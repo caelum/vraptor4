@@ -22,6 +22,7 @@ public class VRaptor4 implements Filter{
 
 	@Inject private BeanManagerUtil beanManagerUtil;
 	
+	@Inject
 	private StupidRouter router;
 	
 	@Override
@@ -44,7 +45,6 @@ public class VRaptor4 implements Filter{
 		
 		HttpServletRequest httpRequest = (HttpServletRequest) request;
 		Set<Bean<?>> beanControllers = beanManagerUtil.getBeans(Object.class,new AnnotationLiteral<Controller>() {});
-		System.out.println(beanControllers);
 		for (Bean beanController : beanControllers) {
 
 			Object controller = beanManagerUtil.instanceFor(beanController);

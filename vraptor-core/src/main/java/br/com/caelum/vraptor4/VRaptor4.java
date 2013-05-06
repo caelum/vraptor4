@@ -2,10 +2,12 @@ package br.com.caelum.vraptor4;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.util.Set;
 
 import javax.enterprise.inject.Any;
 import javax.enterprise.inject.Instance;
 import javax.enterprise.inject.spi.Bean;
+import javax.enterprise.util.AnnotationLiteral;
 import javax.inject.Inject;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -20,13 +22,13 @@ public class VRaptor4 implements Filter{
 
 	@Inject private BeanManagerUtil beanManagerUtil;
 	
-	@Inject @Controller Instance<Bean> beanControllers;
 	private StupidRouter router;
 	
 	@Override
 	public void destroy() {
 	}
 
+	@SuppressWarnings("serial")
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response,
 			FilterChain chain) throws IOException, ServletException {
@@ -41,7 +43,8 @@ public class VRaptor4 implements Filter{
 		System.out.println("Oi, to no filtro do vraptor 4");
 		
 		HttpServletRequest httpRequest = (HttpServletRequest) request;
-		
+		Set<Bean<?>> beanControllers = beanManagerUtil.getBeans(Object.class,new AnnotationLiteral<Controller>() {});
+		System.out.println(beanControllers);
 		for (Bean beanController : beanControllers) {
 
 			Object controller = beanManagerUtil.instanceFor(beanController);

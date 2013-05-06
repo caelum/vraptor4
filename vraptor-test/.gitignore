@@ -1,0 +1,10 @@
+bin
+.DS_Store
+target
+*.class
+src/main/webapp/WEB-INF/classes
+.history
+.classpath
+.project
+.settings
+target/*

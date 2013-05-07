@@ -7,9 +7,7 @@ import java.lang.annotation.Target;
 
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.inject.Stereotype;
-import javax.inject.Qualifier;
 
-@Qualifier
 @Target({ElementType.FIELD, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Stereotype

@@ -60,6 +60,7 @@ public class VRaptor implements Filter {
 	private Event<ServletContext> contextEvent;
 	
 	private ServletContext servletContext;
+	
 	@Inject
 	private StaticContentHandler staticHandler;
 	

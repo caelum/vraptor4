@@ -40,12 +40,17 @@ import br.com.caelum.vraptor.ioc.RequestScoped;
 @Named("result")
 public class DefaultResult extends AbstractResult {
 
-    private final HttpServletRequest request;
-    private final Container container;
-    private final Map<String, Object> includedAttributes;
+    private HttpServletRequest request;
+    private Container container;
+    private Map<String, Object> includedAttributes;
     private boolean responseCommitted = false;
-    private final ExceptionMapper exceptions;
-	private final TypeNameExtractor extractor;
+    private ExceptionMapper exceptions;
+	private TypeNameExtractor extractor;
+
+	//CDI eyes only
+	@Deprecated
+	public DefaultResult() {
+	}
 
 	@Inject
     public DefaultResult(HttpServletRequest request, Container container, ExceptionMapper exceptions, TypeNameExtractor extractor) {
@@ -56,29 +61,35 @@ public class DefaultResult extends AbstractResult {
         this.exceptions = exceptions;
     }
 	
-    public <T extends View> T use(Class<T> view) {
+    @Override
+	public <T extends View> T use(Class<T> view) {
         this.responseCommitted = true;
         return container.instanceFor(view);
     }
     
-    public Result on(Class<? extends Exception> exception) {
+    @Override
+	public Result on(Class<? extends Exception> exception) {
         return exceptions.record(exception);
     }
 
-    public Result include(String key, Object value) {
+    @Override
+	public Result include(String key, Object value) {
     	includedAttributes.put(key, value);
         request.setAttribute(key, value);
         return this;
     }
 
-    public boolean used() {
+    @Override
+	public boolean used() {
         return responseCommitted;
     }
 
+	@Override
 	public Map<String, Object> included() {
 		return Collections.unmodifiableMap(includedAttributes);
 	}
 
+	@Override
 	public Result include(Object value) {
 		if(value == null) {
 			return this;

@@ -29,25 +29,33 @@ import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
  */
 public class HTMLSerialization implements Serialization {
 
-	private final Result result;
-	private final TypeNameExtractor extractor;
+	private Result result;
+	private TypeNameExtractor extractor;
 
+	//CDI eyes only
+	@Deprecated
+	public HTMLSerialization() {
+	}
+	
 	@Inject
 	public HTMLSerialization(Result result, TypeNameExtractor extractor) {
 		this.result = result;
 		this.extractor = extractor;
 	}
 	
+	@Override
 	public boolean accepts(String format) {
 		return "html".equals(format);
 	}
 
+	@Override
 	public <T> Serializer from(T object, String alias) {
 		result.include(alias, object);
 		result.use(page()).defaultView();
 		return new IgnoringSerializer();
 	}
 
+	@Override
 	public <T> Serializer from(T object) {
 		result.include(extractor.nameFor(object.getClass()), object);
 		result.use(page()).defaultView();

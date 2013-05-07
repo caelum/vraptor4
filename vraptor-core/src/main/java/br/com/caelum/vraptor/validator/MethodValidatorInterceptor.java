@@ -40,61 +40,67 @@ import br.com.caelum.vraptor.ioc.RequestScoped;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
 /**
- * Validate method parameters using Bean Validation 1.1. The method will be intercepted if any parameter
- * contains Bean Validation annotations. This component is enabled only if you have any Bean Validation 
- * provider that implements method validation.
+ * Validate method parameters using Bean Validation 1.1. The method will be
+ * intercepted if any parameter contains Bean Validation annotations. This
+ * component is enabled only if you have any Bean Validation provider that
+ * implements method validation.
  * 
  * @author Otávio Scherer Garcia
  * @since 3.5.1-SNAPSHOT
  */
 @RequestScoped
 @Intercepts(before = ExecuteMethodInterceptor.class, after = ParametersInstantiatorInterceptor.class)
-public class MethodValidatorInterceptor
-    implements Interceptor {
+public class MethodValidatorInterceptor implements Interceptor {
 
-    private static final Logger logger = LoggerFactory.getLogger(MethodValidatorInterceptor.class);
+	private static final Logger logger = LoggerFactory.getLogger(MethodValidatorInterceptor.class);
 
-    private final javax.validation.Validator methodValidator;
-    private final Localization localization;
-    private final MessageInterpolator interpolator;
-    private final MethodInfo methodInfo;
-    private final Validator validator;
+	private javax.validation.Validator methodValidator;
+	private Localization localization;
+	private MessageInterpolator interpolator;
+	private MethodInfo methodInfo;
+	private Validator validator;
 
-    @Inject
-    public MethodValidatorInterceptor(Localization localization, MessageInterpolator interpolator, Validator validator, 
-            MethodInfo methodInfo, javax.validation.Validator methodValidator) {
-        this.localization = localization;
-        this.interpolator = interpolator;
-        this.validator = validator;
-        this.methodInfo = methodInfo;
-        this.methodValidator = methodValidator;
-    }
-    
-    public boolean accepts(ResourceMethod method) {
-        BeanDescriptor bean = methodValidator.getConstraintsForClass(method.getResource().getType());
-        MethodDescriptor descriptor = bean.getConstraintsForMethod(method.getMethod().getName(), method.getMethod().getParameterTypes());
-        return descriptor != null && descriptor.hasConstrainedParameters();
-    }
+	@Deprecated
+	public MethodValidatorInterceptor() {}
 
-    public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance)
-        throws InterceptionException {
+	@Inject
+	public MethodValidatorInterceptor(Localization localization, MessageInterpolator interpolator, Validator validator,
+			MethodInfo methodInfo, javax.validation.Validator methodValidator) {
+		this.localization = localization;
+		this.interpolator = interpolator;
+		this.validator = validator;
+		this.methodInfo = methodInfo;
+		this.methodValidator = methodValidator;
+	}
 
-        Set<ConstraintViolation<Object>> violations = methodValidator.forExecutables().validateParameters(resourceInstance,
-                method.getMethod(), methodInfo.getParameters());
-        logger.debug("there are {} violations at method {}.", violations.size(), method);
+	@Override
+	public boolean accepts(ResourceMethod method) {
+		BeanDescriptor bean = methodValidator.getConstraintsForClass(method.getResource().getType());
+		MethodDescriptor descriptor = bean.getConstraintsForMethod(method.getMethod().getName(), method.getMethod()
+				.getParameterTypes());
+		return descriptor != null && descriptor.hasConstrainedParameters();
+	}
 
-        for (ConstraintViolation<Object> violation : violations) {
-            BeanValidatorContext ctx = BeanValidatorContext.of(violation);
-            String msg = interpolator.interpolate(violation.getMessageTemplate(), ctx, getLocale());
+	@Override
+	public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance)
+			throws InterceptionException {
 
-            validator.add(new ValidationMessage(msg, violation.getPropertyPath().toString()));
-            logger.debug("added message {} to validation of bean {}", msg, violation.getRootBean());
-        }
+		Set<ConstraintViolation<Object>> violations = methodValidator.forExecutables().validateParameters(
+				resourceInstance, method.getMethod(), methodInfo.getParameters());
+		logger.debug("there are {} violations at method {}.", violations.size(), method);
 
-        stack.next(method, resourceInstance);
-    }
+		for (ConstraintViolation<Object> violation : violations) {
+			BeanValidatorContext ctx = BeanValidatorContext.of(violation);
+			String msg = interpolator.interpolate(violation.getMessageTemplate(), ctx, getLocale());
 
-    private Locale getLocale() {
-        return localization.getLocale() == null ? Locale.getDefault() : localization.getLocale();
-    }
+			validator.add(new ValidationMessage(msg, violation.getPropertyPath().toString()));
+			logger.debug("added message {} to validation of bean {}", msg, violation.getRootBean());
+		}
+
+		stack.next(method, resourceInstance);
+	}
+
+	private Locale getLocale() {
+		return localization.getLocale() == null ? Locale.getDefault() : localization.getLocale();
+	}
 }

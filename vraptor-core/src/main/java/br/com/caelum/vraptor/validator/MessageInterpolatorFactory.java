@@ -27,8 +27,13 @@ public class MessageInterpolatorFactory implements ComponentFactory<MessageInter
 
 	private static final Logger logger = LoggerFactory.getLogger(MessageInterpolatorFactory.class);
 
-	private final ValidatorFactory factory;
+	private ValidatorFactory factory;
 	private MessageInterpolator interpolator;
+	
+	//CDI eyes only
+	@Deprecated
+	public MessageInterpolatorFactory() {
+	}
 
 	@Inject
 	public MessageInterpolatorFactory(ValidatorFactory factory) {
@@ -41,6 +46,7 @@ public class MessageInterpolatorFactory implements ComponentFactory<MessageInter
 		logger.debug("Initializing Bean Validator MessageInterpolator");
 	}
 
+	@Override
 	public MessageInterpolator getInstance() {
 		return interpolator;
 	}

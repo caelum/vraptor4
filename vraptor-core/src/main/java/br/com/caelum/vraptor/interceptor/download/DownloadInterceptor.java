@@ -52,10 +52,15 @@ public class DownloadInterceptor implements Interceptor {
 
     private static final Logger logger = LoggerFactory.getLogger(DownloadInterceptor.class);
 
-	private final HttpServletResponse response;
-	private final MethodInfo info;
-	private final Result result;
+	private HttpServletResponse response;
+	private MethodInfo info;
+	private Result result;
 
+	//CDI eyes only
+	@Deprecated
+	public DownloadInterceptor() {
+	}
+	
 	@Inject
 	public DownloadInterceptor(HttpServletResponse response, MethodInfo info, Result result) {
 		this.response = response;
@@ -63,12 +68,14 @@ public class DownloadInterceptor implements Interceptor {
 		this.result = result;
 	}
 	
+	@Override
 	public boolean accepts(ResourceMethod method) {
 		Class<?> type = method.getMethod().getReturnType();
 		return InputStream.class.isAssignableFrom(type) || type == File.class || Download.class.isAssignableFrom(type)
 				|| type == byte[].class;
 	}
 
+	@Override
 	public void intercept(InterceptorStack stack, ResourceMethod method, Object instance) throws InterceptionException {
     	logger.debug("Sending a file to the client");
 

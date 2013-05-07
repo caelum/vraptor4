@@ -49,12 +49,17 @@ public class DefaultBeanValidator
 
     private static final Logger logger = LoggerFactory.getLogger(DefaultBeanValidator.class);
 
-    private final Localization localization;
+    private Localization localization;
 
-    private final Validator validator;
+    private Validator validator;
 
-    private final MessageInterpolator interpolator;
+    private MessageInterpolator interpolator;
 
+    //CDI eyes only
+	@Deprecated
+	public DefaultBeanValidator() {
+	}
+    
     @Inject
     public DefaultBeanValidator(Localization localization, Validator validator, MessageInterpolator interpolator) {
         this.localization = localization;
@@ -62,7 +67,8 @@ public class DefaultBeanValidator
         this.interpolator = interpolator;
     }
 
-    public List<Message> validate(Object bean, Class<?>... groups) {
+    @Override
+	public List<Message> validate(Object bean, Class<?>... groups) {
 
         if (bean == null) {
             logger.warn("skiping validation, input bean is null.");
@@ -75,7 +81,8 @@ public class DefaultBeanValidator
         return getMessages(violations);
     }
 
-    public List<Message> validateProperties(Object bean, String... properties) {
+    @Override
+	public List<Message> validateProperties(Object bean, String... properties) {
     	if(bean == null) {
     		logger.warn("skiping validation, input bean is null.");
             return emptyList();

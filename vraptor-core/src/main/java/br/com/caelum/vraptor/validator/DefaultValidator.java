@@ -44,13 +44,18 @@ import com.google.common.base.Supplier;
 @RequestScoped
 public class DefaultValidator extends AbstractValidator {
 
-    private final Result result;
-	private final List<Message> errors = new ArrayList<Message>();
-	private final ValidationViewsFactory viewsFactory;
-	private final BeanValidator beanValidator;
-	private final Outjector outjector;
-	private final Proxifier proxifier;
-	private final Localization localization;
+    private Result result;
+	private List<Message> errors = new ArrayList<Message>();
+	private ValidationViewsFactory viewsFactory;
+	private BeanValidator beanValidator;
+	private Outjector outjector;
+	private Proxifier proxifier;
+	private Localization localization;
+	
+	//CDI eyes only
+	@Deprecated
+	public DefaultValidator() {
+	}
 
 	@Inject
     public DefaultValidator(Result result, ValidationViewsFactory factory, Outjector outjector, Proxifier proxifier, BeanValidator beanValidator, Localization localization) {
@@ -62,19 +67,23 @@ public class DefaultValidator extends AbstractValidator {
 		this.localization = localization;
     }
 	
-    public void checking(Validations validations) {
+    @Override
+	public void checking(Validations validations) {
         addAll(validations.getErrors(new LocalizationSupplier(localization)));
     }
 
-    public void validate(Object object, Class<?>... groups) {
+    @Override
+	public void validate(Object object, Class<?>... groups) {
         addAll(beanValidator.validate(object, groups));
     }
     
-    public void validateProperties(Object object, String... properties) {
+    @Override
+	public void validateProperties(Object object, String... properties) {
     	addAll(beanValidator.validateProperties(object, properties));
 	}
 
-    public <T extends View> T onErrorUse(Class<T> view) {
+    @Override
+	public <T extends View> T onErrorUse(Class<T> view) {
     	if (!hasErrors()) {
     		return new MockResult(proxifier).use(view); //ignore anything, no errors occurred
     	}
@@ -83,23 +92,27 @@ public class DefaultValidator extends AbstractValidator {
     	return viewsFactory.instanceFor(view, errors);
     }
 
-    public void addAll(Collection<? extends Message> messages) {
+    @Override
+	public void addAll(Collection<? extends Message> messages) {
 		for (Message message : messages) {
 			add(message);
 		}
 	}
 
-    public void add(Message message) {
+    @Override
+	public void add(Message message) {
     	if (message instanceof I18nMessage && !((I18nMessage) message).hasBundle()) {
     		((I18nMessage) message).setLazyBundle(new LocalizationSupplier(localization));
     	}
     	errors.add(message);
     }
 
+	@Override
 	public boolean hasErrors() {
 		return !errors.isEmpty();
 	}
 
+	@Override
 	public List<Message> getErrors() {
 		return unmodifiableList(errors);
 	}
@@ -114,6 +127,7 @@ class LocalizationSupplier implements Supplier<ResourceBundle> {
 		this.localization = localization;
 	}
 
+	@Override
 	public ResourceBundle get() {
 		return localization.getBundle();
 	}

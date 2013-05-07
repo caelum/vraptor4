@@ -38,16 +38,22 @@ import com.google.common.collect.MapMaker;
 @Default
 public class DefaultInterceptorHandlerFactory implements InterceptorHandlerFactory {
 
-	private final Container container;
+	private Container container;
 
 	private ConcurrentMap<Class<? extends Interceptor>, InterceptorHandler> cachedHandlers =
 		new MapMaker().makeMap();
 
+	//CDI eyes only
+	@Deprecated
+	public DefaultInterceptorHandlerFactory() {
+	}
+	
 	@Inject
 	public DefaultInterceptorHandlerFactory(Container container) {
 		this.container = container;
 	}
 	
+	@Override
 	public InterceptorHandler handlerFor(Class<? extends Interceptor> type) {
 		if (type.isAnnotationPresent(Lazy.class)) {
 			InterceptorHandler handler = cachedHandlers.get(type);

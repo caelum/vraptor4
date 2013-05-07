@@ -28,8 +28,6 @@ public class CDIRegistry {
 		registerConverters();
 		registerCDISpecifics();
 		registerProvider();
-
-		
 	}
 
 	private void registerProvider() {

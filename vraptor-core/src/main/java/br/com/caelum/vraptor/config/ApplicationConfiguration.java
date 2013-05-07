@@ -34,7 +34,12 @@ import br.com.caelum.vraptor.ioc.RequestScoped;
 @RequestScoped
 public class ApplicationConfiguration implements Configuration {
 
-	private final HttpServletRequest request;
+	private HttpServletRequest request;
+	
+	//CDI eyes only
+	@Deprecated
+	public ApplicationConfiguration() {
+	}
 
 	@Inject
 	public ApplicationConfiguration(HttpServletRequest request) {
@@ -45,6 +50,7 @@ public class ApplicationConfiguration implements Configuration {
 	 * Returns the application path, including the http protocol.<br>
 	 * One can implement this method to return a fixed http/ip prefix.
 	 */
+	@Override
 	public String getApplicationPath() {
 		return request.getScheme() + "://" + request.getServerName()
 			+ (request.getServerPort() != 80? ":" + request.getServerPort() : "")

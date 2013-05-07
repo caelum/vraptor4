@@ -34,13 +34,18 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
 @RequestScoped
 public class DefaultPathResolver implements PathResolver {
 
-	private final FormatResolver resolver;
+	private FormatResolver resolver;
+	
+	@Deprecated
+	public DefaultPathResolver() {
+	}
 
 	@Inject
 	public DefaultPathResolver(FormatResolver resolver) {
 		this.resolver = resolver;
 	}
 	
+	@Override
 	public String pathFor(ResourceMethod method) {
 		String format = resolver.getAcceptFormat();
 

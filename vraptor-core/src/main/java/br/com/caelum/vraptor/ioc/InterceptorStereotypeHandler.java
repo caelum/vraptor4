@@ -31,17 +31,24 @@ import br.com.caelum.vraptor.interceptor.InterceptorRegistry;
 @ApplicationScoped
 public class InterceptorStereotypeHandler implements StereotypeHandler {
 	private static final Logger logger = LoggerFactory.getLogger(InterceptorStereotypeHandler.class);
-	private final InterceptorRegistry registry;
+	private InterceptorRegistry registry;
 
+	//CDI eyes only
+	@Deprecated
+	public InterceptorStereotypeHandler() {
+	}
+	
 	@Inject
 	public InterceptorStereotypeHandler(InterceptorRegistry registry) {
 		this.registry = registry;
 	}
 
+	@Override
 	public Class<? extends Annotation> stereotype() {
 		return Intercepts.class;
 	}
 
+	@Override
 	public void handle(Class<?> type) {
 		if (Interceptor.class.isAssignableFrom(type)) {
             registerInterceptor(type);

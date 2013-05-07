@@ -44,9 +44,14 @@ public class ValidatorCreator implements ComponentFactory<Validator> {
 
     private static final Logger logger = LoggerFactory.getLogger(ValidatorCreator.class);
 
-	private final ValidatorFactory factory;
+	private ValidatorFactory factory;
 
 	private Validator validator;
+	
+	//CDI eyes only
+	@Deprecated
+	public ValidatorCreator() {
+	}
 
 	@Inject
     public ValidatorCreator(ValidatorFactory factory) {
@@ -59,7 +64,8 @@ public class ValidatorCreator implements ComponentFactory<Validator> {
     	logger.debug("Initializing Bean Validator");
     }
 
-    @Default
+    @Override
+	@Default
     @VraptorPreference
 	public Validator getInstance() {
 		return validator;

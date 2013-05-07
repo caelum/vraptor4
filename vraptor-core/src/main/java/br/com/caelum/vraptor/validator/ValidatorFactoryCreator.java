@@ -45,7 +45,7 @@ public class ValidatorFactoryCreator implements ComponentFactory<ValidatorFactor
 	private static final Logger logger = LoggerFactory.getLogger(ValidatorFactoryCreator.class);
 
 	private ValidatorFactory factory;
-
+	
 	@PostConstruct
 	public void buildFactory() {
 		factory = Validation.byDefaultProvider()
@@ -55,6 +55,7 @@ public class ValidatorFactoryCreator implements ComponentFactory<ValidatorFactor
         logger.debug("Initializing JSR303 factory for bean validation");
 	}
 
+	@Override
 	@Default
 	@VraptorPreference
 	public ValidatorFactory getInstance() {

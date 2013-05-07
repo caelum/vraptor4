@@ -44,10 +44,15 @@ public class FlashInterceptor implements Interceptor {
 	final static String FLASH_INCLUDED_PARAMETERS = "br.com.caelum.vraptor.flash.parameters";
 	private static final Logger LOGGER = LoggerFactory.getLogger(FlashInterceptor.class);
 
-	private final HttpSession session;
-	private final Result result;
-	private final MutableResponse response;
+	private HttpSession session;
+	private Result result;
+	private MutableResponse response;
 
+	//CDI eyes only
+	@Deprecated
+	public FlashInterceptor() {
+	}
+	
 	@Inject
 	public FlashInterceptor(HttpSession session, Result result, MutableResponse response) {
 		this.session = session;
@@ -55,10 +60,12 @@ public class FlashInterceptor implements Interceptor {
 		this.response = response;
 	}
 	
+	@Override
 	public boolean accepts(ResourceMethod method) {
 		return true;
 	}
 
+	@Override
 	public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance)
 			throws InterceptionException {
 		@SuppressWarnings("unchecked")
@@ -70,6 +77,7 @@ public class FlashInterceptor implements Interceptor {
 			}
 		}
 		response.addRedirectListener(new RedirectListener() {
+			@Override
 			public void beforeRedirect() {
 				Map<String, Object> included = result.included();
 				if (!included.isEmpty()) {

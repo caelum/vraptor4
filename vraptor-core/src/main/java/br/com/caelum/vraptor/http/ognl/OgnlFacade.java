@@ -54,11 +54,16 @@ public class OgnlFacade {
 
 	private static final Logger logger = LoggerFactory.getLogger(OgnlFacade.class);
 
-	private final Proxifier proxifier;
-	private final Converters converters;
-	private final EmptyElementsRemoval removal;
-	private final Map<Object, OgnlContext> contexts = Maps.newHashMap();
-
+	private Proxifier proxifier;
+	private Converters converters;
+	private EmptyElementsRemoval removal;
+	private Map<Object, OgnlContext> contexts = Maps.newHashMap();
+	
+	//CDI eyes only
+	@Deprecated
+	public OgnlFacade() {
+	}
+	
 	@Inject
 	public OgnlFacade(Converters converters, EmptyElementsRemoval removal, Proxifier proxifier) {
 		this.converters = converters;

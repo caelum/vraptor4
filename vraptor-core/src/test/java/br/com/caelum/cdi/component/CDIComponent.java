@@ -7,13 +7,19 @@ import br.com.caelum.vraptor.ioc.cdi.ComponentToBeProduced;
 
 @Component
 public class CDIComponent implements ComponentFactory {
+	
+	private MyRequestComponent component;
 
-	private final MyRequestComponent component;
+	//CDI eyes only
+	@Deprecated
+	public CDIComponent() {
+	}
 	
 	public CDIComponent(MyRequestComponent component) {
 		this.component = component;
 	}
 
+	@Override
 	public ComponentToBeProduced getInstance() {		
 		return new ComponentToBeProduced();
 	}

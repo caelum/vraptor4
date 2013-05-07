@@ -37,13 +37,19 @@ public class DeserializesHandler implements StereotypeHandler {
 
 	private static final Logger logger = LoggerFactory.getLogger(DeserializesHandler.class);
 
-	private final Deserializers deserializers;
+	private Deserializers deserializers;
+	
+	//CDI eyes only
+	@Deprecated
+	public DeserializesHandler() {
+	}
 
 	@Inject
 	public DeserializesHandler(Deserializers deserializers) {
 		this.deserializers = deserializers;
 	}
 	
+	@Override
 	@SuppressWarnings("unchecked")
 	public void handle(Class<?> type) {
 		if (!Deserializer.class.isAssignableFrom(type)) {
@@ -57,6 +63,7 @@ public class DeserializesHandler implements StereotypeHandler {
 		deserializers.register((Class<? extends Deserializer>) type);
 	}
 
+	@Override
 	public Class<? extends Annotation> stereotype() {
 		return Deserializes.class;
 	}

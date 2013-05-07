@@ -34,12 +34,19 @@ import br.com.caelum.vraptor.ioc.ApplicationScoped;
 @ApplicationScoped
 public class DefaultTypeFinder implements TypeFinder {
 
-	private final ParameterNameProvider provider;
+	private ParameterNameProvider provider;
+	
+	//CDI eyes only
+	@Deprecated
+	public DefaultTypeFinder() {
+	}
+	
 	@Inject
 	public DefaultTypeFinder(ParameterNameProvider provider) {
 		this.provider = provider;
 	}
 	
+	@Override
 	public Map<String, Class<?>> getParameterTypes(Method method, String[] parameterPaths) {
 		Map<String,Class<?>> result = new HashMap<String, Class<?>>();
 		String[] parameterNamesFor = provider.parameterNamesFor(method);

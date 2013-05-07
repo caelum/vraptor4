@@ -68,13 +68,18 @@ public class CommonsUploadMultipartInterceptor
 
     private static final Logger logger = LoggerFactory.getLogger(CommonsUploadMultipartInterceptor.class);
 
-    private final HttpServletRequest request;
-    private final MutableRequest parameters;
-    private final MultipartConfig config;
-    private final Validator validator;
-    private final ServletFileUploadCreator fileUploadCreator;
+    private HttpServletRequest request;
+    private MutableRequest parameters;
+    private MultipartConfig config;
+    private Validator validator;
+    private ServletFileUploadCreator fileUploadCreator;
 
     final Multiset<String> indexes = HashMultiset.create();
+    
+    //CDI eyes only
+	@Deprecated
+	public CommonsUploadMultipartInterceptor() {
+	}
 
     @Inject
     public CommonsUploadMultipartInterceptor(HttpServletRequest request, MutableRequest parameters, MultipartConfig cfg,
@@ -89,11 +94,13 @@ public class CommonsUploadMultipartInterceptor
     /**
      * Will intercept the request if apache file upload says that this request is multipart
      */
-    public boolean accepts(ResourceMethod method) {
+    @Override
+	public boolean accepts(ResourceMethod method) {
         return ServletFileUpload.isMultipartContent(request);
     }
 
-    public void intercept(InterceptorStack stack, ResourceMethod method, Object instance)
+    @Override
+	public void intercept(InterceptorStack stack, ResourceMethod method, Object instance)
         throws InterceptionException {
         logger.info("Request contains multipart data. Try to parse with commons-upload.");
 

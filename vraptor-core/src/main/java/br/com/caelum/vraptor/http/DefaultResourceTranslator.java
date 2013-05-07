@@ -40,13 +40,19 @@ public class DefaultResourceTranslator implements UrlToResourceTranslator {
 
 	private final Logger logger = LoggerFactory.getLogger(DefaultResourceTranslator.class);
 
-	private final Router router;
+	private Router router;
+	
+	//CDI eyes only
+	@Deprecated
+	public DefaultResourceTranslator() {
+	}
 
 	@Inject
 	public DefaultResourceTranslator(Router router) {
 		this.router = router;
 	}
 
+	@Override
 	public ResourceMethod translate(RequestInfo info) {
 		MutableRequest request = info.getRequest();
 		String resourceName = info.getRequestedUri();

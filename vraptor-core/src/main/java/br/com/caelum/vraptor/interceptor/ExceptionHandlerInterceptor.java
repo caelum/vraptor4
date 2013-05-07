@@ -51,20 +51,27 @@ public class ExceptionHandlerInterceptor
 
     private static final Logger logger = LoggerFactory.getLogger(ExceptionHandlerInterceptor.class);
 
-    private final ExceptionMapper exceptions;
-    private final Result result;
+    private ExceptionMapper exceptions;
+    private Result result;
 
+    //CDI eyes only
+	@Deprecated
+	public ExceptionHandlerInterceptor() {
+	}
+    
     @Inject
     public ExceptionHandlerInterceptor(ExceptionMapper exceptions, Result result) {
         this.exceptions = exceptions;
         this.result = result;
     }
     
-    public boolean accepts(ResourceMethod method) {
+    @Override
+	public boolean accepts(ResourceMethod method) {
         return true;
     }
 
-    public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance)
+    @Override
+	public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance)
         throws InterceptionException {
         try {
             stack.next(method, resourceInstance);

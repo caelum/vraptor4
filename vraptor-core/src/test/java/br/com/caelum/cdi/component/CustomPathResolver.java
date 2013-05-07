@@ -11,10 +11,16 @@ import br.com.caelum.vraptor.view.DefaultPathResolver;
 @Component
 public class CustomPathResolver extends DefaultPathResolver{
 
+	//CDI eyes only
+	@Deprecated
+	public CustomPathResolver() {
+	}
+	
 	public CustomPathResolver(FormatResolver resolver) {
 		super(resolver);
 	}
 
+	@Override
 	public String pathFor(ResourceMethod method) {
 		return "/vraptor/route";
 	}

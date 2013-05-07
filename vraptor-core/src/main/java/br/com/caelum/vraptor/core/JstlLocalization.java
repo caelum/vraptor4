@@ -50,15 +50,21 @@ public class JstlLocalization
 
     private static final String DEFAULT_BUNDLE_NAME = "messages";
 
-    private final RequestInfo request;
+    private RequestInfo request;
     private ResourceBundle bundle;
 
+    //CDI eyes only
+	@Deprecated
+	public JstlLocalization() {
+	}
+    
     @Inject
     public JstlLocalization(RequestInfo request) {
         this.request = request;
     }
 
-    public ResourceBundle getBundle() {
+    @Override
+	public ResourceBundle getBundle() {
         if (bundle == null) {
             initializeBundle();
         }
@@ -96,11 +102,13 @@ public class JstlLocalization
         return new EmptyBundle();
 	}
 
-    public Locale getLocale() {
+    @Override
+	public Locale getLocale() {
         return localeFor(Config.FMT_LOCALE);
     }
 
-    public Locale getFallbackLocale() {
+    @Override
+	public Locale getFallbackLocale() {
         return localeFor(Config.FMT_FALLBACK_LOCALE);
     }
 
@@ -142,7 +150,8 @@ public class JstlLocalization
         return request.getServletContext().getInitParameter(key);
     }
 
-    public String getMessage(String key, Object... parameters) {
+    @Override
+	public String getMessage(String key, Object... parameters) {
         try {
             String content = getBundle().getString(key);
             return MessageFormat.format(content, parameters);

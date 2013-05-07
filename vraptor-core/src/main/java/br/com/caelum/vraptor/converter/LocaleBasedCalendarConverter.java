@@ -43,14 +43,20 @@ import br.com.caelum.vraptor.ioc.RequestScoped;
 @RequestScoped
 public class LocaleBasedCalendarConverter implements Converter<Calendar> {
 
-    private final Localization localization;
+    private Localization localization;
+    
+    //CDI eyes only
+	@Deprecated
+	public LocaleBasedCalendarConverter() {
+	}
     
     @Inject
     public LocaleBasedCalendarConverter(Localization localization) {
         this.localization = localization;
     }
 
-    public Calendar convert(String value, Class<? extends Calendar> type, ResourceBundle bundle) {
+    @Override
+	public Calendar convert(String value, Class<? extends Calendar> type, ResourceBundle bundle) {
         if (isNullOrEmpty(value)) {
             return null;
         }

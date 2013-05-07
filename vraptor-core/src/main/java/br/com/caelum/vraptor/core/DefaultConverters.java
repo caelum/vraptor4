@@ -19,7 +19,6 @@ package br.com.caelum.vraptor.core;
 
 import java.util.LinkedList;
 
-import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 
 import org.slf4j.Logger;
@@ -35,10 +34,14 @@ import br.com.caelum.vraptor.ioc.Container;
 @ApplicationScoped
 public class DefaultConverters implements Converters {
 
-    private  final LinkedList<Class<? extends Converter<?>>> classes;
-    private  final Logger logger = LoggerFactory.getLogger(DefaultConverters.class);
-	private  final Container container;
+	private  final Logger logger = LoggerFactory.getLogger(DefaultConverters.class);
+    private LinkedList<Class<? extends Converter<?>>> classes;
+	private Container container;
 
+	//CDI eyes only
+	@Deprecated
+	public DefaultConverters() {
+	}
 	
 	@Inject
     public DefaultConverters(Container container) {
@@ -51,7 +54,8 @@ public class DefaultConverters implements Converters {
         }
     }
     
-    public void register(Class<? extends Converter<?>> converterClass) {
+    @Override
+	public void register(Class<? extends Converter<?>> converterClass) {
         if (!converterClass.isAnnotationPresent(Convert.class)) {
             throw new VRaptorException("The converter type " + converterClass.getName()
                     + " should have the Convert annotation");
@@ -59,7 +63,8 @@ public class DefaultConverters implements Converters {
 		classes.addFirst(converterClass);
     }
 
-    public <T> Converter<T> to(Class<T> clazz) {
+    @Override
+	public <T> Converter<T> to(Class<T> clazz) {
         if (!existsFor(clazz)) {
 			throw new VRaptorException("Unable to find converter for " + clazz.getName());
 		}
@@ -76,15 +81,18 @@ public class DefaultConverters implements Converters {
 		return null;
 	}
 
+	@Override
 	public boolean existsFor(Class<?> type) {
 		return findConverterType(type) != null;
 	}
 
+	@Override
 	public boolean existsTwoWayFor(Class<?> type) {
 		Class<? extends Converter<?>> found = findConverterType(type);
 		return found != null && TwoWayConverter.class.isAssignableFrom(found);
 	}
 
+	@Override
 	public TwoWayConverter<?> twoWayConverterFor(Class<?> type) {
 		if (!existsTwoWayFor(type)) {
 			throw new VRaptorException("Unable to find two way converter for " + type.getName());

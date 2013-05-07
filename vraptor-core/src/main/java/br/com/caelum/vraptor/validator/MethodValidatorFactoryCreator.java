@@ -48,7 +48,12 @@ public class MethodValidatorFactoryCreator
     private static final List<Method> OBJECT_METHODS = asList(Object.class.getDeclaredMethods());
 
     private ValidatorFactory instance;
-    private final ParameterNameProvider nameProvider;
+    private ParameterNameProvider nameProvider;
+    
+    //CDI eyes only
+	@Deprecated
+	public MethodValidatorFactoryCreator() {
+	}
     
     public MethodValidatorFactoryCreator(ParameterNameProvider nameProvider) {
         this.nameProvider = nameProvider;
@@ -68,7 +73,8 @@ public class MethodValidatorFactoryCreator
         instance.close();
     }
 
-    public ValidatorFactory getInstance() {
+    @Override
+	public ValidatorFactory getInstance() {
         if (instance == null) { //pico don't call PostConstruct
             buildFactory();
         }
@@ -93,7 +99,8 @@ public class MethodValidatorFactoryCreator
          * Returns an empty list of parameter names, since we don't validate 
          * constructors.
          */
-        public List<String> getParameterNames(Constructor<?> constructor) {
+        @Override
+		public List<String> getParameterNames(Constructor<?> constructor) {
             return emptyParameters(constructor.getParameterTypes().length);
         }
 
@@ -101,7 +108,8 @@ public class MethodValidatorFactoryCreator
          * Returns the parameter names for the method, skiping if method is inherited 
          * from object.
          */
-        public List<String> getParameterNames(Method method) {
+        @Override
+		public List<String> getParameterNames(Method method) {
             if (OBJECT_METHODS.contains(method)) {
                 return emptyParameters(method.getParameterTypes().length);
             }

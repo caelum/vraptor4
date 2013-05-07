@@ -32,9 +32,14 @@ import br.com.caelum.vraptor.validator.I18nMessage;
 @Component
 public class I18nMessageSerialization implements View{
 
-	private final Localization localization;
-	private final Container container;
+	private Localization localization;
+	private Container container;
 	private I18nMessage i18nMessage;
+	
+	//CDI eyes only
+	@Deprecated
+	public I18nMessageSerialization() {
+	}
 
 	public I18nMessageSerialization(Container container, Localization localization) {
 		this.container = container;

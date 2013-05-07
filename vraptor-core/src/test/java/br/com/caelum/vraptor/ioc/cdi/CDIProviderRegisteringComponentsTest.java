@@ -53,7 +53,6 @@ public class CDIProviderRegisteringComponentsTest extends
 	public static void startCDIContainer(){
 		cdiContainer = CdiContainerLoader.getCdiContainer();
 		cdiContainer.boot();
-		
 	}
 	
 	@AfterClass
@@ -95,7 +94,9 @@ public class CDIProviderRegisteringComponentsTest extends
 
 	@Override
 	protected ContainerProvider getProvider() {
-		return new CDIProvider();
+		//TODO Is a Integration Test?
+		BeanManagerUtil util = new BeanManagerUtil(cdiContainer.getBeanManager());
+		return util.instanceFor(CDIProvider.class);
 	}
 
 	@Override

@@ -5,9 +5,14 @@ import br.com.caelum.vraptor.Resource;
 @Resource
 public class CDIResourceComponent {
 
-	private final CDIComponent component;
+	private CDIComponent component;
 	private boolean initializedDepencies;
 
+	//CDI eyes only
+	@Deprecated
+	public CDIResourceComponent() {
+	}
+	
 	public CDIResourceComponent(CDIComponent component) {
 		this.component = component;
 		this.initializedDepencies = true;

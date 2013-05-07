@@ -40,10 +40,15 @@ import com.thoughtworks.xstream.io.json.JettisonMappedXmlDriver;
 @Deserializes({"application/json","json"})
 public class JsonDeserializer implements Deserializer{
 
-	private final ParameterNameProvider provider;
-	private final XStreamBuilder builder;
-	private final TypeNameExtractor extractor;
+	private ParameterNameProvider provider;
+	private XStreamBuilder builder;
+	private TypeNameExtractor extractor;
 
+	//CDI eyes only
+	@Deprecated
+	public JsonDeserializer() {
+	}
+	
 	@Inject
 	public JsonDeserializer(ParameterNameProvider provider,TypeNameExtractor extractor, XStreamBuilder builder) {
 		this.provider = provider;
@@ -51,6 +56,7 @@ public class JsonDeserializer implements Deserializer{
 		this.builder = builder;
 	}
 	
+	@Override
 	public Object[] deserialize(InputStream inputStream, ResourceMethod method) {
 		Method javaMethod = method.getMethod();
 		Class<?>[] types = javaMethod.getParameterTypes();

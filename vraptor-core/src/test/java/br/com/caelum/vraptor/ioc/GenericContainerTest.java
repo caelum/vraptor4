@@ -17,6 +17,25 @@
 
 package br.com.caelum.vraptor.ioc;
 
+import static br.com.caelum.vraptor.VRaptorMatchers.canHandle;
+import static br.com.caelum.vraptor.VRaptorMatchers.hasOneCopyOf;
+import static br.com.caelum.vraptor.config.BasicConfiguration.BASE_PACKAGES_PARAMETER_NAME;
+import static br.com.caelum.vraptor.config.BasicConfiguration.SCANNING_PARAM;
+import static java.lang.Thread.currentThread;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.sameInstance;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Collection;
@@ -66,28 +85,6 @@ import br.com.caelum.vraptor.scan.ScannotationComponentScannerTest;
 
 import com.google.common.base.Objects;
 
-import static br.com.caelum.vraptor.VRaptorMatchers.canHandle;
-import static br.com.caelum.vraptor.VRaptorMatchers.hasOneCopyOf;
-import static br.com.caelum.vraptor.config.BasicConfiguration.BASE_PACKAGES_PARAMETER_NAME;
-import static br.com.caelum.vraptor.config.BasicConfiguration.SCANNING_PARAM;
-import static java.lang.Thread.currentThread;
-
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
-
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasItem;
-import static org.hamcrest.Matchers.instanceOf;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.hamcrest.Matchers.sameInstance;
-
 /**
  * Acceptance test that checks if the container is capable of giving all
  * required components.
@@ -131,6 +128,7 @@ public abstract class GenericContainerTest {
 	public void canProvideJodaTimeConverters() {
 		executeInsideRequest(new WhatToDo<String>() {
 
+			@Override
 			public String execute(RequestInfo request, int counter) {
 				assertNotNull(getFromContainerInCurrentThread(LocalDateConverter.class, request));
 				assertNotNull(getFromContainerInCurrentThread(LocalTimeConverter.class, request));
@@ -172,9 +170,11 @@ public abstract class GenericContainerTest {
 	@Test
 	public void setsAnAttributeOnRequestWithTheObjectTypeName() throws Exception {
 		executeInsideRequest(new WhatToDo<Void>() {
+			@Override
 			public Void execute(final RequestInfo request, int counter) {
 				return provider.provideForRequest(request, new Execution<Void>() {
 
+					@Override
 					public Void insideRequest(Container container) {
 						Result result = container.instanceFor(Result.class);
 						HttpServletRequest request = container.instanceFor(HttpServletRequest.class);
@@ -190,9 +190,11 @@ public abstract class GenericContainerTest {
 	public void setsAnAttributeOnSessionWithTheObjectTypeName() throws Exception {
 		registerAndGetFromContainer(MySessionComponent.class, MySessionComponent.class);
 		executeInsideRequest(new WhatToDo<Void>() {
+			@Override
 			public Void execute(final RequestInfo request, int counter) {
 				return provider.provideForRequest(request, new Execution<Void>() {
 
+					@Override
 					public Void insideRequest(Container container) {
 						HttpSession session = container.instanceFor(HttpSession.class);
 						MySessionComponent component = container.instanceFor(MySessionComponent.class);
@@ -227,8 +229,10 @@ public abstract class GenericContainerTest {
 	public void processesCorrectlyPrototypeBasedComponents() {
 		registerAndGetFromContainer(MyPrototypeComponent.class, MyPrototypeComponent.class);
 		executeInsideRequest(new WhatToDo<Object>() {
+			@Override
 			public Object execute(RequestInfo request, int counter) {
 				return provider.provideForRequest(request, new Execution<Object>() {
+					@Override
 					public Object insideRequest(Container container) {
 						ComponentRegistry registry = container.instanceFor(ComponentRegistry.class);
 						registry.register(MyPrototypeComponent.class, MyPrototypeComponent.class);
@@ -297,11 +301,12 @@ public abstract class GenericContainerTest {
 
 	protected <T> void checkAvailabilityFor(final boolean shouldBeTheSame, final Class<T> component,
 			final Class<? super T> componentToRegister) {
-
 		T firstInstance = registerAndGetFromContainer(component, componentToRegister);
 		T secondInstance = executeInsideRequest(new WhatToDo<T>() {
+			@Override
 			public T execute(RequestInfo request, final int counter) {
 				return provider.provideForRequest(request, new Execution<T>() {
+					@Override
 					public T insideRequest(Container secondContainer) {
 						if (componentToRegister != null && !isAppScoped(secondContainer, componentToRegister)) {
 							ComponentRegistry registry = secondContainer.instanceFor(ComponentRegistry.class);
@@ -323,9 +328,11 @@ public abstract class GenericContainerTest {
 	protected <T> T registerAndGetFromContainer(final Class<T> componentToBeRetrieved,
 			final Class<?> componentToRegister) {
 		return executeInsideRequest(new WhatToDo<T>() {
+			@Override
 			public T execute(RequestInfo request, final int counter) {
 
 				return provider.provideForRequest(request, new Execution<T>() {
+					@Override
 					public T insideRequest(Container firstContainer) {
 						if (componentToRegister != null) {
 							ComponentRegistry registry = firstContainer.instanceFor(ComponentRegistry.class);
@@ -343,6 +350,7 @@ public abstract class GenericContainerTest {
 
 	protected <T> T getFromContainer(final Class<T> componentToBeRetrieved) {
 		return executeInsideRequest(new WhatToDo<T>() {
+			@Override
 			public T execute(RequestInfo request, final int counter) {
 				return getFromContainerInCurrentThread(componentToBeRetrieved, request);
 			}
@@ -351,6 +359,7 @@ public abstract class GenericContainerTest {
 	
 	protected <T> T getFromContainerAndExecuteSomeCode(final Class<T> componentToBeRetrieved,final Code<T> code) {
 		return executeInsideRequest(new WhatToDo<T>() {
+			@Override
 			public T execute(RequestInfo request, final int counter) {
 				T bean = getFromContainerInCurrentThread(componentToBeRetrieved, request,code);				
 				return bean;
@@ -360,6 +369,7 @@ public abstract class GenericContainerTest {
 
 	protected <T> T getFromContainerInCurrentThread(final Class<T> componentToBeRetrieved, RequestInfo request) {
 		return provider.provideForRequest(request, new Execution<T>() {
+			@Override
 			public T insideRequest(Container firstContainer) {
 				return instanceFor(componentToBeRetrieved,firstContainer);
 			}
@@ -367,6 +377,7 @@ public abstract class GenericContainerTest {
 	}
 	protected <T> T getFromContainerInCurrentThread(final Class<T> componentToBeRetrieved, RequestInfo request,final Code<T> code) {
 		return provider.provideForRequest(request, new Execution<T>() {
+			@Override
 			public T insideRequest(Container firstContainer) {
 				T bean = instanceFor(componentToBeRetrieved,firstContainer);
 				code.execute(bean);
@@ -463,8 +474,10 @@ public abstract class GenericContainerTest {
 	@Test
 	public void shoudRegisterConvertersInConverters() {
 		executeInsideRequest(new WhatToDo<Converters>() {
+			@Override
 			public Converters execute(RequestInfo request, final int counter) {
 				return provider.provideForRequest(request, new Execution<Converters>() {
+					@Override
 					public Converters insideRequest(Container container) {
 						Converters converters = container.instanceFor(Converters.class);
 						Converter<?> converter = converters.to(Void.class);
@@ -483,9 +496,11 @@ public abstract class GenericContainerTest {
 	public void shouldReturnAllDefaultDeserializers() {
 		executeInsideRequest(new WhatToDo<Void>(){
 
+			@Override
 			public Void execute(RequestInfo request, int counter) {
 				return provider.provideForRequest(request, new Execution<Void>() {
 
+					@Override
 					public Void insideRequest(Container container) {
 						Deserializers deserializers = container.instanceFor(Deserializers.class);
 						assertNotNull(deserializers.deserializerFor("application/json", container));

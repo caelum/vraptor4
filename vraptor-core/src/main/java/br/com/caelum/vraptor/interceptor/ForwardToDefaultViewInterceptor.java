@@ -37,20 +37,27 @@ import br.com.caelum.vraptor.view.Results;
  */
 @Intercepts(after=ExecuteMethodInterceptor.class, before={})
 public class ForwardToDefaultViewInterceptor implements Interceptor {
-    private final Result result;
+    private Result result;
 
     private static final Logger logger = LoggerFactory.getLogger(ForwardToDefaultViewInterceptor.class);
 
+    //CDI eyes only
+	@Deprecated
+	public ForwardToDefaultViewInterceptor() {
+	}
+    
     @Inject
     public ForwardToDefaultViewInterceptor(Result result) {
         this.result = result;
     }
     
-    public boolean accepts(ResourceMethod method) {
+    @Override
+	public boolean accepts(ResourceMethod method) {
         return true;
     }
 
-    public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance)
+    @Override
+	public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance)
             throws InterceptionException {
         if (result.used()) {
         	logger.debug("Request already dispatched and commited somewhere else, not forwarding.");

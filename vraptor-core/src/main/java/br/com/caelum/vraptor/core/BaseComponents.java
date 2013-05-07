@@ -360,6 +360,7 @@ public class BaseComponents {
         // try put beanval 1.1 or beanval 1.0 if available
         if (isClassPresent("javax.validation.executable.ExecutableValidator")) {
             APPLICATION_COMPONENTS.put(ValidatorCreator.class, ValidatorCreator.class);
+            APPLICATION_COMPONENTS.put(ValidatorFactoryCreator.class, ValidatorFactoryCreator.class);
             APPLICATION_COMPONENTS.put(MethodValidatorFactoryCreator.class, MethodValidatorFactoryCreator.class);
             APPLICATION_COMPONENTS.put(MessageInterpolatorFactory.class, MessageInterpolatorFactory.class);
         } else if (isClassPresent("javax.validation.Validation")) {

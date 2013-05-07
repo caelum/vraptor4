@@ -50,18 +50,25 @@ public class JavassistProxifier
      * Do not proxy these methods.
      */
     private static final MethodFilter IGNORE_BRIDGE_AND_OBJECT_METHODS = new MethodFilter() {
-        public boolean isHandled(Method method) {
+        @Override
+		public boolean isHandled(Method method) {
             return !method.isBridge() && !OBJECT_METHODS.contains(method);
         }
     };
 
-    private final InstanceCreator instanceCreator;
+    private InstanceCreator instanceCreator;
+    
+    //CDI eyes only
+	@Deprecated
+	public JavassistProxifier() {
+	}
 
     public JavassistProxifier(InstanceCreator instanceCreator) {
         this.instanceCreator = instanceCreator;
     }
 
-    public <T> T proxify(Class<T> type, MethodInvocation<? super T> handler) {
+    @Override
+	public <T> T proxify(Class<T> type, MethodInvocation<? super T> handler) {
         final ProxyFactory factory = new ProxyFactory();
         factory.setFilter(IGNORE_BRIDGE_AND_OBJECT_METHODS);
 
@@ -81,7 +88,8 @@ public class JavassistProxifier
         return type.cast(proxyInstance);
     }
 
-    public boolean isProxy(Object o) {
+    @Override
+	public boolean isProxy(Object o) {
         return o != null && ProxyObject.class.isAssignableFrom(o.getClass());
     }
     
@@ -89,11 +97,13 @@ public class JavassistProxifier
         ProxyObject proxyObject = (ProxyObject) proxyInstance;
 
         proxyObject.setHandler(new MethodHandler() {
-            public Object invoke(final Object self, final Method thisMethod, final Method proceed, Object[] args)
+            @Override
+			public Object invoke(final Object self, final Method thisMethod, final Method proceed, Object[] args)
                 throws Throwable {
 
                 return handler.intercept((T) self, thisMethod, args, new SuperMethod() {
-                    public Object invoke(Object proxy, Object[] args) {
+                    @Override
+					public Object invoke(Object proxy, Object[] args) {
                         try {
                             return proceed.invoke(proxy, args);
                         } catch (Throwable throwable) {

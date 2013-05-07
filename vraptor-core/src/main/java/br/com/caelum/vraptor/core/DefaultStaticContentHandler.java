@@ -45,13 +45,19 @@ public class DefaultStaticContentHandler implements StaticContentHandler {
 
 	private static final Logger logger = LoggerFactory.getLogger(DefaultStaticContentHandler.class);
 
-	private final ServletContext context;
+	private ServletContext context;
 
+	//CDI eyes only
+	@Deprecated
+	public DefaultStaticContentHandler() {
+	}
+	
 	@Inject
 	public DefaultStaticContentHandler(ServletContext context) {
 		this.context = context;
 	}
 	
+	@Override
 	public boolean requestingStaticFile(HttpServletRequest request) throws MalformedURLException {
 		URL resourceUrl = context.getResource(uriRelativeToContextRoot(request));
 		return resourceUrl != null && isAFile(resourceUrl);
@@ -70,6 +76,7 @@ public class DefaultStaticContentHandler implements StaticContentHandler {
 		return !resourceUrl.toString().endsWith("/");
 	}
 
+	@Override
 	public void deferProcessingToContainer(FilterChain filterChain, HttpServletRequest request,
 			HttpServletResponse response) throws IOException, ServletException {
 		logger.debug("Deferring request to container: {} ", request.getRequestURI());

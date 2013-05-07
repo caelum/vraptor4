@@ -30,9 +30,10 @@ import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
 
+import javassist.Modifier;
+
 import javax.inject.Inject;
 
-import javassist.Modifier;
 import net.vidageek.mirror.dsl.Mirror;
 import br.com.caelum.vraptor.Delete;
 import br.com.caelum.vraptor.Get;
@@ -66,13 +67,19 @@ import com.google.common.base.Predicate;
 @ApplicationScoped
 public class PathAnnotationRoutesParser implements RoutesParser {
 
-	private final Router router;
+	private Router router;
 
+	//CDI eyes only
+	@Deprecated
+	public PathAnnotationRoutesParser() {
+	}
+	
 	@Inject
 	public PathAnnotationRoutesParser(Router router) {
 		this.router = router;
 	}
 	
+	@Override
 	public List<Route> rulesFor(ResourceClass resource) {
 		Class<?> baseType = resource.getType();
 		return registerRulesFor(baseType);

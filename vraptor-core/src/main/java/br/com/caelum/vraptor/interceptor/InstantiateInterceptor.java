@@ -35,13 +35,19 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
 @Intercepts(after=ResourceLookupInterceptor.class)
 public class InstantiateInterceptor implements Interceptor {
 
-	private final Container container;
+	private Container container;
 
+	//CDI eyes only
+	@Deprecated
+	public InstantiateInterceptor() {
+	}
+	
 	@Inject
 	public InstantiateInterceptor(Container container) {
 		this.container = container;
 	}
 	
+	@Override
 	public void intercept(InterceptorStack invocation, ResourceMethod method,
 			Object instance) throws InterceptionException {
 		if (instance == null) {
@@ -51,6 +57,7 @@ public class InstantiateInterceptor implements Interceptor {
 		invocation.next(method, instance);
 	}
 
+	@Override
 	public boolean accepts(ResourceMethod method) {
 		return true;
 	}

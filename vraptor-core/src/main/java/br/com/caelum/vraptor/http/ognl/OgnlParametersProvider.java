@@ -64,12 +64,17 @@ public class OgnlParametersProvider implements ParametersProvider {
 
 	private static final Logger logger = LoggerFactory.getLogger(OgnlParametersProvider.class);
 
-	private final HttpServletRequest request;
+	private HttpServletRequest request;
 
-	private final Container container;
+	private Container container;
 
-	private final OgnlFacade ognl;
+	private OgnlFacade ognl;
 
+	//CDI eyes only
+	@Deprecated
+	public OgnlParametersProvider() {
+	}
+	
 	@Inject
 	public OgnlParametersProvider(ParameterNameProvider provider,
 			HttpServletRequest request, Container container, OgnlFacade ognl) {
@@ -79,6 +84,7 @@ public class OgnlParametersProvider implements ParametersProvider {
 		this.ognl = ognl;
 	}
 	
+	@Override
 	public Object[] getParametersFor(ResourceMethod method, List<Message> errors, ResourceBundle bundle) {
 
 		String[] names = provider.parameterNamesFor(method.getMethod());

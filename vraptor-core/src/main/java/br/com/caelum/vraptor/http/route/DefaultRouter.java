@@ -58,6 +58,11 @@ public class DefaultRouter implements Router {
 	private  Converters converters;
 	private  ParameterNameProvider nameProvider;
     private  Evaluator evaluator;
+    
+    //CDI eyes only
+	@Deprecated
+	public DefaultRouter() {
+	}
 
     @Inject
     public DefaultRouter(RoutesConfiguration config,
@@ -70,6 +75,7 @@ public class DefaultRouter implements Router {
 		config.config(this);
 	}
     
+	@Override
 	public RouteBuilder builderFor(String uri) {
 		return new DefaultRouteBuilder(proxifier, finder, converters, nameProvider, evaluator, uri);
 	}
@@ -77,10 +83,12 @@ public class DefaultRouter implements Router {
 	/**
 	 * You can override this method to get notified by all added routes.
 	 */
+	@Override
 	public void add(Route r) {
 		this.routes.add(r);
 	}
 
+	@Override
 	public ResourceMethod parse(String uri, HttpMethod method, MutableRequest request)
 						throws MethodNotAllowedException{
 		Collection<Route> routesMatchingUriAndMethod = routesMatchingUriAndMethod(uri, method);
@@ -115,6 +123,7 @@ public class DefaultRouter implements Router {
 		return routesMatchingMethod;
 	}
 
+	@Override
 	public EnumSet<HttpMethod> allowedMethodsFor(String uri) {
 		EnumSet<HttpMethod> allowed = EnumSet.noneOf(HttpMethod.class);
 		for (Route route : routesMatchingUri(uri)) {
@@ -131,6 +140,7 @@ public class DefaultRouter implements Router {
 		return routesMatchingURI;
 	}
 
+	@Override
 	public <T> String urlFor(Class<T> type, Method method, Object... params) {
 		Iterator<Route> matches = Iterators.filter(routes.iterator(), Filters.canHandle(type, method));
 		if (matches.hasNext()) {
@@ -145,6 +155,7 @@ public class DefaultRouter implements Router {
 				+ method.getName());
 	}
 
+	@Override
 	public List<Route> allRoutes() {
 		return Collections.unmodifiableList(new ArrayList<Route>(routes));
 	}

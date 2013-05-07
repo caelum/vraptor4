@@ -37,9 +37,14 @@ import br.com.caelum.vraptor.resource.HttpMethod;
 @ApplicationScoped
 public class DefaultRoutes implements Routes{
 
-	private final Proxifier proxifier;
-	private final Router router;
+	private Proxifier proxifier;
+	private Router router;
 
+	//CDI eyes only
+	@Deprecated
+	public DefaultRoutes() {
+	}
+	
 	@Inject
 	public DefaultRoutes(Router router, Proxifier proxifier) {
 		this.router = router;
@@ -48,8 +53,10 @@ public class DefaultRoutes implements Routes{
 
 	private String uri;
 
+	@Override
 	public <T> T uriFor(final Class<T> type) {
 		return proxifier.proxify(type, new MethodInvocation<T>() {
+			@Override
 			public Object intercept(T proxy, java.lang.reflect.Method method,
 					Object[] args, br.com.caelum.vraptor.proxy.SuperMethod superMethod) {
 				uri = router.urlFor(type, method, args);
@@ -58,10 +65,12 @@ public class DefaultRoutes implements Routes{
 		});
 	}
 
+	@Override
 	public String getUri() {
 		return uri;
 	}
 
+	@Override
 	public EnumSet<HttpMethod> allowedMethodsFor(String uri) {
 		return router.allowedMethodsFor(uri);
 	}

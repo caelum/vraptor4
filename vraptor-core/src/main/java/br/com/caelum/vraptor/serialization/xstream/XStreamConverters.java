@@ -17,7 +17,6 @@ package br.com.caelum.vraptor.serialization.xstream;
 
 import java.util.List;
 
-import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 
 import org.slf4j.Logger;
@@ -40,11 +39,16 @@ import com.thoughtworks.xstream.converters.SingleValueConverter;
 @Component
 public class XStreamConverters {
 
-	private final List<Converter> converters;
-	private final List<SingleValueConverter> singleValueConverters;
+	private List<Converter> converters;
+	private List<SingleValueConverter> singleValueConverters;
 	
 	private static final Logger logger = LoggerFactory.getLogger(XStreamConverters.class);
 
+	//CDI eyes only
+	@Deprecated
+	public XStreamConverters() {
+	}
+	
     @Inject
 	public XStreamConverters(List<Converter> converters, List<SingleValueConverter> singleValueConverters)
 	{

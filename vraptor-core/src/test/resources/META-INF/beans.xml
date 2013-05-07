@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:weld="http://jboss.org/schema/weld/beans"
+    xmlns="http://java.sun.com/xml/ns/javaee"
+    xsi:schemaLocation="
+          http://java.sun.com/xml/ns/javaee http://docs.jboss.org/cdi/beans_1_0.xsd
+          http://jboss.org/schema/weld/beans http://jboss.org/schema/weld/beans_1_1.xsd">
+          
+    <weld:scan>
+        <weld:exclude name="br.com.caelum.vraptor.**"/>        
+    </weld:scan>
+    <alternatives>
+        <class>br.com.caelum.cdi.component.CustomPathResolver</class>
+    </alternatives>
+
+</beans>

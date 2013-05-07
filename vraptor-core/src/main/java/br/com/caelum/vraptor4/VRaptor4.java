@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.Set;
 
-import javax.enterprise.inject.Any;
-import javax.enterprise.inject.Instance;
 import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.util.AnnotationLiteral;
 import javax.inject.Inject;
@@ -18,7 +16,11 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
+
 public class VRaptor4 implements Filter{
+	
+	@Inject Logger logger;
 
 	@Inject private BeanManagerUtil beanManagerUtil;
 	
@@ -41,10 +43,12 @@ public class VRaptor4 implements Filter{
 				"Servlet environment. Portlets and others aren't supported.");
 		}
 		
-		System.out.println("Oi, to no filtro do vraptor 4");
+		logger.debug("VRaptor received a new request");
 		
 		HttpServletRequest httpRequest = (HttpServletRequest) request;
+		
 		Set<Bean<?>> beanControllers = beanManagerUtil.getBeans(Object.class,new AnnotationLiteral<Controller>() {});
+		
 		for (Bean beanController : beanControllers) {
 
 			Object controller = beanManagerUtil.instanceFor(beanController);

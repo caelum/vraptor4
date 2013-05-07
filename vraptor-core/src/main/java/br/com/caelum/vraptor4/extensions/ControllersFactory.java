@@ -1,16 +1,15 @@
 package br.com.caelum.vraptor4.extensions;
 
 import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.Produces;
+import javax.enterprise.inject.Alternative;
 
-import br.com.caelum.vraptor4.ScannedControllers;
-
+@Alternative
 @ApplicationScoped
 class ControllersFactory {
 
-	@Produces @ApplicationScoped
-	public ScannedControllers produce(ControllersExtension extension) {
-		return extension.controllers;
-	}
+//	@Produces @ApplicationScoped
+//	public ScannedControllers produce(ControllersExtension extension) {
+//		return extension.controllers;
+//	}
 
 }

@@ -27,8 +27,13 @@ public class CDIRegistry {
 		registerPrototypeComponents();	
 		registerConverters();
 		registerCDISpecifics();
+		registerProvider();
 
 		
+	}
+
+	private void registerProvider() {
+		register(CDIProvider.class);
 	}
 
 	private void registerConverters() {

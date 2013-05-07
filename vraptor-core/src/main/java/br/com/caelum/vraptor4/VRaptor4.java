@@ -3,7 +3,7 @@ package br.com.caelum.vraptor4;
 import java.io.IOException;
 import java.lang.reflect.Method;
 
-import javax.inject.Inject;
+import javax.enterprise.inject.Alternative;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -15,15 +15,20 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 
+@Alternative
 public class VRaptor4 implements Filter{
 	
-	@Inject private Logger logger;
+//	@Inject 
+	private Logger logger;
 
-	@Inject private BeanManagerUtil beanManagerUtil;
+//	@Inject 
+	private BeanManagerUtil beanManagerUtil;
 	
-	@Inject private StupidRouter router;
+//	@Inject 
+	private StupidRouter router;
 	
-	@Inject private ScannedControllers scannedControllers;
+//	@Inject 
+	private ScannedControllers scannedControllers;
 	
 	@Override
 	public void destroy() {

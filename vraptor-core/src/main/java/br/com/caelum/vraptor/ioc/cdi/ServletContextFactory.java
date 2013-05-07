@@ -17,6 +17,7 @@ public class ServletContextFactory implements ComponentFactory<ServletContext>{
 		this.context = context;
 	}
 	
+	@Override
 	@ApplicationScoped
 	public ServletContext getInstance(){
 		return this.context;

@@ -7,7 +7,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.when;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -36,7 +35,6 @@ import br.com.caelum.vraptor.core.BaseComponents;
 import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.ioc.ContainerProvider;
-import br.com.caelum.vraptor.ioc.GenericContainerTest.MyAppComponentWithLifecycle;
 import br.com.caelum.vraptor.ioc.WhatToDo;
 import br.com.caelum.vraptor.ioc.fixture.ComponentFactoryInTheClasspath;
 import br.com.caelum.vraptor.ioc.fixture.CustomComponentWithLifecycleInTheClasspath;
@@ -195,10 +193,12 @@ public class CDIProviderRegisteringComponentsTest extends
 		startCDIContainer();
 	}
 	
+	@Override
 	@Ignore
 	public void setsAnAttributeOnRequestWithTheObjectTypeName() throws Exception {
 	}
 	
+	@Override
 	@Ignore
 	public void setsAnAttributeOnSessionWithTheObjectTypeName() throws Exception {
 	}	
@@ -263,7 +263,6 @@ public class CDIProviderRegisteringComponentsTest extends
 	@Override
 	protected void configureExpectations() {
 		super.configureExpectations();
-		when(context.getAttribute(CDIProvider.BEAN_MANAGER_KEY)).thenReturn(cdiContainer.getBeanManager());
 	}
 
 }

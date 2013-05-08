@@ -26,15 +26,12 @@ import java.lang.annotation.Target;
 import javax.enterprise.inject.Stereotype;
 import javax.inject.Named;
 
-import com.google.inject.ScopeAnnotation;
-
 /**
  * @author Fabio Kung
  */
 @Target(TYPE)
 @Retention(RUNTIME)
 @Documented
-@ScopeAnnotation
 @Stereotype
 @javax.enterprise.context.SessionScoped
 @Named

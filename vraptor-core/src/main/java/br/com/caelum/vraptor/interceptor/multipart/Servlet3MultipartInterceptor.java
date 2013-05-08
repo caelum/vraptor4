@@ -85,12 +85,17 @@ public class Servlet3MultipartInterceptor
     public static final String ACCEPT_MULTIPART = "multipart/form-data";
     public static final String CONTENT_DISPOSITION_KEY = "content-disposition";
 
-    private final HttpServletRequest request;
-    private final MutableRequest parameters;
-    private final Validator validator;
+    private HttpServletRequest request;
+    private MutableRequest parameters;
+    private Validator validator;
 
     final Multiset<String> indexes = HashMultiset.create();
 
+    //CDI eyes only
+	@Deprecated
+	public Servlet3MultipartInterceptor() {
+	}
+    
     @Inject
     public Servlet3MultipartInterceptor(HttpServletRequest request, MutableRequest parameters, Validator validator) {
         this.request = request;
@@ -101,7 +106,8 @@ public class Servlet3MultipartInterceptor
     /**
      * Only accept requests that contains multipart headers.
      */
-    public boolean accepts(ControllerMethod method) {
+    @Override
+	public boolean accepts(ControllerMethod method) {
         if (!request.getMethod().toUpperCase().equals("POST")) {
             return false;
         }
@@ -110,7 +116,8 @@ public class Servlet3MultipartInterceptor
         return contentType != null && contentType.startsWith(ACCEPT_MULTIPART);
     }
 
-    public void intercept(InterceptorStack stack, ControllerMethod method, Object resourceInstance)
+    @Override
+	public void intercept(InterceptorStack stack, ControllerMethod method, Object resourceInstance)
         throws InterceptionException {
         logger.info("Request contains multipart data. Try to parse with Servlet3 Part");
 

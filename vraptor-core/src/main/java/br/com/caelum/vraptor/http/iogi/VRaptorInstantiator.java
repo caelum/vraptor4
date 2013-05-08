@@ -51,10 +51,15 @@ import com.google.common.collect.ImmutableList;
 @Component
 @RequestScoped
 public class VRaptorInstantiator implements InstantiatorWithErrors, Instantiator<Object> {
-	private final Localization localization;
-	private final MultiInstantiator multiInstantiator;
+	private Localization localization;
+	private MultiInstantiator multiInstantiator;
 	private List<Message> errors;
-	private final DependencyProvider provider;
+	private DependencyProvider provider;
+	
+	//CDI eyes only
+	@Deprecated
+	public VRaptorInstantiator() {
+	}
 
 	@Inject
 	public VRaptorInstantiator(Converters converters, DependencyProvider provider, Localization localization, ParameterNamesProvider parameterNameProvider, HttpServletRequest request) {
@@ -74,15 +79,18 @@ public class VRaptorInstantiator implements InstantiatorWithErrors, Instantiator
 		multiInstantiator = new MultiInstantiator(instantiatorList);
 	}
 	
+	@Override
 	public boolean isAbleToInstantiate(Target<?> target) {
 		return true;
 	}
 
+	@Override
 	public Object instantiate(Target<?> target, Parameters parameters, List<Message> errors) {
 		this.errors = errors;
 		return instantiate(target, parameters);
 	}
 
+	@Override
 	public Object instantiate(Target<?> target, Parameters parameters) {
 		try {
 			return multiInstantiator.instantiate(target, parameters);
@@ -107,10 +115,12 @@ public class VRaptorInstantiator implements InstantiatorWithErrors, Instantiator
 		public DependencyInstantiator(Instantiator<Object> delegate) {
 			this.delegate = delegate;
 		}
+		@Override
 		public Object instantiate(Target<?> target, Parameters params) {
 			return provider.provide(target);
 		}
 
+		@Override
 		public boolean isAbleToInstantiate(Target<?> target) {
 			return target.getClassType().isInterface() && provider.canProvide(target);
 		}
@@ -123,10 +133,12 @@ public class VRaptorInstantiator implements InstantiatorWithErrors, Instantiator
 		public VRaptorTypeConverter(Converters converters) {
 			this.converters = converters;
 		}
+		@Override
 		public boolean isAbleToInstantiate(Target<?> target) {
 			return !String.class.equals(target.getClassType()) && converters.existsFor(target.getClassType());
 		}
 
+		@Override
 		public Object instantiate(Target<?> target, Parameters parameters) {
 			try {
 				Parameter parameter = parameters.namedAfter(target);

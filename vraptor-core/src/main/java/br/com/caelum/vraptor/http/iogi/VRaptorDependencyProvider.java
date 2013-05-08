@@ -36,17 +36,24 @@ import br.com.caelum.vraptor.ioc.Container;
 @ApplicationScoped
 public class VRaptorDependencyProvider implements DependencyProvider {
 
-	private final Container container;
+	private Container container;
+	
+	//CDI eyes only
+	@Deprecated
+	public VRaptorDependencyProvider() {
+	}
 
 	@Inject
 	public VRaptorDependencyProvider(Container container) {
 		this.container = container;
 	}
 	
+	@Override
 	public boolean canProvide(Target<?> target) {
 		return container.canProvide(target.getClassType());
 	}
 
+	@Override
 	public Object provide(Target<?> target) {
 		return container.instanceFor(target.getClassType());
 	}

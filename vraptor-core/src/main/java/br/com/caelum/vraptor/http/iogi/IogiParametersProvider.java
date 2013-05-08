@@ -46,10 +46,15 @@ import br.com.caelum.vraptor4.controller.ControllerMethod;
 @RequestScoped
 public class IogiParametersProvider implements ParametersProvider {
 	private static final Logger LOGGER = LoggerFactory.getLogger(IogiParametersProvider.class);
-	private final ParameterNameProvider nameProvider;
-	private final HttpServletRequest servletRequest;
-	private final InstantiatorWithErrors instantiator;
+	private ParameterNameProvider nameProvider;
+	private HttpServletRequest servletRequest;
+	private InstantiatorWithErrors instantiator;
 
+	//CDI eyes only
+	@Deprecated
+	public IogiParametersProvider() {
+	}
+	
 	@Inject
 	public IogiParametersProvider(ParameterNameProvider provider, HttpServletRequest parameters, InstantiatorWithErrors instantiator) {
 		this.nameProvider = provider;
@@ -58,6 +63,7 @@ public class IogiParametersProvider implements ParametersProvider {
 		LOGGER.debug("IogiParametersProvider is up");
 	}
 	
+	@Override
 	public Object[] getParametersFor(ControllerMethod method, List<Message> errors, ResourceBundle bundle) {
 		Parameters parameters = parseParameters(servletRequest);
 		List<Target<Object>> targets = createTargets(method);

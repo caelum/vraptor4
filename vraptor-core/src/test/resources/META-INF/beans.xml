@@ -8,6 +8,7 @@
           
     <weld:scan>
         <weld:exclude name="br.com.caelum.vraptor.**"/>        
+        <weld:exclude name="br.com.caelum.vraptor4.**"/>        
     </weld:scan>
     <alternatives>
         <class>br.com.caelum.cdi.component.CustomPathResolver</class>

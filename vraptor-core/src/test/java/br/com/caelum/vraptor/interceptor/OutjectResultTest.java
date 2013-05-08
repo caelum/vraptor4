@@ -33,13 +33,13 @@ import org.mockito.MockitoAnnotations;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.core.MethodInfo;
-import br.com.caelum.vraptor.resource.ResourceMethod;
+import br.com.caelum.vraptor4.controller.ControllerMethod;
 
 public class OutjectResultTest {
 
 	private @Mock Result result;
 	private @Mock MethodInfo info;
-	private @Mock ResourceMethod method;
+	private @Mock ControllerMethod method;
 	private @Mock Object instance;
 	private @Mock InterceptorStack stack;
 	private @Mock TypeNameExtractor extractor;

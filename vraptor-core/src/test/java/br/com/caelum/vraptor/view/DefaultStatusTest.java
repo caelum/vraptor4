@@ -23,10 +23,8 @@ import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.View;
 import br.com.caelum.vraptor.config.Configuration;
 import br.com.caelum.vraptor.http.FormatResolver;
-import br.com.caelum.vraptor.http.route.Router;
 import br.com.caelum.vraptor.proxy.JavassistProxifier;
 import br.com.caelum.vraptor.proxy.ObjenesisInstanceCreator;
-import br.com.caelum.vraptor.resource.HttpMethod;
 import br.com.caelum.vraptor.serialization.DefaultRepresentationResult;
 import br.com.caelum.vraptor.serialization.JSONSerialization;
 import br.com.caelum.vraptor.serialization.Serialization;
@@ -37,6 +35,8 @@ import br.com.caelum.vraptor.validator.Message;
 import br.com.caelum.vraptor.validator.MessageConverter;
 import br.com.caelum.vraptor.validator.SingletonResourceBundle;
 import br.com.caelum.vraptor.validator.ValidationMessage;
+import br.com.caelum.vraptor4.controller.HttpMethod;
+import br.com.caelum.vraptor4.http.route.Router;
 
 import com.google.common.collect.Lists;
 

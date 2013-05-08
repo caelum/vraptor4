@@ -30,14 +30,14 @@ import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.core.Routes;
 import br.com.caelum.vraptor.interceptor.Interceptor;
 import br.com.caelum.vraptor.ioc.RequestScoped;
-import br.com.caelum.vraptor.resource.HttpMethod;
-import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.restfulie.Restfulie;
 import br.com.caelum.vraptor.restfulie.hypermedia.HypermediaResource;
 import br.com.caelum.vraptor.restfulie.hypermedia.Transition;
 import br.com.caelum.vraptor.restfulie.relation.Relation;
 import br.com.caelum.vraptor.restfulie.relation.RelationBuilder;
 import br.com.caelum.vraptor.view.Status;
+import br.com.caelum.vraptor4.controller.HttpMethod;
+import br.com.caelum.vraptor4.controller.ControllerMethod;
 
 /**
  * Intercepts invocations to state control's intercepted controllers.
@@ -65,11 +65,11 @@ public class ResourceControllerInterceptor<T extends HypermediaResource> impleme
 		this.controllers = Arrays.asList(control.getControllers());
 	}
 
-	public boolean accepts(ResourceMethod method) {
+	public boolean accepts(ControllerMethod method) {
 		return controllers.contains(method.getResource().getType()) && method.getMethod().isAnnotationPresent(Transition.class);
 	}
 
-	public void intercept(InterceptorStack stack, ResourceMethod method,
+	public void intercept(InterceptorStack stack, ControllerMethod method,
 			Object instance) throws InterceptionException {
 		ParameterizedType type = searcher.search(control.getClass());
 		if(analyzeImplementation(method,type)) {
@@ -77,7 +77,7 @@ public class ResourceControllerInterceptor<T extends HypermediaResource> impleme
 		}
 	}
 
-	private boolean analyzeImplementation(ResourceMethod method,
+	private boolean analyzeImplementation(ControllerMethod method,
 			ParameterizedType parameterized) {
 		Type parameterType = parameterized.getActualTypeArguments()[0];
 		Class<?> found = (Class<?>) parameterType;

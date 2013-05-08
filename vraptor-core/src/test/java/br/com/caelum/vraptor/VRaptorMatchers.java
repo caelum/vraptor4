@@ -24,7 +24,7 @@ import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 
-import br.com.caelum.vraptor.http.route.Route;
+import br.com.caelum.vraptor4.http.route.Route;
 
 public class VRaptorMatchers {
 	public static Matcher<Collection<?>> hasOneCopyOf(final Object item) {

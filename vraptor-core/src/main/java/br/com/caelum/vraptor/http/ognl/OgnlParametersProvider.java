@@ -44,9 +44,9 @@ import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.http.ParametersProvider;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.ioc.RequestScoped;
-import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.validator.Message;
 import br.com.caelum.vraptor.validator.ValidationMessage;
+import br.com.caelum.vraptor4.controller.ControllerMethod;
 
 import com.google.common.base.Defaults;
 
@@ -85,7 +85,7 @@ public class OgnlParametersProvider implements ParametersProvider {
 	}
 	
 	@Override
-	public Object[] getParametersFor(ResourceMethod method, List<Message> errors, ResourceBundle bundle) {
+	public Object[] getParametersFor(ControllerMethod method, List<Message> errors, ResourceBundle bundle) {
 
 		String[] names = provider.parameterNamesFor(method.getMethod());
 		Type[] types = method.getMethod().getGenericParameterTypes();
@@ -104,9 +104,9 @@ public class OgnlParametersProvider implements ParametersProvider {
 		public Type type;
 		public Class clazz;
 		public String name;
-		public ResourceMethod method;
+		public ControllerMethod method;
 
-		public Parameter(Type type, Class clazz, String name, ResourceMethod method) {
+		public Parameter(Type type, Class clazz, String name, ControllerMethod method) {
 			this.type = type;
 			this.clazz = clazz;
 			this.name = name;

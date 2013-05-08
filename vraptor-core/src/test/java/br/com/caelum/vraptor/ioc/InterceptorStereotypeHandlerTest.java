@@ -28,7 +28,7 @@ import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.interceptor.Interceptor;
 import br.com.caelum.vraptor.interceptor.InterceptorRegistry;
-import br.com.caelum.vraptor.resource.ResourceMethod;
+import br.com.caelum.vraptor4.controller.ControllerMethod;
 
 public class InterceptorStereotypeHandlerTest {
 
@@ -50,21 +50,21 @@ public class InterceptorStereotypeHandlerTest {
 	
 	static class InterceptorA implements Interceptor {
 
-		public boolean accepts(ResourceMethod method) {
+		public boolean accepts(ControllerMethod method) {
 			return false;
 		}
 
-		public void intercept(InterceptorStack stack, ResourceMethod method,
+		public void intercept(InterceptorStack stack, ControllerMethod method,
 				Object resourceInstance) throws InterceptionException {
 		}
 	}
 	static class InterceptorB implements Interceptor {
 
-		public boolean accepts(ResourceMethod method) {
+		public boolean accepts(ControllerMethod method) {
 			return false;
 		}
 
-		public void intercept(InterceptorStack stack, ResourceMethod method,
+		public void intercept(InterceptorStack stack, ControllerMethod method,
 				Object resourceInstance) throws InterceptionException {
 		}
 	}

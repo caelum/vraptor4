@@ -28,11 +28,11 @@ import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.http.UrlToResourceTranslator;
-import br.com.caelum.vraptor.http.route.MethodNotAllowedException;
-import br.com.caelum.vraptor.http.route.ResourceNotFoundException;
-import br.com.caelum.vraptor.resource.MethodNotAllowedHandler;
-import br.com.caelum.vraptor.resource.ResourceMethod;
-import br.com.caelum.vraptor.resource.ResourceNotFoundHandler;
+import br.com.caelum.vraptor4.controller.MethodNotAllowedHandler;
+import br.com.caelum.vraptor4.controller.ControllerMethod;
+import br.com.caelum.vraptor4.controller.ControllerNotFoundHandler;
+import br.com.caelum.vraptor4.http.route.MethodNotAllowedException;
+import br.com.caelum.vraptor4.http.route.ResourceNotFoundException;
 
 /**
  * Looks up the resource for a specific request and delegates for the 404
@@ -48,7 +48,7 @@ public class ResourceLookupInterceptor implements Interceptor {
 	private UrlToResourceTranslator translator;
 	private MethodInfo methodInfo;
 	private RequestInfo requestInfo;
-	private ResourceNotFoundHandler resourceNotFoundHandler;
+	private ControllerNotFoundHandler resourceNotFoundHandler;
 	private MethodNotAllowedHandler methodNotAllowedHandler;
 
 	//CDI eyes only
@@ -58,7 +58,7 @@ public class ResourceLookupInterceptor implements Interceptor {
 	
 	@Inject
 	public ResourceLookupInterceptor(UrlToResourceTranslator translator, MethodInfo methodInfo,
-			ResourceNotFoundHandler resourceNotFoundHandler, MethodNotAllowedHandler methodNotAllowedHandler,
+			ControllerNotFoundHandler resourceNotFoundHandler, MethodNotAllowedHandler methodNotAllowedHandler,
 			RequestInfo requestInfo) {
 		this.translator = translator;
 		this.methodInfo = methodInfo;
@@ -68,11 +68,11 @@ public class ResourceLookupInterceptor implements Interceptor {
 	}
 	
 	@Override
-	public void intercept(InterceptorStack stack, ResourceMethod ignorableMethod, Object resourceInstance)
+	public void intercept(InterceptorStack stack, ControllerMethod ignorableMethod, Object resourceInstance)
 			throws InterceptionException {
 
 		try {
-			ResourceMethod method = translator.translate(requestInfo);
+			ControllerMethod method = translator.translate(requestInfo);
 
 			methodInfo.setResourceMethod(method);
 			stack.next(method, resourceInstance);
@@ -85,7 +85,7 @@ public class ResourceLookupInterceptor implements Interceptor {
 	}
 
 	@Override
-	public boolean accepts(ResourceMethod method) {
+	public boolean accepts(ControllerMethod method) {
 		return true;
 	}
 

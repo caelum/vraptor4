@@ -39,8 +39,8 @@ import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.http.ParametersProvider;
 import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.ioc.RequestScoped;
-import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.validator.Message;
+import br.com.caelum.vraptor4.controller.ControllerMethod;
 
 @Component
 @RequestScoped
@@ -58,7 +58,7 @@ public class IogiParametersProvider implements ParametersProvider {
 		LOGGER.debug("IogiParametersProvider is up");
 	}
 	
-	public Object[] getParametersFor(ResourceMethod method, List<Message> errors, ResourceBundle bundle) {
+	public Object[] getParametersFor(ControllerMethod method, List<Message> errors, ResourceBundle bundle) {
 		Parameters parameters = parseParameters(servletRequest);
 		List<Target<Object>> targets = createTargets(method);
 
@@ -82,7 +82,7 @@ public class IogiParametersProvider implements ParametersProvider {
 		return instantiator.instantiate(target, parameters, errors);
 	}
 
-	private List<Target<Object>> createTargets(ResourceMethod method) {
+	private List<Target<Object>> createTargets(ControllerMethod method) {
 		Method javaMethod = method.getMethod();
 		List<Target<Object>> targets = new ArrayList<Target<Object>>();
 

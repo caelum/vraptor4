@@ -38,11 +38,11 @@ import br.com.caelum.vraptor.converter.StringConverter;
 import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.core.SafeResourceBundle;
 import br.com.caelum.vraptor.ioc.Container;
-import br.com.caelum.vraptor.resource.DefaultResourceMethod;
-import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.util.EmptyBundle;
 import br.com.caelum.vraptor.validator.DefaultValidationException;
 import br.com.caelum.vraptor.validator.Message;
+import br.com.caelum.vraptor4.controller.DefaultControllerMethod;
+import br.com.caelum.vraptor4.controller.ControllerMethod;
 
 import com.google.common.collect.ImmutableMap;
 
@@ -56,21 +56,21 @@ public abstract class ParametersProviderTest {
 
     protected ArrayList<Message> errors;
     protected ParametersProvider provider;
-	protected ResourceMethod buyA;
-	protected ResourceMethod kick;
-	protected ResourceMethod error;
-	protected ResourceMethod array;
-	protected ResourceMethod simple;
+	protected ControllerMethod buyA;
+	protected ControllerMethod kick;
+	protected ControllerMethod error;
+	protected ControllerMethod array;
+	protected ControllerMethod simple;
 
-	protected ResourceMethod list;
-	protected ResourceMethod listOfObject;
-	protected ResourceMethod abc;
-	protected ResourceMethod string;
-	protected ResourceMethod generic;
-	protected ResourceMethod primitive;
-	protected ResourceMethod stringArray;
-	protected ResourceMethod dependency;
-	protected ResourceMethod doNothing;
+	protected ControllerMethod list;
+	protected ControllerMethod listOfObject;
+	protected ControllerMethod abc;
+	protected ControllerMethod string;
+	protected ControllerMethod generic;
+	protected ControllerMethod primitive;
+	protected ControllerMethod stringArray;
+	protected ControllerMethod dependency;
+	protected ControllerMethod doNothing;
 
 	protected abstract ParametersProvider getProvider();
 
@@ -101,11 +101,11 @@ public abstract class ParametersProviderTest {
         dependency 	= method("dependency", Result.class);
         primitive 	= method("primitive", long.class);
         doNothing 	= method("doNothing");
-        generic 	= DefaultResourceMethod.instanceFor(Specific.class, Generic.class.getDeclaredMethod("generic", Object.class));
+        generic 	= DefaultControllerMethod.instanceFor(Specific.class, Generic.class.getDeclaredMethod("generic", Object.class));
     }
 
-	protected ResourceMethod method(String methodName, Class<?>... argTypes) throws NoSuchMethodException {
-		return DefaultResourceMethod.instanceFor(MyResource.class, MyResource.class.getDeclaredMethod(methodName, argTypes));
+	protected ControllerMethod method(String methodName, Class<?>... argTypes) throws NoSuchMethodException {
+		return DefaultControllerMethod.instanceFor(MyResource.class, MyResource.class.getDeclaredMethod(methodName, argTypes));
 	}
 
     @Test
@@ -383,7 +383,7 @@ public abstract class ParametersProviderTest {
     	when(nameProvider.parameterNamesFor(any(Method.class))).thenReturn(new String[]{"any"});
 	}
 
-	protected void requestParameterIs(ResourceMethod method, String paramName, String... values) {
+	protected void requestParameterIs(ControllerMethod method, String paramName, String... values) {
     	String methodName = paramName.replaceAll("[\\.\\[].*", "");
 
 		when(request.getParameterValues(paramName)).thenReturn(values);
@@ -396,7 +396,7 @@ public abstract class ParametersProviderTest {
 
 
     @SuppressWarnings("unchecked")
-	protected <T> T getParameters(ResourceMethod method) {
+	protected <T> T getParameters(ControllerMethod method) {
 		return (T) provider.getParametersFor(method, errors, new SafeResourceBundle(new EmptyBundle()))[0];
 	}
 

@@ -19,7 +19,7 @@ package br.com.caelum.vraptor.core;
 
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.interceptor.Interceptor;
-import br.com.caelum.vraptor.resource.ResourceMethod;
+import br.com.caelum.vraptor4.controller.ControllerMethod;
 
 /**
  * The interceptors stack.
@@ -31,7 +31,7 @@ public interface InterceptorStack {
 	/**
 	 * Invokes the next interceptor on the stack.
 	 */
-    void next(ResourceMethod method, Object resourceInstance) throws InterceptionException;
+    void next(ControllerMethod method, Object resourceInstance) throws InterceptionException;
 
     /**
      * Adds this interceptor at the end of the stack.

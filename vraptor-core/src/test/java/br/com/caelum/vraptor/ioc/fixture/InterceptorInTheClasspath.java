@@ -21,17 +21,17 @@ import br.com.caelum.vraptor.Intercepts;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.interceptor.Interceptor;
 import br.com.caelum.vraptor.ioc.RequestScoped;
-import br.com.caelum.vraptor.resource.ResourceMethod;
+import br.com.caelum.vraptor4.controller.ControllerMethod;
 
 @Intercepts
 @RequestScoped
 public class InterceptorInTheClasspath implements Interceptor{
 
-	public boolean accepts(ResourceMethod method) {
+	public boolean accepts(ControllerMethod method) {
 		return false;
 	}
 
-	public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance)
+	public void intercept(InterceptorStack stack, ControllerMethod method, Object resourceInstance)
 			throws InterceptionException {
 	}
 

@@ -26,7 +26,7 @@ import org.slf4j.LoggerFactory;
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.interceptor.Interceptor;
 import br.com.caelum.vraptor.ioc.Container;
-import br.com.caelum.vraptor.resource.ResourceMethod;
+import br.com.caelum.vraptor4.controller.ControllerMethod;
 
 class LazyInterceptorHandler implements InterceptorHandler {
 
@@ -41,7 +41,7 @@ class LazyInterceptorHandler implements InterceptorHandler {
 		this.type = type;
 	}
 
-	public void execute(InterceptorStack stack, ResourceMethod method, Object resourceInstance)
+	public void execute(InterceptorStack stack, ControllerMethod method, Object resourceInstance)
 			throws InterceptionException {
 		boolean accepts;
 		try {

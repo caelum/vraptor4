@@ -17,7 +17,7 @@ package br.com.caelum.vraptor.deserialization;
 
 import java.io.InputStream;
 
-import br.com.caelum.vraptor.resource.ResourceMethod;
+import br.com.caelum.vraptor4.controller.ControllerMethod;
 
 /**
  * Deserializes request body according to a given content type.
@@ -27,6 +27,6 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
  */
 public interface Deserializer {
 
-	Object[] deserialize(InputStream inputStream, ResourceMethod method);
+	Object[] deserialize(InputStream inputStream, ControllerMethod method);
 
 }

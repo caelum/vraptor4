@@ -29,7 +29,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import br.com.caelum.cdi.component.CDIComponent;
-import br.com.caelum.cdi.component.CDIResourceComponent;
+import br.com.caelum.cdi.component.CDIControllerComponent;
 import br.com.caelum.cdi.component.CDISessionComponent;
 import br.com.caelum.vraptor.core.BaseComponents;
 import br.com.caelum.vraptor.core.RequestInfo;
@@ -229,7 +229,7 @@ public class CDIProviderRegisteringComponentsTest extends
 	
 	@Test
 	public void shouldStereotypeResourceWithRequestAndNamed(){
-		Bean<?> bean = cdiContainer.getBeanManager().getBeans(CDIResourceComponent.class).iterator().next();
+		Bean<?> bean = cdiContainer.getBeanManager().getBeans(CDIControllerComponent.class).iterator().next();
 		assertTrue(bean.getScope().equals(RequestScoped.class));
 	}
 	
@@ -247,7 +247,7 @@ public class CDIProviderRegisteringComponentsTest extends
 	
 	@Test
 	public void shouldUseConstructorEvenWithoutInject(){
-		CDIResourceComponent resource = registerAndGetFromContainer(CDIResourceComponent.class,CDIResourceComponent.class);
+		CDIControllerComponent resource = registerAndGetFromContainer(CDIControllerComponent.class,CDIControllerComponent.class);
 		assertTrue(resource.isInitializedDepencies());
 	}	
 	

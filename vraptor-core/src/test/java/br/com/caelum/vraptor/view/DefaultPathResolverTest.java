@@ -27,13 +27,13 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor.http.FormatResolver;
-import br.com.caelum.vraptor.resource.ResourceClass;
-import br.com.caelum.vraptor.resource.ResourceMethod;
+import br.com.caelum.vraptor4.controller.ControllerClass;
+import br.com.caelum.vraptor4.controller.ControllerMethod;
 
 public class DefaultPathResolverTest {
 
-    private @Mock ResourceMethod method;
-    private @Mock ResourceClass resource;
+    private @Mock ControllerMethod method;
+    private @Mock ControllerClass resource;
 	private @Mock FormatResolver formatResolver;
 
 	private DefaultPathResolver resolver;

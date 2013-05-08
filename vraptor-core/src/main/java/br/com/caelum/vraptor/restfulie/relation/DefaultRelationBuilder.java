@@ -20,10 +20,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.vidageek.mirror.dsl.Mirror;
-import br.com.caelum.vraptor.http.route.Router;
 import br.com.caelum.vraptor.proxy.MethodInvocation;
 import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.proxy.SuperMethod;
+import br.com.caelum.vraptor4.http.route.Router;
 
 /**
  * Default impl for {@link RelationBuilder}

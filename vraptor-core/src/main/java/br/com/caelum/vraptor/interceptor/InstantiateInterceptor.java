@@ -23,7 +23,7 @@ import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.Intercepts;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.ioc.Container;
-import br.com.caelum.vraptor.resource.ResourceMethod;
+import br.com.caelum.vraptor4.controller.ControllerMethod;
 
 /**
  * Using a request scoped container, instantiates a resource.<br/>
@@ -48,7 +48,7 @@ public class InstantiateInterceptor implements Interceptor {
 	}
 	
 	@Override
-	public void intercept(InterceptorStack invocation, ResourceMethod method,
+	public void intercept(InterceptorStack invocation, ControllerMethod method,
 			Object instance) throws InterceptionException {
 		if (instance == null) {
 			Class<?> type = method.getResource().getType();
@@ -58,7 +58,7 @@ public class InstantiateInterceptor implements Interceptor {
 	}
 
 	@Override
-	public boolean accepts(ResourceMethod method) {
+	public boolean accepts(ControllerMethod method) {
 		return true;
 	}
 

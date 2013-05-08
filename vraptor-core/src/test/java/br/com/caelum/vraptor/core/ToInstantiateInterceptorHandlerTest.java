@@ -30,14 +30,14 @@ import org.mockito.MockitoAnnotations;
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.interceptor.Interceptor;
 import br.com.caelum.vraptor.ioc.Container;
-import br.com.caelum.vraptor.resource.ResourceMethod;
+import br.com.caelum.vraptor4.controller.ControllerMethod;
 
 public class ToInstantiateInterceptorHandlerTest {
 
 	private @Mock Container container;
 	private @Mock Interceptor interceptor;
 	private @Mock InterceptorStack stack;
-	private @Mock ResourceMethod method;
+	private @Mock ControllerMethod method;
 
     @Before
     public void setup() {
@@ -48,11 +48,11 @@ public class ToInstantiateInterceptorHandlerTest {
         public MyWeirdInterceptor(Dependency d) {
         }
 
-        public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance)
+        public void intercept(InterceptorStack stack, ControllerMethod method, Object resourceInstance)
                 throws InterceptionException {
         }
 
-        public boolean accepts(ResourceMethod method) {
+        public boolean accepts(ControllerMethod method) {
             return true;
         }
     }

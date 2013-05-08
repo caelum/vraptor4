@@ -34,8 +34,8 @@ import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.deserialization.Deserializer;
 import br.com.caelum.vraptor.deserialization.Deserializers;
 import br.com.caelum.vraptor.ioc.Container;
-import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.view.Status;
+import br.com.caelum.vraptor4.controller.ControllerMethod;
 
 /**
  * Important: this interceptor must be after the {@link ParametersInstantiatorInterceptor}
@@ -64,11 +64,11 @@ public class DeserializingInterceptor implements Interceptor {
 		this.status = status;
 	}
 	
-	public boolean accepts(ResourceMethod method) {
+	public boolean accepts(ControllerMethod method) {
 		return method.containsAnnotation(Consumes.class);
 	}
 
-	public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance) throws InterceptionException {
+	public void intercept(InterceptorStack stack, ControllerMethod method, Object resourceInstance) throws InterceptionException {
 		Consumes consumesAnnotation = method.getMethod().getAnnotation(Consumes.class);
 		List<String> supported =  Arrays.asList(consumesAnnotation.value());
 

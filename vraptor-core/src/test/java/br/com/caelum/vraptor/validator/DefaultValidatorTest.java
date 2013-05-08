@@ -44,7 +44,6 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.core.Localization;
 import br.com.caelum.vraptor.proxy.JavassistProxifier;
@@ -55,6 +54,7 @@ import br.com.caelum.vraptor.util.test.MockResult;
 import br.com.caelum.vraptor.view.DefaultValidationViewsFactory;
 import br.com.caelum.vraptor.view.LogicResult;
 import br.com.caelum.vraptor.view.PageResult;
+import br.com.caelum.vraptor4.Controller;
 
 @RunWith(MockitoJUnitRunner.class)
 public class DefaultValidatorTest {
@@ -215,7 +215,7 @@ public class DefaultValidatorTest {
 		verify(message, never()).setBundle(any(ResourceBundle.class));
 	}
 
-	@Resource
+	@Controller
 	public static interface MyComponent {
 		public void logic();
 	}

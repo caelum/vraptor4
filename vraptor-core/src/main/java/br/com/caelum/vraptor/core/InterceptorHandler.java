@@ -18,7 +18,7 @@
 package br.com.caelum.vraptor.core;
 
 import br.com.caelum.vraptor.InterceptionException;
-import br.com.caelum.vraptor.resource.ResourceMethod;
+import br.com.caelum.vraptor4.controller.ControllerMethod;
 
 /**
  * An interceptor handler is a wrapper to either an interceptor instance or a
@@ -32,6 +32,6 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
  */
 public interface InterceptorHandler {
 
-    void execute(InterceptorStack stack, ResourceMethod method, Object resourceInstance) throws InterceptionException;
+    void execute(InterceptorStack stack, ControllerMethod method, Object resourceInstance) throws InterceptionException;
 
 }

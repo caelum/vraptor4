@@ -21,7 +21,7 @@ import javax.inject.Inject;
 
 import br.com.caelum.vraptor.http.FormatResolver;
 import br.com.caelum.vraptor.ioc.RequestScoped;
-import br.com.caelum.vraptor.resource.ResourceMethod;
+import br.com.caelum.vraptor4.controller.ControllerMethod;
 
 /**
  * The default vraptor3 path resolver uses the type and method name as
@@ -46,7 +46,7 @@ public class DefaultPathResolver implements PathResolver {
 	}
 	
 	@Override
-	public String pathFor(ResourceMethod method) {
+	public String pathFor(ControllerMethod method) {
 		String format = resolver.getAcceptFormat();
 
 		String suffix = "";

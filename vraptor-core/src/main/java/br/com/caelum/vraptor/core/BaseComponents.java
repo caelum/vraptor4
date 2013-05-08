@@ -35,7 +35,6 @@ import br.com.caelum.iogi.spi.ParameterNamesProvider;
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.Intercepts;
-import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.config.ApplicationConfiguration;
@@ -92,16 +91,6 @@ import br.com.caelum.vraptor.http.iogi.VRaptorParameterNamesProvider;
 import br.com.caelum.vraptor.http.ognl.EmptyElementsRemoval;
 import br.com.caelum.vraptor.http.ognl.OgnlFacade;
 import br.com.caelum.vraptor.http.ognl.OgnlParametersProvider;
-import br.com.caelum.vraptor.http.route.DefaultRouter;
-import br.com.caelum.vraptor.http.route.DefaultTypeFinder;
-import br.com.caelum.vraptor.http.route.Evaluator;
-import br.com.caelum.vraptor.http.route.JavaEvaluator;
-import br.com.caelum.vraptor.http.route.NoRoutesConfiguration;
-import br.com.caelum.vraptor.http.route.PathAnnotationRoutesParser;
-import br.com.caelum.vraptor.http.route.Router;
-import br.com.caelum.vraptor.http.route.RoutesConfiguration;
-import br.com.caelum.vraptor.http.route.RoutesParser;
-import br.com.caelum.vraptor.http.route.TypeFinder;
 import br.com.caelum.vraptor.interceptor.DefaultTypeNameExtractor;
 import br.com.caelum.vraptor.interceptor.DeserializingInterceptor;
 import br.com.caelum.vraptor.interceptor.ExceptionHandlerInterceptor;
@@ -127,17 +116,12 @@ import br.com.caelum.vraptor.interceptor.multipart.ServletFileUploadCreator;
 import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.ioc.ConverterHandler;
 import br.com.caelum.vraptor.ioc.InterceptorStereotypeHandler;
-import br.com.caelum.vraptor.ioc.ResourceHandler;
 import br.com.caelum.vraptor.ioc.StereotypeHandler;
 import br.com.caelum.vraptor.proxy.InstanceCreator;
 import br.com.caelum.vraptor.proxy.JavassistProxifier;
 import br.com.caelum.vraptor.proxy.ObjenesisInstanceCreator;
 import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.proxy.ReflectionInstanceCreator;
-import br.com.caelum.vraptor.resource.DefaultMethodNotAllowedHandler;
-import br.com.caelum.vraptor.resource.DefaultResourceNotFoundHandler;
-import br.com.caelum.vraptor.resource.MethodNotAllowedHandler;
-import br.com.caelum.vraptor.resource.ResourceNotFoundHandler;
 import br.com.caelum.vraptor.restfulie.RestHeadersHandler;
 import br.com.caelum.vraptor.restfulie.headers.DefaultRestDefaults;
 import br.com.caelum.vraptor.restfulie.headers.DefaultRestHeadersHandler;
@@ -190,6 +174,22 @@ import br.com.caelum.vraptor.view.RefererResult;
 import br.com.caelum.vraptor.view.SessionFlashScope;
 import br.com.caelum.vraptor.view.Status;
 import br.com.caelum.vraptor.view.ValidationViewsFactory;
+import br.com.caelum.vraptor4.Controller;
+import br.com.caelum.vraptor4.controller.DefaultMethodNotAllowedHandler;
+import br.com.caelum.vraptor4.controller.DefaultControllerNotFoundHandler;
+import br.com.caelum.vraptor4.controller.MethodNotAllowedHandler;
+import br.com.caelum.vraptor4.controller.ControllerNotFoundHandler;
+import br.com.caelum.vraptor4.http.route.DefaultRouter;
+import br.com.caelum.vraptor4.http.route.DefaultTypeFinder;
+import br.com.caelum.vraptor4.http.route.Evaluator;
+import br.com.caelum.vraptor4.http.route.JavaEvaluator;
+import br.com.caelum.vraptor4.http.route.NoRoutesConfiguration;
+import br.com.caelum.vraptor4.http.route.PathAnnotationRoutesParser;
+import br.com.caelum.vraptor4.http.route.Router;
+import br.com.caelum.vraptor4.http.route.RoutesConfiguration;
+import br.com.caelum.vraptor4.http.route.RoutesParser;
+import br.com.caelum.vraptor4.http.route.TypeFinder;
+import br.com.caelum.vraptor4.ioc.ControllerHandler;
 
 import com.thoughtworks.xstream.converters.SingleValueConverter;
 
@@ -213,7 +213,7 @@ public class BaseComponents {
             UrlToResourceTranslator.class, 	DefaultResourceTranslator.class,
             Router.class, 					DefaultRouter.class,
             TypeNameExtractor.class, 		DefaultTypeNameExtractor.class,
-            ResourceNotFoundHandler.class, 	DefaultResourceNotFoundHandler.class,
+            ControllerNotFoundHandler.class, 	DefaultControllerNotFoundHandler.class,
             MethodNotAllowedHandler.class,	DefaultMethodNotAllowedHandler.class,
             RoutesConfiguration.class, 		NoRoutesConfiguration.class,
             Deserializers.class,			DefaultDeserializers.class,
@@ -309,7 +309,7 @@ public class BaseComponents {
 
     @SuppressWarnings("unchecked")
 	private static final Class<? extends StereotypeHandler>[] STEREOTYPE_HANDLERS = new Class[] {
-		ResourceHandler.class,
+		ControllerHandler.class,
 		ConverterHandler.class,
 		InterceptorStereotypeHandler.class,
 		DeserializesHandler.class
@@ -317,7 +317,7 @@ public class BaseComponents {
 
     @SuppressWarnings("unchecked")
     private static final Class<? extends Annotation>[] STEREOTYPES = new Class[] {
-    	Resource.class,
+    	Controller.class,
     	Convert.class,
     	Component.class,
     	Deserializes.class,

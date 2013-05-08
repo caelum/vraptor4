@@ -24,15 +24,15 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import br.com.caelum.vraptor.interceptor.Interceptor;
-import br.com.caelum.vraptor.resource.ResourceMethod;
+import br.com.caelum.vraptor4.controller.ControllerMethod;
 
 /**
  * Identifies that given class should be used with a lazy strategy.
  *
  * On an {@link Interceptor}, it means that it should only
- * be instantiated if the {@link Interceptor#accepts(br.com.caelum.vraptor.resource.ResourceMethod)}
- * method returns true. In this case, the {@link Interceptor#accepts(br.com.caelum.vraptor.resource.ResourceMethod)}
- * should only depend on the received {@link ResourceMethod}.
+ * be instantiated if the {@link Interceptor#accepts(br.com.caelum.vraptor4.controller.ControllerMethod)}
+ * method returns true. In this case, the {@link Interceptor#accepts(br.com.caelum.vraptor4.controller.ControllerMethod)}
+ * should only depend on the received {@link ControllerMethod}.
  *
  * @author Lucas Cavalcanti
  * @author Alberto Souza

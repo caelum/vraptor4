@@ -17,11 +17,11 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.interceptor.DefaultTypeNameExtractor;
 import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
-import br.com.caelum.vraptor.resource.DefaultResourceClass;
-import br.com.caelum.vraptor.resource.DefaultResourceMethod;
-import br.com.caelum.vraptor.resource.ResourceClass;
-import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.serialization.xstream.XStreamBuilderImpl;
+import br.com.caelum.vraptor4.controller.ControllerClass;
+import br.com.caelum.vraptor4.controller.DefaultControllerClass;
+import br.com.caelum.vraptor4.controller.DefaultControllerMethod;
+import br.com.caelum.vraptor4.controller.ControllerMethod;
 
 public class JsonDeserializerTest {
 
@@ -29,11 +29,11 @@ public class JsonDeserializerTest {
 	private ParameterNameProvider provider;
 	private TypeNameExtractor extractor;
 	
-	private ResourceMethod meow;
-	private ResourceMethod roll;
-	private ResourceMethod jump;
-	private ResourceMethod sleep;
-	private ResourceMethod annotated;
+	private ControllerMethod meow;
+	private ControllerMethod roll;
+	private ControllerMethod jump;
+	private ControllerMethod sleep;
+	private ControllerMethod annotated;
 
 	@Before
 	public void setUp() throws Exception {
@@ -43,13 +43,13 @@ public class JsonDeserializerTest {
 		
         deserializer = new JsonDeserializer(provider, extractor, XStreamBuilderImpl.cleanInstance());
         
-		ResourceClass resourceClass = new DefaultResourceClass(CatController.class);
+		ControllerClass resourceClass = new DefaultControllerClass(CatController.class);
 
-		meow = new DefaultResourceMethod(resourceClass, CatController.class.getDeclaredMethod("meow"));
-		roll = new DefaultResourceMethod(resourceClass, CatController.class.getDeclaredMethod("roll", Cat.class));
-		jump = new DefaultResourceMethod(resourceClass, CatController.class.getDeclaredMethod("jump", Cat.class, Integer.class));
-		sleep = new DefaultResourceMethod(resourceClass, CatController.class.getDeclaredMethod("sleep", Integer.class, Cat.class));
-		annotated = new DefaultResourceMethod(resourceClass, CatController.class.getDeclaredMethod("annotated", CatWithAnnotations.class));
+		meow = new DefaultControllerMethod(resourceClass, CatController.class.getDeclaredMethod("meow"));
+		roll = new DefaultControllerMethod(resourceClass, CatController.class.getDeclaredMethod("roll", Cat.class));
+		jump = new DefaultControllerMethod(resourceClass, CatController.class.getDeclaredMethod("jump", Cat.class, Integer.class));
+		sleep = new DefaultControllerMethod(resourceClass, CatController.class.getDeclaredMethod("sleep", Integer.class, Cat.class));
+		annotated = new DefaultControllerMethod(resourceClass, CatController.class.getDeclaredMethod("annotated", CatWithAnnotations.class));
 	}
 
 	@XStreamAlias("catAnnotated")

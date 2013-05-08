@@ -43,9 +43,9 @@ import br.com.caelum.vraptor.http.InvalidParameterException;
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.interceptor.ResourceLookupInterceptor;
 import br.com.caelum.vraptor.ioc.RequestScoped;
-import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.validator.I18nMessage;
 import br.com.caelum.vraptor.validator.Validations;
+import br.com.caelum.vraptor4.controller.ControllerMethod;
 
 import com.google.common.base.Strings;
 import com.google.common.collect.HashMultiset;
@@ -95,12 +95,12 @@ public class CommonsUploadMultipartInterceptor
      * Will intercept the request if apache file upload says that this request is multipart
      */
     @Override
-	public boolean accepts(ResourceMethod method) {
+	public boolean accepts(ControllerMethod method) {
         return ServletFileUpload.isMultipartContent(request);
     }
 
     @Override
-	public void intercept(InterceptorStack stack, ResourceMethod method, Object instance)
+	public void intercept(InterceptorStack stack, ControllerMethod method, Object instance)
         throws InterceptionException {
         logger.info("Request contains multipart data. Try to parse with commons-upload.");
 

@@ -29,8 +29,8 @@ import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.http.MutableRequest;
-import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.validator.I18nMessage;
+import br.com.caelum.vraptor4.controller.ControllerMethod;
 
 /**
  * Test class for uploading features with servlet 3.
@@ -41,7 +41,7 @@ public class Servlet3MultipartInterceptorTest {
 
     private Object instance;
     @Mock private InterceptorStack stack;
-    @Mock private ResourceMethod method;
+    @Mock private ControllerMethod method;
     @Mock private HttpServletRequest request;
     @Mock private MutableRequest parameters;
     @Mock private Validator validator;

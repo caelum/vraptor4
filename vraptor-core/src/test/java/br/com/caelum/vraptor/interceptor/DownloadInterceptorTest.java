@@ -55,8 +55,8 @@ import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.interceptor.download.Download;
 import br.com.caelum.vraptor.interceptor.download.DownloadInterceptor;
-import br.com.caelum.vraptor.resource.DefaultResourceMethod;
-import br.com.caelum.vraptor.resource.ResourceMethod;
+import br.com.caelum.vraptor4.controller.DefaultControllerMethod;
+import br.com.caelum.vraptor4.controller.ControllerMethod;
 
 public class DownloadInterceptorTest {
 
@@ -64,7 +64,7 @@ public class DownloadInterceptorTest {
 
     @Mock private MethodInfo info;
 	@Mock private HttpServletResponse response;
-	@Mock private ResourceMethod resourceMethod;
+	@Mock private ControllerMethod resourceMethod;
 	@Mock private InterceptorStack stack;
 	@Mock private ServletOutputStream outputStream;
 	@Mock private Result result;
@@ -202,7 +202,7 @@ public class DownloadInterceptorTest {
 			}
 
 			protected boolean matchesSafely(Interceptor item) {
-				ResourceMethod m = DefaultResourceMethod.instanceFor(method.getDeclaringClass(), method);
+				ControllerMethod m = DefaultControllerMethod.instanceFor(method.getDeclaringClass(), method);
 				return interceptor.accepts(m);
 			}
 

@@ -19,13 +19,13 @@ import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.core.ExceptionMapper;
 import br.com.caelum.vraptor.core.ExceptionRecorder;
 import br.com.caelum.vraptor.core.InterceptorStack;
-import br.com.caelum.vraptor.resource.ResourceMethod;
+import br.com.caelum.vraptor4.controller.ControllerMethod;
 
 public class ExceptionHandlerInterceptorTest {
 
     private Object instance;
     @Mock private InterceptorStack stack;
-    @Mock private ResourceMethod method;
+    @Mock private ControllerMethod method;
     @Mock private ExceptionMapper mapper;
     @Mock private Result result;
     @Mock private ExceptionRecorder<Result> mockRecorder;

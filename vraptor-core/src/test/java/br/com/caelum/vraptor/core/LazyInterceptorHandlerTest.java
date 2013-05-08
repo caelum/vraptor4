@@ -14,13 +14,13 @@ import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.Lazy;
 import br.com.caelum.vraptor.interceptor.Interceptor;
 import br.com.caelum.vraptor.ioc.Container;
-import br.com.caelum.vraptor.resource.ResourceMethod;
+import br.com.caelum.vraptor4.controller.ControllerMethod;
 
 public class LazyInterceptorHandlerTest {
 
 	private @Mock Container container;
 	private @Mock InterceptorStack stack;
-	private @Mock ResourceMethod method;
+	private @Mock ControllerMethod method;
 	private @Mock Object instance;
 	private @Mock Interceptor mockInterceptor;
 
@@ -38,7 +38,7 @@ public class LazyInterceptorHandlerTest {
 
 		verify(container).instanceFor(AlwaysAcceptInterceptor.class);
 		verify(mockInterceptor).intercept(stack, method, instance);
-		verify(mockInterceptor, never()).accepts(any(ResourceMethod.class));
+		verify(mockInterceptor, never()).accepts(any(ControllerMethod.class));
 	}
 	@Test
 	public void shouldNotUseContainerIfInterceptorDoesntAccept() throws Exception {
@@ -67,18 +67,18 @@ public class LazyInterceptorHandlerTest {
 	static class AlwaysAcceptInterceptor implements Interceptor {
 		public AlwaysAcceptInterceptor(String xxxx) {
 		}
-		public boolean accepts(ResourceMethod method) {
+		public boolean accepts(ControllerMethod method) {
 			return true;
 		}
-		public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance){}
+		public void intercept(InterceptorStack stack, ControllerMethod method, Object resourceInstance){}
 	}
 
 	@Lazy
 	private static class NeverAcceptInterceptor implements Interceptor {
-		public boolean accepts(ResourceMethod method) {
+		public boolean accepts(ControllerMethod method) {
 			return false;
 		}
-		public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance){}
+		public void intercept(InterceptorStack stack, ControllerMethod method, Object resourceInstance){}
 	}
 
 	@Lazy
@@ -86,10 +86,10 @@ public class LazyInterceptorHandlerTest {
 		public InterceptorUsingConstructorParameters(String xuxu) {
 			xuxu.toString();
 		}
-		public boolean accepts(ResourceMethod method) {
+		public boolean accepts(ControllerMethod method) {
 			return false;
 		}
-		public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance){}
+		public void intercept(InterceptorStack stack, ControllerMethod method, Object resourceInstance){}
 	}
 	@Lazy
 	static class InterceptorUsingConstructorParametersOnAccepts implements Interceptor {
@@ -97,10 +97,10 @@ public class LazyInterceptorHandlerTest {
 		public InterceptorUsingConstructorParametersOnAccepts(String xuxu) {
 			this.xuxu = xuxu;
 		}
-		public boolean accepts(ResourceMethod method) {
+		public boolean accepts(ControllerMethod method) {
 			return xuxu.contains("o'really?");
 		}
-		public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance){}
+		public void intercept(InterceptorStack stack, ControllerMethod method, Object resourceInstance){}
 	}
 
 }

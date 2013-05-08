@@ -18,16 +18,16 @@ package br.com.caelum.vraptor.ioc.spring.components;
 
 import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.http.UrlToResourceTranslator;
-import br.com.caelum.vraptor.http.route.MethodNotAllowedException;
-import br.com.caelum.vraptor.http.route.ResourceNotFoundException;
-import br.com.caelum.vraptor.resource.ResourceMethod;
+import br.com.caelum.vraptor4.controller.ControllerMethod;
+import br.com.caelum.vraptor4.http.route.MethodNotAllowedException;
+import br.com.caelum.vraptor4.http.route.ResourceNotFoundException;
 
 /**
  * @author Fabio Kung
  */
 public class CustomTranslator implements UrlToResourceTranslator {
 
-	public ResourceMethod translate(RequestInfo info)
+	public ControllerMethod translate(RequestInfo info)
 			throws ResourceNotFoundException, MethodNotAllowedException {
 		return null;
 	}

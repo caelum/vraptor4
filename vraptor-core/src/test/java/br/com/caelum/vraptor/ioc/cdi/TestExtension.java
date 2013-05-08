@@ -27,7 +27,7 @@ import br.com.caelum.vraptor.ioc.fixture.CustomComponentInTheClasspath;
 import br.com.caelum.vraptor.ioc.fixture.CustomComponentWithLifecycleInTheClasspath;
 import br.com.caelum.vraptor.ioc.fixture.DependentOnSomethingFromComponentFactory;
 import br.com.caelum.vraptor.ioc.fixture.InterceptorInTheClasspath;
-import br.com.caelum.vraptor.ioc.fixture.ResourceInTheClasspath;
+import br.com.caelum.vraptor.ioc.fixture.ControllerInTheClasspath;
 import br.com.caelum.vraptor.ioc.spring.components.DummyComponentFactory;
 import br.com.caelum.vraptor.validator.ValidatorCreator;
 import br.com.caelum.vraptor.validator.ValidatorFactoryCreator;
@@ -42,7 +42,7 @@ public class TestExtension extends RegisterComponentsExtension{
 		discovery.addAnnotatedType(bm.createAnnotatedType(DummyComponentFactory.class));
 		discovery.addAnnotatedType(bm.createAnnotatedType(TheComponentFactory.class));
 		discovery.addAnnotatedType(bm.createAnnotatedType(ComponentFactoryInTheClasspath.class));
-		discovery.addAnnotatedType(bm.createAnnotatedType(ResourceInTheClasspath.class));
+		discovery.addAnnotatedType(bm.createAnnotatedType(ControllerInTheClasspath.class));
 		
 		discovery.addAnnotatedType(bm.createAnnotatedType(GenericContainerTest.MyAppComponent.class));
 		discovery.addAnnotatedType(bm.createAnnotatedType(GenericContainerTest.MyAppComponentWithLifecycle.class));

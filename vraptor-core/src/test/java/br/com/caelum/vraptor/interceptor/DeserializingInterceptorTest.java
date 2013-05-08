@@ -25,14 +25,14 @@ import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.deserialization.Deserializer;
 import br.com.caelum.vraptor.deserialization.Deserializers;
 import br.com.caelum.vraptor.ioc.Container;
-import br.com.caelum.vraptor.resource.DefaultResourceMethod;
 import br.com.caelum.vraptor.view.Status;
+import br.com.caelum.vraptor4.controller.DefaultControllerMethod;
 
 
 public class DeserializingInterceptorTest {
 	private DeserializingInterceptor interceptor;
-	private DefaultResourceMethod consumeXml;
-	private DefaultResourceMethod doesntConsume;
+	private DefaultControllerMethod consumeXml;
+	private DefaultControllerMethod doesntConsume;
 	@Mock private HttpServletRequest request;
 	@Mock private InterceptorStack stack;
 	@Mock Deserializers deserializers;
@@ -46,8 +46,8 @@ public class DeserializingInterceptorTest {
 
 		methodInfo = new DefaultMethodInfo();
 		interceptor = new DeserializingInterceptor(request, deserializers, methodInfo, container, status);
-		consumeXml = new DefaultResourceMethod(null, DummyResource.class.getDeclaredMethod("consumeXml"));
-		doesntConsume = new DefaultResourceMethod(null, DummyResource.class.getDeclaredMethod("doesntConsume"));
+		consumeXml = new DefaultControllerMethod(null, DummyResource.class.getDeclaredMethod("consumeXml"));
+		doesntConsume = new DefaultControllerMethod(null, DummyResource.class.getDeclaredMethod("doesntConsume"));
 	}
 
 
@@ -125,7 +125,7 @@ public class DeserializingInterceptorTest {
 		when(request.getContentType()).thenReturn("application/xml");
 
 		methodInfo.setParameters(new Object[2]);
-		final DefaultResourceMethod consumesAnything = new DefaultResourceMethod(null, DummyResource.class.getDeclaredMethod("consumesAnything"));
+		final DefaultControllerMethod consumesAnything = new DefaultControllerMethod(null, DummyResource.class.getDeclaredMethod("consumesAnything"));
 
 		final Deserializer deserializer = mock(Deserializer.class);
 		when(deserializer.deserialize(null, consumesAnything)).thenReturn(new Object[] {"abc", "def"});

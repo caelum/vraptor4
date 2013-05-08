@@ -26,8 +26,8 @@ import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.Intercepts;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.core.InterceptorStack;
-import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.view.Results;
+import br.com.caelum.vraptor4.controller.ControllerMethod;
 
 /**
  * Intercepts the request and forwards to the default view if no view was
@@ -52,12 +52,12 @@ public class ForwardToDefaultViewInterceptor implements Interceptor {
     }
     
     @Override
-	public boolean accepts(ResourceMethod method) {
+	public boolean accepts(ControllerMethod method) {
         return true;
     }
 
     @Override
-	public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance)
+	public void intercept(InterceptorStack stack, ControllerMethod method, Object resourceInstance)
             throws InterceptionException {
         if (result.used()) {
         	logger.debug("Request already dispatched and commited somewhere else, not forwarding.");

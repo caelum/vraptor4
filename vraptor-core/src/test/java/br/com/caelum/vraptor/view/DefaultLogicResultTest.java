@@ -50,16 +50,16 @@ import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.core.DefaultMethodInfo;
 import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.http.MutableRequest;
-import br.com.caelum.vraptor.http.route.Router;
 import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.proxy.JavassistProxifier;
 import br.com.caelum.vraptor.proxy.ObjenesisInstanceCreator;
 import br.com.caelum.vraptor.proxy.Proxifier;
-import br.com.caelum.vraptor.resource.DefaultResourceMethod;
-import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.validator.Message;
 import br.com.caelum.vraptor.validator.ValidationException;
+import br.com.caelum.vraptor4.controller.DefaultControllerMethod;
+import br.com.caelum.vraptor4.controller.ControllerMethod;
+import br.com.caelum.vraptor4.http.route.Router;
 
 public class DefaultLogicResultTest {
 
@@ -144,7 +144,7 @@ public class DefaultLogicResultTest {
     private MyComponent givenDispatcherWillBeReturnedWhenRequested() {
         final MyComponent component = new MyComponent();
         when(container.instanceFor(MyComponent.class)).thenReturn(component);
-        when(resolver.pathFor(any(ResourceMethod.class))).thenReturn("Abc123");
+        when(resolver.pathFor(any(ControllerMethod.class))).thenReturn("Abc123");
         when(request.getRequestDispatcher("Abc123")).thenReturn(dispatcher);
         return component;
     }
@@ -174,7 +174,7 @@ public class DefaultLogicResultTest {
 
         logicResult.redirectTo(MyComponent.class).withParameter("a");
 
-        verify(flash).includeParameters(any(ResourceMethod.class), eq(new Object[] {"a"}));
+        verify(flash).includeParameters(any(ControllerMethod.class), eq(new Object[] {"a"}));
     }
 
     @Test
@@ -182,7 +182,7 @@ public class DefaultLogicResultTest {
 
         logicResult.redirectTo(MyComponent.class).base();
 
-        verify(flash, never()).includeParameters(any(ResourceMethod.class), any(Object[].class));
+        verify(flash, never()).includeParameters(any(ControllerMethod.class), any(Object[].class));
     }
 
     @Test
@@ -256,22 +256,22 @@ public class DefaultLogicResultTest {
 		when(request.getRequestDispatcher(anyString())).thenThrow(new AssertionError("should have called with the right method!"));
 		doReturn(dispatcher).when(request).getRequestDispatcher("controlled!");
 		
-		methodInfo.setResourceMethod(DefaultResourceMethod.instanceFor(MyComponent.class, MyComponent.class.getDeclaredMethod("base")));
+		methodInfo.setResourceMethod(DefaultControllerMethod.instanceFor(MyComponent.class, MyComponent.class.getDeclaredMethod("base")));
 		
 		logicResult.forwardTo(TheComponent.class).method();
 	}
 
-	private TypeSafeMatcher<ResourceMethod> sameMethodAs(final Method method) {
-		return new TypeSafeMatcher<ResourceMethod>() {
+	private TypeSafeMatcher<ControllerMethod> sameMethodAs(final Method method) {
+		return new TypeSafeMatcher<ControllerMethod>() {
 
 			public void describeTo(Description description) {
 			}
 
-			protected boolean matchesSafely(ResourceMethod item) {
+			protected boolean matchesSafely(ControllerMethod item) {
 				return item.getMethod().equals(method);
 			}
 
-			protected void describeMismatchSafely(ResourceMethod item,
+			protected void describeMismatchSafely(ControllerMethod item,
 					Description mismatchDescription) {
 			}
 		};

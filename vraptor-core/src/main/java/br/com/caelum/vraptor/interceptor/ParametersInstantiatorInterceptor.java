@@ -39,9 +39,9 @@ import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.http.ParametersProvider;
-import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.validator.Message;
 import br.com.caelum.vraptor.view.FlashScope;
+import br.com.caelum.vraptor4.controller.ControllerMethod;
 
 /**
  * An interceptor which instantiates parameters and provide them to the stack.
@@ -74,11 +74,11 @@ public class ParametersInstantiatorInterceptor implements Interceptor {
 		this.flash = flash;
     }
 	
-    public boolean accepts(ResourceMethod method) {
+    public boolean accepts(ControllerMethod method) {
         return method.getMethod().getParameterTypes().length > 0;
     }
 
-	public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance) throws InterceptionException {
+	public void intercept(InterceptorStack stack, ControllerMethod method, Object resourceInstance) throws InterceptionException {
     	Enumeration<String> names = request.getParameterNames();
     	while (names.hasMoreElements()) {
 			fixParameter(names.nextElement());
@@ -99,7 +99,7 @@ public class ParametersInstantiatorInterceptor implements Interceptor {
         stack.next(method, resourceInstance);
     }
  
-	private void addHeaderParametersToAttribute(ResourceMethod method) {
+	private void addHeaderParametersToAttribute(ControllerMethod method) {
 		Method trueMethod = method.getMethod();  
 		  
         String[] parameters = parameterNameProvider.parameterNamesFor(trueMethod);  
@@ -129,7 +129,7 @@ public class ParametersInstantiatorInterceptor implements Interceptor {
 		}
 	}
 
-	private Object[] getParametersFor(ResourceMethod method) {
+	private Object[] getParametersFor(ControllerMethod method) {
 		Object[] args = flash.consumeParameters(method);
 		if (args == null) {
 			return provider.getParametersFor(method, errors, localization.getBundle());

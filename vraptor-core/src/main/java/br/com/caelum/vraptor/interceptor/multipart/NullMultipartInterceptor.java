@@ -19,7 +19,7 @@ package br.com.caelum.vraptor.interceptor.multipart;
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.Lazy;
 import br.com.caelum.vraptor.core.InterceptorStack;
-import br.com.caelum.vraptor.resource.ResourceMethod;
+import br.com.caelum.vraptor4.controller.ControllerMethod;
 
 /**
  * A null implementation of {@link MultipartInterceptor}. This class does nothing.
@@ -34,11 +34,11 @@ public class NullMultipartInterceptor implements MultipartInterceptor {
     /**
      * Never accepts.
      */
-    public boolean accepts(ResourceMethod method) {
+    public boolean accepts(ControllerMethod method) {
         return false;
     }
 
-    public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance)
+    public void intercept(InterceptorStack stack, ControllerMethod method, Object resourceInstance)
         throws InterceptionException {
         throw new UnsupportedOperationException();
     }

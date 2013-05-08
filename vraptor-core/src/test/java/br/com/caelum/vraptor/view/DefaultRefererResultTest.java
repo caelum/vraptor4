@@ -19,11 +19,11 @@ import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.core.Localization;
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.http.ParametersProvider;
-import br.com.caelum.vraptor.http.route.ResourceNotFoundException;
-import br.com.caelum.vraptor.http.route.Router;
-import br.com.caelum.vraptor.resource.DefaultResourceMethod;
-import br.com.caelum.vraptor.resource.HttpMethod;
-import br.com.caelum.vraptor.resource.ResourceMethod;
+import br.com.caelum.vraptor4.controller.DefaultControllerMethod;
+import br.com.caelum.vraptor4.controller.HttpMethod;
+import br.com.caelum.vraptor4.controller.ControllerMethod;
+import br.com.caelum.vraptor4.http.route.ResourceNotFoundException;
+import br.com.caelum.vraptor4.http.route.Router;
 
 public class DefaultRefererResultTest {
 
@@ -104,7 +104,7 @@ public class DefaultRefererResultTest {
 		RefererController controller = mock(RefererController.class);
 
 		Method index = RefererController.class.getMethod("index");
-		ResourceMethod method = DefaultResourceMethod.instanceFor(RefererController.class, index);
+		ControllerMethod method = DefaultControllerMethod.instanceFor(RefererController.class, index);
 
 		when(request.getHeader("Referer")).thenReturn("http://localhost:8080/vraptor/no-controller");
 		when(request.getContextPath()).thenReturn("/vraptor");
@@ -123,7 +123,7 @@ public class DefaultRefererResultTest {
 		RefererController controller = mock(RefererController.class);
 		
 		Method index = RefererController.class.getMethod("index");
-		ResourceMethod method = DefaultResourceMethod.instanceFor(RefererController.class, index);
+		ControllerMethod method = DefaultControllerMethod.instanceFor(RefererController.class, index);
 		
 		when(request.getHeader("Referer")).thenReturn("http://localhost:8080/vraptor/no-controller");
 		when(request.getContextPath()).thenReturn("/vraptor");

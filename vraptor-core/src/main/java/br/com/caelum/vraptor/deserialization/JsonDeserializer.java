@@ -24,9 +24,9 @@ import javax.inject.Inject;
 
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
-import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.serialization.xstream.VRaptorXStream;
 import br.com.caelum.vraptor.serialization.xstream.XStreamBuilder;
+import br.com.caelum.vraptor4.controller.ControllerMethod;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.HierarchicalStreamDriver;
@@ -57,7 +57,7 @@ public class JsonDeserializer implements Deserializer{
 	}
 	
 	@Override
-	public Object[] deserialize(InputStream inputStream, ResourceMethod method) {
+	public Object[] deserialize(InputStream inputStream, ControllerMethod method) {
 		Method javaMethod = method.getMethod();
 		Class<?>[] types = javaMethod.getParameterTypes();
 		checkArgument(types.length > 0, 

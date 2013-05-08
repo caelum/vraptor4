@@ -17,7 +17,7 @@
 
 package br.com.caelum.vraptor.core;
 
-import br.com.caelum.vraptor.resource.ResourceMethod;
+import br.com.caelum.vraptor4.controller.ControllerMethod;
 
 /**
  * Represents all method parameters, and the result returned by the invoked method.
@@ -26,8 +26,8 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
  * @author Fabio Kung
  */
 public interface MethodInfo {
-    ResourceMethod getResourceMethod();
-    void setResourceMethod(ResourceMethod resourceMethod);
+    ControllerMethod getResourceMethod();
+    void setResourceMethod(ControllerMethod resourceMethod);
     void setParameters(Object[] parameters);
     Object[] getParameters();
     Object getResult();

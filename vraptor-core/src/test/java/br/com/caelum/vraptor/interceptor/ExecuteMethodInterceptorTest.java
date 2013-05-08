@@ -41,10 +41,10 @@ import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.core.MethodInfo;
-import br.com.caelum.vraptor.resource.DefaultResourceMethod;
-import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.validator.Message;
 import br.com.caelum.vraptor.validator.ValidationException;
+import br.com.caelum.vraptor4.controller.DefaultControllerMethod;
+import br.com.caelum.vraptor4.controller.ControllerMethod;
 
 public class ExecuteMethodInterceptorTest {
 
@@ -67,7 +67,7 @@ public class ExecuteMethodInterceptorTest {
 	@Test
 	public void shouldInvokeTheMethodAndNotProceedWithInterceptorStack() throws SecurityException,
 			NoSuchMethodException, IOException, InterceptionException {
-		ResourceMethod method = new DefaultResourceMethod(null, DogAlike.class.getMethod("bark"));
+		ControllerMethod method = new DefaultControllerMethod(null, DogAlike.class.getMethod("bark"));
 		DogAlike auau = mock(DogAlike.class);
 		when(info.getParameters()).thenReturn(new Object[0]);
 		
@@ -81,7 +81,7 @@ public class ExecuteMethodInterceptorTest {
 	@Test
 	public void shouldThrowMethodExceptionIfThereIsAnInvocationException() throws IOException, SecurityException,
 			NoSuchMethodException {
-		ResourceMethod method = new DefaultResourceMethod(null, DogAlike.class.getMethod("bark"));
+		ControllerMethod method = new DefaultControllerMethod(null, DogAlike.class.getMethod("bark"));
 		final DogAlike auau = mock(DogAlike.class);
 		final RuntimeException exception = new RuntimeException();
 		
@@ -99,7 +99,7 @@ public class ExecuteMethodInterceptorTest {
 	@Test
 	public void shouldUseTheProvidedArguments() throws SecurityException, NoSuchMethodException, InterceptionException,
 			IOException {
-		ResourceMethod method = new DefaultResourceMethod(null, DogAlike.class.getMethod("bark", int.class));
+		ControllerMethod method = new DefaultControllerMethod(null, DogAlike.class.getMethod("bark", int.class));
 		DogAlike auau = mock(DogAlike.class);
 
 		when(info.getParameters()).thenReturn(new Object[] { 3 });
@@ -124,7 +124,7 @@ public class ExecuteMethodInterceptorTest {
 	@Test
 	public void shouldSetResultReturnedValueFromInvokedMethod() throws SecurityException, NoSuchMethodException,
 			InterceptionException, IOException {
-		ResourceMethod method = new DefaultResourceMethod(null, XController.class.getMethod("method", Object.class));
+		ControllerMethod method = new DefaultControllerMethod(null, XController.class.getMethod("method", Object.class));
 		final XController x = new XController();
 		
 		when(info.getParameters()).thenReturn(new Object[] { "string" });
@@ -138,7 +138,7 @@ public class ExecuteMethodInterceptorTest {
 	@Test
 	public void shouldSetNullWhenNullReturnedFromInvokedMethod() throws SecurityException, NoSuchMethodException,
 			InterceptionException, IOException {
-		ResourceMethod method = new DefaultResourceMethod(null, XController.class.getMethod("method", Object.class));
+		ControllerMethod method = new DefaultControllerMethod(null, XController.class.getMethod("method", Object.class));
 		final XController x = new XController();
 		
 		when(info.getParameters()).thenReturn(new Object[] { null });
@@ -152,7 +152,7 @@ public class ExecuteMethodInterceptorTest {
 	@Test
 	public void shouldSetOkWhenVoidReturnedFromInvokedMethod() throws SecurityException, NoSuchMethodException,
 			InterceptionException, IOException {
-		ResourceMethod method = new DefaultResourceMethod(null, XController.class.getMethod("method"));
+		ControllerMethod method = new DefaultControllerMethod(null, XController.class.getMethod("method"));
 		XController x = new XController();
 		
 		when(info.getParameters()).thenReturn(new Object[] {});
@@ -167,7 +167,7 @@ public class ExecuteMethodInterceptorTest {
 	public void shouldBeOkIfThereIsValidationErrorsAndYouSpecifiedWhereToGo() throws SecurityException,
 			NoSuchMethodException, InterceptionException, IOException {
 		Method specifiedWhereToGo = AnyController.class.getMethod("specifiedWhereToGo");
-		ResourceMethod method = DefaultResourceMethod.instanceFor(AnyController.class, specifiedWhereToGo);
+		ControllerMethod method = DefaultControllerMethod.instanceFor(AnyController.class, specifiedWhereToGo);
 		AnyController controller = new AnyController(validator);
 		
 		when(info.getParameters()).thenReturn(new Object[0]);
@@ -181,7 +181,7 @@ public class ExecuteMethodInterceptorTest {
 	public void shouldThrowExceptionIfYouHaventSpecifiedWhereToGoOnValidationError() throws SecurityException,
 			NoSuchMethodException, InterceptionException, IOException {
 		Method didntSpecifyWhereToGo = AnyController.class.getMethod("didntSpecifyWhereToGo");
-		final ResourceMethod method = DefaultResourceMethod.instanceFor(AnyController.class, didntSpecifyWhereToGo);
+		final ControllerMethod method = DefaultControllerMethod.instanceFor(AnyController.class, didntSpecifyWhereToGo);
 		final AnyController controller = new AnyController(validator);
 		
 		when(info.getParameters()).thenReturn(new Object[0]);

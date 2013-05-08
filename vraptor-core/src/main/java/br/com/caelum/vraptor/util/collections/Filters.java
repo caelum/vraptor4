@@ -23,16 +23,16 @@ import static java.util.Arrays.asList;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
-import br.com.caelum.vraptor.http.route.Route;
 import br.com.caelum.vraptor.interceptor.Interceptor;
-import br.com.caelum.vraptor.resource.HttpMethod;
-import br.com.caelum.vraptor.resource.ResourceMethod;
+import br.com.caelum.vraptor4.controller.HttpMethod;
+import br.com.caelum.vraptor4.controller.ControllerMethod;
+import br.com.caelum.vraptor4.http.route.Route;
 
 import com.google.common.base.Predicate;
 
 public class Filters {
 
-	public static Predicate<Interceptor> accepts(final ResourceMethod method) {
+	public static Predicate<Interceptor> accepts(final ControllerMethod method) {
 		return new Predicate<Interceptor>() {
 			public boolean apply(Interceptor interceptor) {
 				return interceptor.accepts(method);

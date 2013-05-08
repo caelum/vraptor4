@@ -68,8 +68,6 @@ import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.deserialization.Deserializer;
 import br.com.caelum.vraptor.deserialization.Deserializers;
-import br.com.caelum.vraptor.http.route.Route;
-import br.com.caelum.vraptor.http.route.Router;
 import br.com.caelum.vraptor.interceptor.InterceptorRegistry;
 import br.com.caelum.vraptor.ioc.cdi.Code;
 import br.com.caelum.vraptor.ioc.fixture.ComponentFactoryInTheClasspath;
@@ -79,9 +77,11 @@ import br.com.caelum.vraptor.ioc.fixture.CustomComponentInTheClasspath;
 import br.com.caelum.vraptor.ioc.fixture.CustomComponentWithLifecycleInTheClasspath;
 import br.com.caelum.vraptor.ioc.fixture.DependentOnSomethingFromComponentFactory;
 import br.com.caelum.vraptor.ioc.fixture.InterceptorInTheClasspath;
-import br.com.caelum.vraptor.ioc.fixture.ResourceInTheClasspath;
-import br.com.caelum.vraptor.resource.ResourceMethod;
+import br.com.caelum.vraptor.ioc.fixture.ControllerInTheClasspath;
 import br.com.caelum.vraptor.scan.ScannotationComponentScannerTest;
+import br.com.caelum.vraptor4.controller.ControllerMethod;
+import br.com.caelum.vraptor4.http.route.Route;
+import br.com.caelum.vraptor4.http.route.Router;
 
 import com.google.common.base.Objects;
 
@@ -313,7 +313,7 @@ public abstract class GenericContainerTest {
 							registry.register(componentToRegister, componentToRegister);
 						}
 
-						ResourceMethod secondMethod = mock(ResourceMethod.class, "rm" + counter);
+						ControllerMethod secondMethod = mock(ControllerMethod.class, "rm" + counter);
 						secondContainer.instanceFor(MethodInfo.class).setResourceMethod(secondMethod);
 						return instanceFor(component, secondContainer);
 					}
@@ -338,7 +338,7 @@ public abstract class GenericContainerTest {
 							ComponentRegistry registry = firstContainer.instanceFor(ComponentRegistry.class);
 							registry.register(componentToRegister, componentToRegister);
 						}
-						ResourceMethod firstMethod = mock(ResourceMethod.class, "rm" + counter);
+						ControllerMethod firstMethod = mock(ControllerMethod.class, "rm" + counter);
 						firstContainer.instanceFor(MethodInfo.class).setResourceMethod(firstMethod);
 						return instanceFor(componentToBeRetrieved,firstContainer);
 					}
@@ -460,8 +460,8 @@ public abstract class GenericContainerTest {
 	@Test
 	public void shoudRegisterResourcesInRouter() {
 		Router router = getFromContainer(Router.class);
-		Matcher<Iterable<? super Route>> hasItem = hasItem(canHandle(ResourceInTheClasspath.class,
-				ResourceInTheClasspath.class.getDeclaredMethods()[0]));
+		Matcher<Iterable<? super Route>> hasItem = hasItem(canHandle(ControllerInTheClasspath.class,
+				ControllerInTheClasspath.class.getDeclaredMethods()[0]));
 		assertThat(router.allRoutes(), hasItem);
 	}
 

@@ -17,7 +17,7 @@
 package br.com.caelum.vraptor.core;
 
 import br.com.caelum.vraptor.ioc.RequestScoped;
-import br.com.caelum.vraptor.resource.ResourceMethod;
+import br.com.caelum.vraptor4.controller.ControllerMethod;
 
 /**
  * Holder for method being invoked and parameters being passed.
@@ -27,15 +27,15 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
  */
 @RequestScoped
 public class DefaultMethodInfo implements MethodInfo {
-	private ResourceMethod resourceMethod;
+	private ControllerMethod resourceMethod;
 	private Object[] parameters;
 	private Object result;
 
-	public ResourceMethod getResourceMethod() {
+	public ControllerMethod getResourceMethod() {
 		return resourceMethod;
 	}
 
-	public void setResourceMethod(ResourceMethod resourceMethod) {
+	public void setResourceMethod(ControllerMethod resourceMethod) {
 		this.resourceMethod = resourceMethod;
 	}
 

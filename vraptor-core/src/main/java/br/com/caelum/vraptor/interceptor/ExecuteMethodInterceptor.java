@@ -32,9 +32,9 @@ import br.com.caelum.vraptor.Intercepts;
 import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.core.MethodInfo;
-import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.util.Stringnifier;
 import br.com.caelum.vraptor.validator.ValidationException;
+import br.com.caelum.vraptor4.controller.ControllerMethod;
 
 /**
  * Interceptor that executes the logic method.
@@ -54,7 +54,7 @@ public class ExecuteMethodInterceptor implements Interceptor {
 		this.validator = validator;
 	}
 	
-	public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance)
+	public void intercept(InterceptorStack stack, ControllerMethod method, Object resourceInstance)
 			throws InterceptionException {
 		try {
 			Method reflectionMethod = method.getMethod();
@@ -101,7 +101,7 @@ public class ExecuteMethodInterceptor implements Interceptor {
 		}
 	}
 
-	public boolean accepts(ResourceMethod method) {
+	public boolean accepts(ControllerMethod method) {
 		return true;
 	}
 

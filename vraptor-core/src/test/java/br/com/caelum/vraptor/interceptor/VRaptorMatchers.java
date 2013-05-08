@@ -23,9 +23,9 @@ import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 
-import br.com.caelum.vraptor.resource.ResourceClass;
-import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.validator.ValidationMessage;
+import br.com.caelum.vraptor4.controller.ControllerClass;
+import br.com.caelum.vraptor4.controller.ControllerMethod;
 
 /**
  * Useful matchers to use while mocking and hamcresting tests with internal
@@ -35,10 +35,10 @@ import br.com.caelum.vraptor.validator.ValidationMessage;
  */
 public class VRaptorMatchers {
 
-    public static TypeSafeMatcher<ResourceMethod> resourceMethod(final Method method) {
-        return new TypeSafeMatcher<ResourceMethod>() {
+    public static TypeSafeMatcher<ControllerMethod> resourceMethod(final Method method) {
+        return new TypeSafeMatcher<ControllerMethod>() {
 
-            public boolean matchesSafely(ResourceMethod other) {
+            public boolean matchesSafely(ControllerMethod other) {
                 return other.getMethod().equals(method);
             }
 
@@ -47,21 +47,21 @@ public class VRaptorMatchers {
             }
 
 			@Override
-			protected void describeMismatchSafely(ResourceMethod item, Description mismatchDescription) {
+			protected void describeMismatchSafely(ControllerMethod item, Description mismatchDescription) {
 				mismatchDescription.appendText(" an instance of a resource method for method " + item.getMethod().getName() + " declared at " + item.getMethod().getDeclaringClass().getName());
 			}
 
         };
     }
 
-    public static Matcher<ResourceClass> resource(final Class<?> type) {
-        return new BaseMatcher<ResourceClass>() {
+    public static Matcher<ControllerClass> resource(final Class<?> type) {
+        return new BaseMatcher<ControllerClass>() {
 
             public boolean matches(Object item) {
-                if (!(item instanceof ResourceClass)) {
+                if (!(item instanceof ControllerClass)) {
                     return false;
                 }
-                ResourceClass other = (ResourceClass) item;
+                ControllerClass other = (ControllerClass) item;
                 return other.getType().equals(type);
             }
 

@@ -49,11 +49,11 @@ import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.http.ParametersProvider;
-import br.com.caelum.vraptor.resource.DefaultResourceMethod;
-import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.validator.Message;
 import br.com.caelum.vraptor.validator.ValidationMessage;
 import br.com.caelum.vraptor.view.FlashScope;
+import br.com.caelum.vraptor4.controller.DefaultControllerMethod;
+import br.com.caelum.vraptor4.controller.ControllerMethod;
 
 public class ParametersInstantiatorInterceptorTest {
 
@@ -70,8 +70,8 @@ public class ParametersInstantiatorInterceptorTest {
 	private List<Message> errors ;
 	private ParametersInstantiatorInterceptor instantiator;
 
-	private ResourceMethod method;
-	private ResourceMethod otherMethod;
+	private ControllerMethod method;
+	private ControllerMethod otherMethod;
 
 	@Before
 	@SuppressWarnings("unchecked")
@@ -83,8 +83,8 @@ public class ParametersInstantiatorInterceptorTest {
         this.instantiator = new ParametersInstantiatorInterceptor(parametersProvider, parameterNameProvider, params, validator, localization, request, flash);
 
         this.errors = (List<Message>) new Mirror().on(instantiator).get().field("errors");
-        this.method = DefaultResourceMethod.instanceFor(Component.class, Component.class.getDeclaredMethod("method"));
-        this.otherMethod = DefaultResourceMethod.instanceFor(Component.class, Component.class.getDeclaredMethod("otherMethod", int.class));
+        this.method = DefaultControllerMethod.instanceFor(Component.class, Component.class.getDeclaredMethod("method"));
+        this.otherMethod = DefaultControllerMethod.instanceFor(Component.class, Component.class.getDeclaredMethod("otherMethod", int.class));
     }
 
     class Component {
@@ -188,7 +188,7 @@ public class ParametersInstantiatorInterceptorTest {
 	public void shouldAddHeaderInformationToRequestWhenHeaderParamAnnotationIsPresent() throws Exception {
 		Object[] values = new Object[] { new Object() };
 		Method method = HeaderParamComponent.class.getDeclaredMethod("method", String.class);
-		ResourceMethod resourceMethod = DefaultResourceMethod.instanceFor(HeaderParamComponent.class, method);
+		ControllerMethod resourceMethod = DefaultControllerMethod.instanceFor(HeaderParamComponent.class, method);
 		
 		when(request.getHeader("X-MyApp-Password")).thenReturn("123");
     	when(parametersProvider.getParametersFor(resourceMethod, errors, bundle)).thenReturn(values);
@@ -206,7 +206,7 @@ public class ParametersInstantiatorInterceptorTest {
 	public void shouldAddHeaderInformationToRequestWhenHeaderParamAnnotationIsNotPresent() throws Exception {
 		Object[] values = new Object[] { new Object() };
 		Method method = Component.class.getDeclaredMethod("method");
-		ResourceMethod resourceMethod = DefaultResourceMethod.instanceFor(Component.class, method);
+		ControllerMethod resourceMethod = DefaultControllerMethod.instanceFor(Component.class, method);
 		
     	when(parametersProvider.getParametersFor(resourceMethod, errors, bundle)).thenReturn(values);
     	when(parameterNameProvider.parameterNamesFor(method)).thenReturn(new String[]{"password"});
@@ -223,7 +223,7 @@ public class ParametersInstantiatorInterceptorTest {
 	public void shouldAddVariousHeaderInformationsToRequestWhenHeaderParamAnnotationIsPresent() throws Exception {
 		Object[] values = new Object[] { new Object() };
 		Method method = HeaderParamComponent.class.getDeclaredMethod("otherMethod", String.class, String.class, String.class);
-		ResourceMethod resouceMethod = DefaultResourceMethod.instanceFor(HeaderParamComponent.class, method);
+		ControllerMethod resouceMethod = DefaultControllerMethod.instanceFor(HeaderParamComponent.class, method);
 		
 		when(request.getHeader("X-MyApp-User")).thenReturn("user");
 		when(request.getHeader("X-MyApp-Password")).thenReturn("123");

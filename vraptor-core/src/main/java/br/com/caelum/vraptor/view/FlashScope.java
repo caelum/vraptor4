@@ -15,7 +15,7 @@
  */
 package br.com.caelum.vraptor.view;
 
-import br.com.caelum.vraptor.resource.ResourceMethod;
+import br.com.caelum.vraptor4.controller.ControllerMethod;
 
 /**
  * Component responsible to allow redirects with the same passed parameters
@@ -25,6 +25,6 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
  *
  */
 public interface FlashScope {
-	void includeParameters(ResourceMethod method, Object[] args);
-	Object[] consumeParameters(ResourceMethod method);
+	void includeParameters(ControllerMethod method, Object[] args);
+	Object[] consumeParameters(ControllerMethod method);
 }

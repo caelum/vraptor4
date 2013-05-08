@@ -15,7 +15,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import br.com.caelum.vraptor.ioc.fixture.ResourceInTheClasspath;
+import br.com.caelum.vraptor.ioc.fixture.ControllerInTheClasspath;
 
 public class ScannotationComponentScannerTest {
 
@@ -34,7 +34,7 @@ public class ScannotationComponentScannerTest {
 		when(classPathResolver.findWebInfClassesLocation()).thenReturn(classLoader.getResource("br/com/caelum/vraptor/ioc/"));
 
         ScannotationComponentScanner scanner = new ScannotationComponentScanner();
-        assertThat(scanner.scan(classPathResolver), hasItem(ResourceInTheClasspath.class.getName()));
+        assertThat(scanner.scan(classPathResolver), hasItem(ControllerInTheClasspath.class.getName()));
     }
     
     @Test
@@ -46,7 +46,7 @@ public class ScannotationComponentScannerTest {
 
     	ScannotationComponentScanner scanner = new ScannotationComponentScanner();
     	Collection<String> classes = scanner.scan(classPathResolver);
-    	assertThat(classes, hasItem(ResourceInTheClasspath.class.getName()));
+    	assertThat(classes, hasItem(ControllerInTheClasspath.class.getName()));
     }
     
     @Test

@@ -19,7 +19,6 @@ package br.com.caelum.vraptor.restfulie;
 
 import javax.inject.Inject;
 
-import br.com.caelum.vraptor.http.route.Router;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.proxy.Proxifier;
@@ -27,6 +26,7 @@ import br.com.caelum.vraptor.restfulie.hypermedia.ConfigurableHypermediaResource
 import br.com.caelum.vraptor.restfulie.hypermedia.DefaultConfigurableHypermediaResource;
 import br.com.caelum.vraptor.restfulie.relation.DefaultRelationBuilder;
 import br.com.caelum.vraptor.restfulie.relation.RelationBuilder;
+import br.com.caelum.vraptor4.http.route.Router;
 
 /**
  * Default implementation for {@link Restfulie}

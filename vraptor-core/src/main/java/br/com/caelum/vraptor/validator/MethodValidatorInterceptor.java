@@ -37,7 +37,7 @@ import br.com.caelum.vraptor.interceptor.ExecuteMethodInterceptor;
 import br.com.caelum.vraptor.interceptor.Interceptor;
 import br.com.caelum.vraptor.interceptor.ParametersInstantiatorInterceptor;
 import br.com.caelum.vraptor.ioc.RequestScoped;
-import br.com.caelum.vraptor.resource.ResourceMethod;
+import br.com.caelum.vraptor4.controller.ControllerMethod;
 
 /**
  * Validate method parameters using Bean Validation 1.1. The method will be
@@ -74,7 +74,7 @@ public class MethodValidatorInterceptor implements Interceptor {
 	}
 
 	@Override
-	public boolean accepts(ResourceMethod method) {
+	public boolean accepts(ControllerMethod method) {
 		BeanDescriptor bean = methodValidator.getConstraintsForClass(method.getResource().getType());
 		MethodDescriptor descriptor = bean.getConstraintsForMethod(method.getMethod().getName(), method.getMethod()
 				.getParameterTypes());
@@ -82,7 +82,7 @@ public class MethodValidatorInterceptor implements Interceptor {
 	}
 
 	@Override
-	public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance)
+	public void intercept(InterceptorStack stack, ControllerMethod method, Object resourceInstance)
 			throws InterceptionException {
 
 		Set<ConstraintViolation<Object>> violations = methodValidator.forExecutables().validateParameters(

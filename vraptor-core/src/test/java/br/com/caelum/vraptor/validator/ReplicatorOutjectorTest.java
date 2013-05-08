@@ -14,7 +14,7 @@ import org.mockito.MockitoAnnotations;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
-import br.com.caelum.vraptor.resource.ResourceMethod;
+import br.com.caelum.vraptor4.controller.ControllerMethod;
 
 public class ReplicatorOutjectorTest {
 
@@ -22,7 +22,7 @@ public class ReplicatorOutjectorTest {
 	private @Mock ParameterNameProvider provider;
 	private @Mock MethodInfo method;
 	private @Mock Result result;
-	private @Mock ResourceMethod resourceMethod;
+	private @Mock ControllerMethod resourceMethod;
 
 	private Outjector outjector;
 

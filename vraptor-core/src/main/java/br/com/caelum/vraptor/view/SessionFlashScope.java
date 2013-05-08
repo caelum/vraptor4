@@ -18,7 +18,7 @@ package br.com.caelum.vraptor.view;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 
-import br.com.caelum.vraptor.resource.ResourceMethod;
+import br.com.caelum.vraptor4.controller.ControllerMethod;
 /**
  * FlashScope that uses the HttpSession to hold the data
  * 
@@ -36,7 +36,7 @@ public class SessionFlashScope implements FlashScope {
 		this.session = session;
 	}
 	
-	public Object[] consumeParameters(ResourceMethod method) {
+	public Object[] consumeParameters(ControllerMethod method) {
 		Object[] args = (Object[]) session.getAttribute(nameFor(method));
 		if (args != null) {
 			session.removeAttribute(nameFor(method));
@@ -44,11 +44,11 @@ public class SessionFlashScope implements FlashScope {
 		return args;
 	}
 
-	private String nameFor(ResourceMethod method) {
+	private String nameFor(ControllerMethod method) {
 		return KEY_START + method.getMethod();
 	}
 
-	public void includeParameters(ResourceMethod method, Object[] args) {
+	public void includeParameters(ControllerMethod method, Object[] args) {
 		session.setAttribute(nameFor(method), args);
 	}
 

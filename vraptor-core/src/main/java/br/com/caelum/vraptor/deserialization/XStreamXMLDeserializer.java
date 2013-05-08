@@ -22,8 +22,8 @@ import javax.inject.Inject;
 
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.ioc.Component;
-import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.serialization.xstream.XStreamBuilder;
+import br.com.caelum.vraptor4.controller.ControllerMethod;
 
 import com.thoughtworks.xstream.XStream;
 
@@ -47,7 +47,7 @@ public class XStreamXMLDeserializer implements XMLDeserializer {
 		this.builder = builder;
 	}
 	
-	public Object[] deserialize(InputStream inputStream, ResourceMethod method) {
+	public Object[] deserialize(InputStream inputStream, ControllerMethod method) {
 		Method javaMethod = method.getMethod();
 		Class<?>[] types = javaMethod.getParameterTypes();
 		if (types.length == 0) {

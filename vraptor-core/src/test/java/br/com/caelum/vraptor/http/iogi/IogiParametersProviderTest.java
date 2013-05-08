@@ -56,9 +56,9 @@ import br.com.caelum.vraptor.core.Localization;
 import br.com.caelum.vraptor.core.SafeResourceBundle;
 import br.com.caelum.vraptor.http.ParametersProvider;
 import br.com.caelum.vraptor.http.ParametersProviderTest;
-import br.com.caelum.vraptor.resource.DefaultResourceMethod;
-import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.util.EmptyBundle;
+import br.com.caelum.vraptor4.controller.DefaultControllerMethod;
+import br.com.caelum.vraptor4.controller.ControllerMethod;
 
 public class IogiParametersProviderTest extends ParametersProviderTest {
 	private @Mock Localization mockLocalization;
@@ -72,7 +72,7 @@ public class IogiParametersProviderTest extends ParametersProviderTest {
     @Test
     public void returnsNullWhenInstantiatingAStringForWhichThereAreNoParameters() throws Exception {
     	thereAreNoParameters();
-    	final ResourceMethod method = string;
+    	final ControllerMethod method = string;
 
     	Object[] params = provider.getParametersFor(method, errors, null);
 
@@ -83,7 +83,7 @@ public class IogiParametersProviderTest extends ParametersProviderTest {
 	public void canInjectADependencyProvidedByVraptor() throws Exception {
 		thereAreNoParameters();
 
-		ResourceMethod resourceMethod = DefaultResourceMethod.instanceFor(OtherResource.class, OtherResource.class.getDeclaredMethod("logic", NeedsMyResource.class));
+		ControllerMethod resourceMethod = DefaultControllerMethod.instanceFor(OtherResource.class, OtherResource.class.getDeclaredMethod("logic", NeedsMyResource.class));
     	final MyResource providedInstance = new MyResource();
 
     	when(container.canProvide(MyResource.class)).thenReturn(true);
@@ -95,7 +95,7 @@ public class IogiParametersProviderTest extends ParametersProviderTest {
     //---------- The Following tests mock iogi to unit test the ParametersProvider impl.
 	@Test
 	public void willCreateAnIogiParameterForEachRequestParameterValue() throws Exception {
-		ResourceMethod anyMethod = buyA;
+		ControllerMethod anyMethod = buyA;
 		requestParameterIs(anyMethod, "name", "a", "b");
 
 		final InstantiatorWithErrors mockInstantiator = mock(InstantiatorWithErrors.class);
@@ -111,7 +111,7 @@ public class IogiParametersProviderTest extends ParametersProviderTest {
 
 	@Test
 	public void willCreateATargerForEachFormalParameterDeclaredByTheMethod() throws Exception {
-		final ResourceMethod buyAHouse = buyA;
+		final ControllerMethod buyAHouse = buyA;
 		requestParameterIs(buyAHouse, "house", "");
 
 		final InstantiatorWithErrors mockInstantiator = mock(InstantiatorWithErrors.class);
@@ -125,7 +125,7 @@ public class IogiParametersProviderTest extends ParametersProviderTest {
 
 	@Test
 	public void willAddValidationMessagesForConversionErrors() throws Exception {
-		ResourceMethod setId = simple;
+		ControllerMethod setId = simple;
 		requestParameterIs(setId, "id", "asdf");
 
 		getParameters(setId);
@@ -135,7 +135,7 @@ public class IogiParametersProviderTest extends ParametersProviderTest {
 
 	@Test
 	public void inCaseOfConversionErrorsOnlyNullifyTheProblematicParameter() throws Exception {
-		ResourceMethod setId = DefaultResourceMethod.instanceFor(House.class, House.class.getMethod("setCat", Cat.class));
+		ControllerMethod setId = DefaultControllerMethod.instanceFor(House.class, House.class.getMethod("setCat", Cat.class));
 		requestParameterIs(setId, "cat.lols", "sad kitten");
 
 		Cat cat = getParameters(setId);
@@ -147,7 +147,7 @@ public class IogiParametersProviderTest extends ParametersProviderTest {
 	public void isCapableOfDealingWithSets() throws Exception {
     	when(nameProvider.parameterNamesFor(any(Method.class))).thenReturn(new String[]{"abc"});
     	
-        ResourceMethod set = method("set", Set.class);
+        ControllerMethod set = method("set", Set.class);
 
     	requestParameterIs(set, "abc", "1", "2");
 
@@ -161,7 +161,7 @@ public class IogiParametersProviderTest extends ParametersProviderTest {
 	public void isCapableOfDealingWithSetsOfObjects() throws Exception {
     	when(nameProvider.parameterNamesFor(any(Method.class))).thenReturn(new String[]{"abc"});
     	
-        ResourceMethod set = method("setOfObject", Set.class);
+        ControllerMethod set = method("setOfObject", Set.class);
 
     	requestParameterIs(set, "abc.x", "1");
 

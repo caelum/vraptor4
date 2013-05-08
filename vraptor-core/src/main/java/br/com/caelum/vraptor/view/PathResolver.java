@@ -17,7 +17,7 @@
 
 package br.com.caelum.vraptor.view;
 
-import br.com.caelum.vraptor.resource.ResourceMethod;
+import br.com.caelum.vraptor4.controller.ControllerMethod;
 
 /**
  * Decides the url to go to after a request was executed.
@@ -26,6 +26,6 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
  */
 public interface PathResolver {
 
-    String pathFor(ResourceMethod method);
+    String pathFor(ControllerMethod method);
 
 }

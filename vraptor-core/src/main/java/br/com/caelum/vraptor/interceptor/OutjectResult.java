@@ -30,7 +30,7 @@ import br.com.caelum.vraptor.Lazy;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.core.MethodInfo;
-import br.com.caelum.vraptor.resource.ResourceMethod;
+import br.com.caelum.vraptor4.controller.ControllerMethod;
 
 /**
  * Outjects the result of the method invocation to the desired result
@@ -54,12 +54,12 @@ public class OutjectResult implements Interceptor {
 		this.extractor = extractor;
 	}
 	
-	public boolean accepts(ResourceMethod method) {
+	public boolean accepts(ControllerMethod method) {
 		Type returnType = method.getMethod().getGenericReturnType();
 		return !returnType.equals(void.class);
 	}
 
-	public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance)
+	public void intercept(InterceptorStack stack, ControllerMethod method, Object resourceInstance)
 			throws InterceptionException {
 		Type returnType = method.getMethod().getGenericReturnType();
 		String name = extractor.nameFor(returnType);

@@ -38,7 +38,7 @@ import br.com.caelum.vraptor.interceptor.ExecuteMethodInterceptor;
 import br.com.caelum.vraptor.interceptor.ForwardToDefaultViewInterceptor;
 import br.com.caelum.vraptor.interceptor.Interceptor;
 import br.com.caelum.vraptor.ioc.RequestScoped;
-import br.com.caelum.vraptor.resource.ResourceMethod;
+import br.com.caelum.vraptor4.controller.ControllerMethod;
 
 /**
  * Intercepts methods whom return a File or an InputStream.
@@ -69,14 +69,14 @@ public class DownloadInterceptor implements Interceptor {
 	}
 	
 	@Override
-	public boolean accepts(ResourceMethod method) {
+	public boolean accepts(ControllerMethod method) {
 		Class<?> type = method.getMethod().getReturnType();
 		return InputStream.class.isAssignableFrom(type) || type == File.class || Download.class.isAssignableFrom(type)
 				|| type == byte[].class;
 	}
 
 	@Override
-	public void intercept(InterceptorStack stack, ResourceMethod method, Object instance) throws InterceptionException {
+	public void intercept(InterceptorStack stack, ControllerMethod method, Object instance) throws InterceptionException {
     	logger.debug("Sending a file to the client");
 
 		Object result = info.getResult();

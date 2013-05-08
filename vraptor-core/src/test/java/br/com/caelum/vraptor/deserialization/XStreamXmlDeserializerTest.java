@@ -15,33 +15,33 @@ import org.junit.Test;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 import br.com.caelum.vraptor.http.ParameterNameProvider;
-import br.com.caelum.vraptor.resource.DefaultResourceClass;
-import br.com.caelum.vraptor.resource.DefaultResourceMethod;
-import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.serialization.xstream.XStreamBuilderImpl;
+import br.com.caelum.vraptor4.controller.DefaultControllerClass;
+import br.com.caelum.vraptor4.controller.DefaultControllerMethod;
+import br.com.caelum.vraptor4.controller.ControllerMethod;
 
 public class XStreamXmlDeserializerTest {
 
 	private XStreamXMLDeserializer deserializer;
-	private ResourceMethod bark;
+	private ControllerMethod bark;
 	private ParameterNameProvider provider;
-	private ResourceMethod jump;
-	private DefaultResourceMethod woof;
-	private DefaultResourceMethod dropDead;
-	private DefaultResourceMethod annotated;
+	private ControllerMethod jump;
+	private DefaultControllerMethod woof;
+	private DefaultControllerMethod dropDead;
+	private DefaultControllerMethod annotated;
 
 	@Before
 	public void setUp() throws Exception {
 		provider = mock(ParameterNameProvider.class);
 
         deserializer = new XStreamXMLDeserializer(provider, XStreamBuilderImpl.cleanInstance());
-		DefaultResourceClass resourceClass = new DefaultResourceClass(DogController.class);
+		DefaultControllerClass resourceClass = new DefaultControllerClass(DogController.class);
 
-		woof = new DefaultResourceMethod(resourceClass, DogController.class.getDeclaredMethod("woof"));
-		bark = new DefaultResourceMethod(resourceClass, DogController.class.getDeclaredMethod("bark", Dog.class));
-		jump = new DefaultResourceMethod(resourceClass, DogController.class.getDeclaredMethod("jump", Dog.class, Integer.class));
-		dropDead = new DefaultResourceMethod(resourceClass, DogController.class.getDeclaredMethod("dropDead", Integer.class, Dog.class));
-		annotated = new DefaultResourceMethod(resourceClass, DogController.class.getDeclaredMethod("annotated", DogWithAnnotations.class));
+		woof = new DefaultControllerMethod(resourceClass, DogController.class.getDeclaredMethod("woof"));
+		bark = new DefaultControllerMethod(resourceClass, DogController.class.getDeclaredMethod("bark", Dog.class));
+		jump = new DefaultControllerMethod(resourceClass, DogController.class.getDeclaredMethod("jump", Dog.class, Integer.class));
+		dropDead = new DefaultControllerMethod(resourceClass, DogController.class.getDeclaredMethod("dropDead", Integer.class, Dog.class));
+		annotated = new DefaultControllerMethod(resourceClass, DogController.class.getDeclaredMethod("annotated", DogWithAnnotations.class));
 	}
 
 	@XStreamAlias("dogAnnotated")

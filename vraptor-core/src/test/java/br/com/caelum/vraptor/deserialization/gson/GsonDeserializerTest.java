@@ -19,9 +19,9 @@ import org.junit.Test;
 
 import br.com.caelum.vraptor.core.Localization;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
-import br.com.caelum.vraptor.resource.DefaultResourceClass;
-import br.com.caelum.vraptor.resource.DefaultResourceMethod;
-import br.com.caelum.vraptor.resource.ResourceMethod;
+import br.com.caelum.vraptor4.controller.DefaultControllerClass;
+import br.com.caelum.vraptor4.controller.DefaultControllerMethod;
+import br.com.caelum.vraptor4.controller.ControllerMethod;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
@@ -31,12 +31,12 @@ import com.google.gson.JsonParseException;
 public class GsonDeserializerTest {
 
 	private GsonDeserialization deserializer;
-	private ResourceMethod bark;
+	private ControllerMethod bark;
 	private ParameterNameProvider provider;
 	private Localization localization;
-	private ResourceMethod jump;
-	private DefaultResourceMethod woof;
-	private DefaultResourceMethod dropDead;
+	private ControllerMethod jump;
+	private DefaultControllerMethod woof;
+	private DefaultControllerMethod dropDead;
 
 	@Before
 	public void setUp() throws Exception {
@@ -46,13 +46,13 @@ public class GsonDeserializerTest {
 		when(localization.getLocale()).thenReturn(new Locale("pt", "BR"));
 
 		deserializer = new GsonDeserialization(provider, Collections.<JsonDeserializer<?>> emptyList());
-		DefaultResourceClass resourceClass = new DefaultResourceClass(DogController.class);
+		DefaultControllerClass resourceClass = new DefaultControllerClass(DogController.class);
 
-		woof = new DefaultResourceMethod(resourceClass, DogController.class.getDeclaredMethod("woof"));
-		bark = new DefaultResourceMethod(resourceClass, DogController.class.getDeclaredMethod("bark", Dog.class));
-		jump = new DefaultResourceMethod(resourceClass, DogController.class.getDeclaredMethod("jump", Dog.class,
+		woof = new DefaultControllerMethod(resourceClass, DogController.class.getDeclaredMethod("woof"));
+		bark = new DefaultControllerMethod(resourceClass, DogController.class.getDeclaredMethod("bark", Dog.class));
+		jump = new DefaultControllerMethod(resourceClass, DogController.class.getDeclaredMethod("jump", Dog.class,
 				Integer.class));
-		dropDead = new DefaultResourceMethod(resourceClass, DogController.class.getDeclaredMethod("dropDead",
+		dropDead = new DefaultControllerMethod(resourceClass, DogController.class.getDeclaredMethod("dropDead",
 				Integer.class, Dog.class));
 	}
 

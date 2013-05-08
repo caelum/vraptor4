@@ -20,8 +20,8 @@ package br.com.caelum.vraptor.http;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.validator.Message;
+import br.com.caelum.vraptor4.controller.ControllerMethod;
 
 /**
  * Provides all parameters required to invoke an specific java method.
@@ -30,6 +30,6 @@ import br.com.caelum.vraptor.validator.Message;
  */
 public interface ParametersProvider {
 
-    Object[] getParametersFor(ResourceMethod method, List<Message> errors, ResourceBundle bundle);
+    Object[] getParametersFor(ControllerMethod method, List<Message> errors, ResourceBundle bundle);
 
 }

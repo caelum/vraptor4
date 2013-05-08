@@ -43,8 +43,8 @@ import br.com.caelum.vraptor.proxy.JavassistProxifier;
 import br.com.caelum.vraptor.proxy.ObjenesisInstanceCreator;
 import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.proxy.ProxyInvocationException;
-import br.com.caelum.vraptor.resource.DefaultResourceMethod;
-import br.com.caelum.vraptor.resource.ResourceMethod;
+import br.com.caelum.vraptor4.controller.DefaultControllerMethod;
+import br.com.caelum.vraptor4.controller.ControllerMethod;
 
 public class DefaultPageResultTest {
 
@@ -52,7 +52,7 @@ public class DefaultPageResultTest {
     private @Mock HttpServletResponse response;
     private @Mock RequestDispatcher dispatcher;
     private Proxifier proxifier;
-    private ResourceMethod method;
+    private ControllerMethod method;
     private PathResolver fixedResolver;
     private MethodInfo requestInfo;
 	private DefaultPageResult view;
@@ -60,12 +60,12 @@ public class DefaultPageResultTest {
     @Before
     public void setup() {
     	MockitoAnnotations.initMocks(this);
-        method = DefaultResourceMethod.instanceFor(AnyResource.class, AnyResource.class.getDeclaredMethods()[0]);
+        method = DefaultControllerMethod.instanceFor(AnyResource.class, AnyResource.class.getDeclaredMethods()[0]);
         proxifier = new JavassistProxifier(new ObjenesisInstanceCreator());
         requestInfo = new DefaultMethodInfo();
         requestInfo.setResourceMethod(method);
         fixedResolver = new PathResolver() {
-            public String pathFor(ResourceMethod method) {
+            public String pathFor(ControllerMethod method) {
                 return "fixed";
             }
         };

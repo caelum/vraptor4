@@ -30,9 +30,9 @@ import br.com.caelum.vraptor.core.Localization;
 import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.http.ParanamerNameProvider;
-import br.com.caelum.vraptor.resource.DefaultResourceMethod;
-import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.util.test.MockValidator;
+import br.com.caelum.vraptor4.controller.DefaultControllerMethod;
+import br.com.caelum.vraptor4.controller.ControllerMethod;
 
 /**
  * Test method validator feature.
@@ -51,10 +51,10 @@ public class MethodValidatorTest {
     private ValidatorFactory factory;
     private MessageInterpolator interpolator;
     
-	private ResourceMethod withConstraint;
-	private ResourceMethod withTwoConstraints;
-	private ResourceMethod withoutConstraint;
-	private ResourceMethod cascadeConstraint;
+	private ControllerMethod withConstraint;
+	private ControllerMethod withTwoConstraints;
+	private ControllerMethod withoutConstraint;
+	private ControllerMethod cascadeConstraint;
 
     @Before
     public void setup() throws Exception {
@@ -77,10 +77,10 @@ public class MethodValidatorTest {
 
         validator = new MockValidator();
         
-        withConstraint = DefaultResourceMethod.instanceFor(MyController.class, MyController.class.getMethod("withConstraint", String.class));
-        withTwoConstraints = DefaultResourceMethod.instanceFor(MyController.class, MyController.class.getMethod("withTwoConstraints", String.class, Customer.class));
-        withoutConstraint = DefaultResourceMethod.instanceFor(MyController.class, MyController.class.getMethod("withoutConstraint", String.class));
-        cascadeConstraint = DefaultResourceMethod.instanceFor(MyController.class, MyController.class.getMethod("cascadeConstraint", Customer.class));
+        withConstraint = DefaultControllerMethod.instanceFor(MyController.class, MyController.class.getMethod("withConstraint", String.class));
+        withTwoConstraints = DefaultControllerMethod.instanceFor(MyController.class, MyController.class.getMethod("withTwoConstraints", String.class, Customer.class));
+        withoutConstraint = DefaultControllerMethod.instanceFor(MyController.class, MyController.class.getMethod("withoutConstraint", String.class));
+        cascadeConstraint = DefaultControllerMethod.instanceFor(MyController.class, MyController.class.getMethod("cascadeConstraint", Customer.class));
     }
     
     @Test

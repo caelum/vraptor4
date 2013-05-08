@@ -39,8 +39,8 @@ import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.interceptor.ParametersInstantiatorInterceptor;
 import br.com.caelum.vraptor.ioc.RequestScoped;
-import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.validator.I18nMessage;
+import br.com.caelum.vraptor4.controller.ControllerMethod;
 
 import com.google.common.base.Strings;
 import com.google.common.collect.HashMultiset;
@@ -101,7 +101,7 @@ public class Servlet3MultipartInterceptor
     /**
      * Only accept requests that contains multipart headers.
      */
-    public boolean accepts(ResourceMethod method) {
+    public boolean accepts(ControllerMethod method) {
         if (!request.getMethod().toUpperCase().equals("POST")) {
             return false;
         }
@@ -110,7 +110,7 @@ public class Servlet3MultipartInterceptor
         return contentType != null && contentType.startsWith(ACCEPT_MULTIPART);
     }
 
-    public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance)
+    public void intercept(InterceptorStack stack, ControllerMethod method, Object resourceInstance)
         throws InterceptionException {
         logger.info("Request contains multipart data. Try to parse with Servlet3 Part");
 

@@ -36,12 +36,12 @@ import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.http.MutableResponse;
 import br.com.caelum.vraptor.http.UrlToResourceTranslator;
-import br.com.caelum.vraptor.http.route.MethodNotAllowedException;
-import br.com.caelum.vraptor.http.route.ResourceNotFoundException;
-import br.com.caelum.vraptor.resource.HttpMethod;
-import br.com.caelum.vraptor.resource.MethodNotAllowedHandler;
-import br.com.caelum.vraptor.resource.ResourceMethod;
-import br.com.caelum.vraptor.resource.ResourceNotFoundHandler;
+import br.com.caelum.vraptor4.controller.HttpMethod;
+import br.com.caelum.vraptor4.controller.MethodNotAllowedHandler;
+import br.com.caelum.vraptor4.controller.ControllerMethod;
+import br.com.caelum.vraptor4.controller.ControllerNotFoundHandler;
+import br.com.caelum.vraptor4.http.route.MethodNotAllowedException;
+import br.com.caelum.vraptor4.http.route.ResourceNotFoundException;
 
 public class ResourceLookupInterceptorTest {
 
@@ -51,7 +51,7 @@ public class ResourceLookupInterceptorTest {
     private @Mock RequestInfo info;
     private ResourceLookupInterceptor lookup;
     private @Mock MethodInfo methodInfo;
-	private @Mock ResourceNotFoundHandler notFoundHandler;
+	private @Mock ControllerNotFoundHandler notFoundHandler;
 	private @Mock MethodNotAllowedHandler methodNotAllowedHandler;
 
     @Before
@@ -86,7 +86,7 @@ public class ResourceLookupInterceptorTest {
 
     @Test
     public void shouldUseResourceMethodFoundWithNextInterceptor() throws IOException, InterceptionException {
-        final ResourceMethod method = mock(ResourceMethod.class);
+        final ControllerMethod method = mock(ControllerMethod.class);
         final InterceptorStack stack = mock(InterceptorStack.class);
         
         when(translator.translate(info)).thenReturn(method);

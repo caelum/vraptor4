@@ -20,7 +20,7 @@ package br.com.caelum.vraptor.interceptor;
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.Lazy;
 import br.com.caelum.vraptor.core.InterceptorStack;
-import br.com.caelum.vraptor.resource.ResourceMethod;
+import br.com.caelum.vraptor4.controller.ControllerMethod;
 
 /**
  * Whenever an interceptor accepts a resource method, its intercept method is
@@ -33,8 +33,8 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
  * If you have an interceptor A which depends on an interceptor B, i.e, interceptor
  * B must be executed before interceptor A, use {@link InterceptorSequence}.
  *
- * If the {@link Interceptor#accepts(ResourceMethod)} method only depends on received
- * {@link ResourceMethod}, you can annotate the interceptor with @{@link Lazy}, so the
+ * If the {@link Interceptor#accepts(ControllerMethod)} method only depends on received
+ * {@link ControllerMethod}, you can annotate the interceptor with @{@link Lazy}, so the
  * Interceptor will only be instantiated if the accepts returns true.
  * You should not use @Lazy if accepts is constant, or depends on any constructor parameter.
  *
@@ -44,8 +44,8 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
  */
 public interface Interceptor {
 
-    void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance) throws InterceptionException;
+    void intercept(InterceptorStack stack, ControllerMethod method, Object resourceInstance) throws InterceptionException;
 
-    boolean accepts(ResourceMethod method);
+    boolean accepts(ControllerMethod method);
 
 }

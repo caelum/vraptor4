@@ -13,8 +13,8 @@ import org.slf4j.LoggerFactory;
 import br.com.caelum.vraptor.deserialization.Deserializer;
 import br.com.caelum.vraptor.deserialization.Deserializes;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
-import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.view.ResultException;
+import br.com.caelum.vraptor4.controller.ControllerMethod;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -43,7 +43,7 @@ public class GsonDeserialization implements Deserializer {
 		this.adapters = adapters;
 	}
 
-	public Object[] deserialize(InputStream inputStream, ResourceMethod method) {
+	public Object[] deserialize(InputStream inputStream, ControllerMethod method) {
 		Method jMethod = method.getMethod();
 		Class<?>[] types = jMethod.getParameterTypes();
 		if (types.length == 0) {

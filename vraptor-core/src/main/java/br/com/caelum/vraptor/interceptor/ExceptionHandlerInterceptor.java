@@ -28,7 +28,7 @@ import br.com.caelum.vraptor.core.DefaultExceptionMapper;
 import br.com.caelum.vraptor.core.ExceptionMapper;
 import br.com.caelum.vraptor.core.ExceptionRecorder;
 import br.com.caelum.vraptor.core.InterceptorStack;
-import br.com.caelum.vraptor.resource.ResourceMethod;
+import br.com.caelum.vraptor4.controller.ControllerMethod;
 
 import com.google.common.base.Throwables;
 
@@ -66,12 +66,12 @@ public class ExceptionHandlerInterceptor
     }
     
     @Override
-	public boolean accepts(ResourceMethod method) {
+	public boolean accepts(ControllerMethod method) {
         return true;
     }
 
     @Override
-	public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance)
+	public void intercept(InterceptorStack stack, ControllerMethod method, Object resourceInstance)
         throws InterceptionException {
         try {
             stack.next(method, resourceInstance);

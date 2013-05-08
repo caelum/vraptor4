@@ -23,8 +23,8 @@ import javax.inject.Inject;
 
 import br.com.caelum.vraptor.core.Localization;
 import br.com.caelum.vraptor.http.ParametersProvider;
-import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.validator.Message;
+import br.com.caelum.vraptor4.controller.ControllerMethod;
 
 /**
  * 
@@ -49,7 +49,7 @@ public class FormDeserializer implements Deserializer {
 	}
 
 	@Override
-	public Object[] deserialize(InputStream inputStream, ResourceMethod method) {
+	public Object[] deserialize(InputStream inputStream, ControllerMethod method) {
 		List<Message> errors = new ArrayList<Message>();
 		return provider.getParametersFor(method, errors, localization.getBundle());
 

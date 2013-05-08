@@ -29,14 +29,14 @@ import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.core.InterceptorStack;
-import br.com.caelum.vraptor.resource.DefaultResourceClass;
-import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.view.DogController;
+import br.com.caelum.vraptor4.controller.DefaultControllerClass;
+import br.com.caelum.vraptor4.controller.ControllerMethod;
 
 public class InstantiateInterceptorTest {
 
     private @Mock InterceptorStack stack;
-    private @Mock ResourceMethod method;
+    private @Mock ControllerMethod method;
     
     @Before
     public void setup() {
@@ -54,7 +54,7 @@ public class InstantiateInterceptorTest {
         InstanceContainer container = new InstanceContainer(myDog);
         InstantiateInterceptor interceptor = new InstantiateInterceptor(container);
         
-        when(method.getResource()).thenReturn(new DefaultResourceClass(DogController.class));
+        when(method.getResource()).thenReturn(new DefaultControllerClass(DogController.class));
         
         interceptor.intercept(stack, method, null);
         assertTrue(container.isEmpty());

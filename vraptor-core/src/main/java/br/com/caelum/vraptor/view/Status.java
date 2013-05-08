@@ -21,7 +21,7 @@ import java.util.EnumSet;
 import java.util.List;
 
 import br.com.caelum.vraptor.View;
-import br.com.caelum.vraptor.resource.HttpMethod;
+import br.com.caelum.vraptor4.controller.HttpMethod;
 
 /**
  * Allows status + header related results.

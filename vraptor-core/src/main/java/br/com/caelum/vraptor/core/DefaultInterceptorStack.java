@@ -28,7 +28,7 @@ import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.interceptor.ForwardToDefaultViewInterceptor;
 import br.com.caelum.vraptor.interceptor.Interceptor;
 import br.com.caelum.vraptor.ioc.PrototypeScoped;
-import br.com.caelum.vraptor.resource.ResourceMethod;
+import br.com.caelum.vraptor4.controller.ControllerMethod;
 
 /**
  * Default implementation of a interceptor stack.
@@ -48,7 +48,7 @@ public class DefaultInterceptorStack implements InterceptorStack {
         this.handlerFactory = handlerFactory;
     }
     
-    public void next(ResourceMethod method, Object resourceInstance) throws InterceptionException {
+    public void next(ControllerMethod method, Object resourceInstance) throws InterceptionException {
         if (interceptors.isEmpty()) {
         	logger.debug("All registered interceptors have been called. End of VRaptor Request Execution.");
             return;

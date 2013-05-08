@@ -26,12 +26,12 @@ import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.core.Localization;
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.http.ParametersProvider;
-import br.com.caelum.vraptor.http.route.MethodNotAllowedException;
-import br.com.caelum.vraptor.http.route.ResourceNotFoundException;
-import br.com.caelum.vraptor.http.route.Router;
-import br.com.caelum.vraptor.resource.HttpMethod;
-import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.validator.Message;
+import br.com.caelum.vraptor4.controller.HttpMethod;
+import br.com.caelum.vraptor4.controller.ControllerMethod;
+import br.com.caelum.vraptor4.http.route.MethodNotAllowedException;
+import br.com.caelum.vraptor4.http.route.ResourceNotFoundException;
+import br.com.caelum.vraptor4.http.route.Router;
 import static br.com.caelum.vraptor.view.Results.logic;
 import static br.com.caelum.vraptor.view.Results.page;
 
@@ -57,7 +57,7 @@ public class DefaultRefererResult implements RefererResult {
 		String referer = getReferer();
 
 		try {
-			ResourceMethod method = router.parse(referer, HttpMethod.GET, request);
+			ControllerMethod method = router.parse(referer, HttpMethod.GET, request);
 			executeMethod(method, result.use(logic()).forwardTo(method.getResource().getType()));
 		} catch (ResourceNotFoundException e) {
 			result.use(page()).forwardTo(referer);
@@ -66,7 +66,7 @@ public class DefaultRefererResult implements RefererResult {
 		}
 	}
 
-	private void executeMethod(ResourceMethod method, Object instance) {
+	private void executeMethod(ControllerMethod method, Object instance) {
 		new Mirror().on(instance).invoke().method(method.getMethod())
 			.withArgs(provider.getParametersFor(method, new ArrayList<Message>(), localization.getBundle()));
 	}
@@ -74,7 +74,7 @@ public class DefaultRefererResult implements RefererResult {
 	public void redirect() throws IllegalStateException {
 		String referer = getReferer();
 		try {
-			ResourceMethod method = router.parse(referer, HttpMethod.GET, request);
+			ControllerMethod method = router.parse(referer, HttpMethod.GET, request);
 			executeMethod(method, result.use(logic()).redirectTo(method.getResource().getType()));
 		} catch (ResourceNotFoundException e) {
 			result.use(page()).redirectTo(referer);

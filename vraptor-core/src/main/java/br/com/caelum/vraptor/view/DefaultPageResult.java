@@ -33,7 +33,7 @@ import br.com.caelum.vraptor.proxy.MethodInvocation;
 import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.proxy.ProxyInvocationException;
 import br.com.caelum.vraptor.proxy.SuperMethod;
-import br.com.caelum.vraptor.resource.DefaultResourceMethod;
+import br.com.caelum.vraptor4.controller.DefaultControllerMethod;
 
 /**
  * Default page result implementation.
@@ -116,7 +116,7 @@ public class DefaultPageResult implements PageResult {
 			public Object intercept(T proxy, Method method, Object[] args, SuperMethod superMethod) {
 				try {
 					request.getRequestDispatcher(
-							resolver.pathFor(DefaultResourceMethod.instanceFor(controllerType, method))).forward(
+							resolver.pathFor(DefaultControllerMethod.instanceFor(controllerType, method))).forward(
 							request.getOriginalRequest(), response);
 					return null;
 				} catch (Exception e) {

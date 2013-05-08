@@ -28,11 +28,11 @@ import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.interceptor.Interceptor;
-import br.com.caelum.vraptor.resource.ResourceMethod;
+import br.com.caelum.vraptor4.controller.ControllerMethod;
 
 public class DefaultInterceptorStackTest {
 
-	private static final ResourceMethod A_METHOD = null;
+	private static final ControllerMethod A_METHOD = null;
 	private static final Object AN_INSTANCE = null;
 
 	private @Mock InterceptorHandlerFactory handlerFactory;

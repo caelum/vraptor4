@@ -22,6 +22,7 @@ import java.util.Map;
 
 public class NoTypeFinder implements TypeFinder {
 
+	@Override
 	public Map<String, Class<?>> getParameterTypes(Method method, String[] parameterPaths) {
 		return Collections.emptyMap();
 	}

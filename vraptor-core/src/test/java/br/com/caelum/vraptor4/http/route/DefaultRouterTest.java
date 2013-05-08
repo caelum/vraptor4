@@ -217,7 +217,7 @@ public class DefaultRouterTest {
 		new Rules(router) {
 			@Override
 			public void routes() {
-				routeFor("/clients/add").with(HttpMethod.POST).is(MyControl.class).add(null);
+				routeFor("/clients/add").with(HttpMethod.POST).is(SomeController.class).add(null);
 			}
 		};
 		assertThat(router.parse("/clients/add", HttpMethod.POST, request), is(VRaptorMatchers.resourceMethod(method(
@@ -225,7 +225,7 @@ public class DefaultRouterTest {
 	}
 
 	private Method method(String methodName, Class<?>... params) throws SecurityException, NoSuchMethodException {
-		return MyControl.class.getDeclaredMethod(methodName, params);
+		return SomeController.class.getDeclaredMethod(methodName, params);
 	}
 
 	@Test
@@ -233,7 +233,7 @@ public class DefaultRouterTest {
 		new Rules(router) {
 			@Override
 			public void routes() {
-				routeFor("/clients/add").with(HttpMethod.POST).with(HttpMethod.GET).is(MyControl.class).add(null);
+				routeFor("/clients/add").with(HttpMethod.POST).with(HttpMethod.GET).is(SomeController.class).add(null);
 			}
 		};
 		
@@ -258,7 +258,7 @@ public class DefaultRouterTest {
 	}
 
 	@Controller
-	public static class MyControl {
+	public static class SomeController {
 		public void add(Dog object) {
 		}
 

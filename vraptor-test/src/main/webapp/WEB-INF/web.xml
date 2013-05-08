@@ -2,7 +2,7 @@
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:javaee="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd" id="WebApp_ID" version="2.4">
   <filter>
     <filter-name>vraptor4</filter-name>
-    <filter-class>br.com.caelum.vraptor4.VRaptor4</filter-class>
+    <filter-class>br.com.caelum.vraptor.VRaptor</filter-class>
   </filter>
   <filter-mapping>
     <filter-name>vraptor4</filter-name>

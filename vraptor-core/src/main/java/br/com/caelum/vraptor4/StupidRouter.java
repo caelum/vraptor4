@@ -10,14 +10,14 @@ public class StupidRouter {
 	
 	@Inject private Extractor extractor;
 
-	public Method respondTo(Object controller, String requestURI) {
+	public Method respondTo(Class<?> controller, String requestURI) {
 		
 		String controllerName = extractor.extractClassName(requestURI);
 		String methodName = extractor.extractMethodName(requestURI);
 		System.out.println("Controller name => "+controllerName);
 		System.out.println("Method name => "+methodName);
-		if (controllerName.equalsIgnoreCase(extractControllerFromName(controller.getClass().getSimpleName()))){
-			Method[] methods = controller.getClass().getDeclaredMethods();
+		if (controllerName.equalsIgnoreCase(extractControllerFromName(controller.getSimpleName()))){
+			Method[] methods = controller.getDeclaredMethods();
 			for (Method method : methods) {
 				System.out.println("Metodo encontrado => "+method.getName());
 				if (method.getName().equalsIgnoreCase(methodName)) {
@@ -29,6 +29,7 @@ public class StupidRouter {
 	}
 	
 	private String extractControllerFromName(String baseName) {
+		System.out.println("O que chega no basename antes: "+ baseName);
 		baseName = lowerFirstCharacter(baseName).split("\\$")[0];
 		System.out.println("BaseName => "+baseName);
 		if (baseName.endsWith("Controller")) {

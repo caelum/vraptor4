@@ -2,13 +2,8 @@ package br.com.caelum.vraptor4;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
-import java.util.Set;
 
-import javax.enterprise.inject.Any;
-import javax.enterprise.inject.Instance;
-import javax.enterprise.inject.spi.Bean;
-import javax.enterprise.util.AnnotationLiteral;
-import javax.inject.Inject;
+import javax.enterprise.inject.Alternative;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -18,18 +13,27 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class VRaptor4 implements Filter{
+import org.apache.log4j.Logger;
 
-	@Inject private BeanManagerUtil beanManagerUtil;
+@Alternative
+public class VRaptor4 implements Filter{
 	
-	@Inject
+//	@Inject 
+	private Logger logger;
+
+//	@Inject 
+	private BeanManagerUtil beanManagerUtil;
+	
+//	@Inject 
 	private StupidRouter router;
+	
+//	@Inject 
+	private ScannedControllers scannedControllers;
 	
 	@Override
 	public void destroy() {
 	}
 
-	@SuppressWarnings("serial")
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response,
 			FilterChain chain) throws IOException, ServletException {
@@ -41,23 +45,17 @@ public class VRaptor4 implements Filter{
 				"Servlet environment. Portlets and others aren't supported.");
 		}
 		
-		System.out.println("Oi, to no filtro do vraptor 4");
+		logger.debug("VRaptor received a new request");
 		
 		HttpServletRequest httpRequest = (HttpServletRequest) request;
-		Set<Bean<?>> beanControllers = beanManagerUtil.getBeans(Object.class,new AnnotationLiteral<Controller>() {});
-		for (Bean beanController : beanControllers) {
-
-			Object controller = beanManagerUtil.instanceFor(beanController);
-			
-			System.out.println("oi, to no for do filtro");
+		
+		for (Class<?>  controller: scannedControllers.getClasses()) {
 			
 			Method method = router.respondTo(controller,httpRequest.getRequestURI());
 			
-			System.out.println("method bacanudo" + method);
-			
 			if(method!=null){
 				try {
-					method.invoke(controller);
+					method.invoke(beanManagerUtil.instanceFor(controller));
 				} catch (Exception e) {
 					throw new ServletException(e);
 				}

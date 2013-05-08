@@ -116,7 +116,6 @@ public class VRaptorTest {
         
         when(handler.requestingStaticFile(request)).thenReturn(true);
         
-        vraptor.init(new DoNothingProvider(handler));
         vraptor.doFilter(request, response, chain);
         
         verify(handler, times(1)).deferProcessingToContainer(chain, request, response);

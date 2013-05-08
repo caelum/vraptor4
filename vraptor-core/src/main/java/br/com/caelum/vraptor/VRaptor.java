@@ -115,9 +115,5 @@ public class VRaptor implements Filter {
 		logger.info("VRaptor 3.5.0 successfuly initialized");
 	}
 
-	//TODO for tests only?
-	void init(ContainerProvider provider) {
-		this.provider = provider;
-	}
 
 }

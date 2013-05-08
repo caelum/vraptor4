@@ -38,12 +38,9 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import br.com.caelum.vraptor.core.Execution;
 import br.com.caelum.vraptor.core.RequestExecution;
-import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.core.StaticContentHandler;
 import br.com.caelum.vraptor.ioc.Container;
-import br.com.caelum.vraptor.ioc.ContainerProvider;
 
 public class VRaptorTest {
 
@@ -63,46 +60,6 @@ public class VRaptorTest {
         ServletResponse response = mock(ServletResponse.class);
         
         new VRaptor().doFilter(request, response, null);
-    }
-
-
-
-
-    public static class DoNothingProvider implements ContainerProvider {
-        private final StaticContentHandler handler;
-
-		public DoNothingProvider(StaticContentHandler handler) {
-			this.handler = handler;
-		}
-
-		@Override
-		public <T> T provideForRequest(RequestInfo vraptorRequest, Execution<T> execution) {
-            return execution.insideRequest(null);
-        }
-
-        @Override
-		public void start(ServletContext context) {
-        }
-
-        @Override
-		public void stop() {
-        }
-        
-        @Override
-		public Container getContainer() {
-        	return new Container() {
-				
-				@Override
-				public <T> T instanceFor(Class<T> type) {
-					return type.cast(handler);
-				}
-				
-				@Override
-				public <T> boolean canProvide(Class<T> type) {
-					return false;
-				}
-			};
-        }
     }
 
     @Test

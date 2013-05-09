@@ -22,7 +22,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import br.com.caelum.vraptor.config.Configuration;
 import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
-import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.ioc.RequestScoped;
 import br.com.caelum.vraptor.restfulie.Restfulie;
 import br.com.caelum.vraptor.serialization.ProxyInitializer;
@@ -37,7 +36,6 @@ import com.thoughtworks.xstream.converters.reflection.ReflectionConverter;
  * @author guilherme silveira
  * @author ac de souza
  */
-@Component
 @RequestScoped
 public class RestfulSerializationJSON extends XStreamJSONSerialization {
 

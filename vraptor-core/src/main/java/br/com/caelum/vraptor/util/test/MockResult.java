@@ -24,7 +24,6 @@ import java.util.Map;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.View;
 import br.com.caelum.vraptor.core.AbstractResult;
-import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.proxy.JavassistProxifier;
 import br.com.caelum.vraptor.proxy.MethodInvocation;
 import br.com.caelum.vraptor.proxy.ObjenesisInstanceCreator;
@@ -46,7 +45,6 @@ import br.com.caelum.vraptor.view.ResultException;
  * @author Lucas Cavalcanti
  * @author Guilherme Silveira
  */
-@Component
 public class MockResult extends AbstractResult {
 
 	private final Map<String, Object> values = new HashMap<String, Object>();

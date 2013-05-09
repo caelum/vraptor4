@@ -207,7 +207,6 @@ public abstract class GenericContainerTest {
 		});
 	}
 
-	@Component
 	@RequestScoped
 	@Named("teste")
 	public static class MyRequestComponent {
@@ -219,7 +218,6 @@ public abstract class GenericContainerTest {
 		checkAvailabilityFor(false, MyRequestComponent.class, MyRequestComponent.class);
 	}
 
-	@Component
 	@PrototypeScoped
 	public static class MyPrototypeComponent {
 
@@ -408,7 +406,6 @@ public abstract class GenericContainerTest {
 		}
 	}
 
-	@Component
 	@RequestScoped
 	static public class DisposableComponent {
 		private boolean destroyed;
@@ -428,7 +425,6 @@ public abstract class GenericContainerTest {
 		}
 	}
 
-	@Component
 	static public class StartableComponent {
 		private boolean started;
 

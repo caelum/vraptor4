@@ -18,7 +18,6 @@ package br.com.caelum.vraptor.restfulie.headers;
 import java.util.Calendar;
 
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
-import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.restfulie.hypermedia.HypermediaResource;
 
 /**
@@ -27,7 +26,6 @@ import br.com.caelum.vraptor.restfulie.hypermedia.HypermediaResource;
  * @author Lucas Cavalcanti
  * @since 3.1.2
  */
-@Component
 @ApplicationScoped
 public class DefaultRestDefaults implements RestDefaults {
 

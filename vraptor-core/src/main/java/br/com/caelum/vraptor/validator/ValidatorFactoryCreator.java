@@ -26,7 +26,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
-import br.com.caelum.vraptor.ioc.Component;
 
 /**
  * Factory for JSR303 ValidatorFactory
@@ -36,7 +35,6 @@ import br.com.caelum.vraptor.ioc.Component;
  * @since 3.1.3
  *
  */
-@Component
 @ApplicationScoped
 @Alternative
 public class ValidatorFactoryCreator {

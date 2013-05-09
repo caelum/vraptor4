@@ -15,8 +15,6 @@
  */
 package br.com.caelum.vraptor.validator;
 
-import br.com.caelum.vraptor.ioc.Component;
-
 import com.thoughtworks.xstream.converters.Converter;
 import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.converters.UnmarshallingContext;
@@ -28,7 +26,6 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
  * @author Lucas Cavalcanti
  * @since 3.4.0
  */
-@Component
 public class MessageConverter implements Converter {
 
 	public boolean canConvert(Class type) {

@@ -15,14 +15,12 @@
  */
 package br.com.caelum.vraptor.serialization;
 
-import br.com.caelum.vraptor.ioc.Component;
 
 /**
  * Basic xml configuration for xml serialization.
  * @author guilherme silveira
  * @since 3.0.2
  */
-@Component
 public class DefaultXMLConfiguration implements XMLConfiguration {
 
 //	private static final List<Class<?>> PRIMITIVE_TYPES = Arrays.asList(

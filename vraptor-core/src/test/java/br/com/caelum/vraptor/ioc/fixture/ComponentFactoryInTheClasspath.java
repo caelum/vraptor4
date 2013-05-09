@@ -20,9 +20,7 @@ import javax.annotation.PreDestroy;
 import javax.enterprise.inject.Produces;
 
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
-import br.com.caelum.vraptor.ioc.Component;
 
-@Component
 @ApplicationScoped
 public class ComponentFactoryInTheClasspath {
 	private int callsToPreDestroy = 0 ;

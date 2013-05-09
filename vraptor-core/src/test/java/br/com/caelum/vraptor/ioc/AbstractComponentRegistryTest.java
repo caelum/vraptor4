@@ -79,14 +79,12 @@ public class AbstractComponentRegistryTest {
     }
 
 
-	@Component
     static class RunnableComponent implements Runnable {
         public void run() {
         }
     }
 
     @SuppressWarnings("serial")
-    @Component
     public static class ArrayListSubclass extends ArrayList<Object> {
     }
 }

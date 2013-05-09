@@ -21,7 +21,6 @@ import javax.enterprise.inject.Produces;
 /**
  * @author: Fabio Kung
 */
-@Component
 public class TheComponentFactory {
 	
 	@Produces

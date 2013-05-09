@@ -24,7 +24,6 @@ import java.util.List;
 import javax.inject.Inject;
 
 import br.com.caelum.vraptor.http.ParameterNameProvider;
-import br.com.caelum.vraptor.ioc.Component;
 
 /**
  * An adapter for iogi's parameterNamesProvider
@@ -33,7 +32,6 @@ import br.com.caelum.vraptor.ioc.Component;
  * @since
  *
  */
-@Component
 public class VRaptorParameterNamesProvider implements br.com.caelum.iogi.spi.ParameterNamesProvider {
 	private final ParameterNameProvider parameterNameProvider;
 

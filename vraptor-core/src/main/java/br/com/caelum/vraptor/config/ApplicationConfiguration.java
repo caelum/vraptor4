@@ -20,7 +20,6 @@ package br.com.caelum.vraptor.config;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
-import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.ioc.RequestScoped;
 
 /**
@@ -30,7 +29,6 @@ import br.com.caelum.vraptor.ioc.RequestScoped;
  * @author lucas cavalcanti
  * @since 3.0.3
  */
-@Component
 @RequestScoped
 public class ApplicationConfiguration implements Configuration {
 

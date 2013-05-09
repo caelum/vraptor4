@@ -23,7 +23,6 @@ import java.util.Arrays;
 import br.com.caelum.vraptor.View;
 import br.com.caelum.vraptor.http.FormatResolver;
 import br.com.caelum.vraptor.interceptor.DefaultTypeNameExtractor;
-import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.proxy.JavassistProxifier;
 import br.com.caelum.vraptor.proxy.ObjenesisInstanceCreator;
 import br.com.caelum.vraptor.proxy.Proxifier;
@@ -49,7 +48,6 @@ import br.com.caelum.vraptor.view.EmptyResult;
  *
  * @author Vinícius Oliveira
  */
-@Component
 public class MockSerializationResult extends MockResult {
 
 	private Serialization serialization;

@@ -19,12 +19,10 @@ import java.io.Writer;
 import java.util.Arrays;
 import java.util.Collections;
 
-import javax.enterprise.inject.New;
 import javax.inject.Inject;
 
 import br.com.caelum.vraptor.interceptor.DefaultTypeNameExtractor;
 import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
-import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.ioc.PrototypeScoped;
 
 import com.thoughtworks.xstream.XStream;
@@ -42,7 +40,6 @@ import com.thoughtworks.xstream.io.json.JsonWriter;
  * @since 3.4.0
  */
 @PrototypeScoped
-@Component
 public class XStreamBuilderImpl implements XStreamBuilder {
 
 	private final XStreamConverters converters;

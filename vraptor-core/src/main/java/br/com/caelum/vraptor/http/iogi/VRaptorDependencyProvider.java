@@ -22,7 +22,6 @@ import javax.inject.Inject;
 import br.com.caelum.iogi.reflection.Target;
 import br.com.caelum.iogi.spi.DependencyProvider;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
-import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.ioc.Container;
 
 /**
@@ -32,7 +31,6 @@ import br.com.caelum.vraptor.ioc.Container;
  * @since
  *
  */
-@Component
 @ApplicationScoped
 public class VRaptorDependencyProvider implements DependencyProvider {
 

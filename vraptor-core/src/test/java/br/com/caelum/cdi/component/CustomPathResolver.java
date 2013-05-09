@@ -3,12 +3,10 @@ package br.com.caelum.cdi.component;
 import javax.enterprise.inject.Alternative;
 
 import br.com.caelum.vraptor.http.FormatResolver;
-import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.view.DefaultPathResolver;
 import br.com.caelum.vraptor4.controller.ControllerMethod;
 
 @Alternative
-@Component
 public class CustomPathResolver extends DefaultPathResolver{
 
 	//CDI eyes only

@@ -18,7 +18,6 @@ package br.com.caelum.vraptor.serialization;
 
 import br.com.caelum.vraptor.View;
 import br.com.caelum.vraptor.core.Localization;
-import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.validator.I18nMessage;
 
@@ -29,7 +28,6 @@ import br.com.caelum.vraptor.validator.I18nMessage;
  * @author Leonardo Wolter
  * @since 3.5
  */
-@Component
 public class I18nMessageSerialization implements View{
 
 	private Localization localization;

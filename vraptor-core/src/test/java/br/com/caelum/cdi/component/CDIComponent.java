@@ -2,12 +2,9 @@ package br.com.caelum.cdi.component;
 
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.inject.Produces;
-
-import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.ioc.GenericContainerTest.MyRequestComponent;
 import br.com.caelum.vraptor.ioc.cdi.ComponentToBeProduced;
 
-@Component
 public class CDIComponent{
 	
 	private MyRequestComponent component;

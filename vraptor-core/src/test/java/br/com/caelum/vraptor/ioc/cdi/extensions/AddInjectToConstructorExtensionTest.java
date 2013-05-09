@@ -9,7 +9,7 @@ import javax.inject.Inject;
 import org.apache.deltaspike.core.util.metadata.builder.AnnotatedTypeBuilder;
 import org.junit.Test;
 
-import br.com.caelum.vraptor.ioc.Component;
+import br.com.caelum.vraptor4.Controller;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -43,12 +43,11 @@ public class AddInjectToConstructorExtensionTest {
 	}
 
 	
-	@Component
 	private static class WithNonArgsConstructor{
 		
 	}
 	
-	@Component
+	@Controller
 	public static class WithArgsConstructor {
 		private String field;
 

@@ -216,12 +216,6 @@ public class CDIProviderRegisteringComponentsTest extends
 	}
 	
 	@Test
-	public void shouldAddRequestScopeForComponentWithoutScope(){
-		Bean<?> bean = cdiContainer.getBeanManager().getBeans(CDIComponent.class).iterator().next();
-		assertEquals(RequestScoped.class,bean.getScope());
-	}
-	
-	@Test
 	public void shouldNotAddRequestScopeForComponentWithScope(){
 		Bean<?> bean = cdiContainer.getBeanManager().getBeans(CDISessionComponent.class).iterator().next();
 		assertTrue(bean.getScope().equals(SessionScoped.class));

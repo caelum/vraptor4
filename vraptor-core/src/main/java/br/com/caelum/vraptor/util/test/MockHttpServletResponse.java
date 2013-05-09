@@ -27,8 +27,6 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 
-import br.com.caelum.vraptor.ioc.Component;
-
 /**
  *
  * A simple mock for HttpServletResponse.
@@ -38,7 +36,6 @@ import br.com.caelum.vraptor.ioc.Component;
  *
  * @author Vinícius Oliveira
  */
-@Component
 public class MockHttpServletResponse implements HttpServletResponse {
 	
 	private PrintWriter writer;

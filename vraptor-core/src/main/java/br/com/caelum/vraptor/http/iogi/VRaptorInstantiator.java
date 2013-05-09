@@ -40,7 +40,6 @@ import br.com.caelum.vraptor.converter.ConversionError;
 import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.core.Localization;
 import br.com.caelum.vraptor.http.InvalidParameterException;
-import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.ioc.RequestScoped;
 import br.com.caelum.vraptor.validator.Message;
 import br.com.caelum.vraptor.validator.ValidationMessage;
@@ -48,7 +47,6 @@ import br.com.caelum.vraptor.validator.annotation.ValidationException;
 
 import com.google.common.collect.ImmutableList;
 
-@Component
 @RequestScoped
 public class VRaptorInstantiator implements InstantiatorWithErrors, Instantiator<Object> {
 	private Localization localization;

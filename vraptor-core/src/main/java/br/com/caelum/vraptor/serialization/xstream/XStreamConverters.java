@@ -22,8 +22,6 @@ import javax.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import br.com.caelum.vraptor.ioc.Component;
-
 import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
 import com.thoughtworks.xstream.XStream;
@@ -36,7 +34,6 @@ import com.thoughtworks.xstream.converters.SingleValueConverter;
  * @author Rafael Viana
  * @since 3.4.0
  */
-@Component
 public class XStreamConverters {
 
 	private List<Converter> converters;

@@ -21,7 +21,6 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
 
 import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
-import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.serialization.*;
 import br.com.caelum.vraptor.view.ResultException;
 
@@ -33,7 +32,6 @@ import com.thoughtworks.xstream.XStream;
  * @author Lucas Cavalcanti
  * @since 3.0.2
  */
-@Component
 public class XStreamXMLSerialization implements XMLSerialization {
 
 	private final HttpServletResponse response;

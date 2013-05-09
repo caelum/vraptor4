@@ -23,7 +23,6 @@ import javax.servlet.http.HttpServletResponse;
 import br.com.caelum.vraptor.config.Configuration;
 import br.com.caelum.vraptor.serialization.xstream.XStreamBuilder;
 import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
-import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.ioc.RequestScoped;
 import br.com.caelum.vraptor.restfulie.Restfulie;
 import br.com.caelum.vraptor.serialization.ProxyInitializer;
@@ -36,7 +35,6 @@ import com.thoughtworks.xstream.converters.reflection.ReflectionConverter;
  * Custom serialization process provides a way to add links to your resource representations.
  * @author guilherme silveira
  */
-@Component
 @RequestScoped
 public class RestfulSerialization extends XStreamXMLSerialization {
 

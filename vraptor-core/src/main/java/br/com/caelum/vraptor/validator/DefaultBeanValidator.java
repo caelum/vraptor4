@@ -32,7 +32,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.core.Localization;
-import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.ioc.RequestScoped;
 
 /**
@@ -43,7 +42,6 @@ import br.com.caelum.vraptor.ioc.RequestScoped;
  * @since 3.1.2
  */
 @RequestScoped
-@Component
 public class DefaultBeanValidator
     implements BeanValidator {
 

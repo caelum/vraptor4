@@ -29,7 +29,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.config.Configuration;
-import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.proxy.MethodInvocation;
 import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.proxy.SuperMethod;
@@ -42,7 +41,6 @@ import br.com.caelum.vraptor4.http.route.Router;
  * @author guilherme silveira
  * @since 3.0.3
  */
-@Component
 public class DefaultStatus implements Status {
 
 	private final HttpServletResponse response;

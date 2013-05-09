@@ -21,9 +21,13 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
 
 import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
-import br.com.caelum.vraptor.ioc.Component;
-import br.com.caelum.vraptor.serialization.*;
+import br.com.caelum.vraptor.serialization.JSONSerialization;
+import br.com.caelum.vraptor.serialization.NoRootSerialization;
+import br.com.caelum.vraptor.serialization.ProxyInitializer;
+import br.com.caelum.vraptor.serialization.Serializer;
+import br.com.caelum.vraptor.serialization.SerializerBuilder;
 import br.com.caelum.vraptor.view.ResultException;
+
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.HierarchicalStreamDriver;
 
@@ -33,7 +37,6 @@ import com.thoughtworks.xstream.io.HierarchicalStreamDriver;
  * @author Lucas Cavalcanti
  * @since 3.0.2
  */
-@Component
 public class XStreamJSONSerialization implements JSONSerialization {
 
     protected final HttpServletResponse response;

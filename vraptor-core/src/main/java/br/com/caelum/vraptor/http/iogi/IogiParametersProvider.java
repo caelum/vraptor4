@@ -37,12 +37,10 @@ import br.com.caelum.iogi.parameters.Parameters;
 import br.com.caelum.iogi.reflection.Target;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.http.ParametersProvider;
-import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.ioc.RequestScoped;
 import br.com.caelum.vraptor.validator.Message;
 import br.com.caelum.vraptor4.controller.ControllerMethod;
 
-@Component
 @RequestScoped
 public class IogiParametersProvider implements ParametersProvider {
 	private static final Logger LOGGER = LoggerFactory.getLogger(IogiParametersProvider.class);

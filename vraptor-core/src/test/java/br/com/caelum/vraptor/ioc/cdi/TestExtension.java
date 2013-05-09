@@ -16,6 +16,7 @@ import javax.validation.ValidatorFactory;
 
 import org.junit.Ignore;
 
+import br.com.caelum.cdi.component.CDIComponent;
 import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.ioc.GenericContainerTest;
 import br.com.caelum.vraptor.ioc.MySessionComponent;
@@ -57,6 +58,7 @@ public class TestExtension extends RegisterComponentsExtension{
 		discovery.addAnnotatedType(bm.createAnnotatedType(MySessionComponent.class));
 		discovery.addAnnotatedType(bm.createAnnotatedType(TheComponentFactory.class));
 		discovery.addAnnotatedType(bm.createAnnotatedType(DependentOnSomethingFromComponentFactory.class));
+		discovery.addAnnotatedType(bm.createAnnotatedType(CDIComponent.class));
 	}	
 	
 	public void processProducerForServletContext(@Observes ProcessProducer<ServletContextFactory,ServletContext> producer){

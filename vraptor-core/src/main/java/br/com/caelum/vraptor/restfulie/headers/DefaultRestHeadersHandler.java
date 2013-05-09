@@ -22,13 +22,11 @@ import java.util.Calendar;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
 
-import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.restfulie.RestHeadersHandler;
 import br.com.caelum.vraptor.restfulie.hypermedia.HypermediaResource;
 import br.com.caelum.vraptor.restfulie.resource.Cacheable;
 import br.com.caelum.vraptor.restfulie.resource.RestfulEntity;
 
-@Component
 public class DefaultRestHeadersHandler implements RestHeadersHandler {
 
 	private final HttpServletResponse response;

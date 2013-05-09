@@ -22,7 +22,6 @@ import java.util.EnumSet;
 import javax.inject.Inject;
 
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
-import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.proxy.MethodInvocation;
 import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor4.controller.HttpMethod;
@@ -33,7 +32,6 @@ import br.com.caelum.vraptor4.http.route.Router;
  * @author guilherme silveira
  * @since 3.0.3
  */
-@Component
 @ApplicationScoped
 public class DefaultRoutes implements Routes{
 

@@ -21,7 +21,6 @@ import java.util.Collection;
 import javax.servlet.http.HttpServletResponse;
 
 import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
-import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.serialization.JSONSerialization;
 import br.com.caelum.vraptor.serialization.NoRootSerialization;
 import br.com.caelum.vraptor.serialization.ProxyInitializer;
@@ -38,7 +37,6 @@ import com.google.gson.JsonSerializer;
  * @author Renan Reis
  * @author Guilherme Mangabeira
  */
-@Component
 public class GsonJSONSerialization implements JSONSerialization {
 
 	protected final HttpServletResponse response;

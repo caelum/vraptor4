@@ -113,7 +113,6 @@ import br.com.caelum.vraptor.interceptor.multipart.MultipartInterceptor;
 import br.com.caelum.vraptor.interceptor.multipart.NullMultipartInterceptor;
 import br.com.caelum.vraptor.interceptor.multipart.Servlet3MultipartInterceptor;
 import br.com.caelum.vraptor.interceptor.multipart.ServletFileUploadCreator;
-import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.ioc.ConverterHandler;
 import br.com.caelum.vraptor.ioc.InterceptorStereotypeHandler;
 import br.com.caelum.vraptor.ioc.StereotypeHandler;
@@ -319,7 +318,6 @@ public class BaseComponents {
     private static final Class<? extends Annotation>[] STEREOTYPES = new Class[] {
     	Controller.class,
     	Convert.class,
-    	Component.class,
     	Deserializes.class,
     	Intercepts.class
     };

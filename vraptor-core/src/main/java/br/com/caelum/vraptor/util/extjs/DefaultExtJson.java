@@ -22,7 +22,6 @@ import java.io.Writer;
 import javax.servlet.http.HttpServletResponse;
 
 import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
-import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.serialization.ProxyInitializer;
 import br.com.caelum.vraptor.serialization.xstream.XStreamSerializer;
 
@@ -37,7 +36,6 @@ import com.thoughtworks.xstream.io.json.JsonWriter;
  * @author Lucas Cavalcanti
  *
  */
-@Component
 public class DefaultExtJson implements ExtJSJson {
 
     private XStreamSerializer serializer;

@@ -20,7 +20,6 @@ package br.com.caelum.vraptor.restfulie;
 import javax.inject.Inject;
 
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
-import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.restfulie.hypermedia.ConfigurableHypermediaResource;
 import br.com.caelum.vraptor.restfulie.hypermedia.DefaultConfigurableHypermediaResource;
@@ -34,7 +33,6 @@ import br.com.caelum.vraptor4.http.route.Router;
  * @author Lucas Cavalcanti
  * @since 3.2.0
  */
-@Component
 @ApplicationScoped
 public class DefaultRestfulie implements Restfulie {
 

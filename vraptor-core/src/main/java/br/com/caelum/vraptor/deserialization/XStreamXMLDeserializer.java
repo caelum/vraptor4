@@ -21,7 +21,6 @@ import java.lang.reflect.Method;
 import javax.inject.Inject;
 
 import br.com.caelum.vraptor.http.ParameterNameProvider;
-import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.serialization.xstream.XStreamBuilder;
 import br.com.caelum.vraptor4.controller.ControllerMethod;
 
@@ -35,7 +34,6 @@ import com.thoughtworks.xstream.XStream;
  * @author Rafael Viana
  * @since 3.0.2
  */
-@Component
 public class XStreamXMLDeserializer implements XMLDeserializer {
 
 	private final ParameterNameProvider provider;

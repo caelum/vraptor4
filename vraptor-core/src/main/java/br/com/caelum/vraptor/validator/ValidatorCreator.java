@@ -27,7 +27,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
-import br.com.caelum.vraptor.ioc.Component;
 
 /**
  * Bring up Bean Validation factory. This class builds the {@link Validator} once when application
@@ -37,7 +36,6 @@ import br.com.caelum.vraptor.ioc.Component;
  * @since 3.1.2
  */
 @ApplicationScoped
-@Component
 @Alternative
 public class ValidatorCreator {
 

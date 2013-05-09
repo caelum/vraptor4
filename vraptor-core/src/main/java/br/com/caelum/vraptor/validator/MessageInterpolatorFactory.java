@@ -4,6 +4,7 @@
 package br.com.caelum.vraptor.validator;
 
 import javax.annotation.PostConstruct;
+import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 import javax.validation.MessageInterpolator;
 import javax.validation.ValidatorFactory;
@@ -13,7 +14,6 @@ import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.ioc.Component;
-import br.com.caelum.vraptor.ioc.ComponentFactory;
 
 /**
  * Factory for JSR303 MessageInterpolator
@@ -23,7 +23,7 @@ import br.com.caelum.vraptor.ioc.ComponentFactory;
  */
 @Component
 @ApplicationScoped
-public class MessageInterpolatorFactory implements ComponentFactory<MessageInterpolator> {
+public class MessageInterpolatorFactory{
 
 	private static final Logger logger = LoggerFactory.getLogger(MessageInterpolatorFactory.class);
 
@@ -46,7 +46,7 @@ public class MessageInterpolatorFactory implements ComponentFactory<MessageInter
 		logger.debug("Initializing Bean Validator MessageInterpolator");
 	}
 
-	@Override
+	@Produces @javax.enterprise.context.ApplicationScoped
 	public MessageInterpolator getInstance() {
 		return interpolator;
 	}

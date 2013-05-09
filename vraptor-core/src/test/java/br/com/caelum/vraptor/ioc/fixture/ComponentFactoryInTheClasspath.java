@@ -21,11 +21,10 @@ import javax.enterprise.inject.Produces;
 
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.ioc.Component;
-import br.com.caelum.vraptor.ioc.ComponentFactory;
 
 @Component
 @ApplicationScoped
-public class ComponentFactoryInTheClasspath implements ComponentFactory<br.com.caelum.vraptor.ioc.fixture.ComponentFactoryInTheClasspath.Provided> {
+public class ComponentFactoryInTheClasspath {
 	private int callsToPreDestroy = 0 ;
 	
 	@PreDestroy
@@ -39,7 +38,8 @@ public class ComponentFactoryInTheClasspath implements ComponentFactory<br.com.c
 	}
 	public static Provided PROVIDED = new Provided();
 	
-	@Produces		
+	@Produces	
+	@javax.enterprise.context.ApplicationScoped
 	public Provided getInstance() {
 		return PROVIDED;
 	}

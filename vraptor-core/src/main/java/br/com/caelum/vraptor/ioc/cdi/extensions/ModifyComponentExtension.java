@@ -15,10 +15,8 @@ public class ModifyComponentExtension implements Extension {
 		builder.readFromType(pat.getAnnotatedType());
 		AddInjectToConstructorExtension addInjectToConstructorExtension = new AddInjectToConstructorExtension(builder);
 		ComponentExtension componentExtension = new ComponentExtension(builder);
-		ComponentFactoryExtension componentFactoryExtension = new ComponentFactoryExtension(builder);
 		addInjectToConstructorExtension.processAnnotatedType(pat);
 		componentExtension.processAnnotatedType(pat);
-		componentFactoryExtension.addProducesToComponentFactory(pat);
 		pat.setAnnotatedType(builder.create());
 	}
 

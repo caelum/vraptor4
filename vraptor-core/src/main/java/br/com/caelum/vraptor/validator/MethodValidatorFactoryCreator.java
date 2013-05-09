@@ -15,14 +15,13 @@
  */
 package br.com.caelum.vraptor.validator;
 
-import static java.util.Arrays.asList;
-
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import javax.enterprise.inject.Produces;
 import javax.validation.Validation;
 import javax.validation.ValidatorFactory;
 
@@ -31,7 +30,7 @@ import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
-import br.com.caelum.vraptor.ioc.ComponentFactory;
+import static java.util.Arrays.asList;
 
 /**
  * Bring up Method Validation factory. This class builds the {@link ValidatorFactory} factory once when
@@ -41,8 +40,7 @@ import br.com.caelum.vraptor.ioc.ComponentFactory;
  * @since 3.5.1-SNAPSHOT
  */
 @ApplicationScoped
-public class MethodValidatorFactoryCreator
-    implements ComponentFactory<ValidatorFactory> {
+public class MethodValidatorFactoryCreator{
     
     private static final Logger logger = LoggerFactory.getLogger(MethodValidatorFactoryCreator.class);
     private static final List<Method> OBJECT_METHODS = asList(Object.class.getDeclaredMethods());
@@ -73,7 +71,8 @@ public class MethodValidatorFactoryCreator
         instance.close();
     }
 
-    @Override
+    @javax.enterprise.context.ApplicationScoped
+    @Produces
 	public ValidatorFactory getInstance() {
         if (instance == null) { //pico don't call PostConstruct
             buildFactory();

@@ -17,6 +17,7 @@
 
 package br.com.caelum.vraptor.http;
 
+import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 import javax.servlet.ServletContext;
 
@@ -31,7 +32,7 @@ import br.com.caelum.vraptor.ioc.ComponentFactory;
  * @author Lucas Cavalcanti
  */
 @ApplicationScoped
-public class EncodingHandlerFactory implements ComponentFactory<EncodingHandler> {
+public class EncodingHandlerFactory{
 
 	private EncodingHandler handler;
 
@@ -46,7 +47,7 @@ public class EncodingHandlerFactory implements ComponentFactory<EncodingHandler>
 		this.handler = (encoding == null) ? new NullEncodingHandler() : new WebXmlEncodingHandler(encoding);
 	}
 	
-	@Override
+	@Produces @javax.enterprise.context.ApplicationScoped
 	public EncodingHandler getInstance() {
 		return handler;
 	}

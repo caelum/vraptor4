@@ -28,7 +28,6 @@ import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import br.com.caelum.cdi.component.CDIComponent;
 import br.com.caelum.cdi.component.CDIControllerComponent;
 import br.com.caelum.cdi.component.CDISessionComponent;
 import br.com.caelum.vraptor.core.BaseComponents;
@@ -237,12 +236,6 @@ public class CDIProviderRegisteringComponentsTest extends
 			}
 		};
 		getFromContainerAndExecuteSomeCode(PathResolver.class, code);
-	}
-	
-	@Test
-	public void shouldUseConstructorEvenWithoutInject(){
-		CDIControllerComponent resource = registerAndGetFromContainer(CDIControllerComponent.class,CDIControllerComponent.class);
-		assertTrue(resource.isInitializedDepencies());
 	}	
 	
 	@Override

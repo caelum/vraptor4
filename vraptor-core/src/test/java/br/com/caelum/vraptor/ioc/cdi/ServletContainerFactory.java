@@ -19,7 +19,6 @@ import javax.servlet.ServletContext;
 
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.http.MutableResponse;
-import br.com.caelum.vraptor.scan.ScannotationComponentScannerTest;
 import br.com.caelum.vraptor.test.HttpServletRequestMock;
 import br.com.caelum.vraptor.test.HttpSessionMock;
 
@@ -56,7 +55,7 @@ public class ServletContainerFactory {
 		when(context.getRealPath("/WEB-INF/classes")).thenReturn(getClassDir());
 
 		when(context.getClassLoader()).thenReturn(
-				new URLClassLoader(new URL[] {ScannotationComponentScannerTest.class.getResource("/test-fixture.jar")}, 
+				new URLClassLoader(new URL[] {Object.class.getResource("/test-fixture.jar")}, 
 						currentThread().getContextClassLoader()));
 
         //allowing(context).getInitParameter(ENCODING);

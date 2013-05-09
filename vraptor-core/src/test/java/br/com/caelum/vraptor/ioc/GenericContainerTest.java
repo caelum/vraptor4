@@ -72,13 +72,12 @@ import br.com.caelum.vraptor.interceptor.InterceptorRegistry;
 import br.com.caelum.vraptor.ioc.cdi.Code;
 import br.com.caelum.vraptor.ioc.fixture.ComponentFactoryInTheClasspath;
 import br.com.caelum.vraptor.ioc.fixture.ComponentFactoryInTheClasspath.Provided;
+import br.com.caelum.vraptor.ioc.fixture.ControllerInTheClasspath;
 import br.com.caelum.vraptor.ioc.fixture.ConverterInTheClasspath;
 import br.com.caelum.vraptor.ioc.fixture.CustomComponentInTheClasspath;
 import br.com.caelum.vraptor.ioc.fixture.CustomComponentWithLifecycleInTheClasspath;
 import br.com.caelum.vraptor.ioc.fixture.DependentOnSomethingFromComponentFactory;
 import br.com.caelum.vraptor.ioc.fixture.InterceptorInTheClasspath;
-import br.com.caelum.vraptor.ioc.fixture.ControllerInTheClasspath;
-import br.com.caelum.vraptor.scan.ScannotationComponentScannerTest;
 import br.com.caelum.vraptor4.controller.ControllerMethod;
 import br.com.caelum.vraptor4.http.route.Route;
 import br.com.caelum.vraptor4.http.route.Router;
@@ -274,8 +273,9 @@ public abstract class GenericContainerTest {
 		when(context.getInitParameter(BASE_PACKAGES_PARAMETER_NAME)).thenReturn("br.com.caelum.vraptor.ioc.fixture");
 		when(context.getRealPath("/WEB-INF/classes")).thenReturn(getClassDir());
 
+		
 		when(context.getClassLoader()).thenReturn(
-				new URLClassLoader(new URL[] {ScannotationComponentScannerTest.class.getResource("/test-fixture.jar")},
+				new URLClassLoader(new URL[] {Object.class.getResource("/test-fixture.jar")},
 						currentThread().getContextClassLoader()));
 
         //allowing(context).getInitParameter(ENCODING);

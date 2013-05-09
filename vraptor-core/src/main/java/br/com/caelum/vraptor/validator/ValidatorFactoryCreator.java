@@ -18,6 +18,7 @@ package br.com.caelum.vraptor.validator;
 import javax.annotation.PostConstruct;
 import javax.enterprise.inject.Alternative;
 import javax.enterprise.inject.Default;
+import javax.enterprise.inject.Produces;
 import javax.validation.Validation;
 import javax.validation.ValidatorFactory;
 
@@ -26,7 +27,6 @@ import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.ioc.Component;
-import br.com.caelum.vraptor.ioc.ComponentFactory;
 import br.com.caelum.vraptor.ioc.cdi.VraptorPreference;
 
 /**
@@ -40,7 +40,7 @@ import br.com.caelum.vraptor.ioc.cdi.VraptorPreference;
 @Component
 @ApplicationScoped
 @Alternative
-public class ValidatorFactoryCreator implements ComponentFactory<ValidatorFactory> {
+public class ValidatorFactoryCreator {
 
 	private static final Logger logger = LoggerFactory.getLogger(ValidatorFactoryCreator.class);
 
@@ -55,9 +55,7 @@ public class ValidatorFactoryCreator implements ComponentFactory<ValidatorFactor
         logger.debug("Initializing JSR303 factory for bean validation");
 	}
 
-	@Override
-	@Default
-	@VraptorPreference
+	@Produces @Default @javax.enterprise.context.ApplicationScoped
 	public ValidatorFactory getInstance() {
 		if (factory == null) { //pico don't call PostConstruct
 			buildFactory();

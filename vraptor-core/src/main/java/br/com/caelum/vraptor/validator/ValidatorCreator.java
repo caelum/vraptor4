@@ -18,6 +18,7 @@ package br.com.caelum.vraptor.validator;
 import javax.annotation.PostConstruct;
 import javax.enterprise.inject.Alternative;
 import javax.enterprise.inject.Default;
+import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
@@ -27,8 +28,6 @@ import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.ioc.Component;
-import br.com.caelum.vraptor.ioc.ComponentFactory;
-import br.com.caelum.vraptor.ioc.cdi.VraptorPreference;
 
 /**
  * Bring up Bean Validation factory. This class builds the {@link Validator} once when application
@@ -40,7 +39,7 @@ import br.com.caelum.vraptor.ioc.cdi.VraptorPreference;
 @ApplicationScoped
 @Component
 @Alternative
-public class ValidatorCreator implements ComponentFactory<Validator> {
+public class ValidatorCreator {
 
     private static final Logger logger = LoggerFactory.getLogger(ValidatorCreator.class);
 
@@ -64,9 +63,8 @@ public class ValidatorCreator implements ComponentFactory<Validator> {
     	logger.debug("Initializing Bean Validator");
     }
 
-    @Override
-	@Default
-    @VraptorPreference
+	
+	@Produces @Default @javax.enterprise.context.ApplicationScoped
 	public Validator getInstance() {
 		return validator;
 	}

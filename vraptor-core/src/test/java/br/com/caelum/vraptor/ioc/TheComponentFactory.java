@@ -22,7 +22,8 @@ import javax.enterprise.inject.Produces;
  * @author: Fabio Kung
 */
 @Component
-public class TheComponentFactory implements ComponentFactory<NeedsCustomInstantiation> {
+public class TheComponentFactory {
+	
 	@Produces
     public NeedsCustomInstantiation getInstance() {
         return new NeedsCustomInstantiation();

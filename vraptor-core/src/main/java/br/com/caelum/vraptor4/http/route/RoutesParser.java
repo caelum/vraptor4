@@ -19,7 +19,7 @@ package br.com.caelum.vraptor4.http.route;
 
 import java.util.List;
 
-import br.com.caelum.vraptor4.controller.ControllerClass;
+import br.com.caelum.vraptor4.controller.BeanClass;
 
 /**
  * Extracts all possible routes for this specific resource.
@@ -28,6 +28,6 @@ import br.com.caelum.vraptor4.controller.ControllerClass;
  */
 public interface RoutesParser {
 
-    List<Route> rulesFor(ControllerClass resource);
+    List<Route> rulesFor(BeanClass resource);
 
 }

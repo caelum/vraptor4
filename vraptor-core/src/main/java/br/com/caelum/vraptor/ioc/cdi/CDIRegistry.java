@@ -1,12 +1,14 @@
 package br.com.caelum.vraptor.ioc.cdi;
 
-import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.enterprise.inject.spi.BeanManager;
 import javax.enterprise.inject.spi.BeforeBeanDiscovery;
 
 import br.com.caelum.vraptor.core.BaseComponents;
+import br.com.caelum.vraptor.core.StereotypeInfo;
 import br.com.caelum.vraptor4.ioc.cdi.BeanManagerUtil;
 
 public class CDIRegistry {
@@ -62,8 +64,16 @@ public class CDIRegistry {
 	}
 
 	private void registerApplicationComponents() {
-		registerComponents(BaseComponents.getApplicationScoped().values());
-		registerComponents(Arrays.asList(BaseComponents.getStereotypeHandlers()));
+		registerComponents(BaseComponents.getApplicationScoped().values());		
+		registerComponents(getStereotypeHandlers());
+	}
+
+	private Set<Class<?>> getStereotypeHandlers() {			
+		Set<Class<?>> handlers = new HashSet<Class<?>>();
+		for (StereotypeInfo stereotypeInfo : BaseComponents.getStereotypesInfo()) {
+			handlers.add(stereotypeInfo.getStereotypeClass());
+		}
+		return handlers;
 	}
 	
 	private <T> void registerComponents(Collection<Class<? extends T>> toRegister) {

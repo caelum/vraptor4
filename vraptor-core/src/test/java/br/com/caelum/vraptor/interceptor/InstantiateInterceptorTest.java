@@ -30,7 +30,7 @@ import org.mockito.MockitoAnnotations;
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.view.DogController;
-import br.com.caelum.vraptor4.controller.DefaultControllerClass;
+import br.com.caelum.vraptor4.controller.DefaultBeanClass;
 import br.com.caelum.vraptor4.controller.ControllerMethod;
 
 public class InstantiateInterceptorTest {
@@ -54,7 +54,7 @@ public class InstantiateInterceptorTest {
         InstanceContainer container = new InstanceContainer(myDog);
         InstantiateInterceptor interceptor = new InstantiateInterceptor(container);
         
-        when(method.getResource()).thenReturn(new DefaultControllerClass(DogController.class));
+        when(method.getResource()).thenReturn(new DefaultBeanClass(DogController.class));
         
         interceptor.intercept(stack, method, null);
         assertTrue(container.isEmpty());

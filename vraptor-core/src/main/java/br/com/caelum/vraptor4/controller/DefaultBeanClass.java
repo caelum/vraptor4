@@ -17,11 +17,11 @@
 
 package br.com.caelum.vraptor4.controller;
 
-public class DefaultControllerClass implements ControllerClass {
+public class DefaultBeanClass implements BeanClass {
 
 	private final Class<?> type;
 
-	public DefaultControllerClass(Class<?> type) {
+	public DefaultBeanClass(Class<?> type) {
 		this.type = type;
 	}
 
@@ -30,10 +30,10 @@ public class DefaultControllerClass implements ControllerClass {
 		if (obj == null) {
 			return false;
 		}
-		if (!(obj instanceof DefaultControllerClass)) {
+		if (!(obj instanceof DefaultBeanClass)) {
 			return false;
 		}
-		DefaultControllerClass resource = (DefaultControllerClass) obj;
+		DefaultBeanClass resource = (DefaultBeanClass) obj;
 		if (this.type == null && resource.type != null) {
 			return false;
 		}

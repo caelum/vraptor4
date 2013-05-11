@@ -24,7 +24,7 @@ package br.com.caelum.vraptor4.controller;
  * @author Guilherme Silveira
  * @author Paulo Silveira
  */
-public interface ControllerClass {
+public interface BeanClass {
 
 	public Class<?> getType();
 

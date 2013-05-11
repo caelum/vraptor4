@@ -29,6 +29,7 @@ import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.interceptor.Interceptor;
 import br.com.caelum.vraptor.interceptor.InterceptorRegistry;
 import br.com.caelum.vraptor4.controller.ControllerMethod;
+import br.com.caelum.vraptor4.controller.DefaultBeanClass;
 
 public class InterceptorStereotypeHandlerTest {
 
@@ -44,7 +45,7 @@ public class InterceptorStereotypeHandlerTest {
 	@SuppressWarnings("unchecked")
 	@Test
 	public void shouldRegisterInterceptorsOnRegistry() throws Exception {
-		handler.handle(InterceptorA.class);
+		handler.handle(new DefaultBeanClass(InterceptorA.class));
 		verify(interceptorRegistry, times(1)).register(InterceptorA.class);
 	}
 	

@@ -45,4 +45,8 @@ public class BeanManagerUtil {
 		return beanManager.getBeans(type,qualifiers);
 	}
 	
+	public BeanManager getBeanManager() {
+		return beanManager;
+	}
+	
 }

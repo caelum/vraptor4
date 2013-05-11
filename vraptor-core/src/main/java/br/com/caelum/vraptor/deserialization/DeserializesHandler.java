@@ -17,14 +17,16 @@ package br.com.caelum.vraptor.deserialization;
 
 import java.lang.annotation.Annotation;
 
+import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.core.BaseComponents;
+import br.com.caelum.vraptor.core.DeserializesQualifier;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
-import br.com.caelum.vraptor.ioc.StereotypeHandler;
+import br.com.caelum.vraptor4.controller.BeanClass;
 
 /**
  * Handles classes annotated with @Deserializes
@@ -33,7 +35,7 @@ import br.com.caelum.vraptor.ioc.StereotypeHandler;
  * @since 3.0.2
  */
 @ApplicationScoped
-public class DeserializesHandler implements StereotypeHandler {
+public class DeserializesHandler{
 
 	private static final Logger logger = LoggerFactory.getLogger(DeserializesHandler.class);
 
@@ -49,23 +51,17 @@ public class DeserializesHandler implements StereotypeHandler {
 		this.deserializers = deserializers;
 	}
 	
-	@Override
-	@SuppressWarnings("unchecked")
-	public void handle(Class<?> type) {
-		if (!Deserializer.class.isAssignableFrom(type)) {
-			throw new IllegalArgumentException(type + " must implement Deserializer");
+	public void handle(@Observes @DeserializesQualifier BeanClass beanClass) {
+		Class<?> originalType = beanClass.getType();
+		if (!Deserializer.class.isAssignableFrom(originalType)) {
+			throw new IllegalArgumentException(beanClass + " must implement Deserializer");
 		}
-		if (BaseComponents.getDeserializers().contains(type)) {
-			logger.debug("Ignoring default deserializer {}", type);
+		if (BaseComponents.getDeserializers().contains(originalType)) {
+			logger.debug("Ignoring default deserializer {}", originalType);
 			return;
 		}
 
-		deserializers.register((Class<? extends Deserializer>) type);
-	}
-
-	@Override
-	public Class<? extends Annotation> stereotype() {
-		return Deserializes.class;
+		deserializers.register((Class<? extends Deserializer>) originalType);
 	}
 
 }

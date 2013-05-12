@@ -15,6 +15,8 @@ public class CDIProvider implements ContainerProvider {
 	private CDIBasedContainer container;
 	@Inject
 	private BeanManager beanManager;
+	@Inject
+	private StereotypesRegistry stereotypesRegistry;
 	
 	@Override
 	public <T> T provideForRequest(RequestInfo request, Execution<T> execution) {		
@@ -28,7 +30,7 @@ public class CDIProvider implements ContainerProvider {
 
 	@Override
 	public void start(ServletContext context) {
-		new StereotypesRegistry(beanManager).configure();
+		stereotypesRegistry.configure();
 	}
 
 	@Override

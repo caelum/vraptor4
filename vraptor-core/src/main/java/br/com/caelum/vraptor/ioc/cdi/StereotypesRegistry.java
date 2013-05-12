@@ -3,17 +3,26 @@ package br.com.caelum.vraptor.ioc.cdi;
 import java.util.ArrayList;
 import java.util.Set;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.spi.Bean;
-import javax.enterprise.inject.spi.BeanManager;
+import javax.inject.Inject;
 
 import br.com.caelum.vraptor.ioc.StereotypeHandler;
+import br.com.caelum.vraptor4.ioc.cdi.BeanManagerUtil;
 
+@ApplicationScoped
 public class StereotypesRegistry {
 
-	private final BeanManagerUtil beanManagerUtil;
+	private BeanManagerUtil beanManagerUtil;
 
-	public StereotypesRegistry(BeanManager bm) {
-		beanManagerUtil = new BeanManagerUtil(bm);
+	//CDI eyes only
+	@Deprecated
+	public StereotypesRegistry() {
+	}
+	
+	@Inject
+	public StereotypesRegistry(BeanManagerUtil beanManagerUtil) {
+		this.beanManagerUtil = beanManagerUtil;
 	}
 	
 	public void configure(){

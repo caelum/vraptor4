@@ -7,6 +7,7 @@ import javax.enterprise.inject.spi.BeanManager;
 import javax.enterprise.inject.spi.BeforeBeanDiscovery;
 
 import br.com.caelum.vraptor.core.BaseComponents;
+import br.com.caelum.vraptor4.ioc.cdi.BeanManagerUtil;
 
 public class CDIRegistry {
 
@@ -25,6 +26,11 @@ public class CDIRegistry {
 		registerConverters();
 		registerCDISpecifics();
 		registerProvider();
+		registerVraptorSpecifics();
+	}
+
+	private void registerVraptorSpecifics() {
+		register(StereotypesRegistry.class);
 	}
 
 	private void registerProvider() {
@@ -44,6 +50,7 @@ public class CDIRegistry {
 		register(CDIFilterChainFactory.class);
 		register(CDIHttpSessionFactory.class);
 		register(ListProducer.class);
+		register(BeanManagerUtil.class);
 	}
 
 	private void registerPrototypeComponents() {

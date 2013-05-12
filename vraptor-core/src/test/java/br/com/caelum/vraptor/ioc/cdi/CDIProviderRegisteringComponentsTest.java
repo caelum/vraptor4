@@ -41,6 +41,7 @@ import br.com.caelum.vraptor.validator.MessageInterpolatorFactory;
 import br.com.caelum.vraptor.validator.ValidatorCreator;
 import br.com.caelum.vraptor.validator.ValidatorFactoryCreator;
 import br.com.caelum.vraptor.view.PathResolver;
+import br.com.caelum.vraptor4.ioc.cdi.BeanManagerUtil;
 
 public class CDIProviderRegisteringComponentsTest extends
 		AbstractProviderRegisteringComponentsTest {
@@ -93,7 +94,6 @@ public class CDIProviderRegisteringComponentsTest extends
 
 	@Override
 	protected ContainerProvider getProvider() {
-		//TODO Is a Integration Test?
 		BeanManagerUtil util = new BeanManagerUtil(cdiContainer.getBeanManager());
 		return util.instanceFor(CDIProvider.class);
 	}

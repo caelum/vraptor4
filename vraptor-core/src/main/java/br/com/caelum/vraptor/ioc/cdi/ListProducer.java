@@ -7,21 +7,23 @@ import java.util.Set;
 
 import javax.enterprise.inject.Produces;
 import javax.enterprise.inject.spi.Bean;
-import javax.enterprise.inject.spi.BeanManager;
 import javax.enterprise.inject.spi.InjectionPoint;
 import javax.inject.Inject;
 
-import br.com.caelum.vraptor.ioc.cdi.BeanManagerUtil;
+import br.com.caelum.vraptor4.ioc.cdi.BeanManagerUtil;
 
 public class ListProducer {
 	
-	private final BeanManager beanManager;
-	private final BeanManagerUtil beanManagerUtil;
+	private BeanManagerUtil beanManagerUtil;
+	
+	//CDI eyes only
+	@Deprecated
+	public ListProducer() {
+	}
 	
 	@Inject
-	public ListProducer(BeanManager beanManager) {
-		this.beanManager = beanManager;
-		beanManagerUtil = new BeanManagerUtil(beanManager);
+	public ListProducer(BeanManagerUtil beanManagerUtil) {
+		this.beanManagerUtil = beanManagerUtil;
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
@@ -29,7 +31,7 @@ public class ListProducer {
 	public <T> List<T> producesList(InjectionPoint injectionPoint){
 		ParameterizedType type = (ParameterizedType) injectionPoint.getType();
 	    Class klass = (Class) type.getActualTypeArguments()[0];
-	    Set<Bean<?>> beans = beanManager.getBeans(klass);
+	    Set<Bean<?>> beans = beanManagerUtil.getBeans(klass);
 	    ArrayList objects = new ArrayList();
 	    for (Bean<?> bean : beans) {			
 			objects.add(beanManagerUtil.instanceFor(bean));

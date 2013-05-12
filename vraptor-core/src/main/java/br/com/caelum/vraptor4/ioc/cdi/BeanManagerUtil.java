@@ -10,12 +10,21 @@ import javax.inject.Inject;
 
 public class BeanManagerUtil {
 
-	@Inject
 	private BeanManager beanManager;
+	
+	//CDI eyes only
+	@Deprecated
+	public BeanManagerUtil() {
+	}
+	
+	@Inject
+	public BeanManagerUtil(BeanManager beanManager) {
+		this.beanManager = beanManager;
+	}
 
 	public <T> T instanceFor(Class<T> type) {
 		Set beans = getBeans(type);
-		Bean<T> bean = (Bean<T>) beanManager.resolve(beans);
+		Bean<T> bean = beanManager.resolve(beans);
 		return instanceFor(bean,type);
 	}
 	

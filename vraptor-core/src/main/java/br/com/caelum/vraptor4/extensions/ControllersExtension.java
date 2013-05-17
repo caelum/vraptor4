@@ -21,7 +21,7 @@ public class ControllersExtension implements Extension{
 		if (Modifier.isAbstract(clazz.getModifiers())) return;
 
 		for (Annotation annotation : clazz.getAnnotations()) {
-			if (annotation.annotationType() == Controller.class 
+			if (annotation.annotationType().equals(Controller.class) 
 					|| annotation.annotationType().isAnnotationPresent(Controller.class)) {
 				controllers.add(clazz);
 			}

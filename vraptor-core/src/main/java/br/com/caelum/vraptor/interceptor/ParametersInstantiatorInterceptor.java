@@ -51,16 +51,20 @@ import br.com.caelum.vraptor4.controller.ControllerMethod;
 @Intercepts(after=ResourceLookupInterceptor.class)
 @Lazy
 public class ParametersInstantiatorInterceptor implements Interceptor {
-    private final ParametersProvider provider;
-    private final ParameterNameProvider parameterNameProvider;
-    private final MethodInfo parameters;
+    private ParametersProvider provider;
+    private ParameterNameProvider parameterNameProvider;
+    private MethodInfo parameters;
 
     private static final Logger logger = LoggerFactory.getLogger(ParametersInstantiatorInterceptor.class);
-    private final Validator validator;
-    private final Localization localization;
-	private final List<Message> errors = new ArrayList<Message>();
-	private final MutableRequest request;
-	private final FlashScope flash;
+    private Validator validator;
+    private Localization localization;
+	private List<Message> errors = new ArrayList<Message>();
+	private MutableRequest request;
+	private FlashScope flash;
+	
+	@Deprecated
+	public ParametersInstantiatorInterceptor() {
+	}
 
 	@Inject
     public ParametersInstantiatorInterceptor(ParametersProvider provider, ParameterNameProvider parameterNameProvider, MethodInfo parameters,

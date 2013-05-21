@@ -46,14 +46,18 @@ import br.com.caelum.vraptor4.controller.ControllerMethod;
 @Intercepts(after=ParametersInstantiatorInterceptor.class, before=ExecuteMethodInterceptor.class)
 @Lazy
 public class DeserializingInterceptor implements Interceptor {
-	private final HttpServletRequest request;
-	private final Deserializers deserializers;
-	private final MethodInfo methodInfo;
-	private final Container container;
-	private final Status status;
+	private HttpServletRequest request;
+	private Deserializers deserializers;
+	private MethodInfo methodInfo;
+	private Container container;
+	private Status status;
 
 	private static final Logger logger = LoggerFactory.getLogger(DeserializingInterceptor.class);
 
+	@Deprecated
+	public DeserializingInterceptor() {
+	}
+	
 	@Inject
 	public DeserializingInterceptor(HttpServletRequest servletRequest, Deserializers deserializers,
 			MethodInfo methodInfo, Container container, Status status) {

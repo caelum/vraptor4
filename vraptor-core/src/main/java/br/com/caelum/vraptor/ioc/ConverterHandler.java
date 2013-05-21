@@ -16,19 +16,15 @@
  */
 package br.com.caelum.vraptor.ioc;
 
-import java.lang.annotation.Annotation;
-
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.VRaptorException;
 import br.com.caelum.vraptor.core.BaseComponents;
-import br.com.caelum.vraptor.core.ControllerQualifier;
 import br.com.caelum.vraptor.core.ConvertQualifier;
 import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor4.controller.BeanClass;

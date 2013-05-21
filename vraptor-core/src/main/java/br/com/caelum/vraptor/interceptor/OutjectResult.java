@@ -43,9 +43,13 @@ public class OutjectResult implements Interceptor {
 
 	private static final Logger logger = LoggerFactory.getLogger(OutjectResult.class);
 
-	private final Result result;
-	private final MethodInfo info;
-	private final TypeNameExtractor extractor;
+	private Result result;
+	private MethodInfo info;
+	private TypeNameExtractor extractor;
+	
+	@Deprecated
+	public OutjectResult() {
+	}
 
 	@Inject
 	public OutjectResult(Result result, MethodInfo info, TypeNameExtractor extractor) {

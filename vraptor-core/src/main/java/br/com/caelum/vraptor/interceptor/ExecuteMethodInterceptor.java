@@ -44,10 +44,15 @@ import br.com.caelum.vraptor4.controller.ControllerMethod;
 @Intercepts(after=ParametersInstantiatorInterceptor.class, before={})
 public class ExecuteMethodInterceptor implements Interceptor {
 
-	private final MethodInfo info;
-	private final Validator validator;
+	private MethodInfo info;
+	private Validator validator;
 	private final static Logger log = LoggerFactory.getLogger(ExecuteMethodInterceptor.class);
 
+	
+	@Deprecated
+	public ExecuteMethodInterceptor() {
+	}
+	
 	@Inject
 	public ExecuteMethodInterceptor(MethodInfo info, Validator validator) {
 		this.info = info;

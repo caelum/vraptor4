@@ -14,16 +14,8 @@
  * See the License for the specific language governing permissions and 
  * limitations under the License. 
  */
-package br.com.caelum.vraptor.ioc.spring.components;
+package br.com.caelum.vraptor.ioc.components;
 
-import br.com.caelum.vraptor.ioc.RequestScoped;
+public class Foo {
 
-/**
- * @author Fabio Kung
- */
-@RequestScoped
-public class RequestScopedComponent implements RequestScopedContract {
-    public void operation() {
-        System.out.println("operation done");
-    }
 }

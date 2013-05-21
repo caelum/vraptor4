@@ -22,6 +22,7 @@ import br.com.caelum.vraptor.ioc.GenericContainerTest;
 import br.com.caelum.vraptor.ioc.MySessionComponent;
 import br.com.caelum.vraptor.ioc.TheComponentFactory;
 import br.com.caelum.vraptor.ioc.cdi.extensions.RegisterComponentsExtension;
+import br.com.caelum.vraptor.ioc.components.DummyComponentFactory;
 import br.com.caelum.vraptor.ioc.fixture.ComponentFactoryInTheClasspath;
 import br.com.caelum.vraptor.ioc.fixture.ConverterInTheClasspath;
 import br.com.caelum.vraptor.ioc.fixture.CustomComponentInTheClasspath;
@@ -29,7 +30,6 @@ import br.com.caelum.vraptor.ioc.fixture.CustomComponentWithLifecycleInTheClassp
 import br.com.caelum.vraptor.ioc.fixture.DependentOnSomethingFromComponentFactory;
 import br.com.caelum.vraptor.ioc.fixture.InterceptorInTheClasspath;
 import br.com.caelum.vraptor.ioc.fixture.ControllerInTheClasspath;
-import br.com.caelum.vraptor.ioc.spring.components.DummyComponentFactory;
 import br.com.caelum.vraptor.validator.ValidatorCreator;
 import br.com.caelum.vraptor.validator.ValidatorFactoryCreator;
 

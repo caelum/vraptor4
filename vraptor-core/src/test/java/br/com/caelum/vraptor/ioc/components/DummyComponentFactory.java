@@ -1,4 +1,4 @@
-package br.com.caelum.vraptor.ioc.spring.components;
+package br.com.caelum.vraptor.ioc.components;
 
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.inject.Produces;

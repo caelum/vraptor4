@@ -22,11 +22,11 @@ import java.util.EnumSet;
 import java.util.List;
 
 import br.com.caelum.vraptor.http.MutableRequest;
-import br.com.caelum.vraptor4.controller.HttpMethod;
 import br.com.caelum.vraptor4.controller.ControllerMethod;
+import br.com.caelum.vraptor4.controller.HttpMethod;
 
 /**
- * Handles different rules in order to translate urls into Resource methods.
+ * Handles different rules in order to translate urls into Controller methods.
  *
  * @author Guilherme Silveira
  */

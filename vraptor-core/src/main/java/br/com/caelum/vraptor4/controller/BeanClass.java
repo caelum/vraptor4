@@ -18,7 +18,7 @@
 package br.com.caelum.vraptor4.controller;
 
 /**
- * Represents a web accessible Resource class.
+ * Represents a web accessible Controller class.
  * 
  * 
  * @author Guilherme Silveira

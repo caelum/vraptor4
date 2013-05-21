@@ -49,7 +49,7 @@ import com.google.common.base.Predicate;
 /**
  * The default parser routes creator uses the path annotation to create rules.
  * Note that methods are only registered to be public accessible if the type is
- * annotated with @Resource.
+ * annotated with @Controller.
  *
  * If you want to override the convention for default URI, you can create a
  * class like:

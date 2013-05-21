@@ -19,27 +19,26 @@
  */
 package br.com.caelum.vraptor4.ioc;
 
-import java.lang.annotation.Annotation;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
+import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 import javax.servlet.ServletContext;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import br.com.caelum.vraptor.core.ControllerQualifier;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
-import br.com.caelum.vraptor.ioc.StereotypeHandler;
 import br.com.caelum.vraptor.view.LinkToHandler;
-import br.com.caelum.vraptor4.Controller;
-import br.com.caelum.vraptor4.controller.DefaultControllerClass;
+import br.com.caelum.vraptor4.controller.BeanClass;
 import br.com.caelum.vraptor4.http.route.Route;
 import br.com.caelum.vraptor4.http.route.Router;
 import br.com.caelum.vraptor4.http.route.RoutesParser;
 
 @ApplicationScoped
-public class ControllerHandler implements StereotypeHandler {
+public class ControllerHandler{
 	private Logger logger = LoggerFactory.getLogger(ControllerHandler.class);
 	private Router router;
 	private RoutesParser parser;
@@ -62,20 +61,14 @@ public class ControllerHandler implements StereotypeHandler {
 	public void configureLinkToHandler() {
 		new LinkToHandler(context, router).start();
 	}
-
-	@Override
-	public void handle(Class<?> annotatedType) {
+	
+	public void handle(@Observes @ControllerQualifier BeanClass annotatedType) {
 		logger.debug("Found resource: {}", annotatedType);
-		List<Route> routes = parser.rulesFor(new DefaultControllerClass(
-				annotatedType));
+		List<Route> routes = parser.rulesFor(annotatedType);
 		for (Route route : routes) {
 			router.add(route);
 		}
-		context.setAttribute(annotatedType.getSimpleName(), annotatedType);
+		context.setAttribute(annotatedType.getType().getSimpleName(), annotatedType);
 	}
 
-	@Override
-	public Class<? extends Annotation> stereotype() {
-		return Controller.class;
-	}
 }

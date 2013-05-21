@@ -18,6 +18,7 @@ package br.com.caelum.vraptor.ioc;
 
 import java.lang.annotation.Annotation;
 
+import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 
 import org.slf4j.Logger;
@@ -27,10 +28,13 @@ import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.VRaptorException;
 import br.com.caelum.vraptor.core.BaseComponents;
+import br.com.caelum.vraptor.core.ControllerQualifier;
+import br.com.caelum.vraptor.core.ConvertQualifier;
 import br.com.caelum.vraptor.core.Converters;
+import br.com.caelum.vraptor4.controller.BeanClass;
 
 @ApplicationScoped
-public class ConverterHandler implements StereotypeHandler {
+public class ConverterHandler{
 
 	private static final Logger logger = LoggerFactory.getLogger(ConverterHandler.class);
 
@@ -46,23 +50,18 @@ public class ConverterHandler implements StereotypeHandler {
 		this.converters = converters;
 	}
 	
-	@Override
-	public void handle(Class<?> annotatedType) {
-		if (!(Converter.class.isAssignableFrom(annotatedType))) {
+	public void handle(@Observes @ConvertQualifier BeanClass beanClass) {
+		Class<?> originalType = beanClass.getType();
+		if (!(Converter.class.isAssignableFrom(originalType))) {
 			throw new VRaptorException("converter does not implement Converter");
 		}
-		if (BaseComponents.getBundledConverters().contains(annotatedType)) {
-			logger.debug("Ignoring handling default converter {}", annotatedType);
+		if (BaseComponents.getBundledConverters().contains(originalType)) {
+			logger.debug("Ignoring handling default converter {}", originalType);
 			return;
 		}
 		@SuppressWarnings("unchecked")
-		Class<? extends Converter<?>> converterType = (Class<? extends Converter<?>>) annotatedType;
+		Class<? extends Converter<?>> converterType = (Class<? extends Converter<?>>) originalType;
 
 		converters.register(converterType);
-	}
-
-	@Override
-	public Class<? extends Annotation> stereotype() {
-		return Convert.class;
 	}
 }

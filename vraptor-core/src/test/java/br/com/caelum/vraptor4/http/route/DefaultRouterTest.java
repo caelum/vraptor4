@@ -48,9 +48,9 @@ import br.com.caelum.vraptor.proxy.JavassistProxifier;
 import br.com.caelum.vraptor.proxy.ObjenesisInstanceCreator;
 import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor4.Controller;
-import br.com.caelum.vraptor4.controller.ControllerClass;
+import br.com.caelum.vraptor4.controller.BeanClass;
 import br.com.caelum.vraptor4.controller.ControllerMethod;
-import br.com.caelum.vraptor4.controller.DefaultControllerClass;
+import br.com.caelum.vraptor4.controller.DefaultBeanClass;
 import br.com.caelum.vraptor4.controller.HttpMethod;
 
 /**
@@ -301,7 +301,7 @@ public class DefaultRouterTest {
 	private void registerRulesFor(Class<?> type) {
 		RoutesParser parser = new PathAnnotationRoutesParser(router);
 		
-		ControllerClass resourceClass = new DefaultControllerClass(type);
+		BeanClass resourceClass = new DefaultBeanClass(type);
 		List<Route> rules = parser.rulesFor(resourceClass);
 		for (Route route : rules) {
 			router.add(route);

@@ -16,7 +16,7 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.serialization.xstream.XStreamBuilderImpl;
-import br.com.caelum.vraptor4.controller.DefaultControllerClass;
+import br.com.caelum.vraptor4.controller.DefaultBeanClass;
 import br.com.caelum.vraptor4.controller.DefaultControllerMethod;
 import br.com.caelum.vraptor4.controller.ControllerMethod;
 
@@ -35,7 +35,7 @@ public class XStreamXmlDeserializerTest {
 		provider = mock(ParameterNameProvider.class);
 
         deserializer = new XStreamXMLDeserializer(provider, XStreamBuilderImpl.cleanInstance());
-		DefaultControllerClass resourceClass = new DefaultControllerClass(DogController.class);
+		DefaultBeanClass resourceClass = new DefaultBeanClass(DogController.class);
 
 		woof = new DefaultControllerMethod(resourceClass, DogController.class.getDeclaredMethod("woof"));
 		bark = new DefaultControllerMethod(resourceClass, DogController.class.getDeclaredMethod("bark", Dog.class));

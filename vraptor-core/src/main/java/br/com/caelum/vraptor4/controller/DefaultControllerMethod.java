@@ -26,23 +26,23 @@ import br.com.caelum.vraptor.util.Stringnifier;
 
 public class DefaultControllerMethod implements ControllerMethod {
 
-	private final ControllerClass resource;
+	private final BeanClass resource;
 	private final Method method;
 
-	public DefaultControllerMethod(ControllerClass resource, Method method) {
+	public DefaultControllerMethod(BeanClass resource, Method method) {
 		this.resource = resource;
 		this.method = method;
 	}
 
 	public static ControllerMethod instanceFor(Class<?> type, Method method) {
-		return new DefaultControllerMethod(new DefaultControllerClass(type), method);
+		return new DefaultControllerMethod(new DefaultBeanClass(type), method);
 	}
 
 	public Method getMethod() {
 		return method;
 	}
 
-	public ControllerClass getResource() {
+	public BeanClass getResource() {
 		return resource;
 	}
 

@@ -24,7 +24,7 @@ import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 
 import br.com.caelum.vraptor.validator.ValidationMessage;
-import br.com.caelum.vraptor4.controller.ControllerClass;
+import br.com.caelum.vraptor4.controller.BeanClass;
 import br.com.caelum.vraptor4.controller.ControllerMethod;
 
 /**
@@ -54,14 +54,14 @@ public class VRaptorMatchers {
         };
     }
 
-    public static Matcher<ControllerClass> resource(final Class<?> type) {
-        return new BaseMatcher<ControllerClass>() {
+    public static Matcher<BeanClass> resource(final Class<?> type) {
+        return new BaseMatcher<BeanClass>() {
 
             public boolean matches(Object item) {
-                if (!(item instanceof ControllerClass)) {
+                if (!(item instanceof BeanClass)) {
                     return false;
                 }
-                ControllerClass other = (ControllerClass) item;
+                BeanClass other = (BeanClass) item;
                 return other.getType().equals(type);
             }
 

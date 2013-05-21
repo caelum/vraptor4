@@ -52,7 +52,7 @@ import br.com.caelum.vraptor.proxy.JavassistProxifier;
 import br.com.caelum.vraptor.proxy.ObjenesisInstanceCreator;
 import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor4.Controller;
-import br.com.caelum.vraptor4.controller.DefaultControllerClass;
+import br.com.caelum.vraptor4.controller.DefaultBeanClass;
 import br.com.caelum.vraptor4.controller.HttpMethod;
 
 public class PathAnnotationRoutesParserTest {
@@ -170,12 +170,12 @@ public class PathAnnotationRoutesParserTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void addsAPrefixToMethodsWhenTheControllerHasMoreThanOneAnnotatedPath() throws Exception {
-    	parser.rulesFor(new DefaultControllerClass(MoreThanOnePathAnnotatedController.class));
+    	parser.rulesFor(new DefaultBeanClass(MoreThanOnePathAnnotatedController.class));
     }
 
     @Test
     public void addsAPrefixToMethodsWhenTheControllerAndTheMethodAreAnnotatedWithRelativePath() throws Exception {
-    	List<Route> routes = parser.rulesFor(new DefaultControllerClass(PathAnnotatedController.class));
+    	List<Route> routes = parser.rulesFor(new DefaultBeanClass(PathAnnotatedController.class));
     	Route route = getRouteMatching(routes, "/prefix/relativePath");
 
     	assertThat(route, canHandle(PathAnnotatedController.class, "withRelativePath"));
@@ -184,7 +184,7 @@ public class PathAnnotationRoutesParserTest {
 
 	@Test
     public void addsAPrefixToMethodsWhenTheControllerEndsWithSlashAndTheMethodAreAnnotatedWithRelativePath() throws Exception {
-		List<Route> routes = parser.rulesFor(new DefaultControllerClass(EndSlashAnnotatedController.class));
+		List<Route> routes = parser.rulesFor(new DefaultBeanClass(EndSlashAnnotatedController.class));
 		Route route = getRouteMatching(routes, "/endSlash/relativePath");
 
 		assertThat(route, canHandle(EndSlashAnnotatedController.class, "withRelativePath"));
@@ -192,7 +192,7 @@ public class PathAnnotationRoutesParserTest {
     }
     @Test
     public void addsAPrefixToMethodsWhenTheControllerEndsWithSlashAndTheMethodAreAnnotatedWithAbsolutePath() throws Exception {
-    	List<Route> routes = parser.rulesFor(new DefaultControllerClass(EndSlashAnnotatedController.class));
+    	List<Route> routes = parser.rulesFor(new DefaultBeanClass(EndSlashAnnotatedController.class));
     	Route route = getRouteMatching(routes, "/endSlash/absolutePath");
 
     	assertThat(route, canHandle(EndSlashAnnotatedController.class, "withAbsolutePath"));
@@ -200,14 +200,14 @@ public class PathAnnotationRoutesParserTest {
     }
     @Test
     public void addsAPrefixToMethodsWhenTheControllerEndsWithSlashAndTheMethodAreAnnotatedWithEmptyPath() throws Exception {
-    	List<Route> routes = parser.rulesFor(new DefaultControllerClass(EndSlashAnnotatedController.class));
+    	List<Route> routes = parser.rulesFor(new DefaultBeanClass(EndSlashAnnotatedController.class));
     	Route route = getRouteMatching(routes, "/endSlash/");
 
     	assertThat(route, canHandle(EndSlashAnnotatedController.class, "withEmptyPath"));
 
     }
     public void addsAPrefixToMethodsWhenTheControllerEndsWithSlashAndTheMethodAreNotAnnotated() throws Exception {
-    	List<Route> routes = parser.rulesFor(new DefaultControllerClass(EndSlashAnnotatedController.class));
+    	List<Route> routes = parser.rulesFor(new DefaultBeanClass(EndSlashAnnotatedController.class));
     	Route route = getRouteMatching(routes, "/endSlash/withoutPath");
 
     	assertThat(route, canHandle(EndSlashAnnotatedController.class, "withoutPath"));
@@ -215,7 +215,7 @@ public class PathAnnotationRoutesParserTest {
     }
     @Test
     public void addsAPrefixToMethodsWhenTheControllerAndTheMethodAreAnnotatedWithAbsolutePath() throws Exception {
-    	List<Route> routes = parser.rulesFor(new DefaultControllerClass(PathAnnotatedController.class));
+    	List<Route> routes = parser.rulesFor(new DefaultBeanClass(PathAnnotatedController.class));
     	Route route = getRouteMatching(routes, "/prefix/absolutePath");
 
     	assertThat(route, canHandle(PathAnnotatedController.class, "withAbsolutePath"));
@@ -224,7 +224,7 @@ public class PathAnnotationRoutesParserTest {
     }
     @Test
     public void addsAPrefixToMethodsWhenTheControllerAndTheMethodAreAnnotatedWithEmptyPath() throws Exception {
-    	List<Route> routes = parser.rulesFor(new DefaultControllerClass(PathAnnotatedController.class));
+    	List<Route> routes = parser.rulesFor(new DefaultBeanClass(PathAnnotatedController.class));
     	Route route = getRouteMatching(routes, "/prefix");
 
     	assertThat(route, canHandle(PathAnnotatedController.class, "withEmptyPath"));
@@ -233,7 +233,7 @@ public class PathAnnotationRoutesParserTest {
     }
     @Test
     public void addsAPrefixToMethodsWhenTheControllerIsAnnotatedWithPath() throws Exception {
-    	List<Route> routes = parser.rulesFor(new DefaultControllerClass(PathAnnotatedController.class));
+    	List<Route> routes = parser.rulesFor(new DefaultBeanClass(PathAnnotatedController.class));
     	Route route = getRouteMatching(routes, "/prefix/withoutPath");
 
     	assertThat(route, canHandle(PathAnnotatedController.class, "withoutPath"));
@@ -241,7 +241,7 @@ public class PathAnnotationRoutesParserTest {
     }
     @Test
     public void findsTheCorrectAnnotatedMethodIfThereIsNoWebMethodAnnotationPresent() throws Exception {
-    	List<Route> routes = parser.rulesFor(new DefaultControllerClass(ClientsController.class));
+    	List<Route> routes = parser.rulesFor(new DefaultBeanClass(ClientsController.class));
     	Route route = getRouteMatching(routes, "/clients");
 
     	assertThat(route, canHandle(ClientsController.class, "list"));
@@ -253,7 +253,7 @@ public class PathAnnotationRoutesParserTest {
     @Test
     public void suportsTheDefaultNameForANonAnnotatedMethod() throws SecurityException,
             NoSuchMethodException {
-    	List<Route> routes = parser.rulesFor(new DefaultControllerClass(ClientsController.class));
+    	List<Route> routes = parser.rulesFor(new DefaultBeanClass(ClientsController.class));
     	Route route = getRouteMatching(routes, "/clients/add");
 
     	assertThat(route, canHandle(ClientsController.class, "add"));
@@ -264,7 +264,7 @@ public class PathAnnotationRoutesParserTest {
     @Test
     public void ignoresTheControllerSuffixForANonAnnotatedMethod() throws SecurityException,
             NoSuchMethodException {
-    	List<Route> routes = parser.rulesFor(new DefaultControllerClass(ClientsController.class));
+    	List<Route> routes = parser.rulesFor(new DefaultBeanClass(ClientsController.class));
     	Route route = getRouteMatching(routes, "/clients/add");
 
     	assertThat(route, canHandle(ClientsController.class, "add"));
@@ -273,7 +273,7 @@ public class PathAnnotationRoutesParserTest {
     }
     @Test
     public void addsASlashWhenUserForgotIt() throws SecurityException,  NoSuchMethodException {
-    	List<Route> routes = parser.rulesFor(new DefaultControllerClass(ClientsController.class));
+    	List<Route> routes = parser.rulesFor(new DefaultBeanClass(ClientsController.class));
     	Route route = getRouteMatching(routes, "/noSlash");
 
     	assertThat(route, canHandle(ClientsController.class, "noSlash"));
@@ -283,7 +283,7 @@ public class PathAnnotationRoutesParserTest {
 
     @Test
     public void matchesWhenUsingAWildcard() throws SecurityException, NoSuchMethodException {
-    	List<Route> routes = parser.rulesFor(new DefaultControllerClass(ClientsController.class));
+    	List<Route> routes = parser.rulesFor(new DefaultBeanClass(ClientsController.class));
     	Route route = getRouteMatching(routes, "/move/second/child");
 
     	assertThat(route, canHandle(ClientsController.class, "move"));
@@ -292,7 +292,7 @@ public class PathAnnotationRoutesParserTest {
 
     @Test
     public void dontRegisterRouteIfMethodIsNotPublic() {
-    	List<Route> routes = parser.rulesFor(new DefaultControllerClass(ClientsController.class));
+    	List<Route> routes = parser.rulesFor(new DefaultBeanClass(ClientsController.class));
     	Route route = getRouteMatching(routes, "/protectMe");
     	assertNull(route);
 
@@ -300,7 +300,7 @@ public class PathAnnotationRoutesParserTest {
 
     @Test
     public void dontRegisterRouteIfMethodIsStatic() {
-    	List<Route> routes = parser.rulesFor(new DefaultControllerClass(ClientsController.class));
+    	List<Route> routes = parser.rulesFor(new DefaultBeanClass(ClientsController.class));
     	Route route = getRouteMatching(routes, "/staticMe");
     	assertNull(route);
 
@@ -372,14 +372,14 @@ public class PathAnnotationRoutesParserTest {
     @Test(expected=IllegalArgumentException.class)
     public void shouldThrowExceptionIfPathAnnotationHasEmptyArray()
             throws Exception {
-        parser.rulesFor(new DefaultControllerClass(NoPath.class));
+        parser.rulesFor(new DefaultBeanClass(NoPath.class));
     }
 
 
     @Test
     public void shouldFindNonAnnotatedNonStaticPublicMethodWithComponentNameInVariableCamelCaseConventionAsURI()
             throws Exception {
-    	List<Route> routes = parser.rulesFor(new DefaultControllerClass(ClientsController.class));
+    	List<Route> routes = parser.rulesFor(new DefaultBeanClass(ClientsController.class));
     	Route route = getRouteMatching(routes, "/clients/add");
 
     	assertThat(route, canHandle(ClientsController.class, "add"));
@@ -390,7 +390,7 @@ public class PathAnnotationRoutesParserTest {
     @Test
     public void shouldFindSeveralPathsForMethodWithManyValue()
             throws Exception {
-    	List<Route> routes = parser.rulesFor(new DefaultControllerClass(ClientsController.class));
+    	List<Route> routes = parser.rulesFor(new DefaultBeanClass(ClientsController.class));
 
     	Route route = getRouteMatching(routes, "/path1");
     	assertThat(route, canHandle(ClientsController.class, "manyPaths"));
@@ -405,7 +405,7 @@ public class PathAnnotationRoutesParserTest {
 
     @Test
     public void shouldNotMatchIfAResourceHasTheWrongWebMethod() throws SecurityException {
-    	List<Route> routes = parser.rulesFor(new DefaultControllerClass(ClientsController.class));
+    	List<Route> routes = parser.rulesFor(new DefaultBeanClass(ClientsController.class));
     	Route route = getRouteMatching(routes, "/clients/remove");
 
     	assertThat(route.allowedMethods(), not(contains(HttpMethod.POST)));
@@ -414,7 +414,7 @@ public class PathAnnotationRoutesParserTest {
 
     @Test
     public void shouldAcceptAResultWithASpecificWebMethod() throws SecurityException, NoSuchMethodException {
-    	List<Route> routes = parser.rulesFor(new DefaultControllerClass(ClientsController.class));
+    	List<Route> routes = parser.rulesFor(new DefaultBeanClass(ClientsController.class));
     	Route route = getRouteMatching(routes, "/clients/head");
 
     	assertThat(route.allowedMethods(), is(EnumSet.of(HttpMethod.HEAD)));
@@ -424,7 +424,7 @@ public class PathAnnotationRoutesParserTest {
 
     @Test
     public void shouldAcceptAResultWithOptionsWebMethod() throws SecurityException, NoSuchMethodException {
-    	List<Route> routes = parser.rulesFor(new DefaultControllerClass(ClientsController.class));
+    	List<Route> routes = parser.rulesFor(new DefaultBeanClass(ClientsController.class));
     	Route route = getRouteMatching(routes, "/clients/options");
 
     	assertThat(route.allowedMethods(), is(EnumSet.of(HttpMethod.OPTIONS)));
@@ -432,7 +432,7 @@ public class PathAnnotationRoutesParserTest {
     
     @Test
     public void shouldAcceptAResultWithPatchWebMethod() throws SecurityException, NoSuchMethodException {
-    	List<Route> routes = parser.rulesFor(new DefaultControllerClass(ClientsController.class));
+    	List<Route> routes = parser.rulesFor(new DefaultBeanClass(ClientsController.class));
     	Route route = getRouteMatching(routes, "/clients/update");
 
     	assertThat(route.allowedMethods(), is(EnumSet.of(HttpMethod.PATCH)));
@@ -448,14 +448,14 @@ public class PathAnnotationRoutesParserTest {
 
     @Test
     public void findsInheritedMethodsWithDefaultNames() throws SecurityException, NoSuchMethodException {
-    	List<Route> routes = parser.rulesFor(new DefaultControllerClass(NiceClients.class));
+    	List<Route> routes = parser.rulesFor(new DefaultBeanClass(NiceClients.class));
     	Route route = getRouteMatching(routes, "/niceClients/toInherit");
 
     	assertTrue(route.canHandle(NiceClients.class, ClientsController.class.getDeclaredMethod("toInherit")));
     }
     @Test
     public void supportMethodOverriding() throws SecurityException, NoSuchMethodException {
-    	List<Route> routes = parser.rulesFor(new DefaultControllerClass(NiceClients.class));
+    	List<Route> routes = parser.rulesFor(new DefaultBeanClass(NiceClients.class));
     	Route route = getRouteMatching(routes, "/niceClients/add");
 
     	assertThat(route, canHandle(NiceClients.class, "add"));
@@ -471,14 +471,14 @@ public class PathAnnotationRoutesParserTest {
 
     @Test
     public void supportTypeHttpMethodAnnotation() throws SecurityException, NoSuchMethodException {
-    	List<Route> routes = parser.rulesFor(new DefaultControllerClass(AnnotatedController.class));
+    	List<Route> routes = parser.rulesFor(new DefaultBeanClass(AnnotatedController.class));
     	Route route = getRouteMatching(routes, "/annotated/test");
     	assertThat(route.allowedMethods(), is(EnumSet.of(HttpMethod.POST)));
     }
 
     @Test
     public void supportOverrideTypeHttpMethodAnnotation() throws SecurityException, NoSuchMethodException {
-    	List<Route> routes = parser.rulesFor(new DefaultControllerClass(AnnotatedController.class));
+    	List<Route> routes = parser.rulesFor(new DefaultBeanClass(AnnotatedController.class));
     	Route route = getRouteMatching(routes, "/annotated/overridden");
     	assertThat(route.allowedMethods(), is(EnumSet.of(HttpMethod.GET)));
     }
@@ -517,7 +517,7 @@ public class PathAnnotationRoutesParserTest {
 
     @Test
     public void addsAPrefixToMethodsWhenTheGetControllerAndTheMethodAreAnnotatedWithRelativePath() throws Exception {
-    	List<Route> routes = parser.rulesFor(new DefaultControllerClass(GetAnnotatedController.class));
+    	List<Route> routes = parser.rulesFor(new DefaultBeanClass(GetAnnotatedController.class));
     	Route route = getRouteMatching(routes, "/prefix/relativePath");
 
     	assertThat(route, canHandle(GetAnnotatedController.class, "withRelativePath"));
@@ -525,7 +525,7 @@ public class PathAnnotationRoutesParserTest {
 
     @Test
     public void priorityForGetAnnotationShouldBeDefault() throws Exception {
-    	List<Route> routes = parser.rulesFor(new DefaultControllerClass(GetAnnotatedController.class));
+    	List<Route> routes = parser.rulesFor(new DefaultBeanClass(GetAnnotatedController.class));
     	Route route = getRouteMatching(routes, "/prefix/relativePath");
 
     	assertThat(route.getPriority(), is(Path.DEFAULT));
@@ -533,7 +533,7 @@ public class PathAnnotationRoutesParserTest {
 
 	@Test
     public void addsAPrefixToMethodsWhenTheGetControllerEndsWithSlashAndTheMethodAreAnnotatedWithRelativePath() throws Exception {
-		List<Route> routes = parser.rulesFor(new DefaultControllerClass(EndSlashAnnotatedGetController.class));
+		List<Route> routes = parser.rulesFor(new DefaultBeanClass(EndSlashAnnotatedGetController.class));
 		Route route = getRouteMatching(routes, "/endSlash/relativePath");
 
 		assertThat(route, canHandle(EndSlashAnnotatedGetController.class, "withRelativePath"));
@@ -542,7 +542,7 @@ public class PathAnnotationRoutesParserTest {
 
     @Test
     public void addsAPrefixToMethodsWhenTheGetControllerEndsWithSlashAndTheMethodAreAnnotatedWithAbsolutePath() throws Exception {
-    	List<Route> routes = parser.rulesFor(new DefaultControllerClass(EndSlashAnnotatedGetController.class));
+    	List<Route> routes = parser.rulesFor(new DefaultBeanClass(EndSlashAnnotatedGetController.class));
     	Route route = getRouteMatching(routes, "/endSlash/absolutePath");
 
     	assertThat(route, canHandle(EndSlashAnnotatedGetController.class, "withAbsolutePath"));
@@ -551,7 +551,7 @@ public class PathAnnotationRoutesParserTest {
 
     @Test
     public void addsAPrefixToMethodsWhenTheGetControllerAndTheMethodAreAnnotatedWithAbsolutePath() throws Exception {
-    	List<Route> routes = parser.rulesFor(new DefaultControllerClass(GetAnnotatedController.class));
+    	List<Route> routes = parser.rulesFor(new DefaultBeanClass(GetAnnotatedController.class));
     	Route route = getRouteMatching(routes, "/prefix/absolutePath");
 
     	assertThat(route, canHandle(GetAnnotatedController.class, "withAbsolutePath"));
@@ -559,7 +559,7 @@ public class PathAnnotationRoutesParserTest {
 
     @Test
     public void addsAPrefixToMethodsWhenTheGetControllerIsAnnotatedWithPath() throws Exception {
-    	List<Route> routes = parser.rulesFor(new DefaultControllerClass(GetAnnotatedController.class));
+    	List<Route> routes = parser.rulesFor(new DefaultBeanClass(GetAnnotatedController.class));
     	Route route = getRouteMatching(routes, "/prefix/withoutPath");
 
     	assertThat(route, canHandle(GetAnnotatedController.class, "withoutPath"));
@@ -567,7 +567,7 @@ public class PathAnnotationRoutesParserTest {
 
     @Test(expected=IllegalArgumentException.class)
     public void throwsExceptionWhenTheGetControllerHasAmbiguousDeclaration() throws Exception {
-    	parser.rulesFor(new DefaultControllerClass(WrongGetAnnotatedController.class));
+    	parser.rulesFor(new DefaultBeanClass(WrongGetAnnotatedController.class));
     }
 
 }

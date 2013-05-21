@@ -26,6 +26,8 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+import javax.enterprise.util.AnnotationLiteral;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -115,7 +117,6 @@ import br.com.caelum.vraptor.interceptor.multipart.Servlet3MultipartInterceptor;
 import br.com.caelum.vraptor.interceptor.multipart.ServletFileUploadCreator;
 import br.com.caelum.vraptor.ioc.ConverterHandler;
 import br.com.caelum.vraptor.ioc.InterceptorStereotypeHandler;
-import br.com.caelum.vraptor.ioc.StereotypeHandler;
 import br.com.caelum.vraptor.proxy.InstanceCreator;
 import br.com.caelum.vraptor.proxy.JavassistProxifier;
 import br.com.caelum.vraptor.proxy.ObjenesisInstanceCreator;
@@ -174,10 +175,10 @@ import br.com.caelum.vraptor.view.SessionFlashScope;
 import br.com.caelum.vraptor.view.Status;
 import br.com.caelum.vraptor.view.ValidationViewsFactory;
 import br.com.caelum.vraptor4.Controller;
-import br.com.caelum.vraptor4.controller.DefaultMethodNotAllowedHandler;
-import br.com.caelum.vraptor4.controller.DefaultControllerNotFoundHandler;
-import br.com.caelum.vraptor4.controller.MethodNotAllowedHandler;
 import br.com.caelum.vraptor4.controller.ControllerNotFoundHandler;
+import br.com.caelum.vraptor4.controller.DefaultControllerNotFoundHandler;
+import br.com.caelum.vraptor4.controller.DefaultMethodNotAllowedHandler;
+import br.com.caelum.vraptor4.controller.MethodNotAllowedHandler;
 import br.com.caelum.vraptor4.http.route.DefaultRouter;
 import br.com.caelum.vraptor4.http.route.DefaultTypeFinder;
 import br.com.caelum.vraptor4.http.route.Evaluator;
@@ -304,24 +305,18 @@ public class BaseComponents {
 			PrimitiveShortConverter.class,
 			ShortConverter.class,
 			StringConverter.class));
+  
+    
+    @SuppressWarnings("serial")
+	private static final HashMap<Class<? extends Annotation>, StereotypeInfo> STEREOTYPES_INFO = new HashMap<Class<? extends Annotation>,StereotypeInfo>();
+    static {
+    		STEREOTYPES_INFO.put(Controller.class,new StereotypeInfo(Controller.class,ControllerHandler.class,new AnnotationLiteral<ControllerQualifier>() {}));
+    		STEREOTYPES_INFO.put(Convert.class,new StereotypeInfo(Convert.class,ConverterHandler.class,new AnnotationLiteral<ConvertQualifier>() {}));
+    		STEREOTYPES_INFO.put(Deserializes.class,new StereotypeInfo(Deserializes.class,DeserializesHandler.class,new AnnotationLiteral<DeserializesQualifier>() {}));
+    		STEREOTYPES_INFO.put(Intercepts.class,new StereotypeInfo(Intercepts.class,InterceptorStereotypeHandler.class,new AnnotationLiteral<InterceptsQualifier>() {}));    		
 
-
-    @SuppressWarnings("unchecked")
-	private static final Class<? extends StereotypeHandler>[] STEREOTYPE_HANDLERS = new Class[] {
-		ControllerHandler.class,
-		ConverterHandler.class,
-		InterceptorStereotypeHandler.class,
-		DeserializesHandler.class
-	};
-
-    @SuppressWarnings("unchecked")
-    private static final Class<? extends Annotation>[] STEREOTYPES = new Class[] {
-    	Controller.class,
-    	Convert.class,
-    	Deserializes.class,
-    	Intercepts.class
-    };
-
+    }
+    
     private static final Set<Class<? extends Deserializer>> DESERIALIZERS = Collections.<Class<? extends Deserializer>>singleton(XMLDeserializer.class);
     
 
@@ -453,13 +448,12 @@ public class BaseComponents {
         return BUNDLED_CONVERTERS;
     }
 
-    public static Class<? extends Annotation>[] getStereotypes() {
-    	return STEREOTYPES;
-    }
-
-    public static Class<? extends StereotypeHandler>[] getStereotypeHandlers() {
-    	return STEREOTYPE_HANDLERS;
-    }
+    public static Set<StereotypeInfo> getStereotypesInfo() {
+    		return new HashSet<StereotypeInfo>(STEREOTYPES_INFO.values());
+    }   
+    public static Map<Class<? extends Annotation>,StereotypeInfo> getStereotypesInfoMap() {
+    		return STEREOTYPES_INFO;
+    }   
 
     private static Map<Class<?>, Class<?>> classMap(Class<?>... items) {
         HashMap<Class<?>, Class<?>> map = new HashMap<Class<?>, Class<?>>();

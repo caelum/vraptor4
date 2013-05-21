@@ -41,7 +41,7 @@ import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.Put;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
-import br.com.caelum.vraptor4.controller.ControllerClass;
+import br.com.caelum.vraptor4.controller.BeanClass;
 import br.com.caelum.vraptor4.controller.HttpMethod;
 
 import com.google.common.base.Predicate;
@@ -80,7 +80,7 @@ public class PathAnnotationRoutesParser implements RoutesParser {
 	}
 	
 	@Override
-	public List<Route> rulesFor(ControllerClass resource) {
+	public List<Route> rulesFor(BeanClass resource) {
 		Class<?> baseType = resource.getType();
 		return registerRulesFor(baseType);
 	}

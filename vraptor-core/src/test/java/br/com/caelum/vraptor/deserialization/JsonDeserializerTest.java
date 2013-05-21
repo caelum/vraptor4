@@ -18,8 +18,8 @@ import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.interceptor.DefaultTypeNameExtractor;
 import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
 import br.com.caelum.vraptor.serialization.xstream.XStreamBuilderImpl;
-import br.com.caelum.vraptor4.controller.ControllerClass;
-import br.com.caelum.vraptor4.controller.DefaultControllerClass;
+import br.com.caelum.vraptor4.controller.BeanClass;
+import br.com.caelum.vraptor4.controller.DefaultBeanClass;
 import br.com.caelum.vraptor4.controller.DefaultControllerMethod;
 import br.com.caelum.vraptor4.controller.ControllerMethod;
 
@@ -43,7 +43,7 @@ public class JsonDeserializerTest {
 		
         deserializer = new JsonDeserializer(provider, extractor, XStreamBuilderImpl.cleanInstance());
         
-		ControllerClass resourceClass = new DefaultControllerClass(CatController.class);
+		BeanClass resourceClass = new DefaultBeanClass(CatController.class);
 
 		meow = new DefaultControllerMethod(resourceClass, CatController.class.getDeclaredMethod("meow"));
 		roll = new DefaultControllerMethod(resourceClass, CatController.class.getDeclaredMethod("roll", Cat.class));

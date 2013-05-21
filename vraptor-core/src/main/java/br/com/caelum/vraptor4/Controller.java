@@ -24,7 +24,6 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import br.com.caelum.vraptor.ioc.RequestScoped;
-import br.com.caelum.vraptor.ioc.Stereotype;
 
 /**
  * Controllers are entry points for requests; i.e, requests are handled by VRaptor Controllers.
@@ -35,7 +34,6 @@ import br.com.caelum.vraptor.ioc.Stereotype;
 @Target(ElementType.TYPE)
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
-@Stereotype
 @javax.enterprise.inject.Stereotype
 @RequestScoped
 public @interface Controller {

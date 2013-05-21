@@ -21,10 +21,9 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import br.com.caelum.vraptor.ioc.Stereotype;
+import javax.enterprise.inject.Stereotype;
 
 @javax.enterprise.inject.Stereotype
-@Stereotype
 @Documented
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)

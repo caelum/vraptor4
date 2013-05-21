@@ -27,7 +27,6 @@ import br.com.caelum.vraptor.interceptor.ExecuteMethodInterceptor;
 import br.com.caelum.vraptor.interceptor.Interceptor;
 import br.com.caelum.vraptor.interceptor.ResourceLookupInterceptor;
 import br.com.caelum.vraptor.ioc.RequestScoped;
-import br.com.caelum.vraptor.ioc.Stereotype;
 
 /**
  * Notifies vraptor to use this interceptor in the interceptor stack.<br>
@@ -39,7 +38,6 @@ import br.com.caelum.vraptor.ioc.Stereotype;
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
-@Stereotype
 @javax.enterprise.inject.Stereotype
 @RequestScoped
 public @interface Intercepts {

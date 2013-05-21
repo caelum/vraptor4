@@ -20,15 +20,12 @@ package br.com.caelum.vraptor;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
-import br.com.caelum.vraptor.ioc.Stereotype;
-
 /**
  * Registers a class as a converter.
  * 
  * @author Guilherme Silveira
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Stereotype
 @javax.enterprise.inject.Stereotype
 public @interface Convert {
 

@@ -29,6 +29,7 @@ import br.com.caelum.vraptor.ioc.Stereotype;
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Stereotype
+@javax.enterprise.inject.Stereotype
 public @interface Convert {
 
     /**

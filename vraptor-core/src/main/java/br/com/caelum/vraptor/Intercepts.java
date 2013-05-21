@@ -40,6 +40,7 @@ import br.com.caelum.vraptor.ioc.Stereotype;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 @Stereotype
+@javax.enterprise.inject.Stereotype
 @RequestScoped
 public @interface Intercepts {
 	Class<? extends Interceptor>[] before() default ExecuteMethodInterceptor.class;

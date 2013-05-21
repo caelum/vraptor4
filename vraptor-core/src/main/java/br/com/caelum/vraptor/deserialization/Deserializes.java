@@ -23,6 +23,7 @@ import java.lang.annotation.Target;
 
 import br.com.caelum.vraptor.ioc.Stereotype;
 
+@javax.enterprise.inject.Stereotype
 @Stereotype
 @Documented
 @Target(ElementType.TYPE)

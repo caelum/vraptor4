@@ -38,11 +38,11 @@ public class StereotypesRegistry {
 	}
 
 	private Annotation tryToFindAStereotypeQualifier(Bean<?> bean) {
-		Annotation[] annotations = bean.getBeanClass().getAnnotations();
+		Set<Class<? extends Annotation>> annotations = bean.getStereotypes();
 		Map<Class<? extends Annotation>, StereotypeInfo> stereotypesInfo = BaseComponents.getStereotypesInfoMap();
-		for(Annotation annotation : annotations){
-			if(stereotypesInfo.containsKey(annotation.annotationType())){
-				return stereotypesInfo.get(annotation.annotationType()).getStereotypeQualifier();
+		for(Class<? extends Annotation> annotation : annotations){
+			if(stereotypesInfo.containsKey(annotation)){
+				return stereotypesInfo.get(annotation).getStereotypeQualifier();
 			}
 		}
 		return null;

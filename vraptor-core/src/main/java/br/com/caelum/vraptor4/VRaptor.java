@@ -32,7 +32,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.core.Execution;
 import br.com.caelum.vraptor.core.RequestExecution;
@@ -63,9 +62,9 @@ public class VRaptor implements Filter {
 	
 	@Inject
 	private StaticContentHandler staticHandler;
-	
 
-	private static final Logger logger = LoggerFactory.getLogger(VRaptor.class);
+	@Inject 
+	private Logger logger;
 
 	@Override
 	public void destroy() {

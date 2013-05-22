@@ -15,12 +15,15 @@
  */
 package br.com.caelum.vraptor.validator;
 
+import static java.util.Arrays.asList;
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import javax.enterprise.inject.Alternative;
 import javax.enterprise.inject.Produces;
 import javax.validation.Validation;
 import javax.validation.ValidatorFactory;
@@ -30,7 +33,6 @@ import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
-import static java.util.Arrays.asList;
 
 /**
  * Bring up Method Validation factory. This class builds the {@link ValidatorFactory} factory once when
@@ -40,6 +42,7 @@ import static java.util.Arrays.asList;
  * @since 3.5.1-SNAPSHOT
  */
 @ApplicationScoped
+@Alternative
 public class MethodValidatorFactoryCreator{
     
     private static final Logger logger = LoggerFactory.getLogger(MethodValidatorFactoryCreator.class);

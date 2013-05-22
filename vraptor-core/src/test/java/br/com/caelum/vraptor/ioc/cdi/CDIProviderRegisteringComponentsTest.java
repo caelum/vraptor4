@@ -38,6 +38,7 @@ import br.com.caelum.vraptor.ioc.WhatToDo;
 import br.com.caelum.vraptor.ioc.fixture.ComponentFactoryInTheClasspath;
 import br.com.caelum.vraptor.ioc.fixture.CustomComponentWithLifecycleInTheClasspath;
 import br.com.caelum.vraptor.validator.MessageInterpolatorFactory;
+import br.com.caelum.vraptor.validator.MethodValidatorFactoryCreator;
 import br.com.caelum.vraptor.validator.ValidatorCreator;
 import br.com.caelum.vraptor.validator.ValidatorFactoryCreator;
 import br.com.caelum.vraptor.view.PathResolver;
@@ -245,6 +246,7 @@ public class CDIProviderRegisteringComponentsTest extends
 		components.remove(ValidatorFactoryCreator.class);
 		components.remove(ValidatorCreator.class);
 		components.remove(MessageInterpolatorFactory.class);
+		components.remove(MethodValidatorFactoryCreator.class);
 		checkAvailabilityFor(true, components);
 	}	
 		

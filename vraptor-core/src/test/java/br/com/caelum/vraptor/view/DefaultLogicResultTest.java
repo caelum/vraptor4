@@ -50,6 +50,7 @@ import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.core.DefaultMethodInfo;
 import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.http.MutableRequest;
+import br.com.caelum.vraptor.http.MutableResponse;
 import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.proxy.JavassistProxifier;
@@ -66,7 +67,7 @@ public class DefaultLogicResultTest {
     private LogicResult logicResult;
 
     private @Mock Router router;
-    private @Mock HttpServletResponse response;
+    private @Mock MutableResponse response;
     private @Mock MutableRequest request;
     private @Mock Container container;
     private @Mock PathResolver resolver;

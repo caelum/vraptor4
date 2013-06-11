@@ -39,6 +39,7 @@ import org.mockito.MockitoAnnotations;
 import br.com.caelum.vraptor.core.DefaultMethodInfo;
 import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.http.MutableRequest;
+import br.com.caelum.vraptor.http.MutableResponse;
 import br.com.caelum.vraptor.proxy.JavassistProxifier;
 import br.com.caelum.vraptor.proxy.ObjenesisInstanceCreator;
 import br.com.caelum.vraptor.proxy.Proxifier;
@@ -49,7 +50,7 @@ import br.com.caelum.vraptor4.controller.ControllerMethod;
 public class DefaultPageResultTest {
 
     private @Mock MutableRequest request;
-    private @Mock HttpServletResponse response;
+    private @Mock MutableResponse response;
     private @Mock RequestDispatcher dispatcher;
     private Proxifier proxifier;
     private ControllerMethod method;
@@ -71,6 +72,7 @@ public class DefaultPageResultTest {
         };
 		view = new DefaultPageResult(request, response, requestInfo, fixedResolver, proxifier);
 		when(request.getOriginalRequest()).thenReturn(request);
+		when(response.getOriginalResponse()).thenReturn(response);
     }
 
     public static class AnyResource {

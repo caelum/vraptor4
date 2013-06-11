@@ -32,4 +32,6 @@ public interface MutableResponse extends HttpServletResponse {
 	interface RedirectListener {
 		void beforeRedirect();
 	}
+
+	HttpServletResponse getOriginalResponse();
 }

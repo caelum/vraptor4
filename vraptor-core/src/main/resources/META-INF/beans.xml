@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:weld="http://jboss.org/schema/weld/beans"
-    xmlns="http://java.sun.com/xml/ns/javaee"
-    xsi:schemaLocation="
-          http://java.sun.com/xml/ns/javaee http://docs.jboss.org/cdi/beans_1_0.xsd
-          http://jboss.org/schema/weld/beans http://jboss.org/schema/weld/beans_1_1.xsd">
-          
-    <weld:scan>
-        <weld:exclude name="br.com.caelum.vraptor.**"/>
-        <weld:exclude name="br.com.caelum.vraptor4.**"/>    
-    </weld:scan>
+<beans xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee
+         http://xmlns.jcp.org/xml/ns/javaee/beans_1_1.xsd"
+         version="1.1" bean-discovery-mode="all">
+    <scan>
+        <exclude name="br.com.caelum.vraptor.**"/>
+        <exclude name="br.com.caelum.vraptor4.**"/>
+    </scan>    
     <alternatives>
         <class>br.com.caelum.vraptor.ioc.cdi.CDIHttpServletRequestFactory</class>
         <class>br.com.caelum.vraptor.ioc.cdi.CDIHttpServletResponseFactory</class>

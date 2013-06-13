@@ -226,19 +226,7 @@ public class CDIProviderRegisteringComponentsTest extends
 		Bean<?> bean = cdiContainer.getBeanManager().getBeans(CDIControllerComponent.class).iterator().next();
 		assertTrue(bean.getScope().equals(RequestScoped.class));
 	}
-	
-	@Test
-	public void shouldUseCustomComponent(){
-		Code<PathResolver> code = new Code<PathResolver>() {
-
-			@Override
-			public void execute(PathResolver bean) {
-				assertEquals("/vraptor/route",bean.pathFor(null));				
-			}
-		};
-		getFromContainerAndExecuteSomeCode(PathResolver.class, code);
-	}	
-	
+		
 	@Override
 	@Test
 	public void canProvideAllApplicationScopedComponents() {

@@ -18,6 +18,8 @@ package br.com.caelum.vraptor.util.test;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
+import javax.enterprise.inject.Alternative;
+
 import br.com.caelum.vraptor.core.Localization;
 import br.com.caelum.vraptor.core.SafeResourceBundle;
 import br.com.caelum.vraptor.util.EmptyBundle;
@@ -29,6 +31,8 @@ import br.com.caelum.vraptor.util.EmptyBundle;
  * @since 3.3.0
  *
  */
+
+@Alternative
 public class MockLocalization implements Localization {
 
 	public ResourceBundle getBundle() {

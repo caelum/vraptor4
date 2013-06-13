@@ -21,6 +21,8 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.enterprise.inject.Alternative;
+
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.View;
 import br.com.caelum.vraptor.core.AbstractResult;
@@ -45,6 +47,7 @@ import br.com.caelum.vraptor.view.ResultException;
  * @author Lucas Cavalcanti
  * @author Guilherme Silveira
  */
+@Alternative
 public class MockResult extends AbstractResult {
 
 	private final Map<String, Object> values = new HashMap<String, Object>();

@@ -20,6 +20,8 @@ package br.com.caelum.vraptor.util.test;
 
 import java.util.Arrays;
 
+import javax.enterprise.inject.Alternative;
+
 import br.com.caelum.vraptor.View;
 import br.com.caelum.vraptor.http.FormatResolver;
 import br.com.caelum.vraptor.interceptor.DefaultTypeNameExtractor;
@@ -48,6 +50,7 @@ import br.com.caelum.vraptor.view.EmptyResult;
  *
  * @author Vinícius Oliveira
  */
+@Alternative
 public class MockSerializationResult extends MockResult {
 
 	private Serialization serialization;

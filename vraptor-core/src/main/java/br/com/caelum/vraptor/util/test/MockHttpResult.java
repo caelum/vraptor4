@@ -17,6 +17,8 @@
 
 package br.com.caelum.vraptor.util.test;
 
+import javax.enterprise.inject.Alternative;
+
 import br.com.caelum.vraptor.View;
 import br.com.caelum.vraptor.proxy.JavassistProxifier;
 import br.com.caelum.vraptor.proxy.ObjenesisInstanceCreator;
@@ -33,6 +35,7 @@ import br.com.caelum.vraptor.view.HttpResult;
  *
  * @author Danilo Muñoz
  */
+@Alternative
 public class MockHttpResult extends MockResult{
 	private MockHttpServletResponse response = new MockHttpServletResponse();
 

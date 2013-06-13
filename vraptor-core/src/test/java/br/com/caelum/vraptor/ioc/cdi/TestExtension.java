@@ -7,6 +7,7 @@ import javax.enterprise.event.Observes;
 import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.enterprise.inject.spi.BeforeBeanDiscovery;
+import javax.enterprise.inject.spi.Extension;
 import javax.enterprise.inject.spi.InjectionPoint;
 import javax.enterprise.inject.spi.ProcessAnnotatedType;
 import javax.enterprise.inject.spi.ProcessProducer;
@@ -34,11 +35,9 @@ import br.com.caelum.vraptor.validator.ValidatorCreator;
 import br.com.caelum.vraptor.validator.ValidatorFactoryCreator;
 
 @Ignore
-public class TestExtension extends RegisterComponentsExtension{
+public class TestExtension implements Extension{
 	
-	@Override
 	public void beforeBeanDiscovey(@Observes BeforeBeanDiscovery discovery, BeanManager bm) {
-		super.beforeBeanDiscovey(discovery, bm);
 		//just test objects
 		discovery.addAnnotatedType(bm.createAnnotatedType(DummyComponentFactory.class));
 		discovery.addAnnotatedType(bm.createAnnotatedType(TheComponentFactory.class));
@@ -58,7 +57,6 @@ public class TestExtension extends RegisterComponentsExtension{
 		discovery.addAnnotatedType(bm.createAnnotatedType(MySessionComponent.class));
 		discovery.addAnnotatedType(bm.createAnnotatedType(TheComponentFactory.class));
 		discovery.addAnnotatedType(bm.createAnnotatedType(DependentOnSomethingFromComponentFactory.class));
-		discovery.addAnnotatedType(bm.createAnnotatedType(CDIComponent.class));
 	}	
 	
 	public void processProducerForServletContext(@Observes ProcessProducer<ServletContextFactory,ServletContext> producer){

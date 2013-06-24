@@ -32,9 +32,11 @@ import br.com.caelum.vraptor.musicjungle.interceptor.UserInfo;
 import br.com.caelum.vraptor.musicjungle.model.User;
 import br.com.caelum.vraptor.validator.Validations;
 
+import com.google.common.base.Objects;
+
 /**
- * The resource <code>UsersController</code> handles all user operations,
- * such as adding new users, listing all users, and so on.
+ * The resource <code>UsersController</code> handles all user 
+ * operations, such as adding new users, listing users, and so on.
  */
 @Resource
 public class UsersController {
@@ -46,12 +48,15 @@ public class UsersController {
 
 	/**
 	 * Receives dependencies through the constructor.
+	 * 
 	 * @param factory dao factory.
 	 * @param userInfo info on the logged user.
 	 * @param result VRaptor result handler.
 	 * @param validator VRaptor validator.
 	 */
-	public UsersController(UserDao dao, UserInfo userInfo, Result result, Validator validator) {
+	public UsersController(UserDao dao, UserInfo userInfo, 
+			Result result, Validator validator) {
+		
 		this.dao = dao;
 		this.result = result;
 		this.validator = validator;
@@ -60,13 +65,13 @@ public class UsersController {
 
 	/**
 	 * Accepts HTTP GET requests.
+	 * 
 	 * URL:  /home
 	 * View: /WEB-INF/jsp/user/home.jsp
 	 *
-	 * Shows user's home page containing his Dvd collection.
+	 * Shows user's home page containing his Music collection.
 	 */
-	@Path("/")
-	@Get
+	@Get("/")
 	public void home() {
 	    dao.refresh(userInfo.getUser());
 	    result.include("dvdTypes", DvdType.values());
@@ -74,39 +79,34 @@ public class UsersController {
 
 	/**
      * Accepts HTTP GET requests.
+     * 
      * URL:  /users (only GET requests for this URL)
      * View: /WEB-INF/jsp/user/list.jsp
      *
      * Lists all users.
      */
-	@Path("/users")
-	@Get
+	@Get("/users")
 	public void list() {
-        List<User> users = new ArrayList<User>();
-        // search by hand example
-        List<User> usersFromDatabase = this.dao.listAll();
-        for (User user : usersFromDatabase) {
-            User newUser = new User();
-            newUser.setLogin(user.getLogin());
-            newUser.setName(user.getName());
-            users.add(newUser);
-        }
-
+        List<User> users = this.dao.listAll();
+        users = Objects.firstNonNull(users, new ArrayList<User>());
         result.include("users", users);
     }
 
 	/**
 	 * Accepts HTTP POST requests.
+	 * 
 	 * URL:	 /users
 	 * View: /WEB-INF/jsp/user/add.jsp
 	 *
-	 * The "user" parameter will be populated with the request parameters, for example:
+	 * The "user" parameter will be populated with the request 
+	 * parameters, for example:
 	 *
 	 * POST	/user
 	 * user.name=Nico
 	 * user.login=555555
 	 *
-	 * automatically populates the name and login parameters on the user object with values Nico and 555555.
+	 * automatically populates the name and login parameters on 
+	 * the user object with values Nico and 555555.
 	 *
 	 * Adds new users to the database.
 	 */
@@ -114,12 +114,13 @@ public class UsersController {
 	@Post
 	@Public
 	public void add(final User user) {
-//		validator.validate(user); // will add all validation errors from Hibernate Validator
+		// will add all validation errors from Hibernate Validator
+		validator.validate(user); 
+		
 	    validator.checking(new Validations() {{
 		    // checks if there is already an user with the specified login
 		    boolean loginDoesNotExist = !dao.containsUserWithLogin(user.getLogin());
 		    that(loginDoesNotExist, "login", "login_already_exists");
-
 		    that(user.getLogin().matches("[a-z0-9_]+"), "login", "invalid_login");
 		}});
 
@@ -135,8 +136,9 @@ public class UsersController {
 
 	/**
 	 * Accepts HTTP GET requests.
-	 * URL:  /users/{login} (for example, /users/john shows information
-	 * of the user with login john)
+	 * 
+	 * URL:  /users/{login} (for example, /users/john 
+	 * shows information of the user with login john)
 	 * View: /WEB-INF/jsp/user/view.jsp
 	 *
 	 * Shows information on the specified user.

@@ -13,30 +13,53 @@ public class AspectStyleInterceptorTest {
 	private StepInvoker stepInvoker = new StepInvoker();
 
 	@Test
-	public void sempreChamaInterceptParaInterceptorSemAccepts(){
+	public void shouldAlwaysCallAround(){
 		AlwaysAcceptsAspectInterceptor interceptor = spy(new AlwaysAcceptsAspectInterceptor());
 		AspectHandler handler = new AspectHandler(interceptor,stepInvoker);
-		handler.hanle();
+		handler.handle();
 		verify(interceptor).intercept();
 	}
 	
 	@Test
-	public void naoChamaInterceptCasoNaoTenhaAroundInvoke(){
+	public void shouldNotInvokeMethodIfDoesNotHaveAroundInvoke(){
 		InterceptorWithoutAroundInvoke interceptor = spy(new InterceptorWithoutAroundInvoke());
 		AspectHandler handler = new AspectHandler(interceptor,stepInvoker);
-		handler.hanle();
+		handler.handle();
 		verify(interceptor,never()).intercept();
 	}
 	
 	@Test
-	public void chamaOBeginAntesDoIntercept(){
+	public void shouldInvokeUseBeforeAndAfter(){
 		AlwaysAcceptsAspectInterceptor interceptor = spy(new AlwaysAcceptsAspectInterceptor());
 		AspectHandler handler = new AspectHandler(interceptor,stepInvoker);
-		handler.hanle();
+		handler.handle();
 		InOrder order = inOrder(interceptor);
 		order.verify(interceptor).begin();		
 		order.verify(interceptor).intercept();		
 		order.verify(interceptor).after();		
+	}
+	
+	@Test
+	public void shouldInvokeIfAccepts(){
+		AcceptsInterceptor acceptsInterceptor = spy(new AcceptsInterceptor(true));
+		AspectHandler aspectHandler = new AspectHandler(acceptsInterceptor, stepInvoker);
+		aspectHandler.handle();
+		InOrder order = inOrder(acceptsInterceptor);
+		order.verify(acceptsInterceptor).accepts();
+		order.verify(acceptsInterceptor).before();
+		order.verify(acceptsInterceptor).around();
+		order.verify(acceptsInterceptor).after();
+	}
+	
+	@Test
+	public void shouldNotInvokeIfDoesNotAccept(){
+		AcceptsInterceptor acceptsInterceptor = spy(new AcceptsInterceptor(false));
+		AspectHandler aspectHandler = new AspectHandler(acceptsInterceptor, stepInvoker);
+		aspectHandler.handle();
+		verify(acceptsInterceptor).accepts();
+		verify(acceptsInterceptor,never()).before();
+		verify(acceptsInterceptor,never()).around();
+		verify(acceptsInterceptor,never()).after();
 	}
 	
 }

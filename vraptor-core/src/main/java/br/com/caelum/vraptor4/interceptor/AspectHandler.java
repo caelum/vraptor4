@@ -8,6 +8,7 @@ import javax.interceptor.AroundInvoke;
 import net.vidageek.mirror.dsl.Mirror;
 import net.vidageek.mirror.list.dsl.Matcher;
 import net.vidageek.mirror.list.dsl.MirrorList;
+import br.com.caelum.vraptor4.Accepts;
 import br.com.caelum.vraptor4.AfterInvoke;
 import br.com.caelum.vraptor4.BeforeInvoke;
 
@@ -38,22 +39,39 @@ public class AspectHandler {
 
 	}
 
-	public void hanle() {
+	public void handle() {
 		Mirror mirror = new Mirror();
+		
+		MirrorList<Method> acceptsPossibleMethods = getAnnotatedMethod(mirror,
+				new InvokeMatcher(Accepts.class));
+		
+		Object returnObject = stepInvoker.tryToInvoke(interceptor, acceptsPossibleMethods,Accepts.class);
+		
+		boolean accepts = true;
+		
+		if(returnObject!=null){
+			if(!returnObject.getClass().equals(Boolean.class)){
+				throw new IllegalStateException("@Accepts method should return boolean");
+			}
+			accepts = (Boolean) returnObject;
+		}			
+		
+		if(accepts){
+			
+			MirrorList<Method> beginPossibleMethods = getAnnotatedMethod(mirror,
+					new InvokeMatcher(BeforeInvoke.class));
 
-		MirrorList<Method> beginPossibleMethods = getAnnotatedMethod(mirror,
-				new InvokeMatcher(BeforeInvoke.class));
-
-		stepInvoker.tryToInvoke(interceptor,beginPossibleMethods, BeforeInvoke.class);
-
-		MirrorList<Method> aroundInvokePossibleMethods = getAnnotatedMethod(
-				mirror, new InvokeMatcher(AroundInvoke.class));
-		stepInvoker
-				.tryToInvoke(interceptor,aroundInvokePossibleMethods, AroundInvoke.class);
-
-		MirrorList<Method> afterPossibleMethods = getAnnotatedMethod(mirror,
-				new InvokeMatcher(AfterInvoke.class));
-		stepInvoker.tryToInvoke(interceptor,afterPossibleMethods, AfterInvoke.class);
+			stepInvoker.tryToInvoke(interceptor,beginPossibleMethods, BeforeInvoke.class);			
+			
+			MirrorList<Method> aroundInvokePossibleMethods = getAnnotatedMethod(
+					mirror, new InvokeMatcher(AroundInvoke.class));
+			stepInvoker
+					.tryToInvoke(interceptor,aroundInvokePossibleMethods, AroundInvoke.class);
+	
+			MirrorList<Method> afterPossibleMethods = getAnnotatedMethod(mirror,
+					new InvokeMatcher(AfterInvoke.class));
+			stepInvoker.tryToInvoke(interceptor,afterPossibleMethods, AfterInvoke.class);
+		}
 
 	}
 

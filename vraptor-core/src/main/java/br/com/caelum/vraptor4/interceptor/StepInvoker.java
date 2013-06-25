@@ -8,14 +8,14 @@ import net.vidageek.mirror.dsl.Mirror;
 
 public class StepInvoker {
 
-	public void tryToInvoke(Object interceptor,List<Method> possibleMethods,
+	public Object tryToInvoke(Object interceptor,List<Method> possibleMethods,
 			Class<? extends Annotation> step) {
-		if(possibleMethods.isEmpty()) return;
+		if(possibleMethods.isEmpty()) return null;
 		if(possibleMethods.size() > 1){
 			throw new IllegalStateException("You should not have more than one @"+step.getSimpleName()+" annotated method");
 		}		
 		Method beginMethod = possibleMethods.get(0);
-		new Mirror().on(interceptor).invoke().method(beginMethod).withoutArgs();
+		return new Mirror().on(interceptor).invoke().method(beginMethod).withoutArgs();
 	}
 
 }

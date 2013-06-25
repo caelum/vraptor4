@@ -59,7 +59,7 @@ public class AspectStyleInterceptorTest {
 		AspectHandler aspectHandler = new AspectHandler(acceptsInterceptor, stepInvoker);
 		aspectHandler.handle(stack,controllerMethod,controllerInstance);
 		InOrder order = inOrder(acceptsInterceptor);
-		order.verify(acceptsInterceptor).accepts();
+		order.verify(acceptsInterceptor).accepts(controllerMethod);
 		order.verify(acceptsInterceptor).before();
 		order.verify(acceptsInterceptor).around(stack,controllerMethod,controllerInstance);
 		order.verify(acceptsInterceptor).after();
@@ -70,7 +70,7 @@ public class AspectStyleInterceptorTest {
 		AcceptsInterceptor acceptsInterceptor = spy(new AcceptsInterceptor(false));
 		AspectHandler aspectHandler = new AspectHandler(acceptsInterceptor, stepInvoker);
 		aspectHandler.handle(stack,controllerMethod,controllerInstance);
-		verify(acceptsInterceptor).accepts();
+		verify(acceptsInterceptor).accepts(controllerMethod);
 		verify(acceptsInterceptor,never()).before();
 		verify(acceptsInterceptor,never()).around(stack,controllerMethod,controllerInstance);
 		verify(acceptsInterceptor,never()).after();

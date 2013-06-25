@@ -29,7 +29,7 @@ public class AcceptsInterceptor {
 	}
 
 	@Accepts
-	public boolean accepts(){
+	public boolean accepts(ControllerMethod method){
 		return this.accepts;
 	}
 	

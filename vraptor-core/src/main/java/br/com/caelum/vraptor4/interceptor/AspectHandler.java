@@ -21,7 +21,7 @@ public class AspectHandler {
 	}
 
 	public void handle(InterceptorStack stack,ControllerMethod controllerMethod,Object controllerInstance) {
-		Object returnObject = stepInvoker.tryToInvoke(interceptor,Accepts.class);
+		Object returnObject = stepInvoker.tryToInvoke(interceptor,Accepts.class,controllerMethod);
 		
 		boolean accepts = true;
 		

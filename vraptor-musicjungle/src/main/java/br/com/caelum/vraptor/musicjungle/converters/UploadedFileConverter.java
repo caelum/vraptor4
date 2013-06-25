@@ -27,7 +27,6 @@ import br.com.caelum.vraptor.interceptor.multipart.UploadedFile;
 
 /**
  * VRaptor's file upload converter.
- *
  */
 @Convert(UploadedFile.class)
 public class UploadedFileConverter implements Converter<UploadedFile> {
@@ -38,7 +37,9 @@ public class UploadedFileConverter implements Converter<UploadedFile> {
 		this.request = request;
 	}
 
-	public UploadedFile convert(String value, Class<? extends UploadedFile> type, ResourceBundle bundle) {
+	public UploadedFile convert(String value, Class<? extends UploadedFile> 
+		type, ResourceBundle bundle) {
+		
 		Object upload = request.getAttribute(value);
 		return upload == null ? null : type.cast(upload);
 	}

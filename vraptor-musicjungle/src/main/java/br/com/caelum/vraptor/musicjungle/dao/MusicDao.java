@@ -18,34 +18,35 @@ package br.com.caelum.vraptor.musicjungle.dao;
 
 import java.util.List;
 
-import br.com.caelum.vraptor.musicjungle.model.Dvd;
-import br.com.caelum.vraptor.musicjungle.model.DvdRental;
+import br.com.caelum.vraptor.musicjungle.model.Music;
+import br.com.caelum.vraptor.musicjungle.model.MusicOwner;
 
 /**
- * Data Access Object for the Dvd entity.
+ * Data Access Object for the Music entity.
  *
  * @author Lucas Cavalcanti
+ * @author Rodrigo Turini
  */
-public interface DvdDao {
+public interface MusicDao {
 
 	/**
-	 * Add a new dvd to the database.
+	 * Add a new music to the database.
 	 *
-	 * @param dvd
+	 * @param music
 	 */
-	void add(Dvd dvd);
+	void add(Music music);
 
 	/**
-	 * Adds a copy of the dvd
+	 * Adds a copy of the music
 	 */
-	void add(DvdRental copy);
+	void add(MusicOwner copy);
 
 	/**
-	 * Returns a list of DVDs containing the specified title.
+	 * Returns a list of Musics containing the specified title.
 	 *
 	 * @param title title to search for.
-	 * @return DVD list.
+	 * @return Music list.
 	 */
-	List<Dvd> searchSimilarTitle(String title);
+	List<Music> searchSimilarTitle(String title);
 
 }

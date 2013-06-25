@@ -33,56 +33,49 @@ import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
 
 /**
- * User entity.
- *
- * This class represents the User table from the database.
- *
- * A persisted object of this class represents a record in the database.
- *
- * The class is annotated with <code>@Component</code> and <code>@SessionScoped</code>,
- * thus its instances can be injected to other classes who depend on Users.
+ * User entity representing the User table from the database. 
+ * A persisted object of this class represents a record in the 
+ * database.<br> It's annotated with <code>@Component</code> 
+ * and <code>@SessionScoped</code>, thus its instances can be 
+ * injected to other classes who depend on Users.
  */
 @Entity
 @Component
 @SessionScoped
 public class User {
 
-	// Hibernate validator's annnotations/rules
 	@Id
 	@NotNull
 	@Length(min = 3, max = 20)
 	private String login;
 
-	// Hibernate validator's annnotations/rules
 	@NotNull
 	@Length(min = 6, max = 20)
 	private String password;
 
-	// Hibernate validator's annnotations/rules
 	@NotNull
 	@Length(min = 3, max = 100)
 	private String name;
 
-	// user to dvd mapping,
+	// user to music mapping,
 	@OneToMany(mappedBy="owner")
-	private Set<DvdRental> rents;
+	private Set<MusicOwner> musicOwners;
 
-	public Set<DvdRental> getRents() {
-		if (rents == null) {
-			rents = new HashSet<DvdRental>();
+	public Set<MusicOwner> getMusicOwners() {
+		if (musicOwners == null) {
+			musicOwners = new HashSet<MusicOwner>();
 		}
-		return rents;
+		return musicOwners;
 	}
 
-	public void setRents(Set<DvdRental> dvds) {
-		this.rents = dvds;
+	public void setMusicOwners(Set<MusicOwner> musicOwners) {
+		this.musicOwners = musicOwners;
 	}
 
-
-	public Set<Dvd> getDvds() {
-		return new HashSet<Dvd>(Collections2.transform(getRents(), new Function<DvdRental, Dvd>() {
-			public Dvd apply(DvdRental copy) {
-				return copy.getDvd();
+	public Set<Music> getMusics() {
+		return new HashSet<Music>(Collections2.transform(getMusicOwners(), new Function<MusicOwner, Music>() {
+			public Music apply(MusicOwner copy) {
+				return copy.getMusic();
 			}
 		}));
 	}

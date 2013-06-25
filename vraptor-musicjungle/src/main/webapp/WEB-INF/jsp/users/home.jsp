@@ -3,22 +3,22 @@
 <link href="<c:url value="/css/bootstrap-fileupload.min.css"/>" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="<c:url value='/js/bootstrap-fileupload.js'/>"></script>
 
-<h1>${userInfo.user.name}: <fmt:message key="your_dvds"/></h1>
+<h1>${userInfo.user.name}: <fmt:message key="your_musics"/></h1>
 
 <div class="well">
 
-	<form action="<c:url value="/dvds"/>" class="form-inline pull-right" method="post">
-		<label for="title"><fmt:message key="dvd.title"/>
-			<input type="text" name="dvd.title" value="${dvd.title}"/>
+	<form action="<c:url value="/musics"/>" class="form-inline pull-right" method="post">
+		<label for="title"><fmt:message key="music.title"/>
+			<input type="text" name="music.title" value="${music.title}"/>
 		</label>
 		
-		<label for="description"><fmt:message key="dvd.description"/>
-			<input type="text" name="dvd.description" value="${dvd.description}"/>
+		<label for="description"><fmt:message key="music.description"/>
+			<input type="text" name="music.description" value="${music.description}"/>
 		</label>
 		
-		<label for="type"><fmt:message key="dvd.type"/>
-			<select name="dvd.type" id="type">
-				<c:forEach items="${dvdTypes}" var="type">
+		<label for="type"><fmt:message key="music.type"/>
+			<select name="music.type" id="type">
+				<c:forEach items="${musicTypes}" var="type">
 					<option value="${type}"><fmt:message key="${type}"/></option>
 				</c:forEach>
 			</select>
@@ -51,11 +51,11 @@
 		</tr>
 	</thead>
 	<tbody>
-		<c:forEach var="dvd" items="${userInfo.user.dvds}" varStatus="s">
+		<c:forEach var="music" items="${userInfo.user.musics}" varStatus="s">
 			<tr>
-				<td>${dvd.title}</td>
-				<td>${dvd.description}</td>
-				<td><fmt:message key="${dvd.type}"/></td>
+				<td>${music.title}</td>
+				<td>${music.description}</td>
+				<td><fmt:message key="${music.type}"/></td>
 				<td></td>
 			</tr>
 		</c:forEach>

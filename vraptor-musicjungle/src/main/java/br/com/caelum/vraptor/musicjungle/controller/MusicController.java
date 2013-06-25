@@ -29,41 +29,44 @@ import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.interceptor.multipart.UploadedFile;
-import br.com.caelum.vraptor.musicjungle.dao.DvdDao;
+import br.com.caelum.vraptor.musicjungle.dao.MusicDao;
 import br.com.caelum.vraptor.musicjungle.interceptor.UserInfo;
-import br.com.caelum.vraptor.musicjungle.model.Dvd;
-import br.com.caelum.vraptor.musicjungle.model.DvdRental;
+import br.com.caelum.vraptor.musicjungle.model.Music;
+import br.com.caelum.vraptor.musicjungle.model.MusicOwner;
 import br.com.caelum.vraptor.validator.Validations;
 
 /**
- * The resource <code>DvdController</code> handles all Dvd operations,
- * such as adding new Dvds, listing all Dvds, and so on.
+ * The resource <code>MusicController</code> handles all Music 
+ * operations, such as adding new Musics, listing all, and so on.
  *
- * This is a RESTful Resource, so we will explain how to use REST on
- * VRaptor 3 here.
- * POST /dvds -> adds a dvd
+ * This is a RESTful Resource, so we will explain how to use REST 
+ * on VRaptor 3 here.
+ * 
+ * POST /musics -> adds a music
  *
- * GET /dvds/{id} -> shows the dvd of given id
- *
+ * GET /musics/{id} -> shows the music of given id
  */
 @Resource
-public class DvdsController {
+public class MusicController {
 
-	private static final Logger LOG = Logger.getLogger(DvdsController.class);
+	private static final Logger LOG = Logger.getLogger(MusicController.class);
 
     private final Result result;
     private final Validator validator;
     private final UserInfo userInfo;
-	private final DvdDao dao;
+	private final MusicDao dao;
 
 	/**
 	 * Receives dependencies through the constructor.
+	 * 
 	 * @param userInfo info on the logged user.
 	 * @param result VRaptor result handler.
 	 * @param validator VRaptor validator.
 	 * @param factory dao factory.
 	 */
-	public DvdsController(DvdDao dao, UserInfo userInfo, Result result, Validator validator) {
+	public MusicController(MusicDao dao, UserInfo userInfo, 
+				Result result, Validator validator) {
+		
 		this.dao = dao;
 		this.result = result;
         this.validator = validator;
@@ -72,24 +75,26 @@ public class DvdsController {
 
 	/**
 	 * Accepts HTTP POST requests.
-	 * URL:  /dvds
-	 * View: /WEB-INF/jsp/dvd/add.jsp
+	 * 
+	 * URL:  /musics
+	 * View: /WEB-INF/jsp/music/add.jsp
 	 *
-	 * The method adds a new dvd and updates the user.
+	 * The method adds a new music and updates the user.
 	 * We use POST HTTP verb when we want to create some resource.
 	 *
 	 * The <code>UploadedFile</code> is automatically handled
 	 * by VRaptor's <code>MultipartInterceptor</code>.
 	 */
-	@Path("/dvds")
+	@Path("/musics")
 	@Post
-	public void add(final Dvd dvd, UploadedFile file) {
+	public void add(final Music music, UploadedFile file) {
+		
 	    validator.checking(new Validations() {{
-	    	if (dvd != null) {
-	    		that(dvd.getTitle(), is(notEmpty()), "login", "invalid_title");
-	    		that(dvd.getType(), is(notNullValue()), "name", "invalid_type");
-	    		that(dvd.getDescription(), is(notEmpty()), "description", "invalid_description");
-	    		that(dvd.getDescription().length() >= 6, "description", "invalid_description");
+	    	if (music != null) {
+	    		that(music.getTitle(), is(notEmpty()), "login", "invalid_title");
+	    		that(music.getType(), is(notNullValue()), "name", "invalid_type");
+	    		that(music.getDescription(), is(notEmpty()), "description", "invalid_description");
+	    		that(music.getDescription().length() >= 6, "description", "invalid_description");
 	    	}
 		}});
 
@@ -101,55 +106,56 @@ public class DvdsController {
 			LOG.info("Uploaded file: " + file.getFileName());
 		}
 
-		dao.add(dvd);
-		dao.add(new DvdRental(userInfo.getUser(), dvd));
+		dao.add(music);
+		dao.add(new MusicOwner(userInfo.getUser(), music));
 
 		// you can add objects to result even in redirects. Added objects will
 		// survive one more request when redirecting.
-		result.include("notice", dvd.getTitle() + " dvd added");
+		result.include("notice", music.getTitle() + " music added");
 
 		result.redirectTo(UsersController.class).home();
 	}
 
 	/**
 	 * Accepts HTTP GET requests.
-	 * URL:  /dvds/{id}
-	 * View: /WEB-INF/jsp/dvd/show.jsp
-	 * Shows the page with information about given Dvd
+	 * 
+	 * URL:  /musics/{id}
+	 * View: /WEB-INF/jsp/music/show.jsp
+	 * Shows the page with information about given Music
 	 *
-	 * We should only use GET HTTP verb for safe operations. For instance,
-	 * showing a DVD has no side effects, so GET is fine.
+	 * We should only use GET HTTP verb for safe operations. For 
+	 * instance, showing a Music has no side effects, so GET is fine.
 	 *
 	 * We can use templates for Paths, so VRaptor will automatically extract
 	 * variables of the matched URI, and set the fields on parameters.
-	 * In this case, GET /dvds/15 will execute the method below, and
-	 * there will be a parameter dvd.id=15 on request, causing dvd.getId() equal
-	 * to 15.
+	 * 
+	 * In this case, GET /musics/15 will execute the method below, and
+	 * there will be a parameter music.id=15 on request, causing music.getId() 
+	 * equal to 15.
 	 */
-	@Path("/dvds/{dvd.id}")
+	@Path("/musics/{music.id}")
 	@Get
-	public void show(Dvd dvd) {
-	    result.include("dvd", dvd);
+	public void show(Music music) {
+	    result.include("music", music);
 	}
 
     /**
 	 * Accepts HTTP GET requests.
-	 * URL:  /dvds/search
-	 * View: /WEB-INF/jsp/dvd/search.jsp
+	 * 
+	 * URL:  /musics/search
+	 * View: /WEB-INF/jsp/music/search.jsp
 	 *
 	 * Searches are not unique resources, so it is ok to use searches with
 	 * query parameters.
-	 *
-	 * @param dvd
 	 */
-	@Path("/dvds/search")
+	@Path("/musics/search")
 	@Get
-	public void search(Dvd dvd) {
-        if (dvd.getTitle() == null) {
-            dvd.setTitle("");
+	public void search(Music music) {
+        if (music.getTitle() == null) {
+            music.setTitle("");
         }
 
-        result.include("dvds", this.dao.searchSimilarTitle(dvd.getTitle()));
+        result.include("musics", this.dao.searchSimilarTitle(music.getTitle()));
     }
 
 }

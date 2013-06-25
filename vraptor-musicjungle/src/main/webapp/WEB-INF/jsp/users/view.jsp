@@ -12,14 +12,14 @@
 		</tr>
 	</thead>
 	<tbody>
-		<c:forEach var="dvd" items="${user.dvds}">
+		<c:forEach var="music" items="${user.musics}">
 			<tr>
-			   <td>${dvd.title}</td>
-			   <td>${dvd.description}</td>
-			   <td><fmt:message key="${dvd.type}"/></td>
+			   <td>${music.title}</td>
+			   <td>${music.description}</td>
+			   <td><fmt:message key="${music.type}"/></td>
 			   <td class="td-options">
 					<form action="<c:url value="/users/${userInfo
-							.user.login}/dvds/${dvd.id}"/>" method="post">
+							.user.login}/musics/${music.id}"/>" method="post">
 							
 						<button type="submit" class="btn btn-primary">
 							<input type="hidden" name="_method" value="PUT"/>

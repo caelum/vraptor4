@@ -26,7 +26,7 @@ import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.musicjungle.dao.UserDao;
-import br.com.caelum.vraptor.musicjungle.enums.DvdType;
+import br.com.caelum.vraptor.musicjungle.enums.MusicType;
 import br.com.caelum.vraptor.musicjungle.interceptor.Public;
 import br.com.caelum.vraptor.musicjungle.interceptor.UserInfo;
 import br.com.caelum.vraptor.musicjungle.model.User;
@@ -74,7 +74,7 @@ public class UsersController {
 	@Get("/")
 	public void home() {
 	    dao.refresh(userInfo.getUser());
-	    result.include("dvdTypes", DvdType.values());
+	    result.include("musicTypes", MusicType.values());
 	}
 
 	/**

@@ -16,48 +16,30 @@
  */
 package br.com.caelum.vraptor.musicjungle.model;
 
-import java.util.Set;
-
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToOne;
 
-import br.com.caelum.vraptor.musicjungle.enums.DvdType;
-
-/**
- * Dvd entity.
- *
- * Represents the table DVD from the database.
- *
- * A persisted object of this class represents a record in the database.
- */
 @Entity
-public class Dvd {
+public class MusicOwner {
 
 	@Id
 	@GeneratedValue
 	private Long id;
 
-	private String title;
+	@ManyToOne
+	private User owner;
 
-	private String description;
+	@ManyToOne
+	private Music music;
 
-	// dvd to user mapping
-	@OneToMany(mappedBy = "dvd")
-	private Set<DvdRental> rents;
-
-	@Enumerated(EnumType.STRING)
-	private DvdType type;
-
-	public String getDescription() {
-		return description;
+	public MusicOwner(User owner, Music music) {
+		this.owner = owner;
+		this.music = music;
 	}
 
-	public void setDescription(String description) {
-		this.description = description;
+	public MusicOwner() {
 	}
 
 	public Long getId() {
@@ -68,35 +50,29 @@ public class Dvd {
 		this.id = id;
 	}
 
-	public String getTitle() {
-		return title;
+	public User getOwner() {
+		return owner;
 	}
 
-	public void setTitle(String title) {
-		this.title = title;
+	public void setOwner(User owner) {
+		this.owner = owner;
 	}
 
-	public DvdType getType() {
-		return type;
+	public Music getMusic() {
+		return music;
 	}
 
-	public void setType(DvdType type) {
-		this.type = type;
-	}
-
-	public Set<DvdRental> getRents() {
-		return rents;
-	}
-
-	public void setRents(Set<DvdRental> copies) {
-		this.rents = copies;
+	public void setMusic(Music music) {
+		this.music = music;
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + ((music == null) ? 0 : music.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((owner == null) ? 0 : owner.hashCode());
 		return result;
 	}
 
@@ -111,7 +87,14 @@ public class Dvd {
 		if (getClass() != obj.getClass()) {
 			return false;
 		}
-		Dvd other = (Dvd) obj;
+		MusicOwner other = (MusicOwner) obj;
+		if (music == null) {
+			if (other.music != null) {
+				return false;
+			}
+		} else if (!music.equals(other.music)) {
+			return false;
+		}
 		if (id == null) {
 			if (other.id != null) {
 				return false;
@@ -119,8 +102,14 @@ public class Dvd {
 		} else if (!id.equals(other.id)) {
 			return false;
 		}
+		if (owner == null) {
+			if (other.owner != null) {
+				return false;
+			}
+		} else if (!owner.equals(other.owner)) {
+			return false;
+		}
 		return true;
 	}
-
 
 }

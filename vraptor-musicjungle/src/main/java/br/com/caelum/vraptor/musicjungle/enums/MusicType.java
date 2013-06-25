@@ -16,6 +16,13 @@
  */
 package br.com.caelum.vraptor.musicjungle.enums;
 
-public enum DvdType {
-	MUSIC, VIDEO, GAME;
+/**
+ * A simple enum representing some music genres
+ * 
+ * @author Rodrigo Turini
+ */
+public enum MusicType {
+	ROCK, POP, RAP, COUNTRY, JAZZ, PUNK, 
+		CLASSICAL, BLUES, REGGAE, FUNK, OTHER;
 }
+

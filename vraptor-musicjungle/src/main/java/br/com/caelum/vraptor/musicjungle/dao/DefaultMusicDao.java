@@ -16,54 +16,56 @@
  */
 package br.com.caelum.vraptor.musicjungle.dao;
 
+import static org.hibernate.criterion.MatchMode.ANYWHERE;
+import static org.hibernate.criterion.Restrictions.ilike;
+
 import java.util.List;
 
+import org.hibernate.Criteria;
 import org.hibernate.Session;
-import org.hibernate.criterion.MatchMode;
-import org.hibernate.criterion.Restrictions;
 
 import br.com.caelum.vraptor.ioc.Component;
-import br.com.caelum.vraptor.musicjungle.model.Dvd;
-import br.com.caelum.vraptor.musicjungle.model.DvdRental;
+import br.com.caelum.vraptor.musicjungle.model.Music;
+import br.com.caelum.vraptor.musicjungle.model.MusicOwner;
 
 /**
- * Default implementation for DvdDao.
- *
- * Annotating this class with @Component we have the dependency injection
- * support either on this class and on other classes that depend on
- * DvdDao or DefaultDvdDao
+ * Default implementation for MusicDao. <br> Annotating 
+ * this class with <code>@Component</code> we have the 
+ * dependency injection support either on this class and 
+ * on other classes that depend on MusicDao or DefaultMusicDao
  *
  * @author Lucas Cavalcanti
+ * @author Rodrigo Turini
  */
 @Component
-public class DefaultDvdDao implements DvdDao {
+public class DefaultMusicDao implements MusicDao {
 
 	// current hibernate session
 	private final Session session;
 
 	/**
-	 * Creates a new DvdDao.
+	 * Creates a new MusicDao.
 	 *
 	 * @param session hibernate session.
 	 */
-	public DefaultDvdDao(Session session) {
+	public DefaultMusicDao(Session session) {
 		this.session = session;
 	}
 
-	public void add(Dvd dvd) {
-		session.save(dvd);
+	public void add(Music music) {
+		session.save(music);
 	}
 
-	public void add(DvdRental copy) {
+	public void add(MusicOwner copy) {
 		session.save(copy);
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<Dvd> searchSimilarTitle(String title) {
-		// creates a criteria based on the Dvd class and adds
+	public List<Music> searchSimilarTitle(String title) {
+		// creates a criteria based on the Music class and adds
 		// the "title" restriction and then returns the list.
-		return session.createCriteria(Dvd.class).add(
-				Restrictions.ilike("title", title, MatchMode.ANYWHERE)).list();
+		Criteria criteria = session.createCriteria(Music.class);
+		return criteria.add(ilike("title", title, ANYWHERE)).list();
 	}
 
 }

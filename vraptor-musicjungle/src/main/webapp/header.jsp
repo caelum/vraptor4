@@ -70,9 +70,9 @@
     
     	<div class="navbar">
     	
-			<form class="navbar-form pull-right" action="${path}dvds/search">
-			  <input type="text" name="dvd.title" class="span6"
-			  		placeholder="<fmt:message key="search.dvd"/>"/>
+			<form class="navbar-form pull-right" action="${path}musics/search">
+			  <input type="text" name="music.title" class="span6"
+			  		placeholder="<fmt:message key="search.music"/>"/>
 			  <button type="submit" class="btn btn-primary">
 			  		<fmt:message key="search"/> </button>
 			</form>

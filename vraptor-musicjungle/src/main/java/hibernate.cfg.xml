@@ -17,8 +17,8 @@
 		<property name="hibernate.hbm2ddl.auto">update</property>
 		<property name="hibernate.cache.provider_class">org.hibernate.cache.HashtableCacheProvider</property>
 
- 		<mapping class="br.com.caelum.vraptor.musicjungle.model.Dvd" />
- 		<mapping class="br.com.caelum.vraptor.musicjungle.model.DvdRental" />
+ 		<mapping class="br.com.caelum.vraptor.musicjungle.model.Music" />
+ 		<mapping class="br.com.caelum.vraptor.musicjungle.model.MusicOwner" />
  		<mapping class="br.com.caelum.vraptor.musicjungle.model.User" />
 
 	</session-factory>

@@ -22,6 +22,8 @@ import static org.hamcrest.Matchers.notNullValue;
 
 import org.apache.log4j.Logger;
 
+import com.google.common.base.Objects;
+
 import br.com.caelum.vraptor.Get;
 import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.Post;
@@ -151,11 +153,10 @@ public class MusicController {
 	@Path("/musics/search")
 	@Get
 	public void search(Music music) {
-        if (music.getTitle() == null) {
-            music.setTitle("");
-        }
-
-        result.include("musics", this.dao.searchSimilarTitle(music.getTitle()));
+		String title = Objects.firstNonNull(music.getTitle(), "");
+        result.include("musics", this.dao.searchSimilarTitle(title));
     }
+	
+	
 
 }

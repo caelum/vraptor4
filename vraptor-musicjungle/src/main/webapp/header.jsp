@@ -14,10 +14,11 @@
 	<meta name="keywords" content="sites, web, desenvolvimento, development, java, opensource"/>
 
 	<title>VRaptor - Music Jungle</title>
-	<link href="<c:url value="/bootstrap/css/bootstrap.css"/>" rel="stylesheet" type="text/css"/>
+	<link href="<c:url value="/bootstrap/css/bootstrap.min.css"/>" rel="stylesheet" type="text/css"/>
 	<link href="<c:url value="/css/musicjungle.css"/>" rel="stylesheet" type="text/css"/>
 	
 	<script type="text/javascript" src="<c:url value='/js/jquery.js'/>"></script>
+	<script type="text/javascript" src="<c:url value='/bootstrap/bootstrap.min.js'/>"></script>	
 	
     <!--[if lt IE 7]>
 	    <script src="http://ie7-js.googlecode.com/svn/version/2.0(beta3)/IE7.js" 

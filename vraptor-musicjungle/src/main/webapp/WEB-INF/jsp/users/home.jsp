@@ -1,7 +1,7 @@
 <%@ include file="/header.jsp" %> 
 
 <link href="<c:url value="/css/bootstrap-fileupload.min.css"/>" rel="stylesheet" type="text/css"/>
-<script type="text/javascript" src="<c:url value='/js/bootstrap-fileupload.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/js/bootstrap-fileupload.min.js'/>"></script>
 
 <h1>${userInfo.user.name}: <fmt:message key="your_musics"/></h1>
 

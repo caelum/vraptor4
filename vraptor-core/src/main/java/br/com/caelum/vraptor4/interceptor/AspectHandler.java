@@ -24,28 +24,8 @@ public class AspectHandler {
 
 	}
 
-	private class InvokeMatcher implements Matcher<Method> {
-
-		private Class<? extends Annotation> step;
-
-		public InvokeMatcher(Class<? extends Annotation> step) {
-			this.step = step;
-		}
-
-		@Override
-		public boolean accepts(Method element) {
-			return element.isAnnotationPresent(this.step);
-		}
-
-	}
-
 	public void handle() {
-		Mirror mirror = new Mirror();
-		
-		MirrorList<Method> acceptsPossibleMethods = getAnnotatedMethod(mirror,
-				new InvokeMatcher(Accepts.class));
-		
-		Object returnObject = stepInvoker.tryToInvoke(interceptor, acceptsPossibleMethods,Accepts.class);
+		Object returnObject = stepInvoker.tryToInvoke(interceptor,Accepts.class);
 		
 		boolean accepts = true;
 		
@@ -56,30 +36,13 @@ public class AspectHandler {
 			accepts = (Boolean) returnObject;
 		}			
 		
-		if(accepts){
-			
-			MirrorList<Method> beginPossibleMethods = getAnnotatedMethod(mirror,
-					new InvokeMatcher(BeforeInvoke.class));
-
-			stepInvoker.tryToInvoke(interceptor,beginPossibleMethods, BeforeInvoke.class);			
-			
-			MirrorList<Method> aroundInvokePossibleMethods = getAnnotatedMethod(
-					mirror, new InvokeMatcher(AroundInvoke.class));
-			stepInvoker
-					.tryToInvoke(interceptor,aroundInvokePossibleMethods, AroundInvoke.class);
-	
-			MirrorList<Method> afterPossibleMethods = getAnnotatedMethod(mirror,
-					new InvokeMatcher(AfterInvoke.class));
-			stepInvoker.tryToInvoke(interceptor,afterPossibleMethods, AfterInvoke.class);
+		if(accepts){			
+			stepInvoker.tryToInvoke(interceptor,BeforeInvoke.class);						
+			stepInvoker.tryToInvoke(interceptor,AroundInvoke.class);	
+			stepInvoker.tryToInvoke(interceptor,AfterInvoke.class);
 		}
 
 	}
 
-	private MirrorList<Method> getAnnotatedMethod(Mirror mirror,
-			Matcher<Method> matcher) {
-		MirrorList<Method> methods = mirror.on(interceptor.getClass())
-				.reflectAll().methods().matching(matcher);
-		return methods;
-	}
 
 }

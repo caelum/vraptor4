@@ -1,16 +1,12 @@
 package br.com.caelum.vraptor4.interceptor;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
-
 import javax.interceptor.AroundInvoke;
 
-import net.vidageek.mirror.dsl.Mirror;
-import net.vidageek.mirror.list.dsl.Matcher;
-import net.vidageek.mirror.list.dsl.MirrorList;
+import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor4.Accepts;
 import br.com.caelum.vraptor4.AfterInvoke;
 import br.com.caelum.vraptor4.BeforeInvoke;
+import br.com.caelum.vraptor4.controller.ControllerMethod;
 
 public class AspectHandler {
 
@@ -24,7 +20,7 @@ public class AspectHandler {
 
 	}
 
-	public void handle() {
+	public void handle(InterceptorStack stack,ControllerMethod controllerMethod,Object controllerInstance) {
 		Object returnObject = stepInvoker.tryToInvoke(interceptor,Accepts.class);
 		
 		boolean accepts = true;
@@ -38,7 +34,7 @@ public class AspectHandler {
 		
 		if(accepts){			
 			stepInvoker.tryToInvoke(interceptor,BeforeInvoke.class);						
-			stepInvoker.tryToInvoke(interceptor,AroundInvoke.class);	
+			stepInvoker.tryToInvoke(interceptor,AroundInvoke.class,stack,controllerMethod,controllerInstance);	
 			stepInvoker.tryToInvoke(interceptor,AfterInvoke.class);
 		}
 

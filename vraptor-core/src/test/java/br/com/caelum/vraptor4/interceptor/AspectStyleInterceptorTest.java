@@ -1,7 +1,13 @@
 package br.com.caelum.vraptor4.interceptor;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InOrder;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
+import br.com.caelum.vraptor.core.InterceptorStack;
+import br.com.caelum.vraptor4.controller.ControllerMethod;
 
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.never;
@@ -11,31 +17,39 @@ import static org.mockito.Mockito.verify;
 public class AspectStyleInterceptorTest {
 	
 	private StepInvoker stepInvoker = new StepInvoker();
+	private @Mock InterceptorStack stack;
+	private @Mock ControllerMethod controllerMethod;
+	private @Mock Object controllerInstance;
+	
+    @Before
+    public void setup() {
+        MockitoAnnotations.initMocks(this);
+    }
 
 	@Test
 	public void shouldAlwaysCallAround(){
 		AlwaysAcceptsAspectInterceptor interceptor = spy(new AlwaysAcceptsAspectInterceptor());
 		AspectHandler handler = new AspectHandler(interceptor,stepInvoker);
-		handler.handle();
-		verify(interceptor).intercept();
+		handler.handle(stack,controllerMethod,controllerInstance);
+		verify(interceptor).intercept(stack,controllerMethod,controllerInstance);
 	}
 	
 	@Test
 	public void shouldNotInvokeMethodIfDoesNotHaveAroundInvoke(){
 		InterceptorWithoutAroundInvoke interceptor = spy(new InterceptorWithoutAroundInvoke());
 		AspectHandler handler = new AspectHandler(interceptor,stepInvoker);
-		handler.handle();
-		verify(interceptor,never()).intercept();
+		handler.handle(stack,controllerMethod,controllerInstance);
+		verify(interceptor,never()).intercept(stack,controllerMethod,controllerInstance);
 	}
 	
 	@Test
 	public void shouldInvokeUseBeforeAndAfter(){
 		AlwaysAcceptsAspectInterceptor interceptor = spy(new AlwaysAcceptsAspectInterceptor());
 		AspectHandler handler = new AspectHandler(interceptor,stepInvoker);
-		handler.handle();
+		handler.handle(stack,controllerMethod,controllerInstance);
 		InOrder order = inOrder(interceptor);
 		order.verify(interceptor).begin();		
-		order.verify(interceptor).intercept();		
+		order.verify(interceptor).intercept(stack,controllerMethod,controllerInstance);		
 		order.verify(interceptor).after();		
 	}
 	
@@ -43,11 +57,11 @@ public class AspectStyleInterceptorTest {
 	public void shouldInvokeIfAccepts(){
 		AcceptsInterceptor acceptsInterceptor = spy(new AcceptsInterceptor(true));
 		AspectHandler aspectHandler = new AspectHandler(acceptsInterceptor, stepInvoker);
-		aspectHandler.handle();
+		aspectHandler.handle(stack,controllerMethod,controllerInstance);
 		InOrder order = inOrder(acceptsInterceptor);
 		order.verify(acceptsInterceptor).accepts();
 		order.verify(acceptsInterceptor).before();
-		order.verify(acceptsInterceptor).around();
+		order.verify(acceptsInterceptor).around(stack,controllerMethod,controllerInstance);
 		order.verify(acceptsInterceptor).after();
 	}
 	
@@ -55,10 +69,10 @@ public class AspectStyleInterceptorTest {
 	public void shouldNotInvokeIfDoesNotAccept(){
 		AcceptsInterceptor acceptsInterceptor = spy(new AcceptsInterceptor(false));
 		AspectHandler aspectHandler = new AspectHandler(acceptsInterceptor, stepInvoker);
-		aspectHandler.handle();
+		aspectHandler.handle(stack,controllerMethod,controllerInstance);
 		verify(acceptsInterceptor).accepts();
 		verify(acceptsInterceptor,never()).before();
-		verify(acceptsInterceptor,never()).around();
+		verify(acceptsInterceptor,never()).around(stack,controllerMethod,controllerInstance);
 		verify(acceptsInterceptor,never()).after();
 	}
 	

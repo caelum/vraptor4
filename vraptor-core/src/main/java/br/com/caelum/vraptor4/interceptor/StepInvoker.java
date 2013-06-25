@@ -26,7 +26,7 @@ public class StepInvoker {
 	}
 	
 
-	public Object tryToInvoke(Object interceptor,Class<? extends Annotation> step) {
+	public Object tryToInvoke(Object interceptor,Class<? extends Annotation> step,Object... params) {
 		Mirror mirror = new Mirror();
 		MirrorList<Method> possibleMethods = mirror.on(interceptor.getClass()).reflectAll().methods().matching(new InvokeMatcher(step));
 		if(possibleMethods.isEmpty()) return null;
@@ -34,7 +34,7 @@ public class StepInvoker {
 			throw new IllegalStateException("You should not have more than one @"+step.getSimpleName()+" annotated method");
 		}		
 		Method beginMethod = possibleMethods.get(0);
-		return new Mirror().on(interceptor).invoke().method(beginMethod).withoutArgs();
+		return new Mirror().on(interceptor).invoke().method(beginMethod).withArgs(params);
 	}
 		
 

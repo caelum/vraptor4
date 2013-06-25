@@ -16,8 +16,8 @@ public class AlwaysAcceptsAspectInterceptor{
 
 	@AroundInvoke
 	public void intercept(){
-		
 	}
+		
 
 	@AfterInvoke
 	public void after() {

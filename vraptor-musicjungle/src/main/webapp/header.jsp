@@ -18,7 +18,7 @@
 	<link href="<c:url value="/css/musicjungle.css"/>" rel="stylesheet" type="text/css"/>
 	
 	<script type="text/javascript" src="<c:url value='/js/jquery.js'/>"></script>
-	<script type="text/javascript" src="<c:url value='/bootstrap/bootstrap.min.js'/>"></script>	
+	<script type="text/javascript" src="<c:url value='/bootstrap/js/bootstrap.min.js'/>"></script>	
 	
     <!--[if lt IE 7]>
 	    <script src="http://ie7-js.googlecode.com/svn/version/2.0(beta3)/IE7.js" 
@@ -84,6 +84,7 @@
     
 	<c:if test="${not empty errors}">
 		<div class="alert alert-error">
+			<button type="button" class="close" data-dismiss="alert">&times;</button>
 			<c:forEach items="${errors }" var="error">
 				<b>${error.category}</b> - ${error.message}
 			</c:forEach>
@@ -91,7 +92,10 @@
 	</c:if>
 	
 	<c:if test="${not empty notice}">
-		<div class="alert alert-success"> ${notice} </div>
+		<div class="alert alert-success"> 
+			<button type="button" class="close" data-dismiss="alert">&times;</button>
+			${notice} 
+		</div>
 	</c:if>
 	
 	<div id="contentWrap">

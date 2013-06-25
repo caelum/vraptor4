@@ -15,7 +15,7 @@
 	<tbody>
 		<c:forEach var="music" items="${musics}">
 			<tr>
-				<td>${music.title}</td>
+				<td><a href="<c:url value="/musics/${music.id}"/>">${music.title}</a></td>
 				<td>${music.description}</td>
 				<td><fmt:message key="${music.type}"/></td>
 				<td>

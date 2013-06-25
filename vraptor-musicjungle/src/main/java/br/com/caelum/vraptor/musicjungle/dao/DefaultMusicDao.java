@@ -67,5 +67,9 @@ public class DefaultMusicDao implements MusicDao {
 		Criteria criteria = session.createCriteria(Music.class);
 		return criteria.add(ilike("title", title, ANYWHERE)).list();
 	}
+	
+	public Music load(Music music) {
+		return (Music) session.load(Music.class, music.getId());
+	}
 
 }

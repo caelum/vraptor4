@@ -26,7 +26,14 @@ table thead tr {
 .alert {
 	position: absolute;
 	right: 0;
-	left: 0;
+	bottom: 2em;
+	width: 380px;
+}
+
+a.brand.logo {
+	color: #074D70;
+	font-weight: bold;
+	font-size: xx-large;
 }
 
 form[method='post'] {

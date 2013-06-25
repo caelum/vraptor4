@@ -40,7 +40,7 @@
       
         <div class="container">
         
-        <a class="brand" href="${path}">VRaptor Music Jungle</a>
+        <a class="brand logo" href="${path}">VRaptor Music Jungle</a>
             <ul class="nav">
               <li class="active"><a href="${path}"></i> Home</a></li>
               <li><a href="${path}"></i> About</a></li>

@@ -31,8 +31,6 @@ public interface MusicDao {
 
 	/**
 	 * Add a new music to the database.
-	 *
-	 * @param music
 	 */
 	void add(Music music);
 
@@ -40,6 +38,11 @@ public interface MusicDao {
 	 * Adds a copy of the music
 	 */
 	void add(MusicOwner copy);
+	
+	/**
+	 * Load the music from database
+	 */
+	Music load(Music music);
 
 	/**
 	 * Returns a list of Musics containing the specified title.

@@ -1,14 +1,22 @@
 <%@ include file="/header.jsp" %> 
 
-<h1>${music.title}</h1>
+<div class="well well-small">
+	<h1>${music.title}</h1>
+</div>
 
-<p><strong>Description:</strong> ${music.description}</p>
+<p> 
+	<strong>
+		<fmt:message key="music.description"/>:
+	</strong> ${music.description}
 
-<p><strong>Owners:</strong></p>
-<ul>
-	<c:forEach items="${music.musicOwners}" var="musicOwner">
-		<li>${musicOwners.owner}</li>
+<p>
+	<strong>
+		<fmt:message key="music.owners"/>:
+	</strong>
+	
+	<c:forEach items="${music.musicOwners}" var="mo" varStatus="s">
+		<a href="<c:url value="/users/${user.login}"/>">${mo.owner.name}</a> 
+		${s.last ? '.' : ', ' }
 	</c:forEach>
-</ul>
 
 <%@ include file="/footer.jsp" %> 

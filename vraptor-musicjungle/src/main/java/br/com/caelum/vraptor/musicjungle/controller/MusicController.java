@@ -136,7 +136,7 @@ public class MusicController {
 	@Path("/musics/{music.id}")
 	@Get
 	public void show(Music music) {
-	    result.include("music", music);
+	    result.include("music", dao.load(music));
 	}
 
     /**

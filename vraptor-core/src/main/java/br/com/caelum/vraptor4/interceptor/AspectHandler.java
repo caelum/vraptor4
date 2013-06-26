@@ -31,7 +31,7 @@ public class AspectHandler {
 		
 	public void handle(InterceptorStack stack,ControllerMethod controllerMethod,ControllerInstance controllerInstance) {
 		InterceptorStackDecorator interceptorStackDecorator = new InterceptorStackDecorator(stack);
-		InterceptorContainerDecorator interceptorContainer = new InterceptorContainerDecorator(container,interceptorStackDecorator,controllerMethod,controllerInstance,new DefaultSimplerInterceptorStack(stack, controllerMethod, controllerInstance));
+		InterceptorContainerDecorator interceptorContainer = new InterceptorContainerDecorator(container,interceptorStackDecorator,controllerMethod,controllerInstance,new DefaultSimplerInterceptorStack(interceptorStackDecorator, controllerMethod, controllerInstance));
 		Object returnObject = stepInvoker.tryToInvoke(interceptor,Accepts.class,parametersFor(Accepts.class,interceptor,interceptorContainer));
 		
 		boolean accepts = true;

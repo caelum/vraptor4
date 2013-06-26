@@ -43,7 +43,7 @@ public class AspectStyleInterceptorTest {
 	}
 	
 	@Test
-	public void shouldInvokeUseBeforeAndAfter(){
+	public void shouldInvokeUsingBeforeAndAfter(){
 		AlwaysAcceptsAspectInterceptor interceptor = spy(new AlwaysAcceptsAspectInterceptor());
 		AspectHandler handler = new AspectHandler(interceptor,stepInvoker);
 		handler.handle(stack,controllerMethod,controllerInstance);

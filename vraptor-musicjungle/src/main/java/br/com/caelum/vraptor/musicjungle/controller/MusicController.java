@@ -17,12 +17,12 @@
 package br.com.caelum.vraptor.musicjungle.controller;
 
 import static br.com.caelum.vraptor.musicjungle.validation.CustomMatchers.notEmpty;
+import static br.com.caelum.vraptor.view.Results.json;
+import static br.com.caelum.vraptor.view.Results.xml;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 
 import org.apache.log4j.Logger;
-
-import com.google.common.base.Objects;
 
 import br.com.caelum.vraptor.Get;
 import br.com.caelum.vraptor.Path;
@@ -32,10 +32,13 @@ import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.interceptor.multipart.UploadedFile;
 import br.com.caelum.vraptor.musicjungle.dao.MusicDao;
+import br.com.caelum.vraptor.musicjungle.interceptor.Public;
 import br.com.caelum.vraptor.musicjungle.interceptor.UserInfo;
 import br.com.caelum.vraptor.musicjungle.model.Music;
 import br.com.caelum.vraptor.musicjungle.model.MusicOwner;
 import br.com.caelum.vraptor.validator.Validations;
+
+import com.google.common.base.Objects;
 
 /**
  * The resource <code>MusicController</code> handles all Music 
@@ -150,13 +153,26 @@ public class MusicController {
 	 * Searches are not unique resources, so it is ok to use searches with
 	 * query parameters.
 	 */
-	@Path("/musics/search")
-	@Get
+	@Get("/musics/search")
 	public void search(Music music) {
 		String title = Objects.firstNonNull(music.getTitle(), "");
         result.include("musics", this.dao.searchSimilarTitle(title));
     }
 	
-	
+	/**
+	 * Show all list of registered musics in json format
+	 */
+	@Public @Path("/musics/list/json")
+	public void showAllMusicsAsJSON() {
+		result.use(json()).from(dao.listAll()).serialize();
+	}
+
+	/**
+	 * Show all list of registered musics in xml format
+	 */
+	@Public @Path("/musics/list/xml")
+	public void showAllMusicsAsXML() {
+		result.use(xml()).from(dao.listAll()).serialize();
+	}
 
 }

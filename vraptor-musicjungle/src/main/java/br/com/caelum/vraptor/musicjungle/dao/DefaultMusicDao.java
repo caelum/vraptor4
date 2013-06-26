@@ -71,5 +71,10 @@ public class DefaultMusicDao implements MusicDao {
 	public Music load(Music music) {
 		return (Music) session.load(Music.class, music.getId());
 	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Music> listAll() {
+		return session.createCriteria(Music.class).list();
+	}
 
 }

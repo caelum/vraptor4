@@ -52,4 +52,9 @@ public interface MusicDao {
 	 */
 	List<Music> searchSimilarTitle(String title);
 
+	/**
+	 * @return List of all musics
+	 */
+	List<Music> listAll();
+
 }

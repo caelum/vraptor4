@@ -37,7 +37,7 @@ public class AspectStyleInterceptorTest {
 		AlwaysAcceptsAspectInterceptor interceptor = spy(new AlwaysAcceptsAspectInterceptor());
 		AspectHandler handler = new AspectHandler(interceptor,stepInvoker,new InstanceContainer());
 		handler.handle(stack,controllerMethod,controllerInstance);
-		verify(interceptor).intercept(stack,controllerMethod,controllerInstance);
+		verify(interceptor).intercept(Mockito.any(InterceptorStack.class),Mockito.same(controllerMethod),Mockito.same(controllerInstance));
 	}
 	
 	@Test
@@ -55,7 +55,7 @@ public class AspectStyleInterceptorTest {
 		handler.handle(stack,controllerMethod,controllerInstance);
 		InOrder order = inOrder(interceptor);
 		order.verify(interceptor).begin();		
-		order.verify(interceptor).intercept(stack,controllerMethod,controllerInstance);		
+		order.verify(interceptor).intercept(Mockito.any(InterceptorStack.class),Mockito.same(controllerMethod),Mockito.same(controllerInstance));		
 		order.verify(interceptor).after();		
 	}
 	
@@ -67,7 +67,7 @@ public class AspectStyleInterceptorTest {
 		InOrder order = inOrder(acceptsInterceptor);
 		order.verify(acceptsInterceptor).accepts(controllerMethod);
 		order.verify(acceptsInterceptor).before();
-		order.verify(acceptsInterceptor).around(stack,controllerMethod,controllerInstance);
+		order.verify(acceptsInterceptor).around(Mockito.any(InterceptorStack.class),Mockito.same(controllerMethod),Mockito.same(controllerInstance));
 		order.verify(acceptsInterceptor).after();
 	}	
 	
@@ -102,7 +102,7 @@ public class AspectStyleInterceptorTest {
 		InOrder order = inOrder(acceptsWithoutArgsInterceptor);
 		order.verify(acceptsWithoutArgsInterceptor).accepts();
 		order.verify(acceptsWithoutArgsInterceptor).before();
-		order.verify(acceptsWithoutArgsInterceptor).around(stack,controllerMethod,controllerInstance);
+		order.verify(acceptsWithoutArgsInterceptor).around(Mockito.any(InterceptorStack.class),Mockito.same(controllerMethod),Mockito.same(controllerInstance));
 		order.verify(acceptsWithoutArgsInterceptor).after();
 	}	
 	
@@ -122,6 +122,15 @@ public class AspectStyleInterceptorTest {
 		aspectHandler.handle(stack, controllerMethod, instance);
 		verify(interceptor, never()).around(stack, controllerMethod, controllerInstance);
 		verify(stack).next(controllerMethod, instance.getController());		
+	}
+	
+	@Test
+	public void shouldInvokeNotIfDoesNotHaveAround() throws Exception {
+		WithoutAroundInterceptor interceptor = spy(new WithoutAroundInterceptor());
+		AspectHandler aspectHandler = new AspectHandler(interceptor, stepInvoker, new InstanceContainer());
+		ControllerInstance instance = new DefaultControllerInstance(null);
+		aspectHandler.handle(stack, controllerMethod, instance);		
+		verify(stack).next(controllerMethod, instance.getController());
 	}
 	
 }

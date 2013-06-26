@@ -30,7 +30,8 @@ public class AspectHandler {
 	}
 		
 	public void handle(InterceptorStack stack,ControllerMethod controllerMethod,ControllerInstance controllerInstance) {
-		InterceptorContainerDecorator interceptorContainer = new InterceptorContainerDecorator(container,stack,controllerMethod,controllerInstance,new DefaultSimplerInterceptorStack(stack, controllerMethod, controllerInstance));
+		InterceptorStackDecorator interceptorStackDecorator = new InterceptorStackDecorator(stack);
+		InterceptorContainerDecorator interceptorContainer = new InterceptorContainerDecorator(container,interceptorStackDecorator,controllerMethod,controllerInstance,new DefaultSimplerInterceptorStack(stack, controllerMethod, controllerInstance));
 		Object returnObject = stepInvoker.tryToInvoke(interceptor,Accepts.class,parametersFor(Accepts.class,interceptor,interceptorContainer));
 		
 		boolean accepts = true;
@@ -44,9 +45,9 @@ public class AspectHandler {
 		if(accepts){			
 			stepInvoker.tryToInvoke(interceptor,BeforeInvoke.class);
 			stepInvoker.tryToInvoke(interceptor,AroundInvoke.class,parametersFor(AroundInvoke.class,interceptor,interceptorContainer));
-//			if(noAround() && stack.notNexteada()){
-//				stack.next(controllerMethod,controllerInstance.getController());
-//			}
+			if(noAround() && !interceptorStackDecorator.isNexted()){
+				stack.next(controllerMethod,controllerInstance.getController());
+			}
 			stepInvoker.tryToInvoke(interceptor,AfterInvoke.class);
 		} else {
 			stack.next(controllerMethod, controllerInstance.getController());
@@ -54,6 +55,10 @@ public class AspectHandler {
 
 	}
 	
+	private boolean noAround() {
+		return stepInvoker.findMethod(AroundInvoke.class, interceptor) == null;
+	}
+
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public Object[] parametersFor(Class<? extends Annotation> step,Object interceptor,InterceptorContainerDecorator container){
 		Method methodToInvoke = stepInvoker.findMethod(step,interceptor);

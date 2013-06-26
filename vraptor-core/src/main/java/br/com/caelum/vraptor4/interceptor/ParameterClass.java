@@ -28,11 +28,10 @@ public class ParameterClass {
 			if (other.type != null)
 				return false;			
 		} else {			
-			if (!type.isAssignableFrom(other.type)){
+			if (!type.isAssignableFrom(other.type)){				
 				return false;
 			}
 		}
-			
 		return true;
 	}
 	

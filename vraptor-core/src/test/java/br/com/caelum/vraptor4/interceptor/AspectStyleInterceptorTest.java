@@ -4,10 +4,12 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InOrder;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.interceptor.InstanceContainer;
+import br.com.caelum.vraptor4.controller.ControllerInstance;
 import br.com.caelum.vraptor4.controller.ControllerMethod;
 
 import static org.mockito.Mockito.inOrder;
@@ -20,7 +22,7 @@ public class AspectStyleInterceptorTest {
 	private StepInvoker stepInvoker = new StepInvoker();
 	private @Mock InterceptorStack stack;
 	private @Mock ControllerMethod controllerMethod;
-	private @Mock Object controllerInstance;
+	private @Mock ControllerInstance controllerInstance;
 	
     @Before
     public void setup() {
@@ -37,7 +39,7 @@ public class AspectStyleInterceptorTest {
 	
 	@Test
 	public void shouldNotInvokeMethodIfDoesNotHaveAroundInvoke(){
-		InterceptorWithoutAroundInvoke interceptor = spy(new InterceptorWithoutAroundInvoke());
+		WithoutAroundInvokeInterceptor interceptor = spy(new WithoutAroundInvokeInterceptor());
 		AspectHandler handler = new AspectHandler(interceptor,stepInvoker,new InstanceContainer());
 		handler.handle(stack,controllerMethod,controllerInstance);
 		verify(interceptor,never()).intercept(stack,controllerMethod,controllerInstance);
@@ -99,6 +101,14 @@ public class AspectStyleInterceptorTest {
 		order.verify(acceptsWithoutArgsInterceptor).before();
 		order.verify(acceptsWithoutArgsInterceptor).around(stack,controllerMethod,controllerInstance);
 		order.verify(acceptsWithoutArgsInterceptor).after();
+	}	
+	
+	@Test
+	public void shouldInvokeAroundWithSimpleStack(){
+		ExampleOfSimpleStackInterceptor simpleStackInterceptor = spy(new ExampleOfSimpleStackInterceptor());
+		AspectHandler aspectHandler = new AspectHandler(simpleStackInterceptor, stepInvoker,new InstanceContainer());
+		aspectHandler.handle(stack,controllerMethod,controllerInstance);		
+		verify(simpleStackInterceptor).around(Mockito.any(DefaultSimplerInterceptorStack.class));
 	}	
 	
 }

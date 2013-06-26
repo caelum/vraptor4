@@ -13,6 +13,7 @@ import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor4.Accepts;
 import br.com.caelum.vraptor4.AfterInvoke;
 import br.com.caelum.vraptor4.BeforeInvoke;
+import br.com.caelum.vraptor4.controller.ControllerInstance;
 import br.com.caelum.vraptor4.controller.ControllerMethod;
 
 public class AspectHandler {
@@ -28,8 +29,8 @@ public class AspectHandler {
 
 	}
 		
-	public void handle(InterceptorStack stack,ControllerMethod controllerMethod,Object controllerInstance) {
-		InterceptorContainerDecorator interceptorContainer = new InterceptorContainerDecorator(container,stack,controllerMethod,controllerInstance);
+	public void handle(InterceptorStack stack,ControllerMethod controllerMethod,ControllerInstance controllerInstance) {
+		InterceptorContainerDecorator interceptorContainer = new InterceptorContainerDecorator(container,stack,controllerMethod,controllerInstance,new DefaultSimplerInterceptorStack(stack, controllerMethod, controllerInstance));
 		Object returnObject = stepInvoker.tryToInvoke(interceptor,Accepts.class,parametersFor(Accepts.class,interceptor,interceptorContainer));
 		
 		boolean accepts = true;

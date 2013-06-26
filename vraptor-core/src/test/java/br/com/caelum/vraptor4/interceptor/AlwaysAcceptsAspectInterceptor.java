@@ -6,6 +6,7 @@ import br.com.caelum.vraptor.Intercepts;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor4.AfterInvoke;
 import br.com.caelum.vraptor4.BeforeInvoke;
+import br.com.caelum.vraptor4.controller.ControllerInstance;
 import br.com.caelum.vraptor4.controller.ControllerMethod;
 
 @Intercepts
@@ -17,7 +18,7 @@ public class AlwaysAcceptsAspectInterceptor{
 	}
 
 	@AroundInvoke
-	public void intercept(InterceptorStack stack, ControllerMethod method, Object resourceInstance){
+	public void intercept(InterceptorStack stack, ControllerMethod method, ControllerInstance controllerInstance){
 	}
 		
 

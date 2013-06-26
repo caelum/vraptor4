@@ -1,7 +1,6 @@
 package br.com.caelum.vraptor4.interceptor;
 
 import java.util.HashMap;
-import java.util.Set;
 
 import br.com.caelum.vraptor.ioc.Container;
 

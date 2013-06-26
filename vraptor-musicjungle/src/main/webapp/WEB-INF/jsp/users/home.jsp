@@ -7,7 +7,7 @@
 
 <div class="well">
 
-	<form action="<c:url value="/musics"/>" class="form-inline pull-right" method="post">
+	<form action="<c:url value="/musics"/>" class="form-inline pull-right" enctype="multipart/form-data" method="post">
 		<label for="title"><fmt:message key="music.title"/>
 			<input type="text" name="music.title" value="${music.title}"/>
 		</label>
@@ -32,7 +32,7 @@
 				</div><span class="btn btn-file">
 				<span class="fileupload-new">Select file</span>
 				<span class="fileupload-exists">Change</span>
-				<input type="file" /></span>
+				<input type="file" name="file"/></span>
 				<a href="#" class="btn fileupload-exists" data-dismiss="fileupload">Remove</a>
 			</div>
 		</div>

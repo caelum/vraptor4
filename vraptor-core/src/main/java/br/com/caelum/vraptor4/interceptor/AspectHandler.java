@@ -3,20 +3,19 @@ package br.com.caelum.vraptor4.interceptor;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 
 import javax.interceptor.AroundInvoke;
 
+import br.com.caelum.vraptor.core.InterceptorHandler;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor4.Accepts;
 import br.com.caelum.vraptor4.AfterInvoke;
 import br.com.caelum.vraptor4.BeforeInvoke;
-import br.com.caelum.vraptor4.controller.ControllerInstance;
 import br.com.caelum.vraptor4.controller.ControllerMethod;
+import br.com.caelum.vraptor4.controller.DefaultControllerInstance;
 
-public class AspectHandler {
+public class AspectHandler implements InterceptorHandler{
 
 	private StepInvoker stepInvoker;
 	private Object interceptor;
@@ -29,7 +28,8 @@ public class AspectHandler {
 
 	}
 		
-	public void handle(InterceptorStack stack,ControllerMethod controllerMethod,ControllerInstance controllerInstance) {
+	public void execute(InterceptorStack stack,ControllerMethod controllerMethod,Object currentController) {
+		DefaultControllerInstance controllerInstance = new DefaultControllerInstance(currentController);
 		InterceptorStackDecorator interceptorStackDecorator = new InterceptorStackDecorator(stack);
 		InterceptorContainerDecorator interceptorContainer = new InterceptorContainerDecorator(container,interceptorStackDecorator,controllerMethod,controllerInstance,new DefaultSimplerInterceptorStack(interceptorStackDecorator, controllerMethod, controllerInstance));
 		Object returnObject = stepInvoker.tryToInvoke(interceptor,Accepts.class,parametersFor(Accepts.class,interceptor,interceptorContainer));

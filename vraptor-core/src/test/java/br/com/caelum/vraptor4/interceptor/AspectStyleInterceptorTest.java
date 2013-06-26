@@ -76,4 +76,16 @@ public class AspectStyleInterceptorTest {
 		verify(acceptsInterceptor,never()).after();
 	}
 	
+	@Test(expected=IllegalStateException.class)
+	public void shouldVerifyIfAcceptsMethodReturnsVoid(){
+		VoidAcceptsInterceptor weirdInterceptor = new VoidAcceptsInterceptor();
+		new AspectHandler(weirdInterceptor, stepInvoker).handle(stack, controllerMethod, controllerInstance);
+	}
+	
+	@Test(expected=IllegalStateException.class)
+	public void shouldVerifyIfAcceptsMethodReturnsNonBooleanType(){
+		NonBooleanAcceptsInterceptor weirdInterceptor = new NonBooleanAcceptsInterceptor();
+		new AspectHandler(weirdInterceptor, stepInvoker).handle(stack, controllerMethod, controllerInstance);
+	}
+	
 }

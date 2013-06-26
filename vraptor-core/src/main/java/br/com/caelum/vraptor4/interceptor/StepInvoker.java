@@ -9,6 +9,7 @@ import net.vidageek.mirror.list.dsl.MirrorList;
 
 public class StepInvoker {
 	
+	private Mirror mirror = new Mirror();
 	
 	private class InvokeMatcher implements Matcher<Method> {
 
@@ -27,14 +28,18 @@ public class StepInvoker {
 	
 
 	public Object tryToInvoke(Object interceptor,Class<? extends Annotation> step,Object... params) {
-		Mirror mirror = new Mirror();
+		
 		MirrorList<Method> possibleMethods = mirror.on(interceptor.getClass()).reflectAll().methods().matching(new InvokeMatcher(step));
 		if(possibleMethods.isEmpty()) return null;
 		if(possibleMethods.size() > 1){
 			throw new IllegalStateException("You should not have more than one @"+step.getSimpleName()+" annotated method");
 		}		
-		Method beginMethod = possibleMethods.get(0);
-		return new Mirror().on(interceptor).invoke().method(beginMethod).withArgs(params);
+		Method stepMethod = possibleMethods.get(0);		
+		Object returnObject = mirror.on(interceptor).invoke().method(stepMethod).withArgs(params);
+		if(stepMethod.getReturnType().equals(void.class)){
+			return new VoidReturn();
+		}
+		return returnObject;				
 	}
 		
 

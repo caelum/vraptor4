@@ -23,9 +23,8 @@ public class AspectHandler {
 	public void handle(InterceptorStack stack,ControllerMethod controllerMethod,Object controllerInstance) {
 		Object returnObject = stepInvoker.tryToInvoke(interceptor,Accepts.class,controllerMethod);
 		
-		boolean accepts = true;
-		
-		if(returnObject!=null){
+		boolean accepts = true;		
+		if(returnObject!=null){			
 			if(!returnObject.getClass().equals(Boolean.class)){
 				throw new IllegalStateException("@Accepts method should return boolean");
 			}

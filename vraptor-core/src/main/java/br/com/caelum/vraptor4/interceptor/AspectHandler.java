@@ -42,9 +42,14 @@ public class AspectHandler {
 		}			
 		
 		if(accepts){			
-			stepInvoker.tryToInvoke(interceptor,BeforeInvoke.class);						
-			stepInvoker.tryToInvoke(interceptor,AroundInvoke.class,parametersFor(AroundInvoke.class,interceptor,interceptorContainer));	
+			stepInvoker.tryToInvoke(interceptor,BeforeInvoke.class);
+			stepInvoker.tryToInvoke(interceptor,AroundInvoke.class,parametersFor(AroundInvoke.class,interceptor,interceptorContainer));
+//			if(noAround() && stack.notNexteada()){
+//				stack.next(controllerMethod,controllerInstance.getController());
+//			}
 			stepInvoker.tryToInvoke(interceptor,AfterInvoke.class);
+		} else {
+			stack.next(controllerMethod, controllerInstance.getController());
 		}
 
 	}

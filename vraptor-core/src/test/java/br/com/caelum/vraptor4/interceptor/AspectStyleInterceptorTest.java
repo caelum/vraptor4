@@ -7,10 +7,13 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
+import static org.junit.Assert.*;
+
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.interceptor.InstanceContainer;
 import br.com.caelum.vraptor4.controller.ControllerInstance;
 import br.com.caelum.vraptor4.controller.ControllerMethod;
+import br.com.caelum.vraptor4.controller.DefaultControllerInstance;
 
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.never;
@@ -110,5 +113,15 @@ public class AspectStyleInterceptorTest {
 		aspectHandler.handle(stack,controllerMethod,controllerInstance);		
 		verify(simpleStackInterceptor).around(Mockito.any(DefaultSimplerInterceptorStack.class));
 	}	
+	
+	@Test
+	public void shouldInvokeNextIfNotAccepts() throws Exception {
+		AcceptsInterceptor interceptor = spy(new AcceptsInterceptor(false));
+		AspectHandler aspectHandler = new AspectHandler(interceptor, stepInvoker, new InstanceContainer());
+		ControllerInstance instance = new DefaultControllerInstance(null);
+		aspectHandler.handle(stack, controllerMethod, instance);
+		verify(interceptor, never()).around(stack, controllerMethod, controllerInstance);
+		verify(stack).next(controllerMethod, instance.getController());		
+	}
 	
 }

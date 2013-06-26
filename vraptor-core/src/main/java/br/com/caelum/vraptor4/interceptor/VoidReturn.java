@@ -5,6 +5,6 @@ package br.com.caelum.vraptor4.interceptor;
  * @author Alberto Souza
  *
  */
-public class VoidReturn {
+class VoidReturn {
 
 }

@@ -13,7 +13,7 @@
 	<meta name="description" content="<fmt:message key="meta.description"/>"/>
 	<meta name="keywords" content="sites, web, desenvolvimento, development, java, opensource"/>
 
-	<title>VRaptor - Music Jungle</title>
+	<title>VRaptor Music Jungle</title>
 	<link href="<c:url value="/bootstrap/css/bootstrap.min.css"/>" rel="stylesheet" type="text/css"/>
 	<link href="<c:url value="/css/musicjungle.css"/>" rel="stylesheet" type="text/css"/>
 	
@@ -40,7 +40,6 @@
       
         <div class="container">
         
-        <a class="brand logo" href="${path}">VRaptor Music Jungle</a>
             <ul class="nav">
               <li class="active"><a href="${path}"></i> Home</a></li>
               <li><a href="${path}"></i> About</a></li>

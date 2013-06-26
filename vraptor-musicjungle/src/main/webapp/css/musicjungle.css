@@ -45,7 +45,7 @@ form[method='post'] {
 }
 
 div.navbar-fixed-bottom {
-	background-color: #069;
+	background-color: #004568;
 	color: white;
 }
 
@@ -55,4 +55,24 @@ div.navbar-fixed-bottom  a {
 
 .div-inline {
 	display: inline;
+}
+
+div.well.login-logo {
+	margin-top: -60px;
+	margin-bottom: 75px;
+	border: solid 1px #004568;
+	color: #004568;
+}
+
+span.logo {
+	display: block;
+	font-weight: bold;
+	font-size: 50px;
+	margin-bottom: 30px;
+	margin-top: 15px;
+}
+
+span.logo-message {
+	font-size: 25px;
+	margin-left: 200px;
 }

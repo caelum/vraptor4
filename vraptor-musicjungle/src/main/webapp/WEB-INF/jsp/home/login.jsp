@@ -1,6 +1,11 @@
 
 <%@ include file="../../../header.jsp" %> 
 
+<div class="well login-logo ">
+	<span class="logo">VRaptor Music Jungle</span>
+	<span class="logo-message">a place to upload, download and share your favorite musics.</span> 
+</div>
+
 <div class="container pull-right">
 	
 		<form action="<c:url value="/home/login"/>" method="post" class="form-inline">

@@ -5,7 +5,7 @@ import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.interceptor.Interceptor;
 import br.com.caelum.vraptor4.controller.ControllerMethod;
 
-public class InterceptorStackDecorator implements InterceptorStack {
+class InterceptorStackDecorator implements InterceptorStack {
 
 	private InterceptorStack delegate;
 	private boolean nexted;

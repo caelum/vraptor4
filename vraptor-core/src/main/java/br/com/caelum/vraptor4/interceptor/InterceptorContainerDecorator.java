@@ -4,7 +4,7 @@ import java.util.HashMap;
 
 import br.com.caelum.vraptor.ioc.Container;
 
-public class InterceptorContainerDecorator implements Container {
+class InterceptorContainerDecorator implements Container {
 
 	private Container delegate;
 	private HashMap<ParameterClass, Object> onDemandObjects = new HashMap<ParameterClass,Object>();

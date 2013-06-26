@@ -18,17 +18,18 @@ import br.com.caelum.vraptor4.controller.DefaultControllerInstance;
 public class AspectHandler implements InterceptorHandler{
 
 	private StepInvoker stepInvoker;
-	private Object interceptor;
 	private Container container;
+	private Class<?> interceptorClass;
 
-	public AspectHandler(Object interceptor, StepInvoker stepInvoker,Container container) {
-		this.interceptor = interceptor;
+	public AspectHandler(Class<?> interceptorClass, StepInvoker stepInvoker,Container container) {
+		this.interceptorClass = interceptorClass;
 		this.stepInvoker = stepInvoker;
 		this.container = container;
 
 	}
 		
 	public void execute(InterceptorStack stack,ControllerMethod controllerMethod,Object currentController) {
+		Object interceptor = container.instanceFor(interceptorClass);
 		DefaultControllerInstance controllerInstance = new DefaultControllerInstance(currentController);
 		InterceptorStackDecorator interceptorStackDecorator = new InterceptorStackDecorator(stack);
 		InterceptorContainerDecorator interceptorContainer = new InterceptorContainerDecorator(container,interceptorStackDecorator,controllerMethod,controllerInstance,new DefaultSimplerInterceptorStack(interceptorStackDecorator, controllerMethod, controllerInstance));
@@ -45,7 +46,7 @@ public class AspectHandler implements InterceptorHandler{
 		if(accepts){			
 			stepInvoker.tryToInvoke(interceptor,BeforeInvoke.class);
 			stepInvoker.tryToInvoke(interceptor,AroundInvoke.class,parametersFor(AroundInvoke.class,interceptor,interceptorContainer));
-			if(noAround() && !interceptorStackDecorator.isNexted()){
+			if(noAround(interceptor) && !interceptorStackDecorator.isNexted()){
 				stack.next(controllerMethod,controllerInstance.getController());
 			}
 			stepInvoker.tryToInvoke(interceptor,AfterInvoke.class);
@@ -55,7 +56,7 @@ public class AspectHandler implements InterceptorHandler{
 
 	}
 	
-	private boolean noAround() {
+	private boolean noAround(Object interceptor) {
 		return stepInvoker.findMethod(AroundInvoke.class, interceptor) == null;
 	}
 

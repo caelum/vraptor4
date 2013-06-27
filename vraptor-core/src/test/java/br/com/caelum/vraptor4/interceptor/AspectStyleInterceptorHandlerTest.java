@@ -7,13 +7,10 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
-import static org.junit.Assert.*;
-
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.interceptor.InstanceContainer;
 import br.com.caelum.vraptor4.controller.ControllerInstance;
 import br.com.caelum.vraptor4.controller.ControllerMethod;
-import br.com.caelum.vraptor4.controller.DefaultControllerInstance;
 
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.never;

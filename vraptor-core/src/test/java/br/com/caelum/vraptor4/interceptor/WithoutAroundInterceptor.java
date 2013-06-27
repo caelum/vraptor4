@@ -1,17 +1,17 @@
 package br.com.caelum.vraptor4.interceptor;
 
 import br.com.caelum.vraptor.Intercepts;
-import br.com.caelum.vraptor4.AfterInvoke;
-import br.com.caelum.vraptor4.BeforeInvoke;
+import br.com.caelum.vraptor4.AfterCall;
+import br.com.caelum.vraptor4.BeforeCall;
 
 @Intercepts
 public class WithoutAroundInterceptor {
 
-	@BeforeInvoke
+	@BeforeCall
 	public void before() {
 	}
 	
-	@AfterInvoke
+	@AfterCall
 	public void after() {
 	}
 }

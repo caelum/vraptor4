@@ -13,8 +13,9 @@ import br.com.caelum.vraptor.core.InterceptorHandler;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor4.Accepts;
-import br.com.caelum.vraptor4.AfterInvoke;
-import br.com.caelum.vraptor4.BeforeInvoke;
+import br.com.caelum.vraptor4.AfterCall;
+import br.com.caelum.vraptor4.AroundCall;
+import br.com.caelum.vraptor4.BeforeCall;
 import br.com.caelum.vraptor4.controller.ControllerMethod;
 import br.com.caelum.vraptor4.controller.DefaultControllerInstance;
 
@@ -49,14 +50,14 @@ public class AspectStyleInterceptorHandler implements InterceptorHandler{
 		
 		if(accepts){		
 			logger.debug("Invoking interceptor {}", interceptor.getClass().getSimpleName());
-			stepInvoker.tryToInvoke(interceptor,BeforeInvoke.class);			
+			stepInvoker.tryToInvoke(interceptor,BeforeCall.class);			
 			if(noAround(interceptor) && !interceptorStackDecorator.isNexted()){
 				stack.next(controllerMethod,controllerInstance.getController());
 			}
 			else{
-			   stepInvoker.tryToInvoke(interceptor,AroundInvoke.class,parametersFor(AroundInvoke.class,interceptor,interceptorContainer));
+			   stepInvoker.tryToInvoke(interceptor,AroundCall.class,parametersFor(AroundCall.class,interceptor,interceptorContainer));
 			}
-			stepInvoker.tryToInvoke(interceptor,AfterInvoke.class);
+			stepInvoker.tryToInvoke(interceptor,AfterCall.class);
 		} else {
 			stack.next(controllerMethod, controllerInstance.getController());
 		}
@@ -64,7 +65,7 @@ public class AspectStyleInterceptorHandler implements InterceptorHandler{
 	}
 	
 	private boolean noAround(Object interceptor) {
-		return stepInvoker.findMethod(AroundInvoke.class, interceptor) == null;
+		return stepInvoker.findMethod(AroundCall.class, interceptor) == null;
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })

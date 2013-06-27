@@ -44,10 +44,12 @@ public class AspectHandler implements InterceptorHandler{
 		}			
 		
 		if(accepts){			
-			stepInvoker.tryToInvoke(interceptor,BeforeInvoke.class);
-			stepInvoker.tryToInvoke(interceptor,AroundInvoke.class,parametersFor(AroundInvoke.class,interceptor,interceptorContainer));
+			stepInvoker.tryToInvoke(interceptor,BeforeInvoke.class);			
 			if(noAround(interceptor) && !interceptorStackDecorator.isNexted()){
 				stack.next(controllerMethod,controllerInstance.getController());
+			}
+			else{
+			   stepInvoker.tryToInvoke(interceptor,AroundInvoke.class,parametersFor(AroundInvoke.class,interceptor,interceptorContainer));
 			}
 			stepInvoker.tryToInvoke(interceptor,AfterInvoke.class);
 		} else {

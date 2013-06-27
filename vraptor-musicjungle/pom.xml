@@ -63,9 +63,9 @@
 		
 		<dependency>
 	        <groupId>org.seleniumhq.selenium</groupId>
-	        <artifactId>selenium-java</artifactId>
+	        <artifactId>selenium-firefox-driver</artifactId>
 	        <version>2.33.0</version>
-	    </dependency>  
+	    </dependency>
             
 		<dependency>
 			<groupId>junit</groupId>

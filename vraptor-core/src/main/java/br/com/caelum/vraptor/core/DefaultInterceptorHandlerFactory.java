@@ -27,7 +27,7 @@ import br.com.caelum.vraptor.Lazy;
 import br.com.caelum.vraptor.interceptor.Interceptor;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.ioc.Container;
-import br.com.caelum.vraptor4.interceptor.AspectHandler;
+import br.com.caelum.vraptor4.interceptor.AspectStyleInterceptorHandler;
 import br.com.caelum.vraptor4.interceptor.StepInvoker;
 
 import com.google.common.collect.MapMaker;
@@ -73,7 +73,7 @@ public class DefaultInterceptorHandlerFactory implements InterceptorHandlerFacto
 		else{
 			List<Class<?>> interfaces = Arrays.asList(type.getInterfaces());
 			if(type.isAnnotationPresent(Intercepts.class) && !interfaces.contains(Interceptor.class)){
-				return new AspectHandler(type, new StepInvoker(), container);
+				return new AspectStyleInterceptorHandler(type, new StepInvoker(), container);
 			}
 		}
 		return new ToInstantiateInterceptorHandler(container, type);

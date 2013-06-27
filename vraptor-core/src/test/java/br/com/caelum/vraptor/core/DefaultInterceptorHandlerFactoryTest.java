@@ -13,7 +13,7 @@ import br.com.caelum.vraptor.Intercepts;
 import br.com.caelum.vraptor.Lazy;
 import br.com.caelum.vraptor.interceptor.Interceptor;
 import br.com.caelum.vraptor.ioc.Container;
-import br.com.caelum.vraptor4.interceptor.AspectHandler;
+import br.com.caelum.vraptor4.interceptor.AspectStyleInterceptorHandler;
 
 public class DefaultInterceptorHandlerFactoryTest {
 
@@ -40,7 +40,7 @@ public class DefaultInterceptorHandlerFactoryTest {
 	
 	@Test
 	public void handlerForAspectStyleInterceptorsShouldBeDynamic() throws Exception {
-		assertThat(factory.handlerFor(AspectStyleInterceptor.class), is(instanceOf(AspectHandler.class)));
+		assertThat(factory.handlerFor(AspectStyleInterceptor.class), is(instanceOf(AspectStyleInterceptorHandler.class)));
 	}	
 	
 	@Test

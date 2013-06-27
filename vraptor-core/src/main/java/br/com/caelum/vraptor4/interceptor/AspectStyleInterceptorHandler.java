@@ -15,13 +15,13 @@ import br.com.caelum.vraptor4.BeforeInvoke;
 import br.com.caelum.vraptor4.controller.ControllerMethod;
 import br.com.caelum.vraptor4.controller.DefaultControllerInstance;
 
-public class AspectHandler implements InterceptorHandler{
+public class AspectStyleInterceptorHandler implements InterceptorHandler{
 
 	private StepInvoker stepInvoker;
 	private Container container;
 	private Class<?> interceptorClass;
 
-	public AspectHandler(Class<?> interceptorClass, StepInvoker stepInvoker,Container container) {
+	public AspectStyleInterceptorHandler(Class<?> interceptorClass, StepInvoker stepInvoker,Container container) {
 		this.interceptorClass = interceptorClass;
 		this.stepInvoker = stepInvoker;
 		this.container = container;

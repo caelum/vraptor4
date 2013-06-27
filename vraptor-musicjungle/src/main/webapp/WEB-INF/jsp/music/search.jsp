@@ -24,20 +24,17 @@
 					</c:forEach>
 				</td>
 				<td class="td-options">
-					<form action="<c:url value="/users/${userInfo
-							.user.login}/musics/${music.id}"/>" method="post">
-							
+					<form action="<c:url value="/users/${userInfo.user.login}/musics/${music.id}"/>" method="post">
+						<input type="hidden" name="_method" value="PUT"/>
 						<button type="submit" class="btn btn-primary">
-							<input type="hidden" name="_method" value="PUT"/>
 							<span class="icon icon-plus icon-white"></span>
 							<fmt:message key="add_to_my_list"/>
 						</button>
 					</form>
-					
-					<button class="btn btn-primary">
-						<span class="icon icon-download-alt icon-white"></span>
+					<a href="<c:url value="/musics/download/${music.id}"/>" class="btn btn-primary" download>
+						<i class="icon-download-alt icon-white"></i>
 						download
-					</button>
+					</a>
 			   </td>
 			</tr>
 		</c:forEach>

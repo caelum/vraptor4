@@ -22,6 +22,8 @@ import static br.com.caelum.vraptor.view.Results.xml;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 
+import java.io.File;
+
 import org.apache.log4j.Logger;
 
 import br.com.caelum.vraptor.Get;
@@ -30,7 +32,10 @@ import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.Validator;
+import br.com.caelum.vraptor.interceptor.download.Download;
+import br.com.caelum.vraptor.interceptor.download.FileDownload;
 import br.com.caelum.vraptor.interceptor.multipart.UploadedFile;
+import br.com.caelum.vraptor.musicjungle.converter.Musics;
 import br.com.caelum.vraptor.musicjungle.dao.MusicDao;
 import br.com.caelum.vraptor.musicjungle.interceptor.Public;
 import br.com.caelum.vraptor.musicjungle.interceptor.UserInfo;
@@ -60,6 +65,7 @@ public class MusicController {
     private final Validator validator;
     private final UserInfo userInfo;
 	private final MusicDao dao;
+	private final Musics musics;
 
 	/**
 	 * Receives dependencies through the constructor.
@@ -70,12 +76,13 @@ public class MusicController {
 	 * @param factory dao factory.
 	 */
 	public MusicController(MusicDao dao, UserInfo userInfo, 
-				Result result, Validator validator) {
+				Result result, Validator validator, Musics musics) {
 		
 		this.dao = dao;
 		this.result = result;
         this.validator = validator;
         this.userInfo = userInfo;
+		this.musics = musics;
 	}
 
 	/**
@@ -105,14 +112,15 @@ public class MusicController {
 
 		validator.onErrorForwardTo(UsersController.class).home();
 
-		// is there a file?
-		if (file != null) {
-		    // usually we would save the file, in this case, we just log :)
-			LOG.info("Uploaded file: " + file.getFileName());
-		}
-
 		dao.add(music);
 		dao.add(new MusicOwner(userInfo.getUser(), music));
+		
+		// is there a file?
+		if (file != null) {
+		    // Let's save the file
+			musics.save(file, music);
+			LOG.info("Uploaded file: " + file.getFileName());
+		}
 
 		// you can add objects to result even in redirects. Added objects will
 		// survive one more request when redirecting.
@@ -158,6 +166,18 @@ public class MusicController {
 		String title = Objects.firstNonNull(music.getTitle(), "");
         result.include("musics", this.dao.searchSimilarTitle(title));
     }
+	
+	@Path("/musics/download/{m.id}")
+	@Get
+	public Download download(Music m){
+		
+		Music music = dao.load(m);
+		File file = musics.getFile(music);
+		String contentType = "audio/mpeg";
+        String filename = music.getTitle() + ".mp3";
+
+        return new FileDownload(file, contentType, filename);
+	}
 	
 	/**
 	 * Show all list of registered musics in json format

@@ -56,7 +56,7 @@
 				<td><a href="<c:url value="/musics/${music.id}"/>">${music.title}</a></td>
 				<td>${music.description}</td>
 				<td><fmt:message key="${music.type}"/></td>
-				<td></td>
+				<td><a href="<c:url value="/musics/download/${music.id}"/>">download</a></td>
 			</tr>
 		</c:forEach>
 	</tbody>

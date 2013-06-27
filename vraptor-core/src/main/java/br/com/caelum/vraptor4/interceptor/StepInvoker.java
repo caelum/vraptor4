@@ -3,8 +3,6 @@ package br.com.caelum.vraptor4.interceptor;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
-import br.com.caelum.vraptor4.Accepts;
-import br.com.caelum.vraptor4.controller.ControllerMethod;
 import net.vidageek.mirror.dsl.Mirror;
 import net.vidageek.mirror.list.dsl.Matcher;
 import net.vidageek.mirror.list.dsl.MirrorList;

@@ -35,16 +35,16 @@ public class ToInstantiateInterceptorHandler implements InterceptorHandler {
 	private static final Logger logger = LoggerFactory.getLogger(ToInstantiateInterceptorHandler.class);
 
 	private final Container container;
-	private final Class<? extends Interceptor> type;
+	private final Class<?> type;
 
-	public ToInstantiateInterceptorHandler(Container container, Class<? extends Interceptor> type) {
+	public ToInstantiateInterceptorHandler(Container container, Class<?> type) {
 		this.container = container;
 		this.type = type;
 	}
 
 	public void execute(InterceptorStack stack, ControllerMethod method, Object resourceInstance)
 			throws InterceptionException {
-		Interceptor interceptor = container.instanceFor(type);
+		Interceptor interceptor = (Interceptor) container.instanceFor(type);
 		if (interceptor == null) {
 			throw new InterceptionException("Unable to instantiate interceptor for " + type.getName()
 					+ ": the container returned null.");

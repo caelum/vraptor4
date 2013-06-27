@@ -6,6 +6,9 @@ import java.util.ArrayList;
 
 import javax.interceptor.AroundInvoke;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import br.com.caelum.vraptor.core.InterceptorHandler;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.ioc.Container;
@@ -20,6 +23,7 @@ public class AspectStyleInterceptorHandler implements InterceptorHandler{
 	private StepInvoker stepInvoker;
 	private Container container;
 	private Class<?> interceptorClass;
+	private static final Logger logger = LoggerFactory.getLogger(AspectStyleInterceptorHandler.class);
 
 	public AspectStyleInterceptorHandler(Class<?> interceptorClass, StepInvoker stepInvoker,Container container) {
 		this.interceptorClass = interceptorClass;
@@ -43,7 +47,8 @@ public class AspectStyleInterceptorHandler implements InterceptorHandler{
 			accepts = (Boolean) returnObject;
 		}			
 		
-		if(accepts){			
+		if(accepts){		
+			logger.debug("Invoking interceptor {}", interceptor.getClass().getSimpleName());
 			stepInvoker.tryToInvoke(interceptor,BeforeInvoke.class);			
 			if(noAround(interceptor) && !interceptorStackDecorator.isNexted()){
 				stack.next(controllerMethod,controllerInstance.getController());

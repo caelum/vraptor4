@@ -39,7 +39,7 @@
 			</div>
 		</div>
 					
-		<button type="submit" class="btn btn-primary"><fmt:message key="add_music"/></button>
+		<button type="submit" class="btn btn-primary "><fmt:message key="add_music"/></button>
 	</form>
 </div>
 

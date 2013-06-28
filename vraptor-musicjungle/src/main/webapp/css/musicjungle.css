@@ -81,16 +81,19 @@ span.logo-message {
 	border-radius: 5px;
 }
 
+.form label, .form input {
+  display:inline-block;
+}
+
+.form label {
+  width: 150px;
+}
+
 .form-sign{
 	width: 300px;
 }
 
 .form-music{
-	width: 400px;
-}
-
-.form label{
-	width:150px;    /*Or however much space you need for the form’s labels*/
-    float:left;
+	width: 500px;
 }
 

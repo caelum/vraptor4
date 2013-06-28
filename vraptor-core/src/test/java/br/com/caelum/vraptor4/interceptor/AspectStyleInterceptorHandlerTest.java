@@ -109,7 +109,7 @@ public class AspectStyleInterceptorHandlerTest {
 		ExampleOfSimpleStackInterceptor simpleStackInterceptor = spy(new ExampleOfSimpleStackInterceptor());
 		AspectStyleInterceptorHandler aspectHandler = new AspectStyleInterceptorHandler(ExampleOfSimpleStackInterceptor.class, stepInvoker,new InstanceContainer(simpleStackInterceptor));
 		aspectHandler.execute(stack,controllerMethod,currentController);		
-		verify(simpleStackInterceptor).around(Mockito.any(DefaultSimplerInterceptorStack.class));
+		verify(simpleStackInterceptor).around(Mockito.any(DefaultSimpleInterceptorStack.class));
 	}	
 	
 	@Test

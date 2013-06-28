@@ -7,10 +7,19 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 
 import org.jboss.weld.resources.DefaultReflectionCache;
 
+import br.com.caelum.vraptor4.AroundCall;
+
+import com.google.common.base.Function;
+import com.google.common.base.Predicate;
+import com.google.common.base.Predicates;
+import com.google.common.collect.Collections2;
+import com.google.common.collect.Lists;
 import com.thoughtworks.xstream.converters.reflection.PureJavaReflectionProvider;
 
 import net.vidageek.mirror.dsl.Mirror;
@@ -53,7 +62,7 @@ public class StepInvoker {
 		if(stepMethod==null){
 			return null;
 		}	
-		Object returnObject = new Mirror().on(interceptor).invoke().method(stepMethod).withArgs(params);
+		Object returnObject = createMirror().on(interceptor).invoke().method(stepMethod).withArgs(params);
 		if(stepMethod.getReturnType().equals(void.class)){
 			return new VoidReturn();
 		}
@@ -62,7 +71,7 @@ public class StepInvoker {
 
 
 	public Method findMethod(Class<? extends Annotation> step,Object interceptor) {		
-		MirrorList<Method> possibleMethods = new Mirror(new MyReflectionProvider()).on(interceptor.getClass()).reflectAll().methods().matching(new InvokeMatcher(step));
+		MirrorList<Method> possibleMethods = createMirror().on(interceptor.getClass()).reflectAll().methods().matching(new InvokeMatcher(step));
 		if(possibleMethods.size() > 1){
 			throw new IllegalStateException("You should not have more than one @"+step.getSimpleName()+" annotated method");
 		}		
@@ -71,6 +80,11 @@ public class StepInvoker {
 		}
 		Method stepMethod = possibleMethods.get(0);
 		return stepMethod;
+	}
+
+
+	private Mirror createMirror() {
+		return new Mirror(new MyReflectionProvider());
 	}
 	
 	private class MyReflectionProvider implements ReflectionProvider{
@@ -178,7 +192,24 @@ public class StepInvoker {
 		}
 
 		public List<Method> reflectAllMethods() {
-			return Arrays.asList(klass.getDeclaredMethods());			
+			Class<?> c = klass;
+			final HashSet<InheritedMethod> methods = new HashSet<InheritedMethod>();
+			while (c != null) {
+				Method[] declaredMethods = c.getDeclaredMethods();
+				for (Method method : declaredMethods) {
+					methods.add(new InheritedMethod(method));
+				}
+				c = c.getSuperclass();
+			}
+			List<Method> originalMethods = new ArrayList<Method>(Collections2.transform(methods,new Function<InheritedMethod,Method>() {
+
+				@Override
+				public Method apply(InheritedMethod input) {
+					return input.original;
+				}
+			}));			
+			return originalMethods;
+			
 		}
 
 		public List<Constructor<T>> reflectAllConstructors() {
@@ -203,5 +234,50 @@ public class StepInvoker {
 		
 	}
 		
+	private class InheritedMethod {
+		private Method original;
 
+		public InheritedMethod(Method original) {
+			super();
+			this.original = original;
+		}
+		
+		@Override
+		public int hashCode() {
+			/*
+			 * yeah yeah... same situation. But different classes have different hashes
+			 * and this situation is breaking me.
+			 */
+			return 1;
+		}
+		
+		/**
+		 * 
+		 */
+		@Override
+		public boolean equals(Object obj) {
+			 if (obj != null && obj instanceof InheritedMethod) {
+				             Method other = ((InheritedMethod)obj).original;
+							 if(other.getDeclaringClass().getName().contains("$")) {
+								 return false;
+							 }
+				             if (original.getDeclaringClass().isAssignableFrom(other.getDeclaringClass())
+				                 && (original.getName() == other.getName())) {
+				                 if (!original.getReturnType().equals(other.getReturnType()))
+				                     return false;
+				                 /* Avoid unnecessary cloning */
+				                 Class[] params1 = original.getParameterTypes();
+				                 Class[] params2 = other.getParameterTypes();
+				                 if (params1.length == params2.length) {
+				                     for (int i = 0; i < params1.length; i++) {
+				                         if (params1[i] != params2[i])
+				                             return false;
+				                     }
+				                     return true;
+				                 }
+				             }
+				         }
+			 return false;
+		}
+	}
 }

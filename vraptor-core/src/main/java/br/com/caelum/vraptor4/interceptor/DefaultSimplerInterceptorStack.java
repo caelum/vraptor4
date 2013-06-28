@@ -1,15 +1,16 @@
 package br.com.caelum.vraptor4.interceptor;
 
 import br.com.caelum.vraptor.core.InterceptorStack;
+import br.com.caelum.vraptor4.controller.ControllerInstance;
 import br.com.caelum.vraptor4.controller.ControllerMethod;
 
 public class DefaultSimplerInterceptorStack implements SimpleInterceptorStack{
 	
 	private InterceptorStack delegate;
 	private ControllerMethod controllerMethod;
-	private Object controllerInstance;
+	private ControllerInstance controllerInstance;
 
-	public DefaultSimplerInterceptorStack(InterceptorStack delegate,ControllerMethod controllerMethod,Object controllerInstance) {
+	public DefaultSimplerInterceptorStack(InterceptorStack delegate,ControllerMethod controllerMethod,ControllerInstance controllerInstance) {
 		super();
 		this.delegate = delegate;
 		this.controllerMethod = controllerMethod;
@@ -18,7 +19,7 @@ public class DefaultSimplerInterceptorStack implements SimpleInterceptorStack{
 
 	@Override
 	public void next(){		
-		delegate.next(controllerMethod,controllerInstance);
+		delegate.next(controllerMethod,controllerInstance.getController());
 	}
 
 	

@@ -3,6 +3,7 @@ package br.com.caelum.vraptor4.interceptor;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import javax.interceptor.AroundInvoke;
 
@@ -37,7 +38,7 @@ public class AspectStyleInterceptorHandler implements InterceptorHandler{
 		Object interceptor = container.instanceFor(interceptorClass);
 		DefaultControllerInstance controllerInstance = new DefaultControllerInstance(currentController);
 		InterceptorStackDecorator interceptorStackDecorator = new InterceptorStackDecorator(stack);
-		InterceptorContainerDecorator interceptorContainer = new InterceptorContainerDecorator(container,interceptorStackDecorator,controllerMethod,controllerInstance,new DefaultSimplerInterceptorStack(interceptorStackDecorator, controllerMethod, controllerInstance.getController()));
+		InterceptorContainerDecorator interceptorContainer = new InterceptorContainerDecorator(container,interceptorStackDecorator,controllerMethod,controllerInstance,new DefaultSimplerInterceptorStack(interceptorStackDecorator, controllerMethod, controllerInstance));
 		Object returnObject = stepInvoker.tryToInvoke(interceptor,Accepts.class,parametersFor(Accepts.class,interceptor,interceptorContainer));
 		
 		boolean accepts = true;
@@ -47,14 +48,13 @@ public class AspectStyleInterceptorHandler implements InterceptorHandler{
 			}
 			accepts = (Boolean) returnObject;
 		}			
-		
 		if(accepts){		
 			logger.debug("Invoking interceptor {}", interceptor.getClass().getSimpleName());
 			stepInvoker.tryToInvoke(interceptor,BeforeCall.class);			
 			if(noAround(interceptor) && !interceptorStackDecorator.isNexted()){
 				stack.next(controllerMethod,controllerInstance.getController());
 			}
-			else{
+			else{				
 			   stepInvoker.tryToInvoke(interceptor,AroundCall.class,parametersFor(AroundCall.class,interceptor,interceptorContainer));
 			}
 			stepInvoker.tryToInvoke(interceptor,AfterCall.class);

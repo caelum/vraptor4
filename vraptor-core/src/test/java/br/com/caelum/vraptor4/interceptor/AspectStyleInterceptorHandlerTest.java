@@ -22,7 +22,7 @@ public class AspectStyleInterceptorHandlerTest {
 	private StepInvoker stepInvoker = new StepInvoker();
 	private @Mock InterceptorStack stack;
 	private @Mock ControllerMethod controllerMethod;
-	private @Mock ControllerInstance controllerInstance;
+	private @Mock Object currentController;
 	
     @Before
     public void setup() {
@@ -33,7 +33,7 @@ public class AspectStyleInterceptorHandlerTest {
 	public void shouldAlwaysCallAround(){
 		AlwaysAcceptsAspectInterceptor interceptor = spy(new AlwaysAcceptsAspectInterceptor());
 		AspectStyleInterceptorHandler handler = new AspectStyleInterceptorHandler(AlwaysAcceptsAspectInterceptor.class,stepInvoker,new InstanceContainer(interceptor));
-		handler.execute(stack,controllerMethod,controllerInstance);
+		handler.execute(stack,controllerMethod,currentController);
 		verify(interceptor).intercept(Mockito.any(InterceptorStack.class),Mockito.same(controllerMethod),Mockito.any(ControllerInstance.class));
 	}
 	
@@ -41,15 +41,15 @@ public class AspectStyleInterceptorHandlerTest {
 	public void shouldNotInvokeMethodIfDoesNotHaveAroundInvoke(){
 		WithoutAroundInvokeInterceptor interceptor = spy(new WithoutAroundInvokeInterceptor());
 		AspectStyleInterceptorHandler handler = new AspectStyleInterceptorHandler(WithoutAroundInvokeInterceptor.class,stepInvoker,new InstanceContainer(interceptor));
-		handler.execute(stack,controllerMethod,controllerInstance);
-		verify(interceptor,never()).intercept(stack,controllerMethod,controllerInstance);
+		handler.execute(stack,controllerMethod,currentController);
+		verify(interceptor,never()).intercept(Mockito.same(stack),Mockito.same(controllerMethod),Mockito.any(ControllerInstance.class));
 	}
 	
 	@Test
 	public void shouldInvokeUsingBeforeAndAfter(){
 		AlwaysAcceptsAspectInterceptor interceptor = spy(new AlwaysAcceptsAspectInterceptor());
 		AspectStyleInterceptorHandler handler = new AspectStyleInterceptorHandler(AlwaysAcceptsAspectInterceptor.class,stepInvoker,new InstanceContainer(interceptor));
-		handler.execute(stack,controllerMethod,controllerInstance);
+		handler.execute(stack,controllerMethod,currentController);
 		InOrder order = inOrder(interceptor);
 		order.verify(interceptor).begin();		
 		order.verify(interceptor).intercept(Mockito.any(InterceptorStack.class),Mockito.same(controllerMethod),Mockito.any(ControllerInstance.class));		
@@ -60,7 +60,7 @@ public class AspectStyleInterceptorHandlerTest {
 	public void shouldInvokeIfAccepts(){
 		AcceptsInterceptor acceptsInterceptor = spy(new AcceptsInterceptor(true));
 		AspectStyleInterceptorHandler aspectHandler = new AspectStyleInterceptorHandler(AcceptsInterceptor.class, stepInvoker,new InstanceContainer(acceptsInterceptor));
-		aspectHandler.execute(stack,controllerMethod,controllerInstance);
+		aspectHandler.execute(stack,controllerMethod,currentController);
 		InOrder order = inOrder(acceptsInterceptor);
 		order.verify(acceptsInterceptor).accepts(controllerMethod);
 		order.verify(acceptsInterceptor).before();
@@ -72,30 +72,30 @@ public class AspectStyleInterceptorHandlerTest {
 	public void shouldNotInvokeIfDoesNotAccept(){
 		AcceptsInterceptor acceptsInterceptor = spy(new AcceptsInterceptor(false));
 		AspectStyleInterceptorHandler aspectHandler = new AspectStyleInterceptorHandler(AcceptsInterceptor.class, stepInvoker,new InstanceContainer(acceptsInterceptor));
-		aspectHandler.execute(stack,controllerMethod,controllerInstance);
+		aspectHandler.execute(stack,controllerMethod,currentController);
 		verify(acceptsInterceptor).accepts(controllerMethod);
 		verify(acceptsInterceptor,never()).before();
-		verify(acceptsInterceptor,never()).around(stack,controllerMethod,controllerInstance);
+		verify(acceptsInterceptor,never()).around(Mockito.same(stack),Mockito.same(controllerMethod),Mockito.any(ControllerInstance.class));
 		verify(acceptsInterceptor,never()).after();
 	}
 	
 	@Test(expected=IllegalStateException.class)
 	public void shouldVerifyIfAcceptsMethodReturnsVoid(){
 		VoidAcceptsInterceptor weirdInterceptor = new VoidAcceptsInterceptor();
-		new AspectStyleInterceptorHandler(VoidAcceptsInterceptor.class, stepInvoker,new InstanceContainer(weirdInterceptor)).execute(stack, controllerMethod, controllerInstance);
+		new AspectStyleInterceptorHandler(VoidAcceptsInterceptor.class, stepInvoker,new InstanceContainer(weirdInterceptor)).execute(stack, controllerMethod, currentController);
 	}
 	
 	@Test(expected=IllegalStateException.class)
 	public void shouldVerifyIfAcceptsMethodReturnsNonBooleanType(){
 		NonBooleanAcceptsInterceptor weirdInterceptor = new NonBooleanAcceptsInterceptor();
-		new AspectStyleInterceptorHandler(NonBooleanAcceptsInterceptor.class, stepInvoker,new InstanceContainer(weirdInterceptor)).execute(stack, controllerMethod, controllerInstance);
+		new AspectStyleInterceptorHandler(NonBooleanAcceptsInterceptor.class, stepInvoker,new InstanceContainer(weirdInterceptor)).execute(stack, controllerMethod, currentController);
 	}
 	
 	@Test
 	public void shouldInvokeAcceptsWithoutArgs(){
 		AcceptsWithoutArgsInterceptor acceptsWithoutArgsInterceptor = spy(new AcceptsWithoutArgsInterceptor());
 		AspectStyleInterceptorHandler aspectHandler = new AspectStyleInterceptorHandler(AcceptsWithoutArgsInterceptor.class, stepInvoker,new InstanceContainer(acceptsWithoutArgsInterceptor));
-		aspectHandler.execute(stack,controllerMethod,controllerInstance);
+		aspectHandler.execute(stack,controllerMethod,currentController);
 		InOrder order = inOrder(acceptsWithoutArgsInterceptor);
 		order.verify(acceptsWithoutArgsInterceptor).accepts();
 		order.verify(acceptsWithoutArgsInterceptor).before();
@@ -107,7 +107,7 @@ public class AspectStyleInterceptorHandlerTest {
 	public void shouldInvokeAroundWithSimpleStack(){
 		ExampleOfSimpleStackInterceptor simpleStackInterceptor = spy(new ExampleOfSimpleStackInterceptor());
 		AspectStyleInterceptorHandler aspectHandler = new AspectStyleInterceptorHandler(ExampleOfSimpleStackInterceptor.class, stepInvoker,new InstanceContainer(simpleStackInterceptor));
-		aspectHandler.execute(stack,controllerMethod,controllerInstance);		
+		aspectHandler.execute(stack,controllerMethod,currentController);		
 		verify(simpleStackInterceptor).around(Mockito.any(DefaultSimplerInterceptorStack.class));
 	}	
 	
@@ -117,7 +117,7 @@ public class AspectStyleInterceptorHandlerTest {
 		AspectStyleInterceptorHandler aspectHandler = new AspectStyleInterceptorHandler(AcceptsInterceptor.class, stepInvoker, new InstanceContainer(interceptor));
 		aspectHandler.execute(stack, controllerMethod, null);
 		verify(interceptor, never()).around(Mockito.any(InterceptorStack.class), Mockito.same(controllerMethod), Mockito.any(ControllerInstance.class));
-		verify(stack).next(controllerMethod, controllerInstance.getController());		
+		verify(stack).next(Mockito.same(controllerMethod), Mockito.any(ControllerInstance.class));		
 	}
 	
 	@Test

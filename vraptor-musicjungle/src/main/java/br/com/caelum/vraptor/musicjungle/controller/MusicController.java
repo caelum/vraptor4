@@ -19,6 +19,7 @@ package br.com.caelum.vraptor.musicjungle.controller;
 import static br.com.caelum.vraptor.musicjungle.validation.CustomMatchers.notEmpty;
 import static br.com.caelum.vraptor.view.Results.http;
 import static br.com.caelum.vraptor.view.Results.json;
+import static br.com.caelum.vraptor.view.Results.representation;
 import static br.com.caelum.vraptor.view.Results.xml;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
@@ -205,4 +206,12 @@ public class MusicController {
 			dao.listAll().toString()+"</p>");
 	}
 
+	@Public @Path("/musics/list/form")
+	public void listForm() {}
+	
+	@Public @Path("musics/listAs")
+	public void listAs() {
+		result.use(representation())
+			.from(dao.listAll()).serialize();
+	}
 }

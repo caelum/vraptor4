@@ -72,7 +72,15 @@ public class DefaultInterceptorHandlerFactory implements InterceptorHandlerFacto
 		}
 		else{
 			List<Class<?>> interfaces = Arrays.asList(type.getInterfaces());
-			if(type.isAnnotationPresent(Intercepts.class) && !interfaces.contains(Interceptor.class)){
+			boolean isInterceptorWithInterface = false;
+			for (Class<?> interfacee : interfaces) {
+				if(Interceptor.class.isAssignableFrom(interfacee)){
+					isInterceptorWithInterface = true;
+					break;
+				}
+			}
+			if(type.isAnnotationPresent(Intercepts.class) && !isInterceptorWithInterface){
+				System.out.println("AspectStyle => "+type);
 				return new AspectStyleInterceptorHandler(type, new StepInvoker(), container);
 			}
 		}

@@ -48,6 +48,11 @@
               		<fmt:message key="list_users" />
 				</a>
 			  </li>
+			  <li>
+			  	<a href="${path}musics/list/form"> 
+			  		<fmt:message key="export_all_musics" /> 
+			  	</a>
+			  </li>
             </ul>
             
              <ul class="nav">

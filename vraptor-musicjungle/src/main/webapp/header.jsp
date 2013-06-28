@@ -44,7 +44,7 @@
               <li class="active"><a href="${path}"></i> Home</a></li>
               <li><a href="${path}"></i> About</a></li>
               <li>
-              	<a href="<c:url value="/users"/>"> 
+              	<a href="${linkTo[UsersController].list}"> 
               		<fmt:message key="list_users" />
 				</a>
 			  </li>
@@ -58,7 +58,7 @@
             </ul>
             
             <span class="pull-right ${not empty userInfo.user ? '' : 'hidden'}">
-            	${userInfo.user.name} (<a href="<c:url value='/home/logout'/>">Logout</a>)
+            	${userInfo.user.name} (<a href="${linkTo[HomeController].logout}">Logout</a>)
             </span>
             
         </div>

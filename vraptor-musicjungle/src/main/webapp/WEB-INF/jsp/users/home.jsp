@@ -7,7 +7,7 @@
 
 <div class="well">
 
-	<form action="<c:url value="/musics"/>" class="form form-music" enctype="multipart/form-data" method="post">
+	<form action="${linkTo[MusicController].add}" class="form form-music" enctype="multipart/form-data" method="post">
 		<label for="title"><fmt:message key="music.title"/>
 		</label>
 			<input type="text" name="music.title" value="${music.title}"/>
@@ -51,10 +51,10 @@
 	<tbody>
 		<c:forEach var="music" items="${userInfo.user.musics}" varStatus="s">
 			<tr>
-				<td><a href="<c:url value="/musics/${music.id}"/>">${music.title}</a></td>
+				<td><a href="${linkTo[MusicController].show[music]}">${music.title}</a></td>
 				<td>${music.description}</td>
 				<td><fmt:message key="${music.type}"/></td>
-				<td><a href="<c:url value="/musics/download/${music.id}"/>">download</a></td>
+				<td><a href="${linkTo[MusicController].download[music]}" download>download</a></td>
 			</tr>
 		</c:forEach>
 	</tbody>

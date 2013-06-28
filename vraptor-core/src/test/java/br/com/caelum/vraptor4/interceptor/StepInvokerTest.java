@@ -19,10 +19,16 @@ public class StepInvokerTest {
 	}
 	
 	@Test
-	public void teste() throws SecurityException, NoSuchMethodException{
-		ExampleOfSimpleStackInterceptor wtfProxy = spy(new ExampleOfSimpleStackInterceptor());
-		assertNotNull(stepInvoker.findMethod(AroundCall.class,wtfProxy));
+	public void shouldFindFirstMethodAnnotatedWithInterceptorStep(){
+		ExampleOfSimpleStackInterceptor proxy = spy(new ExampleOfSimpleStackInterceptor());
+		assertNotNull(stepInvoker.findMethod(AroundCall.class,proxy));
 	}
+	
+	@Test
+	public void teste() throws SecurityException, NoSuchMethodException{
+		WeldProxy$$$StyleInterceptor proxy = new WeldProxy$$$StyleInterceptor();
+		assertNotNull(stepInvoker.findMethod(AroundCall.class,proxy));
+	}	
 	
 	
 }

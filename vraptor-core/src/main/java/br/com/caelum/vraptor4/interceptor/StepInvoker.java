@@ -195,9 +195,11 @@ public class StepInvoker {
 			Class<?> c = klass;
 			final HashSet<InheritedMethod> methods = new HashSet<InheritedMethod>();
 			while (c != null) {
-				Method[] declaredMethods = c.getDeclaredMethods();
-				for (Method method : declaredMethods) {
-					methods.add(new InheritedMethod(method));
+				if(!c.getName().contains("$")){
+					Method[] declaredMethods = c.getDeclaredMethods();
+					for (Method method : declaredMethods) {
+						methods.add(new InheritedMethod(method));
+					}
 				}
 				c = c.getSuperclass();
 			}
@@ -207,7 +209,7 @@ public class StepInvoker {
 				public Method apply(InheritedMethod input) {
 					return input.original;
 				}
-			}));			
+			}));		
 			return originalMethods;
 			
 		}
@@ -258,9 +260,6 @@ public class StepInvoker {
 		public boolean equals(Object obj) {
 			 if (obj != null && obj instanceof InheritedMethod) {
 				             Method other = ((InheritedMethod)obj).original;
-							 if(other.getDeclaringClass().getName().contains("$")) {
-								 return false;
-							 }
 				             if (original.getDeclaringClass().isAssignableFrom(other.getDeclaringClass())
 				                 && (original.getName() == other.getName())) {
 				                 if (!original.getReturnType().equals(other.getReturnType()))

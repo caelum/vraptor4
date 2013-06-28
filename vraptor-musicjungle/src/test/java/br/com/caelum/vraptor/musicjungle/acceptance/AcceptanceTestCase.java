@@ -4,6 +4,7 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
+import br.com.caelum.vraptor.musicjungle.acceptance.pageObjects.GenericPage;
 import br.com.caelum.vraptor.musicjungle.acceptance.pageObjects.LoginPage;
 
 public abstract class AcceptanceTestCase {
@@ -29,4 +30,8 @@ public abstract class AcceptanceTestCase {
 		return "http://localhost:8080/vraptor-musicjungle";
 	}
 	
+	public GenericPage accessFullUrl(String uri) {
+		driver.get(getBaseUrl() + uri);
+		return new GenericPage(driver);
+	}
 }

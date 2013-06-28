@@ -55,7 +55,7 @@ public class AspectStyleInterceptorHandlerTest {
 		order.verify(interceptor).intercept(Mockito.any(InterceptorStack.class),Mockito.same(controllerMethod),Mockito.any(ControllerInstance.class));		
 		order.verify(interceptor).after();		
 	}
-	
+			
 	@Test
 	public void shouldInvokeIfAccepts(){
 		AcceptsInterceptor acceptsInterceptor = spy(new AcceptsInterceptor(true));

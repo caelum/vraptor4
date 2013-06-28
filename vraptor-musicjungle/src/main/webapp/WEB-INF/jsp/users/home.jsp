@@ -23,23 +23,19 @@
 					<option value="${type}"><fmt:message key="${type}"/></option>
 				</c:forEach>
 			</select>
-		
-		<label for="upload"><fmt:message key="music.upload"/>
-		</label>
-		<div class="fileupload fileupload-new div-inline" data-provides="fileupload">
-			<div class="input-append">
-				<div class="uneditable-input span3 div-inline">
-					<i class="icon-file fileupload-exists"></i> 
-					<span class="fileupload-preview"></span>
-				</div><span class="btn btn-file">
-				<span class="fileupload-new">Select file</span>
-				<span class="fileupload-exists">Change</span>
-				<input type="file" id="upload" name="file"/></span>
-				<a href="#" class="btn fileupload-exists" data-dismiss="fileupload">Remove</a>
+			
+			<div class="fileupload fileupload-new" data-provides="fileupload">
+				<label for="upload"><fmt:message key="music.upload"/>
+				</label>
+  				<span class="btn btn-file">
+  					<span class="fileupload-new">Select file</span>
+  					<span class="fileupload-exists">Change</span>
+  					<input type="file" name="file" />
+  				</span>
+  				<span class="fileupload-preview"></span>
+  				<a href="#" class="close fileupload-exists" data-dismiss="fileupload" style="float: none">×</a>
 			</div>
-		</div>
-					
-		<button type="submit" class="btn btn-primary "><fmt:message key="add_music"/></button>
+			<button type="submit" class="btn btn-primary pull-left"><fmt:message key="add_music"/></button>
 	</form>
 </div>
 

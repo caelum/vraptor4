@@ -1,6 +1,7 @@
 <%@ include file="/header.jsp" %> 
 
-<form class="form-inline" action="${path}musics/listAs">
+<form class="form-inline" 
+		action="${linkTo[MusicController].listAs}">
 
 	<select name="_format">
 		<option value="xml">XML</option>

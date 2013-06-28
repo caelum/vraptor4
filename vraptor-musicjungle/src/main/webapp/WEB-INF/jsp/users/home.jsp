@@ -7,23 +7,25 @@
 
 <div class="well">
 
-	<form action="<c:url value="/musics"/>" class="form-inline pull-right" enctype="multipart/form-data" method="post">
+	<form action="<c:url value="/musics"/>" class="form form-music" enctype="multipart/form-data" method="post">
 		<label for="title"><fmt:message key="music.title"/>
-			<input type="text" name="music.title" value="${music.title}"/>
 		</label>
+			<input type="text" name="music.title" value="${music.title}"/>
 		
 		<label for="description"><fmt:message key="music.description"/>
-			<input type="text" name="music.description" value="${music.description}"/>
 		</label>
+			<input type="text" name="music.description" value="${music.description}"/>
 		
 		<label for="type"><fmt:message key="music.type"/>
+		</label>
 			<select name="music.type" id="type">
 				<c:forEach items="${musicTypes}" var="type">
 					<option value="${type}"><fmt:message key="${type}"/></option>
 				</c:forEach>
 			</select>
-		</label>
 		
+		<label for="upload"><fmt:message key="music.upload"/>
+		</label>
 		<div class="fileupload fileupload-new div-inline" data-provides="fileupload">
 			<div class="input-append">
 				<div class="uneditable-input span3 div-inline">
@@ -32,7 +34,7 @@
 				</div><span class="btn btn-file">
 				<span class="fileupload-new">Select file</span>
 				<span class="fileupload-exists">Change</span>
-				<input type="file" name="file"/></span>
+				<input type="file" id="upload" name="file"/></span>
 				<a href="#" class="btn fileupload-exists" data-dismiss="fileupload">Remove</a>
 			</div>
 		</div>

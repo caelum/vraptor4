@@ -89,3 +89,8 @@ span.logo-message {
 	width: 400px;
 }
 
+.form label{
+	width:150px;    /*Or however much space you need for the form’s labels*/
+    float:left;
+}
+

@@ -53,8 +53,7 @@ public class AspectStyleInterceptorHandler implements InterceptorHandler{
 			stepInvoker.tryToInvoke(interceptor,BeforeCall.class,new BeforeAfterSignatureAcceptor());			
 			if(noAround(interceptor) && !interceptorStackDecorator.isNexted()){
 				stack.next(controllerMethod,controllerInstance.getController());
-			}
-			else{				
+			} else{				
 			   stepInvoker.tryToInvoke(interceptor,
 					   AroundCall.class,
 					   new AroundSignatureAcceptor(),

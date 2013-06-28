@@ -18,20 +18,17 @@
 			   <td>${music.description}</td>
 			   <td><fmt:message key="${music.type}"/></td>
 			   <td class="td-options">
-					<form action="<c:url value="/users/${userInfo
-							.user.login}/musics/${music.id}"/>" method="post">
-							
+					<form action="${linkTo[MusicOwnerController].addToMyList[userInfo.user][music]}" method="post">
+						<input type="hidden" name="_method" value="PUT"/>
 						<button type="submit" class="btn btn-primary">
-							<input type="hidden" name="_method" value="PUT"/>
 							<span class="icon icon-plus icon-white"></span>
 							<fmt:message key="add_to_my_list"/>
 						</button>
 					</form>
-					
-					<button class="btn btn-primary">
+					<a href="${linkTo[MusicController].download[music]}" class="btn btn-primary" download>
 						<span class="icon icon-download-alt icon-white"></span>
 						download
-					</button>
+					</a>
 			   </td>
 		    </tr>
 		</c:forEach>

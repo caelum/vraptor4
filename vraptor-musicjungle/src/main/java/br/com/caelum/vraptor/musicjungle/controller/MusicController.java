@@ -17,6 +17,7 @@
 package br.com.caelum.vraptor.musicjungle.controller;
 
 import static br.com.caelum.vraptor.musicjungle.validation.CustomMatchers.notEmpty;
+import static br.com.caelum.vraptor.view.Results.http;
 import static br.com.caelum.vraptor.view.Results.json;
 import static br.com.caelum.vraptor.view.Results.xml;
 import static org.hamcrest.Matchers.is;
@@ -193,6 +194,15 @@ public class MusicController {
 	@Public @Path("/musics/list/xml")
 	public void showAllMusicsAsXML() {
 		result.use(xml()).from(dao.listAll()).serialize();
+	}
+	
+	/**
+	 * Show all list of registered musics in http format
+	 */
+	@Public @Path("/musics/list/http")
+	public void showAllMusicsAsHTTP() {
+		result.use(http()).body("<p class=\"content\">"+
+			dao.listAll().toString()+"</p>");
 	}
 
 }

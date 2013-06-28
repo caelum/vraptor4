@@ -62,8 +62,10 @@ public class StepInvoker {
 		if(stepMethod==null){
 			return null;
 		}
-		if(!acceptor.accepts(stepMethod)){
-			throw new IllegalArgumentException("Invalid signature for "+stepMethod);
+
+		
+		if(!acceptor.accepts(stepMethod)){			
+			throw new IllegalArgumentException(acceptor.errorMessage());
 		}
 		Object returnObject = createMirror().on(interceptor).invoke().method(stepMethod).withArgs(params);
 		if(stepMethod.getReturnType().equals(void.class)){

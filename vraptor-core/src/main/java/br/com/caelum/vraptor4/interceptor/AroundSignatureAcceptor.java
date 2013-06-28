@@ -9,6 +9,7 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 
 import br.com.caelum.vraptor.core.InterceptorStack;
+import br.com.caelum.vraptor4.AroundCall;
 
 public class AroundSignatureAcceptor implements SignatureAcceptor {
 
@@ -23,5 +24,10 @@ public class AroundSignatureAcceptor implements SignatureAcceptor {
 			}
 		});
 		return !possibleStackParams.isEmpty();
+	}
+	
+	@Override
+	public String errorMessage() {
+		return AroundCall.class.getSimpleName()+" method must receive "+InterceptorStack.class.getName()+" or "+SimpleInterceptorStack.class.getName();
 	}
 }

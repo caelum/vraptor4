@@ -9,4 +9,8 @@ public class AlwaysTrueSignatureAcceptor implements SignatureAcceptor{
 		return true;
 	}
 
+	public String errorMessage() {
+		return null;
+	}
+
 }

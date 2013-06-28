@@ -6,4 +6,6 @@ public interface SignatureAcceptor {
 
 	public abstract boolean accepts(Method method);
 
+	public abstract String errorMessage();
+	
 }

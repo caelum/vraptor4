@@ -39,7 +39,7 @@ public class AspectStyleInterceptorHandler implements InterceptorHandler{
 		DefaultControllerInstance controllerInstance = new DefaultControllerInstance(currentController);
 		InterceptorStackDecorator interceptorStackDecorator = new InterceptorStackDecorator(stack);
 		InterceptorContainerDecorator interceptorContainer = new InterceptorContainerDecorator(container,interceptorStackDecorator,controllerMethod,controllerInstance,new DefaultSimplerInterceptorStack(interceptorStackDecorator, controllerMethod, controllerInstance));
-		Object returnObject = stepInvoker.tryToInvoke(interceptor,Accepts.class,parametersFor(Accepts.class,interceptor,interceptorContainer));
+		Object returnObject = stepInvoker.tryToInvoke(interceptor,Accepts.class,new BeforeAfterSignatureAcceptor(),parametersFor(Accepts.class,interceptor,interceptorContainer));
 		
 		boolean accepts = true;
 		if(returnObject!=null){			
@@ -50,14 +50,18 @@ public class AspectStyleInterceptorHandler implements InterceptorHandler{
 		}			
 		if(accepts){		
 			logger.debug("Invoking interceptor {}", interceptor.getClass().getSimpleName());
-			stepInvoker.tryToInvoke(interceptor,BeforeCall.class);			
+			stepInvoker.tryToInvoke(interceptor,BeforeCall.class,new BeforeAfterSignatureAcceptor());			
 			if(noAround(interceptor) && !interceptorStackDecorator.isNexted()){
 				stack.next(controllerMethod,controllerInstance.getController());
 			}
 			else{				
-			   stepInvoker.tryToInvoke(interceptor,AroundCall.class,parametersFor(AroundCall.class,interceptor,interceptorContainer));
+			   stepInvoker.tryToInvoke(interceptor,
+					   AroundCall.class,
+					   new AroundSignatureAcceptor(),
+					   parametersFor(AroundCall.class,interceptor,interceptorContainer)
+					   );
 			}
-			stepInvoker.tryToInvoke(interceptor,AfterCall.class);
+			stepInvoker.tryToInvoke(interceptor,AfterCall.class,new BeforeAfterSignatureAcceptor());
 		} else {
 			stack.next(controllerMethod, controllerInstance.getController());
 		}

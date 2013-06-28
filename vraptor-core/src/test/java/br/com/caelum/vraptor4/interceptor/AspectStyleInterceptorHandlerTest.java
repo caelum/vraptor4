@@ -9,6 +9,7 @@ import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.interceptor.InstanceContainer;
+import br.com.caelum.vraptor4.MustHaveArgumentException;
 import br.com.caelum.vraptor4.controller.ControllerInstance;
 import br.com.caelum.vraptor4.controller.ControllerMethod;
 
@@ -126,6 +127,27 @@ public class AspectStyleInterceptorHandlerTest {
 		AspectStyleInterceptorHandler aspectHandler = new AspectStyleInterceptorHandler(WithoutAroundInterceptor.class, stepInvoker, new InstanceContainer(interceptor));
 		aspectHandler.execute(stack, controllerMethod, null);
 		verify(stack).next(Mockito.same(controllerMethod), Mockito.any(ControllerInstance.class));
+	}
+	
+	@Test(expected=IllegalArgumentException.class)
+	public void mustReceiveStackAsParameterForAroundCall(){
+		AroundInterceptorWithoutSimpleStackParameter interceptor = new AroundInterceptorWithoutSimpleStackParameter();
+		AspectStyleInterceptorHandler aspectHandler = new AspectStyleInterceptorHandler(AroundInterceptorWithoutSimpleStackParameter.class, stepInvoker, new InstanceContainer(interceptor));
+		aspectHandler.execute(stack, controllerMethod, currentController);
+	}
+	
+	@Test(expected=IllegalArgumentException.class)
+	public void mustNotReceiveStackAsParameterForBeforeAfterCall(){
+		BeforeAfterInterceptorWithStackAsParameter interceptor = new BeforeAfterInterceptorWithStackAsParameter();
+		AspectStyleInterceptorHandler aspectHandler = new AspectStyleInterceptorHandler(AroundInterceptorWithoutSimpleStackParameter.class, stepInvoker, new InstanceContainer(interceptor));
+		aspectHandler.execute(stack, controllerMethod, currentController);
+	}
+	
+	@Test(expected=IllegalArgumentException.class)
+	public void mustNotReceiveStackAsParameterForAcceptsCall(){
+		AcceptsInterceptorWithStackAsParameter interceptor = new AcceptsInterceptorWithStackAsParameter();
+		AspectStyleInterceptorHandler aspectHandler = new AspectStyleInterceptorHandler(AroundInterceptorWithoutSimpleStackParameter.class, stepInvoker, new InstanceContainer(interceptor));
+		aspectHandler.execute(stack, controllerMethod, currentController);
 	}
 	
 }

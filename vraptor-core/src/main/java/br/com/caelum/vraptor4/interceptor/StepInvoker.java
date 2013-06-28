@@ -57,11 +57,14 @@ public class StepInvoker {
 	}
 	
 
-	public Object tryToInvoke(Object interceptor,Class<? extends Annotation> step,Object... params) {
+	public Object tryToInvoke(Object interceptor,Class<? extends Annotation> step,SignatureAcceptor acceptor,Object... params) {
 		Method stepMethod = findMethod(step, interceptor);
 		if(stepMethod==null){
 			return null;
-		}	
+		}
+		if(!acceptor.accepts(stepMethod)){
+			throw new IllegalArgumentException("Invalid signature for "+stepMethod);
+		}
 		Object returnObject = createMirror().on(interceptor).invoke().method(stepMethod).withArgs(params);
 		if(stepMethod.getReturnType().equals(void.class)){
 			return new VoidReturn();

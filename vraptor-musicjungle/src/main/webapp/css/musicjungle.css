@@ -36,20 +36,17 @@ a.brand.logo {
 	font-size: xx-large;
 }
 
-form[method='post'] {
-	display: inline;
-}
-
 .td-options {
 	width: 340px;
 }
 
-div.navbar-fixed-bottom {
+.v-footer {
+	height: 40px;
 	background-color: #004568;
 	color: white;
 }
 
-div.navbar-fixed-bottom  a {
+.v-footer a {
 	color: white;
 }
 
@@ -59,7 +56,7 @@ div.navbar-fixed-bottom  a {
 
 div.well.login-logo {
 	margin-top: -60px;
-	margin-bottom: 75px;
+	margin-bottom: 20	px;
 	border: solid 1px #004568;
 	color: #004568;
 }
@@ -76,3 +73,19 @@ span.logo-message {
 	font-size: 25px;
 	margin-left: 200px;
 }
+
+.form{
+	margin: 10px auto 20px;
+	border: 1px solid #e5e5e5;
+	padding: 20px 20px 30px;
+	border-radius: 5px;
+}
+
+.form-sign{
+	width: 300px;
+}
+
+.form-music{
+	width: 400px;
+}
+

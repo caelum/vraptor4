@@ -11,6 +11,17 @@ import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.interceptor.InstanceContainer;
 import br.com.caelum.vraptor4.controller.ControllerInstance;
 import br.com.caelum.vraptor4.controller.ControllerMethod;
+import br.com.caelum.vraptor4.interceptor.example.AcceptsInterceptor;
+import br.com.caelum.vraptor4.interceptor.example.AcceptsInterceptorWithStackAsParameter;
+import br.com.caelum.vraptor4.interceptor.example.AcceptsWithoutArgsInterceptor;
+import br.com.caelum.vraptor4.interceptor.example.AlwaysAcceptsAspectInterceptor;
+import br.com.caelum.vraptor4.interceptor.example.AroundInterceptorWithoutSimpleStackParameter;
+import br.com.caelum.vraptor4.interceptor.example.BeforeAfterInterceptorWithStackAsParameter;
+import br.com.caelum.vraptor4.interceptor.example.ExampleOfSimpleStackInterceptor;
+import br.com.caelum.vraptor4.interceptor.example.NonBooleanAcceptsInterceptor;
+import br.com.caelum.vraptor4.interceptor.example.VoidAcceptsInterceptor;
+import br.com.caelum.vraptor4.interceptor.example.WithoutAroundInterceptor;
+import br.com.caelum.vraptor4.interceptor.example.WithoutAroundInvokeInterceptor;
 
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.never;
@@ -147,6 +158,10 @@ public class AspectStyleInterceptorHandlerTest {
 		AcceptsInterceptorWithStackAsParameter interceptor = new AcceptsInterceptorWithStackAsParameter();
 		AspectStyleInterceptorHandler aspectHandler = new AspectStyleInterceptorHandler(AroundInterceptorWithoutSimpleStackParameter.class, stepInvoker, new InstanceContainer(interceptor));
 		aspectHandler.execute(stack, controllerMethod, currentController);
+	}
+	
+	public void	 name() {
+		
 	}
 	
 }

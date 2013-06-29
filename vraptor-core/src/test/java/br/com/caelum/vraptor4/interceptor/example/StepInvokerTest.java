@@ -1,9 +1,10 @@
-package br.com.caelum.vraptor4.interceptor;
+package br.com.caelum.vraptor4.interceptor.example;
 
 import org.junit.Ignore;
 import org.junit.Test;
 
 import br.com.caelum.vraptor4.AroundCall;
+import br.com.caelum.vraptor4.interceptor.StepInvoker;
 
 import static org.junit.Assert.assertNotNull;
 

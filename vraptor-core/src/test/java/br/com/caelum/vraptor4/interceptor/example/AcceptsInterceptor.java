@@ -1,4 +1,4 @@
-package br.com.caelum.vraptor4.interceptor;
+package br.com.caelum.vraptor4.interceptor.example;
 
 import br.com.caelum.vraptor.Intercepts;
 import br.com.caelum.vraptor.core.InterceptorStack;
@@ -10,17 +10,13 @@ import br.com.caelum.vraptor4.controller.ControllerInstance;
 import br.com.caelum.vraptor4.controller.ControllerMethod;
 
 @Intercepts
-public class AcceptsWithoutArgsInterceptor{
+public class AcceptsInterceptor {
 
-	@Accepts
-	public boolean accepts(){
-		return true;
+	private boolean accepts;
+
+	public AcceptsInterceptor(boolean accepts) {
+		this.accepts = accepts;
 	}
-	
-	@AroundCall
-	public void around(InterceptorStack stack, ControllerMethod method, ControllerInstance resourceInstance){
-		
-	}	
 	
 	@BeforeCall
 	public void before(){
@@ -30,5 +26,15 @@ public class AcceptsWithoutArgsInterceptor{
 	@AfterCall
 	public void after(){
 		
-	}	
+	}
+
+	@Accepts
+	public boolean accepts(ControllerMethod method){
+		return this.accepts;
+	}
+	
+	@AroundCall
+	public void around(InterceptorStack stack, ControllerMethod method, ControllerInstance resourceInstance){
+		
+	}
 }

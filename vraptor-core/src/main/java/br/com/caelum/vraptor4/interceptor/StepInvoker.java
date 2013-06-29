@@ -1,45 +1,19 @@
 package br.com.caelum.vraptor4.interceptor;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.AnnotatedElement;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-
-import org.jboss.weld.resources.DefaultReflectionCache;
-
-import br.com.caelum.vraptor4.AroundCall;
-
-import com.google.common.base.Function;
-import com.google.common.base.Predicate;
-import com.google.common.base.Predicates;
-import com.google.common.collect.Collections2;
-import com.google.common.collect.Lists;
-import com.thoughtworks.xstream.converters.reflection.PureJavaReflectionProvider;
 
 import net.vidageek.mirror.dsl.Mirror;
 import net.vidageek.mirror.list.dsl.Matcher;
 import net.vidageek.mirror.list.dsl.MirrorList;
-import net.vidageek.mirror.provider.AnnotatedElementReflectionProvider;
-import net.vidageek.mirror.provider.ClassReflectionProvider;
-import net.vidageek.mirror.provider.ConstructorBypassingReflectionProvider;
-import net.vidageek.mirror.provider.ConstructorReflectionProvider;
-import net.vidageek.mirror.provider.FieldReflectionProvider;
-import net.vidageek.mirror.provider.GenericTypeAccessor;
-import net.vidageek.mirror.provider.MethodReflectionProvider;
-import net.vidageek.mirror.provider.ParameterizedElementReflectionProvider;
-import net.vidageek.mirror.provider.ProxyReflectionProvider;
-import net.vidageek.mirror.provider.ReflectionProvider;
-import net.vidageek.mirror.provider.java.DefaultMirrorReflectionProvider;
-import net.vidageek.mirror.provider.java.PureJavaClassReflectionProvider;
-import net.vidageek.mirror.proxy.dsl.MethodInterceptor;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class StepInvoker {
+	
+	private static final Logger logger = LoggerFactory
+			.getLogger(StepInvoker.class);
 	
 	private class InvokeMatcher implements Matcher<Method> {
 
@@ -52,6 +26,7 @@ public class StepInvoker {
 		@Override
 		public boolean accepts(Method element) {
 			if(element.getDeclaringClass().getName().contains("$")){
+				logger.debug("Ignoring possible proxy {}",element.getDeclaringClass());
 				return false;
 			}
 			return element.isAnnotationPresent(this.step);

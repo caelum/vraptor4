@@ -9,7 +9,6 @@ import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.interceptor.InstanceContainer;
-import br.com.caelum.vraptor4.MustHaveArgumentException;
 import br.com.caelum.vraptor4.controller.ControllerInstance;
 import br.com.caelum.vraptor4.controller.ControllerMethod;
 

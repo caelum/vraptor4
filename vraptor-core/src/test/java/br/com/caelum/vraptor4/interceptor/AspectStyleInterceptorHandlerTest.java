@@ -28,7 +28,7 @@ import br.com.caelum.vraptor4.interceptor.example.BeforeAfterInterceptorWithStac
 import br.com.caelum.vraptor4.interceptor.example.ExampleOfSimpleStackInterceptor;
 import br.com.caelum.vraptor4.interceptor.example.InterceptorWithCustomizedAccepts;
 import br.com.caelum.vraptor4.interceptor.example.NonBooleanAcceptsInterceptor;
-import br.com.caelum.vraptor4.interceptor.example.NotLoggedExampleController;
+import br.com.caelum.vraptor4.interceptor.example.MethodLevelAcceptsController;
 import br.com.caelum.vraptor4.interceptor.example.VoidAcceptsInterceptor;
 import br.com.caelum.vraptor4.interceptor.example.WithoutAroundInterceptor;
 import br.com.caelum.vraptor4.interceptor.example.WithoutAroundInvokeInterceptor;
@@ -221,13 +221,13 @@ public class AspectStyleInterceptorHandlerTest {
 		AspectStyleInterceptorHandler aspectHandler = newAspectStyleInterceptor(
 				InterceptorWithCustomizedAccepts.class, interceptor, validator);
 		DefaultControllerMethod home = new DefaultControllerMethod(
-				new DefaultBeanClass(NotLoggedExampleController.class),
-				NotLoggedExampleController.class.getDeclaredMethod("home"));
+				new DefaultBeanClass(MethodLevelAcceptsController.class),
+				MethodLevelAcceptsController.class.getDeclaredMethod("home"));
 		when(
 				validator.validate(Mockito.same(home),
 						Mockito.any(ControllerInstance.class)))
 				.thenReturn(true);
-		aspectHandler.execute(stack, home, new NotLoggedExampleController());
+		aspectHandler.execute(stack, home, new MethodLevelAcceptsController());
 		assertTrue(interceptor.isBeforeCalled());
 		assertTrue(interceptor.isInterceptCalled());
 		assertTrue(interceptor.isAfterCalled());
@@ -241,14 +241,14 @@ public class AspectStyleInterceptorHandlerTest {
 		AspectStyleInterceptorHandler aspectHandler = newAspectStyleInterceptor(
 				InterceptorWithCustomizedAccepts.class, interceptor, validator);
 		DefaultControllerMethod home = new DefaultControllerMethod(
-				new DefaultBeanClass(NotLoggedExampleController.class),
-				NotLoggedExampleController.class
+				new DefaultBeanClass(MethodLevelAcceptsController.class),
+				MethodLevelAcceptsController.class
 						.getDeclaredMethod("notAllowed"));
 		when(
 				validator.validate(Mockito.same(home),
 						Mockito.any(ControllerInstance.class))).thenReturn(
 				false);
-		aspectHandler.execute(stack, home, new NotLoggedExampleController());
+		aspectHandler.execute(stack, home, new MethodLevelAcceptsController());
 		assertFalse(interceptor.isBeforeCalled());
 		assertFalse(interceptor.isInterceptCalled());
 		assertFalse(interceptor.isAfterCalled());

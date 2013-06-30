@@ -9,4 +9,6 @@ public interface ControllerInstance {
 
 	public abstract Object getController();
 
+	public abstract BeanClass getBeanClass();
+
 }

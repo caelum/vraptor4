@@ -14,4 +14,9 @@ public class DefaultControllerInstance implements ControllerInstance {
 		return controller;
 	}
 	
+	@Override
+	public BeanClass getBeanClass(){
+		return new DefaultBeanClass(controller.getClass());
+	}
+	
 }

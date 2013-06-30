@@ -6,12 +6,13 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import br.com.caelum.vraptor.interceptor.InstanceContainer;
+import br.com.caelum.vraptor4.controller.ControllerInstance;
 import br.com.caelum.vraptor4.controller.ControllerMethod;
 import br.com.caelum.vraptor4.controller.DefaultBeanClass;
 import br.com.caelum.vraptor4.controller.DefaultControllerInstance;
 import br.com.caelum.vraptor4.controller.DefaultControllerMethod;
 import br.com.caelum.vraptor4.interceptor.example.InterceptorWithCustomizedAccepts;
-import br.com.caelum.vraptor4.interceptor.example.NotLoggedExampleController;
+import br.com.caelum.vraptor4.interceptor.example.MethodLevelAcceptsController;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
@@ -25,8 +26,8 @@ public class CustomAcceptsVerifierTest {
 		InterceptorWithCustomizedAccepts interceptor = new InterceptorWithCustomizedAccepts();
 		WithAnnotationAcceptor validator = mock(WithAnnotationAcceptor.class);		
 		ControllerMethod controllerMethod = mock(ControllerMethod.class);
-		DefaultControllerInstance controllerInstance = new DefaultControllerInstance(
-				new NotLoggedExampleController());
+		ControllerInstance controllerInstance = new DefaultControllerInstance(
+				new MethodLevelAcceptsController());
 		CustomiAcceptsVerifier verifier = new CustomiAcceptsVerifier(controllerMethod,
 				controllerInstance, new InstanceContainer(validator), interceptor);
 		when(validator.validate(controllerMethod, controllerInstance)).thenReturn(true);
@@ -39,8 +40,8 @@ public class CustomAcceptsVerifierTest {
 		WithAnnotationAcceptor validator1 = mock(WithAnnotationAcceptor.class);		
 		PackagesAcceptor validator2 = mock(PackagesAcceptor.class);		
 		ControllerMethod controllerMethod = mock(ControllerMethod.class);
-		DefaultControllerInstance controllerInstance = new DefaultControllerInstance(
-				new NotLoggedExampleController());
+		ControllerInstance controllerInstance = new DefaultControllerInstance(
+				new MethodLevelAcceptsController());
 		CustomiAcceptsVerifier verifier = new CustomiAcceptsVerifier(controllerMethod,
 				controllerInstance, new InstanceContainer(validator1,validator2), interceptor);
 		when(validator1.validate(controllerMethod, controllerInstance)).thenReturn(true);
@@ -54,8 +55,8 @@ public class CustomAcceptsVerifierTest {
 		WithAnnotationAcceptor validator1 = mock(WithAnnotationAcceptor.class);		
 		PackagesAcceptor validator2 = mock(PackagesAcceptor.class);		
 		ControllerMethod controllerMethod = mock(ControllerMethod.class);
-		DefaultControllerInstance controllerInstance = new DefaultControllerInstance(
-				new NotLoggedExampleController());
+		ControllerInstance controllerInstance = new DefaultControllerInstance(
+				new MethodLevelAcceptsController());
 		CustomiAcceptsVerifier verifier = new CustomiAcceptsVerifier(controllerMethod,
 				controllerInstance, new InstanceContainer(validator1,validator2), interceptor);
 		when(validator1.validate(controllerMethod, controllerInstance)).thenReturn(false);

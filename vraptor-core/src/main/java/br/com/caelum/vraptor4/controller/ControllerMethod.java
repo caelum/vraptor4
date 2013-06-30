@@ -33,5 +33,7 @@ public interface ControllerMethod {
 
 	boolean containsAnnotation(Class<? extends Annotation> annotation);
 
+	public abstract Annotation[] getAnnotations();
+
 
 }

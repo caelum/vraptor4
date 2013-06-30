@@ -12,7 +12,7 @@ public class PackagesAcceptor implements AcceptsValidator<AcceptsForPackages> {
 
 	@Override
 	public boolean validate(ControllerMethod method, ControllerInstance instance) {		
-		String controllerPackageName = instance.getController().getClass().getPackage().getName();		
+		String controllerPackageName = instance.getBeanClass().getPackageName();		
 		for (String packageName : allowedPackages) {
 			if(controllerPackageName.contains(packageName)){
 				return true;

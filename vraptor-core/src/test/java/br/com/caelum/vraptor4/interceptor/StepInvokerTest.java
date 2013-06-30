@@ -1,10 +1,13 @@
-package br.com.caelum.vraptor4.interceptor.example;
+package br.com.caelum.vraptor4.interceptor;
 
 import org.junit.Ignore;
 import org.junit.Test;
 
 import br.com.caelum.vraptor4.AroundCall;
 import br.com.caelum.vraptor4.interceptor.StepInvoker;
+import br.com.caelum.vraptor4.interceptor.example.ExampleOfSimpleStackInterceptor;
+import br.com.caelum.vraptor4.interceptor.example.InterceptorWithInheritance;
+import br.com.caelum.vraptor4.interceptor.example.WeldProxy$$$StyleInterceptor;
 
 import static org.junit.Assert.assertNotNull;
 

@@ -33,15 +33,14 @@ public class AspectStyleInterceptorHandler implements InterceptorHandler{
 		this.container = container;
 
 	}
-		
+	
 	public void execute(InterceptorStack stack,ControllerMethod controllerMethod,Object currentController) {
 		Object interceptor = container.instanceFor(interceptorClass);
 		DefaultControllerInstance controllerInstance = new DefaultControllerInstance(currentController);
 		InterceptorStackDecorator interceptorStackDecorator = new InterceptorStackDecorator(stack);
 		InterceptorContainerDecorator interceptorContainer = new InterceptorContainerDecorator(container,interceptorStackDecorator,controllerMethod,controllerInstance,new DefaultSimpleInterceptorStack(interceptorStackDecorator, controllerMethod, controllerInstance));
-		Object returnObject = stepInvoker.tryToInvoke(interceptor,Accepts.class,new BeforeAfterSignatureAcceptor(),parametersFor(Accepts.class,interceptor,interceptorContainer));
-		
-		boolean accepts = true;
+		boolean accepts = new CustomizedAcceptsVerifier(controllerMethod,controllerInstance,container,interceptor).isValid();		
+		Object returnObject = stepInvoker.tryToInvoke(interceptor,Accepts.class,new BeforeAfterSignatureAcceptor(),parametersFor(Accepts.class,interceptor,interceptorContainer));		
 		if(returnObject!=null){			
 			if(!returnObject.getClass().equals(Boolean.class)){
 				throw new IllegalStateException("@Accepts method should return boolean");
@@ -72,7 +71,7 @@ public class AspectStyleInterceptorHandler implements InterceptorHandler{
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public Object[] parametersFor(Class<? extends Annotation> step,Object interceptor,InterceptorContainerDecorator container){
+	private Object[] parametersFor(Class<? extends Annotation> step,Object interceptor,InterceptorContainerDecorator container){
 		Method methodToInvoke = stepInvoker.findMethod(step,interceptor);
 		if(methodToInvoke==null) return new Object[]{};
 		Class<?>[] parameterTypes = methodToInvoke.getParameterTypes();

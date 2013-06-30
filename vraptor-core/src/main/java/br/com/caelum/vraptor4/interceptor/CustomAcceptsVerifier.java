@@ -10,7 +10,7 @@ import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor4.controller.ControllerInstance;
 import br.com.caelum.vraptor4.controller.ControllerMethod;
 
-public class CustomiAcceptsVerifier {
+public class CustomAcceptsVerifier {
 
 	public class AcceptsConstraintMatcher implements Matcher<Annotation> {
 
@@ -26,7 +26,7 @@ public class CustomiAcceptsVerifier {
 	private Object interceptor;
 	private ControllerMethod controllerMethod;
 
-	public CustomiAcceptsVerifier(ControllerMethod controllerMethod,ControllerInstance controllerInstance,
+	public CustomAcceptsVerifier(ControllerMethod controllerMethod,ControllerInstance controllerInstance,
 			Container container, Object interceptor) {
 		this.controllerMethod = controllerMethod;
 		this.controllerInstance = controllerInstance;
@@ -48,6 +48,6 @@ public class CustomiAcceptsVerifier {
 			}
 		}
 		return true;
-	}
+	}	
 
 }

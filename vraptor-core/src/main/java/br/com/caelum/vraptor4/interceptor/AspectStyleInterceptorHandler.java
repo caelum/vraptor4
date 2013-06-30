@@ -40,7 +40,7 @@ public class AspectStyleInterceptorHandler implements InterceptorHandler{
 		ControllerInstance controllerInstance = new DefaultControllerInstance(currentController);
 		InterceptorStackDecorator interceptorStackDecorator = new InterceptorStackDecorator(stack);
 		InterceptorContainerDecorator interceptorContainer = new InterceptorContainerDecorator(container,interceptorStackDecorator,controllerMethod,controllerInstance,new DefaultSimpleInterceptorStack(interceptorStackDecorator, controllerMethod, controllerInstance));
-		boolean accepts = new CustomiAcceptsVerifier(controllerMethod,controllerInstance,container,interceptor).isValid();		
+		boolean accepts = new CustomAcceptsVerifier(controllerMethod,controllerInstance,container,interceptor).isValid();		
 		Object returnObject = stepInvoker.tryToInvoke(interceptor,Accepts.class,new BeforeAfterSignatureAcceptor(),parametersFor(Accepts.class,interceptor,interceptorContainer));		
 		if(returnObject!=null){			
 			if(!returnObject.getClass().equals(Boolean.class)){

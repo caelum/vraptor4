@@ -28,7 +28,7 @@ public class CustomAcceptsVerifierTest {
 		ControllerMethod controllerMethod = mock(ControllerMethod.class);
 		ControllerInstance controllerInstance = new DefaultControllerInstance(
 				new MethodLevelAcceptsController());
-		CustomiAcceptsVerifier verifier = new CustomiAcceptsVerifier(controllerMethod,
+		CustomAcceptsVerifier verifier = new CustomAcceptsVerifier(controllerMethod,
 				controllerInstance, new InstanceContainer(validator), interceptor);
 		when(validator.validate(controllerMethod, controllerInstance)).thenReturn(true);
 		assertTrue(verifier.isValid());
@@ -42,7 +42,7 @@ public class CustomAcceptsVerifierTest {
 		ControllerMethod controllerMethod = mock(ControllerMethod.class);
 		ControllerInstance controllerInstance = new DefaultControllerInstance(
 				new MethodLevelAcceptsController());
-		CustomiAcceptsVerifier verifier = new CustomiAcceptsVerifier(controllerMethod,
+		CustomAcceptsVerifier verifier = new CustomAcceptsVerifier(controllerMethod,
 				controllerInstance, new InstanceContainer(validator1,validator2), interceptor);
 		when(validator1.validate(controllerMethod, controllerInstance)).thenReturn(true);
 		when(validator2.validate(controllerMethod, controllerInstance)).thenReturn(true);
@@ -57,7 +57,7 @@ public class CustomAcceptsVerifierTest {
 		ControllerMethod controllerMethod = mock(ControllerMethod.class);
 		ControllerInstance controllerInstance = new DefaultControllerInstance(
 				new MethodLevelAcceptsController());
-		CustomiAcceptsVerifier verifier = new CustomiAcceptsVerifier(controllerMethod,
+		CustomAcceptsVerifier verifier = new CustomAcceptsVerifier(controllerMethod,
 				controllerInstance, new InstanceContainer(validator1,validator2), interceptor);
 		when(validator1.validate(controllerMethod, controllerInstance)).thenReturn(false);
 		when(validator2.validate(controllerMethod, controllerInstance)).thenReturn(true);

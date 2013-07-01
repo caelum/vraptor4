@@ -15,7 +15,7 @@
 	</strong>
 	
 	<c:forEach items="${music.musicOwners}" var="mo" varStatus="s">
-		<a href="<c:url value="/users/${user.login}"/>">${mo.owner.name}</a> 
+		<a href="<c:url value="/users/${mo.owner.login}"/>">${mo.owner.name}</a> 
 		${s.last ? '.' : ', ' }
 	</c:forEach>
 

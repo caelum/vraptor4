@@ -15,7 +15,7 @@
 	<tbody>
 		<c:forEach var="music" items="${musics}">
 			<tr>
-				<td><a href="<c:url value="/musics/${music.id}"/>">${music.title}</a></td>
+				<td><a href="${linkTo[MusicController].show[music]}">${music.title}</a></td>
 				<td>${music.description}</td>
 				<td><fmt:message key="${music.type}"/></td>
 				<td>
@@ -24,14 +24,14 @@
 					</c:forEach>
 				</td>
 				<td class="td-options">
-					<form action="<c:url value="/users/${userInfo.user.login}/musics/${music.id}"/>" method="post">
+					<form action="${linkTo[MusicOwnerController].addToMyList[userInfo.user][music]}" method="post">
 						<input type="hidden" name="_method" value="PUT"/>
 						<button type="submit" class="btn btn-primary">
 							<span class="icon icon-plus icon-white"></span>
 							<fmt:message key="add_to_my_list"/>
 						</button>
 					</form>
-					<a href="<c:url value="/musics/download/${music.id}"/>" class="btn btn-primary" download>
+					<a href="${linkTo[MusicController].download[music]}" class="btn btn-primary" download>
 						<i class="icon-download-alt icon-white"></i>
 						download
 					</a>

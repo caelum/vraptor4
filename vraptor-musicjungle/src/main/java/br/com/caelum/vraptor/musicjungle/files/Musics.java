@@ -1,4 +1,4 @@
-package br.com.caelum.vraptor.musicjungle.converter;
+package br.com.caelum.vraptor.musicjungle.files;
 
 import java.io.File;
 import java.io.FileOutputStream;

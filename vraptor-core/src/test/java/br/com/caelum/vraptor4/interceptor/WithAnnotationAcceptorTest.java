@@ -7,13 +7,10 @@ import javax.enterprise.util.AnnotationLiteral;
 
 import net.vidageek.mirror.dsl.Mirror;
 
+import org.junit.Before;
 import org.junit.Test;
-
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor4.controller.ControllerMethod;
 import br.com.caelum.vraptor4.controller.DefaultControllerInstance;
@@ -22,58 +19,70 @@ import br.com.caelum.vraptor4.interceptor.example.InterceptorWithCustomizedAccep
 import br.com.caelum.vraptor4.interceptor.example.MethodLevelAcceptsController;
 import br.com.caelum.vraptor4.interceptor.example.NotLogged;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import static org.mockito.Mockito.when;
+
 public class WithAnnotationAcceptorTest {
+	
+	private @Mock ControllerMethod controllerMethod;
+	private AcceptsWithAnnotations annotation;
+	
+	@Before
+	public void setup() {
+		MockitoAnnotations.initMocks(this);
+		annotation = new Mirror()
+		.on((AnnotatedElement) InterceptorWithCustomizedAccepts.class)
+		.reflect().annotation(AcceptsWithAnnotations.class);
+	}	
 
 	@Test
 	public void shouldAcceptMethodWithAnnotation() throws Exception {
-		WithAnnotationAcceptor acceptor = new WithAnnotationAcceptor();
-		AcceptsWithAnnotations annotation = new Mirror()
-				.on((AnnotatedElement) InterceptorWithCustomizedAccepts.class)
-				.reflect().annotation(AcceptsWithAnnotations.class);
-		acceptor.initialize(annotation);
+		WithAnnotationAcceptor acceptor = new WithAnnotationAcceptor();		
 		DefaultControllerInstance controllerInstance = new DefaultControllerInstance(new MethodLevelAcceptsController());
-		ControllerMethod controllerMethod = mock(ControllerMethod.class);
 		AnnotationLiteral<NotLogged> notLogged = new AnnotationLiteral<NotLogged>() {};
+		
+		acceptor.initialize(annotation);
+		
 		when(controllerMethod.getAnnotations()).thenReturn(new Annotation[]{notLogged});
+		
 		assertTrue(acceptor.validate(controllerMethod, controllerInstance));
 	}
 	
 	@Test
 	public void shouldNotAcceptMethodWithoutAnnotation() throws Exception {
 		WithAnnotationAcceptor acceptor = new WithAnnotationAcceptor();
-		AcceptsWithAnnotations annotation = new Mirror()
-				.on((AnnotatedElement) InterceptorWithCustomizedAccepts.class)
-				.reflect().annotation(AcceptsWithAnnotations.class);
-		acceptor.initialize(annotation);
 		DefaultControllerInstance controllerInstance = new DefaultControllerInstance(new MethodLevelAcceptsController());
-		ControllerMethod controllerMethod = mock(ControllerMethod.class);		
+		
+		acceptor.initialize(annotation);
+		
 		when(controllerMethod.getAnnotations()).thenReturn(new Annotation[]{});
+		
 		assertFalse(acceptor.validate(controllerMethod, controllerInstance));
 	}
 	
 	@Test
 	public void shouldAcceptsAllMethodsInsideAnnotatedClass() throws Exception {
 		WithAnnotationAcceptor acceptor = new WithAnnotationAcceptor();
-		AcceptsWithAnnotations annotation = new Mirror()
-		.on((AnnotatedElement) InterceptorWithCustomizedAccepts.class)
-		.reflect().annotation(AcceptsWithAnnotations.class);
-		acceptor.initialize(annotation);
 		DefaultControllerInstance controllerInstance = new DefaultControllerInstance(new ClassLevelAcceptsController());
-		ControllerMethod controllerMethod = mock(ControllerMethod.class);		
+		
+		acceptor.initialize(annotation);
+		
 		when(controllerMethod.getAnnotations()).thenReturn(new Annotation[]{});
+		
 		assertTrue(acceptor.validate(controllerMethod, controllerInstance));
 	}	
 	
 	@Test
 	public void shouldNotAcceptsAnyMethodsInsideNonAnnotatedClass() throws Exception {
 		WithAnnotationAcceptor acceptor = new WithAnnotationAcceptor();
-		AcceptsWithAnnotations annotation = new Mirror()
-		.on((AnnotatedElement) InterceptorWithCustomizedAccepts.class)
-		.reflect().annotation(AcceptsWithAnnotations.class);
-		acceptor.initialize(annotation);
 		DefaultControllerInstance controllerInstance = new DefaultControllerInstance(new Object());
-		ControllerMethod controllerMethod = mock(ControllerMethod.class);		
+		
+		acceptor.initialize(annotation);
+		
 		when(controllerMethod.getAnnotations()).thenReturn(new Annotation[]{});
+		
 		assertFalse(acceptor.validate(controllerMethod, controllerInstance));
 	}	
 }

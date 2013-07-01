@@ -1,67 +1,67 @@
 package br.com.caelum.vraptor4.interceptor;
 
+import org.junit.Before;
 import org.junit.Test;
-
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor.interceptor.InstanceContainer;
 import br.com.caelum.vraptor4.controller.ControllerInstance;
 import br.com.caelum.vraptor4.controller.ControllerMethod;
-import br.com.caelum.vraptor4.controller.DefaultBeanClass;
 import br.com.caelum.vraptor4.controller.DefaultControllerInstance;
-import br.com.caelum.vraptor4.controller.DefaultControllerMethod;
 import br.com.caelum.vraptor4.interceptor.example.InterceptorWithCustomizedAccepts;
 import br.com.caelum.vraptor4.interceptor.example.MethodLevelAcceptsController;
 
-import static org.mockito.Mockito.mock;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class CustomAcceptsVerifierTest {
+	
+	private @Mock WithAnnotationAcceptor withAnnotationAcceptor;
+	private @Mock ControllerMethod controllerMethod;
+	private @Mock PackagesAcceptor packagesAcceptor;
+	private InterceptorWithCustomizedAccepts interceptor;
+	private ControllerInstance controllerInstance;
+	
+	@Before
+	public void setup() {
+		MockitoAnnotations.initMocks(this);
+		interceptor = new InterceptorWithCustomizedAccepts();
+		controllerInstance = new DefaultControllerInstance(
+				new MethodLevelAcceptsController());		
+	}	
 
 	@Test
 	public void shouldValidateWithOne() throws Exception {
-		InterceptorWithCustomizedAccepts interceptor = new InterceptorWithCustomizedAccepts();
-		WithAnnotationAcceptor validator = mock(WithAnnotationAcceptor.class);		
-		ControllerMethod controllerMethod = mock(ControllerMethod.class);
-		ControllerInstance controllerInstance = new DefaultControllerInstance(
-				new MethodLevelAcceptsController());
 		CustomAcceptsVerifier verifier = new CustomAcceptsVerifier(controllerMethod,
-				controllerInstance, new InstanceContainer(validator), interceptor);
-		when(validator.validate(controllerMethod, controllerInstance)).thenReturn(true);
+				controllerInstance, new InstanceContainer(withAnnotationAcceptor), interceptor);		
+		when(withAnnotationAcceptor.validate(controllerMethod, controllerInstance)).thenReturn(true);
+		
 		assertTrue(verifier.isValid());
 	}
 	
 	@Test
 	public void shouldValidateWithTwoOrMore() throws Exception {
-		InterceptorWithCustomizedAccepts interceptor = new InterceptorWithCustomizedAccepts();
-		WithAnnotationAcceptor validator1 = mock(WithAnnotationAcceptor.class);		
-		PackagesAcceptor validator2 = mock(PackagesAcceptor.class);		
-		ControllerMethod controllerMethod = mock(ControllerMethod.class);
-		ControllerInstance controllerInstance = new DefaultControllerInstance(
-				new MethodLevelAcceptsController());
 		CustomAcceptsVerifier verifier = new CustomAcceptsVerifier(controllerMethod,
-				controllerInstance, new InstanceContainer(validator1,validator2), interceptor);
-		when(validator1.validate(controllerMethod, controllerInstance)).thenReturn(true);
-		when(validator2.validate(controllerMethod, controllerInstance)).thenReturn(true);
+				controllerInstance, new InstanceContainer(withAnnotationAcceptor,packagesAcceptor), interceptor);
+		when(withAnnotationAcceptor.validate(controllerMethod, controllerInstance)).thenReturn(true);
+		when(packagesAcceptor.validate(controllerMethod, controllerInstance)).thenReturn(true);
+		
 		assertTrue(verifier.isValid());
 	}
 	
 	@Test
 	public void shouldEndProcessIfOneIsInvalid() throws Exception {
-		InterceptorWithCustomizedAccepts interceptor = new InterceptorWithCustomizedAccepts();
-		WithAnnotationAcceptor validator1 = mock(WithAnnotationAcceptor.class);		
-		PackagesAcceptor validator2 = mock(PackagesAcceptor.class);		
-		ControllerMethod controllerMethod = mock(ControllerMethod.class);
-		ControllerInstance controllerInstance = new DefaultControllerInstance(
-				new MethodLevelAcceptsController());
 		CustomAcceptsVerifier verifier = new CustomAcceptsVerifier(controllerMethod,
-				controllerInstance, new InstanceContainer(validator1,validator2), interceptor);
-		when(validator1.validate(controllerMethod, controllerInstance)).thenReturn(false);
-		when(validator2.validate(controllerMethod, controllerInstance)).thenReturn(true);
-		verify(validator2,never()).validate(controllerMethod, controllerInstance);
+				controllerInstance, new InstanceContainer(withAnnotationAcceptor,packagesAcceptor), interceptor);
+		when(withAnnotationAcceptor.validate(controllerMethod, controllerInstance)).thenReturn(false);
+		when(packagesAcceptor.validate(controllerMethod, controllerInstance)).thenReturn(true);
+		
+		verify(packagesAcceptor,never()).validate(controllerMethod, controllerInstance);
 		assertFalse(verifier.isValid());
 	}	
 }

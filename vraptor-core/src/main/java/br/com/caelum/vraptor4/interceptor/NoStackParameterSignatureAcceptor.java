@@ -6,7 +6,7 @@ import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor4.AfterCall;
 import br.com.caelum.vraptor4.BeforeCall;
 
-public class BeforeAfterSignatureAcceptor implements SignatureAcceptor {
+public class NoStackParameterSignatureAcceptor implements SignatureAcceptor {
 
 	@Override
 	public boolean accepts(Method method){
@@ -14,6 +14,6 @@ public class BeforeAfterSignatureAcceptor implements SignatureAcceptor {
 	}
 
 	public String errorMessage() {
-		return BeforeCall.class.getSimpleName()+" or "+AfterCall.class.getSimpleName()+" method must not receive "+InterceptorStack.class.getName()+" or "+SimpleInterceptorStack.class.getName();
+		return "Non @Around method must not receive "+InterceptorStack.class.getName()+" or "+SimpleInterceptorStack.class.getName();
 	}
 }

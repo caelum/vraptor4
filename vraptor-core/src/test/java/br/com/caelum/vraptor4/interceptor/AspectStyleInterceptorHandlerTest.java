@@ -235,15 +235,11 @@ public class AspectStyleInterceptorHandlerTest {
 		InterceptorWithCustomizedAccepts interceptor = new InterceptorWithCustomizedAccepts();
 		AspectStyleInterceptorHandler aspectHandler = newAspectStyleInterceptorHandler(
 				InterceptorWithCustomizedAccepts.class, interceptor, withAnnotationAcceptor);
-		DefaultControllerMethod home = new DefaultControllerMethod(
-				new DefaultBeanClass(MethodLevelAcceptsController.class),
-				MethodLevelAcceptsController.class.getDeclaredMethod("home"));
-
 		when(
-				withAnnotationAcceptor.validate(Mockito.same(home),
+				withAnnotationAcceptor.validate(Mockito.same(controllerMethod),
 						Mockito.any(ControllerInstance.class)))
 				.thenReturn(true);
-		aspectHandler.execute(stack, home, new MethodLevelAcceptsController());
+		aspectHandler.execute(stack, controllerMethod, new MethodLevelAcceptsController());
 
 		assertTrue(interceptor.isBeforeCalled());
 		assertTrue(interceptor.isInterceptCalled());
@@ -256,21 +252,19 @@ public class AspectStyleInterceptorHandlerTest {
 		InterceptorWithCustomizedAccepts interceptor = new InterceptorWithCustomizedAccepts();
 		AspectStyleInterceptorHandler aspectHandler = newAspectStyleInterceptorHandler(
 				InterceptorWithCustomizedAccepts.class, interceptor, withAnnotationAcceptor);
-		DefaultControllerMethod home = new DefaultControllerMethod(
-				new DefaultBeanClass(MethodLevelAcceptsController.class),
-				MethodLevelAcceptsController.class
-						.getDeclaredMethod("notAllowed"));
 		when(
-				withAnnotationAcceptor.validate(Mockito.same(home),
+				withAnnotationAcceptor.validate(Mockito.same(controllerMethod),
 						Mockito.any(ControllerInstance.class))).thenReturn(
 				false);
-		aspectHandler.execute(stack, home, new MethodLevelAcceptsController());
+		aspectHandler.execute(stack, controllerMethod, new MethodLevelAcceptsController());
 
 		assertFalse(interceptor.isBeforeCalled());
 		assertFalse(interceptor.isInterceptCalled());
 		assertFalse(interceptor.isAfterCalled());
 
 	}
+	
+
 
 	private AspectStyleInterceptorHandler newAspectStyleInterceptorHandler(
 			Class<?> interceptorClass, Object... dependencies) {

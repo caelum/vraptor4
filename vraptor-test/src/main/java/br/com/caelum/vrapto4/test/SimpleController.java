@@ -14,7 +14,7 @@ public class SimpleController {
 	@Inject
 	private Result result;
 	
-	public void teste() throws IOException{
+	public void test() throws IOException{
 		result.use(http()).body("<html><body>Olha olha ai</body></html>");
 	}
 }

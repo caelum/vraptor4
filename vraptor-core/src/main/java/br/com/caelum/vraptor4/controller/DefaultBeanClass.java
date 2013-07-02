@@ -17,6 +17,8 @@
 
 package br.com.caelum.vraptor4.controller;
 
+import java.lang.annotation.Annotation;
+
 public class DefaultBeanClass implements BeanClass {
 
 	private final Class<?> type;
@@ -52,6 +54,20 @@ public class DefaultBeanClass implements BeanClass {
 
 	public Class<?> getType() {
 		return type;
+	}
+	
+	public Annotation[] getAnnotations(){
+		return type.getAnnotations();
+	}
+	
+	@Override
+	public Package getPackage(){
+		return type.getPackage();
+	}
+	
+	@Override
+	public String getPackageName(){
+		return getPackage().getName();
 	}
 
 }

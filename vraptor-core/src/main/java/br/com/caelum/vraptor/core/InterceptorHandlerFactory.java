@@ -15,7 +15,6 @@
  */
 package br.com.caelum.vraptor.core;
 
-import br.com.caelum.vraptor.interceptor.Interceptor;
 
 /**
  * Factory for InterceptorHandlers
@@ -32,6 +31,6 @@ public interface InterceptorHandlerFactory {
 	 * @param type
 	 * @return
 	 */
-	InterceptorHandler handlerFor(Class<? extends Interceptor> type);
+	InterceptorHandler handlerFor(Class<?> type);
 
 }

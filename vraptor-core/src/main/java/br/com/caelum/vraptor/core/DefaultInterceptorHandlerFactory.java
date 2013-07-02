@@ -15,15 +15,20 @@
  */
 package br.com.caelum.vraptor.core;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.ConcurrentMap;
 
 import javax.enterprise.inject.Default;
 import javax.inject.Inject;
 
+import br.com.caelum.vraptor.Intercepts;
 import br.com.caelum.vraptor.Lazy;
 import br.com.caelum.vraptor.interceptor.Interceptor;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.ioc.Container;
+import br.com.caelum.vraptor4.interceptor.AspectStyleInterceptorHandler;
+import br.com.caelum.vraptor4.interceptor.StepInvoker;
 
 import com.google.common.collect.MapMaker;
 
@@ -40,7 +45,7 @@ public class DefaultInterceptorHandlerFactory implements InterceptorHandlerFacto
 
 	private Container container;
 
-	private ConcurrentMap<Class<? extends Interceptor>, InterceptorHandler> cachedHandlers =
+	private ConcurrentMap<Class<?>, InterceptorHandler> cachedHandlers =
 		new MapMaker().makeMap();
 
 	//CDI eyes only
@@ -54,7 +59,7 @@ public class DefaultInterceptorHandlerFactory implements InterceptorHandlerFacto
 	}
 	
 	@Override
-	public InterceptorHandler handlerFor(Class<? extends Interceptor> type) {
+	public InterceptorHandler handlerFor(Class<?> type) {
 		if (type.isAnnotationPresent(Lazy.class)) {
 			InterceptorHandler handler = cachedHandlers.get(type);
 			if (handler == null) {
@@ -63,6 +68,11 @@ public class DefaultInterceptorHandlerFactory implements InterceptorHandlerFacto
 				return value;
 			} else {
 				return handler;
+			}
+		}
+		else{
+			if(type.isAnnotationPresent(Intercepts.class) && !Interceptor.class.isAssignableFrom(type)){
+				return new AspectStyleInterceptorHandler(type, new StepInvoker(), container);
 			}
 		}
 		return new ToInstantiateInterceptorHandler(container, type);

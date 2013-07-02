@@ -3,6 +3,7 @@ package br.com.caelum.vraptor.interceptor;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
@@ -26,13 +27,14 @@ import br.com.caelum.vraptor.deserialization.Deserializer;
 import br.com.caelum.vraptor.deserialization.Deserializers;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.view.Status;
+import br.com.caelum.vraptor4.controller.ControllerMethod;
 import br.com.caelum.vraptor4.controller.DefaultControllerMethod;
 
 
 public class DeserializingInterceptorTest {
 	private DeserializingInterceptor interceptor;
-	private DefaultControllerMethod consumeXml;
-	private DefaultControllerMethod doesntConsume;
+	private ControllerMethod consumeXml;
+	private ControllerMethod doesntConsume;
 	@Mock private HttpServletRequest request;
 	@Mock private InterceptorStack stack;
 	@Mock Deserializers deserializers;
@@ -125,7 +127,7 @@ public class DeserializingInterceptorTest {
 		when(request.getContentType()).thenReturn("application/xml");
 
 		methodInfo.setParameters(new Object[2]);
-		final DefaultControllerMethod consumesAnything = new DefaultControllerMethod(null, DummyResource.class.getDeclaredMethod("consumesAnything"));
+		final ControllerMethod consumesAnything = new DefaultControllerMethod(null, DummyResource.class.getDeclaredMethod("consumesAnything"));
 
 		final Deserializer deserializer = mock(Deserializer.class);
 		when(deserializer.deserialize(null, consumesAnything)).thenReturn(new Object[] {"abc", "def"});

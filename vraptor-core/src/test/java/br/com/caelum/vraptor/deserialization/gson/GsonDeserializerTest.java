@@ -2,7 +2,9 @@ package br.com.caelum.vraptor.deserialization.gson;
 
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
+
 import static org.junit.Assert.assertThat;
+
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -19,6 +21,7 @@ import org.junit.Test;
 
 import br.com.caelum.vraptor.core.Localization;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
+import br.com.caelum.vraptor4.controller.BeanClass;
 import br.com.caelum.vraptor4.controller.DefaultBeanClass;
 import br.com.caelum.vraptor4.controller.DefaultControllerMethod;
 import br.com.caelum.vraptor4.controller.ControllerMethod;
@@ -35,8 +38,8 @@ public class GsonDeserializerTest {
 	private ParameterNameProvider provider;
 	private Localization localization;
 	private ControllerMethod jump;
-	private DefaultControllerMethod woof;
-	private DefaultControllerMethod dropDead;
+	private ControllerMethod woof;
+	private ControllerMethod dropDead;
 
 	@Before
 	public void setUp() throws Exception {
@@ -46,7 +49,7 @@ public class GsonDeserializerTest {
 		when(localization.getLocale()).thenReturn(new Locale("pt", "BR"));
 
 		deserializer = new GsonDeserialization(provider, Collections.<JsonDeserializer<?>> emptyList());
-		DefaultBeanClass resourceClass = new DefaultBeanClass(DogController.class);
+		BeanClass resourceClass = new DefaultBeanClass(DogController.class);
 
 		woof = new DefaultControllerMethod(resourceClass, DogController.class.getDeclaredMethod("woof"));
 		bark = new DefaultControllerMethod(resourceClass, DogController.class.getDeclaredMethod("bark", Dog.class));

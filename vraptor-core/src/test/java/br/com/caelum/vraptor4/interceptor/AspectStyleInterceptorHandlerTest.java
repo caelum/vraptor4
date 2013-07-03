@@ -39,10 +39,14 @@ import static org.mockito.Mockito.when;
 public class AspectStyleInterceptorHandlerTest {
 
 	private StepInvoker stepInvoker = new StepInvoker();
-	private @Mock InterceptorStack stack;
-	private @Mock ControllerMethod controllerMethod;
-	private @Mock Object currentController;
-	private @Mock WithAnnotationAcceptor withAnnotationAcceptor;
+	private @Mock
+	InterceptorStack stack;
+	private @Mock
+	ControllerMethod controllerMethod;
+	private @Mock
+	Object currentController;
+	private @Mock
+	WithAnnotationAcceptor withAnnotationAcceptor;
 
 	@Before
 	public void setup() {
@@ -234,12 +238,14 @@ public class AspectStyleInterceptorHandlerTest {
 	public void shouldAcceptCustomizedAccepts() throws Exception {
 		InterceptorWithCustomizedAccepts interceptor = new InterceptorWithCustomizedAccepts();
 		AspectStyleInterceptorHandler aspectHandler = newAspectStyleInterceptorHandler(
-				InterceptorWithCustomizedAccepts.class, interceptor, withAnnotationAcceptor);
+				InterceptorWithCustomizedAccepts.class, interceptor,
+				withAnnotationAcceptor);
 		when(
 				withAnnotationAcceptor.validate(Mockito.same(controllerMethod),
 						Mockito.any(ControllerInstance.class)))
 				.thenReturn(true);
-		aspectHandler.execute(stack, controllerMethod, new MethodLevelAcceptsController());
+		aspectHandler.execute(stack, controllerMethod,
+				new MethodLevelAcceptsController());
 
 		assertTrue(interceptor.isBeforeCalled());
 		assertTrue(interceptor.isInterceptCalled());
@@ -251,20 +257,39 @@ public class AspectStyleInterceptorHandlerTest {
 	public void shouldNotAcceptCustomizedAccepts() throws Exception {
 		InterceptorWithCustomizedAccepts interceptor = new InterceptorWithCustomizedAccepts();
 		AspectStyleInterceptorHandler aspectHandler = newAspectStyleInterceptorHandler(
-				InterceptorWithCustomizedAccepts.class, interceptor, withAnnotationAcceptor);
+				InterceptorWithCustomizedAccepts.class, interceptor,
+				withAnnotationAcceptor);
 		when(
 				withAnnotationAcceptor.validate(Mockito.same(controllerMethod),
 						Mockito.any(ControllerInstance.class))).thenReturn(
 				false);
-		aspectHandler.execute(stack, controllerMethod, new MethodLevelAcceptsController());
+		aspectHandler.execute(stack, controllerMethod,
+				new MethodLevelAcceptsController());
 
 		assertFalse(interceptor.isBeforeCalled());
 		assertFalse(interceptor.isInterceptCalled());
 		assertFalse(interceptor.isAfterCalled());
 
 	}
-	
 
+	@Test
+	public void shouldInvokeCustomAcceptsFailCallback() {
+		InterceptorWithCustomizedAccepts interceptor = spy(new InterceptorWithCustomizedAccepts());
+		AspectStyleInterceptorHandler aspectHandler = newAspectStyleInterceptorHandler(
+				InterceptorWithCustomizedAccepts.class, interceptor,
+				withAnnotationAcceptor);
+
+		when(
+				withAnnotationAcceptor.validate(Mockito.same(controllerMethod),
+						Mockito.any(ControllerInstance.class))).thenReturn(
+				false);
+		
+		aspectHandler.execute(stack, controllerMethod, aspectHandler);
+		
+		verify(interceptor).customAcceptsFailCallback();
+				
+
+	}
 
 	private AspectStyleInterceptorHandler newAspectStyleInterceptorHandler(
 			Class<?> interceptorClass, Object... dependencies) {

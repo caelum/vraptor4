@@ -16,26 +16,28 @@ import br.com.caelum.vraptor.musicjungle.acceptance.pages.GenericPage;
  */
 public class ResultSerializationTest extends AcceptanceTestCase{
 
+	private GenericPage genericPage;
+
 	@Test
 	public void shouldSerializeAMusicListAsJsonXmlAndHTTP() throws Exception {
 		
-		GenericPage genericPage = accessFullUrl("/musics/list/json");
-		assertThat(genericPage.pageSource(), containsString(getExpectedJson()));
+		this.genericPage = accessFullUrl("/musics/list/json");
+		assertThat(pageSource(), containsString(getExpectedJson()));
 		
 		genericPage = accessFullUrl("/musics/list/xml");
-		assertThat(genericPage.pageSource(), containsString(getExpectedXml()));
+		assertThat(pageSource(), containsString(getExpectedXml()));
 		
 		genericPage = accessFullUrl("/musics/list/http");
-		assertThat(genericPage.pageSource(), containsString(getExpectedHTTP()));
+		assertThat(pageSource(), containsString(getExpectedHTTP()));
 		
 		genericPage = accessFullUrl("/musics/list/form");
 		genericPage.getForm().select(name("_format"), "xml").submit();
 		
-		assertThat(genericPage.pageSource(), containsString(getExpectedXml()));
+		assertThat(pageSource(), containsString(getExpectedXml()));
 		genericPage = accessFullUrl("/musics/list/form");
 		
 		genericPage.getForm().select(name("_format"), "json").submit();
-		assertThat(genericPage.pageSource(), containsString(getExpectedJson()));
+		assertThat(pageSource(), containsString(getExpectedJson()));
 	}
 	
 	private String getExpectedJson() {
@@ -68,4 +70,7 @@ public class ResultSerializationTest extends AcceptanceTestCase{
 			"Moonlight Sonata, description=Beethoven, type=CLASSICAL]]";
 	}
 	
+	private String pageSource() {
+		return this.genericPage.pageSource();
+	}
 }

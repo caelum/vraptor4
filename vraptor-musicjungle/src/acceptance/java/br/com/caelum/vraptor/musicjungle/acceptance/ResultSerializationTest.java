@@ -21,23 +21,23 @@ public class ResultSerializationTest extends AcceptanceTestCase{
 	@Test
 	public void shouldSerializeAMusicListAsJsonXmlAndHTTP() throws Exception {
 		
-		this.genericPage = accessFullUrl("/musics/list/json");
-		assertThat(pageSource(), containsString(getExpectedJson()));
-		
-		genericPage = accessFullUrl("/musics/list/xml");
-		assertThat(pageSource(), containsString(getExpectedXml()));
-		
-		genericPage = accessFullUrl("/musics/list/http");
-		assertThat(pageSource(), containsString(getExpectedHTTP()));
-		
-		genericPage = accessFullUrl("/musics/list/form");
-		genericPage.getForm().select(name("_format"), "xml").submit();
-		
-		assertThat(pageSource(), containsString(getExpectedXml()));
-		genericPage = accessFullUrl("/musics/list/form");
-		
-		genericPage.getForm().select(name("_format"), "json").submit();
-		assertThat(pageSource(), containsString(getExpectedJson()));
+		accessURLAndAssertContent("/musics/list/json", getExpectedJson());
+		accessURLAndAssertContent("/musics/list/xml", getExpectedXml());
+		accessURLAndAssertContent("/musics/list/http", getExpectedHTTP());
+
+		accessFormURLSelectItemAndAssertContent("xml", getExpectedXml());
+		accessFormURLSelectItemAndAssertContent("json", getExpectedJson());
+	}
+
+	private void accessURLAndAssertContent(String url, String expected) {
+		this.genericPage = accessFullUrl(url);
+		assertThat(pageSource(), containsString(expected));
+	}
+	
+	private void accessFormURLSelectItemAndAssertContent(String item, String v) {
+		this.genericPage = accessFullUrl("/musics/list/form");
+		this.genericPage.getForm().select(name("_format"), item).submit();
+		assertThat(pageSource(), containsString(v));
 	}
 	
 	private String getExpectedJson() {

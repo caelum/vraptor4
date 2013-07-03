@@ -17,16 +17,22 @@ public class ResultSerializationTest extends AcceptanceTestCase{
 
 	@Test
 	public void shouldSerializeAMusicListAsJsonXmlAndHTTP() throws Exception {
+		
 		GenericPage genericPage = accessFullUrl("/musics/list/json");
 		assertThat(genericPage.pageSource(), containsString(getExpectedJson()));
+		
 		genericPage = accessFullUrl("/musics/list/xml");
 		assertThat(genericPage.pageSource(), containsString(getExpectedXml()));
+		
 		genericPage = accessFullUrl("/musics/list/http");
 		assertThat(genericPage.pageSource(), containsString(getExpectedHTTP()));
+		
 		genericPage = accessFullUrl("/musics/list/form");
 		genericPage.getForm().select(name("_format"), "xml").submit();
+		
 		assertThat(genericPage.pageSource(), containsString(getExpectedXml()));
 		genericPage = accessFullUrl("/musics/list/form");
+		
 		genericPage.getForm().select(name("_format"), "json").submit();
 		assertThat(genericPage.pageSource(), containsString(getExpectedJson()));
 	}

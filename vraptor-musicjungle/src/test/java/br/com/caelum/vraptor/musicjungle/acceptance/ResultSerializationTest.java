@@ -2,6 +2,7 @@ package br.com.caelum.vraptor.musicjungle.acceptance;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.junit.Assert.assertThat;
+import static org.openqa.selenium.By.name;
 
 import org.junit.Test;
 
@@ -22,6 +23,12 @@ public class ResultSerializationTest extends AcceptanceTestCase{
 		assertThat(genericPage.pageSource(), containsString(getExpectedXml()));
 		genericPage = accessFullUrl("/musics/list/http");
 		assertThat(genericPage.pageSource(), containsString(getExpectedHTTP()));
+		genericPage = accessFullUrl("/musics/list/form");
+		genericPage.getForm().select(name("_format"), "xml").submit();
+		assertThat(genericPage.pageSource(), containsString(getExpectedXml()));
+		genericPage = accessFullUrl("/musics/list/form");
+		genericPage.getForm().select(name("_format"), "json").submit();
+		assertThat(genericPage.pageSource(), containsString(getExpectedJson()));
 	}
 	
 	private String getExpectedJson() {

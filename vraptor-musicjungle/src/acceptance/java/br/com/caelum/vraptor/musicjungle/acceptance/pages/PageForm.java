@@ -1,4 +1,4 @@
-package br.com.caelum.vraptor.musicjungle.acceptance.pageObjects;
+package br.com.caelum.vraptor.musicjungle.acceptance.pages;
 
 import static org.openqa.selenium.By.tagName;
 

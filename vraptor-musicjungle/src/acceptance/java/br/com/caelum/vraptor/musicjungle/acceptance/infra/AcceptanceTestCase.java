@@ -1,12 +1,12 @@
-package br.com.caelum.vraptor.musicjungle.acceptance;
+package br.com.caelum.vraptor.musicjungle.acceptance.infra;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
-import br.com.caelum.vraptor.musicjungle.acceptance.pageObjects.GenericPage;
-import br.com.caelum.vraptor.musicjungle.acceptance.pageObjects.LoginPage;
+import br.com.caelum.vraptor.musicjungle.acceptance.pages.GenericPage;
+import br.com.caelum.vraptor.musicjungle.acceptance.pages.LoginPage;
 
 public abstract class AcceptanceTestCase {
 

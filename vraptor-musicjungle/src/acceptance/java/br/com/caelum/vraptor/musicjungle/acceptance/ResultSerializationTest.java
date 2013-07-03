@@ -6,7 +6,8 @@ import static org.openqa.selenium.By.name;
 
 import org.junit.Test;
 
-import br.com.caelum.vraptor.musicjungle.acceptance.pageObjects.GenericPage;
+import br.com.caelum.vraptor.musicjungle.acceptance.infra.AcceptanceTestCase;
+import br.com.caelum.vraptor.musicjungle.acceptance.pages.GenericPage;
 
 /**
  * Some tests for <code>Results</code> class, such as json(), xml() and html().

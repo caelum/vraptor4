@@ -1,4 +1,4 @@
-package br.com.caelum.vraptor.musicjungle.acceptance.pageObjects;
+package br.com.caelum.vraptor.musicjungle.acceptance.pages;
 
 import org.openqa.selenium.WebDriver;
 

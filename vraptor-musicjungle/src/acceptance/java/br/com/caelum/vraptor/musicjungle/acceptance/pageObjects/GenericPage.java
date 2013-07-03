@@ -20,8 +20,8 @@ public class GenericPage {
 		return this.driver.getPageSource();
 	}
 	
-	public WebDriverForm getForm() {
-		return new WebDriverForm(this.driver);
+	public PageForm getForm() {
+		return new PageForm(this.driver);
 	}
 
 }

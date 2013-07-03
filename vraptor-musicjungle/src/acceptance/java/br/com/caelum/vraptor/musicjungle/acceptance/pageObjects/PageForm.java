@@ -8,15 +8,15 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
-public class WebDriverForm {
+public class PageForm {
 
 	private WebDriver driver;
 
-	public WebDriverForm(WebDriver driver) {
+	public PageForm(WebDriver driver) {
 		this.driver = driver;
 	}
 
-	public WebDriverForm select(By by, String value) {
+	public PageForm select(By by, String value) {
 		
 		WebElement select = driver.findElement(by);
 		List<WebElement> options = select.findElements(tagName("option"));

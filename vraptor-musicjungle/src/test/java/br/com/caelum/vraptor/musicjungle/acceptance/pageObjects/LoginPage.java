@@ -1,13 +1,13 @@
 package br.com.caelum.vraptor.musicjungle.acceptance.pageObjects;
 
-import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.WebDriver;
 
 
 public class LoginPage {
 
-	private FirefoxDriver driver;
+	private WebDriver driver;
 
-	public LoginPage(FirefoxDriver driver) {
+	public LoginPage(WebDriver driver) {
 		this.driver = driver;
 	}
 	

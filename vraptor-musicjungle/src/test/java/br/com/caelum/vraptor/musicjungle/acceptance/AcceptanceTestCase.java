@@ -2,6 +2,7 @@ package br.com.caelum.vraptor.musicjungle.acceptance;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
 import br.com.caelum.vraptor.musicjungle.acceptance.pageObjects.GenericPage;
@@ -9,7 +10,7 @@ import br.com.caelum.vraptor.musicjungle.acceptance.pageObjects.LoginPage;
 
 public abstract class AcceptanceTestCase {
 
-	private static FirefoxDriver driver;
+	private static WebDriver driver;
 
 	@BeforeClass
 	public static void beforeClass() {

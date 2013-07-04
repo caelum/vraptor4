@@ -31,6 +31,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
@@ -61,7 +62,7 @@ public class AspectStyleInterceptorHandlerTest {
 
 		handler.execute(stack, controllerMethod, currentController);
 
-		verify(interceptor).intercept(Mockito.any(InterceptorStack.class),
+		verify(interceptor).intercept(Mockito.same(stack),
 				Mockito.same(controllerMethod),
 				Mockito.any(ControllerInstance.class));
 	}
@@ -90,7 +91,7 @@ public class AspectStyleInterceptorHandlerTest {
 		InOrder order = inOrder(interceptor);
 		order.verify(interceptor).begin();
 		order.verify(interceptor).intercept(
-				Mockito.any(InterceptorStack.class),
+				Mockito.same(stack),
 				Mockito.same(controllerMethod),
 				Mockito.any(ControllerInstance.class));
 		order.verify(interceptor).after();
@@ -100,7 +101,7 @@ public class AspectStyleInterceptorHandlerTest {
 	public void shouldInvokeIfAccepts() {
 		AcceptsInterceptor acceptsInterceptor = spy(new AcceptsInterceptor(true));
 		AspectStyleInterceptorHandler aspectHandler = newAspectStyleInterceptorHandler(
-				AcceptsInterceptor.class, acceptsInterceptor);
+				AcceptsInterceptor.class, acceptsInterceptor,controllerMethod);
 
 		aspectHandler.execute(stack, controllerMethod, currentController);
 
@@ -108,7 +109,7 @@ public class AspectStyleInterceptorHandlerTest {
 		order.verify(acceptsInterceptor).accepts(controllerMethod);
 		order.verify(acceptsInterceptor).before();
 		order.verify(acceptsInterceptor).around(
-				Mockito.any(InterceptorStack.class),
+				Mockito.same(stack),
 				Mockito.same(controllerMethod),
 				Mockito.any(ControllerInstance.class));
 		order.verify(acceptsInterceptor).after();
@@ -119,7 +120,7 @@ public class AspectStyleInterceptorHandlerTest {
 		AcceptsInterceptor acceptsInterceptor = spy(new AcceptsInterceptor(
 				false));
 		AspectStyleInterceptorHandler aspectHandler = newAspectStyleInterceptorHandler(
-				AcceptsInterceptor.class, acceptsInterceptor);
+				AcceptsInterceptor.class, acceptsInterceptor,controllerMethod);
 
 		aspectHandler.execute(stack, controllerMethod, currentController);
 
@@ -135,7 +136,7 @@ public class AspectStyleInterceptorHandlerTest {
 	public void shouldVerifyIfAcceptsMethodReturnsVoid() {
 		VoidAcceptsInterceptor weirdInterceptor = new VoidAcceptsInterceptor();
 		new AspectStyleInterceptorHandler(VoidAcceptsInterceptor.class,
-				stepInvoker, new InstanceContainer(weirdInterceptor)).execute(
+				stepInvoker, new InstanceContainer(weirdInterceptor,controllerMethod)).execute(
 				stack, controllerMethod, currentController);
 	}
 
@@ -144,7 +145,7 @@ public class AspectStyleInterceptorHandlerTest {
 		NonBooleanAcceptsInterceptor weirdInterceptor = new NonBooleanAcceptsInterceptor();
 
 		new AspectStyleInterceptorHandler(NonBooleanAcceptsInterceptor.class,
-				stepInvoker, new InstanceContainer(weirdInterceptor)).execute(
+				stepInvoker, new InstanceContainer(weirdInterceptor,controllerMethod)).execute(
 				stack, controllerMethod, currentController);
 	}
 
@@ -161,7 +162,7 @@ public class AspectStyleInterceptorHandlerTest {
 		order.verify(acceptsWithoutArgsInterceptor).accepts();
 		order.verify(acceptsWithoutArgsInterceptor).before();
 		order.verify(acceptsWithoutArgsInterceptor).around(
-				Mockito.any(InterceptorStack.class),
+				Mockito.same(stack),
 				Mockito.same(controllerMethod),
 				Mockito.any(ControllerInstance.class));
 		order.verify(acceptsWithoutArgsInterceptor).after();
@@ -176,14 +177,14 @@ public class AspectStyleInterceptorHandlerTest {
 		aspectHandler.execute(stack, controllerMethod, currentController);
 
 		verify(simpleStackInterceptor).around(
-				Mockito.any(DefaultSimpleInterceptorStack.class));
+				Mockito.any(SimpleInterceptorStack.class));
 	}
 
 	@Test
 	public void shouldInvokeNextIfNotAccepts() throws Exception {
 		AcceptsInterceptor interceptor = spy(new AcceptsInterceptor(false));
 		AspectStyleInterceptorHandler aspectHandler = newAspectStyleInterceptorHandler(
-				AcceptsInterceptor.class, interceptor);
+				AcceptsInterceptor.class, interceptor,controllerMethod);
 
 		aspectHandler.execute(stack, controllerMethod, null);
 
@@ -229,7 +230,7 @@ public class AspectStyleInterceptorHandlerTest {
 	public void mustNotReceiveStackAsParameterForAcceptsCall() {
 		AcceptsInterceptorWithStackAsParameter interceptor = new AcceptsInterceptorWithStackAsParameter();
 		AspectStyleInterceptorHandler aspectHandler = newAspectStyleInterceptorHandler(
-				AcceptsInterceptorWithStackAsParameter.class, interceptor);
+				AcceptsInterceptorWithStackAsParameter.class, interceptor,mock(SimpleInterceptorStack.class));
 
 		aspectHandler.execute(stack, controllerMethod, currentController);
 	}

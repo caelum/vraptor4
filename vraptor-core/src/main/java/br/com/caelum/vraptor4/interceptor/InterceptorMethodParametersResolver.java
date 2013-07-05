@@ -6,12 +6,12 @@ import java.util.ArrayList;
 
 import br.com.caelum.vraptor.ioc.Container;
 
-public class InterceptorMethodParameterResolver {
+public class InterceptorMethodParametersResolver {
 
 	private StepInvoker stepInvoker;
 	private Container container;
 
-	public InterceptorMethodParameterResolver(StepInvoker stepInvoker,
+	public InterceptorMethodParametersResolver(StepInvoker stepInvoker,
 			Container container) {
 		super();
 		this.stepInvoker = stepInvoker;

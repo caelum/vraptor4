@@ -4,10 +4,12 @@ import static org.hamcrest.Matchers.containsString;
 import static org.junit.Assert.assertThat;
 import static org.openqa.selenium.By.name;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.musicjungle.acceptance.infra.AcceptanceTestCase;
-import br.com.caelum.vraptor.musicjungle.acceptance.pages.GenericPage;
+import br.com.caelum.vraptor.musicjungle.acceptance.pages.PageForm;
+import br.com.caelum.vraptor.musicjungle.acceptance.pages.ServiceResultPage;
 
 /**
  * Some tests for <code>Results</code> class, such as json(), xml() and html().
@@ -16,15 +18,20 @@ import br.com.caelum.vraptor.musicjungle.acceptance.pages.GenericPage;
  */
 public class ResultSerializationTest extends AcceptanceTestCase{
 
-	private GenericPage genericPage;
+	private ServiceResultPage genericPage;
+	
+	@Before
+	public void setUpBeforeClass() {
+		loginPage().loginAsUser("vraptortest");
+		acceptanceData().insertSomeMusicsToDataBase();
+		loginPage().logout();
+	}
 
 	@Test
 	public void shouldSerializeAMusicListAsJsonXmlAndHTTP() throws Exception {
-		
 		accessURLAndAssertContent("/musics/list/json", getExpectedJson());
 		accessURLAndAssertContent("/musics/list/xml", getExpectedXml());
 		accessURLAndAssertContent("/musics/list/http", getExpectedHTTP());
-
 		accessFormURLSelectItemAndAssertContent("xml", getExpectedXml());
 		accessFormURLSelectItemAndAssertContent("json", getExpectedJson());
 	}
@@ -35,14 +42,15 @@ public class ResultSerializationTest extends AcceptanceTestCase{
 	}
 	
 	private void accessFormURLSelectItemAndAssertContent(String item, String v) {
-		this.genericPage = accessFullUrl("/musics/list/form");
-		this.genericPage.getForm().select(name("_format"), item).submit();
+		loginPage();
+		PageForm pageForm = accessMusicsExport().getForm();
+		pageForm.select(name("_format"), item).submitForm();
 		assertThat(pageSource(), containsString(v));
 	}
 	
 	private String getExpectedJson() {
 		return "{\"list\": [{\"id\": 1,\"title\": \"Mozart - Symphony " +
-				"#40\",\"description\": \"A Mozart Symphony\",\"type\": " +
+				"#40\",\"description\": \"Mozart\",\"type\": " +
 				"\"CLASSICAL\"},{\"id\": 2,\"title\": \"Moonlight Sonata\"," +
 				"\"description\": \"Beethoven\",\"type\": \"CLASSICAL\"}]}";
 	}
@@ -52,7 +60,7 @@ public class ResultSerializationTest extends AcceptanceTestCase{
 				"  <music>\n"+
 				"    <id>1</id>\n"+
 				"    <title>Mozart - Symphony #40</title>\n"+
-				"    <description>A Mozart Symphony</description>\n"+
+				"    <description>Mozart</description>\n"+
 				"    <type>CLASSICAL</type>\n"+
 				"  </music>\n"+
 				"  <music>\n"+
@@ -66,7 +74,7 @@ public class ResultSerializationTest extends AcceptanceTestCase{
 	
 	private String getExpectedHTTP() {
 		return "[Music [id=1, title=Mozart - Symphony #40, description" +
-			"=A Mozart Symphony, type=CLASSICAL], Music [id=2, title=" +
+			"=Mozart, type=CLASSICAL], Music [id=2, title=" +
 			"Moonlight Sonata, description=Beethoven, type=CLASSICAL]]";
 	}
 	

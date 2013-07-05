@@ -8,7 +8,14 @@ import org.openqa.selenium.WebDriver;
 
 import br.com.caelum.vraptor.musicjungle.acceptance.pages.PageForm;
 
-
+/**
+ * Inserts <b>manually</b> some data on {@code MusicJungle} database.
+ * The point here is that doing this way, and not directly by the DB, 
+ * we are ensuring {@code VRaptor} ability of inject {@code hibernate 
+ * section} and populate objects coming from {@code HttpRequest} <br>
+ * 
+ * @author Rodrigo Turini
+ */
 public class AcceptanceData {
 
 	private WebDriver driver;
@@ -30,6 +37,10 @@ public class AcceptanceData {
 		form.submitForm();
 	}
 
+	/*
+	 * (non-javadoc) this refresh method is needed to prevent 
+	 * {@code org.openqa.selenium.StaleElementReferenceException}
+	 */
 	private PageForm refreshPageForm() {
 		By cssSelector = cssSelector(".well form");
 		return new PageForm(driver, cssSelector);

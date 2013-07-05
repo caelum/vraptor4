@@ -1,12 +1,15 @@
 package br.com.caelum.vraptor.musicjungle.acceptance.infra;
 
+import static org.openqa.selenium.By.linkText;
+
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
-import br.com.caelum.vraptor.musicjungle.acceptance.pages.GenericPage;
 import br.com.caelum.vraptor.musicjungle.acceptance.pages.LoginPage;
+import br.com.caelum.vraptor.musicjungle.acceptance.pages.ServiceResultPage;
 
 public abstract class AcceptanceTestCase {
 
@@ -27,12 +30,23 @@ public abstract class AcceptanceTestCase {
     	return new LoginPage(driver);
     }
 	
+	public AcceptanceData acceptanceData() {
+		return new AcceptanceData(driver);
+	}
+	
 	public String getBaseUrl() {
 		return "http://localhost:8080/vraptor-musicjungle";
 	}
 	
-	public GenericPage accessFullUrl(String uri) {
+	public ServiceResultPage accessFullUrl(String uri) {
 		driver.get(getBaseUrl() + uri);
-		return new GenericPage(driver);
+		return new ServiceResultPage(driver);
 	}
+
+	public MusicExportPage accessMusicsExport() {
+		By linkText = linkText("Export all musics");
+		driver.findElement(linkText).click();
+		return new MusicExportPage(driver);
+	}
+	
 }

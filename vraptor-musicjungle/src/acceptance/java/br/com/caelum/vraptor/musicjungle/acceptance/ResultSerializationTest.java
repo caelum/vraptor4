@@ -18,7 +18,7 @@ import br.com.caelum.vraptor.musicjungle.acceptance.pages.ServiceResultPage;
  */
 public class ResultSerializationTest extends AcceptanceTestCase{
 
-	private ServiceResultPage genericPage;
+	private ServiceResultPage serviceResultPage;
 	
 	@Before
 	public void setUpBeforeClass() {
@@ -37,7 +37,7 @@ public class ResultSerializationTest extends AcceptanceTestCase{
 	}
 
 	private void accessURLAndAssertContent(String url, String expected) {
-		this.genericPage = accessFullUrl(url);
+		this.serviceResultPage = accessFullUrl(url);
 		assertThat(pageSource(), containsString(expected));
 	}
 	
@@ -79,6 +79,6 @@ public class ResultSerializationTest extends AcceptanceTestCase{
 	}
 	
 	private String pageSource() {
-		return this.genericPage.pageSource();
+		return this.serviceResultPage.pageSource();
 	}
 }

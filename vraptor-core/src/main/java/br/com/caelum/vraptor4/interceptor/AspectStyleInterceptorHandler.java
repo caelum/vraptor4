@@ -30,13 +30,15 @@ public class AspectStyleInterceptorHandler implements InterceptorHandler{
 		Object interceptor = container.instanceFor(interceptorClass);
 		ControllerInstance controllerInstance = new DefaultControllerInstance(currentController);
 		InterceptorContainerDecorator interceptorContainer = new InterceptorContainerDecorator(container,stack,controllerMethod,controllerInstance,new DefaultSimpleInterceptorStack(stack, controllerMethod, controllerInstance));
+		InterceptorMethodParametersResolver parametersResolver = new InterceptorMethodParametersResolver(stepInvoker, interceptorContainer);
+		
 		logger.debug("Invoking interceptor {}", interceptor.getClass().getSimpleName());
 		
 		boolean customAccepts = new CustomAcceptsExecutor(stepInvoker, container).execute(interceptor, controllerMethod, controllerInstance);
-		boolean interceptorAccepts = new InterceptorAcceptsExecutor(stepInvoker,container).execute(interceptor);
+		boolean interceptorAccepts = new InterceptorAcceptsExecutor(stepInvoker,parametersResolver).execute(interceptor);
 		if(customAccepts && interceptorAccepts){		
 			stepInvoker.tryToInvoke(interceptor,BeforeCall.class,new NoStackParameterSignatureAcceptor());			
-			new AroundExecutor(stepInvoker, stack, interceptorContainer).execute(interceptor, controllerMethod, controllerInstance);
+			new AroundExecutor(stepInvoker, stack, parametersResolver).execute(interceptor, controllerMethod, controllerInstance);
 			stepInvoker.tryToInvoke(interceptor,AfterCall.class,new NoStackParameterSignatureAcceptor());
 		} else {
 			stack.next(controllerMethod, controllerInstance.getController());

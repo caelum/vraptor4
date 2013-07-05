@@ -15,6 +15,7 @@ public class AroundExecutor {
 	private StepInvoker stepInvoker;
 	private InterceptorStack stack;
 	private Container container;
+	private InterceptorMethodParameterResolver parameterResolver;
 
 	public AroundExecutor(StepInvoker stepInvoker, InterceptorStack stack,
 			Container container) {
@@ -22,6 +23,8 @@ public class AroundExecutor {
 		this.stepInvoker = stepInvoker;
 		this.stack = stack;
 		this.container = container;
+		this.parameterResolver = new InterceptorMethodParameterResolver(
+				stepInvoker, container);
 	}
 
 	public void execute(Object interceptor, ControllerMethod controllerMethod,
@@ -29,31 +32,13 @@ public class AroundExecutor {
 		if (noAround(interceptor)) {
 			stack.next(controllerMethod, controllerInstance.getController());
 		} else {
-			stepInvoker.tryToInvoke(
-					interceptor,
-					AroundCall.class,
-					new AroundSignatureAcceptor(),
-					parametersFor(AroundCall.class, interceptor,
-							container));
+			stepInvoker.tryToInvoke(interceptor, AroundCall.class,
+					new AroundSignatureAcceptor(), parameterResolver
+							.parametersFor(AroundCall.class, interceptor));
 		}
 	}
 
 	private boolean noAround(Object interceptor) {
 		return stepInvoker.findMethod(AroundCall.class, interceptor) == null;
-	}
-
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private Object[] parametersFor(Class<? extends Annotation> step,
-			Object interceptor, Container container) {
-		Method methodToInvoke = stepInvoker.findMethod(step, interceptor);
-		if (methodToInvoke == null)
-			return new Object[] {};
-		Class<?>[] parameterTypes = methodToInvoke.getParameterTypes();
-		ArrayList parameters = new ArrayList();
-		for (Class<?> parameterType : parameterTypes) {
-			parameters.add(container.instanceFor(parameterType));
-		}
-		return parameters.toArray();
-
 	}
 }

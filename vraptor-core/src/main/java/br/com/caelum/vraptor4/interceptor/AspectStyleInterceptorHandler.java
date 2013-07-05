@@ -1,21 +1,12 @@
 package br.com.caelum.vraptor4.interceptor;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Arrays;
-
-import javax.interceptor.AroundInvoke;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.core.InterceptorHandler;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.ioc.Container;
-import br.com.caelum.vraptor4.Accepts;
 import br.com.caelum.vraptor4.AfterCall;
-import br.com.caelum.vraptor4.AroundCall;
 import br.com.caelum.vraptor4.BeforeCall;
 import br.com.caelum.vraptor4.controller.ControllerInstance;
 import br.com.caelum.vraptor4.controller.ControllerMethod;
@@ -39,11 +30,11 @@ public class AspectStyleInterceptorHandler implements InterceptorHandler{
 		Object interceptor = container.instanceFor(interceptorClass);
 		ControllerInstance controllerInstance = new DefaultControllerInstance(currentController);
 		InterceptorContainerDecorator interceptorContainer = new InterceptorContainerDecorator(container,stack,controllerMethod,controllerInstance,new DefaultSimpleInterceptorStack(stack, controllerMethod, controllerInstance));
+		logger.debug("Invoking interceptor {}", interceptor.getClass().getSimpleName());
 		
 		boolean customAccepts = new CustomAcceptsExecutor(stepInvoker, container).execute(interceptor, controllerMethod, controllerInstance);
 		boolean interceptorAccepts = new InterceptorAcceptsExecutor(stepInvoker,container).execute(interceptor);
 		if(customAccepts && interceptorAccepts){		
-			logger.debug("Invoking interceptor {}", interceptor.getClass().getSimpleName());
 			stepInvoker.tryToInvoke(interceptor,BeforeCall.class,new NoStackParameterSignatureAcceptor());			
 			new AroundExecutor(stepInvoker, stack, interceptorContainer).execute(interceptor, controllerMethod, controllerInstance);
 			stepInvoker.tryToInvoke(interceptor,AfterCall.class,new NoStackParameterSignatureAcceptor());

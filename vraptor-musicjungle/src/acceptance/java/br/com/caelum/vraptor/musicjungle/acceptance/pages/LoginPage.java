@@ -14,9 +14,9 @@ public class LoginPage {
 	}
 
 	public void loginAsUser(String user) {
+		createUser(user);
 		By cssSelector = cssSelector("form:nth-child(1)");
 		PageForm form = new PageForm(driver, cssSelector);
-		createUser(user);
 		form.input("login", user);
 		form.input("password", user);
 		form.submitForm();

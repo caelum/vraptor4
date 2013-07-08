@@ -2,6 +2,7 @@ package br.com.caelum.vraptor4.interceptor;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedElement;
+import java.util.List;
 
 import net.vidageek.mirror.dsl.Mirror;
 import net.vidageek.mirror.list.dsl.Matcher;
@@ -12,7 +13,7 @@ import br.com.caelum.vraptor4.controller.ControllerMethod;
 
 public class CustomAcceptsVerifier {
 
-	public class AcceptsConstraintMatcher implements Matcher<Annotation> {
+	private static class AcceptsConstraintMatcher implements Matcher<Annotation> {
 
 		@Override
 		public boolean accepts(Annotation element) {
@@ -36,8 +37,7 @@ public class CustomAcceptsVerifier {
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public boolean isValid() {
-		MirrorList<Annotation> constraints = new Mirror().on((AnnotatedElement) interceptor.getClass()).reflectAll()
-				.annotations().matching(new AcceptsConstraintMatcher());
+		List<Annotation> constraints = CustomAcceptsVerifier.getCustomAcceptsAnnotations(interceptor.getClass());
 		for (Annotation annotation : constraints) {
 			AcceptsConstraint constraint = annotation.annotationType().getAnnotation(AcceptsConstraint.class);
 			Class<? extends AcceptsValidator<?>> validatorClass = constraint.value();
@@ -48,6 +48,12 @@ public class CustomAcceptsVerifier {
 			}
 		}
 		return true;
-	}	
+	}
+	
+	public static List<Annotation> getCustomAcceptsAnnotations(Class<?> klass){
+		MirrorList<Annotation> constraints = new Mirror().on((AnnotatedElement) klass).reflectAll()
+				.annotations().matching(new AcceptsConstraintMatcher());		
+		return constraints;
+	}
 
 }

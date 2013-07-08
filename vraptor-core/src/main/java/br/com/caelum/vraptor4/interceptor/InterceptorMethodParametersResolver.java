@@ -21,7 +21,7 @@ public class InterceptorMethodParametersResolver {
 	@SuppressWarnings("unchecked")
 	public Object[] parametersFor(Class<? extends Annotation> step,
 			Object interceptor) {
-		Method methodToInvoke = stepInvoker.findMethod(step, interceptor);
+		Method methodToInvoke = stepInvoker.findMethod(step, interceptor.getClass());
 		if (methodToInvoke == null)
 			return new Object[] {};
 		Class<?>[] parameterTypes = methodToInvoke.getParameterTypes();

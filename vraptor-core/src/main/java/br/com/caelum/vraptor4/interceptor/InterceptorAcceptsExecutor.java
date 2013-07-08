@@ -17,13 +17,9 @@ public class InterceptorAcceptsExecutor {
 	public boolean execute(Object interceptor) {
 		boolean interceptorAccepts = true;
 		Object returnObject = stepInvoker.tryToInvoke(interceptor,
-				Accepts.class, new NoStackParameterSignatureAcceptor(),
+				Accepts.class,
 				parameterResolver.parametersFor(Accepts.class, interceptor));
 		if (returnObject != null) {
-			if (!returnObject.getClass().equals(Boolean.class)) {
-				throw new IllegalStateException(
-						"@Accepts method should return boolean");
-			}
 			interceptorAccepts = (Boolean) returnObject;
 		}
 		return interceptorAccepts;

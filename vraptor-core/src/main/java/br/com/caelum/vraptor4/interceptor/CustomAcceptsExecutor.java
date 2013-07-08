@@ -22,8 +22,7 @@ public class CustomAcceptsExecutor {
 				controllerInstance, container, interceptor).isValid();
 		if (!customAccepts) {
 			stepInvoker.tryToInvoke(interceptor,
-					CustomAcceptsFailCallback.class,
-					new NoStackParameterSignatureAcceptor());
+					CustomAcceptsFailCallback.class);
 		}
 		return customAccepts;
 	}

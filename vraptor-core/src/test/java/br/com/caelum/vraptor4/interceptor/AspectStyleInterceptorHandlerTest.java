@@ -7,6 +7,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
+import br.com.caelum.vraptor.VRaptorException;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.interceptor.InstanceContainer;
 import br.com.caelum.vraptor4.controller.ControllerInstance;
@@ -21,6 +22,7 @@ import br.com.caelum.vraptor4.interceptor.example.AroundInterceptorWithoutSimple
 import br.com.caelum.vraptor4.interceptor.example.BeforeAfterInterceptorWithStackAsParameter;
 import br.com.caelum.vraptor4.interceptor.example.ExampleOfSimpleStackInterceptor;
 import br.com.caelum.vraptor4.interceptor.example.InterceptorWithCustomizedAccepts;
+import br.com.caelum.vraptor4.interceptor.example.InternalAndCustomAcceptsInterceptor;
 import br.com.caelum.vraptor4.interceptor.example.MethodLevelAcceptsController;
 import br.com.caelum.vraptor4.interceptor.example.NonBooleanAcceptsInterceptor;
 import br.com.caelum.vraptor4.interceptor.example.VoidAcceptsInterceptor;
@@ -52,7 +54,7 @@ public class AspectStyleInterceptorHandlerTest {
 	@Before
 	public void setup() {
 		MockitoAnnotations.initMocks(this);
-	}
+	}	
 
 	@Test
 	public void shouldAlwaysCallAround() {
@@ -136,8 +138,7 @@ public class AspectStyleInterceptorHandlerTest {
 	public void shouldVerifyIfAcceptsMethodReturnsVoid() {
 		VoidAcceptsInterceptor weirdInterceptor = new VoidAcceptsInterceptor();
 		new AspectStyleInterceptorHandler(VoidAcceptsInterceptor.class,
-				stepInvoker, new InstanceContainer(weirdInterceptor,controllerMethod)).execute(
-				stack, controllerMethod, currentController);
+				stepInvoker, new InstanceContainer(weirdInterceptor,controllerMethod));
 	}
 
 	@Test(expected = IllegalStateException.class)
@@ -145,8 +146,7 @@ public class AspectStyleInterceptorHandlerTest {
 		NonBooleanAcceptsInterceptor weirdInterceptor = new NonBooleanAcceptsInterceptor();
 
 		new AspectStyleInterceptorHandler(NonBooleanAcceptsInterceptor.class,
-				stepInvoker, new InstanceContainer(weirdInterceptor,controllerMethod)).execute(
-				stack, controllerMethod, currentController);
+				stepInvoker, new InstanceContainer(weirdInterceptor,controllerMethod));
 	}
 
 	@Test
@@ -211,28 +211,31 @@ public class AspectStyleInterceptorHandlerTest {
 	@Test(expected = IllegalArgumentException.class)
 	public void mustReceiveStackAsParameterForAroundCall() {
 		AroundInterceptorWithoutSimpleStackParameter interceptor = new AroundInterceptorWithoutSimpleStackParameter();
-		AspectStyleInterceptorHandler aspectHandler = newAspectStyleInterceptorHandler(
-				AroundInterceptorWithoutSimpleStackParameter.class, interceptor);
-
-		aspectHandler.execute(stack, controllerMethod, currentController);
+		newAspectStyleInterceptorHandler(
+				AroundInterceptorWithoutSimpleStackParameter.class, interceptor);		
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void mustNotReceiveStackAsParameterForBeforeAfterCall() {
 		BeforeAfterInterceptorWithStackAsParameter interceptor = new BeforeAfterInterceptorWithStackAsParameter();
-		AspectStyleInterceptorHandler aspectHandler = newAspectStyleInterceptorHandler(
+		newAspectStyleInterceptorHandler(
 				BeforeAfterInterceptorWithStackAsParameter.class, interceptor);
-
-		aspectHandler.execute(stack, controllerMethod, currentController);
+		
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void mustNotReceiveStackAsParameterForAcceptsCall() {
 		AcceptsInterceptorWithStackAsParameter interceptor = new AcceptsInterceptorWithStackAsParameter();
-		AspectStyleInterceptorHandler aspectHandler = newAspectStyleInterceptorHandler(
-				AcceptsInterceptorWithStackAsParameter.class, interceptor,mock(SimpleInterceptorStack.class));
+		newAspectStyleInterceptorHandler(
+				AcceptsInterceptorWithStackAsParameter.class, interceptor);
 
-		aspectHandler.execute(stack, controllerMethod, currentController);
+	}
+	
+	@Test(expected = VRaptorException.class)
+	public void mustNotUseInternalAcceptsAndCustomAccepts(){
+		InternalAndCustomAcceptsInterceptor interceptor = new InternalAndCustomAcceptsInterceptor();
+		newAspectStyleInterceptorHandler(
+				InternalAndCustomAcceptsInterceptor.class, interceptor);		
 	}
 
 	@Test

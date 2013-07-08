@@ -3,14 +3,12 @@ package br.com.caelum.vraptor.musicjungle.acceptance;
 import static br.com.caelum.vraptor.musicjungle.enums.MusicType.CLASSICAL;
 import static org.hamcrest.Matchers.containsString;
 import static org.junit.Assert.assertThat;
-import static org.openqa.selenium.By.name;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.musicjungle.acceptance.infra.AcceptanceTestCase;
 import br.com.caelum.vraptor.musicjungle.acceptance.pages.HomePage;
-import br.com.caelum.vraptor.musicjungle.acceptance.pages.PageForm;
 import br.com.caelum.vraptor.musicjungle.acceptance.pages.ServiceResultPage;
 import br.com.caelum.vraptor.musicjungle.model.Music;
 

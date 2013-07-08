@@ -8,12 +8,10 @@ import org.openqa.selenium.WebDriver;
 
 import br.com.caelum.vraptor.musicjungle.model.Music;
 
-public class HomePage {
-
-	private WebDriver driver;
+public class HomePage extends PageObject{
 
 	public HomePage(WebDriver driver) {
-		this.driver = driver;
+		super(driver);
 	}
 
 	public MusicPage clickOnFirstMusic() {

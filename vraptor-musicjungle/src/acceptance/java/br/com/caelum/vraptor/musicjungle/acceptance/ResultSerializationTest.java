@@ -12,7 +12,7 @@ import br.com.caelum.vraptor.musicjungle.acceptance.pages.PageForm;
 import br.com.caelum.vraptor.musicjungle.acceptance.pages.ServiceResultPage;
 
 /**
- * Some tests for <code>Results</code> class, such as json(), xml() and html().
+ * Some tests for {@code Results} class, such as json(), xml() and html().
  * 
  * @author Rodrigo Turini
  */

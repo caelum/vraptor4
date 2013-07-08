@@ -134,14 +134,14 @@ public class AspectStyleInterceptorHandlerTest {
 		verify(acceptsInterceptor, never()).after();
 	}
 
-	@Test(expected = IllegalStateException.class)
+	@Test(expected = VRaptorException.class)
 	public void shouldVerifyIfAcceptsMethodReturnsVoid() {
 		VoidAcceptsInterceptor weirdInterceptor = new VoidAcceptsInterceptor();
 		new AspectStyleInterceptorHandler(VoidAcceptsInterceptor.class,
 				stepInvoker, new InstanceContainer(weirdInterceptor,controllerMethod));
 	}
 
-	@Test(expected = IllegalStateException.class)
+	@Test(expected = VRaptorException.class)
 	public void shouldVerifyIfAcceptsMethodReturnsNonBooleanType() {
 		NonBooleanAcceptsInterceptor weirdInterceptor = new NonBooleanAcceptsInterceptor();
 
@@ -223,7 +223,7 @@ public class AspectStyleInterceptorHandlerTest {
 		
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test(expected = VRaptorException.class)
 	public void mustNotReceiveStackAsParameterForAcceptsCall() {
 		AcceptsInterceptorWithStackAsParameter interceptor = new AcceptsInterceptorWithStackAsParameter();
 		newAspectStyleInterceptorHandler(

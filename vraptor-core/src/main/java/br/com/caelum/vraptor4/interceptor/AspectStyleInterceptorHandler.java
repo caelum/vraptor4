@@ -39,19 +39,14 @@ public class AspectStyleInterceptorHandler implements InterceptorHandler {
 
 	}
 
-	//descobrir se a classe tem accepts customizado.
 	private void configure() {
 		Method acceptsMethod = stepInvoker.findMethod(Accepts.class,
 				interceptorClass);
-		NoStackParameterSignatureAcceptor noStackAcceptor = new NoStackParameterSignatureAcceptor();
+		InternalAcceptsSignature internalAcceptsSignature = new InternalAcceptsSignature(new NoStackParameterSignatureAcceptor());
 		boolean interceptorAccepts = false;
 		if (acceptsMethod != null) {
-			if (!acceptsMethod.getReturnType().equals(Boolean.class) && !acceptsMethod.getReturnType().equals(boolean.class)) {
-				throw new IllegalStateException(
-						"@Accepts method should return boolean");
-			}
-			if(!noStackAcceptor.accepts(acceptsMethod)){
-				throw new IllegalArgumentException(noStackAcceptor.errorMessage());
+			if(!internalAcceptsSignature.accepts(acceptsMethod)){
+				throw new VRaptorException(internalAcceptsSignature.errorMessage());
 			}
 			interceptorAccepts = true;
 		}
@@ -74,6 +69,7 @@ public class AspectStyleInterceptorHandler implements InterceptorHandler {
 			}
 		}
 		
+		NoStackParameterSignatureAcceptor noStackAcceptor = new NoStackParameterSignatureAcceptor();
 		Method before = stepInvoker.findMethod(BeforeCall.class, interceptorClass);
 		if(before!=null){
 			if(!noStackAcceptor.accepts(before)){

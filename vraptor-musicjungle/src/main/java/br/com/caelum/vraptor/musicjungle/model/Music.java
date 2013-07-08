@@ -49,6 +49,14 @@ public class Music {
 	@Enumerated(EnumType.STRING)
 	private MusicType type;
 
+	public Music() {}
+	
+	public Music(String title, String description, MusicType type) {
+		this.title = title;
+		this.description = description;
+		this.type = type;
+	}
+	
 	public String getDescription() {
 		return description;
 	}

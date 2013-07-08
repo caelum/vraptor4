@@ -51,7 +51,8 @@ public class Music {
 
 	public Music() {}
 	
-	public Music(String title, String description, MusicType type) {
+	public Music(long id, String title, String description, MusicType type) {
+		this.id = id;
 		this.title = title;
 		this.description = description;
 		this.type = type;

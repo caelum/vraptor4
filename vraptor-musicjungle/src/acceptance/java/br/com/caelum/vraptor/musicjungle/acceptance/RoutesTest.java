@@ -18,14 +18,13 @@ public class RoutesTest extends AcceptanceTestCase {
 
 	private LoginPage loginPage;
 	private Music music;
-	private String userName;
+	private String userName = "vraptortest";
 
 	@Before
 	public void setUp() {
 		this.loginPage = loginPage();
-		this.userName = "vraptortest";
 		loginPage.loginAsUser(userName);
-		this.music = new Music("Mozart - Symphony #40", "Mozart", CLASSICAL);
+		this.music = new Music(1, "Mozart - Symphony #40", "Mozart", CLASSICAL);
 		homePage().addMusic(music);
 		loginPage.logout();
 	}

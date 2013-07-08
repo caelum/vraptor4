@@ -22,13 +22,17 @@ import br.com.caelum.vraptor.musicjungle.model.Music;
 public class ResultSerializationTest extends AcceptanceTestCase{
 
 	private ServiceResultPage serviceResultPage;
+	private Music mozart;
+	private Music beethoven;
 	
 	@Before
 	public void setUpBeforeClass() {
 		loginPage().loginAsUser("vraptortest");
 		HomePage page = homePage();
-		page.addMusic(new Music("Mozart - Symphony #40", "Mozart", CLASSICAL));
-		page.addMusic(new Music("Moonlight Sonata", "Beethoven", CLASSICAL));
+		this.mozart = new Music(1, "Mozart - Symphony #40", "Mozart", CLASSICAL);
+		this.beethoven = new Music(2, "Moonlight Sonata", "Beethoven", CLASSICAL);
+		page.addMusic(mozart);
+		page.addMusic(beethoven);
 		loginPage().logout();
 	}
 
@@ -54,33 +58,36 @@ public class ResultSerializationTest extends AcceptanceTestCase{
 	}
 	
 	private String getExpectedJson() {
-		return "{\"list\": [{\"id\": 1,\"title\": \"Mozart - Symphony " +
-				"#40\",\"description\": \"Mozart\",\"type\": " +
-				"\"CLASSICAL\"},{\"id\": 2,\"title\": \"Moonlight Sonata\"," +
-				"\"description\": \"Beethoven\",\"type\": \"CLASSICAL\"}]}";
+		return "{\"list\": [" + JSON(mozart) + "," + JSON(beethoven) + "]}";
+	}
+
+	private String JSON(Music music) {
+		return new StringBuilder("{\"id\": ").append(music.getId())
+			.append(",\"title\": \"").append(music.getTitle())
+			.append("\",\"description\": \"").append(music.getDescription())
+			.append("\",\"type\": \"").append(music.getType().toString())
+			.append("\"}").toString();
 	}
 
 	private String getExpectedXml() {
 		return "<list>\n"+
 				"  <music>\n"+
 				"    <id>1</id>\n"+
-				"    <title>Mozart - Symphony #40</title>\n"+
-				"    <description>Mozart</description>\n"+
-				"    <type>CLASSICAL</type>\n"+
+				"    <title>"+ mozart.getTitle() +"</title>\n"+
+				"    <description>"+ mozart.getDescription() +"</description>\n"+
+				"    <type>"+ mozart.getType().toString() +"</type>\n"+
 				"  </music>\n"+
 				"  <music>\n"+
 				"    <id>2</id>\n"+
-				"    <title>Moonlight Sonata</title>\n"+
-				"    <description>Beethoven</description>\n"+
-				"    <type>CLASSICAL</type>\n"+
+				"    <title>"+ beethoven.getTitle() +"</title>\n"+
+				"    <description>"+ beethoven.getDescription() +"</description>\n"+
+				"    <type>"+ beethoven.getType().toString() +"</type>\n"+
 				"  </music>\n"+
 				"</list>";
 	}
 	
 	private String getExpectedHTTP() {
-		return "[Music [id=1, title=Mozart - Symphony #40, description" +
-			"=Mozart, type=CLASSICAL], Music [id=2, title=" +
-			"Moonlight Sonata, description=Beethoven, type=CLASSICAL]]";
+		return "[" + mozart.toString() + ", " + beethoven.toString() + "]";
 	}
 	
 	private String pageSource() {

@@ -10,6 +10,7 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 
 import br.com.caelum.vraptor.musicjungle.acceptance.pages.HomePage;
 import br.com.caelum.vraptor.musicjungle.acceptance.pages.LoginPage;
+import br.com.caelum.vraptor.musicjungle.acceptance.pages.MusicExportPage;
 import br.com.caelum.vraptor.musicjungle.acceptance.pages.ServiceResultPage;
 
 public abstract class AcceptanceTestCase {

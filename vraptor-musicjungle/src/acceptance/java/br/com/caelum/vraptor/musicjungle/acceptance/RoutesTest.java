@@ -26,7 +26,7 @@ public class RoutesTest extends AcceptanceTestCase {
 		this.userName = "vraptortest";
 		loginPage.loginAsUser(userName);
 		this.music = new Music("Mozart - Symphony #40", "Mozart", CLASSICAL);
-		acceptanceData().addMusic(music);
+		homePage().addMusic(music);
 		loginPage.logout();
 	}
 

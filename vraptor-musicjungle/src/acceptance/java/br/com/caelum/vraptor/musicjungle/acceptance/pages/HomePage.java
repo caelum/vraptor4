@@ -1,4 +1,4 @@
-package br.com.caelum.vraptor.musicjungle.acceptance.infra;
+package br.com.caelum.vraptor.musicjungle.acceptance.pages;
 
 import static org.openqa.selenium.By.cssSelector;
 import static org.openqa.selenium.By.name;
@@ -6,25 +6,29 @@ import static org.openqa.selenium.By.name;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
-import br.com.caelum.vraptor.musicjungle.acceptance.pages.PageForm;
 import br.com.caelum.vraptor.musicjungle.model.Music;
 
-/**
- * Inserts <b>manually</b> some data on {@code MusicJungle} database.
- * The point here is that doing this way, and not directly by the DB, 
- * we are ensuring {@code VRaptor} ability of inject {@code hibernate 
- * section} and populate objects coming from {@code HttpRequest} <br>
- * 
- * @author Rodrigo Turini
- */
-public class AcceptanceData {
+public class HomePage {
 
 	private WebDriver driver;
 
-	public AcceptanceData(WebDriver driver) {
+	public HomePage(WebDriver driver) {
 		this.driver = driver;
 	}
 
+	public MusicPage clickOnFirstMusic() {
+		By selector = cssSelector("table a:first-child");
+		driver.findElement(selector).click();
+		return new MusicPage(driver);
+	}
+
+	public SearchPage searchFor(String title) {
+		By cssSelector = cssSelector("form");
+		PageForm form = new PageForm(driver, cssSelector);
+		form.input("music.title", title).submitForm();
+		return new SearchPage(driver);
+	}
+	
 	public void addMusic(Music music) {
 		PageForm form = refreshPageForm();
 		form.input("music.title", music.getTitle());

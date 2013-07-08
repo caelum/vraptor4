@@ -9,7 +9,7 @@ import org.junit.Test;
 
 import br.com.caelum.vraptor.musicjungle.acceptance.infra.AcceptanceTestCase;
 import br.com.caelum.vraptor.musicjungle.acceptance.pages.LoginPage;
-import br.com.caelum.vraptor.musicjungle.acceptance.pages.MusicPage;
+import br.com.caelum.vraptor.musicjungle.acceptance.pages.PageObject;
 import br.com.caelum.vraptor.musicjungle.acceptance.pages.SearchPage;
 import br.com.caelum.vraptor.musicjungle.model.Music;
 
@@ -41,27 +41,25 @@ public class RoutesTest extends AcceptanceTestCase {
 	}
 
 	private void shouldAccessPathPlusGetMethodWithURLParameter() {
-		MusicPage musicPage = homePage().clickOnFirstMusic();
-		String source = musicPage.pageSource();
-		assertPageContains(source, music.getTitle(), "Owners:", userName);
+		PageObject musicPage = homePage().clickOnFirstMusic();
+		assertPageContains(musicPage, music.getTitle(), "Owners:", userName);
 	}
 
 	private void shouldAccessGetMethodWithADefinedValue() {
 		loginPage.loginAsUser(userName);
 		String musicTitle = music.getTitle();
 		SearchPage searchPage = homePage().searchFor(musicTitle);
-		String source = searchPage.pageSource();
-		assertPageContains(source, "Search results", musicTitle);
+		assertPageContains(searchPage, "Search results", musicTitle);
 	}
 
 	private void shouldAccessPostMethodWithDefaultURLValue() {
-		String source = loginPage.pageSource();
-		assertPageContains(source, "VRaptor Music Jungle", "Sign In");
+		assertPageContains(loginPage, "VRaptor Music Jungle", "Sign In");
 	}
 
-	private void assertPageContains(String source, String ...args) {
+	private void assertPageContains(PageObject page, String ...args) {
+		String pageSource = page.pageSource();
 		for (String expectedText : args) {
-			assertThat(source, containsString(expectedText));
+			assertThat(pageSource, containsString(expectedText));
 		}
 	}
 

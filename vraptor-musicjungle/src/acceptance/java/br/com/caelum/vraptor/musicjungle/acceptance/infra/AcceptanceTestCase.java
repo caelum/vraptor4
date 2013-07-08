@@ -8,6 +8,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
+import br.com.caelum.vraptor.musicjungle.acceptance.pages.HomePage;
 import br.com.caelum.vraptor.musicjungle.acceptance.pages.LoginPage;
 import br.com.caelum.vraptor.musicjungle.acceptance.pages.ServiceResultPage;
 
@@ -26,13 +27,9 @@ public abstract class AcceptanceTestCase {
 	}
 	
 	public LoginPage loginPage() {
-		driver.get(getBaseUrl());
+		driver.get(getBaseUrl() + "/home/login");
     	return new LoginPage(driver);
     }
-	
-	public AcceptanceData acceptanceData() {
-		return new AcceptanceData(driver);
-	}
 	
 	public String getBaseUrl() {
 		return "http://localhost:8080/vraptor-musicjungle";
@@ -47,6 +44,11 @@ public abstract class AcceptanceTestCase {
 		By linkText = linkText("Export all musics");
 		driver.findElement(linkText).click();
 		return new MusicExportPage(driver);
+	}
+	
+	public HomePage homePage() {
+		driver.get(getBaseUrl());
+		return new HomePage(driver);
 	}
 	
 }

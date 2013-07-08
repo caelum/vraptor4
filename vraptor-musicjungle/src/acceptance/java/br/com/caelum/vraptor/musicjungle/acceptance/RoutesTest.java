@@ -13,7 +13,12 @@ import br.com.caelum.vraptor.musicjungle.acceptance.pages.PageObject;
 import br.com.caelum.vraptor.musicjungle.acceptance.pages.SearchPage;
 import br.com.caelum.vraptor.musicjungle.model.Music;
 
-
+/**
+ * Some tests for vraptor {@code routes} of a {@code RESTFUL} resource, 
+ * such as post, get, path, defaul url values, param injection and so on. 
+ * 
+ * @author Rodrigo Turini
+ */
 public class RoutesTest extends AcceptanceTestCase {
 
 	private LoginPage loginPage;

@@ -1,5 +1,6 @@
 package br.com.caelum.vraptor.musicjungle.acceptance.infra;
 
+import static org.openqa.selenium.By.name;
 import static org.openqa.selenium.By.tagName;
 
 import org.openqa.selenium.WebDriver;
@@ -13,8 +14,9 @@ public class MusicExportPage extends PageObject {
 		super(driver);
 	}
 
-	public PageForm getForm() {
-		return new PageForm(driver, tagName("form"));
+	public void select(String value) {
+		PageForm form = new PageForm(driver, tagName("form"));
+		form.select(name("_format"), value).submitForm();
 	}
 
 }

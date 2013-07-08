@@ -50,10 +50,9 @@ public class ResultSerializationTest extends AcceptanceTestCase{
 		assertThat(pageSource(), containsString(expected));
 	}
 	
-	private void accessFormURLSelectItemAndAssertContent(String item, String v) {
+	private void accessFormURLSelectItemAndAssertContent(String value, String v) {
 		loginPage();
-		PageForm pageForm = accessMusicsExport().getForm();
-		pageForm.select(name("_format"), item).submitForm();
+		accessMusicsExport().select(value);
 		assertThat(pageSource(), containsString(v));
 	}
 	

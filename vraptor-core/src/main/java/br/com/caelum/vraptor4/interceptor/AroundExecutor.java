@@ -12,7 +12,8 @@ public class AroundExecutor {
 	private InterceptorStack stack;
 	private InterceptorMethodParametersResolver parametersResolver;
 
-	public AroundExecutor(StepInvoker stepInvoker, InterceptorStack stack,InterceptorMethodParametersResolver parametersResolver) {
+	public AroundExecutor(StepInvoker stepInvoker, InterceptorStack stack,
+			InterceptorMethodParametersResolver parametersResolver) {
 		super();
 		this.stepInvoker = stepInvoker;
 		this.stack = stack;
@@ -25,12 +26,12 @@ public class AroundExecutor {
 			stack.next(controllerMethod, controllerInstance.getController());
 		} else {
 			stepInvoker.tryToInvoke(interceptor, AroundCall.class,
-					new AroundSignatureAcceptor(), parametersResolver
-							.parametersFor(AroundCall.class, interceptor));
+					parametersResolver.parametersFor(AroundCall.class,
+							interceptor));
 		}
 	}
 
 	private boolean noAround(Object interceptor) {
-		return stepInvoker.findMethod(AroundCall.class, interceptor) == null;
+		return stepInvoker.findMethod(AroundCall.class, interceptor.getClass()) == null;
 	}
 }

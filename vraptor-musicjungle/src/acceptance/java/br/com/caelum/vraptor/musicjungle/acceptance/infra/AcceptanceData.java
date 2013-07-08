@@ -7,6 +7,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
 import br.com.caelum.vraptor.musicjungle.acceptance.pages.PageForm;
+import br.com.caelum.vraptor.musicjungle.model.Music;
 
 /**
  * Inserts <b>manually</b> some data on {@code MusicJungle} database.
@@ -24,11 +25,11 @@ public class AcceptanceData {
 		this.driver = driver;
 	}
 
-	public void addMusic(String title, String type, String desc) {
+	public void addMusic(Music music) {
 		PageForm form = refreshPageForm();
-		form.input("music.title", title);
-		form.select(name("music.type"), type);
-		form.input("music.description", desc);
+		form.input("music.title", music.getTitle());
+		form.select(name("music.type"), music.getType().toString());
+		form.input("music.description", music.getDescription());
 		form.submitForm();
 	}
 	

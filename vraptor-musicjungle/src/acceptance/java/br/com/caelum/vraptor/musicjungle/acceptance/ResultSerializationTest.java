@@ -1,5 +1,6 @@
 package br.com.caelum.vraptor.musicjungle.acceptance;
 
+import static br.com.caelum.vraptor.musicjungle.enums.MusicType.CLASSICAL;
 import static org.hamcrest.Matchers.containsString;
 import static org.junit.Assert.assertThat;
 import static org.openqa.selenium.By.name;
@@ -11,6 +12,7 @@ import br.com.caelum.vraptor.musicjungle.acceptance.infra.AcceptanceData;
 import br.com.caelum.vraptor.musicjungle.acceptance.infra.AcceptanceTestCase;
 import br.com.caelum.vraptor.musicjungle.acceptance.pages.PageForm;
 import br.com.caelum.vraptor.musicjungle.acceptance.pages.ServiceResultPage;
+import br.com.caelum.vraptor.musicjungle.model.Music;
 
 /**
  * Some tests for {@code Results} class, such as json(), xml() and html().
@@ -24,9 +26,9 @@ public class ResultSerializationTest extends AcceptanceTestCase{
 	@Before
 	public void setUpBeforeClass() {
 		loginPage().loginAsUser("vraptortest");
-		AcceptanceData acceptanceData = acceptanceData();
-		acceptanceData.addMusic("Mozart - Symphony #40", "CLASSICAL", "Mozart");
-		acceptanceData.addMusic("Moonlight Sonata", "CLASSICAL", "Beethoven");
+		AcceptanceData page = acceptanceData();
+		page.addMusic(new Music("Mozart - Symphony #40", "Mozart", CLASSICAL));
+		page.addMusic(new Music("Moonlight Sonata", "Beethoven", CLASSICAL));
 		loginPage().logout();
 	}
 

@@ -24,19 +24,14 @@ public class AcceptanceData {
 		this.driver = driver;
 	}
 
-	public void insertSomeMusicsToDataBase() {
-		addMusic("Mozart - Symphony #40", "CLASSICAL", "Mozart");
-		addMusic("Moonlight Sonata", "CLASSICAL", "Beethoven");
-	}
-
-	private void addMusic(String title, String type, String desc) {
+	public void addMusic(String title, String type, String desc) {
 		PageForm form = refreshPageForm();
 		form.input("music.title", title);
 		form.select(name("music.type"), type);
 		form.input("music.description", desc);
 		form.submitForm();
 	}
-
+	
 	/*
 	 * (non-javadoc) this refresh method is needed to prevent 
 	 * {@code org.openqa.selenium.StaleElementReferenceException}

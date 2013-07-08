@@ -7,6 +7,7 @@ import static org.openqa.selenium.By.name;
 import org.junit.Before;
 import org.junit.Test;
 
+import br.com.caelum.vraptor.musicjungle.acceptance.infra.AcceptanceData;
 import br.com.caelum.vraptor.musicjungle.acceptance.infra.AcceptanceTestCase;
 import br.com.caelum.vraptor.musicjungle.acceptance.pages.PageForm;
 import br.com.caelum.vraptor.musicjungle.acceptance.pages.ServiceResultPage;
@@ -23,7 +24,9 @@ public class ResultSerializationTest extends AcceptanceTestCase{
 	@Before
 	public void setUpBeforeClass() {
 		loginPage().loginAsUser("vraptortest");
-		acceptanceData().insertSomeMusicsToDataBase();
+		AcceptanceData acceptanceData = acceptanceData();
+		acceptanceData.addMusic("Mozart - Symphony #40", "CLASSICAL", "Mozart");
+		acceptanceData.addMusic("Moonlight Sonata", "CLASSICAL", "Beethoven");
 		loginPage().logout();
 	}
 

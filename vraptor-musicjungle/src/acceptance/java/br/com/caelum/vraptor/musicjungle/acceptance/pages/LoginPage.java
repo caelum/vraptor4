@@ -31,8 +31,12 @@ public class LoginPage {
 		form.submitForm();
 	}
 
+	public String pageSource() {
+		return driver.getPageSource();
+	}
+	
 	public void logout() {
-		driver.findElement(By.linkText("Logout"));
+		driver.findElement(By.linkText("Logout")).click();
 	}
 	
 }

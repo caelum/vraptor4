@@ -1,6 +1,8 @@
 package br.com.caelum.vraptor.ioc.cdi;
 
 import javax.enterprise.inject.spi.CDI;
+import javax.enterprise.inject.spi.Unmanaged;
+import javax.enterprise.inject.spi.Unmanaged.UnmanagedInstance;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,7 +26,7 @@ public class CDIBasedContainer implements Container, ComponentRegistry {
 
 	@Override
 	public <T> boolean canProvide(Class<T> type) {
-		return CDI.current().select(type).isUnsatisfied();
+		return !CDI.current().select(type).isUnsatisfied();
 	}
 
 	@Override

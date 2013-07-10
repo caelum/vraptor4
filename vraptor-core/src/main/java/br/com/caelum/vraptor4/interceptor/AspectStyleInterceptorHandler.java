@@ -1,11 +1,5 @@
 package br.com.caelum.vraptor4.interceptor;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.List;
-
-import org.junit.After;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,13 +7,10 @@ import br.com.caelum.vraptor.VRaptorException;
 import br.com.caelum.vraptor.core.InterceptorHandler;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.ioc.Container;
-import br.com.caelum.vraptor4.Accepts;
 import br.com.caelum.vraptor4.AfterCall;
-import br.com.caelum.vraptor4.AroundCall;
 import br.com.caelum.vraptor4.BeforeCall;
 import br.com.caelum.vraptor4.controller.ControllerInstance;
 import br.com.caelum.vraptor4.controller.ControllerMethod;
-import br.com.caelum.vraptor4.controller.DefaultControllerInstance;
 
 public class AspectStyleInterceptorHandler implements InterceptorHandler {
 
@@ -30,6 +21,12 @@ public class AspectStyleInterceptorHandler implements InterceptorHandler {
 			.getLogger(AspectStyleInterceptorHandler.class);
 	private InterceptorMethodParametersResolver parametersResolver;
 	private ControllerInstance controllerInstance;
+	private ControllerMethod controllerMethod;
+	private InterceptorStack interceptorStack;
+	private StepExecutor<Boolean> acceptsExecutor;
+	private NoStackParameterStepExecutor after;
+	private AroundExecutor around;
+	private NoStackParameterStepExecutor before;
 
 
 	public AspectStyleInterceptorHandler(Class<?> interceptorClass,
@@ -40,54 +37,34 @@ public class AspectStyleInterceptorHandler implements InterceptorHandler {
 		parametersResolver = new InterceptorMethodParametersResolver(
 				stepInvoker, container);
 		this.controllerInstance = container.instanceFor(ControllerInstance.class);
+		this.controllerMethod = container.instanceFor(ControllerMethod.class);
+		this.interceptorStack = container.instanceFor(InterceptorStack.class);
 		configure();
 
 	}
 
-	private void configure() {
-		Method acceptsMethod = stepInvoker.findMethod(Accepts.class,
-				interceptorClass);
-		InternalAcceptsSignature internalAcceptsSignature = new InternalAcceptsSignature(new NoStackParameterSignatureAcceptor());
-		boolean interceptorAccepts = false;
-		if (acceptsMethod != null) {
-			if(!internalAcceptsSignature.accepts(acceptsMethod)){
-				throw new VRaptorException(internalAcceptsSignature.errorMessage());
-			}
-			interceptorAccepts = true;
-		}
-		List<Annotation> customAnnotations = CustomAcceptsVerifier.getCustomAcceptsAnnotations(interceptorClass);
-		boolean customAccepts = false;
-		if(!customAnnotations.isEmpty()){
-			customAccepts = true;
-		}
-		if(customAccepts && interceptorAccepts){
+	private void configure() {		
+		after = new NoStackParameterStepExecutor(stepInvoker, AfterCall.class);		
+		after.accept(interceptorClass);
+		
+		around = new AroundExecutor(stepInvoker, interceptorStack, parametersResolver,controllerMethod,controllerInstance);
+		around.accept(interceptorClass);
+		
+		before = new NoStackParameterStepExecutor(stepInvoker, BeforeCall.class);
+		before.accept(interceptorClass);
+		
+		StepExecutor<Boolean> customAcceptsExecutor = new CustomAcceptsExecutor(stepInvoker, container, controllerMethod, controllerInstance);
+		InterceptorAcceptsExecutor interceptorAcceptsExecutor = new InterceptorAcceptsExecutor(stepInvoker, parametersResolver);		
+		boolean customAccepts = customAcceptsExecutor.accept(interceptorClass);
+		boolean internalAccepts = interceptorAcceptsExecutor.accept(interceptorClass);
+		if(customAccepts && internalAccepts){
 			throw new VRaptorException("Interceptor "+interceptorClass+" must declare internal accepts or custom, not both.");
 		}
 		
+		this.acceptsExecutor = customAccepts?customAcceptsExecutor:interceptorAcceptsExecutor;
 		
 		
-		Method around = stepInvoker.findMethod(AroundCall.class, interceptorClass);
-		if(around!=null){
-			MustReceiveStackAsParameterAcceptor stackAcceptor = new MustReceiveStackAsParameterAcceptor();
-			if(!stackAcceptor.accepts(around)){
-				throw new IllegalArgumentException(stackAcceptor.errorMessage());
-			}
-		}
-		
-		NoStackParameterSignatureAcceptor noStackAcceptor = new NoStackParameterSignatureAcceptor();
-		Method before = stepInvoker.findMethod(BeforeCall.class, interceptorClass);
-		if(before!=null){
-			if(!noStackAcceptor.accepts(before)){
-				throw new IllegalArgumentException(noStackAcceptor.errorMessage());
-			}
-		}
-		
-		Method after = stepInvoker.findMethod(AfterCall.class, interceptorClass);
-		if(after!=null){
-			if(!noStackAcceptor.accepts(after)){
-				throw new IllegalArgumentException(noStackAcceptor.errorMessage());
-			}
-		}
+	
 
 	}
 
@@ -98,16 +75,10 @@ public class AspectStyleInterceptorHandler implements InterceptorHandler {
 		logger.debug("Invoking interceptor {}", interceptor.getClass()
 				.getSimpleName());
 
-		boolean customAccepts = new CustomAcceptsExecutor(stepInvoker,
-				container).execute(interceptor, controllerMethod,
-				controllerInstance);
-		boolean interceptorAccepts = new InterceptorAcceptsExecutor(
-				stepInvoker, parametersResolver).execute(interceptor);
-		if (customAccepts && interceptorAccepts) {
-			stepInvoker.tryToInvoke(interceptor, BeforeCall.class);
-			new AroundExecutor(stepInvoker, stack, parametersResolver).execute(
-					interceptor, controllerMethod, controllerInstance);
-			stepInvoker.tryToInvoke(interceptor, AfterCall.class);
+		if (acceptsExecutor.execute(interceptor)) {
+			before.execute(interceptor);
+			around.execute(interceptor);
+			after.execute(interceptor);
 		} else {
 			stack.next(controllerMethod, controllerInstance.getController());
 		}

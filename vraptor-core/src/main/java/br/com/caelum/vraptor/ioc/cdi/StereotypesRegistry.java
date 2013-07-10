@@ -30,11 +30,11 @@ public class StereotypesRegistry {
 	}
 	
 	public void configure(){
-		Set<Bean<?>> beans = beanManagerUtil.getBeans(Object.class);		
+		BeanManager beanManager = CDI.current().getBeanManager();
+		Set<Bean<?>> beans = beanManager.getBeans(Object.class);
 		for (Bean<?> bean : beans) {
 			Annotation qualifier = tryToFindAStereotypeQualifier(bean);
 			if(qualifier!=null){
-				BeanManager beanManager = CDI.current().getBeanManager();
 				beanManager.fireEvent(new DefaultBeanClass(bean.getBeanClass()),qualifier);
 			}
 		}

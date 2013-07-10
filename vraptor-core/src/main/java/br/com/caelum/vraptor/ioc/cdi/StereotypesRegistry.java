@@ -8,25 +8,17 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.enterprise.inject.spi.CDI;
-import javax.inject.Inject;
 
-import br.com.caelum.vraptor4.ioc.cdi.BeanManagerUtil;
 import br.com.caelum.vraptor.core.BaseComponents;
 import br.com.caelum.vraptor.core.StereotypeInfo;
 import br.com.caelum.vraptor4.controller.DefaultBeanClass;
 
 @ApplicationScoped
 public class StereotypesRegistry {
-	private BeanManagerUtil beanManagerUtil;
 
 	//CDI eyes only
 	@Deprecated
 	public StereotypesRegistry() {
-	}
-	
-	@Inject
-	public StereotypesRegistry(BeanManagerUtil beanManagerUtil) {
-		this.beanManagerUtil = beanManagerUtil;
 	}
 	
 	public void configure(){
@@ -50,8 +42,4 @@ public class StereotypesRegistry {
 		}
 		return null;
 	}
-	
-	
-	
-	
 }

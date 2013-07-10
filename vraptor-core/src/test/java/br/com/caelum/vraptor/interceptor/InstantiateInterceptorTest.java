@@ -57,7 +57,6 @@ public class InstantiateInterceptorTest {
         when(method.getResource()).thenReturn(new DefaultBeanClass(DogController.class));
         
         interceptor.intercept(stack, method, null);
-        assertTrue(container.isEmpty());
         
         verify(stack).next(method, myDog);
     }

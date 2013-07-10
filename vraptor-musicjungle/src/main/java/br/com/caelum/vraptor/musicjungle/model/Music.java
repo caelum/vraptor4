@@ -49,15 +49,6 @@ public class Music {
 	@Enumerated(EnumType.STRING)
 	private MusicType type;
 
-	public Music() {}
-	
-	public Music(long id, String title, String description, MusicType type) {
-		this.id = id;
-		this.title = title;
-		this.description = description;
-		this.type = type;
-	}
-	
 	public String getDescription() {
 		return description;
 	}

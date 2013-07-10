@@ -28,6 +28,8 @@ public class AspectStyleInterceptorHandler implements InterceptorHandler {
 	private Class<?> interceptorClass;
 	private static final Logger logger = LoggerFactory
 			.getLogger(AspectStyleInterceptorHandler.class);
+	private InterceptorMethodParametersResolver parametersResolver;
+	private ControllerInstance controllerInstance;
 
 
 	public AspectStyleInterceptorHandler(Class<?> interceptorClass,
@@ -35,6 +37,9 @@ public class AspectStyleInterceptorHandler implements InterceptorHandler {
 		this.interceptorClass = interceptorClass;
 		this.stepInvoker = stepInvoker;
 		this.container = container;
+		parametersResolver = new InterceptorMethodParametersResolver(
+				stepInvoker, container);
+		this.controllerInstance = container.instanceFor(ControllerInstance.class);
 		configure();
 
 	}
@@ -89,14 +94,6 @@ public class AspectStyleInterceptorHandler implements InterceptorHandler {
 	public void execute(InterceptorStack stack,
 			ControllerMethod controllerMethod, Object currentController) {
 		Object interceptor = container.instanceFor(interceptorClass);
-		ControllerInstance controllerInstance = new DefaultControllerInstance(
-				currentController);
-		InterceptorContainerDecorator interceptorContainer = new InterceptorContainerDecorator(
-				container, stack, controllerMethod, controllerInstance,
-				new DefaultSimpleInterceptorStack(stack, controllerMethod,
-						controllerInstance));
-		InterceptorMethodParametersResolver parametersResolver = new InterceptorMethodParametersResolver(
-				stepInvoker, interceptorContainer);
 
 		logger.debug("Invoking interceptor {}", interceptor.getClass()
 				.getSimpleName());

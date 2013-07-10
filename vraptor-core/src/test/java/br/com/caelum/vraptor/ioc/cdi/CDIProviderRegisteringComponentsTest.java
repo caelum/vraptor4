@@ -18,6 +18,7 @@ import java.util.concurrent.Callable;
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.context.SessionScoped;
 import javax.enterprise.inject.spi.Bean;
+import javax.enterprise.inject.spi.CDI;
 
 import org.apache.deltaspike.cdise.api.CdiContainer;
 import org.apache.deltaspike.cdise.api.CdiContainerLoader;
@@ -95,8 +96,7 @@ public class CDIProviderRegisteringComponentsTest extends
 
 	@Override
 	protected ContainerProvider getProvider() {
-		BeanManagerUtil util = new BeanManagerUtil(cdiContainer.getBeanManager());
-		return util.instanceFor(CDIProvider.class);
+		return CDI.current().select(CDIProvider.class).get();
 	}
 
 	@Override

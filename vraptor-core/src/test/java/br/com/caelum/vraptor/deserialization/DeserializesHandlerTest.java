@@ -1,14 +1,12 @@
 package br.com.caelum.vraptor.deserialization;
 
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+
 import org.junit.Before;
 import org.junit.Test;
 
 import br.com.caelum.vraptor4.controller.DefaultBeanClass;
-
-import static org.junit.Assert.assertEquals;
-
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
 
 public class DeserializesHandlerTest {
 

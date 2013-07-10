@@ -12,13 +12,13 @@ import java.io.InputStream;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
-
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.serialization.xstream.XStreamBuilderImpl;
+import br.com.caelum.vraptor4.controller.ControllerMethod;
 import br.com.caelum.vraptor4.controller.DefaultBeanClass;
 import br.com.caelum.vraptor4.controller.DefaultControllerMethod;
-import br.com.caelum.vraptor4.controller.ControllerMethod;
+
+import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 public class XStreamXmlDeserializerTest {
 

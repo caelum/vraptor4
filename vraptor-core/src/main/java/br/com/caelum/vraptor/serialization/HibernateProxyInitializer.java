@@ -17,8 +17,6 @@
 
 package br.com.caelum.vraptor.serialization;
 
-import javax.enterprise.inject.Default;
-
 import org.hibernate.proxy.HibernateProxy;
 import org.hibernate.proxy.LazyInitializer;
 

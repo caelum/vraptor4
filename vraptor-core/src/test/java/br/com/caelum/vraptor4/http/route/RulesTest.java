@@ -25,11 +25,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor.proxy.Proxifier;
-import br.com.caelum.vraptor4.http.route.DefaultRouteBuilder;
-import br.com.caelum.vraptor4.http.route.IllegalRouteException;
-import br.com.caelum.vraptor4.http.route.JavaEvaluator;
-import br.com.caelum.vraptor4.http.route.Router;
-import br.com.caelum.vraptor4.http.route.Rules;
 
 public class RulesTest {
 

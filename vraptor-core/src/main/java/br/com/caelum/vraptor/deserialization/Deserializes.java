@@ -21,8 +21,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import javax.enterprise.inject.Stereotype;
-
 @javax.enterprise.inject.Stereotype
 @Documented
 @Target(ElementType.TYPE)

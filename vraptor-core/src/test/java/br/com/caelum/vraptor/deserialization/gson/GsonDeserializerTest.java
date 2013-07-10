@@ -19,9 +19,9 @@ import org.junit.Test;
 
 import br.com.caelum.vraptor.core.Localization;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
+import br.com.caelum.vraptor4.controller.ControllerMethod;
 import br.com.caelum.vraptor4.controller.DefaultBeanClass;
 import br.com.caelum.vraptor4.controller.DefaultControllerMethod;
-import br.com.caelum.vraptor4.controller.ControllerMethod;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;

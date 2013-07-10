@@ -41,8 +41,8 @@ import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.util.EmptyBundle;
 import br.com.caelum.vraptor.validator.DefaultValidationException;
 import br.com.caelum.vraptor.validator.Message;
-import br.com.caelum.vraptor4.controller.DefaultControllerMethod;
 import br.com.caelum.vraptor4.controller.ControllerMethod;
+import br.com.caelum.vraptor4.controller.DefaultControllerMethod;
 
 import com.google.common.collect.ImmutableMap;
 

@@ -16,8 +16,6 @@
  */
 package br.com.caelum.vraptor.ioc;
 
-import java.lang.annotation.Annotation;
-
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 
@@ -26,7 +24,6 @@ import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.Intercepts;
 import br.com.caelum.vraptor.VRaptorException;
-import br.com.caelum.vraptor.core.ControllerQualifier;
 import br.com.caelum.vraptor.core.InterceptsQualifier;
 import br.com.caelum.vraptor.interceptor.Interceptor;
 import br.com.caelum.vraptor.interceptor.InterceptorRegistry;

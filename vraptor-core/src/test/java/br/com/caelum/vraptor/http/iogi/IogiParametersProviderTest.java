@@ -57,8 +57,8 @@ import br.com.caelum.vraptor.core.SafeResourceBundle;
 import br.com.caelum.vraptor.http.ParametersProvider;
 import br.com.caelum.vraptor.http.ParametersProviderTest;
 import br.com.caelum.vraptor.util.EmptyBundle;
-import br.com.caelum.vraptor4.controller.DefaultControllerMethod;
 import br.com.caelum.vraptor4.controller.ControllerMethod;
+import br.com.caelum.vraptor4.controller.DefaultControllerMethod;
 
 public class IogiParametersProviderTest extends ParametersProviderTest {
 	private @Mock Localization mockLocalization;

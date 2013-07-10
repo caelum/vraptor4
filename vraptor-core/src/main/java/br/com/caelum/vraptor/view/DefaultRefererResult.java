@@ -17,6 +17,9 @@
 
 package br.com.caelum.vraptor.view;
 
+import static br.com.caelum.vraptor.view.Results.logic;
+import static br.com.caelum.vraptor.view.Results.page;
+
 import java.util.ArrayList;
 
 import javax.inject.Inject;
@@ -27,13 +30,11 @@ import br.com.caelum.vraptor.core.Localization;
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.http.ParametersProvider;
 import br.com.caelum.vraptor.validator.Message;
-import br.com.caelum.vraptor4.controller.HttpMethod;
 import br.com.caelum.vraptor4.controller.ControllerMethod;
+import br.com.caelum.vraptor4.controller.HttpMethod;
 import br.com.caelum.vraptor4.http.route.MethodNotAllowedException;
 import br.com.caelum.vraptor4.http.route.ResourceNotFoundException;
 import br.com.caelum.vraptor4.http.route.Router;
-import static br.com.caelum.vraptor.view.Results.logic;
-import static br.com.caelum.vraptor.view.Results.page;
 
 public class DefaultRefererResult implements RefererResult {
 

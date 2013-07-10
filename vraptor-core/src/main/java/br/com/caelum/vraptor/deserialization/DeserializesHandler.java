@@ -15,8 +15,6 @@
  */
 package br.com.caelum.vraptor.deserialization;
 
-import java.lang.annotation.Annotation;
-
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 

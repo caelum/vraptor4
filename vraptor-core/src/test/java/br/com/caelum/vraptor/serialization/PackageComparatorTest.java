@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import br.com.caelum.vraptor.other.pack4ge.DumbSerialization;
 import junit.framework.Assert;
 
 import org.junit.Test;
 
+import br.com.caelum.vraptor.other.pack4ge.DumbSerialization;
 import br.com.caelum.vraptor.restfulie.serialization.RestfulSerialization;
 import br.com.caelum.vraptor.serialization.xstream.XStreamJSONSerialization;
 import br.com.caelum.vraptor.serialization.xstream.XStreamXMLSerialization;

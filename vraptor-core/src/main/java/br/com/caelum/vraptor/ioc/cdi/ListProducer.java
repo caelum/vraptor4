@@ -7,6 +7,8 @@ import java.util.Set;
 
 import javax.enterprise.inject.Produces;
 import javax.enterprise.inject.spi.Bean;
+import javax.enterprise.inject.spi.BeanManager;
+import javax.enterprise.inject.spi.CDI;
 import javax.enterprise.inject.spi.InjectionPoint;
 import javax.inject.Inject;
 
@@ -31,10 +33,12 @@ public class ListProducer {
 	public <T> List<T> producesList(InjectionPoint injectionPoint){
 		ParameterizedType type = (ParameterizedType) injectionPoint.getType();
 	    Class klass = (Class) type.getActualTypeArguments()[0];
-	    Set<Bean<?>> beans = beanManagerUtil.getBeans(klass);
+	    CDI<Object> currentCDI = CDI.current();
+		BeanManager beanManager = currentCDI.getBeanManager();
+	    Set<Bean<?>> beans = beanManager.getBeans(klass);
 	    ArrayList objects = new ArrayList();
 	    for (Bean<?> bean : beans) {			
-			objects.add(beanManagerUtil.instanceFor(bean));
+	    	objects.add(currentCDI.select(bean.getBeanClass()).get());
 		}
 		return objects;
 	}

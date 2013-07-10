@@ -10,24 +10,14 @@ import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.enterprise.inject.spi.CDI;
 import javax.enterprise.inject.spi.InjectionPoint;
-import javax.inject.Inject;
-
-import br.com.caelum.vraptor4.ioc.cdi.BeanManagerUtil;
 
 public class ListProducer {
-	
-	private BeanManagerUtil beanManagerUtil;
 	
 	//CDI eyes only
 	@Deprecated
 	public ListProducer() {
 	}
 	
-	@Inject
-	public ListProducer(BeanManagerUtil beanManagerUtil) {
-		this.beanManagerUtil = beanManagerUtil;
-	}
-
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Produces
 	public <T> List<T> producesList(InjectionPoint injectionPoint){

@@ -6,6 +6,8 @@ import java.util.Set;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.spi.Bean;
+import javax.enterprise.inject.spi.BeanManager;
+import javax.enterprise.inject.spi.CDI;
 import javax.inject.Inject;
 
 import br.com.caelum.vraptor4.ioc.cdi.BeanManagerUtil;
@@ -32,7 +34,8 @@ public class StereotypesRegistry {
 		for (Bean<?> bean : beans) {
 			Annotation qualifier = tryToFindAStereotypeQualifier(bean);
 			if(qualifier!=null){
-				beanManagerUtil.getBeanManager().fireEvent(new DefaultBeanClass(bean.getBeanClass()),qualifier);
+				BeanManager beanManager = CDI.current().getBeanManager();
+				beanManager.fireEvent(new DefaultBeanClass(bean.getBeanClass()),qualifier);
 			}
 		}
 	}

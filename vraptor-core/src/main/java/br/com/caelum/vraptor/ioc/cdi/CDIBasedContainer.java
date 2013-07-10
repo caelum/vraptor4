@@ -21,7 +21,13 @@ public class CDIBasedContainer implements Container, ComponentRegistry {
 
 	@Override
 	public <T> T instanceFor(Class<T> type) {
-		return CDI.current().select(type).get();
+		
+		if (canProvide(type)){
+			return CDI.current().select(type).get();
+		}
+		Unmanaged<T> unmanaged = new Unmanaged<T>(type);
+		UnmanagedInstance<T> instance = unmanaged.newInstance();
+		return instance.postConstruct().inject().get();
 	}
 
 	@Override

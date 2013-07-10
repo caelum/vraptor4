@@ -7,6 +7,7 @@ import static org.junit.Assert.assertThat;
 import org.junit.Before;
 import org.junit.Test;
 
+import br.com.caelum.vraptor.musicjungle.acceptance.builder.MusicBuilder;
 import br.com.caelum.vraptor.musicjungle.acceptance.infra.AcceptanceTestCase;
 import br.com.caelum.vraptor.musicjungle.acceptance.pages.HomePage;
 import br.com.caelum.vraptor.musicjungle.acceptance.pages.ServiceResultPage;
@@ -27,8 +28,8 @@ public class ResultSerializationTest extends AcceptanceTestCase{
 	public void setUpBeforeClass() {
 		loginPage().loginAsUser("vraptortest");
 		HomePage page = homePage();
-		this.mozart = new Music(1, "Mozart - Symphony #40", "Mozart", CLASSICAL);
-		this.beethoven = new Music(2, "Moonlight Sonata", "Beethoven", CLASSICAL);
+		this.mozart = new MusicBuilder(1, "Mozart - Symphony #40", "Mozart", CLASSICAL).create();
+		this.beethoven = new MusicBuilder(2, "Moonlight Sonata", "Beethoven", CLASSICAL).create();
 		page.addMusic(mozart);
 		page.addMusic(beethoven);
 		loginPage().logout();

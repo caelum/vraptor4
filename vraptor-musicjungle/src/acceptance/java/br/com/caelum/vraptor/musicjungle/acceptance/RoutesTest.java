@@ -1,12 +1,13 @@
 package br.com.caelum.vraptor.musicjungle.acceptance;
 
-import static br.com.caelum.vraptor.musicjungle.enums.MusicType.CLASSICAL;
+import static br.com.caelum.vraptor.musicjungle.enums.MusicType.ROCK;
 import static org.hamcrest.Matchers.containsString;
 import static org.junit.Assert.assertThat;
 
 import org.junit.Before;
 import org.junit.Test;
 
+import br.com.caelum.vraptor.musicjungle.acceptance.builder.MusicBuilder;
 import br.com.caelum.vraptor.musicjungle.acceptance.infra.AcceptanceTestCase;
 import br.com.caelum.vraptor.musicjungle.acceptance.pages.LoginPage;
 import br.com.caelum.vraptor.musicjungle.acceptance.pages.PageObject;
@@ -29,7 +30,7 @@ public class RoutesTest extends AcceptanceTestCase {
 	public void setUp() {
 		this.loginPage = loginPage();
 		loginPage.loginAsUser(userName);
-		this.music = new Music(1, "Mozart - Symphony #40", "Mozart", CLASSICAL);
+		this.music = new MusicBuilder(3, "Please Please Me", "Beatles", ROCK).create();
 		homePage().addMusic(music);
 		loginPage.logout();
 	}

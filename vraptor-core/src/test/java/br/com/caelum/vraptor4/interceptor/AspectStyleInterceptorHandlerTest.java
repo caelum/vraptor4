@@ -1,5 +1,9 @@
 package br.com.caelum.vraptor4.interceptor;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InOrder;
@@ -12,8 +16,6 @@ import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.interceptor.InstanceContainer;
 import br.com.caelum.vraptor4.controller.ControllerInstance;
 import br.com.caelum.vraptor4.controller.ControllerMethod;
-import br.com.caelum.vraptor4.controller.DefaultBeanClass;
-import br.com.caelum.vraptor4.controller.DefaultControllerMethod;
 import br.com.caelum.vraptor4.interceptor.example.AcceptsInterceptor;
 import br.com.caelum.vraptor4.interceptor.example.AcceptsInterceptorWithStackAsParameter;
 import br.com.caelum.vraptor4.interceptor.example.AcceptsWithoutArgsInterceptor;
@@ -33,7 +35,6 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import static org.mockito.Mockito.inOrder;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
@@ -50,6 +51,10 @@ public class AspectStyleInterceptorHandlerTest {
 	Object currentController;
 	private @Mock
 	WithAnnotationAcceptor withAnnotationAcceptor;
+	private @Mock
+	ControllerInstance controllerInstance;
+	private @Mock
+	SimpleInterceptorStack simpleInterceptorStack;
 
 	@Before
 	public void setup() {
@@ -103,7 +108,7 @@ public class AspectStyleInterceptorHandlerTest {
 	public void shouldInvokeIfAccepts() {
 		AcceptsInterceptor acceptsInterceptor = spy(new AcceptsInterceptor(true));
 		AspectStyleInterceptorHandler aspectHandler = newAspectStyleInterceptorHandler(
-				AcceptsInterceptor.class, acceptsInterceptor,controllerMethod);
+				AcceptsInterceptor.class, acceptsInterceptor);
 
 		aspectHandler.execute(stack, controllerMethod, currentController);
 
@@ -122,7 +127,7 @@ public class AspectStyleInterceptorHandlerTest {
 		AcceptsInterceptor acceptsInterceptor = spy(new AcceptsInterceptor(
 				false));
 		AspectStyleInterceptorHandler aspectHandler = newAspectStyleInterceptorHandler(
-				AcceptsInterceptor.class, acceptsInterceptor,controllerMethod);
+				AcceptsInterceptor.class, acceptsInterceptor);
 
 		aspectHandler.execute(stack, controllerMethod, currentController);
 
@@ -184,7 +189,7 @@ public class AspectStyleInterceptorHandlerTest {
 	public void shouldInvokeNextIfNotAccepts() throws Exception {
 		AcceptsInterceptor interceptor = spy(new AcceptsInterceptor(false));
 		AspectStyleInterceptorHandler aspectHandler = newAspectStyleInterceptorHandler(
-				AcceptsInterceptor.class, interceptor,controllerMethod);
+				AcceptsInterceptor.class, interceptor);
 
 		aspectHandler.execute(stack, controllerMethod, null);
 
@@ -200,7 +205,7 @@ public class AspectStyleInterceptorHandlerTest {
 	public void shouldNotInvokeIfDoesNotHaveAround() throws Exception {
 		WithoutAroundInterceptor interceptor = spy(new WithoutAroundInterceptor());
 		AspectStyleInterceptorHandler aspectHandler = newAspectStyleInterceptorHandler(
-				WithoutAroundInvokeInterceptor.class, interceptor);
+				WithoutAroundInterceptor.class, interceptor);
 
 		aspectHandler.execute(stack, controllerMethod, null);
 
@@ -295,11 +300,27 @@ public class AspectStyleInterceptorHandlerTest {
 
 	}
 
+	@SuppressWarnings("unchecked")
 	private AspectStyleInterceptorHandler newAspectStyleInterceptorHandler(
 			Class<?> interceptorClass, Object... dependencies) {
+		@SuppressWarnings("rawtypes")
+		List<Object> deps = new ArrayList(Arrays.asList(dependencies));
+		boolean hasControllerInstance = false;
+		for (Object object : deps) {
+			if(ControllerInstance.class.isAssignableFrom(object.getClass())){
+				hasControllerInstance = true;
+				break;
+			}
+		}
+		if(!hasControllerInstance){
+			deps.add(controllerInstance);
+		}
+		deps.add(stack);	
+		deps.add(controllerMethod);
+		deps.add(simpleInterceptorStack);
 		AspectStyleInterceptorHandler aspectHandler = new AspectStyleInterceptorHandler(
 				interceptorClass, stepInvoker, new InstanceContainer(
-						dependencies));
+						deps.toArray()));
 		return aspectHandler;
 	}
 

@@ -28,6 +28,7 @@ import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.interceptor.ForwardToDefaultViewInterceptor;
 import br.com.caelum.vraptor.interceptor.Interceptor;
 import br.com.caelum.vraptor.ioc.PrototypeScoped;
+import br.com.caelum.vraptor.ioc.RequestScoped;
 import br.com.caelum.vraptor4.controller.ControllerMethod;
 
 /**
@@ -35,7 +36,7 @@ import br.com.caelum.vraptor4.controller.ControllerMethod;
  * @author guilherme silveira
  *
  */
-@PrototypeScoped
+@RequestScoped
 public class DefaultInterceptorStack implements InterceptorStack {
 
 	private static final Logger logger = LoggerFactory.getLogger(DefaultInterceptorStack.class);

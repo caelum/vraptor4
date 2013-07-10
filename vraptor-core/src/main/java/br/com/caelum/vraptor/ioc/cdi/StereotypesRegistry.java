@@ -16,11 +16,6 @@ import br.com.caelum.vraptor4.controller.DefaultBeanClass;
 @ApplicationScoped
 public class StereotypesRegistry {
 
-	//CDI eyes only
-	@Deprecated
-	public StereotypesRegistry() {
-	}
-	
 	public void configure(){
 		BeanManager beanManager = CDI.current().getBeanManager();
 		Set<Bean<?>> beans = beanManager.getBeans(Object.class);

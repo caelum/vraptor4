@@ -13,11 +13,6 @@ import javax.enterprise.inject.spi.InjectionPoint;
 
 public class ListProducer {
 	
-	//CDI eyes only
-	@Deprecated
-	public ListProducer() {
-	}
-	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Produces
 	public <T> List<T> producesList(InjectionPoint injectionPoint){

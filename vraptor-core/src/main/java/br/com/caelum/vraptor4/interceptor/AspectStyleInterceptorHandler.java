@@ -21,9 +21,9 @@ public class AspectStyleInterceptorHandler implements InterceptorHandler {
 			.getLogger(AspectStyleInterceptorHandler.class);
 	private InterceptorMethodParametersResolver parametersResolver;
 	private StepExecutor<Boolean> acceptsExecutor;
-	private NoStackParameterStepExecutor after;
+	private StepExecutor<?> after;
 	private StepExecutor<?> around;
-	private NoStackParameterStepExecutor before;
+	private StepExecutor<?> before;
 
 
 	public AspectStyleInterceptorHandler(Class<?> interceptorClass,
@@ -39,7 +39,9 @@ public class AspectStyleInterceptorHandler implements InterceptorHandler {
 
 	private void configure() {		
 		after = new NoStackParameterStepExecutor(stepInvoker, AfterCall.class);		
-		after.accept(interceptorClass);
+		if(!after.accept(interceptorClass)){
+			after = new DoNothingStepExecutor();
+		}
 		
 		around = new AroundExecutor(stepInvoker,parametersResolver, container);
 		if(!around.accept(interceptorClass)){
@@ -47,7 +49,9 @@ public class AspectStyleInterceptorHandler implements InterceptorHandler {
 		}
 		
 		before = new NoStackParameterStepExecutor(stepInvoker, BeforeCall.class);
-		before.accept(interceptorClass);
+		if(!before.accept(interceptorClass)){
+			before = new DoNothingStepExecutor();
+		}
 		
 		CustomAcceptsExecutor customAcceptsExecutor = new CustomAcceptsExecutor(stepInvoker, container);
 		InterceptorAcceptsExecutor interceptorAcceptsExecutor = new InterceptorAcceptsExecutor(stepInvoker, parametersResolver);		

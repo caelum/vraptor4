@@ -57,9 +57,9 @@ public class InstantiateInterceptor implements Interceptor {
 			Object instance) throws InterceptionException {
 		if (instance == null) {
 			Class<?> type = method.getResource().getType();
-			instance = container.instanceFor(type);
-			this.controllerInstance = new DefaultControllerInstance(instance);
+			instance = container.instanceFor(type);			
 		}
+		this.controllerInstance = new DefaultControllerInstance(instance);
 		invocation.next(method, instance);
 	}
 

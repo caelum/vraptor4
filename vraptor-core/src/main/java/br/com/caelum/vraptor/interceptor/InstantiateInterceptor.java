@@ -17,6 +17,7 @@
 
 package br.com.caelum.vraptor.interceptor;
 
+import javax.enterprise.context.RequestScoped;
 import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 
@@ -68,6 +69,7 @@ public class InstantiateInterceptor implements Interceptor {
 	}
 	
 	@Produces
+	@RequestScoped
 	public ControllerInstance createControllerInstance() {
 		return this.controllerInstance;
 	}

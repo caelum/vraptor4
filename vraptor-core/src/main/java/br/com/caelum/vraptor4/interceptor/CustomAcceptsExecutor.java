@@ -11,16 +11,11 @@ public class CustomAcceptsExecutor implements StepExecutor<Boolean> {
 
 	private StepInvoker stepInvoker;
 	private Container container;
-	private ControllerMethod controllerMethod;
-	private ControllerInstance controllerInstance;
 
-	public CustomAcceptsExecutor(StepInvoker stepInvoker, Container container,ControllerMethod controllerMethod,
-			ControllerInstance controllerInstance) {
+	public CustomAcceptsExecutor(StepInvoker stepInvoker, Container container) {
 		super();
 		this.stepInvoker = stepInvoker;
 		this.container = container;
-		this.controllerMethod = controllerMethod;
-		this.controllerInstance = controllerInstance;
 	}
 	
 
@@ -32,8 +27,8 @@ public class CustomAcceptsExecutor implements StepExecutor<Boolean> {
 
 	@Override
 	public Boolean execute(Object interceptor) {
-		boolean customAccepts = new CustomAcceptsVerifier(controllerMethod,
-				controllerInstance, container, interceptor).isValid();
+		boolean customAccepts = new CustomAcceptsVerifier(container.instanceFor(ControllerMethod.class),
+				container.instanceFor(ControllerInstance.class), container, interceptor).isValid();
 		if (!customAccepts) {
 			stepInvoker.tryToInvoke(interceptor,
 					CustomAcceptsFailCallback.class);

@@ -1,6 +1,6 @@
 package br.com.caelum.vraptor4.interceptor;
 
-import com.google.inject.Inject;
+import javax.inject.Inject;
 
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.ioc.RequestScoped;

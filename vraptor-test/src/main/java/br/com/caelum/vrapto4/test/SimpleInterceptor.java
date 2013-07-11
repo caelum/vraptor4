@@ -1,12 +1,13 @@
 package br.com.caelum.vrapto4.test;
 
 import br.com.caelum.vraptor.Intercepts;
+import br.com.caelum.vraptor.interceptor.InstantiateInterceptor;
 import br.com.caelum.vraptor4.AfterCall;
 import br.com.caelum.vraptor4.AroundCall;
 import br.com.caelum.vraptor4.BeforeCall;
 import br.com.caelum.vraptor4.interceptor.SimpleInterceptorStack;
 
-@Intercepts
+@Intercepts(after=InstantiateInterceptor.class)
 public class SimpleInterceptor {
 
 	@BeforeCall

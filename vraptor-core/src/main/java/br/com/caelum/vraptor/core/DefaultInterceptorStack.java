@@ -33,46 +33,57 @@ import br.com.caelum.vraptor4.controller.ControllerMethod;
 
 /**
  * Default implementation of a interceptor stack.
+ * 
  * @author guilherme silveira
- *
+ * 
  */
 @RequestScoped
 public class DefaultInterceptorStack implements InterceptorStack {
 
-	private static final Logger logger = LoggerFactory.getLogger(DefaultInterceptorStack.class);
+	private static final Logger logger = LoggerFactory
+			.getLogger(DefaultInterceptorStack.class);
 
-    private final LinkedList<InterceptorHandler> interceptors = new LinkedList<InterceptorHandler>();
-    private final InterceptorHandlerFactory handlerFactory;
+	private LinkedList<InterceptorHandler> interceptors = new LinkedList<InterceptorHandler>();
+	private InterceptorHandlerFactory handlerFactory;
 
-    @Inject
-    public DefaultInterceptorStack(InterceptorHandlerFactory handlerFactory) {
-        this.handlerFactory = handlerFactory;
-    }
-    
-    public void next(ControllerMethod method, Object resourceInstance) throws InterceptionException {
-        if (interceptors.isEmpty()) {
-        	logger.debug("All registered interceptors have been called. End of VRaptor Request Execution.");
-            return;
-        }
-        InterceptorHandler handler = interceptors.poll();
-        handler.execute(this, method, resourceInstance);
-    }
 
-    public void add(Class<? extends Interceptor> type) {
-        this.interceptors.addLast(handlerFactory.handlerFor(type));
-    }
+	@Deprecated
+	public DefaultInterceptorStack() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
 
-    //XXX this method will be removed soon
-    public void addAsNext(Class<? extends Interceptor> type) {
-    	if (!type.getPackage().getName().startsWith("br.com.caelum.vraptor.interceptor") &&
-    			!type.equals(ForwardToDefaultViewInterceptor.class)) {
+	@Inject
+	public DefaultInterceptorStack(InterceptorHandlerFactory handlerFactory) {
+		this.handlerFactory = handlerFactory;
+	}
+
+	public void next(ControllerMethod method, Object resourceInstance)
+			throws InterceptionException {
+		if (interceptors.isEmpty()) {
+			logger.debug("All registered interceptors have been called. End of VRaptor Request Execution.");
+			return;
+		}
+		InterceptorHandler handler = interceptors.poll();
+		handler.execute(this, method, resourceInstance);
+	}
+
+	public void add(Class<? extends Interceptor> type) {
+		this.interceptors.addLast(handlerFactory.handlerFor(type));
+	}
+
+	// XXX this method will be removed soon
+	public void addAsNext(Class<? extends Interceptor> type) {
+		if (!type.getPackage().getName()
+				.startsWith("br.com.caelum.vraptor.interceptor")
+				&& !type.equals(ForwardToDefaultViewInterceptor.class)) {
 			this.interceptors.addFirst(handlerFactory.handlerFor(type));
 		}
-    }
+	}
 
-    @Override
-    public String toString() {
-    	return "DefaultInterceptorStack " + interceptors;
-    }
+	@Override
+	public String toString() {
+		return "DefaultInterceptorStack " + interceptors;
+	}
 
 }

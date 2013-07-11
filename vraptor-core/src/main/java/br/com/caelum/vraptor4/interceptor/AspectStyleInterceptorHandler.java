@@ -20,12 +20,9 @@ public class AspectStyleInterceptorHandler implements InterceptorHandler {
 	private static final Logger logger = LoggerFactory
 			.getLogger(AspectStyleInterceptorHandler.class);
 	private InterceptorMethodParametersResolver parametersResolver;
-	private ControllerInstance controllerInstance;
-	private ControllerMethod controllerMethod;
-	private InterceptorStack interceptorStack;
 	private StepExecutor<Boolean> acceptsExecutor;
 	private NoStackParameterStepExecutor after;
-	private AroundExecutor around;
+	private StepExecutor<?> around;
 	private NoStackParameterStepExecutor before;
 
 
@@ -36,9 +33,6 @@ public class AspectStyleInterceptorHandler implements InterceptorHandler {
 		this.container = container;
 		parametersResolver = new InterceptorMethodParametersResolver(
 				stepInvoker, container);
-		this.controllerInstance = container.instanceFor(ControllerInstance.class);
-		this.controllerMethod = container.instanceFor(ControllerMethod.class);
-		this.interceptorStack = container.instanceFor(InterceptorStack.class);
 		configure();
 
 	}
@@ -47,13 +41,15 @@ public class AspectStyleInterceptorHandler implements InterceptorHandler {
 		after = new NoStackParameterStepExecutor(stepInvoker, AfterCall.class);		
 		after.accept(interceptorClass);
 		
-		around = new AroundExecutor(stepInvoker, interceptorStack, parametersResolver,controllerMethod,controllerInstance);
-		around.accept(interceptorClass);
+		around = new AroundExecutor(stepInvoker,parametersResolver, container);
+		if(!around.accept(interceptorClass)){
+			around = new StackNextExecutor(container);
+		}
 		
 		before = new NoStackParameterStepExecutor(stepInvoker, BeforeCall.class);
 		before.accept(interceptorClass);
 		
-		StepExecutor<Boolean> customAcceptsExecutor = new CustomAcceptsExecutor(stepInvoker, container, controllerMethod, controllerInstance);
+		CustomAcceptsExecutor customAcceptsExecutor = new CustomAcceptsExecutor(stepInvoker, container);
 		InterceptorAcceptsExecutor interceptorAcceptsExecutor = new InterceptorAcceptsExecutor(stepInvoker, parametersResolver);		
 		boolean customAccepts = customAcceptsExecutor.accept(interceptorClass);
 		boolean internalAccepts = interceptorAcceptsExecutor.accept(interceptorClass);
@@ -79,8 +75,8 @@ public class AspectStyleInterceptorHandler implements InterceptorHandler {
 			before.execute(interceptor);
 			around.execute(interceptor);
 			after.execute(interceptor);
-		} else {
-			stack.next(controllerMethod, controllerInstance.getController());
+		} else {			
+			stack.next(controllerMethod, currentController);
 		}
 
 	}

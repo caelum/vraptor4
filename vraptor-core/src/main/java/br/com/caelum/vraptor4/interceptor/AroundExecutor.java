@@ -3,28 +3,24 @@ package br.com.caelum.vraptor4.interceptor;
 import java.lang.reflect.Method;
 
 import br.com.caelum.vraptor.core.InterceptorStack;
+import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor4.AroundCall;
 import br.com.caelum.vraptor4.controller.ControllerInstance;
 import br.com.caelum.vraptor4.controller.ControllerMethod;
 
-public class AroundExecutor implements StepExecutor<Object>{
+public class AroundExecutor implements StepExecutor<Object> {
 
 	private StepInvoker stepInvoker;
-	private InterceptorStack stack;
 	private InterceptorMethodParametersResolver parametersResolver;
-	private ControllerMethod controllerMethod;
-	private ControllerInstance controllerInstance;
+	private Container container;
 
-	public AroundExecutor(StepInvoker stepInvoker, InterceptorStack stack,
+	public AroundExecutor(StepInvoker stepInvoker,
 			InterceptorMethodParametersResolver parametersResolver,
-			ControllerMethod controllerMethod,
-			ControllerInstance controllerInstance) {
+			Container container) {
 		super();
 		this.stepInvoker = stepInvoker;
-		this.stack = stack;
 		this.parametersResolver = parametersResolver;
-		this.controllerMethod = controllerMethod;
-		this.controllerInstance = controllerInstance;
+		this.container = container;
 	}
 
 	public boolean accept(Class<?> interceptorClass) {
@@ -41,17 +37,8 @@ public class AroundExecutor implements StepExecutor<Object>{
 	}
 
 	public Object execute(Object interceptor) {
-		if (noAround(interceptor)) {
-			stack.next(controllerMethod, controllerInstance.getController());
-		} else {
-			return stepInvoker.tryToInvoke(interceptor, AroundCall.class,
-					parametersResolver.parametersFor(AroundCall.class,
-							interceptor));
-		}
-		return null;
-	}
-
-	private boolean noAround(Object interceptor) {
-		return stepInvoker.findMethod(AroundCall.class, interceptor.getClass()) == null;
+		return stepInvoker
+				.tryToInvoke(interceptor, AroundCall.class, parametersResolver
+						.parametersFor(AroundCall.class, interceptor));
 	}
 }

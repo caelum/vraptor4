@@ -24,6 +24,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import br.com.caelum.vraptor.interceptor.ExecuteMethodInterceptor;
+import br.com.caelum.vraptor.interceptor.InstantiateInterceptor;
 import br.com.caelum.vraptor.interceptor.Interceptor;
 import br.com.caelum.vraptor.interceptor.ResourceLookupInterceptor;
 import br.com.caelum.vraptor.ioc.RequestScoped;
@@ -42,5 +43,5 @@ import br.com.caelum.vraptor.ioc.RequestScoped;
 @RequestScoped
 public @interface Intercepts {
 	Class<? extends Interceptor>[] before() default ExecuteMethodInterceptor.class;
-	Class<? extends Interceptor>[] after() default ResourceLookupInterceptor.class;
+	Class<? extends Interceptor>[] after() default InstantiateInterceptor.class;
 }

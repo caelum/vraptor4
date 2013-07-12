@@ -7,7 +7,7 @@ import br.com.caelum.vraptor4.AroundCall;
 import br.com.caelum.vraptor4.BeforeCall;
 import br.com.caelum.vraptor4.interceptor.SimpleInterceptorStack;
 
-@Intercepts(after=InstantiateInterceptor.class)
+@Intercepts
 public class SimpleInterceptor {
 
 	@BeforeCall

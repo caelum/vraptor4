@@ -7,7 +7,7 @@ import java.util.Set;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.BeanManager;
-import javax.enterprise.inject.spi.CDI;
+import javax.inject.Inject;
 
 import br.com.caelum.vraptor.core.BaseComponents;
 import br.com.caelum.vraptor.core.StereotypeInfo;
@@ -15,9 +15,10 @@ import br.com.caelum.vraptor4.controller.DefaultBeanClass;
 
 @ApplicationScoped
 public class StereotypesRegistry {
+	
+	@Inject private BeanManager beanManager;
 
 	public void configure(){
-		BeanManager beanManager = CDI.current().getBeanManager();
 		Set<Bean<?>> beans = beanManager.getBeans(Object.class);
 		for (Bean<?> bean : beans) {
 			Annotation qualifier = tryToFindAStereotypeQualifier(bean);

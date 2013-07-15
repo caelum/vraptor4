@@ -17,6 +17,8 @@
 
 package br.com.caelum.vraptor.converter.jodatime;
 
+import static org.joda.time.format.DateTimeFormat.shortTime;
+
 import java.text.MessageFormat;
 import java.util.ResourceBundle;
 
@@ -29,7 +31,6 @@ import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.converter.ConversionError;
 import br.com.caelum.vraptor.core.Localization;
-import static org.joda.time.format.DateTimeFormat.shortTime;
 
 /**
  * VRaptor converter for {@link LocalTime}. {@link LocalTime} is part of Joda Time library.

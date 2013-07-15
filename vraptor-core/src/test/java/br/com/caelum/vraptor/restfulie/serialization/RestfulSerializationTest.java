@@ -4,11 +4,11 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.typeCompatibleWith;
 import static org.junit.Assert.assertThat;
 
-import br.com.caelum.vraptor.serialization.xstream.XStreamBuilderImpl;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.restfulie.hypermedia.HypermediaResource;
 import br.com.caelum.vraptor.restfulie.relation.RelationBuilder;
+import br.com.caelum.vraptor.serialization.xstream.XStreamBuilderImpl;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.converters.Converter;

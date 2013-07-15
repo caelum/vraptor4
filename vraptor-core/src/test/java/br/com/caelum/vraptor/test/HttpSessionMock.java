@@ -30,7 +30,7 @@ import javax.servlet.http.HttpSessionContext;
 /**
  * @author Fabio Kung
  */
-@SuppressWarnings({"deprecation", "unchecked"})
+@SuppressWarnings("unchecked")
 public class HttpSessionMock implements HttpSession,Serializable {
     private ServletContext context;
     private String id;

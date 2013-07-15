@@ -20,10 +20,7 @@ import static br.com.caelum.vraptor.view.Results.status;
 import java.util.Collections;
 import java.util.List;
 
-import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
-
-import com.google.common.collect.Lists;
 
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.http.FormatResolver;

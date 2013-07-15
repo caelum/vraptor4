@@ -30,8 +30,8 @@ import org.mockito.MockitoAnnotations;
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.view.DogController;
-import br.com.caelum.vraptor4.controller.DefaultBeanClass;
 import br.com.caelum.vraptor4.controller.ControllerMethod;
+import br.com.caelum.vraptor4.controller.DefaultBeanClass;
 
 public class InstantiateInterceptorTest {
 

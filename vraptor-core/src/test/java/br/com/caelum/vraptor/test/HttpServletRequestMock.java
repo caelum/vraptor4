@@ -26,7 +26,6 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-import javax.enterprise.inject.Default;
 import javax.inject.Inject;
 import javax.servlet.AsyncContext;
 import javax.servlet.DispatcherType;

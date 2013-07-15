@@ -36,8 +36,8 @@ import br.com.caelum.vraptor.restfulie.hypermedia.Transition;
 import br.com.caelum.vraptor.restfulie.relation.Relation;
 import br.com.caelum.vraptor.restfulie.relation.RelationBuilder;
 import br.com.caelum.vraptor.view.Status;
-import br.com.caelum.vraptor4.controller.HttpMethod;
 import br.com.caelum.vraptor4.controller.ControllerMethod;
+import br.com.caelum.vraptor4.controller.HttpMethod;
 
 /**
  * Intercepts invocations to state control's intercepted controllers.

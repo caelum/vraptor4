@@ -24,8 +24,8 @@ import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
-import br.com.caelum.vraptor4.controller.HttpMethod;
 import br.com.caelum.vraptor4.controller.ControllerMethod;
+import br.com.caelum.vraptor4.controller.HttpMethod;
 import br.com.caelum.vraptor4.http.route.MethodNotAllowedException;
 import br.com.caelum.vraptor4.http.route.Router;
 

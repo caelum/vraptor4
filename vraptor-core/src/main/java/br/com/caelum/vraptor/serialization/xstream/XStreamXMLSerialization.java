@@ -21,7 +21,10 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
 
 import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
-import br.com.caelum.vraptor.serialization.*;
+import br.com.caelum.vraptor.serialization.ProxyInitializer;
+import br.com.caelum.vraptor.serialization.Serializer;
+import br.com.caelum.vraptor.serialization.SerializerBuilder;
+import br.com.caelum.vraptor.serialization.XMLSerialization;
 import br.com.caelum.vraptor.view.ResultException;
 
 import com.thoughtworks.xstream.XStream;

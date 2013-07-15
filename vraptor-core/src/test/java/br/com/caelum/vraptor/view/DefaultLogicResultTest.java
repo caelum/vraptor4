@@ -35,7 +35,6 @@ import java.lang.reflect.Method;
 import java.util.Collections;
 
 import javax.servlet.RequestDispatcher;
-import javax.servlet.http.HttpServletResponse;
 
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
@@ -58,8 +57,8 @@ import br.com.caelum.vraptor.proxy.ObjenesisInstanceCreator;
 import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.validator.Message;
 import br.com.caelum.vraptor.validator.ValidationException;
-import br.com.caelum.vraptor4.controller.DefaultControllerMethod;
 import br.com.caelum.vraptor4.controller.ControllerMethod;
+import br.com.caelum.vraptor4.controller.DefaultControllerMethod;
 import br.com.caelum.vraptor4.http.route.Router;
 
 public class DefaultLogicResultTest {

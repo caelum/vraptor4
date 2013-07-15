@@ -57,7 +57,7 @@ public class DefaultControllerMethod implements ControllerMethod {
 
 	@Override
 	public String toString() {
-		return "[DefaultResourceMethod: "
+		return "[DefaultControllerMethod: "
 				+ method.getDeclaringClass().getSimpleName() + "."
 				+ method.getName()
 				+ Stringnifier.simpleNameFor(method) + "]";

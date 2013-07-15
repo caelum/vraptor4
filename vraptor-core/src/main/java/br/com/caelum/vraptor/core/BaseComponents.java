@@ -307,7 +307,6 @@ public class BaseComponents {
 			StringConverter.class));
   
     
-    @SuppressWarnings("serial")
 	private static final HashMap<Class<? extends Annotation>, StereotypeInfo> STEREOTYPES_INFO = new HashMap<Class<? extends Annotation>,StereotypeInfo>();
     static {
     		STEREOTYPES_INFO.put(Controller.class,new StereotypeInfo(Controller.class,ControllerHandler.class,new AnnotationLiteral<ControllerQualifier>() {}));

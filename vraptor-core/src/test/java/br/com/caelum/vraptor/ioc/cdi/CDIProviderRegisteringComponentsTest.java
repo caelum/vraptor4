@@ -3,7 +3,6 @@ package br.com.caelum.vraptor.ioc.cdi;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
@@ -41,7 +40,6 @@ import br.com.caelum.vraptor.validator.MessageInterpolatorFactory;
 import br.com.caelum.vraptor.validator.MethodValidatorFactoryCreator;
 import br.com.caelum.vraptor.validator.ValidatorCreator;
 import br.com.caelum.vraptor.validator.ValidatorFactoryCreator;
-import br.com.caelum.vraptor.view.PathResolver;
 import br.com.caelum.vraptor4.ioc.cdi.BeanManagerUtil;
 
 public class CDIProviderRegisteringComponentsTest extends

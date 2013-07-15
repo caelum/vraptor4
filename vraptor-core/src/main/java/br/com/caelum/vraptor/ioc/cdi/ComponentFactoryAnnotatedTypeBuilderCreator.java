@@ -48,7 +48,6 @@ public class ComponentFactoryAnnotatedTypeBuilderCreator {
 		return create(klass,scopedInfo);
 	}
 	
-	@SuppressWarnings({"unchecked"})
 	private AnnotatedTypeBuilder create(Class klass,ScopeInfo scopeInfo){
 		try{
 			Method getInstance = klass.getMethod("getInstance");

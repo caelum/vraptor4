@@ -142,30 +142,29 @@ public class DefaultValidationViewsFactoryTest {
 
 		factory.instanceFor(HttpResult.class, errors).addDateHeader("abc", 123l).addHeader("def", "ghi").addIntHeader("jkl", 234);
 	}
-	@SuppressWarnings("deprecation")
-	@Test(expected=ValidationException.class)
-	public void onHttpResultShouldThrowExceptionsOnMoved() throws Exception {
-		HttpResult httpResult = mock(HttpResult.class);
 
-		when(result.use(HttpResult.class)).thenReturn(httpResult);
-		when(httpResult.movedPermanentlyTo(RandomComponent.class)).thenReturn(new RandomComponent());
+	@Test(expected=ValidationException.class)
+	public void onStatusResultShouldThrowExceptionsOnMoved() throws Exception {
+		Status status = mock(Status.class);
+
+		when(result.use(Status.class)).thenReturn(status);
+		when(status.movedPermanentlyTo(RandomComponent.class)).thenReturn(new RandomComponent());
 
 		try {
-			factory.instanceFor(HttpResult.class, errors).movedPermanentlyTo(RandomComponent.class);
+			factory.instanceFor(Status.class, errors).movedPermanentlyTo(RandomComponent.class);
 		} catch (ValidationException e) {
 			Assert.fail("The exception must occur only on method call");
 		}
-		factory.instanceFor(HttpResult.class, errors).movedPermanentlyTo(RandomComponent.class).random();
+		factory.instanceFor(Status.class, errors).movedPermanentlyTo(RandomComponent.class).random();
 	}
 
-	@SuppressWarnings("deprecation")
 	@Test(expected=ValidationException.class)
-	public void onHttpResultShouldThrowExceptionsOnMovedToLogic() throws Exception {
-		HttpResult httpResult = mock(HttpResult.class);
+	public void onStatusResultShouldThrowExceptionsOnMovedToLogic() throws Exception {
+		Status status = mock(Status.class);
 
-		when(result.use(HttpResult.class)).thenReturn(httpResult);
+		when(result.use(Status.class)).thenReturn(status);
 
-		factory.instanceFor(HttpResult.class, errors).movedPermanentlyTo("anywhere");
+		factory.instanceFor(Status.class, errors).movedPermanentlyTo("anywhere");
 	}
 
 	@Test(expected=ValidationException.class)
@@ -296,7 +295,7 @@ public class DefaultValidationViewsFactoryTest {
 		public RandomSerializer exclude(String... names) {
 			return this;
 		}
-		
+
 		public RandomSerializer excludeAll() {
 			return this;
 		}

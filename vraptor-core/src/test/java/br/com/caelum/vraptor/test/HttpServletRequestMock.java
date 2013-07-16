@@ -190,7 +190,7 @@ public class HttpServletRequestMock implements MutableRequest {
 	}
 
 	public String getRealPath(String path) {
-		return wrapper.getRealPath(path);
+		return wrapper.getServletContext().getRealPath(path);
 	}
 
 	public String getRemoteAddr() {

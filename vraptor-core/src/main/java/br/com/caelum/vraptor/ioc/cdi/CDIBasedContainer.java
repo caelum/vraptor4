@@ -1,8 +1,6 @@
 package br.com.caelum.vraptor.ioc.cdi;
 
 import javax.enterprise.inject.spi.CDI;
-import javax.enterprise.inject.spi.Unmanaged;
-import javax.enterprise.inject.spi.Unmanaged.UnmanagedInstance;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,7 +11,7 @@ import br.com.caelum.vraptor.ioc.Container;
 public class CDIBasedContainer implements Container, ComponentRegistry {
 
 	private static final Logger logger = LoggerFactory.getLogger(CDIBasedContainer.class);
-	
+
 	//CDI eyes only
 	@Deprecated
 	public CDIBasedContainer() {
@@ -21,13 +19,7 @@ public class CDIBasedContainer implements Container, ComponentRegistry {
 
 	@Override
 	public <T> T instanceFor(Class<T> type) {
-		
-		if (canProvide(type)){
-			return CDI.current().select(type).get();
-		}
-		Unmanaged<T> unmanaged = new Unmanaged<T>(type);
-		UnmanagedInstance<T> instance = unmanaged.newInstance();
-		return instance.postConstruct().inject().get();
+		return CDI.current().select(type).get();
 	}
 
 	@Override

@@ -35,7 +35,7 @@ public class AddInjectToConstructorExtension {
 			for (Annotation foundAnnotation : pat.getAnnotatedType()
 					.getAnnotations()) {
 				if (foundAnnotation.annotationType().equals(stereotype)) {
-					tryToDefineInjectConstructor(pat, builder);					
+					tryToDefineInjectConstructor(pat, builder);
 					return;
 				}
 			}
@@ -46,8 +46,7 @@ public class AddInjectToConstructorExtension {
 			AnnotatedTypeBuilder builder) {
 		Class componentClass = pat.getAnnotatedType().getJavaClass();
 		List<Constructor> constructors = new Mirror().on(componentClass)
-				.reflectAll()
-				.constructorsMatching(new ArgsAndNoInjectConstructorMatcher());
+				.reflectAll().constructors().matching(new ArgsAndNoInjectConstructorMatcher());
 		boolean hasArgsConstructorAndNoInjection = !constructors.isEmpty();
 		if (hasArgsConstructorAndNoInjection) {
 			Constructor constructor = constructors.get(0);

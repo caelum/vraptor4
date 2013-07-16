@@ -12,6 +12,7 @@ import javax.inject.Inject;
 
 import net.vidageek.mirror.dsl.Matcher;
 import net.vidageek.mirror.dsl.Mirror;
+import net.vidageek.mirror.list.dsl.MirrorList;
 
 import org.apache.deltaspike.core.util.metadata.builder.AnnotatedTypeBuilder;
 
@@ -45,8 +46,7 @@ public class AddInjectToConstructorExtension {
 	private void tryToDefineInjectConstructor(ProcessAnnotatedType pat,
 			AnnotatedTypeBuilder builder) {
 		Class componentClass = pat.getAnnotatedType().getJavaClass();
-		List<Constructor> constructors = new Mirror().on(componentClass)
-				.reflectAll().constructors().matching(new ArgsAndNoInjectConstructorMatcher());
+		List<Constructor> constructors = getConstructors(componentClass);
 		boolean hasArgsConstructorAndNoInjection = !constructors.isEmpty();
 		if (hasArgsConstructorAndNoInjection) {
 			Constructor constructor = constructors.get(0);
@@ -54,6 +54,11 @@ public class AddInjectToConstructorExtension {
 					new AnnotationLiteral<Inject>() {
 					});
 		}
+	}
+
+	private MirrorList getConstructors(Class componentClass) {
+		return new Mirror().on(componentClass).reflectAll()
+			.constructors().matching(new ArgsAndNoInjectConstructorMatcher());
 	}
 
 	private static class ArgsAndNoInjectConstructorMatcher implements

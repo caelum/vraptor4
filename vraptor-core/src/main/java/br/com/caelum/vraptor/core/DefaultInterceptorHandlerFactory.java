@@ -60,6 +60,9 @@ public class DefaultInterceptorHandlerFactory implements InterceptorHandlerFacto
 	
 	@Override
 	public InterceptorHandler handlerFor(Class<?> type) {
+		if(cachedHandlers.containsKey(type)){
+			return cachedHandlers.get(type);
+		}
 		if (type.isAnnotationPresent(Lazy.class)) {
 			InterceptorHandler handler = cachedHandlers.get(type);
 			if (handler == null) {
@@ -72,7 +75,9 @@ public class DefaultInterceptorHandlerFactory implements InterceptorHandlerFacto
 		}
 		else{
 			if(type.isAnnotationPresent(Intercepts.class) && !Interceptor.class.isAssignableFrom(type)){
-				return new AspectStyleInterceptorHandler(type, new StepInvoker(), container);
+				AspectStyleInterceptorHandler handler = new AspectStyleInterceptorHandler(type, new StepInvoker(), container);
+				cachedHandlers.putIfAbsent(type,handler);
+				return handler;
 			}
 		}
 		return new ToInstantiateInterceptorHandler(container, type);

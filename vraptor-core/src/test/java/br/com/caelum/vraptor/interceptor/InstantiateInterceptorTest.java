@@ -16,7 +16,9 @@
  */
 package br.com.caelum.vraptor.interceptor;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -57,9 +59,9 @@ public class InstantiateInterceptorTest {
         when(method.getResource()).thenReturn(new DefaultBeanClass(DogController.class));
         
         interceptor.intercept(stack, method, null);
-        assertTrue(container.isEmpty());
         
         verify(stack).next(method, myDog);
+        assertEquals(myDog,interceptor.createControllerInstance().getController());
     }
 
     @Test
@@ -69,5 +71,6 @@ public class InstantiateInterceptorTest {
         
         interceptor.intercept(stack, method, myDog);
         verify(stack).next(method, myDog);
+        assertEquals(myDog,interceptor.createControllerInstance().getController());
     }
 }

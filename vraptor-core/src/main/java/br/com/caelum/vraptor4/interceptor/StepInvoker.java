@@ -35,15 +35,10 @@ public class StepInvoker {
 	}
 	
 
-	public Object tryToInvoke(Object interceptor,Class<? extends Annotation> step,SignatureAcceptor acceptor,Object... params) {
-		Method stepMethod = findMethod(step, interceptor);
+	public Object tryToInvoke(Object interceptor,Class<? extends Annotation> step,Object... params) {
+		Method stepMethod = findMethod(step, interceptor.getClass());
 		if(stepMethod==null){
 			return null;
-		}
-
-		
-		if(!acceptor.accepts(stepMethod)){			
-			throw new IllegalArgumentException(acceptor.errorMessage());
 		}
 		Object returnObject = createMirror().on(interceptor).invoke().method(stepMethod).withArgs(params);
 		if(stepMethod.getReturnType().equals(void.class)){
@@ -53,8 +48,8 @@ public class StepInvoker {
 	}
 
 
-	public Method findMethod(Class<? extends Annotation> step,Object interceptor) {		
-		MirrorList<Method> possibleMethods = createMirror().on(interceptor.getClass()).reflectAll().methods().matching(new InvokeMatcher(step));
+	public Method findMethod(Class<? extends Annotation> step,Class<?> interceptorClass) {		
+		MirrorList<Method> possibleMethods = createMirror().on(interceptorClass).reflectAll().methods().matching(new InvokeMatcher(step));
 		if(possibleMethods.size() > 1){
 			throw new IllegalStateException("You should not have more than one @"+step.getSimpleName()+" annotated method");
 		}		

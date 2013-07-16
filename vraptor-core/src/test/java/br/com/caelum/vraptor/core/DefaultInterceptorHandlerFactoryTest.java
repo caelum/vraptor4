@@ -47,9 +47,16 @@ public class DefaultInterceptorHandlerFactoryTest {
 	public void handlerForStaticInterceptorsShouldBeStatic() throws Exception {
 		assertThat(factory.handlerFor(ALazyInterceptor.class), is(instanceOf(LazyInterceptorHandler.class)));
 	}
+	
 	@Test
 	public void staticHandlersShouldBeCached() throws Exception {
 		InterceptorHandler handler = factory.handlerFor(ALazyInterceptor.class);
 		assertThat(factory.handlerFor(ALazyInterceptor.class), is(sameInstance(handler)));
+	}
+	
+	@Test
+	public void aspectStyleHandlersShouldBeCached() throws Exception {
+		InterceptorHandler handler = factory.handlerFor(AspectStyleInterceptor.class);
+		assertThat(factory.handlerFor(AspectStyleInterceptor.class), is(sameInstance(handler)));
 	}
 }

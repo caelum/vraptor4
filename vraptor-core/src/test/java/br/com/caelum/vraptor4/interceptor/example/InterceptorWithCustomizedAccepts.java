@@ -1,10 +1,12 @@
 package br.com.caelum.vraptor4.interceptor.example;
 
 import br.com.caelum.vraptor.Intercepts;
+import br.com.caelum.vraptor4.Accepts;
 import br.com.caelum.vraptor4.AfterCall;
 import br.com.caelum.vraptor4.AroundCall;
 import br.com.caelum.vraptor4.BeforeCall;
 import br.com.caelum.vraptor4.interceptor.AcceptsWithAnnotations;
+import br.com.caelum.vraptor4.interceptor.CustomAcceptsFailCallback;
 import br.com.caelum.vraptor4.interceptor.SimpleInterceptorStack;
 
 @Intercepts
@@ -40,6 +42,10 @@ public class InterceptorWithCustomizedAccepts {
 
 	public boolean isAfterCalled() {
 		return afterCalled;
+	}
+
+	@CustomAcceptsFailCallback
+	public void customAcceptsFailCallback() {
 	}
 	
 	

@@ -19,19 +19,18 @@ public class StepInvokerTest {
 
 	@Ignore
 	public void shouldNotReadInheritedMethods() throws Exception {
-		stepInvoker.findMethod(AroundCall.class,new InterceptorWithInheritance());		
+		stepInvoker.findMethod(AroundCall.class,InterceptorWithInheritance.class);		
 	}
 	
 	@Test
 	public void shouldFindFirstMethodAnnotatedWithInterceptorStep(){
 		ExampleOfSimpleStackInterceptor proxy = spy(new ExampleOfSimpleStackInterceptor());
-		assertNotNull(stepInvoker.findMethod(AroundCall.class,proxy));
+		assertNotNull(stepInvoker.findMethod(AroundCall.class,proxy.getClass()));
 	}
 	
 	@Test
 	public void teste() throws SecurityException, NoSuchMethodException{
-		WeldProxy$$$StyleInterceptor proxy = new WeldProxy$$$StyleInterceptor();
-		assertNotNull(stepInvoker.findMethod(AroundCall.class,proxy));
+		assertNotNull(stepInvoker.findMethod(AroundCall.class,WeldProxy$$$StyleInterceptor.class));
 	}	
 	
 	

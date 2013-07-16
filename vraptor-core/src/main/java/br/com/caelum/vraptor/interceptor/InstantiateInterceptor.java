@@ -17,13 +17,17 @@
 
 package br.com.caelum.vraptor.interceptor;
 
+import javax.enterprise.context.RequestScoped;
+import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.Intercepts;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.ioc.Container;
+import br.com.caelum.vraptor4.controller.ControllerInstance;
 import br.com.caelum.vraptor4.controller.ControllerMethod;
+import br.com.caelum.vraptor4.controller.DefaultControllerInstance;
 
 /**
  * Using a request scoped container, instantiates a resource.<br/>
@@ -36,6 +40,7 @@ import br.com.caelum.vraptor4.controller.ControllerMethod;
 public class InstantiateInterceptor implements Interceptor {
 
 	private Container container;
+	private ControllerInstance controllerInstance;
 
 	//CDI eyes only
 	@Deprecated
@@ -52,14 +57,21 @@ public class InstantiateInterceptor implements Interceptor {
 			Object instance) throws InterceptionException {
 		if (instance == null) {
 			Class<?> type = method.getResource().getType();
-			instance = container.instanceFor(type);
+			instance = container.instanceFor(type);			
 		}
+		this.controllerInstance = new DefaultControllerInstance(instance);
 		invocation.next(method, instance);
 	}
 
 	@Override
 	public boolean accepts(ControllerMethod method) {
 		return true;
+	}
+	
+	@Produces
+	@RequestScoped
+	public ControllerInstance createControllerInstance() {
+		return this.controllerInstance;
 	}
 
 }

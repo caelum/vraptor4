@@ -11,7 +11,7 @@ import com.google.common.collect.Collections2;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor4.AroundCall;
 
-public class AroundSignatureAcceptor implements SignatureAcceptor {
+public class MustReceiveStackAsParameterAcceptor implements SignatureAcceptor {
 
 	@Override
 	public boolean accepts(Method method){

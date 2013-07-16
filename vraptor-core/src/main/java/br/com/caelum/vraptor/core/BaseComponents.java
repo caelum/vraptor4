@@ -189,6 +189,8 @@ import br.com.caelum.vraptor4.http.route.Router;
 import br.com.caelum.vraptor4.http.route.RoutesConfiguration;
 import br.com.caelum.vraptor4.http.route.RoutesParser;
 import br.com.caelum.vraptor4.http.route.TypeFinder;
+import br.com.caelum.vraptor4.interceptor.DefaultSimpleInterceptorStack;
+import br.com.caelum.vraptor4.interceptor.SimpleInterceptorStack;
 import br.com.caelum.vraptor4.ioc.ControllerHandler;
 
 import com.thoughtworks.xstream.converters.SingleValueConverter;
@@ -234,12 +236,13 @@ public class BaseComponents {
     );
 
     private static final Map<Class<?>, Class<?>> PROTOTYPE_COMPONENTS = classMap(
-    		InterceptorStack.class, 						DefaultInterceptorStack.class,
     		RequestExecution.class, 						EnhancedRequestExecution.class,
     		XStreamBuilder.class, 							XStreamBuilderImpl.class
     );
 
     private static final Map<Class<?>, Class<?>> REQUEST_COMPONENTS = classMap(
+    			InterceptorStack.class, 						DefaultInterceptorStack.class,
+    			SimpleInterceptorStack.class,                DefaultSimpleInterceptorStack.class,
             MethodInfo.class, 								DefaultMethodInfo.class,
             LogicResult.class, 								DefaultLogicResult.class,
             PageResult.class, 								DefaultPageResult.class,

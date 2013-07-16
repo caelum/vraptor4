@@ -17,6 +17,8 @@
 
 package br.com.caelum.vraptor.interceptor;
 
+import javax.enterprise.context.RequestScoped;
+import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 
 import org.slf4j.Logger;
@@ -50,6 +52,7 @@ public class ResourceLookupInterceptor implements Interceptor {
 	private RequestInfo requestInfo;
 	private ControllerNotFoundHandler resourceNotFoundHandler;
 	private MethodNotAllowedHandler methodNotAllowedHandler;
+	private ControllerMethod method;
 
 	//CDI eyes only
 	@Deprecated
@@ -72,7 +75,7 @@ public class ResourceLookupInterceptor implements Interceptor {
 			throws InterceptionException {
 
 		try {
-			ControllerMethod method = translator.translate(requestInfo);
+			method = translator.translate(requestInfo);
 
 			methodInfo.setResourceMethod(method);
 			stack.next(method, resourceInstance);
@@ -89,4 +92,9 @@ public class ResourceLookupInterceptor implements Interceptor {
 		return true;
 	}
 
+	@Produces
+	@RequestScoped
+	public ControllerMethod createControllerMethod() {
+		return this.method;
+	}
 }

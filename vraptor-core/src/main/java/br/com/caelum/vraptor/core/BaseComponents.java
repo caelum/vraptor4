@@ -226,7 +226,7 @@ public class BaseComponents {
             Evaluator.class,				JavaEvaluator.class,
             StaticContentHandler.class,		DefaultStaticContentHandler.class,
             SingleValueConverter.class,     NullConverter.class,
-            ProxyInitializer.class,			getProxyInitializerImpl()
+            ProxyInitializer.class,			NullProxyInitializer.class
     );
 
     private final static Map<Class<?>, Class<?>> CACHED_COMPONENTS = classMap(
@@ -320,10 +320,6 @@ public class BaseComponents {
 
     public static Set<Class<? extends Deserializer>> getDeserializers() {
 		return DESERIALIZERS;
-	}
-
-    private static Class<? extends ProxyInitializer> getProxyInitializerImpl() {
-		return NullProxyInitializer.class;
 	}
 
     private static Class<? extends InstanceCreator> getInstanceCreator() {

@@ -134,11 +134,6 @@ public class HttpSessionMock implements HttpSession,Serializable {
         attributes.remove(name);
     }
 
-    @Deprecated
-    public void removeValue(String name) {
-        removeAttribute(name);
-    }
-
     public void invalidate() {
         attributes.clear();
     }

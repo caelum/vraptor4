@@ -6,7 +6,6 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.io.ByteArrayOutputStream;
@@ -25,7 +24,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.interceptor.DefaultTypeNameExtractor;
-import br.com.caelum.vraptor.serialization.HibernateProxyInitializer;
+import br.com.caelum.vraptor.serialization.NullProxyInitializer;
 
 import com.google.common.collect.ForwardingCollection;
 import com.thoughtworks.xstream.XStream;
@@ -42,8 +41,8 @@ public class XStreamJSONSerializationTest {
 	private ByteArrayOutputStream stream;
 	private HttpServletResponse response;
 	private DefaultTypeNameExtractor extractor;
-	private HibernateProxyInitializer initializer;
-    private XStreamBuilder builder = XStreamBuilderImpl.cleanInstance();
+	private NullProxyInitializer initializer;
+    private final XStreamBuilder builder = XStreamBuilderImpl.cleanInstance();
 
     @Before
     public void setup() throws Exception {
@@ -52,7 +51,7 @@ public class XStreamJSONSerializationTest {
         response = mock(HttpServletResponse.class);
         when(response.getWriter()).thenReturn(new PrintWriter(stream));
         extractor = new DefaultTypeNameExtractor();
-		initializer = new HibernateProxyInitializer();
+		initializer = new NullProxyInitializer();
 		this.serialization = new XStreamJSONSerialization(response, extractor, initializer, builder);
     }
 
@@ -229,7 +228,7 @@ public class XStreamJSONSerializationTest {
 	static class WithAdvanced {
 		AdvancedOrder order;
 	}
-	
+
 	@Test
 	public void shouldSerializeParentFields() {
 //		String expectedResult = "<advancedOrder><notes>complex package</notes><price>15.0</price><comments>pack it nicely, please</comments></advancedOrder>";
@@ -237,7 +236,7 @@ public class XStreamJSONSerializationTest {
 		serialization.from(order).serialize();
 		assertThat(result(), containsString("\"notes\": \"complex package\""));
 	}
-	
+
 	@Test
 	public void shouldExcludeNonPrimitiveParentFields() {
 //		String expectedResult = "<advancedOrder><notes>complex package</notes><price>15.0</price><comments>pack it nicely, please</comments></advancedOrder>";
@@ -246,14 +245,14 @@ public class XStreamJSONSerializationTest {
 		serialization.from(advanced).include("order").serialize();
 		assertThat(result(), not(containsString("\"client\"")));
 	}
-	
+
 	@Test
 	public void shouldExcludeParentFields() {
 		Order order = new AdvancedOrder(null, 15.0, "pack it nicely, please", "complex package");
 		serialization.from(order).exclude("comments").serialize();
 		assertThat(result(), not(containsString("\"comments\"")));
 	}
-	
+
 	@Test
 	public void shouldExcludeAllPrimitiveFields() {
 		String expectedResult = "{\"order\": {}}";
@@ -261,7 +260,7 @@ public class XStreamJSONSerializationTest {
 		serialization.from(order).excludeAll().serialize();
 		assertThat(result(), is(equalTo(expectedResult)));
 	}
-	
+
 	@Test
 	public void shouldExcludeAllPrimitiveParentFields() {
 		String expectedResult = "{\"advancedOrder\": {}}";
@@ -269,7 +268,7 @@ public class XStreamJSONSerializationTest {
 		serialization.from(order).excludeAll().serialize();
 		assertThat(result(), is(equalTo(expectedResult)));
 	}
-	
+
 	@Test
 	public void shouldExcludeAllThanIncludeAndSerialize() {
 		String expectedResult = "{\"order\": {\"price\": 15.0}}";
@@ -380,23 +379,6 @@ public class XStreamJSONSerializationTest {
 		}
 
 	}
-	@Test
-	public void shouldRunHibernateLazyInitialization() throws Exception {
-		LazyInitializer initializer = mock(LazyInitializer.class);
-
-		SomeProxy proxy = new SomeProxy(initializer);
-		proxy.name = "my name";
-		proxy.aField = "abc";
-
-		when(initializer.getPersistentClass()).thenReturn(Client.class);
-
-		serialization.from(proxy).serialize();
-
-		assertThat(result(), is("{\"client\": {\"name\": \"my name\",\"aField\": \"abc\"}}"));
-
-		verify(initializer).initialize();
-	}
-
 
 	static class MyCollection extends ForwardingCollection<Order> {
 		@Override

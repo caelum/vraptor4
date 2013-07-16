@@ -10,8 +10,8 @@ import javax.enterprise.inject.spi.ProcessAnnotatedType;
 import javax.enterprise.util.AnnotationLiteral;
 import javax.inject.Inject;
 
-import net.vidageek.mirror.dsl.Matcher;
 import net.vidageek.mirror.dsl.Mirror;
+import net.vidageek.mirror.list.dsl.Matcher;
 import net.vidageek.mirror.list.dsl.MirrorList;
 
 import org.apache.deltaspike.core.util.metadata.builder.AnnotatedTypeBuilder;
@@ -61,8 +61,7 @@ public class AddInjectToConstructorExtension {
 			.constructors().matching(new ArgsAndNoInjectConstructorMatcher());
 	}
 
-	private static class ArgsAndNoInjectConstructorMatcher implements
-			Matcher<Constructor> {
+	private static class ArgsAndNoInjectConstructorMatcher implements Matcher<Constructor> {
 
 		public boolean accepts(Constructor constructor) {
 			boolean hasInject = constructor.isAnnotationPresent(Inject.class);

@@ -438,22 +438,31 @@ public abstract class GenericContainerTest {
 	 */
 	@Test
 	public void shouldReturnAllDefaultDeserializers() {
+
 		executeInsideRequest(new WhatToDo<Void>(){
 
-			@Override
 			public Void execute(RequestInfo request, int counter) {
+
 				return provider.provideForRequest(request, new Execution<Void>() {
 
-					@Override
+					private Container container;
+					private Deserializers deserializers;
+
 					public Void insideRequest(Container container) {
-						Deserializers deserializers = container.instanceFor(Deserializers.class);
-						assertNotNull(deserializers.deserializerFor("application/json", container));
-						assertNotNull(deserializers.deserializerFor("json", container));
-						assertNotNull(deserializers.deserializerFor("application/xml", container));
-						assertNotNull(deserializers.deserializerFor("xml", container));
-						assertNotNull(deserializers.deserializerFor("text/xml", container));
-						assertNotNull(deserializers.deserializerFor("application/x-www-form-urlencoded", container));
+						this.container = container;
+						deserializers = container.instanceFor(Deserializers.class);
+						assertThat(deserializerFor("application/json"), is(notNullValue()));
+						assertThat(deserializerFor("application/json"), is(notNullValue()));
+						assertThat(deserializerFor("json"), is(notNullValue()));
+						assertThat(deserializerFor("application/xml"), is(notNullValue()));
+						assertThat(deserializerFor("xml"), is(notNullValue()));
+						assertThat(deserializerFor("text/xml"), is(notNullValue()));
+						assertThat(deserializerFor("application/x-www-form-urlencoded"), is(notNullValue()));
 						return null;
+					}
+
+					private Deserializer deserializerFor(String type) {
+						return deserializers.deserializerFor(type, container);
 					}
 
 				});

@@ -22,6 +22,7 @@ import static br.com.caelum.vraptor.VRaptorMatchers.hasOneCopyOf;
 import static br.com.caelum.vraptor.config.BasicConfiguration.BASE_PACKAGES_PARAMETER_NAME;
 import static br.com.caelum.vraptor.config.BasicConfiguration.SCANNING_PARAM;
 import static java.lang.Thread.currentThread;
+import static java.util.Arrays.asList;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.instanceOf;
@@ -40,6 +41,7 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -445,25 +447,17 @@ public abstract class GenericContainerTest {
 
 				return provider.provideForRequest(request, new Execution<Void>() {
 
-					private Container container;
-					private Deserializers deserializers;
-
 					public Void insideRequest(Container container) {
-						this.container = container;
-						deserializers = container.instanceFor(Deserializers.class);
-						assertThat(deserializerFor("application/json"), is(notNullValue()));
-						assertThat(deserializerFor("json"), is(notNullValue()));
-						assertThat(deserializerFor("application/xml"), is(notNullValue()));
-						assertThat(deserializerFor("xml"), is(notNullValue()));
-						assertThat(deserializerFor("text/xml"), is(notNullValue()));
-						assertThat(deserializerFor("application/x-www-form-urlencoded"), is(notNullValue()));
+						Deserializers deserializers = container.instanceFor(Deserializers.class);
+
+						List<String> types = asList("application/json", "json", "application/xml",
+							"xml", "text/xml", "application/x-www-form-urlencoded");
+
+						for (String type : types) {
+							assertThat(deserializers.deserializerFor(type, container), is(notNullValue()));
+						}
 						return null;
 					}
-
-					private Deserializer deserializerFor(String type) {
-						return deserializers.deserializerFor(type, container);
-					}
-
 				});
 			}
 		});

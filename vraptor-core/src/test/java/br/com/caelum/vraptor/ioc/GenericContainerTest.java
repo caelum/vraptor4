@@ -56,7 +56,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import br.com.caelum.vraptor.ComponentRegistry;
 import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.converter.jodatime.LocalDateConverter;
@@ -94,10 +93,39 @@ public abstract class GenericContainerTest {
 
 	protected ContainerProvider provider;
 	protected ServletContext context;
+	private static final String PACKAGENAME = "br.com.caelum.vraptor.ioc.fixture";
+
 	protected abstract ContainerProvider getProvider();
 	protected abstract <T> T executeInsideRequest(WhatToDo<T> execution);
 	protected abstract void configureExpectations();
-	
+
+	@Before
+	public void setup() throws Exception {
+
+		ClassLoader contextClassLoader = currentThread().getContextClassLoader();
+		URL[] urls = new URL[] {Object.class.getResource("/test-fixture.jar")};
+
+		context = mock(ServletContext.class, "servlet context");
+		when(context.getMajorVersion()).thenReturn(3);
+		when(context.getInitParameter(BASE_PACKAGES_PARAMETER_NAME)).thenReturn(PACKAGENAME);
+		when(context.getRealPath("/WEB-INF/classes")).thenReturn(getClassDir());
+		when(context.getClassLoader()).thenReturn(new URLClassLoader(urls, contextClassLoader));
+        when(context.getInitParameter(SCANNING_PARAM)).thenReturn("enabled");
+
+		configureExpectations();
+		getStartedProvider();
+	}
+
+	protected void getStartedProvider() {
+		provider = getProvider();
+		provider.start(context);
+	}
+
+	@After
+	public void tearDown() {
+		provider.stop();
+		provider = null;
+	}
 
 	@Test
 	public void canProvideAllApplicationScopedComponents() {
@@ -121,7 +149,7 @@ public abstract class GenericContainerTest {
 
 	@Test
 	public void processesCorrectlyAppBasedComponents() {
-		checkAvailabilityFor(true, MyAppComponent.class, MyAppComponent.class);
+		checkAvailabilityFor(true, MyAppComponent.class);
 	}
 	@Test
 	public void canProvideJodaTimeConverters() {
@@ -148,7 +176,7 @@ public abstract class GenericContainerTest {
 		public int getCalls() {
 			return calls;
 		}
-		
+
 		@PreDestroy
 		public void z() {
 			calls++;
@@ -157,13 +185,11 @@ public abstract class GenericContainerTest {
 
 	@Test
 	public void callsPredestroyExactlyOneTime() throws Exception {
-		MyAppComponentWithLifecycle component = registerAndGetFromContainer(MyAppComponentWithLifecycle.class,
-				MyAppComponentWithLifecycle.class);
+		MyAppComponentWithLifecycle component = getFromContainer(MyAppComponentWithLifecycle.class);
 		assertThat(component.calls, is(0));
 		provider.stop();
 		assertThat(component.calls, is(1));
-		provider = getProvider();
-		start(provider);
+		getStartedProvider();
 	}
 
 	@Test
@@ -187,7 +213,6 @@ public abstract class GenericContainerTest {
 
 	@Test
 	public void setsAnAttributeOnSessionWithTheObjectTypeName() throws Exception {
-		registerAndGetFromContainer(MySessionComponent.class, MySessionComponent.class);
 		executeInsideRequest(new WhatToDo<Void>() {
 			@Override
 			public Void execute(final RequestInfo request, int counter) {
@@ -214,7 +239,7 @@ public abstract class GenericContainerTest {
 
 	@Test
 	public void processesCorrectlyRequestBasedComponents() {
-		checkAvailabilityFor(false, MyRequestComponent.class, MyRequestComponent.class);
+		checkAvailabilityFor(false, MyRequestComponent.class);
 	}
 
 	@PrototypeScoped
@@ -224,16 +249,12 @@ public abstract class GenericContainerTest {
 
 	@Test
 	public void processesCorrectlyPrototypeBasedComponents() {
-		registerAndGetFromContainer(MyPrototypeComponent.class, MyPrototypeComponent.class);
 		executeInsideRequest(new WhatToDo<Object>() {
 			@Override
 			public Object execute(RequestInfo request, int counter) {
 				return provider.provideForRequest(request, new Execution<Object>() {
 					@Override
 					public Object insideRequest(Container container) {
-						ComponentRegistry registry = container.instanceFor(ComponentRegistry.class);
-						registry.register(MyPrototypeComponent.class, MyPrototypeComponent.class);
-
 						MyPrototypeComponent instance1 = instanceFor(MyPrototypeComponent.class,container);
 						MyPrototypeComponent instance2 = instanceFor(MyPrototypeComponent.class,container);
 						assertThat(instance1, not(sameInstance(instance2)));
@@ -246,71 +267,27 @@ public abstract class GenericContainerTest {
 
 	@Test
 	public void supportsComponentFactoriesForCustomInstantiation() {
-		// TODO the registered component is only available in the next request
-		// with Pico. FIX IT!
-		registerAndGetFromContainer(Container.class, TheComponentFactory.class);
-
-		TheComponentFactory factory = registerAndGetFromContainer(TheComponentFactory.class, null);
+		TheComponentFactory factory = getFromContainer(TheComponentFactory.class);
 		assertThat(factory, is(notNullValue()));
 
-		NeedsCustomInstantiation component = registerAndGetFromContainer(NeedsCustomInstantiation.class, null);
+		NeedsCustomInstantiation component = getFromContainer(NeedsCustomInstantiation.class);
 		assertThat(component, is(notNullValue()));
 
-		registerAndGetFromContainer(DependentOnSomethingFromComponentFactory.class,
-				DependentOnSomethingFromComponentFactory.class);
+		DependentOnSomethingFromComponentFactory dependent =
+				getFromContainer(DependentOnSomethingFromComponentFactory.class);
 
-		DependentOnSomethingFromComponentFactory dependent = registerAndGetFromContainer(
-				DependentOnSomethingFromComponentFactory.class, null);
 		assertThat(dependent, is(notNullValue()));
 		assertThat(dependent.getDependency(), is(notNullValue()));
 	}
 
-	@Before
-	public void setup() throws Exception {
-		context = mock(ServletContext.class, "servlet context");
-
-		when(context.getMajorVersion()).thenReturn(3);
-		when(context.getInitParameter(BASE_PACKAGES_PARAMETER_NAME)).thenReturn("br.com.caelum.vraptor.ioc.fixture");
-		when(context.getRealPath("/WEB-INF/classes")).thenReturn(getClassDir());
-
-		
-		when(context.getClassLoader()).thenReturn(
-				new URLClassLoader(new URL[] {Object.class.getResource("/test-fixture.jar")},
-						currentThread().getContextClassLoader()));
-
-        //allowing(context).getInitParameter(ENCODING);
-        //allowing(context).setAttribute(with(any(String.class)), with(any(Object.class)));
-
-        when(context.getInitParameter(SCANNING_PARAM)).thenReturn("enabled");
-
-		configureExpectations();
-		provider = getProvider();
-		start(provider);
-	}
-	protected void start(ContainerProvider provider) {
-		provider.start(context);
-	}
-
-	@After
-	public void tearDown() {
-		provider.stop();
-		provider = null;
-	}
-
-	protected <T> void checkAvailabilityFor(final boolean shouldBeTheSame, final Class<T> component,
-			final Class<? super T> componentToRegister) {
-		T firstInstance = registerAndGetFromContainer(component, componentToRegister);
+	protected <T> void checkAvailabilityFor(final boolean shouldBeTheSame, final Class<T> component) {
+		T firstInstance = getFromContainer(component);
 		T secondInstance = executeInsideRequest(new WhatToDo<T>() {
 			@Override
 			public T execute(RequestInfo request, final int counter) {
 				return provider.provideForRequest(request, new Execution<T>() {
 					@Override
 					public T insideRequest(Container secondContainer) {
-						if (componentToRegister != null && !isAppScoped(secondContainer, componentToRegister)) {
-							ComponentRegistry registry = secondContainer.instanceFor(ComponentRegistry.class);
-							registry.register(componentToRegister, componentToRegister);
-						}
-
 						ControllerMethod secondMethod = mock(ControllerMethod.class, "rm" + counter);
 						secondContainer.instanceFor(MethodInfo.class).setResourceMethod(secondMethod);
 						return instanceFor(component, secondContainer);
@@ -323,29 +300,6 @@ public abstract class GenericContainerTest {
 		checkSimilarity(component, shouldBeTheSame, firstInstance, secondInstance);
 	}
 
-	protected <T> T registerAndGetFromContainer(final Class<T> componentToBeRetrieved,
-			final Class<?> componentToRegister) {
-		return executeInsideRequest(new WhatToDo<T>() {
-			@Override
-			public T execute(RequestInfo request, final int counter) {
-
-				return provider.provideForRequest(request, new Execution<T>() {
-					@Override
-					public T insideRequest(Container firstContainer) {
-						if (componentToRegister != null) {
-							ComponentRegistry registry = firstContainer.instanceFor(ComponentRegistry.class);
-							registry.register(componentToRegister, componentToRegister);
-						}
-						ControllerMethod firstMethod = mock(ControllerMethod.class, "rm" + counter);
-						firstContainer.instanceFor(MethodInfo.class).setResourceMethod(firstMethod);
-						return instanceFor(componentToBeRetrieved,firstContainer);
-					}
-				});
-
-			}
-		});
-	}
-
 	protected <T> T getFromContainer(final Class<T> componentToBeRetrieved) {
 		return executeInsideRequest(new WhatToDo<T>() {
 			@Override
@@ -354,12 +308,12 @@ public abstract class GenericContainerTest {
 			}
 		});
 	}
-	
+
 	protected <T> T getFromContainerAndExecuteSomeCode(final Class<T> componentToBeRetrieved,final Code<T> code) {
 		return executeInsideRequest(new WhatToDo<T>() {
 			@Override
 			public T execute(RequestInfo request, final int counter) {
-				T bean = getFromContainerInCurrentThread(componentToBeRetrieved, request,code);				
+				T bean = getFromContainerInCurrentThread(componentToBeRetrieved, request,code);
 				return bean;
 			}
 		});
@@ -384,10 +338,6 @@ public abstract class GenericContainerTest {
 		});
 	}
 
-	private boolean isAppScoped(Container secondContainer, Class<?> componentToRegister) {
-		return secondContainer.instanceFor(componentToRegister) != null;
-	}
-
 	protected void checkSimilarity(Class<?> component, boolean shouldBeTheSame, Object firstInstance,
 			Object secondInstance) {
 
@@ -401,16 +351,16 @@ public abstract class GenericContainerTest {
 	}
 
 	protected void checkAvailabilityFor(boolean shouldBeTheSame, Collection<Class<?>> components) {
-		for (Class<?> component : components) {			
-			checkAvailabilityFor(shouldBeTheSame, component, null);
+		for (Class<?> component : components) {
+			checkAvailabilityFor(shouldBeTheSame, component);
 		}
 	}
 
 	@RequestScoped
 	static public class DisposableComponent {
 		private boolean destroyed;
-		private Object dependency = new Object();
-		
+		private final Object dependency = new Object();
+
 		public Object getDependency() {
 			return dependency;
 		}
@@ -419,7 +369,7 @@ public abstract class GenericContainerTest {
 		public void preDestroy() {
 			this.destroyed = true;
 		}
-		
+
 		public boolean isDestroyed() {
 			return destroyed;
 		}
@@ -436,15 +386,13 @@ public abstract class GenericContainerTest {
 
 	@Test
 	public void shouldDisposeAfterRequest() {
-		registerAndGetFromContainer(Container.class, DisposableComponent.class);
-		DisposableComponent comp = registerAndGetFromContainer(DisposableComponent.class, null);
+		DisposableComponent comp = getFromContainer(DisposableComponent.class);
 		assertTrue(comp.destroyed);
 	}
 
 	@Test
 	public void shouldStartBeforeRequestExecution() {
-		registerAndGetFromContainer(Container.class, StartableComponent.class);
-		StartableComponent comp = registerAndGetFromContainer(StartableComponent.class, null);
+		StartableComponent comp = getFromContainer(StartableComponent.class);
 		assertTrue(comp.started);
 	}
 
@@ -466,7 +414,7 @@ public abstract class GenericContainerTest {
 		Provided object = getFromContainer(Provided.class);
 		assertThat(object, is(sameInstance(ComponentFactoryInTheClasspath.PROVIDED)));
 	}
-			
+
 	@Test
 	public void shoudRegisterConvertersInConverters() {
 		executeInsideRequest(new WhatToDo<Converters>() {
@@ -483,8 +431,8 @@ public abstract class GenericContainerTest {
 				});
 			}
 		});
-	}	
-	
+	}
+
 	/**
 	 * Check if exist {@link Deserializer} registered in VRaptor for determined Content-Types.
 	 */
@@ -511,16 +459,16 @@ public abstract class GenericContainerTest {
 				});
 			}
 		});
-	}	
-	
+	}
+
 	@Test
 	public void shoudRegisterInterceptorsInInterceptorRegistry() {
 		InterceptorRegistry registry = getFromContainer(InterceptorRegistry.class);
 		assertThat(registry.all(), hasOneCopyOf(InterceptorInTheClasspath.class));
-	}	
-		
-	
-	
+	}
+
+
+
 	@Test
 	public void shoudCallPredestroyExactlyOneTimeForComponentsScannedFromTheClasspath() {
 		CustomComponentWithLifecycleInTheClasspath component = getFromContainer(CustomComponentWithLifecycleInTheClasspath.class);
@@ -528,11 +476,11 @@ public abstract class GenericContainerTest {
 		provider.stop();
 		assertThat(component.getCallsToPreDestroy(), is(equalTo(1)));
 
-		resetProvider();
+		getStartedProvider();
 	}
-	
-	
-	
+
+
+
 	@Test
 	public void shoudCallPredestroyExactlyOneTimeForComponentFactoriesScannedFromTheClasspath() {
 		ComponentFactoryInTheClasspath componentFactory = getFromContainer(ComponentFactoryInTheClasspath.class);
@@ -540,24 +488,15 @@ public abstract class GenericContainerTest {
 		provider.stop();
 		assertThat(componentFactory.getCallsToPreDestroy(), is(equalTo(1)));
 
-		resetProvider();
-	}
-
-
-
-
-	protected void resetProvider() {
-		provider = getProvider();
-		start(provider);
+		getStartedProvider();
 	}
 
 	protected String getClassDir() {
 		return getClass().getResource("/br/com/caelum/vraptor/test").getFile();
 	}
-	
-	protected <T> T instanceFor(final Class<T> component,
-			Container secondContainer) {
-		return secondContainer.instanceFor(component);
+
+	protected <T> T instanceFor(final Class<T> component, Container container) {
+		return container.instanceFor(component);
 	}
 
 }

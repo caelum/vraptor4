@@ -27,7 +27,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.interceptor.DefaultTypeNameExtractor;
-import br.com.caelum.vraptor.serialization.HibernateProxyInitializer;
+import br.com.caelum.vraptor.serialization.NullProxyInitializer;
 import br.com.caelum.vraptor.serialization.gson.adapters.CalendarSerializer;
 
 import com.google.common.collect.ForwardingCollection;
@@ -48,7 +48,7 @@ public class GsonJSONSerializationTest {
 
 	private DefaultTypeNameExtractor extractor;
 
-	private HibernateProxyInitializer initializer;
+	private NullProxyInitializer initializer;
 
 	@Before
 	public void setup() throws Exception {
@@ -57,7 +57,7 @@ public class GsonJSONSerializationTest {
 		response = mock(HttpServletResponse.class);
 		when(response.getWriter()).thenReturn(new PrintWriter(stream));
 		extractor = new DefaultTypeNameExtractor();
-		initializer = new HibernateProxyInitializer();
+		initializer = new NullProxyInitializer();
 
 		this.serialization = new GsonJSONSerialization(response, extractor, initializer,
 				Collections.<JsonSerializer<?>> emptyList(), Collections.<ExclusionStrategy> emptyList());
@@ -429,7 +429,7 @@ public class GsonJSONSerializationTest {
 
 		serialization.from(proxy).serialize();
 
-		assertThat(result(), is("{\"client\":{\"aField\":\"abc\",\"name\":\"my name\"}}"));
+		assertThat(result(), is("{\"someProxy\":{\"aField\":\"abc\",\"name\":\"my name\"}}"));
 	}
 
 	static class MyCollection extends ForwardingCollection<Order> {
@@ -495,7 +495,7 @@ public class GsonJSONSerializationTest {
 
 		assertThat(result(), not(containsString("address")));
 	}
-	
+
 	@Test
 	public void shouldExcludeAllPrimitiveFields() {
 		String expectedResult = "{\"order\":{}}";
@@ -503,7 +503,7 @@ public class GsonJSONSerializationTest {
 		serialization.from(order).excludeAll().serialize();
 		assertThat(result(), is(equalTo(expectedResult)));
 	}
-	
+
 	@Test
 	public void shouldExcludeAllPrimitiveParentFields() {
 		String expectedResult = "{\"advancedOrder\":{}}";
@@ -511,7 +511,7 @@ public class GsonJSONSerializationTest {
 		serialization.from(order).excludeAll().serialize();
 		assertThat(result(), is(equalTo(expectedResult)));
 	}
-	
+
 	@Test
 	public void shouldExcludeAllThanIncludeAndSerialize() {
 		String expectedResult = "{\"order\":{\"price\":15.0}}";

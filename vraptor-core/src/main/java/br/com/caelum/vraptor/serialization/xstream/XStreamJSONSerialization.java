@@ -29,7 +29,6 @@ import br.com.caelum.vraptor.serialization.SerializerBuilder;
 import br.com.caelum.vraptor.view.ResultException;
 
 import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.io.HierarchicalStreamDriver;
 
 /**
  * XStream implementation for JSONSerialization
@@ -51,7 +50,7 @@ public class XStreamJSONSerialization implements JSONSerialization {
         this.initializer = initializer;
         this.builder = builder;
     }
-    
+
     public boolean accepts(String format) {
         return "json".equals(format);
     }
@@ -80,7 +79,7 @@ public class XStreamJSONSerialization implements JSONSerialization {
        	builder.withoutRoot();
         return this;
     }
-    
+
     public JSONSerialization indented() {
         builder.indented();
         return this;
@@ -96,13 +95,5 @@ public class XStreamJSONSerialization implements JSONSerialization {
     protected XStream getXStream() {
         return builder.jsonInstance();
     }
-
-    /**
-     * You can override this method for configuring Driver before serialization
-     * @deprecated Override this method on XStreamBuilderImpl instead. WARN: this method will be ignored!
-     * @return configured hierarchical driver
-     */
-    @Deprecated
-    protected HierarchicalStreamDriver getHierarchicalStreamDriver() { return null; }
 
 }

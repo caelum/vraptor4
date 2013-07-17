@@ -52,15 +52,4 @@ public interface HttpResult extends View {
 
 	HttpResult body(Reader body);
 
-	/**
-	 * @deprecated use result.use(status()).movedPermanentlyTo(url) instead
-	 */
-	@Deprecated
-	void movedPermanentlyTo(String url);
-
-	/**
-	 * @deprecated use result.use(status()).movedPermanentlyTo(ClientsController.class).list(); instead
-	 */
-	@Deprecated
-	<T> T movedPermanentlyTo(Class<T> controller);
 }

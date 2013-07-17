@@ -107,7 +107,7 @@ public interface Status extends View {
 
 	/**
 	 * Send redirect with Moved Permanently (301) Header Example:
-	 * result.use(http()).movedPermanentlyTo("/clients"); will move to
+	 * result.use(status()).movedPermanentlyTo("/clients"); will move to
 	 * /<contextPath>/clients
 	 *
 	 * @param uri
@@ -120,7 +120,7 @@ public interface Status extends View {
 	 * controller.method(args);
 	 *
 	 * Example:
-	 * result.use(http()).movedPermanentlyTo(ClientsController.class).list();
+	 * result.use(status()).movedPermanentlyTo(ClientsController.class).list();
 	 */
 	<T> T movedPermanentlyTo(Class<T> controller);
 
@@ -138,9 +138,9 @@ public interface Status extends View {
 	 */
 	void notAcceptable();
 
-	
+
 	/**
-	 * Return Accepted (202) Status 
+	 * Return Accepted (202) Status
 	 */
 	void accepted();
 

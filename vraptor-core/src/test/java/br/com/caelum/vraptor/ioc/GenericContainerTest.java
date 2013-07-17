@@ -156,7 +156,7 @@ public abstract class GenericContainerTest {
 
 	@Test
 	public void callsPredestroyExactlyOneTime() throws Exception {
-		MyAppComponentWithLifecycle component = registerAndGetFromContainer(MyAppComponentWithLifecycle.class,
+		MyAppComponentWithLifecycle component = getFromContainer(MyAppComponentWithLifecycle.class,
 				MyAppComponentWithLifecycle.class);
 		assertThat(component.calls, is(0));
 		provider.stop();
@@ -186,7 +186,7 @@ public abstract class GenericContainerTest {
 
 	@Test
 	public void setsAnAttributeOnSessionWithTheObjectTypeName() throws Exception {
-		registerAndGetFromContainer(MySessionComponent.class, MySessionComponent.class);
+		getFromContainer(MySessionComponent.class, MySessionComponent.class);
 		executeInsideRequest(new WhatToDo<Void>() {
 			@Override
 			public Void execute(final RequestInfo request, int counter) {
@@ -223,7 +223,7 @@ public abstract class GenericContainerTest {
 
 	@Test
 	public void processesCorrectlyPrototypeBasedComponents() {
-		registerAndGetFromContainer(MyPrototypeComponent.class, MyPrototypeComponent.class);
+		getFromContainer(MyPrototypeComponent.class, MyPrototypeComponent.class);
 		executeInsideRequest(new WhatToDo<Object>() {
 			@Override
 			public Object execute(RequestInfo request, int counter) {
@@ -244,18 +244,18 @@ public abstract class GenericContainerTest {
 	public void supportsComponentFactoriesForCustomInstantiation() {
 		// TODO the registered component is only available in the next request
 		// with Pico. FIX IT!
-		registerAndGetFromContainer(Container.class, TheComponentFactory.class);
+		getFromContainer(Container.class, TheComponentFactory.class);
 
-		TheComponentFactory factory = registerAndGetFromContainer(TheComponentFactory.class, null);
+		TheComponentFactory factory = getFromContainer(TheComponentFactory.class, null);
 		assertThat(factory, is(notNullValue()));
 
-		NeedsCustomInstantiation component = registerAndGetFromContainer(NeedsCustomInstantiation.class, null);
+		NeedsCustomInstantiation component = getFromContainer(NeedsCustomInstantiation.class, null);
 		assertThat(component, is(notNullValue()));
 
-		registerAndGetFromContainer(DependentOnSomethingFromComponentFactory.class,
+		getFromContainer(DependentOnSomethingFromComponentFactory.class,
 				DependentOnSomethingFromComponentFactory.class);
 
-		DependentOnSomethingFromComponentFactory dependent = registerAndGetFromContainer(
+		DependentOnSomethingFromComponentFactory dependent = getFromContainer(
 				DependentOnSomethingFromComponentFactory.class, null);
 		assertThat(dependent, is(notNullValue()));
 		assertThat(dependent.getDependency(), is(notNullValue()));
@@ -295,7 +295,7 @@ public abstract class GenericContainerTest {
 
 	protected <T> void checkAvailabilityFor(final boolean shouldBeTheSame, final Class<T> component,
 			final Class<? super T> componentToRegister) {
-		T firstInstance = registerAndGetFromContainer(component, componentToRegister);
+		T firstInstance = getFromContainer(component, componentToRegister);
 		T secondInstance = executeInsideRequest(new WhatToDo<T>() {
 			@Override
 			public T execute(RequestInfo request, final int counter) {
@@ -314,7 +314,7 @@ public abstract class GenericContainerTest {
 		checkSimilarity(component, shouldBeTheSame, firstInstance, secondInstance);
 	}
 
-	protected <T> T registerAndGetFromContainer(final Class<T> componentToBeRetrieved,
+	protected <T> T getFromContainer(final Class<T> componentToBeRetrieved,
 			final Class<?> componentToRegister) {
 		return executeInsideRequest(new WhatToDo<T>() {
 			@Override
@@ -419,15 +419,15 @@ public abstract class GenericContainerTest {
 
 	@Test
 	public void shouldDisposeAfterRequest() {
-		registerAndGetFromContainer(Container.class, DisposableComponent.class);
-		DisposableComponent comp = registerAndGetFromContainer(DisposableComponent.class, null);
+		getFromContainer(Container.class, DisposableComponent.class);
+		DisposableComponent comp = getFromContainer(DisposableComponent.class, null);
 		assertTrue(comp.destroyed);
 	}
 
 	@Test
 	public void shouldStartBeforeRequestExecution() {
-		registerAndGetFromContainer(Container.class, StartableComponent.class);
-		StartableComponent comp = registerAndGetFromContainer(StartableComponent.class, null);
+		getFromContainer(Container.class, StartableComponent.class);
+		StartableComponent comp = getFromContainer(StartableComponent.class, null);
 		assertTrue(comp.started);
 	}
 

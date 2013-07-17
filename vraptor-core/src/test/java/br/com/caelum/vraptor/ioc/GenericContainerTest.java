@@ -31,7 +31,6 @@ import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.sameInstance;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
@@ -47,8 +46,6 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.inject.Named;
 import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import org.hamcrest.Matcher;
 import org.hamcrest.MatcherAssert;
@@ -59,7 +56,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.Converter;
-import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.converter.jodatime.LocalDateConverter;
 import br.com.caelum.vraptor.converter.jodatime.LocalTimeConverter;
 import br.com.caelum.vraptor.core.BaseComponents;
@@ -82,8 +78,6 @@ import br.com.caelum.vraptor.ioc.fixture.InterceptorInTheClasspath;
 import br.com.caelum.vraptor4.controller.ControllerMethod;
 import br.com.caelum.vraptor4.http.route.Route;
 import br.com.caelum.vraptor4.http.route.Router;
-
-import com.google.common.base.Objects;
 
 /**
  * Acceptance test that checks if the container is capable of giving all
@@ -190,45 +184,6 @@ public abstract class GenericContainerTest {
 		provider.stop();
 		assertThat(component.calls, is(1));
 		getStartedProvider();
-	}
-
-	@Test
-	public void setsAnAttributeOnRequestWithTheObjectTypeName() throws Exception {
-		executeInsideRequest(new WhatToDo<Void>() {
-			@Override
-			public Void execute(final RequestInfo request, int counter) {
-				return provider.provideForRequest(request, new Execution<Void>() {
-
-					@Override
-					public Void insideRequest(Container container) {
-						Result result = container.instanceFor(Result.class);
-						HttpServletRequest request = container.instanceFor(HttpServletRequest.class);
-						assertSame(result, Objects.firstNonNull(request.getAttribute("result"), request.getAttribute("defaultResult")));
-						return null;
-					}
-				});
-			}
-		});
-	}
-
-	@Test
-	public void setsAnAttributeOnSessionWithTheObjectTypeName() throws Exception {
-		executeInsideRequest(new WhatToDo<Void>() {
-			@Override
-			public Void execute(final RequestInfo request, int counter) {
-				return provider.provideForRequest(request, new Execution<Void>() {
-
-					@Override
-					public Void insideRequest(Container container) {
-						HttpSession session = container.instanceFor(HttpSession.class);
-						MySessionComponent component = container.instanceFor(MySessionComponent.class);
-						assertNotNull(component);
-						assertSame(component, session.getAttribute("mySessionComponent"));
-						return null;
-					}
-				});
-			}
-		});
 	}
 
 	@RequestScoped

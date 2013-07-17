@@ -28,7 +28,6 @@ import org.apache.deltaspike.cdise.weld.ContextController;
 import org.hamcrest.MatcherAssert;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import br.com.caelum.cdi.component.CDIControllerComponent;
@@ -197,16 +196,6 @@ public class CDIBasedContainerTest extends GenericContainerTest {
 		assertThat(componentFactory.getCallsToPreDestroy(), is(equalTo(1)));
 
 		startCDIContainer();
-	}
-
-	@Override
-	@Ignore
-	public void setsAnAttributeOnRequestWithTheObjectTypeName() throws Exception {
-	}
-
-	@Override
-	@Ignore
-	public void setsAnAttributeOnSessionWithTheObjectTypeName() throws Exception {
 	}
 
 	@Test

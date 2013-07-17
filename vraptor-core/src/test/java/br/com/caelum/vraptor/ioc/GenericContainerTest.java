@@ -94,6 +94,7 @@ public abstract class GenericContainerTest {
 	protected ContainerProvider provider;
 	protected ServletContext context;
 	private static final String PACKAGENAME = "br.com.caelum.vraptor.ioc.fixture";
+
 	protected abstract ContainerProvider getProvider();
 	protected abstract <T> T executeInsideRequest(WhatToDo<T> execution);
 	protected abstract void configureExpectations();
@@ -148,7 +149,7 @@ public abstract class GenericContainerTest {
 
 	@Test
 	public void processesCorrectlyAppBasedComponents() {
-		checkAvailabilityFor(true, MyAppComponent.class, MyAppComponent.class);
+		checkAvailabilityFor(true, MyAppComponent.class);
 	}
 	@Test
 	public void canProvideJodaTimeConverters() {
@@ -238,7 +239,7 @@ public abstract class GenericContainerTest {
 
 	@Test
 	public void processesCorrectlyRequestBasedComponents() {
-		checkAvailabilityFor(false, MyRequestComponent.class, MyRequestComponent.class);
+		checkAvailabilityFor(false, MyRequestComponent.class);
 	}
 
 	@PrototypeScoped
@@ -279,8 +280,7 @@ public abstract class GenericContainerTest {
 		assertThat(dependent.getDependency(), is(notNullValue()));
 	}
 
-	protected <T> void checkAvailabilityFor(final boolean shouldBeTheSame, final Class<T> component,
-			final Class<? super T> componentToRegister) {
+	protected <T> void checkAvailabilityFor(final boolean shouldBeTheSame, final Class<T> component) {
 		T firstInstance = getFromContainer(component);
 		T secondInstance = executeInsideRequest(new WhatToDo<T>() {
 			@Override
@@ -352,7 +352,7 @@ public abstract class GenericContainerTest {
 
 	protected void checkAvailabilityFor(boolean shouldBeTheSame, Collection<Class<?>> components) {
 		for (Class<?> component : components) {
-			checkAvailabilityFor(shouldBeTheSame, component, null);
+			checkAvailabilityFor(shouldBeTheSame, component);
 		}
 	}
 

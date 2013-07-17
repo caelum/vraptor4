@@ -145,4 +145,10 @@ public class HttpSessionMock implements HttpSession,Serializable {
     public void setNew(boolean isNew) {
         this.isNew = isNew;
     }
+
+	@Override
+	public void removeValue(String value) {
+		// TODO Auto-generated method stub
+		
+	}
 }

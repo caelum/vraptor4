@@ -2,7 +2,9 @@ package br.com.caelum.vraptor.deserialization;
 
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
+
 import static org.junit.Assert.assertThat;
+
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -12,13 +14,14 @@ import java.io.InputStream;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
-
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.serialization.xstream.XStreamBuilderImpl;
+import br.com.caelum.vraptor4.controller.BeanClass;
+import br.com.caelum.vraptor4.controller.ControllerMethod;
 import br.com.caelum.vraptor4.controller.DefaultBeanClass;
 import br.com.caelum.vraptor4.controller.DefaultControllerMethod;
-import br.com.caelum.vraptor4.controller.ControllerMethod;
+
+import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 public class XStreamXmlDeserializerTest {
 
@@ -26,16 +29,16 @@ public class XStreamXmlDeserializerTest {
 	private ControllerMethod bark;
 	private ParameterNameProvider provider;
 	private ControllerMethod jump;
-	private DefaultControllerMethod woof;
-	private DefaultControllerMethod dropDead;
-	private DefaultControllerMethod annotated;
+	private ControllerMethod woof;
+	private ControllerMethod dropDead;
+	private ControllerMethod annotated;
 
 	@Before
 	public void setUp() throws Exception {
 		provider = mock(ParameterNameProvider.class);
 
         deserializer = new XStreamXMLDeserializer(provider, XStreamBuilderImpl.cleanInstance());
-		DefaultBeanClass resourceClass = new DefaultBeanClass(DogController.class);
+		BeanClass resourceClass = new DefaultBeanClass(DogController.class);
 
 		woof = new DefaultControllerMethod(resourceClass, DogController.class.getDeclaredMethod("woof"));
 		bark = new DefaultControllerMethod(resourceClass, DogController.class.getDeclaredMethod("bark", Dog.class));

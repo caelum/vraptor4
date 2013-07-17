@@ -128,7 +128,6 @@ import br.com.caelum.vraptor.restfulie.headers.DefaultRestHeadersHandler;
 import br.com.caelum.vraptor.restfulie.headers.RestDefaults;
 import br.com.caelum.vraptor.serialization.DefaultRepresentationResult;
 import br.com.caelum.vraptor.serialization.HTMLSerialization;
-import br.com.caelum.vraptor.serialization.HibernateProxyInitializer;
 import br.com.caelum.vraptor.serialization.I18nMessageSerialization;
 import br.com.caelum.vraptor.serialization.JSONPSerialization;
 import br.com.caelum.vraptor.serialization.JSONSerialization;
@@ -189,6 +188,8 @@ import br.com.caelum.vraptor4.http.route.Router;
 import br.com.caelum.vraptor4.http.route.RoutesConfiguration;
 import br.com.caelum.vraptor4.http.route.RoutesParser;
 import br.com.caelum.vraptor4.http.route.TypeFinder;
+import br.com.caelum.vraptor4.interceptor.DefaultSimpleInterceptorStack;
+import br.com.caelum.vraptor4.interceptor.SimpleInterceptorStack;
 import br.com.caelum.vraptor4.ioc.ControllerHandler;
 
 import com.thoughtworks.xstream.converters.SingleValueConverter;
@@ -227,19 +228,20 @@ public class BaseComponents {
             Evaluator.class,				JavaEvaluator.class,
             StaticContentHandler.class,		DefaultStaticContentHandler.class,
             SingleValueConverter.class,     NullConverter.class,
-            ProxyInitializer.class,			getProxyInitializerImpl()
+            ProxyInitializer.class,			NullProxyInitializer.class
     );
 
     private final static Map<Class<?>, Class<?>> CACHED_COMPONENTS = classMap(
     );
 
     private static final Map<Class<?>, Class<?>> PROTOTYPE_COMPONENTS = classMap(
-    		InterceptorStack.class, 						DefaultInterceptorStack.class,
     		RequestExecution.class, 						EnhancedRequestExecution.class,
     		XStreamBuilder.class, 							XStreamBuilderImpl.class
     );
 
     private static final Map<Class<?>, Class<?>> REQUEST_COMPONENTS = classMap(
+    			InterceptorStack.class, 						DefaultInterceptorStack.class,
+    			SimpleInterceptorStack.class,                DefaultSimpleInterceptorStack.class,
             MethodInfo.class, 								DefaultMethodInfo.class,
             LogicResult.class, 								DefaultLogicResult.class,
             PageResult.class, 								DefaultPageResult.class,
@@ -305,32 +307,22 @@ public class BaseComponents {
 			PrimitiveShortConverter.class,
 			ShortConverter.class,
 			StringConverter.class));
-  
-    
-    @SuppressWarnings("serial")
+
+
 	private static final HashMap<Class<? extends Annotation>, StereotypeInfo> STEREOTYPES_INFO = new HashMap<Class<? extends Annotation>,StereotypeInfo>();
     static {
     		STEREOTYPES_INFO.put(Controller.class,new StereotypeInfo(Controller.class,ControllerHandler.class,new AnnotationLiteral<ControllerQualifier>() {}));
     		STEREOTYPES_INFO.put(Convert.class,new StereotypeInfo(Convert.class,ConverterHandler.class,new AnnotationLiteral<ConvertQualifier>() {}));
     		STEREOTYPES_INFO.put(Deserializes.class,new StereotypeInfo(Deserializes.class,DeserializesHandler.class,new AnnotationLiteral<DeserializesQualifier>() {}));
-    		STEREOTYPES_INFO.put(Intercepts.class,new StereotypeInfo(Intercepts.class,InterceptorStereotypeHandler.class,new AnnotationLiteral<InterceptsQualifier>() {}));    		
+    		STEREOTYPES_INFO.put(Intercepts.class,new StereotypeInfo(Intercepts.class,InterceptorStereotypeHandler.class,new AnnotationLiteral<InterceptsQualifier>() {}));
 
     }
-    
+
     private static final Set<Class<? extends Deserializer>> DESERIALIZERS = Collections.<Class<? extends Deserializer>>singleton(XMLDeserializer.class);
-    
+
 
     public static Set<Class<? extends Deserializer>> getDeserializers() {
 		return DESERIALIZERS;
-	}
-
-    private static Class<? extends ProxyInitializer> getProxyInitializerImpl() {
-		try {
-			Class.forName("org.hibernate.proxy.HibernateProxy");
-			return HibernateProxyInitializer.class;
-		} catch (ClassNotFoundException e) {
-			return NullProxyInitializer.class;
-		}
 	}
 
     private static Class<? extends InstanceCreator> getInstanceCreator() {
@@ -343,13 +335,13 @@ public class BaseComponents {
 
 	public static Map<Class<?>, Class<?>> getCachedComponents() {
 		return Collections.unmodifiableMap(CACHED_COMPONENTS);
-	}	
-	
+	}
+
     public static Map<Class<?>, Class<?>> getApplicationScoped() {
         if (!isClassPresent("ognl.OgnlRuntime")) {
             APPLICATION_COMPONENTS.put(DependencyProvider.class, VRaptorDependencyProvider.class);
         }
-    	
+
         // try put beanval 1.1 or beanval 1.0 if available
         if (isClassPresent("javax.validation.executable.ExecutableValidator")) {
             APPLICATION_COMPONENTS.put(ValidatorCreator.class, ValidatorCreator.class);
@@ -361,7 +353,7 @@ public class BaseComponents {
             APPLICATION_COMPONENTS.put(ValidatorFactoryCreator.class, ValidatorFactoryCreator.class);
             APPLICATION_COMPONENTS.put(MessageInterpolatorFactory.class, MessageInterpolatorFactory.class);
         }
-        
+
     	return Collections.unmodifiableMap(APPLICATION_COMPONENTS);
     }
 
@@ -375,7 +367,7 @@ public class BaseComponents {
         } else {
             REQUEST_COMPONENTS.put(BeanValidator.class, NullBeanValidator.class);
         }
-        
+
         if (isClassPresent("org.apache.commons.fileupload.FileItem")) {
             REQUEST_COMPONENTS.put(MultipartInterceptor.class, CommonsUploadMultipartInterceptor.class);
             REQUEST_COMPONENTS.put(ServletFileUploadCreator.class, DefaultServletFileUploadCreator.class);
@@ -387,7 +379,7 @@ public class BaseComponents {
     	    		"your classpath or use a Servlet 3 Container");
             REQUEST_COMPONENTS.put(MultipartInterceptor.class, NullMultipartInterceptor.class);
     	}
-        
+
         if (isClassPresent("ognl.OgnlRuntime")) {
             REQUEST_COMPONENTS.put(ParametersProvider.class, OgnlParametersProvider.class);
             REQUEST_COMPONENTS.put(EmptyElementsRemoval.class, EmptyElementsRemoval.class);
@@ -451,7 +443,7 @@ public class BaseComponents {
     public static Set<StereotypeInfo> getStereotypesInfo() {
     		return new HashSet<StereotypeInfo>(STEREOTYPES_INFO.values());
     }
-    
+
     public static Set<Class<? extends Annotation>> getStereotypes() {
     		Set<StereotypeInfo> stereotypesInfo = getStereotypesInfo();
     		HashSet<Class<? extends Annotation>> stereotypes = new HashSet<Class<? extends Annotation>>();
@@ -459,10 +451,10 @@ public class BaseComponents {
     			stereotypes.add(stereotypeInfo.getStereotype());
 		}
     		return stereotypes;
-    }   
+    }
     public static Map<Class<? extends Annotation>,StereotypeInfo> getStereotypesInfoMap() {
     		return STEREOTYPES_INFO;
-    }   
+    }
 
     private static Map<Class<?>, Class<?>> classMap(Class<?>... items) {
         HashMap<Class<?>, Class<?>> map = new HashMap<Class<?>, Class<?>>();

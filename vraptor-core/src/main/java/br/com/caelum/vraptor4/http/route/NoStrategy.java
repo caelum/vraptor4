@@ -21,8 +21,8 @@ import java.lang.reflect.Method;
 import java.util.EnumSet;
 
 import br.com.caelum.vraptor.http.MutableRequest;
-import br.com.caelum.vraptor4.controller.HttpMethod;
 import br.com.caelum.vraptor4.controller.ControllerMethod;
+import br.com.caelum.vraptor4.controller.HttpMethod;
 
 /**
  * A route strategy which is basically invalid in order to force users to not

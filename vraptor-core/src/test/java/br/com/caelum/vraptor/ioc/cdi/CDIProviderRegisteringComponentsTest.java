@@ -1,12 +1,5 @@
 package br.com.caelum.vraptor.ioc.cdi;
 
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
-
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.HashSet;
@@ -41,6 +34,15 @@ import br.com.caelum.vraptor.validator.MessageInterpolatorFactory;
 import br.com.caelum.vraptor.validator.MethodValidatorFactoryCreator;
 import br.com.caelum.vraptor.validator.ValidatorCreator;
 import br.com.caelum.vraptor.validator.ValidatorFactoryCreator;
+import br.com.caelum.vraptor4.interceptor.PackagesAcceptor;
+
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
+
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
 
 public class CDIProviderRegisteringComponentsTest extends
 		AbstractProviderRegisteringComponentsTest {
@@ -155,6 +157,12 @@ public class CDIProviderRegisteringComponentsTest extends
 					+ component.getName(), actualInstance(firstInstance),
 					is(not(equalTo(actualInstance(secondInstance)))));
 		}
+	}
+	
+	@Test
+	public void instantiateCustomAcceptor(){
+		PackagesAcceptor acceptor = getFromContainer(PackagesAcceptor.class);
+		actualInstance(acceptor);
 	}
 
 	@Override

@@ -88,10 +88,10 @@ public class ToInstantiateInterceptorHandlerTest {
         when(container.instanceFor(Interceptor.class)).thenReturn(interceptor);
         when(interceptor.accepts(method)).thenReturn(false);
 
-    	ToInstantiateInterceptorHandler handler = new ToInstantiateInterceptorHandler(container, Interceptor.class);
-    	handler.execute(stack, method, instance);
+    		ToInstantiateInterceptorHandler handler = new ToInstantiateInterceptorHandler(container, Interceptor.class);
+    		handler.execute(stack, method, instance);
     	
         verify(interceptor, never()).intercept(stack, method, instance);
         verify(stack).next(method, instance);
-    }
+    }   
 }

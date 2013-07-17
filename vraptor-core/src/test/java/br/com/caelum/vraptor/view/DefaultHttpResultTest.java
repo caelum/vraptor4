@@ -53,37 +53,19 @@ public class DefaultHttpResultTest {
 		httpResult = new DefaultHttpResult(response, status);
 	}
 
-	@SuppressWarnings("deprecation")
-	@Test
-	public void shouldDelegateToStatus() throws Exception {
-		httpResult.movedPermanentlyTo("/my/uri");
-
-		verify(status).movedPermanentlyTo("/my/uri");
-	}
-
 	public static class RandomController {
 		public void method() {
 		}
 	}
-	
-	@SuppressWarnings("deprecation")
-	@Test
-	public void shouldDelegateToStatusWhenMovingToLogic() throws Exception {
-		when(status.movedPermanentlyTo(RandomController.class)).thenReturn(new RandomController());
 
-		httpResult.movedPermanentlyTo(RandomController.class).method();
-
-		verify(status).movedPermanentlyTo(RandomController.class);
-	}
-	
 	@Test
 	public void shouldHeadersProperly() {
 		httpResult.addDateHeader("key", 10L);
 		verify(response).addDateHeader("key", 10L);
-		
+
 		httpResult.addHeader("key", "value");
 		verify(response).addHeader("key", "value");
-		
+
 		httpResult.addIntHeader("key", 10);
 		verify(response).addIntHeader("key", 10);
 	}
@@ -93,7 +75,7 @@ public class DefaultHttpResultTest {
 		httpResult.sendError(SC_INTERNAL_SERVER_ERROR);
 		verify(response).sendError(SC_INTERNAL_SERVER_ERROR);
 	}
-	
+
 	@Test
 	public void shouldThrowsResultExceptionIfAnIOExceptionWhenSendError() throws Exception {
 		doThrow(new IOException()).when(response).sendError(anyInt());
@@ -105,7 +87,7 @@ public class DefaultHttpResultTest {
 			verify(response, only()).sendError(anyInt());
 		}
 	}
-	
+
 	@Test
 	public void shouldSendErrorWithMessage() throws Exception {
 		httpResult.sendError(SC_INTERNAL_SERVER_ERROR, "A simple message");
@@ -123,31 +105,31 @@ public class DefaultHttpResultTest {
 			verify(response, only()).sendError(anyInt(), anyString());
 		}
 	}
-	
+
 	@Test
 	public void shouldSetStatusCode() throws Exception {
 		httpResult.setStatusCode(SC_INTERNAL_SERVER_ERROR);
 		verify(response).setStatus(SC_INTERNAL_SERVER_ERROR);
 	}
-	
+
 	@Test
 	public void shouldWriteStringBody() throws Exception {
 		PrintWriter writer = mock(PrintWriter.class);
 		when(response.getWriter()).thenReturn(writer);
-		
+
 		httpResult.body("The text");
 		verify(writer).print(anyString());
 	}
-	
+
 	@Test
 	public void shouldThrowResultExceptionIfAnIOExceptionWhenWriteStringBody() throws Exception {
 		doThrow(new IOException()).when(response).getWriter();
-		
+
 		try {
 			httpResult.body("The text");
 			fail("should throw ResultException");
 		} catch (ResultException e) {
-			
+
 		}
 	}
 
@@ -155,12 +137,12 @@ public class DefaultHttpResultTest {
 	public void shouldThrowResultExceptionIfAnIOExceptionWhenWriteInputStreamBody() throws Exception {
 		doThrow(new IOException()).when(response).getOutputStream();
 		InputStream in = new ByteArrayInputStream("the text".getBytes());
-		
+
 		try {
 			httpResult.body(in);
 			fail("should throw ResultException");
 		} catch (ResultException e) {
-			
+
 		}
 	}
 
@@ -168,12 +150,12 @@ public class DefaultHttpResultTest {
 	public void shouldThrowResultExceptionIfAnIOExceptionWhenWriteReaderBody() throws Exception {
 		doThrow(new IOException()).when(response).getWriter();
 		Reader reader = new StringReader("the text");
-		
+
 		try {
 			httpResult.body(reader);
 			fail("should throw ResultException");
 		} catch (ResultException e) {
-			
+
 		}
 	}
 }

@@ -17,6 +17,8 @@
 
 package br.com.caelum.vraptor4.controller;
 
+import java.lang.annotation.Annotation;
+
 /**
  * Represents a web accessible Controller class.
  * 
@@ -27,5 +29,11 @@ package br.com.caelum.vraptor4.controller;
 public interface BeanClass {
 
 	public Class<?> getType();
+
+	public Annotation[] getAnnotations();
+
+	public Package getPackage();
+
+	public abstract String getPackageName();
 
 }

@@ -49,10 +49,15 @@ public class DefaultControllerMethod implements ControllerMethod {
 	public boolean containsAnnotation(Class<? extends Annotation> annotation) {
 		return method.isAnnotationPresent(annotation);
 	}
+	
+	@Override
+	public Annotation[] getAnnotations(){
+		return method.getAnnotations();
+	}
 
 	@Override
 	public String toString() {
-		return "[DefaultResourceMethod: "
+		return "[DefaultControllerMethod: "
 				+ method.getDeclaringClass().getSimpleName() + "."
 				+ method.getName()
 				+ Stringnifier.simpleNameFor(method) + "]";

@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Map;
 
 import javax.enterprise.context.Dependent;
-import javax.enterprise.context.NormalScope;
 import javax.enterprise.context.RequestScoped;
 
 import br.com.caelum.vraptor.ioc.ApplicationScoped;

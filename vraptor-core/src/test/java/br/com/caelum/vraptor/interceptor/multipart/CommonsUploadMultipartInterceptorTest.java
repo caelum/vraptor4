@@ -36,7 +36,6 @@ import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.http.InvalidParameterException;
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.validator.I18nMessage;
-import br.com.caelum.vraptor.validator.Validations;
 import br.com.caelum.vraptor4.controller.ControllerMethod;
 
 /**

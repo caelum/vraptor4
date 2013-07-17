@@ -30,7 +30,7 @@ import javax.servlet.http.HttpSessionContext;
 /**
  * @author Fabio Kung
  */
-@SuppressWarnings({"deprecation", "unchecked"})
+@SuppressWarnings("unchecked")
 public class HttpSessionMock implements HttpSession,Serializable {
     private ServletContext context;
     private String id;
@@ -134,11 +134,6 @@ public class HttpSessionMock implements HttpSession,Serializable {
         attributes.remove(name);
     }
 
-    @Deprecated
-    public void removeValue(String name) {
-        removeAttribute(name);
-    }
-
     public void invalidate() {
         attributes.clear();
     }
@@ -150,4 +145,10 @@ public class HttpSessionMock implements HttpSession,Serializable {
     public void setNew(boolean isNew) {
         this.isNew = isNew;
     }
+
+	@Override
+	public void removeValue(String value) {
+		// TODO Auto-generated method stub
+		
+	}
 }

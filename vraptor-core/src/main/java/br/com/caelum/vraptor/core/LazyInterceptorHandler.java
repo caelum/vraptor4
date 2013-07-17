@@ -33,10 +33,10 @@ class LazyInterceptorHandler implements InterceptorHandler {
 	private static final Logger logger = LoggerFactory.getLogger(LazyInterceptorHandler.class);
 
 	private final Container container;
-	private final Class<? extends Interceptor> type;
+	private final Class<?> type;
 	private Interceptor acceptor;
 
-	public LazyInterceptorHandler(Container container, Class<? extends Interceptor> type) {
+	public LazyInterceptorHandler(Container container, Class<?> type) {
 		this.container = container;
 		this.type = type;
 	}
@@ -50,7 +50,7 @@ class LazyInterceptorHandler implements InterceptorHandler {
 			throw new InterceptionException("StaticInterceptors should not use constructor parameters inside the accepts method", e);
 		}
 		if (accepts) {
-			Interceptor interceptor = container.instanceFor(type);
+			Interceptor interceptor = (Interceptor) container.instanceFor(type);
 			if (interceptor == null) {
 				throw new InterceptionException("Unable to instantiate interceptor for " + type.getName()
 						+ ": the container returned null.");
@@ -68,7 +68,7 @@ class LazyInterceptorHandler implements InterceptorHandler {
 			try {
 				Constructor<?> constructor = type.getDeclaredConstructors()[0];
 				int argsLength = constructor.getParameterTypes().length;
-				acceptor = type.cast(new Mirror().on(type).invoke().constructor(constructor).withArgs(new Object[argsLength]));
+				acceptor = (Interceptor) new Mirror().on(type).invoke().constructor(constructor).withArgs(new Object[argsLength]);
 			} catch (MirrorException e) {
 				if (e.getCause() instanceof NullPointerException) {
 					throw new InterceptionException("StaticInterceptors should not use constructor parameters inside the constructor", e);

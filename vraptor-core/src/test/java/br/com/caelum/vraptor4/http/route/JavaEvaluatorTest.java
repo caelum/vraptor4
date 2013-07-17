@@ -26,9 +26,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
-import br.com.caelum.vraptor4.http.route.Evaluator;
-import br.com.caelum.vraptor4.http.route.JavaEvaluator;
-
 import org.junit.Before;
 import org.junit.Test;
 

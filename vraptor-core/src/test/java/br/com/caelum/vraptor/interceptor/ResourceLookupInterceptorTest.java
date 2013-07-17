@@ -16,7 +16,9 @@
  */
 package br.com.caelum.vraptor.interceptor;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -36,10 +38,10 @@ import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.http.MutableResponse;
 import br.com.caelum.vraptor.http.UrlToResourceTranslator;
-import br.com.caelum.vraptor4.controller.HttpMethod;
-import br.com.caelum.vraptor4.controller.MethodNotAllowedHandler;
 import br.com.caelum.vraptor4.controller.ControllerMethod;
 import br.com.caelum.vraptor4.controller.ControllerNotFoundHandler;
+import br.com.caelum.vraptor4.controller.HttpMethod;
+import br.com.caelum.vraptor4.controller.MethodNotAllowedHandler;
 import br.com.caelum.vraptor4.http.route.MethodNotAllowedException;
 import br.com.caelum.vraptor4.http.route.ResourceNotFoundException;
 
@@ -94,5 +96,6 @@ public class ResourceLookupInterceptorTest {
         lookup.intercept(stack, null, null);
         verify(stack).next(method, null);
         verify(methodInfo).setResourceMethod(method);
+        assertEquals(method, lookup.createControllerMethod());
     }
 }

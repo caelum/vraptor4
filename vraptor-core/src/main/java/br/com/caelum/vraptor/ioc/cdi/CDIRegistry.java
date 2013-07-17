@@ -9,6 +9,8 @@ import javax.enterprise.inject.spi.BeforeBeanDiscovery;
 
 import br.com.caelum.vraptor.core.BaseComponents;
 import br.com.caelum.vraptor.core.StereotypeInfo;
+import br.com.caelum.vraptor4.interceptor.PackagesAcceptor;
+import br.com.caelum.vraptor4.interceptor.WithAnnotationAcceptor;
 import br.com.caelum.vraptor4.others.LoggerFactory;
 
 public class CDIRegistry {
@@ -29,6 +31,12 @@ public class CDIRegistry {
 		registerCDISpecifics();
 		registerProvider();
 		registerVraptorSpecifics();
+		registerCustomAcceptors();
+	}
+
+	private void registerCustomAcceptors() {
+		register(PackagesAcceptor.class);
+		register(WithAnnotationAcceptor.class);
 	}
 
 	private void registerVraptorSpecifics() {
@@ -82,7 +90,7 @@ public class CDIRegistry {
 		}
 	}
 	
-	private void register(Class<?> component) {			
+	private void register(Class<?> component) {
 		discovery.addAnnotatedType(bm.createAnnotatedType(component));
 	}
 	

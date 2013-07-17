@@ -56,7 +56,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import br.com.caelum.vraptor.ComponentRegistry;
 import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.converter.jodatime.LocalDateConverter;
@@ -97,7 +96,7 @@ public abstract class GenericContainerTest {
 	protected abstract ContainerProvider getProvider();
 	protected abstract <T> T executeInsideRequest(WhatToDo<T> execution);
 	protected abstract void configureExpectations();
-	
+
 
 	@Test
 	public void canProvideAllApplicationScopedComponents() {
@@ -148,7 +147,7 @@ public abstract class GenericContainerTest {
 		public int getCalls() {
 			return calls;
 		}
-		
+
 		@PreDestroy
 		public void z() {
 			calls++;
@@ -273,7 +272,7 @@ public abstract class GenericContainerTest {
 		when(context.getInitParameter(BASE_PACKAGES_PARAMETER_NAME)).thenReturn("br.com.caelum.vraptor.ioc.fixture");
 		when(context.getRealPath("/WEB-INF/classes")).thenReturn(getClassDir());
 
-		
+
 		when(context.getClassLoader()).thenReturn(
 				new URLClassLoader(new URL[] {Object.class.getResource("/test-fixture.jar")},
 						currentThread().getContextClassLoader()));
@@ -354,12 +353,12 @@ public abstract class GenericContainerTest {
 			}
 		});
 	}
-	
+
 	protected <T> T getFromContainerAndExecuteSomeCode(final Class<T> componentToBeRetrieved,final Code<T> code) {
 		return executeInsideRequest(new WhatToDo<T>() {
 			@Override
 			public T execute(RequestInfo request, final int counter) {
-				T bean = getFromContainerInCurrentThread(componentToBeRetrieved, request,code);				
+				T bean = getFromContainerInCurrentThread(componentToBeRetrieved, request,code);
 				return bean;
 			}
 		});
@@ -401,7 +400,7 @@ public abstract class GenericContainerTest {
 	}
 
 	protected void checkAvailabilityFor(boolean shouldBeTheSame, Collection<Class<?>> components) {
-		for (Class<?> component : components) {			
+		for (Class<?> component : components) {
 			checkAvailabilityFor(shouldBeTheSame, component, null);
 		}
 	}
@@ -409,8 +408,8 @@ public abstract class GenericContainerTest {
 	@RequestScoped
 	static public class DisposableComponent {
 		private boolean destroyed;
-		private Object dependency = new Object();
-		
+		private final Object dependency = new Object();
+
 		public Object getDependency() {
 			return dependency;
 		}
@@ -419,7 +418,7 @@ public abstract class GenericContainerTest {
 		public void preDestroy() {
 			this.destroyed = true;
 		}
-		
+
 		public boolean isDestroyed() {
 			return destroyed;
 		}
@@ -466,7 +465,7 @@ public abstract class GenericContainerTest {
 		Provided object = getFromContainer(Provided.class);
 		assertThat(object, is(sameInstance(ComponentFactoryInTheClasspath.PROVIDED)));
 	}
-			
+
 	@Test
 	public void shoudRegisterConvertersInConverters() {
 		executeInsideRequest(new WhatToDo<Converters>() {
@@ -483,8 +482,8 @@ public abstract class GenericContainerTest {
 				});
 			}
 		});
-	}	
-	
+	}
+
 	/**
 	 * Check if exist {@link Deserializer} registered in VRaptor for determined Content-Types.
 	 */
@@ -511,16 +510,16 @@ public abstract class GenericContainerTest {
 				});
 			}
 		});
-	}	
-	
+	}
+
 	@Test
 	public void shoudRegisterInterceptorsInInterceptorRegistry() {
 		InterceptorRegistry registry = getFromContainer(InterceptorRegistry.class);
 		assertThat(registry.all(), hasOneCopyOf(InterceptorInTheClasspath.class));
-	}	
-		
-	
-	
+	}
+
+
+
 	@Test
 	public void shoudCallPredestroyExactlyOneTimeForComponentsScannedFromTheClasspath() {
 		CustomComponentWithLifecycleInTheClasspath component = getFromContainer(CustomComponentWithLifecycleInTheClasspath.class);
@@ -530,9 +529,9 @@ public abstract class GenericContainerTest {
 
 		resetProvider();
 	}
-	
-	
-	
+
+
+
 	@Test
 	public void shoudCallPredestroyExactlyOneTimeForComponentFactoriesScannedFromTheClasspath() {
 		ComponentFactoryInTheClasspath componentFactory = getFromContainer(ComponentFactoryInTheClasspath.class);
@@ -554,10 +553,9 @@ public abstract class GenericContainerTest {
 	protected String getClassDir() {
 		return getClass().getResource("/br/com/caelum/vraptor/test").getFile();
 	}
-	
-	protected <T> T instanceFor(final Class<T> component,
-			Container secondContainer) {
-		return secondContainer.instanceFor(component);
+
+	protected <T> T instanceFor(final Class<T> component, Container container) {
+		return container.instanceFor(component);
 	}
 
 }

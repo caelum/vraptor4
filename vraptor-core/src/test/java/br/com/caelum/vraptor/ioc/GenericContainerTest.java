@@ -452,7 +452,6 @@ public abstract class GenericContainerTest {
 						this.container = container;
 						deserializers = container.instanceFor(Deserializers.class);
 						assertThat(deserializerFor("application/json"), is(notNullValue()));
-						assertThat(deserializerFor("application/json"), is(notNullValue()));
 						assertThat(deserializerFor("json"), is(notNullValue()));
 						assertThat(deserializerFor("application/xml"), is(notNullValue()));
 						assertThat(deserializerFor("xml"), is(notNullValue()));

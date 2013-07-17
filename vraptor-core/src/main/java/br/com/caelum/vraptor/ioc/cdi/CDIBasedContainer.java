@@ -2,14 +2,9 @@ package br.com.caelum.vraptor.ioc.cdi;
 
 import javax.enterprise.inject.spi.CDI;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import br.com.caelum.vraptor.ioc.Container;
 
 public class CDIBasedContainer implements Container {
-
-	private static final Logger logger = LoggerFactory.getLogger(CDIBasedContainer.class);
 
 	//CDI eyes only
 	@Deprecated

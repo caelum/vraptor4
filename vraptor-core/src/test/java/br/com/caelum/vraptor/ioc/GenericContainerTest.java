@@ -156,8 +156,7 @@ public abstract class GenericContainerTest {
 
 	@Test
 	public void callsPredestroyExactlyOneTime() throws Exception {
-		MyAppComponentWithLifecycle component = getFromContainer(MyAppComponentWithLifecycle.class,
-				MyAppComponentWithLifecycle.class);
+		MyAppComponentWithLifecycle component = getFromContainer(MyAppComponentWithLifecycle.class);
 		assertThat(component.calls, is(0));
 		provider.stop();
 		assertThat(component.calls, is(1));
@@ -186,7 +185,6 @@ public abstract class GenericContainerTest {
 
 	@Test
 	public void setsAnAttributeOnSessionWithTheObjectTypeName() throws Exception {
-		getFromContainer(MySessionComponent.class, MySessionComponent.class);
 		executeInsideRequest(new WhatToDo<Void>() {
 			@Override
 			public Void execute(final RequestInfo request, int counter) {
@@ -223,7 +221,6 @@ public abstract class GenericContainerTest {
 
 	@Test
 	public void processesCorrectlyPrototypeBasedComponents() {
-		getFromContainer(MyPrototypeComponent.class, MyPrototypeComponent.class);
 		executeInsideRequest(new WhatToDo<Object>() {
 			@Override
 			public Object execute(RequestInfo request, int counter) {
@@ -244,19 +241,15 @@ public abstract class GenericContainerTest {
 	public void supportsComponentFactoriesForCustomInstantiation() {
 		// TODO the registered component is only available in the next request
 		// with Pico. FIX IT!
-		getFromContainer(Container.class, TheComponentFactory.class);
-
-		TheComponentFactory factory = getFromContainer(TheComponentFactory.class, null);
+		TheComponentFactory factory = getFromContainer(TheComponentFactory.class);
 		assertThat(factory, is(notNullValue()));
 
-		NeedsCustomInstantiation component = getFromContainer(NeedsCustomInstantiation.class, null);
+		NeedsCustomInstantiation component = getFromContainer(NeedsCustomInstantiation.class);
 		assertThat(component, is(notNullValue()));
 
-		getFromContainer(DependentOnSomethingFromComponentFactory.class,
-				DependentOnSomethingFromComponentFactory.class);
+		DependentOnSomethingFromComponentFactory dependent =
+				getFromContainer(DependentOnSomethingFromComponentFactory.class);
 
-		DependentOnSomethingFromComponentFactory dependent = getFromContainer(
-				DependentOnSomethingFromComponentFactory.class, null);
 		assertThat(dependent, is(notNullValue()));
 		assertThat(dependent.getDependency(), is(notNullValue()));
 	}
@@ -295,7 +288,7 @@ public abstract class GenericContainerTest {
 
 	protected <T> void checkAvailabilityFor(final boolean shouldBeTheSame, final Class<T> component,
 			final Class<? super T> componentToRegister) {
-		T firstInstance = getFromContainer(component, componentToRegister);
+		T firstInstance = getFromContainer(component);
 		T secondInstance = executeInsideRequest(new WhatToDo<T>() {
 			@Override
 			public T execute(RequestInfo request, final int counter) {
@@ -400,15 +393,13 @@ public abstract class GenericContainerTest {
 
 	@Test
 	public void shouldDisposeAfterRequest() {
-		getFromContainer(Container.class, DisposableComponent.class);
-		DisposableComponent comp = getFromContainer(DisposableComponent.class, null);
+		DisposableComponent comp = getFromContainer(DisposableComponent.class);
 		assertTrue(comp.destroyed);
 	}
 
 	@Test
 	public void shouldStartBeforeRequestExecution() {
-		getFromContainer(Container.class, StartableComponent.class);
-		StartableComponent comp = getFromContainer(StartableComponent.class, null);
+		StartableComponent comp = getFromContainer(StartableComponent.class);
 		assertTrue(comp.started);
 	}
 

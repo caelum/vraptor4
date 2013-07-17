@@ -167,14 +167,11 @@ public class CDIProviderRegisteringComponentsTest extends
 	@Override
 	@Test
 	public void callsPredestroyExactlyOneTime() throws Exception {
-
-		MyAppComponentWithLifecycle component = getFromContainer(MyAppComponentWithLifecycle.class,
-				MyAppComponentWithLifecycle.class);
+		MyAppComponentWithLifecycle component = getFromContainer(MyAppComponentWithLifecycle.class);
 		assertThat(component.getCalls(), is(0));
 		shutdownCDIContainer();
 		assertThat(component.getCalls(), is(1));
 		startCDIContainer();
-
 	}
 
 	@Override

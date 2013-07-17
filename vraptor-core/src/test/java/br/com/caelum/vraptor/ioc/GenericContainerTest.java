@@ -323,8 +323,6 @@ public abstract class GenericContainerTest {
 				return provider.provideForRequest(request, new Execution<T>() {
 					@Override
 					public T insideRequest(Container firstContainer) {
-						if (componentToRegister != null) {
-						}
 						ControllerMethod firstMethod = mock(ControllerMethod.class, "rm" + counter);
 						firstContainer.instanceFor(MethodInfo.class).setResourceMethod(firstMethod);
 						return instanceFor(componentToBeRetrieved,firstContainer);

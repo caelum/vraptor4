@@ -230,9 +230,6 @@ public abstract class GenericContainerTest {
 				return provider.provideForRequest(request, new Execution<Object>() {
 					@Override
 					public Object insideRequest(Container container) {
-						ComponentRegistry registry = container.instanceFor(ComponentRegistry.class);
-						registry.register(MyPrototypeComponent.class, MyPrototypeComponent.class);
-
 						MyPrototypeComponent instance1 = instanceFor(MyPrototypeComponent.class,container);
 						MyPrototypeComponent instance2 = instanceFor(MyPrototypeComponent.class,container);
 						assertThat(instance1, not(sameInstance(instance2)));
@@ -305,11 +302,6 @@ public abstract class GenericContainerTest {
 				return provider.provideForRequest(request, new Execution<T>() {
 					@Override
 					public T insideRequest(Container secondContainer) {
-						if (componentToRegister != null && !isAppScoped(secondContainer, componentToRegister)) {
-							ComponentRegistry registry = secondContainer.instanceFor(ComponentRegistry.class);
-							registry.register(componentToRegister, componentToRegister);
-						}
-
 						ControllerMethod secondMethod = mock(ControllerMethod.class, "rm" + counter);
 						secondContainer.instanceFor(MethodInfo.class).setResourceMethod(secondMethod);
 						return instanceFor(component, secondContainer);
@@ -332,8 +324,6 @@ public abstract class GenericContainerTest {
 					@Override
 					public T insideRequest(Container firstContainer) {
 						if (componentToRegister != null) {
-							ComponentRegistry registry = firstContainer.instanceFor(ComponentRegistry.class);
-							registry.register(componentToRegister, componentToRegister);
 						}
 						ControllerMethod firstMethod = mock(ControllerMethod.class, "rm" + counter);
 						firstContainer.instanceFor(MethodInfo.class).setResourceMethod(firstMethod);

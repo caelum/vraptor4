@@ -146,9 +146,7 @@ public class HttpSessionMock implements HttpSession,Serializable {
         this.isNew = isNew;
     }
 
-	@Override
-	public void removeValue(String value) {
-		// TODO Auto-generated method stub
-		
+	public void removeValue(String name) {
+		removeAttribute(name);
 	}
 }

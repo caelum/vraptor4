@@ -112,11 +112,11 @@ public abstract class GenericContainerTest {
         when(context.getInitParameter(SCANNING_PARAM)).thenReturn("enabled");
 
 		configureExpectations();
-		provider = getProvider();
-		start(provider);
+		getStartedProvider();
 	}
 
-	protected void start(ContainerProvider provider) {
+	protected void getStartedProvider() {
+		provider = getProvider();
 		provider.start(context);
 	}
 
@@ -188,8 +188,7 @@ public abstract class GenericContainerTest {
 		assertThat(component.calls, is(0));
 		provider.stop();
 		assertThat(component.calls, is(1));
-		provider = getProvider();
-		start(provider);
+		getStartedProvider();
 	}
 
 	@Test

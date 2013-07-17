@@ -371,10 +371,6 @@ public abstract class GenericContainerTest {
 		});
 	}
 
-	private boolean isAppScoped(Container secondContainer, Class<?> componentToRegister) {
-		return secondContainer.instanceFor(componentToRegister) != null;
-	}
-
 	protected void checkSimilarity(Class<?> component, boolean shouldBeTheSame, Object firstInstance,
 			Object secondInstance) {
 

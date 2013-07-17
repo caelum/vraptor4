@@ -93,6 +93,7 @@ public abstract class GenericContainerTest {
 
 	protected ContainerProvider provider;
 	protected ServletContext context;
+	private static final String PACKAGENAME = "br.com.caelum.vraptor.ioc.fixture";
 	protected abstract ContainerProvider getProvider();
 	protected abstract <T> T executeInsideRequest(WhatToDo<T> execution);
 	protected abstract void configureExpectations();
@@ -100,13 +101,12 @@ public abstract class GenericContainerTest {
 	@Before
 	public void setup() throws Exception {
 
-		String packageName = "br.com.caelum.vraptor.ioc.fixture";
 		ClassLoader contextClassLoader = currentThread().getContextClassLoader();
 		URL[] urls = new URL[] {Object.class.getResource("/test-fixture.jar")};
 
 		context = mock(ServletContext.class, "servlet context");
 		when(context.getMajorVersion()).thenReturn(3);
-		when(context.getInitParameter(BASE_PACKAGES_PARAMETER_NAME)).thenReturn(packageName);
+		when(context.getInitParameter(BASE_PACKAGES_PARAMETER_NAME)).thenReturn(PACKAGENAME);
 		when(context.getRealPath("/WEB-INF/classes")).thenReturn(getClassDir());
 		when(context.getClassLoader()).thenReturn(new URLClassLoader(urls, contextClassLoader));
         when(context.getInitParameter(SCANNING_PARAM)).thenReturn("enabled");

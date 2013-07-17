@@ -314,25 +314,6 @@ public abstract class GenericContainerTest {
 		checkSimilarity(component, shouldBeTheSame, firstInstance, secondInstance);
 	}
 
-	protected <T> T getFromContainer(final Class<T> componentToBeRetrieved,
-			final Class<?> componentToRegister) {
-		return executeInsideRequest(new WhatToDo<T>() {
-			@Override
-			public T execute(RequestInfo request, final int counter) {
-
-				return provider.provideForRequest(request, new Execution<T>() {
-					@Override
-					public T insideRequest(Container firstContainer) {
-						ControllerMethod firstMethod = mock(ControllerMethod.class, "rm" + counter);
-						firstContainer.instanceFor(MethodInfo.class).setResourceMethod(firstMethod);
-						return instanceFor(componentToBeRetrieved,firstContainer);
-					}
-				});
-
-			}
-		});
-	}
-
 	protected <T> T getFromContainer(final Class<T> componentToBeRetrieved) {
 		return executeInsideRequest(new WhatToDo<T>() {
 			@Override

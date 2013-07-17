@@ -97,6 +97,38 @@ public abstract class GenericContainerTest {
 	protected abstract <T> T executeInsideRequest(WhatToDo<T> execution);
 	protected abstract void configureExpectations();
 
+	@Before
+	public void setup() throws Exception {
+		context = mock(ServletContext.class, "servlet context");
+
+		when(context.getMajorVersion()).thenReturn(3);
+		when(context.getInitParameter(BASE_PACKAGES_PARAMETER_NAME)).thenReturn("br.com.caelum.vraptor.ioc.fixture");
+		when(context.getRealPath("/WEB-INF/classes")).thenReturn(getClassDir());
+
+
+		when(context.getClassLoader()).thenReturn(
+				new URLClassLoader(new URL[] {Object.class.getResource("/test-fixture.jar")},
+						currentThread().getContextClassLoader()));
+
+        //allowing(context).getInitParameter(ENCODING);
+        //allowing(context).setAttribute(with(any(String.class)), with(any(Object.class)));
+
+        when(context.getInitParameter(SCANNING_PARAM)).thenReturn("enabled");
+
+		configureExpectations();
+		provider = getProvider();
+		start(provider);
+	}
+
+	protected void start(ContainerProvider provider) {
+		provider.start(context);
+	}
+
+	@After
+	public void tearDown() {
+		provider.stop();
+		provider = null;
+	}
 
 	@Test
 	public void canProvideAllApplicationScopedComponents() {
@@ -250,38 +282,6 @@ public abstract class GenericContainerTest {
 
 		assertThat(dependent, is(notNullValue()));
 		assertThat(dependent.getDependency(), is(notNullValue()));
-	}
-
-	@Before
-	public void setup() throws Exception {
-		context = mock(ServletContext.class, "servlet context");
-
-		when(context.getMajorVersion()).thenReturn(3);
-		when(context.getInitParameter(BASE_PACKAGES_PARAMETER_NAME)).thenReturn("br.com.caelum.vraptor.ioc.fixture");
-		when(context.getRealPath("/WEB-INF/classes")).thenReturn(getClassDir());
-
-
-		when(context.getClassLoader()).thenReturn(
-				new URLClassLoader(new URL[] {Object.class.getResource("/test-fixture.jar")},
-						currentThread().getContextClassLoader()));
-
-        //allowing(context).getInitParameter(ENCODING);
-        //allowing(context).setAttribute(with(any(String.class)), with(any(Object.class)));
-
-        when(context.getInitParameter(SCANNING_PARAM)).thenReturn("enabled");
-
-		configureExpectations();
-		provider = getProvider();
-		start(provider);
-	}
-	protected void start(ContainerProvider provider) {
-		provider.start(context);
-	}
-
-	@After
-	public void tearDown() {
-		provider.stop();
-		provider = null;
 	}
 
 	protected <T> void checkAvailabilityFor(final boolean shouldBeTheSame, final Class<T> component,

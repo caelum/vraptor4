@@ -99,20 +99,16 @@ public abstract class GenericContainerTest {
 
 	@Before
 	public void setup() throws Exception {
+
+		String packageName = "br.com.caelum.vraptor.ioc.fixture";
+		ClassLoader contextClassLoader = currentThread().getContextClassLoader();
+		URL[] urls = new URL[] {Object.class.getResource("/test-fixture.jar")};
+
 		context = mock(ServletContext.class, "servlet context");
-
 		when(context.getMajorVersion()).thenReturn(3);
-		when(context.getInitParameter(BASE_PACKAGES_PARAMETER_NAME)).thenReturn("br.com.caelum.vraptor.ioc.fixture");
+		when(context.getInitParameter(BASE_PACKAGES_PARAMETER_NAME)).thenReturn(packageName);
 		when(context.getRealPath("/WEB-INF/classes")).thenReturn(getClassDir());
-
-
-		when(context.getClassLoader()).thenReturn(
-				new URLClassLoader(new URL[] {Object.class.getResource("/test-fixture.jar")},
-						currentThread().getContextClassLoader()));
-
-        //allowing(context).getInitParameter(ENCODING);
-        //allowing(context).setAttribute(with(any(String.class)), with(any(Object.class)));
-
+		when(context.getClassLoader()).thenReturn(new URLClassLoader(urls, contextClassLoader));
         when(context.getInitParameter(SCANNING_PARAM)).thenReturn("enabled");
 
 		configureExpectations();

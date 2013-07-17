@@ -476,7 +476,7 @@ public abstract class GenericContainerTest {
 		provider.stop();
 		assertThat(component.getCallsToPreDestroy(), is(equalTo(1)));
 
-		resetProvider();
+		getStartedProvider();
 	}
 
 
@@ -488,15 +488,7 @@ public abstract class GenericContainerTest {
 		provider.stop();
 		assertThat(componentFactory.getCallsToPreDestroy(), is(equalTo(1)));
 
-		resetProvider();
-	}
-
-
-
-
-	protected void resetProvider() {
-		provider = getProvider();
-		start(provider);
+		getStartedProvider();
 	}
 
 	protected String getClassDir() {

@@ -239,8 +239,6 @@ public abstract class GenericContainerTest {
 
 	@Test
 	public void supportsComponentFactoriesForCustomInstantiation() {
-		// TODO the registered component is only available in the next request
-		// with Pico. FIX IT!
 		TheComponentFactory factory = getFromContainer(TheComponentFactory.class);
 		assertThat(factory, is(notNullValue()));
 

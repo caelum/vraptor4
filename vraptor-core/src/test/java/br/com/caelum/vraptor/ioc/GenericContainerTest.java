@@ -153,21 +153,19 @@ public abstract class GenericContainerTest {
 	public void processesCorrectlyAppBasedComponents() {
 		checkAvailabilityFor(true, MyAppComponent.class);
 	}
+
 	@Test
 	public void canProvideJodaTimeConverters() {
 		executeInsideRequest(new WhatToDo<String>() {
-
 			@Override
 			public String execute(RequestInfo request, int counter) {
 				assertNotNull(getFromContainerInCurrentThread(LocalDateConverter.class, request));
 				assertNotNull(getFromContainerInCurrentThread(LocalTimeConverter.class, request));
-
 				Converters converters = getFromContainerInCurrentThread(Converters.class, request);
 				assertTrue(converters.existsFor(LocalDate.class));
 				assertTrue(converters.existsFor(LocalTime.class));
 				return null;
 			}
-
 		});
 	}
 
@@ -469,19 +467,14 @@ public abstract class GenericContainerTest {
 		assertThat(registry.all(), hasOneCopyOf(InterceptorInTheClasspath.class));
 	}
 
-
-
 	@Test
 	public void shoudCallPredestroyExactlyOneTimeForComponentsScannedFromTheClasspath() {
 		CustomComponentWithLifecycleInTheClasspath component = getFromContainer(CustomComponentWithLifecycleInTheClasspath.class);
 		assertThat(component.getCallsToPreDestroy(), is(equalTo(0)));
 		provider.stop();
 		assertThat(component.getCallsToPreDestroy(), is(equalTo(1)));
-
 		getStartedProvider();
 	}
-
-
 
 	@Test
 	public void shoudCallPredestroyExactlyOneTimeForComponentFactoriesScannedFromTheClasspath() {
@@ -489,7 +482,6 @@ public abstract class GenericContainerTest {
 		assertThat(componentFactory.getCallsToPreDestroy(), is(equalTo(0)));
 		provider.stop();
 		assertThat(componentFactory.getCallsToPreDestroy(), is(equalTo(1)));
-
 		getStartedProvider();
 	}
 

@@ -1,5 +1,12 @@
 package br.com.caelum.vraptor.ioc.cdi;
 
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
+
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.HashSet;
@@ -36,26 +43,18 @@ import br.com.caelum.vraptor.validator.ValidatorCreator;
 import br.com.caelum.vraptor.validator.ValidatorFactoryCreator;
 import br.com.caelum.vraptor4.interceptor.PackagesAcceptor;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
-
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
-
 public class CDIProviderRegisteringComponentsTest extends
 		AbstractProviderRegisteringComponentsTest {
 
 	private static CdiContainer cdiContainer;
 	private final ServletContainerFactory servletContainerFactory = new ServletContainerFactory();
-	
+
 	@BeforeClass
 	public static void startCDIContainer(){
 		cdiContainer = CdiContainerLoader.getCdiContainer();
 		cdiContainer.boot();
 	}
-	
+
 	@AfterClass
 	public static void shutdownCDIContainer() {
 		cdiContainer.shutdown();
@@ -74,12 +73,12 @@ public class CDIProviderRegisteringComponentsTest extends
 			fieldRequestMap.setAccessible(true);
 			Map<String, Object> requestMap = (Map<String, Object>) fieldRequestMap.get(contextController);
 			return requestMap;
-			
+
 		}catch(Exception e){
 			throw new RuntimeException(e);
 		}
 	}
-	
+
 	public void stopContexts() {
 		cdiContainer.getContextControl().stopContexts();
 	}
@@ -104,13 +103,13 @@ public class CDIProviderRegisteringComponentsTest extends
 			@Override
 			public T call() throws Exception {
 				start(RequestScoped.class);
-				start(SessionScoped.class);				
+				start(SessionScoped.class);
 				RequestInfo request = new RequestInfo(context, null,
 						servletContainerFactory.getRequest(),
 						servletContainerFactory.getResponse());
 
 				T result = execution.execute(request, counter);
-				
+
 				stop(SessionScoped.class);
 				stop(RequestScoped.class);
 				return result;
@@ -124,7 +123,7 @@ public class CDIProviderRegisteringComponentsTest extends
 		}
 	}
 
-	private Object actualInstance(Object instance) {		
+	private Object actualInstance(Object instance) {
 		try {
 			//sorry, but i have to initialize the weld proxy
 			initializeProxy(instance);
@@ -137,13 +136,13 @@ public class CDIProviderRegisteringComponentsTest extends
 			return instance;
 		}
 	}
-	
+
 	@Override
 	protected <T> T instanceFor(final Class<T> component,
 			Container container) {
 		T maybeAWeldProxy = container.instanceFor(component);
 		return (T)actualInstance(maybeAWeldProxy);
-	}	
+	}
 
 	@Override
 	protected void checkSimilarity(Class<?> component, boolean shouldBeTheSame,
@@ -158,7 +157,7 @@ public class CDIProviderRegisteringComponentsTest extends
 					is(not(equalTo(actualInstance(secondInstance)))));
 		}
 	}
-	
+
 	@Test
 	public void instantiateCustomAcceptor(){
 		PackagesAcceptor acceptor = getFromContainer(PackagesAcceptor.class);
@@ -168,16 +167,16 @@ public class CDIProviderRegisteringComponentsTest extends
 	@Override
 	@Test
 	public void callsPredestroyExactlyOneTime() throws Exception {
-		
-		MyAppComponentWithLifecycle component = registerAndGetFromContainer(MyAppComponentWithLifecycle.class,
-				MyAppComponentWithLifecycle.class);		
+
+		MyAppComponentWithLifecycle component = getFromContainer(MyAppComponentWithLifecycle.class,
+				MyAppComponentWithLifecycle.class);
 		assertThat(component.getCalls(), is(0));
 		shutdownCDIContainer();
 		assertThat(component.getCalls(), is(1));
 		startCDIContainer();
-		
+
 	}
-	
+
 	@Override
 	@Test
 	public void shoudCallPredestroyExactlyOneTimeForComponentsScannedFromTheClasspath() {
@@ -198,17 +197,17 @@ public class CDIProviderRegisteringComponentsTest extends
 
 		startCDIContainer();
 	}
-	
+
 	@Override
 	@Ignore
 	public void setsAnAttributeOnRequestWithTheObjectTypeName() throws Exception {
 	}
-	
+
 	@Override
 	@Ignore
 	public void setsAnAttributeOnSessionWithTheObjectTypeName() throws Exception {
-	}	
-	
+	}
+
 	@Test
 	public void shouldUseComponentFactoryAsProducer() {
 		ComponentToBeProduced component = getFromContainer(ComponentToBeProduced.class);
@@ -219,19 +218,19 @@ public class CDIProviderRegisteringComponentsTest extends
 	private void initializeProxy(Object component) {
 		component.toString();
 	}
-	
+
 	@Test
 	public void shouldNotAddRequestScopeForComponentWithScope(){
 		Bean<?> bean = cdiContainer.getBeanManager().getBeans(CDISessionComponent.class).iterator().next();
 		assertTrue(bean.getScope().equals(SessionScoped.class));
 	}
-	
+
 	@Test
 	public void shouldStereotypeResourceWithRequestAndNamed(){
 		Bean<?> bean = cdiContainer.getBeanManager().getBeans(CDIControllerComponent.class).iterator().next();
 		assertTrue(bean.getScope().equals(RequestScoped.class));
 	}
-		
+
 	@Override
 	@Test
 	public void canProvideAllApplicationScopedComponents() {
@@ -241,8 +240,8 @@ public class CDIProviderRegisteringComponentsTest extends
 		components.remove(MessageInterpolatorFactory.class);
 		components.remove(MethodValidatorFactoryCreator.class);
 		checkAvailabilityFor(true, components);
-	}	
-		
+	}
+
 	@Override
 	protected void configureExpectations() {
 		super.configureExpectations();

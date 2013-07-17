@@ -6,9 +6,12 @@ import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.when;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.util.Collections;
+import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -34,6 +37,7 @@ import br.com.caelum.vraptor.core.BaseComponents;
 import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.ioc.ContainerProvider;
+import br.com.caelum.vraptor.ioc.GenericContainerTest;
 import br.com.caelum.vraptor.ioc.WhatToDo;
 import br.com.caelum.vraptor.ioc.fixture.ComponentFactoryInTheClasspath;
 import br.com.caelum.vraptor.ioc.fixture.CustomComponentWithLifecycleInTheClasspath;
@@ -43,11 +47,11 @@ import br.com.caelum.vraptor.validator.ValidatorCreator;
 import br.com.caelum.vraptor.validator.ValidatorFactoryCreator;
 import br.com.caelum.vraptor4.interceptor.PackagesAcceptor;
 
-public class CDIProviderRegisteringComponentsTest extends
-		AbstractProviderRegisteringComponentsTest {
+public class CDIProviderRegisteringComponentsTest extends GenericContainerTest {
 
 	private static CdiContainer cdiContainer;
 	private final ServletContainerFactory servletContainerFactory = new ServletContainerFactory();
+	private int counter;
 
 	@BeforeClass
 	public static void startCDIContainer(){
@@ -241,7 +245,9 @@ public class CDIProviderRegisteringComponentsTest extends
 
 	@Override
 	protected void configureExpectations() {
-		super.configureExpectations();
+    	Enumeration<String> emptyEnumeration = Collections.enumeration(Collections.<String>emptyList());
+    	when(context.getInitParameterNames()).thenReturn(emptyEnumeration);
+    	when(context.getAttributeNames()).thenReturn(emptyEnumeration);
 	}
 
 }

@@ -26,12 +26,6 @@ public class ReturnParamInterceptor implements Interceptor{
 		this.nameProvider = nameProvider;
 	}
 
-	@Override
-	public boolean accepts(ControllerMethod method) {
-		return true;
-	}
-
-	@Override
 	public void intercept(InterceptorStack stack, ControllerMethod method,
 			Object instance) throws InterceptionException {
 

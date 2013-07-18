@@ -23,8 +23,11 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import br.com.caelum.vraptor.interceptor.DefaultTypeNameExtractor;
-import br.com.caelum.vraptor.serialization.NullProxyInitializer;
+import br.com.caelum.vraptor4.interceptor.DefaultTypeNameExtractor;
+import br.com.caelum.vraptor4.serialization.NullProxyInitializer;
+import br.com.caelum.vraptor4.serialization.xstream.XStreamBuilder;
+import br.com.caelum.vraptor4.serialization.xstream.XStreamBuilderImpl;
+import br.com.caelum.vraptor4.serialization.xstream.XStreamJSONSerialization;
 
 import com.google.common.collect.ForwardingCollection;
 import com.thoughtworks.xstream.XStream;

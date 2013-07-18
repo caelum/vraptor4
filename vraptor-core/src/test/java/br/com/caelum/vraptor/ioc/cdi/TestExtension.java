@@ -25,6 +25,7 @@ import br.com.caelum.vraptor.ioc.fixture.CustomComponentInTheClasspath;
 import br.com.caelum.vraptor.ioc.fixture.CustomComponentWithLifecycleInTheClasspath;
 import br.com.caelum.vraptor.ioc.fixture.DependentOnSomethingFromComponentFactory;
 import br.com.caelum.vraptor.ioc.fixture.InterceptorInTheClasspath;
+import br.com.caelum.vraptor4.ioc.cdi.ServletContextFactory;
 
 @Ignore
 public class TestExtension implements Extension{

@@ -1,7 +1,7 @@
 package br.com.caelum.vraptor.other.pack4ge;
 
-import br.com.caelum.vraptor.serialization.Serialization;
-import br.com.caelum.vraptor.serialization.Serializer;
+import br.com.caelum.vraptor4.serialization.Serialization;
+import br.com.caelum.vraptor4.serialization.Serializer;
 
 /**
  * Test Serialization's comparator

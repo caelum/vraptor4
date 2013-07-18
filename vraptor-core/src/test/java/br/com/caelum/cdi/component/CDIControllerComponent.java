@@ -1,6 +1,6 @@
 package br.com.caelum.cdi.component;
 
-import br.com.caelum.vraptor4.Controller;
+import br.com.caelum.vraptor4x.Controller;
 
 @Controller
 public class CDIControllerComponent {

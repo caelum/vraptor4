@@ -9,6 +9,8 @@ import java.util.PropertyResourceBundle;
 import org.junit.Before;
 import org.junit.Test;
 
+import br.com.caelum.vraptor4.core.SafeResourceBundle;
+
 public class SafeResourceBundleTest {
 
 

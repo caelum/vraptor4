@@ -30,19 +30,22 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import br.com.caelum.vraptor.Converter;
-import br.com.caelum.vraptor.Result;
-import br.com.caelum.vraptor.converter.LongConverter;
-import br.com.caelum.vraptor.converter.PrimitiveLongConverter;
-import br.com.caelum.vraptor.converter.StringConverter;
-import br.com.caelum.vraptor.core.Converters;
-import br.com.caelum.vraptor.core.SafeResourceBundle;
-import br.com.caelum.vraptor.ioc.Container;
-import br.com.caelum.vraptor.util.EmptyBundle;
-import br.com.caelum.vraptor.validator.DefaultValidationException;
-import br.com.caelum.vraptor.validator.Message;
-import br.com.caelum.vraptor4.controller.ControllerMethod;
-import br.com.caelum.vraptor4.controller.DefaultControllerMethod;
+import br.com.caelum.vraptor4.Converter;
+import br.com.caelum.vraptor4.Result;
+import br.com.caelum.vraptor4.converter.LongConverter;
+import br.com.caelum.vraptor4.converter.PrimitiveLongConverter;
+import br.com.caelum.vraptor4.converter.StringConverter;
+import br.com.caelum.vraptor4.core.Converters;
+import br.com.caelum.vraptor4.core.SafeResourceBundle;
+import br.com.caelum.vraptor4.http.InvalidParameterException;
+import br.com.caelum.vraptor4.http.ParameterNameProvider;
+import br.com.caelum.vraptor4.http.ParametersProvider;
+import br.com.caelum.vraptor4.ioc.Container;
+import br.com.caelum.vraptor4.util.EmptyBundle;
+import br.com.caelum.vraptor4.validator.DefaultValidationException;
+import br.com.caelum.vraptor4.validator.Message;
+import br.com.caelum.vraptor4x.controller.ControllerMethod;
+import br.com.caelum.vraptor4x.controller.DefaultControllerMethod;
 
 import com.google.common.collect.ImmutableMap;
 

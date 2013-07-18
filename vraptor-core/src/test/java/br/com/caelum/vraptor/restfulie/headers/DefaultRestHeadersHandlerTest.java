@@ -13,10 +13,12 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import br.com.caelum.vraptor.restfulie.hypermedia.HypermediaResource;
-import br.com.caelum.vraptor.restfulie.relation.RelationBuilder;
-import br.com.caelum.vraptor.restfulie.resource.Cacheable;
-import br.com.caelum.vraptor.restfulie.resource.RestfulEntity;
+import br.com.caelum.vraptor4.restfulie.headers.DefaultRestHeadersHandler;
+import br.com.caelum.vraptor4.restfulie.headers.RestDefaults;
+import br.com.caelum.vraptor4.restfulie.hypermedia.HypermediaResource;
+import br.com.caelum.vraptor4.restfulie.relation.RelationBuilder;
+import br.com.caelum.vraptor4.restfulie.resource.Cacheable;
+import br.com.caelum.vraptor4.restfulie.resource.RestfulEntity;
 
 public class DefaultRestHeadersHandlerTest {
 

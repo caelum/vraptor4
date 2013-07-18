@@ -1,7 +1,7 @@
 package br.com.caelum.vraptor.view;
 
-import static br.com.caelum.vraptor.view.Results.logic;
-import static br.com.caelum.vraptor.view.Results.page;
+import static br.com.caelum.vraptor4.view.Results.logic;
+import static br.com.caelum.vraptor4.view.Results.page;
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
@@ -15,15 +15,18 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import br.com.caelum.vraptor.Result;
-import br.com.caelum.vraptor.core.Localization;
-import br.com.caelum.vraptor.http.MutableRequest;
-import br.com.caelum.vraptor.http.ParametersProvider;
-import br.com.caelum.vraptor4.controller.ControllerMethod;
-import br.com.caelum.vraptor4.controller.DefaultControllerMethod;
-import br.com.caelum.vraptor4.controller.HttpMethod;
-import br.com.caelum.vraptor4.http.route.ResourceNotFoundException;
-import br.com.caelum.vraptor4.http.route.Router;
+import br.com.caelum.vraptor4.Result;
+import br.com.caelum.vraptor4.core.Localization;
+import br.com.caelum.vraptor4.http.MutableRequest;
+import br.com.caelum.vraptor4.http.ParametersProvider;
+import br.com.caelum.vraptor4.view.DefaultRefererResult;
+import br.com.caelum.vraptor4.view.LogicResult;
+import br.com.caelum.vraptor4.view.PageResult;
+import br.com.caelum.vraptor4x.controller.ControllerMethod;
+import br.com.caelum.vraptor4x.controller.DefaultControllerMethod;
+import br.com.caelum.vraptor4x.controller.HttpMethod;
+import br.com.caelum.vraptor4x.http.route.ResourceNotFoundException;
+import br.com.caelum.vraptor4x.http.route.Router;
 
 public class DefaultRefererResultTest {
 

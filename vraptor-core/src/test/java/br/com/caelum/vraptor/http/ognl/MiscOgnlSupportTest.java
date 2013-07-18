@@ -36,16 +36,19 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import br.com.caelum.vraptor.converter.IntegerConverter;
-import br.com.caelum.vraptor.converter.LocaleBasedCalendarConverter;
-import br.com.caelum.vraptor.converter.LongConverter;
-import br.com.caelum.vraptor.converter.StringConverter;
-import br.com.caelum.vraptor.core.Converters;
-import br.com.caelum.vraptor.core.JstlLocalization;
-import br.com.caelum.vraptor.core.RequestInfo;
-import br.com.caelum.vraptor.http.MutableRequest;
-import br.com.caelum.vraptor.proxy.JavassistProxifier;
-import br.com.caelum.vraptor.proxy.ReflectionInstanceCreator;
+import br.com.caelum.vraptor4.converter.IntegerConverter;
+import br.com.caelum.vraptor4.converter.LocaleBasedCalendarConverter;
+import br.com.caelum.vraptor4.converter.LongConverter;
+import br.com.caelum.vraptor4.converter.StringConverter;
+import br.com.caelum.vraptor4.core.Converters;
+import br.com.caelum.vraptor4.core.JstlLocalization;
+import br.com.caelum.vraptor4.core.RequestInfo;
+import br.com.caelum.vraptor4.http.MutableRequest;
+import br.com.caelum.vraptor4.http.ognl.EmptyElementsRemoval;
+import br.com.caelum.vraptor4.http.ognl.GenericNullHandler;
+import br.com.caelum.vraptor4.http.ognl.VRaptorConvertersAdapter;
+import br.com.caelum.vraptor4.proxy.JavassistProxifier;
+import br.com.caelum.vraptor4.proxy.ReflectionInstanceCreator;
 
 /**
  * Unfortunately OGNL sucks so bad in its design that we had to create a "unit"

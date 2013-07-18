@@ -9,7 +9,11 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import br.com.caelum.vraptor.ioc.Container;
+import br.com.caelum.vraptor4.deserialization.DefaultDeserializers;
+import br.com.caelum.vraptor4.deserialization.Deserializer;
+import br.com.caelum.vraptor4.deserialization.Deserializers;
+import br.com.caelum.vraptor4.deserialization.Deserializes;
+import br.com.caelum.vraptor4.ioc.Container;
 
 public class DefaultDeserializersTest {
 

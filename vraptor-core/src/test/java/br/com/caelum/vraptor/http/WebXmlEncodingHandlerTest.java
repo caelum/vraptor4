@@ -1,6 +1,6 @@
 package br.com.caelum.vraptor.http;
 
-import static br.com.caelum.vraptor.config.BasicConfiguration.ENCODING;
+import static br.com.caelum.vraptor4.config.BasicConfiguration.ENCODING;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
@@ -17,7 +17,8 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import br.com.caelum.vraptor.VRaptorException;
+import br.com.caelum.vraptor4.VRaptorException;
+import br.com.caelum.vraptor4.http.WebXmlEncodingHandler;
 
 public class WebXmlEncodingHandlerTest {
     

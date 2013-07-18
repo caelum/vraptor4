@@ -30,11 +30,12 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import br.com.caelum.vraptor.config.Configuration;
-import br.com.caelum.vraptor.restfulie.hypermedia.HypermediaResource;
-import br.com.caelum.vraptor.restfulie.relation.Relation;
-import br.com.caelum.vraptor.restfulie.relation.RelationBuilder;
-import br.com.caelum.vraptor.restfulie.serialization.LinkConverterJSON;
+import br.com.caelum.vraptor4.config.Configuration;
+import br.com.caelum.vraptor4.restfulie.Restfulie;
+import br.com.caelum.vraptor4.restfulie.hypermedia.HypermediaResource;
+import br.com.caelum.vraptor4.restfulie.relation.Relation;
+import br.com.caelum.vraptor4.restfulie.relation.RelationBuilder;
+import br.com.caelum.vraptor4.restfulie.serialization.LinkConverterJSON;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.converters.reflection.ReflectionConverter;

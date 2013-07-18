@@ -1,13 +1,13 @@
 package br.com.caelum.vraptor4.interceptor.example;
 
-import br.com.caelum.vraptor.Intercepts;
-import br.com.caelum.vraptor.core.InterceptorStack;
-import br.com.caelum.vraptor4.Accepts;
-import br.com.caelum.vraptor4.AfterCall;
-import br.com.caelum.vraptor4.AroundCall;
-import br.com.caelum.vraptor4.BeforeCall;
-import br.com.caelum.vraptor4.controller.ControllerInstance;
-import br.com.caelum.vraptor4.controller.ControllerMethod;
+import br.com.caelum.vraptor4.Intercepts;
+import br.com.caelum.vraptor4.core.InterceptorStack;
+import br.com.caelum.vraptor4x.Accepts;
+import br.com.caelum.vraptor4x.AfterCall;
+import br.com.caelum.vraptor4x.AroundCall;
+import br.com.caelum.vraptor4x.BeforeCall;
+import br.com.caelum.vraptor4x.controller.ControllerInstance;
+import br.com.caelum.vraptor4x.controller.ControllerMethod;
 
 @Intercepts
 public class AcceptsInterceptor {

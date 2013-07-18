@@ -13,7 +13,9 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import br.com.caelum.vraptor.view.AcceptHeaderToFormat;
+import br.com.caelum.vraptor4.http.DefaultFormatResolver;
+import br.com.caelum.vraptor4.http.FormatResolver;
+import br.com.caelum.vraptor4.view.AcceptHeaderToFormat;
 
 public class DefaultFormatResolverTest {
 

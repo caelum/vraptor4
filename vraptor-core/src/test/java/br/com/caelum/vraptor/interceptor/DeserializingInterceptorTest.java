@@ -18,17 +18,18 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import br.com.caelum.vraptor.Consumes;
-import br.com.caelum.vraptor.InterceptionException;
-import br.com.caelum.vraptor.core.DefaultMethodInfo;
-import br.com.caelum.vraptor.core.InterceptorStack;
-import br.com.caelum.vraptor.core.MethodInfo;
-import br.com.caelum.vraptor.deserialization.Deserializer;
-import br.com.caelum.vraptor.deserialization.Deserializers;
-import br.com.caelum.vraptor.ioc.Container;
-import br.com.caelum.vraptor.view.Status;
-import br.com.caelum.vraptor4.controller.ControllerMethod;
-import br.com.caelum.vraptor4.controller.DefaultControllerMethod;
+import br.com.caelum.vraptor4.Consumes;
+import br.com.caelum.vraptor4.InterceptionException;
+import br.com.caelum.vraptor4.core.DefaultMethodInfo;
+import br.com.caelum.vraptor4.core.InterceptorStack;
+import br.com.caelum.vraptor4.core.MethodInfo;
+import br.com.caelum.vraptor4.deserialization.Deserializer;
+import br.com.caelum.vraptor4.deserialization.Deserializers;
+import br.com.caelum.vraptor4.interceptor.DeserializingInterceptor;
+import br.com.caelum.vraptor4.ioc.Container;
+import br.com.caelum.vraptor4.view.Status;
+import br.com.caelum.vraptor4x.controller.ControllerMethod;
+import br.com.caelum.vraptor4x.controller.DefaultControllerMethod;
 
 
 public class DeserializingInterceptorTest {

@@ -11,10 +11,12 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import br.com.caelum.vraptor.Result;
-import br.com.caelum.vraptor.core.MethodInfo;
-import br.com.caelum.vraptor.http.ParameterNameProvider;
-import br.com.caelum.vraptor4.controller.ControllerMethod;
+import br.com.caelum.vraptor4.Result;
+import br.com.caelum.vraptor4.core.MethodInfo;
+import br.com.caelum.vraptor4.http.ParameterNameProvider;
+import br.com.caelum.vraptor4.validator.Outjector;
+import br.com.caelum.vraptor4.validator.ReplicatorOutjector;
+import br.com.caelum.vraptor4x.controller.ControllerMethod;
 
 public class ReplicatorOutjectorTest {
 

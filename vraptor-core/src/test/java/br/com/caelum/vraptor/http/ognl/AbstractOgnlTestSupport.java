@@ -4,10 +4,13 @@ import java.util.List;
 
 import ognl.OgnlException;
 import ognl.OgnlRuntime;
-import br.com.caelum.vraptor.core.Converters;
-import br.com.caelum.vraptor.proxy.JavassistProxifier;
-import br.com.caelum.vraptor.proxy.Proxifier;
-import br.com.caelum.vraptor.proxy.ReflectionInstanceCreator;
+import br.com.caelum.vraptor4.core.Converters;
+import br.com.caelum.vraptor4.http.ognl.ArrayAccessor;
+import br.com.caelum.vraptor4.http.ognl.ListAccessor;
+import br.com.caelum.vraptor4.http.ognl.ReflectionBasedNullHandler;
+import br.com.caelum.vraptor4.proxy.JavassistProxifier;
+import br.com.caelum.vraptor4.proxy.Proxifier;
+import br.com.caelum.vraptor4.proxy.ReflectionInstanceCreator;
 
 public final class AbstractOgnlTestSupport {
 

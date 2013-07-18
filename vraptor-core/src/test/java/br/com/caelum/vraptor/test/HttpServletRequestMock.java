@@ -42,7 +42,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 
-import br.com.caelum.vraptor.http.MutableRequest;
+import br.com.caelum.vraptor4.http.MutableRequest;
 
 /**
  * @author Fabio Kung

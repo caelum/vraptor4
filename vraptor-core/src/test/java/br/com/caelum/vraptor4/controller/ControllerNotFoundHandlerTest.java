@@ -30,10 +30,12 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import br.com.caelum.vraptor.InterceptionException;
-import br.com.caelum.vraptor.core.RequestInfo;
-import br.com.caelum.vraptor.http.MutableRequest;
-import br.com.caelum.vraptor.http.MutableResponse;
+import br.com.caelum.vraptor4.InterceptionException;
+import br.com.caelum.vraptor4.core.RequestInfo;
+import br.com.caelum.vraptor4.http.MutableRequest;
+import br.com.caelum.vraptor4.http.MutableResponse;
+import br.com.caelum.vraptor4x.controller.ControllerNotFoundHandler;
+import br.com.caelum.vraptor4x.controller.DefaultControllerNotFoundHandler;
 
 public class ControllerNotFoundHandlerTest {
 

@@ -9,11 +9,15 @@ import static org.junit.Assert.assertThat;
 import org.junit.Before;
 import org.junit.Test;
 
-import br.com.caelum.vraptor.Intercepts;
-import br.com.caelum.vraptor.Lazy;
-import br.com.caelum.vraptor.interceptor.Interceptor;
-import br.com.caelum.vraptor.ioc.Container;
-import br.com.caelum.vraptor4.interceptor.AspectStyleInterceptorHandler;
+import br.com.caelum.vraptor4.Intercepts;
+import br.com.caelum.vraptor4.Lazy;
+import br.com.caelum.vraptor4.core.DefaultInterceptorHandlerFactory;
+import br.com.caelum.vraptor4.core.InterceptorHandler;
+import br.com.caelum.vraptor4.core.LazyInterceptorHandler;
+import br.com.caelum.vraptor4.core.ToInstantiateInterceptorHandler;
+import br.com.caelum.vraptor4.interceptor.Interceptor;
+import br.com.caelum.vraptor4.ioc.Container;
+import br.com.caelum.vraptor4x.interceptor.AspectStyleInterceptorHandler;
 
 public class DefaultInterceptorHandlerFactoryTest {
 

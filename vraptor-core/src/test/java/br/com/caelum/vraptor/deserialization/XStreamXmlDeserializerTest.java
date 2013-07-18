@@ -14,12 +14,13 @@ import java.io.InputStream;
 import org.junit.Before;
 import org.junit.Test;
 
-import br.com.caelum.vraptor.http.ParameterNameProvider;
-import br.com.caelum.vraptor.serialization.xstream.XStreamBuilderImpl;
-import br.com.caelum.vraptor4.controller.BeanClass;
-import br.com.caelum.vraptor4.controller.ControllerMethod;
-import br.com.caelum.vraptor4.controller.DefaultBeanClass;
-import br.com.caelum.vraptor4.controller.DefaultControllerMethod;
+import br.com.caelum.vraptor4.deserialization.XStreamXMLDeserializer;
+import br.com.caelum.vraptor4.http.ParameterNameProvider;
+import br.com.caelum.vraptor4.serialization.xstream.XStreamBuilderImpl;
+import br.com.caelum.vraptor4x.controller.BeanClass;
+import br.com.caelum.vraptor4x.controller.ControllerMethod;
+import br.com.caelum.vraptor4x.controller.DefaultBeanClass;
+import br.com.caelum.vraptor4x.controller.DefaultControllerMethod;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 

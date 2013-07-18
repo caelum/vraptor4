@@ -45,14 +45,17 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import br.com.caelum.vraptor.converter.LongConverter;
-import br.com.caelum.vraptor.converter.StringConverter;
-import br.com.caelum.vraptor.core.Converters;
-import br.com.caelum.vraptor.ioc.Container;
-import br.com.caelum.vraptor.proxy.JavassistProxifier;
-import br.com.caelum.vraptor.proxy.ObjenesisInstanceCreator;
-import br.com.caelum.vraptor.proxy.Proxifier;
-import br.com.caelum.vraptor.proxy.ReflectionInstanceCreator;
+import br.com.caelum.vraptor4.converter.LongConverter;
+import br.com.caelum.vraptor4.converter.StringConverter;
+import br.com.caelum.vraptor4.core.Converters;
+import br.com.caelum.vraptor4.http.ognl.EmptyElementsRemoval;
+import br.com.caelum.vraptor4.http.ognl.GenericNullHandler;
+import br.com.caelum.vraptor4.http.ognl.ReflectionBasedNullHandler;
+import br.com.caelum.vraptor4.ioc.Container;
+import br.com.caelum.vraptor4.proxy.JavassistProxifier;
+import br.com.caelum.vraptor4.proxy.ObjenesisInstanceCreator;
+import br.com.caelum.vraptor4.proxy.Proxifier;
+import br.com.caelum.vraptor4.proxy.ReflectionInstanceCreator;
 
 public class ReflectionBasedNullHandlerTest {
 

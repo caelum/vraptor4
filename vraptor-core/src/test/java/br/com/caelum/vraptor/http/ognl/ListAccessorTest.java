@@ -33,8 +33,9 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import br.com.caelum.vraptor.converter.StringConverter;
-import br.com.caelum.vraptor.core.Converters;
+import br.com.caelum.vraptor4.converter.StringConverter;
+import br.com.caelum.vraptor4.core.Converters;
+import br.com.caelum.vraptor4.http.ognl.ListAccessor;
 
 import com.google.inject.util.Types;
 

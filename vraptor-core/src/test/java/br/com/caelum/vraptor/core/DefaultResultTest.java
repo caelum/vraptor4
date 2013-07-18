@@ -33,14 +33,15 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import br.com.caelum.vraptor.Result;
-import br.com.caelum.vraptor.View;
-import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
-import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.view.DefaultHttpResultTest.RandomController;
-import br.com.caelum.vraptor.view.LogicResult;
-import br.com.caelum.vraptor.view.PageResult;
-import br.com.caelum.vraptor.view.Status;
+import br.com.caelum.vraptor4.Result;
+import br.com.caelum.vraptor4.View;
+import br.com.caelum.vraptor4.core.DefaultResult;
+import br.com.caelum.vraptor4.interceptor.TypeNameExtractor;
+import br.com.caelum.vraptor4.ioc.Container;
+import br.com.caelum.vraptor4.view.LogicResult;
+import br.com.caelum.vraptor4.view.PageResult;
+import br.com.caelum.vraptor4.view.Status;
 
 public class DefaultResultTest {
 

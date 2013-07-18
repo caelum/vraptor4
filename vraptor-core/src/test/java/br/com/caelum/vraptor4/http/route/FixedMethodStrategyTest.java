@@ -34,12 +34,14 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.interceptor.VRaptorMatchers;
-import br.com.caelum.vraptor4.Controller;
-import br.com.caelum.vraptor4.controller.ControllerMethod;
-import br.com.caelum.vraptor4.controller.DefaultControllerMethod;
-import br.com.caelum.vraptor4.controller.HttpMethod;
+import br.com.caelum.vraptor4.http.MutableRequest;
+import br.com.caelum.vraptor4x.Controller;
+import br.com.caelum.vraptor4x.controller.ControllerMethod;
+import br.com.caelum.vraptor4x.controller.DefaultControllerMethod;
+import br.com.caelum.vraptor4x.controller.HttpMethod;
+import br.com.caelum.vraptor4x.http.route.FixedMethodStrategy;
+import br.com.caelum.vraptor4x.http.route.ParametersControl;
 
 import com.google.common.collect.Sets;
 

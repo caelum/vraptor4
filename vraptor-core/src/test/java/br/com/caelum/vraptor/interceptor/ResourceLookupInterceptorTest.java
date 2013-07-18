@@ -31,19 +31,20 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import br.com.caelum.vraptor.InterceptionException;
-import br.com.caelum.vraptor.core.InterceptorStack;
-import br.com.caelum.vraptor.core.MethodInfo;
-import br.com.caelum.vraptor.core.RequestInfo;
-import br.com.caelum.vraptor.http.MutableRequest;
-import br.com.caelum.vraptor.http.MutableResponse;
-import br.com.caelum.vraptor.http.UrlToResourceTranslator;
-import br.com.caelum.vraptor4.controller.ControllerMethod;
-import br.com.caelum.vraptor4.controller.ControllerNotFoundHandler;
-import br.com.caelum.vraptor4.controller.HttpMethod;
-import br.com.caelum.vraptor4.controller.MethodNotAllowedHandler;
-import br.com.caelum.vraptor4.http.route.MethodNotAllowedException;
-import br.com.caelum.vraptor4.http.route.ResourceNotFoundException;
+import br.com.caelum.vraptor4.InterceptionException;
+import br.com.caelum.vraptor4.core.InterceptorStack;
+import br.com.caelum.vraptor4.core.MethodInfo;
+import br.com.caelum.vraptor4.core.RequestInfo;
+import br.com.caelum.vraptor4.http.MutableRequest;
+import br.com.caelum.vraptor4.http.MutableResponse;
+import br.com.caelum.vraptor4.http.UrlToResourceTranslator;
+import br.com.caelum.vraptor4.interceptor.ResourceLookupInterceptor;
+import br.com.caelum.vraptor4x.controller.ControllerMethod;
+import br.com.caelum.vraptor4x.controller.ControllerNotFoundHandler;
+import br.com.caelum.vraptor4x.controller.HttpMethod;
+import br.com.caelum.vraptor4x.controller.MethodNotAllowedHandler;
+import br.com.caelum.vraptor4x.http.route.MethodNotAllowedException;
+import br.com.caelum.vraptor4x.http.route.ResourceNotFoundException;
 
 public class ResourceLookupInterceptorTest {
 

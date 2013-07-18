@@ -26,10 +26,10 @@ import static org.mockito.Mockito.when;
 import org.junit.Before;
 import org.junit.Test;
 
-import br.com.caelum.vraptor.Result;
-import br.com.caelum.vraptor.interceptor.ForwardToDefaultViewInterceptor;
 import br.com.caelum.vraptor.view.MockedPage;
-import br.com.caelum.vraptor.view.PageResult;
+import br.com.caelum.vraptor4.Result;
+import br.com.caelum.vraptor4.interceptor.ForwardToDefaultViewInterceptor;
+import br.com.caelum.vraptor4.view.PageResult;
 
 public class ForwardToDefaultViewInterceptorTest {
 

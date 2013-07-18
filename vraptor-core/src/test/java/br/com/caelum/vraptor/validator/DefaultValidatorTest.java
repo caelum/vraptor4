@@ -44,17 +44,25 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import br.com.caelum.vraptor.Result;
-import br.com.caelum.vraptor.core.Localization;
-import br.com.caelum.vraptor.proxy.JavassistProxifier;
-import br.com.caelum.vraptor.proxy.ObjenesisInstanceCreator;
-import br.com.caelum.vraptor.proxy.Proxifier;
-import br.com.caelum.vraptor.util.EmptyBundle;
-import br.com.caelum.vraptor.util.test.MockResult;
-import br.com.caelum.vraptor.view.DefaultValidationViewsFactory;
-import br.com.caelum.vraptor.view.LogicResult;
-import br.com.caelum.vraptor.view.PageResult;
-import br.com.caelum.vraptor4.Controller;
+import br.com.caelum.vraptor4.Result;
+import br.com.caelum.vraptor4.core.Localization;
+import br.com.caelum.vraptor4.proxy.JavassistProxifier;
+import br.com.caelum.vraptor4.proxy.ObjenesisInstanceCreator;
+import br.com.caelum.vraptor4.proxy.Proxifier;
+import br.com.caelum.vraptor4.util.EmptyBundle;
+import br.com.caelum.vraptor4.util.test.MockResult;
+import br.com.caelum.vraptor4.validator.BeanValidator;
+import br.com.caelum.vraptor4.validator.DefaultValidator;
+import br.com.caelum.vraptor4.validator.I18nMessage;
+import br.com.caelum.vraptor4.validator.Message;
+import br.com.caelum.vraptor4.validator.Outjector;
+import br.com.caelum.vraptor4.validator.ValidationException;
+import br.com.caelum.vraptor4.validator.ValidationMessage;
+import br.com.caelum.vraptor4.validator.Validations;
+import br.com.caelum.vraptor4.view.DefaultValidationViewsFactory;
+import br.com.caelum.vraptor4.view.LogicResult;
+import br.com.caelum.vraptor4.view.PageResult;
+import br.com.caelum.vraptor4x.Controller;
 
 @RunWith(MockitoJUnitRunner.class)
 public class DefaultValidatorTest {

@@ -1,6 +1,6 @@
 package br.com.caelum.vraptor.interceptor;
 
-import static br.com.caelum.vraptor.interceptor.FlashInterceptor.FLASH_INCLUDED_PARAMETERS;
+import static br.com.caelum.vraptor4.interceptor.FlashInterceptor.FLASH_INCLUDED_PARAMETERS;
 import static java.util.Collections.singletonMap;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.anyObject;
@@ -22,10 +22,11 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import br.com.caelum.vraptor.Result;
-import br.com.caelum.vraptor.core.InterceptorStack;
-import br.com.caelum.vraptor.http.MutableResponse;
-import br.com.caelum.vraptor.http.VRaptorResponse;
+import br.com.caelum.vraptor4.Result;
+import br.com.caelum.vraptor4.core.InterceptorStack;
+import br.com.caelum.vraptor4.http.MutableResponse;
+import br.com.caelum.vraptor4.http.VRaptorResponse;
+import br.com.caelum.vraptor4.interceptor.FlashInterceptor;
 
 /**
  * Tests FlashInterceptor

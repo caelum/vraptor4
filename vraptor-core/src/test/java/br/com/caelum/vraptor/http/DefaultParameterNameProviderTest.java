@@ -25,7 +25,8 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
-import br.com.caelum.vraptor.interceptor.DefaultTypeNameExtractor;
+import br.com.caelum.vraptor4.http.DefaultParameterNameProvider;
+import br.com.caelum.vraptor4.interceptor.DefaultTypeNameExtractor;
 
 public class DefaultParameterNameProviderTest {
 

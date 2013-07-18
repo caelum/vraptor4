@@ -16,8 +16,8 @@
  */
 package br.com.caelum.vraptor.ioc.fixture;
 
-import br.com.caelum.vraptor.Get;
-import br.com.caelum.vraptor4.Controller;
+import br.com.caelum.vraptor4.Get;
+import br.com.caelum.vraptor4x.Controller;
 
 @Controller
 public class ControllerInTheClasspath {

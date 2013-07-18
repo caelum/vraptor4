@@ -9,9 +9,12 @@ import junit.framework.Assert;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.other.pack4ge.DumbSerialization;
-import br.com.caelum.vraptor.restfulie.serialization.RestfulSerialization;
-import br.com.caelum.vraptor.serialization.xstream.XStreamJSONSerialization;
-import br.com.caelum.vraptor.serialization.xstream.XStreamXMLSerialization;
+import br.com.caelum.vraptor4.restfulie.serialization.RestfulSerialization;
+import br.com.caelum.vraptor4.serialization.HTMLSerialization;
+import br.com.caelum.vraptor4.serialization.PackageComparator;
+import br.com.caelum.vraptor4.serialization.Serialization;
+import br.com.caelum.vraptor4.serialization.xstream.XStreamJSONSerialization;
+import br.com.caelum.vraptor4.serialization.xstream.XStreamXMLSerialization;
 
 public class PackageComparatorTest {
 

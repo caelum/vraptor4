@@ -1,12 +1,14 @@
 package br.com.caelum.vraptor.util.test;
 
-import static br.com.caelum.vraptor.view.Results.json;
+import static br.com.caelum.vraptor4.view.Results.json;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
+import br.com.caelum.vraptor4.util.test.MockSerializationResult;
 
 public class MockSerializationResultTest {
 

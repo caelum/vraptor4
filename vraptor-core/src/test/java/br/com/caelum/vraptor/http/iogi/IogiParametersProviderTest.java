@@ -52,13 +52,18 @@ import org.mockito.Mock;
 import br.com.caelum.iogi.parameters.Parameter;
 import br.com.caelum.iogi.parameters.Parameters;
 import br.com.caelum.iogi.reflection.Target;
-import br.com.caelum.vraptor.core.Localization;
-import br.com.caelum.vraptor.core.SafeResourceBundle;
-import br.com.caelum.vraptor.http.ParametersProvider;
 import br.com.caelum.vraptor.http.ParametersProviderTest;
-import br.com.caelum.vraptor.util.EmptyBundle;
-import br.com.caelum.vraptor4.controller.ControllerMethod;
-import br.com.caelum.vraptor4.controller.DefaultControllerMethod;
+import br.com.caelum.vraptor4.core.Localization;
+import br.com.caelum.vraptor4.core.SafeResourceBundle;
+import br.com.caelum.vraptor4.http.ParametersProvider;
+import br.com.caelum.vraptor4.http.iogi.InstantiatorWithErrors;
+import br.com.caelum.vraptor4.http.iogi.IogiParametersProvider;
+import br.com.caelum.vraptor4.http.iogi.VRaptorDependencyProvider;
+import br.com.caelum.vraptor4.http.iogi.VRaptorInstantiator;
+import br.com.caelum.vraptor4.http.iogi.VRaptorParameterNamesProvider;
+import br.com.caelum.vraptor4.util.EmptyBundle;
+import br.com.caelum.vraptor4x.controller.ControllerMethod;
+import br.com.caelum.vraptor4x.controller.DefaultControllerMethod;
 
 public class IogiParametersProviderTest extends ParametersProviderTest {
 	private @Mock Localization mockLocalization;

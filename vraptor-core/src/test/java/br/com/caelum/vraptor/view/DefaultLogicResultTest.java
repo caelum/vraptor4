@@ -43,23 +43,30 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import br.com.caelum.vraptor.Get;
-import br.com.caelum.vraptor.Post;
-import br.com.caelum.vraptor.Result;
-import br.com.caelum.vraptor.core.DefaultMethodInfo;
-import br.com.caelum.vraptor.core.MethodInfo;
-import br.com.caelum.vraptor.http.MutableRequest;
-import br.com.caelum.vraptor.http.MutableResponse;
-import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
-import br.com.caelum.vraptor.ioc.Container;
-import br.com.caelum.vraptor.proxy.JavassistProxifier;
-import br.com.caelum.vraptor.proxy.ObjenesisInstanceCreator;
-import br.com.caelum.vraptor.proxy.Proxifier;
-import br.com.caelum.vraptor.validator.Message;
-import br.com.caelum.vraptor.validator.ValidationException;
-import br.com.caelum.vraptor4.controller.ControllerMethod;
-import br.com.caelum.vraptor4.controller.DefaultControllerMethod;
-import br.com.caelum.vraptor4.http.route.Router;
+import br.com.caelum.vraptor4.Get;
+import br.com.caelum.vraptor4.Post;
+import br.com.caelum.vraptor4.Result;
+import br.com.caelum.vraptor4.core.DefaultMethodInfo;
+import br.com.caelum.vraptor4.core.MethodInfo;
+import br.com.caelum.vraptor4.http.MutableRequest;
+import br.com.caelum.vraptor4.http.MutableResponse;
+import br.com.caelum.vraptor4.interceptor.TypeNameExtractor;
+import br.com.caelum.vraptor4.ioc.Container;
+import br.com.caelum.vraptor4.proxy.JavassistProxifier;
+import br.com.caelum.vraptor4.proxy.ObjenesisInstanceCreator;
+import br.com.caelum.vraptor4.proxy.Proxifier;
+import br.com.caelum.vraptor4.validator.Message;
+import br.com.caelum.vraptor4.validator.ValidationException;
+import br.com.caelum.vraptor4.view.DefaultLogicResult;
+import br.com.caelum.vraptor4.view.DefaultPageResult;
+import br.com.caelum.vraptor4.view.FlashScope;
+import br.com.caelum.vraptor4.view.LogicResult;
+import br.com.caelum.vraptor4.view.PageResult;
+import br.com.caelum.vraptor4.view.PathResolver;
+import br.com.caelum.vraptor4.view.Results;
+import br.com.caelum.vraptor4x.controller.ControllerMethod;
+import br.com.caelum.vraptor4x.controller.DefaultControllerMethod;
+import br.com.caelum.vraptor4x.http.route.Router;
 
 public class DefaultLogicResultTest {
 

@@ -31,12 +31,17 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import br.com.caelum.vraptor.Validator;
-import br.com.caelum.vraptor.core.InterceptorStack;
-import br.com.caelum.vraptor.http.InvalidParameterException;
-import br.com.caelum.vraptor.http.MutableRequest;
-import br.com.caelum.vraptor.validator.I18nMessage;
-import br.com.caelum.vraptor4.controller.ControllerMethod;
+import br.com.caelum.vraptor4.Validator;
+import br.com.caelum.vraptor4.core.InterceptorStack;
+import br.com.caelum.vraptor4.http.InvalidParameterException;
+import br.com.caelum.vraptor4.http.MutableRequest;
+import br.com.caelum.vraptor4.interceptor.multipart.CommonsUploadMultipartInterceptor;
+import br.com.caelum.vraptor4.interceptor.multipart.DefaultMultipartConfig;
+import br.com.caelum.vraptor4.interceptor.multipart.MultipartConfig;
+import br.com.caelum.vraptor4.interceptor.multipart.ServletFileUploadCreator;
+import br.com.caelum.vraptor4.interceptor.multipart.UploadedFile;
+import br.com.caelum.vraptor4.validator.I18nMessage;
+import br.com.caelum.vraptor4x.controller.ControllerMethod;
 
 /**
  * Test class for uploading features using commons-fileupload.

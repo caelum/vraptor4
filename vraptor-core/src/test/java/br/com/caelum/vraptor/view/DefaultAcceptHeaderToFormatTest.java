@@ -21,6 +21,9 @@ import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import br.com.caelum.vraptor4.view.AcceptHeaderToFormat;
+import br.com.caelum.vraptor4.view.DefaultAcceptHeaderToFormat;
+
 public class DefaultAcceptHeaderToFormatTest {
 
 	private AcceptHeaderToFormat mimeTypeToFormat;

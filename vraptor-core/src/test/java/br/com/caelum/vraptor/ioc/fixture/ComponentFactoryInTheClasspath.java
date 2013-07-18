@@ -19,7 +19,7 @@ package br.com.caelum.vraptor.ioc.fixture;
 import javax.annotation.PreDestroy;
 import javax.enterprise.inject.Produces;
 
-import br.com.caelum.vraptor.ioc.ApplicationScoped;
+import br.com.caelum.vraptor4.ioc.ApplicationScoped;
 
 @ApplicationScoped
 public class ComponentFactoryInTheClasspath {

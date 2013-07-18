@@ -49,14 +49,15 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import br.com.caelum.vraptor.InterceptionException;
-import br.com.caelum.vraptor.Result;
-import br.com.caelum.vraptor.core.InterceptorStack;
-import br.com.caelum.vraptor.core.MethodInfo;
-import br.com.caelum.vraptor.interceptor.download.Download;
-import br.com.caelum.vraptor.interceptor.download.DownloadInterceptor;
-import br.com.caelum.vraptor4.controller.ControllerMethod;
-import br.com.caelum.vraptor4.controller.DefaultControllerMethod;
+import br.com.caelum.vraptor4.InterceptionException;
+import br.com.caelum.vraptor4.Result;
+import br.com.caelum.vraptor4.core.InterceptorStack;
+import br.com.caelum.vraptor4.core.MethodInfo;
+import br.com.caelum.vraptor4.interceptor.Interceptor;
+import br.com.caelum.vraptor4.interceptor.download.Download;
+import br.com.caelum.vraptor4.interceptor.download.DownloadInterceptor;
+import br.com.caelum.vraptor4x.controller.ControllerMethod;
+import br.com.caelum.vraptor4x.controller.DefaultControllerMethod;
 
 public class DownloadInterceptorTest {
 

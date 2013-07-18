@@ -1,7 +1,7 @@
 package br.com.caelum.vraptor.ioc.cdi;
 
-import static br.com.caelum.vraptor.config.BasicConfiguration.BASE_PACKAGES_PARAMETER_NAME;
-import static br.com.caelum.vraptor.config.BasicConfiguration.SCANNING_PARAM;
+import static br.com.caelum.vraptor4.config.BasicConfiguration.BASE_PACKAGES_PARAMETER_NAME;
+import static br.com.caelum.vraptor4.config.BasicConfiguration.SCANNING_PARAM;
 import static java.lang.Thread.currentThread;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -17,10 +17,10 @@ import javax.enterprise.inject.Produces;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletContext;
 
-import br.com.caelum.vraptor.http.MutableRequest;
-import br.com.caelum.vraptor.http.MutableResponse;
 import br.com.caelum.vraptor.test.HttpServletRequestMock;
 import br.com.caelum.vraptor.test.HttpSessionMock;
+import br.com.caelum.vraptor4.http.MutableRequest;
+import br.com.caelum.vraptor4.http.MutableResponse;
 
 @ApplicationScoped
 public class ServletContainerFactory {

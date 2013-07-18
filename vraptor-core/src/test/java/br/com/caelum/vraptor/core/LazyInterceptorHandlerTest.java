@@ -10,11 +10,13 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import br.com.caelum.vraptor.InterceptionException;
-import br.com.caelum.vraptor.Lazy;
-import br.com.caelum.vraptor.interceptor.Interceptor;
-import br.com.caelum.vraptor.ioc.Container;
-import br.com.caelum.vraptor4.controller.ControllerMethod;
+import br.com.caelum.vraptor4.InterceptionException;
+import br.com.caelum.vraptor4.Lazy;
+import br.com.caelum.vraptor4.core.InterceptorStack;
+import br.com.caelum.vraptor4.core.LazyInterceptorHandler;
+import br.com.caelum.vraptor4.interceptor.Interceptor;
+import br.com.caelum.vraptor4.ioc.Container;
+import br.com.caelum.vraptor4x.controller.ControllerMethod;
 
 public class LazyInterceptorHandlerTest {
 

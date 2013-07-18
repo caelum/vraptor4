@@ -27,6 +27,9 @@ import java.util.ResourceBundle;
 import org.junit.Before;
 import org.junit.Test;
 
+import br.com.caelum.vraptor4.converter.CharacterConverter;
+import br.com.caelum.vraptor4.converter.ConversionError;
+
 public class CharacterConverterTest {
 
 	private CharacterConverter converter;

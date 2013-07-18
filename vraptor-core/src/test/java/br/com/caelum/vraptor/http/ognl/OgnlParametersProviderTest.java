@@ -17,11 +17,14 @@
 
 package br.com.caelum.vraptor.http.ognl;
 
-import br.com.caelum.vraptor.http.ParametersProvider;
 import br.com.caelum.vraptor.http.ParametersProviderTest;
-import br.com.caelum.vraptor.proxy.JavassistProxifier;
-import br.com.caelum.vraptor.proxy.Proxifier;
-import br.com.caelum.vraptor.proxy.ReflectionInstanceCreator;
+import br.com.caelum.vraptor4.http.ParametersProvider;
+import br.com.caelum.vraptor4.http.ognl.EmptyElementsRemoval;
+import br.com.caelum.vraptor4.http.ognl.OgnlFacade;
+import br.com.caelum.vraptor4.http.ognl.OgnlParametersProvider;
+import br.com.caelum.vraptor4.proxy.JavassistProxifier;
+import br.com.caelum.vraptor4.proxy.Proxifier;
+import br.com.caelum.vraptor4.proxy.ReflectionInstanceCreator;
 
 public class OgnlParametersProviderTest extends ParametersProviderTest {
 

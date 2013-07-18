@@ -35,8 +35,9 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import br.com.caelum.vraptor.Converter;
-import br.com.caelum.vraptor.core.Converters;
+import br.com.caelum.vraptor4.Converter;
+import br.com.caelum.vraptor4.core.Converters;
+import br.com.caelum.vraptor4.http.ognl.VRaptorConvertersAdapter;
 
 public class VRaptorConvertersAdapterTest {
 

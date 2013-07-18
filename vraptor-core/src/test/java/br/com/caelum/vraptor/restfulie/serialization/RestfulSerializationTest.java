@@ -6,9 +6,11 @@ import static org.junit.Assert.assertThat;
 
 import org.junit.Test;
 
-import br.com.caelum.vraptor.restfulie.hypermedia.HypermediaResource;
-import br.com.caelum.vraptor.restfulie.relation.RelationBuilder;
-import br.com.caelum.vraptor.serialization.xstream.XStreamBuilderImpl;
+import br.com.caelum.vraptor4.restfulie.hypermedia.HypermediaResource;
+import br.com.caelum.vraptor4.restfulie.relation.RelationBuilder;
+import br.com.caelum.vraptor4.restfulie.serialization.LinkConverter;
+import br.com.caelum.vraptor4.restfulie.serialization.RestfulSerialization;
+import br.com.caelum.vraptor4.serialization.xstream.XStreamBuilderImpl;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.converters.Converter;

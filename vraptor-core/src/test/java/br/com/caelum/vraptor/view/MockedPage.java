@@ -18,11 +18,12 @@ package br.com.caelum.vraptor.view;
 
 import java.lang.reflect.Method;
 
-import br.com.caelum.vraptor.proxy.JavassistProxifier;
-import br.com.caelum.vraptor.proxy.MethodInvocation;
-import br.com.caelum.vraptor.proxy.ObjenesisInstanceCreator;
-import br.com.caelum.vraptor.proxy.Proxifier;
-import br.com.caelum.vraptor.proxy.SuperMethod;
+import br.com.caelum.vraptor4.proxy.JavassistProxifier;
+import br.com.caelum.vraptor4.proxy.MethodInvocation;
+import br.com.caelum.vraptor4.proxy.ObjenesisInstanceCreator;
+import br.com.caelum.vraptor4.proxy.Proxifier;
+import br.com.caelum.vraptor4.proxy.SuperMethod;
+import br.com.caelum.vraptor4.view.PageResult;
 
 public class MockedPage implements PageResult {
 

@@ -41,7 +41,9 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import br.com.caelum.vraptor.ioc.Container;
+import br.com.caelum.vraptor4.http.ognl.EmptyElementsRemoval;
+import br.com.caelum.vraptor4.http.ognl.GenericNullHandler;
+import br.com.caelum.vraptor4.ioc.Container;
 
 public class GenericNullHandlerTest {
 

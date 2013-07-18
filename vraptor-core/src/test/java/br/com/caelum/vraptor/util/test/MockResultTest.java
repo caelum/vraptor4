@@ -1,15 +1,17 @@
 package br.com.caelum.vraptor.util.test;
 
-import static br.com.caelum.vraptor.view.Results.http;
-import static br.com.caelum.vraptor.view.Results.json;
-import static br.com.caelum.vraptor.view.Results.logic;
-import static br.com.caelum.vraptor.view.Results.page;
-import static br.com.caelum.vraptor.view.Results.representation;
-import static br.com.caelum.vraptor.view.Results.status;
-import static br.com.caelum.vraptor.view.Results.xml;
+import static br.com.caelum.vraptor4.view.Results.http;
+import static br.com.caelum.vraptor4.view.Results.json;
+import static br.com.caelum.vraptor4.view.Results.logic;
+import static br.com.caelum.vraptor4.view.Results.page;
+import static br.com.caelum.vraptor4.view.Results.representation;
+import static br.com.caelum.vraptor4.view.Results.status;
+import static br.com.caelum.vraptor4.view.Results.xml;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import br.com.caelum.vraptor4.util.test.MockResult;
 
 public class MockResultTest {
 

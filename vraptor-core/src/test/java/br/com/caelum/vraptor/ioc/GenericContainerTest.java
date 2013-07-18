@@ -19,8 +19,8 @@ package br.com.caelum.vraptor.ioc;
 
 import static br.com.caelum.vraptor.VRaptorMatchers.canHandle;
 import static br.com.caelum.vraptor.VRaptorMatchers.hasOneCopyOf;
-import static br.com.caelum.vraptor.config.BasicConfiguration.BASE_PACKAGES_PARAMETER_NAME;
-import static br.com.caelum.vraptor.config.BasicConfiguration.SCANNING_PARAM;
+import static br.com.caelum.vraptor4.config.BasicConfiguration.BASE_PACKAGES_PARAMETER_NAME;
+import static br.com.caelum.vraptor4.config.BasicConfiguration.SCANNING_PARAM;
 import static java.lang.Thread.currentThread;
 import static java.util.Arrays.asList;
 import static org.hamcrest.Matchers.equalTo;
@@ -55,17 +55,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import br.com.caelum.vraptor.Converter;
-import br.com.caelum.vraptor.converter.jodatime.LocalDateConverter;
-import br.com.caelum.vraptor.converter.jodatime.LocalTimeConverter;
-import br.com.caelum.vraptor.core.BaseComponents;
-import br.com.caelum.vraptor.core.Converters;
-import br.com.caelum.vraptor.core.Execution;
-import br.com.caelum.vraptor.core.MethodInfo;
-import br.com.caelum.vraptor.core.RequestInfo;
-import br.com.caelum.vraptor.deserialization.Deserializer;
-import br.com.caelum.vraptor.deserialization.Deserializers;
-import br.com.caelum.vraptor.interceptor.InterceptorRegistry;
 import br.com.caelum.vraptor.ioc.cdi.Code;
 import br.com.caelum.vraptor.ioc.fixture.ComponentFactoryInTheClasspath;
 import br.com.caelum.vraptor.ioc.fixture.ComponentFactoryInTheClasspath.Provided;
@@ -75,9 +64,25 @@ import br.com.caelum.vraptor.ioc.fixture.CustomComponentInTheClasspath;
 import br.com.caelum.vraptor.ioc.fixture.CustomComponentWithLifecycleInTheClasspath;
 import br.com.caelum.vraptor.ioc.fixture.DependentOnSomethingFromComponentFactory;
 import br.com.caelum.vraptor.ioc.fixture.InterceptorInTheClasspath;
-import br.com.caelum.vraptor4.controller.ControllerMethod;
-import br.com.caelum.vraptor4.http.route.Route;
-import br.com.caelum.vraptor4.http.route.Router;
+import br.com.caelum.vraptor4.Converter;
+import br.com.caelum.vraptor4.converter.jodatime.LocalDateConverter;
+import br.com.caelum.vraptor4.converter.jodatime.LocalTimeConverter;
+import br.com.caelum.vraptor4.core.BaseComponents;
+import br.com.caelum.vraptor4.core.Converters;
+import br.com.caelum.vraptor4.core.Execution;
+import br.com.caelum.vraptor4.core.MethodInfo;
+import br.com.caelum.vraptor4.core.RequestInfo;
+import br.com.caelum.vraptor4.deserialization.Deserializer;
+import br.com.caelum.vraptor4.deserialization.Deserializers;
+import br.com.caelum.vraptor4.interceptor.InterceptorRegistry;
+import br.com.caelum.vraptor4.ioc.ApplicationScoped;
+import br.com.caelum.vraptor4.ioc.Container;
+import br.com.caelum.vraptor4.ioc.ContainerProvider;
+import br.com.caelum.vraptor4.ioc.PrototypeScoped;
+import br.com.caelum.vraptor4.ioc.RequestScoped;
+import br.com.caelum.vraptor4x.controller.ControllerMethod;
+import br.com.caelum.vraptor4x.http.route.Route;
+import br.com.caelum.vraptor4x.http.route.Router;
 
 /**
  * Acceptance test that checks if the container is capable of giving all

@@ -11,11 +11,9 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
-import br.com.caelum.vraptor.VRaptorException;
-import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.interceptor.InstanceContainer;
-import br.com.caelum.vraptor4.controller.ControllerInstance;
-import br.com.caelum.vraptor4.controller.ControllerMethod;
+import br.com.caelum.vraptor4.VRaptorException;
+import br.com.caelum.vraptor4.core.InterceptorStack;
 import br.com.caelum.vraptor4.interceptor.example.AcceptsInterceptor;
 import br.com.caelum.vraptor4.interceptor.example.AcceptsInterceptorWithStackAsParameter;
 import br.com.caelum.vraptor4.interceptor.example.AcceptsWithoutArgsInterceptor;
@@ -30,6 +28,12 @@ import br.com.caelum.vraptor4.interceptor.example.NonBooleanAcceptsInterceptor;
 import br.com.caelum.vraptor4.interceptor.example.VoidAcceptsInterceptor;
 import br.com.caelum.vraptor4.interceptor.example.WithoutAroundInterceptor;
 import br.com.caelum.vraptor4.interceptor.example.WithoutAroundInvokeInterceptor;
+import br.com.caelum.vraptor4x.controller.ControllerInstance;
+import br.com.caelum.vraptor4x.controller.ControllerMethod;
+import br.com.caelum.vraptor4x.interceptor.AspectStyleInterceptorHandler;
+import br.com.caelum.vraptor4x.interceptor.SimpleInterceptorStack;
+import br.com.caelum.vraptor4x.interceptor.StepInvoker;
+import br.com.caelum.vraptor4x.interceptor.WithAnnotationAcceptor;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;

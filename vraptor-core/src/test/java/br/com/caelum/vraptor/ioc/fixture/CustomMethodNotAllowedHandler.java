@@ -2,10 +2,10 @@ package br.com.caelum.vraptor.ioc.fixture;
 
 import java.util.Set;
 
-import br.com.caelum.vraptor.core.RequestInfo;
-import br.com.caelum.vraptor.ioc.ApplicationScoped;
-import br.com.caelum.vraptor4.controller.HttpMethod;
-import br.com.caelum.vraptor4.controller.MethodNotAllowedHandler;
+import br.com.caelum.vraptor4.core.RequestInfo;
+import br.com.caelum.vraptor4.ioc.ApplicationScoped;
+import br.com.caelum.vraptor4x.controller.HttpMethod;
+import br.com.caelum.vraptor4x.controller.MethodNotAllowedHandler;
 
 @ApplicationScoped
 public class CustomMethodNotAllowedHandler implements MethodNotAllowedHandler {

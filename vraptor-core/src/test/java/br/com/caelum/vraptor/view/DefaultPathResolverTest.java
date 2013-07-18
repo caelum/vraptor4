@@ -26,9 +26,10 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import br.com.caelum.vraptor.http.FormatResolver;
-import br.com.caelum.vraptor4.controller.BeanClass;
-import br.com.caelum.vraptor4.controller.ControllerMethod;
+import br.com.caelum.vraptor4.http.FormatResolver;
+import br.com.caelum.vraptor4.view.DefaultPathResolver;
+import br.com.caelum.vraptor4x.controller.BeanClass;
+import br.com.caelum.vraptor4x.controller.ControllerMethod;
 
 public class DefaultPathResolverTest {
 

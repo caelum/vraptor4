@@ -15,8 +15,9 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
-import br.com.caelum.vraptor.serialization.NullProxyInitializer;
+import br.com.caelum.vraptor4.interceptor.TypeNameExtractor;
+import br.com.caelum.vraptor4.serialization.NullProxyInitializer;
+import br.com.caelum.vraptor4.util.extjs.DefaultExtJson;
 
 public class DefaultExtJsonTest {
 

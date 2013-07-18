@@ -1,10 +1,10 @@
 package br.com.caelum.vraptor4.interceptor.example;
 
-import br.com.caelum.vraptor.Intercepts;
-import br.com.caelum.vraptor4.AfterCall;
-import br.com.caelum.vraptor4.AroundCall;
-import br.com.caelum.vraptor4.BeforeCall;
-import br.com.caelum.vraptor4.interceptor.SimpleInterceptorStack;
+import br.com.caelum.vraptor4.Intercepts;
+import br.com.caelum.vraptor4x.AfterCall;
+import br.com.caelum.vraptor4x.AroundCall;
+import br.com.caelum.vraptor4x.BeforeCall;
+import br.com.caelum.vraptor4x.interceptor.SimpleInterceptorStack;
 
 @Intercepts
 public class InterceptorWithInheritance extends BaseInterceptor{

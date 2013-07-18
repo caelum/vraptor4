@@ -39,9 +39,11 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import br.com.caelum.vraptor.VRaptorException;
-import br.com.caelum.vraptor.proxy.JavassistProxifier;
-import br.com.caelum.vraptor.proxy.ReflectionInstanceCreator;
+import br.com.caelum.vraptor4.VRaptorException;
+import br.com.caelum.vraptor4.http.ognl.EmptyElementsRemoval;
+import br.com.caelum.vraptor4.http.ognl.ListNullHandler;
+import br.com.caelum.vraptor4.proxy.JavassistProxifier;
+import br.com.caelum.vraptor4.proxy.ReflectionInstanceCreator;
 
 public class ListNullHandlerTest {
 

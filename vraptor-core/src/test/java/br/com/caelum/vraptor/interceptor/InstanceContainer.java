@@ -5,8 +5,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
-import br.com.caelum.vraptor.VRaptorException;
-import br.com.caelum.vraptor.ioc.Container;
+import br.com.caelum.vraptor4.VRaptorException;
+import br.com.caelum.vraptor4.ioc.Container;
 
 /**
  * A simple container implementation used for tests

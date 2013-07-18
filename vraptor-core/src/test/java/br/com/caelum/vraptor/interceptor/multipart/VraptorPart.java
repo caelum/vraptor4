@@ -1,6 +1,6 @@
 package br.com.caelum.vraptor.interceptor.multipart;
 
-import static br.com.caelum.vraptor.interceptor.multipart.Servlet3MultipartInterceptor.CONTENT_DISPOSITION_KEY;
+import static br.com.caelum.vraptor4.interceptor.multipart.Servlet3MultipartInterceptor.CONTENT_DISPOSITION_KEY;
 import static java.util.Arrays.asList;
 
 import java.io.ByteArrayInputStream;

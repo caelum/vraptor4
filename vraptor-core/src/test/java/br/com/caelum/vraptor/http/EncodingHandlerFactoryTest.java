@@ -1,6 +1,6 @@
 package br.com.caelum.vraptor.http;
 
-import static br.com.caelum.vraptor.config.BasicConfiguration.ENCODING;
+import static br.com.caelum.vraptor4.config.BasicConfiguration.ENCODING;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
@@ -11,6 +11,10 @@ import javax.servlet.ServletContext;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import br.com.caelum.vraptor4.http.EncodingHandlerFactory;
+import br.com.caelum.vraptor4.http.NullEncodingHandler;
+import br.com.caelum.vraptor4.http.WebXmlEncodingHandler;
 
 public class EncodingHandlerFactoryTest {
 

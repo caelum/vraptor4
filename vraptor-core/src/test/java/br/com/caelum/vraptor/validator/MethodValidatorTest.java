@@ -23,16 +23,20 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import br.com.caelum.vraptor.Validator;
-import br.com.caelum.vraptor.core.DefaultMethodInfo;
-import br.com.caelum.vraptor.core.InterceptorStack;
-import br.com.caelum.vraptor.core.Localization;
-import br.com.caelum.vraptor.core.MethodInfo;
-import br.com.caelum.vraptor.http.ParameterNameProvider;
-import br.com.caelum.vraptor.http.ParanamerNameProvider;
-import br.com.caelum.vraptor.util.test.MockValidator;
-import br.com.caelum.vraptor4.controller.ControllerMethod;
-import br.com.caelum.vraptor4.controller.DefaultControllerMethod;
+import br.com.caelum.vraptor4.Validator;
+import br.com.caelum.vraptor4.core.DefaultMethodInfo;
+import br.com.caelum.vraptor4.core.InterceptorStack;
+import br.com.caelum.vraptor4.core.Localization;
+import br.com.caelum.vraptor4.core.MethodInfo;
+import br.com.caelum.vraptor4.http.ParameterNameProvider;
+import br.com.caelum.vraptor4.http.ParanamerNameProvider;
+import br.com.caelum.vraptor4.util.test.MockValidator;
+import br.com.caelum.vraptor4.validator.MessageInterpolatorFactory;
+import br.com.caelum.vraptor4.validator.MethodValidatorFactoryCreator;
+import br.com.caelum.vraptor4.validator.MethodValidatorInterceptor;
+import br.com.caelum.vraptor4.validator.ValidatorFactoryCreator;
+import br.com.caelum.vraptor4x.controller.ControllerMethod;
+import br.com.caelum.vraptor4x.controller.DefaultControllerMethod;
 
 /**
  * Test method validator feature.

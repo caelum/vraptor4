@@ -17,7 +17,7 @@
 
 package br.com.caelum.vraptor.interceptor;
 
-import static br.com.caelum.vraptor.view.Results.nothing;
+import static br.com.caelum.vraptor4.view.Results.nothing;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
@@ -37,14 +37,15 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import br.com.caelum.vraptor.InterceptionException;
-import br.com.caelum.vraptor.Validator;
-import br.com.caelum.vraptor.core.InterceptorStack;
-import br.com.caelum.vraptor.core.MethodInfo;
-import br.com.caelum.vraptor.validator.Message;
-import br.com.caelum.vraptor.validator.ValidationException;
-import br.com.caelum.vraptor4.controller.ControllerMethod;
-import br.com.caelum.vraptor4.controller.DefaultControllerMethod;
+import br.com.caelum.vraptor4.InterceptionException;
+import br.com.caelum.vraptor4.Validator;
+import br.com.caelum.vraptor4.core.InterceptorStack;
+import br.com.caelum.vraptor4.core.MethodInfo;
+import br.com.caelum.vraptor4.interceptor.ExecuteMethodInterceptor;
+import br.com.caelum.vraptor4.validator.Message;
+import br.com.caelum.vraptor4.validator.ValidationException;
+import br.com.caelum.vraptor4x.controller.ControllerMethod;
+import br.com.caelum.vraptor4x.controller.DefaultControllerMethod;
 
 public class ExecuteMethodInterceptorTest {
 

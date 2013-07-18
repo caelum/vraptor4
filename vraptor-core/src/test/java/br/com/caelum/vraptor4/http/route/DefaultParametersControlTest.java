@@ -33,9 +33,13 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import br.com.caelum.vraptor.TwoWayConverter;
-import br.com.caelum.vraptor.core.Converters;
-import br.com.caelum.vraptor.http.MutableRequest;
+import br.com.caelum.vraptor4.TwoWayConverter;
+import br.com.caelum.vraptor4.core.Converters;
+import br.com.caelum.vraptor4.http.MutableRequest;
+import br.com.caelum.vraptor4x.http.route.DefaultParametersControl;
+import br.com.caelum.vraptor4x.http.route.Evaluator;
+import br.com.caelum.vraptor4x.http.route.JavaEvaluator;
+import br.com.caelum.vraptor4x.http.route.ParametersControl;
 
 import com.google.common.collect.ImmutableMap;
 

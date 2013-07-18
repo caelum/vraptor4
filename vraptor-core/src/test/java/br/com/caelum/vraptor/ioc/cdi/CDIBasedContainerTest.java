@@ -32,19 +32,20 @@ import org.junit.Test;
 
 import br.com.caelum.cdi.component.CDIControllerComponent;
 import br.com.caelum.cdi.component.CDISessionComponent;
-import br.com.caelum.vraptor.core.BaseComponents;
-import br.com.caelum.vraptor.core.RequestInfo;
-import br.com.caelum.vraptor.ioc.Container;
-import br.com.caelum.vraptor.ioc.ContainerProvider;
 import br.com.caelum.vraptor.ioc.GenericContainerTest;
 import br.com.caelum.vraptor.ioc.WhatToDo;
 import br.com.caelum.vraptor.ioc.fixture.ComponentFactoryInTheClasspath;
 import br.com.caelum.vraptor.ioc.fixture.CustomComponentWithLifecycleInTheClasspath;
-import br.com.caelum.vraptor.validator.MessageInterpolatorFactory;
-import br.com.caelum.vraptor.validator.MethodValidatorFactoryCreator;
-import br.com.caelum.vraptor.validator.ValidatorCreator;
-import br.com.caelum.vraptor.validator.ValidatorFactoryCreator;
-import br.com.caelum.vraptor4.interceptor.PackagesAcceptor;
+import br.com.caelum.vraptor4.core.BaseComponents;
+import br.com.caelum.vraptor4.core.RequestInfo;
+import br.com.caelum.vraptor4.ioc.Container;
+import br.com.caelum.vraptor4.ioc.ContainerProvider;
+import br.com.caelum.vraptor4.ioc.cdi.CDIProvider;
+import br.com.caelum.vraptor4.validator.MessageInterpolatorFactory;
+import br.com.caelum.vraptor4.validator.MethodValidatorFactoryCreator;
+import br.com.caelum.vraptor4.validator.ValidatorCreator;
+import br.com.caelum.vraptor4.validator.ValidatorFactoryCreator;
+import br.com.caelum.vraptor4x.interceptor.PackagesAcceptor;
 
 public class CDIBasedContainerTest extends GenericContainerTest {
 

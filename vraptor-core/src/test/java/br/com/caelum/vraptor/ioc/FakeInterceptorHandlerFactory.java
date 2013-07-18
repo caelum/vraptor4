@@ -1,7 +1,8 @@
 package br.com.caelum.vraptor.ioc;
 
-import br.com.caelum.vraptor.core.InterceptorHandler;
-import br.com.caelum.vraptor.core.InterceptorHandlerFactory;
+import br.com.caelum.vraptor4.core.InterceptorHandler;
+import br.com.caelum.vraptor4.core.InterceptorHandlerFactory;
+import br.com.caelum.vraptor4.ioc.ApplicationScoped;
 
 @ApplicationScoped
 public class FakeInterceptorHandlerFactory implements InterceptorHandlerFactory{

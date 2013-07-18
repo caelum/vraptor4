@@ -11,7 +11,7 @@ import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor4.BeforeCall;
 import br.com.caelum.vraptor4.controller.ControllerMethod;
 
-@Intercepts
+@Intercepts(after=ParametersInstantiatorInterceptor.class)
 public class ReturnParamInterceptor {
 
 	@Inject private MethodInfo info;
@@ -21,7 +21,6 @@ public class ReturnParamInterceptor {
 
 	@BeforeCall
 	public void intercept() {
-
 		Object[] parameters = info.getParameters();
 		Method method = cmethod.getMethod();
 		String[] names = nameProvider.parameterNamesFor(method);

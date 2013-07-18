@@ -37,7 +37,6 @@ import javax.servlet.http.HttpServletRequest;
 import org.junit.Before;
 import org.junit.Test;
 
-import br.com.caelum.vraptor.interceptor.VRaptorMatchers;
 import br.com.caelum.vraptor4.Controller;
 import br.com.caelum.vraptor4.Path;
 import br.com.caelum.vraptor4.core.Converters;
@@ -55,6 +54,7 @@ import br.com.caelum.vraptor4.http.route.Route;
 import br.com.caelum.vraptor4.http.route.RoutesParser;
 import br.com.caelum.vraptor4.http.route.Rules;
 import br.com.caelum.vraptor4.interceptor.DefaultTypeNameExtractor;
+import br.com.caelum.vraptor4.interceptor.VRaptorMatchers;
 import br.com.caelum.vraptor4.proxy.JavassistProxifier;
 import br.com.caelum.vraptor4.proxy.ObjenesisInstanceCreator;
 import br.com.caelum.vraptor4.proxy.Proxifier;

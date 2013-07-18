@@ -11,8 +11,6 @@ import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor4.restfulie.controller.BeanClass;
 import br.com.caelum.vraptor4.restfulie.controller.ControllerInstance;
-import br.com.caelum.vraptor4x.interceptor.AcceptsForPackages;
-import br.com.caelum.vraptor4x.interceptor.PackagesAcceptor;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;

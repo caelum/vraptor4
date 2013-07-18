@@ -1,4 +1,4 @@
-package br.com.caelum.vraptor4x.interceptor;
+package br.com.caelum.vraptor4.interceptor;
 
 /**
  * Used to execute any step inside the AspectStyle interceptor.

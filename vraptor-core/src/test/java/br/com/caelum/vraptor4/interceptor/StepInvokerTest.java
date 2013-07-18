@@ -7,7 +7,6 @@ import br.com.caelum.vraptor4.AroundCall;
 import br.com.caelum.vraptor4.interceptor.example.ExampleOfSimpleStackInterceptor;
 import br.com.caelum.vraptor4.interceptor.example.InterceptorWithInheritance;
 import br.com.caelum.vraptor4.interceptor.example.WeldProxy$$$StyleInterceptor;
-import br.com.caelum.vraptor4x.interceptor.StepInvoker;
 
 import static org.junit.Assert.assertNotNull;
 

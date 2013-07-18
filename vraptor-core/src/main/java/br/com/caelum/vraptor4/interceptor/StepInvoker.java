@@ -1,4 +1,4 @@
-package br.com.caelum.vraptor4x.interceptor;
+package br.com.caelum.vraptor4.interceptor;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;

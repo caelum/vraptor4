@@ -11,9 +11,6 @@ import br.com.caelum.vraptor4.interceptor.example.MethodLevelAcceptsController;
 import br.com.caelum.vraptor4.restfulie.controller.ControllerInstance;
 import br.com.caelum.vraptor4.restfulie.controller.ControllerMethod;
 import br.com.caelum.vraptor4.restfulie.controller.DefaultControllerInstance;
-import br.com.caelum.vraptor4x.interceptor.CustomAcceptsVerifier;
-import br.com.caelum.vraptor4x.interceptor.PackagesAcceptor;
-import br.com.caelum.vraptor4x.interceptor.WithAnnotationAcceptor;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;

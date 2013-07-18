@@ -15,9 +15,9 @@ import br.com.caelum.vraptor4.core.DefaultInterceptorHandlerFactory;
 import br.com.caelum.vraptor4.core.InterceptorHandler;
 import br.com.caelum.vraptor4.core.LazyInterceptorHandler;
 import br.com.caelum.vraptor4.core.ToInstantiateInterceptorHandler;
+import br.com.caelum.vraptor4.interceptor.AspectStyleInterceptorHandler;
 import br.com.caelum.vraptor4.interceptor.Interceptor;
 import br.com.caelum.vraptor4.ioc.Container;
-import br.com.caelum.vraptor4x.interceptor.AspectStyleInterceptorHandler;
 
 public class DefaultInterceptorHandlerFactoryTest {
 

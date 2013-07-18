@@ -38,6 +38,7 @@ import br.com.caelum.vraptor.ioc.fixture.ComponentFactoryInTheClasspath;
 import br.com.caelum.vraptor.ioc.fixture.CustomComponentWithLifecycleInTheClasspath;
 import br.com.caelum.vraptor4.core.BaseComponents;
 import br.com.caelum.vraptor4.core.RequestInfo;
+import br.com.caelum.vraptor4.interceptor.PackagesAcceptor;
 import br.com.caelum.vraptor4.ioc.Container;
 import br.com.caelum.vraptor4.ioc.ContainerProvider;
 import br.com.caelum.vraptor4.ioc.cdi.CDIProvider;
@@ -45,7 +46,6 @@ import br.com.caelum.vraptor4.validator.MessageInterpolatorFactory;
 import br.com.caelum.vraptor4.validator.MethodValidatorFactoryCreator;
 import br.com.caelum.vraptor4.validator.ValidatorCreator;
 import br.com.caelum.vraptor4.validator.ValidatorFactoryCreator;
-import br.com.caelum.vraptor4x.interceptor.PackagesAcceptor;
 
 public class CDIBasedContainerTest extends GenericContainerTest {
 

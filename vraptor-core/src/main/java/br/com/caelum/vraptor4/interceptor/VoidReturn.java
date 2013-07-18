@@ -1,4 +1,4 @@
-package br.com.caelum.vraptor4x.interceptor;
+package br.com.caelum.vraptor4.interceptor;
 
 /**
  * Just to mark empty return from interceptor methods

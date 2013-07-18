@@ -1,4 +1,4 @@
-package br.com.caelum.vraptor4x.interceptor;
+package br.com.caelum.vraptor4.interceptor;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

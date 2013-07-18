@@ -30,10 +30,6 @@ import br.com.caelum.vraptor4.interceptor.example.WithoutAroundInterceptor;
 import br.com.caelum.vraptor4.interceptor.example.WithoutAroundInvokeInterceptor;
 import br.com.caelum.vraptor4.restfulie.controller.ControllerInstance;
 import br.com.caelum.vraptor4.restfulie.controller.ControllerMethod;
-import br.com.caelum.vraptor4x.interceptor.AspectStyleInterceptorHandler;
-import br.com.caelum.vraptor4x.interceptor.SimpleInterceptorStack;
-import br.com.caelum.vraptor4x.interceptor.StepInvoker;
-import br.com.caelum.vraptor4x.interceptor.WithAnnotationAcceptor;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;

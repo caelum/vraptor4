@@ -42,37 +42,37 @@ public class ServletContainerFactory {
 
 	public FilterChain getFilterChain() {
 		return mock(FilterChain.class);
-	}	
-	
-	
+	}
+
+
 	@Produces
 	@Default
 	public ServletContext createServletContext() {
 		ServletContext context = mock(ServletContext.class, "servlet context");
 
 		when(context.getMajorVersion()).thenReturn(3);
-		when(context.getInitParameter(BASE_PACKAGES_PARAMETER_NAME)).thenReturn("br.com.caelum.vraptor.ioc.fixture");
+		when(context.getInitParameter(BASE_PACKAGES_PARAMETER_NAME)).thenReturn("br.com.caelum.vraptor4.ioc.fixture");
 		when(context.getRealPath("/WEB-INF/classes")).thenReturn(getClassDir());
 
 		when(context.getClassLoader()).thenReturn(
-				new URLClassLoader(new URL[] {Object.class.getResource("/test-fixture.jar")}, 
+				new URLClassLoader(new URL[] {Object.class.getResource("/test-fixture.jar")},
 						currentThread().getContextClassLoader()));
 
         //allowing(context).getInitParameter(ENCODING);
         //allowing(context).setAttribute(with(any(String.class)), with(any(Object.class)));
-            
-        when(context.getInitParameter(SCANNING_PARAM)).thenReturn("enabled");        
+
+        when(context.getInitParameter(SCANNING_PARAM)).thenReturn("enabled");
 		configureExpectations(context);
 		return context;
-	}	
+	}
 
     private void configureExpectations(ServletContext context) {
     	Enumeration<String> emptyEnumeration = Collections.enumeration(Collections.<String>emptyList());
     	when(context.getInitParameterNames()).thenReturn(emptyEnumeration);
     	when(context.getAttributeNames()).thenReturn(emptyEnumeration);
    }
-    
+
 	private String getClassDir() {
-		return getClass().getResource("/br/com/caelum/vraptor/test").getFile();
-	}    
+		return getClass().getResource("/br/com/caelum/vraptor4/test").getFile();
+	}
 }

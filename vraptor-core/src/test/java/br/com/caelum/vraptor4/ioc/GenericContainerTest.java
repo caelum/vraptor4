@@ -68,20 +68,15 @@ import br.com.caelum.vraptor4.deserialization.Deserializers;
 import br.com.caelum.vraptor4.http.route.Route;
 import br.com.caelum.vraptor4.http.route.Router;
 import br.com.caelum.vraptor4.interceptor.InterceptorRegistry;
-import br.com.caelum.vraptor4.ioc.ApplicationScoped;
-import br.com.caelum.vraptor4.ioc.Container;
-import br.com.caelum.vraptor4.ioc.ContainerProvider;
-import br.com.caelum.vraptor4.ioc.PrototypeScoped;
-import br.com.caelum.vraptor4.ioc.RequestScoped;
 import br.com.caelum.vraptor4.ioc.cdi.Code;
 import br.com.caelum.vraptor4.ioc.fixture.ComponentFactoryInTheClasspath;
+import br.com.caelum.vraptor4.ioc.fixture.ComponentFactoryInTheClasspath.Provided;
 import br.com.caelum.vraptor4.ioc.fixture.ControllerInTheClasspath;
 import br.com.caelum.vraptor4.ioc.fixture.ConverterInTheClasspath;
 import br.com.caelum.vraptor4.ioc.fixture.CustomComponentInTheClasspath;
 import br.com.caelum.vraptor4.ioc.fixture.CustomComponentWithLifecycleInTheClasspath;
 import br.com.caelum.vraptor4.ioc.fixture.DependentOnSomethingFromComponentFactory;
 import br.com.caelum.vraptor4.ioc.fixture.InterceptorInTheClasspath;
-import br.com.caelum.vraptor4.ioc.fixture.ComponentFactoryInTheClasspath.Provided;
 import br.com.caelum.vraptor4.restfulie.controller.ControllerMethod;
 
 /**
@@ -94,7 +89,7 @@ public abstract class GenericContainerTest {
 
 	protected ContainerProvider provider;
 	protected ServletContext context;
-	private static final String PACKAGENAME = "br.com.caelum.vraptor.ioc.fixture";
+	private static final String PACKAGENAME = "br.com.caelum.vraptor4.ioc.fixture";
 
 	protected abstract ContainerProvider getProvider();
 	protected abstract <T> T executeInsideRequest(WhatToDo<T> execution);
@@ -446,7 +441,7 @@ public abstract class GenericContainerTest {
 	}
 
 	protected String getClassDir() {
-		return getClass().getResource("/br/com/caelum/vraptor/test").getFile();
+		return getClass().getResource("/br/com/caelum/vraptor4/test").getFile();
 	}
 
 	protected <T> T instanceFor(final Class<T> component, Container container) {

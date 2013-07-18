@@ -41,7 +41,7 @@ import br.com.caelum.vraptor4.restfulie.controller.ControllerMethod;
 @Intercepts
 public class FlashInterceptor implements Interceptor {
 
-	final static String FLASH_INCLUDED_PARAMETERS = "br.com.caelum.vraptor.flash.parameters";
+	final static String FLASH_INCLUDED_PARAMETERS = "br.com.caelum.vraptor4.flash.parameters";
 	private static final Logger LOGGER = LoggerFactory.getLogger(FlashInterceptor.class);
 
 	private HttpSession session;
@@ -52,14 +52,14 @@ public class FlashInterceptor implements Interceptor {
 	@Deprecated
 	public FlashInterceptor() {
 	}
-	
+
 	@Inject
 	public FlashInterceptor(HttpSession session, Result result, MutableResponse response) {
 		this.session = session;
 		this.result = result;
 		this.response = response;
 	}
-	
+
 	@Override
 	public boolean accepts(ControllerMethod method) {
 		return true;

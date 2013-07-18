@@ -27,15 +27,14 @@ import org.slf4j.LoggerFactory;
 import br.com.caelum.vraptor4.InterceptionException;
 import br.com.caelum.vraptor4.interceptor.ForwardToDefaultViewInterceptor;
 import br.com.caelum.vraptor4.interceptor.Interceptor;
-import br.com.caelum.vraptor4.ioc.PrototypeScoped;
 import br.com.caelum.vraptor4.ioc.RequestScoped;
 import br.com.caelum.vraptor4.restfulie.controller.ControllerMethod;
 
 /**
  * Default implementation of a interceptor stack.
- * 
+ *
  * @author guilherme silveira
- * 
+ *
  */
 @RequestScoped
 public class DefaultInterceptorStack implements InterceptorStack {
@@ -43,7 +42,7 @@ public class DefaultInterceptorStack implements InterceptorStack {
 	private static final Logger logger = LoggerFactory
 			.getLogger(DefaultInterceptorStack.class);
 
-	private LinkedList<InterceptorHandler> interceptors = new LinkedList<InterceptorHandler>();
+	private final LinkedList<InterceptorHandler> interceptors = new LinkedList<InterceptorHandler>();
 	private InterceptorHandlerFactory handlerFactory;
 
 
@@ -75,7 +74,7 @@ public class DefaultInterceptorStack implements InterceptorStack {
 	// XXX this method will be removed soon
 	public void addAsNext(Class<? extends Interceptor> type) {
 		if (!type.getPackage().getName()
-				.startsWith("br.com.caelum.vraptor.interceptor")
+				.startsWith("br.com.caelum.vraptor4.interceptor")
 				&& !type.equals(ForwardToDefaultViewInterceptor.class)) {
 			this.interceptors.addFirst(handlerFactory.handlerFor(type));
 		}

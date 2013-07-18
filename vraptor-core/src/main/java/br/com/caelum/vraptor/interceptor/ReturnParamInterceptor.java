@@ -1,5 +1,7 @@
 package br.com.caelum.vraptor.interceptor;
 
+import java.lang.reflect.Method;
+
 import javax.inject.Inject;
 
 import br.com.caelum.vraptor.Intercepts;
@@ -20,10 +22,11 @@ public class ReturnParamInterceptor {
 	@Inject private ParameterNameProvider nameProvider;
 
 	@BeforeCall
-	public void intercept(ControllerMethod method) {
+	public void intercept(ControllerMethod cmethod) {
 
 		Object[] parameters = info.getParameters();
-		String[] names = nameProvider.parameterNamesFor(method.getMethod());
+		Method method = cmethod.getMethod();
+		String[] names = nameProvider.parameterNamesFor(method);
 
 		for(int i=0; i< names.length; i++) {
 			result.include(names[i], parameters[i]);

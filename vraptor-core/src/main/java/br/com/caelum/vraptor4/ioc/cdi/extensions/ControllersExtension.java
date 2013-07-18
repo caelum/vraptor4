@@ -1,4 +1,4 @@
-package br.com.caelum.vraptor4x.extensions;
+package br.com.caelum.vraptor4.ioc.cdi.extensions;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Modifier;

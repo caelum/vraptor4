@@ -1,4 +1,4 @@
-package br.com.caelum.vraptor4x.extensions;
+package br.com.caelum.vraptor4.ioc.cdi.extensions;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Alternative;

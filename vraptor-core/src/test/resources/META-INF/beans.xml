@@ -6,7 +6,6 @@
          version="1.1" bean-discovery-mode="all">
          
     <scan>
-        <exclude name="br.com.caelum.vraptor.**"></exclude>
         <exclude name="br.com.caelum.vraptor4.**"></exclude>
     </scan>    
 

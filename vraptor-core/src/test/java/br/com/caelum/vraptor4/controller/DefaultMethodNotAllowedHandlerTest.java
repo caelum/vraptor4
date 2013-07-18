@@ -15,10 +15,12 @@ import javax.servlet.http.HttpServletResponse;
 import org.junit.Before;
 import org.junit.Test;
 
-import br.com.caelum.vraptor.InterceptionException;
-import br.com.caelum.vraptor.core.RequestInfo;
-import br.com.caelum.vraptor.http.MutableRequest;
-import br.com.caelum.vraptor.http.MutableResponse;
+import br.com.caelum.vraptor4.InterceptionException;
+import br.com.caelum.vraptor4.core.RequestInfo;
+import br.com.caelum.vraptor4.http.MutableRequest;
+import br.com.caelum.vraptor4.http.MutableResponse;
+import br.com.caelum.vraptor4.restfulie.controller.DefaultMethodNotAllowedHandler;
+import br.com.caelum.vraptor4.restfulie.controller.HttpMethod;
 
 public class DefaultMethodNotAllowedHandlerTest {
 

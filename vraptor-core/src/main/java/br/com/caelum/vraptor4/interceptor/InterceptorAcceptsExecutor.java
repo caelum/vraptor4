@@ -2,8 +2,8 @@ package br.com.caelum.vraptor4.interceptor;
 
 import java.lang.reflect.Method;
 
-import br.com.caelum.vraptor.VRaptorException;
 import br.com.caelum.vraptor4.Accepts;
+import br.com.caelum.vraptor4.VRaptorException;
 
 public class InterceptorAcceptsExecutor implements StepExecutor<Boolean>{
 

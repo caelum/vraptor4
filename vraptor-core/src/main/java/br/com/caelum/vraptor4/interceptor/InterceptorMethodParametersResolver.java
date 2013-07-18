@@ -4,7 +4,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 
-import br.com.caelum.vraptor.ioc.Container;
+import br.com.caelum.vraptor4.ioc.Container;
 
 public class InterceptorMethodParametersResolver {
 

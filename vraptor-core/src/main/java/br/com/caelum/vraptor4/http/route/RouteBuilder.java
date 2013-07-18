@@ -18,7 +18,7 @@ package br.com.caelum.vraptor4.http.route;
 import java.lang.reflect.Method;
 import java.util.Set;
 
-import br.com.caelum.vraptor4.controller.HttpMethod;
+import br.com.caelum.vraptor4.restfulie.controller.HttpMethod;
 
 public interface RouteBuilder {
 

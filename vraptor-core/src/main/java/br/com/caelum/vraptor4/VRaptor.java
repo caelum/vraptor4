@@ -33,15 +33,15 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 
-import br.com.caelum.vraptor.core.Execution;
-import br.com.caelum.vraptor.core.RequestExecution;
-import br.com.caelum.vraptor.core.RequestInfo;
-import br.com.caelum.vraptor.core.StaticContentHandler;
-import br.com.caelum.vraptor.http.EncodingHandler;
-import br.com.caelum.vraptor.http.VRaptorRequest;
-import br.com.caelum.vraptor.http.VRaptorResponse;
-import br.com.caelum.vraptor.ioc.Container;
-import br.com.caelum.vraptor.ioc.ContainerProvider;
+import br.com.caelum.vraptor4.core.Execution;
+import br.com.caelum.vraptor4.core.RequestExecution;
+import br.com.caelum.vraptor4.core.RequestInfo;
+import br.com.caelum.vraptor4.core.StaticContentHandler;
+import br.com.caelum.vraptor4.http.EncodingHandler;
+import br.com.caelum.vraptor4.http.VRaptorRequest;
+import br.com.caelum.vraptor4.http.VRaptorResponse;
+import br.com.caelum.vraptor4.ioc.Container;
+import br.com.caelum.vraptor4.ioc.ContainerProvider;
 
 /**
  * VRaptor entry point.<br>

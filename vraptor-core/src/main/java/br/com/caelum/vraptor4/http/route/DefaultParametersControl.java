@@ -32,10 +32,10 @@ import java.util.regex.Pattern;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import br.com.caelum.vraptor.TwoWayConverter;
-import br.com.caelum.vraptor.core.Converters;
-import br.com.caelum.vraptor.http.MutableRequest;
-import br.com.caelum.vraptor.util.StringUtils;
+import br.com.caelum.vraptor4.TwoWayConverter;
+import br.com.caelum.vraptor4.core.Converters;
+import br.com.caelum.vraptor4.http.MutableRequest;
+import br.com.caelum.vraptor4.util.StringUtils;
 
 /**
  * Default implementation of parameters control on uris.

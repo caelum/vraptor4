@@ -1,7 +1,7 @@
 package br.com.caelum.vraptor4.interceptor;
 
-import br.com.caelum.vraptor4.controller.ControllerInstance;
-import br.com.caelum.vraptor4.controller.ControllerMethod;
+import br.com.caelum.vraptor4.restfulie.controller.ControllerInstance;
+import br.com.caelum.vraptor4.restfulie.controller.ControllerMethod;
 
 public interface AcceptsValidator<A> {
 

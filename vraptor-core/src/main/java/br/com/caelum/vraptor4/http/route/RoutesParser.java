@@ -19,7 +19,7 @@ package br.com.caelum.vraptor4.http.route;
 
 import java.util.List;
 
-import br.com.caelum.vraptor4.controller.BeanClass;
+import br.com.caelum.vraptor4.restfulie.controller.BeanClass;
 
 /**
  * Extracts all possible routes for this specific resource.

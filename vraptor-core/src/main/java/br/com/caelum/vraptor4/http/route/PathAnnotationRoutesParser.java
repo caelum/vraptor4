@@ -35,14 +35,14 @@ import javassist.Modifier;
 import javax.inject.Inject;
 
 import net.vidageek.mirror.dsl.Mirror;
-import br.com.caelum.vraptor.Delete;
-import br.com.caelum.vraptor.Get;
-import br.com.caelum.vraptor.Path;
-import br.com.caelum.vraptor.Post;
-import br.com.caelum.vraptor.Put;
-import br.com.caelum.vraptor.ioc.ApplicationScoped;
-import br.com.caelum.vraptor4.controller.BeanClass;
-import br.com.caelum.vraptor4.controller.HttpMethod;
+import br.com.caelum.vraptor4.Delete;
+import br.com.caelum.vraptor4.Get;
+import br.com.caelum.vraptor4.Path;
+import br.com.caelum.vraptor4.Post;
+import br.com.caelum.vraptor4.Put;
+import br.com.caelum.vraptor4.ioc.ApplicationScoped;
+import br.com.caelum.vraptor4.restfulie.controller.BeanClass;
+import br.com.caelum.vraptor4.restfulie.controller.HttpMethod;
 
 import com.google.common.base.Predicate;
 

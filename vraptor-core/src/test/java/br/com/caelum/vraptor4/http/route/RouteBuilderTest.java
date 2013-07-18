@@ -32,14 +32,20 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import br.com.caelum.vraptor.core.Converters;
-import br.com.caelum.vraptor.http.ParameterNameProvider;
-import br.com.caelum.vraptor.proxy.JavassistProxifier;
-import br.com.caelum.vraptor.proxy.ObjenesisInstanceCreator;
-import br.com.caelum.vraptor.proxy.Proxifier;
-import br.com.caelum.vraptor4.controller.ControllerMethod;
-import br.com.caelum.vraptor4.controller.DefaultBeanClass;
-import br.com.caelum.vraptor4.controller.DefaultControllerMethod;
+import br.com.caelum.vraptor4.core.Converters;
+import br.com.caelum.vraptor4.http.ParameterNameProvider;
+import br.com.caelum.vraptor4.http.route.DefaultRouteBuilder;
+import br.com.caelum.vraptor4.http.route.DefaultTypeFinder;
+import br.com.caelum.vraptor4.http.route.JavaEvaluator;
+import br.com.caelum.vraptor4.http.route.Route;
+import br.com.caelum.vraptor4.http.route.RouteBuilder;
+import br.com.caelum.vraptor4.http.route.TypeFinder;
+import br.com.caelum.vraptor4.proxy.JavassistProxifier;
+import br.com.caelum.vraptor4.proxy.ObjenesisInstanceCreator;
+import br.com.caelum.vraptor4.proxy.Proxifier;
+import br.com.caelum.vraptor4.restfulie.controller.ControllerMethod;
+import br.com.caelum.vraptor4.restfulie.controller.DefaultBeanClass;
+import br.com.caelum.vraptor4.restfulie.controller.DefaultControllerMethod;
 
 public class RouteBuilderTest {
 

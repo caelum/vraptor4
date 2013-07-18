@@ -23,8 +23,8 @@ import java.util.Iterator;
 import java.util.List;
 
 import net.vidageek.mirror.dsl.Mirror;
-import br.com.caelum.vraptor.VRaptorException;
-import br.com.caelum.vraptor.ioc.ApplicationScoped;
+import br.com.caelum.vraptor4.VRaptorException;
+import br.com.caelum.vraptor4.ioc.ApplicationScoped;
 
 /**
  * Evaluates expressions in order to access values.

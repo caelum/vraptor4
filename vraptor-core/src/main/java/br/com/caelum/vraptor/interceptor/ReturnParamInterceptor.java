@@ -11,6 +11,13 @@ import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor4.BeforeCall;
 import br.com.caelum.vraptor4.controller.ControllerMethod;
 
+/**
+ * An interceptor that auto include all controller method
+ * parameters to view
+ *
+ * @author Rodrigo Turini
+ * @since 4.0
+ */
 @Intercepts(
 	after=ParametersInstantiatorInterceptor.class
 )

@@ -1,4 +1,4 @@
-package br.com.caelum.vraptor4x.others;
+package br.com.caelum.vraptor4.others;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

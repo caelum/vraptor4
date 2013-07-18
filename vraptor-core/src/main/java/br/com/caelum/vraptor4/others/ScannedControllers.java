@@ -1,4 +1,4 @@
-package br.com.caelum.vraptor4x.others;
+package br.com.caelum.vraptor4.others;
 
 import java.util.LinkedList;
 import java.util.List;

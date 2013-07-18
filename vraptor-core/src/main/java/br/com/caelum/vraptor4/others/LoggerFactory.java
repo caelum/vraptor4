@@ -1,4 +1,4 @@
-package br.com.caelum.vraptor4x.others;
+package br.com.caelum.vraptor4.others;
 
 import javax.enterprise.inject.Produces;
 import javax.enterprise.inject.spi.InjectionPoint;

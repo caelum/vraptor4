@@ -9,7 +9,7 @@ import javax.enterprise.inject.spi.Extension;
 import javax.enterprise.inject.spi.ProcessAnnotatedType;
 
 import br.com.caelum.vraptor4.Controller;
-import br.com.caelum.vraptor4x.others.ScannedControllers;
+import br.com.caelum.vraptor4.others.ScannedControllers;
 
 public class ControllersExtension implements Extension{
 

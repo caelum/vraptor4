@@ -11,7 +11,7 @@ import br.com.caelum.vraptor4.core.BaseComponents;
 import br.com.caelum.vraptor4.core.StereotypeInfo;
 import br.com.caelum.vraptor4.interceptor.PackagesAcceptor;
 import br.com.caelum.vraptor4.interceptor.WithAnnotationAcceptor;
-import br.com.caelum.vraptor4x.others.LoggerFactory;
+import br.com.caelum.vraptor4.others.LoggerFactory;
 
 public class CDIRegistry {
 

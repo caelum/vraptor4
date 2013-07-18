@@ -1,5 +1,7 @@
 package br.com.caelum.vraptor.interceptor;
 
+import javax.inject.Inject;
+
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.Intercepts;
 import br.com.caelum.vraptor.Result;
@@ -14,17 +16,9 @@ import br.com.caelum.vraptor4.controller.ControllerMethod;
 )
 public class ReturnParamInterceptor {
 
-	private final MethodInfo info;
-	private final Result result;
-	private final ParameterNameProvider nameProvider;
-
-	public ReturnParamInterceptor(Result result,
-		MethodInfo info, ParameterNameProvider nameProvider) {
-
-		this.result = result;
-		this.info = info;
-		this.nameProvider = nameProvider;
-	}
+	@Inject private MethodInfo info;
+	@Inject private Result result;
+	@Inject private ParameterNameProvider nameProvider;
 
 	public void intercept(InterceptorStack stack, ControllerMethod method,
 			Object instance) throws InterceptionException {

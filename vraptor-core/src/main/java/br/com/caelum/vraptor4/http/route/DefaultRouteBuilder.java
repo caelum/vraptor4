@@ -41,7 +41,7 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package br.com.caelum.vraptor4x.http.route;
+package br.com.caelum.vraptor4.http.route;
 
 import java.lang.reflect.Method;
 import java.math.BigDecimal;

@@ -19,13 +19,13 @@ package br.com.caelum.vraptor4.restfulie;
 
 import javax.inject.Inject;
 
+import br.com.caelum.vraptor4.http.route.Router;
 import br.com.caelum.vraptor4.ioc.ApplicationScoped;
 import br.com.caelum.vraptor4.proxy.Proxifier;
 import br.com.caelum.vraptor4.restfulie.hypermedia.ConfigurableHypermediaResource;
 import br.com.caelum.vraptor4.restfulie.hypermedia.DefaultConfigurableHypermediaResource;
 import br.com.caelum.vraptor4.restfulie.relation.DefaultRelationBuilder;
 import br.com.caelum.vraptor4.restfulie.relation.RelationBuilder;
-import br.com.caelum.vraptor4x.http.route.Router;
 
 /**
  * Default implementation for {@link Restfulie}

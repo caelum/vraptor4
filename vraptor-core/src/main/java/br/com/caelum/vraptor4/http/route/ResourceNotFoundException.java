@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package br.com.caelum.vraptor4x.http.route;
+package br.com.caelum.vraptor4.http.route;
 
 /**
  * Exception thrown when no routes matching URI are found.

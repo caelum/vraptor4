@@ -30,11 +30,11 @@ import br.com.caelum.vraptor4.core.InterceptorStack;
 import br.com.caelum.vraptor4.core.MethodInfo;
 import br.com.caelum.vraptor4.core.RequestInfo;
 import br.com.caelum.vraptor4.http.UrlToResourceTranslator;
+import br.com.caelum.vraptor4.http.route.MethodNotAllowedException;
+import br.com.caelum.vraptor4.http.route.ResourceNotFoundException;
 import br.com.caelum.vraptor4.restfulie.controller.ControllerMethod;
 import br.com.caelum.vraptor4.restfulie.controller.ControllerNotFoundHandler;
 import br.com.caelum.vraptor4.restfulie.controller.MethodNotAllowedHandler;
-import br.com.caelum.vraptor4x.http.route.MethodNotAllowedException;
-import br.com.caelum.vraptor4x.http.route.ResourceNotFoundException;
 
 /**
  * Looks up the resource for a specific request and delegates for the 404

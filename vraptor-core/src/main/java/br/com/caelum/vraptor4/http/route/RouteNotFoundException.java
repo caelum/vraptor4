@@ -14,17 +14,22 @@
  * See the License for the specific language governing permissions and 
  * limitations under the License. 
  */
-package br.com.caelum.vraptor4x.http.route;
 
-import java.lang.reflect.Method;
-import java.util.Collections;
-import java.util.Map;
+package br.com.caelum.vraptor4.http.route;
 
-public class NoTypeFinder implements TypeFinder {
+import br.com.caelum.vraptor4.VRaptorException;
 
-	@Override
-	public Map<String, Class<?>> getParameterTypes(Method method, String[] parameterPaths) {
-		return Collections.emptyMap();
+/**
+ * A route was not found for the specified parameters.
+ * 
+ * @author guilherme silveira
+ */
+public class RouteNotFoundException extends VRaptorException {
+
+	public RouteNotFoundException(String msg) {
+		super(msg);
 	}
+
+	private static final long serialVersionUID = 606801838930057251L;
 
 }

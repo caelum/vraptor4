@@ -30,7 +30,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor4.http.ParameterNameProvider;
-import br.com.caelum.vraptor4x.http.route.DefaultTypeFinder;
+import br.com.caelum.vraptor4.http.route.DefaultTypeFinder;
 
 public class DefaultTypeFinderTest {
 

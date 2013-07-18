@@ -50,6 +50,7 @@ import br.com.caelum.vraptor4.core.DefaultMethodInfo;
 import br.com.caelum.vraptor4.core.MethodInfo;
 import br.com.caelum.vraptor4.http.MutableRequest;
 import br.com.caelum.vraptor4.http.MutableResponse;
+import br.com.caelum.vraptor4.http.route.Router;
 import br.com.caelum.vraptor4.interceptor.TypeNameExtractor;
 import br.com.caelum.vraptor4.ioc.Container;
 import br.com.caelum.vraptor4.proxy.JavassistProxifier;
@@ -66,7 +67,6 @@ import br.com.caelum.vraptor4.view.LogicResult;
 import br.com.caelum.vraptor4.view.PageResult;
 import br.com.caelum.vraptor4.view.PathResolver;
 import br.com.caelum.vraptor4.view.Results;
-import br.com.caelum.vraptor4x.http.route.Router;
 
 public class DefaultLogicResultTest {
 

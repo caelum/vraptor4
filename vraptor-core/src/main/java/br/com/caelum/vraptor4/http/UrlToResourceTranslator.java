@@ -18,9 +18,9 @@
 package br.com.caelum.vraptor4.http;
 
 import br.com.caelum.vraptor4.core.RequestInfo;
+import br.com.caelum.vraptor4.http.route.MethodNotAllowedException;
+import br.com.caelum.vraptor4.http.route.ResourceNotFoundException;
 import br.com.caelum.vraptor4.restfulie.controller.ControllerMethod;
-import br.com.caelum.vraptor4x.http.route.MethodNotAllowedException;
-import br.com.caelum.vraptor4x.http.route.ResourceNotFoundException;
 
 /**
  * Translates requests into resource methods.<br>

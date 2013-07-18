@@ -14,15 +14,17 @@
  * See the License for the specific language governing permissions and 
  * limitations under the License. 
  */
+package br.com.caelum.vraptor4.http.route;
 
-package br.com.caelum.vraptor4x.http.route;
+import java.lang.reflect.Method;
+import java.util.Collections;
+import java.util.Map;
 
-/**
- * Configs your routes for your application.
- * @author guilherme silveira
- */
-public interface RoutesConfiguration {
+public class NoTypeFinder implements TypeFinder {
 
-	void config(Router router);
+	@Override
+	public Map<String, Class<?>> getParameterTypes(Method method, String[] parameterPaths) {
+		return Collections.emptyMap();
+	}
 
 }

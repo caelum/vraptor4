@@ -44,6 +44,16 @@ import br.com.caelum.vraptor4.core.Converters;
 import br.com.caelum.vraptor4.http.DefaultParameterNameProvider;
 import br.com.caelum.vraptor4.http.ParameterNameProvider;
 import br.com.caelum.vraptor4.http.VRaptorRequest;
+import br.com.caelum.vraptor4.http.route.DefaultRouter;
+import br.com.caelum.vraptor4.http.route.JavaEvaluator;
+import br.com.caelum.vraptor4.http.route.MethodNotAllowedException;
+import br.com.caelum.vraptor4.http.route.NoRoutesConfiguration;
+import br.com.caelum.vraptor4.http.route.NoTypeFinder;
+import br.com.caelum.vraptor4.http.route.PathAnnotationRoutesParser;
+import br.com.caelum.vraptor4.http.route.ResourceNotFoundException;
+import br.com.caelum.vraptor4.http.route.Route;
+import br.com.caelum.vraptor4.http.route.RoutesParser;
+import br.com.caelum.vraptor4.http.route.Rules;
 import br.com.caelum.vraptor4.interceptor.DefaultTypeNameExtractor;
 import br.com.caelum.vraptor4.proxy.JavassistProxifier;
 import br.com.caelum.vraptor4.proxy.ObjenesisInstanceCreator;
@@ -52,16 +62,6 @@ import br.com.caelum.vraptor4.restfulie.controller.BeanClass;
 import br.com.caelum.vraptor4.restfulie.controller.ControllerMethod;
 import br.com.caelum.vraptor4.restfulie.controller.DefaultBeanClass;
 import br.com.caelum.vraptor4.restfulie.controller.HttpMethod;
-import br.com.caelum.vraptor4x.http.route.DefaultRouter;
-import br.com.caelum.vraptor4x.http.route.JavaEvaluator;
-import br.com.caelum.vraptor4x.http.route.MethodNotAllowedException;
-import br.com.caelum.vraptor4x.http.route.NoRoutesConfiguration;
-import br.com.caelum.vraptor4x.http.route.NoTypeFinder;
-import br.com.caelum.vraptor4x.http.route.PathAnnotationRoutesParser;
-import br.com.caelum.vraptor4x.http.route.ResourceNotFoundException;
-import br.com.caelum.vraptor4x.http.route.Route;
-import br.com.caelum.vraptor4x.http.route.RoutesParser;
-import br.com.caelum.vraptor4x.http.route.Rules;
 
 /**
  * Those are more likely to be acceptance than unit tests.

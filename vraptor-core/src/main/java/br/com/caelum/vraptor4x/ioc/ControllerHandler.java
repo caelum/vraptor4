@@ -30,12 +30,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor4.core.ControllerQualifier;
+import br.com.caelum.vraptor4.http.route.Route;
+import br.com.caelum.vraptor4.http.route.Router;
+import br.com.caelum.vraptor4.http.route.RoutesParser;
 import br.com.caelum.vraptor4.ioc.ApplicationScoped;
 import br.com.caelum.vraptor4.restfulie.controller.BeanClass;
 import br.com.caelum.vraptor4.view.LinkToHandler;
-import br.com.caelum.vraptor4x.http.route.Route;
-import br.com.caelum.vraptor4x.http.route.Router;
-import br.com.caelum.vraptor4x.http.route.RoutesParser;
 
 @ApplicationScoped
 public class ControllerHandler{

@@ -15,22 +15,25 @@
  * limitations under the License. 
  */
 
-package br.com.caelum.vraptor4x.http.route;
+package br.com.caelum.vraptor4.http.route;
 
-import br.com.caelum.vraptor4.ioc.ApplicationScoped;
+import br.com.caelum.vraptor4.VRaptorException;
 
 /**
- * No extra routes are registered.
- * 
+ * Illegal routes might be created under different situations. THe most common
+ * is to invoke the is() method but forgetting to invoke the attached method.
+ *
  * @author guilherme silveira
  */
-@ApplicationScoped
-public class NoRoutesConfiguration implements RoutesConfiguration {
+public class IllegalRouteException extends VRaptorException {
 
-	public NoRoutesConfiguration() {
-	}
+	/**
+	 * Random
+	 */
+	private static final long serialVersionUID = -3854707059890751018L;
 
-	public void config(Router router) {
+	public IllegalRouteException(String msg) {
+		super(msg);
 	}
 
 }

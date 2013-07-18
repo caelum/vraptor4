@@ -15,21 +15,14 @@
  * limitations under the License. 
  */
 
-package br.com.caelum.vraptor4x.http.route;
-
-import br.com.caelum.vraptor4.VRaptorException;
+package br.com.caelum.vraptor4.http.route;
 
 /**
- * A route was not found for the specified parameters.
- * 
+ * Configs your routes for your application.
  * @author guilherme silveira
  */
-public class RouteNotFoundException extends VRaptorException {
+public interface RoutesConfiguration {
 
-	public RouteNotFoundException(String msg) {
-		super(msg);
-	}
-
-	private static final long serialVersionUID = 606801838930057251L;
+	void config(Router router);
 
 }

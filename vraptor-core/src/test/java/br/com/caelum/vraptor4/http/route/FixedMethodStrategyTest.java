@@ -37,11 +37,11 @@ import org.mockito.MockitoAnnotations;
 import br.com.caelum.vraptor.interceptor.VRaptorMatchers;
 import br.com.caelum.vraptor4.Controller;
 import br.com.caelum.vraptor4.http.MutableRequest;
+import br.com.caelum.vraptor4.http.route.FixedMethodStrategy;
+import br.com.caelum.vraptor4.http.route.ParametersControl;
 import br.com.caelum.vraptor4.restfulie.controller.ControllerMethod;
 import br.com.caelum.vraptor4.restfulie.controller.DefaultControllerMethod;
 import br.com.caelum.vraptor4.restfulie.controller.HttpMethod;
-import br.com.caelum.vraptor4x.http.route.FixedMethodStrategy;
-import br.com.caelum.vraptor4x.http.route.ParametersControl;
 
 import com.google.common.collect.Sets;
 

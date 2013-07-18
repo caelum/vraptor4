@@ -31,6 +31,7 @@ import org.slf4j.LoggerFactory;
 import br.com.caelum.vraptor4.Get;
 import br.com.caelum.vraptor4.core.MethodInfo;
 import br.com.caelum.vraptor4.http.MutableRequest;
+import br.com.caelum.vraptor4.http.route.Router;
 import br.com.caelum.vraptor4.interceptor.TypeNameExtractor;
 import br.com.caelum.vraptor4.ioc.Container;
 import br.com.caelum.vraptor4.proxy.MethodInvocation;
@@ -41,7 +42,6 @@ import br.com.caelum.vraptor4.restfulie.controller.ControllerMethod;
 import br.com.caelum.vraptor4.restfulie.controller.DefaultControllerMethod;
 import br.com.caelum.vraptor4.restfulie.controller.HttpMethod;
 import br.com.caelum.vraptor4.util.Stringnifier;
-import br.com.caelum.vraptor4x.http.route.Router;
 
 /**
  * The default implementation of LogicResult.<br>

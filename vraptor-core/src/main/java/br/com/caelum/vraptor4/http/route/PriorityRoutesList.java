@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package br.com.caelum.vraptor4x.http.route;
+package br.com.caelum.vraptor4.http.route;
 
 import java.util.Collection;
 import java.util.Iterator;

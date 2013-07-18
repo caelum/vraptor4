@@ -74,6 +74,8 @@ import br.com.caelum.vraptor4.core.MethodInfo;
 import br.com.caelum.vraptor4.core.RequestInfo;
 import br.com.caelum.vraptor4.deserialization.Deserializer;
 import br.com.caelum.vraptor4.deserialization.Deserializers;
+import br.com.caelum.vraptor4.http.route.Route;
+import br.com.caelum.vraptor4.http.route.Router;
 import br.com.caelum.vraptor4.interceptor.InterceptorRegistry;
 import br.com.caelum.vraptor4.ioc.ApplicationScoped;
 import br.com.caelum.vraptor4.ioc.Container;
@@ -81,8 +83,6 @@ import br.com.caelum.vraptor4.ioc.ContainerProvider;
 import br.com.caelum.vraptor4.ioc.PrototypeScoped;
 import br.com.caelum.vraptor4.ioc.RequestScoped;
 import br.com.caelum.vraptor4.restfulie.controller.ControllerMethod;
-import br.com.caelum.vraptor4x.http.route.Route;
-import br.com.caelum.vraptor4x.http.route.Router;
 
 /**
  * Acceptance test that checks if the container is capable of giving all

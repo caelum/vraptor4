@@ -15,19 +15,22 @@
  * limitations under the License. 
  */
 
-package br.com.caelum.vraptor4x.http.route;
+package br.com.caelum.vraptor4.http.route;
 
-import java.util.List;
-
-import br.com.caelum.vraptor4.restfulie.controller.BeanClass;
+import br.com.caelum.vraptor4.ioc.ApplicationScoped;
 
 /**
- * Extracts all possible routes for this specific resource.
- *
+ * No extra routes are registered.
+ * 
  * @author guilherme silveira
  */
-public interface RoutesParser {
+@ApplicationScoped
+public class NoRoutesConfiguration implements RoutesConfiguration {
 
-    List<Route> rulesFor(BeanClass resource);
+	public NoRoutesConfiguration() {
+	}
+
+	public void config(Router router) {
+	}
 
 }

@@ -15,25 +15,19 @@
  * limitations under the License. 
  */
 
-package br.com.caelum.vraptor4x.http.route;
+package br.com.caelum.vraptor4.http.route;
 
-import br.com.caelum.vraptor4.VRaptorException;
+import java.util.List;
+
+import br.com.caelum.vraptor4.restfulie.controller.BeanClass;
 
 /**
- * Illegal routes might be created under different situations. THe most common
- * is to invoke the is() method but forgetting to invoke the attached method.
+ * Extracts all possible routes for this specific resource.
  *
  * @author guilherme silveira
  */
-public class IllegalRouteException extends VRaptorException {
+public interface RoutesParser {
 
-	/**
-	 * Random
-	 */
-	private static final long serialVersionUID = -3854707059890751018L;
-
-	public IllegalRouteException(String msg) {
-		super(msg);
-	}
+    List<Route> rulesFor(BeanClass resource);
 
 }

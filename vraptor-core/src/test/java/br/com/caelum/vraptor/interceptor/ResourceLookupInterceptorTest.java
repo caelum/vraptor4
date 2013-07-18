@@ -38,13 +38,13 @@ import br.com.caelum.vraptor4.core.RequestInfo;
 import br.com.caelum.vraptor4.http.MutableRequest;
 import br.com.caelum.vraptor4.http.MutableResponse;
 import br.com.caelum.vraptor4.http.UrlToResourceTranslator;
+import br.com.caelum.vraptor4.http.route.MethodNotAllowedException;
+import br.com.caelum.vraptor4.http.route.ResourceNotFoundException;
 import br.com.caelum.vraptor4.interceptor.ResourceLookupInterceptor;
 import br.com.caelum.vraptor4.restfulie.controller.ControllerMethod;
 import br.com.caelum.vraptor4.restfulie.controller.ControllerNotFoundHandler;
 import br.com.caelum.vraptor4.restfulie.controller.HttpMethod;
 import br.com.caelum.vraptor4.restfulie.controller.MethodNotAllowedHandler;
-import br.com.caelum.vraptor4x.http.route.MethodNotAllowedException;
-import br.com.caelum.vraptor4x.http.route.ResourceNotFoundException;
 
 public class ResourceLookupInterceptorTest {
 

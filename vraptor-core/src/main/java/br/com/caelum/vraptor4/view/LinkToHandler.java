@@ -29,7 +29,7 @@ import net.vidageek.mirror.dsl.Mirror;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import br.com.caelum.vraptor4x.http.route.Router;
+import br.com.caelum.vraptor4.http.route.Router;
 
 import com.google.common.collect.ForwardingMap;
 

@@ -1,11 +1,13 @@
-package br.com.caelum.vraptor4.interceptor;
+package br.com.caelum.vraptor.interceptor;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import br.com.caelum.vraptor.interceptor.InstanceContainer;
+import br.com.caelum.vraptor4.interceptor.CustomAcceptsVerifier;
+import br.com.caelum.vraptor4.interceptor.PackagesAcceptor;
+import br.com.caelum.vraptor4.interceptor.WithAnnotationAcceptor;
 import br.com.caelum.vraptor4.interceptor.example.InterceptorWithCustomizedAccepts;
 import br.com.caelum.vraptor4.interceptor.example.MethodLevelAcceptsController;
 import br.com.caelum.vraptor4.restfulie.controller.ControllerInstance;

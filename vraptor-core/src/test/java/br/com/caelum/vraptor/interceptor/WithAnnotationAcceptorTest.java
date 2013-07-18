@@ -1,4 +1,4 @@
-package br.com.caelum.vraptor4.interceptor;
+package br.com.caelum.vraptor.interceptor;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedElement;
@@ -12,6 +12,8 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import br.com.caelum.vraptor4.interceptor.AcceptsWithAnnotations;
+import br.com.caelum.vraptor4.interceptor.WithAnnotationAcceptor;
 import br.com.caelum.vraptor4.interceptor.example.ClassLevelAcceptsController;
 import br.com.caelum.vraptor4.interceptor.example.InterceptorWithCustomizedAccepts;
 import br.com.caelum.vraptor4.interceptor.example.MethodLevelAcceptsController;

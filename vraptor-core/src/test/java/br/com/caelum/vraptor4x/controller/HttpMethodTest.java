@@ -1,4 +1,4 @@
-package br.com.caelum.vraptor4.controller;
+package br.com.caelum.vraptor4x.controller;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;

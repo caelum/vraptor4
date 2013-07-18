@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package br.com.caelum.vraptor4.controller;
+package br.com.caelum.vraptor4x.controller;
 
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.only;

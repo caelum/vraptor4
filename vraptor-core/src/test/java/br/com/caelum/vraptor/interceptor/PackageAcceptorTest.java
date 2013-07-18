@@ -1,4 +1,4 @@
-package br.com.caelum.vraptor4.interceptor;
+package br.com.caelum.vraptor.interceptor;
 
 import java.lang.reflect.AnnotatedElement;
 
@@ -9,6 +9,8 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import br.com.caelum.vraptor4.interceptor.AcceptsForPackages;
+import br.com.caelum.vraptor4.interceptor.PackagesAcceptor;
 import br.com.caelum.vraptor4.restfulie.controller.BeanClass;
 import br.com.caelum.vraptor4.restfulie.controller.ControllerInstance;
 

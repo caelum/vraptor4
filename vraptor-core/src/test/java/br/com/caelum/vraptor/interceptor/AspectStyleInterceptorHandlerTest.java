@@ -1,4 +1,4 @@
-package br.com.caelum.vraptor4.interceptor;
+package br.com.caelum.vraptor.interceptor;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,9 +11,12 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
-import br.com.caelum.vraptor.interceptor.InstanceContainer;
 import br.com.caelum.vraptor4.VRaptorException;
 import br.com.caelum.vraptor4.core.InterceptorStack;
+import br.com.caelum.vraptor4.interceptor.AspectStyleInterceptorHandler;
+import br.com.caelum.vraptor4.interceptor.SimpleInterceptorStack;
+import br.com.caelum.vraptor4.interceptor.StepInvoker;
+import br.com.caelum.vraptor4.interceptor.WithAnnotationAcceptor;
 import br.com.caelum.vraptor4.interceptor.example.AcceptsInterceptor;
 import br.com.caelum.vraptor4.interceptor.example.AcceptsInterceptorWithStackAsParameter;
 import br.com.caelum.vraptor4.interceptor.example.AcceptsWithoutArgsInterceptor;

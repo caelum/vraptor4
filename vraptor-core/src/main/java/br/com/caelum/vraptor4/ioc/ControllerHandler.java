@@ -17,7 +17,7 @@
 /**
  *
  */
-package br.com.caelum.vraptor4x.ioc;
+package br.com.caelum.vraptor4.ioc;
 
 import java.util.List;
 
@@ -33,7 +33,6 @@ import br.com.caelum.vraptor4.core.ControllerQualifier;
 import br.com.caelum.vraptor4.http.route.Route;
 import br.com.caelum.vraptor4.http.route.Router;
 import br.com.caelum.vraptor4.http.route.RoutesParser;
-import br.com.caelum.vraptor4.ioc.ApplicationScoped;
 import br.com.caelum.vraptor4.restfulie.controller.BeanClass;
 import br.com.caelum.vraptor4.view.LinkToHandler;
 

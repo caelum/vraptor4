@@ -128,6 +128,7 @@ import br.com.caelum.vraptor4.interceptor.multipart.MultipartInterceptor;
 import br.com.caelum.vraptor4.interceptor.multipart.NullMultipartInterceptor;
 import br.com.caelum.vraptor4.interceptor.multipart.Servlet3MultipartInterceptor;
 import br.com.caelum.vraptor4.interceptor.multipart.ServletFileUploadCreator;
+import br.com.caelum.vraptor4.ioc.ControllerHandler;
 import br.com.caelum.vraptor4.ioc.ConverterHandler;
 import br.com.caelum.vraptor4.ioc.InterceptorStereotypeHandler;
 import br.com.caelum.vraptor4.proxy.InstanceCreator;
@@ -190,7 +191,6 @@ import br.com.caelum.vraptor4.view.RefererResult;
 import br.com.caelum.vraptor4.view.SessionFlashScope;
 import br.com.caelum.vraptor4.view.Status;
 import br.com.caelum.vraptor4.view.ValidationViewsFactory;
-import br.com.caelum.vraptor4x.ioc.ControllerHandler;
 
 import com.thoughtworks.xstream.converters.SingleValueConverter;
 

@@ -18,7 +18,7 @@ package br.com.caelum.vraptor4.view;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 
-import br.com.caelum.vraptor4x.controller.ControllerMethod;
+import br.com.caelum.vraptor4.restfulie.controller.ControllerMethod;
 /**
  * FlashScope that uses the HttpSession to hold the data
  * 

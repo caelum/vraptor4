@@ -26,8 +26,8 @@ import br.com.caelum.vraptor4.InterceptionException;
 import br.com.caelum.vraptor4.Intercepts;
 import br.com.caelum.vraptor4.Result;
 import br.com.caelum.vraptor4.core.InterceptorStack;
+import br.com.caelum.vraptor4.restfulie.controller.ControllerMethod;
 import br.com.caelum.vraptor4.view.Results;
-import br.com.caelum.vraptor4x.controller.ControllerMethod;
 
 /**
  * Intercepts the request and forwards to the default view if no view was

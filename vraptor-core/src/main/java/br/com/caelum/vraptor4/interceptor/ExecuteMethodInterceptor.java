@@ -32,9 +32,9 @@ import br.com.caelum.vraptor4.Intercepts;
 import br.com.caelum.vraptor4.Validator;
 import br.com.caelum.vraptor4.core.InterceptorStack;
 import br.com.caelum.vraptor4.core.MethodInfo;
+import br.com.caelum.vraptor4.restfulie.controller.ControllerMethod;
 import br.com.caelum.vraptor4.util.Stringnifier;
 import br.com.caelum.vraptor4.validator.ValidationException;
-import br.com.caelum.vraptor4x.controller.ControllerMethod;
 
 /**
  * Interceptor that executes the logic method.

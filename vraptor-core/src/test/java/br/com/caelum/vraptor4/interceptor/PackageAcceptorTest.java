@@ -9,8 +9,8 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import br.com.caelum.vraptor4x.controller.BeanClass;
-import br.com.caelum.vraptor4x.controller.ControllerInstance;
+import br.com.caelum.vraptor4.restfulie.controller.BeanClass;
+import br.com.caelum.vraptor4.restfulie.controller.ControllerInstance;
 import br.com.caelum.vraptor4x.interceptor.AcceptsForPackages;
 import br.com.caelum.vraptor4x.interceptor.PackagesAcceptor;
 

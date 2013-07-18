@@ -3,8 +3,8 @@ package br.com.caelum.vraptor4x.interceptor;
 import java.util.Arrays;
 import java.util.List;
 
-import br.com.caelum.vraptor4x.controller.ControllerInstance;
-import br.com.caelum.vraptor4x.controller.ControllerMethod;
+import br.com.caelum.vraptor4.restfulie.controller.ControllerInstance;
+import br.com.caelum.vraptor4.restfulie.controller.ControllerMethod;
 
 public class PackagesAcceptor implements AcceptsValidator<AcceptsForPackages> {
 

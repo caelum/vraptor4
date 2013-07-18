@@ -33,8 +33,8 @@ import br.com.caelum.vraptor.view.DogController;
 import br.com.caelum.vraptor4.InterceptionException;
 import br.com.caelum.vraptor4.core.InterceptorStack;
 import br.com.caelum.vraptor4.interceptor.InstantiateInterceptor;
-import br.com.caelum.vraptor4x.controller.ControllerMethod;
-import br.com.caelum.vraptor4x.controller.DefaultBeanClass;
+import br.com.caelum.vraptor4.restfulie.controller.ControllerMethod;
+import br.com.caelum.vraptor4.restfulie.controller.DefaultBeanClass;
 
 public class InstantiateInterceptorTest {
 

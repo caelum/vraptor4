@@ -31,8 +31,8 @@ import br.com.caelum.vraptor4.core.InterceptorStack;
 import br.com.caelum.vraptor4.http.MutableRequest;
 import br.com.caelum.vraptor4.interceptor.multipart.Servlet3MultipartInterceptor;
 import br.com.caelum.vraptor4.interceptor.multipart.UploadedFile;
+import br.com.caelum.vraptor4.restfulie.controller.ControllerMethod;
 import br.com.caelum.vraptor4.validator.I18nMessage;
-import br.com.caelum.vraptor4x.controller.ControllerMethod;
 
 /**
  * Test class for uploading features with servlet 3.

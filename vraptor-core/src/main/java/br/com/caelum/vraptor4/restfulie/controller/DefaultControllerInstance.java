@@ -1,4 +1,4 @@
-package br.com.caelum.vraptor4x.controller;
+package br.com.caelum.vraptor4.restfulie.controller;
 
 public class DefaultControllerInstance implements ControllerInstance {
 

@@ -31,7 +31,7 @@ import br.com.caelum.vraptor4.core.DefaultInterceptorStack;
 import br.com.caelum.vraptor4.core.InterceptorHandler;
 import br.com.caelum.vraptor4.core.InterceptorHandlerFactory;
 import br.com.caelum.vraptor4.interceptor.Interceptor;
-import br.com.caelum.vraptor4x.controller.ControllerMethod;
+import br.com.caelum.vraptor4.restfulie.controller.ControllerMethod;
 
 public class DefaultInterceptorStackTest {
 

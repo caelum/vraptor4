@@ -80,7 +80,7 @@ import br.com.caelum.vraptor4.ioc.Container;
 import br.com.caelum.vraptor4.ioc.ContainerProvider;
 import br.com.caelum.vraptor4.ioc.PrototypeScoped;
 import br.com.caelum.vraptor4.ioc.RequestScoped;
-import br.com.caelum.vraptor4x.controller.ControllerMethod;
+import br.com.caelum.vraptor4.restfulie.controller.ControllerMethod;
 import br.com.caelum.vraptor4x.http.route.Route;
 import br.com.caelum.vraptor4x.http.route.Router;
 

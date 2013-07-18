@@ -15,25 +15,16 @@
  * limitations under the License. 
  */
 
-package br.com.caelum.vraptor4x.controller;
+package br.com.caelum.vraptor4.restfulie.controller;
 
-import java.lang.annotation.Annotation;
+import br.com.caelum.vraptor4.core.RequestInfo;
 
 /**
- * Represents a web accessible Controller class.
- * 
- * 
+ * A component capable of handling not found components.
  * @author Guilherme Silveira
- * @author Paulo Silveira
+ * @author Cecilia
  */
-public interface BeanClass {
+public interface ControllerNotFoundHandler {
 
-	public Class<?> getType();
-
-	public Annotation[] getAnnotations();
-
-	public Package getPackage();
-
-	public abstract String getPackageName();
-
+	public void couldntFind (RequestInfo request);
 }

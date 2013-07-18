@@ -22,10 +22,10 @@ import org.junit.Test;
 import br.com.caelum.vraptor4.core.Localization;
 import br.com.caelum.vraptor4.deserialization.gson.GsonDeserialization;
 import br.com.caelum.vraptor4.http.ParameterNameProvider;
-import br.com.caelum.vraptor4x.controller.BeanClass;
-import br.com.caelum.vraptor4x.controller.ControllerMethod;
-import br.com.caelum.vraptor4x.controller.DefaultBeanClass;
-import br.com.caelum.vraptor4x.controller.DefaultControllerMethod;
+import br.com.caelum.vraptor4.restfulie.controller.BeanClass;
+import br.com.caelum.vraptor4.restfulie.controller.ControllerMethod;
+import br.com.caelum.vraptor4.restfulie.controller.DefaultBeanClass;
+import br.com.caelum.vraptor4.restfulie.controller.DefaultControllerMethod;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;

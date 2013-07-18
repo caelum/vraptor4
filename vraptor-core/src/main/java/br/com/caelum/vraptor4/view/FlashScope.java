@@ -15,7 +15,7 @@
  */
 package br.com.caelum.vraptor4.view;
 
-import br.com.caelum.vraptor4x.controller.ControllerMethod;
+import br.com.caelum.vraptor4.restfulie.controller.ControllerMethod;
 
 /**
  * Component responsible to allow redirects with the same passed parameters

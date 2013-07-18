@@ -34,8 +34,8 @@ import br.com.caelum.vraptor4.core.MethodInfo;
 import br.com.caelum.vraptor4.deserialization.Deserializer;
 import br.com.caelum.vraptor4.deserialization.Deserializers;
 import br.com.caelum.vraptor4.ioc.Container;
+import br.com.caelum.vraptor4.restfulie.controller.ControllerMethod;
 import br.com.caelum.vraptor4.view.Status;
-import br.com.caelum.vraptor4x.controller.ControllerMethod;
 
 /**
  * Important: this interceptor must be after the {@link ParametersInstantiatorInterceptor}

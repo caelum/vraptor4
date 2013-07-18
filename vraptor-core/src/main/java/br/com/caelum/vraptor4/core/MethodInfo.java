@@ -17,7 +17,7 @@
 
 package br.com.caelum.vraptor4.core;
 
-import br.com.caelum.vraptor4x.controller.ControllerMethod;
+import br.com.caelum.vraptor4.restfulie.controller.ControllerMethod;
 
 /**
  * Represents all method parameters, and the result returned by the invoked method.

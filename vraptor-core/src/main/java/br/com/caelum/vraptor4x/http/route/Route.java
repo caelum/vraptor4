@@ -21,8 +21,8 @@ import java.lang.reflect.Method;
 import java.util.EnumSet;
 
 import br.com.caelum.vraptor4.http.MutableRequest;
-import br.com.caelum.vraptor4x.controller.ControllerMethod;
-import br.com.caelum.vraptor4x.controller.HttpMethod;
+import br.com.caelum.vraptor4.restfulie.controller.ControllerMethod;
+import br.com.caelum.vraptor4.restfulie.controller.HttpMethod;
 
 /**
  * An specific route rule.

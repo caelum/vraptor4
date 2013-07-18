@@ -40,8 +40,8 @@ import br.com.caelum.vraptor4.interceptor.multipart.DefaultMultipartConfig;
 import br.com.caelum.vraptor4.interceptor.multipart.MultipartConfig;
 import br.com.caelum.vraptor4.interceptor.multipart.ServletFileUploadCreator;
 import br.com.caelum.vraptor4.interceptor.multipart.UploadedFile;
+import br.com.caelum.vraptor4.restfulie.controller.ControllerMethod;
 import br.com.caelum.vraptor4.validator.I18nMessage;
-import br.com.caelum.vraptor4x.controller.ControllerMethod;
 
 /**
  * Test class for uploading features using commons-fileupload.

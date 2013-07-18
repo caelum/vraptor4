@@ -13,8 +13,8 @@ import org.slf4j.LoggerFactory;
 import br.com.caelum.vraptor4.deserialization.Deserializer;
 import br.com.caelum.vraptor4.deserialization.Deserializes;
 import br.com.caelum.vraptor4.http.ParameterNameProvider;
+import br.com.caelum.vraptor4.restfulie.controller.ControllerMethod;
 import br.com.caelum.vraptor4.view.ResultException;
-import br.com.caelum.vraptor4x.controller.ControllerMethod;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

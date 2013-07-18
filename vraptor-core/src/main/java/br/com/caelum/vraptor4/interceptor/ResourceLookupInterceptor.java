@@ -30,9 +30,9 @@ import br.com.caelum.vraptor4.core.InterceptorStack;
 import br.com.caelum.vraptor4.core.MethodInfo;
 import br.com.caelum.vraptor4.core.RequestInfo;
 import br.com.caelum.vraptor4.http.UrlToResourceTranslator;
-import br.com.caelum.vraptor4x.controller.ControllerMethod;
-import br.com.caelum.vraptor4x.controller.ControllerNotFoundHandler;
-import br.com.caelum.vraptor4x.controller.MethodNotAllowedHandler;
+import br.com.caelum.vraptor4.restfulie.controller.ControllerMethod;
+import br.com.caelum.vraptor4.restfulie.controller.ControllerNotFoundHandler;
+import br.com.caelum.vraptor4.restfulie.controller.MethodNotAllowedHandler;
 import br.com.caelum.vraptor4x.http.route.MethodNotAllowedException;
 import br.com.caelum.vraptor4x.http.route.ResourceNotFoundException;
 

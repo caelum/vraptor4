@@ -20,7 +20,7 @@ package br.com.caelum.vraptor4x.http.route;
 import java.text.MessageFormat;
 import java.util.Set;
 
-import br.com.caelum.vraptor4x.controller.HttpMethod;
+import br.com.caelum.vraptor4.restfulie.controller.HttpMethod;
 
 /**
  * Exception thrown when no routes matching given URI allow given HTTP method.

@@ -37,7 +37,7 @@ import br.com.caelum.vraptor4.interceptor.ExecuteMethodInterceptor;
 import br.com.caelum.vraptor4.interceptor.Interceptor;
 import br.com.caelum.vraptor4.interceptor.ParametersInstantiatorInterceptor;
 import br.com.caelum.vraptor4.ioc.RequestScoped;
-import br.com.caelum.vraptor4x.controller.ControllerMethod;
+import br.com.caelum.vraptor4.restfulie.controller.ControllerMethod;
 
 /**
  * Validate method parameters using Bean Validation 1.1. The method will be

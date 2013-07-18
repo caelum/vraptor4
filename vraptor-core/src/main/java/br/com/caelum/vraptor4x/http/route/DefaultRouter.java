@@ -35,9 +35,9 @@ import br.com.caelum.vraptor4.http.MutableRequest;
 import br.com.caelum.vraptor4.http.ParameterNameProvider;
 import br.com.caelum.vraptor4.ioc.ApplicationScoped;
 import br.com.caelum.vraptor4.proxy.Proxifier;
+import br.com.caelum.vraptor4.restfulie.controller.ControllerMethod;
+import br.com.caelum.vraptor4.restfulie.controller.HttpMethod;
 import br.com.caelum.vraptor4.util.collections.Filters;
-import br.com.caelum.vraptor4x.controller.ControllerMethod;
-import br.com.caelum.vraptor4x.controller.HttpMethod;
 
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Iterators;

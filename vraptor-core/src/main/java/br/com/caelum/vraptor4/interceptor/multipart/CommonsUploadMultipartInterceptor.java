@@ -43,9 +43,9 @@ import br.com.caelum.vraptor4.http.InvalidParameterException;
 import br.com.caelum.vraptor4.http.MutableRequest;
 import br.com.caelum.vraptor4.interceptor.ResourceLookupInterceptor;
 import br.com.caelum.vraptor4.ioc.RequestScoped;
+import br.com.caelum.vraptor4.restfulie.controller.ControllerMethod;
 import br.com.caelum.vraptor4.validator.I18nMessage;
 import br.com.caelum.vraptor4.validator.Validations;
-import br.com.caelum.vraptor4x.controller.ControllerMethod;
 
 import com.google.common.base.Strings;
 import com.google.common.collect.HashMultiset;

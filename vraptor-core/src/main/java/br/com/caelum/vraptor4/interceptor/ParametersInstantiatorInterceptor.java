@@ -39,9 +39,9 @@ import br.com.caelum.vraptor4.core.MethodInfo;
 import br.com.caelum.vraptor4.http.MutableRequest;
 import br.com.caelum.vraptor4.http.ParameterNameProvider;
 import br.com.caelum.vraptor4.http.ParametersProvider;
+import br.com.caelum.vraptor4.restfulie.controller.ControllerMethod;
 import br.com.caelum.vraptor4.validator.Message;
 import br.com.caelum.vraptor4.view.FlashScope;
-import br.com.caelum.vraptor4x.controller.ControllerMethod;
 
 /**
  * An interceptor which instantiates parameters and provide them to the stack.

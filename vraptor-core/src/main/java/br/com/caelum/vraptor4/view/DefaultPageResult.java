@@ -33,7 +33,7 @@ import br.com.caelum.vraptor4.proxy.MethodInvocation;
 import br.com.caelum.vraptor4.proxy.Proxifier;
 import br.com.caelum.vraptor4.proxy.ProxyInvocationException;
 import br.com.caelum.vraptor4.proxy.SuperMethod;
-import br.com.caelum.vraptor4x.controller.DefaultControllerMethod;
+import br.com.caelum.vraptor4.restfulie.controller.DefaultControllerMethod;
 
 /**
  * Default page result implementation.

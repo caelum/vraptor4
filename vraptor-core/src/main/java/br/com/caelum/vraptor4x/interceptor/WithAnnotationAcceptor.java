@@ -9,8 +9,8 @@ import java.util.List;
 import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
 
-import br.com.caelum.vraptor4x.controller.ControllerInstance;
-import br.com.caelum.vraptor4x.controller.ControllerMethod;
+import br.com.caelum.vraptor4.restfulie.controller.ControllerInstance;
+import br.com.caelum.vraptor4.restfulie.controller.ControllerMethod;
 
 /**
  * Verify if certain annotations are presents in class or method.

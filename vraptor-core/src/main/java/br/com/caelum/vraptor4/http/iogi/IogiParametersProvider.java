@@ -38,8 +38,8 @@ import br.com.caelum.iogi.reflection.Target;
 import br.com.caelum.vraptor4.http.ParameterNameProvider;
 import br.com.caelum.vraptor4.http.ParametersProvider;
 import br.com.caelum.vraptor4.ioc.RequestScoped;
+import br.com.caelum.vraptor4.restfulie.controller.ControllerMethod;
 import br.com.caelum.vraptor4.validator.Message;
-import br.com.caelum.vraptor4x.controller.ControllerMethod;
 
 @RequestScoped
 public class IogiParametersProvider implements ParametersProvider {

@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package br.com.caelum.vraptor4x.controller;
+package br.com.caelum.vraptor4.restfulie.controller;
 
 import java.lang.annotation.Annotation;
 

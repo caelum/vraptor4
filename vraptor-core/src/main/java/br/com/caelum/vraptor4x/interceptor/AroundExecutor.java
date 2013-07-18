@@ -4,9 +4,9 @@ import java.lang.reflect.Method;
 
 import br.com.caelum.vraptor4.core.InterceptorStack;
 import br.com.caelum.vraptor4.ioc.Container;
+import br.com.caelum.vraptor4.restfulie.controller.ControllerInstance;
+import br.com.caelum.vraptor4.restfulie.controller.ControllerMethod;
 import br.com.caelum.vraptor4x.AroundCall;
-import br.com.caelum.vraptor4x.controller.ControllerInstance;
-import br.com.caelum.vraptor4x.controller.ControllerMethod;
 
 public class AroundExecutor implements StepExecutor<Object> {
 

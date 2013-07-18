@@ -32,7 +32,7 @@ import br.com.caelum.vraptor4.config.Configuration;
 import br.com.caelum.vraptor4.proxy.MethodInvocation;
 import br.com.caelum.vraptor4.proxy.Proxifier;
 import br.com.caelum.vraptor4.proxy.SuperMethod;
-import br.com.caelum.vraptor4x.controller.HttpMethod;
+import br.com.caelum.vraptor4.restfulie.controller.HttpMethod;
 import br.com.caelum.vraptor4x.http.route.Router;
 
 /**

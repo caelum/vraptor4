@@ -41,8 +41,8 @@ import br.com.caelum.vraptor4.Path;
 import br.com.caelum.vraptor4.Post;
 import br.com.caelum.vraptor4.Put;
 import br.com.caelum.vraptor4.ioc.ApplicationScoped;
-import br.com.caelum.vraptor4x.controller.BeanClass;
-import br.com.caelum.vraptor4x.controller.HttpMethod;
+import br.com.caelum.vraptor4.restfulie.controller.BeanClass;
+import br.com.caelum.vraptor4.restfulie.controller.HttpMethod;
 
 import com.google.common.base.Predicate;
 

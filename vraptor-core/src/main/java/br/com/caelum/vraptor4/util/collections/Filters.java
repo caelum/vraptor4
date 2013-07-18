@@ -24,8 +24,8 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
 import br.com.caelum.vraptor4.interceptor.Interceptor;
-import br.com.caelum.vraptor4x.controller.ControllerMethod;
-import br.com.caelum.vraptor4x.controller.HttpMethod;
+import br.com.caelum.vraptor4.restfulie.controller.ControllerMethod;
+import br.com.caelum.vraptor4.restfulie.controller.HttpMethod;
 import br.com.caelum.vraptor4x.http.route.Route;
 
 import com.google.common.base.Predicate;

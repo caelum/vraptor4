@@ -30,13 +30,13 @@ import br.com.caelum.vraptor4.core.Localization;
 import br.com.caelum.vraptor4.core.MethodInfo;
 import br.com.caelum.vraptor4.http.ParameterNameProvider;
 import br.com.caelum.vraptor4.http.ParanamerNameProvider;
+import br.com.caelum.vraptor4.restfulie.controller.ControllerMethod;
+import br.com.caelum.vraptor4.restfulie.controller.DefaultControllerMethod;
 import br.com.caelum.vraptor4.util.test.MockValidator;
 import br.com.caelum.vraptor4.validator.MessageInterpolatorFactory;
 import br.com.caelum.vraptor4.validator.MethodValidatorFactoryCreator;
 import br.com.caelum.vraptor4.validator.MethodValidatorInterceptor;
 import br.com.caelum.vraptor4.validator.ValidatorFactoryCreator;
-import br.com.caelum.vraptor4x.controller.ControllerMethod;
-import br.com.caelum.vraptor4x.controller.DefaultControllerMethod;
 
 /**
  * Test method validator feature.

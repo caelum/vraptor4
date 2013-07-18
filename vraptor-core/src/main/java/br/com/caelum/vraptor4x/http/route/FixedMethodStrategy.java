@@ -24,9 +24,9 @@ import java.util.EnumSet;
 import java.util.Set;
 
 import br.com.caelum.vraptor4.http.MutableRequest;
+import br.com.caelum.vraptor4.restfulie.controller.ControllerMethod;
+import br.com.caelum.vraptor4.restfulie.controller.HttpMethod;
 import br.com.caelum.vraptor4.util.Stringnifier;
-import br.com.caelum.vraptor4x.controller.ControllerMethod;
-import br.com.caelum.vraptor4x.controller.HttpMethod;
 
 /**
  * A route strategy which invokes a fixed type's method.

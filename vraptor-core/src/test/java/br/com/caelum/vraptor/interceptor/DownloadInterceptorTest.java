@@ -56,8 +56,8 @@ import br.com.caelum.vraptor4.core.MethodInfo;
 import br.com.caelum.vraptor4.interceptor.Interceptor;
 import br.com.caelum.vraptor4.interceptor.download.Download;
 import br.com.caelum.vraptor4.interceptor.download.DownloadInterceptor;
-import br.com.caelum.vraptor4x.controller.ControllerMethod;
-import br.com.caelum.vraptor4x.controller.DefaultControllerMethod;
+import br.com.caelum.vraptor4.restfulie.controller.ControllerMethod;
+import br.com.caelum.vraptor4.restfulie.controller.DefaultControllerMethod;
 
 public class DownloadInterceptorTest {
 

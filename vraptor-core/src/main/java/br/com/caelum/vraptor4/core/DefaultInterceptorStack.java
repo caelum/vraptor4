@@ -29,7 +29,7 @@ import br.com.caelum.vraptor4.interceptor.ForwardToDefaultViewInterceptor;
 import br.com.caelum.vraptor4.interceptor.Interceptor;
 import br.com.caelum.vraptor4.ioc.PrototypeScoped;
 import br.com.caelum.vraptor4.ioc.RequestScoped;
-import br.com.caelum.vraptor4x.controller.ControllerMethod;
+import br.com.caelum.vraptor4.restfulie.controller.ControllerMethod;
 
 /**
  * Default implementation of a interceptor stack.

@@ -41,11 +41,11 @@ import br.com.caelum.vraptor4.http.InvalidParameterException;
 import br.com.caelum.vraptor4.http.ParameterNameProvider;
 import br.com.caelum.vraptor4.http.ParametersProvider;
 import br.com.caelum.vraptor4.ioc.Container;
+import br.com.caelum.vraptor4.restfulie.controller.ControllerMethod;
+import br.com.caelum.vraptor4.restfulie.controller.DefaultControllerMethod;
 import br.com.caelum.vraptor4.util.EmptyBundle;
 import br.com.caelum.vraptor4.validator.DefaultValidationException;
 import br.com.caelum.vraptor4.validator.Message;
-import br.com.caelum.vraptor4x.controller.ControllerMethod;
-import br.com.caelum.vraptor4x.controller.DefaultControllerMethod;
 
 import com.google.common.collect.ImmutableMap;
 

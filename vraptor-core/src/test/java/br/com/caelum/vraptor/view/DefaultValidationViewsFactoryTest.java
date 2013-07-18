@@ -34,6 +34,7 @@ import br.com.caelum.vraptor4.Result;
 import br.com.caelum.vraptor4.proxy.JavassistProxifier;
 import br.com.caelum.vraptor4.proxy.ObjenesisInstanceCreator;
 import br.com.caelum.vraptor4.proxy.Proxifier;
+import br.com.caelum.vraptor4.restfulie.controller.HttpMethod;
 import br.com.caelum.vraptor4.serialization.JSONSerialization;
 import br.com.caelum.vraptor4.serialization.SerializerBuilder;
 import br.com.caelum.vraptor4.util.test.MockedLogic;
@@ -46,7 +47,6 @@ import br.com.caelum.vraptor4.view.LogicResult;
 import br.com.caelum.vraptor4.view.PageResult;
 import br.com.caelum.vraptor4.view.RefererResult;
 import br.com.caelum.vraptor4.view.Status;
-import br.com.caelum.vraptor4x.controller.HttpMethod;
 
 public class DefaultValidationViewsFactoryTest {
 

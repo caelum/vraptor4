@@ -27,7 +27,7 @@ import br.com.caelum.vraptor4.VRaptorException;
 import br.com.caelum.vraptor4.core.InterceptsQualifier;
 import br.com.caelum.vraptor4.interceptor.Interceptor;
 import br.com.caelum.vraptor4.interceptor.InterceptorRegistry;
-import br.com.caelum.vraptor4x.controller.BeanClass;
+import br.com.caelum.vraptor4.restfulie.controller.BeanClass;
 
 @ApplicationScoped
 public class InterceptorStereotypeHandler{

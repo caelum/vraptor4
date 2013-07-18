@@ -6,7 +6,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * 	http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -15,33 +15,33 @@
  * limitations under the License.
  */
 
-package br.com.caelum.vraptor4x.controller;
+package br.com.caelum.vraptor4.restfulie.controller;
 
 import java.io.IOException;
+import java.util.Set;
 
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletResponse;
 
 import br.com.caelum.vraptor4.InterceptionException;
 import br.com.caelum.vraptor4.core.RequestInfo;
 import br.com.caelum.vraptor4.ioc.ApplicationScoped;
 
 /**
- * Default 404 component. It defers the request back to container
+ * Default implementation which sets the header and send an error response.
+ * @author guilherme
  *
- * @author Lucas Cavalcanti
- * @author Luiz Real
  */
 @ApplicationScoped
-public class DefaultControllerNotFoundHandler implements ControllerNotFoundHandler {
+public class DefaultMethodNotAllowedHandler implements MethodNotAllowedHandler {
 
-	public void couldntFind(RequestInfo request) {
-		FilterChain chain = request.getChain();
+	public void deny(RequestInfo request, Set<HttpMethod> allowedMethods) {
+		request.getResponse().addHeader(
+				"Allow", allowedMethods.toString().replaceAll("\\[|\\]", ""));
 		try {
-			chain.doFilter(request.getRequest(), request.getResponse());
+			if (!"OPTIONS".equalsIgnoreCase(request.getRequest().getMethod())) {
+				request.getResponse().sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
+			}
 		} catch (IOException e) {
-			throw new InterceptionException(e);
-		} catch (ServletException e) {
 			throw new InterceptionException(e);
 		}
 	}

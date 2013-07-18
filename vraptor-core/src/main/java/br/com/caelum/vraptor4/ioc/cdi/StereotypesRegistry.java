@@ -11,7 +11,7 @@ import javax.inject.Inject;
 
 import br.com.caelum.vraptor4.core.BaseComponents;
 import br.com.caelum.vraptor4.core.StereotypeInfo;
-import br.com.caelum.vraptor4x.controller.DefaultBeanClass;
+import br.com.caelum.vraptor4.restfulie.controller.DefaultBeanClass;
 
 @ApplicationScoped
 public class StereotypesRegistry {

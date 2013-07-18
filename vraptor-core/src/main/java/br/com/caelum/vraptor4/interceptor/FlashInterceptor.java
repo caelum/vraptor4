@@ -30,7 +30,7 @@ import br.com.caelum.vraptor4.Result;
 import br.com.caelum.vraptor4.core.InterceptorStack;
 import br.com.caelum.vraptor4.http.MutableResponse;
 import br.com.caelum.vraptor4.http.MutableResponse.RedirectListener;
-import br.com.caelum.vraptor4x.controller.ControllerMethod;
+import br.com.caelum.vraptor4.restfulie.controller.ControllerMethod;
 
 /**
  * Interceptor that handles flash scope.

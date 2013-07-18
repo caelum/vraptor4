@@ -24,7 +24,7 @@ import org.slf4j.LoggerFactory;
 import br.com.caelum.vraptor4.core.BaseComponents;
 import br.com.caelum.vraptor4.core.DeserializesQualifier;
 import br.com.caelum.vraptor4.ioc.ApplicationScoped;
-import br.com.caelum.vraptor4x.controller.BeanClass;
+import br.com.caelum.vraptor4.restfulie.controller.BeanClass;
 
 /**
  * Handles classes annotated with @Deserializes

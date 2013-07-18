@@ -28,7 +28,7 @@ import br.com.caelum.vraptor4.core.DefaultExceptionMapper;
 import br.com.caelum.vraptor4.core.ExceptionMapper;
 import br.com.caelum.vraptor4.core.ExceptionRecorder;
 import br.com.caelum.vraptor4.core.InterceptorStack;
-import br.com.caelum.vraptor4x.controller.ControllerMethod;
+import br.com.caelum.vraptor4.restfulie.controller.ControllerMethod;
 
 import com.google.common.base.Throwables;
 

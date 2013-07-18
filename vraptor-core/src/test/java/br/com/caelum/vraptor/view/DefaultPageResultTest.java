@@ -43,11 +43,11 @@ import br.com.caelum.vraptor4.proxy.JavassistProxifier;
 import br.com.caelum.vraptor4.proxy.ObjenesisInstanceCreator;
 import br.com.caelum.vraptor4.proxy.Proxifier;
 import br.com.caelum.vraptor4.proxy.ProxyInvocationException;
+import br.com.caelum.vraptor4.restfulie.controller.ControllerMethod;
+import br.com.caelum.vraptor4.restfulie.controller.DefaultControllerMethod;
 import br.com.caelum.vraptor4.view.DefaultPageResult;
 import br.com.caelum.vraptor4.view.PathResolver;
 import br.com.caelum.vraptor4.view.ResultException;
-import br.com.caelum.vraptor4x.controller.ControllerMethod;
-import br.com.caelum.vraptor4x.controller.DefaultControllerMethod;
 
 public class DefaultPageResultTest {
 

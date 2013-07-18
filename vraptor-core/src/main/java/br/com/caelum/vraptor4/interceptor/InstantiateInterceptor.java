@@ -25,9 +25,9 @@ import br.com.caelum.vraptor4.InterceptionException;
 import br.com.caelum.vraptor4.Intercepts;
 import br.com.caelum.vraptor4.core.InterceptorStack;
 import br.com.caelum.vraptor4.ioc.Container;
-import br.com.caelum.vraptor4x.controller.ControllerInstance;
-import br.com.caelum.vraptor4x.controller.ControllerMethod;
-import br.com.caelum.vraptor4x.controller.DefaultControllerInstance;
+import br.com.caelum.vraptor4.restfulie.controller.ControllerInstance;
+import br.com.caelum.vraptor4.restfulie.controller.ControllerMethod;
+import br.com.caelum.vraptor4.restfulie.controller.DefaultControllerInstance;
 
 /**
  * Using a request scoped container, instantiates a resource.<br/>

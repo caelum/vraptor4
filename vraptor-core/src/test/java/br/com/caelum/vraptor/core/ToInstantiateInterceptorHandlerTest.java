@@ -32,7 +32,7 @@ import br.com.caelum.vraptor4.core.InterceptorStack;
 import br.com.caelum.vraptor4.core.ToInstantiateInterceptorHandler;
 import br.com.caelum.vraptor4.interceptor.Interceptor;
 import br.com.caelum.vraptor4.ioc.Container;
-import br.com.caelum.vraptor4x.controller.ControllerMethod;
+import br.com.caelum.vraptor4.restfulie.controller.ControllerMethod;
 
 public class ToInstantiateInterceptorHandlerTest {
 

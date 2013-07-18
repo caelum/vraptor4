@@ -14,9 +14,9 @@ import org.mockito.MockitoAnnotations;
 import br.com.caelum.vraptor4.Result;
 import br.com.caelum.vraptor4.core.MethodInfo;
 import br.com.caelum.vraptor4.http.ParameterNameProvider;
+import br.com.caelum.vraptor4.restfulie.controller.ControllerMethod;
 import br.com.caelum.vraptor4.validator.Outjector;
 import br.com.caelum.vraptor4.validator.ReplicatorOutjector;
-import br.com.caelum.vraptor4x.controller.ControllerMethod;
 
 public class ReplicatorOutjectorTest {
 

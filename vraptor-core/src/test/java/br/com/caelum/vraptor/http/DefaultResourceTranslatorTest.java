@@ -36,8 +36,8 @@ import br.com.caelum.vraptor4.core.RequestInfo;
 import br.com.caelum.vraptor4.http.DefaultResourceTranslator;
 import br.com.caelum.vraptor4.http.MutableRequest;
 import br.com.caelum.vraptor4.http.VRaptorRequest;
-import br.com.caelum.vraptor4x.controller.ControllerMethod;
-import br.com.caelum.vraptor4x.controller.HttpMethod;
+import br.com.caelum.vraptor4.restfulie.controller.ControllerMethod;
+import br.com.caelum.vraptor4.restfulie.controller.HttpMethod;
 import br.com.caelum.vraptor4x.http.route.MethodNotAllowedException;
 import br.com.caelum.vraptor4x.http.route.Router;
 

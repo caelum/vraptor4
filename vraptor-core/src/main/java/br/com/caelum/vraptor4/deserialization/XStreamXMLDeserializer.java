@@ -21,8 +21,8 @@ import java.lang.reflect.Method;
 import javax.inject.Inject;
 
 import br.com.caelum.vraptor4.http.ParameterNameProvider;
+import br.com.caelum.vraptor4.restfulie.controller.ControllerMethod;
 import br.com.caelum.vraptor4.serialization.xstream.XStreamBuilder;
-import br.com.caelum.vraptor4x.controller.ControllerMethod;
 
 import com.thoughtworks.xstream.XStream;
 

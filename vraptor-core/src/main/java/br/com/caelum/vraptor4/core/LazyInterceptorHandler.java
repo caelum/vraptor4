@@ -26,7 +26,7 @@ import org.slf4j.LoggerFactory;
 import br.com.caelum.vraptor4.InterceptionException;
 import br.com.caelum.vraptor4.interceptor.Interceptor;
 import br.com.caelum.vraptor4.ioc.Container;
-import br.com.caelum.vraptor4x.controller.ControllerMethod;
+import br.com.caelum.vraptor4.restfulie.controller.ControllerMethod;
 
 class LazyInterceptorHandler implements InterceptorHandler {
 

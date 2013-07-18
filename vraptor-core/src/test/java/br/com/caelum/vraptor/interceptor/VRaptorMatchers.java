@@ -23,9 +23,9 @@ import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 
+import br.com.caelum.vraptor4.restfulie.controller.BeanClass;
+import br.com.caelum.vraptor4.restfulie.controller.ControllerMethod;
 import br.com.caelum.vraptor4.validator.ValidationMessage;
-import br.com.caelum.vraptor4x.controller.BeanClass;
-import br.com.caelum.vraptor4x.controller.ControllerMethod;
 
 /**
  * Useful matchers to use while mocking and hamcresting tests with internal

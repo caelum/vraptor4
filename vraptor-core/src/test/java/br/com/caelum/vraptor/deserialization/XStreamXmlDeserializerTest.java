@@ -16,11 +16,11 @@ import org.junit.Test;
 
 import br.com.caelum.vraptor4.deserialization.XStreamXMLDeserializer;
 import br.com.caelum.vraptor4.http.ParameterNameProvider;
+import br.com.caelum.vraptor4.restfulie.controller.BeanClass;
+import br.com.caelum.vraptor4.restfulie.controller.ControllerMethod;
+import br.com.caelum.vraptor4.restfulie.controller.DefaultBeanClass;
+import br.com.caelum.vraptor4.restfulie.controller.DefaultControllerMethod;
 import br.com.caelum.vraptor4.serialization.xstream.XStreamBuilderImpl;
-import br.com.caelum.vraptor4x.controller.BeanClass;
-import br.com.caelum.vraptor4x.controller.ControllerMethod;
-import br.com.caelum.vraptor4x.controller.DefaultBeanClass;
-import br.com.caelum.vraptor4x.controller.DefaultControllerMethod;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 

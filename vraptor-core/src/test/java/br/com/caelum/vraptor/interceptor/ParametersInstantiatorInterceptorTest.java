@@ -50,11 +50,11 @@ import br.com.caelum.vraptor4.http.MutableRequest;
 import br.com.caelum.vraptor4.http.ParameterNameProvider;
 import br.com.caelum.vraptor4.http.ParametersProvider;
 import br.com.caelum.vraptor4.interceptor.ParametersInstantiatorInterceptor;
+import br.com.caelum.vraptor4.restfulie.controller.ControllerMethod;
+import br.com.caelum.vraptor4.restfulie.controller.DefaultControllerMethod;
 import br.com.caelum.vraptor4.validator.Message;
 import br.com.caelum.vraptor4.validator.ValidationMessage;
 import br.com.caelum.vraptor4.view.FlashScope;
-import br.com.caelum.vraptor4x.controller.ControllerMethod;
-import br.com.caelum.vraptor4x.controller.DefaultControllerMethod;
 
 public class ParametersInstantiatorInterceptorTest {
 

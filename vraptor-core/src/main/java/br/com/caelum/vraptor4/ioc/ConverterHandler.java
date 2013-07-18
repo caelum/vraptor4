@@ -27,7 +27,7 @@ import br.com.caelum.vraptor4.VRaptorException;
 import br.com.caelum.vraptor4.core.BaseComponents;
 import br.com.caelum.vraptor4.core.ConvertQualifier;
 import br.com.caelum.vraptor4.core.Converters;
-import br.com.caelum.vraptor4x.controller.BeanClass;
+import br.com.caelum.vraptor4.restfulie.controller.BeanClass;
 
 @ApplicationScoped
 public class ConverterHandler{

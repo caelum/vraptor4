@@ -1,7 +1,7 @@
 package br.com.caelum.vrapto4.test;
 
-import br.com.caelum.vraptor.Intercepts;
 import br.com.caelum.vraptor4.AroundCall;
+import br.com.caelum.vraptor4.Intercepts;
 import br.com.caelum.vraptor4.interceptor.AcceptsWithAnnotations;
 import br.com.caelum.vraptor4.interceptor.SimpleInterceptorStack;
 
@@ -14,5 +14,5 @@ public class CustomAcceptsInterceptor {
 		System.out.println("notlogged antes");
 		stack.next();
 		System.out.println("notlogged depois");
-	}	
+	}
 }

@@ -39,6 +39,7 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
+import br.com.caelum.vraptor4.Controller;
 import br.com.caelum.vraptor4.Delete;
 import br.com.caelum.vraptor4.Get;
 import br.com.caelum.vraptor4.Head;
@@ -53,7 +54,6 @@ import br.com.caelum.vraptor4.proxy.ObjenesisInstanceCreator;
 import br.com.caelum.vraptor4.proxy.Proxifier;
 import br.com.caelum.vraptor4.restfulie.controller.DefaultBeanClass;
 import br.com.caelum.vraptor4.restfulie.controller.HttpMethod;
-import br.com.caelum.vraptor4x.Controller;
 import br.com.caelum.vraptor4x.http.route.DefaultRouteBuilder;
 import br.com.caelum.vraptor4x.http.route.JavaEvaluator;
 import br.com.caelum.vraptor4x.http.route.NoTypeFinder;

@@ -1,4 +1,4 @@
-package br.com.caelum.vraptor4x;
+package br.com.caelum.vraptor4;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;

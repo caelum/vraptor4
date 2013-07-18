@@ -38,10 +38,10 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import br.com.caelum.vraptor4.VRaptor;
 import br.com.caelum.vraptor4.core.RequestExecution;
 import br.com.caelum.vraptor4.core.StaticContentHandler;
 import br.com.caelum.vraptor4.ioc.Container;
-import br.com.caelum.vraptor4x.VRaptor;
 
 public class VRaptorTest {
 

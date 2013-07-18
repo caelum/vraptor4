@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package br.com.caelum.vraptor4x;
+package br.com.caelum.vraptor4;
 
 import java.io.IOException;
 

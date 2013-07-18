@@ -1,4 +1,4 @@
-package br.com.caelum.vraptor4x;
+package br.com.caelum.vraptor4;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
@@ -9,5 +9,6 @@ import java.lang.annotation.Target;
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
-public @interface AroundCall {
+public @interface BeforeCall {
+
 }

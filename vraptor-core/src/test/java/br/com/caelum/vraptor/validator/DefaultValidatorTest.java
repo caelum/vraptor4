@@ -44,6 +44,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import br.com.caelum.vraptor4.Controller;
 import br.com.caelum.vraptor4.Result;
 import br.com.caelum.vraptor4.core.Localization;
 import br.com.caelum.vraptor4.proxy.JavassistProxifier;
@@ -62,7 +63,6 @@ import br.com.caelum.vraptor4.validator.Validations;
 import br.com.caelum.vraptor4.view.DefaultValidationViewsFactory;
 import br.com.caelum.vraptor4.view.LogicResult;
 import br.com.caelum.vraptor4.view.PageResult;
-import br.com.caelum.vraptor4x.Controller;
 
 @RunWith(MockitoJUnitRunner.class)
 public class DefaultValidatorTest {

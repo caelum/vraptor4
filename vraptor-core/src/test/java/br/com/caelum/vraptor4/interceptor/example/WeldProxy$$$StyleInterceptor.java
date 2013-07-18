@@ -1,6 +1,6 @@
 package br.com.caelum.vraptor4.interceptor.example;
 
-import br.com.caelum.vraptor4x.AroundCall;
+import br.com.caelum.vraptor4.AroundCall;
 import br.com.caelum.vraptor4x.interceptor.SimpleInterceptorStack;
 
 public class WeldProxy$$$StyleInterceptor extends BaseInterceptor {

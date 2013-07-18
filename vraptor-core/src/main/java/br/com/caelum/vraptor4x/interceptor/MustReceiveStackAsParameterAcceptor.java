@@ -8,8 +8,8 @@ import java.util.List;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 
+import br.com.caelum.vraptor4.AroundCall;
 import br.com.caelum.vraptor4.core.InterceptorStack;
-import br.com.caelum.vraptor4x.AroundCall;
 
 public class MustReceiveStackAsParameterAcceptor implements SignatureAcceptor {
 

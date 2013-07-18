@@ -21,7 +21,7 @@ import br.com.caelum.vraptor4.controller.ControllerMethod;
 @Intercepts(
 	after=ParametersInstantiatorInterceptor.class
 )
-public class ReturnParamInterceptor {
+public class ParameterIncluderInterceptor {
 
 	private MethodInfo info;
 	private Result result;
@@ -29,10 +29,10 @@ public class ReturnParamInterceptor {
 	private ControllerMethod controllerMethod;
 
 	@Deprecated // CDI eyes only
-	public ReturnParamInterceptor() {}
+	public ParameterIncluderInterceptor() {}
 
 	@Inject
-	public ReturnParamInterceptor(MethodInfo info,
+	public ParameterIncluderInterceptor(MethodInfo info,
 			Result result, ParameterNameProvider nameProvider,
 			ControllerMethod controllerMethod) {
 

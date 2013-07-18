@@ -104,7 +104,7 @@ import br.com.caelum.vraptor.interceptor.InterceptorRegistry;
 import br.com.caelum.vraptor.interceptor.OutjectResult;
 import br.com.caelum.vraptor.interceptor.ParametersInstantiatorInterceptor;
 import br.com.caelum.vraptor.interceptor.ResourceLookupInterceptor;
-import br.com.caelum.vraptor.interceptor.ReturnParamInterceptor;
+import br.com.caelum.vraptor.interceptor.ParameterIncluderInterceptor;
 import br.com.caelum.vraptor.interceptor.TopologicalSortedInterceptorRegistry;
 import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
 import br.com.caelum.vraptor.interceptor.download.DownloadInterceptor;
@@ -282,7 +282,7 @@ public class BaseComponents {
             FlashScope.class,								SessionFlashScope.class,
             XStreamConverters.class,                        XStreamConverters.class,
             MessageConverter.class,							MessageConverter.class,
-            ReturnParamInterceptor.class,					ReturnParamInterceptor.class
+            ParameterIncluderInterceptor.class,					ParameterIncluderInterceptor.class
     );
 
     @SuppressWarnings({"unchecked", "rawtypes"})

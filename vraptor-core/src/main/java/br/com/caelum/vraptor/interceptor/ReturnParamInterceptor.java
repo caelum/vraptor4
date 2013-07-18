@@ -12,7 +12,7 @@ import br.com.caelum.vraptor4.controller.ControllerMethod;
 	before=ExecuteMethodInterceptor.class,
 	after=ParametersInstantiatorInterceptor.class
 )
-public class ReturnParamInterceptor implements Interceptor{
+public class ReturnParamInterceptor {
 
 	private final MethodInfo info;
 	private final Result result;

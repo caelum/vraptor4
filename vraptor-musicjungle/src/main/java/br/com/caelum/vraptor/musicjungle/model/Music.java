@@ -119,5 +119,10 @@ public class Music {
 		return true;
 	}
 
-
+	@Override
+	public String toString() {
+		return "Music [id=" + id + ", title=" + title + 
+			", description=" + description + ", type=" + type + "]";
+	}
+	
 }

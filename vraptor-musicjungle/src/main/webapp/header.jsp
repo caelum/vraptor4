@@ -49,7 +49,7 @@
 				</a>
 			  </li>
 			  <li>
-			  	<a href="${path}musics/list/form"> 
+			  	<a href="${linkTo[MusicController].listForm}"> 
 			  		<fmt:message key="export_all_musics" /> 
 			  	</a>
 			  </li>

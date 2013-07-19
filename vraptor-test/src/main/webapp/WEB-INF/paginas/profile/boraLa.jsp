@@ -6,8 +6,7 @@
 		<title>Teste VRaptor4</title>
 	</head>
 	<body>
-		Profile name: ${name} <br/>
-		Profile email: ${email} <br/>
-		safado		
+		Profile name: ${profile.name} <br/>
+		Profile email: ${profile.email} <br/>
 	</body>
 </html>

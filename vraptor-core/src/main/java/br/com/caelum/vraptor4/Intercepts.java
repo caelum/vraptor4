@@ -26,7 +26,6 @@ import java.lang.annotation.Target;
 import br.com.caelum.vraptor4.interceptor.ExecuteMethodInterceptor;
 import br.com.caelum.vraptor4.interceptor.InstantiateInterceptor;
 import br.com.caelum.vraptor4.interceptor.Interceptor;
-import br.com.caelum.vraptor4.interceptor.ResourceLookupInterceptor;
 import br.com.caelum.vraptor4.ioc.RequestScoped;
 
 /**

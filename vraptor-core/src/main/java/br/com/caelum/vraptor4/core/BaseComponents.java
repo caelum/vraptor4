@@ -114,6 +114,7 @@ import br.com.caelum.vraptor4.interceptor.ForwardToDefaultViewInterceptor;
 import br.com.caelum.vraptor4.interceptor.InstantiateInterceptor;
 import br.com.caelum.vraptor4.interceptor.InterceptorRegistry;
 import br.com.caelum.vraptor4.interceptor.OutjectResult;
+import br.com.caelum.vraptor4.interceptor.ParameterIncluderInterceptor;
 import br.com.caelum.vraptor4.interceptor.ParametersInstantiatorInterceptor;
 import br.com.caelum.vraptor4.interceptor.ResourceLookupInterceptor;
 import br.com.caelum.vraptor4.interceptor.SimpleInterceptorStack;
@@ -280,7 +281,8 @@ public class BaseComponents {
             RestHeadersHandler.class,						DefaultRestHeadersHandler.class,
             FlashScope.class,								SessionFlashScope.class,
             XStreamConverters.class,                        XStreamConverters.class,
-            MessageConverter.class,							MessageConverter.class
+            MessageConverter.class,							MessageConverter.class,
+            ParameterIncluderInterceptor.class,					ParameterIncluderInterceptor.class
     );
 
     @SuppressWarnings({"unchecked", "rawtypes"})

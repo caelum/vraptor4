@@ -2,7 +2,7 @@ package br.com.caelum.vraptor4.interceptor;
 
 import java.lang.reflect.Method;
 
-import br.com.caelum.vraptor.core.InterceptorStack;
+import br.com.caelum.vraptor4.core.InterceptorStack;
 
 public class NoStackParameterSignatureAcceptor implements SignatureAcceptor {
 

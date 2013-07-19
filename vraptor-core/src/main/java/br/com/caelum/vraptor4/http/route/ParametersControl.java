@@ -17,7 +17,7 @@
 
 package br.com.caelum.vraptor4.http.route;
 
-import br.com.caelum.vraptor.http.MutableRequest;
+import br.com.caelum.vraptor4.http.MutableRequest;
 
 public interface ParametersControl {
 

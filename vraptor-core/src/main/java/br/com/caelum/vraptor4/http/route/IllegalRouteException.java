@@ -17,7 +17,7 @@
 
 package br.com.caelum.vraptor4.http.route;
 
-import br.com.caelum.vraptor.VRaptorException;
+import br.com.caelum.vraptor4.VRaptorException;
 
 /**
  * Illegal routes might be created under different situations. THe most common

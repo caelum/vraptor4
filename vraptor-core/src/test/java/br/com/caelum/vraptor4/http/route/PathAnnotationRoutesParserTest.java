@@ -39,21 +39,27 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
-import br.com.caelum.vraptor.Delete;
-import br.com.caelum.vraptor.Get;
-import br.com.caelum.vraptor.Head;
-import br.com.caelum.vraptor.Options;
-import br.com.caelum.vraptor.Patch;
-import br.com.caelum.vraptor.Path;
-import br.com.caelum.vraptor.Post;
-import br.com.caelum.vraptor.core.Converters;
-import br.com.caelum.vraptor.http.ParameterNameProvider;
-import br.com.caelum.vraptor.proxy.JavassistProxifier;
-import br.com.caelum.vraptor.proxy.ObjenesisInstanceCreator;
-import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor4.Controller;
-import br.com.caelum.vraptor4.controller.DefaultBeanClass;
-import br.com.caelum.vraptor4.controller.HttpMethod;
+import br.com.caelum.vraptor4.Delete;
+import br.com.caelum.vraptor4.Get;
+import br.com.caelum.vraptor4.Head;
+import br.com.caelum.vraptor4.Options;
+import br.com.caelum.vraptor4.Patch;
+import br.com.caelum.vraptor4.Path;
+import br.com.caelum.vraptor4.Post;
+import br.com.caelum.vraptor4.core.Converters;
+import br.com.caelum.vraptor4.http.ParameterNameProvider;
+import br.com.caelum.vraptor4.http.route.DefaultRouteBuilder;
+import br.com.caelum.vraptor4.http.route.JavaEvaluator;
+import br.com.caelum.vraptor4.http.route.NoTypeFinder;
+import br.com.caelum.vraptor4.http.route.PathAnnotationRoutesParser;
+import br.com.caelum.vraptor4.http.route.Route;
+import br.com.caelum.vraptor4.http.route.Router;
+import br.com.caelum.vraptor4.proxy.JavassistProxifier;
+import br.com.caelum.vraptor4.proxy.ObjenesisInstanceCreator;
+import br.com.caelum.vraptor4.proxy.Proxifier;
+import br.com.caelum.vraptor4.restfulie.controller.DefaultBeanClass;
+import br.com.caelum.vraptor4.restfulie.controller.HttpMethod;
 
 public class PathAnnotationRoutesParserTest {
 

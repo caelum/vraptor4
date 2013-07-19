@@ -2,7 +2,7 @@ package br.com.caelum.vraptor4.interceptor;
 
 import java.util.HashMap;
 
-import br.com.caelum.vraptor.ioc.Container;
+import br.com.caelum.vraptor4.ioc.Container;
 
 class InterceptorContainerDecorator implements Container {
 

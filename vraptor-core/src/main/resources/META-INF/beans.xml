@@ -6,16 +6,15 @@
          version="1.1" bean-discovery-mode="all">
          
     <scan>
-        <exclude name="br.com.caelum.vraptor.**"></exclude>
         <exclude name="br.com.caelum.vraptor4.**"></exclude>
     </scan>
 
     <alternatives>
-        <class>br.com.caelum.vraptor.ioc.cdi.CDIHttpServletRequestFactory</class>
-        <class>br.com.caelum.vraptor.ioc.cdi.CDIHttpServletResponseFactory</class>
-        <class>br.com.caelum.vraptor.ioc.cdi.ServletContextFactory</class>
-        <class>br.com.caelum.vraptor.ioc.cdi.CDIFilterChainFactory</class>
-        <class>br.com.caelum.vraptor.ioc.cdi.CDIHttpSessionFactory</class>
+        <class>br.com.caelum.vraptor4.ioc.cdi.CDIHttpServletRequestFactory</class>
+        <class>br.com.caelum.vraptor4.ioc.cdi.CDIHttpServletResponseFactory</class>
+        <class>br.com.caelum.vraptor4.ioc.cdi.ServletContextFactory</class>
+        <class>br.com.caelum.vraptor4.ioc.cdi.CDIFilterChainFactory</class>
+        <class>br.com.caelum.vraptor4.ioc.cdi.CDIHttpSessionFactory</class>
     </alternatives>    
 
 </beans>

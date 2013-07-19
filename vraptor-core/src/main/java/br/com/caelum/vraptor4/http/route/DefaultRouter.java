@@ -29,15 +29,15 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import br.com.caelum.vraptor.VRaptorException;
-import br.com.caelum.vraptor.core.Converters;
-import br.com.caelum.vraptor.http.MutableRequest;
-import br.com.caelum.vraptor.http.ParameterNameProvider;
-import br.com.caelum.vraptor.ioc.ApplicationScoped;
-import br.com.caelum.vraptor.proxy.Proxifier;
-import br.com.caelum.vraptor.util.collections.Filters;
-import br.com.caelum.vraptor4.controller.ControllerMethod;
-import br.com.caelum.vraptor4.controller.HttpMethod;
+import br.com.caelum.vraptor4.VRaptorException;
+import br.com.caelum.vraptor4.core.Converters;
+import br.com.caelum.vraptor4.http.MutableRequest;
+import br.com.caelum.vraptor4.http.ParameterNameProvider;
+import br.com.caelum.vraptor4.ioc.ApplicationScoped;
+import br.com.caelum.vraptor4.proxy.Proxifier;
+import br.com.caelum.vraptor4.restfulie.controller.ControllerMethod;
+import br.com.caelum.vraptor4.restfulie.controller.HttpMethod;
+import br.com.caelum.vraptor4.util.collections.Filters;
 
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Iterators;

@@ -12,12 +12,14 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import br.com.caelum.vraptor4.controller.ControllerMethod;
-import br.com.caelum.vraptor4.controller.DefaultControllerInstance;
+import br.com.caelum.vraptor4.interceptor.AcceptsWithAnnotations;
+import br.com.caelum.vraptor4.interceptor.WithAnnotationAcceptor;
 import br.com.caelum.vraptor4.interceptor.example.ClassLevelAcceptsController;
 import br.com.caelum.vraptor4.interceptor.example.InterceptorWithCustomizedAccepts;
 import br.com.caelum.vraptor4.interceptor.example.MethodLevelAcceptsController;
 import br.com.caelum.vraptor4.interceptor.example.NotLogged;
+import br.com.caelum.vraptor4.restfulie.controller.ControllerMethod;
+import br.com.caelum.vraptor4.restfulie.controller.DefaultControllerInstance;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;

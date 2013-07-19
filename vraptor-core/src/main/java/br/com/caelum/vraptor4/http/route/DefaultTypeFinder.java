@@ -24,8 +24,8 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import net.vidageek.mirror.dsl.Mirror;
-import br.com.caelum.vraptor.http.ParameterNameProvider;
-import br.com.caelum.vraptor.ioc.ApplicationScoped;
+import br.com.caelum.vraptor4.http.ParameterNameProvider;
+import br.com.caelum.vraptor4.ioc.ApplicationScoped;
 /**
  * Discover parameter types
  * @author Lucas Cavalcanti

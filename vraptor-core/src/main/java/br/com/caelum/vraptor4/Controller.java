@@ -23,7 +23,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import br.com.caelum.vraptor.ioc.RequestScoped;
+import br.com.caelum.vraptor4.ioc.RequestScoped;
 
 /**
  * Controllers are entry points for requests; i.e, requests are handled by VRaptor Controllers.

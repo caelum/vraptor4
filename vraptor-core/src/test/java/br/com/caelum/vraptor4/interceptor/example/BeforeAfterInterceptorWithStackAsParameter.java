@@ -1,8 +1,8 @@
 package br.com.caelum.vraptor4.interceptor.example;
 
-import br.com.caelum.vraptor.Intercepts;
-import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor4.BeforeCall;
+import br.com.caelum.vraptor4.Intercepts;
+import br.com.caelum.vraptor4.core.InterceptorStack;
 
 @Intercepts
 public class BeforeAfterInterceptorWithStackAsParameter{

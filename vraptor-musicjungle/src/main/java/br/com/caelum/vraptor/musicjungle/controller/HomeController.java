@@ -19,21 +19,21 @@ package br.com.caelum.vraptor.musicjungle.controller;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
+import javax.annotation.Resource;
 
-import br.com.caelum.vraptor.Get;
-import br.com.caelum.vraptor.Post;
-import br.com.caelum.vraptor.Resource;
-import br.com.caelum.vraptor.Result;
-import br.com.caelum.vraptor.Validator;
-import br.com.caelum.vraptor.ioc.ComponentFactory;
+import org.hsqldb.Session;
+
+import sun.awt.ComponentFactory;
 import br.com.caelum.vraptor.musicjungle.dao.DefaultUserDao;
 import br.com.caelum.vraptor.musicjungle.dao.UserDao;
 import br.com.caelum.vraptor.musicjungle.interceptor.Public;
 import br.com.caelum.vraptor.musicjungle.interceptor.UserInfo;
 import br.com.caelum.vraptor.musicjungle.model.User;
-import br.com.caelum.vraptor.validator.Validations;
+import br.com.caelum.vraptor4.Get;
+import br.com.caelum.vraptor4.Post;
+import br.com.caelum.vraptor4.Result;
+import br.com.caelum.vraptor4.Validator;
+import br.com.caelum.vraptor4.validator.Validations;
 
 /**
  * This class will be responsible to login/logout users.

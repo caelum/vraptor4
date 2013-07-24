@@ -19,18 +19,19 @@ package br.com.caelum.vraptor.musicjungle.controller;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.com.caelum.vraptor.Get;
-import br.com.caelum.vraptor.Path;
-import br.com.caelum.vraptor.Post;
-import br.com.caelum.vraptor.Resource;
-import br.com.caelum.vraptor.Result;
-import br.com.caelum.vraptor.Validator;
+import javax.annotation.Resource;
+
 import br.com.caelum.vraptor.musicjungle.dao.UserDao;
 import br.com.caelum.vraptor.musicjungle.enums.MusicType;
 import br.com.caelum.vraptor.musicjungle.interceptor.Public;
 import br.com.caelum.vraptor.musicjungle.interceptor.UserInfo;
 import br.com.caelum.vraptor.musicjungle.model.User;
-import br.com.caelum.vraptor.validator.Validations;
+import br.com.caelum.vraptor4.Get;
+import br.com.caelum.vraptor4.Path;
+import br.com.caelum.vraptor4.Post;
+import br.com.caelum.vraptor4.Result;
+import br.com.caelum.vraptor4.Validator;
+import br.com.caelum.vraptor4.validator.Validations;
 
 import com.google.common.base.Objects;
 

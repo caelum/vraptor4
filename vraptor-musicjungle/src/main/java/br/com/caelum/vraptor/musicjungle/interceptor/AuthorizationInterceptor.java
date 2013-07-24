@@ -18,13 +18,14 @@ package br.com.caelum.vraptor.musicjungle.interceptor;
 
 import java.util.Arrays;
 
+import javax.inject.Inject;
+
 import br.com.caelum.vraptor.musicjungle.controller.HomeController;
 import br.com.caelum.vraptor.musicjungle.dao.UserDao;
 import br.com.caelum.vraptor4.InterceptionException;
 import br.com.caelum.vraptor4.Intercepts;
 import br.com.caelum.vraptor4.Result;
 import br.com.caelum.vraptor4.interceptor.SimpleInterceptorStack;
-import br.com.caelum.vraptor4.restfulie.controller.ControllerMethod;
 import br.com.caelum.vraptor4.validator.ValidationMessage;
 
 /**
@@ -34,19 +35,14 @@ import br.com.caelum.vraptor4.validator.ValidationMessage;
 public class AuthorizationInterceptor{
 
 
-	private final UserInfo info;
-	private final UserDao dao;
-	private final Result result;
-
-	public AuthorizationInterceptor(UserInfo info, UserDao dao, Result result) {
-		this.info = info;
-		this.dao = dao;
-		this.result = result;
-	}
-
-    public boolean accepts(ControllerMethod method) {
-        return !method.containsAnnotation(Public.class);
-    }
+	@Inject
+	private UserInfo info;
+	
+	@Inject
+	private UserDao dao;
+	
+	@Inject
+	private Result result;
 
     /**
      * Intercepts the request and checks if there is a user logged in.

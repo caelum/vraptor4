@@ -16,6 +16,7 @@
  */
 package br.com.caelum.vraptor.musicjungle.model;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -40,7 +41,7 @@ import com.google.common.collect.Collections2;
  */
 @Entity
 @SessionScoped
-public class User {
+public class User implements Serializable{
 
 	@Id
 	@NotNull

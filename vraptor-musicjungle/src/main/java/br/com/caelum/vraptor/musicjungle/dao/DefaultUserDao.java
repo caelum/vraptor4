@@ -20,6 +20,8 @@ import static org.hibernate.criterion.Restrictions.eq;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 
@@ -33,7 +35,8 @@ import br.com.caelum.vraptor.musicjungle.model.User;
  */
 public class DefaultUserDao implements UserDao {
 
-	private final Session session;
+	@Inject
+	private Session session;
 
 	/**
 	 * Creates a new UserDao. You can receive dependencies 
@@ -43,9 +46,9 @@ public class DefaultUserDao implements UserDao {
 	 * 
 	 * @param session Hibernate's Session.
 	 */
-	public DefaultUserDao(Session session) {
-		this.session = session;
-	}
+//	public DefaultUserDao(Session session) {
+//		this.session = session;
+//	}
 
 	@Override
 	public User find(String login, String password) {

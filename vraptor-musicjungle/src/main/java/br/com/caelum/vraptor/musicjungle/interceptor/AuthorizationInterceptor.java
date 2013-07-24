@@ -18,21 +18,20 @@ package br.com.caelum.vraptor.musicjungle.interceptor;
 
 import java.util.Arrays;
 
-import br.com.caelum.vraptor.InterceptionException;
-import br.com.caelum.vraptor.Intercepts;
-import br.com.caelum.vraptor.Result;
-import br.com.caelum.vraptor.core.InterceptorStack;
-import br.com.caelum.vraptor.interceptor.Interceptor;
 import br.com.caelum.vraptor.musicjungle.controller.HomeController;
 import br.com.caelum.vraptor.musicjungle.dao.UserDao;
-import br.com.caelum.vraptor.resource.ResourceMethod;
-import br.com.caelum.vraptor.validator.ValidationMessage;
+import br.com.caelum.vraptor4.InterceptionException;
+import br.com.caelum.vraptor4.Intercepts;
+import br.com.caelum.vraptor4.Result;
+import br.com.caelum.vraptor4.interceptor.SimpleInterceptorStack;
+import br.com.caelum.vraptor4.restfulie.controller.ControllerMethod;
+import br.com.caelum.vraptor4.validator.ValidationMessage;
 
 /**
  * Interceptor to check if the user is in the session.
  */
 @Intercepts
-public class AuthorizationInterceptor implements Interceptor {
+public class AuthorizationInterceptor{
 
 
 	private final UserInfo info;
@@ -45,17 +44,14 @@ public class AuthorizationInterceptor implements Interceptor {
 		this.result = result;
 	}
 
-	/**
-	 * the easiest way to implement the accepts method is creating an annotation
-	 */
-    public boolean accepts(ResourceMethod method) {
+    public boolean accepts(ControllerMethod method) {
         return !method.containsAnnotation(Public.class);
     }
 
     /**
      * Intercepts the request and checks if there is a user logged in.
      */
-    public void intercept(InterceptorStack stack, ResourceMethod method, Object resourceInstance)
+    public void intercept(SimpleInterceptorStack stack)
             throws InterceptionException {
     	/**
     	 * You can use the result even in interceptors.
@@ -67,7 +63,7 @@ public class AuthorizationInterceptor implements Interceptor {
     	} else {
 	    	dao.refresh(info.getUser());
 	    	// continues execution
-	    	stack.next(method, resourceInstance);
+	    	stack.next();
     	}
     }
 

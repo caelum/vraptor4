@@ -6,11 +6,9 @@ import java.io.IOException;
 
 import org.apache.commons.io.IOUtils;
 
-import br.com.caelum.vraptor.interceptor.multipart.UploadedFile;
-import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.musicjungle.model.Music;
+import br.com.caelum.vraptor4.interceptor.multipart.UploadedFile;
 
-@Component
 public class Musics {
 	
 	private File DEFAULT_FOLDER = new File("/tmp/uploads/");

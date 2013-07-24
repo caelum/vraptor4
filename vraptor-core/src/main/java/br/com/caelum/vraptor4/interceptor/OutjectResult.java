@@ -26,7 +26,6 @@ import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor4.InterceptionException;
 import br.com.caelum.vraptor4.Intercepts;
-import br.com.caelum.vraptor4.Lazy;
 import br.com.caelum.vraptor4.Result;
 import br.com.caelum.vraptor4.core.InterceptorStack;
 import br.com.caelum.vraptor4.core.MethodInfo;
@@ -38,7 +37,6 @@ import br.com.caelum.vraptor4.restfulie.controller.ControllerMethod;
  * @author guilherme silveira
  */
 @Intercepts(after=ExecuteMethodInterceptor.class, before=ForwardToDefaultViewInterceptor.class)
-@Lazy
 public class OutjectResult implements Interceptor {
 
 	private static final Logger logger = LoggerFactory.getLogger(OutjectResult.class);
@@ -46,7 +44,7 @@ public class OutjectResult implements Interceptor {
 	private Result result;
 	private MethodInfo info;
 	private TypeNameExtractor extractor;
-	
+
 	@Deprecated
 	public OutjectResult() {
 	}
@@ -57,7 +55,7 @@ public class OutjectResult implements Interceptor {
 		this.info = info;
 		this.extractor = extractor;
 	}
-	
+
 	public boolean accepts(ControllerMethod method) {
 		Type returnType = method.getMethod().getGenericReturnType();
 		return !returnType.equals(void.class);

@@ -12,15 +12,15 @@
 		<param-value>messages</param-value>
 	</context-param>
 	
-	<context-param>
-        <param-name>br.com.caelum.vraptor.packages</param-name>
-        <param-value>br.com.caelum.vraptor.util.hibernate</param-value>
-        <!-- you can add optional component packages here -->
-    </context-param>
+<!-- 	<context-param> -->
+<!--         <param-name>br.com.caelum.vraptor.packages</param-name> -->
+<!--         <param-value>br.com.caelum.vraptor.util.hibernate</param-value> -->
+<!--         you can add optional component packages here -->
+<!--     </context-param> -->
 
 	<filter>
         <filter-name>vraptor</filter-name>
-        <filter-class>br.com.caelum.vraptor.VRaptor</filter-class>
+        <filter-class>br.com.caelum.vraptor4.VRaptor</filter-class>
     </filter>
 
     <filter-mapping>

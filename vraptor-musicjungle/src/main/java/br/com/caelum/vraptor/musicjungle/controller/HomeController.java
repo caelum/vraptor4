@@ -19,8 +19,7 @@ package br.com.caelum.vraptor.musicjungle.controller;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 
-import javax.annotation.Resource;
-
+import org.hibernate.SessionFactory;
 import org.hsqldb.Session;
 
 import sun.awt.ComponentFactory;
@@ -29,6 +28,7 @@ import br.com.caelum.vraptor.musicjungle.dao.UserDao;
 import br.com.caelum.vraptor.musicjungle.interceptor.Public;
 import br.com.caelum.vraptor.musicjungle.interceptor.UserInfo;
 import br.com.caelum.vraptor.musicjungle.model.User;
+import br.com.caelum.vraptor4.Controller;
 import br.com.caelum.vraptor4.Get;
 import br.com.caelum.vraptor4.Post;
 import br.com.caelum.vraptor4.Result;
@@ -43,7 +43,7 @@ import br.com.caelum.vraptor4.validator.Validations;
  * the URI is: /something/doStuff
  *
  */
-@Resource
+@Controller
 public class HomeController {
 
     private final Result result;

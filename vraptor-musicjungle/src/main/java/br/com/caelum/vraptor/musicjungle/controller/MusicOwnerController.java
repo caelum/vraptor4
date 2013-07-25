@@ -19,15 +19,13 @@ package br.com.caelum.vraptor.musicjungle.controller;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
-
-import javax.annotation.Resource;
-
 import br.com.caelum.vraptor.musicjungle.dao.MusicDao;
 import br.com.caelum.vraptor.musicjungle.dao.UserDao;
 import br.com.caelum.vraptor.musicjungle.interceptor.UserInfo;
 import br.com.caelum.vraptor.musicjungle.model.Music;
 import br.com.caelum.vraptor.musicjungle.model.MusicOwner;
 import br.com.caelum.vraptor.musicjungle.model.User;
+import br.com.caelum.vraptor4.Controller;
 import br.com.caelum.vraptor4.Path;
 import br.com.caelum.vraptor4.Put;
 import br.com.caelum.vraptor4.Result;
@@ -38,7 +36,7 @@ import br.com.caelum.vraptor4.validator.Validations;
  * The resource <code>MusicOwnerController</code> handles all 
  * MusicOwner operations, such as adding new Musics to a user list.
  */
-@Resource
+@Controller
 public class MusicOwnerController {
 
     private final Result result;

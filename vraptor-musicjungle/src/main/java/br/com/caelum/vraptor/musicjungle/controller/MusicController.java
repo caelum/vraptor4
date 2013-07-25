@@ -26,8 +26,6 @@ import static org.hamcrest.Matchers.notNullValue;
 
 import java.io.File;
 
-import javax.annotation.Resource;
-
 import org.apache.log4j.Logger;
 
 import br.com.caelum.vraptor.musicjungle.dao.MusicDao;
@@ -36,6 +34,7 @@ import br.com.caelum.vraptor.musicjungle.interceptor.Public;
 import br.com.caelum.vraptor.musicjungle.interceptor.UserInfo;
 import br.com.caelum.vraptor.musicjungle.model.Music;
 import br.com.caelum.vraptor.musicjungle.model.MusicOwner;
+import br.com.caelum.vraptor4.Controller;
 import br.com.caelum.vraptor4.Get;
 import br.com.caelum.vraptor4.Path;
 import br.com.caelum.vraptor4.Post;
@@ -59,7 +58,7 @@ import com.google.common.base.Objects;
  *
  * GET /musics/{id} -> shows the music of given id
  */
-@Resource
+@Controller
 public class MusicController {
 
 	private static final Logger LOG = Logger.getLogger(MusicController.class);

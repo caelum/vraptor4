@@ -19,13 +19,12 @@ package br.com.caelum.vraptor.musicjungle.controller;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.Resource;
-
 import br.com.caelum.vraptor.musicjungle.dao.UserDao;
 import br.com.caelum.vraptor.musicjungle.enums.MusicType;
 import br.com.caelum.vraptor.musicjungle.interceptor.Public;
 import br.com.caelum.vraptor.musicjungle.interceptor.UserInfo;
 import br.com.caelum.vraptor.musicjungle.model.User;
+import br.com.caelum.vraptor4.Controller;
 import br.com.caelum.vraptor4.Get;
 import br.com.caelum.vraptor4.Path;
 import br.com.caelum.vraptor4.Post;
@@ -39,7 +38,7 @@ import com.google.common.base.Objects;
  * The resource <code>UsersController</code> handles all user 
  * operations, such as adding new users, listing users, and so on.
  */
-@Resource
+@Controller
 public class UsersController {
 
     private final Validator validator;

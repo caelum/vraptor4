@@ -17,6 +17,7 @@
 
 package br.com.caelum.vraptor4.converter;
 
+import static junit.framework.Assert.assertEquals;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
@@ -27,29 +28,32 @@ import java.util.ResourceBundle;
 import org.junit.Before;
 import org.junit.Test;
 
-import br.com.caelum.vraptor4.converter.ConversionError;
-import br.com.caelum.vraptor4.converter.EnumConverter;
+import br.com.caelum.vraptor4.Converter;
 
 public class EnumConverterTest {
 
-	private EnumConverter<MyCustomEnum> converter;
+	private Converter<Enum> converter;
 	private ResourceBundle bundle;
 
 	@Before
 	public void setup() {
-		this.converter = new EnumConverter<MyCustomEnum>();
+		this.converter = new EnumConverter();
 		this.bundle = ResourceBundle.getBundle("messages");
 	}
 
 	@Test
 	public void shouldBeAbleToConvertByOrdinal() {
-		assertThat(converter.convert("1", MyCustomEnum.class, bundle), is(equalTo(MyCustomEnum.SECOND)));
+		Enum value = converter.convert("1", MyCustomEnum.class, bundle);
+		MyCustomEnum second = MyCustomEnum.SECOND;
+		assertEquals(value, second);
 	}
 
 	@Test
 	public void shouldBeAbleToConvertByName() {
-		assertThat(converter.convert("FIRST", MyCustomEnum.class, bundle),
-				is(equalTo(MyCustomEnum.FIRST)));
+		
+		Enum value = converter.convert("FIRST", MyCustomEnum.class, bundle);
+		MyCustomEnum first = MyCustomEnum.FIRST;
+		assertEquals(value, first);
 	}
 
 	@Test

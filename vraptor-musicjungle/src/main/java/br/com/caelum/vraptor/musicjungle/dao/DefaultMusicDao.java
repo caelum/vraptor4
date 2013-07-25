@@ -21,6 +21,8 @@ import static org.hibernate.criterion.Restrictions.ilike;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 
@@ -39,13 +41,19 @@ import br.com.caelum.vraptor.musicjungle.model.MusicOwner;
 public class DefaultMusicDao implements MusicDao {
 
 	// current hibernate session
-	private final Session session;
+	private Session session;
 
+	//CDI eyes only
+	@Deprecated
+	public DefaultMusicDao() {
+	}
+	
 	/**
 	 * Creates a new MusicDao.
 	 *
 	 * @param session hibernate session.
 	 */
+	@Inject
 	public DefaultMusicDao(Session session) {
 		this.session = session;
 	}

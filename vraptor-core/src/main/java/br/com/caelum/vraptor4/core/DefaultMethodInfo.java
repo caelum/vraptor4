@@ -31,11 +31,11 @@ public class DefaultMethodInfo implements MethodInfo {
 	private Object[] parameters;
 	private Object result;
 
-	public ControllerMethod getResourceMethod() {
+	public ControllerMethod getControllerMethod() {
 		return resourceMethod;
 	}
 
-	public void setResourceMethod(ControllerMethod resourceMethod) {
+	public void setControllerMethod(ControllerMethod resourceMethod) {
 		this.resourceMethod = resourceMethod;
 	}
 

@@ -31,7 +31,7 @@ public class ReplicatorOutjectorTest {
 	@Before
 	public void setUp() throws Exception {
 		MockitoAnnotations.initMocks(this);
-		when(method.getResourceMethod()).thenReturn(resourceMethod);
+		when(method.getControllerMethod()).thenReturn(resourceMethod);
 		outjector = new ReplicatorOutjector(result, method, provider);
 	}
 

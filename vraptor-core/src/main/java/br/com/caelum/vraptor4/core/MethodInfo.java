@@ -26,8 +26,8 @@ import br.com.caelum.vraptor4.restfulie.controller.ControllerMethod;
  * @author Fabio Kung
  */
 public interface MethodInfo {
-    ControllerMethod getResourceMethod();
-    void setResourceMethod(ControllerMethod resourceMethod);
+    ControllerMethod getControllerMethod();
+    void setControllerMethod(ControllerMethod controllerMethod);
     void setParameters(Object[] parameters);
     Object[] getParameters();
     Object getResult();

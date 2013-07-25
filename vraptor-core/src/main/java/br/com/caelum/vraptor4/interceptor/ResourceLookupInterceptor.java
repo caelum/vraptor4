@@ -77,7 +77,7 @@ public class ResourceLookupInterceptor implements Interceptor {
 		try {
 			method = translator.translate(requestInfo);
 
-			methodInfo.setResourceMethod(method);
+			methodInfo.setControllerMethod(method);
 			stack.next(method, resourceInstance);
 		} catch (ResourceNotFoundException e) {
 			resourceNotFoundHandler.couldntFind(requestInfo);

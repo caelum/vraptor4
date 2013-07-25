@@ -40,7 +40,7 @@ public class ReplicatorOutjector implements Outjector {
     }
 	
     public void outjectRequestMap() {
-          String[] names = provider.parameterNamesFor(method.getResourceMethod().getMethod());
+          String[] names = provider.parameterNamesFor(method.getControllerMethod().getMethod());
           for (int i = 0; i < names.length; i++) {
                result.include(names[i], method.getParameters()[i]);
           }

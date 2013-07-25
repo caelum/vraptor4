@@ -96,7 +96,7 @@ public class ResourceLookupInterceptorTest {
         
         lookup.intercept(stack, null, null);
         verify(stack).next(method, null);
-        verify(methodInfo).setResourceMethod(method);
+        verify(methodInfo).setControllerMethod(method);
         assertEquals(method, lookup.createControllerMethod());
     }
 }

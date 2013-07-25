@@ -17,7 +17,6 @@
 package br.com.caelum.vraptor4.interceptor.multipart;
 
 import br.com.caelum.vraptor4.InterceptionException;
-import br.com.caelum.vraptor4.Lazy;
 import br.com.caelum.vraptor4.core.InterceptorStack;
 import br.com.caelum.vraptor4.restfulie.controller.ControllerMethod;
 
@@ -28,7 +27,6 @@ import br.com.caelum.vraptor4.restfulie.controller.ControllerMethod;
  * @since 3.1.3
  * @see CommonsUploadMultipartInterceptor
  */
-@Lazy
 public class NullMultipartInterceptor implements MultipartInterceptor {
 
     /**

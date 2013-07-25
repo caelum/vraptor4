@@ -19,6 +19,8 @@ package br.com.caelum.vraptor.musicjungle.controller;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 
+import javax.inject.Inject;
+
 import org.hibernate.SessionFactory;
 import org.hsqldb.Session;
 
@@ -46,10 +48,14 @@ import br.com.caelum.vraptor4.validator.Validations;
 @Controller
 public class HomeController {
 
-    private final Result result;
-    private final Validator validator;
-    private final UserInfo userInfo;
-	private final UserDao dao;
+    private Result result;
+    private Validator validator;
+    private UserInfo userInfo;
+	private UserDao dao;
+	
+	//CDI eyes only
+	@Deprecated
+	public HomeController() {}
 
 	/**
 	 * You can receive any dependency on constructor. If VRaptor knows all dependencies, this
@@ -58,6 +64,7 @@ public class HomeController {
 	 * - all of your classes annotated with @Component, e.g {@link DefaultUserDao}
 	 * - all of the classes that have a {@link ComponentFactory}, e.g {@link Session} or {@link SessionFactory}
 	 */
+	@Inject
 	public HomeController(UserDao dao, UserInfo userInfo, Result result, Validator validator) {
 	    this.dao = dao;
 		this.result = result;

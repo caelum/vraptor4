@@ -26,6 +26,8 @@ import static org.hamcrest.Matchers.notNullValue;
 
 import java.io.File;
 
+import javax.inject.Inject;
+
 import org.apache.log4j.Logger;
 
 import br.com.caelum.vraptor.musicjungle.dao.MusicDao;
@@ -63,11 +65,16 @@ public class MusicController {
 
 	private static final Logger LOG = Logger.getLogger(MusicController.class);
 
-    private final Result result;
-    private final Validator validator;
-    private final UserInfo userInfo;
-	private final MusicDao dao;
-	private final Musics musics;
+    private Result result;
+    private Validator validator;
+    private UserInfo userInfo;
+	private MusicDao dao;
+	private Musics musics;
+	
+	//CDI eyes only
+	@Deprecated
+	public MusicController() {
+	}
 
 	/**
 	 * Receives dependencies through the constructor.
@@ -77,6 +84,7 @@ public class MusicController {
 	 * @param validator VRaptor validator.
 	 * @param factory dao factory.
 	 */
+	@Inject
 	public MusicController(MusicDao dao, UserInfo userInfo, 
 				Result result, Validator validator, Musics musics) {
 		

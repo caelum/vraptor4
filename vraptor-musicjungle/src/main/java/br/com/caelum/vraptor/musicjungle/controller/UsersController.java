@@ -19,6 +19,8 @@ package br.com.caelum.vraptor.musicjungle.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import br.com.caelum.vraptor.musicjungle.dao.UserDao;
 import br.com.caelum.vraptor.musicjungle.enums.MusicType;
 import br.com.caelum.vraptor.musicjungle.interceptor.Public;
@@ -41,11 +43,17 @@ import com.google.common.base.Objects;
 @Controller
 public class UsersController {
 
-    private final Validator validator;
-    private final Result result;
-    private final UserInfo userInfo;
-	private final UserDao dao;
+    private Validator validator;
+    private Result result;
+    private UserInfo userInfo;
+	private UserDao dao;
 
+	
+	//CDI eyes only
+	@Deprecated
+	public UsersController() {
+	}
+	
 	/**
 	 * Receives dependencies through the constructor.
 	 * 
@@ -54,6 +62,7 @@ public class UsersController {
 	 * @param result VRaptor result handler.
 	 * @param validator VRaptor validator.
 	 */
+	@Inject
 	public UsersController(UserDao dao, UserInfo userInfo, 
 			Result result, Validator validator) {
 		

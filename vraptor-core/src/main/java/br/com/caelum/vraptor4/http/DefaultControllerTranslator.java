@@ -67,7 +67,7 @@ public class DefaultControllerTranslator implements UrlToControllerTranslator {
 		}
 		ControllerMethod controller = router.parse(controllerName, method, request);
 
-		logger.debug("found resource {}", controller);
+		logger.debug("found controller {}", controller);
 		return controller;
 	}
 

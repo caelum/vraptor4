@@ -26,11 +26,11 @@ import br.com.caelum.vraptor4.util.Stringnifier;
 
 public class DefaultControllerMethod implements ControllerMethod {
 
-	private final BeanClass resource;
+	private final BeanClass controller;
 	private final Method method;
 
-	public DefaultControllerMethod(BeanClass resource, Method method) {
-		this.resource = resource;
+	public DefaultControllerMethod(BeanClass controller, Method method) {
+		this.controller = controller;
 		this.method = method;
 	}
 
@@ -43,7 +43,7 @@ public class DefaultControllerMethod implements ControllerMethod {
 	}
 
 	public BeanClass getController() {
-		return resource;
+		return controller;
 	}
 
 	public boolean containsAnnotation(Class<? extends Annotation> annotation) {
@@ -68,7 +68,7 @@ public class DefaultControllerMethod implements ControllerMethod {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((method == null) ? 0 : method.hashCode());
-		result = prime * result + ((resource == null) ? 0 : resource.hashCode());
+		result = prime * result + ((controller == null) ? 0 : controller.hashCode());
 		return result;
 	}
 
@@ -84,7 +84,7 @@ public class DefaultControllerMethod implements ControllerMethod {
 			return false;
 		}
 		DefaultControllerMethod other = (DefaultControllerMethod) obj;
-		return equal(method, other.method) && equal(resource, other.resource);
+		return equal(method, other.method) && equal(controller, other.controller);
 	}
 
 }

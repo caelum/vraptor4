@@ -30,8 +30,8 @@ import br.com.caelum.vraptor4.restfulie.controller.ControllerMethod;
 import br.com.caelum.vraptor4.restfulie.controller.DefaultControllerInstance;
 
 /**
- * Using a request scoped container, instantiates a resource.<br/>
- * Only instantiates the resource if it has not been instantiated so far, thus
+ * Using a request scoped container, instantiates a controller.<br/>
+ * Only instantiates the controller if it has not been instantiated so far, thus
  * allowing composition of another component instantiator and this one.
  *
  * @author Guilherme Silveira
@@ -46,18 +46,18 @@ public class InstantiateInterceptor implements Interceptor {
 	@Deprecated
 	public InstantiateInterceptor() {
 	}
-	
+
 	@Inject
 	public InstantiateInterceptor(Container container) {
 		this.container = container;
 	}
-	
+
 	@Override
 	public void intercept(InterceptorStack invocation, ControllerMethod method,
 			Object instance) throws InterceptionException {
 		if (instance == null) {
 			Class<?> type = method.getController().getType();
-			instance = container.instanceFor(type);			
+			instance = container.instanceFor(type);
 		}
 		this.controllerInstance = new DefaultControllerInstance(instance);
 		invocation.next(method, instance);
@@ -67,7 +67,7 @@ public class InstantiateInterceptor implements Interceptor {
 	public boolean accepts(ControllerMethod method) {
 		return true;
 	}
-	
+
 	@Produces
 	@RequestScoped
 	public ControllerInstance createControllerInstance() {

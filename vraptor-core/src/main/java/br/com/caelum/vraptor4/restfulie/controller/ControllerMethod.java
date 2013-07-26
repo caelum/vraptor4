@@ -21,7 +21,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
 /**
- * An identifier for a resource accesible web method.
+ * An identifier for a controller accesible web method.
  *
  * @author guilherme silveira
  */

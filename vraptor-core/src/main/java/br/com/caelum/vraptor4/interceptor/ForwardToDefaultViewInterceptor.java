@@ -45,19 +45,19 @@ public class ForwardToDefaultViewInterceptor implements Interceptor {
 	@Deprecated
 	public ForwardToDefaultViewInterceptor() {
 	}
-    
+
     @Inject
     public ForwardToDefaultViewInterceptor(Result result) {
         this.result = result;
     }
-    
+
     @Override
 	public boolean accepts(ControllerMethod method) {
         return true;
     }
 
     @Override
-	public void intercept(InterceptorStack stack, ControllerMethod method, Object resourceInstance)
+	public void intercept(InterceptorStack stack, ControllerMethod method, Object controllerInstance)
             throws InterceptionException {
         if (result.used()) {
         	logger.debug("Request already dispatched and commited somewhere else, not forwarding.");

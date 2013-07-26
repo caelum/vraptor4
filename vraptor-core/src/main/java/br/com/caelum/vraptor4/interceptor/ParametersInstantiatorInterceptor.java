@@ -82,7 +82,7 @@ public class ParametersInstantiatorInterceptor implements Interceptor {
         return method.getMethod().getParameterTypes().length > 0;
     }
 
-	public void intercept(InterceptorStack stack, ControllerMethod method, Object resourceInstance) throws InterceptionException {
+	public void intercept(InterceptorStack stack, ControllerMethod method, Object controllerInstance) throws InterceptionException {
     	Enumeration<String> names = request.getParameterNames();
     	while (names.hasMoreElements()) {
 			fixParameter(names.nextElement());
@@ -100,7 +100,7 @@ public class ParametersInstantiatorInterceptor implements Interceptor {
         logger.debug("Parameter values for {} are {}", method, values);
 
         parameters.setParameters(values);
-        stack.next(method, resourceInstance);
+        stack.next(method, controllerInstance);
     }
  
 	private void addHeaderParametersToAttribute(ControllerMethod method) {

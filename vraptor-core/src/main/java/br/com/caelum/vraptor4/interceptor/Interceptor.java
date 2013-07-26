@@ -23,7 +23,7 @@ import br.com.caelum.vraptor4.core.InterceptorStack;
 import br.com.caelum.vraptor4.restfulie.controller.ControllerMethod;
 
 /**
- * Whenever an interceptor accepts a resource method, its intercept method is
+ * Whenever an interceptor accepts a controller method, its intercept method is
  * invoked to intercept the process of request parsing in order to allow the
  * software to do some specific tasks.<br>
  * Common usage for interceptors for end-users (end-programmers) are security
@@ -44,7 +44,7 @@ import br.com.caelum.vraptor4.restfulie.controller.ControllerMethod;
  */
 public interface Interceptor {
 
-    void intercept(InterceptorStack stack, ControllerMethod method, Object resourceInstance) throws InterceptionException;
+    void intercept(InterceptorStack stack, ControllerMethod method, Object controllerInstance) throws InterceptionException;
 
     boolean accepts(ControllerMethod method);
 

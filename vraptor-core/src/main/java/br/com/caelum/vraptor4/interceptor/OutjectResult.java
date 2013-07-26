@@ -46,7 +46,7 @@ public class OutjectResult implements Interceptor {
 	private Result result;
 	private MethodInfo info;
 	private TypeNameExtractor extractor;
-	
+
 	@Deprecated
 	public OutjectResult() {
 	}
@@ -57,13 +57,13 @@ public class OutjectResult implements Interceptor {
 		this.info = info;
 		this.extractor = extractor;
 	}
-	
+
 	public boolean accepts(ControllerMethod method) {
 		Type returnType = method.getMethod().getGenericReturnType();
 		return !returnType.equals(void.class);
 	}
 
-	public void intercept(InterceptorStack stack, ControllerMethod method, Object resourceInstance)
+	public void intercept(InterceptorStack stack, ControllerMethod method, Object controllerInstance)
 			throws InterceptionException {
 		Type returnType = method.getMethod().getGenericReturnType();
 		String name = extractor.nameFor(returnType);
@@ -71,7 +71,7 @@ public class OutjectResult implements Interceptor {
 
 		logger.debug("outjecting {}={}", name, value);
 		result.include(name, value);
-		stack.next(method, resourceInstance);
+		stack.next(method, controllerInstance);
 	}
 
 }

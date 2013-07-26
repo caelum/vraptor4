@@ -57,7 +57,7 @@ public class DeserializingInterceptor implements Interceptor {
 	@Deprecated
 	public DeserializingInterceptor() {
 	}
-	
+
 	@Inject
 	public DeserializingInterceptor(HttpServletRequest servletRequest, Deserializers deserializers,
 			MethodInfo methodInfo, Container container, Status status) {
@@ -67,12 +67,12 @@ public class DeserializingInterceptor implements Interceptor {
 		this.container = container;
 		this.status = status;
 	}
-	
+
 	public boolean accepts(ControllerMethod method) {
 		return method.containsAnnotation(Consumes.class);
 	}
 
-	public void intercept(InterceptorStack stack, ControllerMethod method, Object resourceInstance) throws InterceptionException {
+	public void intercept(InterceptorStack stack, ControllerMethod method, Object controllerInstance) throws InterceptionException {
 		Consumes consumesAnnotation = method.getMethod().getAnnotation(Consumes.class);
 		List<String> supported =  Arrays.asList(consumesAnnotation.value());
 
@@ -104,7 +104,7 @@ public class DeserializingInterceptor implements Interceptor {
 				}
 			}
 
-			stack.next(method, resourceInstance);
+			stack.next(method, controllerInstance);
 		} catch (IOException e) {
 			throw new InterceptionException(e);
 		}

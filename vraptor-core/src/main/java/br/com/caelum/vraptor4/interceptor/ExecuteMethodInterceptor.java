@@ -48,25 +48,25 @@ public class ExecuteMethodInterceptor implements Interceptor {
 	private Validator validator;
 	private final static Logger log = LoggerFactory.getLogger(ExecuteMethodInterceptor.class);
 
-	
+
 	@Deprecated
 	public ExecuteMethodInterceptor() {
 	}
-	
+
 	@Inject
 	public ExecuteMethodInterceptor(MethodInfo info, Validator validator) {
 		this.info = info;
 		this.validator = validator;
 	}
-	
-	public void intercept(InterceptorStack stack, ControllerMethod method, Object resourceInstance)
+
+	public void intercept(InterceptorStack stack, ControllerMethod method, Object controllerInstance)
 			throws InterceptionException {
 		try {
 			Method reflectionMethod = method.getMethod();
 			Object[] parameters = this.info.getParameters();
 
 			log.debug("Invoking {}", Stringnifier.simpleNameFor(reflectionMethod));
-			Object result = reflectionMethod.invoke(resourceInstance, parameters);
+			Object result = reflectionMethod.invoke(controllerInstance, parameters);
 
 			if (validator.hasErrors()) { // method should have thrown ValidationException
 				if (log.isDebugEnabled()) {
@@ -90,7 +90,7 @@ public class ExecuteMethodInterceptor implements Interceptor {
 			} else {
 				this.info.setResult(result);
 			}
-			stack.next(method, resourceInstance);
+			stack.next(method, controllerInstance);
 		} catch (IllegalArgumentException e) {
 			throw new InterceptionException(e);
 		} catch (IllegalAccessException e) {

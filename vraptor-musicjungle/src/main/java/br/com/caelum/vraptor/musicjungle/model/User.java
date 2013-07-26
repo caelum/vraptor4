@@ -27,8 +27,6 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.Length;
 
-import br.com.caelum.vraptor4.ioc.SessionScoped;
-
 import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
 
@@ -40,7 +38,6 @@ import com.google.common.collect.Collections2;
  * injected to other classes who depend on Users.
  */
 @Entity
-@SessionScoped
 public class User implements Serializable{
 
 	@Id

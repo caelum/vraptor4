@@ -34,7 +34,7 @@ import br.com.caelum.vraptor4.view.DefaultPathResolver;
 public class DefaultPathResolverTest {
 
     private @Mock ControllerMethod method;
-    private @Mock BeanClass resource;
+    private @Mock BeanClass controller;
 	private @Mock FormatResolver formatResolver;
 
 	private DefaultPathResolver resolver;
@@ -46,9 +46,9 @@ public class DefaultPathResolverTest {
     	MockitoAnnotations.initMocks(this);
 
     	resolver = new DefaultPathResolver(formatResolver);
-    	when(method.getController()).thenReturn(resource);
+    	when(method.getController()).thenReturn(controller);
     	when(method.getMethod()  ).thenReturn(DogController.class.getDeclaredMethod("bark"));
-    	when(resource.getType()  ).thenReturn((Class) DogController.class);
+    	when(controller.getType()  ).thenReturn((Class) DogController.class);
     }
 
     @Test

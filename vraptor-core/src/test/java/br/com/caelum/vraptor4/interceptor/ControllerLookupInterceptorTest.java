@@ -88,7 +88,7 @@ public class ControllerLookupInterceptorTest {
     }
 
     @Test
-    public void shouldUseResourceMethodFoundWithNextInterceptor() throws IOException, InterceptionException {
+    public void shouldUseControllerMethodFoundWithNextInterceptor() throws IOException, InterceptionException {
         final ControllerMethod method = mock(ControllerMethod.class);
         final InterceptorStack stack = mock(InterceptorStack.class);
         

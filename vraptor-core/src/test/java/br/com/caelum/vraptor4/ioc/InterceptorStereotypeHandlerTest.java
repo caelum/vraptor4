@@ -57,7 +57,7 @@ public class InterceptorStereotypeHandlerTest {
 		}
 
 		public void intercept(InterceptorStack stack, ControllerMethod method,
-				Object resourceInstance) throws InterceptionException {
+				Object controllerInstance) throws InterceptionException {
 		}
 	}
 	static class InterceptorB implements Interceptor {
@@ -67,7 +67,7 @@ public class InterceptorStereotypeHandlerTest {
 		}
 
 		public void intercept(InterceptorStack stack, ControllerMethod method,
-				Object resourceInstance) throws InterceptionException {
+				Object controllerInstance) throws InterceptionException {
 		}
 	}
 }

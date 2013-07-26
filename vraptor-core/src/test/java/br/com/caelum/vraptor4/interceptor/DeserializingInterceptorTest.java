@@ -70,7 +70,7 @@ public class DeserializingInterceptorTest {
 	}
 
 	@Test
-	public void willSetHttpStatusCode415IfTheResourceMethodDoesNotSupportTheGivenMediaTypes() throws Exception {
+	public void willSetHttpStatusCode415IfTheControllerMethodDoesNotSupportTheGivenMediaTypes() throws Exception {
 		when(request.getContentType()).thenReturn("image/jpeg");
 
 		interceptor.intercept(stack, consumeXml, null);

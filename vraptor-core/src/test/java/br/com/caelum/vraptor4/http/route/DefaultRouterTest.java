@@ -273,7 +273,7 @@ public class DefaultRouterTest {
 	}
 
 	@Controller
-	public static class MyResource {
+	public static class MyController {
 		public void notAnnotated() {
 		}
 
@@ -287,46 +287,46 @@ public class DefaultRouterTest {
 	}
 
 	@Controller
-	class InheritanceExample extends MyResource {
+	class InheritanceExample extends MyController {
 	}
 
 	@Test
 	public void usesAsteriskBothWays() throws NoSuchMethodException {
-		registerRulesFor(MyResource.class);
-		final Method method = MyResource.class.getMethod("starPath");
-		String url = router.urlFor(MyResource.class, method, new Object[] {});
+		registerRulesFor(MyController.class);
+		final Method method = MyController.class.getMethod("starPath");
+		String url = router.urlFor(MyController.class, method, new Object[] {});
 		assertThat(router.parse(url, HttpMethod.POST, null).getMethod(), is(equalTo(method)));
 	}
 
 	private void registerRulesFor(Class<?> type) {
 		RoutesParser parser = new PathAnnotationRoutesParser(router);
 
-		BeanClass resourceClass = new DefaultBeanClass(type);
-		List<Route> rules = parser.rulesFor(resourceClass);
+		BeanClass controllerClass = new DefaultBeanClass(type);
+		List<Route> rules = parser.rulesFor(controllerClass);
 		for (Route route : rules) {
 			router.add(route);
 		}
 	}
 
 	@Test
-	public void canTranslateAInheritedResourceBothWays() throws NoSuchMethodException {
-		registerRulesFor(MyResource.class);
+	public void canTranslateAInheritedControllerBothWays() throws NoSuchMethodException {
+		registerRulesFor(MyController.class);
 		registerRulesFor(InheritanceExample.class);
-		final Method method = MyResource.class.getMethod("notAnnotated");
+		final Method method = MyController.class.getMethod("notAnnotated");
 		String url = router.urlFor(InheritanceExample.class, method, new Object[] {});
 		assertThat(router.parse(url, HttpMethod.POST, null).getMethod(), is(equalTo(method)));
 	}
 
 	@Test
 	public void canTranslateAnnotatedMethodBothWays() throws NoSuchMethodException {
-		registerRulesFor(MyResource.class);
-		final Method method = MyResource.class.getMethod("customizedPath");
-		String url = router.urlFor(MyResource.class, method, new Object[] {});
+		registerRulesFor(MyController.class);
+		final Method method = MyController.class.getMethod("customizedPath");
+		String url = router.urlFor(MyController.class, method, new Object[] {});
 		assertThat(router.parse(url, HttpMethod.POST, null).getMethod(), is(equalTo(method)));
 	}
 }
 
-class MyCustomResource {
+class MyCustomController {
 	public void notAnnotated() {
 	}
 }

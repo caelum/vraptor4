@@ -410,7 +410,7 @@ public class PathAnnotationRoutesParserTest {
 
 
     @Test
-    public void shouldNotMatchIfAResourceHasTheWrongWebMethod() throws SecurityException {
+    public void shouldNotMatchIfAControllerHasTheWrongWebMethod() throws SecurityException {
     	List<Route> routes = parser.rulesFor(new DefaultBeanClass(ClientsController.class));
     	Route route = getRouteMatching(routes, "/clients/remove");
 

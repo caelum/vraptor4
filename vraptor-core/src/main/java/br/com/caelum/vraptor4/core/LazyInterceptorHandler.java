@@ -41,7 +41,7 @@ class LazyInterceptorHandler implements InterceptorHandler {
 		this.type = type;
 	}
 
-	public void execute(InterceptorStack stack, ControllerMethod method, Object resourceInstance)
+	public void execute(InterceptorStack stack, ControllerMethod method, Object controllerInstance)
 			throws InterceptionException {
 		boolean accepts;
 		try {
@@ -56,9 +56,9 @@ class LazyInterceptorHandler implements InterceptorHandler {
 						+ ": the container returned null.");
 			}
 			logger.debug("Invoking interceptor {}", interceptor.getClass().getSimpleName());
-			interceptor.intercept(stack, method, resourceInstance);
+			interceptor.intercept(stack, method, controllerInstance);
 		} else {
-			stack.next(method, resourceInstance);
+			stack.next(method, controllerInstance);
 		}
 
 	}

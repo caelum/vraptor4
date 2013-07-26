@@ -42,7 +42,7 @@ public class ToInstantiateInterceptorHandler implements InterceptorHandler {
 		this.type = type;
 	}
 
-	public void execute(InterceptorStack stack, ControllerMethod method, Object resourceInstance)
+	public void execute(InterceptorStack stack, ControllerMethod method, Object controllerInstance)
 			throws InterceptionException {
 		Interceptor interceptor = (Interceptor) container.instanceFor(type);
 		if (interceptor == null) {
@@ -51,9 +51,9 @@ public class ToInstantiateInterceptorHandler implements InterceptorHandler {
 		}
 		if (interceptor.accepts(method)) {
 			logger.debug("Invoking interceptor {}", interceptor.getClass().getSimpleName());
-			interceptor.intercept(stack, method, resourceInstance);
+			interceptor.intercept(stack, method, controllerInstance);
 		} else {
-			stack.next(method, resourceInstance);
+			stack.next(method, controllerInstance);
 		}
 	}
 

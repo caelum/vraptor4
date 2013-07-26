@@ -22,10 +22,13 @@ import javax.inject.Inject;
 
 import br.com.caelum.vraptor.musicjungle.controller.HomeController;
 import br.com.caelum.vraptor.musicjungle.dao.UserDao;
+import br.com.caelum.vraptor4.Accepts;
+import br.com.caelum.vraptor4.AroundCall;
 import br.com.caelum.vraptor4.InterceptionException;
 import br.com.caelum.vraptor4.Intercepts;
 import br.com.caelum.vraptor4.Result;
 import br.com.caelum.vraptor4.interceptor.SimpleInterceptorStack;
+import br.com.caelum.vraptor4.restfulie.controller.ControllerMethod;
 import br.com.caelum.vraptor4.validator.ValidationMessage;
 
 /**
@@ -43,10 +46,16 @@ public class AuthorizationInterceptor{
 	
 	@Inject
 	private Result result;
+	
+	@Accepts
+	public boolean accepts(ControllerMethod method){
+		return !method.containsAnnotation(Public.class);
+	}
 
     /**
      * Intercepts the request and checks if there is a user logged in.
      */
+	@AroundCall
     public void intercept(SimpleInterceptorStack stack)
             throws InterceptionException {
     	/**

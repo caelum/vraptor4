@@ -29,58 +29,58 @@ import br.com.caelum.vraptor4.Intercepts;
 import br.com.caelum.vraptor4.core.InterceptorStack;
 import br.com.caelum.vraptor4.core.MethodInfo;
 import br.com.caelum.vraptor4.core.RequestInfo;
-import br.com.caelum.vraptor4.http.UrlToResourceTranslator;
+import br.com.caelum.vraptor4.http.UrlToControllerTranslator;
+import br.com.caelum.vraptor4.http.route.ControllerNotFoundException;
 import br.com.caelum.vraptor4.http.route.MethodNotAllowedException;
-import br.com.caelum.vraptor4.http.route.ResourceNotFoundException;
 import br.com.caelum.vraptor4.restfulie.controller.ControllerMethod;
 import br.com.caelum.vraptor4.restfulie.controller.ControllerNotFoundHandler;
 import br.com.caelum.vraptor4.restfulie.controller.MethodNotAllowedHandler;
 
 /**
- * Looks up the resource for a specific request and delegates for the 404
+ * Looks up the controller for a specific request and delegates for the 404
  * component if unable to find it.
  *
  * @author Guilherme Silveira
  * @author Cecilia Fernandes
  */
 @Intercepts(after={})
-public class ResourceLookupInterceptor implements Interceptor {
+public class ControllerLookupInterceptor implements Interceptor {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(ResourceLookupInterceptor.class);
-	private UrlToResourceTranslator translator;
+	private static final Logger LOGGER = LoggerFactory.getLogger(ControllerLookupInterceptor.class);
+	private UrlToControllerTranslator translator;
 	private MethodInfo methodInfo;
 	private RequestInfo requestInfo;
-	private ControllerNotFoundHandler resourceNotFoundHandler;
+	private ControllerNotFoundHandler controllerNotFoundHandler;
 	private MethodNotAllowedHandler methodNotAllowedHandler;
 	private ControllerMethod method;
 
 	//CDI eyes only
 	@Deprecated
-	public ResourceLookupInterceptor() {
+	public ControllerLookupInterceptor() {
 	}
-	
+
 	@Inject
-	public ResourceLookupInterceptor(UrlToResourceTranslator translator, MethodInfo methodInfo,
-			ControllerNotFoundHandler resourceNotFoundHandler, MethodNotAllowedHandler methodNotAllowedHandler,
+	public ControllerLookupInterceptor(UrlToControllerTranslator translator, MethodInfo methodInfo,
+			ControllerNotFoundHandler controllerNotFoundHandler, MethodNotAllowedHandler methodNotAllowedHandler,
 			RequestInfo requestInfo) {
 		this.translator = translator;
 		this.methodInfo = methodInfo;
 		this.methodNotAllowedHandler = methodNotAllowedHandler;
-		this.resourceNotFoundHandler = resourceNotFoundHandler;
+		this.controllerNotFoundHandler = controllerNotFoundHandler;
 		this.requestInfo = requestInfo;
 	}
-	
+
 	@Override
-	public void intercept(InterceptorStack stack, ControllerMethod ignorableMethod, Object resourceInstance)
+	public void intercept(InterceptorStack stack, ControllerMethod ignorableMethod, Object controllerInstance)
 			throws InterceptionException {
 
 		try {
 			method = translator.translate(requestInfo);
 
 			methodInfo.setControllerMethod(method);
-			stack.next(method, resourceInstance);
-		} catch (ResourceNotFoundException e) {
-			resourceNotFoundHandler.couldntFind(requestInfo);
+			stack.next(method, controllerInstance);
+		} catch (ControllerNotFoundException e) {
+			controllerNotFoundHandler.couldntFind(requestInfo);
 		} catch (MethodNotAllowedException e) {
 			LOGGER.debug(e.getMessage(), e);
 			methodNotAllowedHandler.deny(requestInfo, e.getAllowedMethods());

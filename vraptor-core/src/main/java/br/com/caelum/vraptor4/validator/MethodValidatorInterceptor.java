@@ -82,11 +82,11 @@ public class MethodValidatorInterceptor implements Interceptor {
 	}
 
 	@Override
-	public void intercept(InterceptorStack stack, ControllerMethod method, Object resourceInstance)
+	public void intercept(InterceptorStack stack, ControllerMethod method, Object controllerInstance)
 			throws InterceptionException {
 
 		Set<ConstraintViolation<Object>> violations = methodValidator.forExecutables().validateParameters(
-				resourceInstance, method.getMethod(), methodInfo.getParameters());
+				controllerInstance, method.getMethod(), methodInfo.getParameters());
 		logger.debug("there are {} violations at method {}.", violations.size(), method);
 
 		for (ConstraintViolation<Object> violation : violations) {
@@ -97,7 +97,7 @@ public class MethodValidatorInterceptor implements Interceptor {
 			logger.debug("added message {} to validation of bean {}", msg, violation.getRootBean());
 		}
 
-		stack.next(method, resourceInstance);
+		stack.next(method, controllerInstance);
 	}
 
 	private Locale getLocale() {

@@ -25,7 +25,7 @@ import br.com.caelum.vraptor4.view.PageResult;
 import br.com.caelum.vraptor4.view.Status;
 
 /**
- * A resource requisition result.
+ * A controller requisition result.
  *
  * @author Guilherme Silveira
  */
@@ -33,17 +33,17 @@ public interface Result {
 
     /**
      * Stores an attribute in the result.
-     * 
+     *
      * @param key a String specifying the key of the attribute
      * @param value the object to be stored
      * @return this own class
      */
     Result include(String key, Object value);
-    
+
     /**
-     * Stores an attribute in the result. The key for the object is defined by 
+     * Stores an attribute in the result. The key for the object is defined by
      * extracting the value class.
-     * 
+     *
      * @param value the object to be stored
      * @return this own class
      * @see TypeNameExtractor
@@ -54,10 +54,10 @@ public interface Result {
      * Force result to use the defined view.
      */
 	<T extends View> T use(Class<T> view);
-	
+
     /**
      * Add an {@link Exception} to be handled by Exception Handler.
-     * 
+     *
      * @param exception The exception to handle.
      * @throws A {@link NullPointerException} if exception is null.
      */

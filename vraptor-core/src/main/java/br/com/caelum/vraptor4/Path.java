@@ -24,7 +24,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Sets a custom path to allow web requisitions to access this resource.<br>
+ * Sets a custom path to allow web requisitions to access this controller.<br>
  * To be used together with web methods annotations as Get, Post and so on.
  *
  * @author Guilherme Silveira
@@ -35,8 +35,8 @@ import java.lang.annotation.Target;
 public @interface Path {
 
 	/**
-	 * All paths that will be mapped to an annotated Resource method. The path value also can be 
-	 * configured in class level and using {@link Get}, {@link Post}, {@link Trace} and {@link Delete} 
+	 * All paths that will be mapped to an annotated Controller method. The path value also can be
+	 * configured in class level and using {@link Get}, {@link Post}, {@link Trace} and {@link Delete}
 	 * annotations. If both {@link Path} and these annotations are used, an exception will be thrown.
 	 * @return
 	 */

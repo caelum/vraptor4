@@ -220,7 +220,7 @@ public class DefaultRouterTest {
 				routeFor("/clients/add").with(HttpMethod.POST).is(SomeController.class).add(null);
 			}
 		};
-		assertThat(router.parse("/clients/add", HttpMethod.POST, request), is(VRaptorMatchers.resourceMethod(method(
+		assertThat(router.parse("/clients/add", HttpMethod.POST, request), is(VRaptorMatchers.controllerMethod(method(
 				"add", Dog.class))));
 	}
 
@@ -237,10 +237,10 @@ public class DefaultRouterTest {
 			}
 		};
 
-		assertThat(router.parse("/clients/add", HttpMethod.POST, request), is(VRaptorMatchers.resourceMethod(method(
+		assertThat(router.parse("/clients/add", HttpMethod.POST, request), is(VRaptorMatchers.controllerMethod(method(
 				"add", Dog.class))));
 
-		assertThat(router.parse("/clients/add", HttpMethod.GET, request), is(VRaptorMatchers.resourceMethod(method(
+		assertThat(router.parse("/clients/add", HttpMethod.GET, request), is(VRaptorMatchers.controllerMethod(method(
 				"add", Dog.class))));
 	}
 

@@ -27,16 +27,17 @@ import br.com.caelum.vraptor4.restfulie.controller.ControllerMethod;
  */
 @RequestScoped
 public class DefaultMethodInfo implements MethodInfo {
-	private ControllerMethod resourceMethod;
+
+	private ControllerMethod controllerMethod;
 	private Object[] parameters;
 	private Object result;
 
 	public ControllerMethod getControllerMethod() {
-		return resourceMethod;
+		return controllerMethod;
 	}
 
-	public void setControllerMethod(ControllerMethod resourceMethod) {
-		this.resourceMethod = resourceMethod;
+	public void setControllerMethod(ControllerMethod controllerMethod) {
+		this.controllerMethod = controllerMethod;
 	}
 
 	public void setParameters(Object[] parameters) {

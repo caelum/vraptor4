@@ -49,7 +49,7 @@ import br.com.caelum.vraptor4.http.route.MethodNotAllowedException;
 import br.com.caelum.vraptor4.http.route.NoRoutesConfiguration;
 import br.com.caelum.vraptor4.http.route.NoTypeFinder;
 import br.com.caelum.vraptor4.http.route.PathAnnotationRoutesParser;
-import br.com.caelum.vraptor4.http.route.ResourceNotFoundException;
+import br.com.caelum.vraptor4.http.route.ControllerNotFoundException;
 import br.com.caelum.vraptor4.http.route.Route;
 import br.com.caelum.vraptor4.http.route.RoutesParser;
 import br.com.caelum.vraptor4.http.route.Rules;
@@ -97,7 +97,7 @@ public class DefaultRouterTest {
 		try {
 			router.parse("any uri", HttpMethod.DELETE, request);
 			fail("ResourceNotFoundException is expected");
-		} catch (ResourceNotFoundException e) {
+		} catch (ControllerNotFoundException e) {
 			
 		}
 	}
@@ -123,7 +123,7 @@ public class DefaultRouterTest {
 		Route first = mock(Route.class);
 		Route second = mock(Route.class);
 		
-		ControllerMethod method2 = second.resourceMethod(request, "second");
+		ControllerMethod method2 = second.controllerMethod(request, "second");
 		
 		router.add(second);
 		router.add(first);
@@ -148,7 +148,7 @@ public class DefaultRouterTest {
 		
 		when(route.canHandle("/clients/add")).thenReturn(true);
 		when(route.allowedMethods()).thenReturn(EnumSet.of(HttpMethod.POST));
-		when(route.resourceMethod(request, "/clients/add")).thenReturn(method);
+		when(route.controllerMethod(request, "/clients/add")).thenReturn(method);
 
 		router.add(route);
 		ControllerMethod found = router.parse("/clients/add", HttpMethod.POST, request);
@@ -165,7 +165,7 @@ public class DefaultRouterTest {
 		
 		when(route.canHandle("/clients/add")).thenReturn(true);
 		when(route.allowedMethods()).thenReturn(EnumSet.of(delete));
-		when(route.resourceMethod(request, "/clients/add")).thenReturn(method);
+		when(route.controllerMethod(request, "/clients/add")).thenReturn(method);
 
 		router.add(route);
 		ControllerMethod found = router.parse("/clients/add", delete, request);
@@ -186,7 +186,7 @@ public class DefaultRouterTest {
 		when(route.allowedMethods()).thenReturn(all);
 		when(second.allowedMethods()).thenReturn(all);
 
-		when(route.resourceMethod(request, "/clients/add")).thenReturn(method);
+		when(route.controllerMethod(request, "/clients/add")).thenReturn(method);
 		when(route.getPriority()).thenReturn(Path.HIGHEST);
 		when(second.getPriority()).thenReturn(Path.LOWEST);
 

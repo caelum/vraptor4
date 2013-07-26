@@ -79,13 +79,13 @@ import br.com.caelum.vraptor4.deserialization.JsonDeserializer;
 import br.com.caelum.vraptor4.deserialization.XMLDeserializer;
 import br.com.caelum.vraptor4.deserialization.XStreamXMLDeserializer;
 import br.com.caelum.vraptor4.http.DefaultFormatResolver;
-import br.com.caelum.vraptor4.http.DefaultResourceTranslator;
+import br.com.caelum.vraptor4.http.DefaultControllerTranslator;
 import br.com.caelum.vraptor4.http.EncodingHandlerFactory;
 import br.com.caelum.vraptor4.http.FormatResolver;
 import br.com.caelum.vraptor4.http.ParameterNameProvider;
 import br.com.caelum.vraptor4.http.ParametersProvider;
 import br.com.caelum.vraptor4.http.ParanamerNameProvider;
-import br.com.caelum.vraptor4.http.UrlToResourceTranslator;
+import br.com.caelum.vraptor4.http.UrlToControllerTranslator;
 import br.com.caelum.vraptor4.http.iogi.InstantiatorWithErrors;
 import br.com.caelum.vraptor4.http.iogi.IogiParametersProvider;
 import br.com.caelum.vraptor4.http.iogi.VRaptorDependencyProvider;
@@ -116,7 +116,7 @@ import br.com.caelum.vraptor4.interceptor.InterceptorRegistry;
 import br.com.caelum.vraptor4.interceptor.OutjectResult;
 import br.com.caelum.vraptor4.interceptor.ParameterIncluderInterceptor;
 import br.com.caelum.vraptor4.interceptor.ParametersInstantiatorInterceptor;
-import br.com.caelum.vraptor4.interceptor.ResourceLookupInterceptor;
+import br.com.caelum.vraptor4.interceptor.ControllerLookupInterceptor;
 import br.com.caelum.vraptor4.interceptor.SimpleInterceptorStack;
 import br.com.caelum.vraptor4.interceptor.TopologicalSortedInterceptorRegistry;
 import br.com.caelum.vraptor4.interceptor.TypeNameExtractor;
@@ -212,7 +212,7 @@ public class BaseComponents {
             InterceptorRegistry.class, 		TopologicalSortedInterceptorRegistry.class,
             InterceptorHandlerFactory.class,DefaultInterceptorHandlerFactory.class,
             MultipartConfig.class, 			DefaultMultipartConfig.class,
-            UrlToResourceTranslator.class, 	DefaultResourceTranslator.class,
+            UrlToControllerTranslator.class, 	DefaultControllerTranslator.class,
             Router.class, 					DefaultRouter.class,
             TypeNameExtractor.class, 		DefaultTypeNameExtractor.class,
             ControllerNotFoundHandler.class, 	DefaultControllerNotFoundHandler.class,
@@ -267,7 +267,7 @@ public class BaseComponents {
             Localization.class, 							JstlLocalization.class,
             OutjectResult.class, 							OutjectResult.class,
             ParametersInstantiatorInterceptor.class, 		ParametersInstantiatorInterceptor.class,
-            ResourceLookupInterceptor.class, 				ResourceLookupInterceptor.class,
+            ControllerLookupInterceptor.class, 				ControllerLookupInterceptor.class,
             Status.class,									DefaultStatus.class,
             XMLDeserializer.class,			                XStreamXMLDeserializer.class,
             XMLSerialization.class,							XStreamXMLSerialization.class,

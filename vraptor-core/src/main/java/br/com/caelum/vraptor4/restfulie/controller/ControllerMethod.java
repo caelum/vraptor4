@@ -29,7 +29,7 @@ public interface ControllerMethod {
 
 	Method getMethod();
 
-	BeanClass getResource();
+	BeanClass getController();
 
 	boolean containsAnnotation(Class<? extends Annotation> annotation);
 

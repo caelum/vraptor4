@@ -30,7 +30,7 @@ import br.com.caelum.vraptor4.core.Localization;
 import br.com.caelum.vraptor4.http.MutableRequest;
 import br.com.caelum.vraptor4.http.ParametersProvider;
 import br.com.caelum.vraptor4.http.route.MethodNotAllowedException;
-import br.com.caelum.vraptor4.http.route.ResourceNotFoundException;
+import br.com.caelum.vraptor4.http.route.ControllerNotFoundException;
 import br.com.caelum.vraptor4.http.route.Router;
 import br.com.caelum.vraptor4.restfulie.controller.ControllerMethod;
 import br.com.caelum.vraptor4.restfulie.controller.HttpMethod;
@@ -59,8 +59,8 @@ public class DefaultRefererResult implements RefererResult {
 
 		try {
 			ControllerMethod method = router.parse(referer, HttpMethod.GET, request);
-			executeMethod(method, result.use(logic()).forwardTo(method.getResource().getType()));
-		} catch (ResourceNotFoundException e) {
+			executeMethod(method, result.use(logic()).forwardTo(method.getController().getType()));
+		} catch (ControllerNotFoundException e) {
 			result.use(page()).forwardTo(referer);
 		} catch (MethodNotAllowedException e) {
 			result.use(page()).forwardTo(referer);
@@ -76,8 +76,8 @@ public class DefaultRefererResult implements RefererResult {
 		String referer = getReferer();
 		try {
 			ControllerMethod method = router.parse(referer, HttpMethod.GET, request);
-			executeMethod(method, result.use(logic()).redirectTo(method.getResource().getType()));
-		} catch (ResourceNotFoundException e) {
+			executeMethod(method, result.use(logic()).redirectTo(method.getController().getType()));
+		} catch (ControllerNotFoundException e) {
 			result.use(page()).redirectTo(referer);
 		} catch (MethodNotAllowedException e) {
 			result.use(page()).redirectTo(referer);

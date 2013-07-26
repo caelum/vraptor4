@@ -48,7 +48,7 @@ import br.com.caelum.vraptor4.view.FlashScope;
  *
  * @author Guilherme Silveira
  */
-@Intercepts(after=ResourceLookupInterceptor.class)
+@Intercepts(after=ControllerLookupInterceptor.class)
 @Lazy
 public class ParametersInstantiatorInterceptor implements Interceptor {
     private ParametersProvider provider;

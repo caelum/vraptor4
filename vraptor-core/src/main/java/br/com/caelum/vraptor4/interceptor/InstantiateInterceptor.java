@@ -36,7 +36,7 @@ import br.com.caelum.vraptor4.restfulie.controller.DefaultControllerInstance;
  *
  * @author Guilherme Silveira
  */
-@Intercepts(after=ResourceLookupInterceptor.class)
+@Intercepts(after=ControllerLookupInterceptor.class)
 public class InstantiateInterceptor implements Interceptor {
 
 	private Container container;
@@ -56,7 +56,7 @@ public class InstantiateInterceptor implements Interceptor {
 	public void intercept(InterceptorStack invocation, ControllerMethod method,
 			Object instance) throws InterceptionException {
 		if (instance == null) {
-			Class<?> type = method.getResource().getType();
+			Class<?> type = method.getController().getType();
 			instance = container.instanceFor(type);			
 		}
 		this.controllerInstance = new DefaultControllerInstance(instance);

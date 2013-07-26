@@ -33,7 +33,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor4.core.RequestInfo;
-import br.com.caelum.vraptor4.http.DefaultResourceTranslator;
+import br.com.caelum.vraptor4.http.DefaultControllerTranslator;
 import br.com.caelum.vraptor4.http.MutableRequest;
 import br.com.caelum.vraptor4.http.VRaptorRequest;
 import br.com.caelum.vraptor4.http.route.MethodNotAllowedException;
@@ -52,14 +52,14 @@ public class DefaultResourceTranslatorTest {
 	private RequestInfo info;
 
 
-	private DefaultResourceTranslator translator;
+	private DefaultControllerTranslator translator;
 
     @Before
     public void setup() {
     	MockitoAnnotations.initMocks(this);
 
         this.webRequest = new VRaptorRequest(request);
-        this.translator = new DefaultResourceTranslator(router);
+        this.translator = new DefaultControllerTranslator(router);
         this.info = new RequestInfo(null,null, webRequest,null);
         when(request.getContextPath()).thenReturn("");
     }

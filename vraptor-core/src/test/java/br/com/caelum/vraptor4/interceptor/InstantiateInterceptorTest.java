@@ -57,7 +57,7 @@ public class InstantiateInterceptorTest {
         InstanceContainer container = new InstanceContainer(myDog);
         InstantiateInterceptor interceptor = new InstantiateInterceptor(container);
         
-        when(method.getResource()).thenReturn(new DefaultBeanClass(DogController.class));
+        when(method.getController()).thenReturn(new DefaultBeanClass(DogController.class));
         
         interceptor.intercept(stack, method, null);
         

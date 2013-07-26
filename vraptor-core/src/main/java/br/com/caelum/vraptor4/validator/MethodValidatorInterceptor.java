@@ -75,7 +75,7 @@ public class MethodValidatorInterceptor implements Interceptor {
 
 	@Override
 	public boolean accepts(ControllerMethod method) {
-		BeanDescriptor bean = methodValidator.getConstraintsForClass(method.getResource().getType());
+		BeanDescriptor bean = methodValidator.getConstraintsForClass(method.getController().getType());
 		MethodDescriptor descriptor = bean.getConstraintsForMethod(method.getMethod().getName(), method.getMethod()
 				.getParameterTypes());
 		return descriptor != null && descriptor.hasConstrainedParameters();

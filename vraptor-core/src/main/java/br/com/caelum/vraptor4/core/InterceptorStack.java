@@ -31,7 +31,7 @@ public interface InterceptorStack {
 	/**
 	 * Invokes the next interceptor on the stack.
 	 */
-    void next(ControllerMethod method, Object resourceInstance) throws InterceptionException;
+    void next(ControllerMethod method, Object controllerInstance) throws InterceptionException;
 
     /**
      * Adds this interceptor at the end of the stack.

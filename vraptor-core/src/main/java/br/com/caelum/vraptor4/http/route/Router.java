@@ -41,7 +41,7 @@ public interface Router {
 
 	/**
 	 * Find a {@link ControllerMethod} that can handle this request.
-	 * @throws ResourceNotFoundException when there is no {@link ControllerMethod} that can handle
+	 * @throws ControllerNotFoundException when there is no {@link ControllerMethod} that can handle
 	 *         this request
 	 * @throws MethodNotAllowedException when there is no {@link ControllerMethod} that can handle
 	 *         given URI with given {@link HttpMethod}
@@ -49,7 +49,7 @@ public interface Router {
 	 * 		   request.
 	 */
 	ControllerMethod parse(String uri, HttpMethod method, MutableRequest request)
-		throws ResourceNotFoundException, MethodNotAllowedException, IllegalStateException;
+		throws ControllerNotFoundException, MethodNotAllowedException, IllegalStateException;
 
 	/**
 	 * Retrieves a single url to access the desired method.

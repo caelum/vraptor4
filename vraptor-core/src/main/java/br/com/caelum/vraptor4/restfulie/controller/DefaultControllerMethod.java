@@ -42,7 +42,7 @@ public class DefaultControllerMethod implements ControllerMethod {
 		return method;
 	}
 
-	public BeanClass getResource() {
+	public BeanClass getController() {
 		return resource;
 	}
 

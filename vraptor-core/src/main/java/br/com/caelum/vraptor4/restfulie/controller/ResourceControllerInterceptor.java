@@ -64,7 +64,7 @@ public class ResourceControllerInterceptor<T extends HypermediaResource> impleme
 	}
 
 	public boolean accepts(ControllerMethod method) {
-		return controllers.contains(method.getResource().getType()) && method.getMethod().isAnnotationPresent(Transition.class);
+		return controllers.contains(method.getController().getType()) && method.getMethod().isAnnotationPresent(Transition.class);
 	}
 
 	public void intercept(InterceptorStack stack, ControllerMethod method,

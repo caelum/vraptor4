@@ -62,7 +62,7 @@ public class FixedMethodStrategyTest {
 		FixedMethodStrategy strategy = new FixedMethodStrategy("abc", list,
 				methods(HttpMethod.POST), control, 0, new String[] {});
 		when(control.matches("/clients/add")).thenReturn(true);
-		ControllerMethod match = strategy.resourceMethod(request, "/clients/add");
+		ControllerMethod match = strategy.controllerMethod(request, "/clients/add");
 		assertThat(match, is(VRaptorMatchers.resourceMethod(method("list"))));
 		verify(control, only()).fillIntoRequest("/clients/add", request);
 	}

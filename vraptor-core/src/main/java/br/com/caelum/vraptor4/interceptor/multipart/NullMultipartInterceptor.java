@@ -38,7 +38,7 @@ public class NullMultipartInterceptor implements MultipartInterceptor {
         return false;
     }
 
-    public void intercept(InterceptorStack stack, ControllerMethod method, Object resourceInstance)
+    public void intercept(InterceptorStack stack, ControllerMethod method, Object controllerInstance)
         throws InterceptionException {
         throw new UnsupportedOperationException();
     }

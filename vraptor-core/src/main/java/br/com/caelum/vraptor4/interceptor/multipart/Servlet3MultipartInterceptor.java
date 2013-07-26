@@ -117,7 +117,7 @@ public class Servlet3MultipartInterceptor
     }
 
     @Override
-	public void intercept(InterceptorStack stack, ControllerMethod method, Object resourceInstance)
+	public void intercept(InterceptorStack stack, ControllerMethod method, Object controllerInstance)
         throws InterceptionException {
         logger.info("Request contains multipart data. Try to parse with Servlet3 Part");
 
@@ -157,7 +157,7 @@ public class Servlet3MultipartInterceptor
             parameters.setParameter(paramName, paramValues.toArray(new String[paramValues.size()]));
         }
 
-        stack.next(method, resourceInstance);
+        stack.next(method, controllerInstance);
     }
 
     /**

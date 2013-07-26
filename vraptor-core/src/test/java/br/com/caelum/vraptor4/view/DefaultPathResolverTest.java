@@ -46,7 +46,7 @@ public class DefaultPathResolverTest {
     	MockitoAnnotations.initMocks(this);
 
     	resolver = new DefaultPathResolver(formatResolver);
-    	when(method.getResource()).thenReturn(resource);
+    	when(method.getController()).thenReturn(resource);
     	when(method.getMethod()  ).thenReturn(DogController.class.getDeclaredMethod("bark"));
     	when(resource.getType()  ).thenReturn((Class) DogController.class);
     }

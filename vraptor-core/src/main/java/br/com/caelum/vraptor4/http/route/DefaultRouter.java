@@ -43,7 +43,7 @@ import com.google.common.collect.Collections2;
 import com.google.common.collect.Iterators;
 
 /**
- * The default implementation of resource localization rules. It also uses a
+ * The default implementation of controller localization rules. It also uses a
  * Path annotation to discover path->method mappings using the supplied
  * ResourceAndMethodLookup.
  *
@@ -53,12 +53,12 @@ import com.google.common.collect.Iterators;
 public class DefaultRouter implements Router {
 
 	private  Proxifier proxifier;
-	private  Collection<Route> routes = new PriorityRoutesList();
+	private final  Collection<Route> routes = new PriorityRoutesList();
 	private  TypeFinder finder;
 	private  Converters converters;
 	private  ParameterNameProvider nameProvider;
     private  Evaluator evaluator;
-    
+
     //CDI eyes only
 	@Deprecated
 	public DefaultRouter() {
@@ -74,7 +74,7 @@ public class DefaultRouter implements Router {
         this.evaluator = evaluator;
 		config.config(this);
 	}
-    
+
 	@Override
 	public RouteBuilder builderFor(String uri) {
 		return new DefaultRouteBuilder(proxifier, finder, converters, nameProvider, evaluator, uri);
@@ -98,7 +98,7 @@ public class DefaultRouter implements Router {
 		Route route = iterator.next();
 		checkIfThereIsAnotherRoute(uri, method, iterator, route);
 
-		return route.resourceMethod(request, uri);
+		return route.controllerMethod(request, uri);
 	}
 
 	private void checkIfThereIsAnotherRoute(String uri, HttpMethod method, Iterator<Route> iterator, Route route) {
@@ -135,7 +135,7 @@ public class DefaultRouter implements Router {
 	private Collection<Route> routesMatchingUri(String uri) {
 		Collection<Route> routesMatchingURI = Collections2.filter(routes, Filters.canHandle(uri));
 		if (routesMatchingURI.isEmpty()) {
-			throw new ResourceNotFoundException();
+			throw new ControllerNotFoundException();
 		}
 		return routesMatchingURI;
 	}

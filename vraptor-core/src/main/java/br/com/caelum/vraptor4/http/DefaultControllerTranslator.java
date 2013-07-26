@@ -30,45 +30,45 @@ import br.com.caelum.vraptor4.restfulie.controller.ControllerMethod;
 import br.com.caelum.vraptor4.restfulie.controller.HttpMethod;
 
 /**
- * Basic url to resource method translator.
+ * Basic url to controller method translator.
  *
  * @author Guilherme Silveira
  * @author Leonardo Bessa
  */
 @ApplicationScoped
-public class DefaultResourceTranslator implements UrlToResourceTranslator {
+public class DefaultControllerTranslator implements UrlToControllerTranslator {
 
-	private final Logger logger = LoggerFactory.getLogger(DefaultResourceTranslator.class);
+	private final Logger logger = LoggerFactory.getLogger(DefaultControllerTranslator.class);
 
 	private Router router;
-	
+
 	//CDI eyes only
 	@Deprecated
-	public DefaultResourceTranslator() {
+	public DefaultControllerTranslator() {
 	}
 
 	@Inject
-	public DefaultResourceTranslator(Router router) {
+	public DefaultControllerTranslator(Router router) {
 		this.router = router;
 	}
 
 	@Override
 	public ControllerMethod translate(RequestInfo info) {
 		MutableRequest request = info.getRequest();
-		String resourceName = info.getRequestedUri();
+		String controllerName = info.getRequestedUri();
 
-		logger.debug("trying to access {}", resourceName);
+		logger.debug("trying to access {}", controllerName);
 
 		HttpMethod method;
 		try {
 			method = HttpMethod.of(request);
 		} catch (IllegalArgumentException e) {
-			throw new MethodNotAllowedException(router.allowedMethodsFor(resourceName), request.getMethod());
+			throw new MethodNotAllowedException(router.allowedMethodsFor(controllerName), request.getMethod());
 		}
-		ControllerMethod resource = router.parse(resourceName, method, request);
+		ControllerMethod controller = router.parse(controllerName, method, request);
 
-		logger.debug("found resource {}", resource);
-		return resource;
+		logger.debug("found resource {}", controller);
+		return controller;
 	}
 
 }

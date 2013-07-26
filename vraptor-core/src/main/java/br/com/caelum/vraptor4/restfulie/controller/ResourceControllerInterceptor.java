@@ -46,7 +46,7 @@ import br.com.caelum.vraptor4.view.Status;
 @RequestScoped
 public class ResourceControllerInterceptor<T extends HypermediaResource> implements Interceptor {
 
-	private final ResourceControl<T> control;
+	private final ControllerControl<T> control;
 	private final List<Class<?>> controllers;
 	private final Status status;
 	private final Restfulie restfulie;
@@ -54,7 +54,7 @@ public class ResourceControllerInterceptor<T extends HypermediaResource> impleme
 	private final RequestInfo info;
 	private final ParameterizedTypeSearcher searcher = new ParameterizedTypeSearcher();
 
-	public ResourceControllerInterceptor(ResourceControl<T> control, Restfulie restfulie, Status status, RequestInfo info, Routes routes) {
+	public ResourceControllerInterceptor(ControllerControl<T> control, Restfulie restfulie, Status status, RequestInfo info, Routes routes) {
 		this.control = control;
 		this.restfulie = restfulie;
 		this.status = status;

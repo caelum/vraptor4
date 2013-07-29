@@ -65,13 +65,13 @@ public class MusicController {
 
 	private static final Logger LOG = Logger.getLogger(MusicController.class);
 
-    private Result result;
-    private Validator validator;
-    private UserInfo userInfo;
+	private Result result;
+	private Validator validator;
+	private UserInfo userInfo;
 	private MusicDao dao;
 	private Musics musics;
-	
-	//CDI eyes only
+
+	// CDI eyes only
 	@Deprecated
 	public MusicController() {
 	}

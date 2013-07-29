@@ -43,17 +43,16 @@ import com.google.common.base.Objects;
 @Controller
 public class UsersController {
 
-    private Validator validator;
-    private Result result;
-    private UserInfo userInfo;
+	private Validator validator;
+	private Result result;
+	private UserInfo userInfo;
 	private UserDao dao;
 
-	
-	//CDI eyes only
+	// CDI eyes only
 	@Deprecated
 	public UsersController() {
 	}
-	
+
 	/**
 	 * Receives dependencies through the constructor.
 	 * 

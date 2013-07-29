@@ -42,9 +42,9 @@ import br.com.caelum.vraptor4.validator.Validations;
 @Controller
 public class MusicOwnerController {
 
-    private Result result;
-    private Validator validator;
-    private UserInfo userInfo;
+	private Result result;
+	private Validator validator;
+	private UserInfo userInfo;
 	private MusicDao dao;
 	private UserDao userDao;
 	

@@ -11,12 +11,6 @@
 		<param-value>messages</param-value>
 	</context-param>
 
-	<!-- <context-param> -->
-	<!-- <param-name>br.com.caelum.vraptor.packages</param-name> -->
-	<!-- <param-value>br.com.caelum.vraptor.util.hibernate</param-value> -->
-	<!-- you can add optional component packages here -->
-	<!-- </context-param> -->
-
 	<listener>
 		<listener-class>org.jboss.weld.environment.servlet.Listener</listener-class>
 	</listener>

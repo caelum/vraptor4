@@ -38,7 +38,7 @@ import com.google.common.collect.Collections2;
  * injected to other classes who depend on Users.
  */
 @Entity
-public class User implements Serializable{
+public class User implements Serializable {
 
 	@Id
 	@NotNull

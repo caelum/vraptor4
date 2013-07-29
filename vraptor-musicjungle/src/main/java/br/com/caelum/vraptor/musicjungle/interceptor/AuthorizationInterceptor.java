@@ -23,11 +23,10 @@ import javax.inject.Inject;
 import br.com.caelum.vraptor.musicjungle.controller.HomeController;
 import br.com.caelum.vraptor.musicjungle.dao.UserDao;
 import br.com.caelum.vraptor4.Accepts;
-import br.com.caelum.vraptor4.AroundCall;
+import br.com.caelum.vraptor4.BeforeCall;
 import br.com.caelum.vraptor4.InterceptionException;
 import br.com.caelum.vraptor4.Intercepts;
 import br.com.caelum.vraptor4.Result;
-import br.com.caelum.vraptor4.interceptor.SimpleInterceptorStack;
 import br.com.caelum.vraptor4.restfulie.controller.ControllerMethod;
 import br.com.caelum.vraptor4.validator.ValidationMessage;
 
@@ -55,9 +54,8 @@ public class AuthorizationInterceptor{
     /**
      * Intercepts the request and checks if there is a user logged in.
      */
-	@AroundCall
-    public void intercept(SimpleInterceptorStack stack)
-            throws InterceptionException {
+	@BeforeCall
+    public void intercept() throws InterceptionException {
     	/**
     	 * You can use the result even in interceptors.
     	 */
@@ -67,8 +65,6 @@ public class AuthorizationInterceptor{
     		result.redirectTo(HomeController.class).login();
     	} else {
 	    	dao.refresh(info.getUser());
-	    	// continues execution
-	    	stack.next();
     	}
     }
 

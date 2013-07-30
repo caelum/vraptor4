@@ -3,16 +3,13 @@ package br.com.caelum.vraptor4.interceptor;
 import java.lang.reflect.Method;
 
 import br.com.caelum.vraptor4.AroundCall;
-import br.com.caelum.vraptor4.core.InterceptorStack;
 import br.com.caelum.vraptor4.ioc.Container;
-import br.com.caelum.vraptor4.restfulie.controller.ControllerInstance;
-import br.com.caelum.vraptor4.restfulie.controller.ControllerMethod;
 
 public class AroundExecutor implements StepExecutor<Object> {
 
-	private StepInvoker stepInvoker;
-	private InterceptorMethodParametersResolver parametersResolver;
-	private Container container;
+	private final StepInvoker stepInvoker;
+	private final InterceptorMethodParametersResolver parametersResolver;
+	private final Container container;
 
 	public AroundExecutor(StepInvoker stepInvoker,
 			InterceptorMethodParametersResolver parametersResolver,

@@ -9,17 +9,16 @@ import br.com.caelum.vraptor4.VRaptorException;
 import br.com.caelum.vraptor4.core.InterceptorHandler;
 import br.com.caelum.vraptor4.core.InterceptorStack;
 import br.com.caelum.vraptor4.ioc.Container;
-import br.com.caelum.vraptor4.restfulie.controller.ControllerInstance;
 import br.com.caelum.vraptor4.restfulie.controller.ControllerMethod;
 
 public class AspectStyleInterceptorHandler implements InterceptorHandler {
 
-	private StepInvoker stepInvoker;
-	private Container container;
-	private Class<?> interceptorClass;
+	private final StepInvoker stepInvoker;
+	private final Container container;
+	private final Class<?> interceptorClass;
 	private static final Logger logger = LoggerFactory
 			.getLogger(AspectStyleInterceptorHandler.class);
-	private InterceptorMethodParametersResolver parametersResolver;
+	private final InterceptorMethodParametersResolver parametersResolver;
 	private StepExecutor<Boolean> acceptsExecutor;
 	private StepExecutor<?> after;
 	private StepExecutor<?> around;
@@ -37,35 +36,30 @@ public class AspectStyleInterceptorHandler implements InterceptorHandler {
 
 	}
 
-	private void configure() {		
-		after = new NoStackParameterStepExecutor(stepInvoker, AfterCall.class);		
+	private void configure() {
+		after = new NoStackParameterStepExecutor(stepInvoker, AfterCall.class);
 		if(!after.accept(interceptorClass)){
 			after = new DoNothingStepExecutor();
 		}
-		
+
 		around = new AroundExecutor(stepInvoker,parametersResolver, container);
 		if(!around.accept(interceptorClass)){
 			around = new StackNextExecutor(container);
 		}
-		
+
 		before = new NoStackParameterStepExecutor(stepInvoker, BeforeCall.class);
 		if(!before.accept(interceptorClass)){
 			before = new DoNothingStepExecutor();
 		}
-		
+
 		CustomAcceptsExecutor customAcceptsExecutor = new CustomAcceptsExecutor(stepInvoker, container);
-		InterceptorAcceptsExecutor interceptorAcceptsExecutor = new InterceptorAcceptsExecutor(stepInvoker, parametersResolver);		
+		InterceptorAcceptsExecutor interceptorAcceptsExecutor = new InterceptorAcceptsExecutor(stepInvoker, parametersResolver);
 		boolean customAccepts = customAcceptsExecutor.accept(interceptorClass);
 		boolean internalAccepts = interceptorAcceptsExecutor.accept(interceptorClass);
 		if(customAccepts && internalAccepts){
 			throw new VRaptorException("Interceptor "+interceptorClass+" must declare internal accepts or custom, not both.");
 		}
-		
 		this.acceptsExecutor = customAccepts?customAcceptsExecutor:interceptorAcceptsExecutor;
-		
-		
-	
-
 	}
 
 	public void execute(InterceptorStack stack,
@@ -79,10 +73,8 @@ public class AspectStyleInterceptorHandler implements InterceptorHandler {
 			before.execute(interceptor);
 			around.execute(interceptor);
 			after.execute(interceptor);
-		} else {			
+		} else {
 			stack.next(controllerMethod, currentController);
 		}
-
 	}
-
 }

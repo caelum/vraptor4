@@ -24,7 +24,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor4.Validator;
-import br.com.caelum.vraptor4.core.DefaultMethodInfo;
+import br.com.caelum.vraptor4.core.MethodInfo;
 import br.com.caelum.vraptor4.core.InterceptorStack;
 import br.com.caelum.vraptor4.core.Localization;
 import br.com.caelum.vraptor4.core.MethodInfo;
@@ -108,7 +108,7 @@ public class MethodValidatorTest {
     @Test
     public void shouldValidateMethodWithConstraint()
         throws Exception {
-        MethodInfo info = new DefaultMethodInfo();
+        MethodInfo info = new MethodInfo();
         info.setParameters(new Object[] { null });
         info.setControllerMethod(withConstraint);
 
@@ -125,7 +125,7 @@ public class MethodValidatorTest {
     @Test
     public void shouldUseDefaultLocale()
         throws Exception {
-        MethodInfo info = new DefaultMethodInfo();
+        MethodInfo info = new MethodInfo();
         info.setParameters(new Object[] { null });
         info.setControllerMethod(withConstraint);
 
@@ -142,7 +142,7 @@ public class MethodValidatorTest {
     @Test
     public void shouldValidateMethodWithTwoConstraints()
         throws Exception {
-        MethodInfo info = new DefaultMethodInfo();
+        MethodInfo info = new MethodInfo();
         info.setParameters(new Object[] { null, new Customer(null, null) });
         info.setControllerMethod(withTwoConstraints);
 

@@ -1,5 +1,13 @@
 package br.com.caelum.vraptor4.interceptor;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -13,10 +21,6 @@ import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor4.VRaptorException;
 import br.com.caelum.vraptor4.core.InterceptorStack;
-import br.com.caelum.vraptor4.interceptor.AspectStyleInterceptorHandler;
-import br.com.caelum.vraptor4.interceptor.SimpleInterceptorStack;
-import br.com.caelum.vraptor4.interceptor.StepInvoker;
-import br.com.caelum.vraptor4.interceptor.WithAnnotationAcceptor;
 import br.com.caelum.vraptor4.interceptor.example.AcceptsInterceptor;
 import br.com.caelum.vraptor4.interceptor.example.AcceptsInterceptorWithStackAsParameter;
 import br.com.caelum.vraptor4.interceptor.example.AcceptsWithoutArgsInterceptor;
@@ -34,18 +38,9 @@ import br.com.caelum.vraptor4.interceptor.example.WithoutAroundInvokeInterceptor
 import br.com.caelum.vraptor4.restfulie.controller.ControllerInstance;
 import br.com.caelum.vraptor4.restfulie.controller.ControllerMethod;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
-import static org.mockito.Mockito.inOrder;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 public class AspectStyleInterceptorHandlerTest {
 
-	private StepInvoker stepInvoker = new StepInvoker();
+	private final StepInvoker stepInvoker = new StepInvoker();
 	private @Mock
 	InterceptorStack stack;
 	private @Mock
@@ -62,7 +57,7 @@ public class AspectStyleInterceptorHandlerTest {
 	@Before
 	public void setup() {
 		MockitoAnnotations.initMocks(this);
-	}	
+	}
 
 	@Test
 	public void shouldAlwaysCallAround() {
@@ -220,7 +215,7 @@ public class AspectStyleInterceptorHandlerTest {
 	public void mustReceiveStackAsParameterForAroundCall() {
 		AroundInterceptorWithoutSimpleStackParameter interceptor = new AroundInterceptorWithoutSimpleStackParameter();
 		newAspectStyleInterceptorHandler(
-				AroundInterceptorWithoutSimpleStackParameter.class, interceptor);		
+				AroundInterceptorWithoutSimpleStackParameter.class, interceptor);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
@@ -228,7 +223,7 @@ public class AspectStyleInterceptorHandlerTest {
 		BeforeAfterInterceptorWithStackAsParameter interceptor = new BeforeAfterInterceptorWithStackAsParameter();
 		newAspectStyleInterceptorHandler(
 				BeforeAfterInterceptorWithStackAsParameter.class, interceptor);
-		
+
 	}
 
 	@Test(expected = VRaptorException.class)
@@ -238,12 +233,12 @@ public class AspectStyleInterceptorHandlerTest {
 				AcceptsInterceptorWithStackAsParameter.class, interceptor);
 
 	}
-	
+
 	@Test(expected = VRaptorException.class)
 	public void mustNotUseInternalAcceptsAndCustomAccepts(){
 		InternalAndCustomAcceptsInterceptor interceptor = new InternalAndCustomAcceptsInterceptor();
 		newAspectStyleInterceptorHandler(
-				InternalAndCustomAcceptsInterceptor.class, interceptor);		
+				InternalAndCustomAcceptsInterceptor.class, interceptor);
 	}
 
 	@Test
@@ -295,11 +290,11 @@ public class AspectStyleInterceptorHandlerTest {
 				withAnnotationAcceptor.validate(Mockito.same(controllerMethod),
 						Mockito.any(ControllerInstance.class))).thenReturn(
 				false);
-		
+
 		aspectHandler.execute(stack, controllerMethod, aspectHandler);
-		
+
 		verify(interceptor).customAcceptsFailCallback();
-				
+
 
 	}
 
@@ -318,12 +313,11 @@ public class AspectStyleInterceptorHandlerTest {
 		if(!hasControllerInstance){
 			deps.add(controllerInstance);
 		}
-		deps.add(stack);	
+		deps.add(stack);
 		deps.add(controllerMethod);
 		deps.add(simpleInterceptorStack);
 		AspectStyleInterceptorHandler aspectHandler = new AspectStyleInterceptorHandler(
-				interceptorClass, stepInvoker, new InstanceContainer(
-						deps.toArray()));
+				interceptorClass, stepInvoker, new InstanceContainer(deps.toArray()));
 		return aspectHandler;
 	}
 

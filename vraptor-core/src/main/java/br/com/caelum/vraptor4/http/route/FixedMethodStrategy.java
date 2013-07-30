@@ -35,7 +35,7 @@ import br.com.caelum.vraptor4.util.Stringnifier;
  */
 public class FixedMethodStrategy implements Route {
 
-	private final ControllerMethod resourceMethod;
+	private final ControllerMethod controllerMethod;
 
 	private final EnumSet<HttpMethod> methods;
 
@@ -54,18 +54,18 @@ public class FixedMethodStrategy implements Route {
 		this.parameterNames = parameterNames;
 		this.methods = methods.isEmpty() ? EnumSet.allOf(HttpMethod.class) : EnumSet.copyOf(methods);
 		this.parameters = control;
-		this.resourceMethod = method;
+		this.controllerMethod = method;
 		this.priority = priority;
 	}
 
 	public boolean canHandle(Class<?> type, Method method) {
-		return type.equals(this.resourceMethod.getResource().getType())
-				&& method.equals(this.resourceMethod.getMethod());
+		return type.equals(this.controllerMethod.getController().getType())
+				&& method.equals(this.controllerMethod.getMethod());
 	}
 
-	public ControllerMethod resourceMethod(MutableRequest request, String uri) {
+	public ControllerMethod controllerMethod(MutableRequest request, String uri) {
 		parameters.fillIntoRequest(uri, request);
-		return this.resourceMethod;
+		return this.controllerMethod;
 	}
 
 	public EnumSet<HttpMethod> allowedMethods() {
@@ -91,7 +91,7 @@ public class FixedMethodStrategy implements Route {
 	@Override
 	public String toString() {
 		return String.format("[FixedMethodStrategy: %-65s %-70s %s]", originalUri, Stringnifier
-				.simpleNameFor(resourceMethod.getMethod()), methods.size() == HttpMethod.values().length ? "ALL" : methods);
+				.simpleNameFor(controllerMethod.getMethod()), methods.size() == HttpMethod.values().length ? "ALL" : methods);
 	}
 
 	@Override
@@ -100,7 +100,7 @@ public class FixedMethodStrategy implements Route {
 		int result = 1;
 		result = prime * result + ((methods == null) ? 0 : methods.hashCode());
 		result = prime * result + ((originalUri == null) ? 0 : originalUri.hashCode());
-		result = prime * result + ((resourceMethod == null) ? 0 : resourceMethod.hashCode());
+		result = prime * result + ((controllerMethod == null) ? 0 : controllerMethod.hashCode());
 		return result;
 	}
 
@@ -116,6 +116,6 @@ public class FixedMethodStrategy implements Route {
 			return false;
 		}
 		FixedMethodStrategy other = (FixedMethodStrategy) obj;
-		return equal(methods, other.methods) && equal(originalUri, other.originalUri) && equal(resourceMethod,other.resourceMethod);
+		return equal(methods, other.methods) && equal(originalUri, other.originalUri) && equal(controllerMethod,other.controllerMethod);
 	}
 }

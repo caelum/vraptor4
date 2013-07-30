@@ -24,7 +24,7 @@ import br.com.caelum.vraptor4.View;
  * Redirects or forwards to the Referer.
  *
  * "The Referer[sic] request-header field allows the client to specify,
- * 	for the server's benefit, the address (URI) of the resource from which
+ * 	for the server's benefit, the address (URI) of the controller from which
  * 	the Request-URI was obtained (the "referrer", although the header field
  * 	is misspelled.)"
  *  -- http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html

@@ -18,20 +18,20 @@
 package br.com.caelum.vraptor4.http;
 
 import br.com.caelum.vraptor4.core.RequestInfo;
+import br.com.caelum.vraptor4.http.route.ControllerNotFoundException;
 import br.com.caelum.vraptor4.http.route.MethodNotAllowedException;
-import br.com.caelum.vraptor4.http.route.ResourceNotFoundException;
 import br.com.caelum.vraptor4.restfulie.controller.ControllerMethod;
 
 /**
- * Translates requests into resource methods.<br>
+ * Translates requests into controller methods.<br>
  * The basic idea is to analyze the uri to strip it of unwanted data and use the
- * rest to route for an specific resource.
+ * rest to route for an specific controller.
  *
  * @author Guilherme Silveira
  */
-public interface UrlToResourceTranslator {
+public interface UrlToControllerTranslator {
 
 	ControllerMethod translate(RequestInfo info)
-			throws ResourceNotFoundException, MethodNotAllowedException;
+			throws ControllerNotFoundException, MethodNotAllowedException;
 
 }

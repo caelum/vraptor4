@@ -8,7 +8,7 @@ import br.com.caelum.vraptor4.restfulie.controller.ControllerMethod;
 @Intercepts
 public class WithoutAroundInvokeInterceptor {
 
-	public void intercept(InterceptorStack stack, ControllerMethod method, ControllerInstance resourceInstance){
+	public void intercept(InterceptorStack stack, ControllerMethod method, ControllerInstance controllerInstance){
 		
 	}
 }

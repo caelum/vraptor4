@@ -19,7 +19,7 @@ import br.com.caelum.vraptor4.Result;
 import br.com.caelum.vraptor4.core.Localization;
 import br.com.caelum.vraptor4.http.MutableRequest;
 import br.com.caelum.vraptor4.http.ParametersProvider;
-import br.com.caelum.vraptor4.http.route.ResourceNotFoundException;
+import br.com.caelum.vraptor4.http.route.ControllerNotFoundException;
 import br.com.caelum.vraptor4.http.route.Router;
 import br.com.caelum.vraptor4.restfulie.controller.ControllerMethod;
 import br.com.caelum.vraptor4.restfulie.controller.DefaultControllerMethod;
@@ -73,7 +73,7 @@ public class DefaultRefererResultTest {
 		
 		when(request.getHeader("Referer")).thenReturn("http://localhost:8080/vraptor/no-controller");
 		when(request.getContextPath()).thenReturn("/vraptor");
-		when(router.parse("/no-controller", HttpMethod.GET, request)).thenThrow(new ResourceNotFoundException());
+		when(router.parse("/no-controller", HttpMethod.GET, request)).thenThrow(new ControllerNotFoundException());
 		doReturn(page).when(result).use(page());
 
 		refererResult.forward();
@@ -87,7 +87,7 @@ public class DefaultRefererResultTest {
 		
 		when(request.getHeader("Referer")).thenReturn("http://localhost:8080/vraptor/no-controller");
 		when(request.getContextPath()).thenReturn("/vraptor");
-		when(router.parse("/no-controller", HttpMethod.GET, request)).thenThrow(new ResourceNotFoundException());
+		when(router.parse("/no-controller", HttpMethod.GET, request)).thenThrow(new ControllerNotFoundException());
 		doReturn(page).when(result).use(page());
 		
 		refererResult.redirect();

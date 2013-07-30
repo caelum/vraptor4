@@ -43,16 +43,6 @@ import br.com.caelum.vraptor4.core.Converters;
 import br.com.caelum.vraptor4.http.DefaultParameterNameProvider;
 import br.com.caelum.vraptor4.http.ParameterNameProvider;
 import br.com.caelum.vraptor4.http.VRaptorRequest;
-import br.com.caelum.vraptor4.http.route.DefaultRouter;
-import br.com.caelum.vraptor4.http.route.JavaEvaluator;
-import br.com.caelum.vraptor4.http.route.MethodNotAllowedException;
-import br.com.caelum.vraptor4.http.route.NoRoutesConfiguration;
-import br.com.caelum.vraptor4.http.route.NoTypeFinder;
-import br.com.caelum.vraptor4.http.route.PathAnnotationRoutesParser;
-import br.com.caelum.vraptor4.http.route.ResourceNotFoundException;
-import br.com.caelum.vraptor4.http.route.Route;
-import br.com.caelum.vraptor4.http.route.RoutesParser;
-import br.com.caelum.vraptor4.http.route.Rules;
 import br.com.caelum.vraptor4.interceptor.DefaultTypeNameExtractor;
 import br.com.caelum.vraptor4.interceptor.VRaptorMatchers;
 import br.com.caelum.vraptor4.proxy.JavassistProxifier;
@@ -88,20 +78,20 @@ public class DefaultRouterTest {
 	}
 
 	@Test
-	public void shouldThrowResourceNotFoundExceptionWhenNoRoutesMatchTheURI() throws Exception {
+	public void shouldThrowControllerNotFoundExceptionWhenNoRoutesMatchTheURI() throws Exception {
 		Route route = mock(Route.class);
 		when(route.canHandle(anyString())).thenReturn(false);
 
 		router.add(route);
-		
+
 		try {
 			router.parse("any uri", HttpMethod.DELETE, request);
-			fail("ResourceNotFoundException is expected");
-		} catch (ResourceNotFoundException e) {
-			
+			fail("ControllerNotFoundException is expected");
+		} catch (ControllerNotFoundException e) {
+
 		}
 	}
-	
+
 	@Test
 	public void shouldThrowMethodNotAllowedExceptionWhenNoRoutesMatchTheURIWithGivenHttpMethod() throws Exception {
 		Route route = mock(Route.class);
@@ -109,7 +99,7 @@ public class DefaultRouterTest {
 		when(route.allowedMethods()).thenReturn(EnumSet.of(HttpMethod.GET));
 
 		router.add(route);
-		
+
 		try {
 			router.parse("any uri", HttpMethod.DELETE, request);
 			fail("MethodNotAllowedException is expected");
@@ -122,22 +112,22 @@ public class DefaultRouterTest {
 	public void shouldObeyPriorityOfRoutes() throws Exception {
 		Route first = mock(Route.class);
 		Route second = mock(Route.class);
-		
-		ControllerMethod method2 = second.resourceMethod(request, "second");
-		
+
+		ControllerMethod method2 = second.controllerMethod(request, "second");
+
 		router.add(second);
 		router.add(first);
 
 		when(first.getPriority()).thenReturn(Path.HIGH);
 		when(second.getPriority()).thenReturn(Path.LOW);
-		
+
 		EnumSet<HttpMethod> get = EnumSet.of(HttpMethod.GET);
 		when(first.allowedMethods()).thenReturn(get);
 		when(second.allowedMethods()).thenReturn(get);
-		
+
 		when(first.canHandle(anyString())).thenReturn(false);
 		when(second.canHandle(anyString())).thenReturn(true);
-		
+
 		ControllerMethod found = router.parse("anything", HttpMethod.GET, request);
 		assertThat(found, is(method2));
 	}
@@ -145,14 +135,14 @@ public class DefaultRouterTest {
 	@Test
 	public void acceptsASingleMappingRule() throws SecurityException, NoSuchMethodException {
 		Route route = mock(Route.class);
-		
+
 		when(route.canHandle("/clients/add")).thenReturn(true);
 		when(route.allowedMethods()).thenReturn(EnumSet.of(HttpMethod.POST));
-		when(route.resourceMethod(request, "/clients/add")).thenReturn(method);
+		when(route.controllerMethod(request, "/clients/add")).thenReturn(method);
 
 		router.add(route);
 		ControllerMethod found = router.parse("/clients/add", HttpMethod.POST, request);
-		
+
 		assertThat(found, is(equalTo(method)));
 		verify(route, atLeastOnce()).getPriority();
 	}
@@ -162,22 +152,22 @@ public class DefaultRouterTest {
 	public void passesTheWebMethod() throws SecurityException, NoSuchMethodException {
 		HttpMethod delete = HttpMethod.DELETE;
 		Route route = mock(Route.class);
-		
+
 		when(route.canHandle("/clients/add")).thenReturn(true);
 		when(route.allowedMethods()).thenReturn(EnumSet.of(delete));
-		when(route.resourceMethod(request, "/clients/add")).thenReturn(method);
+		when(route.controllerMethod(request, "/clients/add")).thenReturn(method);
 
 		router.add(route);
 		ControllerMethod found = router.parse("/clients/add", delete, request);
 		assertThat(found, is(equalTo(method)));
 		verify(route, atLeastOnce()).getPriority();
 	}
-	
+
 	@Test
 	public void usesTheFirstRegisteredRuleMatchingThePattern() throws SecurityException, NoSuchMethodException {
 		Route route = mock(Route.class);
 		Route second = mock(Route.class, "second");
-		
+
 		when(route.canHandle("/clients/add")).thenReturn(true);
 		when(second.canHandle("/clients/add")).thenReturn(true);
 
@@ -186,13 +176,13 @@ public class DefaultRouterTest {
 		when(route.allowedMethods()).thenReturn(all);
 		when(second.allowedMethods()).thenReturn(all);
 
-		when(route.resourceMethod(request, "/clients/add")).thenReturn(method);
+		when(route.controllerMethod(request, "/clients/add")).thenReturn(method);
 		when(route.getPriority()).thenReturn(Path.HIGHEST);
 		when(second.getPriority()).thenReturn(Path.LOWEST);
 
 		router.add(route);
 		router.add(second);
-		
+
 		ControllerMethod found = router.parse("/clients/add", HttpMethod.POST, request);
 		assertThat(found, is(equalTo(method)));
 	}
@@ -200,7 +190,7 @@ public class DefaultRouterTest {
 	public void throwsExceptionIfMoreThanOneUriMatchesWithSamePriority() {
 		Route route = mock(Route.class);
 		Route second = mock(Route.class, "second");
-		
+
 		when(route.canHandle("/clients/add")).thenReturn(true);
 		when(second.canHandle("/clients/add")).thenReturn(true);
 
@@ -211,10 +201,10 @@ public class DefaultRouterTest {
 
 		when(route.getPriority()).thenReturn(Path.DEFAULT);
 		when(second.getPriority()).thenReturn(Path.DEFAULT);
-		
+
 		router.add(route);
 		router.add(second);
-		
+
 		try {
 			router.parse("/clients/add", HttpMethod.POST, request);
 			fail("IllegalStateException expected");
@@ -230,7 +220,7 @@ public class DefaultRouterTest {
 				routeFor("/clients/add").with(HttpMethod.POST).is(SomeController.class).add(null);
 			}
 		};
-		assertThat(router.parse("/clients/add", HttpMethod.POST, request), is(VRaptorMatchers.resourceMethod(method(
+		assertThat(router.parse("/clients/add", HttpMethod.POST, request), is(VRaptorMatchers.controllerMethod(method(
 				"add", Dog.class))));
 	}
 
@@ -246,11 +236,11 @@ public class DefaultRouterTest {
 				routeFor("/clients/add").with(HttpMethod.POST).with(HttpMethod.GET).is(SomeController.class).add(null);
 			}
 		};
-		
-		assertThat(router.parse("/clients/add", HttpMethod.POST, request), is(VRaptorMatchers.resourceMethod(method(
+
+		assertThat(router.parse("/clients/add", HttpMethod.POST, request), is(VRaptorMatchers.controllerMethod(method(
 				"add", Dog.class))));
-		
-		assertThat(router.parse("/clients/add", HttpMethod.GET, request), is(VRaptorMatchers.resourceMethod(method(
+
+		assertThat(router.parse("/clients/add", HttpMethod.GET, request), is(VRaptorMatchers.controllerMethod(method(
 				"add", Dog.class))));
 	}
 
@@ -283,7 +273,7 @@ public class DefaultRouterTest {
 	}
 
 	@Controller
-	public static class MyResource {
+	public static class MyController {
 		public void notAnnotated() {
 		}
 
@@ -297,46 +287,46 @@ public class DefaultRouterTest {
 	}
 
 	@Controller
-	class InheritanceExample extends MyResource {
+	class InheritanceExample extends MyController {
 	}
 
 	@Test
 	public void usesAsteriskBothWays() throws NoSuchMethodException {
-		registerRulesFor(MyResource.class);
-		final Method method = MyResource.class.getMethod("starPath");
-		String url = router.urlFor(MyResource.class, method, new Object[] {});
+		registerRulesFor(MyController.class);
+		final Method method = MyController.class.getMethod("starPath");
+		String url = router.urlFor(MyController.class, method, new Object[] {});
 		assertThat(router.parse(url, HttpMethod.POST, null).getMethod(), is(equalTo(method)));
 	}
 
 	private void registerRulesFor(Class<?> type) {
 		RoutesParser parser = new PathAnnotationRoutesParser(router);
-		
-		BeanClass resourceClass = new DefaultBeanClass(type);
-		List<Route> rules = parser.rulesFor(resourceClass);
+
+		BeanClass controllerClass = new DefaultBeanClass(type);
+		List<Route> rules = parser.rulesFor(controllerClass);
 		for (Route route : rules) {
 			router.add(route);
 		}
 	}
 
 	@Test
-	public void canTranslateAInheritedResourceBothWays() throws NoSuchMethodException {
-		registerRulesFor(MyResource.class);
+	public void canTranslateAInheritedControllerBothWays() throws NoSuchMethodException {
+		registerRulesFor(MyController.class);
 		registerRulesFor(InheritanceExample.class);
-		final Method method = MyResource.class.getMethod("notAnnotated");
+		final Method method = MyController.class.getMethod("notAnnotated");
 		String url = router.urlFor(InheritanceExample.class, method, new Object[] {});
 		assertThat(router.parse(url, HttpMethod.POST, null).getMethod(), is(equalTo(method)));
 	}
 
 	@Test
 	public void canTranslateAnnotatedMethodBothWays() throws NoSuchMethodException {
-		registerRulesFor(MyResource.class);
-		final Method method = MyResource.class.getMethod("customizedPath");
-		String url = router.urlFor(MyResource.class, method, new Object[] {});
+		registerRulesFor(MyController.class);
+		final Method method = MyController.class.getMethod("customizedPath");
+		String url = router.urlFor(MyController.class, method, new Object[] {});
 		assertThat(router.parse(url, HttpMethod.POST, null).getMethod(), is(equalTo(method)));
 	}
 }
 
-class MyCustomResource {
+class MyCustomController {
 	public void notAnnotated() {
 	}
 }

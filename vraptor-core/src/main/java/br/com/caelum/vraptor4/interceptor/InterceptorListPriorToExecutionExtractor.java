@@ -31,7 +31,7 @@ import com.google.common.collect.Lists;
 
 /**
  * Extracts all interceptors which are supposed to be applied for this current
- * resource method.
+ * controller method.
  *
  * @author Guilherme Silveira
  * @deprecated This class is deprecated. If you extend a request execution, consider using @Intercepts(after=..., before=...) instead.
@@ -50,12 +50,12 @@ public class InterceptorListPriorToExecutionExtractor implements Interceptor {
         this.registry = registry;
         logger.warn("This class is deprecated. If you extend a request execution, consider using @Intercepts(after=..., before=...) instead.");
     }
-    
-    public void intercept(InterceptorStack stack, ControllerMethod method, Object resourceInstance) throws InterceptionException {
+
+    public void intercept(InterceptorStack stack, ControllerMethod method, Object controllerInstance) throws InterceptionException {
     	for (Class<? extends Interceptor> type : Lists.reverse(registry.all())) {
 			stack.addAsNext(type);
 		}
-        stack.next(method, resourceInstance);
+        stack.next(method, controllerInstance);
     }
 
     public boolean accepts(ControllerMethod method) {

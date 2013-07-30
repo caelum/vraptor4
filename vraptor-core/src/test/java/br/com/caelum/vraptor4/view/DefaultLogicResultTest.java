@@ -263,7 +263,7 @@ public class DefaultLogicResultTest {
 		when(request.getRequestDispatcher(anyString())).thenThrow(new AssertionError("should have called with the right method!"));
 		doReturn(dispatcher).when(request).getRequestDispatcher("controlled!");
 		
-		methodInfo.setResourceMethod(DefaultControllerMethod.instanceFor(MyComponent.class, MyComponent.class.getDeclaredMethod("base")));
+		methodInfo.setControllerMethod(DefaultControllerMethod.instanceFor(MyComponent.class, MyComponent.class.getDeclaredMethod("base")));
 		
 		logicResult.forwardTo(TheComponent.class).method();
 	}

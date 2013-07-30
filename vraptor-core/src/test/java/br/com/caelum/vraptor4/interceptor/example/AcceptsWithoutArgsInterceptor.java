@@ -18,7 +18,7 @@ public class AcceptsWithoutArgsInterceptor{
 	}
 	
 	@AroundCall
-	public void around(InterceptorStack stack, ControllerMethod method, ControllerInstance resourceInstance){
+	public void around(InterceptorStack stack, ControllerMethod method, ControllerInstance controllerInstance){
 		
 	}	
 	

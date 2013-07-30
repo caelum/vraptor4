@@ -24,14 +24,14 @@ public class ReplicatorOutjectorTest {
 	private @Mock ParameterNameProvider provider;
 	private @Mock MethodInfo method;
 	private @Mock Result result;
-	private @Mock ControllerMethod resourceMethod;
+	private @Mock ControllerMethod controllerMethod;
 
 	private Outjector outjector;
 
 	@Before
 	public void setUp() throws Exception {
 		MockitoAnnotations.initMocks(this);
-		when(method.getResourceMethod()).thenReturn(resourceMethod);
+		when(method.getControllerMethod()).thenReturn(controllerMethod);
 		outjector = new ReplicatorOutjector(result, method, provider);
 	}
 

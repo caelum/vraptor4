@@ -66,7 +66,7 @@ public class DefaultPageResultTest {
         method = DefaultControllerMethod.instanceFor(AnyResource.class, AnyResource.class.getDeclaredMethods()[0]);
         proxifier = new JavassistProxifier(new ObjenesisInstanceCreator());
         requestInfo = new DefaultMethodInfo();
-        requestInfo.setResourceMethod(method);
+        requestInfo.setControllerMethod(method);
         fixedResolver = new PathResolver() {
             public String pathFor(ControllerMethod method) {
                 return "fixed";

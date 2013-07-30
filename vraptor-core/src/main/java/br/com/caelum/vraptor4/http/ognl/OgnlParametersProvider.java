@@ -114,7 +114,7 @@ public class OgnlParametersProvider implements ParametersProvider {
 		}
 		public Class actualType() {
 			if (type instanceof TypeVariable) {
-				ParameterizedType superclass = (ParameterizedType) method.getResource().getType().getGenericSuperclass();
+				ParameterizedType superclass = (ParameterizedType) method.getController().getType().getGenericSuperclass();
 				return (Class) superclass.getActualTypeArguments()[0];
 			}
 			return clazz;

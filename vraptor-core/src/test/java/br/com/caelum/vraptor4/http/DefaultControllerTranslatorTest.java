@@ -33,15 +33,12 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor4.core.RequestInfo;
-import br.com.caelum.vraptor4.http.DefaultResourceTranslator;
-import br.com.caelum.vraptor4.http.MutableRequest;
-import br.com.caelum.vraptor4.http.VRaptorRequest;
 import br.com.caelum.vraptor4.http.route.MethodNotAllowedException;
 import br.com.caelum.vraptor4.http.route.Router;
 import br.com.caelum.vraptor4.restfulie.controller.ControllerMethod;
 import br.com.caelum.vraptor4.restfulie.controller.HttpMethod;
 
-public class DefaultResourceTranslatorTest {
+public class DefaultControllerTranslatorTest {
 
     private @Mock Router router;
     private @Mock HttpServletRequest request;
@@ -52,14 +49,14 @@ public class DefaultResourceTranslatorTest {
 	private RequestInfo info;
 
 
-	private DefaultResourceTranslator translator;
+	private DefaultControllerTranslator translator;
 
     @Before
     public void setup() {
     	MockitoAnnotations.initMocks(this);
 
         this.webRequest = new VRaptorRequest(request);
-        this.translator = new DefaultResourceTranslator(router);
+        this.translator = new DefaultControllerTranslator(router);
         this.info = new RequestInfo(null,null, webRequest,null);
         when(request.getContextPath()).thenReturn("");
     }
@@ -71,8 +68,8 @@ public class DefaultResourceTranslatorTest {
     	when(request.getMethod()).thenReturn("POST");
     	when(router.parse("/url", HttpMethod.POST, webRequest)).thenReturn(method);
 
-        ControllerMethod resource = translator.translate(info);
-        assertThat(resource, is(sameInstance(method)));
+        ControllerMethod controller = translator.translate(info);
+        assertThat(controller, is(sameInstance(method)));
     }
 
     @Test
@@ -82,8 +79,8 @@ public class DefaultResourceTranslatorTest {
     	when(request.getMethod()).thenReturn("POST");
     	when(router.parse("/url", HttpMethod.POST,webRequest)).thenReturn(method);
 
-        ControllerMethod resource = translator.translate(info);
-        assertThat(resource, is(equalTo(method)));
+        ControllerMethod controller = translator.translate(info);
+        assertThat(controller, is(equalTo(method)));
     }
 
     @Test
@@ -92,9 +89,9 @@ public class DefaultResourceTranslatorTest {
     	when(request.getMethod()).thenReturn("pOsT");
     	when(router.parse("/url", HttpMethod.POST,webRequest)).thenReturn(method);
 
-        ControllerMethod resource = translator.translate(info);
+        ControllerMethod controller = translator.translate(info);
 
-        assertThat(resource, is(equalTo(method)));
+        assertThat(controller, is(equalTo(method)));
     }
 
     @Test
@@ -104,8 +101,8 @@ public class DefaultResourceTranslatorTest {
     	when(request.getMethod()).thenReturn("POST");
     	when(router.parse("/url", HttpMethod.GET, webRequest)).thenReturn(method);
 
-        ControllerMethod resource = translator.translate(info);
-        assertThat(resource, is(equalTo(method)));
+        ControllerMethod controller = translator.translate(info);
+        assertThat(controller, is(equalTo(method)));
     }
 
 
@@ -125,8 +122,8 @@ public class DefaultResourceTranslatorTest {
     	when(request.getMethod()).thenReturn("POST");
     	when(router.parse("/url", HttpMethod.DELETE, webRequest)).thenReturn(method);
 
-        ControllerMethod resource = translator.translate(info);
-        assertThat(resource, is(equalTo(method)));
+        ControllerMethod controller = translator.translate(info);
+        assertThat(controller, is(equalTo(method)));
     }
 
     @Test
@@ -136,8 +133,8 @@ public class DefaultResourceTranslatorTest {
     	when(request.getMethod()).thenReturn("GET");
     	when(router.parse("/url", HttpMethod.GET, webRequest)).thenReturn(method);
 
-    	ControllerMethod resource = translator.translate(info);
-    	assertThat(resource, is(equalTo(method)));
+    	ControllerMethod controller = translator.translate(info);
+    	assertThat(controller, is(equalTo(method)));
 
     }
 
@@ -148,8 +145,8 @@ public class DefaultResourceTranslatorTest {
     	when(request.getMethod()).thenReturn("GET");
     	when(router.parse("/url", HttpMethod.GET, webRequest)).thenReturn(method);
 
-    	ControllerMethod resource = translator.translate(info);
-    	assertThat(resource, is(equalTo(method)));
+    	ControllerMethod controller = translator.translate(info);
+    	assertThat(controller, is(equalTo(method)));
     }
 
     @Test
@@ -158,8 +155,8 @@ public class DefaultResourceTranslatorTest {
     	when(request.getMethod()).thenReturn("GET");
     	when(router.parse("/", HttpMethod.GET, webRequest)).thenReturn(method);
 
-    	ControllerMethod resource = translator.translate(info);
-    	assertThat(resource, is(equalTo(method)));
+    	ControllerMethod controller = translator.translate(info);
+    	assertThat(controller, is(equalTo(method)));
    	}
 
     @Test
@@ -168,8 +165,8 @@ public class DefaultResourceTranslatorTest {
     	when(request.getMethod()).thenReturn("GET");
     	when(router.parse("/products/1", HttpMethod.GET, webRequest)).thenReturn(method);
 
-    	ControllerMethod resource = translator.translate(info);
-    	assertThat(resource, is(equalTo(method)));
+    	ControllerMethod controller = translator.translate(info);
+    	assertThat(controller, is(equalTo(method)));
     }
 
     @Test
@@ -179,8 +176,8 @@ public class DefaultResourceTranslatorTest {
     	when(request.getMethod()).thenReturn("GET");
     	when(router.parse("/products/1", HttpMethod.GET, webRequest)).thenReturn(method);
 
-    	ControllerMethod resource = translator.translate(info);
-    	assertThat(resource, is(equalTo(method)));
+    	ControllerMethod controller = translator.translate(info);
+    	assertThat(controller, is(equalTo(method)));
     }
     @Test
     public void canHandleUrlWithAppendedJSessionID() {
@@ -205,8 +202,8 @@ public class DefaultResourceTranslatorTest {
     	when(request.getMethod()).thenReturn("GET");
     	when(router.parse("/", HttpMethod.GET, webRequest)).thenReturn(method);
 
-    	ControllerMethod resource = translator.translate(info);
-    	assertThat(resource, is(equalTo(method)));
+    	ControllerMethod controller = translator.translate(info);
+    	assertThat(controller, is(equalTo(method)));
     }
 
 }

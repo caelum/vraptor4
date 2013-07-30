@@ -53,7 +53,7 @@ public class DefaultPathResolver implements PathResolver {
 		if (format != null && !format.equals("html")) {
 			suffix = "." + format;
 		}
-        String name = method.getResource().getType().getSimpleName();
+        String name = method.getController().getType().getSimpleName();
         String folderName = extractControllerFromName(name);
 		return getPrefix() + folderName + "/" + method.getMethod().getName() + suffix
 				+ "."+getExtension();

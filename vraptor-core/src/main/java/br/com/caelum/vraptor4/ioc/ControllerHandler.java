@@ -38,7 +38,7 @@ import br.com.caelum.vraptor4.view.LinkToHandler;
 
 @ApplicationScoped
 public class ControllerHandler{
-	private Logger logger = LoggerFactory.getLogger(ControllerHandler.class);
+	private final Logger logger = LoggerFactory.getLogger(ControllerHandler.class);
 	private Router router;
 	private RoutesParser parser;
 	private ServletContext context;
@@ -47,7 +47,7 @@ public class ControllerHandler{
 	@Deprecated
 	public ControllerHandler() {
 	}
-	
+
 	@Inject
 	public ControllerHandler(Router router, RoutesParser parser,
 			ServletContext context) {
@@ -60,9 +60,9 @@ public class ControllerHandler{
 	public void configureLinkToHandler() {
 		new LinkToHandler(context, router).start();
 	}
-	
+
 	public void handle(@Observes @ControllerQualifier BeanClass annotatedType) {
-		logger.debug("Found resource: {}", annotatedType);
+		logger.debug("Found controller: {}", annotatedType);
 		List<Route> routes = parser.rulesFor(annotatedType);
 		for (Route route : routes) {
 			router.add(route);

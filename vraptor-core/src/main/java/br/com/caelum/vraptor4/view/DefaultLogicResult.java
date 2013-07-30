@@ -88,10 +88,10 @@ public class DefaultLogicResult implements LogicResult {
 			public Object intercept(T proxy, Method method, Object[] args, SuperMethod superMethod) {
 				try {
 					logger.debug("Executing {}", Stringnifier.simpleNameFor(method));
-					ControllerMethod old = methodInfo.getResourceMethod();
-					methodInfo.setResourceMethod(DefaultControllerMethod.instanceFor(type, method));
+					ControllerMethod old = methodInfo.getControllerMethod();
+					methodInfo.setControllerMethod(DefaultControllerMethod.instanceFor(type, method));
 					Object result = method.invoke(container.instanceFor(type), args);
-					methodInfo.setResourceMethod(old);
+					methodInfo.setControllerMethod(old);
 
 					Type returnType = method.getGenericReturnType();
 					if (!(returnType == void.class)) {

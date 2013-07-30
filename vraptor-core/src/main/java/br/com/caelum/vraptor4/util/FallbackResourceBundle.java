@@ -20,7 +20,6 @@ import java.util.Enumeration;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
-
 /**
  * A resource bundle which uses two different bundles to look for messages.
  *

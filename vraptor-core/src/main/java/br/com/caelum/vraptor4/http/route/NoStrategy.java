@@ -32,7 +32,7 @@ import br.com.caelum.vraptor4.restfulie.controller.HttpMethod;
  */
 public class NoStrategy implements Route {
 
-	public ControllerMethod resourceMethod(MutableRequest request, String uri) {
+	public ControllerMethod controllerMethod(MutableRequest request, String uri) {
 		throw new IllegalRouteException("You have created a route, but did not specify any method to be invoked.");
 	}
 

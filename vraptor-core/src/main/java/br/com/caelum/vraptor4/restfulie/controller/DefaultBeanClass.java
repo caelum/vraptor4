@@ -35,11 +35,11 @@ public class DefaultBeanClass implements BeanClass {
 		if (!(obj instanceof DefaultBeanClass)) {
 			return false;
 		}
-		DefaultBeanClass resource = (DefaultBeanClass) obj;
-		if (this.type == null && resource.type != null) {
+		DefaultBeanClass controller = (DefaultBeanClass) obj;
+		if (this.type == null && controller.type != null) {
 			return false;
 		}
-		return this.type.equals(resource.type);
+		return this.type.equals(controller.type);
 	}
 
 	@Override
@@ -49,22 +49,22 @@ public class DefaultBeanClass implements BeanClass {
 
 	@Override
 	public String toString() {
-		return "{ResourceClass " + type.getName() + "}";
+		return "{ControllerClass " + type.getName() + "}";
 	}
 
 	public Class<?> getType() {
 		return type;
 	}
-	
+
 	public Annotation[] getAnnotations(){
 		return type.getAnnotations();
 	}
-	
+
 	@Override
 	public Package getPackage(){
 		return type.getPackage();
 	}
-	
+
 	@Override
 	public String getPackageName(){
 		return getPackage().getName();

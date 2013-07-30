@@ -17,16 +17,15 @@
 
 package br.com.caelum.vraptor4.restfulie.controller;
 
-
 /**
- * Resources implementing this interface will be serialized with their links.
+ * Controllers implementing this interface will be serialized with their links.
  *
  * @author guilherme silveira
  * @author caires vinicius
  * @since 3.0.3
  *
  */
-public interface ResourceControl<T> {
+public interface ControllerControl<T> {
 
 	/**
 	 * Returns a list of controllers to be intercepted.

@@ -66,7 +66,7 @@ public class FlashInterceptor implements Interceptor {
 	}
 
 	@Override
-	public void intercept(InterceptorStack stack, ControllerMethod method, Object resourceInstance)
+	public void intercept(InterceptorStack stack, ControllerMethod method, Object controllerInstance)
 			throws InterceptionException {
 		@SuppressWarnings("unchecked")
 		Map<String, Object> parameters = (Map<String, Object>) session.getAttribute(FLASH_INCLUDED_PARAMETERS);
@@ -90,7 +90,7 @@ public class FlashInterceptor implements Interceptor {
 				}
 			}
 		});
-		stack.next(method, resourceInstance);
+		stack.next(method, controllerInstance);
 
 	}
 

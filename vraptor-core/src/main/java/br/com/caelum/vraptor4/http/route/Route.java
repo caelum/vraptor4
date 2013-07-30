@@ -32,12 +32,12 @@ import br.com.caelum.vraptor4.restfulie.controller.HttpMethod;
 public interface Route {
 
 	/**
-	 * Returns the resource method for this specifig rule. Also applies the
+	 * Returns the controller method for this specifig rule. Also applies the
 	 * required parameters to this vraptor request.
 	 * You must call {@link Route#canHandle(String)} method, and see if request
 	 * HTTP method is in {@link Route#allowedMethods()} before calling this method.
 	 */
-	ControllerMethod resourceMethod(MutableRequest request, String uri);
+	ControllerMethod controllerMethod(MutableRequest request, String uri);
 
 	/**
 	 * Returns if this route can handle this URI

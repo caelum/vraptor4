@@ -57,14 +57,14 @@ public class DefaultInterceptorStack implements InterceptorStack {
 		this.handlerFactory = handlerFactory;
 	}
 
-	public void next(ControllerMethod method, Object resourceInstance)
+	public void next(ControllerMethod method, Object controllerInstance)
 			throws InterceptionException {
 		if (interceptors.isEmpty()) {
 			logger.debug("All registered interceptors have been called. End of VRaptor Request Execution.");
 			return;
 		}
 		InterceptorHandler handler = interceptors.poll();
-		handler.execute(this, method, resourceInstance);
+		handler.execute(this, method, controllerInstance);
 	}
 
 	public void add(Class<? extends Interceptor> type) {

@@ -63,7 +63,7 @@ public class DefaultPageResult implements PageResult {
 	
 	public void defaultView() {
 		try {
-			String to = resolver.pathFor(requestInfo.getResourceMethod());
+			String to = resolver.pathFor(requestInfo.getControllerMethod());
 			logger.debug("forwarding to {}", to);			
 			request.getRequestDispatcher(to).forward(request.getOriginalRequest(), response.getOriginalResponse());
 		} catch (ServletException e) {
@@ -75,7 +75,7 @@ public class DefaultPageResult implements PageResult {
 
 	public void include() {
 		try {
-			String to = resolver.pathFor(requestInfo.getResourceMethod());
+			String to = resolver.pathFor(requestInfo.getControllerMethod());
 			logger.debug("including {}", to);
 			request.getRequestDispatcher(to).include(request.getOriginalRequest(), response.getOriginalResponse());
 		} catch (ServletException e) {

@@ -110,13 +110,13 @@ public class MethodValidatorTest {
         throws Exception {
         MethodInfo info = new DefaultMethodInfo();
         info.setParameters(new Object[] { null });
-        info.setResourceMethod(withConstraint);
+        info.setControllerMethod(withConstraint);
 
         interceptor = new MethodValidatorInterceptor(l10n, interpolator, validator, info, factory.getValidator());
         when(l10n.getLocale()).thenReturn(new Locale("pt", "br"));
 
         MyController controller = new MyController();
-        interceptor.intercept(stack, info.getResourceMethod(), controller);
+        interceptor.intercept(stack, info.getControllerMethod(), controller);
         
         assertThat(validator.getErrors(), hasSize(1));
         assertThat(validator.getErrors().get(0).getCategory(), is("withConstraint.email"));
@@ -127,12 +127,12 @@ public class MethodValidatorTest {
         throws Exception {
         MethodInfo info = new DefaultMethodInfo();
         info.setParameters(new Object[] { null });
-        info.setResourceMethod(withConstraint);
+        info.setControllerMethod(withConstraint);
 
         interceptor = new MethodValidatorInterceptor(l10n, interpolator, validator, info, factory.getValidator());
 
         MyController controller = new MyController();
-        interceptor.intercept(stack, info.getResourceMethod(), controller);
+        interceptor.intercept(stack, info.getControllerMethod(), controller);
 
         assertThat(validator.getErrors(), hasSize(1));
         assertThat(validator.getErrors().get(0).getCategory(), is("withConstraint.email"));
@@ -144,13 +144,13 @@ public class MethodValidatorTest {
         throws Exception {
         MethodInfo info = new DefaultMethodInfo();
         info.setParameters(new Object[] { null, new Customer(null, null) });
-        info.setResourceMethod(withTwoConstraints);
+        info.setControllerMethod(withTwoConstraints);
 
         interceptor = new MethodValidatorInterceptor(l10n, interpolator, validator, info, factory.getValidator());
         when(l10n.getLocale()).thenReturn(new Locale("pt", "br"));
 
         MyController controller = new MyController();
-        interceptor.intercept(stack, info.getResourceMethod(), controller);
+        interceptor.intercept(stack, info.getControllerMethod(), controller);
         String messages = validator.getErrors().toString();
 
         assertThat(validator.getErrors(), hasSize(3));

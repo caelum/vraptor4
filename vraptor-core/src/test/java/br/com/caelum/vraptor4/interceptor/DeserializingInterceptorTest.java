@@ -20,7 +20,7 @@ import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor4.Consumes;
 import br.com.caelum.vraptor4.InterceptionException;
-import br.com.caelum.vraptor4.core.DefaultMethodInfo;
+import br.com.caelum.vraptor4.core.MethodInfo;
 import br.com.caelum.vraptor4.core.InterceptorStack;
 import br.com.caelum.vraptor4.core.MethodInfo;
 import br.com.caelum.vraptor4.deserialization.Deserializer;
@@ -47,7 +47,7 @@ public class DeserializingInterceptorTest {
 	public void setUp() throws Exception {
 		MockitoAnnotations.initMocks(this);
 
-		methodInfo = new DefaultMethodInfo();
+		methodInfo = new MethodInfo();
 		interceptor = new DeserializingInterceptor(request, deserializers, methodInfo, container, status);
 		consumeXml = new DefaultControllerMethod(null, DummyResource.class.getDeclaredMethod("consumeXml"));
 		doesntConsume = new DefaultControllerMethod(null, DummyResource.class.getDeclaredMethod("doesntConsume"));

@@ -78,8 +78,8 @@ import br.com.caelum.vraptor4.deserialization.FormDeserializer;
 import br.com.caelum.vraptor4.deserialization.JsonDeserializer;
 import br.com.caelum.vraptor4.deserialization.XMLDeserializer;
 import br.com.caelum.vraptor4.deserialization.XStreamXMLDeserializer;
-import br.com.caelum.vraptor4.http.DefaultFormatResolver;
 import br.com.caelum.vraptor4.http.DefaultControllerTranslator;
+import br.com.caelum.vraptor4.http.DefaultFormatResolver;
 import br.com.caelum.vraptor4.http.EncodingHandlerFactory;
 import br.com.caelum.vraptor4.http.FormatResolver;
 import br.com.caelum.vraptor4.http.ParameterNameProvider;
@@ -104,6 +104,7 @@ import br.com.caelum.vraptor4.http.route.Router;
 import br.com.caelum.vraptor4.http.route.RoutesConfiguration;
 import br.com.caelum.vraptor4.http.route.RoutesParser;
 import br.com.caelum.vraptor4.http.route.TypeFinder;
+import br.com.caelum.vraptor4.interceptor.ControllerLookupInterceptor;
 import br.com.caelum.vraptor4.interceptor.DefaultSimpleInterceptorStack;
 import br.com.caelum.vraptor4.interceptor.DefaultTypeNameExtractor;
 import br.com.caelum.vraptor4.interceptor.DeserializingInterceptor;
@@ -116,7 +117,6 @@ import br.com.caelum.vraptor4.interceptor.InterceptorRegistry;
 import br.com.caelum.vraptor4.interceptor.OutjectResult;
 import br.com.caelum.vraptor4.interceptor.ParameterIncluderInterceptor;
 import br.com.caelum.vraptor4.interceptor.ParametersInstantiatorInterceptor;
-import br.com.caelum.vraptor4.interceptor.ControllerLookupInterceptor;
 import br.com.caelum.vraptor4.interceptor.SimpleInterceptorStack;
 import br.com.caelum.vraptor4.interceptor.TopologicalSortedInterceptorRegistry;
 import br.com.caelum.vraptor4.interceptor.TypeNameExtractor;
@@ -243,7 +243,7 @@ public class BaseComponents {
     private static final Map<Class<?>, Class<?>> REQUEST_COMPONENTS = classMap(
     			InterceptorStack.class, 						DefaultInterceptorStack.class,
     			SimpleInterceptorStack.class,                DefaultSimpleInterceptorStack.class,
-            MethodInfo.class, 								DefaultMethodInfo.class,
+            MethodInfo.class, 						MethodInfo.class,
             LogicResult.class, 								DefaultLogicResult.class,
             PageResult.class, 								DefaultPageResult.class,
             HttpResult.class, 								DefaultHttpResult.class,

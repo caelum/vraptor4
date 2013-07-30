@@ -217,7 +217,7 @@ public class CDIBasedContainerTest extends GenericContainerTest {
 	}
 
 	@Test
-	public void shouldStereotypeResourceWithRequestAndNamed(){
+	public void shouldStereotypeControllerWithRequestAndNamed(){
 		Bean<?> bean = cdiContainer.getBeanManager().getBeans(CDIControllerComponent.class).iterator().next();
 		assertTrue(bean.getScope().equals(RequestScoped.class));
 	}

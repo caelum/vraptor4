@@ -23,7 +23,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Indicates that the resource method expects the specified MIME content-types
+ * Indicates that the controller method expects the specified MIME content-types
  * in the request.
  *
  * @author Lucas Cavalcanti, Rafael Ferreira, GUilherme Silveira

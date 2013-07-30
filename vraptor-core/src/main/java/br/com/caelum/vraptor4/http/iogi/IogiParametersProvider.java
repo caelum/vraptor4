@@ -94,7 +94,7 @@ public class IogiParametersProvider implements ParametersProvider {
 		String[] parameterNames = nameProvider.parameterNamesFor(javaMethod);
 		for (int i = 0; i < methodArity(javaMethod); i++) {
 			if (parameterTypes[i] instanceof TypeVariable) {
-				ParameterizedType superclass = (ParameterizedType) method.getResource().getType().getGenericSuperclass();
+				ParameterizedType superclass = (ParameterizedType) method.getController().getType().getGenericSuperclass();
 				parameterTypes[i] = superclass.getActualTypeArguments()[0];
 			}
 			Target<Object> newTarget = new Target<Object>(parameterTypes[i], parameterNames[i]);

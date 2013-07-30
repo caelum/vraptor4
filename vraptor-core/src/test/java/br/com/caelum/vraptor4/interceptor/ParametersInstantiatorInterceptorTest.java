@@ -189,17 +189,17 @@ public class ParametersInstantiatorInterceptorTest {
 	public void shouldAddHeaderInformationToRequestWhenHeaderParamAnnotationIsPresent() throws Exception {
 		Object[] values = new Object[] { new Object() };
 		Method method = HeaderParamComponent.class.getDeclaredMethod("method", String.class);
-		ControllerMethod resourceMethod = DefaultControllerMethod.instanceFor(HeaderParamComponent.class, method);
+		ControllerMethod controllerMethod = DefaultControllerMethod.instanceFor(HeaderParamComponent.class, method);
 		
 		when(request.getHeader("X-MyApp-Password")).thenReturn("123");
-    	when(parametersProvider.getParametersFor(resourceMethod, errors, bundle)).thenReturn(values);
+    	when(parametersProvider.getParametersFor(controllerMethod, errors, bundle)).thenReturn(values);
     	when(parameterNameProvider.parameterNamesFor(method)).thenReturn(new String[]{"password"});
 
-        instantiator.intercept(stack, resourceMethod, null);
+        instantiator.intercept(stack, controllerMethod, null);
         
 		verify(request).setAttribute("password", "123");
         verify(params).setParameters(values);
-        verify(stack).next(resourceMethod, null);
+        verify(stack).next(controllerMethod, null);
         verify(validator).addAll(Collections.<Message>emptyList());
 	}
 	
@@ -207,16 +207,16 @@ public class ParametersInstantiatorInterceptorTest {
 	public void shouldAddHeaderInformationToRequestWhenHeaderParamAnnotationIsNotPresent() throws Exception {
 		Object[] values = new Object[] { new Object() };
 		Method method = Component.class.getDeclaredMethod("method");
-		ControllerMethod resourceMethod = DefaultControllerMethod.instanceFor(Component.class, method);
+		ControllerMethod controllerMethod = DefaultControllerMethod.instanceFor(Component.class, method);
 		
-    	when(parametersProvider.getParametersFor(resourceMethod, errors, bundle)).thenReturn(values);
+    	when(parametersProvider.getParametersFor(controllerMethod, errors, bundle)).thenReturn(values);
     	when(parameterNameProvider.parameterNamesFor(method)).thenReturn(new String[]{"password"});
 
-        instantiator.intercept(stack, resourceMethod, null);
+        instantiator.intercept(stack, controllerMethod, null);
         
         verify(request, never()).setAttribute(anyString(), anyString());
         verify(params).setParameters(values);
-        verify(stack).next(resourceMethod, null);
+        verify(stack).next(controllerMethod, null);
         verify(validator).addAll(Collections.<Message>emptyList());
 	}
 	

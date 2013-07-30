@@ -39,7 +39,7 @@ public class ParameterizedTypeSearcher {
 								+ " does not implement StateControl of an specific type");
 			}
 			ParameterizedType parameterized = (ParameterizedType) type;
-			if(parameterized.getRawType().equals(ResourceControl.class)) {
+			if(parameterized.getRawType().equals(ControllerControl.class)) {
 				return parameterized;
 			}
 		}

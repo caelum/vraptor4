@@ -58,23 +58,23 @@ public class ExceptionHandlerInterceptor
 	@Deprecated
 	public ExceptionHandlerInterceptor() {
 	}
-    
+
     @Inject
     public ExceptionHandlerInterceptor(ExceptionMapper exceptions, Result result) {
         this.exceptions = exceptions;
         this.result = result;
     }
-    
+
     @Override
 	public boolean accepts(ControllerMethod method) {
         return true;
     }
 
     @Override
-	public void intercept(InterceptorStack stack, ControllerMethod method, Object resourceInstance)
+	public void intercept(InterceptorStack stack, ControllerMethod method, Object controllerInstance)
         throws InterceptionException {
         try {
-            stack.next(method, resourceInstance);
+            stack.next(method, controllerInstance);
         } catch (InterceptionException e) {
             if (!(e.getCause() instanceof Exception) || !replay((Exception) e.getCause())) {
                 throw e;

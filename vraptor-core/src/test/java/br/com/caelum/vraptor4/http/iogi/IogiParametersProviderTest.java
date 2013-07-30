@@ -56,11 +56,6 @@ import br.com.caelum.vraptor4.core.Localization;
 import br.com.caelum.vraptor4.core.SafeResourceBundle;
 import br.com.caelum.vraptor4.http.ParametersProvider;
 import br.com.caelum.vraptor4.http.ParametersProviderTest;
-import br.com.caelum.vraptor4.http.iogi.InstantiatorWithErrors;
-import br.com.caelum.vraptor4.http.iogi.IogiParametersProvider;
-import br.com.caelum.vraptor4.http.iogi.VRaptorDependencyProvider;
-import br.com.caelum.vraptor4.http.iogi.VRaptorInstantiator;
-import br.com.caelum.vraptor4.http.iogi.VRaptorParameterNamesProvider;
 import br.com.caelum.vraptor4.restfulie.controller.ControllerMethod;
 import br.com.caelum.vraptor4.restfulie.controller.DefaultControllerMethod;
 import br.com.caelum.vraptor4.util.EmptyBundle;
@@ -88,13 +83,13 @@ public class IogiParametersProviderTest extends ParametersProviderTest {
 	public void canInjectADependencyProvidedByVraptor() throws Exception {
 		thereAreNoParameters();
 
-		ControllerMethod resourceMethod = DefaultControllerMethod.instanceFor(OtherResource.class, OtherResource.class.getDeclaredMethod("logic", NeedsMyResource.class));
+		ControllerMethod controllerMethod = DefaultControllerMethod.instanceFor(OtherResource.class, OtherResource.class.getDeclaredMethod("logic", NeedsMyResource.class));
     	final MyResource providedInstance = new MyResource();
 
     	when(container.canProvide(MyResource.class)).thenReturn(true);
     	when(container.instanceFor(MyResource.class)).thenReturn(providedInstance);
 
-    	Object[] params = provider.getParametersFor(resourceMethod, errors, null);
+    	Object[] params = provider.getParametersFor(controllerMethod, errors, null);
 		assertThat(((NeedsMyResource)params[0]).getMyResource(), is(sameInstance(providedInstance)));
 	}
     //---------- The Following tests mock iogi to unit test the ParametersProvider impl.
@@ -147,11 +142,11 @@ public class IogiParametersProviderTest extends ParametersProviderTest {
 		assertThat(cat, is(notNullValue()));
 		assertThat(cat.getLols(), is(nullValue()));
 	}
-	
+
 	@Test
 	public void isCapableOfDealingWithSets() throws Exception {
     	when(nameProvider.parameterNamesFor(any(Method.class))).thenReturn(new String[]{"abc"});
-    	
+
         ControllerMethod set = method("set", Set.class);
 
     	requestParameterIs(set, "abc", "1", "2");
@@ -161,11 +156,11 @@ public class IogiParametersProviderTest extends ParametersProviderTest {
     	assertThat(abc, hasSize(2));
     	assertThat(abc, allOf(hasItem(1l), hasItem(2l)));
 	}
-	
+
 	@Test
 	public void isCapableOfDealingWithSetsOfObjects() throws Exception {
     	when(nameProvider.parameterNamesFor(any(Method.class))).thenReturn(new String[]{"abc"});
-    	
+
         ControllerMethod set = method("setOfObject", Set.class);
 
     	requestParameterIs(set, "abc.x", "1");
@@ -175,7 +170,7 @@ public class IogiParametersProviderTest extends ParametersProviderTest {
     	assertThat(abc, hasSize(1));
     	assertThat(abc.iterator().next().getX(), is(1l));
 	}
-	
+
 	//----------
 
 	class OtherResource {

@@ -37,22 +37,22 @@ import br.com.caelum.vraptor4.core.MethodInfo;
 import br.com.caelum.vraptor4.core.RequestInfo;
 import br.com.caelum.vraptor4.http.MutableRequest;
 import br.com.caelum.vraptor4.http.MutableResponse;
-import br.com.caelum.vraptor4.http.UrlToResourceTranslator;
+import br.com.caelum.vraptor4.http.UrlToControllerTranslator;
 import br.com.caelum.vraptor4.http.route.MethodNotAllowedException;
-import br.com.caelum.vraptor4.http.route.ResourceNotFoundException;
-import br.com.caelum.vraptor4.interceptor.ResourceLookupInterceptor;
+import br.com.caelum.vraptor4.http.route.ControllerNotFoundException;
+import br.com.caelum.vraptor4.interceptor.ControllerLookupInterceptor;
 import br.com.caelum.vraptor4.restfulie.controller.ControllerMethod;
 import br.com.caelum.vraptor4.restfulie.controller.ControllerNotFoundHandler;
 import br.com.caelum.vraptor4.restfulie.controller.HttpMethod;
 import br.com.caelum.vraptor4.restfulie.controller.MethodNotAllowedHandler;
 
-public class ResourceLookupInterceptorTest {
+public class ControllerLookupInterceptorTest {
 
-    private @Mock UrlToResourceTranslator translator;
+    private @Mock UrlToControllerTranslator translator;
     private @Mock MutableRequest webRequest;
     private @Mock MutableResponse webResponse;
     private @Mock RequestInfo info;
-    private ResourceLookupInterceptor lookup;
+    private ControllerLookupInterceptor lookup;
     private @Mock MethodInfo methodInfo;
 	private @Mock ControllerNotFoundHandler notFoundHandler;
 	private @Mock MethodNotAllowedHandler methodNotAllowedHandler;
@@ -61,7 +61,7 @@ public class ResourceLookupInterceptorTest {
     public void config() {
     	MockitoAnnotations.initMocks(this);
         info = new RequestInfo(null, null, webRequest, webResponse);
-        lookup = new ResourceLookupInterceptor(translator, methodInfo, notFoundHandler, methodNotAllowedHandler, info);
+        lookup = new ControllerLookupInterceptor(translator, methodInfo, notFoundHandler, methodNotAllowedHandler, info);
     }
     
     @Test
@@ -71,7 +71,7 @@ public class ResourceLookupInterceptorTest {
 
     @Test
     public void shouldHandle404() throws IOException, InterceptionException {
-        when(translator.translate(info)).thenThrow(new ResourceNotFoundException());
+        when(translator.translate(info)).thenThrow(new ControllerNotFoundException());
                 
         lookup.intercept(null, null, null);
         verify(notFoundHandler).couldntFind(info);
@@ -88,7 +88,7 @@ public class ResourceLookupInterceptorTest {
     }
 
     @Test
-    public void shouldUseResourceMethodFoundWithNextInterceptor() throws IOException, InterceptionException {
+    public void shouldUseControllerMethodFoundWithNextInterceptor() throws IOException, InterceptionException {
         final ControllerMethod method = mock(ControllerMethod.class);
         final InterceptorStack stack = mock(InterceptorStack.class);
         
@@ -96,7 +96,7 @@ public class ResourceLookupInterceptorTest {
         
         lookup.intercept(stack, null, null);
         verify(stack).next(method, null);
-        verify(methodInfo).setResourceMethod(method);
+        verify(methodInfo).setControllerMethod(method);
         assertEquals(method, lookup.createControllerMethod());
     }
 }

@@ -12,7 +12,6 @@ import java.io.InputStream;
 import org.junit.Before;
 import org.junit.Test;
 
-import br.com.caelum.vraptor4.deserialization.JsonDeserializer;
 import br.com.caelum.vraptor4.http.ParameterNameProvider;
 import br.com.caelum.vraptor4.interceptor.DefaultTypeNameExtractor;
 import br.com.caelum.vraptor4.interceptor.TypeNameExtractor;
@@ -29,7 +28,7 @@ public class JsonDeserializerTest {
 	private JsonDeserializer deserializer;
 	private ParameterNameProvider provider;
 	private TypeNameExtractor extractor;
-	
+
 	private ControllerMethod meow;
 	private ControllerMethod roll;
 	private ControllerMethod jump;
@@ -41,28 +40,28 @@ public class JsonDeserializerTest {
 		provider = mock(ParameterNameProvider.class);
 
 		extractor = new DefaultTypeNameExtractor();
-		
-        deserializer = new JsonDeserializer(provider, extractor, XStreamBuilderImpl.cleanInstance());
-        
-		BeanClass resourceClass = new DefaultBeanClass(CatController.class);
 
-		meow = new DefaultControllerMethod(resourceClass, CatController.class.getDeclaredMethod("meow"));
-		roll = new DefaultControllerMethod(resourceClass, CatController.class.getDeclaredMethod("roll", Cat.class));
-		jump = new DefaultControllerMethod(resourceClass, CatController.class.getDeclaredMethod("jump", Cat.class, Integer.class));
-		sleep = new DefaultControllerMethod(resourceClass, CatController.class.getDeclaredMethod("sleep", Integer.class, Cat.class));
-		annotated = new DefaultControllerMethod(resourceClass, CatController.class.getDeclaredMethod("annotated", CatWithAnnotations.class));
+        deserializer = new JsonDeserializer(provider, extractor, XStreamBuilderImpl.cleanInstance());
+
+		BeanClass controllerClass = new DefaultBeanClass(CatController.class);
+
+		meow = new DefaultControllerMethod(controllerClass, CatController.class.getDeclaredMethod("meow"));
+		roll = new DefaultControllerMethod(controllerClass, CatController.class.getDeclaredMethod("roll", Cat.class));
+		jump = new DefaultControllerMethod(controllerClass, CatController.class.getDeclaredMethod("jump", Cat.class, Integer.class));
+		sleep = new DefaultControllerMethod(controllerClass, CatController.class.getDeclaredMethod("sleep", Integer.class, Cat.class));
+		annotated = new DefaultControllerMethod(controllerClass, CatController.class.getDeclaredMethod("annotated", CatWithAnnotations.class));
 	}
 
 	@XStreamAlias("catAnnotated")
 	static class CatWithAnnotations {
-		
+
 		@XStreamAlias("nameAnnotated")
 		private String name;
-		
+
 		@XStreamAlias("ageAnnotated")
 		private Integer age;
 	}
-	
+
 	static class Cat {
 		private String name;
 		private Integer age;
@@ -146,19 +145,19 @@ public class JsonDeserializerTest {
 		assertThat(cat.name, is("Samantha"));
 		assertThat(cat.age, is(2));
 	}
-	
+
 	@Test
 	public void shouldBeAbleToDeserializeACatWhenAliasConfiguredByAnnotations() {
-	
+
 		InputStream stream = new ByteArrayInputStream("{\"catAnnotated\":{\"nameAnnotated\": \"Zulu\", \"ageAnnotated\": 1}}".getBytes());
-		
+
 		when(provider.parameterNamesFor(annotated.getMethod())).thenReturn(new String[] {"cat"});
-		
+
 		Object[] deserialized = deserializer.deserialize(stream, annotated);
-		
+
 		assertThat(deserialized.length, is(1));
 		assertThat(deserialized[0], is(instanceOf(CatWithAnnotations.class)));
-		
+
 		CatWithAnnotations cat = (CatWithAnnotations) deserialized[0];
 		assertThat(cat.name, is("Zulu"));
 		assertThat(cat.age, is(1));

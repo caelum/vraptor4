@@ -35,8 +35,7 @@ import java.lang.annotation.Target;
 public @interface Delete {
 
 	/**
-	 * All paths that will be mapped to an annotated Resource method. 
-	 * @return
+	 * All paths that will be mapped to an annotated Controller method.
 	 */
     String[] value() default {};
 }

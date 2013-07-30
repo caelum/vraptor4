@@ -73,15 +73,15 @@ public class PathAnnotationRoutesParser implements RoutesParser {
 	@Deprecated
 	public PathAnnotationRoutesParser() {
 	}
-	
+
 	@Inject
 	public PathAnnotationRoutesParser(Router router) {
 		this.router = router;
 	}
-	
+
 	@Override
-	public List<Route> rulesFor(BeanClass resource) {
-		Class<?> baseType = resource.getType();
+	public List<Route> rulesFor(BeanClass controller) {
+		Class<?> baseType = controller.getType();
 		return registerRulesFor(baseType);
 	}
 

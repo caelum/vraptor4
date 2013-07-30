@@ -53,7 +53,6 @@ import br.com.caelum.vraptor4.InterceptionException;
 import br.com.caelum.vraptor4.Result;
 import br.com.caelum.vraptor4.core.InterceptorStack;
 import br.com.caelum.vraptor4.core.MethodInfo;
-import br.com.caelum.vraptor4.interceptor.Interceptor;
 import br.com.caelum.vraptor4.interceptor.download.Download;
 import br.com.caelum.vraptor4.interceptor.download.DownloadInterceptor;
 import br.com.caelum.vraptor4.restfulie.controller.ControllerMethod;
@@ -65,7 +64,7 @@ public class DownloadInterceptorTest {
 
     @Mock private MethodInfo info;
 	@Mock private HttpServletResponse response;
-	@Mock private ControllerMethod resourceMethod;
+	@Mock private ControllerMethod controllerMethod;
 	@Mock private InterceptorStack stack;
 	@Mock private ServletOutputStream outputStream;
 	@Mock private Result result;
@@ -85,7 +84,7 @@ public class DownloadInterceptorTest {
 
 		when(info.getResult()).thenReturn(download);
 
-		interceptor.intercept(stack, resourceMethod, null);
+		interceptor.intercept(stack, controllerMethod, null);
 
 		verify(download).write(response);
 
@@ -96,7 +95,7 @@ public class DownloadInterceptorTest {
 		byte[] bytes = "abc".getBytes();
 		when(info.getResult()).thenReturn(new ByteArrayInputStream(bytes));
 
-		interceptor.intercept(stack, resourceMethod, null);
+		interceptor.intercept(stack, controllerMethod, null);
 
 		verify(outputStream).write(argThat(is(arrayStartingWith(bytes))), eq(0), eq(3));
 
@@ -106,7 +105,7 @@ public class DownloadInterceptorTest {
 		byte[] bytes = "abc".getBytes();
 		when(info.getResult()).thenReturn(bytes);
 
-		interceptor.intercept(stack, resourceMethod, null);
+		interceptor.intercept(stack, controllerMethod, null);
 
 		verify(outputStream).write(argThat(is(arrayStartingWith(bytes))), eq(0), eq(3));
 
@@ -119,7 +118,7 @@ public class DownloadInterceptorTest {
 
 		when(info.getResult()).thenReturn(tmp);
 
-		interceptor.intercept(stack, resourceMethod, null);
+		interceptor.intercept(stack, controllerMethod, null);
 
 		verify(outputStream).write(argThat(is(arrayStartingWith("abc".getBytes()))), eq(0), eq(3));
 
@@ -130,9 +129,9 @@ public class DownloadInterceptorTest {
 		when(result.used()).thenReturn(true);
 
 
-		interceptor.intercept(stack, resourceMethod, null);
+		interceptor.intercept(stack, controllerMethod, null);
 
-		verify(stack).next(resourceMethod, null);
+		verify(stack).next(controllerMethod, null);
 		verifyZeroInteractions(response);
 
 	}
@@ -142,59 +141,59 @@ public class DownloadInterceptorTest {
 		when(result.used()).thenReturn(false);
 
 		try {
-			interceptor.intercept(stack, resourceMethod, null);
+			interceptor.intercept(stack, controllerMethod, null);
 			fail("expected NullPointerException");
 		} catch (NullPointerException e) {
 			verifyZeroInteractions(response);
 		}
 	}
-	
+
     @Test
     public void shouldThrowInterceptionExceptionIfIOExceptionOccurs() throws Exception {
         Download download = mock(Download.class);
-        
+
         when(info.getResult()).thenReturn(download);
         when(result.used()).thenReturn(false);
         doThrow(new IOException()).when(download).write(any(HttpServletResponse.class));
 
         try {
-            interceptor.intercept(stack, resourceMethod, null);
+            interceptor.intercept(stack, controllerMethod, null);
             fail("expected InterceptionException");
         } catch (InterceptionException e) {
-            
+
         }
     }
-    
+
     @Test
     public void shouldNotAcceptStringReturn() throws Exception {
-        Method method = FakeResource.class.getMethod("string");
+        Method method = FakeController.class.getMethod("string");
         assertThat(interceptor, not(accepts(method)));
     }
-    
+
 	@Test
 	public void shouldAcceptFile() throws Exception {
-	    Method method = FakeResource.class.getMethod("file");
+	    Method method = FakeController.class.getMethod("file");
         assertThat(interceptor, accepts(method));
 	}
 
     @Test
     public void shouldAcceptInput() throws Exception {
-        Method method = FakeResource.class.getMethod("input");
+        Method method = FakeController.class.getMethod("input");
         assertThat(interceptor, accepts(method));
     }
-    
+
     @Test
     public void shouldAcceptDownload() throws Exception {
-        Method method = FakeResource.class.getMethod("download");
+        Method method = FakeController.class.getMethod("download");
         assertThat(interceptor, accepts(method));
     }
-    
+
     @Test
     public void shouldAcceptByte() throws Exception {
-        Method method = FakeResource.class.getMethod("asByte");
+        Method method = FakeController.class.getMethod("asByte");
         assertThat(interceptor, accepts(method));
     }
-    
+
     private Matcher<Interceptor> accepts(final Method method) {
     	return new TypeSafeMatcher<Interceptor>() {
 
@@ -211,12 +210,12 @@ public class DownloadInterceptorTest {
 			}
 		};
     }
-    
+
 	private Matcher<byte[]> arrayStartingWith(final byte[] array) {
 		return new TypeSafeMatcher<byte[]>() {
 			protected void describeMismatchSafely(byte[] item, Description mismatchDescription) {
 			}
-			
+
 			protected boolean matchesSafely(byte[] item) {
 				if (item.length < array.length) {
 					return false;
@@ -234,7 +233,7 @@ public class DownloadInterceptorTest {
 			}
 		};
 	}
-	static class FakeResource {
+	static class FakeController {
 		public String string() {
 			return null;
 		}

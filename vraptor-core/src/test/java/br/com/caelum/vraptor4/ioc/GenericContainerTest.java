@@ -244,7 +244,7 @@ public abstract class GenericContainerTest {
 					@Override
 					public T insideRequest(Container secondContainer) {
 						ControllerMethod secondMethod = mock(ControllerMethod.class, "rm" + counter);
-						secondContainer.instanceFor(MethodInfo.class).setResourceMethod(secondMethod);
+						secondContainer.instanceFor(MethodInfo.class).setControllerMethod(secondMethod);
 						return instanceFor(component, secondContainer);
 					}
 				});

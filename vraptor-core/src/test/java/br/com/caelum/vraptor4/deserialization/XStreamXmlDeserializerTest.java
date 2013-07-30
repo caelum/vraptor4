@@ -2,9 +2,7 @@ package br.com.caelum.vraptor4.deserialization;
 
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
-
 import static org.junit.Assert.assertThat;
-
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -14,7 +12,6 @@ import java.io.InputStream;
 import org.junit.Before;
 import org.junit.Test;
 
-import br.com.caelum.vraptor4.deserialization.XStreamXMLDeserializer;
 import br.com.caelum.vraptor4.http.ParameterNameProvider;
 import br.com.caelum.vraptor4.restfulie.controller.BeanClass;
 import br.com.caelum.vraptor4.restfulie.controller.ControllerMethod;
@@ -39,25 +36,25 @@ public class XStreamXmlDeserializerTest {
 		provider = mock(ParameterNameProvider.class);
 
         deserializer = new XStreamXMLDeserializer(provider, XStreamBuilderImpl.cleanInstance());
-		BeanClass resourceClass = new DefaultBeanClass(DogController.class);
+		BeanClass controllerClass = new DefaultBeanClass(DogController.class);
 
-		woof = new DefaultControllerMethod(resourceClass, DogController.class.getDeclaredMethod("woof"));
-		bark = new DefaultControllerMethod(resourceClass, DogController.class.getDeclaredMethod("bark", Dog.class));
-		jump = new DefaultControllerMethod(resourceClass, DogController.class.getDeclaredMethod("jump", Dog.class, Integer.class));
-		dropDead = new DefaultControllerMethod(resourceClass, DogController.class.getDeclaredMethod("dropDead", Integer.class, Dog.class));
-		annotated = new DefaultControllerMethod(resourceClass, DogController.class.getDeclaredMethod("annotated", DogWithAnnotations.class));
+		woof = new DefaultControllerMethod(controllerClass, DogController.class.getDeclaredMethod("woof"));
+		bark = new DefaultControllerMethod(controllerClass, DogController.class.getDeclaredMethod("bark", Dog.class));
+		jump = new DefaultControllerMethod(controllerClass, DogController.class.getDeclaredMethod("jump", Dog.class, Integer.class));
+		dropDead = new DefaultControllerMethod(controllerClass, DogController.class.getDeclaredMethod("dropDead", Integer.class, Dog.class));
+		annotated = new DefaultControllerMethod(controllerClass, DogController.class.getDeclaredMethod("annotated", DogWithAnnotations.class));
 	}
 
 	@XStreamAlias("dogAnnotated")
 	static class DogWithAnnotations {
-		
+
 		@XStreamAlias("nameAnnotated")
 		private String name;
-		
+
 		@XStreamAlias("ageAnnotated")
 		private Integer age;
 	}
-	
+
 	static class Dog {
 		private String name;
 		private Integer age;
@@ -141,19 +138,19 @@ public class XStreamXmlDeserializerTest {
 		assertThat(dog.name, is("Brutus"));
 		assertThat(dog.age, is(7));
 	}
-	
+
 	@Test
 	public void shouldBeAbleToDeserializeADogWhenAliasConfiguredByAnnotations() {
-	
+
 		InputStream stream = new ByteArrayInputStream("<dogAnnotated><nameAnnotated>Lubi</nameAnnotated><ageAnnotated>8</ageAnnotated></dogAnnotated>".getBytes());
-		
+
 		when(provider.parameterNamesFor(annotated.getMethod())).thenReturn(new String[] {"dog"});
-		
+
 		Object[] deserialized = deserializer.deserialize(stream, annotated);
-		
+
 		assertThat(deserialized.length, is(1));
 		assertThat(deserialized[0], is(instanceOf(DogWithAnnotations.class)));
-		
+
 		DogWithAnnotations dog = (DogWithAnnotations) deserialized[0];
 		assertThat(dog.name, is("Lubi"));
 		assertThat(dog.age, is(8));

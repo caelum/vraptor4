@@ -15,15 +15,12 @@
  */
 package br.com.caelum.vraptor4.core;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.concurrent.ConcurrentMap;
 
 import javax.enterprise.inject.Default;
 import javax.inject.Inject;
 
 import br.com.caelum.vraptor4.Intercepts;
-import br.com.caelum.vraptor4.Lazy;
 import br.com.caelum.vraptor4.interceptor.AspectStyleInterceptorHandler;
 import br.com.caelum.vraptor4.interceptor.Interceptor;
 import br.com.caelum.vraptor4.interceptor.StepInvoker;
@@ -45,40 +42,27 @@ public class DefaultInterceptorHandlerFactory implements InterceptorHandlerFacto
 
 	private Container container;
 
-	private ConcurrentMap<Class<?>, InterceptorHandler> cachedHandlers =
-		new MapMaker().makeMap();
+	private final ConcurrentMap<Class<?>, InterceptorHandler> cachedHandlers = new MapMaker().makeMap();
 
 	//CDI eyes only
 	@Deprecated
 	public DefaultInterceptorHandlerFactory() {
 	}
-	
+
 	@Inject
 	public DefaultInterceptorHandlerFactory(Container container) {
 		this.container = container;
 	}
-	
+
 	@Override
 	public InterceptorHandler handlerFor(Class<?> type) {
 		if(cachedHandlers.containsKey(type)){
 			return cachedHandlers.get(type);
 		}
-		if (type.isAnnotationPresent(Lazy.class)) {
-			InterceptorHandler handler = cachedHandlers.get(type);
-			if (handler == null) {
-				LazyInterceptorHandler value = new LazyInterceptorHandler(container, type);
-				cachedHandlers.putIfAbsent(type, value);
-				return value;
-			} else {
-				return handler;
-			}
-		}
-		else{
-			if(type.isAnnotationPresent(Intercepts.class) && !Interceptor.class.isAssignableFrom(type)){
-				AspectStyleInterceptorHandler handler = new AspectStyleInterceptorHandler(type, new StepInvoker(), container);
-				cachedHandlers.putIfAbsent(type,handler);
-				return handler;
-			}
+		if(type.isAnnotationPresent(Intercepts.class) && !Interceptor.class.isAssignableFrom(type)){
+			AspectStyleInterceptorHandler handler = new AspectStyleInterceptorHandler(type, new StepInvoker(), container);
+			cachedHandlers.putIfAbsent(type,handler);
+			return handler;
 		}
 		return new ToInstantiateInterceptorHandler(container, type);
 	}

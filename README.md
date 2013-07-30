@@ -1,3 +1,5 @@
-#VRaptor 4
+#VRaptor 4 Beta 1
 
-Will be cool someday
+To generate the jar file and dependencies:
+
+mvn install

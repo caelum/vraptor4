@@ -8,6 +8,9 @@ import javax.validation.Validator;
 import javax.validation.ValidatorContext;
 import javax.validation.ValidatorFactory;
 
+import org.junit.Ignore;
+
+@Ignore
 public class TestValidatorFactory implements ValidatorFactory{
 
 	@Override

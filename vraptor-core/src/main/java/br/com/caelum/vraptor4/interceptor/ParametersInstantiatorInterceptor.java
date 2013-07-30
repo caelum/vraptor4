@@ -31,7 +31,6 @@ import org.slf4j.LoggerFactory;
 import br.com.caelum.vraptor4.HeaderParam;
 import br.com.caelum.vraptor4.InterceptionException;
 import br.com.caelum.vraptor4.Intercepts;
-import br.com.caelum.vraptor4.Lazy;
 import br.com.caelum.vraptor4.Validator;
 import br.com.caelum.vraptor4.core.InterceptorStack;
 import br.com.caelum.vraptor4.core.Localization;
@@ -49,7 +48,6 @@ import br.com.caelum.vraptor4.view.FlashScope;
  * @author Guilherme Silveira
  */
 @Intercepts(after=ControllerLookupInterceptor.class)
-@Lazy
 public class ParametersInstantiatorInterceptor implements Interceptor {
     private ParametersProvider provider;
     private ParameterNameProvider parameterNameProvider;
@@ -58,10 +56,10 @@ public class ParametersInstantiatorInterceptor implements Interceptor {
     private static final Logger logger = LoggerFactory.getLogger(ParametersInstantiatorInterceptor.class);
     private Validator validator;
     private Localization localization;
-	private List<Message> errors = new ArrayList<Message>();
+	private final List<Message> errors = new ArrayList<Message>();
 	private MutableRequest request;
 	private FlashScope flash;
-	
+
 	@Deprecated
 	public ParametersInstantiatorInterceptor() {
 	}
@@ -77,7 +75,7 @@ public class ParametersInstantiatorInterceptor implements Interceptor {
 		this.request = request;
 		this.flash = flash;
     }
-	
+
     public boolean accepts(ControllerMethod method) {
         return method.getMethod().getParameterTypes().length > 0;
     }
@@ -87,9 +85,9 @@ public class ParametersInstantiatorInterceptor implements Interceptor {
     	while (names.hasMoreElements()) {
 			fixParameter(names.nextElement());
 		}
-    	
+
     	addHeaderParametersToAttribute(method);
-    	
+
         Object[] values = getParametersFor(method);
 
         validator.addAll(errors);
@@ -102,23 +100,23 @@ public class ParametersInstantiatorInterceptor implements Interceptor {
         parameters.setParameters(values);
         stack.next(method, controllerInstance);
     }
- 
-	private void addHeaderParametersToAttribute(ControllerMethod method) {
-		Method trueMethod = method.getMethod();  
-		  
-        String[] parameters = parameterNameProvider.parameterNamesFor(trueMethod);  
 
-        Annotation[][] annotations = trueMethod.getParameterAnnotations();  
-        for (int i = 0; i < annotations.length; i++) {  
-            for (Annotation annotation : annotations[i]) {  
-                if (annotation instanceof HeaderParam) {  
-                    HeaderParam headerParam = (HeaderParam) annotation;  
-                    String value = request.getHeader(headerParam.value());  
-                    request.setAttribute(parameters[i], value);  
-                }  
-            }  
-        }  
-		
+	private void addHeaderParametersToAttribute(ControllerMethod method) {
+		Method trueMethod = method.getMethod();
+
+        String[] parameters = parameterNameProvider.parameterNamesFor(trueMethod);
+
+        Annotation[][] annotations = trueMethod.getParameterAnnotations();
+        for (int i = 0; i < annotations.length; i++) {
+            for (Annotation annotation : annotations[i]) {
+                if (annotation instanceof HeaderParam) {
+                    HeaderParam headerParam = (HeaderParam) annotation;
+                    String value = request.getHeader(headerParam.value());
+                    request.setAttribute(parameters[i], value);
+                }
+            }
+        }
+
 	}
 
 	private void fixParameter(String name) {

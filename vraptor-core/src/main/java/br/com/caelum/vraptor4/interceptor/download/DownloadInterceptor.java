@@ -30,7 +30,6 @@ import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor4.InterceptionException;
 import br.com.caelum.vraptor4.Intercepts;
-import br.com.caelum.vraptor4.Lazy;
 import br.com.caelum.vraptor4.Result;
 import br.com.caelum.vraptor4.core.InterceptorStack;
 import br.com.caelum.vraptor4.core.MethodInfo;
@@ -47,7 +46,6 @@ import br.com.caelum.vraptor4.restfulie.controller.ControllerMethod;
  */
 @Intercepts(after=ExecuteMethodInterceptor.class, before=ForwardToDefaultViewInterceptor.class)
 @RequestScoped
-@Lazy
 public class DownloadInterceptor implements Interceptor {
 
     private static final Logger logger = LoggerFactory.getLogger(DownloadInterceptor.class);
@@ -60,14 +58,14 @@ public class DownloadInterceptor implements Interceptor {
 	@Deprecated
 	public DownloadInterceptor() {
 	}
-	
+
 	@Inject
 	public DownloadInterceptor(HttpServletResponse response, MethodInfo info, Result result) {
 		this.response = response;
 		this.info = info;
 		this.result = result;
 	}
-	
+
 	@Override
 	public boolean accepts(ControllerMethod method) {
 		Class<?> type = method.getMethod().getReturnType();

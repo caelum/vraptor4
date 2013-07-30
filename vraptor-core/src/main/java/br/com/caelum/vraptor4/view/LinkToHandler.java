@@ -30,6 +30,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor4.http.route.Router;
+import br.com.caelum.vraptor4.restfulie.controller.BeanClass;
 
 import com.google.common.collect.ForwardingMap;
 
@@ -63,7 +64,8 @@ public class LinkToHandler extends ForwardingMap<Class<?>, Object> {
 
     @Override
     public LinkMethod get(Object key) {
-        return new LinkMethod((Class<?>) key);
+    	BeanClass beanClass = (BeanClass) key;
+        return new LinkMethod(beanClass.getType());
     }
 
 	class LinkMethod extends ForwardingMap<String, Linker> {

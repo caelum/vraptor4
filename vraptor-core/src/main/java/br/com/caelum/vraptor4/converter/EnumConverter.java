@@ -32,25 +32,25 @@ import br.com.caelum.vraptor4.Converter;
  * @author Guilherme Silveira
  */
 @Convert(Enum.class)
-public class EnumConverter<T extends Enum<T>> implements Converter<T> {
+public class EnumConverter implements Converter {
 
 	/**
 	 * Enums are always final, so I can suppress this warning safely
 	 */
 	@SuppressWarnings("unchecked")
-    public T convert(String value, Class<? extends T> type, ResourceBundle bundle) {
+    public Object convert(String value, Class type, ResourceBundle bundle) {
 	    if (isNullOrEmpty(value)) {
             return null;
         }
 	    
         if (Character.isDigit(value.charAt(0))) {
-            return resolveByOrdinal(value, (Class<T>) type, bundle);
+            return resolveByOrdinal(value, type, bundle);
         } else {
-            return resolveByName(value, (Class<T>) type, bundle);
+            return resolveByName(value, type, bundle);
         }
     }
 
-    private T resolveByName(String value, Class<T> enumType, ResourceBundle bundle) {
+    private Object resolveByName(String value, Class enumType, ResourceBundle bundle) {
         try {
             return Enum.valueOf(enumType, value);
         } catch (IllegalArgumentException e) {
@@ -58,7 +58,7 @@ public class EnumConverter<T extends Enum<T>> implements Converter<T> {
         }
     }
 
-    private T resolveByOrdinal(String value, Class<T> enumType, ResourceBundle bundle) {
+    private Object resolveByOrdinal(String value, Class enumType, ResourceBundle bundle) {
         try {
             int ordinal = Integer.parseInt(value);
             if (ordinal >= enumType.getEnumConstants().length) {

@@ -20,10 +20,11 @@ import static org.hibernate.criterion.Restrictions.eq;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 
-import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.musicjungle.model.User;
 
 /**
@@ -32,10 +33,10 @@ import br.com.caelum.vraptor.musicjungle.model.User;
  * @author Lucas Cavalcanti
  * @author Rodrigo Turini
  */
-@Component
 public class DefaultUserDao implements UserDao {
 
-	private final Session session;
+	@Inject
+	private Session session;
 
 	/**
 	 * Creates a new UserDao. You can receive dependencies 
@@ -45,26 +46,30 @@ public class DefaultUserDao implements UserDao {
 	 * 
 	 * @param session Hibernate's Session.
 	 */
-	public DefaultUserDao(Session session) {
-		this.session = session;
-	}
+//	public DefaultUserDao(Session session) {
+//		this.session = session;
+//	}
 
+	@Override
 	public User find(String login, String password) {
 		Criteria criteria = session.createCriteria(User.class);
 		criteria.add(eq("login", login)).add(eq("password", password));
 		return (User) criteria.uniqueResult();
 	}
 
+	@Override
 	public User find(String login) {
 		Criteria criteria = findUserByLogin(login);
 		return (User) criteria.uniqueResult();
 	}
 
+	@Override
 	@SuppressWarnings("unchecked")
 	public List<User> listAll() {
 		return session.createCriteria(User.class).list();
 	}
 	
+	@Override
 	public boolean containsUserWithLogin(String login) {
 		return !findUserByLogin(login).list().isEmpty();
 	}
@@ -74,14 +79,17 @@ public class DefaultUserDao implements UserDao {
 		return criteria.add(eq("login", login));
 	}
 	
+	@Override
 	public void add(User user) {
 		session.save(user);
 	}
 
+	@Override
 	public void refresh(User user) {
 		session.refresh(user);
 	}
 
+	@Override
 	public void update(User user) {
 		session.update(user);
 	}

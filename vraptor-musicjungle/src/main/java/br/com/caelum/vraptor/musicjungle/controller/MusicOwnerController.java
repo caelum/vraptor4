@@ -19,31 +19,39 @@ package br.com.caelum.vraptor.musicjungle.controller;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
-import br.com.caelum.vraptor.Path;
-import br.com.caelum.vraptor.Put;
-import br.com.caelum.vraptor.Resource;
-import br.com.caelum.vraptor.Result;
-import br.com.caelum.vraptor.Validator;
+
+import javax.inject.Inject;
+
 import br.com.caelum.vraptor.musicjungle.dao.MusicDao;
 import br.com.caelum.vraptor.musicjungle.dao.UserDao;
 import br.com.caelum.vraptor.musicjungle.interceptor.UserInfo;
 import br.com.caelum.vraptor.musicjungle.model.Music;
 import br.com.caelum.vraptor.musicjungle.model.MusicOwner;
 import br.com.caelum.vraptor.musicjungle.model.User;
-import br.com.caelum.vraptor.validator.Validations;
+import br.com.caelum.vraptor4.Controller;
+import br.com.caelum.vraptor4.Path;
+import br.com.caelum.vraptor4.Put;
+import br.com.caelum.vraptor4.Result;
+import br.com.caelum.vraptor4.Validator;
+import br.com.caelum.vraptor4.validator.Validations;
 
 /**
  * The resource <code>MusicOwnerController</code> handles all 
  * MusicOwner operations, such as adding new Musics to a user list.
  */
-@Resource
+@Controller
 public class MusicOwnerController {
 
-    private final Result result;
-    private final Validator validator;
-    private final UserInfo userInfo;
-	private final MusicDao dao;
-	private final UserDao userDao;
+	private Result result;
+	private Validator validator;
+	private UserInfo userInfo;
+	private MusicDao dao;
+	private UserDao userDao;
+	
+	//CDI eyes only
+	@Deprecated
+	public MusicOwnerController() {
+	}
 
 	/**
 	 * Receives dependencies through the constructor.
@@ -53,6 +61,7 @@ public class MusicOwnerController {
 	 * @param result VRaptor result handler.
 	 * @param validator VRaptor validator.
 	 */
+	@Inject
 	public MusicOwnerController(MusicDao dao, UserDao userDao, 
 			UserInfo userInfo, Result result, Validator validator) {
 		

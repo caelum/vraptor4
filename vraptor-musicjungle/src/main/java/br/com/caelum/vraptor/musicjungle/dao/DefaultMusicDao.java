@@ -21,10 +21,11 @@ import static org.hibernate.criterion.Restrictions.ilike;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 
-import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.musicjungle.model.Music;
 import br.com.caelum.vraptor.musicjungle.model.MusicOwner;
 
@@ -37,29 +38,37 @@ import br.com.caelum.vraptor.musicjungle.model.MusicOwner;
  * @author Lucas Cavalcanti
  * @author Rodrigo Turini
  */
-@Component
 public class DefaultMusicDao implements MusicDao {
 
 	// current hibernate session
-	private final Session session;
+	private Session session;
 
+	//CDI eyes only
+	@Deprecated
+	public DefaultMusicDao() {
+	}
+	
 	/**
 	 * Creates a new MusicDao.
 	 *
 	 * @param session hibernate session.
 	 */
+	@Inject
 	public DefaultMusicDao(Session session) {
 		this.session = session;
 	}
 
+	@Override
 	public void add(Music music) {
 		session.save(music);
 	}
 
+	@Override
 	public void add(MusicOwner copy) {
 		session.save(copy);
 	}
 
+	@Override
 	@SuppressWarnings("unchecked")
 	public List<Music> searchSimilarTitle(String title) {
 		// creates a criteria based on the Music class and adds
@@ -68,10 +77,12 @@ public class DefaultMusicDao implements MusicDao {
 		return criteria.add(ilike("title", title, ANYWHERE)).list();
 	}
 	
+	@Override
 	public Music load(Music music) {
 		return (Music) session.load(Music.class, music.getId());
 	}
 	
+	@Override
 	@SuppressWarnings("unchecked")
 	public List<Music> listAll() {
 		return session.createCriteria(Music.class).list();

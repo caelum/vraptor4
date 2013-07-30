@@ -17,33 +17,35 @@
 package br.com.caelum.vraptor.musicjungle.controller;
 
 import static br.com.caelum.vraptor.musicjungle.validation.CustomMatchers.notEmpty;
-import static br.com.caelum.vraptor.view.Results.http;
-import static br.com.caelum.vraptor.view.Results.json;
-import static br.com.caelum.vraptor.view.Results.representation;
-import static br.com.caelum.vraptor.view.Results.xml;
+import static br.com.caelum.vraptor4.view.Results.http;
+import static br.com.caelum.vraptor4.view.Results.json;
+import static br.com.caelum.vraptor4.view.Results.representation;
+import static br.com.caelum.vraptor4.view.Results.xml;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 
 import java.io.File;
 
+import javax.inject.Inject;
+
 import org.apache.log4j.Logger;
 
-import br.com.caelum.vraptor.Get;
-import br.com.caelum.vraptor.Path;
-import br.com.caelum.vraptor.Post;
-import br.com.caelum.vraptor.Resource;
-import br.com.caelum.vraptor.Result;
-import br.com.caelum.vraptor.Validator;
-import br.com.caelum.vraptor.interceptor.download.Download;
-import br.com.caelum.vraptor.interceptor.download.FileDownload;
-import br.com.caelum.vraptor.interceptor.multipart.UploadedFile;
 import br.com.caelum.vraptor.musicjungle.dao.MusicDao;
 import br.com.caelum.vraptor.musicjungle.files.Musics;
 import br.com.caelum.vraptor.musicjungle.interceptor.Public;
 import br.com.caelum.vraptor.musicjungle.interceptor.UserInfo;
 import br.com.caelum.vraptor.musicjungle.model.Music;
 import br.com.caelum.vraptor.musicjungle.model.MusicOwner;
-import br.com.caelum.vraptor.validator.Validations;
+import br.com.caelum.vraptor4.Controller;
+import br.com.caelum.vraptor4.Get;
+import br.com.caelum.vraptor4.Path;
+import br.com.caelum.vraptor4.Post;
+import br.com.caelum.vraptor4.Result;
+import br.com.caelum.vraptor4.Validator;
+import br.com.caelum.vraptor4.interceptor.download.Download;
+import br.com.caelum.vraptor4.interceptor.download.FileDownload;
+import br.com.caelum.vraptor4.interceptor.multipart.UploadedFile;
+import br.com.caelum.vraptor4.validator.Validations;
 
 import com.google.common.base.Objects;
 
@@ -58,16 +60,21 @@ import com.google.common.base.Objects;
  *
  * GET /musics/{id} -> shows the music of given id
  */
-@Resource
+@Controller
 public class MusicController {
 
 	private static final Logger LOG = Logger.getLogger(MusicController.class);
 
-    private final Result result;
-    private final Validator validator;
-    private final UserInfo userInfo;
-	private final MusicDao dao;
-	private final Musics musics;
+	private Result result;
+	private Validator validator;
+	private UserInfo userInfo;
+	private MusicDao dao;
+	private Musics musics;
+
+	// CDI eyes only
+	@Deprecated
+	public MusicController() {
+	}
 
 	/**
 	 * Receives dependencies through the constructor.
@@ -77,6 +84,7 @@ public class MusicController {
 	 * @param validator VRaptor validator.
 	 * @param factory dao factory.
 	 */
+	@Inject
 	public MusicController(MusicDao dao, UserInfo userInfo, 
 				Result result, Validator validator, Musics musics) {
 		

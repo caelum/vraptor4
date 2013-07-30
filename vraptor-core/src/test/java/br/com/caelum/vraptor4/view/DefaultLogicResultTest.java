@@ -46,7 +46,7 @@ import org.mockito.MockitoAnnotations;
 import br.com.caelum.vraptor4.Get;
 import br.com.caelum.vraptor4.Post;
 import br.com.caelum.vraptor4.Result;
-import br.com.caelum.vraptor4.core.DefaultMethodInfo;
+import br.com.caelum.vraptor4.core.MethodInfo;
 import br.com.caelum.vraptor4.core.MethodInfo;
 import br.com.caelum.vraptor4.http.MutableRequest;
 import br.com.caelum.vraptor4.http.MutableResponse;
@@ -120,7 +120,7 @@ public class DefaultLogicResultTest {
         MockitoAnnotations.initMocks(this);
 
         proxifier = new JavassistProxifier(new ObjenesisInstanceCreator());
-        methodInfo = new DefaultMethodInfo();
+        methodInfo = new MethodInfo();
 		this.logicResult = new DefaultLogicResult(proxifier, router, request, response, container,
                 resolver, extractor, flash, methodInfo);
 		when(request.getOriginalRequest()).thenReturn(request);

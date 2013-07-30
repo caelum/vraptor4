@@ -5,12 +5,12 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import br.com.caelum.vraptor4.core.DefaultMethodInfo;
+import br.com.caelum.vraptor4.core.MethodInfo;
 import br.com.caelum.vraptor4.core.MethodInfo;
 
 
 public class DefaultMethodInfoTest {
-	private final MethodInfo methodInfo = new DefaultMethodInfo();
+	private final MethodInfo methodInfo = new MethodInfo();
 
 	@Test
 	public void unsetParameters() throws Exception {

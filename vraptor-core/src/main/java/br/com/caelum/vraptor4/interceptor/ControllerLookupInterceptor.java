@@ -26,8 +26,8 @@ import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor4.InterceptionException;
 import br.com.caelum.vraptor4.Intercepts;
-import br.com.caelum.vraptor4.core.InterceptorStack;
 import br.com.caelum.vraptor4.core.MethodInfo;
+import br.com.caelum.vraptor4.core.InterceptorStack;
 import br.com.caelum.vraptor4.core.RequestInfo;
 import br.com.caelum.vraptor4.http.UrlToControllerTranslator;
 import br.com.caelum.vraptor4.http.route.ControllerNotFoundException;

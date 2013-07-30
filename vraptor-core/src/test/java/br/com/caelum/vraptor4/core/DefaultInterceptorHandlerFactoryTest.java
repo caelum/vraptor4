@@ -8,7 +8,6 @@ import static org.junit.Assert.assertThat;
 import org.junit.Before;
 import org.junit.Test;
 
-import br.com.caelum.vraptor4.Intercepts;
 import br.com.caelum.vraptor4.interceptor.AspectStyleInterceptorHandler;
 import br.com.caelum.vraptor4.interceptor.Interceptor;
 import br.com.caelum.vraptor4.ioc.Container;
@@ -25,9 +24,6 @@ public class DefaultInterceptorHandlerFactoryTest {
 	}
 
 	static interface RegularInterceptor extends Interceptor {}
-
-	@Intercepts
-	static class AspectStyleInterceptor{}
 
 	@Test
 	public void handlerForRegularInterceptorsShouldBeDynamic() throws Exception {

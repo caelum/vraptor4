@@ -59,12 +59,7 @@ public class AspectStyleInterceptorHandler implements InterceptorHandler {
 		if(customAccepts && internalAccepts){
 			throw new VRaptorException("Interceptor "+interceptorClass+" must declare internal accepts or custom, not both.");
 		}
-
 		this.acceptsExecutor = customAccepts?customAcceptsExecutor:interceptorAcceptsExecutor;
-
-
-
-
 	}
 
 	public void execute(InterceptorStack stack,
@@ -81,7 +76,5 @@ public class AspectStyleInterceptorHandler implements InterceptorHandler {
 		} else {
 			stack.next(controllerMethod, currentController);
 		}
-
 	}
-
 }

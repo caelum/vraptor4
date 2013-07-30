@@ -19,6 +19,8 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
+import br.com.caelum.vraptor4.InterceptionException;
+import br.com.caelum.vraptor4.Intercepts;
 import br.com.caelum.vraptor4.VRaptorException;
 import br.com.caelum.vraptor4.core.InterceptorStack;
 import br.com.caelum.vraptor4.interceptor.example.AcceptsInterceptor;
@@ -34,7 +36,6 @@ import br.com.caelum.vraptor4.interceptor.example.MethodLevelAcceptsController;
 import br.com.caelum.vraptor4.interceptor.example.NonBooleanAcceptsInterceptor;
 import br.com.caelum.vraptor4.interceptor.example.VoidAcceptsInterceptor;
 import br.com.caelum.vraptor4.interceptor.example.WithoutAroundInterceptor;
-import br.com.caelum.vraptor4.interceptor.example.WithoutAroundInvokeInterceptor;
 import br.com.caelum.vraptor4.restfulie.controller.ControllerInstance;
 import br.com.caelum.vraptor4.restfulie.controller.ControllerMethod;
 
@@ -68,19 +69,6 @@ public class AspectStyleInterceptorHandlerTest {
 		handler.execute(stack, controllerMethod, currentController);
 
 		verify(interceptor).intercept(Mockito.same(stack),
-				Mockito.same(controllerMethod),
-				Mockito.any(ControllerInstance.class));
-	}
-
-	@Test
-	public void shouldNotInvokeMethodIfDoesNotHaveAroundInvoke() {
-		WithoutAroundInvokeInterceptor interceptor = spy(new WithoutAroundInvokeInterceptor());
-		AspectStyleInterceptorHandler handler = newAspectStyleInterceptorHandler(
-				WithoutAroundInvokeInterceptor.class, interceptor);
-
-		handler.execute(stack, controllerMethod, currentController);
-
-		verify(interceptor, never()).intercept(Mockito.same(stack),
 				Mockito.same(controllerMethod),
 				Mockito.any(ControllerInstance.class));
 	}
@@ -296,6 +284,17 @@ public class AspectStyleInterceptorHandlerTest {
 		verify(interceptor).customAcceptsFailCallback();
 
 
+	}
+
+	@Intercepts
+	class SimpleInterceptor {
+		public void dummyMethodWithoutInterceptorAnnotations() {}
+	}
+
+	@Test(expected=InterceptionException.class)
+	public void shoulThrowExceptionIfInterceptorDontHaveAnyCallableMethod() {
+		SimpleInterceptor interceptor = new SimpleInterceptor();
+		newAspectStyleInterceptorHandler(SimpleInterceptor.class, interceptor);
 	}
 
 	@SuppressWarnings("unchecked")

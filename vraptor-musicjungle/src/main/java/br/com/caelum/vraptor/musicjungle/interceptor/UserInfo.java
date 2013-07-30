@@ -16,17 +16,17 @@
  */
 package br.com.caelum.vraptor.musicjungle.interceptor;
 
-import br.com.caelum.vraptor.ioc.Component;
-import br.com.caelum.vraptor.ioc.SessionScoped;
+import java.io.Serializable;
+
 import br.com.caelum.vraptor.musicjungle.model.User;
+import br.com.caelum.vraptor4.ioc.SessionScoped;
 
 /**
  * Represents the user logged in the system.
  * @author Caio Filipini
  */
-@Component
 @SessionScoped
-public class UserInfo {
+public class UserInfo implements Serializable{
 
     private User user;
 

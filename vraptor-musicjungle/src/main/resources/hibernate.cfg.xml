@@ -13,7 +13,7 @@
 		<property name="hibernate.connection.username">sa</property>
 		<property name="hibernate.connection.password"></property>
 
-		<property name="hibernate.show_sql">false</property>
+		<property name="hibernate.show_sql">true</property>
 		<property name="hibernate.hbm2ddl.auto">update</property>
 		<property name="hibernate.cache.provider_class">org.hibernate.cache.HashtableCacheProvider</property>
 

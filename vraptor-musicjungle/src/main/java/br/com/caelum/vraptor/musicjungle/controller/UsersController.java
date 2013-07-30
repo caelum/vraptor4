@@ -19,18 +19,20 @@ package br.com.caelum.vraptor.musicjungle.controller;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.com.caelum.vraptor.Get;
-import br.com.caelum.vraptor.Path;
-import br.com.caelum.vraptor.Post;
-import br.com.caelum.vraptor.Resource;
-import br.com.caelum.vraptor.Result;
-import br.com.caelum.vraptor.Validator;
+import javax.inject.Inject;
+
 import br.com.caelum.vraptor.musicjungle.dao.UserDao;
 import br.com.caelum.vraptor.musicjungle.enums.MusicType;
 import br.com.caelum.vraptor.musicjungle.interceptor.Public;
 import br.com.caelum.vraptor.musicjungle.interceptor.UserInfo;
 import br.com.caelum.vraptor.musicjungle.model.User;
-import br.com.caelum.vraptor.validator.Validations;
+import br.com.caelum.vraptor4.Controller;
+import br.com.caelum.vraptor4.Get;
+import br.com.caelum.vraptor4.Path;
+import br.com.caelum.vraptor4.Post;
+import br.com.caelum.vraptor4.Result;
+import br.com.caelum.vraptor4.Validator;
+import br.com.caelum.vraptor4.validator.Validations;
 
 import com.google.common.base.Objects;
 
@@ -38,13 +40,18 @@ import com.google.common.base.Objects;
  * The resource <code>UsersController</code> handles all user 
  * operations, such as adding new users, listing users, and so on.
  */
-@Resource
+@Controller
 public class UsersController {
 
-    private final Validator validator;
-    private final Result result;
-    private final UserInfo userInfo;
-	private final UserDao dao;
+	private Validator validator;
+	private Result result;
+	private UserInfo userInfo;
+	private UserDao dao;
+
+	// CDI eyes only
+	@Deprecated
+	public UsersController() {
+	}
 
 	/**
 	 * Receives dependencies through the constructor.
@@ -54,6 +61,7 @@ public class UsersController {
 	 * @param result VRaptor result handler.
 	 * @param validator VRaptor validator.
 	 */
+	@Inject
 	public UsersController(UserDao dao, UserInfo userInfo, 
 			Result result, Validator validator) {
 		

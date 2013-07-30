@@ -26,7 +26,6 @@ public class StepInvoker {
 		@Override
 		public boolean accepts(Method element) {
 			if(element.getDeclaringClass().getName().contains("$")){
-				logger.debug("Ignoring possible proxy {}",element.getDeclaringClass());
 				return false;
 			}
 			return element.isAnnotationPresent(this.step);

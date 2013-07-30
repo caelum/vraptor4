@@ -19,21 +19,23 @@ package br.com.caelum.vraptor.musicjungle.controller;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
+import javax.inject.Inject;
 
-import br.com.caelum.vraptor.Get;
-import br.com.caelum.vraptor.Post;
-import br.com.caelum.vraptor.Resource;
-import br.com.caelum.vraptor.Result;
-import br.com.caelum.vraptor.Validator;
-import br.com.caelum.vraptor.ioc.ComponentFactory;
+import org.hibernate.SessionFactory;
+import org.hsqldb.Session;
+
+import sun.awt.ComponentFactory;
 import br.com.caelum.vraptor.musicjungle.dao.DefaultUserDao;
 import br.com.caelum.vraptor.musicjungle.dao.UserDao;
 import br.com.caelum.vraptor.musicjungle.interceptor.Public;
 import br.com.caelum.vraptor.musicjungle.interceptor.UserInfo;
 import br.com.caelum.vraptor.musicjungle.model.User;
-import br.com.caelum.vraptor.validator.Validations;
+import br.com.caelum.vraptor4.Controller;
+import br.com.caelum.vraptor4.Get;
+import br.com.caelum.vraptor4.Post;
+import br.com.caelum.vraptor4.Result;
+import br.com.caelum.vraptor4.Validator;
+import br.com.caelum.vraptor4.validator.Validations;
 
 /**
  * This class will be responsible to login/logout users.
@@ -43,13 +45,17 @@ import br.com.caelum.vraptor.validator.Validations;
  * the URI is: /something/doStuff
  *
  */
-@Resource
+@Controller
 public class HomeController {
 
-    private final Result result;
-    private final Validator validator;
-    private final UserInfo userInfo;
-	private final UserDao dao;
+    private Result result;
+    private Validator validator;
+    private UserInfo userInfo;
+	private UserDao dao;
+	
+	//CDI eyes only
+	@Deprecated
+	public HomeController() {}
 
 	/**
 	 * You can receive any dependency on constructor. If VRaptor knows all dependencies, this
@@ -58,6 +64,7 @@ public class HomeController {
 	 * - all of your classes annotated with @Component, e.g {@link DefaultUserDao}
 	 * - all of the classes that have a {@link ComponentFactory}, e.g {@link Session} or {@link SessionFactory}
 	 */
+	@Inject
 	public HomeController(UserDao dao, UserInfo userInfo, Result result, Validator validator) {
 	    this.dao = dao;
 		this.result = result;

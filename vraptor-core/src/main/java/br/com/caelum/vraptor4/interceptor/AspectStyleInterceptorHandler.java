@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor4.AfterCall;
 import br.com.caelum.vraptor4.BeforeCall;
+import br.com.caelum.vraptor4.InterceptionException;
 import br.com.caelum.vraptor4.VRaptorException;
 import br.com.caelum.vraptor4.core.InterceptorHandler;
 import br.com.caelum.vraptor4.core.InterceptorStack;
@@ -37,19 +38,22 @@ public class AspectStyleInterceptorHandler implements InterceptorHandler {
 	}
 
 	private void configure() {
+
 		after = new NoStackParameterStepExecutor(stepInvoker, AfterCall.class);
-		if(!after.accept(interceptorClass)){
-			after = new DoNothingStepExecutor();
-		}
-
 		around = new AroundExecutor(stepInvoker,parametersResolver, container);
-		if(!around.accept(interceptorClass)){
-			around = new StackNextExecutor(container);
-		}
-
 		before = new NoStackParameterStepExecutor(stepInvoker, BeforeCall.class);
-		if(!before.accept(interceptorClass)){
-			before = new DoNothingStepExecutor();
+
+		boolean doNotAcceptAfter = !after.accept(interceptorClass);
+		boolean doNotAcceptAround = !around.accept(interceptorClass);
+		boolean doNotAcceptBefore = !before.accept(interceptorClass);
+
+		if(doNotAcceptAfter) after = new DoNothingStepExecutor();
+		if(doNotAcceptAround) around = new StackNextExecutor(container);
+		if(doNotAcceptBefore) before = new DoNothingStepExecutor();
+
+		if (doNotAcceptAfter && doNotAcceptAround && doNotAcceptBefore) {
+			throw new InterceptionException("Interceptor " + interceptorClass + " must declare " +
+				"at least one method whith @AfterCall, @AroundCall or @BeforeCall annotation");
 		}
 
 		CustomAcceptsExecutor customAcceptsExecutor = new CustomAcceptsExecutor(stepInvoker, container);
@@ -60,11 +64,8 @@ public class AspectStyleInterceptorHandler implements InterceptorHandler {
 			throw new VRaptorException("Interceptor "+interceptorClass+" must declare internal accepts or custom, not both.");
 		}
 
+
 		this.acceptsExecutor = customAccepts?customAcceptsExecutor:interceptorAcceptsExecutor;
-
-
-
-
 	}
 
 	public void execute(InterceptorStack stack,

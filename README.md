@@ -2,4 +2,6 @@
 
 To generate the jar file and dependencies:
 
+```
 mvn install
+```

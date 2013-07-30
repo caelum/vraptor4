@@ -72,8 +72,7 @@ public class AspectStyleInterceptorHandler implements InterceptorHandler {
 			ControllerMethod controllerMethod, Object currentController) {
 		Object interceptor = container.instanceFor(interceptorClass);
 
-		logger.debug("Invoking interceptor {}", interceptor.getClass()
-				.getSimpleName());
+		logger.debug("Invoking interceptor {}", interceptor.getClass().getSimpleName());
 
 		if (acceptsExecutor.execute(interceptor)) {
 			before.execute(interceptor);

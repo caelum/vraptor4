@@ -1,7 +1,9 @@
 package br.com.caelum.vraptor4.view;
 
 import static org.hamcrest.Matchers.is;
+
 import static org.junit.Assert.assertThat;
+
 import static org.mockito.Mockito.when;
 
 import java.lang.reflect.Method;
@@ -16,6 +18,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor4.http.route.Router;
+import br.com.caelum.vraptor4.restfulie.controller.DefaultBeanClass;
 import br.com.caelum.vraptor4.view.LinkToHandler;
 
 public class LinkToHandlerTest {
@@ -40,25 +43,25 @@ public class LinkToHandlerTest {
     @Test(expected = IllegalArgumentException.class)
     public void shouldThrowExceptionWhenInvocationIsIncomplete() {
         //${linkTo[TestController]}
-        handler.get(TestController.class).toString();
+        handler.get(new DefaultBeanClass(TestController.class)).toString();
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void shouldThrowExceptionWhenInvokingInexistantMethod() {
         //${linkTo[TestController].nonExists}
-        handler.get(TestController.class).get("nonExists").toString();
+        handler.get(new DefaultBeanClass(TestController.class)).get("nonExists").toString();
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void shouldThrowExceptionWhenMethodIsAmbiguous() {
         //${linkTo[TestController].method}
-        handler.get(TestController.class).get("method").toString();
+        handler.get(new DefaultBeanClass(TestController.class)).get("method").toString();
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void shouldThrowExceptionWhenUsingParametersOfWrongTypes() {
         //${linkTo[TestController].method[123]}
-        handler.get(TestController.class).get("method").get(123).toString();
+        handler.get(new DefaultBeanClass(TestController.class)).get("method").get(123).toString();
     }
 
 
@@ -67,7 +70,7 @@ public class LinkToHandlerTest {
         when(router.urlFor(TestController.class, anotherMethod, new Object[2])).thenReturn("/expectedURL");
 
         //${linkTo[TestController].anotherMethod}
-        String uri = handler.get(TestController.class).get("anotherMethod").toString();
+        String uri = handler.get(new DefaultBeanClass(TestController.class)).get("anotherMethod").toString();
         assertThat(uri, is("/path/expectedURL"));
     }
 
@@ -77,7 +80,7 @@ public class LinkToHandlerTest {
         int b = 3;
         when(router.urlFor(TestController.class, method2params, new Object[]{a, b})).thenReturn("/expectedURL");
         //${linkTo[TestController].method['test'][3]}
-        String uri = handler.get(TestController.class).get("method").get(a).get(b).toString();
+        String uri = handler.get(new DefaultBeanClass(TestController.class)).get("method").get(a).get(b).toString();
         assertThat(uri, is("/path/expectedURL"));
     }
 
@@ -86,7 +89,7 @@ public class LinkToHandlerTest {
     	String a = "test";
     	when(router.urlFor(TestController.class, anotherMethod, new Object[]{a, null})).thenReturn("/expectedUrl");
     	//${linkTo[TestController].anotherMethod['test']}
-    	String uri = handler.get(TestController.class).get("anotherMethod").get(a).toString();
+    	String uri = handler.get(new DefaultBeanClass(TestController.class)).get("anotherMethod").get(a).toString();
     	assertThat(uri, is("/path/expectedUrl"));
     }
 
@@ -95,7 +98,7 @@ public class LinkToHandlerTest {
     	String a = "test";
     	when(router.urlFor(SubGenericController.class, SubGenericController.class.getDeclaredMethod("method", new Class[]{String.class}), new Object[]{a})).thenReturn("/expectedURL");
     	//${linkTo[TestSubGenericController].method['test']}]
-    	String uri = handler.get(SubGenericController.class).get("method").get(a).toString();
+    	String uri = handler.get(new DefaultBeanClass(SubGenericController.class)).get("method").get(a).toString();
     	assertThat(uri, is("/path/expectedURL"));
     }
 
@@ -104,7 +107,7 @@ public class LinkToHandlerTest {
     	String a = "test";
     	when(router.urlFor(SubGenericController.class, SubGenericController.class.getDeclaredMethod("anotherMethod", new Class[]{String.class, String.class}), new Object[]{a, null})).thenReturn("/expectedURL");
     	//${linkTo[TestSubGenericController].anotherMethod['test']}]
-    	String uri = handler.get(SubGenericController.class).get("anotherMethod").get(a).toString();
+    	String uri = handler.get(new DefaultBeanClass(SubGenericController.class)).get("anotherMethod").get(a).toString();
     	assertThat(uri, is("/path/expectedURL"));
     }
 
@@ -113,7 +116,7 @@ public class LinkToHandlerTest {
     	String a = "test";
     	when(router.urlFor(TestController.class, method1param, a)).thenReturn("/expectedUrl");
     	//${linkTo[TestController].method['test']}
-    	String uri = handler.get(TestController.class).get("method").get(a).toString();
+    	String uri = handler.get(new DefaultBeanClass(TestController.class)).get("method").get(a).toString();
     	assertThat(uri, is("/path/expectedUrl"));
     }
 
@@ -123,7 +126,7 @@ public class LinkToHandlerTest {
         int b = 3;
         String c = "anotherTest";
         //${linkTo[TestController].anotherMethod['test'][3]['anotherTest']}
-        handler.get(TestController.class).get("anotherMethod").get(a).get(b).get(c).toString();
+        handler.get(new DefaultBeanClass(TestController.class)).get("anotherMethod").get(a).get(b).get(c).toString();
     }
 
     static class TestController {

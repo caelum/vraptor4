@@ -12,8 +12,8 @@ import br.com.caelum.vraptor4.http.ParameterNameProvider;
 import br.com.caelum.vraptor4.restfulie.controller.ControllerMethod;
 
 /**
- * An interceptor that auto include all controller method
- * parameters to view
+ * Interceptor that includes all the parameters on the view of
+ * a method annotated with {@link IncludeParameters} annotation
  *
  * @author Rodrigo Turini
  * @since 4.0
@@ -21,6 +21,7 @@ import br.com.caelum.vraptor4.restfulie.controller.ControllerMethod;
 @Intercepts(
 	after=ParametersInstantiatorInterceptor.class
 )
+@AcceptsWithAnnotations(IncludeParameters.class)
 public class ParameterIncluderInterceptor {
 
 	private MethodInfo info;

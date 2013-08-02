@@ -21,6 +21,7 @@ import br.com.caelum.vraptor4.restfulie.controller.ControllerMethod;
 @Intercepts(
 	after=ParametersInstantiatorInterceptor.class
 )
+@AcceptsWithAnnotations(IncludeParameters.class)
 public class ParameterIncluderInterceptor {
 
 	private MethodInfo info;

@@ -4,13 +4,14 @@ import javax.annotation.Priority;
 import javax.enterprise.inject.Alternative;
 import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
+import javax.interceptor.Interceptor;
 
 import br.com.caelum.vraptor4.http.MutableResponse;
 import br.com.caelum.vraptor4.ioc.RequestScoped;
 
 @RequestScoped
 @Alternative
-@Priority(1000)
+@Priority(Interceptor.Priority.LIBRARY_BEFORE)
 public class CDIHttpServletResponseFactory{
 
 	@Inject

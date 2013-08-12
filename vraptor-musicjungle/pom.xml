@@ -8,7 +8,7 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>br.com.caelum.vraptor4</groupId>
+			<groupId>br.com.caelum</groupId>
 			<artifactId>vraptor4</artifactId>
 			<version>4.0-SNAPSHOT</version>
 		</dependency>
@@ -23,6 +23,13 @@
 			<groupId>javax.el</groupId>
 			<artifactId>javax.el-api</artifactId>
 			<version>2.2.1</version>
+			<scope>provided</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.mortbay.jetty</groupId>
+			<artifactId>servlet-api</artifactId>
+			<version>3.0.20100224</version>
 			<scope>provided</scope>
 		</dependency>
 		

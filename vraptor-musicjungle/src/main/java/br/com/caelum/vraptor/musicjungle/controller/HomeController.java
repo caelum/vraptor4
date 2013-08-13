@@ -24,7 +24,6 @@ import javax.inject.Inject;
 import org.hibernate.SessionFactory;
 import org.hsqldb.Session;
 
-import sun.awt.ComponentFactory;
 import br.com.caelum.vraptor.musicjungle.dao.DefaultUserDao;
 import br.com.caelum.vraptor.musicjungle.dao.UserDao;
 import br.com.caelum.vraptor.musicjungle.interceptor.Public;
@@ -52,7 +51,7 @@ public class HomeController {
     private Validator validator;
     private UserInfo userInfo;
 	private UserDao dao;
-	
+
 	//CDI eyes only
 	@Deprecated
 	public HomeController() {}

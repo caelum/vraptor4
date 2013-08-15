@@ -7,7 +7,6 @@
 	<alternatives>
 		<class>br.com.caelum.vraptor4.validator.ValidatorFactoryCreator</class>
 		<class>br.com.caelum.vraptor4.validator.ValidatorCreator</class>
-		<class>br.com.caelum.vraptor.musicjungle.config.CustomMultipartConfig</class>
 	</alternatives>
 
 </beans>

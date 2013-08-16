@@ -20,6 +20,7 @@ package br.com.caelum.vraptor4.proxy;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 import java.lang.reflect.Method;
@@ -29,19 +30,12 @@ import net.vidageek.mirror.dsl.Mirror;
 import org.junit.Before;
 import org.junit.Test;
 
-import br.com.caelum.vraptor4.proxy.JavassistProxifier;
-import br.com.caelum.vraptor4.proxy.MethodInvocation;
-import br.com.caelum.vraptor4.proxy.ObjenesisInstanceCreator;
-import br.com.caelum.vraptor4.proxy.Proxifier;
-import br.com.caelum.vraptor4.proxy.ProxyInvocationException;
-import br.com.caelum.vraptor4.proxy.SuperMethod;
-
 /**
  * @author Fabio Kung
  */
 public class JavassistProxifierTest {
 
-    private Proxifier proxifier;
+    private JavassistProxifier proxifier;
     
     @Before
     public void setUp() throws Exception {
@@ -149,6 +143,20 @@ public class JavassistProxifierTest {
 			}
 		}
     }
+    
+    @Test
+	public void shouldConsiderSuperclassWhenProxifiyngProxy() throws Exception {
+		MethodInvocation<C> handler = new MethodInvocation<C>() {
+			@Override
+			public Object intercept(C proxy, Method method, Object[] args,
+					SuperMethod superMethod) {
+				return null;
+			}
+		};
+		C firstProxy = proxifier.proxify(C.class, handler);
+		C secondProxy = proxifier.proxify(firstProxy.getClass(), handler);
+		assertEquals(firstProxy.getClass(), secondProxy.getClass());
+	}
 
 	public static class A<T> {
 		public T getT(T t) { return t; }

@@ -1,19 +1,8 @@
 package br.com.caelum.vraptor4.ioc.cdi;
 
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.when;
-
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.Callable;
 
@@ -22,9 +11,6 @@ import javax.enterprise.context.SessionScoped;
 import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.CDI;
 
-import org.apache.deltaspike.cdise.api.CdiContainer;
-import org.apache.deltaspike.cdise.api.CdiContainerLoader;
-import org.apache.deltaspike.cdise.weld.ContextController;
 import org.hamcrest.MatcherAssert;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -39,13 +25,21 @@ import br.com.caelum.vraptor4.ioc.Container;
 import br.com.caelum.vraptor4.ioc.ContainerProvider;
 import br.com.caelum.vraptor4.ioc.GenericContainerTest;
 import br.com.caelum.vraptor4.ioc.WhatToDo;
-import br.com.caelum.vraptor4.ioc.cdi.CDIProvider;
 import br.com.caelum.vraptor4.ioc.fixture.ComponentFactoryInTheClasspath;
 import br.com.caelum.vraptor4.ioc.fixture.CustomComponentWithLifecycleInTheClasspath;
 import br.com.caelum.vraptor4.validator.MessageInterpolatorFactory;
 import br.com.caelum.vraptor4.validator.MethodValidatorFactoryCreator;
 import br.com.caelum.vraptor4.validator.ValidatorCreator;
 import br.com.caelum.vraptor4.validator.ValidatorFactoryCreator;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
+
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
+
+import static org.mockito.Mockito.when;
 
 public class CDIBasedContainerTest extends GenericContainerTest {
 
@@ -55,46 +49,14 @@ public class CDIBasedContainerTest extends GenericContainerTest {
 
 	@BeforeClass
 	public static void startCDIContainer(){
-		cdiContainer = CdiContainerLoader.getCdiContainer();
-		cdiContainer.boot();
+		cdiContainer = new br.com.caelum.vraptor4.ioc.cdi.CdiContainer();
+		cdiContainer.start();
 	}
 
 	@AfterClass
 	public static void shutdownCDIContainer() {
 		cdiContainer.shutdown();
 	}
-
-	public void startContexts() {
-		cdiContainer.getContextControl().startContexts();
-	}
-
-	public Map<String,Object> getRequestMap(){
-		try{
-			Field contextControl = cdiContainer.getContextControl().getClass().getDeclaredField("contextController");
-			contextControl.setAccessible(true);
-			ContextController contextController = (ContextController) contextControl.get(cdiContainer.getContextControl());
-			Field fieldRequestMap = contextController.getClass().getDeclaredField("requestMap");
-			fieldRequestMap.setAccessible(true);
-			Map<String, Object> requestMap = (Map<String, Object>) fieldRequestMap.get(contextController);
-			return requestMap;
-
-		}catch(Exception e){
-			throw new RuntimeException(e);
-		}
-	}
-
-	public void stopContexts() {
-		cdiContainer.getContextControl().stopContexts();
-	}
-
-	public void start(Class<? extends Annotation> scope) {
-		cdiContainer.getContextControl().startContext(scope);
-	}
-
-	public void stop(Class<? extends Annotation> scope) {
-		cdiContainer.getContextControl().stopContext(scope);
-	}
-
 
 	@Override
 	protected ContainerProvider getProvider() {
@@ -106,16 +68,16 @@ public class CDIBasedContainerTest extends GenericContainerTest {
 		Callable<T> task = new Callable<T>() {
 			@Override
 			public T call() throws Exception {
-				start(RequestScoped.class);
-				start(SessionScoped.class);
+				cdiContainer.startRequest();
+				cdiContainer.startSession();
 				RequestInfo request = new RequestInfo(context, null,
 						servletContainerFactory.getRequest(),
 						servletContainerFactory.getResponse());
 
 				T result = execution.execute(request, counter);
 
-				stop(SessionScoped.class);
-				stop(RequestScoped.class);
+				cdiContainer.stopSession();
+				cdiContainer.stopRequest();
 				return result;
 			}
 		};
@@ -127,6 +89,7 @@ public class CDIBasedContainerTest extends GenericContainerTest {
 		}
 	}
 
+	@SuppressWarnings("rawtypes")
 	private Object actualInstance(Object instance) {
 		try {
 			//sorry, but i have to initialize the weld proxy
@@ -141,6 +104,7 @@ public class CDIBasedContainerTest extends GenericContainerTest {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	protected <T> T instanceFor(final Class<T> component,
 			Container container) {

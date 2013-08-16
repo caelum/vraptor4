@@ -37,6 +37,7 @@ import br.com.caelum.vraptor4.core.Execution;
 import br.com.caelum.vraptor4.core.RequestExecution;
 import br.com.caelum.vraptor4.core.RequestInfo;
 import br.com.caelum.vraptor4.core.StaticContentHandler;
+import br.com.caelum.vraptor4.events.VRaptorInitialized;
 import br.com.caelum.vraptor4.http.EncodingHandler;
 import br.com.caelum.vraptor4.http.VRaptorRequest;
 import br.com.caelum.vraptor4.http.VRaptorResponse;
@@ -57,6 +58,9 @@ public class VRaptor implements Filter {
 	
 	@Inject
 	private Event<ServletContext> contextEvent;
+	
+	@Inject
+	private Event<VRaptorInitialized> initializedEvent;
 	
 	private ServletContext servletContext;
 	
@@ -112,6 +116,7 @@ public class VRaptor implements Filter {
 		contextEvent.fire(servletContext);
 		this.provider.start(servletContext);
 		logger.info("VRaptor 3.5.0 successfuly initialized");
+		initializedEvent.fire(new VRaptorInitialized());
 	}
 
 

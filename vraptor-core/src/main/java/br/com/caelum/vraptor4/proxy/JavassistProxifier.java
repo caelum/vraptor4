@@ -71,14 +71,19 @@ public class JavassistProxifier
     }
 
     @Override
+    @SuppressWarnings("rawtypes")
 	public <T> T proxify(Class<T> type, MethodInvocation<? super T> handler) {
         final ProxyFactory factory = new ProxyFactory();
         factory.setFilter(IGNORE_BRIDGE_AND_OBJECT_METHODS);
+		Class rawType = type;
+        if (isProxyClass(type)) {
+        	rawType = type.getSuperclass();
+        }
 
         if (type.isInterface()) {
-            factory.setInterfaces(new Class[] { type });
+            factory.setInterfaces(new Class[] { rawType });
         } else {
-            factory.setSuperclass(type);
+            factory.setSuperclass(rawType);
         }
 
         Class<?> proxyClass = factory.createClass();
@@ -93,8 +98,12 @@ public class JavassistProxifier
 
     @Override
 	public boolean isProxy(Object o) {
-        return o != null && ProxyObject.class.isAssignableFrom(o.getClass());
+        return o != null && isProxyClass(o.getClass());
     }
+
+	private boolean isProxyClass(Class<? extends Object> clazz) {
+		return ProxyObject.class.isAssignableFrom(clazz);
+	}
     
     private <T> void setHandler(Object proxyInstance, final MethodInvocation<? super T> handler) {
         ProxyObject proxyObject = (ProxyObject) proxyInstance;

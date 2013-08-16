@@ -58,6 +58,7 @@ import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor4.Path;
 import br.com.caelum.vraptor4.core.Converters;
+import br.com.caelum.vraptor4.http.EncodingHandler;
 import br.com.caelum.vraptor4.http.ParameterNameProvider;
 import br.com.caelum.vraptor4.proxy.MethodInvocation;
 import br.com.caelum.vraptor4.proxy.Proxifier;
@@ -100,13 +101,16 @@ public class DefaultRouteBuilder implements RouteBuilder {
 	private final ParameterNameProvider nameProvider;
     private final Evaluator evaluator;
 
-    public DefaultRouteBuilder(Proxifier proxifier, TypeFinder finder, Converters converters, ParameterNameProvider nameProvider, Evaluator evaluator, String uri) {
+	private EncodingHandler encodingHandler;
+
+    public DefaultRouteBuilder(Proxifier proxifier, TypeFinder finder, Converters converters, ParameterNameProvider nameProvider, Evaluator evaluator, String uri, EncodingHandler encodingHandler) {
 		this.proxifier = proxifier;
 		this.finder = finder;
 		this.converters = converters;
 		this.nameProvider = nameProvider;
         this.evaluator = evaluator;
 		this.originalUri = uri;
+		this.encodingHandler = encodingHandler;
 		builder = new DefaultParameterControlBuilder();
 	}
 
@@ -148,7 +152,7 @@ public class DefaultRouteBuilder implements RouteBuilder {
 		}
 
 		private ParametersControl build() {
-			return new DefaultParametersControl(originalUri, parameters, converters, evaluator);
+			return new DefaultParametersControl(originalUri, parameters, converters, evaluator,encodingHandler);
 		}
 	}
 

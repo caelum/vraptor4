@@ -17,15 +17,6 @@
 
 package br.com.caelum.vraptor4.http.route;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.contains;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.when;
-
 import java.util.EnumSet;
 import java.util.List;
 
@@ -48,18 +39,23 @@ import br.com.caelum.vraptor4.Patch;
 import br.com.caelum.vraptor4.Path;
 import br.com.caelum.vraptor4.Post;
 import br.com.caelum.vraptor4.core.Converters;
+import br.com.caelum.vraptor4.http.EncodingHandler;
 import br.com.caelum.vraptor4.http.ParameterNameProvider;
-import br.com.caelum.vraptor4.http.route.DefaultRouteBuilder;
-import br.com.caelum.vraptor4.http.route.JavaEvaluator;
-import br.com.caelum.vraptor4.http.route.NoTypeFinder;
-import br.com.caelum.vraptor4.http.route.PathAnnotationRoutesParser;
-import br.com.caelum.vraptor4.http.route.Route;
-import br.com.caelum.vraptor4.http.route.Router;
 import br.com.caelum.vraptor4.proxy.JavassistProxifier;
 import br.com.caelum.vraptor4.proxy.ObjenesisInstanceCreator;
 import br.com.caelum.vraptor4.proxy.Proxifier;
 import br.com.caelum.vraptor4.restfulie.controller.DefaultBeanClass;
 import br.com.caelum.vraptor4.restfulie.controller.HttpMethod;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
+
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.when;
 
 public class PathAnnotationRoutesParserTest {
 
@@ -68,6 +64,7 @@ public class PathAnnotationRoutesParserTest {
 	private NoTypeFinder typeFinder;
 	private @Mock Router router;
 	private @Mock ParameterNameProvider nameProvider;
+	private @Mock EncodingHandler encodingHandler;
 
 	private PathAnnotationRoutesParser parser;
 
@@ -82,7 +79,7 @@ public class PathAnnotationRoutesParserTest {
 
 			@Override
 			public DefaultRouteBuilder answer(InvocationOnMock invocation) throws Throwable {
-				return new DefaultRouteBuilder(proxifier, typeFinder, converters, nameProvider, new JavaEvaluator(), (String) invocation.getArguments()[0]);
+				return new DefaultRouteBuilder(proxifier, typeFinder, converters, nameProvider, new JavaEvaluator(), (String) invocation.getArguments()[0],encodingHandler);
 			}
 		});
 

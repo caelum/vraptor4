@@ -19,6 +19,7 @@ package br.com.caelum.vraptor4.http.route;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -34,6 +35,7 @@ import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor4.TwoWayConverter;
 import br.com.caelum.vraptor4.core.Converters;
+import br.com.caelum.vraptor4.http.EncodingHandler;
 import br.com.caelum.vraptor4.http.MutableRequest;
 import br.com.caelum.vraptor4.util.StringUtils;
 
@@ -50,16 +52,18 @@ public class DefaultParametersControl implements ParametersControl {
 	private final String originalPattern;
 	private final Converters converters;
     private final Evaluator evaluator;
+	private EncodingHandler encodingHandler;
 
-    public DefaultParametersControl(String originalPattern, Map<String, String> parameterPatterns, Converters converters, Evaluator evaluator) {
+    public DefaultParametersControl(String originalPattern, Map<String, String> parameterPatterns, Converters converters, Evaluator evaluator, EncodingHandler encodingHandler) {
 		this.originalPattern = originalPattern;
 		this.converters = converters;
+		this.encodingHandler = encodingHandler;
 		this.pattern = compilePattern(originalPattern, parameterPatterns);
         this.evaluator = evaluator;
 	}
 
-	public DefaultParametersControl(String originalPattern, Converters converters, Evaluator evaluator) {
-		this(originalPattern, Collections.<String, String>emptyMap(), converters, evaluator);
+	public DefaultParametersControl(String originalPattern, Converters converters, Evaluator evaluator, EncodingHandler encodingHandler) {
+		this(originalPattern, Collections.<String, String>emptyMap(), converters, evaluator, encodingHandler);
 	}
 
 	private Pattern compilePattern(String originalPattern, Map<String, String> parameterPatterns) {
@@ -105,10 +109,21 @@ public class DefaultParametersControl implements ParametersControl {
 				}
 			}
 
-			base = base.replace("{" + splittedPatterns[i] + "}", result == null ? "" : result.toString());
+			String parameter = encodeParameter(result.toString());
+			base = base.replace("{" + splittedPatterns[i] + "}", result == null ? "" : parameter);
 		}
 		
 		return base.replaceAll("\\.\\*", "");
+	}
+
+	private String encodeParameter(String parameter) {
+		
+		try {
+			return URLEncoder.encode(parameter, encodingHandler.getEncoding());
+		} catch (Exception e) {
+			logger.warn("Can't encode parameter : {} with encoding : {}", new Object[]{parameter, encodingHandler.getEncoding() });
+			return parameter;
+		}
 	}
 
 	private Object selectParam(String key, String[] paramNames, Object[] paramValues) {

@@ -1,11 +1,5 @@
 package br.com.caelum.vraptor4.http;
 
-import static br.com.caelum.vraptor4.config.BasicConfiguration.ENCODING;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 import java.io.UnsupportedEncodingException;
 
 import javax.servlet.ServletContext;
@@ -18,7 +12,11 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor4.VRaptorException;
-import br.com.caelum.vraptor4.http.WebXmlEncodingHandler;
+import static br.com.caelum.vraptor4.config.BasicConfiguration.ENCODING;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 public class WebXmlEncodingHandlerTest {
     
@@ -44,7 +42,6 @@ public class WebXmlEncodingHandlerTest {
     @Test(expected=VRaptorException.class)
     public void shouldThrowExceptionWhenAnUnsupportedEncodingExceptionOccurs() throws Exception {
         doThrow(new UnsupportedEncodingException()).when(request).setCharacterEncoding(anyString());
-        
         new WebXmlEncodingHandler("UTF-8").setEncoding(request, response);
     }
 }

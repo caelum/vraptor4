@@ -17,26 +17,26 @@
 
 package br.com.caelum.vraptor4.http.route;
 
-import static org.mockito.Mockito.when;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-
+import br.com.caelum.vraptor4.http.EncodingHandler;
 import br.com.caelum.vraptor4.proxy.Proxifier;
+import static org.mockito.Mockito.when;
 
 public class RulesTest {
 
 	private @Mock Router router;
 	private @Mock Proxifier proxifier;
 	private DefaultRouteBuilder routeBuilder;
+	private @Mock EncodingHandler encodingHandler;
 
 	@Before
 	public void setup() {
 		MockitoAnnotations.initMocks(this);
 		
-		routeBuilder = new DefaultRouteBuilder(proxifier, null, null, null, new JavaEvaluator(), "");
+		routeBuilder = new DefaultRouteBuilder(proxifier, null, null, null, new JavaEvaluator(), "",encodingHandler);
 		when(router.builderFor("")).thenReturn(routeBuilder);
 	}
 

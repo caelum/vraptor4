@@ -34,6 +34,7 @@ import br.com.caelum.vraptor4.VRaptorException;
 import br.com.caelum.vraptor4.controller.ControllerMethod;
 import br.com.caelum.vraptor4.controller.HttpMethod;
 import br.com.caelum.vraptor4.core.Converters;
+import br.com.caelum.vraptor4.http.EncodingHandler;
 import br.com.caelum.vraptor4.http.MutableRequest;
 import br.com.caelum.vraptor4.http.ParameterNameProvider;
 import br.com.caelum.vraptor4.proxy.Proxifier;
@@ -58,6 +59,7 @@ public class DefaultRouter implements Router {
 	private  Converters converters;
 	private  ParameterNameProvider nameProvider;
     private  Evaluator evaluator;
+	private EncodingHandler encodingHandler;
 
     //CDI eyes only
 	@Deprecated
@@ -66,18 +68,20 @@ public class DefaultRouter implements Router {
 
     @Inject
     public DefaultRouter(RoutesConfiguration config,
-			Proxifier proxifier, TypeFinder finder, Converters converters, ParameterNameProvider nameProvider, Evaluator evaluator) {
+			Proxifier proxifier, TypeFinder finder, Converters converters, ParameterNameProvider nameProvider, Evaluator evaluator, EncodingHandler encodingHandler) {
+    	
 		this.proxifier = proxifier;
 		this.finder = finder;
 		this.converters = converters;
 		this.nameProvider = nameProvider;
         this.evaluator = evaluator;
+		this.encodingHandler = encodingHandler;
 		config.config(this);
 	}
 
 	@Override
 	public RouteBuilder builderFor(String uri) {
-		return new DefaultRouteBuilder(proxifier, finder, converters, nameProvider, evaluator, uri);
+		return new DefaultRouteBuilder(proxifier, finder, converters, nameProvider, evaluator, uri, encodingHandler);
 	}
 
 	/**

@@ -41,6 +41,7 @@ import br.com.caelum.vraptor4.Intercepts;
 import br.com.caelum.vraptor4.Result;
 import br.com.caelum.vraptor4.Validator;
 import br.com.caelum.vraptor4.config.ApplicationConfiguration;
+import br.com.caelum.vraptor4.config.BasicConfiguration;
 import br.com.caelum.vraptor4.config.Configuration;
 import br.com.caelum.vraptor4.controller.ControllerNotFoundHandler;
 import br.com.caelum.vraptor4.controller.DefaultControllerNotFoundHandler;
@@ -227,7 +228,8 @@ public class BaseComponents {
             Evaluator.class,				JavaEvaluator.class,
             StaticContentHandler.class,		DefaultStaticContentHandler.class,
             SingleValueConverter.class,     NullConverter.class,
-            ProxyInitializer.class,			NullProxyInitializer.class
+            ProxyInitializer.class,			NullProxyInitializer.class,
+            BasicConfiguration.class,		BasicConfiguration.class
     );
 
     private static final Map<Class<?>, Class<?>> PROTOTYPE_COMPONENTS = classMap(

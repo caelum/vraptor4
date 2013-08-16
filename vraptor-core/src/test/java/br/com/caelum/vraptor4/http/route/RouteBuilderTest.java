@@ -16,13 +16,6 @@
  */
 package br.com.caelum.vraptor4.http.route;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.when;
-
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
 
@@ -36,10 +29,22 @@ import br.com.caelum.vraptor4.controller.ControllerMethod;
 import br.com.caelum.vraptor4.controller.DefaultBeanClass;
 import br.com.caelum.vraptor4.controller.DefaultControllerMethod;
 import br.com.caelum.vraptor4.core.Converters;
+import br.com.caelum.vraptor4.http.EncodingHandler;
 import br.com.caelum.vraptor4.http.ParameterNameProvider;
 import br.com.caelum.vraptor4.proxy.JavassistProxifier;
 import br.com.caelum.vraptor4.proxy.ObjenesisInstanceCreator;
 import br.com.caelum.vraptor4.proxy.Proxifier;
+import br.com.caelum.vraptor4.restfulie.controller.ControllerMethod;
+import br.com.caelum.vraptor4.restfulie.controller.DefaultBeanClass;
+import br.com.caelum.vraptor4.restfulie.controller.DefaultControllerMethod;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.when;
 
 public class RouteBuilderTest {
 
@@ -49,6 +54,7 @@ public class RouteBuilderTest {
 	private ControllerMethod method;
 	private Proxifier proxifier;
 	private TypeFinder typeFinder;
+	private @Mock EncodingHandler encodingHandler;
 
 	public static class MyResource {
 
@@ -86,7 +92,7 @@ public class RouteBuilderTest {
 	}
 
 	private DefaultRouteBuilder newBuilder(String uri) {
-		return new DefaultRouteBuilder(proxifier, typeFinder, converters, provider, new JavaEvaluator(), uri);
+		return new DefaultRouteBuilder(proxifier, typeFinder, converters, provider, new JavaEvaluator(), uri, encodingHandler);
 	}
 
 	@Test

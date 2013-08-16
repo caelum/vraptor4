@@ -30,4 +30,9 @@ public class NullEncodingHandler implements EncodingHandler {
 	public void setEncoding(HttpServletRequest request, HttpServletResponse response) {
 	    
 	}
+
+	@Override
+	public String getEncoding() {
+		return "UTF-8";
+	}
 }

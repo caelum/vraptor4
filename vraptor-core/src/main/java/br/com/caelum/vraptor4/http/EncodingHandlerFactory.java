@@ -20,7 +20,6 @@ package br.com.caelum.vraptor4.http;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
-import javax.servlet.ServletContext;
 
 import br.com.caelum.vraptor4.config.BasicConfiguration;
 
@@ -41,8 +40,8 @@ public class EncodingHandlerFactory{
 	}
 	
 	@Inject
-	public EncodingHandlerFactory(ServletContext context) {
-		String encoding = new BasicConfiguration(context).getEncoding();
+	public EncodingHandlerFactory(BasicConfiguration configuration) {
+		String encoding = configuration.getEncoding();
 		this.handler = (encoding == null) ? new NullEncodingHandler() : new WebXmlEncodingHandler(encoding);
 	}
 	

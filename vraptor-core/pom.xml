@@ -73,51 +73,45 @@
 			<version>1</version>
 			<scope>provided</scope>
 		</dependency>
+		
+		<dependency>
+			<groupId>javax.annotation</groupId>
+			<artifactId>javax.annotation-api</artifactId>
+			<version>1.2</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>javax.interceptor</groupId>
+			<artifactId>javax.interceptor-api</artifactId>
+			<version>1.2</version>
+		</dependency>
+
+		<dependency>
+			<groupId>javax.enterprise</groupId>
+			<artifactId>cdi-api</artifactId>
+			<version>1.1</version>
+			<scope>provided</scope>
+			<exclusions>
+				<exclusion>
+					<artifactId>
+						jboss-interceptors-api_1.1_spec
+					</artifactId>
+					<groupId>org.jboss.spec.javax.interceptor</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		
 	    <dependency>
 	        <groupId>javax.ejb</groupId>
 	        <artifactId>ejb-api</artifactId>
 	        <version>3.0</version>
-<!-- 	        <scope>test</scope> -->
 	    </dependency>		
-		<dependency>
-		    <groupId>org.jboss.weld</groupId>
-		    <artifactId>weld-core</artifactId>
-		    <version>2.0.3.Final</version>
-		    <scope>provided</scope>
-		</dependency>	
 		<dependency>
 		    <groupId>org.slf4j</groupId>
 		    <artifactId>slf4j-simple</artifactId>
 		    <version>1.6.4</version>
 		    <scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.deltaspike.cdictrl</groupId>
-			<artifactId>deltaspike-cdictrl-api</artifactId>
-			<version>0.4</version>
-		</dependency>
-		<dependency>
-		    <groupId>org.apache.deltaspike.cdictrl</groupId>
-		    <artifactId>deltaspike-cdictrl-weld</artifactId>
-		    <version>0.4</version>
-		</dependency>		
-		<dependency>
-		    <groupId>org.apache.deltaspike.core</groupId>
-		    <artifactId>deltaspike-core-api</artifactId>
-		    <version>0.4</version>
-		</dependency>		
-		<dependency>
-		    <groupId>org.apache.deltaspike.core</groupId>
-		    <artifactId>deltaspike-core-impl</artifactId>
-		    <version>0.4</version>
-		</dependency>		
-		<dependency>
-			<groupId>org.jboss.weld.se</groupId>
-			<artifactId>weld-se-core</artifactId>
-			<version>2.0.3.Final</version>
-			<scope>provided</scope>
-		</dependency>
-                        				
+		</dependency>                        				
 		<!-- [/cdi] -->
 
 		<!-- [deserialization] -->
@@ -251,7 +245,13 @@
 			<version>3.0</version>
 			<scope>test</scope>
 		</dependency>
-	
+
+        <dependency>
+                <groupId>org.jboss.weld.se</groupId>
+                <artifactId>weld-se-core</artifactId>
+                <version>2.0.3.Final</version>
+                <scope>test</scope>
+        </dependency>
 		</dependencies>
 		
 		<dependencyManagement>

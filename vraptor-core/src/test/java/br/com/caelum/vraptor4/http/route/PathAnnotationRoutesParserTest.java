@@ -47,6 +47,8 @@ import br.com.caelum.vraptor4.Options;
 import br.com.caelum.vraptor4.Patch;
 import br.com.caelum.vraptor4.Path;
 import br.com.caelum.vraptor4.Post;
+import br.com.caelum.vraptor4.controller.DefaultBeanClass;
+import br.com.caelum.vraptor4.controller.HttpMethod;
 import br.com.caelum.vraptor4.core.Converters;
 import br.com.caelum.vraptor4.http.ParameterNameProvider;
 import br.com.caelum.vraptor4.http.route.DefaultRouteBuilder;
@@ -58,8 +60,6 @@ import br.com.caelum.vraptor4.http.route.Router;
 import br.com.caelum.vraptor4.proxy.JavassistProxifier;
 import br.com.caelum.vraptor4.proxy.ObjenesisInstanceCreator;
 import br.com.caelum.vraptor4.proxy.Proxifier;
-import br.com.caelum.vraptor4.restfulie.controller.DefaultBeanClass;
-import br.com.caelum.vraptor4.restfulie.controller.HttpMethod;
 
 public class PathAnnotationRoutesParserTest {
 

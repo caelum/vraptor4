@@ -38,12 +38,12 @@ import org.slf4j.LoggerFactory;
 import br.com.caelum.vraptor4.InterceptionException;
 import br.com.caelum.vraptor4.Intercepts;
 import br.com.caelum.vraptor4.Validator;
+import br.com.caelum.vraptor4.controller.ControllerMethod;
 import br.com.caelum.vraptor4.core.InterceptorStack;
 import br.com.caelum.vraptor4.http.InvalidParameterException;
 import br.com.caelum.vraptor4.http.MutableRequest;
 import br.com.caelum.vraptor4.interceptor.ControllerLookupInterceptor;
 import br.com.caelum.vraptor4.ioc.RequestScoped;
-import br.com.caelum.vraptor4.restfulie.controller.ControllerMethod;
 import br.com.caelum.vraptor4.validator.I18nMessage;
 import br.com.caelum.vraptor4.validator.Validations;
 

@@ -20,7 +20,7 @@ package br.com.caelum.vraptor4.http;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import br.com.caelum.vraptor4.restfulie.controller.ControllerMethod;
+import br.com.caelum.vraptor4.controller.ControllerMethod;
 import br.com.caelum.vraptor4.validator.Message;
 
 /**

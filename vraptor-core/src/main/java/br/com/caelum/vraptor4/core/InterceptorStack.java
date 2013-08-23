@@ -18,8 +18,8 @@
 package br.com.caelum.vraptor4.core;
 
 import br.com.caelum.vraptor4.InterceptionException;
+import br.com.caelum.vraptor4.controller.ControllerMethod;
 import br.com.caelum.vraptor4.interceptor.Interceptor;
-import br.com.caelum.vraptor4.restfulie.controller.ControllerMethod;
 
 /**
  * The interceptors stack.

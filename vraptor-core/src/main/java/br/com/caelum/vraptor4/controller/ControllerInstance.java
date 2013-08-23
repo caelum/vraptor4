@@ -1,4 +1,4 @@
-package br.com.caelum.vraptor4.restfulie.controller;
+package br.com.caelum.vraptor4.controller;
 
 /**
  * Wrapper for controller instance

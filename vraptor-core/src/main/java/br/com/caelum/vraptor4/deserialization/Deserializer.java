@@ -17,7 +17,7 @@ package br.com.caelum.vraptor4.deserialization;
 
 import java.io.InputStream;
 
-import br.com.caelum.vraptor4.restfulie.controller.ControllerMethod;
+import br.com.caelum.vraptor4.controller.ControllerMethod;
 
 /**
  * Deserializes request body according to a given content type.

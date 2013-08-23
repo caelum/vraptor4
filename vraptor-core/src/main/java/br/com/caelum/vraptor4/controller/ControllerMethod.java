@@ -6,7 +6,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * 	http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -15,25 +15,25 @@
  * limitations under the License.
  */
 
-package br.com.caelum.vraptor4.restfulie.controller;
+package br.com.caelum.vraptor4.controller;
 
-import java.util.Set;
-
-import br.com.caelum.vraptor4.core.RequestInfo;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
 
 /**
- * Handler for Method Not Allowed Http Status (405).
+ * An identifier for a controller accesible web method.
  *
- * @author Lucas Cavalcanti
- * @author Caio Filipini
+ * @author guilherme silveira
  */
-public interface MethodNotAllowedHandler {
+public interface ControllerMethod {
 
-	/**
-	 * Denies current request due to method not allowed.
-	 * @param request
-	 * @param allowedMethods
-	 */
-	void deny(RequestInfo request, Set<HttpMethod> allowedMethods);
+	Method getMethod();
+
+	BeanClass getController();
+
+	boolean containsAnnotation(Class<? extends Annotation> annotation);
+
+	public abstract Annotation[] getAnnotations();
+
 
 }

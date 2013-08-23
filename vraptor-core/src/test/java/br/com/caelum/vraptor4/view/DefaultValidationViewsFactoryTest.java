@@ -31,10 +31,10 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
 import br.com.caelum.vraptor4.Result;
+import br.com.caelum.vraptor4.controller.HttpMethod;
 import br.com.caelum.vraptor4.proxy.JavassistProxifier;
 import br.com.caelum.vraptor4.proxy.ObjenesisInstanceCreator;
 import br.com.caelum.vraptor4.proxy.Proxifier;
-import br.com.caelum.vraptor4.restfulie.controller.HttpMethod;
 import br.com.caelum.vraptor4.serialization.JSONSerialization;
 import br.com.caelum.vraptor4.serialization.SerializerBuilder;
 import br.com.caelum.vraptor4.util.test.MockedLogic;

@@ -19,7 +19,7 @@ package br.com.caelum.vraptor4.core;
 
 import java.util.EnumSet;
 
-import br.com.caelum.vraptor4.restfulie.controller.HttpMethod;
+import br.com.caelum.vraptor4.controller.HttpMethod;
 
 /**
  * Allows easy access to detect any route information.<br>

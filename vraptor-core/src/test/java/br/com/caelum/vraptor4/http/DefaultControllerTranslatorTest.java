@@ -32,11 +32,11 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import br.com.caelum.vraptor4.controller.ControllerMethod;
+import br.com.caelum.vraptor4.controller.HttpMethod;
 import br.com.caelum.vraptor4.core.RequestInfo;
 import br.com.caelum.vraptor4.http.route.MethodNotAllowedException;
 import br.com.caelum.vraptor4.http.route.Router;
-import br.com.caelum.vraptor4.restfulie.controller.ControllerMethod;
-import br.com.caelum.vraptor4.restfulie.controller.HttpMethod;
 
 public class DefaultControllerTranslatorTest {
 

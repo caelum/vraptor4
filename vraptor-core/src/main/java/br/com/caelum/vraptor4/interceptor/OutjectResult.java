@@ -27,9 +27,9 @@ import org.slf4j.LoggerFactory;
 import br.com.caelum.vraptor4.InterceptionException;
 import br.com.caelum.vraptor4.Intercepts;
 import br.com.caelum.vraptor4.Result;
+import br.com.caelum.vraptor4.controller.ControllerMethod;
 import br.com.caelum.vraptor4.core.InterceptorStack;
 import br.com.caelum.vraptor4.core.MethodInfo;
-import br.com.caelum.vraptor4.restfulie.controller.ControllerMethod;
 
 /**
  * Outjects the result of the method invocation to the desired result

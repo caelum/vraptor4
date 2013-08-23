@@ -16,14 +16,14 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor4.Result;
+import br.com.caelum.vraptor4.controller.ControllerMethod;
+import br.com.caelum.vraptor4.controller.DefaultControllerMethod;
+import br.com.caelum.vraptor4.controller.HttpMethod;
 import br.com.caelum.vraptor4.core.Localization;
 import br.com.caelum.vraptor4.http.MutableRequest;
 import br.com.caelum.vraptor4.http.ParametersProvider;
 import br.com.caelum.vraptor4.http.route.ControllerNotFoundException;
 import br.com.caelum.vraptor4.http.route.Router;
-import br.com.caelum.vraptor4.restfulie.controller.ControllerMethod;
-import br.com.caelum.vraptor4.restfulie.controller.DefaultControllerMethod;
-import br.com.caelum.vraptor4.restfulie.controller.HttpMethod;
 import br.com.caelum.vraptor4.view.DefaultRefererResult;
 import br.com.caelum.vraptor4.view.LogicResult;
 import br.com.caelum.vraptor4.view.PageResult;

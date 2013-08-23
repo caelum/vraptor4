@@ -7,9 +7,9 @@ import java.util.List;
 import net.vidageek.mirror.dsl.Mirror;
 import net.vidageek.mirror.list.dsl.Matcher;
 import net.vidageek.mirror.list.dsl.MirrorList;
+import br.com.caelum.vraptor4.controller.ControllerInstance;
+import br.com.caelum.vraptor4.controller.ControllerMethod;
 import br.com.caelum.vraptor4.ioc.Container;
-import br.com.caelum.vraptor4.restfulie.controller.ControllerInstance;
-import br.com.caelum.vraptor4.restfulie.controller.ControllerMethod;
 
 public class CustomAcceptsVerifier {
 

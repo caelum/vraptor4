@@ -23,9 +23,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor4.InterceptionException;
+import br.com.caelum.vraptor4.controller.ControllerMethod;
 import br.com.caelum.vraptor4.core.InterceptorStack;
 import br.com.caelum.vraptor4.ioc.ApplicationScoped;
-import br.com.caelum.vraptor4.restfulie.controller.ControllerMethod;
 
 import com.google.common.collect.Lists;
 

@@ -7,9 +7,9 @@ import javax.inject.Inject;
 import br.com.caelum.vraptor4.BeforeCall;
 import br.com.caelum.vraptor4.Intercepts;
 import br.com.caelum.vraptor4.Result;
+import br.com.caelum.vraptor4.controller.ControllerMethod;
 import br.com.caelum.vraptor4.core.MethodInfo;
 import br.com.caelum.vraptor4.http.ParameterNameProvider;
-import br.com.caelum.vraptor4.restfulie.controller.ControllerMethod;
 
 /**
  * Interceptor that includes all the parameters on the view of

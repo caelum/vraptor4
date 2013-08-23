@@ -17,8 +17,8 @@
 package br.com.caelum.vraptor4.interceptor.multipart;
 
 import br.com.caelum.vraptor4.InterceptionException;
+import br.com.caelum.vraptor4.controller.ControllerMethod;
 import br.com.caelum.vraptor4.core.InterceptorStack;
-import br.com.caelum.vraptor4.restfulie.controller.ControllerMethod;
 
 /**
  * A null implementation of {@link MultipartInterceptor}. This class does nothing.

@@ -14,11 +14,11 @@ import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor4.InterceptionException;
 import br.com.caelum.vraptor4.Result;
+import br.com.caelum.vraptor4.controller.ControllerMethod;
 import br.com.caelum.vraptor4.core.ExceptionMapper;
 import br.com.caelum.vraptor4.core.ExceptionRecorder;
 import br.com.caelum.vraptor4.core.InterceptorStack;
 import br.com.caelum.vraptor4.interceptor.ExceptionHandlerInterceptor;
-import br.com.caelum.vraptor4.restfulie.controller.ControllerMethod;
 
 public class ExceptionHandlerInterceptorTest {
 

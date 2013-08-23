@@ -17,10 +17,10 @@
 
 package br.com.caelum.vraptor4.http;
 
+import br.com.caelum.vraptor4.controller.ControllerMethod;
 import br.com.caelum.vraptor4.core.RequestInfo;
 import br.com.caelum.vraptor4.http.route.ControllerNotFoundException;
 import br.com.caelum.vraptor4.http.route.MethodNotAllowedException;
-import br.com.caelum.vraptor4.restfulie.controller.ControllerMethod;
 
 /**
  * Translates requests into controller methods.<br>

@@ -19,7 +19,6 @@ package br.com.caelum.vraptor.musicjungle.interceptor;
 import java.io.Serializable;
 
 import br.com.caelum.vraptor.musicjungle.model.User;
-import br.com.caelum.vraptor4.ioc.SessionScoped;
 
 /**
  * Represents the user logged in the system.

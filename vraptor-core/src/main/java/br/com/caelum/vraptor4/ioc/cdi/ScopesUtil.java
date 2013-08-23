@@ -11,8 +11,7 @@ import java.util.Map;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.Dependent;
 import javax.enterprise.context.RequestScoped;
-
-import br.com.caelum.vraptor4.ioc.SessionScoped;
+import javax.enterprise.context.SessionScoped;
 
 /**
  * This class should be used for bean registration at startup time

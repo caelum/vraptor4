@@ -8,8 +8,6 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.util.AnnotationLiteral;
 
-import br.com.caelum.vraptor4.ioc.SessionScoped;
-
 //TODO unit tests
 @SuppressWarnings("serial")
 public class ScopeInfo {
@@ -19,7 +17,6 @@ public class ScopeInfo {
 
 	{
 		scopesLiterals.put(ApplicationScoped.class,new AnnotationLiteral<ApplicationScoped>(){});
-		scopesLiterals.put(SessionScoped.class,new AnnotationLiteral<SessionScoped>(){});
 		scopesLiterals.put(RequestScoped.class,new AnnotationLiteral<RequestScoped>(){});
 	}
 

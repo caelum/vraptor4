@@ -11,10 +11,6 @@ import org.hamcrest.TypeSafeMatcher;
 import org.junit.Test;
 
 import br.com.caelum.vraptor4.Intercepts;
-import br.com.caelum.vraptor4.interceptor.ExecuteMethodInterceptor;
-import br.com.caelum.vraptor4.interceptor.Interceptor;
-import br.com.caelum.vraptor4.interceptor.ControllerLookupInterceptor;
-import br.com.caelum.vraptor4.interceptor.TopologicalSortedInterceptorRegistry;
 
 public class TopologicalSortedInterceptorRegistryTest {
 

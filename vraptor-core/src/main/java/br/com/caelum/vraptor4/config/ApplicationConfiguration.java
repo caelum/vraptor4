@@ -17,10 +17,9 @@
 
 package br.com.caelum.vraptor4.config;
 
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
-
-import br.com.caelum.vraptor4.ioc.RequestScoped;
 
 /**
  * Basic implementation of an application configuration.<br>

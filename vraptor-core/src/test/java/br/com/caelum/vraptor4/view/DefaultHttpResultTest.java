@@ -40,11 +40,6 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import br.com.caelum.vraptor4.view.DefaultHttpResult;
-import br.com.caelum.vraptor4.view.HttpResult;
-import br.com.caelum.vraptor4.view.ResultException;
-import br.com.caelum.vraptor4.view.Status;
-
 public class DefaultHttpResultTest {
 
 	private @Mock HttpServletResponse response;

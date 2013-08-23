@@ -35,13 +35,12 @@ import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor4.Result;
 import br.com.caelum.vraptor4.View;
-import br.com.caelum.vraptor4.core.DefaultResult;
 import br.com.caelum.vraptor4.interceptor.TypeNameExtractor;
 import br.com.caelum.vraptor4.ioc.Container;
+import br.com.caelum.vraptor4.view.DefaultHttpResultTest.RandomController;
 import br.com.caelum.vraptor4.view.LogicResult;
 import br.com.caelum.vraptor4.view.PageResult;
 import br.com.caelum.vraptor4.view.Status;
-import br.com.caelum.vraptor4.view.DefaultHttpResultTest.RandomController;
 
 public class DefaultResultTest {
 

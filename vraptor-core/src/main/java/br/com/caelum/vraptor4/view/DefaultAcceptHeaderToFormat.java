@@ -26,7 +26,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import br.com.caelum.vraptor4.ioc.ApplicationScoped;
+import javax.enterprise.context.ApplicationScoped;
+
 import br.com.caelum.vraptor4.util.LRUCache;
 
 import com.google.common.base.Function;

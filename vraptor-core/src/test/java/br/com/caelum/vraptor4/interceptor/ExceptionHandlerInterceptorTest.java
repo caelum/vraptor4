@@ -18,7 +18,6 @@ import br.com.caelum.vraptor4.controller.ControllerMethod;
 import br.com.caelum.vraptor4.core.ExceptionMapper;
 import br.com.caelum.vraptor4.core.ExceptionRecorder;
 import br.com.caelum.vraptor4.core.InterceptorStack;
-import br.com.caelum.vraptor4.interceptor.ExceptionHandlerInterceptor;
 
 public class ExceptionHandlerInterceptorTest {
 

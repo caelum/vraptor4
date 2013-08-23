@@ -4,6 +4,7 @@
 package br.com.caelum.vraptor4.validator;
 
 import javax.annotation.PostConstruct;
+import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 import javax.validation.MessageInterpolator;
@@ -11,8 +12,6 @@ import javax.validation.ValidatorFactory;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import br.com.caelum.vraptor4.ioc.ApplicationScoped;
 
 /**
  * Factory for JSR303 MessageInterpolator

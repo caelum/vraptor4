@@ -22,9 +22,10 @@ import static com.google.common.base.Strings.isNullOrEmpty;
 import java.text.MessageFormat;
 import java.util.ResourceBundle;
 
+import javax.enterprise.context.ApplicationScoped;
+
 import br.com.caelum.vraptor4.Convert;
 import br.com.caelum.vraptor4.Converter;
-import br.com.caelum.vraptor4.ioc.ApplicationScoped;
 
 /**
  * VRaptor's primitive byte converter.

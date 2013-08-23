@@ -27,8 +27,9 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+import javax.enterprise.context.RequestScoped;
+
 import br.com.caelum.vraptor4.VRaptorException;
-import br.com.caelum.vraptor4.ioc.RequestScoped;
 
 /**
  * A component capable of removing null elements out of collections and arrays.

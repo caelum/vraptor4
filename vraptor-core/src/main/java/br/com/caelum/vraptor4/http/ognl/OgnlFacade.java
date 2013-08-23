@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 
 import ognl.MethodFailedException;
@@ -35,7 +36,6 @@ import org.slf4j.LoggerFactory;
 import br.com.caelum.vraptor4.converter.ConversionError;
 import br.com.caelum.vraptor4.core.Converters;
 import br.com.caelum.vraptor4.http.InvalidParameterException;
-import br.com.caelum.vraptor4.ioc.RequestScoped;
 import br.com.caelum.vraptor4.proxy.Proxifier;
 import br.com.caelum.vraptor4.validator.annotation.ValidationException;
 

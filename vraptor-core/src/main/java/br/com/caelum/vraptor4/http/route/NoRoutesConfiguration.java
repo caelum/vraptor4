@@ -17,7 +17,7 @@
 
 package br.com.caelum.vraptor4.http.route;
 
-import br.com.caelum.vraptor4.ioc.ApplicationScoped;
+import javax.enterprise.context.ApplicationScoped;
 
 /**
  * No extra routes are registered.

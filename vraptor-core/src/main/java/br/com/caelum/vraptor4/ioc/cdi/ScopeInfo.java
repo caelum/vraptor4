@@ -4,11 +4,10 @@ import java.lang.annotation.Annotation;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.RequestScoped;
 import javax.enterprise.util.AnnotationLiteral;
 
-import br.com.caelum.vraptor4.ioc.ApplicationScoped;
-import br.com.caelum.vraptor4.ioc.PrototypeScoped;
-import br.com.caelum.vraptor4.ioc.RequestScoped;
 import br.com.caelum.vraptor4.ioc.SessionScoped;
 
 //TODO unit tests
@@ -22,15 +21,13 @@ public class ScopeInfo {
 		scopesLiterals.put(ApplicationScoped.class,new AnnotationLiteral<ApplicationScoped>(){});
 		scopesLiterals.put(SessionScoped.class,new AnnotationLiteral<SessionScoped>(){});
 		scopesLiterals.put(RequestScoped.class,new AnnotationLiteral<RequestScoped>(){});
-		scopesLiterals.put(PrototypeScoped.class,new AnnotationLiteral<PrototypeScoped>(){});
-
 	}
 
 	public ScopeInfo(Class<? extends Annotation> scope) {
 		super();
 		this.scope = scope;
 	}
-	
+
 	public ScopeInfo() {
 	}
 

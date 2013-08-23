@@ -21,7 +21,8 @@ import java.lang.reflect.TypeVariable;
 import java.lang.reflect.WildcardType;
 import java.util.Collection;
 
-import br.com.caelum.vraptor4.ioc.ApplicationScoped;
+import javax.enterprise.context.ApplicationScoped;
+
 import br.com.caelum.vraptor4.util.StringUtils;
 
 /**

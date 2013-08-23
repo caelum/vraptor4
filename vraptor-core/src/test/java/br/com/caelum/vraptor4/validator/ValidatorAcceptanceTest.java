@@ -34,9 +34,6 @@ import br.com.caelum.vraptor4.proxy.JavassistProxifier;
 import br.com.caelum.vraptor4.proxy.ObjenesisInstanceCreator;
 import br.com.caelum.vraptor4.proxy.Proxifier;
 import br.com.caelum.vraptor4.util.EmptyBundle;
-import br.com.caelum.vraptor4.validator.DefaultValidator;
-import br.com.caelum.vraptor4.validator.Outjector;
-import br.com.caelum.vraptor4.validator.Validations;
 import br.com.caelum.vraptor4.view.ValidationViewsFactory;
 
 @RunWith(MockitoJUnitRunner.class)

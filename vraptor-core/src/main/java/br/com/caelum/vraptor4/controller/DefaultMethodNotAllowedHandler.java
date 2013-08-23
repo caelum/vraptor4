@@ -20,11 +20,11 @@ package br.com.caelum.vraptor4.controller;
 import java.io.IOException;
 import java.util.Set;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.servlet.http.HttpServletResponse;
 
 import br.com.caelum.vraptor4.InterceptionException;
 import br.com.caelum.vraptor4.core.RequestInfo;
-import br.com.caelum.vraptor4.ioc.ApplicationScoped;
 
 /**
  * Default implementation which sets the header and send an error response.

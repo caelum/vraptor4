@@ -8,18 +8,17 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.Dependent;
 import javax.enterprise.context.RequestScoped;
 
-import br.com.caelum.vraptor4.ioc.ApplicationScoped;
-import br.com.caelum.vraptor4.ioc.PrototypeScoped;
 import br.com.caelum.vraptor4.ioc.SessionScoped;
 
 /**
  * This class should be used for bean registration at startup time
- * 
+ *
  * @author Alberto Souza
- * 
+ *
  */
 // TODO create unit tests
 @SuppressWarnings({ "unchecked", "rawtypes" })
@@ -31,17 +30,15 @@ public class ScopesUtil {
 			RequestScoped.class);
 
 	private final List vraptorScopes = Arrays.asList(ApplicationScoped.class,
-			SessionScoped.class, br.com.caelum.vraptor4.ioc.RequestScoped.class,
-			PrototypeScoped.class);
+			SessionScoped.class, RequestScoped.class);
 
-	private final Map<Class<? extends Annotation>, Class<? extends Annotation>> cdiToVraptorScopes = 
+	private final Map<Class<? extends Annotation>, Class<? extends Annotation>> cdiToVraptorScopes =
 			new HashMap<Class<? extends Annotation>, Class<? extends Annotation>>();
-	
+
 	{
 		cdiToVraptorScopes.put(javax.enterprise.context.ApplicationScoped.class,ApplicationScoped.class);
 		cdiToVraptorScopes.put(javax.enterprise.context.SessionScoped.class,SessionScoped.class);
-		cdiToVraptorScopes.put(RequestScoped.class,br.com.caelum.vraptor4.ioc.RequestScoped.class);
-		cdiToVraptorScopes.put(javax.enterprise.context.Dependent.class,PrototypeScoped.class);
+		cdiToVraptorScopes.put(RequestScoped.class, RequestScoped.class);
 	}
 
 	private HashSet<Class<? extends Annotation>> findAnnotations(final Class<?> componentType,
@@ -73,7 +70,7 @@ public class ScopesUtil {
 		iterator = vraptorScopes(clazz).iterator();
 		if(iterator.hasNext()){
 			Class<? extends Annotation> vraptorScope = (Class<? extends Annotation>) iterator.next();
-			scopedInfo.setScope(vraptorScope);			
+			scopedInfo.setScope(vraptorScope);
 		}
 		return scopedInfo;
 	}

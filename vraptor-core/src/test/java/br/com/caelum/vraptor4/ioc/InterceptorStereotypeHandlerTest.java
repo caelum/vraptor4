@@ -30,7 +30,6 @@ import br.com.caelum.vraptor4.controller.DefaultBeanClass;
 import br.com.caelum.vraptor4.core.InterceptorStack;
 import br.com.caelum.vraptor4.interceptor.Interceptor;
 import br.com.caelum.vraptor4.interceptor.InterceptorRegistry;
-import br.com.caelum.vraptor4.ioc.InterceptorStereotypeHandler;
 
 public class InterceptorStereotypeHandlerTest {
 

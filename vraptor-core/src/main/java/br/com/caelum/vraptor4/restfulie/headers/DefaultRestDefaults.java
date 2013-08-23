@@ -17,7 +17,8 @@ package br.com.caelum.vraptor4.restfulie.headers;
 
 import java.util.Calendar;
 
-import br.com.caelum.vraptor4.ioc.ApplicationScoped;
+import javax.enterprise.context.ApplicationScoped;
+
 import br.com.caelum.vraptor4.restfulie.hypermedia.HypermediaResource;
 
 /**

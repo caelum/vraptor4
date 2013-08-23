@@ -7,11 +7,6 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 
-import br.com.caelum.vraptor4.interceptor.DefaultInterceptorRegistry;
-import br.com.caelum.vraptor4.interceptor.ExceptionHandlerInterceptor;
-import br.com.caelum.vraptor4.interceptor.ExecuteMethodInterceptor;
-import br.com.caelum.vraptor4.interceptor.Interceptor;
-
 public class DefaultInterceptorRegistryTest {
 	
 	@Test

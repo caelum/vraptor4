@@ -4,8 +4,6 @@ import static org.junit.Assert.assertFalse;
 
 import org.junit.Test;
 
-import br.com.caelum.vraptor4.interceptor.multipart.NullMultipartInterceptor;
-
 public class NullMultipartInterceptorTest {
 
 	@Test

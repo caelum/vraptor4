@@ -11,8 +11,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor4.converter.ConversionError;
-import br.com.caelum.vraptor4.interceptor.multipart.UploadedFile;
-import br.com.caelum.vraptor4.interceptor.multipart.UploadedFileConverter;
 
 public class UploadedFileConverterTest {
 	

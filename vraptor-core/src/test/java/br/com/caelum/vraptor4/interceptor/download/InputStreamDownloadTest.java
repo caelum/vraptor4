@@ -17,8 +17,6 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import br.com.caelum.vraptor4.interceptor.download.InputStreamDownload;
-
 public class InputStreamDownloadTest {
 
 	private InputStream inputStream;

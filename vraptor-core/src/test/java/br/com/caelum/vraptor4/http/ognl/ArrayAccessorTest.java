@@ -37,8 +37,6 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import br.com.caelum.vraptor4.http.ognl.ArrayAccessor;
-import br.com.caelum.vraptor4.http.ognl.EmptyElementsRemoval;
 import br.com.caelum.vraptor4.proxy.JavassistProxifier;
 import br.com.caelum.vraptor4.proxy.Proxifier;
 import br.com.caelum.vraptor4.proxy.ReflectionInstanceCreator;

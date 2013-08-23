@@ -6,11 +6,11 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import com.google.common.base.Function;
-import com.google.common.collect.Collections2;
-
 import br.com.caelum.vraptor4.controller.ControllerInstance;
 import br.com.caelum.vraptor4.controller.ControllerMethod;
+
+import com.google.common.base.Function;
+import com.google.common.collect.Collections2;
 
 /**
  * Verify if certain annotations are presents in class or method.

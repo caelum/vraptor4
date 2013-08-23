@@ -1,13 +1,12 @@
 package br.com.caelum.vraptor4.ioc.cdi;
 
 import javax.annotation.Priority;
+import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
 import javax.enterprise.inject.Alternative;
 import javax.enterprise.inject.Produces;
 import javax.interceptor.Interceptor;
 import javax.servlet.ServletContext;
-
-import br.com.caelum.vraptor4.ioc.ApplicationScoped;
 
 @ApplicationScoped
 @Alternative

@@ -18,7 +18,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor4.VRaptorException;
-import br.com.caelum.vraptor4.http.WebXmlEncodingHandler;
 
 public class WebXmlEncodingHandlerTest {
     

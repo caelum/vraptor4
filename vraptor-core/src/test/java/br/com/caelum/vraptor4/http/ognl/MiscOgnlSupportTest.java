@@ -44,9 +44,6 @@ import br.com.caelum.vraptor4.core.Converters;
 import br.com.caelum.vraptor4.core.JstlLocalization;
 import br.com.caelum.vraptor4.core.RequestInfo;
 import br.com.caelum.vraptor4.http.MutableRequest;
-import br.com.caelum.vraptor4.http.ognl.EmptyElementsRemoval;
-import br.com.caelum.vraptor4.http.ognl.GenericNullHandler;
-import br.com.caelum.vraptor4.http.ognl.VRaptorConvertersAdapter;
 import br.com.caelum.vraptor4.proxy.JavassistProxifier;
 import br.com.caelum.vraptor4.proxy.ReflectionInstanceCreator;
 

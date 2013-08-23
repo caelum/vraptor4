@@ -51,7 +51,6 @@ import br.com.caelum.vraptor4.core.MethodInfo;
 import br.com.caelum.vraptor4.http.MutableRequest;
 import br.com.caelum.vraptor4.http.ParameterNameProvider;
 import br.com.caelum.vraptor4.http.ParametersProvider;
-import br.com.caelum.vraptor4.interceptor.ParametersInstantiatorInterceptor;
 import br.com.caelum.vraptor4.validator.Message;
 import br.com.caelum.vraptor4.validator.ValidationMessage;
 import br.com.caelum.vraptor4.view.FlashScope;

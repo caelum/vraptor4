@@ -10,10 +10,11 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.regex.Pattern;
 
+import javax.enterprise.context.RequestScoped;
+
 import br.com.caelum.vraptor4.Convert;
 import br.com.caelum.vraptor4.Converter;
 import br.com.caelum.vraptor4.core.Localization;
-import br.com.caelum.vraptor4.ioc.RequestScoped;
 
 @Convert(Time.class)
 @RequestScoped

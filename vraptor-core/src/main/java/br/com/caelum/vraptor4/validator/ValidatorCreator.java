@@ -16,6 +16,7 @@
 package br.com.caelum.vraptor4.validator;
 
 import javax.annotation.PostConstruct;
+import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Alternative;
 import javax.enterprise.inject.Default;
 import javax.enterprise.inject.Produces;
@@ -25,8 +26,6 @@ import javax.validation.ValidatorFactory;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import br.com.caelum.vraptor4.ioc.ApplicationScoped;
 
 /**
  * Bring up Bean Validation factory. This class builds the {@link Validator} once when application

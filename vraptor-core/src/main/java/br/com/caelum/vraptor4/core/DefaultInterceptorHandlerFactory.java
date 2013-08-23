@@ -17,6 +17,7 @@ package br.com.caelum.vraptor4.core;
 
 import java.util.concurrent.ConcurrentMap;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Default;
 import javax.inject.Inject;
 
@@ -24,7 +25,6 @@ import br.com.caelum.vraptor4.Intercepts;
 import br.com.caelum.vraptor4.interceptor.AspectStyleInterceptorHandler;
 import br.com.caelum.vraptor4.interceptor.Interceptor;
 import br.com.caelum.vraptor4.interceptor.StepInvoker;
-import br.com.caelum.vraptor4.ioc.ApplicationScoped;
 import br.com.caelum.vraptor4.ioc.Container;
 
 import com.google.common.collect.MapMaker;

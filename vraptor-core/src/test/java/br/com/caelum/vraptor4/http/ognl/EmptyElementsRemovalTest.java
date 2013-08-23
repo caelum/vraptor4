@@ -27,8 +27,6 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
-import br.com.caelum.vraptor4.http.ognl.EmptyElementsRemoval;
-
 public class EmptyElementsRemovalTest {
 	
 	private EmptyElementsRemoval removal;

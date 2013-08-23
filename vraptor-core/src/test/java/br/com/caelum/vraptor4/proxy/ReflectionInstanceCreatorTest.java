@@ -30,12 +30,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import br.com.caelum.vraptor4.proxy.JavassistProxifier;
-import br.com.caelum.vraptor4.proxy.MethodInvocation;
-import br.com.caelum.vraptor4.proxy.Proxifier;
-import br.com.caelum.vraptor4.proxy.ReflectionInstanceCreator;
-import br.com.caelum.vraptor4.proxy.SuperMethod;
-
 /**
  * @author Fabio Kung
  */

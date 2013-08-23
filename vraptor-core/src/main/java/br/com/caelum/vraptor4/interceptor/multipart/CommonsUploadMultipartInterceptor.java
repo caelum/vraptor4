@@ -22,6 +22,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.Collection;
 import java.util.List;
 
+import javax.enterprise.context.RequestScoped;
 import javax.enterprise.inject.Default;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
@@ -43,7 +44,6 @@ import br.com.caelum.vraptor4.core.InterceptorStack;
 import br.com.caelum.vraptor4.http.InvalidParameterException;
 import br.com.caelum.vraptor4.http.MutableRequest;
 import br.com.caelum.vraptor4.interceptor.ControllerLookupInterceptor;
-import br.com.caelum.vraptor4.ioc.RequestScoped;
 import br.com.caelum.vraptor4.validator.I18nMessage;
 import br.com.caelum.vraptor4.validator.Validations;
 

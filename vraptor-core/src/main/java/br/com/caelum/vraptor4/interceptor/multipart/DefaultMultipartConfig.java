@@ -20,10 +20,10 @@ package br.com.caelum.vraptor4.interceptor.multipart;
 import java.io.File;
 import java.io.IOException;
 
+import javax.enterprise.context.ApplicationScoped;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import br.com.caelum.vraptor4.ioc.ApplicationScoped;
 
 /**
  * Default implementation for {@link MultipartConfig}.

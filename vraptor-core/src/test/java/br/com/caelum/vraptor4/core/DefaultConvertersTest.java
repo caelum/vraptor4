@@ -55,7 +55,6 @@ import br.com.caelum.vraptor4.converter.PrimitiveIntConverter;
 import br.com.caelum.vraptor4.converter.PrimitiveLongConverter;
 import br.com.caelum.vraptor4.converter.PrimitiveShortConverter;
 import br.com.caelum.vraptor4.converter.ShortConverter;
-import br.com.caelum.vraptor4.core.DefaultConverters;
 import br.com.caelum.vraptor4.ioc.Container;
 
 public class DefaultConvertersTest {

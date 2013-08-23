@@ -27,9 +27,6 @@ import java.util.ResourceBundle;
 import org.junit.Before;
 import org.junit.Test;
 
-import br.com.caelum.vraptor4.converter.ConversionError;
-import br.com.caelum.vraptor4.converter.LongConverter;
-
 public class LongConverterTest {
     
     private LongConverter converter;

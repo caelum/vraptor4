@@ -17,12 +17,12 @@
 
 package br.com.caelum.vraptor4.restfulie.serialization;
 
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
 
 import br.com.caelum.vraptor4.config.Configuration;
 import br.com.caelum.vraptor4.interceptor.TypeNameExtractor;
-import br.com.caelum.vraptor4.ioc.RequestScoped;
 import br.com.caelum.vraptor4.restfulie.Restfulie;
 import br.com.caelum.vraptor4.serialization.ProxyInitializer;
 import br.com.caelum.vraptor4.serialization.xstream.XStreamBuilder;

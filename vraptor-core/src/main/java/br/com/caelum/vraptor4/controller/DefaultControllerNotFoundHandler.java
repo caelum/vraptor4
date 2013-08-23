@@ -19,12 +19,12 @@ package br.com.caelum.vraptor4.controller;
 
 import java.io.IOException;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 
 import br.com.caelum.vraptor4.InterceptionException;
 import br.com.caelum.vraptor4.core.RequestInfo;
-import br.com.caelum.vraptor4.ioc.ApplicationScoped;
 
 /**
  * Default 404 component. It defers the request back to container

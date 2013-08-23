@@ -18,10 +18,6 @@ import org.junit.Test;
 
 import br.com.caelum.vraptor4.interceptor.DefaultTypeNameExtractor;
 import br.com.caelum.vraptor4.ioc.Container;
-import br.com.caelum.vraptor4.serialization.I18nMessageSerialization;
-import br.com.caelum.vraptor4.serialization.JSONSerialization;
-import br.com.caelum.vraptor4.serialization.NullProxyInitializer;
-import br.com.caelum.vraptor4.serialization.XMLSerialization;
 import br.com.caelum.vraptor4.serialization.xstream.XStreamBuilder;
 import br.com.caelum.vraptor4.serialization.xstream.XStreamBuilderImpl;
 import br.com.caelum.vraptor4.serialization.xstream.XStreamJSONSerialization;

@@ -28,6 +28,7 @@ import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor4.Result;
 import br.com.caelum.vraptor4.interceptor.ExceptionHandlerInterceptor;
+import br.com.caelum.vraptor4.ioc.RequestScoped;
 import br.com.caelum.vraptor4.proxy.Proxifier;
 
 /**
@@ -42,6 +43,7 @@ import br.com.caelum.vraptor4.proxy.Proxifier;
  * @see ExceptionHandlerInterceptor
  * @since 3.2
  */
+@RequestScoped
 public class DefaultExceptionMapper
     implements ExceptionMapper {
 
@@ -49,7 +51,11 @@ public class DefaultExceptionMapper
 
     private final Map<Class<? extends Exception>, ExceptionRecorder<Result>> exceptions;
     private final Proxifier proxifier;
-
+    
+    @Deprecated
+	public DefaultExceptionMapper() {
+    	this(null);
+	}
     @Inject
     public DefaultExceptionMapper(Proxifier proxifier) {
         this.proxifier = proxifier;

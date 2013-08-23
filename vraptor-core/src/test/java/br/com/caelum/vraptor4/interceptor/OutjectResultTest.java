@@ -31,11 +31,11 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor4.Result;
+import br.com.caelum.vraptor4.controller.ControllerMethod;
 import br.com.caelum.vraptor4.core.InterceptorStack;
 import br.com.caelum.vraptor4.core.MethodInfo;
 import br.com.caelum.vraptor4.interceptor.OutjectResult;
 import br.com.caelum.vraptor4.interceptor.TypeNameExtractor;
-import br.com.caelum.vraptor4.restfulie.controller.ControllerMethod;
 
 public class OutjectResultTest {
 

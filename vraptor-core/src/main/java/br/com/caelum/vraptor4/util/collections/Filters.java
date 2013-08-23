@@ -23,10 +23,10 @@ import static java.util.Arrays.asList;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
+import br.com.caelum.vraptor4.controller.ControllerMethod;
+import br.com.caelum.vraptor4.controller.HttpMethod;
 import br.com.caelum.vraptor4.http.route.Route;
 import br.com.caelum.vraptor4.interceptor.Interceptor;
-import br.com.caelum.vraptor4.restfulie.controller.ControllerMethod;
-import br.com.caelum.vraptor4.restfulie.controller.HttpMethod;
 
 import com.google.common.base.Predicate;
 

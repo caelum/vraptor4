@@ -21,9 +21,9 @@ import java.lang.reflect.Method;
 import java.util.EnumSet;
 import java.util.List;
 
+import br.com.caelum.vraptor4.controller.ControllerMethod;
+import br.com.caelum.vraptor4.controller.HttpMethod;
 import br.com.caelum.vraptor4.http.MutableRequest;
-import br.com.caelum.vraptor4.restfulie.controller.ControllerMethod;
-import br.com.caelum.vraptor4.restfulie.controller.HttpMethod;
 
 /**
  * Handles different rules in order to translate urls into Controller methods.

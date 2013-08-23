@@ -39,11 +39,11 @@ import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor4.InterceptionException;
 import br.com.caelum.vraptor4.Validator;
+import br.com.caelum.vraptor4.controller.ControllerMethod;
+import br.com.caelum.vraptor4.controller.DefaultControllerMethod;
 import br.com.caelum.vraptor4.core.InterceptorStack;
 import br.com.caelum.vraptor4.core.MethodInfo;
 import br.com.caelum.vraptor4.interceptor.ExecuteMethodInterceptor;
-import br.com.caelum.vraptor4.restfulie.controller.ControllerMethod;
-import br.com.caelum.vraptor4.restfulie.controller.DefaultControllerMethod;
 import br.com.caelum.vraptor4.validator.Message;
 import br.com.caelum.vraptor4.validator.ValidationException;
 

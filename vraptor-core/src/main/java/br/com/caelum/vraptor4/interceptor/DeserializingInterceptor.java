@@ -28,12 +28,12 @@ import org.slf4j.LoggerFactory;
 import br.com.caelum.vraptor4.Consumes;
 import br.com.caelum.vraptor4.InterceptionException;
 import br.com.caelum.vraptor4.Intercepts;
+import br.com.caelum.vraptor4.controller.ControllerMethod;
 import br.com.caelum.vraptor4.core.InterceptorStack;
 import br.com.caelum.vraptor4.core.MethodInfo;
 import br.com.caelum.vraptor4.deserialization.Deserializer;
 import br.com.caelum.vraptor4.deserialization.Deserializers;
 import br.com.caelum.vraptor4.ioc.Container;
-import br.com.caelum.vraptor4.restfulie.controller.ControllerMethod;
 import br.com.caelum.vraptor4.view.Status;
 
 /**

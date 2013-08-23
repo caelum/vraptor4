@@ -21,11 +21,11 @@ import java.util.EnumSet;
 
 import javax.inject.Inject;
 
+import br.com.caelum.vraptor4.controller.HttpMethod;
 import br.com.caelum.vraptor4.http.route.Router;
 import br.com.caelum.vraptor4.ioc.ApplicationScoped;
 import br.com.caelum.vraptor4.proxy.MethodInvocation;
 import br.com.caelum.vraptor4.proxy.Proxifier;
-import br.com.caelum.vraptor4.restfulie.controller.HttpMethod;
 
 /**
  * Default implementation of route info extractor.

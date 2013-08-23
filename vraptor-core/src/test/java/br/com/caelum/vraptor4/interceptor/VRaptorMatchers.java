@@ -23,8 +23,8 @@ import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 
-import br.com.caelum.vraptor4.restfulie.controller.BeanClass;
-import br.com.caelum.vraptor4.restfulie.controller.ControllerMethod;
+import br.com.caelum.vraptor4.controller.BeanClass;
+import br.com.caelum.vraptor4.controller.ControllerMethod;
 import br.com.caelum.vraptor4.validator.ValidationMessage;
 
 /**

@@ -32,6 +32,8 @@ import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor4.Converter;
 import br.com.caelum.vraptor4.Result;
+import br.com.caelum.vraptor4.controller.ControllerMethod;
+import br.com.caelum.vraptor4.controller.DefaultControllerMethod;
 import br.com.caelum.vraptor4.converter.LongConverter;
 import br.com.caelum.vraptor4.converter.PrimitiveLongConverter;
 import br.com.caelum.vraptor4.converter.StringConverter;
@@ -41,8 +43,6 @@ import br.com.caelum.vraptor4.http.InvalidParameterException;
 import br.com.caelum.vraptor4.http.ParameterNameProvider;
 import br.com.caelum.vraptor4.http.ParametersProvider;
 import br.com.caelum.vraptor4.ioc.Container;
-import br.com.caelum.vraptor4.restfulie.controller.ControllerMethod;
-import br.com.caelum.vraptor4.restfulie.controller.DefaultControllerMethod;
 import br.com.caelum.vraptor4.util.EmptyBundle;
 import br.com.caelum.vraptor4.validator.DefaultValidationException;
 import br.com.caelum.vraptor4.validator.Message;

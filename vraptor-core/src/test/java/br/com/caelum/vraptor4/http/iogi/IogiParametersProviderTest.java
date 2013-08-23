@@ -52,12 +52,12 @@ import org.mockito.Mock;
 import br.com.caelum.iogi.parameters.Parameter;
 import br.com.caelum.iogi.parameters.Parameters;
 import br.com.caelum.iogi.reflection.Target;
+import br.com.caelum.vraptor4.controller.ControllerMethod;
+import br.com.caelum.vraptor4.controller.DefaultControllerMethod;
 import br.com.caelum.vraptor4.core.Localization;
 import br.com.caelum.vraptor4.core.SafeResourceBundle;
 import br.com.caelum.vraptor4.http.ParametersProvider;
 import br.com.caelum.vraptor4.http.ParametersProviderTest;
-import br.com.caelum.vraptor4.restfulie.controller.ControllerMethod;
-import br.com.caelum.vraptor4.restfulie.controller.DefaultControllerMethod;
 import br.com.caelum.vraptor4.util.EmptyBundle;
 
 public class IogiParametersProviderTest extends ParametersProviderTest {

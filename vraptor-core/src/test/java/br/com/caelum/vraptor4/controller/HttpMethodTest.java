@@ -10,7 +10,6 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import br.com.caelum.vraptor4.restfulie.controller.HttpMethod;
 
 public class HttpMethodTest {
 

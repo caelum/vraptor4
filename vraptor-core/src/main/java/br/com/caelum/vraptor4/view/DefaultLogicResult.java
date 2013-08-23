@@ -29,6 +29,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor4.Get;
+import br.com.caelum.vraptor4.controller.ControllerMethod;
+import br.com.caelum.vraptor4.controller.DefaultControllerMethod;
+import br.com.caelum.vraptor4.controller.HttpMethod;
 import br.com.caelum.vraptor4.core.MethodInfo;
 import br.com.caelum.vraptor4.http.MutableRequest;
 import br.com.caelum.vraptor4.http.route.Router;
@@ -38,9 +41,6 @@ import br.com.caelum.vraptor4.proxy.MethodInvocation;
 import br.com.caelum.vraptor4.proxy.Proxifier;
 import br.com.caelum.vraptor4.proxy.ProxyInvocationException;
 import br.com.caelum.vraptor4.proxy.SuperMethod;
-import br.com.caelum.vraptor4.restfulie.controller.ControllerMethod;
-import br.com.caelum.vraptor4.restfulie.controller.DefaultControllerMethod;
-import br.com.caelum.vraptor4.restfulie.controller.HttpMethod;
 import br.com.caelum.vraptor4.util.Stringnifier;
 
 /**

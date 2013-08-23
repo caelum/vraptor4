@@ -56,6 +56,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import br.com.caelum.vraptor4.Converter;
+import br.com.caelum.vraptor4.controller.ControllerMethod;
 import br.com.caelum.vraptor4.converter.jodatime.LocalDateConverter;
 import br.com.caelum.vraptor4.converter.jodatime.LocalTimeConverter;
 import br.com.caelum.vraptor4.core.BaseComponents;
@@ -77,7 +78,6 @@ import br.com.caelum.vraptor4.ioc.fixture.CustomComponentInTheClasspath;
 import br.com.caelum.vraptor4.ioc.fixture.CustomComponentWithLifecycleInTheClasspath;
 import br.com.caelum.vraptor4.ioc.fixture.DependentOnSomethingFromComponentFactory;
 import br.com.caelum.vraptor4.ioc.fixture.InterceptorInTheClasspath;
-import br.com.caelum.vraptor4.restfulie.controller.ControllerMethod;
 
 /**
  * Acceptance test that checks if the container is capable of giving all

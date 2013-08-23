@@ -25,6 +25,8 @@ import java.util.EnumSet;
 import java.util.List;
 
 import br.com.caelum.vraptor4.InterceptionException;
+import br.com.caelum.vraptor4.controller.ControllerMethod;
+import br.com.caelum.vraptor4.controller.HttpMethod;
 import br.com.caelum.vraptor4.core.InterceptorStack;
 import br.com.caelum.vraptor4.core.RequestInfo;
 import br.com.caelum.vraptor4.core.Routes;

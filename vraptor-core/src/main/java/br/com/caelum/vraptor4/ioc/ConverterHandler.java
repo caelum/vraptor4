@@ -24,10 +24,10 @@ import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor4.Converter;
 import br.com.caelum.vraptor4.VRaptorException;
+import br.com.caelum.vraptor4.controller.BeanClass;
 import br.com.caelum.vraptor4.core.BaseComponents;
 import br.com.caelum.vraptor4.core.ConvertQualifier;
 import br.com.caelum.vraptor4.core.Converters;
-import br.com.caelum.vraptor4.restfulie.controller.BeanClass;
 
 @ApplicationScoped
 public class ConverterHandler{

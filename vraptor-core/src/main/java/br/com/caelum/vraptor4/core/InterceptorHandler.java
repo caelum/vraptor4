@@ -18,7 +18,7 @@
 package br.com.caelum.vraptor4.core;
 
 import br.com.caelum.vraptor4.InterceptionException;
-import br.com.caelum.vraptor4.restfulie.controller.ControllerMethod;
+import br.com.caelum.vraptor4.controller.ControllerMethod;
 
 /**
  * An interceptor handler is a wrapper to either an interceptor instance or a

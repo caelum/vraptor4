@@ -6,10 +6,10 @@ import static org.mockito.Mockito.verify;
 import org.junit.Before;
 import org.junit.Test;
 
+import br.com.caelum.vraptor4.controller.DefaultBeanClass;
 import br.com.caelum.vraptor4.deserialization.Deserializer;
 import br.com.caelum.vraptor4.deserialization.Deserializers;
 import br.com.caelum.vraptor4.deserialization.DeserializesHandler;
-import br.com.caelum.vraptor4.restfulie.controller.DefaultBeanClass;
 
 public class DeserializesHandlerTest {
 

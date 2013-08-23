@@ -26,6 +26,7 @@ import javax.servlet.ServletException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import br.com.caelum.vraptor4.controller.DefaultControllerMethod;
 import br.com.caelum.vraptor4.core.MethodInfo;
 import br.com.caelum.vraptor4.http.MutableRequest;
 import br.com.caelum.vraptor4.http.MutableResponse;
@@ -33,7 +34,6 @@ import br.com.caelum.vraptor4.proxy.MethodInvocation;
 import br.com.caelum.vraptor4.proxy.Proxifier;
 import br.com.caelum.vraptor4.proxy.ProxyInvocationException;
 import br.com.caelum.vraptor4.proxy.SuperMethod;
-import br.com.caelum.vraptor4.restfulie.controller.DefaultControllerMethod;
 
 /**
  * Default page result implementation.

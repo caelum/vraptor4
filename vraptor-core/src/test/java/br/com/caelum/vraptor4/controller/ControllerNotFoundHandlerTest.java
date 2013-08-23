@@ -34,8 +34,6 @@ import br.com.caelum.vraptor4.InterceptionException;
 import br.com.caelum.vraptor4.core.RequestInfo;
 import br.com.caelum.vraptor4.http.MutableRequest;
 import br.com.caelum.vraptor4.http.MutableResponse;
-import br.com.caelum.vraptor4.restfulie.controller.ControllerNotFoundHandler;
-import br.com.caelum.vraptor4.restfulie.controller.DefaultControllerNotFoundHandler;
 
 public class ControllerNotFoundHandlerTest {
 

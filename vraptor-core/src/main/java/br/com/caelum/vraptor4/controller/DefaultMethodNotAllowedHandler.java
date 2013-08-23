@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package br.com.caelum.vraptor4.restfulie.controller;
+package br.com.caelum.vraptor4.controller;
 
 import java.io.IOException;
 import java.util.Set;

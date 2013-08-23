@@ -32,6 +32,10 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor4.InterceptionException;
+import br.com.caelum.vraptor4.controller.ControllerMethod;
+import br.com.caelum.vraptor4.controller.ControllerNotFoundHandler;
+import br.com.caelum.vraptor4.controller.HttpMethod;
+import br.com.caelum.vraptor4.controller.MethodNotAllowedHandler;
 import br.com.caelum.vraptor4.core.InterceptorStack;
 import br.com.caelum.vraptor4.core.MethodInfo;
 import br.com.caelum.vraptor4.core.RequestInfo;
@@ -41,10 +45,6 @@ import br.com.caelum.vraptor4.http.UrlToControllerTranslator;
 import br.com.caelum.vraptor4.http.route.MethodNotAllowedException;
 import br.com.caelum.vraptor4.http.route.ControllerNotFoundException;
 import br.com.caelum.vraptor4.interceptor.ControllerLookupInterceptor;
-import br.com.caelum.vraptor4.restfulie.controller.ControllerMethod;
-import br.com.caelum.vraptor4.restfulie.controller.ControllerNotFoundHandler;
-import br.com.caelum.vraptor4.restfulie.controller.HttpMethod;
-import br.com.caelum.vraptor4.restfulie.controller.MethodNotAllowedHandler;
 
 public class ControllerLookupInterceptorTest {
 

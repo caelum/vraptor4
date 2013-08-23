@@ -7,10 +7,10 @@ import br.com.caelum.vraptor4.AfterCall;
 import br.com.caelum.vraptor4.BeforeCall;
 import br.com.caelum.vraptor4.InterceptionException;
 import br.com.caelum.vraptor4.VRaptorException;
+import br.com.caelum.vraptor4.controller.ControllerMethod;
 import br.com.caelum.vraptor4.core.InterceptorHandler;
 import br.com.caelum.vraptor4.core.InterceptorStack;
 import br.com.caelum.vraptor4.ioc.Container;
-import br.com.caelum.vraptor4.restfulie.controller.ControllerMethod;
 
 public class AspectStyleInterceptorHandler implements InterceptorHandler {
 

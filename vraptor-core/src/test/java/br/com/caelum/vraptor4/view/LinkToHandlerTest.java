@@ -17,8 +17,8 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import br.com.caelum.vraptor4.controller.DefaultBeanClass;
 import br.com.caelum.vraptor4.http.route.Router;
-import br.com.caelum.vraptor4.restfulie.controller.DefaultBeanClass;
 import br.com.caelum.vraptor4.view.LinkToHandler;
 
 public class LinkToHandlerTest {

@@ -22,6 +22,8 @@ import org.mockito.MockitoAnnotations;
 import br.com.caelum.vraptor4.InterceptionException;
 import br.com.caelum.vraptor4.Intercepts;
 import br.com.caelum.vraptor4.VRaptorException;
+import br.com.caelum.vraptor4.controller.ControllerInstance;
+import br.com.caelum.vraptor4.controller.ControllerMethod;
 import br.com.caelum.vraptor4.core.InterceptorStack;
 import br.com.caelum.vraptor4.interceptor.example.AcceptsInterceptor;
 import br.com.caelum.vraptor4.interceptor.example.AcceptsInterceptorWithStackAsParameter;
@@ -36,8 +38,6 @@ import br.com.caelum.vraptor4.interceptor.example.MethodLevelAcceptsController;
 import br.com.caelum.vraptor4.interceptor.example.NonBooleanAcceptsInterceptor;
 import br.com.caelum.vraptor4.interceptor.example.VoidAcceptsInterceptor;
 import br.com.caelum.vraptor4.interceptor.example.WithoutAroundInterceptor;
-import br.com.caelum.vraptor4.restfulie.controller.ControllerInstance;
-import br.com.caelum.vraptor4.restfulie.controller.ControllerMethod;
 
 public class AspectStyleInterceptorHandlerTest {
 

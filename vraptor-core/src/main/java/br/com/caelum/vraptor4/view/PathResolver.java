@@ -17,7 +17,7 @@
 
 package br.com.caelum.vraptor4.view;
 
-import br.com.caelum.vraptor4.restfulie.controller.ControllerMethod;
+import br.com.caelum.vraptor4.controller.ControllerMethod;
 
 /**
  * Decides the url to go to after a request was executed.

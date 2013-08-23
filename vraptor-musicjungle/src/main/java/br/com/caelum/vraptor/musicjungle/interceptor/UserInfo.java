@@ -18,6 +18,8 @@ package br.com.caelum.vraptor.musicjungle.interceptor;
 
 import java.io.Serializable;
 
+import javax.enterprise.context.SessionScoped;
+
 import br.com.caelum.vraptor.musicjungle.model.User;
 
 /**

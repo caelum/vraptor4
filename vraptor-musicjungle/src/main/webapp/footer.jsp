@@ -6,8 +6,8 @@
      <div class="footer v-footer">
               <p>
               	<a href="http://www.apache.org/licenses/LICENSE-2.0">
-              		LicenÃ§a Apache 
-              	</a> | VRaptor Â©2009 Caelum - Ensino e InovaÃ§Ã£o
+              		Licença Apache 
+              	</a> | VRaptor @2009 Caelum - Ensino e Inovação
              </p>
      </div>
       

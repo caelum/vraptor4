@@ -27,9 +27,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import br.com.caelum.vraptor4.converter.ConversionError;
-import br.com.caelum.vraptor4.converter.PrimitiveBooleanConverter;
-
 public class PrimitiveBooleanConverterTest {
 
 	private PrimitiveBooleanConverter converter;

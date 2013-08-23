@@ -32,10 +32,6 @@ import java.util.ResourceBundle;
 import org.junit.Before;
 import org.junit.Test;
 
-import br.com.caelum.vraptor4.validator.Message;
-import br.com.caelum.vraptor4.validator.ValidationMessage;
-import br.com.caelum.vraptor4.validator.Validations;
-
 public class ValidationsTest {
 
     public static class Client {

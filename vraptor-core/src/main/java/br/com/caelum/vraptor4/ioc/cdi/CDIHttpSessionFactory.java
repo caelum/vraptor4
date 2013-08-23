@@ -1,13 +1,12 @@
 package br.com.caelum.vraptor4.ioc.cdi;
 
 import javax.annotation.Priority;
+import javax.enterprise.context.RequestScoped;
 import javax.enterprise.inject.Alternative;
 import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 import javax.interceptor.Interceptor;
 import javax.servlet.http.HttpSession;
-
-import br.com.caelum.vraptor4.ioc.RequestScoped;
 
 @RequestScoped
 @Alternative

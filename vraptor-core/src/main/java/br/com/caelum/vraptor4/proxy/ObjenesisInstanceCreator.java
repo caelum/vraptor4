@@ -15,9 +15,9 @@
  */
 package br.com.caelum.vraptor4.proxy;
 
-import org.objenesis.ObjenesisStd;
+import javax.enterprise.context.ApplicationScoped;
 
-import br.com.caelum.vraptor4.ioc.ApplicationScoped;
+import org.objenesis.ObjenesisStd;
 
 /**
  * Objenesis implementation for {@link InstanceCreator}.

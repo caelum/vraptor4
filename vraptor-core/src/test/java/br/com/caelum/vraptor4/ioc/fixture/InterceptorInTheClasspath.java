@@ -16,12 +16,13 @@
  */
 package br.com.caelum.vraptor4.ioc.fixture;
 
+import javax.enterprise.context.RequestScoped;
+
 import br.com.caelum.vraptor4.InterceptionException;
 import br.com.caelum.vraptor4.Intercepts;
 import br.com.caelum.vraptor4.controller.ControllerMethod;
 import br.com.caelum.vraptor4.core.InterceptorStack;
 import br.com.caelum.vraptor4.interceptor.Interceptor;
-import br.com.caelum.vraptor4.ioc.RequestScoped;
 
 @Intercepts
 @RequestScoped

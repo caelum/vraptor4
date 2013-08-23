@@ -19,6 +19,7 @@ package br.com.caelum.vraptor4.http.iogi;
 
 import java.util.List;
 
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
@@ -40,7 +41,6 @@ import br.com.caelum.vraptor4.converter.ConversionError;
 import br.com.caelum.vraptor4.core.Converters;
 import br.com.caelum.vraptor4.core.Localization;
 import br.com.caelum.vraptor4.http.InvalidParameterException;
-import br.com.caelum.vraptor4.ioc.RequestScoped;
 import br.com.caelum.vraptor4.validator.Message;
 import br.com.caelum.vraptor4.validator.ValidationMessage;
 import br.com.caelum.vraptor4.validator.annotation.ValidationException;

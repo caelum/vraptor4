@@ -28,9 +28,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import br.com.caelum.vraptor4.converter.BooleanConverter;
-import br.com.caelum.vraptor4.converter.ConversionError;
-
 public class BooleanConverterTest {
 
     private BooleanConverter converter;

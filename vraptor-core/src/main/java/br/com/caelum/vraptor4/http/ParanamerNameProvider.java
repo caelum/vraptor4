@@ -19,10 +19,11 @@ package br.com.caelum.vraptor4.http;
 import java.lang.reflect.AccessibleObject;
 import java.util.Arrays;
 
+import javax.enterprise.context.ApplicationScoped;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import br.com.caelum.vraptor4.ioc.ApplicationScoped;
 import br.com.caelum.vraptor4.util.Stringnifier;
 
 import com.thoughtworks.paranamer.AnnotationParanamer;

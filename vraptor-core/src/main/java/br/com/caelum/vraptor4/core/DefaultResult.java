@@ -22,6 +22,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
@@ -30,7 +31,6 @@ import br.com.caelum.vraptor4.Result;
 import br.com.caelum.vraptor4.View;
 import br.com.caelum.vraptor4.interceptor.TypeNameExtractor;
 import br.com.caelum.vraptor4.ioc.Container;
-import br.com.caelum.vraptor4.ioc.RequestScoped;
 
 /**
  * A basic implementation of a Result

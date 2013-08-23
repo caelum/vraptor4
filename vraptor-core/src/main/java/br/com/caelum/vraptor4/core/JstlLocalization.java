@@ -21,6 +21,7 @@ import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
+import javax.enterprise.context.RequestScoped;
 import javax.enterprise.inject.Default;
 import javax.inject.Inject;
 import javax.servlet.ServletContext;
@@ -30,7 +31,6 @@ import javax.servlet.jsp.jstl.fmt.LocalizationContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import br.com.caelum.vraptor4.ioc.RequestScoped;
 import br.com.caelum.vraptor4.util.EmptyBundle;
 
 import com.google.common.base.Strings;

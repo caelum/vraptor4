@@ -25,9 +25,10 @@ import java.util.HashSet;
 import java.util.ResourceBundle;
 import java.util.Set;
 
+import javax.enterprise.context.ApplicationScoped;
+
 import br.com.caelum.vraptor4.Convert;
 import br.com.caelum.vraptor4.Converter;
-import br.com.caelum.vraptor4.ioc.ApplicationScoped;
 
 /**
  * VRaptor's Boolean converter.

@@ -1,5 +1,9 @@
 package br.com.caelum.vraptor4.interceptor;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.when;
+
 import java.lang.reflect.AnnotatedElement;
 
 import net.vidageek.mirror.dsl.Mirror;
@@ -11,13 +15,6 @@ import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor4.controller.BeanClass;
 import br.com.caelum.vraptor4.controller.ControllerInstance;
-import br.com.caelum.vraptor4.interceptor.AcceptsForPackages;
-import br.com.caelum.vraptor4.interceptor.PackagesAcceptor;
-
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
-import static org.mockito.Mockito.when;
 
 public class PackageAcceptorTest {
 	

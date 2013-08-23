@@ -17,7 +17,7 @@
 
 package br.com.caelum.vraptor4.serialization;
 
-import br.com.caelum.vraptor4.ioc.ApplicationScoped;
+import javax.enterprise.context.ApplicationScoped;
 
 /**
  * ProxyInitializer that does nothing.

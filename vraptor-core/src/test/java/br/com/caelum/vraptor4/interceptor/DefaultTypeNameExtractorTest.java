@@ -14,8 +14,6 @@ import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import br.com.caelum.vraptor4.interceptor.DefaultTypeNameExtractor;
-
 public class DefaultTypeNameExtractorTest {
 
 

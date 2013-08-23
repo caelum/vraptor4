@@ -1,5 +1,13 @@
 package br.com.caelum.vraptor4.ioc.cdi;
 
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.when;
+
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashSet;
@@ -31,15 +39,6 @@ import br.com.caelum.vraptor4.validator.MessageInterpolatorFactory;
 import br.com.caelum.vraptor4.validator.MethodValidatorFactoryCreator;
 import br.com.caelum.vraptor4.validator.ValidatorCreator;
 import br.com.caelum.vraptor4.validator.ValidatorFactoryCreator;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
-
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
-
-import static org.mockito.Mockito.when;
 
 public class CDIBasedContainerTest extends GenericContainerTest {
 

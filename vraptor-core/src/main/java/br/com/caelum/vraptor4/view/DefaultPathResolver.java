@@ -17,11 +17,11 @@
 
 package br.com.caelum.vraptor4.view;
 
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 
 import br.com.caelum.vraptor4.controller.ControllerMethod;
 import br.com.caelum.vraptor4.http.FormatResolver;
-import br.com.caelum.vraptor4.ioc.RequestScoped;
 
 /**
  * The default vraptor3 path resolver uses the type and method name as

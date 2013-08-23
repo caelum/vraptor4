@@ -1,9 +1,7 @@
 package br.com.caelum.vraptor4.view;
 
 import static org.hamcrest.Matchers.is;
-
 import static org.junit.Assert.assertThat;
-
 import static org.mockito.Mockito.when;
 
 import java.lang.reflect.Method;
@@ -19,7 +17,6 @@ import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor4.controller.DefaultBeanClass;
 import br.com.caelum.vraptor4.http.route.Router;
-import br.com.caelum.vraptor4.view.LinkToHandler;
 
 public class LinkToHandlerTest {
     private @Mock ServletContext context;

@@ -22,6 +22,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.Collection;
 import java.util.regex.Pattern;
 
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.servlet.Filter;
 import javax.servlet.ServletException;
@@ -39,7 +40,6 @@ import br.com.caelum.vraptor4.controller.ControllerMethod;
 import br.com.caelum.vraptor4.core.InterceptorStack;
 import br.com.caelum.vraptor4.http.MutableRequest;
 import br.com.caelum.vraptor4.interceptor.ParametersInstantiatorInterceptor;
-import br.com.caelum.vraptor4.ioc.RequestScoped;
 import br.com.caelum.vraptor4.validator.I18nMessage;
 
 import com.google.common.base.Strings;

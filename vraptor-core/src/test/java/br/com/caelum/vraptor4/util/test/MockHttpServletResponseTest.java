@@ -7,8 +7,6 @@ import java.io.IOException;
 import org.junit.Before;
 import org.junit.Test;
 
-import br.com.caelum.vraptor4.util.test.MockHttpServletResponse;
-
 public class MockHttpServletResponseTest {
 
 

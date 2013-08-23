@@ -44,6 +44,9 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.Dependent;
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Named;
 import javax.servlet.ServletContext;
 
@@ -197,21 +200,21 @@ public abstract class GenericContainerTest {
 		checkAvailabilityFor(false, MyRequestComponent.class);
 	}
 
-	@PrototypeScoped
-	public static class MyPrototypeComponent {
+	@Dependent
+	public static class MyDependentComponent {
 
 	}
 
 	@Test
-	public void processesCorrectlyPrototypeBasedComponents() {
+	public void processesCorrectlyDependentComponents() {
 		executeInsideRequest(new WhatToDo<Object>() {
 			@Override
 			public Object execute(RequestInfo request, int counter) {
 				return provider.provideForRequest(request, new Execution<Object>() {
 					@Override
 					public Object insideRequest(Container container) {
-						MyPrototypeComponent instance1 = instanceFor(MyPrototypeComponent.class,container);
-						MyPrototypeComponent instance2 = instanceFor(MyPrototypeComponent.class,container);
+						MyDependentComponent instance1 = instanceFor(MyDependentComponent.class,container);
+						MyDependentComponent instance2 = instanceFor(MyDependentComponent.class,container);
 						assertThat(instance1, not(sameInstance(instance2)));
 						return null;
 					}

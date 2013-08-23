@@ -19,6 +19,7 @@ package br.com.caelum.vraptor4.core;
 
 import java.util.LinkedList;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
 import org.slf4j.Logger;
@@ -28,7 +29,6 @@ import br.com.caelum.vraptor4.Convert;
 import br.com.caelum.vraptor4.Converter;
 import br.com.caelum.vraptor4.TwoWayConverter;
 import br.com.caelum.vraptor4.VRaptorException;
-import br.com.caelum.vraptor4.ioc.ApplicationScoped;
 import br.com.caelum.vraptor4.ioc.Container;
 
 @ApplicationScoped

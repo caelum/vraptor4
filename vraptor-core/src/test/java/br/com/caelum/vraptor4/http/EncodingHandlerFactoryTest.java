@@ -12,10 +12,6 @@ import javax.servlet.ServletContext;
 import org.junit.Before;
 import org.junit.Test;
 
-import br.com.caelum.vraptor4.http.EncodingHandlerFactory;
-import br.com.caelum.vraptor4.http.NullEncodingHandler;
-import br.com.caelum.vraptor4.http.WebXmlEncodingHandler;
-
 public class EncodingHandlerFactoryTest {
 
     private ServletContext context;

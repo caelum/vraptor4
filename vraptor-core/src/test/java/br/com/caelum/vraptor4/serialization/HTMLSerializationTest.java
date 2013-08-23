@@ -13,9 +13,6 @@ import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor4.Result;
 import br.com.caelum.vraptor4.interceptor.TypeNameExtractor;
-import br.com.caelum.vraptor4.serialization.HTMLSerialization;
-import br.com.caelum.vraptor4.serialization.IgnoringSerializer;
-import br.com.caelum.vraptor4.serialization.Serializer;
 import br.com.caelum.vraptor4.view.PageResult;
 
 public class HTMLSerializationTest {

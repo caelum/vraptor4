@@ -15,6 +15,7 @@
  */
 package br.com.caelum.vraptor4.deserialization;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 
@@ -24,7 +25,6 @@ import org.slf4j.LoggerFactory;
 import br.com.caelum.vraptor4.controller.BeanClass;
 import br.com.caelum.vraptor4.core.BaseComponents;
 import br.com.caelum.vraptor4.core.DeserializesQualifier;
-import br.com.caelum.vraptor4.ioc.ApplicationScoped;
 
 /**
  * Handles classes annotated with @Deserializes

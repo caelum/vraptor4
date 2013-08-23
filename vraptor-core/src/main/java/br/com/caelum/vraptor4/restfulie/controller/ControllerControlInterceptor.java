@@ -24,6 +24,8 @@ import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
 
+import javax.enterprise.context.RequestScoped;
+
 import br.com.caelum.vraptor4.InterceptionException;
 import br.com.caelum.vraptor4.controller.ControllerMethod;
 import br.com.caelum.vraptor4.controller.HttpMethod;
@@ -31,7 +33,6 @@ import br.com.caelum.vraptor4.core.InterceptorStack;
 import br.com.caelum.vraptor4.core.RequestInfo;
 import br.com.caelum.vraptor4.core.Routes;
 import br.com.caelum.vraptor4.interceptor.Interceptor;
-import br.com.caelum.vraptor4.ioc.RequestScoped;
 import br.com.caelum.vraptor4.restfulie.Restfulie;
 import br.com.caelum.vraptor4.restfulie.hypermedia.HypermediaResource;
 import br.com.caelum.vraptor4.restfulie.hypermedia.Transition;

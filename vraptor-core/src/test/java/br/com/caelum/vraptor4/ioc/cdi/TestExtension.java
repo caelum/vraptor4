@@ -17,7 +17,6 @@ import org.junit.Ignore;
 import br.com.caelum.vraptor4.ioc.GenericContainerTest;
 import br.com.caelum.vraptor4.ioc.MySessionComponent;
 import br.com.caelum.vraptor4.ioc.TheComponentFactory;
-import br.com.caelum.vraptor4.ioc.cdi.ServletContextFactory;
 import br.com.caelum.vraptor4.ioc.components.DummyComponentFactory;
 import br.com.caelum.vraptor4.ioc.fixture.ComponentFactoryInTheClasspath;
 import br.com.caelum.vraptor4.ioc.fixture.ControllerInTheClasspath;
@@ -40,7 +39,7 @@ public class TestExtension implements Extension{
 		discovery.addAnnotatedType(bm.createAnnotatedType(GenericContainerTest.MyAppComponent.class));
 		discovery.addAnnotatedType(bm.createAnnotatedType(GenericContainerTest.MyAppComponentWithLifecycle.class));
 		discovery.addAnnotatedType(bm.createAnnotatedType(GenericContainerTest.MyRequestComponent.class));
-		discovery.addAnnotatedType(bm.createAnnotatedType(GenericContainerTest.MyPrototypeComponent.class));
+		discovery.addAnnotatedType(bm.createAnnotatedType(GenericContainerTest.MyDependentComponent.class));
 		discovery.addAnnotatedType(bm.createAnnotatedType(GenericContainerTest.DisposableComponent.class));
 		discovery.addAnnotatedType(bm.createAnnotatedType(GenericContainerTest.StartableComponent.class));
 		discovery.addAnnotatedType(bm.createAnnotatedType(InterceptorInTheClasspath.class));

@@ -16,6 +16,7 @@
  */
 package br.com.caelum.vraptor4.ioc;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 

@@ -3,7 +3,6 @@ package br.com.caelum.vraptor4.interceptor;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
 
 import br.com.caelum.vraptor4.VRaptorException;
 import br.com.caelum.vraptor4.ioc.Container;

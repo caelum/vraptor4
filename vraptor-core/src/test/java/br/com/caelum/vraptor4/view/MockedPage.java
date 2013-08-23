@@ -23,7 +23,6 @@ import br.com.caelum.vraptor4.proxy.MethodInvocation;
 import br.com.caelum.vraptor4.proxy.ObjenesisInstanceCreator;
 import br.com.caelum.vraptor4.proxy.Proxifier;
 import br.com.caelum.vraptor4.proxy.SuperMethod;
-import br.com.caelum.vraptor4.view.PageResult;
 
 public class MockedPage implements PageResult {
 

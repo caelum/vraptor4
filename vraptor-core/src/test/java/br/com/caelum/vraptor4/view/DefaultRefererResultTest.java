@@ -24,9 +24,6 @@ import br.com.caelum.vraptor4.http.MutableRequest;
 import br.com.caelum.vraptor4.http.ParametersProvider;
 import br.com.caelum.vraptor4.http.route.ControllerNotFoundException;
 import br.com.caelum.vraptor4.http.route.Router;
-import br.com.caelum.vraptor4.view.DefaultRefererResult;
-import br.com.caelum.vraptor4.view.LogicResult;
-import br.com.caelum.vraptor4.view.PageResult;
 
 public class DefaultRefererResultTest {
 

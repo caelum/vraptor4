@@ -15,6 +15,8 @@
  */
 package br.com.caelum.vraptor4.proxy;
 
+import static javassist.util.proxy.ProxyFactory.isProxyClass;
+
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
@@ -99,10 +101,6 @@ public class JavassistProxifier implements Proxifier {
 	public boolean isProxy(Object o) {
         return o != null && isProxyClass(o.getClass());
     }
-
-	private boolean isProxyClass(Class<? extends Object> clazz) {
-		return ProxyObject.class.isAssignableFrom(clazz);
-	}
 
     private <T> void setHandler(Object proxyInstance, final MethodInvocation<? super T> handler) {
         ProxyObject proxyObject = (ProxyObject) proxyInstance;

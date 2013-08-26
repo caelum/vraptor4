@@ -101,6 +101,7 @@ public class FixedMethodStrategyTest {
 		return Sets.newHashSet(method);
 	}
 
+	@SuppressWarnings("rawtypes")
 	private Method method(String name, Class... types) {
 		try {
 			return MyControl.class.getDeclaredMethod(name, types);

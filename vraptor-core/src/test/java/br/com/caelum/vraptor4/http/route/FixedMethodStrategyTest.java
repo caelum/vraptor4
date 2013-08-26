@@ -17,6 +17,7 @@
 
 package br.com.caelum.vraptor4.http.route;
 
+import static br.com.caelum.vraptor4.controller.DefaultControllerMethod.instanceFor;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
@@ -39,9 +40,9 @@ import br.com.caelum.vraptor4.controller.ControllerMethod;
 import br.com.caelum.vraptor4.controller.DefaultControllerMethod;
 import br.com.caelum.vraptor4.controller.HttpMethod;
 import br.com.caelum.vraptor4.http.MutableRequest;
-import br.com.caelum.vraptor4.http.route.FixedMethodStrategy;
-import br.com.caelum.vraptor4.http.route.ParametersControl;
 import br.com.caelum.vraptor4.interceptor.VRaptorMatchers;
+import br.com.caelum.vraptor4.proxy.JavassistProxifier;
+import br.com.caelum.vraptor4.proxy.ObjenesisInstanceCreator;
 
 import com.google.common.collect.Sets;
 
@@ -50,11 +51,17 @@ public class FixedMethodStrategyTest {
 	private @Mock MutableRequest request;
 	private @Mock ParametersControl control;
 	private ControllerMethod list;
+	private JavassistProxifier proxifier;
+	private EnumSet<HttpMethod> get;
+	private EnumSet<HttpMethod> post;
 
 	@Before
 	public void setup() {
 		MockitoAnnotations.initMocks(this);
 		list = DefaultControllerMethod.instanceFor(MyControl.class, method("list"));
+		get = EnumSet.of(HttpMethod.GET);
+		post = EnumSet.of(HttpMethod.POST);
+		proxifier = new JavassistProxifier(new ObjenesisInstanceCreator());
 	}
 
 	@Test
@@ -69,14 +76,25 @@ public class FixedMethodStrategyTest {
 
 	@Test
 	public void areEquals() throws Exception {
-		FixedMethodStrategy first = new FixedMethodStrategy("/uri", list, EnumSet.of(HttpMethod.GET), control, 0, new String[0]);
-		FixedMethodStrategy second = new FixedMethodStrategy("/uri", list, EnumSet.of(HttpMethod.GET), control, 2, new String[0]);
-		FixedMethodStrategy third = new FixedMethodStrategy("/different", list, EnumSet.of(HttpMethod.GET), control, 2, new String[0]);
-		FixedMethodStrategy forth = new FixedMethodStrategy("/uri", list, EnumSet.of(HttpMethod.POST), control, 2, new String[0]);
+		FixedMethodStrategy first = new FixedMethodStrategy("/uri", list, get, control, 0, new String[0]);
+		FixedMethodStrategy second = new FixedMethodStrategy("/uri", list, get, control, 2, new String[0]);
+		FixedMethodStrategy third = new FixedMethodStrategy("/different", list, get, control, 2, new String[0]);
+		FixedMethodStrategy forth = new FixedMethodStrategy("/uri", list, post, control, 2, new String[0]);
 
 		assertThat(first, equalTo(second));
 		assertThat(first, not(equalTo(third)));
 		assertThat(first, not(equalTo(forth)));
+	}
+
+	@Test
+	public void canHandleProxyMethodsAndTypes() throws Exception {
+
+		MyControl proxy = proxifier.proxify(MyControl.class, null);
+		Method method = method("show", Dog.class);
+		ControllerMethod cMethod = instanceFor(MyControl.class, method);
+
+		FixedMethodStrategy fms = new FixedMethodStrategy("/uri", cMethod, get, control, 0, new String[0]);
+		assertThat("can not handle proxy", fms.canHandle(proxy.getClass(), method));
 	}
 
 	private Set<HttpMethod> methods(HttpMethod method) {

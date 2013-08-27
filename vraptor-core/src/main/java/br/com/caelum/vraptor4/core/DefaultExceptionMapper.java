@@ -21,6 +21,7 @@ import static com.google.common.collect.Maps.newLinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 
 import org.slf4j.Logger;
@@ -28,7 +29,6 @@ import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor4.Result;
 import br.com.caelum.vraptor4.interceptor.ExceptionHandlerInterceptor;
-import br.com.caelum.vraptor4.ioc.RequestScoped;
 import br.com.caelum.vraptor4.proxy.Proxifier;
 
 /**
@@ -51,7 +51,7 @@ public class DefaultExceptionMapper
 
     private final Map<Class<? extends Exception>, ExceptionRecorder<Result>> exceptions;
     private final Proxifier proxifier;
-    
+
     @Deprecated
 	public DefaultExceptionMapper() {
     	this(null);
@@ -61,7 +61,7 @@ public class DefaultExceptionMapper
         this.proxifier = proxifier;
         this.exceptions = newLinkedHashMap();
     }
-    
+
     public Result record(Class<? extends Exception> exception) {
         if (exception == null) {
             throw new NullPointerException("Exception cannot be null.");

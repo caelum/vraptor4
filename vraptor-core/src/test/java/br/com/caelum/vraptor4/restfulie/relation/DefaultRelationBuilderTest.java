@@ -16,9 +16,6 @@ import org.mockito.MockitoAnnotations;
 import br.com.caelum.vraptor4.http.route.Router;
 import br.com.caelum.vraptor4.proxy.JavassistProxifier;
 import br.com.caelum.vraptor4.proxy.ObjenesisInstanceCreator;
-import br.com.caelum.vraptor4.restfulie.relation.DefaultRelationBuilder;
-import br.com.caelum.vraptor4.restfulie.relation.Relation;
-import br.com.caelum.vraptor4.restfulie.relation.RelationBuilder;
 
 public class DefaultRelationBuilderTest {
 

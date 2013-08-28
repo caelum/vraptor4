@@ -19,7 +19,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor4.converter.ConversionError;
-import br.com.caelum.vraptor4.converter.jodatime.LocalTimeConverter;
 import br.com.caelum.vraptor4.core.JstlLocalization;
 import br.com.caelum.vraptor4.core.RequestInfo;
 import br.com.caelum.vraptor4.http.MutableRequest;

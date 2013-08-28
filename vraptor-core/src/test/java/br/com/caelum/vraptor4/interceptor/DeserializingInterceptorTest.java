@@ -3,7 +3,6 @@ package br.com.caelum.vraptor4.interceptor;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
@@ -22,12 +21,10 @@ import br.com.caelum.vraptor4.Consumes;
 import br.com.caelum.vraptor4.InterceptionException;
 import br.com.caelum.vraptor4.controller.ControllerMethod;
 import br.com.caelum.vraptor4.controller.DefaultControllerMethod;
-import br.com.caelum.vraptor4.core.MethodInfo;
 import br.com.caelum.vraptor4.core.InterceptorStack;
 import br.com.caelum.vraptor4.core.MethodInfo;
 import br.com.caelum.vraptor4.deserialization.Deserializer;
 import br.com.caelum.vraptor4.deserialization.Deserializers;
-import br.com.caelum.vraptor4.interceptor.DeserializingInterceptor;
 import br.com.caelum.vraptor4.ioc.Container;
 import br.com.caelum.vraptor4.view.Status;
 

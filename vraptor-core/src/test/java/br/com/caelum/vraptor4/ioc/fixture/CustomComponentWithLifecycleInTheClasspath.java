@@ -17,8 +17,7 @@
 package br.com.caelum.vraptor4.ioc.fixture;
 
 import javax.annotation.PreDestroy;
-
-import br.com.caelum.vraptor4.ioc.ApplicationScoped;
+import javax.enterprise.context.ApplicationScoped;
 
 @ApplicationScoped
 public class CustomComponentWithLifecycleInTheClasspath {

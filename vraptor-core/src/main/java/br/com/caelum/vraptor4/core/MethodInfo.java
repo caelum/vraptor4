@@ -16,8 +16,9 @@
  */
 package br.com.caelum.vraptor4.core;
 
+import javax.enterprise.context.RequestScoped;
+
 import br.com.caelum.vraptor4.controller.ControllerMethod;
-import br.com.caelum.vraptor4.ioc.RequestScoped;
 
 /**
  * Holder for method being invoked and parameters being passed.

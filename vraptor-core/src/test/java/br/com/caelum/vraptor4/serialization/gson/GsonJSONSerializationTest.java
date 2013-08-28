@@ -28,7 +28,6 @@ import org.junit.Test;
 
 import br.com.caelum.vraptor4.interceptor.DefaultTypeNameExtractor;
 import br.com.caelum.vraptor4.serialization.NullProxyInitializer;
-import br.com.caelum.vraptor4.serialization.gson.GsonJSONSerialization;
 import br.com.caelum.vraptor4.serialization.gson.adapters.CalendarSerializer;
 
 import com.google.common.collect.ForwardingCollection;

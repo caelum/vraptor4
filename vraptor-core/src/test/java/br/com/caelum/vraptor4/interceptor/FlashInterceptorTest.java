@@ -26,7 +26,6 @@ import br.com.caelum.vraptor4.Result;
 import br.com.caelum.vraptor4.core.InterceptorStack;
 import br.com.caelum.vraptor4.http.MutableResponse;
 import br.com.caelum.vraptor4.http.VRaptorResponse;
-import br.com.caelum.vraptor4.interceptor.FlashInterceptor;
 
 /**
  * Tests FlashInterceptor

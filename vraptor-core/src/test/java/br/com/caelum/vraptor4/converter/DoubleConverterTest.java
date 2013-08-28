@@ -27,9 +27,6 @@ import java.util.ResourceBundle;
 import org.junit.Before;
 import org.junit.Test;
 
-import br.com.caelum.vraptor4.converter.ConversionError;
-import br.com.caelum.vraptor4.converter.DoubleConverter;
-
 public class DoubleConverterTest {
 
 	private DoubleConverter converter;

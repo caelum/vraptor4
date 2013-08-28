@@ -32,6 +32,7 @@ import java.util.List;
 
 import javassist.Modifier;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
 import net.vidageek.mirror.dsl.Mirror;
@@ -42,7 +43,6 @@ import br.com.caelum.vraptor4.Post;
 import br.com.caelum.vraptor4.Put;
 import br.com.caelum.vraptor4.controller.BeanClass;
 import br.com.caelum.vraptor4.controller.HttpMethod;
-import br.com.caelum.vraptor4.ioc.ApplicationScoped;
 
 import com.google.common.base.Predicate;
 

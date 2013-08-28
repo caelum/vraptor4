@@ -36,11 +36,6 @@ import br.com.caelum.vraptor4.controller.ControllerMethod;
 import br.com.caelum.vraptor4.core.InterceptorStack;
 import br.com.caelum.vraptor4.http.InvalidParameterException;
 import br.com.caelum.vraptor4.http.MutableRequest;
-import br.com.caelum.vraptor4.interceptor.multipart.CommonsUploadMultipartInterceptor;
-import br.com.caelum.vraptor4.interceptor.multipart.DefaultMultipartConfig;
-import br.com.caelum.vraptor4.interceptor.multipart.MultipartConfig;
-import br.com.caelum.vraptor4.interceptor.multipart.ServletFileUploadCreator;
-import br.com.caelum.vraptor4.interceptor.multipart.UploadedFile;
 import br.com.caelum.vraptor4.validator.I18nMessage;
 
 /**

@@ -19,9 +19,6 @@ package br.com.caelum.vraptor4.http.ognl;
 
 import br.com.caelum.vraptor4.http.ParametersProvider;
 import br.com.caelum.vraptor4.http.ParametersProviderTest;
-import br.com.caelum.vraptor4.http.ognl.EmptyElementsRemoval;
-import br.com.caelum.vraptor4.http.ognl.OgnlFacade;
-import br.com.caelum.vraptor4.http.ognl.OgnlParametersProvider;
 import br.com.caelum.vraptor4.proxy.JavassistProxifier;
 import br.com.caelum.vraptor4.proxy.Proxifier;
 import br.com.caelum.vraptor4.proxy.ReflectionInstanceCreator;

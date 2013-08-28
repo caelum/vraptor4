@@ -10,8 +10,6 @@ import org.apache.commons.fileupload.FileItemFactory;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
-import br.com.caelum.vraptor4.interceptor.multipart.ServletFileUploadCreator;
-
 public class MockFilesCommonsFileUpload
     implements ServletFileUploadCreator {
 

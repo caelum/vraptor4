@@ -38,16 +38,12 @@ import org.mockito.MockitoAnnotations;
 import br.com.caelum.vraptor4.controller.ControllerMethod;
 import br.com.caelum.vraptor4.controller.DefaultControllerMethod;
 import br.com.caelum.vraptor4.core.MethodInfo;
-import br.com.caelum.vraptor4.core.MethodInfo;
 import br.com.caelum.vraptor4.http.MutableRequest;
 import br.com.caelum.vraptor4.http.MutableResponse;
 import br.com.caelum.vraptor4.proxy.JavassistProxifier;
 import br.com.caelum.vraptor4.proxy.ObjenesisInstanceCreator;
 import br.com.caelum.vraptor4.proxy.Proxifier;
 import br.com.caelum.vraptor4.proxy.ProxyInvocationException;
-import br.com.caelum.vraptor4.view.DefaultPageResult;
-import br.com.caelum.vraptor4.view.PathResolver;
-import br.com.caelum.vraptor4.view.ResultException;
 
 public class DefaultPageResultTest {
 

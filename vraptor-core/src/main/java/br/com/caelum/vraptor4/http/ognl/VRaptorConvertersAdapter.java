@@ -26,10 +26,11 @@ import java.lang.reflect.Type;
 import java.util.Map;
 import java.util.ResourceBundle;
 
+import javax.enterprise.context.RequestScoped;
+
 import ognl.TypeConverter;
 import br.com.caelum.vraptor4.Converter;
 import br.com.caelum.vraptor4.core.Converters;
-import br.com.caelum.vraptor4.ioc.RequestScoped;
 
 @RequestScoped
 public class VRaptorConvertersAdapter implements TypeConverter {

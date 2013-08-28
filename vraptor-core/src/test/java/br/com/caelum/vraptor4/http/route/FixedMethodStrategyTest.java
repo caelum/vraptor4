@@ -39,8 +39,6 @@ import br.com.caelum.vraptor4.controller.ControllerMethod;
 import br.com.caelum.vraptor4.controller.DefaultControllerMethod;
 import br.com.caelum.vraptor4.controller.HttpMethod;
 import br.com.caelum.vraptor4.http.MutableRequest;
-import br.com.caelum.vraptor4.http.route.FixedMethodStrategy;
-import br.com.caelum.vraptor4.http.route.ParametersControl;
 import br.com.caelum.vraptor4.interceptor.VRaptorMatchers;
 
 import com.google.common.collect.Sets;

@@ -18,6 +18,7 @@ package br.com.caelum.vraptor4.validator;
 import java.util.Locale;
 import java.util.Set;
 
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.validation.ConstraintViolation;
 import javax.validation.MessageInterpolator;
@@ -37,7 +38,6 @@ import br.com.caelum.vraptor4.core.MethodInfo;
 import br.com.caelum.vraptor4.interceptor.ExecuteMethodInterceptor;
 import br.com.caelum.vraptor4.interceptor.Interceptor;
 import br.com.caelum.vraptor4.interceptor.ParametersInstantiatorInterceptor;
-import br.com.caelum.vraptor4.ioc.RequestScoped;
 
 /**
  * Validate method parameters using Bean Validation 1.1. The method will be

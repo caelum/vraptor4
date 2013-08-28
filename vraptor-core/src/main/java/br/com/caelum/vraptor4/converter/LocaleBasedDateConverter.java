@@ -25,12 +25,12 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 
 import br.com.caelum.vraptor4.Convert;
 import br.com.caelum.vraptor4.Converter;
 import br.com.caelum.vraptor4.core.Localization;
-import br.com.caelum.vraptor4.ioc.RequestScoped;
 
 /**
  * Locale based date converter.

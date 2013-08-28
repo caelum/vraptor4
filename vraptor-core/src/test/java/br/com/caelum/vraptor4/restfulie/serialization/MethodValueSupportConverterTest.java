@@ -6,9 +6,6 @@ import static org.junit.Assert.assertThat;
 
 import org.junit.Test;
 
-import br.com.caelum.vraptor4.restfulie.serialization.MethodValueSupportConverter;
-import br.com.caelum.vraptor4.restfulie.serialization.XStreamSerialize;
-
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.converters.reflection.ReflectionConverter;
 

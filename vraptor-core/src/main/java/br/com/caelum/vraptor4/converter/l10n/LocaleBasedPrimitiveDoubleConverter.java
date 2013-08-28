@@ -25,11 +25,12 @@ import java.text.ParseException;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
+import javax.enterprise.context.RequestScoped;
+
 import br.com.caelum.vraptor4.Convert;
 import br.com.caelum.vraptor4.Converter;
 import br.com.caelum.vraptor4.converter.ConversionError;
 import br.com.caelum.vraptor4.core.Localization;
-import br.com.caelum.vraptor4.ioc.RequestScoped;
 
 /**
  * Localized version of VRaptor's Double converter. This component is optional and must be declared in web.xml before

@@ -18,8 +18,9 @@ package br.com.caelum.vraptor4.deserialization;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.enterprise.context.ApplicationScoped;
+
 import br.com.caelum.vraptor4.core.BaseComponents;
-import br.com.caelum.vraptor4.ioc.ApplicationScoped;
 import br.com.caelum.vraptor4.ioc.Container;
 
 /**

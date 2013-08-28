@@ -40,13 +40,6 @@ import br.com.caelum.vraptor4.serialization.SerializerBuilder;
 import br.com.caelum.vraptor4.util.test.MockedLogic;
 import br.com.caelum.vraptor4.validator.Message;
 import br.com.caelum.vraptor4.validator.ValidationException;
-import br.com.caelum.vraptor4.view.DefaultValidationViewsFactory;
-import br.com.caelum.vraptor4.view.EmptyResult;
-import br.com.caelum.vraptor4.view.HttpResult;
-import br.com.caelum.vraptor4.view.LogicResult;
-import br.com.caelum.vraptor4.view.PageResult;
-import br.com.caelum.vraptor4.view.RefererResult;
-import br.com.caelum.vraptor4.view.Status;
 
 public class DefaultValidationViewsFactoryTest {
 

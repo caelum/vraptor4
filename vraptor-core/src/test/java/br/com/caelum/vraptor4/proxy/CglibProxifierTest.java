@@ -29,13 +29,6 @@ import net.vidageek.mirror.dsl.Mirror;
 import org.junit.Before;
 import org.junit.Test;
 
-import br.com.caelum.vraptor4.proxy.JavassistProxifier;
-import br.com.caelum.vraptor4.proxy.MethodInvocation;
-import br.com.caelum.vraptor4.proxy.ObjenesisInstanceCreator;
-import br.com.caelum.vraptor4.proxy.Proxifier;
-import br.com.caelum.vraptor4.proxy.ProxyInvocationException;
-import br.com.caelum.vraptor4.proxy.SuperMethod;
-
 /**
  * @author Fabio Kung
  */

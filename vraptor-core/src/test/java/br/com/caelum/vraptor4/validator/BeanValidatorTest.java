@@ -17,13 +17,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor4.core.Localization;
-import br.com.caelum.vraptor4.validator.BeanValidator;
-import br.com.caelum.vraptor4.validator.DefaultBeanValidator;
-import br.com.caelum.vraptor4.validator.Message;
-import br.com.caelum.vraptor4.validator.MessageInterpolatorFactory;
-import br.com.caelum.vraptor4.validator.NullBeanValidator;
-import br.com.caelum.vraptor4.validator.ValidatorCreator;
-import br.com.caelum.vraptor4.validator.ValidatorFactoryCreator;
 
 /**
  * A simple class to test JSR303Validator and HibernateValidator3 components.

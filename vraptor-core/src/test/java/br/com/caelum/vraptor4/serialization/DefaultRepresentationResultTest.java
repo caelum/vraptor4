@@ -19,11 +19,6 @@ import br.com.caelum.vraptor4.Result;
 import br.com.caelum.vraptor4.http.FormatResolver;
 import br.com.caelum.vraptor4.restfulie.RestHeadersHandler;
 import br.com.caelum.vraptor4.restfulie.hypermedia.HypermediaResource;
-import br.com.caelum.vraptor4.serialization.DefaultRepresentationResult;
-import br.com.caelum.vraptor4.serialization.IgnoringSerializer;
-import br.com.caelum.vraptor4.serialization.RepresentationResult;
-import br.com.caelum.vraptor4.serialization.Serialization;
-import br.com.caelum.vraptor4.serialization.Serializer;
 import br.com.caelum.vraptor4.view.PageResult;
 import br.com.caelum.vraptor4.view.Status;
 

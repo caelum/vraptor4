@@ -19,6 +19,7 @@ package br.com.caelum.vraptor4.core;
 
 import java.util.LinkedList;
 
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 
 import org.slf4j.Logger;
@@ -28,7 +29,6 @@ import br.com.caelum.vraptor4.InterceptionException;
 import br.com.caelum.vraptor4.controller.ControllerMethod;
 import br.com.caelum.vraptor4.interceptor.ForwardToDefaultViewInterceptor;
 import br.com.caelum.vraptor4.interceptor.Interceptor;
-import br.com.caelum.vraptor4.ioc.RequestScoped;
 
 /**
  * Default implementation of a interceptor stack.

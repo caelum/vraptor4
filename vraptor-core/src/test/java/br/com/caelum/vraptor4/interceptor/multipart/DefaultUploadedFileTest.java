@@ -7,8 +7,6 @@ import org.apache.commons.io.input.NullInputStream;
 import org.hamcrest.Matchers;
 import org.junit.Test;
 
-import br.com.caelum.vraptor4.interceptor.multipart.DefaultUploadedFile;
-
 public class DefaultUploadedFileTest {
 
 	private static final NullInputStream CONTENT = new NullInputStream(0);

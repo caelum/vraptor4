@@ -37,8 +37,6 @@ import br.com.caelum.vraptor4.validator.Message;
 import br.com.caelum.vraptor4.validator.MessageConverter;
 import br.com.caelum.vraptor4.validator.SingletonResourceBundle;
 import br.com.caelum.vraptor4.validator.ValidationMessage;
-import br.com.caelum.vraptor4.view.DefaultStatus;
-import br.com.caelum.vraptor4.view.Status;
 
 import com.google.common.collect.Lists;
 

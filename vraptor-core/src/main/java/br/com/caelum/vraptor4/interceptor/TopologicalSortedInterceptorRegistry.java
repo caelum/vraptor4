@@ -17,10 +17,10 @@ package br.com.caelum.vraptor4.interceptor;
 
 import java.util.List;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Default;
 
 import br.com.caelum.vraptor4.Intercepts;
-import br.com.caelum.vraptor4.ioc.ApplicationScoped;
 
 /**
  * An interceptor registry that sorts interceptors based on their before and after conditions

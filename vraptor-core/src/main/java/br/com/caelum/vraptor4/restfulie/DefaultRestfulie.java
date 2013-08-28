@@ -17,10 +17,10 @@
 
 package br.com.caelum.vraptor4.restfulie;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
 import br.com.caelum.vraptor4.http.route.Router;
-import br.com.caelum.vraptor4.ioc.ApplicationScoped;
 import br.com.caelum.vraptor4.proxy.Proxifier;
 import br.com.caelum.vraptor4.restfulie.hypermedia.ConfigurableHypermediaResource;
 import br.com.caelum.vraptor4.restfulie.hypermedia.DefaultConfigurableHypermediaResource;

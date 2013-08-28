@@ -17,12 +17,12 @@
 
 package br.com.caelum.vraptor4.http;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 import javax.servlet.ServletContext;
 
 import br.com.caelum.vraptor4.config.BasicConfiguration;
-import br.com.caelum.vraptor4.ioc.ApplicationScoped;
 
 /**
  * Create an instance for {@link EncodingHandler}. If {@link BasicConfiguration#ENCODING} is defined into web.xml,

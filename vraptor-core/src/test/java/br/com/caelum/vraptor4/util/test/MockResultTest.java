@@ -11,8 +11,6 @@ import static br.com.caelum.vraptor4.view.Results.xml;
 import org.junit.Before;
 import org.junit.Test;
 
-import br.com.caelum.vraptor4.util.test.MockResult;
-
 public class MockResultTest {
 
 

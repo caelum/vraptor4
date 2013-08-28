@@ -24,12 +24,12 @@ import java.util.Collection;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 
 import br.com.caelum.vraptor4.Result;
 import br.com.caelum.vraptor4.View;
 import br.com.caelum.vraptor4.core.Localization;
-import br.com.caelum.vraptor4.ioc.RequestScoped;
 import br.com.caelum.vraptor4.proxy.Proxifier;
 import br.com.caelum.vraptor4.util.test.MockResult;
 import br.com.caelum.vraptor4.view.ValidationViewsFactory;

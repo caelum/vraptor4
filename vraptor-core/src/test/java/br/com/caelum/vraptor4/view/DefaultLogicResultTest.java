@@ -49,7 +49,6 @@ import br.com.caelum.vraptor4.Result;
 import br.com.caelum.vraptor4.controller.ControllerMethod;
 import br.com.caelum.vraptor4.controller.DefaultControllerMethod;
 import br.com.caelum.vraptor4.core.MethodInfo;
-import br.com.caelum.vraptor4.core.MethodInfo;
 import br.com.caelum.vraptor4.http.MutableRequest;
 import br.com.caelum.vraptor4.http.MutableResponse;
 import br.com.caelum.vraptor4.http.route.Router;
@@ -60,13 +59,6 @@ import br.com.caelum.vraptor4.proxy.ObjenesisInstanceCreator;
 import br.com.caelum.vraptor4.proxy.Proxifier;
 import br.com.caelum.vraptor4.validator.Message;
 import br.com.caelum.vraptor4.validator.ValidationException;
-import br.com.caelum.vraptor4.view.DefaultLogicResult;
-import br.com.caelum.vraptor4.view.DefaultPageResult;
-import br.com.caelum.vraptor4.view.FlashScope;
-import br.com.caelum.vraptor4.view.LogicResult;
-import br.com.caelum.vraptor4.view.PageResult;
-import br.com.caelum.vraptor4.view.PathResolver;
-import br.com.caelum.vraptor4.view.Results;
 
 public class DefaultLogicResultTest {
 

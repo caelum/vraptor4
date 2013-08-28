@@ -8,8 +8,6 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 
-import br.com.caelum.vraptor4.util.Stringnifier;
-
 
 
 public class StringnifierTest {

@@ -38,5 +38,4 @@ public class StepInvokerTest {
 		assertNotNull(stepInvoker.findMethod(BeforeCall.class, ExceptionThrowerInterceptor.class));
 		stepInvoker.tryToInvoke(new ExceptionThrowerInterceptor(), BeforeCall.class);
 	}
-
 }

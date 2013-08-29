@@ -42,13 +42,12 @@ public class InterceptorStereotypeHandlerTest {
 		handler = new InterceptorStereotypeHandler(interceptorRegistry);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Test
 	public void shouldRegisterInterceptorsOnRegistry() throws Exception {
 		handler.handle(new DefaultBeanClass(InterceptorA.class));
 		verify(interceptorRegistry, times(1)).register(InterceptorA.class);
 	}
-	
+
 	static class InterceptorA implements Interceptor {
 
 		public boolean accepts(ControllerMethod method) {

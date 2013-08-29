@@ -19,7 +19,6 @@ package br.com.caelum.vraptor4.core;
 
 import br.com.caelum.vraptor4.InterceptionException;
 import br.com.caelum.vraptor4.controller.ControllerMethod;
-import br.com.caelum.vraptor4.interceptor.Interceptor;
 
 /**
  * The interceptors stack.
@@ -36,12 +35,12 @@ public interface InterceptorStack {
     /**
      * Adds this interceptor at the end of the stack.
      */
-    void add(Class<? extends Interceptor> interceptor);
+    void add(Class<?> interceptor);
 
     /**
      * Adds this interceptor at the head of the stack.
      */
     @Deprecated
-    void addAsNext(Class<? extends Interceptor> interceptor);
+    void addAsNext(Class<?> interceptor);
 
 }

@@ -28,7 +28,6 @@ import org.slf4j.LoggerFactory;
 import br.com.caelum.vraptor4.InterceptionException;
 import br.com.caelum.vraptor4.controller.ControllerMethod;
 import br.com.caelum.vraptor4.interceptor.ForwardToDefaultViewInterceptor;
-import br.com.caelum.vraptor4.interceptor.Interceptor;
 
 /**
  * Default implementation of a interceptor stack.
@@ -67,12 +66,12 @@ public class DefaultInterceptorStack implements InterceptorStack {
 		handler.execute(this, method, controllerInstance);
 	}
 
-	public void add(Class<? extends Interceptor> type) {
+	public void add(Class<?> type) {
 		this.interceptors.addLast(handlerFactory.handlerFor(type));
 	}
 
 	// XXX this method will be removed soon
-	public void addAsNext(Class<? extends Interceptor> type) {
+	public void addAsNext(Class<?> type) {
 		if (!type.getPackage().getName()
 				.startsWith("br.com.caelum.vraptor4.interceptor")
 				&& !type.equals(ForwardToDefaultViewInterceptor.class)) {

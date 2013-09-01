@@ -20,7 +20,6 @@ import javax.enterprise.inject.Default;
 import javax.inject.Inject;
 
 import br.com.caelum.vraptor4.VRaptorException;
-import br.com.caelum.vraptor4.interceptor.Interceptor;
 import br.com.caelum.vraptor4.interceptor.InterceptorRegistry;
 
 /**
@@ -43,7 +42,7 @@ public class EnhancedRequestExecution implements RequestExecution {
 	}
 
 	public void execute() throws VRaptorException {
-		for (Class<? extends Interceptor> interceptor : registry.all()) {
+		for (Class<?> interceptor : registry.all()) {
 			stack.add(interceptor);
 		}
 		stack.next(null, null);

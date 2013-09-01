@@ -34,14 +34,14 @@ import br.com.caelum.vraptor4.Intercepts;
 @Default
 public class TopologicalSortedInterceptorRegistry implements InterceptorRegistry {
 
-	private Graph<Class<? extends Interceptor>> set = new Graph<Class<? extends Interceptor>>();
+	private Graph<Class<?>> set = new Graph<Class<?>>();
 
-	public List<Class<? extends Interceptor>> all() {
+	public List<Class<?>> all() {
 		return set.topologicalOrder();
 	}
 
-	public void register(Class<? extends Interceptor>... interceptors) {
-		for (Class<? extends Interceptor> interceptor : interceptors) {
+	public void register(Class<?>... interceptors) {
+		for (Class<?> interceptor : interceptors) {
 			Intercepts intercepts = interceptor.getAnnotation(Intercepts.class);
 			if (intercepts != null) {
 				addEdges(interceptor, intercepts.before(), intercepts.after());
@@ -51,17 +51,17 @@ public class TopologicalSortedInterceptorRegistry implements InterceptorRegistry
 		}
 	}
 
-	private void addDefaultEdges(Class<? extends Interceptor> interceptor) {
+	private void addDefaultEdges(Class<?> interceptor) {
 		set.addEdge(interceptor, ExecuteMethodInterceptor.class);
 		if (!interceptor.equals(ControllerLookupInterceptor.class)) {
 			set.addEdge(ControllerLookupInterceptor.class, interceptor);
 		}
 	}
 
-	private void addEdges(Class<? extends Interceptor> interceptor, Class<? extends Interceptor>[] before, Class<? extends Interceptor>[] after) {
+	private void addEdges(Class<?> interceptor, Class<?>[] before, Class<?>[] after) {
 		set.addEdges(interceptor, before);
 
-		for (Class<? extends Interceptor> other : after) {
+		for (Class<?> other : after) {
 			set.addEdge(other, interceptor);
 		}
 	}

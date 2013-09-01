@@ -15,27 +15,27 @@ import br.com.caelum.vraptor4.Intercepts;
 public class TopologicalSortedInterceptorRegistryTest {
 
 	@Intercepts
-	static interface A extends Interceptor {}
+	static interface A {}
 
 	@Intercepts(before=A.class)
-	static interface B extends Interceptor {}
+	static interface B {}
 
 	@Intercepts(after=A.class)
-	static interface C extends Interceptor {}
+	static interface C {}
 
 	@Intercepts(after=A.class, before=C.class)
-	static interface D extends Interceptor {}
+	static interface D {}
 
 	@Intercepts(before=A.class, after=C.class)
-	static interface E extends Interceptor {}
+	static interface E {}
 
-	static interface F extends Interceptor {}
+	static interface F {}
 
 	@Test
 	public void returnsRegisteredClasses() throws Exception {
 		TopologicalSortedInterceptorRegistry set = new TopologicalSortedInterceptorRegistry();
 		set.register(A.class, B.class, C.class);
-		List<Class<? extends Interceptor>> list = set.all();
+		List<Class<?>> list = set.all();
 
 		assertThat(list, hasItems(A.class, B.class, C.class));
 	}

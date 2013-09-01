@@ -52,7 +52,7 @@ public class InterceptorListPriorToExecutionExtractor implements Interceptor {
     }
 
     public void intercept(InterceptorStack stack, ControllerMethod method, Object controllerInstance) throws InterceptionException {
-    	for (Class<? extends Interceptor> type : Lists.reverse(registry.all())) {
+    	for (Class<?> type : Lists.reverse(registry.all())) {
 			stack.addAsNext(type);
 		}
         stack.next(method, controllerInstance);

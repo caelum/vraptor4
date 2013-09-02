@@ -21,6 +21,11 @@ public class StepInvokerTest {
 		stepInvoker.findMethod(AroundCall.class,InterceptorWithInheritance.class);
 	}
 
+	@Test(expected=IllegalStateException.class)
+	public void shouldThrowsExceptionWhenInterceptorHasMoreThanOneAnnotatedMethod() {
+		stepInvoker.findMethod(BeforeCall.class,InterceptorWithMoreThanOneBeforeCallMethod.class);
+	}
+
 	@Test
 	public void shouldFindFirstMethodAnnotatedWithInterceptorStep(){
 		ExampleOfSimpleStackInterceptor proxy = spy(new ExampleOfSimpleStackInterceptor());

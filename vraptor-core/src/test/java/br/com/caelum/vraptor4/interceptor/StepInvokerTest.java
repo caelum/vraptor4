@@ -3,7 +3,6 @@ package br.com.caelum.vraptor4.interceptor;
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.spy;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import br.com.caelum.vraptor4.AroundCall;
@@ -17,7 +16,7 @@ public class StepInvokerTest {
 
 	private StepInvoker stepInvoker = new StepInvoker();
 
-	@Ignore
+	@Test
 	public void shouldNotReadInheritedMethods() throws Exception {
 		stepInvoker.findMethod(AroundCall.class,InterceptorWithInheritance.class);
 	}

@@ -44,12 +44,7 @@ import br.com.caelum.iogi.util.DefaultLocaleProvider;
 import br.com.caelum.iogi.util.NullDependencyProvider;
 
 /**
- * Unfortunately OGNL sucks so bad in its design that we had to create a "unit"
- * test which accesses more than a single class to test the ognl funcionality.
- * Even worse, OGNL sucks with its static configuration methods in such a way
- * that tests are not thread safe. Summing up: OGNL api sucks, OGNL idea rulez.
- * This test is here to ensure generic support through our implementation using
- * OGNL.
+ * Test if IOGI can support generic types.
  *
  * @author Guilherme Silveira
  */

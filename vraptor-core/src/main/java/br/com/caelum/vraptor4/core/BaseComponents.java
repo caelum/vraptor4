@@ -133,6 +133,7 @@ import br.com.caelum.vraptor4.interceptor.multipart.MultipartInterceptor;
 import br.com.caelum.vraptor4.interceptor.multipart.NullMultipartInterceptor;
 import br.com.caelum.vraptor4.interceptor.multipart.Servlet3MultipartInterceptor;
 import br.com.caelum.vraptor4.interceptor.multipart.ServletFileUploadCreator;
+import br.com.caelum.vraptor4.interceptor.multipart.UploadedFileConverter;
 import br.com.caelum.vraptor4.ioc.ControllerHandler;
 import br.com.caelum.vraptor4.ioc.ConverterHandler;
 import br.com.caelum.vraptor4.ioc.InterceptorStereotypeHandler;
@@ -308,7 +309,8 @@ public class BaseComponents {
 			PrimitiveLongConverter.class,
 			PrimitiveShortConverter.class,
 			ShortConverter.class,
-			StringConverter.class));
+			StringConverter.class,
+			UploadedFileConverter.class));
 
 
 	private static final HashMap<Class<? extends Annotation>, StereotypeInfo> STEREOTYPES_INFO = new HashMap<Class<? extends Annotation>,StereotypeInfo>();

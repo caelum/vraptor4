@@ -10,9 +10,6 @@ import org.junit.Test;
 
 import br.com.caelum.vraptor.other.pack4ge.DumbSerialization;
 import br.com.caelum.vraptor.restfulie.serialization.RestfulSerialization;
-import br.com.caelum.vraptor.serialization.HTMLSerialization;
-import br.com.caelum.vraptor.serialization.PackageComparator;
-import br.com.caelum.vraptor.serialization.Serialization;
 import br.com.caelum.vraptor.serialization.xstream.XStreamJSONSerialization;
 import br.com.caelum.vraptor.serialization.xstream.XStreamXMLSerialization;
 
@@ -30,7 +27,7 @@ public class PackageComparatorTest {
 
 		Collections.sort(serializers, new PackageComparator());
 
-		Assert.assertEquals("br.com.caelum.vraptor4.other.pack4ge", serializers.get(0).getClass().getPackage().getName());
+		Assert.assertEquals("br.com.caelum.vraptor.other.pack4ge", serializers.get(0).getClass().getPackage().getName());
 
 	}
 
@@ -46,7 +43,7 @@ public class PackageComparatorTest {
 
 		Collections.sort(serializers, new PackageComparator());
 
-		Assert.assertEquals("br.com.caelum.vraptor4.other.pack4ge", serializers.get(0).getClass().getPackage().getName());
+		Assert.assertEquals("br.com.caelum.vraptor.other.pack4ge", serializers.get(0).getClass().getPackage().getName());
 	}
 
 	@Test
@@ -61,7 +58,7 @@ public class PackageComparatorTest {
 
 		Collections.sort(serializers, new PackageComparator());
 
-		Assert.assertEquals("br.com.caelum.vraptor4.other.pack4ge", serializers.get(0).getClass().getPackage().getName());
-		Assert.assertEquals("br.com.caelum.vraptor4.restfulie.serialization", serializers.get(1).getClass().getPackage().getName());
+		Assert.assertEquals("br.com.caelum.vraptor.other.pack4ge", serializers.get(0).getClass().getPackage().getName());
+		Assert.assertEquals("br.com.caelum.vraptor.restfulie.serialization", serializers.get(1).getClass().getPackage().getName());
 	}
 }

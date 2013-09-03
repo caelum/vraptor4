@@ -9,9 +9,9 @@ import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 
 import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileItemHeaders;
 
-public class MockFileItem
-    implements FileItem {
+public class MockFileItem implements FileItem {
 
     private static final long serialVersionUID = 5566658661323774136L;
 
@@ -33,7 +33,7 @@ public class MockFileItem
         this.name = name;
         this.content = content;
     }
-    
+
     public MockFileItem(String fieldName, String contentType, String name, byte[] content) {
         this.fieldName = fieldName;
         this.contentType = contentType;
@@ -105,5 +105,14 @@ public class MockFileItem
         throws Exception {
 
     }
+
+	@Override
+	public FileItemHeaders getHeaders() {
+		return null;
+	}
+
+	@Override
+	public void setHeaders(FileItemHeaders arg0) {
+	}
 
 }

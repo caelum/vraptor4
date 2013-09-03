@@ -36,8 +36,6 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 
-import ognl.OgnlException;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -50,12 +48,7 @@ import br.com.caelum.iogi.spi.LocaleProvider;
 import br.com.caelum.iogi.util.NullDependencyProvider;
 
 /**
- * Unfortunately OGNL sucks so bad in its design that we had to create a "unit"
- * test which accesses more than a single class to test the ognl funcionality.
- * Even worse, OGNL sucks with its static configuration methods in such a way
- * that tests are not thread safe. Summing up: OGNL api sucks, OGNL idea rulez.
- * Tests written here are "acceptance tests" for the Ognl support on http
- * parameters.
+ * Miscelanious test for IOGI.
  *
  * @author Guilherme Silveira
  */
@@ -125,7 +118,7 @@ public class MiscIogiSupportTest {
     }
 
     @Test
-    public void isCapableOfDealingWithEmptyParameterForInternalValueWhichNeedsAConverter() throws OgnlException {
+    public void isCapableOfDealingWithEmptyParameterForInternalValueWhichNeedsAConverter() {
     	final Target<House> target = Target.create(House.class, "house");
     	final Parameter parameter = new Parameter("house.cat.firstLeg.birthDay", "10/5/2010");
     	when(mockLocaleProvider.getLocale()).thenReturn(new Locale("pt", "BR"));

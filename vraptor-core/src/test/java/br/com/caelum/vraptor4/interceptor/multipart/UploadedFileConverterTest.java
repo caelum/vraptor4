@@ -10,8 +10,6 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import br.com.caelum.vraptor4.converter.ConversionError;
-
 public class UploadedFileConverterTest {
 	
 	private @Mock HttpServletRequest request;
@@ -30,14 +28,5 @@ public class UploadedFileConverterTest {
 		
 		UploadedFile uploadedFile = converter.convert("myfile", UploadedFile.class, null);
 		assertEquals(file, uploadedFile);
-	}
-
-	@Test(expected = ConversionError.class)
-	public void shouldThrowExceptionIfFileIsNull() {
-		when(request.getAttribute("myfile")).thenReturn(null);
-		
-		UploadedFileConverter converter = new UploadedFileConverter(request);
-		
-		converter.convert("myfile", UploadedFile.class, null);
 	}
 }

@@ -26,7 +26,6 @@ public class StepInvoker {
 			}
 			return element.isAnnotationPresent(this.step);
 		}
-
 	}
 
 	public Object tryToInvoke(Object interceptor,Class<? extends Annotation> step,Object... params) {
@@ -52,11 +51,16 @@ public class StepInvoker {
 	}
 
 	public Method findMethod(Class<? extends Annotation> step,Class<?> interceptorClass) {
-		MirrorList<Method> possibleMethods = new Mirror().on(interceptorClass).reflectAll().methods().matching(new InvokeMatcher(step));
+		MirrorList<Method> possibleMethods = findPossibleMethods(step, interceptorClass);
 		if (possibleMethods.size() > 1 && isNotSameClass(possibleMethods, interceptorClass)) {
-			throw new IllegalStateException("You should not have more than one @"+step.getSimpleName()+" annotated method");
+			throw new IllegalStateException("You should not " +
+				"have more than one @"+step.getSimpleName()+" annotated method");
 		}
 		return possibleMethods.isEmpty() ? null : possibleMethods.get(0);
+	}
+
+	private MirrorList<Method> findPossibleMethods(Class<? extends Annotation> step, Class<?> classs) {
+		return new Mirror().on(classs).reflectAll().methods().matching(new InvokeMatcher(step));
 	}
 
 	private boolean isNotSameClass(MirrorList<Method> methods, Class<?> interceptorClass) {

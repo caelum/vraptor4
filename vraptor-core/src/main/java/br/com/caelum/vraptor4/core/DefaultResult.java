@@ -27,6 +27,9 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import br.com.caelum.vraptor4.Result;
 import br.com.caelum.vraptor4.View;
 import br.com.caelum.vraptor4.interceptor.TypeNameExtractor;
@@ -39,6 +42,8 @@ import br.com.caelum.vraptor4.ioc.Container;
 @RequestScoped
 @Named("result")
 public class DefaultResult extends AbstractResult {
+    
+    private static final Logger logger = LoggerFactory.getLogger(DefaultResult.class);
 
     private HttpServletRequest request;
     private Container container;
@@ -63,7 +68,7 @@ public class DefaultResult extends AbstractResult {
 	
     @Override
 	public <T extends View> T use(Class<T> view) {
-        this.responseCommitted = true;
+        responseCommitted = true;
         return container.instanceFor(view);
     }
     
@@ -74,6 +79,8 @@ public class DefaultResult extends AbstractResult {
 
     @Override
 	public Result include(String key, Object value) {
+        logger.debug("including attribute {}: {}", key, value);
+        
     	includedAttributes.put(key, value);
         request.setAttribute(key, value);
         return this;
@@ -95,7 +102,7 @@ public class DefaultResult extends AbstractResult {
 			return this;
 		}
 		
-		String key = this.extractor.nameFor(value.getClass());
+		String key = extractor.nameFor(value.getClass());
 		return include(key, value);
 	}
 }

@@ -27,6 +27,9 @@ import java.util.ResourceBundle;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import br.com.caelum.vraptor4.Result;
 import br.com.caelum.vraptor4.View;
 import br.com.caelum.vraptor4.core.Localization;
@@ -43,6 +46,8 @@ import com.google.common.base.Supplier;
  */
 @RequestScoped
 public class DefaultValidator extends AbstractValidator {
+    
+    private static final Logger logger = LoggerFactory.getLogger(DefaultValidator.class);
 
     private Result result;
 	private List<Message> errors = new ArrayList<Message>();
@@ -87,6 +92,11 @@ public class DefaultValidator extends AbstractValidator {
     	if (!hasErrors()) {
     		return new MockResult(proxifier).use(view); //ignore anything, no errors occurred
     	}
+    	
+    	if (logger.isDebugEnabled()) {
+    	    logger.debug("there are errors on result: {}", errors);
+    	}
+    	
     	result.include("errors", errors);
     	outjector.outjectRequestMap();
     	return viewsFactory.instanceFor(view, errors);

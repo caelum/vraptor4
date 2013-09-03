@@ -41,7 +41,7 @@ import br.com.caelum.vraptor.http.MutableResponse.RedirectListener;
 @Intercepts
 public class FlashInterceptor implements Interceptor {
 
-	final static String FLASH_INCLUDED_PARAMETERS = "br.com.caelum.vraptor4.flash.parameters";
+	final static String FLASH_INCLUDED_PARAMETERS = "br.com.caelum.vraptor.flash.parameters";
 	private static final Logger LOGGER = LoggerFactory.getLogger(FlashInterceptor.class);
 
 	private HttpSession session;

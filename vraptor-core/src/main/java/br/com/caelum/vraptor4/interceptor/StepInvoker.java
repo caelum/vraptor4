@@ -56,11 +56,7 @@ public class StepInvoker {
 		if (possibleMethods.size() > 1) {
 			throw new IllegalStateException("You should not have more than one @"+step.getSimpleName()+" annotated method");
 		}
-		if(possibleMethods.isEmpty()){
-			return null;
-		}
-		Method stepMethod = possibleMethods.get(0);
-		return stepMethod;
+		return possibleMethods.isEmpty() ? null : possibleMethods.get(0);
 	}
 
 	private Mirror createMirror() {

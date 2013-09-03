@@ -1,7 +1,10 @@
 package br.com.caelum.vraptor4.interceptor;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.spy;
+
+import java.lang.reflect.Method;
 
 import org.junit.Test;
 
@@ -18,7 +21,9 @@ public class StepInvokerTest {
 
 	@Test
 	public void shouldNotReadInheritedMethods() throws Exception {
-		stepInvoker.findMethod(AroundCall.class,InterceptorWithInheritance.class);
+		Class<?> interceptorClass = InterceptorWithInheritance.class;
+		Method method = stepInvoker.findMethod(BeforeCall.class,interceptorClass);
+		assertEquals(method, interceptorClass.getDeclaredMethod("begin"));
 	}
 
 	@Test(expected=IllegalStateException.class)

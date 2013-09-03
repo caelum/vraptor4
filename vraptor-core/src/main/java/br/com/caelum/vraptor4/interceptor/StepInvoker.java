@@ -53,10 +53,20 @@ public class StepInvoker {
 
 	public Method findMethod(Class<? extends Annotation> step,Class<?> interceptorClass) {
 		MirrorList<Method> possibleMethods = createMirror().on(interceptorClass).reflectAll().methods().matching(new InvokeMatcher(step));
-		if (possibleMethods.size() > 1) {
+		if (possibleMethods.size() > 1 && isNotSameClass(possibleMethods, interceptorClass)) {
 			throw new IllegalStateException("You should not have more than one @"+step.getSimpleName()+" annotated method");
 		}
 		return possibleMethods.isEmpty() ? null : possibleMethods.get(0);
+	}
+
+	private boolean isNotSameClass(MirrorList<Method> methods, Class<?> interceptorClass) {
+
+		for (Method possibleMethod : methods) {
+			if(!possibleMethod.getDeclaringClass().equals(interceptorClass)) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	private Mirror createMirror() {

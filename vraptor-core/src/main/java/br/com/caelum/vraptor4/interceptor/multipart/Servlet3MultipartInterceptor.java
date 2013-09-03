@@ -89,7 +89,7 @@ public class Servlet3MultipartInterceptor
     private MutableRequest parameters;
     private Validator validator;
 
-    final Multiset<String> indexes = HashMultiset.create();
+    private Multiset<String> indexes;
 
     //CDI eyes only
 	@Deprecated
@@ -122,6 +122,7 @@ public class Servlet3MultipartInterceptor
         logger.info("Request contains multipart data. Try to parse with Servlet3 Part");
 
         final Multimap<String, String> params = LinkedListMultimap.create();
+        indexes = HashMultiset.create();
 
         try {
             for (Part part : request.getParts()) {

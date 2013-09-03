@@ -20,15 +20,15 @@ import java.util.Arrays;
 
 import javax.inject.Inject;
 
+import br.com.caelum.vraptor.Accepts;
+import br.com.caelum.vraptor.BeforeCall;
+import br.com.caelum.vraptor.InterceptionException;
+import br.com.caelum.vraptor.Intercepts;
+import br.com.caelum.vraptor.Result;
+import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.musicjungle.controller.HomeController;
 import br.com.caelum.vraptor.musicjungle.dao.UserDao;
-import br.com.caelum.vraptor4.Accepts;
-import br.com.caelum.vraptor4.BeforeCall;
-import br.com.caelum.vraptor4.InterceptionException;
-import br.com.caelum.vraptor4.Intercepts;
-import br.com.caelum.vraptor4.Result;
-import br.com.caelum.vraptor4.controller.ControllerMethod;
-import br.com.caelum.vraptor4.validator.ValidationMessage;
+import br.com.caelum.vraptor.validator.ValidationMessage;
 
 /**
  * Interceptor to check if the user is in the session.

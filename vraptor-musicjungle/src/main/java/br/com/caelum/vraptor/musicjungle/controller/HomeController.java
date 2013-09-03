@@ -24,17 +24,17 @@ import javax.inject.Inject;
 import org.hibernate.SessionFactory;
 import org.hsqldb.Session;
 
+import br.com.caelum.vraptor.Controller;
+import br.com.caelum.vraptor.Get;
+import br.com.caelum.vraptor.Post;
+import br.com.caelum.vraptor.Result;
+import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.musicjungle.dao.DefaultUserDao;
 import br.com.caelum.vraptor.musicjungle.dao.UserDao;
 import br.com.caelum.vraptor.musicjungle.interceptor.Public;
 import br.com.caelum.vraptor.musicjungle.interceptor.UserInfo;
 import br.com.caelum.vraptor.musicjungle.model.User;
-import br.com.caelum.vraptor4.Controller;
-import br.com.caelum.vraptor4.Get;
-import br.com.caelum.vraptor4.Post;
-import br.com.caelum.vraptor4.Result;
-import br.com.caelum.vraptor4.Validator;
-import br.com.caelum.vraptor4.validator.Validations;
+import br.com.caelum.vraptor.validator.Validations;
 
 /**
  * This class will be responsible to login/logout users.

@@ -1,13 +1,13 @@
 package br.com.caelum.vrapto4.test;
 
-import static br.com.caelum.vraptor4.view.Results.http;
+import static br.com.caelum.vraptor.view.Results.http;
 
 import java.io.IOException;
 
 import javax.inject.Inject;
 
-import br.com.caelum.vraptor4.Controller;
-import br.com.caelum.vraptor4.Result;
+import br.com.caelum.vraptor.Controller;
+import br.com.caelum.vraptor.Result;
 
 @Controller
 public class SimpleController {

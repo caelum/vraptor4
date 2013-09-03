@@ -51,7 +51,7 @@ public class ServletContainerFactory {
 		ServletContext context = mock(ServletContext.class, "servlet context");
 
 		when(context.getMajorVersion()).thenReturn(3);
-		when(context.getInitParameter(BASE_PACKAGES_PARAMETER_NAME)).thenReturn("br.com.caelum.vraptor4.ioc.fixture");
+		when(context.getInitParameter(BASE_PACKAGES_PARAMETER_NAME)).thenReturn("br.com.caelum.vraptor.ioc.fixture");
 		when(context.getRealPath("/WEB-INF/classes")).thenReturn(getClassDir());
 
 		when(context.getClassLoader()).thenReturn(
@@ -73,6 +73,6 @@ public class ServletContainerFactory {
    }
 
 	private String getClassDir() {
-		return getClass().getResource("/br/com/caelum/vraptor4/test").getFile();
+		return getClass().getResource("/br/com/caelum/vraptor/test").getFile();
 	}
 }

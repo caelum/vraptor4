@@ -72,17 +72,15 @@ import br.com.caelum.vraptor.deserialization.Deserializers;
 import br.com.caelum.vraptor.http.route.Route;
 import br.com.caelum.vraptor.http.route.Router;
 import br.com.caelum.vraptor.interceptor.InterceptorRegistry;
-import br.com.caelum.vraptor.ioc.Container;
-import br.com.caelum.vraptor.ioc.ContainerProvider;
 import br.com.caelum.vraptor.ioc.cdi.Code;
 import br.com.caelum.vraptor.ioc.fixture.ComponentFactoryInTheClasspath;
+import br.com.caelum.vraptor.ioc.fixture.ComponentFactoryInTheClasspath.Provided;
 import br.com.caelum.vraptor.ioc.fixture.ControllerInTheClasspath;
 import br.com.caelum.vraptor.ioc.fixture.ConverterInTheClasspath;
 import br.com.caelum.vraptor.ioc.fixture.CustomComponentInTheClasspath;
 import br.com.caelum.vraptor.ioc.fixture.CustomComponentWithLifecycleInTheClasspath;
 import br.com.caelum.vraptor.ioc.fixture.DependentOnSomethingFromComponentFactory;
 import br.com.caelum.vraptor.ioc.fixture.InterceptorInTheClasspath;
-import br.com.caelum.vraptor.ioc.fixture.ComponentFactoryInTheClasspath.Provided;
 
 /**
  * Acceptance test that checks if the container is capable of giving all
@@ -94,7 +92,7 @@ public abstract class GenericContainerTest {
 
 	protected ContainerProvider provider;
 	protected ServletContext context;
-	private static final String PACKAGENAME = "br.com.caelum.vraptor4.ioc.fixture";
+	private static final String PACKAGENAME = "br.com.caelum.vraptor.ioc.fixture";
 
 	protected abstract ContainerProvider getProvider();
 	protected abstract <T> T executeInsideRequest(WhatToDo<T> execution);
@@ -446,7 +444,7 @@ public abstract class GenericContainerTest {
 	}
 
 	protected String getClassDir() {
-		return getClass().getResource("/br/com/caelum/vraptor4/test").getFile();
+		return getClass().getResource("/br/com/caelum/vraptor/test").getFile();
 	}
 
 	protected <T> T instanceFor(final Class<T> component, Container container) {

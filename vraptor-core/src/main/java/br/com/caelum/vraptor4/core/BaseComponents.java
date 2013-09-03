@@ -95,9 +95,6 @@ import br.com.caelum.vraptor4.http.iogi.IogiParametersProvider;
 import br.com.caelum.vraptor4.http.iogi.VRaptorDependencyProvider;
 import br.com.caelum.vraptor4.http.iogi.VRaptorInstantiator;
 import br.com.caelum.vraptor4.http.iogi.VRaptorParameterNamesProvider;
-import br.com.caelum.vraptor4.http.ognl.EmptyElementsRemoval;
-import br.com.caelum.vraptor4.http.ognl.OgnlFacade;
-import br.com.caelum.vraptor4.http.ognl.OgnlParametersProvider;
 import br.com.caelum.vraptor4.http.route.DefaultRouter;
 import br.com.caelum.vraptor4.http.route.DefaultTypeFinder;
 import br.com.caelum.vraptor4.http.route.Evaluator;
@@ -342,9 +339,7 @@ public class BaseComponents {
 	}
 
     public static Map<Class<?>, Class<?>> getApplicationScoped() {
-        if (!isClassPresent("ognl.OgnlRuntime")) {
-            APPLICATION_COMPONENTS.put(DependencyProvider.class, VRaptorDependencyProvider.class);
-        }
+        APPLICATION_COMPONENTS.put(DependencyProvider.class, VRaptorDependencyProvider.class);
 
         // try put beanval 1.1 or beanval 1.0 if available
         if (isClassPresent("javax.validation.executable.ExecutableValidator")) {
@@ -384,16 +379,10 @@ public class BaseComponents {
             REQUEST_COMPONENTS.put(MultipartInterceptor.class, NullMultipartInterceptor.class);
     	}
 
-        if (isClassPresent("ognl.OgnlRuntime")) {
-            REQUEST_COMPONENTS.put(ParametersProvider.class, OgnlParametersProvider.class);
-            REQUEST_COMPONENTS.put(EmptyElementsRemoval.class, EmptyElementsRemoval.class);
-            REQUEST_COMPONENTS.put(OgnlFacade.class, OgnlFacade.class);
-        } else {
-            REQUEST_COMPONENTS.put(ParametersProvider.class, IogiParametersProvider.class);
-            REQUEST_COMPONENTS.put(ParameterNamesProvider.class, VRaptorParameterNamesProvider.class);
-            REQUEST_COMPONENTS.put(InstantiatorWithErrors.class, VRaptorInstantiator.class);
-            REQUEST_COMPONENTS.put(Instantiator.class, VRaptorInstantiator.class);
-        }
+        REQUEST_COMPONENTS.put(ParametersProvider.class, IogiParametersProvider.class);
+        REQUEST_COMPONENTS.put(ParameterNamesProvider.class, VRaptorParameterNamesProvider.class);
+        REQUEST_COMPONENTS.put(InstantiatorWithErrors.class, VRaptorInstantiator.class);
+        REQUEST_COMPONENTS.put(Instantiator.class, VRaptorInstantiator.class);
 
         return Collections.unmodifiableMap(REQUEST_COMPONENTS);
     }

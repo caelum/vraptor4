@@ -73,7 +73,7 @@ public class DefaultInterceptorStack implements InterceptorStack {
 	// XXX this method will be removed soon
 	public void addAsNext(Class<?> type) {
 		if (!type.getPackage().getName()
-				.startsWith("br.com.caelum.vraptor4.interceptor")
+				.startsWith("br.com.caelum.vraptor.interceptor")
 				&& !type.equals(ForwardToDefaultViewInterceptor.class)) {
 			this.interceptors.addFirst(handlerFactory.handlerFor(type));
 		}

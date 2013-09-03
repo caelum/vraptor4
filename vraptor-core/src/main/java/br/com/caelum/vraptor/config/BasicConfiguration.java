@@ -41,22 +41,22 @@ public class BasicConfiguration {
 	/**
 	 * context parameter that represents the class of IoC provider
 	 */
-	public static final String CONTAINER_PROVIDER = "br.com.caelum.vraptor4.provider";
+	public static final String CONTAINER_PROVIDER = "br.com.caelum.vraptor.provider";
 
 	/**
 	 * context parameter that represents application character encoding
 	 */
-	public static final String ENCODING = "br.com.caelum.vraptor4.encoding";
+	public static final String ENCODING = "br.com.caelum.vraptor.encoding";
 
 	/**
 	 * context parameter that represents the base package(s) of your application
 	 */
-	public static final String BASE_PACKAGES_PARAMETER_NAME = "br.com.caelum.vraptor4.packages";
+	public static final String BASE_PACKAGES_PARAMETER_NAME = "br.com.caelum.vraptor.packages";
 
 	/**
 	 * Disables/enables classpath scanning
 	 */
-	public static final String SCANNING_PARAM = "br.com.caelum.vraptor4.scanning";
+	public static final String SCANNING_PARAM = "br.com.caelum.vraptor.scanning";
 
 	private final ServletContext servletContext;
 

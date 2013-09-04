@@ -39,10 +39,13 @@ import com.thoughtworks.xstream.XStream;
 @RequestScoped
 public class XStreamXMLSerialization implements XMLSerialization {
 
-	private final HttpServletResponse response;
-	private final TypeNameExtractor extractor;
-	private final ProxyInitializer initializer;
-	private final XStreamBuilder builder;
+	private HttpServletResponse response;
+	private TypeNameExtractor extractor;
+	private ProxyInitializer initializer;
+	private XStreamBuilder builder;
+
+	@Deprecated // CDI eyes only
+	public XStreamXMLSerialization() {}
 
 	@Inject
 	public XStreamXMLSerialization(HttpServletResponse response, TypeNameExtractor extractor, ProxyInitializer initializer, XStreamBuilder builder) {

@@ -21,7 +21,11 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@javax.enterprise.inject.Stereotype
+import javax.enterprise.context.RequestScoped;
+import javax.enterprise.inject.Stereotype;
+
+@RequestScoped
+@Stereotype
 @Documented
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)

@@ -22,6 +22,7 @@ import static br.com.caelum.vraptor4.view.Results.page;
 
 import java.util.ArrayList;
 
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 
 import net.vidageek.mirror.dsl.Mirror;
@@ -36,6 +37,7 @@ import br.com.caelum.vraptor4.http.route.MethodNotAllowedException;
 import br.com.caelum.vraptor4.http.route.Router;
 import br.com.caelum.vraptor4.validator.Message;
 
+@RequestScoped
 public class DefaultRefererResult implements RefererResult {
 
 	private final MutableRequest request;

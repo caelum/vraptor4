@@ -24,6 +24,7 @@ import java.lang.reflect.Method;
 import java.util.EnumSet;
 import java.util.List;
 
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
 
@@ -41,6 +42,7 @@ import br.com.caelum.vraptor4.proxy.SuperMethod;
  * @author guilherme silveira
  * @since 3.0.3
  */
+@RequestScoped
 public class DefaultStatus implements Status {
 
 	private final HttpServletResponse response;
@@ -58,7 +60,7 @@ public class DefaultStatus implements Status {
 		this.proxifier = proxifier;
 		this.router = router;
 	}
-	
+
 	public void notFound() {
 		sendError(HttpServletResponse.SC_NOT_FOUND);
 	}

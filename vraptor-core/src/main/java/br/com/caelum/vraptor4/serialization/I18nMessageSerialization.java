@@ -16,6 +16,8 @@
 
 package br.com.caelum.vraptor4.serialization;
 
+import javax.enterprise.context.RequestScoped;
+
 import br.com.caelum.vraptor4.View;
 import br.com.caelum.vraptor4.core.Localization;
 import br.com.caelum.vraptor4.ioc.Container;
@@ -28,12 +30,13 @@ import br.com.caelum.vraptor4.validator.I18nMessage;
  * @author Leonardo Wolter
  * @since 3.5
  */
+@RequestScoped
 public class I18nMessageSerialization implements View{
 
 	private Localization localization;
 	private Container container;
 	private I18nMessage i18nMessage;
-	
+
 	//CDI eyes only
 	@Deprecated
 	public I18nMessageSerialization() {
@@ -50,7 +53,7 @@ public class I18nMessageSerialization implements View{
 		this.i18nMessage = i18nMessage;
 		return this;
 	}
-	
+
 	public void as(Class<? extends Serialization> method){
 		Serialization serialization = container.instanceFor(method);
 		serialization.from(i18nMessage, "message").serialize();

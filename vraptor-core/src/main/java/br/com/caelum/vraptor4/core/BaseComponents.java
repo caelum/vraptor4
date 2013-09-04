@@ -277,7 +277,7 @@ public class BaseComponents {
             FlashScope.class,								SessionFlashScope.class,
             XStreamConverters.class,                        XStreamConverters.class,
             MessageConverter.class,							MessageConverter.class,
-            ParameterIncluderInterceptor.class,					ParameterIncluderInterceptor.class
+            ParameterIncluderInterceptor.class,				ParameterIncluderInterceptor.class
     );
 
     @SuppressWarnings({"unchecked", "rawtypes"})

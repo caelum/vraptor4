@@ -19,6 +19,7 @@ package br.com.caelum.vraptor4.restfulie.headers;
 
 import java.util.Calendar;
 
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
 
@@ -27,6 +28,7 @@ import br.com.caelum.vraptor4.restfulie.hypermedia.HypermediaResource;
 import br.com.caelum.vraptor4.restfulie.resource.Cacheable;
 import br.com.caelum.vraptor4.restfulie.resource.RestfulEntity;
 
+@RequestScoped
 public class DefaultRestHeadersHandler implements RestHeadersHandler {
 
 	private final HttpServletResponse response;
@@ -37,7 +39,7 @@ public class DefaultRestHeadersHandler implements RestHeadersHandler {
 		this.defaults = defaults;
 		this.response = response;
 	}
-	
+
 	public void handle(HypermediaResource resource) {
 		// TODO implement link headers
 		if(Cacheable.class.isAssignableFrom(resource.getClass())) {

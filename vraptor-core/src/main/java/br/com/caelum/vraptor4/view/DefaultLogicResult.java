@@ -22,6 +22,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
 
@@ -49,6 +50,7 @@ import br.com.caelum.vraptor4.util.Stringnifier;
  *
  * @author Guilherme Silveira
  */
+@RequestScoped
 public class DefaultLogicResult implements LogicResult {
 
 	private static final Logger logger = LoggerFactory.getLogger(DefaultLogicResult.class);
@@ -77,7 +79,7 @@ public class DefaultLogicResult implements LogicResult {
 		this.flash = flash;
 		this.methodInfo = methodInfo;
 	}
-	
+
 	/**
 	 * This implementation don't actually use request dispatcher for the
 	 * forwarding. It runs forwarding logic, and renders its <b>default</b>

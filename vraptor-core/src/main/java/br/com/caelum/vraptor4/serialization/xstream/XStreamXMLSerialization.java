@@ -17,6 +17,7 @@ package br.com.caelum.vraptor4.serialization.xstream;
 
 import java.io.IOException;
 
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
 
@@ -35,13 +36,14 @@ import com.thoughtworks.xstream.XStream;
  * @author Lucas Cavalcanti
  * @since 3.0.2
  */
+@RequestScoped
 public class XStreamXMLSerialization implements XMLSerialization {
 
 	private final HttpServletResponse response;
 	private final TypeNameExtractor extractor;
 	private final ProxyInitializer initializer;
 	private final XStreamBuilder builder;
-	
+
 	@Inject
 	public XStreamXMLSerialization(HttpServletResponse response, TypeNameExtractor extractor, ProxyInitializer initializer, XStreamBuilder builder) {
 		this.response = response;

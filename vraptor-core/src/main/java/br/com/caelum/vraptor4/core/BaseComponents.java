@@ -230,9 +230,6 @@ public class BaseComponents {
             ProxyInitializer.class,			NullProxyInitializer.class
     );
 
-    private final static Map<Class<?>, Class<?>> CACHED_COMPONENTS = classMap(
-    );
-
     private static final Map<Class<?>, Class<?>> PROTOTYPE_COMPONENTS = classMap(
     		RequestExecution.class, 						EnhancedRequestExecution.class,
     		XStreamBuilder.class, 							XStreamBuilderImpl.class
@@ -334,10 +331,6 @@ public class BaseComponents {
         return ReflectionInstanceCreator.class;
     }
 
-	public static Map<Class<?>, Class<?>> getCachedComponents() {
-		return Collections.unmodifiableMap(CACHED_COMPONENTS);
-	}
-
     public static Map<Class<?>, Class<?>> getApplicationScoped() {
         APPLICATION_COMPONENTS.put(DependencyProvider.class, VRaptorDependencyProvider.class);
 
@@ -396,19 +389,6 @@ public class BaseComponents {
         }
     }
 
-	private static boolean registerIfClassPresent(Map<Class<?>, Class<?>> components, String className, Class<?>... types) {
-		try {
-			Class.forName(className);
-			for (Class<?> type : types) {
-				components.put(type, type);
-			}
-			return true;
-		} catch (ClassNotFoundException e) {
-			/* ok, don't register */
-			return false;
-		}
-	}
-
 	private static void registerIfClassPresent(Set<Class<? extends Converter<?>>> components, String className, Class<? extends Converter<?>>... types) {
 		if (components.contains(types[0])) {
 			return;
@@ -437,14 +417,6 @@ public class BaseComponents {
     		return new HashSet<StereotypeInfo>(STEREOTYPES_INFO.values());
     }
 
-    public static Set<Class<? extends Annotation>> getStereotypes() {
-    		Set<StereotypeInfo> stereotypesInfo = getStereotypesInfo();
-    		HashSet<Class<? extends Annotation>> stereotypes = new HashSet<Class<? extends Annotation>>();
-    		for (StereotypeInfo stereotypeInfo : stereotypesInfo) {
-    			stereotypes.add(stereotypeInfo.getStereotype());
-		}
-    		return stereotypes;
-    }
     public static Map<Class<? extends Annotation>,StereotypeInfo> getStereotypesInfoMap() {
     		return STEREOTYPES_INFO;
     }

@@ -60,7 +60,7 @@ public class DefaultRouter implements Router {
 	private  Converters converters;
 	private  ParameterNameProvider nameProvider;
     private  Evaluator evaluator;
-    private Map<Invocation, Iterator<Route>> cache = new ConcurrentHashMap<Invocation, Iterator<Route>>();
+    private Map<Invocation, Route> cache = new ConcurrentHashMap<Invocation, Route>();
 
     //CDI eyes only
 	@Deprecated
@@ -149,17 +149,14 @@ public class DefaultRouter implements Router {
 		Invocation invocation = new Invocation(type, method);
 		if(!cache.containsKey(invocation)){
 			Iterator<Route> matches = Iterators.filter(routes.iterator(), Filters.canHandle(type, method));
-			cache.put(invocation, matches);
+			if (matches.hasNext()) {
+				cache.put(invocation, matches.next());
+			}
 		}
 		
-		Iterator<Route> matches = cache.get(invocation);
-		if (matches.hasNext()) {
-			try {
-				return matches.next().urlFor(type, method, params);
-			} catch (Exception e) {
-				throw new VRaptorException("The selected route is invalid for redirection: " + type.getName() + "."
-						+ method.getName(), e);
-			}
+		Route route = cache.get(invocation);
+		if (route != null) {
+			return route.urlFor(type, method, params);
 		}
 		throw new RouteNotFoundException("The selected route is invalid for redirection: " + type.getName() + "."
 				+ method.getName());

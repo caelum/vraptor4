@@ -280,6 +280,10 @@ public class DefaultRouterTest {
 		@Path("/myPath")
 		public void customizedPath() {
 		}
+		
+		@Path("/myPath/{param}")
+		public void pathWithParam(String param) {
+		}
 
 		@Path("/*/customPath")
 		public void starPath() {
@@ -294,6 +298,15 @@ public class DefaultRouterTest {
 	public void usesAsteriskBothWays() throws NoSuchMethodException {
 		registerRulesFor(MyController.class);
 		final Method method = MyController.class.getMethod("starPath");
+		String url = router.urlFor(MyController.class, method, new Object[] {});
+		assertThat(router.parse(url, HttpMethod.POST, null).getMethod(), is(equalTo(method)));
+	}
+	
+	@Test
+	public void shouldCacheInvocationsAfterFirstCall() throws NoSuchMethodException {
+		registerRulesFor(MyController.class);
+		final Method method = MyController.class.getMethod("starPath");
+		router.urlFor(MyController.class, method, new Object[] {});
 		String url = router.urlFor(MyController.class, method, new Object[] {});
 		assertThat(router.parse(url, HttpMethod.POST, null).getMethod(), is(equalTo(method)));
 	}

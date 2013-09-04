@@ -31,8 +31,11 @@ import br.com.caelum.vraptor4.restfulie.resource.RestfulEntity;
 @RequestScoped
 public class DefaultRestHeadersHandler implements RestHeadersHandler {
 
-	private final HttpServletResponse response;
-	private final RestDefaults defaults;
+	private HttpServletResponse response;
+	private RestDefaults defaults;
+
+	@Deprecated // CDI eyes only
+	public DefaultRestHeadersHandler() {}
 
 	@Inject
 	public DefaultRestHeadersHandler(HttpServletResponse response, RestDefaults defaults) {

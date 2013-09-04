@@ -53,8 +53,11 @@ import br.com.caelum.vraptor4.validator.ValidationException;
 @RequestScoped
 public class DefaultValidationViewsFactory implements ValidationViewsFactory {
 
-	private final Result result;
-	private final Proxifier proxifier;
+	private Result result;
+	private Proxifier proxifier;
+
+	@Deprecated // CDI eyes only
+	public DefaultValidationViewsFactory() {}
 
 	@Inject
 	public DefaultValidationViewsFactory(Result result, Proxifier proxifier) {

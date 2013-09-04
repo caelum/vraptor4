@@ -26,6 +26,8 @@ import java.util.Collections;
 import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -58,6 +60,7 @@ public class DefaultRouter implements Router {
 	private  Converters converters;
 	private  ParameterNameProvider nameProvider;
     private  Evaluator evaluator;
+    private Map<Invocation, Iterator<Route>> cache = new ConcurrentHashMap<Invocation, Iterator<Route>>();
 
     //CDI eyes only
 	@Deprecated
@@ -142,7 +145,14 @@ public class DefaultRouter implements Router {
 
 	@Override
 	public <T> String urlFor(Class<T> type, Method method, Object... params) {
-		Iterator<Route> matches = Iterators.filter(routes.iterator(), Filters.canHandle(type, method));
+	
+		Invocation invocation = new Invocation(type, method);
+		if(!cache.containsKey(invocation)){
+			Iterator<Route> matches = Iterators.filter(routes.iterator(), Filters.canHandle(type, method));
+			cache.put(invocation, matches);
+		}
+		
+		Iterator<Route> matches = cache.get(invocation);
 		if (matches.hasNext()) {
 			try {
 				return matches.next().urlFor(type, method, params);
@@ -160,4 +170,49 @@ public class DefaultRouter implements Router {
 		return Collections.unmodifiableList(new ArrayList<Route>(routes));
 	}
 
+	private static class Invocation{
+		private Class<?> controllerType;
+		private Method method;
+
+		public Invocation(Class<?> type, Method method) {
+			controllerType = type;
+			this.method = method;
+		}
+
+		@Override
+		public int hashCode() {
+			final int prime = 31;
+			int result = 1;
+			result = prime
+					* result
+					+ ((controllerType == null) ? 0 : controllerType.hashCode());
+			result = prime * result
+					+ ((method == null) ? 0 : method.hashCode());
+			return result;
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (this == obj)
+				return true;
+			if (obj == null)
+				return false;
+			if (getClass() != obj.getClass())
+				return false;
+			Invocation other = (Invocation) obj;
+			if (controllerType == null) {
+				if (other.controllerType != null)
+					return false;
+			} else if (!controllerType.equals(other.controllerType))
+				return false;
+			if (method == null) {
+				if (other.method != null)
+					return false;
+			} else if (!method.equals(other.method))
+				return false;
+			return true;
+		}
+		
+	}
 }
+

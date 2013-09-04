@@ -40,11 +40,14 @@ import br.com.caelum.vraptor4.validator.Message;
 @RequestScoped
 public class DefaultRefererResult implements RefererResult {
 
-	private final MutableRequest request;
-	private final Result result;
-	private final Router router;
-	private final ParametersProvider provider;
-	private final Localization localization;
+	private MutableRequest request;
+	private Result result;
+	private Router router;
+	private ParametersProvider provider;
+	private Localization localization;
+
+	@Deprecated// CDI eyes only
+	public DefaultRefererResult() {}
 
 	@Inject
 	public DefaultRefererResult(Result result, MutableRequest request, Router router,

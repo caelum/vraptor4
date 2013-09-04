@@ -417,14 +417,6 @@ public class BaseComponents {
     		return new HashSet<StereotypeInfo>(STEREOTYPES_INFO.values());
     }
 
-    public static Set<Class<? extends Annotation>> getStereotypes() {
-    		Set<StereotypeInfo> stereotypesInfo = getStereotypesInfo();
-    		HashSet<Class<? extends Annotation>> stereotypes = new HashSet<Class<? extends Annotation>>();
-    		for (StereotypeInfo stereotypeInfo : stereotypesInfo) {
-    			stereotypes.add(stereotypeInfo.getStereotype());
-		}
-    		return stereotypes;
-    }
     public static Map<Class<? extends Annotation>,StereotypeInfo> getStereotypesInfoMap() {
     		return STEREOTYPES_INFO;
     }

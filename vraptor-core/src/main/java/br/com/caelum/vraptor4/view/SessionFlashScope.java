@@ -29,9 +29,12 @@ import br.com.caelum.vraptor4.controller.ControllerMethod;
 @RequestScoped
 public class SessionFlashScope implements FlashScope {
 
-	private final HttpSession session;
+	private HttpSession session;
 
 	private static final String KEY_START = "vraptor_flash_parameters_for_";
+
+	@Deprecated // CDI eyes only
+	public SessionFlashScope() {}
 
 	@Inject
 	public SessionFlashScope(HttpSession session) {

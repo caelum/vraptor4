@@ -38,10 +38,13 @@ import br.com.caelum.vraptor4.restfulie.hypermedia.HypermediaResource;
 @RequestScoped
 public class DefaultRepresentationResult implements RepresentationResult {
 
-	private final FormatResolver formatResolver;
-	private final List<Serialization> serializations;
-	private final Result result;
-	private final RestHeadersHandler headersHandler;
+	private FormatResolver formatResolver;
+	private List<Serialization> serializations;
+	private Result result;
+	private RestHeadersHandler headersHandler;
+
+	@Deprecated // CDI eyes only
+	public DefaultRepresentationResult() {}
 
 	@Inject
 	public DefaultRepresentationResult(FormatResolver formatResolver, Result result, List<Serialization> serializations, RestHeadersHandler headersHandler) {

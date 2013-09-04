@@ -38,8 +38,11 @@ import com.thoughtworks.xstream.XStream;
 @RequestScoped
 public class XStreamXMLDeserializer implements XMLDeserializer {
 
-	private final ParameterNameProvider provider;
-	private final XStreamBuilder builder;
+	private ParameterNameProvider provider;
+	private XStreamBuilder builder;
+
+	@Deprecated // CDI eyes only
+	public XStreamXMLDeserializer() {}
 
 	@Inject
 	public XStreamXMLDeserializer(ParameterNameProvider provider, XStreamBuilder builder) {

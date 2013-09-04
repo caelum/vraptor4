@@ -43,10 +43,13 @@ import br.com.caelum.vraptor4.view.ResultException;
 @RequestScoped
 public class XStreamJSONPSerialization implements JSONPSerialization {
 
-	private final HttpServletResponse response;
-	private final TypeNameExtractor extractor;
-	private final ProxyInitializer initializer;
-	private final XStreamBuilder builder;
+	private HttpServletResponse response;
+	private TypeNameExtractor extractor;
+	private ProxyInitializer initializer;
+	private XStreamBuilder builder;
+
+	@Deprecated // CDI eyes only
+	public XStreamJSONPSerialization() {}
 
 	@Inject
 	public XStreamJSONPSerialization(HttpServletResponse response, TypeNameExtractor extractor, ProxyInitializer initializer, XStreamBuilder builder) {

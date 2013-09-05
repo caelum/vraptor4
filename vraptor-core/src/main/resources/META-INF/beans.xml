@@ -24,8 +24,10 @@
 			<if-class-not-available name="javax.validation.executable.ExecutableValidator"/>
 		</exclude>
 
-		<!-- caca aqui... o DefaultBeanValidator tem que estar se uma >>>OU<<< outra -->
-		<!-- br.com.caelum.vraptor.validator.DefaultBeanValidatorr -->
+		<exclude name="br.com.caelum.vraptor.validator.DefaultBeanValidator">
+			<if-class-not-available name="javax.validation.executable.ExecutableValidator"/>
+			<if-class-not-available name="javax.validation.Validation"/>
+		</exclude>
 		
 		<exclude name="br.com.caelum.vraptor.validator.ValidatorCreator, 
 					   br.com.caelum.vraptor.validator.ValidatorFactoryCreator, 

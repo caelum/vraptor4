@@ -18,7 +18,21 @@
 		<exclude name="br.com.caelum.vraptor.proxy.ReflectionInstanceCreator">
 			<if-class-available name="org.objenesis.ObjenesisStd"/>
 		</exclude>
+	
+		<exclude name="br.com.caelum.vraptor.validator.MethodValidatorFactoryCreator, 
+					   br.com.caelum.vraptor.validator.MethodValidatorInterceptor">
+			<if-class-not-available name="javax.validation.executable.ExecutableValidator"/>
+		</exclude>
+
+		<!-- caca aqui... o DefaultBeanValidator tem que estar se uma >>>OU<<< outra -->
+		<!-- br.com.caelum.vraptor.validator.DefaultBeanValidatorr -->
 		
+		<exclude name="br.com.caelum.vraptor.validator.ValidatorCreator, 
+					   br.com.caelum.vraptor.validator.ValidatorFactoryCreator, 
+					   br.com.caelum.vraptor.validator.MessageInterpolatorFactory">
+			<if-class-not-available name="javax.validation.Validation"/>
+		</exclude>
+			
 	</scan>
 
 </beans>

@@ -32,7 +32,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import br.com.caelum.iogi.Instantiator;
-import br.com.caelum.iogi.spi.DependencyProvider;
 import br.com.caelum.iogi.spi.ParameterNamesProvider;
 import br.com.caelum.vraptor.Controller;
 import br.com.caelum.vraptor.Convert;
@@ -53,7 +52,6 @@ import br.com.caelum.vraptor.http.FormatResolver;
 import br.com.caelum.vraptor.http.ParametersProvider;
 import br.com.caelum.vraptor.http.iogi.InstantiatorWithErrors;
 import br.com.caelum.vraptor.http.iogi.IogiParametersProvider;
-import br.com.caelum.vraptor.http.iogi.VRaptorDependencyProvider;
 import br.com.caelum.vraptor.http.iogi.VRaptorInstantiator;
 import br.com.caelum.vraptor.http.iogi.VRaptorParameterNamesProvider;
 import br.com.caelum.vraptor.interceptor.ControllerLookupInterceptor;
@@ -95,14 +93,10 @@ import br.com.caelum.vraptor.validator.BeanValidator;
 import br.com.caelum.vraptor.validator.DefaultBeanValidator;
 import br.com.caelum.vraptor.validator.DefaultValidator;
 import br.com.caelum.vraptor.validator.MessageConverter;
-import br.com.caelum.vraptor.validator.MessageInterpolatorFactory;
-import br.com.caelum.vraptor.validator.MethodValidatorFactoryCreator;
 import br.com.caelum.vraptor.validator.MethodValidatorInterceptor;
 import br.com.caelum.vraptor.validator.NullBeanValidator;
 import br.com.caelum.vraptor.validator.Outjector;
 import br.com.caelum.vraptor.validator.ReplicatorOutjector;
-import br.com.caelum.vraptor.validator.ValidatorCreator;
-import br.com.caelum.vraptor.validator.ValidatorFactoryCreator;
 import br.com.caelum.vraptor.view.DefaultHttpResult;
 import br.com.caelum.vraptor.view.DefaultLogicResult;
 import br.com.caelum.vraptor.view.DefaultPageResult;
@@ -192,24 +186,6 @@ public class BaseComponents {
     public static Set<Class<? extends Deserializer>> getDeserializers() {
 		return DESERIALIZERS;
 	}
-
-    public static Map<Class<?>, Class<?>> getApplicationScoped() {
-        APPLICATION_COMPONENTS.put(DependencyProvider.class, VRaptorDependencyProvider.class);
-
-        // try put beanval 1.1 or beanval 1.0 if available
-        if (isClassPresent("javax.validation.executable.ExecutableValidator")) {
-            APPLICATION_COMPONENTS.put(ValidatorCreator.class, ValidatorCreator.class);
-            APPLICATION_COMPONENTS.put(ValidatorFactoryCreator.class, ValidatorFactoryCreator.class);
-            APPLICATION_COMPONENTS.put(MethodValidatorFactoryCreator.class, MethodValidatorFactoryCreator.class);
-            APPLICATION_COMPONENTS.put(MessageInterpolatorFactory.class, MessageInterpolatorFactory.class);
-        } else if (isClassPresent("javax.validation.Validation")) {
-            APPLICATION_COMPONENTS.put(ValidatorCreator.class, ValidatorCreator.class);
-            APPLICATION_COMPONENTS.put(ValidatorFactoryCreator.class, ValidatorFactoryCreator.class);
-            APPLICATION_COMPONENTS.put(MessageInterpolatorFactory.class, MessageInterpolatorFactory.class);
-        }
-
-    	return Collections.unmodifiableMap(APPLICATION_COMPONENTS);
-    }
 
     public static Map<Class<?>, Class<?>> getRequestScoped() {
         // try put beanval 1.1 or beanval 1.0 if available

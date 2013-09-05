@@ -10,7 +10,15 @@
 		<exclude name="br.com.caelum.vraptor.converter.jodatime.*">
 			<if-class-not-available name="org.joda.time.LocalDate"/>
 		</exclude>
-			
+	
+		<exclude name="br.com.caelum.vraptor.proxy.ObjenesisInstanceCreator">
+			<if-class-not-available name="org.objenesis.ObjenesisStd"/>
+		</exclude>
+		
+		<exclude name="br.com.caelum.vraptor.proxy.ReflectionInstanceCreator">
+			<if-class-available name="org.objenesis.ObjenesisStd"/>
+		</exclude>
+		
 	</scan>
 
 </beans>

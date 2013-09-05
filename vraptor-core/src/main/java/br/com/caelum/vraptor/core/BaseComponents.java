@@ -106,11 +106,8 @@ import br.com.caelum.vraptor.interceptor.multipart.ServletFileUploadCreator;
 import br.com.caelum.vraptor.ioc.ControllerHandler;
 import br.com.caelum.vraptor.ioc.ConverterHandler;
 import br.com.caelum.vraptor.ioc.InterceptorStereotypeHandler;
-import br.com.caelum.vraptor.proxy.InstanceCreator;
 import br.com.caelum.vraptor.proxy.JavassistProxifier;
-import br.com.caelum.vraptor.proxy.ObjenesisInstanceCreator;
 import br.com.caelum.vraptor.proxy.Proxifier;
-import br.com.caelum.vraptor.proxy.ReflectionInstanceCreator;
 import br.com.caelum.vraptor.restfulie.RestHeadersHandler;
 import br.com.caelum.vraptor.restfulie.headers.DefaultRestDefaults;
 import br.com.caelum.vraptor.restfulie.headers.DefaultRestHeadersHandler;
@@ -190,7 +187,6 @@ public class BaseComponents {
             RoutesConfiguration.class, 		NoRoutesConfiguration.class,
             Deserializers.class,			DefaultDeserializers.class,
             Proxifier.class, 				JavassistProxifier.class,
-            InstanceCreator.class,          getInstanceCreator(),
             ParameterNameProvider.class, 	ParanamerNameProvider.class,
             TypeFinder.class, 				DefaultTypeFinder.class,
             RoutesParser.class, 			PathAnnotationRoutesParser.class,
@@ -271,14 +267,6 @@ public class BaseComponents {
     public static Set<Class<? extends Deserializer>> getDeserializers() {
 		return DESERIALIZERS;
 	}
-
-    private static Class<? extends InstanceCreator> getInstanceCreator() {
-        if (isClassPresent("org.objenesis.ObjenesisStd")) {
-            return ObjenesisInstanceCreator.class;
-        }
-
-        return ReflectionInstanceCreator.class;
-    }
 
 	public static Map<Class<?>, Class<?>> getCachedComponents() {
 		return Collections.unmodifiableMap(CACHED_COMPONENTS);

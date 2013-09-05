@@ -22,7 +22,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
 
@@ -45,7 +44,6 @@ import br.com.caelum.vraptor4.interceptor.Interceptor;
  * @author filipesabella
  */
 @Intercepts(after=ExecuteMethodInterceptor.class, before=ForwardToDefaultViewInterceptor.class)
-@RequestScoped
 public class DownloadInterceptor implements Interceptor {
 
     private static final Logger logger = LoggerFactory.getLogger(DownloadInterceptor.class);

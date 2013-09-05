@@ -17,6 +17,7 @@ package br.com.caelum.vraptor4.serialization.xstream;
 
 import java.io.IOException;
 
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
 
@@ -36,12 +37,16 @@ import com.thoughtworks.xstream.XStream;
  * @author Lucas Cavalcanti
  * @since 3.0.2
  */
+@RequestScoped
 public class XStreamJSONSerialization implements JSONSerialization {
 
-    protected final HttpServletResponse response;
-    protected final TypeNameExtractor extractor;
-    protected final ProxyInitializer initializer;
-    protected final XStreamBuilder builder;
+    protected HttpServletResponse response;
+    protected TypeNameExtractor extractor;
+    protected ProxyInitializer initializer;
+    protected XStreamBuilder builder;
+
+	@Deprecated // CDI eyes only
+	public XStreamJSONSerialization() {}
 
     @Inject
     public XStreamJSONSerialization(HttpServletResponse response, TypeNameExtractor extractor, ProxyInitializer initializer, XStreamBuilder builder) {

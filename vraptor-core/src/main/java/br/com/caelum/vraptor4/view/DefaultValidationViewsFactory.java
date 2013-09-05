@@ -19,6 +19,7 @@ package br.com.caelum.vraptor4.view;
 import java.lang.reflect.Method;
 import java.util.List;
 
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 
 import net.vidageek.mirror.dsl.Mirror;
@@ -49,17 +50,21 @@ import br.com.caelum.vraptor4.validator.ValidationException;
  * @author Lucas Cavalcanti
  * @author Pedro Matiello
  */
+@RequestScoped
 public class DefaultValidationViewsFactory implements ValidationViewsFactory {
 
-	private final Result result;
-	private final Proxifier proxifier;
+	private Result result;
+	private Proxifier proxifier;
+
+	@Deprecated // CDI eyes only
+	public DefaultValidationViewsFactory() {}
 
 	@Inject
 	public DefaultValidationViewsFactory(Result result, Proxifier proxifier) {
 		this.result = result;
 		this.proxifier = proxifier;
 	}
-	
+
 	public <T extends View> T instanceFor(final Class<T> view, final List<Message> errors) {
 		if (view.equals(EmptyResult.class)) {
 			throw new ValidationException(errors);

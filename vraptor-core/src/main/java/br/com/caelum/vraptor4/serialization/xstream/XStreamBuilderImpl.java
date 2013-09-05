@@ -19,6 +19,7 @@ import java.io.Writer;
 import java.util.Arrays;
 import java.util.Collections;
 
+import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 
 import br.com.caelum.vraptor4.interceptor.DefaultTypeNameExtractor;
@@ -38,6 +39,7 @@ import com.thoughtworks.xstream.io.json.JsonWriter;
  * @author Rafael Viana
  * @since 3.4.0
  */
+@Dependent
 @Deprecated
 public class XStreamBuilderImpl implements XStreamBuilder {
 

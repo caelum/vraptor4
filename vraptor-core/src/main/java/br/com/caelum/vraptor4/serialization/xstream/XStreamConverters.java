@@ -55,8 +55,6 @@ public class XStreamConverters {
 		this.singleValueConverters = Objects.firstNonNull(singleValueConverters, Lists.<SingleValueConverter>newArrayList());
 	}
 
-
-
 	/**
 	 * Method used to register all the XStream converters scanned to a XStream instance
 	 * @param xstream

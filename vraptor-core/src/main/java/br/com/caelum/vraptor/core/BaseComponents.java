@@ -36,37 +36,15 @@ import br.com.caelum.iogi.spi.ParameterNamesProvider;
 import br.com.caelum.vraptor.Controller;
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Intercepts;
-import br.com.caelum.vraptor.Result;
-import br.com.caelum.vraptor.Validator;
-import br.com.caelum.vraptor.config.ApplicationConfiguration;
-import br.com.caelum.vraptor.config.Configuration;
 import br.com.caelum.vraptor.deserialization.Deserializer;
 import br.com.caelum.vraptor.deserialization.Deserializes;
 import br.com.caelum.vraptor.deserialization.DeserializesHandler;
-import br.com.caelum.vraptor.deserialization.FormDeserializer;
-import br.com.caelum.vraptor.deserialization.JsonDeserializer;
 import br.com.caelum.vraptor.deserialization.XMLDeserializer;
-import br.com.caelum.vraptor.deserialization.XStreamXMLDeserializer;
-import br.com.caelum.vraptor.http.DefaultFormatResolver;
-import br.com.caelum.vraptor.http.FormatResolver;
 import br.com.caelum.vraptor.http.ParametersProvider;
 import br.com.caelum.vraptor.http.iogi.InstantiatorWithErrors;
 import br.com.caelum.vraptor.http.iogi.IogiParametersProvider;
 import br.com.caelum.vraptor.http.iogi.VRaptorInstantiator;
 import br.com.caelum.vraptor.http.iogi.VRaptorParameterNamesProvider;
-import br.com.caelum.vraptor.interceptor.ControllerLookupInterceptor;
-import br.com.caelum.vraptor.interceptor.DefaultSimpleInterceptorStack;
-import br.com.caelum.vraptor.interceptor.DeserializingInterceptor;
-import br.com.caelum.vraptor.interceptor.ExceptionHandlerInterceptor;
-import br.com.caelum.vraptor.interceptor.ExecuteMethodInterceptor;
-import br.com.caelum.vraptor.interceptor.FlashInterceptor;
-import br.com.caelum.vraptor.interceptor.ForwardToDefaultViewInterceptor;
-import br.com.caelum.vraptor.interceptor.InstantiateInterceptor;
-import br.com.caelum.vraptor.interceptor.OutjectResult;
-import br.com.caelum.vraptor.interceptor.ParameterIncluderInterceptor;
-import br.com.caelum.vraptor.interceptor.ParametersInstantiatorInterceptor;
-import br.com.caelum.vraptor.interceptor.SimpleInterceptorStack;
-import br.com.caelum.vraptor.interceptor.download.DownloadInterceptor;
 import br.com.caelum.vraptor.interceptor.multipart.CommonsUploadMultipartInterceptor;
 import br.com.caelum.vraptor.interceptor.multipart.DefaultServletFileUploadCreator;
 import br.com.caelum.vraptor.interceptor.multipart.MultipartInterceptor;
@@ -76,44 +54,10 @@ import br.com.caelum.vraptor.interceptor.multipart.ServletFileUploadCreator;
 import br.com.caelum.vraptor.ioc.ControllerHandler;
 import br.com.caelum.vraptor.ioc.ConverterHandler;
 import br.com.caelum.vraptor.ioc.InterceptorStereotypeHandler;
-import br.com.caelum.vraptor.restfulie.RestHeadersHandler;
-import br.com.caelum.vraptor.restfulie.headers.DefaultRestHeadersHandler;
-import br.com.caelum.vraptor.serialization.DefaultRepresentationResult;
-import br.com.caelum.vraptor.serialization.HTMLSerialization;
-import br.com.caelum.vraptor.serialization.I18nMessageSerialization;
-import br.com.caelum.vraptor.serialization.JSONPSerialization;
-import br.com.caelum.vraptor.serialization.JSONSerialization;
-import br.com.caelum.vraptor.serialization.RepresentationResult;
-import br.com.caelum.vraptor.serialization.XMLSerialization;
-import br.com.caelum.vraptor.serialization.xstream.XStreamConverters;
-import br.com.caelum.vraptor.serialization.xstream.XStreamJSONPSerialization;
-import br.com.caelum.vraptor.serialization.xstream.XStreamJSONSerialization;
-import br.com.caelum.vraptor.serialization.xstream.XStreamXMLSerialization;
 import br.com.caelum.vraptor.validator.BeanValidator;
 import br.com.caelum.vraptor.validator.DefaultBeanValidator;
-import br.com.caelum.vraptor.validator.DefaultValidator;
-import br.com.caelum.vraptor.validator.MessageConverter;
 import br.com.caelum.vraptor.validator.MethodValidatorInterceptor;
 import br.com.caelum.vraptor.validator.NullBeanValidator;
-import br.com.caelum.vraptor.validator.Outjector;
-import br.com.caelum.vraptor.validator.ReplicatorOutjector;
-import br.com.caelum.vraptor.view.DefaultHttpResult;
-import br.com.caelum.vraptor.view.DefaultLogicResult;
-import br.com.caelum.vraptor.view.DefaultPageResult;
-import br.com.caelum.vraptor.view.DefaultPathResolver;
-import br.com.caelum.vraptor.view.DefaultRefererResult;
-import br.com.caelum.vraptor.view.DefaultStatus;
-import br.com.caelum.vraptor.view.DefaultValidationViewsFactory;
-import br.com.caelum.vraptor.view.EmptyResult;
-import br.com.caelum.vraptor.view.FlashScope;
-import br.com.caelum.vraptor.view.HttpResult;
-import br.com.caelum.vraptor.view.LogicResult;
-import br.com.caelum.vraptor.view.PageResult;
-import br.com.caelum.vraptor.view.PathResolver;
-import br.com.caelum.vraptor.view.RefererResult;
-import br.com.caelum.vraptor.view.SessionFlashScope;
-import br.com.caelum.vraptor.view.Status;
-import br.com.caelum.vraptor.view.ValidationViewsFactory;
 
 /**
  * List of base components to vraptor.<br/>
@@ -124,52 +68,6 @@ import br.com.caelum.vraptor.view.ValidationViewsFactory;
 public class BaseComponents {
 
     static final Logger logger = LoggerFactory.getLogger(BaseComponents.class);
-
-    private static final Map<Class<?>, Class<?>> REQUEST_COMPONENTS = classMap(
-    			InterceptorStack.class, 						DefaultInterceptorStack.class,
-    			SimpleInterceptorStack.class,                DefaultSimpleInterceptorStack.class,
-            MethodInfo.class, 						MethodInfo.class,
-            LogicResult.class, 								DefaultLogicResult.class,
-            PageResult.class, 								DefaultPageResult.class,
-            HttpResult.class, 								DefaultHttpResult.class,
-            RefererResult.class, 							DefaultRefererResult.class,
-            PathResolver.class, 							DefaultPathResolver.class,
-            ValidationViewsFactory.class,					DefaultValidationViewsFactory.class,
-            Result.class, 									DefaultResult.class,
-            Validator.class, 								DefaultValidator.class,
-            Outjector.class, 								ReplicatorOutjector.class,
-            DownloadInterceptor.class, 						DownloadInterceptor.class,
-            EmptyResult.class, 								EmptyResult.class,
-            ExecuteMethodInterceptor.class, 				ExecuteMethodInterceptor.class,
-            ExceptionHandlerInterceptor.class,              ExceptionHandlerInterceptor.class,
-            ExceptionMapper.class,                          DefaultExceptionMapper.class,
-            FlashInterceptor.class, 						FlashInterceptor.class,
-            ForwardToDefaultViewInterceptor.class, 			ForwardToDefaultViewInterceptor.class,
-            InstantiateInterceptor.class, 					InstantiateInterceptor.class,
-            DeserializingInterceptor.class, 				DeserializingInterceptor.class,
-            JsonDeserializer.class,							JsonDeserializer.class,
-            FormDeserializer.class,							FormDeserializer.class,
-            Localization.class, 							JstlLocalization.class,
-            OutjectResult.class, 							OutjectResult.class,
-            ParametersInstantiatorInterceptor.class, 		ParametersInstantiatorInterceptor.class,
-            ControllerLookupInterceptor.class, 				ControllerLookupInterceptor.class,
-            Status.class,									DefaultStatus.class,
-            XMLDeserializer.class,			                XStreamXMLDeserializer.class,
-            XMLSerialization.class,							XStreamXMLSerialization.class,
-            JSONSerialization.class,						XStreamJSONSerialization.class,
-            JSONPSerialization.class,						XStreamJSONPSerialization.class,
-            HTMLSerialization.class,						HTMLSerialization.class,
-            I18nMessageSerialization.class,					I18nMessageSerialization.class,
-            RepresentationResult.class,						DefaultRepresentationResult.class,
-            FormatResolver.class,							DefaultFormatResolver.class,
-            Configuration.class,							ApplicationConfiguration.class,
-            RestHeadersHandler.class,						DefaultRestHeadersHandler.class,
-            FlashScope.class,								SessionFlashScope.class,
-            XStreamConverters.class,                        XStreamConverters.class,
-            MessageConverter.class,							MessageConverter.class,
-            ParameterIncluderInterceptor.class,					ParameterIncluderInterceptor.class
-    );
-
 
 	private static final HashMap<Class<? extends Annotation>, StereotypeInfo> STEREOTYPES_INFO = new HashMap<Class<? extends Annotation>,StereotypeInfo>();
     static {

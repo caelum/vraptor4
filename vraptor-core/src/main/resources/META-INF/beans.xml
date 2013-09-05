@@ -41,6 +41,23 @@
 			<if-class-available name="javax.validation.executable.ExecutableValidator"/>
 		</exclude>
 		
+		<exclude name="br.com.caelum.vraptor.interceptor.multipart.CommonsUploadMultipartInterceptor,
+					   br.com.caelum.vraptor.interceptor.multipart.DefaultServletFileUploadCreator">
+			<if-class-not-available name="org.apache.commons.fileupload.FileItem"/>
+		</exclude>
+		
+		<exclude name="br.com.caelum.vraptor.interceptor.multipart.Servlet3MultipartInterceptor">
+			<if-class-available name="org.apache.commons.fileupload.FileItem"/>
+			<if-class-not-available name="javax.servlet.http.Part"/>
+		</exclude>
+		
+		<exclude name="br.com.caelum.vraptor.interceptor.multipart.NullMultipartInterceptor">
+			<if-class-available name="org.apache.commons.fileupload.FileItem"/>
+		</exclude>
+		
+		<exclude name="br.com.caelum.vraptor.interceptor.multipart.NullMultipartInterceptor">
+			<if-class-available name="javax.servlet.http.Part"/>
+		</exclude>
 			
 	</scan>
 

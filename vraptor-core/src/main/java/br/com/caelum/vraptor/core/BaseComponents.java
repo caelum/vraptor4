@@ -38,18 +38,9 @@ import br.com.caelum.vraptor.deserialization.Deserializer;
 import br.com.caelum.vraptor.deserialization.Deserializes;
 import br.com.caelum.vraptor.deserialization.DeserializesHandler;
 import br.com.caelum.vraptor.deserialization.XMLDeserializer;
-import br.com.caelum.vraptor.interceptor.multipart.CommonsUploadMultipartInterceptor;
-import br.com.caelum.vraptor.interceptor.multipart.DefaultServletFileUploadCreator;
-import br.com.caelum.vraptor.interceptor.multipart.MultipartInterceptor;
-import br.com.caelum.vraptor.interceptor.multipart.NullMultipartInterceptor;
-import br.com.caelum.vraptor.interceptor.multipart.Servlet3MultipartInterceptor;
-import br.com.caelum.vraptor.interceptor.multipart.ServletFileUploadCreator;
 import br.com.caelum.vraptor.ioc.ControllerHandler;
 import br.com.caelum.vraptor.ioc.ConverterHandler;
 import br.com.caelum.vraptor.ioc.InterceptorStereotypeHandler;
-import br.com.caelum.vraptor.validator.BeanValidator;
-import br.com.caelum.vraptor.validator.DefaultBeanValidator;
-import br.com.caelum.vraptor.validator.MethodValidatorInterceptor;
 
 /**
  * List of base components to vraptor.<br/>
@@ -76,29 +67,6 @@ public class BaseComponents {
     public static Set<Class<? extends Deserializer>> getDeserializers() {
 		return DESERIALIZERS;
 	}
-
-    public static Map<Class<?>, Class<?>> getRequestScoped() {
-        // try put beanval 1.1 or beanval 1.0 if available
-        if (isClassPresent("javax.validation.executable.ExecutableValidator")) {
-            REQUEST_COMPONENTS.put(BeanValidator.class, DefaultBeanValidator.class);
-            REQUEST_COMPONENTS.put(MethodValidatorInterceptor.class, MethodValidatorInterceptor.class);
-        } else if (isClassPresent("javax.validation.Validation")) {
-            REQUEST_COMPONENTS.put(BeanValidator.class, DefaultBeanValidator.class);
-        }
-
-        if (isClassPresent("org.apache.commons.fileupload.FileItem")) {
-            REQUEST_COMPONENTS.put(MultipartInterceptor.class, CommonsUploadMultipartInterceptor.class);
-            REQUEST_COMPONENTS.put(ServletFileUploadCreator.class, DefaultServletFileUploadCreator.class);
-        } else if (isClassPresent("javax.servlet.http.Part")) {
-            REQUEST_COMPONENTS.put(MultipartInterceptor.class, Servlet3MultipartInterceptor.class);
-        } else {
-    	    logger.warn("There is neither commons-fileupload nor servlet3 handlers registered. " +
-    	    		"If you are willing to upload a file, please add the commons-fileupload in " +
-    	    		"your classpath or use a Servlet 3 Container");
-            REQUEST_COMPONENTS.put(MultipartInterceptor.class, NullMultipartInterceptor.class);
-    	}
-
-    }
 
     private static boolean isClassPresent(String className) {
         try {

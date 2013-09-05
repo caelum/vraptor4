@@ -68,15 +68,6 @@ public class BaseComponents {
 		return DESERIALIZERS;
 	}
 
-    private static boolean isClassPresent(String className) {
-        try {
-            Class.forName(className);
-            return true;
-        } catch (ClassNotFoundException e) {
-            return false;
-        }
-    }
-
     public static Set<StereotypeInfo> getStereotypesInfo() {
     		return new HashSet<StereotypeInfo>(STEREOTYPES_INFO.values());
     }

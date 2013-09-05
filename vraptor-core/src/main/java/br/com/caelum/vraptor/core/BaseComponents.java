@@ -18,7 +18,6 @@
 package br.com.caelum.vraptor.core;
 
 import java.lang.annotation.Annotation;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -32,10 +31,8 @@ import org.slf4j.LoggerFactory;
 import br.com.caelum.vraptor.Controller;
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Intercepts;
-import br.com.caelum.vraptor.deserialization.Deserializer;
 import br.com.caelum.vraptor.deserialization.Deserializes;
 import br.com.caelum.vraptor.deserialization.DeserializesHandler;
-import br.com.caelum.vraptor.deserialization.XMLDeserializer;
 import br.com.caelum.vraptor.ioc.ControllerHandler;
 import br.com.caelum.vraptor.ioc.ConverterHandler;
 import br.com.caelum.vraptor.ioc.InterceptorStereotypeHandler;
@@ -58,13 +55,6 @@ public class BaseComponents {
     		STEREOTYPES_INFO.put(Intercepts.class,new StereotypeInfo(Intercepts.class,InterceptorStereotypeHandler.class,new AnnotationLiteral<InterceptsQualifier>() {}));
 
     }
-
-    private static final Set<Class<? extends Deserializer>> DESERIALIZERS = Collections.<Class<? extends Deserializer>>singleton(XMLDeserializer.class);
-
-
-    public static Set<Class<? extends Deserializer>> getDeserializers() {
-		return DESERIALIZERS;
-	}
 
     public static Set<StereotypeInfo> getStereotypesInfo() {
     		return new HashSet<StereotypeInfo>(STEREOTYPES_INFO.values());

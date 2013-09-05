@@ -18,11 +18,9 @@
 package br.com.caelum.vraptor.core;
 
 import java.lang.annotation.Annotation;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
@@ -83,20 +81,5 @@ public class BaseComponents {
     public static Map<Class<? extends Annotation>,StereotypeInfo> getStereotypesInfoMap() {
     		return STEREOTYPES_INFO;
     }
-
-    private static Map<Class<?>, Class<?>> classMap(Class<?>... items) {
-        HashMap<Class<?>, Class<?>> map = new HashMap<Class<?>, Class<?>>();
-        Iterator<Class<?>> it = Arrays.asList(items).iterator();
-        while (it.hasNext()) {
-            Class<?> key = it.next();
-            Class<?> value = it.next();
-            if (value == null) {
-                throw new IllegalArgumentException("The number of items should be even.");
-            }
-            map.put(key, value);
-        }
-        return map;
-    }
-
 
 }

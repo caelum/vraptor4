@@ -32,6 +32,15 @@
 					   br.com.caelum.vraptor.validator.MessageInterpolatorFactory">
 			<if-class-not-available name="javax.validation.Validation"/>
 		</exclude>
+		
+		<exclude name="br.com.caelum.vraptor.validator.NullBeanValidator">
+			<if-class-available name="javax.validation.Validation"/>
+		</exclude>
+	
+		<exclude name="br.com.caelum.vraptor.validator.NullBeanValidator">
+			<if-class-available name="javax.validation.executable.ExecutableValidator"/>
+		</exclude>
+		
 			
 	</scan>
 

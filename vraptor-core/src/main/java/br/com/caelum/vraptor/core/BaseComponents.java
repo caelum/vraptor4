@@ -31,8 +31,6 @@ import javax.enterprise.util.AnnotationLiteral;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import br.com.caelum.iogi.Instantiator;
-import br.com.caelum.iogi.spi.ParameterNamesProvider;
 import br.com.caelum.vraptor.Controller;
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Intercepts;
@@ -40,11 +38,6 @@ import br.com.caelum.vraptor.deserialization.Deserializer;
 import br.com.caelum.vraptor.deserialization.Deserializes;
 import br.com.caelum.vraptor.deserialization.DeserializesHandler;
 import br.com.caelum.vraptor.deserialization.XMLDeserializer;
-import br.com.caelum.vraptor.http.ParametersProvider;
-import br.com.caelum.vraptor.http.iogi.InstantiatorWithErrors;
-import br.com.caelum.vraptor.http.iogi.IogiParametersProvider;
-import br.com.caelum.vraptor.http.iogi.VRaptorInstantiator;
-import br.com.caelum.vraptor.http.iogi.VRaptorParameterNamesProvider;
 import br.com.caelum.vraptor.interceptor.multipart.CommonsUploadMultipartInterceptor;
 import br.com.caelum.vraptor.interceptor.multipart.DefaultServletFileUploadCreator;
 import br.com.caelum.vraptor.interceptor.multipart.MultipartInterceptor;
@@ -57,7 +50,6 @@ import br.com.caelum.vraptor.ioc.InterceptorStereotypeHandler;
 import br.com.caelum.vraptor.validator.BeanValidator;
 import br.com.caelum.vraptor.validator.DefaultBeanValidator;
 import br.com.caelum.vraptor.validator.MethodValidatorInterceptor;
-import br.com.caelum.vraptor.validator.NullBeanValidator;
 
 /**
  * List of base components to vraptor.<br/>
@@ -92,8 +84,6 @@ public class BaseComponents {
             REQUEST_COMPONENTS.put(MethodValidatorInterceptor.class, MethodValidatorInterceptor.class);
         } else if (isClassPresent("javax.validation.Validation")) {
             REQUEST_COMPONENTS.put(BeanValidator.class, DefaultBeanValidator.class);
-        } else {
-            REQUEST_COMPONENTS.put(BeanValidator.class, NullBeanValidator.class);
         }
 
         if (isClassPresent("org.apache.commons.fileupload.FileItem")) {
@@ -108,12 +98,6 @@ public class BaseComponents {
             REQUEST_COMPONENTS.put(MultipartInterceptor.class, NullMultipartInterceptor.class);
     	}
 
-        REQUEST_COMPONENTS.put(ParametersProvider.class, IogiParametersProvider.class);
-        REQUEST_COMPONENTS.put(ParameterNamesProvider.class, VRaptorParameterNamesProvider.class);
-        REQUEST_COMPONENTS.put(InstantiatorWithErrors.class, VRaptorInstantiator.class);
-        REQUEST_COMPONENTS.put(Instantiator.class, VRaptorInstantiator.class);
-
-        return Collections.unmodifiableMap(REQUEST_COMPONENTS);
     }
 
     private static boolean isClassPresent(String className) {

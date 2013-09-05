@@ -30,7 +30,7 @@ import br.com.caelum.vraptor4.http.ParameterNameProvider;
 @RequestScoped
 public class ReplicatorOutjector implements Outjector {
 
-    private Result result;
+	private Result result;
 	private MethodInfo method;
 	private ParameterNameProvider provider;
 

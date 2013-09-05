@@ -36,7 +36,6 @@ import br.com.caelum.iogi.spi.DependencyProvider;
 import br.com.caelum.iogi.spi.ParameterNamesProvider;
 import br.com.caelum.vraptor.Controller;
 import br.com.caelum.vraptor.Convert;
-import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.Intercepts;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.Validator;
@@ -198,9 +197,6 @@ public class BaseComponents {
             ProxyInitializer.class,			NullProxyInitializer.class
     );
 
-    private final static Map<Class<?>, Class<?>> CACHED_COMPONENTS = classMap(
-    );
-
     private static final Map<Class<?>, Class<?>> PROTOTYPE_COMPONENTS = classMap(
     		RequestExecution.class, 						EnhancedRequestExecution.class,
     		XStreamBuilder.class, 							XStreamBuilderImpl.class
@@ -268,10 +264,6 @@ public class BaseComponents {
 		return DESERIALIZERS;
 	}
 
-	public static Map<Class<?>, Class<?>> getCachedComponents() {
-		return Collections.unmodifiableMap(CACHED_COMPONENTS);
-	}
-
     public static Map<Class<?>, Class<?>> getApplicationScoped() {
         APPLICATION_COMPONENTS.put(DependencyProvider.class, VRaptorDependencyProvider.class);
 
@@ -329,31 +321,6 @@ public class BaseComponents {
             return false;
         }
     }
-
-	private static boolean registerIfClassPresent(Map<Class<?>, Class<?>> components, String className, Class<?>... types) {
-		try {
-			Class.forName(className);
-			for (Class<?> type : types) {
-				components.put(type, type);
-			}
-			return true;
-		} catch (ClassNotFoundException e) {
-			/* ok, don't register */
-			return false;
-		}
-	}
-
-	private static void registerIfClassPresent(Set<Class<? extends Converter<?>>> components, String className, Class<? extends Converter<?>>... types) {
-		if (components.contains(types[0])) {
-			return;
-		}
-		try {
-    		Class.forName(className);
-    		for (Class<? extends Converter<?>> type : types) {
-    			components.add(type);
-			}
-    	} catch (ClassNotFoundException e) { /*ok, don't register*/ }
-	}
 
     public static Map<Class<?>, Class<?>> getPrototypeScoped() {
 		return Collections.unmodifiableMap(PROTOTYPE_COMPONENTS);

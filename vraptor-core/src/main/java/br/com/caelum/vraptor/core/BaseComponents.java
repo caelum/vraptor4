@@ -46,28 +46,6 @@ import br.com.caelum.vraptor.controller.ControllerNotFoundHandler;
 import br.com.caelum.vraptor.controller.DefaultControllerNotFoundHandler;
 import br.com.caelum.vraptor.controller.DefaultMethodNotAllowedHandler;
 import br.com.caelum.vraptor.controller.MethodNotAllowedHandler;
-import br.com.caelum.vraptor.converter.BigDecimalConverter;
-import br.com.caelum.vraptor.converter.BigIntegerConverter;
-import br.com.caelum.vraptor.converter.BooleanConverter;
-import br.com.caelum.vraptor.converter.ByteConverter;
-import br.com.caelum.vraptor.converter.CharacterConverter;
-import br.com.caelum.vraptor.converter.DoubleConverter;
-import br.com.caelum.vraptor.converter.EnumConverter;
-import br.com.caelum.vraptor.converter.FloatConverter;
-import br.com.caelum.vraptor.converter.IntegerConverter;
-import br.com.caelum.vraptor.converter.LocaleBasedCalendarConverter;
-import br.com.caelum.vraptor.converter.LocaleBasedDateConverter;
-import br.com.caelum.vraptor.converter.LongConverter;
-import br.com.caelum.vraptor.converter.PrimitiveBooleanConverter;
-import br.com.caelum.vraptor.converter.PrimitiveByteConverter;
-import br.com.caelum.vraptor.converter.PrimitiveCharConverter;
-import br.com.caelum.vraptor.converter.PrimitiveDoubleConverter;
-import br.com.caelum.vraptor.converter.PrimitiveFloatConverter;
-import br.com.caelum.vraptor.converter.PrimitiveIntConverter;
-import br.com.caelum.vraptor.converter.PrimitiveLongConverter;
-import br.com.caelum.vraptor.converter.PrimitiveShortConverter;
-import br.com.caelum.vraptor.converter.ShortConverter;
-import br.com.caelum.vraptor.converter.StringConverter;
 import br.com.caelum.vraptor.deserialization.DefaultDeserializers;
 import br.com.caelum.vraptor.deserialization.Deserializer;
 import br.com.caelum.vraptor.deserialization.Deserializers;
@@ -125,7 +103,6 @@ import br.com.caelum.vraptor.interceptor.multipart.MultipartInterceptor;
 import br.com.caelum.vraptor.interceptor.multipart.NullMultipartInterceptor;
 import br.com.caelum.vraptor.interceptor.multipart.Servlet3MultipartInterceptor;
 import br.com.caelum.vraptor.interceptor.multipart.ServletFileUploadCreator;
-import br.com.caelum.vraptor.interceptor.multipart.UploadedFileConverter;
 import br.com.caelum.vraptor.ioc.ControllerHandler;
 import br.com.caelum.vraptor.ioc.ConverterHandler;
 import br.com.caelum.vraptor.ioc.InterceptorStereotypeHandler;
@@ -278,32 +255,6 @@ public class BaseComponents {
             ParameterIncluderInterceptor.class,					ParameterIncluderInterceptor.class
     );
 
-    @SuppressWarnings({"unchecked", "rawtypes"})
-	private static final Set<Class<? extends Converter<?>>> BUNDLED_CONVERTERS = new HashSet(Arrays.asList(
-    		BigDecimalConverter.class,
-    		BigIntegerConverter.class,
-    		BooleanConverter.class,
-    		ByteConverter.class,
-    		CharacterConverter.class,
-    		DoubleConverter.class,
-    		EnumConverter.class,
-    		FloatConverter.class,
-    		IntegerConverter.class,
-    		LocaleBasedCalendarConverter.class,
-    		LocaleBasedDateConverter.class,
-    		LongConverter.class,
-    		PrimitiveBooleanConverter.class,
-    		PrimitiveByteConverter.class,
-    		PrimitiveCharConverter.class,
-    		PrimitiveDoubleConverter.class,
-    		PrimitiveFloatConverter.class,
-			PrimitiveIntConverter.class,
-			PrimitiveLongConverter.class,
-			PrimitiveShortConverter.class,
-			ShortConverter.class,
-			StringConverter.class,
-			UploadedFileConverter.class));
-
 
 	private static final HashMap<Class<? extends Annotation>, StereotypeInfo> STEREOTYPES_INFO = new HashMap<Class<? extends Annotation>,StereotypeInfo>();
     static {
@@ -419,11 +370,6 @@ public class BaseComponents {
     public static Map<Class<?>, Class<?>> getPrototypeScoped() {
 		return Collections.unmodifiableMap(PROTOTYPE_COMPONENTS);
 	}
-
-    @SuppressWarnings("unchecked")
-	public static Set<Class<? extends Converter<?>>> getBundledConverters() {
-        return BUNDLED_CONVERTERS;
-    }
 
     public static Set<StereotypeInfo> getStereotypesInfo() {
     		return new HashSet<StereotypeInfo>(STEREOTYPES_INFO.values());

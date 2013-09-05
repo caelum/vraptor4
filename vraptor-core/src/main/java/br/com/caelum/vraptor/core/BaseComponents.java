@@ -41,63 +41,36 @@ import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.config.ApplicationConfiguration;
 import br.com.caelum.vraptor.config.Configuration;
-import br.com.caelum.vraptor.controller.ControllerNotFoundHandler;
-import br.com.caelum.vraptor.controller.DefaultControllerNotFoundHandler;
-import br.com.caelum.vraptor.controller.DefaultMethodNotAllowedHandler;
-import br.com.caelum.vraptor.controller.MethodNotAllowedHandler;
-import br.com.caelum.vraptor.deserialization.DefaultDeserializers;
 import br.com.caelum.vraptor.deserialization.Deserializer;
-import br.com.caelum.vraptor.deserialization.Deserializers;
 import br.com.caelum.vraptor.deserialization.Deserializes;
 import br.com.caelum.vraptor.deserialization.DeserializesHandler;
 import br.com.caelum.vraptor.deserialization.FormDeserializer;
 import br.com.caelum.vraptor.deserialization.JsonDeserializer;
 import br.com.caelum.vraptor.deserialization.XMLDeserializer;
 import br.com.caelum.vraptor.deserialization.XStreamXMLDeserializer;
-import br.com.caelum.vraptor.http.DefaultControllerTranslator;
 import br.com.caelum.vraptor.http.DefaultFormatResolver;
-import br.com.caelum.vraptor.http.EncodingHandlerFactory;
 import br.com.caelum.vraptor.http.FormatResolver;
-import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.http.ParametersProvider;
-import br.com.caelum.vraptor.http.ParanamerNameProvider;
-import br.com.caelum.vraptor.http.UrlToControllerTranslator;
 import br.com.caelum.vraptor.http.iogi.InstantiatorWithErrors;
 import br.com.caelum.vraptor.http.iogi.IogiParametersProvider;
 import br.com.caelum.vraptor.http.iogi.VRaptorDependencyProvider;
 import br.com.caelum.vraptor.http.iogi.VRaptorInstantiator;
 import br.com.caelum.vraptor.http.iogi.VRaptorParameterNamesProvider;
-import br.com.caelum.vraptor.http.route.DefaultRouter;
-import br.com.caelum.vraptor.http.route.DefaultTypeFinder;
-import br.com.caelum.vraptor.http.route.Evaluator;
-import br.com.caelum.vraptor.http.route.JavaEvaluator;
-import br.com.caelum.vraptor.http.route.NoRoutesConfiguration;
-import br.com.caelum.vraptor.http.route.PathAnnotationRoutesParser;
-import br.com.caelum.vraptor.http.route.Router;
-import br.com.caelum.vraptor.http.route.RoutesConfiguration;
-import br.com.caelum.vraptor.http.route.RoutesParser;
-import br.com.caelum.vraptor.http.route.TypeFinder;
 import br.com.caelum.vraptor.interceptor.ControllerLookupInterceptor;
 import br.com.caelum.vraptor.interceptor.DefaultSimpleInterceptorStack;
-import br.com.caelum.vraptor.interceptor.DefaultTypeNameExtractor;
 import br.com.caelum.vraptor.interceptor.DeserializingInterceptor;
 import br.com.caelum.vraptor.interceptor.ExceptionHandlerInterceptor;
 import br.com.caelum.vraptor.interceptor.ExecuteMethodInterceptor;
 import br.com.caelum.vraptor.interceptor.FlashInterceptor;
 import br.com.caelum.vraptor.interceptor.ForwardToDefaultViewInterceptor;
 import br.com.caelum.vraptor.interceptor.InstantiateInterceptor;
-import br.com.caelum.vraptor.interceptor.InterceptorRegistry;
 import br.com.caelum.vraptor.interceptor.OutjectResult;
 import br.com.caelum.vraptor.interceptor.ParameterIncluderInterceptor;
 import br.com.caelum.vraptor.interceptor.ParametersInstantiatorInterceptor;
 import br.com.caelum.vraptor.interceptor.SimpleInterceptorStack;
-import br.com.caelum.vraptor.interceptor.TopologicalSortedInterceptorRegistry;
-import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
 import br.com.caelum.vraptor.interceptor.download.DownloadInterceptor;
 import br.com.caelum.vraptor.interceptor.multipart.CommonsUploadMultipartInterceptor;
-import br.com.caelum.vraptor.interceptor.multipart.DefaultMultipartConfig;
 import br.com.caelum.vraptor.interceptor.multipart.DefaultServletFileUploadCreator;
-import br.com.caelum.vraptor.interceptor.multipart.MultipartConfig;
 import br.com.caelum.vraptor.interceptor.multipart.MultipartInterceptor;
 import br.com.caelum.vraptor.interceptor.multipart.NullMultipartInterceptor;
 import br.com.caelum.vraptor.interceptor.multipart.Servlet3MultipartInterceptor;
@@ -105,22 +78,15 @@ import br.com.caelum.vraptor.interceptor.multipart.ServletFileUploadCreator;
 import br.com.caelum.vraptor.ioc.ControllerHandler;
 import br.com.caelum.vraptor.ioc.ConverterHandler;
 import br.com.caelum.vraptor.ioc.InterceptorStereotypeHandler;
-import br.com.caelum.vraptor.proxy.JavassistProxifier;
-import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.restfulie.RestHeadersHandler;
-import br.com.caelum.vraptor.restfulie.headers.DefaultRestDefaults;
 import br.com.caelum.vraptor.restfulie.headers.DefaultRestHeadersHandler;
-import br.com.caelum.vraptor.restfulie.headers.RestDefaults;
 import br.com.caelum.vraptor.serialization.DefaultRepresentationResult;
 import br.com.caelum.vraptor.serialization.HTMLSerialization;
 import br.com.caelum.vraptor.serialization.I18nMessageSerialization;
 import br.com.caelum.vraptor.serialization.JSONPSerialization;
 import br.com.caelum.vraptor.serialization.JSONSerialization;
-import br.com.caelum.vraptor.serialization.NullProxyInitializer;
-import br.com.caelum.vraptor.serialization.ProxyInitializer;
 import br.com.caelum.vraptor.serialization.RepresentationResult;
 import br.com.caelum.vraptor.serialization.XMLSerialization;
-import br.com.caelum.vraptor.serialization.xstream.NullConverter;
 import br.com.caelum.vraptor.serialization.xstream.XStreamConverters;
 import br.com.caelum.vraptor.serialization.xstream.XStreamJSONPSerialization;
 import br.com.caelum.vraptor.serialization.xstream.XStreamJSONSerialization;
@@ -137,8 +103,6 @@ import br.com.caelum.vraptor.validator.Outjector;
 import br.com.caelum.vraptor.validator.ReplicatorOutjector;
 import br.com.caelum.vraptor.validator.ValidatorCreator;
 import br.com.caelum.vraptor.validator.ValidatorFactoryCreator;
-import br.com.caelum.vraptor.view.AcceptHeaderToFormat;
-import br.com.caelum.vraptor.view.DefaultAcceptHeaderToFormat;
 import br.com.caelum.vraptor.view.DefaultHttpResult;
 import br.com.caelum.vraptor.view.DefaultLogicResult;
 import br.com.caelum.vraptor.view.DefaultPageResult;
@@ -157,8 +121,6 @@ import br.com.caelum.vraptor.view.SessionFlashScope;
 import br.com.caelum.vraptor.view.Status;
 import br.com.caelum.vraptor.view.ValidationViewsFactory;
 
-import com.thoughtworks.xstream.converters.SingleValueConverter;
-
 /**
  * List of base components to vraptor.<br/>
  * Those components should be available with any chosen ioc implementation.
@@ -168,32 +130,6 @@ import com.thoughtworks.xstream.converters.SingleValueConverter;
 public class BaseComponents {
 
     static final Logger logger = LoggerFactory.getLogger(BaseComponents.class);
-
-    private final static Map<Class<?>, Class<?>> APPLICATION_COMPONENTS = classMap(
-    		EncodingHandlerFactory.class, 	EncodingHandlerFactory.class,
-    		AcceptHeaderToFormat.class, 	DefaultAcceptHeaderToFormat.class,
-    		Converters.class, 				DefaultConverters.class,
-            InterceptorRegistry.class, 		TopologicalSortedInterceptorRegistry.class,
-            InterceptorHandlerFactory.class,DefaultInterceptorHandlerFactory.class,
-            MultipartConfig.class, 			DefaultMultipartConfig.class,
-            UrlToControllerTranslator.class, 	DefaultControllerTranslator.class,
-            Router.class, 					DefaultRouter.class,
-            TypeNameExtractor.class, 		DefaultTypeNameExtractor.class,
-            ControllerNotFoundHandler.class, 	DefaultControllerNotFoundHandler.class,
-            MethodNotAllowedHandler.class,	DefaultMethodNotAllowedHandler.class,
-            RoutesConfiguration.class, 		NoRoutesConfiguration.class,
-            Deserializers.class,			DefaultDeserializers.class,
-            Proxifier.class, 				JavassistProxifier.class,
-            ParameterNameProvider.class, 	ParanamerNameProvider.class,
-            TypeFinder.class, 				DefaultTypeFinder.class,
-            RoutesParser.class, 			PathAnnotationRoutesParser.class,
-            Routes.class,					DefaultRoutes.class,
-            RestDefaults.class,				DefaultRestDefaults.class,
-            Evaluator.class,				JavaEvaluator.class,
-            StaticContentHandler.class,		DefaultStaticContentHandler.class,
-            SingleValueConverter.class,     NullConverter.class,
-            ProxyInitializer.class,			NullProxyInitializer.class
-    );
 
     private static final Map<Class<?>, Class<?>> REQUEST_COMPONENTS = classMap(
     			InterceptorStack.class, 						DefaultInterceptorStack.class,

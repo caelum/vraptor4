@@ -21,6 +21,7 @@ import java.lang.reflect.AccessibleObject;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 
 import br.com.caelum.vraptor4.http.ParameterNameProvider;
@@ -32,8 +33,13 @@ import br.com.caelum.vraptor4.http.ParameterNameProvider;
  * @since
  *
  */
+@RequestScoped
 public class VRaptorParameterNamesProvider implements br.com.caelum.iogi.spi.ParameterNamesProvider {
-	private final ParameterNameProvider parameterNameProvider;
+
+	private ParameterNameProvider parameterNameProvider;
+
+	@Deprecated // CDI eyes only
+	public VRaptorParameterNamesProvider() {}
 
 	@Inject
 	public VRaptorParameterNamesProvider(ParameterNameProvider parameterNameProvider) {

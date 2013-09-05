@@ -19,6 +19,8 @@ import static java.util.Collections.emptyList;
 
 import java.util.List;
 
+import javax.enterprise.context.RequestScoped;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,6 +29,7 @@ import org.slf4j.LoggerFactory;
  * @author Lucas Cavalcanti
  * @since 3.1.2
  */
+@RequestScoped
 public class NullBeanValidator implements BeanValidator {
 
 	private static final Logger logger = LoggerFactory.getLogger(NullBeanValidator.class);

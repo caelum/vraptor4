@@ -20,6 +20,7 @@ import static br.com.caelum.vraptor4.view.Results.status;
 import java.util.Collections;
 import java.util.List;
 
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 
 import br.com.caelum.vraptor4.Result;
@@ -34,12 +35,16 @@ import br.com.caelum.vraptor4.restfulie.hypermedia.HypermediaResource;
  * @author Jose Donizetti
  * @since 3.0.3
  */
+@RequestScoped
 public class DefaultRepresentationResult implements RepresentationResult {
-	
-	private final FormatResolver formatResolver;
-	private final List<Serialization> serializations;
-	private final Result result;
-	private final RestHeadersHandler headersHandler;
+
+	private FormatResolver formatResolver;
+	private List<Serialization> serializations;
+	private Result result;
+	private RestHeadersHandler headersHandler;
+
+	@Deprecated // CDI eyes only
+	public DefaultRepresentationResult() {}
 
 	@Inject
 	public DefaultRepresentationResult(FormatResolver formatResolver, Result result, List<Serialization> serializations, RestHeadersHandler headersHandler) {
@@ -47,8 +52,8 @@ public class DefaultRepresentationResult implements RepresentationResult {
 		this.result = result;
 		this.serializations = serializations;
 		this.headersHandler = headersHandler;
-	}	
-	
+	}
+
 	public <T> Serializer from(T object) {
 		return from(object, null);
 	}

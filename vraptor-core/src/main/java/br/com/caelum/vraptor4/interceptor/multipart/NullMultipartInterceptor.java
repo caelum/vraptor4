@@ -16,6 +16,8 @@
  */
 package br.com.caelum.vraptor4.interceptor.multipart;
 
+import javax.enterprise.context.RequestScoped;
+
 import br.com.caelum.vraptor4.InterceptionException;
 import br.com.caelum.vraptor4.controller.ControllerMethod;
 import br.com.caelum.vraptor4.core.InterceptorStack;
@@ -27,6 +29,7 @@ import br.com.caelum.vraptor4.core.InterceptorStack;
  * @since 3.1.3
  * @see CommonsUploadMultipartInterceptor
  */
+@RequestScoped
 public class NullMultipartInterceptor implements MultipartInterceptor {
 
     /**

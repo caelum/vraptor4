@@ -22,6 +22,7 @@ import static br.com.caelum.vraptor4.view.Results.page;
 
 import java.util.ArrayList;
 
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 
 import net.vidageek.mirror.dsl.Mirror;
@@ -36,13 +37,17 @@ import br.com.caelum.vraptor4.http.route.MethodNotAllowedException;
 import br.com.caelum.vraptor4.http.route.Router;
 import br.com.caelum.vraptor4.validator.Message;
 
+@RequestScoped
 public class DefaultRefererResult implements RefererResult {
 
-	private final MutableRequest request;
-	private final Result result;
-	private final Router router;
-	private final ParametersProvider provider;
-	private final Localization localization;
+	private MutableRequest request;
+	private Result result;
+	private Router router;
+	private ParametersProvider provider;
+	private Localization localization;
+
+	@Deprecated// CDI eyes only
+	public DefaultRefererResult() {}
 
 	@Inject
 	public DefaultRefererResult(Result result, MutableRequest request, Router router,

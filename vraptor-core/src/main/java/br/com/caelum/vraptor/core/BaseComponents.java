@@ -121,8 +121,6 @@ import br.com.caelum.vraptor.serialization.ProxyInitializer;
 import br.com.caelum.vraptor.serialization.RepresentationResult;
 import br.com.caelum.vraptor.serialization.XMLSerialization;
 import br.com.caelum.vraptor.serialization.xstream.NullConverter;
-import br.com.caelum.vraptor.serialization.xstream.XStreamBuilder;
-import br.com.caelum.vraptor.serialization.xstream.XStreamBuilderImpl;
 import br.com.caelum.vraptor.serialization.xstream.XStreamConverters;
 import br.com.caelum.vraptor.serialization.xstream.XStreamJSONPSerialization;
 import br.com.caelum.vraptor.serialization.xstream.XStreamJSONSerialization;
@@ -195,11 +193,6 @@ public class BaseComponents {
             StaticContentHandler.class,		DefaultStaticContentHandler.class,
             SingleValueConverter.class,     NullConverter.class,
             ProxyInitializer.class,			NullProxyInitializer.class
-    );
-
-    private static final Map<Class<?>, Class<?>> PROTOTYPE_COMPONENTS = classMap(
-    		RequestExecution.class, 						EnhancedRequestExecution.class,
-    		XStreamBuilder.class, 							XStreamBuilderImpl.class
     );
 
     private static final Map<Class<?>, Class<?>> REQUEST_COMPONENTS = classMap(
@@ -321,10 +314,6 @@ public class BaseComponents {
             return false;
         }
     }
-
-    public static Map<Class<?>, Class<?>> getPrototypeScoped() {
-		return Collections.unmodifiableMap(PROTOTYPE_COMPONENTS);
-	}
 
     public static Set<StereotypeInfo> getStereotypesInfo() {
     		return new HashSet<StereotypeInfo>(STEREOTYPES_INFO.values());

@@ -61,7 +61,7 @@ public class ValidatorCreator {
     }
 
 	
-	@Produces @Default @javax.enterprise.context.ApplicationScoped
+	@Produces @Default @ApplicationScoped
 	public Validator getInstance() {
 		return validator;
 	}

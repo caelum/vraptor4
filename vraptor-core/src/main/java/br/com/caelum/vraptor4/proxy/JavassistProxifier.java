@@ -102,6 +102,11 @@ public class JavassistProxifier implements Proxifier {
         return o != null && isProxyClass(o.getClass());
     }
 
+    @Override
+	public boolean isProxyType(Class<?> type) {
+		return isProxyClass(type) || org.jboss.weld.bean.proxy.ProxyFactory.isProxy(type);
+	}
+
     private <T> void setHandler(Object proxyInstance, final MethodInvocation<? super T> handler) {
         ProxyObject proxyObject = (ProxyObject) proxyInstance;
 

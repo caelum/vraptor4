@@ -42,6 +42,7 @@ import br.com.caelum.vraptor4.http.MutableRequest;
 import br.com.caelum.vraptor4.interceptor.VRaptorMatchers;
 import br.com.caelum.vraptor4.proxy.JavassistProxifier;
 import br.com.caelum.vraptor4.proxy.ObjenesisInstanceCreator;
+import br.com.caelum.vraptor4.proxy.Proxifier;
 
 import com.google.common.collect.Sets;
 
@@ -50,7 +51,7 @@ public class FixedMethodStrategyTest {
 	private @Mock MutableRequest request;
 	private @Mock ParametersControl control;
 	private ControllerMethod list;
-	private JavassistProxifier proxifier;
+	private Proxifier proxifier;
 	private EnumSet<HttpMethod> get;
 	private EnumSet<HttpMethod> post;
 

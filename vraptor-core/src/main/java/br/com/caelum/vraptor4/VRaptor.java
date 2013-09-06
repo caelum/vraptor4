@@ -75,7 +75,6 @@ public class VRaptor implements Filter {
 		servletContext = null;
 	}
 
-
 	@Override
 	public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException,
 			ServletException {
@@ -118,6 +117,5 @@ public class VRaptor implements Filter {
 		logger.info("VRaptor 4.0 successfuly initialized");
 		initializedEvent.fire(new VRaptorInitialized());
 	}
-
 
 }

@@ -17,7 +17,6 @@
 
 package br.com.caelum.vraptor4.http.route;
 
-import static br.com.caelum.vraptor4.controller.DefaultControllerMethod.instanceFor;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
@@ -84,17 +83,6 @@ public class FixedMethodStrategyTest {
 		assertThat(first, equalTo(second));
 		assertThat(first, not(equalTo(third)));
 		assertThat(first, not(equalTo(forth)));
-	}
-
-	@Test
-	public void canHandleProxyMethodsAndTypes() throws Exception {
-
-		MyControl proxy = proxifier.proxify(MyControl.class, null);
-		Method method = method("show", Dog.class);
-		ControllerMethod cMethod = instanceFor(MyControl.class, method);
-
-		FixedMethodStrategy fms = new FixedMethodStrategy("/uri", cMethod, get, control, 0, new String[0]);
-		assertThat("can not handle proxy", fms.canHandle(proxy.getClass(), method));
 	}
 
 	private Set<HttpMethod> methods(HttpMethod method) {

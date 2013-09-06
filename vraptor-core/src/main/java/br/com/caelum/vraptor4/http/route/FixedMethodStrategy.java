@@ -24,7 +24,6 @@ import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.Set;
 
-import javassist.util.proxy.ProxyObject;
 import br.com.caelum.vraptor4.controller.ControllerMethod;
 import br.com.caelum.vraptor4.controller.HttpMethod;
 import br.com.caelum.vraptor4.http.MutableRequest;
@@ -61,7 +60,6 @@ public class FixedMethodStrategy implements Route {
 	}
 
 	public boolean canHandle(Class<?> type, Method method) {
-		type = ProxyObject.class.isAssignableFrom(type) ? type.getSuperclass() : type;
 		Method getMethod = this.controllerMethod.getMethod();
 		return type.equals(this.controllerMethod.getController().getType())
 			&& method.getName().equals(getMethod.getName())

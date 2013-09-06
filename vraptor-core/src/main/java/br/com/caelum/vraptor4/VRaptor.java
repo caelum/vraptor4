@@ -52,29 +52,28 @@ import br.com.caelum.vraptor4.ioc.ContainerProvider;
  * @author Fabio Kung
  */
 public class VRaptor implements Filter {
-	
+
 	@Inject
 	private ContainerProvider provider;
-	
+
 	@Inject
 	private Event<ServletContext> contextEvent;
-	
+
 	@Inject
 	private Event<VRaptorInitialized> initializedEvent;
-	
+
 	private ServletContext servletContext;
-	
+
 	@Inject
 	private StaticContentHandler staticHandler;
 
-	@Inject 
+	@Inject
 	private Logger logger;
 
 	@Override
 	public void destroy() {
 		servletContext = null;
 	}
-
 
 	@Override
 	public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException,
@@ -115,9 +114,8 @@ public class VRaptor implements Filter {
 		servletContext = cfg.getServletContext();
 		contextEvent.fire(servletContext);
 		this.provider.start(servletContext);
-		logger.info("VRaptor 3.5.0 successfuly initialized");
+		logger.info("VRaptor 4.0 successfuly initialized");
 		initializedEvent.fire(new VRaptorInitialized());
 	}
-
 
 }

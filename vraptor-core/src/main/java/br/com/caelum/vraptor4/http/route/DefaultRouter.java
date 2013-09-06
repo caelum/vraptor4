@@ -142,16 +142,21 @@ public class DefaultRouter implements Router {
 
 	@Override
 	public <T> String urlFor(Class<T> type, Method method, Object... params) {
-		Iterator<Route> matches = Iterators.filter(routes.iterator(), Filters.canHandle(type, method));
+
+		Class<?> rawtype = type;
+
+		if (proxifier.isProxyType(type)) rawtype = type.getSuperclass();
+
+		Iterator<Route> matches = Iterators.filter(routes.iterator(), Filters.canHandle(rawtype, method));
 		if (matches.hasNext()) {
 			try {
-				return matches.next().urlFor(type, method, params);
+				return matches.next().urlFor(rawtype, method, params);
 			} catch (Exception e) {
-				throw new VRaptorException("The selected route is invalid for redirection: " + type.getName() + "."
+				throw new VRaptorException("The selected route is invalid for redirection: " + rawtype.getName() + "."
 						+ method.getName(), e);
 			}
 		}
-		throw new RouteNotFoundException("The selected route is invalid for redirection: " + type.getName() + "."
+		throw new RouteNotFoundException("The selected route is invalid for redirection: " + rawtype.getName() + "."
 				+ method.getName());
 	}
 

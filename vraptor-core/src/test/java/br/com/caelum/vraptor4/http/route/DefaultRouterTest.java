@@ -20,6 +20,7 @@ package br.com.caelum.vraptor4.http.route;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.atLeastOnce;
@@ -323,6 +324,15 @@ public class DefaultRouterTest {
 		final Method method = MyController.class.getMethod("customizedPath");
 		String url = router.urlFor(MyController.class, method, new Object[] {});
 		assertThat(router.parse(url, HttpMethod.POST, null).getMethod(), is(equalTo(method)));
+	}
+
+	@Test
+	public void canFindUrlForProxyClasses() throws Exception {
+		registerRulesFor(MyController.class);
+		MyController proxy = proxifier.proxify(MyController.class, null);
+		Class<? extends MyController> type = proxy.getClass();
+		Method method = type.getMethod("notAnnotated");
+		assertEquals("/my/notAnnotated", router.urlFor(type, method));
 	}
 }
 

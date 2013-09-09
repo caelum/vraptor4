@@ -20,7 +20,6 @@ import java.util.Map;
 
 import javax.enterprise.context.ApplicationScoped;
 
-import br.com.caelum.vraptor.core.BaseComponents;
 import br.com.caelum.vraptor.ioc.Container;
 
 /**
@@ -37,11 +36,8 @@ public class DefaultDeserializers implements Deserializers {
 	private final Map<String, Class<? extends Deserializer>> deserializers = new HashMap<String, Class<? extends Deserializer>>();
 
 	public DefaultDeserializers() {
-		for (Class<? extends Deserializer> type : BaseComponents.getDeserializers()) {
-			register(type);
-		}
 	}
-	
+
 	public Deserializer deserializerFor(String contentType, Container container) {
 		if (deserializers.containsKey(contentType)) {
 			return container.instanceFor(deserializers.get(contentType));

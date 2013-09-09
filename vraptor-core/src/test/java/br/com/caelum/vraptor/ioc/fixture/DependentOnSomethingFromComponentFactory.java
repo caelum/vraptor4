@@ -14,7 +14,7 @@ public class DependentOnSomethingFromComponentFactory {
 	public DependentOnSomethingFromComponentFactory(NeedsCustomInstantiation dependency) {
 		this.dependency = dependency;
 	}
-	
+
 	public NeedsCustomInstantiation getDependency() {
 		return dependency;
 	}

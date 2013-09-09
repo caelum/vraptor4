@@ -21,15 +21,19 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@javax.enterprise.inject.Stereotype
-@Documented
-@Target(ElementType.TYPE)
-@Retention(RetentionPolicy.RUNTIME)
+import javax.enterprise.context.RequestScoped;
+import javax.enterprise.inject.Stereotype;
+
 /**
  * Indicates that annotated class will deserialize specified content types
  * @author Lucas Cavalcanti, Cecilia Fernandes
  * @since 3.0.2
  */
+@RequestScoped
+@Stereotype
+@Documented
+@Target(ElementType.TYPE)
+@Retention(RetentionPolicy.RUNTIME)
 public @interface Deserializes {
 	String[] value();
 }

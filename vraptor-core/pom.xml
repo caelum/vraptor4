@@ -4,8 +4,12 @@
 	<groupId>br.com.caelum</groupId>
 	<artifactId>vraptor</artifactId>
 	<packaging>jar</packaging>
-	<version>4.0-SNAPSHOT</version>
 
+	<parent>
+		<groupId>br.com.caelum</groupId>
+		<artifactId>vraptor-parent</artifactId>
+		<version>4.0-SNAPSHOT</version>
+	</parent>
 
 	<dependencies>
 		<!-- mandatory -->
@@ -234,7 +238,6 @@
                 <groupId>org.jboss.weld.se</groupId>
                 <artifactId>weld-se-core</artifactId>
                 <version>2.0.3.Final</version>
-                <scope>test</scope>
         </dependency>
 		</dependencies>
 		
@@ -283,8 +286,8 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>2.3.1</version>
 				<configuration>
-					<source>1.6</source>
-					<target>1.6</target>
+					<source>1.7</source>
+					<target>1.7</target>
 				</configuration>
 			</plugin>
 			<plugin>

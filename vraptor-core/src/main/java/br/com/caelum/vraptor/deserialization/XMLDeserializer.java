@@ -21,7 +21,6 @@ package br.com.caelum.vraptor.deserialization;
  * @author Lucas Cavalcanti, Cecilia Fernandes
  * @since 3.0.2
  */
-@Deserializes({"application/xml","xml", "text/xml"})
 public interface XMLDeserializer extends Deserializer {
 
 }

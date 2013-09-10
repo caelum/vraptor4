@@ -18,7 +18,6 @@ package br.com.caelum.vraptor.deserialization;
 import br.com.caelum.vraptor.ioc.Container;
 
 /**
- *
  * @author Lucas Cavalcanti, Cecilia Fernandes
  * @since 3.0.2
  */
@@ -27,5 +26,4 @@ public interface Deserializers {
 	Deserializer deserializerFor(String contentType, Container container);
 
 	void register(Class<? extends Deserializer> type);
-
 }

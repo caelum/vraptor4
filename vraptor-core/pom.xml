@@ -2,13 +2,13 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>br.com.caelum</groupId>
-	<artifactId>vraptor4</artifactId>
+	<artifactId>vraptor</artifactId>
 	<packaging>jar</packaging>
 	<version>4.0-SNAPSHOT</version>
 
 
 	<dependencies>
-			<!-- mandatory -->
+		<!-- mandatory -->
 		<dependency>
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>

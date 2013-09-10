@@ -19,6 +19,7 @@ package br.com.caelum.vraptor4.config;
 
 import java.lang.reflect.InvocationTargetException;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -26,7 +27,6 @@ import javax.servlet.ServletException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import br.com.caelum.vraptor4.ioc.ApplicationScoped;
 import br.com.caelum.vraptor4.ioc.ContainerProvider;
 import br.com.caelum.vraptor4.ioc.MissingConfigurationException;
 import br.com.caelum.vraptor4.ioc.cdi.CDIProvider;

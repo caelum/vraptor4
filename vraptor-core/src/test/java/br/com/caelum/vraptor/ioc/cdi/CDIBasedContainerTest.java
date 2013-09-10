@@ -10,8 +10,6 @@ import static org.mockito.Mockito.when;
 
 import java.util.Collections;
 import java.util.Enumeration;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.concurrent.Callable;
 
 import javax.enterprise.context.RequestScoped;
@@ -26,20 +24,14 @@ import org.junit.Test;
 
 import br.com.caelum.cdi.component.CDIControllerComponent;
 import br.com.caelum.cdi.component.CDISessionComponent;
-import br.com.caelum.vraptor.core.BaseComponents;
 import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.interceptor.PackagesAcceptor;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.ioc.ContainerProvider;
 import br.com.caelum.vraptor.ioc.GenericContainerTest;
 import br.com.caelum.vraptor.ioc.WhatToDo;
-import br.com.caelum.vraptor.ioc.cdi.CDIProvider;
 import br.com.caelum.vraptor.ioc.fixture.ComponentFactoryInTheClasspath;
 import br.com.caelum.vraptor.ioc.fixture.CustomComponentWithLifecycleInTheClasspath;
-import br.com.caelum.vraptor.validator.MessageInterpolatorFactory;
-import br.com.caelum.vraptor.validator.MethodValidatorFactoryCreator;
-import br.com.caelum.vraptor.validator.ValidatorCreator;
-import br.com.caelum.vraptor.validator.ValidatorFactoryCreator;
 
 public class CDIBasedContainerTest extends GenericContainerTest {
 
@@ -184,17 +176,6 @@ public class CDIBasedContainerTest extends GenericContainerTest {
 	public void shouldStereotypeControllerWithRequestAndNamed(){
 		Bean<?> bean = cdiContainer.getBeanManager().getBeans(CDIControllerComponent.class).iterator().next();
 		assertTrue(bean.getScope().equals(RequestScoped.class));
-	}
-
-	@Override
-	@Test
-	public void canProvideAllApplicationScopedComponents() {
-		Set<Class<?>> components = new HashSet<Class<?>>(BaseComponents.getApplicationScoped().keySet());
-		components.remove(ValidatorFactoryCreator.class);
-		components.remove(ValidatorCreator.class);
-		components.remove(MessageInterpolatorFactory.class);
-		components.remove(MethodValidatorFactoryCreator.class);
-		checkAvailabilityFor(true, components);
 	}
 
 	@Override

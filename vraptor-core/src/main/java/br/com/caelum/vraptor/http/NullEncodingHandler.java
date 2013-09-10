@@ -17,17 +17,19 @@
 
 package br.com.caelum.vraptor.http;
 
+import javax.enterprise.inject.Alternative;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
  * {@link EncodingHandler} that does nothing.
- * 
+ *
  * @author Lucas Cavalcanti
  */
+@Alternative
 public class NullEncodingHandler implements EncodingHandler {
-    
+
 	public void setEncoding(HttpServletRequest request, HttpServletResponse response) {
-	    
+
 	}
 }

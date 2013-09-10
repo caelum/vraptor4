@@ -19,6 +19,7 @@ package br.com.caelum.vraptor.http;
 
 import java.io.UnsupportedEncodingException;
 
+import javax.enterprise.inject.Alternative;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -26,9 +27,10 @@ import br.com.caelum.vraptor.VRaptorException;
 
 /**
  * {@link EncodingHandler} that uses Encoding from web.xml.
- * 
+ *
  * @author Lucas Cavalcanti
  */
+@Alternative
 public class WebXmlEncodingHandler implements EncodingHandler {
 
 	private final String encoding;

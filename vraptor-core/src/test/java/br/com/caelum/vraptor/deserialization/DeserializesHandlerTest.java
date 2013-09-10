@@ -7,9 +7,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.controller.DefaultBeanClass;
-import br.com.caelum.vraptor.deserialization.Deserializer;
-import br.com.caelum.vraptor.deserialization.Deserializers;
-import br.com.caelum.vraptor.deserialization.DeserializesHandler;
 
 public class DeserializesHandlerTest {
 
@@ -33,7 +30,6 @@ public class DeserializesHandlerTest {
 	@Test
 	public void shouldRegisterTypesOnDeserializers() throws Exception {
 		handler.handle(new DefaultBeanClass(MyDeserializer.class));
-
 		verify(deserializers).register(MyDeserializer.class);
 	}
 }

@@ -21,11 +21,8 @@ import static com.google.common.collect.Iterables.any;
 import static java.util.Arrays.asList;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
 
 import br.com.caelum.vraptor4.controller.ControllerMethod;
-import br.com.caelum.vraptor4.controller.HttpMethod;
-import br.com.caelum.vraptor4.http.route.Route;
 import br.com.caelum.vraptor4.interceptor.Interceptor;
 
 import com.google.common.base.Predicate;
@@ -36,29 +33,6 @@ public class Filters {
 		return new Predicate<Interceptor>() {
 			public boolean apply(Interceptor interceptor) {
 				return interceptor.accepts(method);
-			}
-		};
-	}
-
-	public static Predicate<Route> canHandle(final Class<?> type, final Method method) {
-		return new Predicate<Route>() {
-			public boolean apply(Route route) {
-				return route.canHandle(type, method);
-			}
-		};
-	}
-
-	public static Predicate<Route> canHandle(final String uri) {
-		return new Predicate<Route>() {
-			public boolean apply(Route route) {
-				return route.canHandle(uri);
-			}
-		};
-	}
-	public static Predicate<Route> allow(final HttpMethod method) {
-		return new Predicate<Route>() {
-			public boolean apply(Route route) {
-				return route.allowedMethods().contains(method);
 			}
 		};
 	}

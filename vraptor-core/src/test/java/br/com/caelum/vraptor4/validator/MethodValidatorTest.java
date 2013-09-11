@@ -66,7 +66,7 @@ public class MethodValidatorTest {
 
         provider = new ParanamerNameProvider();
         
-        MethodValidatorFactoryCreator methodValidatorCreator = new MethodValidatorFactoryCreator(provider);
+        ValidatorFactoryCreator methodValidatorCreator = new ValidatorFactoryCreator(provider);
         methodValidatorCreator.buildFactory();
         factory = methodValidatorCreator.getInstance();
 

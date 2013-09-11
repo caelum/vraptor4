@@ -117,7 +117,7 @@ public class VRaptor implements Filter {
 			} catch (ControllerInvocationException e) {
 				// it is a business logic exception, we dont need to show
 				// all interceptors stack trace
-				throw new ServletException(e.getCause());
+				throw new ServletException("Your controller threw an exception", e.getCause());
 			}
 
 			logger.debug("VRaptor ended the request");

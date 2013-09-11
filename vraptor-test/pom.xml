@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>br.com.caelum.vraptor</groupId>
 	<artifactId>vraptor-test</artifactId>
-	<version>1.0.0.beta</version>
+	<version>1.0.0.beta-SNAPSHOT</version>
 	<packaging>war</packaging>
 
 	<name>vraptor-test</name>
@@ -36,7 +36,7 @@
 		<dependency>
 			<groupId>br.com.caelum</groupId>
 			<artifactId>vraptor</artifactId>
-			<version>4.0.0.beta</version>
+			<version>4.0.0.beta-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>br.com.caelum.vraptor</groupId>

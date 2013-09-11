@@ -48,7 +48,7 @@ public class DefaultTypeFinder implements TypeFinder {
 	
 	@Override
 	public Map<String, Class<?>> getParameterTypes(Method method, String[] parameterPaths) {
-		Map<String,Class<?>> result = new HashMap<String, Class<?>>();
+		Map<String,Class<?>> result = new HashMap<>();
 		String[] parameterNamesFor = provider.parameterNamesFor(method);
 		for (String path : parameterPaths) {
 			for (int i = 0; i < parameterNamesFor.length; i++) {

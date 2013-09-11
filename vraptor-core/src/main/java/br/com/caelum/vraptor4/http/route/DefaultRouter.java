@@ -163,7 +163,7 @@ public class DefaultRouter implements Router {
 
 	@Override
 	public List<Route> allRoutes() {
-		return Collections.unmodifiableList(new ArrayList<Route>(routes));
+		return Collections.unmodifiableList(new ArrayList<>(routes));
 	}
 
     private Predicate<Route> canHandle(final Class<?> type, final Method method) {

@@ -90,7 +90,7 @@ public class XStreamJSONSerializationTest {
 			this.client = client;
 			this.price = price;
 			this.comments = comments;
-			this.items = new ArrayList<Item>(Arrays.asList(items));
+			this.items = new ArrayList<>(Arrays.asList(items));
 		}
 		public String nice() {
 			return "nice output";
@@ -125,11 +125,11 @@ public class XStreamJSONSerializationTest {
     public void shouldSerializeGenericClass() {
 		String expectedResult = "{\"genericWrapper\": {\"entityList\": [{\"name\": \"washington botelho\"},{\"name\": \"washington botelho\"}],\"total\": 2}}";
 
-		Collection<Client> entityList = new ArrayList<Client>();
+		Collection<Client> entityList = new ArrayList<>();
 		entityList.add(new Client("washington botelho"));
 		entityList.add(new Client("washington botelho"));
 
-		GenericWrapper<Client> wrapper = new GenericWrapper<Client>(entityList, entityList.size());
+		GenericWrapper<Client> wrapper = new GenericWrapper<>(entityList, entityList.size());
 
         serialization.from(wrapper).include("entityList").serialize();
 

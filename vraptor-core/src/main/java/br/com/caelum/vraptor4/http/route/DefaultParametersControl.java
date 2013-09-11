@@ -45,7 +45,7 @@ import br.com.caelum.vraptor4.util.StringUtils;
 public class DefaultParametersControl implements ParametersControl {
 
 	private final Logger logger = LoggerFactory.getLogger(DefaultParametersControl.class);
-	private final List<String> parameters = new ArrayList<String>();
+	private final List<String> parameters = new ArrayList<>();
 	private final Pattern pattern;
 	private final String originalPattern;
 	private final Converters converters;
@@ -63,7 +63,7 @@ public class DefaultParametersControl implements ParametersControl {
 	}
 
 	private Pattern compilePattern(String originalPattern, Map<String, String> parameterPatterns) {
-		Map<String, String> parameters = new HashMap<String, String>(parameterPatterns);
+		Map<String, String> parameters = new HashMap<>(parameterPatterns);
 		Matcher matcher = Pattern.compile("\\{((?=[^\\{]+?[\\{])[^\\}]+?\\}|[^\\}]+?)\\}").matcher(originalPattern);
 		while (matcher.find()) {
 			String value = matcher.group(1);

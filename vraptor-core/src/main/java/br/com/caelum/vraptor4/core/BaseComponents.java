@@ -307,7 +307,7 @@ public class BaseComponents {
 			UploadedFileConverter.class));
 
 
-	private static final HashMap<Class<? extends Annotation>, StereotypeInfo> STEREOTYPES_INFO = new HashMap<Class<? extends Annotation>,StereotypeInfo>();
+	private static final HashMap<Class<? extends Annotation>, StereotypeInfo> STEREOTYPES_INFO = new HashMap<>();
     static {
     		STEREOTYPES_INFO.put(Controller.class,new StereotypeInfo(Controller.class,ControllerHandler.class,new AnnotationLiteral<ControllerQualifier>() {}));
     		STEREOTYPES_INFO.put(Convert.class,new StereotypeInfo(Convert.class,ConverterHandler.class,new AnnotationLiteral<ConvertQualifier>() {}));
@@ -414,7 +414,7 @@ public class BaseComponents {
     }
 
     public static Set<StereotypeInfo> getStereotypesInfo() {
-    		return new HashSet<StereotypeInfo>(STEREOTYPES_INFO.values());
+    		return new HashSet<>(STEREOTYPES_INFO.values());
     }
 
     public static Map<Class<? extends Annotation>,StereotypeInfo> getStereotypesInfoMap() {
@@ -422,7 +422,7 @@ public class BaseComponents {
     }
 
     private static Map<Class<?>, Class<?>> classMap(Class<?>... items) {
-        HashMap<Class<?>, Class<?>> map = new HashMap<Class<?>, Class<?>>();
+        HashMap<Class<?>, Class<?>> map = new HashMap<>();
         Iterator<Class<?>> it = Arrays.asList(items).iterator();
         while (it.hasNext()) {
             Class<?> key = it.next();

@@ -34,7 +34,7 @@ class ExtJSWrapper {
 
     public ExtJSWrapper(Object object) {
         if (object instanceof Collection) {
-            this.list = new ArrayList<Object>((Collection<?>) object);
+            this.list = new ArrayList<>((Collection<?>) object);
         } else {
             this.data = object;
         }

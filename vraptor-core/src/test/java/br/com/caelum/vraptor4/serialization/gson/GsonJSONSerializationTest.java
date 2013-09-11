@@ -112,7 +112,7 @@ public class GsonJSONSerializationTest {
 			this.client = client;
 			this.price = price;
 			this.comments = comments;
-			this.items = new ArrayList<Item>(Arrays.asList(items));
+			this.items = new ArrayList<>(Arrays.asList(items));
 		}
 
 		public String nice() {
@@ -162,11 +162,11 @@ public class GsonJSONSerializationTest {
 	public void shouldSerializeGenericClass() {
 		String expectedResult = "{\"genericWrapper\":{\"entityList\":[{\"name\":\"washington botelho\"},{\"name\":\"washington botelho\"}],\"total\":2}}";
 
-		Collection<Client> entityList = new ArrayList<Client>();
+		Collection<Client> entityList = new ArrayList<>();
 		entityList.add(new Client("washington botelho"));
 		entityList.add(new Client("washington botelho"));
 
-		GenericWrapper<Client> wrapper = new GenericWrapper<Client>(entityList, entityList.size());
+		GenericWrapper<Client> wrapper = new GenericWrapper<>(entityList, entityList.size());
 
 		// serialization.from(wrapper).include("entityList").include("entityList.name").serialize();
 		serialization.from(wrapper).include("entityList").serialize();
@@ -451,7 +451,7 @@ public class GsonJSONSerializationTest {
 	public void shouldUseCollectionConverterWhenItExists() {
 		String expectedResult = "[\"testing\"]";
 
-		List<JsonSerializer<?>> adapters = new ArrayList<JsonSerializer<?>>();
+		List<JsonSerializer<?>> adapters = new ArrayList<>();
 		adapters.add(new CollectionSerializer());
 
 		GsonJSONSerialization serialization = new GsonJSONSerialization(response, extractor, initializer,
@@ -463,7 +463,7 @@ public class GsonJSONSerializationTest {
 
 	@Test
 	public void shouldSerializeCalendarLikeXstream() {
-		List<JsonSerializer<?>> adapters = new ArrayList<JsonSerializer<?>>();
+		List<JsonSerializer<?>> adapters = new ArrayList<>();
 		adapters.add(new CalendarSerializer());
 
 		GsonJSONSerialization serialization = new GsonJSONSerialization(response, extractor, initializer,
@@ -484,7 +484,7 @@ public class GsonJSONSerializationTest {
 
 	@Test
 	public void shouldExcludeAttributeUsingExclusionStrategy() {
-		List<ExclusionStrategy> exclusions = new ArrayList<ExclusionStrategy>();
+		List<ExclusionStrategy> exclusions = new ArrayList<>();
 		exclusions.add(new ClientAddressExclusion());
 
 		GsonJSONSerialization serialization = new GsonJSONSerialization(response, extractor, initializer,

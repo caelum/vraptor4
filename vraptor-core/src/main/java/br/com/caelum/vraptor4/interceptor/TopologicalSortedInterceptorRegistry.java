@@ -34,7 +34,7 @@ import br.com.caelum.vraptor4.Intercepts;
 @Default
 public class TopologicalSortedInterceptorRegistry implements InterceptorRegistry {
 
-	private Graph<Class<?>> set = new Graph<Class<?>>();
+	private Graph<Class<?>> set = new Graph<>();
 
 	public List<Class<?>> all() {
 		return set.topologicalOrder();

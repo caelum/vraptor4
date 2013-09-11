@@ -34,7 +34,7 @@ import javax.enterprise.context.ApplicationScoped;
 @ApplicationScoped
 public class DefaultInterceptorRegistry implements InterceptorRegistry {
 
-    private final List<Class<?>> interceptors = new ArrayList<Class<?>>();
+    private final List<Class<?>> interceptors = new ArrayList<>();
 
     public void register(Class<?>... interceptors) {
         this.interceptors.addAll(Arrays.asList(interceptors));

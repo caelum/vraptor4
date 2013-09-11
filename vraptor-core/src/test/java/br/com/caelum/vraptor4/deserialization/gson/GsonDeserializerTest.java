@@ -114,7 +114,7 @@ public class GsonDeserializerTest {
 
 	@Test
 	public void shouldBeAbleToDeserializeADogWithDeserializerAdapter() throws Exception {
-		List<JsonDeserializer<?>> deserializers = new ArrayList<JsonDeserializer<?>>();
+		List<JsonDeserializer<?>> deserializers = new ArrayList<>();
 		deserializers.add(new DogDeserializer());
 
 		deserializer = new GsonDeserialization(provider, deserializers);

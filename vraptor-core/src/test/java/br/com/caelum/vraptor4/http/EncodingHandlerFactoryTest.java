@@ -12,11 +12,6 @@ import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import javax.servlet.ServletContext;
-
-import org.junit.Before;
-import org.junit.Test;
-
 public class EncodingHandlerFactoryTest {
 
     private BasicConfiguration configuration;
@@ -27,11 +22,11 @@ public class EncodingHandlerFactoryTest {
     }
 
     @Test
-    public void shouldReturnANullHandlerWhenThereIsNoEncodingInitParameter() throws Exception {
+    public void shouldReturnAUTF8HandlerWhenThereIsNoEncodingInitParameter() throws Exception {
         when(configuration.getEncoding()).thenReturn(null);
         
         EncodingHandlerFactory handlerFactory = new EncodingHandlerFactory(configuration);
-        assertThat(handlerFactory.getInstance(), is(instanceOf(NullEncodingHandler.class)));
+        assertThat(handlerFactory.getInstance(), is(instanceOf(UTF8EncodingHandler.class)));
     }
     @Test
     public void shouldReturnAWebXmlHandlerWhenThereIsAnEncodingInitParameter() throws Exception {

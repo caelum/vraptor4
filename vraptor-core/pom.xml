@@ -2,13 +2,17 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>br.com.caelum</groupId>
-	<artifactId>vraptor4</artifactId>
+	<artifactId>vraptor</artifactId>
 	<packaging>jar</packaging>
-	<version>4.0-SNAPSHOT</version>
 
+	<parent>
+		<groupId>br.com.caelum</groupId>
+		<artifactId>vraptor-parent</artifactId>
+		<version>4.0.0.beta-SNAPSHOT</version>
+	</parent>
 
 	<dependencies>
-			<!-- mandatory -->
+		<!-- mandatory -->
 		<dependency>
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
@@ -234,7 +238,6 @@
                 <groupId>org.jboss.weld.se</groupId>
                 <artifactId>weld-se-core</artifactId>
                 <version>2.0.3.Final</version>
-                <scope>test</scope>
         </dependency>
 		</dependencies>
 		
@@ -283,8 +286,8 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>2.3.1</version>
 				<configuration>
-					<source>1.6</source>
-					<target>1.6</target>
+					<source>1.7</source>
+					<target>1.7</target>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -318,6 +321,23 @@
 				</configuration>
 			</plugin>
 
+			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<version>2.3</version>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<configuration>
+							<descriptors>
+								<descriptor>assembly.xml</descriptor>
+							</descriptors>
+						</configuration>
+						<goals>
+							<goal>assembly</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 	</build>
 </project>

@@ -460,6 +460,17 @@ public class PathAnnotationRoutesParserTest {
 
     	assertThat(route, canHandle(NiceClients.class, "add"));
     }
+    
+    static class UPPERController {
+        public void method() {}
+    }
+    
+    public void shouldlowerFirstWord() {
+        List<Route> routes = parser.rulesFor(new DefaultBeanClass(UPPERController.class));
+        Route route = getRouteMatching(routes, "/upper/method");
+
+        assertThat(route, canHandle(UPPERController.class, "method"));
+    }
 
     @Post
     static class AnnotatedController {

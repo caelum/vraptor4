@@ -37,7 +37,7 @@ import br.com.caelum.iogi.reflection.Target;
 import br.com.caelum.iogi.spi.DependencyProvider;
 import br.com.caelum.iogi.spi.ParameterNamesProvider;
 import br.com.caelum.vraptor4.Converter;
-import br.com.caelum.vraptor4.converter.ConversionError;
+import br.com.caelum.vraptor4.converter.ConversionException;
 import br.com.caelum.vraptor4.core.Converters;
 import br.com.caelum.vraptor4.core.Localization;
 import br.com.caelum.vraptor4.http.InvalidParameterException;
@@ -141,7 +141,7 @@ public class VRaptorInstantiator implements InstantiatorWithErrors, Instantiator
 			try {
 				Parameter parameter = parameters.namedAfter(target);
 				return converterForTarget(target).convert(parameter.getValue(), target.getClassType(), localization.getBundle());
-			} catch (ConversionError ex) {
+			} catch (ConversionException ex) {
 				errors.add(new ValidationMessage(ex.getMessage(), target.getName()));
 			} catch (IllegalStateException e) {
 				return setPropertiesAfterConversions(target, parameters);

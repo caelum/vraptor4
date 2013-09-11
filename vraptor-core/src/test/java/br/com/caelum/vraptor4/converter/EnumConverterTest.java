@@ -65,7 +65,7 @@ public class EnumConverterTest {
 	public void shouldComplainAboutInvalidIndex() {
 		try {
 			converter.convert("3200", MyCustomEnum.class, bundle);
-		} catch (ConversionError e) {
+		} catch (ConversionException e) {
 			assertThat(e.getMessage(), is(equalTo("3200 is not a valid option.")));
 		}
 	}
@@ -74,7 +74,7 @@ public class EnumConverterTest {
 	public void shouldComplainAboutInvalidNumber() {
 		try {
 			converter.convert("32a00", MyCustomEnum.class, bundle);
-		} catch (ConversionError e) {
+		} catch (ConversionException e) {
 			assertThat(e.getMessage(), is(equalTo("32a00 is not a valid option.")));
 		}
 	}
@@ -83,7 +83,7 @@ public class EnumConverterTest {
 	public void shouldComplainAboutInvalidOrdinal() {
 		try {
 			converter.convert("THIRD", MyCustomEnum.class, bundle);
-		} catch (ConversionError e) {
+		} catch (ConversionException e) {
 			assertThat(e.getMessage(), is(equalTo("THIRD is not a valid option.")));
 		}
 	}

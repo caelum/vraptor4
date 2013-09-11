@@ -47,7 +47,7 @@ public class ShortConverterTest {
 	public void shouldComplainAboutInvalidNumber() {
 		try {
 			converter.convert("---", Short.class, bundle);
-		} catch (ConversionError e) {
+		} catch (ConversionException e) {
 			assertThat(e.getMessage(), is(equalTo("--- is not a valid integer.")));
 		}
 	}

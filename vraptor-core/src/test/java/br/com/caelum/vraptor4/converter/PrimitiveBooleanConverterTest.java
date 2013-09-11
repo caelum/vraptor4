@@ -87,7 +87,7 @@ public class PrimitiveBooleanConverterTest {
 		try {
 			converter.convert("not a boolean!", boolean.class, bundle);
 			Assert.assertTrue(false);
-		} catch (ConversionError e) {
+		} catch (ConversionException e) {
 			assertThat(e.getMessage(),
 					is(equalTo("NOT A BOOLEAN! is not a valid boolean. Please use true/false, yes/no, y/n or on/off")));
 		}

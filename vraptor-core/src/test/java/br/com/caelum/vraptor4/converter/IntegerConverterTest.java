@@ -47,7 +47,7 @@ public class IntegerConverterTest {
 	public void shouldComplainAboutInvalidNumber() {
 		try {
 			converter.convert("---", Integer.class, bundle);
-		} catch (ConversionError e) {
+		} catch (ConversionException e) {
 			assertThat(e.getMessage(), is(equalTo("--- is not a valid integer.")));
 		}
 	}

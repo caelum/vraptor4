@@ -53,7 +53,7 @@ public class BigDecimalConverterTest {
 	public void shouldComplainAboutInvalidNumber() {
 		try {
 			converter.convert("---", BigDecimal.class, bundle);
-		} catch (ConversionError e) {
+		} catch (ConversionException e) {
 			assertThat(e.getMessage(), is(equalTo("--- is not a valid number.")));
 		}
 	}

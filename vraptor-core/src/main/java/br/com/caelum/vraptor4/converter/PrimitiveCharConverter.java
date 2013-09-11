@@ -42,7 +42,7 @@ public class PrimitiveCharConverter implements Converter<Character> {
         }
         
         if (value.length() != 1) {
-            throw new ConversionError(MessageFormat.format(bundle.getString("is_not_a_valid_character"), value));
+            throw new ConversionException(MessageFormat.format(bundle.getString("is_not_a_valid_character"), value));
         }
         return value.charAt(0);
     }

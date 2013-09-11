@@ -46,6 +46,9 @@ public class StepInvoker {
 			Object returnObject = new Mirror().on(interceptor).invoke().method(stepMethod).withArgs(params);
 			return returnObject;
 		} catch (MirrorException e) {
+			if(e.getCause() != null && e.getCause() instanceof ControllerInvocationException) {
+				throw (ControllerInvocationException) e.getCause();
+			}
 			throw new InterceptionException(e.getCause());
 		}
 	}

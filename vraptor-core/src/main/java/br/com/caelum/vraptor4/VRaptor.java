@@ -41,13 +41,14 @@ import br.com.caelum.vraptor4.events.VRaptorInitialized;
 import br.com.caelum.vraptor4.http.EncodingHandler;
 import br.com.caelum.vraptor4.http.VRaptorRequest;
 import br.com.caelum.vraptor4.http.VRaptorResponse;
+import br.com.caelum.vraptor4.interceptor.ControllerInvocationException;
 import br.com.caelum.vraptor4.ioc.Container;
 import br.com.caelum.vraptor4.ioc.ContainerProvider;
 
 /**
  * VRaptor entry point.<br>
  * Provider configuration is supported through init parameter.
- *
+ * 
  * @author Guilherme Silveira
  * @author Fabio Kung
  */
@@ -76,10 +77,11 @@ public class VRaptor implements Filter {
 	}
 
 	@Override
-	public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException,
-			ServletException {
+	public void doFilter(ServletRequest req, ServletResponse res,
+			FilterChain chain) throws IOException, ServletException {
 
-		if (!(req instanceof HttpServletRequest) || !(res instanceof HttpServletResponse)) {
+		if (!(req instanceof HttpServletRequest)
+				|| !(res instanceof HttpServletResponse)) {
 			throw new ServletException(
 					"VRaptor must be run inside a Servlet environment. Portlets and others aren't supported.");
 		}
@@ -88,7 +90,8 @@ public class VRaptor implements Filter {
 		final HttpServletResponse baseResponse = (HttpServletResponse) res;
 
 		if (staticHandler.requestingStaticFile(baseRequest)) {
-			staticHandler.deferProcessingToContainer(chain, baseRequest, baseResponse);
+			staticHandler.deferProcessingToContainer(chain, baseRequest,
+					baseResponse);
 		} else {
 			logger.debug("VRaptor received a new request");
 			logger.trace("Request: {}", req);
@@ -96,15 +99,27 @@ public class VRaptor implements Filter {
 			VRaptorRequest mutableRequest = new VRaptorRequest(baseRequest);
 			VRaptorResponse mutableResponse = new VRaptorResponse(baseResponse);
 
-			final RequestInfo request = new RequestInfo(servletContext, chain, mutableRequest, mutableResponse);
-			provider.provideForRequest(request, new Execution<Object>() {
+			final RequestInfo request = new RequestInfo(servletContext, chain,
+					mutableRequest, mutableResponse);
+
+			Execution<Object> execution = new Execution<Object>() {
 				@Override
 				public Object insideRequest(Container container) {
-					container.instanceFor(EncodingHandler.class).setEncoding(baseRequest, baseResponse);
+					container.instanceFor(EncodingHandler.class).setEncoding(
+							baseRequest, baseResponse);
 					container.instanceFor(RequestExecution.class).execute();
 					return null;
 				}
-			});
+			};
+			
+			try {
+				provider.provideForRequest(request, execution);
+			} catch (ControllerInvocationException e) {
+				// it is a business logic exception, we dont need to show
+				// all interceptors stack trace
+				throw new ServletException(e.getCause());
+			}
+
 			logger.debug("VRaptor ended the request");
 		}
 	}

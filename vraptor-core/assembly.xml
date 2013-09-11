@@ -9,7 +9,7 @@
 	<dependencySets>
 		<dependencySet>
 			<unpack>false</unpack>
-			<scope>runtime</scope>
+			<scope>test</scope>
 			<outputDirectory>lib</outputDirectory>
 		</dependencySet>
 	</dependencySets>

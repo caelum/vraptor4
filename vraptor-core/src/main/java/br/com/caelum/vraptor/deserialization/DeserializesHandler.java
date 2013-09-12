@@ -43,6 +43,7 @@ public class DeserializesHandler{
 		this.deserializers = deserializers;
 	}
 
+	@SuppressWarnings("unchecked")
 	public void handle(@Observes @DeserializesQualifier BeanClass beanClass) {
 		Class<?> originalType = beanClass.getType();
 		if (!Deserializer.class.isAssignableFrom(originalType)) {

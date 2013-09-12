@@ -22,11 +22,11 @@ import javax.validation.metadata.ConstraintDescriptor;
 /**
  * Create a personalized implementation for {@link javax.validation.MessageInterpolator.Context}. This class
  * is need to interpolate the constraint violation message with localized messages.
- * 
+ *
  * @author Otávio Scherer Garcia
  * @version $Revision$
  */
-class BeanValidatorContext
+public class BeanValidatorContext
     implements MessageInterpolator.Context {
 
     private final ConstraintDescriptor<?> descriptor;
@@ -48,7 +48,7 @@ class BeanValidatorContext
     public static BeanValidatorContext of(ConstraintViolation<Object> violation) {
         return new BeanValidatorContext(violation.getConstraintDescriptor(), violation.getInvalidValue());
     }
-    
+
     public <T> T unwrap(Class<T> clazz) {
         return clazz.cast(this);
     }

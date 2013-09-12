@@ -22,6 +22,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.Alternative;
 
 /**
  * A registry filled with interceptors to intercept requests.<br/>
@@ -31,7 +32,7 @@ import javax.enterprise.context.ApplicationScoped;
  * @author Guilherme Silveira
  * @author Fabio Kung
  */
-@ApplicationScoped
+@ApplicationScoped @Alternative
 public class DefaultInterceptorRegistry implements InterceptorRegistry {
 
     private final List<Class<?>> interceptors = new ArrayList<Class<?>>();

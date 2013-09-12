@@ -23,7 +23,6 @@ import java.util.Collection;
 import java.util.List;
 
 import javax.enterprise.context.RequestScoped;
-import javax.enterprise.inject.Default;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
@@ -56,13 +55,12 @@ import com.google.common.collect.Multiset;
 /**
  * A multipart interceptor based on Apache Commons Upload. Provided parameters are injected through
  * RequestParameters.set and uploaded files are made available through
- * 
+ *
  * @author Guilherme Silveira
  * @author Otávio Scherer Garcia
  */
 @Intercepts(before = ControllerLookupInterceptor.class, after = {})
 @RequestScoped
-@Default
 public class CommonsUploadMultipartInterceptor
     implements MultipartInterceptor {
 
@@ -75,7 +73,7 @@ public class CommonsUploadMultipartInterceptor
     private ServletFileUploadCreator fileUploadCreator;
 
     private Multiset<String> indexes;
-    
+
     //CDI eyes only
 	@Deprecated
 	public CommonsUploadMultipartInterceptor() {
@@ -90,7 +88,7 @@ public class CommonsUploadMultipartInterceptor
         this.config = cfg;
         this.fileUploadCreator = fileUploadCreator;
     }
-    
+
     /**
      * Will intercept the request if apache file upload says that this request is multipart
      */
@@ -119,7 +117,7 @@ public class CommonsUploadMultipartInterceptor
             for (FileItem item : items) {
                 String name = item.getFieldName();
                 name = fixIndexedParameters(name);
-                
+
                 if (item.isFormField()) {
                     logger.debug("{} is a field", name);
                     params.put(name, getValue(item));
@@ -156,7 +154,7 @@ public class CommonsUploadMultipartInterceptor
     /**
      * This method is called when the {@link SizeLimitExceededException} was thrown. By default, add the key
      * file.limit.exceeded using {@link Validations}.
-     * 
+     *
      * @param e
      */
     protected void reportSizeLimitExceeded(final SizeLimitExceededException e) {

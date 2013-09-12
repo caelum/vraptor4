@@ -19,11 +19,7 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import br.com.caelum.vraptor.controller.BeanClass;
-import br.com.caelum.vraptor.core.BaseComponents;
 import br.com.caelum.vraptor.core.DeserializesQualifier;
 
 /**
@@ -35,10 +31,8 @@ import br.com.caelum.vraptor.core.DeserializesQualifier;
 @ApplicationScoped
 public class DeserializesHandler{
 
-	private static final Logger logger = LoggerFactory.getLogger(DeserializesHandler.class);
-
 	private Deserializers deserializers;
-	
+
 	//CDI eyes only
 	@Deprecated
 	public DeserializesHandler() {
@@ -48,18 +42,13 @@ public class DeserializesHandler{
 	public DeserializesHandler(Deserializers deserializers) {
 		this.deserializers = deserializers;
 	}
-	
+
+	@SuppressWarnings("unchecked")
 	public void handle(@Observes @DeserializesQualifier BeanClass beanClass) {
 		Class<?> originalType = beanClass.getType();
 		if (!Deserializer.class.isAssignableFrom(originalType)) {
 			throw new IllegalArgumentException(beanClass + " must implement Deserializer");
 		}
-		if (BaseComponents.getDeserializers().contains(originalType)) {
-			logger.debug("Ignoring default deserializer {}", originalType);
-			return;
-		}
-
 		deserializers.register((Class<? extends Deserializer>) originalType);
 	}
-
 }

@@ -18,13 +18,15 @@ package br.com.caelum.vraptor.view;
 
 import java.lang.reflect.Method;
 
+import javax.enterprise.inject.Alternative;
+
 import br.com.caelum.vraptor.proxy.JavassistProxifier;
 import br.com.caelum.vraptor.proxy.MethodInvocation;
 import br.com.caelum.vraptor.proxy.ObjenesisInstanceCreator;
 import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.proxy.SuperMethod;
-import br.com.caelum.vraptor.view.PageResult;
 
+@Alternative
 public class MockedPage implements PageResult {
 
 	private final Proxifier proxifier;
@@ -40,9 +42,9 @@ public class MockedPage implements PageResult {
 	public void forwardTo(String url) {
 
 	}
-	
+
 	public void defaultView() {
-		
+
 	}
 
 	public void include() {
@@ -74,6 +76,6 @@ public class MockedPage implements PageResult {
 		this.defaultView();
 	}
 
-	
+
 
 }

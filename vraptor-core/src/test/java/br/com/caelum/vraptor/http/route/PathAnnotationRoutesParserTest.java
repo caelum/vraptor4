@@ -51,12 +51,6 @@ import br.com.caelum.vraptor.controller.DefaultBeanClass;
 import br.com.caelum.vraptor.controller.HttpMethod;
 import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
-import br.com.caelum.vraptor.http.route.DefaultRouteBuilder;
-import br.com.caelum.vraptor.http.route.JavaEvaluator;
-import br.com.caelum.vraptor.http.route.NoTypeFinder;
-import br.com.caelum.vraptor.http.route.PathAnnotationRoutesParser;
-import br.com.caelum.vraptor.http.route.Route;
-import br.com.caelum.vraptor.http.route.Router;
 import br.com.caelum.vraptor.proxy.JavassistProxifier;
 import br.com.caelum.vraptor.proxy.ObjenesisInstanceCreator;
 import br.com.caelum.vraptor.proxy.Proxifier;
@@ -121,12 +115,7 @@ public class PathAnnotationRoutesParserTest {
     	}
     }
 
-    @Controller
-    public static class WrongGetAnnotatedController {
-    	@Path("/some") @Get("/other")
-    	public void withAmbiguousDeclaration() {
-    	}
-    }
+
 
     @Controller
     @Path("/endSlash/")
@@ -163,13 +152,6 @@ public class PathAnnotationRoutesParserTest {
     @Controller
     @Path("prefix")
     public static class WrongPathAnnotatedController {
-    	public void noSlashPath() {
-    	}
-    }
-
-    @Controller
-    @Path({"/prefix", "/prefix2"})
-    public static class MoreThanOnePathAnnotatedController {
     	public void noSlashPath() {
     	}
     }
@@ -249,12 +231,8 @@ public class PathAnnotationRoutesParserTest {
     public void findsTheCorrectAnnotatedMethodIfThereIsNoWebMethodAnnotationPresent() throws Exception {
     	List<Route> routes = parser.rulesFor(new DefaultBeanClass(ClientsController.class));
     	Route route = getRouteMatching(routes, "/clients");
-
     	assertThat(route, canHandle(ClientsController.class, "list"));
-
-
     }
-
 
     @Test
     public void suportsTheDefaultNameForANonAnnotatedMethod() throws SecurityException,
@@ -340,11 +318,11 @@ public class PathAnnotationRoutesParserTest {
         @Options("/clients/options")
         public void options() {
         }
-        
+
         @Patch("/clients/update")
         public void update() {
         }
-        
+
         public void add() {
         }
 
@@ -356,7 +334,6 @@ public class PathAnnotationRoutesParserTest {
         public void manyPaths() {
         }
 
-
         @Path("/staticMe")
         public static void staticMe() {
         }
@@ -365,22 +342,11 @@ public class PathAnnotationRoutesParserTest {
         }
     }
 
-
-
-    @Controller
-    public static class NoPath {
-
-        @Path( {})
-        public void noPaths() {
-        }
-
-    }
     @Test(expected=IllegalArgumentException.class)
     public void shouldThrowExceptionIfPathAnnotationHasEmptyArray()
             throws Exception {
         parser.rulesFor(new DefaultBeanClass(NoPath.class));
     }
-
 
     @Test
     public void shouldFindNonAnnotatedNonStaticPublicMethodWithComponentNameInVariableCamelCaseConventionAsURI()
@@ -389,25 +355,17 @@ public class PathAnnotationRoutesParserTest {
     	Route route = getRouteMatching(routes, "/clients/add");
 
     	assertThat(route, canHandle(ClientsController.class, "add"));
-
-
     }
 
     @Test
-    public void shouldFindSeveralPathsForMethodWithManyValue()
-            throws Exception {
+    public void shouldFindSeveralPathsForMethodWithManyValue() throws Exception {
     	List<Route> routes = parser.rulesFor(new DefaultBeanClass(ClientsController.class));
 
     	Route route = getRouteMatching(routes, "/path1");
     	assertThat(route, canHandle(ClientsController.class, "manyPaths"));
     	Route route2 = getRouteMatching(routes, "/path2");
     	assertThat(route2, canHandle(ClientsController.class, "manyPaths"));
-
-
     }
-
-
-
 
     @Test
     public void shouldNotMatchIfAControllerHasTheWrongWebMethod() throws SecurityException {
@@ -415,7 +373,6 @@ public class PathAnnotationRoutesParserTest {
     	Route route = getRouteMatching(routes, "/clients/remove");
 
     	assertThat(route.allowedMethods(), not(contains(HttpMethod.POST)));
-
     }
 
     @Test
@@ -424,9 +381,7 @@ public class PathAnnotationRoutesParserTest {
     	Route route = getRouteMatching(routes, "/clients/head");
 
     	assertThat(route.allowedMethods(), is(EnumSet.of(HttpMethod.HEAD)));
-
     }
-
 
     @Test
     public void shouldAcceptAResultWithOptionsWebMethod() throws SecurityException, NoSuchMethodException {
@@ -435,7 +390,7 @@ public class PathAnnotationRoutesParserTest {
 
     	assertThat(route.allowedMethods(), is(EnumSet.of(HttpMethod.OPTIONS)));
     }
-    
+
     @Test
     public void shouldAcceptAResultWithPatchWebMethod() throws SecurityException, NoSuchMethodException {
     	List<Route> routes = parser.rulesFor(new DefaultBeanClass(ClientsController.class));
@@ -443,7 +398,7 @@ public class PathAnnotationRoutesParserTest {
 
     	assertThat(route.allowedMethods(), is(EnumSet.of(HttpMethod.PATCH)));
     }
-    
+
     static class NiceClients extends ClientsController {
 
     	@Override
@@ -553,7 +508,6 @@ public class PathAnnotationRoutesParserTest {
 
     	assertThat(route, canHandle(EndSlashAnnotatedGetController.class, "withAbsolutePath"));
     }
-
 
     @Test
     public void addsAPrefixToMethodsWhenTheGetControllerAndTheMethodAreAnnotatedWithAbsolutePath() throws Exception {

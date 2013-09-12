@@ -18,7 +18,7 @@
 			<if-class-available name="org.objenesis.ObjenesisStd"/>
 		</exclude>
 	
-		<exclude name="br.com.caelum.vraptor.validator.beanvalidations.*">
+		<exclude name="br.com.caelum.vraptor.validator.beanvalidation.*">
 			<if-class-not-available name="javax.validation.executable.ExecutableValidator"/>
 		</exclude>
 		

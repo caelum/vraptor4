@@ -1,8 +1,6 @@
 package br.com.caelum.vraptor.ioc.cdi;
 
 import java.lang.annotation.Annotation;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -26,6 +24,8 @@ import br.com.caelum.vraptor.deserialization.DeserializesHandler;
 import br.com.caelum.vraptor.ioc.ControllerHandler;
 import br.com.caelum.vraptor.ioc.ConverterHandler;
 import br.com.caelum.vraptor.ioc.InterceptorStereotypeHandler;
+
+import com.google.common.collect.ImmutableMap;
 
 @ApplicationScoped
 public class StereotypesRegistry {
@@ -56,11 +56,11 @@ public class StereotypesRegistry {
 	}
 
     static {
-    		HashMap<Class<?>, StereotypeInfo> map = new HashMap<Class<?>,StereotypeInfo>();
-    		map.put(Controller.class,new StereotypeInfo(Controller.class,ControllerHandler.class,new AnnotationLiteral<ControllerQualifier>() {}));
-    		map.put(Convert.class,new StereotypeInfo(Convert.class,ConverterHandler.class,new AnnotationLiteral<ConvertQualifier>() {}));
-    		map.put(Deserializes.class,new StereotypeInfo(Deserializes.class,DeserializesHandler.class,new AnnotationLiteral<DeserializesQualifier>() {}));
-    		map.put(Intercepts.class,new StereotypeInfo(Intercepts.class,InterceptorStereotypeHandler.class,new AnnotationLiteral<InterceptsQualifier>() {}));
-    		STEREOTYPES_INFO = Collections.unmodifiableMap(map);
+		STEREOTYPES_INFO = ImmutableMap.<Class<?>, StereotypeInfo>of(
+			Controller.class,new StereotypeInfo(Controller.class,ControllerHandler.class,new AnnotationLiteral<ControllerQualifier>() {}),
+			Convert.class,new StereotypeInfo(Convert.class,ConverterHandler.class,new AnnotationLiteral<ConvertQualifier>() {}),
+			Deserializes.class,new StereotypeInfo(Deserializes.class,DeserializesHandler.class,new AnnotationLiteral<DeserializesQualifier>() {}),
+			Intercepts.class,new StereotypeInfo(Intercepts.class,InterceptorStereotypeHandler.class,new AnnotationLiteral<InterceptsQualifier>(){})
+		);
     }
 }

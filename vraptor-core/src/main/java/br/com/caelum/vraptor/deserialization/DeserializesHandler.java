@@ -19,9 +19,6 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import br.com.caelum.vraptor.controller.BeanClass;
 import br.com.caelum.vraptor.core.DeserializesQualifier;
 
@@ -33,8 +30,6 @@ import br.com.caelum.vraptor.core.DeserializesQualifier;
  */
 @ApplicationScoped
 public class DeserializesHandler{
-
-	private static final Logger logger = LoggerFactory.getLogger(DeserializesHandler.class);
 
 	private Deserializers deserializers;
 

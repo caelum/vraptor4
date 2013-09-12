@@ -53,7 +53,7 @@ public class BigIntegerConverterTest {
 	public void shouldComplainAboutNonIntegerNumbers() {
 		try {
 			converter.convert("2.3", BigInteger.class, bundle);
-		} catch (ConversionError e) {
+		} catch (ConversionException e) {
 			assertThat(e.getMessage(), is(equalTo("2.3 is not a valid integer.")));
 		}
 	}
@@ -62,7 +62,7 @@ public class BigIntegerConverterTest {
 	public void shouldComplainAboutInvalidNumber() {
 		try {
 			converter.convert("---", BigInteger.class, bundle);
-		} catch (ConversionError e) {
+		} catch (ConversionException e) {
 			assertThat(e.getMessage(), is(equalTo("--- is not a valid integer.")));
 		}
 	}

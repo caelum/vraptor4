@@ -73,7 +73,7 @@ public class LocaleBasedCalendarConverter implements Converter<Calendar> {
             calendar.setTime(date);
             return calendar;
         } catch (ParseException e) {
-			throw new ConversionError(MessageFormat.format(bundle.getString("is_not_a_valid_date"), value));
+			throw new ConversionException(MessageFormat.format(bundle.getString("is_not_a_valid_date"), value));
         }
     }
 

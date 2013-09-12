@@ -19,6 +19,7 @@ package br.com.caelum.vraptor4.interceptor.multipart;
 
 import java.util.ResourceBundle;
 
+import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
 import br.com.caelum.vraptor4.Convert;
@@ -33,8 +34,12 @@ import br.com.caelum.vraptor4.Converter;
 @Convert(UploadedFile.class)
 public class UploadedFileConverter implements Converter<UploadedFile> {
 
-    private final HttpServletRequest request;
+    private HttpServletRequest request;
 
+    @Deprecated	//CDI eyes only
+	public UploadedFileConverter() {}
+    
+    @Inject
     public UploadedFileConverter(HttpServletRequest request) {
         this.request = request;
     }

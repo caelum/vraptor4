@@ -7,7 +7,7 @@ import br.com.caelum.vraptor4.ioc.Container;
 class InterceptorContainerDecorator implements Container {
 
 	private Container delegate;
-	private HashMap<ParameterClass, Object> onDemandObjects = new HashMap<ParameterClass,Object>();
+	private HashMap<ParameterClass, Object> onDemandObjects = new HashMap<>();
 
 	public InterceptorContainerDecorator(Container container,Object... onDemandObjects) {
 		this.delegate = container;

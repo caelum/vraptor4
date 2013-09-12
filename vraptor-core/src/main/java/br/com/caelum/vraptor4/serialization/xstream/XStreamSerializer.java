@@ -89,7 +89,7 @@ public class XStreamSerializer implements SerializerBuilder {
 	private Collection<Object> normalizeList(Object obj) {
 		Collection<Object> list;
 		if (hasDefaultConverter()) {
-			list = new ArrayList<Object>((Collection<?>)obj);
+			list = new ArrayList<>((Collection<?>)obj);
 		} else {
 			list = (Collection<Object>) obj;
 		}
@@ -121,7 +121,7 @@ public class XStreamSerializer implements SerializerBuilder {
 	}
 
 	private Set<Class<?>> findElementTypes(Collection<Object> list) {
-		Set<Class<?>> set = new HashSet<Class<?>>();
+		Set<Class<?>> set = new HashSet<>();
 		for (Object element : list) {
 			if (element != null && !isPrimitive(element.getClass())) {
 				set.add(initializer.getActualClass(element));

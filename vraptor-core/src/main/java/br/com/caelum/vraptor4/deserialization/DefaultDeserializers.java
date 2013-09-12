@@ -34,7 +34,7 @@ import br.com.caelum.vraptor4.ioc.Container;
 @ApplicationScoped
 public class DefaultDeserializers implements Deserializers {
 
-	private final Map<String, Class<? extends Deserializer>> deserializers = new HashMap<String, Class<? extends Deserializer>>();
+	private final Map<String, Class<? extends Deserializer>> deserializers = new HashMap<>();
 
 	public DefaultDeserializers() {
 		for (Class<? extends Deserializer> type : BaseComponents.getDeserializers()) {

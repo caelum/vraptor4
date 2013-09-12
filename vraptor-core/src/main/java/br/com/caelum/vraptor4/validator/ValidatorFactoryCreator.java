@@ -27,6 +27,7 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Alternative;
 import javax.enterprise.inject.Default;
 import javax.enterprise.inject.Produces;
+import javax.inject.Inject;
 import javax.validation.Validation;
 import javax.validation.ValidatorFactory;
 
@@ -57,6 +58,7 @@ public class ValidatorFactoryCreator {
 	public ValidatorFactoryCreator() {
 	}
     
+	@Inject
     public ValidatorFactoryCreator(ParameterNameProvider nameProvider) {
         this.nameProvider = nameProvider;
     }

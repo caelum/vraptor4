@@ -17,7 +17,7 @@ public class PackageComparatorTest {
 
 	@Test
 	public void shouldSortBasedOnPackageNamesLessPriorityToCaelumInitialList3rdPartyFirst() {
-		List<Serialization> serializers = new ArrayList<Serialization>();
+		List<Serialization> serializers = new ArrayList<>();
 
 		serializers.add(new DumbSerialization());
 		serializers.add(new XStreamXMLSerialization(null, null, null, null));
@@ -33,7 +33,7 @@ public class PackageComparatorTest {
 
 	@Test
 	public void shouldSortBasedOnPackageNamesLessPriorityToCaelumInitialList3rdPartyLast() {
-		List<Serialization> serializers = new ArrayList<Serialization>();
+		List<Serialization> serializers = new ArrayList<>();
 
 		serializers.add(new XStreamXMLSerialization(null, null, null, null));
 		serializers.add(new XStreamJSONSerialization(null, null, null, null));
@@ -48,7 +48,7 @@ public class PackageComparatorTest {
 
 	@Test
 	public void shouldSortBasedOnPackageNamesLessPriorityToCaelumMoreToRestfulieInitialList3rdPartyLast() {
-		List<Serialization> serializers = new ArrayList<Serialization>();
+		List<Serialization> serializers = new ArrayList<>();
 
 		serializers.add(new XStreamXMLSerialization(null, null, null, null));
 		serializers.add(new XStreamJSONSerialization(null, null, null, null));

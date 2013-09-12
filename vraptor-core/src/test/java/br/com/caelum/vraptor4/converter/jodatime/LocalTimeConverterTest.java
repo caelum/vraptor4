@@ -18,7 +18,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import br.com.caelum.vraptor4.converter.ConversionError;
+import br.com.caelum.vraptor4.converter.ConversionException;
 import br.com.caelum.vraptor4.core.JstlLocalization;
 import br.com.caelum.vraptor4.core.RequestInfo;
 import br.com.caelum.vraptor4.http.MutableRequest;
@@ -72,7 +72,7 @@ public class LocalTimeConverterTest {
 		
 		try {
 			converter.convert("xx:yy:ff", LocalTime.class, bundle);
-		} catch (ConversionError e) {
+		} catch (ConversionException e) {
 			assertThat(e.getMessage(), is(equalTo("xx:yy:ff is not a valid time.")));
 		}
 	}

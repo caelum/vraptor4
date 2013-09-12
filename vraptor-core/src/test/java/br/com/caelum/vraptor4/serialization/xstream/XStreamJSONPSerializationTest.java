@@ -84,11 +84,11 @@ public class XStreamJSONPSerializationTest {
     public void shouldSerializeGenericClass() {
 		String expectedResult = "myCallback({\"genericWrapper\": {\"entityList\": [{\"street\": \"vergueiro street\"},{\"street\": \"vergueiro street\"}],\"total\": 2}})";
 
-		Collection<Address> entityList = new ArrayList<Address>();
+		Collection<Address> entityList = new ArrayList<>();
 		entityList.add(new Address("vergueiro street"));
 		entityList.add(new Address("vergueiro street"));
 
-		GenericWrapper<Address> wrapper = new GenericWrapper<Address>(entityList, entityList.size());
+		GenericWrapper<Address> wrapper = new GenericWrapper<>(entityList, entityList.size());
 
         serialization.withCallback("myCallback").from(wrapper).include("entityList").serialize();
 

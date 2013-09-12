@@ -44,7 +44,7 @@ public class IntegerConverter implements Converter<Integer> {
         try {
             return Integer.valueOf(value);
         } catch (NumberFormatException e) {
-			throw new ConversionError(MessageFormat.format(bundle.getString("is_not_a_valid_integer"), value));
+			throw new ConversionException(MessageFormat.format(bundle.getString("is_not_a_valid_integer"), value));
         }
     }
 

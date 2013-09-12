@@ -29,13 +29,13 @@ import javax.enterprise.context.RequestScoped;
 
 import br.com.caelum.vraptor4.Convert;
 import br.com.caelum.vraptor4.Converter;
-import br.com.caelum.vraptor4.converter.ConversionError;
+import br.com.caelum.vraptor4.converter.ConversionException;
 import br.com.caelum.vraptor4.core.Localization;
 
 /**
  * Localized version of VRaptor's Double converter. This component is optional and must be declared in web.xml before
  * using. If the input value if empty or a null string, null values are returned. If the input string is not a number a
- * {@link ConversionError} will be throw.
+ * {@link ConversionException} will be throw.
  * 
  * @author Otávio Scherer Garcia
  * @since 3.1.2
@@ -62,7 +62,7 @@ public class LocaleBasedDoubleConverter
 
             return fmt.parse(value).doubleValue();
         } catch (ParseException e) {
-            throw new ConversionError(MessageFormat.format(bundle.getString("is_not_a_valid_number"), value));
+            throw new ConversionException(MessageFormat.format(bundle.getString("is_not_a_valid_number"), value));
         }
     }
 

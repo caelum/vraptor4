@@ -35,7 +35,7 @@ import br.com.caelum.vraptor4.proxy.SuperMethod;
  */
 public class DefaultRelationBuilder implements RelationBuilder {
 
-	private final List<Relation> relations = new ArrayList<Relation>();
+	private final List<Relation> relations = new ArrayList<>();
 	private final Proxifier proxifier;
 	private final Router router;
 
@@ -53,7 +53,7 @@ public class DefaultRelationBuilder implements RelationBuilder {
 	}
 
 	public List<Relation> getRelations() {
-		return new ArrayList<Relation>(relations);
+		return new ArrayList<>(relations);
 	}
 
 	public <T> T relation(final Class<T> type) {

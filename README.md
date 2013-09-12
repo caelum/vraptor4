@@ -1,7 +1,7 @@
 VRaptor 4 Beta
 =========
 
-A web MVC framework for fast and maintainable development. It's website can be found at http://vraptor.caelum.com.br
+A web MVC framework for fast and maintainable development. It's last version website can be found at http://vraptor.caelum.com.br
 
 Building in your machine
 ========================

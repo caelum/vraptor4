@@ -37,7 +37,6 @@ public class EnumConverter implements Converter {
 	/**
 	 * Enums are always final, so I can suppress this warning safely
 	 */
-	@SuppressWarnings("unchecked")
     public Object convert(String value, Class type, ResourceBundle bundle) {
 	    if (isNullOrEmpty(value)) {
             return null;
@@ -54,7 +53,7 @@ public class EnumConverter implements Converter {
         try {
             return Enum.valueOf(enumType, value);
         } catch (IllegalArgumentException e) {
-			throw new ConversionError(MessageFormat.format(bundle.getString("is_not_a_valid_enum_value"), value));
+			throw new ConversionException(MessageFormat.format(bundle.getString("is_not_a_valid_enum_value"), value));
         }
     }
 
@@ -62,11 +61,11 @@ public class EnumConverter implements Converter {
         try {
             int ordinal = Integer.parseInt(value);
             if (ordinal >= enumType.getEnumConstants().length) {
-    			throw new ConversionError(MessageFormat.format(bundle.getString("is_not_a_valid_enum_value"), value));
+    			throw new ConversionException(MessageFormat.format(bundle.getString("is_not_a_valid_enum_value"), value));
             }
             return enumType.getEnumConstants()[ordinal];
         } catch (NumberFormatException e) {
-			throw new ConversionError(MessageFormat.format(bundle.getString("is_not_a_valid_enum_value"), value));
+			throw new ConversionException(MessageFormat.format(bundle.getString("is_not_a_valid_enum_value"), value));
         }
     }
 

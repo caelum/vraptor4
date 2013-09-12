@@ -188,7 +188,7 @@ public class CDIBasedContainerTest extends GenericContainerTest {
 	@Override
 	@Test
 	public void canProvideAllApplicationScopedComponents() {
-		Set<Class<?>> components = new HashSet<Class<?>>(BaseComponents.getApplicationScoped().keySet());
+		Set<Class<?>> components = new HashSet<>(BaseComponents.getApplicationScoped().keySet());
 		components.remove(ValidatorFactoryCreator.class);
 		components.remove(ValidatorCreator.class);
 		components.remove(MessageInterpolatorFactory.class);

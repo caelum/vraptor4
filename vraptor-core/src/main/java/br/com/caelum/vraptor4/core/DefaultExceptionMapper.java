@@ -67,7 +67,7 @@ public class DefaultExceptionMapper
             throw new NullPointerException("Exception cannot be null.");
         }
 
-        ExceptionRecorder<Result> instance = new ExceptionRecorder<Result>(proxifier);
+        ExceptionRecorder<Result> instance = new ExceptionRecorder<>(proxifier);
         exceptions.put(exception, instance);
 
         return proxifier.proxify(Result.class, instance);

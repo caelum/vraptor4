@@ -56,7 +56,7 @@ public class ParametersInstantiatorInterceptor implements Interceptor {
     private static final Logger logger = LoggerFactory.getLogger(ParametersInstantiatorInterceptor.class);
     private Validator validator;
     private Localization localization;
-	private final List<Message> errors = new ArrayList<Message>();
+	private final List<Message> errors = new ArrayList<>();
 	private MutableRequest request;
 	private FlashScope flash;
 

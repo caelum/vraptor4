@@ -39,7 +39,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import br.com.caelum.vraptor4.converter.ConversionError;
+import br.com.caelum.vraptor4.converter.ConversionException;
 import br.com.caelum.vraptor4.core.JstlLocalization;
 import br.com.caelum.vraptor4.core.RequestInfo;
 import br.com.caelum.vraptor4.http.MutableRequest;
@@ -115,7 +115,7 @@ public class LocaleBasedFloatConverterTest {
         try {
             converter.convert("vr3.9", Float.class, bundle);
             fail("Should throw exception");
-        } catch (ConversionError e) {
+        } catch (ConversionException e) {
             assertThat(e.getMessage(), is(equalTo("vr3.9 is not a valid number.")));
         }
     }

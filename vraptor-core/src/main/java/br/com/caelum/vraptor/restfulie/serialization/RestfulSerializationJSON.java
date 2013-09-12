@@ -18,6 +18,7 @@
 package br.com.caelum.vraptor.restfulie.serialization;
 
 import javax.enterprise.context.RequestScoped;
+import javax.enterprise.inject.Specializes;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
 
@@ -36,11 +37,14 @@ import com.thoughtworks.xstream.converters.reflection.ReflectionConverter;
  * @author guilherme silveira
  * @author ac de souza
  */
-@RequestScoped
+@RequestScoped @Specializes
 public class RestfulSerializationJSON extends XStreamJSONSerialization {
 
-	private final Restfulie restfulie;
-	private final Configuration config;
+	private Restfulie restfulie;
+	private Configuration config;
+
+	@Deprecated // CDI eyes only
+	public RestfulSerializationJSON() {}
 
 	@Inject
 	public RestfulSerializationJSON(HttpServletResponse response, TypeNameExtractor extractor, Restfulie restfulie, Configuration config, ProxyInitializer initializer, XStreamBuilder builder) {
@@ -48,7 +52,7 @@ public class RestfulSerializationJSON extends XStreamJSONSerialization {
 		this.restfulie = restfulie;
 		this.config = config;
 	}
-	
+
 	/**
 	 * You can override this method for configuring XStream before serialization.
 	 * It configures the xstream instance with a link converter for all StateResource implementations.

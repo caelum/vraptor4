@@ -30,7 +30,7 @@ import java.util.List;
  */
 public abstract class Rules {
     private final Router router;
-	private final List<RouteBuilder> routesToBuild = new ArrayList<RouteBuilder>();
+	private final List<RouteBuilder> routesToBuild = new ArrayList<>();
 
     public Rules(Router router) {
         this.router = router;

@@ -46,7 +46,7 @@ public class DefaultConverters implements Converters {
 	@Inject
     public DefaultConverters(Container container) {
         this.container = container;
-		this.classes = new LinkedList<Class<? extends Converter<?>>>();
+		this.classes = new LinkedList<>();
         logger.info("Registering bundled converters");
         for (Class<? extends Converter<?>> converterType : BaseComponents.getBundledConverters()) {
             logger.debug("bundled converter to be registered: {}", converterType);

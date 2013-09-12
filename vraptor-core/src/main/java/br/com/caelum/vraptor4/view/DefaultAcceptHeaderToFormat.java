@@ -49,7 +49,7 @@ public class DefaultAcceptHeaderToFormat implements AcceptHeaderToFormat {
 	protected final Map<String, String> mimeToFormat;
 
 	public DefaultAcceptHeaderToFormat() {
-		mimeToFormat = new ConcurrentHashMap<String, String>();
+		mimeToFormat = new ConcurrentHashMap<>();
 		mimeToFormat.put("text/html", "html");
 		mimeToFormat.put("application/json", "json");
 		mimeToFormat.put("application/xml", "xml");

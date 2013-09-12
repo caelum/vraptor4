@@ -91,7 +91,7 @@ public class CommonsUploadMultipartInterceptorTest {
     public void withFieldsOnly() throws Exception {
         interceptor = new CommonsUploadMultipartInterceptor(request, parameters, config, validator, mockCreator);
 
-        final List<FileItem> elements = new ArrayList<FileItem>();
+        final List<FileItem> elements = new ArrayList<>();
         elements.add(new MockFileItem("foo", "blah"));
         elements.add(new MockFileItem("bar", "blah blah"));
 
@@ -110,7 +110,7 @@ public class CommonsUploadMultipartInterceptorTest {
     public void withFieldsOnlyWithInvalidCharset() throws Exception {
         interceptor = new CommonsUploadMultipartInterceptor(request, parameters, config, validator, mockCreator);
 
-        final List<FileItem> elements = new ArrayList<FileItem>();
+        final List<FileItem> elements = new ArrayList<>();
         elements.add(new MockFileItem("foo", "blah"));
         elements.add(new MockFileItem("bar", "blah blah"));
 
@@ -127,7 +127,7 @@ public class CommonsUploadMultipartInterceptorTest {
 
     @Test
     public void withFilesAndFields() throws Exception {
-        final List<FileItem> elements = new ArrayList<FileItem>();
+        final List<FileItem> elements = new ArrayList<>();
         elements.add(new MockFileItem("foo", "blah"));
         elements.add(new MockFileItem("bar", "blah blah"));
         elements.add(new MockFileItem("thefile0", "foo.txt", "foo".getBytes()));
@@ -155,7 +155,7 @@ public class CommonsUploadMultipartInterceptorTest {
     public void emptyFiles() throws Exception {
         interceptor = new CommonsUploadMultipartInterceptor(request, parameters, config, validator, mockCreator);
 
-        final List<FileItem> elements = new ArrayList<FileItem>();
+        final List<FileItem> elements = new ArrayList<>();
         elements.add(new MockFileItem("thefile0", "", new byte[0]));
 
         when(request.getContentType()).thenReturn("multipart/form-data");
@@ -185,7 +185,7 @@ public class CommonsUploadMultipartInterceptorTest {
     public void fieldsWithSameName() throws Exception {
         interceptor = new CommonsUploadMultipartInterceptor(request, parameters, config, validator, mockCreator);
 
-        final List<FileItem> elements = new ArrayList<FileItem>();
+        final List<FileItem> elements = new ArrayList<>();
         elements.add(new MockFileItem("myfile0", "foo.txt", "foo".getBytes()));
         elements.add(new MockFileItem("myfile1", "foo.txt", "bar".getBytes()));
 
@@ -206,7 +206,7 @@ public class CommonsUploadMultipartInterceptorTest {
     public void multipleUpload() throws Exception {
         interceptor = new CommonsUploadMultipartInterceptor(request, parameters, config, validator, mockCreator);
 
-        final List<FileItem> elements = new ArrayList<FileItem>();
+        final List<FileItem> elements = new ArrayList<>();
         elements.add(new MockFileItem("myfile0[]", "foo.txt", "foo".getBytes()));
         elements.add(new MockFileItem("myfile0[]", "foo.txt", "bar".getBytes()));
 
@@ -250,7 +250,7 @@ public class CommonsUploadMultipartInterceptorTest {
 
         interceptor = new CommonsUploadMultipartInterceptor(request, parameters, configSpy, validator, mockCreator);
 
-        final List<FileItem> elements = new ArrayList<FileItem>();
+        final List<FileItem> elements = new ArrayList<>();
         elements.add(new MockFileItem("myfile", "foo.txt", "bar".getBytes()));
 
         when(request.getContentType()).thenReturn("multipart/form-data");
@@ -264,7 +264,7 @@ public class CommonsUploadMultipartInterceptorTest {
 
     @Test
     public void checkIfFileHasBeenUploaded() throws Exception {
-        final List<FileItem> elements = new ArrayList<FileItem>();
+        final List<FileItem> elements = new ArrayList<>();
 		byte[] content = "foo".getBytes();
 		elements.add(new MockFileItem("thefile0", "text/plain", "file.txt", content));
 

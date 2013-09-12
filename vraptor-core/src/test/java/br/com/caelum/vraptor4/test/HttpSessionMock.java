@@ -38,7 +38,7 @@ public class HttpSessionMock implements HttpSession,Serializable {
     private long creationTime;
     private long lastAccessedTime;
     private int maxInactiveInterval;
-    private final Map<String, Object> attributes = new HashMap<String, Object>();
+    private final Map<String, Object> attributes = new HashMap<>();
     private boolean isNew;
 
     public HttpSessionMock(ServletContext context, String id) {

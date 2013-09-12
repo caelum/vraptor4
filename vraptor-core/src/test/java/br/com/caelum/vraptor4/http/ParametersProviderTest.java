@@ -78,7 +78,7 @@ public abstract class ParametersProviderTest {
     public void setup() throws Exception {
     	MockitoAnnotations.initMocks(this);
         this.provider = getProvider();
-        this.errors = new ArrayList<Message>();
+        this.errors = new ArrayList<>();
         when(converters.existsFor(Long.class)).thenReturn(true);
         when(converters.existsFor(long.class)).thenReturn(true);
         when(converters.existsFor(String.class)).thenReturn(true);

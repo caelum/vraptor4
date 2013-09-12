@@ -88,7 +88,7 @@ public class DefaultBeanValidator
     	
     	checkArgument(hasProperties(properties), "No properties were defined to be validated");
     	
-    	List<Message> messages = new ArrayList<Message>();
+    	List<Message> messages = new ArrayList<>();
     	
     	for(String property : properties) {        
             Set<ConstraintViolation<Object>> violations = validator.validateProperty(bean, property);
@@ -101,7 +101,7 @@ public class DefaultBeanValidator
     }
     
     private List<Message> getMessages(final Set<ConstraintViolation<Object>> violations) {
-    	List<Message> messages = new ArrayList<Message>();
+    	List<Message> messages = new ArrayList<>();
     	
     	for(ConstraintViolation<Object> violation : violations) {
     		BeanValidatorContext ctx = BeanValidatorContext.of(violation);

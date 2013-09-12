@@ -6,8 +6,8 @@ import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 
-import br.com.caelum.vraptor.validator.beanvalidations.DefaultBeanValidator;
-import br.com.caelum.vraptor.validator.beanvalidations.MessageInterpolatorFactory;
+import br.com.caelum.vraptor.validator.beanvalidation.DefaultBeanValidator;
+import br.com.caelum.vraptor.validator.beanvalidation.MessageInterpolatorFactory;
 
 /**
  * Mock Bean Validators - JSR 303

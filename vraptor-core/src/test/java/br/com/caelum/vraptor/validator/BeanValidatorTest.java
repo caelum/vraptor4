@@ -20,10 +20,10 @@ import br.com.caelum.vraptor.core.Localization;
 import br.com.caelum.vraptor.validator.BeanValidator;
 import br.com.caelum.vraptor.validator.Message;
 import br.com.caelum.vraptor.validator.NullBeanValidator;
-import br.com.caelum.vraptor.validator.beanvalidations.DefaultBeanValidator;
-import br.com.caelum.vraptor.validator.beanvalidations.MessageInterpolatorFactory;
-import br.com.caelum.vraptor.validator.beanvalidations.ValidatorCreator;
-import br.com.caelum.vraptor.validator.beanvalidations.ValidatorFactoryCreator;
+import br.com.caelum.vraptor.validator.beanvalidation.DefaultBeanValidator;
+import br.com.caelum.vraptor.validator.beanvalidation.MessageInterpolatorFactory;
+import br.com.caelum.vraptor.validator.beanvalidation.ValidatorCreator;
+import br.com.caelum.vraptor.validator.beanvalidation.ValidatorFactoryCreator;
 
 /**
  * A simple class to test JSR303Validator and HibernateValidator3 components.

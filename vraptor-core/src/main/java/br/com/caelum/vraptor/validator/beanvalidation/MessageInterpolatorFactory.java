@@ -1,7 +1,7 @@
 /**
  *
  */
-package br.com.caelum.vraptor.validator.beanvalidations;
+package br.com.caelum.vraptor.validator.beanvalidation;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;

@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package br.com.caelum.vraptor.validator.beanvalidations;
+package br.com.caelum.vraptor.validator.beanvalidation;
 
 import static java.util.Arrays.asList;
 

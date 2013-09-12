@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package br.com.caelum.vraptor.validator;
+package br.com.caelum.vraptor.validator.beanvalidations;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;

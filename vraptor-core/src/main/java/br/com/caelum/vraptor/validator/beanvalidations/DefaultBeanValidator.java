@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package br.com.caelum.vraptor.validator;
+package br.com.caelum.vraptor.validator.beanvalidations;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static java.util.Collections.emptyList;
@@ -33,6 +33,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.core.Localization;
+import br.com.caelum.vraptor.validator.BeanValidator;
+import br.com.caelum.vraptor.validator.BeanValidatorContext;
+import br.com.caelum.vraptor.validator.Message;
+import br.com.caelum.vraptor.validator.ValidationMessage;
 
 /**
  * Implements the {@link BeanValidator} using Bean Validation (JSR303). This implementation

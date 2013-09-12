@@ -18,27 +18,7 @@
 			<if-class-available name="org.objenesis.ObjenesisStd"/>
 		</exclude>
 	
-		<exclude name="br.com.caelum.vraptor.validator.MethodValidatorFactoryCreator">
-			<if-class-not-available name="javax.validation.executable.ExecutableValidator"/>
-		</exclude>
-
-		<exclude name="br.com.caelum.vraptor.validator.MethodValidatorInterceptor">
-			<if-class-not-available name="javax.validation.executable.ExecutableValidator"/>
-		</exclude>
-
-		<exclude name="br.com.caelum.vraptor.validator.DefaultBeanValidator">
-			<if-class-not-available name="javax.validation.executable.ExecutableValidator"/>
-		</exclude>
-		
-		<exclude name="br.com.caelum.vraptor.validator.ValidatorCreator"> 
-			<if-class-not-available name="javax.validation.executable.ExecutableValidator"/>
-		</exclude>
-
-		<exclude name="br.com.caelum.vraptor.validator.ValidatorFactoryCreator"> 
-			<if-class-not-available name="javax.validation.executable.ExecutableValidator"/>
-		</exclude>
-
-		<exclude name="br.com.caelum.vraptor.validator.MessageInterpolatorFactory">
+		<exclude name="br.com.caelum.vraptor.validator.beanvalidations.*">
 			<if-class-not-available name="javax.validation.executable.ExecutableValidator"/>
 		</exclude>
 		

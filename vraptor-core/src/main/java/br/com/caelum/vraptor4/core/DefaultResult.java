@@ -62,7 +62,7 @@ public class DefaultResult extends AbstractResult {
         this.request = request;
         this.container = container;
 		this.extractor = extractor;
-        this.includedAttributes = new HashMap<String, Object>();
+        this.includedAttributes = new HashMap<>();
         this.exceptions = exceptions;
     }
 	

@@ -119,7 +119,7 @@ public class GsonSerializer implements SerializerBuilder {
 	}
 
 	private Set<Class<?>> findElementTypes(Collection<Object> list) {
-		Set<Class<?>> set = new HashSet<Class<?>>();
+		Set<Class<?>> set = new HashSet<>();
 		for (Object element : list) {
 			if (element != null && !isPrimitive(element.getClass())) {
 				set.add(initializer.getActualClass(element));
@@ -145,7 +145,7 @@ public class GsonSerializer implements SerializerBuilder {
 			if (builder.isWithoutRoot()) {
 				writer.write(gson.toJson(root));
 			} else {
-				Map<String, Object> tree = new HashMap<String, Object>();
+				Map<String, Object> tree = new HashMap<>();
 				tree.put(alias, root);
 				writer.write(gson.toJson(tree));
 			}

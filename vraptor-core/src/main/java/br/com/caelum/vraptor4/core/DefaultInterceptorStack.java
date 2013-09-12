@@ -41,7 +41,7 @@ public class DefaultInterceptorStack implements InterceptorStack {
 	private static final Logger logger = LoggerFactory
 			.getLogger(DefaultInterceptorStack.class);
 
-	private final LinkedList<InterceptorHandler> interceptors = new LinkedList<InterceptorHandler>();
+	private final LinkedList<InterceptorHandler> interceptors = new LinkedList<>();
 	private InterceptorHandlerFactory handlerFactory;
 
 

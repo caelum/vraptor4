@@ -43,7 +43,7 @@ public class VRaptorRequestTest {
 	public void setup() {
 		MockitoAnnotations.initMocks(this);
 		
-		final Hashtable<String, String[]> t = new Hashtable<String, String[]>();
+		final Hashtable<String, String[]> t = new Hashtable<>();
 		t.put("name", new String[] { "guilherme" });
 		t.put("age", new String[] { "27" });
 		

@@ -74,7 +74,7 @@ public class IogiParametersProvider implements ParametersProvider {
 	private List<Object> instantiateParameters(Parameters parameters, List<Target<Object>> targets, List<Message> errors) {
 		LOGGER.debug("getParametersFor() called with parameters {} and targets {}.", parameters, targets);
 
-		List<Object> arguments = new ArrayList<Object>();
+		List<Object> arguments = new ArrayList<>();
 		for (Target<Object> target : targets) {
 			Object newObject = instantiateOrAddError(parameters, errors, target);
 			arguments.add(newObject);
@@ -88,7 +88,7 @@ public class IogiParametersProvider implements ParametersProvider {
 
 	private List<Target<Object>> createTargets(ControllerMethod method) {
 		Method javaMethod = method.getMethod();
-		List<Target<Object>> targets = new ArrayList<Target<Object>>();
+		List<Target<Object>> targets = new ArrayList<>();
 
 		Type[] parameterTypes = javaMethod.getGenericParameterTypes();
 		String[] parameterNames = nameProvider.parameterNamesFor(javaMethod);
@@ -97,7 +97,7 @@ public class IogiParametersProvider implements ParametersProvider {
 				ParameterizedType superclass = (ParameterizedType) method.getController().getType().getGenericSuperclass();
 				parameterTypes[i] = superclass.getActualTypeArguments()[0];
 			}
-			Target<Object> newTarget = new Target<Object>(parameterTypes[i], parameterNames[i]);
+			Target<Object> newTarget = new Target<>(parameterTypes[i], parameterNames[i]);
 			targets.add(newTarget);
 		}
 
@@ -109,7 +109,7 @@ public class IogiParametersProvider implements ParametersProvider {
 	}
 
 	private Parameters parseParameters(HttpServletRequest request) {
-		List<Parameter> parameterList = new ArrayList<Parameter>();
+		List<Parameter> parameterList = new ArrayList<>();
 
 		Enumeration<?> enumeration = request.getParameterNames();
 		while (enumeration.hasMoreElements()) {

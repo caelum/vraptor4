@@ -37,8 +37,7 @@ public class LocaleBasedTimeConverter implements Converter<Time> {
 			locale = Locale.getDefault();
 		}
 
-		DateFormat formatHour = DateFormat.getTimeInstance(DateFormat.SHORT,
-				locale);
+		DateFormat formatHour = DateFormat.getTimeInstance(DateFormat.SHORT, locale);
 		try {
 			if (isUncompleteTime(value)) {
 				value = value + ":00";
@@ -46,8 +45,7 @@ public class LocaleBasedTimeConverter implements Converter<Time> {
 			return new Time(formatHour.parse(value).getTime());
 		} catch (ParseException pe) {
 
-			throw new ConversionException(MessageFormat.format(
-					bundle.getString("is_not_a_valid_time"), value));
+			throw new ConversionException(MessageFormat.format(bundle.getString("is_not_a_valid_time"), value));
 		}
 	}
 

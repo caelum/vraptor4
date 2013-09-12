@@ -50,7 +50,7 @@ public class FormDeserializer implements Deserializer {
 
 	@Override
 	public Object[] deserialize(InputStream inputStream, ControllerMethod method) {
-		List<Message> errors = new ArrayList<Message>();
+		List<Message> errors = new ArrayList<>();
 		return provider.getParametersFor(method, errors, localization.getBundle());
 
 	}

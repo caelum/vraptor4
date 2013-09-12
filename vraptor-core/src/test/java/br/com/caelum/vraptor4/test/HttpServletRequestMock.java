@@ -48,7 +48,7 @@ import br.com.caelum.vraptor4.http.MutableRequest;
  * @author Fabio Kung
  */
 public class HttpServletRequestMock implements MutableRequest {
-	private final Map<String, Object> attributes = new HashMap<String, Object>();
+	private final Map<String, Object> attributes = new HashMap<>();
 	private HttpSession session;
 	private HttpServletRequestWrapper wrapper;
 

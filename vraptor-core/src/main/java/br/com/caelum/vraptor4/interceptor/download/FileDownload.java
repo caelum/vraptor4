@@ -46,8 +46,7 @@ public class FileDownload implements Download {
 
 	public FileDownload(File file, String contentType, String fileName, boolean doDownload) {
 		try {
-			this.inputDownload = new InputStreamDownload(new FileInputStream(file), contentType, fileName, doDownload,
-					file.length());
+			inputDownload = new InputStreamDownload(new FileInputStream(file), contentType, fileName, doDownload, file.length());
 		} catch (FileNotFoundException e) {
 			throw new IllegalArgumentException(e);
 		}

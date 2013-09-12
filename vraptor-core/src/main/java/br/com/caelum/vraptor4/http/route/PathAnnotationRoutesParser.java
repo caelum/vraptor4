@@ -89,7 +89,7 @@ public class PathAnnotationRoutesParser implements RoutesParser {
 	protected List<Route> registerRulesFor(Class<?> baseType) {
 		EnumSet<HttpMethod> typeMethods = getHttpMethods(baseType);
 
-		List<Route> routes = new ArrayList<Route>();
+		List<Route> routes = new ArrayList<>();
 		for (Method javaMethod : baseType.getMethods()) {
 			if (isEligible(javaMethod)) {
 				String[] uris = getURIsFor(javaMethod, baseType);

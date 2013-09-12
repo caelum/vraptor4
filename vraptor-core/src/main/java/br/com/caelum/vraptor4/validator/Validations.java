@@ -49,7 +49,7 @@ import com.google.common.base.Suppliers;
  */
 public class Validations {
 
-    private final List<Message> errors = new ArrayList<Message>();
+    private final List<Message> errors = new ArrayList<>();
 	private Supplier<ResourceBundle> bundle;
 
     public Validations(ResourceBundle bundle) {

@@ -111,7 +111,7 @@ public class DefaultRouteBuilder implements RouteBuilder {
 	}
 
 	public class DefaultParameterControlBuilder implements ParameterControlBuilder {
-		private final Map<String, String> parameters = new HashMap<String, String>();
+		private final Map<String, String> parameters = new HashMap<>();
 		private String name;
 
 		private DefaultParameterControlBuilder withParameter(String name) {

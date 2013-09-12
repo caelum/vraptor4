@@ -25,6 +25,7 @@ import br.com.caelum.vraptor4.interceptor.DefaultTypeNameExtractor;
 import br.com.caelum.vraptor4.serialization.NullProxyInitializer;
 
 import com.google.common.collect.ForwardingCollection;
+import com.google.common.collect.Lists;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.converters.Converter;
 import com.thoughtworks.xstream.converters.MarshallingContext;
@@ -88,7 +89,7 @@ public class XStreamJSONSerializationTest {
 			this.client = client;
 			this.price = price;
 			this.comments = comments;
-			this.items = new ArrayList<Item>(Arrays.asList(items));
+			this.items = Lists.newArrayList(items);
 		}
 		public String nice() {
 			return "nice output";
@@ -123,11 +124,11 @@ public class XStreamJSONSerializationTest {
     public void shouldSerializeGenericClass() {
 		String expectedResult = "{\"genericWrapper\": {\"entityList\": [{\"name\": \"washington botelho\"},{\"name\": \"washington botelho\"}],\"total\": 2}}";
 
-		Collection<Client> entityList = new ArrayList<Client>();
+		Collection<Client> entityList = new ArrayList<>();
 		entityList.add(new Client("washington botelho"));
 		entityList.add(new Client("washington botelho"));
 
-		GenericWrapper<Client> wrapper = new GenericWrapper<Client>(entityList, entityList.size());
+		GenericWrapper<Client> wrapper = new GenericWrapper<>(entityList, entityList.size());
 
         serialization.from(wrapper).include("entityList").serialize();
 

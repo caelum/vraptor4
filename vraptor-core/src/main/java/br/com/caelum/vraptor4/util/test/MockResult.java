@@ -50,7 +50,7 @@ import br.com.caelum.vraptor4.view.ResultException;
 @Alternative
 public class MockResult extends AbstractResult {
 
-	private final Map<String, Object> values = new HashMap<String, Object>();
+	private final Map<String, Object> values = new HashMap<>();
 	protected Class<?> typeToUse;
 	protected final Proxifier proxifier;
 	

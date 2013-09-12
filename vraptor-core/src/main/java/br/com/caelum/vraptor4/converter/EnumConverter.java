@@ -37,7 +37,6 @@ public class EnumConverter implements Converter {
 	/**
 	 * Enums are always final, so I can suppress this warning safely
 	 */
-	@SuppressWarnings("unchecked")
     public Object convert(String value, Class type, ResourceBundle bundle) {
 	    if (isNullOrEmpty(value)) {
             return null;

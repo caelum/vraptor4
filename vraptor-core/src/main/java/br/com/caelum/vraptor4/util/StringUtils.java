@@ -60,7 +60,7 @@ public class StringUtils {
 
 	public static String[] extractParameters(String uri) {
 		//yeah, regexes are the root of all evil... so falling back to bracket matching!!! =)
-		List<String> params = new ArrayList<String>();
+		List<String> params = new ArrayList<>();
 		StringBuilder param = new StringBuilder();
 		int brackets = 0;
 		for (int i = 0; i < uri.length(); i++) {

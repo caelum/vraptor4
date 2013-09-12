@@ -101,7 +101,7 @@ public class ExecuteMethodInterceptor implements Interceptor {
 				// fine... already parsed
 				log.trace("swallowing {}", cause);
 			} else {
-				throw new InterceptionException("exception raised, check root cause for details: " + cause, cause);
+				throw new ControllerInvocationException("exception raised, check root cause for details: " + cause, cause);
 			}
 		}
 	}

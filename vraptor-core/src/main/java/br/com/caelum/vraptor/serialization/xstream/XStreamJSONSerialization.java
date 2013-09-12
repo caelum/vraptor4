@@ -43,7 +43,7 @@ public class XStreamJSONSerialization implements JSONSerialization {
     protected ProxyInitializer initializer;
     protected XStreamBuilder builder;
 
-    @Deprecated // CDI eyes only
+	@Deprecated // CDI eyes only
 	public XStreamJSONSerialization() {}
 
     @Inject

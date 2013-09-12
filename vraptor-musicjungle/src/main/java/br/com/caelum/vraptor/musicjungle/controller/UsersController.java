@@ -24,7 +24,6 @@ import javax.inject.Inject;
 import br.com.caelum.vraptor.musicjungle.dao.UserDao;
 import br.com.caelum.vraptor.musicjungle.enums.MusicType;
 import br.com.caelum.vraptor.musicjungle.interceptor.Public;
-import br.com.caelum.vraptor.musicjungle.interceptor.UserInfo;
 import br.com.caelum.vraptor.musicjungle.model.User;
 import br.com.caelum.vraptor4.Controller;
 import br.com.caelum.vraptor4.Get;
@@ -45,7 +44,6 @@ public class UsersController {
 
 	private Validator validator;
 	private Result result;
-	private UserInfo userInfo;
 	private UserDao dao;
 
 	// CDI eyes only
@@ -62,13 +60,11 @@ public class UsersController {
 	 * @param validator VRaptor validator.
 	 */
 	@Inject
-	public UsersController(UserDao dao, UserInfo userInfo, 
-			Result result, Validator validator) {
+	public UsersController(UserDao dao, Result result, Validator validator) {
 		
 		this.dao = dao;
 		this.result = result;
 		this.validator = validator;
-        this.userInfo = userInfo;
 	}
 
 	/**
@@ -81,7 +77,6 @@ public class UsersController {
 	 */
 	@Get("/")
 	public void home() {
-	    dao.refresh(userInfo.getUser());
 	    result.include("musicTypes", MusicType.values());
 	}
 

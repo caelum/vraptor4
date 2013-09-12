@@ -6,7 +6,6 @@
          version="1.1" bean-discovery-mode="all">
          
 	<scan>
-	
 		<exclude name="br.com.caelum.vraptor.converter.jodatime.*">
 			<if-class-not-available name="org.joda.time.LocalDate"/>
 		</exclude>
@@ -19,8 +18,11 @@
 			<if-class-available name="org.objenesis.ObjenesisStd"/>
 		</exclude>
 	
-		<exclude name="br.com.caelum.vraptor.validator.MethodValidatorFactoryCreator, 
-					   br.com.caelum.vraptor.validator.MethodValidatorInterceptor">
+		<exclude name="br.com.caelum.vraptor.validator.MethodValidatorFactoryCreator">
+			<if-class-not-available name="javax.validation.executable.ExecutableValidator"/>
+		</exclude>
+
+		<exclude name="br.com.caelum.vraptor.validator.MethodValidatorInterceptor">
 			<if-class-not-available name="javax.validation.executable.ExecutableValidator"/>
 		</exclude>
 
@@ -29,9 +31,15 @@
 			<if-class-not-available name="javax.validation.Validation"/>
 		</exclude>
 		
-		<exclude name="br.com.caelum.vraptor.validator.ValidatorCreator, 
-					   br.com.caelum.vraptor.validator.ValidatorFactoryCreator, 
-					   br.com.caelum.vraptor.validator.MessageInterpolatorFactory">
+		<exclude name="br.com.caelum.vraptor.validator.ValidatorCreator"> 
+			<if-class-not-available name="javax.validation.Validation"/>
+		</exclude>
+
+		<exclude name="br.com.caelum.vraptor.validator.ValidatorFactoryCreator"> 
+			<if-class-not-available name="javax.validation.Validation"/>
+		</exclude>
+
+		<exclude name="br.com.caelum.vraptor.validator.MessageInterpolatorFactory">
 			<if-class-not-available name="javax.validation.Validation"/>
 		</exclude>
 		
@@ -43,8 +51,11 @@
 			<if-class-available name="javax.validation.executable.ExecutableValidator"/>
 		</exclude>
 		
-		<exclude name="br.com.caelum.vraptor.interceptor.multipart.CommonsUploadMultipartInterceptor,
-					   br.com.caelum.vraptor.interceptor.multipart.DefaultServletFileUploadCreator">
+		<exclude name="br.com.caelum.vraptor.interceptor.multipart.CommonsUploadMultipartInterceptor">
+			<if-class-not-available name="org.apache.commons.fileupload.FileItem"/>
+		</exclude>
+		
+		<exclude name="br.com.caelum.vraptor.interceptor.multipart.DefaultServletFileUploadCreator">
 			<if-class-not-available name="org.apache.commons.fileupload.FileItem"/>
 		</exclude>
 		
@@ -60,7 +71,6 @@
 		<exclude name="br.com.caelum.vraptor.interceptor.multipart.NullMultipartInterceptor">
 			<if-class-available name="javax.servlet.http.Part"/>
 		</exclude>
-			
 	</scan>
-
+	
 </beans>

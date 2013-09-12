@@ -42,13 +42,13 @@ public class LocalDateConverter implements Converter<LocalDate> {
 
     private Localization localization;
 
-    @Deprecated // CDI eyes only
+	@Deprecated // CDI eyes only
 	public LocalDateConverter() {}
 
-    @Inject
+	@Inject
 	public LocalDateConverter(Localization localization) {
-        this.localization = localization;
-    }
+	    this.localization = localization;
+	}
 
     public LocalDate convert(String value, Class<? extends LocalDate> type, ResourceBundle bundle) {
         try {

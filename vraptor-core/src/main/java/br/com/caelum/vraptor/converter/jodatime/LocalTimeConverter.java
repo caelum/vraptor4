@@ -33,33 +33,37 @@ import br.com.caelum.vraptor.converter.ConversionError;
 import br.com.caelum.vraptor.core.Localization;
 
 /**
- * VRaptor converter for {@link LocalTime}. {@link LocalTime} is part of Joda Time library.
+ * VRaptor converter for {@link LocalTime}. {@link LocalTime} is part of Joda
+ * Time library.
  *
  * @author Lucas Cavalcanti
  */
 @Convert(LocalTime.class)
 public class LocalTimeConverter implements Converter<LocalTime> {
 
-    private Localization localization;
+	private Localization localization;
 
-    @Deprecated // CDI eyes only
+	@Deprecated // CDI eyes only
 	public LocalTimeConverter() {}
 
-    @Inject
+	@Inject
 	public LocalTimeConverter(Localization localization) {
-        this.localization = localization;
-    }
+		this.localization = localization;
+	}
 
-    public LocalTime convert(String value, Class<? extends LocalTime> type, ResourceBundle bundle) {
-        try {
-            DateTime out = new LocaleBasedJodaTimeConverter(localization).convert(value, shortTime());
-            if (out == null) {
-                return null;
-            }
+	public LocalTime convert(String value, Class<? extends LocalTime> type,
+			ResourceBundle bundle) {
+		try {
+			DateTime out = new LocaleBasedJodaTimeConverter(localization)
+					.convert(value, shortTime());
+			if (out == null) {
+				return null;
+			}
 
-            return out.toLocalTime();
-        } catch (Exception e) {
-			throw new ConversionError(MessageFormat.format(bundle.getString("is_not_a_valid_time"), value));
-        }
+			return out.toLocalTime();
+		} catch (Exception e) {
+			throw new ConversionError(MessageFormat.format(
+					bundle.getString("is_not_a_valid_time"), value));
+		}
 	}
 }

@@ -89,17 +89,17 @@
 			</exclusions>
 		</dependency>
 		
-	    <dependency>
-	        <groupId>javax.ejb</groupId>
-	        <artifactId>ejb-api</artifactId>
-	        <version>3.0</version>
-	    </dependency>		
 		<dependency>
-		    <groupId>org.slf4j</groupId>
-		    <artifactId>slf4j-simple</artifactId>
-		    <version>1.7.5</version>
-		    <scope>test</scope>
-		</dependency>                        				
+			<groupId>javax.ejb</groupId>
+			<artifactId>ejb-api</artifactId>
+			<version>3.0</version>
+		</dependency>		
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-simple</artifactId>
+			<version>1.7.5</version>
+			<scope>test</scope>
+		</dependency>										
 		<!-- [/cdi] -->
 
 		<!-- [deserialization] -->
@@ -122,14 +122,6 @@
 		</dependency>
 		<!-- [/deserialization] -->
 
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-core</artifactId>
-			<version>3.6.6.Final</version>
-			<scope>compile</scope>
-			<optional>true</optional>
-		</dependency>
-		
 		<dependency>
 			<groupId>javax.validation</groupId>
 			<artifactId>validation-api</artifactId>
@@ -242,18 +234,17 @@
 	</dependencies>
 		
 	<dependencyManagement>
-	    <dependencies>
-	        <dependency>
-	            <groupId>org.jboss.arquillian</groupId>
-	            <artifactId>arquillian-bom</artifactId>
-	            <version>1.0.3.Final</version>
-	            <scope>import</scope>
-	            <type>pom</type>
-	        </dependency>
-	    </dependencies>
+		<dependencies>
+			<dependency>
+				<groupId>org.jboss.arquillian</groupId>
+				<artifactId>arquillian-bom</artifactId>
+				<version>1.0.3.Final</version>
+				<scope>import</scope>
+				<type>pom</type>
+			</dependency>
+		</dependencies>
 	</dependencyManagement>	
 		
-
 	<build>
 		<plugins>
 			<plugin>

@@ -44,7 +44,7 @@ public class PrimitiveDoubleConverter implements Converter<Double> {
         try {
             return Double.parseDouble(value);
         } catch (NumberFormatException e) {
-            throw new ConversionError(MessageFormat.format(bundle.getString("is_not_a_valid_number"), value));
+            throw new ConversionException(MessageFormat.format(bundle.getString("is_not_a_valid_number"), value));
         }
     }
 

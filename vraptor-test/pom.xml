@@ -3,9 +3,9 @@
 	xmlns="http://maven.apache.org/POM/4.0.0"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>br.com.caelum.vraptor4</groupId>
+	<groupId>br.com.caelum.vraptor</groupId>
 	<artifactId>vraptor-test</artifactId>
-	<version>1.0-SNAPSHOT</version>
+	<version>4.0.0.beta-SNAPSHOT</version>
 	<packaging>war</packaging>
 
 	<name>vraptor-test</name>
@@ -35,8 +35,8 @@
 
 		<dependency>
 			<groupId>br.com.caelum</groupId>
-			<artifactId>vraptor4</artifactId>
-			<version>4.0-SNAPSHOT</version>
+			<artifactId>vraptor</artifactId>
+			<version>4.0.0.beta-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>br.com.caelum.vraptor</groupId>

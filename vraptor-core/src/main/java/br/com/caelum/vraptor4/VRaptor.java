@@ -41,13 +41,14 @@ import br.com.caelum.vraptor4.events.VRaptorInitialized;
 import br.com.caelum.vraptor4.http.EncodingHandler;
 import br.com.caelum.vraptor4.http.VRaptorRequest;
 import br.com.caelum.vraptor4.http.VRaptorResponse;
+import br.com.caelum.vraptor4.interceptor.ControllerInvocationException;
 import br.com.caelum.vraptor4.ioc.Container;
 import br.com.caelum.vraptor4.ioc.ContainerProvider;
 
 /**
  * VRaptor entry point.<br>
  * Provider configuration is supported through init parameter.
- *
+ * 
  * @author Guilherme Silveira
  * @author Fabio Kung
  */
@@ -97,14 +98,24 @@ public class VRaptor implements Filter {
 			VRaptorResponse mutableResponse = new VRaptorResponse(baseResponse);
 
 			final RequestInfo request = new RequestInfo(servletContext, chain, mutableRequest, mutableResponse);
-			provider.provideForRequest(request, new Execution<Object>() {
+
+			Execution<Object> execution = new Execution<Object>() {
 				@Override
 				public Object insideRequest(Container container) {
 					container.instanceFor(EncodingHandler.class).setEncoding(baseRequest, baseResponse);
 					container.instanceFor(RequestExecution.class).execute();
 					return null;
 				}
-			});
+			};
+
+			try {
+				provider.provideForRequest(request, execution);
+			} catch (ControllerInvocationException e) {
+				// it is a business logic exception, we dont need to show
+				// all interceptors stack trace
+				throw new ServletException("Your controller threw an exception", e.getCause());
+			}
+
 			logger.debug("VRaptor ended the request");
 		}
 	}

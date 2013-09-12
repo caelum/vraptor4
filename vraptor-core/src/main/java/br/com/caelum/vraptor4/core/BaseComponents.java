@@ -164,7 +164,6 @@ import br.com.caelum.vraptor4.validator.DefaultBeanValidator;
 import br.com.caelum.vraptor4.validator.DefaultValidator;
 import br.com.caelum.vraptor4.validator.MessageConverter;
 import br.com.caelum.vraptor4.validator.MessageInterpolatorFactory;
-import br.com.caelum.vraptor4.validator.MethodValidatorFactoryCreator;
 import br.com.caelum.vraptor4.validator.MethodValidatorInterceptor;
 import br.com.caelum.vraptor4.validator.NullBeanValidator;
 import br.com.caelum.vraptor4.validator.Outjector;
@@ -334,14 +333,9 @@ public class BaseComponents {
     public static Map<Class<?>, Class<?>> getApplicationScoped() {
         APPLICATION_COMPONENTS.put(DependencyProvider.class, VRaptorDependencyProvider.class);
 
-        // try put beanval 1.1 or beanval 1.0 if available
         if (isClassPresent("javax.validation.executable.ExecutableValidator")) {
             APPLICATION_COMPONENTS.put(ValidatorCreator.class, ValidatorCreator.class);
             APPLICATION_COMPONENTS.put(ValidatorFactoryCreator.class, ValidatorFactoryCreator.class);
-            APPLICATION_COMPONENTS.put(MethodValidatorFactoryCreator.class, MethodValidatorFactoryCreator.class);
-            APPLICATION_COMPONENTS.put(MessageInterpolatorFactory.class, MessageInterpolatorFactory.class);
-        } else if (isClassPresent("javax.validation.Validation")) {
-            APPLICATION_COMPONENTS.put(ValidatorCreator.class, ValidatorCreator.class);
             APPLICATION_COMPONENTS.put(ValidatorFactoryCreator.class, ValidatorFactoryCreator.class);
             APPLICATION_COMPONENTS.put(MessageInterpolatorFactory.class, MessageInterpolatorFactory.class);
         }
@@ -350,12 +344,9 @@ public class BaseComponents {
     }
 
     public static Map<Class<?>, Class<?>> getRequestScoped() {
-        // try put beanval 1.1 or beanval 1.0 if available
         if (isClassPresent("javax.validation.executable.ExecutableValidator")) {
             REQUEST_COMPONENTS.put(BeanValidator.class, DefaultBeanValidator.class);
             REQUEST_COMPONENTS.put(MethodValidatorInterceptor.class, MethodValidatorInterceptor.class);
-        } else if (isClassPresent("javax.validation.Validation")) {
-            REQUEST_COMPONENTS.put(BeanValidator.class, DefaultBeanValidator.class);
         } else {
             REQUEST_COMPONENTS.put(BeanValidator.class, NullBeanValidator.class);
         }

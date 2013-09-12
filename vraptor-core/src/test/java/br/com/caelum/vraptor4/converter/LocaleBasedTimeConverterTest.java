@@ -108,7 +108,7 @@ public class LocaleBasedTimeConverterTest {
         
 		try {
 			converter.convert("25:dd:88", Time.class, bundle);
-		} catch (ConversionError e) {
+		} catch (ConversionException e) {
 			assertThat(e.getMessage(), is(equalTo("25:dd:88 is not a valid time.")));
 		}
 	}

@@ -46,7 +46,7 @@ public class PrimitiveIntConverterTest {
 	public void shouldComplainAboutInvalidNumber() {
 		try {
 			converter.convert("---", int.class, bundle);
-		} catch (ConversionError e) {
+		} catch (ConversionException e) {
 			assertThat(e.getMessage(), is(equalTo("--- is not a valid integer.")));
 		}
 	}

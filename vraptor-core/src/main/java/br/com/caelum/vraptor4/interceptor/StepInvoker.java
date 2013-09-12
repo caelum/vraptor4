@@ -3,6 +3,8 @@ package br.com.caelum.vraptor4.interceptor;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
+import com.google.common.base.Throwables;
+
 import net.vidageek.mirror.dsl.Mirror;
 import net.vidageek.mirror.exception.MirrorException;
 import net.vidageek.mirror.list.dsl.Matcher;
@@ -46,9 +48,12 @@ public class StepInvoker {
 			Object returnObject = new Mirror().on(interceptor).invoke().method(stepMethod).withArgs(params);
 			return returnObject;
 		} catch (MirrorException e) {
+			// we dont wanna wrap it if it is a simple controller business logic exception
+			Throwables.propagateIfInstanceOf(e.getCause(), ControllerInvocationException.class);
 			throw new InterceptionException(e.getCause());
 		}
 	}
+	
 
 	public Method findMethod(Class<? extends Annotation> step,Class<?> interceptorClass) {
 		MirrorList<Method> possibleMethods = findPossibleMethods(step, interceptorClass);

@@ -106,7 +106,7 @@ public class LocaleBasedDateConverterTest {
 		
 		try {
 			converter.convert("a,10/06/2008/a/b/c", Date.class, bundle);
-		} catch (ConversionError e) {
+		} catch (ConversionException e) {
 			assertThat(e.getMessage(), is(equalTo("a,10/06/2008/a/b/c is not a valid date.")));
 		}
 	}

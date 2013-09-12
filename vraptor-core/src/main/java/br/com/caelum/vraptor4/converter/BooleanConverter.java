@@ -57,7 +57,7 @@ public class BooleanConverter implements Converter<Boolean> {
 			return false;
 		}
 		
-		throw new ConversionError(MessageFormat.format(bundle.getString("is_not_a_valid_boolean"), value));
+		throw new ConversionException(MessageFormat.format(bundle.getString("is_not_a_valid_boolean"), value));
 	}
 
 	private boolean matches(Set<String> words, String value) {

@@ -26,7 +26,7 @@ import org.joda.time.DateTime;
 
 import br.com.caelum.vraptor4.Convert;
 import br.com.caelum.vraptor4.Converter;
-import br.com.caelum.vraptor4.converter.ConversionError;
+import br.com.caelum.vraptor4.converter.ConversionException;
 import br.com.caelum.vraptor4.core.Localization;
 
 /**
@@ -53,7 +53,7 @@ public class DateTimeConverter implements Converter<DateTime> {
             
             return out.toDateTime();
 		} catch (Exception e) {
-			throw new ConversionError(MessageFormat.format(bundle.getString("is_not_a_valid_datetime"), value));
+			throw new ConversionException(MessageFormat.format(bundle.getString("is_not_a_valid_datetime"), value));
 		}
 	}
 }

@@ -75,7 +75,7 @@ public class LocaleBasedDateConverter
             try {  
                 return formatDate.parse(value);  
             } catch (ParseException pe1) {  
-                throw new ConversionError(MessageFormat.format(  
+                throw new ConversionException(MessageFormat.format(  
                         bundle.getString("is_not_a_valid_date"), value));  
             }  
         }  

@@ -28,6 +28,7 @@ import br.com.caelum.vraptor4.interceptor.DefaultTypeNameExtractor;
 import br.com.caelum.vraptor4.serialization.NullProxyInitializer;
 import br.com.caelum.vraptor4.serialization.Serialization;
 
+import com.google.common.collect.Lists;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 public class XStreamXMLSerializationTest {
@@ -81,7 +82,7 @@ public class XStreamXMLSerializationTest {
 			this.client = client;
 			this.price = price;
 			this.comments = comments;
-			this.items = new ArrayList<>(Arrays.asList(items));
+			this.items = Lists.newArrayList(items);;
 		}
 		public String nice() {
 			return "nice output";

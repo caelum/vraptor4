@@ -20,8 +20,6 @@ package br.com.caelum.vraptor4.converter;
 import static com.google.common.base.Strings.isNullOrEmpty;
 
 import java.text.MessageFormat;
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.ResourceBundle;
 import java.util.Set;
 
@@ -29,6 +27,8 @@ import javax.enterprise.context.ApplicationScoped;
 
 import br.com.caelum.vraptor4.Convert;
 import br.com.caelum.vraptor4.Converter;
+
+import com.google.common.collect.Sets;
 
 /**
  * VRaptor's Boolean converter.
@@ -41,8 +41,8 @@ import br.com.caelum.vraptor4.Converter;
 @Convert(Boolean.class)
 @ApplicationScoped
 public class BooleanConverter implements Converter<Boolean> {
-	private static final Set<String> IS_TRUE  = new HashSet<>(Arrays.asList("TRUE", "1", "YES", "Y", "ON"));
-	private static final Set<String> IS_FALSE = new HashSet<>(Arrays.asList("FALSE", "0", "NO", "N", "OFF"));
+	private static final Set<String> IS_TRUE  = Sets.newHashSet("TRUE", "1", "YES", "Y", "ON");
+	private static final Set<String> IS_FALSE = Sets.newHashSet("FALSE", "0", "NO", "N", "OFF");
 
 	public Boolean convert(String value, Class<? extends Boolean> type, ResourceBundle bundle) {
 	    if (isNullOrEmpty(value)) {

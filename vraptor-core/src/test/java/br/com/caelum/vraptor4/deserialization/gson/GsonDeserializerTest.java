@@ -32,7 +32,6 @@ import br.com.caelum.vraptor4.controller.DefaultBeanClass;
 import br.com.caelum.vraptor4.controller.DefaultControllerMethod;
 import br.com.caelum.vraptor4.core.Localization;
 import br.com.caelum.vraptor4.http.ParameterNameProvider;
-import br.com.caelum.vraptor4.serialization.gson.adapters.CalendarDeserializer;
 import br.com.caelum.vraptor4.view.GenericController;
 
 import com.google.gson.JsonDeserializationContext;

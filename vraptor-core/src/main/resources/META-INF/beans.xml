@@ -28,29 +28,24 @@
 
 		<exclude name="br.com.caelum.vraptor.validator.DefaultBeanValidator">
 			<if-class-not-available name="javax.validation.executable.ExecutableValidator"/>
-			<if-class-not-available name="javax.validation.Validation"/>
 		</exclude>
 		
 		<exclude name="br.com.caelum.vraptor.validator.ValidatorCreator"> 
-			<if-class-not-available name="javax.validation.Validation"/>
+			<if-class-not-available name="javax.validation.executable.ExecutableValidator"/>
 		</exclude>
 
 		<exclude name="br.com.caelum.vraptor.validator.ValidatorFactoryCreator"> 
-			<if-class-not-available name="javax.validation.Validation"/>
+			<if-class-not-available name="javax.validation.executable.ExecutableValidator"/>
 		</exclude>
 
 		<exclude name="br.com.caelum.vraptor.validator.MessageInterpolatorFactory">
-			<if-class-not-available name="javax.validation.Validation"/>
+			<if-class-not-available name="javax.validation.executable.ExecutableValidator"/>
 		</exclude>
 		
-		<exclude name="br.com.caelum.vraptor.validator.NullBeanValidator">
-			<if-class-available name="javax.validation.Validation"/>
-		</exclude>
-	
 		<exclude name="br.com.caelum.vraptor.validator.NullBeanValidator">
 			<if-class-available name="javax.validation.executable.ExecutableValidator"/>
 		</exclude>
-		
+	
 		<exclude name="br.com.caelum.vraptor.interceptor.multipart.CommonsUploadMultipartInterceptor">
 			<if-class-not-available name="org.apache.commons.fileupload.FileItem"/>
 		</exclude>

@@ -58,7 +58,7 @@ public class GsonDeserializerTest {
 
 		when(localization.getLocale()).thenReturn(new Locale("pt", "BR"));
 
-		List<JsonDeserializer> adapters = new ArrayList<JsonDeserializer>();
+		List<JsonDeserializer> adapters = new ArrayList<>();
 		adapters.add(new CalendarDeserializer());
 		
 		deserializer = new GsonDeserialization(provider, adapters, request);

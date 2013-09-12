@@ -20,20 +20,14 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.VRaptorException;
 import br.com.caelum.vraptor.controller.BeanClass;
-import br.com.caelum.vraptor.core.BaseComponents;
 import br.com.caelum.vraptor.core.ConvertQualifier;
 import br.com.caelum.vraptor.core.Converters;
 
 @ApplicationScoped
 public class ConverterHandler{
-
-	private static final Logger logger = LoggerFactory.getLogger(ConverterHandler.class);
 
 	private Converters converters;
 
@@ -41,24 +35,19 @@ public class ConverterHandler{
 	@Deprecated
 	public ConverterHandler() {
 	}
-	
+
 	@Inject
 	public ConverterHandler(Converters converters) {
 		this.converters = converters;
 	}
-	
+
 	public void handle(@Observes @ConvertQualifier BeanClass beanClass) {
 		Class<?> originalType = beanClass.getType();
 		if (!(Converter.class.isAssignableFrom(originalType))) {
 			throw new VRaptorException("converter does not implement Converter");
 		}
-		if (BaseComponents.getBundledConverters().contains(originalType)) {
-			logger.debug("Ignoring handling default converter {}", originalType);
-			return;
-		}
 		@SuppressWarnings("unchecked")
 		Class<? extends Converter<?>> converterType = (Class<? extends Converter<?>>) originalType;
-
 		converters.register(converterType);
 	}
 }

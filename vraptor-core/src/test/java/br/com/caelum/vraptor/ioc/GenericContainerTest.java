@@ -23,6 +23,7 @@ import static br.com.caelum.vraptor.config.BasicConfiguration.BASE_PACKAGES_PARA
 import static br.com.caelum.vraptor.config.BasicConfiguration.SCANNING_PARAM;
 import static java.lang.Thread.currentThread;
 import static java.util.Arrays.asList;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.instanceOf;
@@ -31,16 +32,19 @@ import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.sameInstance;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map.Entry;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -60,9 +64,25 @@ import org.junit.Test;
 
 import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.controller.ControllerMethod;
+import br.com.caelum.vraptor.converter.BooleanConverter;
+import br.com.caelum.vraptor.converter.ByteConverter;
+import br.com.caelum.vraptor.converter.DoubleConverter;
+import br.com.caelum.vraptor.converter.EnumConverter;
+import br.com.caelum.vraptor.converter.FloatConverter;
+import br.com.caelum.vraptor.converter.IntegerConverter;
+import br.com.caelum.vraptor.converter.LocaleBasedCalendarConverter;
+import br.com.caelum.vraptor.converter.LocaleBasedDateConverter;
+import br.com.caelum.vraptor.converter.LongConverter;
+import br.com.caelum.vraptor.converter.PrimitiveBooleanConverter;
+import br.com.caelum.vraptor.converter.PrimitiveByteConverter;
+import br.com.caelum.vraptor.converter.PrimitiveDoubleConverter;
+import br.com.caelum.vraptor.converter.PrimitiveFloatConverter;
+import br.com.caelum.vraptor.converter.PrimitiveIntConverter;
+import br.com.caelum.vraptor.converter.PrimitiveLongConverter;
+import br.com.caelum.vraptor.converter.PrimitiveShortConverter;
+import br.com.caelum.vraptor.converter.ShortConverter;
 import br.com.caelum.vraptor.converter.jodatime.LocalDateConverter;
 import br.com.caelum.vraptor.converter.jodatime.LocalTimeConverter;
-import br.com.caelum.vraptor.core.BaseComponents;
 import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.core.Execution;
 import br.com.caelum.vraptor.core.MethodInfo;
@@ -124,21 +144,6 @@ public abstract class GenericContainerTest {
 	public void tearDown() {
 		provider.stop();
 		provider = null;
-	}
-
-	@Test
-	public void canProvideAllApplicationScopedComponents() {
-		checkAvailabilityFor(true, BaseComponents.getApplicationScoped().keySet());
-	}
-
-	@Test
-	public void canProvideAllPrototypeScopedComponents() {
-		checkAvailabilityFor(false, BaseComponents.getPrototypeScoped().keySet());
-	}
-
-	@Test
-	public void canProvideAllRequestScopedComponents() {
-		checkAvailabilityFor(false, BaseComponents.getRequestScoped().keySet());
 	}
 
 	@ApplicationScoped
@@ -405,7 +410,6 @@ public abstract class GenericContainerTest {
 
 					public Void insideRequest(Container container) {
 						Deserializers deserializers = container.instanceFor(Deserializers.class);
-
 						List<String> types = asList("application/json", "json", "application/xml",
 							"xml", "text/xml", "application/x-www-form-urlencoded");
 
@@ -417,6 +421,49 @@ public abstract class GenericContainerTest {
 				});
 			}
 		});
+	}
+
+	@Test
+	public void shouldReturnAllDefaultConverters() {
+		executeInsideRequest(new WhatToDo<Void>(){
+			public Void execute(RequestInfo request, int counter) {
+				return provider.provideForRequest(request, new Execution<Void>() {
+					public Void insideRequest(Container container) {
+
+					Converters converters = container.instanceFor(Converters.class);
+
+					final HashMap<Class, Class<?>> EXPECTED_CONVERTERS = new HashMap<Class, Class<?>>() {
+					    {
+					        put(int.class, PrimitiveIntConverter.class);
+					        put(long.class, PrimitiveLongConverter.class);
+					        put(short.class, PrimitiveShortConverter.class);
+					        put(byte.class, PrimitiveByteConverter.class);
+					        put(double.class, PrimitiveDoubleConverter.class);
+					        put(float.class, PrimitiveFloatConverter.class);
+					        put(boolean.class, PrimitiveBooleanConverter.class);
+					        put(Integer.class, IntegerConverter.class);
+					        put(Long.class, LongConverter.class);
+					        put(Short.class, ShortConverter.class);
+					        put(Byte.class, ByteConverter.class);
+					        put(Double.class, DoubleConverter.class);
+					        put(Float.class, FloatConverter.class);
+					        put(Boolean.class, BooleanConverter.class);
+					        put(Calendar.class, LocaleBasedCalendarConverter.class);
+					        put(Date.class, LocaleBasedDateConverter.class);
+					        put(Enum.class, EnumConverter.class);
+					    }
+					    private static final long serialVersionUID = 8559316558416038474L;
+					};
+
+					for (Entry<Class, Class<?>> entry : EXPECTED_CONVERTERS.entrySet()) {
+					    Converter<?> converter = converters.to((Class<?>) entry.getKey());
+					    assertThat(converter, is(instanceOf(entry.getValue())));
+					}
+					return null;
+				}
+			});
+		}
+	});
 	}
 
 	@Test

@@ -23,6 +23,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import javax.enterprise.inject.Alternative;
+
 import br.com.caelum.vraptor.View;
 import br.com.caelum.vraptor.validator.AbstractValidator;
 import br.com.caelum.vraptor.validator.I18nMessage;
@@ -50,8 +52,8 @@ import br.com.caelum.vraptor.validator.Validations;
  * @Test(expected=ValidationError.class)
  *
  * @author Lucas Cavalcanti
- *
  */
+@Alternative
 public class MockValidator extends AbstractValidator {
 
 	private final List<Message> errors = new ArrayList<Message>();
@@ -62,7 +64,7 @@ public class MockValidator extends AbstractValidator {
 
 	public void validate(Object object, Class<?>... groups) {
 	}
-	
+
 	public void validateProperties(Object object, String... properties) {
 	}
 
@@ -88,7 +90,7 @@ public class MockValidator extends AbstractValidator {
 	public List<Message> getErrors() {
 		return Collections.unmodifiableList(errors);
 	}
-	
+
 	public boolean containsMessage(String messageKey, Object... messageParameters) {
 		I18nMessage expectedMessage = new I18nMessage("validation", messageKey, messageParameters);
 		expectedMessage.setBundle(ResourceBundle.getBundle("messages"));
@@ -97,7 +99,7 @@ public class MockValidator extends AbstractValidator {
 				return true;
 			}
 		}
-		
+
 		return false;
 	}
 }

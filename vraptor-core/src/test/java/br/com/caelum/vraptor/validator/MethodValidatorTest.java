@@ -32,10 +32,10 @@ import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.http.ParanamerNameProvider;
 import br.com.caelum.vraptor.util.test.MockValidator;
-import br.com.caelum.vraptor.validator.MessageInterpolatorFactory;
-import br.com.caelum.vraptor.validator.MethodValidatorFactoryCreator;
-import br.com.caelum.vraptor.validator.MethodValidatorInterceptor;
-import br.com.caelum.vraptor.validator.ValidatorFactoryCreator;
+import br.com.caelum.vraptor.validator.beanvalidation.MessageInterpolatorFactory;
+import br.com.caelum.vraptor.validator.beanvalidation.MethodValidatorFactoryCreator;
+import br.com.caelum.vraptor.validator.beanvalidation.MethodValidatorInterceptor;
+import br.com.caelum.vraptor.validator.beanvalidation.ValidatorFactoryCreator;
 
 /**
  * Test method validator feature.

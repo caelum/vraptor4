@@ -18,6 +18,7 @@
 package br.com.caelum.vraptor.restfulie.serialization;
 
 import javax.enterprise.context.RequestScoped;
+import javax.enterprise.inject.Specializes;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
 
@@ -35,11 +36,14 @@ import com.thoughtworks.xstream.converters.reflection.ReflectionConverter;
  * Custom serialization process provides a way to add links to your resource representations.
  * @author guilherme silveira
  */
-@RequestScoped
+@RequestScoped @Specializes
 public class RestfulSerialization extends XStreamXMLSerialization {
 
-	private final Restfulie restfulie;
-	private final Configuration config;
+	private Restfulie restfulie;
+	private Configuration config;
+
+	@Deprecated // CDI eyes only
+	public RestfulSerialization() {}
 
 	@Inject
 	public RestfulSerialization(HttpServletResponse response, TypeNameExtractor extractor, Restfulie restfulie, Configuration config, ProxyInitializer initializer, XStreamBuilder builder) {
@@ -47,7 +51,7 @@ public class RestfulSerialization extends XStreamXMLSerialization {
 		this.restfulie = restfulie;
 		this.config = config;
 	}
-	
+
 	/**
 	 * You can override this method for configuring XStream before serialization.
 	 * It configures the xstream instance with a link converter for all StateResource implementations.

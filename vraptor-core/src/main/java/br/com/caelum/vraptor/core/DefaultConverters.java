@@ -38,22 +38,16 @@ public class DefaultConverters implements Converters {
     private LinkedList<Class<? extends Converter<?>>> classes;
 	private Container container;
 
-	//CDI eyes only
-	@Deprecated
-	public DefaultConverters() {
-	}
-	
+	@Deprecated //CDI eyes only
+	public DefaultConverters() {}
+
 	@Inject
     public DefaultConverters(Container container) {
         this.container = container;
 		this.classes = new LinkedList<Class<? extends Converter<?>>>();
         logger.info("Registering bundled converters");
-        for (Class<? extends Converter<?>> converterType : BaseComponents.getBundledConverters()) {
-            logger.debug("bundled converter to be registered: {}", converterType);
-            register(converterType);
-        }
     }
-    
+
     @Override
 	public void register(Class<? extends Converter<?>> converterClass) {
         if (!converterClass.isAnnotationPresent(Convert.class)) {
@@ -63,13 +57,14 @@ public class DefaultConverters implements Converters {
 		classes.addFirst(converterClass);
     }
 
-    @Override
+	@SuppressWarnings("unchecked")
+	@Override
 	public <T> Converter<T> to(Class<T> clazz) {
-        if (!existsFor(clazz)) {
+		if (!existsFor(clazz)) {
 			throw new VRaptorException("Unable to find converter for " + clazz.getName());
 		}
-        return (Converter<T>) container.instanceFor(findConverterType(clazz));
-    }
+		return (Converter<T>) container.instanceFor(findConverterType(clazz));
+	}
 
 	private Class<? extends Converter<?>> findConverterType(Class<?> clazz) {
 		for (Class<? extends Converter<?>> converterType : classes) {
@@ -99,5 +94,4 @@ public class DefaultConverters implements Converters {
 		}
         return (TwoWayConverter<?>) container.instanceFor(findConverterType(type));
 	}
-
 }

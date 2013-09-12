@@ -38,10 +38,13 @@ import com.thoughtworks.xstream.XStream;
  */
 public class XStreamJSONSerialization implements JSONSerialization {
 
-    protected final HttpServletResponse response;
-    protected final TypeNameExtractor extractor;
-    protected final ProxyInitializer initializer;
-    protected final XStreamBuilder builder;
+    protected HttpServletResponse response;
+    protected TypeNameExtractor extractor;
+    protected ProxyInitializer initializer;
+    protected XStreamBuilder builder;
+
+	@Deprecated // CDI eyes only
+	public XStreamJSONSerialization() {}
 
     @Inject
     public XStreamJSONSerialization(HttpServletResponse response, TypeNameExtractor extractor, ProxyInitializer initializer, XStreamBuilder builder) {

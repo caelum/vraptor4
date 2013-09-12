@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package br.com.caelum.vraptor.validator;
+package br.com.caelum.vraptor.validator.beanvalidation;
 
 import java.util.Locale;
 import java.util.Set;
@@ -38,6 +38,8 @@ import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.interceptor.ExecuteMethodInterceptor;
 import br.com.caelum.vraptor.interceptor.Interceptor;
 import br.com.caelum.vraptor.interceptor.ParametersInstantiatorInterceptor;
+import br.com.caelum.vraptor.validator.BeanValidatorContext;
+import br.com.caelum.vraptor.validator.ValidationMessage;
 
 /**
  * Validate method parameters using Bean Validation 1.1. The method will be

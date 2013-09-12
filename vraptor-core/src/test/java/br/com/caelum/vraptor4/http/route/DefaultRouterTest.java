@@ -297,10 +297,6 @@ public class DefaultRouterTest {
 		public void customizedPath() {
 		}
 		
-		@Path("/myPath/{param}")
-		public void pathWithParam(String param) {
-		}
-
 		@Path("/*/customPath")
 		public void starPath() {
 		}

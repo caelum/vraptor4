@@ -59,5 +59,10 @@ public class NoStrategy implements Route {
 	public String getOriginalUri() {
 		return "NoStrategy";
 	}
+	
+	@Override
+	public ControllerMethod getControllerMethod() {
+		return null;
+	}
 
 }

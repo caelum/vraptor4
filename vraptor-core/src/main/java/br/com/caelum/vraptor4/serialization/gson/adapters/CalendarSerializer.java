@@ -3,20 +3,22 @@ package br.com.caelum.vraptor4.serialization.gson.adapters;
 import java.lang.reflect.Type;
 import java.util.Calendar;
 
+import javax.xml.bind.DatatypeConverter;
+
 import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
+import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
+/**
+ * Serialize {@link Calendar} using ISO8601 format.
+ * 
+ * @author Renan Reis
+ * @author Otávio Garcia
+ */
 public class CalendarSerializer implements JsonSerializer<Calendar> {
 
 	public JsonElement serialize(Calendar calendar, Type typeOfSrc, JsonSerializationContext context) {
-		long timeInMillis = calendar.getTimeInMillis();
-		String timeZoneID = calendar.getTimeZone().getID();
-
-		String json = "{\"time\" : \"%s\", \"timezone\" : \"%s\"}";
-		json = String.format(json, timeInMillis, timeZoneID);
-
-		return new JsonParser().parse(json).getAsJsonObject();
+		return new JsonPrimitive(DatatypeConverter.printDateTime(calendar));
 	}
 }

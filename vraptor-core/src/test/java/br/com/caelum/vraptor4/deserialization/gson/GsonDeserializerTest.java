@@ -13,9 +13,11 @@ import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
+import java.util.TimeZone;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -30,6 +32,7 @@ import br.com.caelum.vraptor4.controller.DefaultBeanClass;
 import br.com.caelum.vraptor4.controller.DefaultControllerMethod;
 import br.com.caelum.vraptor4.core.Localization;
 import br.com.caelum.vraptor4.http.ParameterNameProvider;
+import br.com.caelum.vraptor4.serialization.gson.adapters.CalendarDeserializer;
 import br.com.caelum.vraptor4.view.GenericController;
 
 import com.google.gson.JsonDeserializationContext;
@@ -56,7 +59,10 @@ public class GsonDeserializerTest {
 
 		when(localization.getLocale()).thenReturn(new Locale("pt", "BR"));
 
-		deserializer = new GsonDeserialization(provider, Collections.<JsonDeserializer> emptyList(), request);
+		List<JsonDeserializer> adapters = new ArrayList<JsonDeserializer>();
+		adapters.add(new CalendarDeserializer());
+		
+		deserializer = new GsonDeserialization(provider, adapters, request);
 		BeanClass controllerClass = new DefaultBeanClass(DogController.class);
 
 		woof = new DefaultControllerMethod(controllerClass, DogController.class.getDeclaredMethod("woof"));
@@ -70,6 +76,7 @@ public class GsonDeserializerTest {
 	static class Dog {
 		private String name;
 		private Integer age;
+		private Calendar birthday;
 	}
 
 	static class DogController {
@@ -268,7 +275,7 @@ public class GsonDeserializerTest {
 	@Test
 	public void shouldDeserializeFromGenericTypeOneParam() {
 		InputStream stream = new ByteArrayInputStream(
-				"{'entity':{'name':'Brutus','age':7,'birthday':'06/01/1987'}}"
+				"{'entity':{'name':'Brutus','age':7,'birthday':'2013-07-23T17:14:14-03:00'}}"
 						.getBytes());
 		BeanClass resourceClass = new DefaultBeanClass(ExtGenericController.class);
 		Method method = new Mirror().on(GenericController.class).reflect()
@@ -286,7 +293,7 @@ public class GsonDeserializerTest {
 	@Test
 	public void shouldDeserializeFromGenericTypeTwoParams() {
 		InputStream stream = new ByteArrayInputStream(
-				"{'entity':{'name':'Brutus','age':7,'birthday':'06/01/1987'}, 'param': 'test', 'over': 'value'}"
+				"{'entity':{'name':'Brutus','age':7,'birthday':'2013-07-23T17:14:14-03:00'}, 'param': 'test', 'over': 'value'}"
 						.getBytes());
 		BeanClass resourceClass = new DefaultBeanClass(ExtGenericController.class);
 		Method method = new Mirror().on(GenericController.class).reflect()
@@ -321,4 +328,27 @@ public class GsonDeserializerTest {
 
 		assertThat(param, equalTo("test"));
 	}
+
+	@Test
+	public void shouldDeserializeADogWithCalendarWithISO8601() {
+		InputStream stream = new ByteArrayInputStream("{'dog':{'name':'Brutus','age':7,'birthday':'2013-07-23T17:14:14-03:00'}}"
+						.getBytes());
+
+		when(provider.parameterNamesFor(bark.getMethod())).thenReturn(new String[] { "dog" });
+
+		Object[] deserialized = deserializer.deserialize(stream, bark);
+
+		assertThat(deserialized.length, is(1));
+		assertThat(deserialized[0], is(instanceOf(Dog.class)));
+		Dog dog = (Dog) deserialized[0];
+		assertThat(dog.name, is("Brutus"));
+		assertThat(dog.age, is(7));
+
+		Calendar birthday = new GregorianCalendar(2013, 6, 23, 17, 14, 14);
+		birthday.setTimeZone(TimeZone.getTimeZone("GMT-0300"));
+
+		// calendar.equals is too bad :)
+		assertThat(dog.birthday.compareTo(birthday), is(0));
+	}
+
 }

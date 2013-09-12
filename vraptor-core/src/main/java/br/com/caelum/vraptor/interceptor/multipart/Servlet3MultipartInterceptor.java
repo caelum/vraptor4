@@ -23,6 +23,7 @@ import java.util.Collection;
 import java.util.regex.Pattern;
 
 import javax.enterprise.context.RequestScoped;
+import javax.enterprise.inject.Alternative;
 import javax.inject.Inject;
 import javax.servlet.Filter;
 import javax.servlet.ServletException;
@@ -65,7 +66,7 @@ import com.google.common.io.Closeables;
  * TODO According JSR315, all form fields are also avaliable via request.getParameter and request.getParameters(), but
  * not all containers implements this issue (Glassfish 3.0 fails).
  * </p>
- * 
+ *
  * @author Otávio Scherer Garcia
  * @since 3.2
  * @see DefaultMultipartConfig
@@ -75,6 +76,7 @@ import com.google.common.io.Closeables;
 
 @Intercepts(before = ParametersInstantiatorInterceptor.class)
 @RequestScoped
+@Alternative
 public class Servlet3MultipartInterceptor
     implements MultipartInterceptor {
 
@@ -95,14 +97,14 @@ public class Servlet3MultipartInterceptor
 	@Deprecated
 	public Servlet3MultipartInterceptor() {
 	}
-    
+
     @Inject
     public Servlet3MultipartInterceptor(HttpServletRequest request, MutableRequest parameters, Validator validator) {
         this.request = request;
         this.parameters = parameters;
         this.validator = validator;
     }
-    
+
     /**
      * Only accept requests that contains multipart headers.
      */
@@ -164,7 +166,7 @@ public class Servlet3MultipartInterceptor
     /**
      * This method is called when the max upload size is reached. There are no way to get the maxFileSize() and
      * maxRequestSize() attributes in a Filter.
-     * 
+     *
      * @param e
      */
     protected void reportSizeLimitExceeded(final IllegalStateException e) {

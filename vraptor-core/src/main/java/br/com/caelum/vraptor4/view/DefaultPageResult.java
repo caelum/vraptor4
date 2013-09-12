@@ -30,6 +30,7 @@ import br.com.caelum.vraptor4.controller.DefaultControllerMethod;
 import br.com.caelum.vraptor4.core.MethodInfo;
 import br.com.caelum.vraptor4.http.MutableRequest;
 import br.com.caelum.vraptor4.http.MutableResponse;
+import br.com.caelum.vraptor4.interceptor.ApplicationLogicException;
 import br.com.caelum.vraptor4.proxy.MethodInvocation;
 import br.com.caelum.vraptor4.proxy.Proxifier;
 import br.com.caelum.vraptor4.proxy.ProxyInvocationException;
@@ -62,12 +63,12 @@ public class DefaultPageResult implements PageResult {
 	}
 	
 	public void defaultView() {
+		String to = resolver.pathFor(requestInfo.getControllerMethod());
+		logger.debug("forwarding to {}", to);			
 		try {
-			String to = resolver.pathFor(requestInfo.getControllerMethod());
-			logger.debug("forwarding to {}", to);			
 			request.getRequestDispatcher(to).forward(request.getOriginalRequest(), response.getOriginalResponse());
 		} catch (ServletException e) {
-			throw new ResultException(e);
+			throw new ApplicationLogicException(to + " raised an exception", e);
 		} catch (IOException e) {
 			throw new ResultException(e);
 		}

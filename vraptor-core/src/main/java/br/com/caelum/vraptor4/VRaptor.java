@@ -41,40 +41,40 @@ import br.com.caelum.vraptor4.events.VRaptorInitialized;
 import br.com.caelum.vraptor4.http.EncodingHandler;
 import br.com.caelum.vraptor4.http.VRaptorRequest;
 import br.com.caelum.vraptor4.http.VRaptorResponse;
+import br.com.caelum.vraptor4.interceptor.ControllerInvocationException;
 import br.com.caelum.vraptor4.ioc.Container;
 import br.com.caelum.vraptor4.ioc.ContainerProvider;
 
 /**
  * VRaptor entry point.<br>
  * Provider configuration is supported through init parameter.
- *
+ * 
  * @author Guilherme Silveira
  * @author Fabio Kung
  */
 public class VRaptor implements Filter {
-	
+
 	@Inject
 	private ContainerProvider provider;
-	
+
 	@Inject
 	private Event<ServletContext> contextEvent;
-	
+
 	@Inject
 	private Event<VRaptorInitialized> initializedEvent;
-	
+
 	private ServletContext servletContext;
-	
+
 	@Inject
 	private StaticContentHandler staticHandler;
 
-	@Inject 
+	@Inject
 	private Logger logger;
 
 	@Override
 	public void destroy() {
 		servletContext = null;
 	}
-
 
 	@Override
 	public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException,
@@ -98,14 +98,24 @@ public class VRaptor implements Filter {
 			VRaptorResponse mutableResponse = new VRaptorResponse(baseResponse);
 
 			final RequestInfo request = new RequestInfo(servletContext, chain, mutableRequest, mutableResponse);
-			provider.provideForRequest(request, new Execution<Object>() {
+
+			Execution<Object> execution = new Execution<Object>() {
 				@Override
 				public Object insideRequest(Container container) {
 					container.instanceFor(EncodingHandler.class).setEncoding(baseRequest, baseResponse);
 					container.instanceFor(RequestExecution.class).execute();
 					return null;
 				}
-			});
+			};
+
+			try {
+				provider.provideForRequest(request, execution);
+			} catch (ControllerInvocationException e) {
+				// it is a business logic exception, we dont need to show
+				// all interceptors stack trace
+				throw new ServletException("Your controller threw an exception", e.getCause());
+			}
+
 			logger.debug("VRaptor ended the request");
 		}
 	}
@@ -115,9 +125,8 @@ public class VRaptor implements Filter {
 		servletContext = cfg.getServletContext();
 		contextEvent.fire(servletContext);
 		this.provider.start(servletContext);
-		logger.info("VRaptor 3.5.0 successfuly initialized");
+		logger.info("VRaptor 4.0 successfuly initialized");
 		initializedEvent.fire(new VRaptorInitialized());
 	}
-
 
 }

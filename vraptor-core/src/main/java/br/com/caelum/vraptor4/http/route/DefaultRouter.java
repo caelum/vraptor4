@@ -41,6 +41,7 @@ import br.com.caelum.vraptor4.http.ParameterNameProvider;
 import br.com.caelum.vraptor4.proxy.Proxifier;
 import br.com.caelum.vraptor4.util.collections.Filters;
 
+import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Iterators;
 
@@ -118,7 +119,7 @@ public class DefaultRouter implements Router {
 
 
 	private Collection<Route> routesMatchingUriAndMethod(String uri, HttpMethod method) {
-		Collection<Route> routesMatchingMethod = Collections2.filter(routesMatchingUri(uri), Filters.allow(method));
+		Collection<Route> routesMatchingMethod = Collections2.filter(routesMatchingUri(uri), allow(method));
 		if (routesMatchingMethod.isEmpty()) {
 			EnumSet<HttpMethod> allowed = allowedMethodsFor(uri);
 			throw new MethodNotAllowedException(allowed, method.toString());
@@ -136,7 +137,7 @@ public class DefaultRouter implements Router {
 	}
 
 	private Collection<Route> routesMatchingUri(String uri) {
-		Collection<Route> routesMatchingURI = Collections2.filter(routes, Filters.canHandle(uri));
+		Collection<Route> routesMatchingURI = Collections2.filter(routes, canHandle(uri));
 		if (routesMatchingURI.isEmpty()) {
 			throw new ControllerNotFoundException();
 		}
@@ -148,7 +149,7 @@ public class DefaultRouter implements Router {
 	
 		Invocation invocation = new Invocation(type, method);
 		if(!cache.containsKey(invocation)){
-			Iterator<Route> matches = Iterators.filter(routes.iterator(), Filters.canHandle(type, method));
+			Iterator<Route> matches = Iterators.filter(routes.iterator(), canHandle(type, method));
 			if (matches.hasNext()) {
 				cache.put(invocation, matches.next());
 			}
@@ -164,7 +165,7 @@ public class DefaultRouter implements Router {
 
 	@Override
 	public List<Route> allRoutes() {
-		return Collections.unmodifiableList(new ArrayList<Route>(routes));
+		return Collections.unmodifiableList(new ArrayList<>(routes));
 	}
 
 	private static class Invocation{
@@ -211,5 +212,29 @@ public class DefaultRouter implements Router {
 		}
 		
 	}
+	
+    private Predicate<Route> canHandle(final Class<?> type, final Method method) {
+        return new Predicate<Route>() {
+            public boolean apply(Route route) {
+                return route.canHandle(type, method);
+            }
+        };
+    }
+
+    private Predicate<Route> canHandle(final String uri) {
+        return new Predicate<Route>() {
+            public boolean apply(Route route) {
+                return route.canHandle(uri);
+            }
+        };
+    }
+    
+    private Predicate<Route> allow(final HttpMethod method) {
+        return new Predicate<Route>() {
+            public boolean apply(Route route) {
+                return route.allowedMethods().contains(method);
+            }
+        };
+    }
 }
 

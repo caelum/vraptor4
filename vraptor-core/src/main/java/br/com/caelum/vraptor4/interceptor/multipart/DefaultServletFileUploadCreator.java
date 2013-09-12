@@ -17,6 +17,8 @@
 
 package br.com.caelum.vraptor4.interceptor.multipart;
 
+import javax.enterprise.context.RequestScoped;
+
 import org.apache.commons.fileupload.FileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
@@ -26,6 +28,7 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
  *
  * @author Otávio Scherer Garcia
  */
+@RequestScoped
 public class DefaultServletFileUploadCreator
     implements ServletFileUploadCreator {
 

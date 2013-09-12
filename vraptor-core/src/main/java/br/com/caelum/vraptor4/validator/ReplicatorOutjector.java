@@ -15,6 +15,7 @@
  */
 package br.com.caelum.vraptor4.validator;
 
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 
 import br.com.caelum.vraptor4.Result;
@@ -26,11 +27,15 @@ import br.com.caelum.vraptor4.http.ParameterNameProvider;
  * @author Lucas Cavalcanti
  * @since 3.1.1
  */
+@RequestScoped
 public class ReplicatorOutjector implements Outjector {
 
-    private final Result result;
-	private final MethodInfo method;
-	private final ParameterNameProvider provider;
+	private Result result;
+	private MethodInfo method;
+	private ParameterNameProvider provider;
+
+	@Deprecated // CDI eyes only
+	public ReplicatorOutjector() {}
 
 	@Inject
 	public ReplicatorOutjector(Result result, MethodInfo method, ParameterNameProvider provider) {
@@ -38,7 +43,7 @@ public class ReplicatorOutjector implements Outjector {
 		this.method = method;
 		this.provider = provider;
     }
-	
+
     public void outjectRequestMap() {
           String[] names = provider.parameterNamesFor(method.getControllerMethod().getMethod());
           for (int i = 0; i < names.length; i++) {

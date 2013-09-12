@@ -16,6 +16,7 @@
  */
 package br.com.caelum.vraptor4.interceptor;
 
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 
 import org.slf4j.Logger;
@@ -46,6 +47,7 @@ import com.google.common.base.Throwables;
  * @since 3.2
  */
 @Intercepts
+@RequestScoped
 public class ExceptionHandlerInterceptor
     implements Interceptor {
 

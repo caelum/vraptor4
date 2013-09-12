@@ -77,7 +77,7 @@ public class CDIRegistry {
 	}
 
 	private Set<Class<?>> getStereotypeHandlers() {			
-		Set<Class<?>> handlers = new HashSet<Class<?>>();
+		Set<Class<?>> handlers = new HashSet<>();
 		for (StereotypeInfo stereotypeInfo : BaseComponents.getStereotypesInfo()) {
 			handlers.add(stereotypeInfo.getStereotypeClass());
 		}

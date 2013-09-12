@@ -18,6 +18,7 @@ package br.com.caelum.vraptor4.deserialization;
 import java.io.InputStream;
 import java.lang.reflect.Method;
 
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 
 import br.com.caelum.vraptor4.controller.ControllerMethod;
@@ -34,17 +35,21 @@ import com.thoughtworks.xstream.XStream;
  * @author Rafael Viana
  * @since 3.0.2
  */
+@RequestScoped
 public class XStreamXMLDeserializer implements XMLDeserializer {
 
-	private final ParameterNameProvider provider;
-	private final XStreamBuilder builder;
+	private ParameterNameProvider provider;
+	private XStreamBuilder builder;
+
+	@Deprecated // CDI eyes only
+	public XStreamXMLDeserializer() {}
 
 	@Inject
 	public XStreamXMLDeserializer(ParameterNameProvider provider, XStreamBuilder builder) {
 		this.provider = provider;
 		this.builder = builder;
 	}
-	
+
 	public Object[] deserialize(InputStream inputStream, ControllerMethod method) {
 		Method javaMethod = method.getMethod();
 		Class<?>[] types = javaMethod.getParameterTypes();
@@ -54,7 +59,7 @@ public class XStreamXMLDeserializer implements XMLDeserializer {
 		XStream xStream = getConfiguredXStream(javaMethod, types);
 
 		Object[] params = new Object[types.length];
-		
+
 		chooseParam(types, params, xStream.fromXML(inputStream));
 
 		return params;
@@ -65,9 +70,9 @@ public class XStreamXMLDeserializer implements XMLDeserializer {
 	 */
 	public XStream getConfiguredXStream(Method javaMethod, Class<?>[] types) {
 		XStream xStream = getXStream();
-		
+
 		xStream.processAnnotations(types);
-		
+
 		aliasParams(javaMethod, types, xStream);
 		return xStream;
 	}
@@ -96,5 +101,5 @@ public class XStreamXMLDeserializer implements XMLDeserializer {
 	protected XStream getXStream() {
 		return builder.xmlInstance();
 	}
-	
+
 }

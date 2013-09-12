@@ -40,7 +40,7 @@ public class VRaptorRequest extends HttpServletRequestWrapper implements Mutable
 
 	private static final Logger logger = LoggerFactory.getLogger(VRaptorRequest.class);
 
-	private final Hashtable<String, String[]> extraParameters = new Hashtable<String, String[]>();
+	private final Hashtable<String, String[]> extraParameters = new Hashtable<>();
 
 	public VRaptorRequest(HttpServletRequest request) {
 		super(request);

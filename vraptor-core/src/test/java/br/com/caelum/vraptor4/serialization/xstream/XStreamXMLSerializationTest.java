@@ -28,6 +28,7 @@ import br.com.caelum.vraptor4.interceptor.DefaultTypeNameExtractor;
 import br.com.caelum.vraptor4.serialization.NullProxyInitializer;
 import br.com.caelum.vraptor4.serialization.Serialization;
 
+import com.google.common.collect.Lists;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 public class XStreamXMLSerializationTest {
@@ -81,7 +82,7 @@ public class XStreamXMLSerializationTest {
 			this.client = client;
 			this.price = price;
 			this.comments = comments;
-			this.items = new ArrayList<Item>(Arrays.asList(items));
+			this.items = Lists.newArrayList(items);;
 		}
 		public String nice() {
 			return "nice output";
@@ -91,7 +92,7 @@ public class XStreamXMLSerializationTest {
 	public static class Properties {
 		Map<String, String> map;
 		public Properties(String key, String value) {
-			map = new HashMap<String, String>(Collections.singletonMap(key, value));
+			map = new HashMap<>(Collections.singletonMap(key, value));
 		}
 	}
 	public static class AdvancedOrder extends Order{
@@ -122,11 +123,11 @@ public class XStreamXMLSerializationTest {
     public void shouldSerializeGenericClass() {
 		String expectedResult = "<genericWrapper>\n  <entityList class=\"list\">\n    <client>\n      <name>washington botelho</name>\n    </client>\n    <client>\n      <name>washington botelho</name>\n    </client>\n  </entityList>\n  <total>2</total>\n</genericWrapper>";
 
-		Collection<Client> entityList = new ArrayList<Client>();
+		Collection<Client> entityList = new ArrayList<>();
 		entityList.add(new Client("washington botelho"));
 		entityList.add(new Client("washington botelho"));
 
-		GenericWrapper<Client> wrapper = new GenericWrapper<Client>(entityList, entityList.size());
+		GenericWrapper<Client> wrapper = new GenericWrapper<>(entityList, entityList.size());
 
         serialization.from(wrapper).include("entityList").serialize();
 

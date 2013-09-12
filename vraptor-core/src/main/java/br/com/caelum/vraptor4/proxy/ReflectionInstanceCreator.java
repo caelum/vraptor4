@@ -62,7 +62,7 @@ public class ReflectionInstanceCreator
     }
 
     private <T> T tryAllConstructors(Class<T> type, Constructor<?>[] constructors) {
-        List<Throwable> problems = new ArrayList<Throwable>();
+        List<Throwable> problems = new ArrayList<>();
 
         for (Constructor<?> constructor : constructors) {
             Class<?>[] parameterTypes = constructor.getParameterTypes();

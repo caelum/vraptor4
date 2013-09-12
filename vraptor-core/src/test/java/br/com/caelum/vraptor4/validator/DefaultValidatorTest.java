@@ -134,7 +134,7 @@ public class DefaultValidatorTest {
 
 	@Test
 	public void shouldAddBeanValidatorErrorsIfPossible() {
-		List<Message> messages = new ArrayList<Message>();
+		List<Message> messages = new ArrayList<>();
 		
 		when(beanValidator.validate(any())).thenReturn(messages);
 		validator.validate(new Object());
@@ -148,7 +148,7 @@ public class DefaultValidatorTest {
 	
 	@Test
 	public void shouldAddBeanValidatorErrorsIfPossibleForSpecificProperties() {
-		List<Message> messages = new ArrayList<Message>();
+		List<Message> messages = new ArrayList<>();
 		
 		when(beanValidator.validateProperties(any())).thenReturn(messages);
 		validator.validateProperties(new Object());

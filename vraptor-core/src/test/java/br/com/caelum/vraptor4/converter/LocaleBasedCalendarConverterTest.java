@@ -108,7 +108,7 @@ public class LocaleBasedCalendarConverterTest {
 		when(request.getAttribute(LOCALE_KEY + ".request")).thenReturn("pt_br");
 		try {
 			converter.convert("a,10/06/2008/a/b/c", Calendar.class, bundle);
-		} catch (ConversionError e) {
+		} catch (ConversionException e) {
 			assertThat(e.getMessage(), is(equalTo("a,10/06/2008/a/b/c is not a valid date.")));
 		}
 	}

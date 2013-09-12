@@ -22,7 +22,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
 
@@ -45,10 +44,9 @@ import br.com.caelum.vraptor4.interceptor.Interceptor;
  * @author filipesabella
  */
 @Intercepts(after=ExecuteMethodInterceptor.class, before=ForwardToDefaultViewInterceptor.class)
-@RequestScoped
 public class DownloadInterceptor implements Interceptor {
 
-    private static final Logger logger = LoggerFactory.getLogger(DownloadInterceptor.class);
+	private static final Logger logger = LoggerFactory.getLogger(DownloadInterceptor.class);
 
 	private HttpServletResponse response;
 	private MethodInfo info;
@@ -75,7 +73,7 @@ public class DownloadInterceptor implements Interceptor {
 
 	@Override
 	public void intercept(InterceptorStack stack, ControllerMethod method, Object instance) throws InterceptionException {
-    	logger.debug("Sending a file to the client");
+		logger.debug("Sending a file to the client");
 
 		Object result = info.getResult();
 
@@ -87,30 +85,34 @@ public class DownloadInterceptor implements Interceptor {
 				throw new NullPointerException("You've just returned a Null Download. Consider redirecting to another page/logic");
 			}
 		}
-		try {
-			Download download = null;
-
-			if (result instanceof InputStream) {
-				InputStream input = (InputStream) result;
-				download = new InputStreamDownload(input, null, null);
-			} else if (result instanceof byte[]) {
-				byte[] bytes = (byte[]) result;
-				download = new ByteArrayDownload(bytes, null, null);
-			} else if (result instanceof File) {
-				File file = (File) result;
-				download = new FileDownload(file, null, null);
-			} else if (result instanceof Download) {
-				download = (Download) result;
-			}
-
-			OutputStream output = response.getOutputStream();
+		
+		try (OutputStream output = response.getOutputStream()) {
+			Download download = resolveDownload(result);
 			download.write(response);
-
 			output.flush();
-			output.close();
 		} catch (IOException e) {
 			throw new InterceptionException(e);
 		}
 
+	}
+
+	private Download resolveDownload(Object result) {
+		if (result instanceof InputStream) {
+			return new InputStreamDownload((InputStream) result, null, null);
+		}
+		
+		if (result instanceof byte[]) {
+			return new ByteArrayDownload((byte[]) result, null, null);
+		}
+		
+		if (result instanceof File) {
+			return new FileDownload((File) result, null, null);
+		} 
+		
+		if (result instanceof Download) {
+			return (Download) result;
+		}
+		
+		return null;
 	}
 }

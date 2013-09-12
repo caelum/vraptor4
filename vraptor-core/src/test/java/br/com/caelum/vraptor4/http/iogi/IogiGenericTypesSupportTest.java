@@ -111,7 +111,7 @@ public class IogiGenericTypesSupportTest {
     @Test
     public void canInstantiatingStringsInAListSettingItsInternalValueWithoutInvokingConverters1() throws Exception {
         final Type type = ContainsParameterizedList.class.getField("listOfString").getGenericType();
-		final Target<List<String>> target = new Target<List<String>>(type, "legLength");
+		final Target<List<String>> target = new Target<>(type, "legLength");
 		final List<String> legs = iogi.instantiate(target , new Parameter("legLength[0]", "small"), new Parameter("legLength[1]", "big"));
         assertThat(legs.get(1), is(equalTo("big")));
     }
@@ -142,7 +142,7 @@ public class IogiGenericTypesSupportTest {
     @Test
     public void canInstantiateAndPopulateAListOfWrappers1() throws Exception {
     	final Type type = ContainsParameterizedList.class.getField("listOfLong").getGenericType();
-		final Target<List<Long>> target = new Target<List<Long>>(type, "eyeColorCode");
+		final Target<List<Long>> target = new Target<>(type, "eyeColorCode");
     	final List<Long> eyeColorCode = iogi.instantiate(target, new Parameter("eyeColorCode[0]", "3"), new Parameter("eyeColorCode[1]", "5"));
         assertThat(eyeColorCode.get(0), is(equalTo(3L)));
         assertThat(eyeColorCode.get(1), is(equalTo(5L)));

@@ -88,7 +88,7 @@ public class Serializee {
 			Class<?> type = getRootClass();
 			return getParentTypes(name, type);
 		} else {
-			Set<Class<?>> result = new HashSet<Class<?>>();
+			Set<Class<?>> result = new HashSet<>();
 			for (Class<?> type : getElementTypes()) {
 				result.addAll(getParentTypes(name, type));
 			}

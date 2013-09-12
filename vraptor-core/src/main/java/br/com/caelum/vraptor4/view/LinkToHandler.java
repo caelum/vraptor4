@@ -97,7 +97,7 @@ public class LinkToHandler extends ForwardingMap<Class<?>, Object> {
 		private final Class<?> controller;
 
 		public Linker(Class<?> controller, String methodName) {
-			this(controller, methodName, new ArrayList<Object>());
+			this(controller, methodName, new ArrayList<>());
 		}
 
 		public Linker(Class<?> controller, String methodName, List<Object> args) {
@@ -108,7 +108,7 @@ public class LinkToHandler extends ForwardingMap<Class<?>, Object> {
 
 		@Override
 		public Linker get(Object key) {
-			List<Object> newArgs = new ArrayList<Object>(args);
+			List<Object> newArgs = new ArrayList<>(args);
 			newArgs.add(key);
 			return new Linker(controller, methodName, newArgs);
 		}

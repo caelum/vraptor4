@@ -50,7 +50,7 @@ public class DefaultValidator extends AbstractValidator {
     private static final Logger logger = LoggerFactory.getLogger(DefaultValidator.class);
 
     private Result result;
-	private List<Message> errors = new ArrayList<Message>();
+	private List<Message> errors = new ArrayList<>();
 	private ValidationViewsFactory viewsFactory;
 	private BeanValidator beanValidator;
 	private Outjector outjector;

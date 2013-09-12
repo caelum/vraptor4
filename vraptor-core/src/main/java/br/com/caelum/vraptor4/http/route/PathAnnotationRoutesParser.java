@@ -43,6 +43,7 @@ import br.com.caelum.vraptor4.Post;
 import br.com.caelum.vraptor4.Put;
 import br.com.caelum.vraptor4.controller.BeanClass;
 import br.com.caelum.vraptor4.controller.HttpMethod;
+import br.com.caelum.vraptor4.util.StringUtils;
 
 import com.google.common.base.Predicate;
 
@@ -88,7 +89,7 @@ public class PathAnnotationRoutesParser implements RoutesParser {
 	protected List<Route> registerRulesFor(Class<?> baseType) {
 		EnumSet<HttpMethod> typeMethods = getHttpMethods(baseType);
 
-		List<Route> routes = new ArrayList<Route>();
+		List<Route> routes = new ArrayList<>();
 		for (Method javaMethod : baseType.getMethods()) {
 			if (isEligible(javaMethod)) {
 				String[] uris = getURIsFor(javaMethod, baseType);
@@ -207,7 +208,7 @@ public class PathAnnotationRoutesParser implements RoutesParser {
 	protected String extractControllerNameFrom(Class<?> type) {
 		String prefix = extractPrefix(type);
 		if ("".equals(prefix)) {
-			String baseName = lowerFirstCharacter(type.getSimpleName());
+			String baseName = StringUtils.lowercaseFirst(type.getSimpleName());
 			if (baseName.endsWith("Controller")) {
 				return "/" + baseName.substring(0, baseName.lastIndexOf("Controller"));
 			}
@@ -225,9 +226,6 @@ public class PathAnnotationRoutesParser implements RoutesParser {
 		return controllerName + "/" + methodName;
 	}
 
-	protected String lowerFirstCharacter(String baseName) {
-		return baseName.toLowerCase().substring(0, 1) + baseName.substring(1, baseName.length());
-	}
 
 	private Predicate<Annotation> instanceOfMethodAnnotation() {
 		return or(instanceOf(Get.class), instanceOf(Post.class), instanceOf(Put.class), instanceOf(Delete.class));

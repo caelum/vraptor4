@@ -26,8 +26,8 @@ public class Contexts {
 	@Inject
 	private BoundConversationContext conversationContext;
 	
-	private Map<String, Object> sessionMap = new HashMap<String, Object>();;
-	private Map<String, Object> requestMap = new HashMap<String, Object>();;
+	private Map<String, Object> sessionMap = new HashMap<>();;
+	private Map<String, Object> requestMap = new HashMap<>();;
 
 	void startApplicationScope() {
 		// Welds ApplicationContext is always active
@@ -51,7 +51,7 @@ public class Contexts {
 			sessionContext.invalidate();
 			sessionContext.deactivate();
 			sessionContext.dissociate(sessionMap);
-			sessionMap = new HashMap<String, Object>();
+			sessionMap = new HashMap<>();
 		}
 	}
 
@@ -78,7 +78,7 @@ public class Contexts {
 			requestContext.invalidate();
 			requestContext.deactivate();
 			requestContext.dissociate(requestMap);
-			requestMap = new HashMap<String, Object>();
+			requestMap = new HashMap<>();
 		}
 	}
 }

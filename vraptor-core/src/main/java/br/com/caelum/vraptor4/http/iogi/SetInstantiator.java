@@ -56,6 +56,6 @@ public class SetInstantiator implements Instantiator<Set<Object>> {
 			return null;
 		}
 
-		return new HashSet<Object>(list);
+		return new HashSet<>(list);
 	}
 }

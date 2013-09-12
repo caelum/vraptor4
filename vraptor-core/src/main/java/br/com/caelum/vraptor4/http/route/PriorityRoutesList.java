@@ -42,14 +42,14 @@ public class PriorityRoutesList implements Collection<Route> {
 	private Lock cacheLock = new ReentrantLock();
 
 	public PriorityRoutesList() {
-		map = new TreeMap<Integer, Set<Route>>();
+		map = new TreeMap<>();
 	}
 
 	private List<Route> getFullList() {
 		try {
 			cacheLock.lock();
 			if (cache == null) {
-				cache = new LinkedList<Route>();
+				cache = new LinkedList<>();
 				for (Entry<Integer, Set<Route>> entry : map.entrySet()) {
 					cache.addAll(entry.getValue());
 				}

@@ -22,11 +22,11 @@ package br.com.caelum.vraptor4.converter;
  *
  * @author guilherme silveira
  */
-public class ConversionError extends Error {
+public class ConversionException extends IllegalArgumentException {
 
 	private static final long serialVersionUID = 8817715363221616696L;
 
-	public ConversionError(String msg) {
+	public ConversionException(String msg) {
 		super(msg);
 	}
 

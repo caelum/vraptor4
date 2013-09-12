@@ -40,6 +40,9 @@ import br.com.caelum.vraptor4.controller.DefaultControllerMethod;
 import br.com.caelum.vraptor4.controller.HttpMethod;
 import br.com.caelum.vraptor4.http.MutableRequest;
 import br.com.caelum.vraptor4.interceptor.VRaptorMatchers;
+import br.com.caelum.vraptor4.proxy.JavassistProxifier;
+import br.com.caelum.vraptor4.proxy.ObjenesisInstanceCreator;
+import br.com.caelum.vraptor4.proxy.Proxifier;
 
 import com.google.common.collect.Sets;
 
@@ -48,11 +51,17 @@ public class FixedMethodStrategyTest {
 	private @Mock MutableRequest request;
 	private @Mock ParametersControl control;
 	private ControllerMethod list;
+	private Proxifier proxifier;
+	private EnumSet<HttpMethod> get;
+	private EnumSet<HttpMethod> post;
 
 	@Before
 	public void setup() {
 		MockitoAnnotations.initMocks(this);
 		list = DefaultControllerMethod.instanceFor(MyControl.class, method("list"));
+		get = EnumSet.of(HttpMethod.GET);
+		post = EnumSet.of(HttpMethod.POST);
+		proxifier = new JavassistProxifier(new ObjenesisInstanceCreator());
 	}
 
 	@Test
@@ -67,10 +76,10 @@ public class FixedMethodStrategyTest {
 
 	@Test
 	public void areEquals() throws Exception {
-		FixedMethodStrategy first = new FixedMethodStrategy("/uri", list, EnumSet.of(HttpMethod.GET), control, 0, new String[0]);
-		FixedMethodStrategy second = new FixedMethodStrategy("/uri", list, EnumSet.of(HttpMethod.GET), control, 2, new String[0]);
-		FixedMethodStrategy third = new FixedMethodStrategy("/different", list, EnumSet.of(HttpMethod.GET), control, 2, new String[0]);
-		FixedMethodStrategy forth = new FixedMethodStrategy("/uri", list, EnumSet.of(HttpMethod.POST), control, 2, new String[0]);
+		FixedMethodStrategy first = new FixedMethodStrategy("/uri", list, get, control, 0, new String[0]);
+		FixedMethodStrategy second = new FixedMethodStrategy("/uri", list, get, control, 2, new String[0]);
+		FixedMethodStrategy third = new FixedMethodStrategy("/different", list, get, control, 2, new String[0]);
+		FixedMethodStrategy forth = new FixedMethodStrategy("/uri", list, post, control, 2, new String[0]);
 
 		assertThat(first, equalTo(second));
 		assertThat(first, not(equalTo(third)));
@@ -81,6 +90,7 @@ public class FixedMethodStrategyTest {
 		return Sets.newHashSet(method);
 	}
 
+	@SuppressWarnings("rawtypes")
 	private Method method(String name, Class... types) {
 		try {
 			return MyControl.class.getDeclaredMethod(name, types);

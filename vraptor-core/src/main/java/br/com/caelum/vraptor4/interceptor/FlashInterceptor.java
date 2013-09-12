@@ -68,9 +68,14 @@ public class FlashInterceptor implements Interceptor {
 	@Override
 	public void intercept(InterceptorStack stack, ControllerMethod method, Object controllerInstance)
 			throws InterceptionException {
-		@SuppressWarnings("unchecked")
-		Map<String, Object> parameters = (Map<String, Object>) session.getAttribute(FLASH_INCLUDED_PARAMETERS);
-		if (parameters != null) {
+		if (session.getAttribute(FLASH_INCLUDED_PARAMETERS) != null) {			
+			// TODO: concurrent modification exception if the same user makes two requests here
+			// but we dont want to add a syncrhonozed(session). not yet.
+			
+			
+			@SuppressWarnings("unchecked")
+			Map<String, Object> parameters = (Map<String, Object>) session.getAttribute(FLASH_INCLUDED_PARAMETERS);
+			
 			session.removeAttribute(FLASH_INCLUDED_PARAMETERS);
 			for (Entry<String, Object> parameter : parameters.entrySet()) {
 				result.include(parameter.getKey(), parameter.getValue());

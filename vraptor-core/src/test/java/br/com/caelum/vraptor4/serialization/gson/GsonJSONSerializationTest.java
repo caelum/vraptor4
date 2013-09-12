@@ -20,8 +20,6 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
-import org.hibernate.proxy.HibernateProxy;
-import org.hibernate.proxy.LazyInitializer;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -31,6 +29,7 @@ import br.com.caelum.vraptor4.serialization.NullProxyInitializer;
 import br.com.caelum.vraptor4.serialization.gson.adapters.CalendarSerializer;
 
 import com.google.common.collect.ForwardingCollection;
+import com.google.common.collect.Lists;
 import com.google.gson.ExclusionStrategy;
 import com.google.gson.FieldAttributes;
 import com.google.gson.JsonElement;
@@ -112,7 +111,7 @@ public class GsonJSONSerializationTest {
 			this.client = client;
 			this.price = price;
 			this.comments = comments;
-			this.items = new ArrayList<Item>(Arrays.asList(items));
+			this.items = Lists.newArrayList(items);
 		}
 
 		public String nice() {
@@ -162,11 +161,11 @@ public class GsonJSONSerializationTest {
 	public void shouldSerializeGenericClass() {
 		String expectedResult = "{\"genericWrapper\":{\"entityList\":[{\"name\":\"washington botelho\"},{\"name\":\"washington botelho\"}],\"total\":2}}";
 
-		Collection<Client> entityList = new ArrayList<Client>();
+		Collection<Client> entityList = new ArrayList<>();
 		entityList.add(new Client("washington botelho"));
 		entityList.add(new Client("washington botelho"));
 
-		GenericWrapper<Client> wrapper = new GenericWrapper<Client>(entityList, entityList.size());
+		GenericWrapper<Client> wrapper = new GenericWrapper<>(entityList, entityList.size());
 
 		// serialization.from(wrapper).include("entityList").include("entityList.name").serialize();
 		serialization.from(wrapper).include("entityList").serialize();
@@ -390,48 +389,6 @@ public class GsonJSONSerializationTest {
 		return new String(stream.toByteArray());
 	}
 
-	public static class SomeProxy extends Client implements HibernateProxy {
-		private static final long serialVersionUID = 1L;
-
-		private String aField;
-
-		private transient LazyInitializer initializer;
-
-		public SomeProxy(LazyInitializer initializer) {
-			super("name");
-			this.initializer = initializer;
-		}
-
-		public LazyInitializer getHibernateLazyInitializer() {
-			return initializer;
-		}
-
-		public String getaField() {
-			return aField;
-		}
-
-		public Object writeReplace() {
-			return this;
-		}
-
-	}
-
-	@Test
-	public void shouldRunHibernateLazyInitialization() throws Exception {
-		LazyInitializer initializer = mock(LazyInitializer.class);
-
-		SomeProxy proxy = new SomeProxy(initializer);
-		proxy.name = "my name";
-		proxy.aField = "abc";
-
-		when(initializer.getPersistentClass()).thenReturn(Client.class);
-		when(proxy.getHibernateLazyInitializer().getImplementation()).thenReturn(proxy);
-
-		serialization.from(proxy).serialize();
-
-		assertThat(result(), is("{\"someProxy\":{\"aField\":\"abc\",\"name\":\"my name\"}}"));
-	}
-
 	static class MyCollection extends ForwardingCollection<Order> {
 		@Override
 		protected Collection<Order> delegate() {
@@ -451,7 +408,7 @@ public class GsonJSONSerializationTest {
 	public void shouldUseCollectionConverterWhenItExists() {
 		String expectedResult = "[\"testing\"]";
 
-		List<JsonSerializer<?>> adapters = new ArrayList<JsonSerializer<?>>();
+		List<JsonSerializer<?>> adapters = new ArrayList<>();
 		adapters.add(new CollectionSerializer());
 
 		GsonJSONSerialization serialization = new GsonJSONSerialization(response, extractor, initializer,
@@ -463,7 +420,7 @@ public class GsonJSONSerializationTest {
 
 	@Test
 	public void shouldSerializeCalendarLikeXstream() {
-		List<JsonSerializer<?>> adapters = new ArrayList<JsonSerializer<?>>();
+		List<JsonSerializer<?>> adapters = new ArrayList<>();
 		adapters.add(new CalendarSerializer());
 
 		GsonJSONSerialization serialization = new GsonJSONSerialization(response, extractor, initializer,
@@ -484,7 +441,7 @@ public class GsonJSONSerializationTest {
 
 	@Test
 	public void shouldExcludeAttributeUsingExclusionStrategy() {
-		List<ExclusionStrategy> exclusions = new ArrayList<ExclusionStrategy>();
+		List<ExclusionStrategy> exclusions = new ArrayList<>();
 		exclusions.add(new ClientAddressExclusion());
 
 		GsonJSONSerialization serialization = new GsonJSONSerialization(response, extractor, initializer,

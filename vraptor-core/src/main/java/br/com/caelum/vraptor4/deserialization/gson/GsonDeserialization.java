@@ -1,6 +1,7 @@
 package br.com.caelum.vraptor4.deserialization.gson;
 
 import static com.google.common.base.Objects.firstNonNull;
+import static com.google.common.base.Strings.isNullOrEmpty;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -67,23 +68,25 @@ public class GsonDeserialization implements Deserializer {
 		try {
 			String content = getContentOfStream(inputStream);
 			logger.debug("json retrieved: {}", content);
-
-			JsonParser parser = new JsonParser();
-			JsonObject root = (JsonObject) parser.parse(content);
-
-			for (int i = 0; i < types.length; i++) {
-				String name = parameterNames[i];
-				JsonElement node = root.get(name);
-				
-				if (isWithoutRoot(types, node)) {
-					params[i] = gson.fromJson(root, types[i]);
-					logger.info("json without root deserialized");
+			
+			if (!isNullOrEmpty(content)) {
+				JsonParser parser = new JsonParser();
+				JsonObject root = (JsonObject) parser.parse(content);
+	
+				for (int i = 0; i < types.length; i++) {
+					String name = parameterNames[i];
+					JsonElement node = root.get(name);
 					
-				} else if (node != null) {
-					params[i] = gson.fromJson(node, types[i]);
+					if (isWithoutRoot(types, node)) {
+						params[i] = gson.fromJson(root, types[i]);
+						logger.info("json without root deserialized");
+						
+					} else if (node != null) {
+						params[i] = gson.fromJson(node, types[i]);
+					}
+					
+					logger.debug("json deserialized: {}", params[i]);
 				}
-				
-				logger.debug("json deserialized: {}", params[i]);
 			}
 		} catch (Exception e) {
 			throw new ResultException("Unable to deserialize data", e);

@@ -6,7 +6,6 @@ import static com.google.common.base.Strings.isNullOrEmpty;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Collection;
@@ -54,16 +53,15 @@ public class GsonDeserialization implements Deserializer {
 	}
 
 	public Object[] deserialize(InputStream inputStream, ControllerMethod method) {
-		Method jMethod = method.getMethod();
-		Class<?>[] types = jMethod.getParameterTypes();
+		Class<?>[] types = getTypes(method);
 		if (types.length == 0) {
 			throw new IllegalArgumentException("Methods that consumes representations must receive just one argument");
 		}
 
 		Gson gson = getGson();
-
+		
 		Object[] params = new Object[types.length];
-		String[] parameterNames = paramNameProvider.parameterNamesFor(jMethod);
+		String[] parameterNames = paramNameProvider.parameterNamesFor(method.getMethod());
 
 		try {
 			String content = getContentOfStream(inputStream);
@@ -132,5 +130,40 @@ public class GsonDeserialization implements Deserializer {
 				return false;
 		}
 		return true;
+	}
+
+	protected Class<?>[] getTypes(ControllerMethod method) {
+		Class<?>[] parameterTypes = method.getMethod().getParameterTypes();
+		Type genericType = getGenericSuperClass(method);
+		if (genericType != null) {
+			return parseGenericParameters(parameterTypes, genericType);
+		}
+
+		return parameterTypes;
+	}
+
+	private Class<?>[] parseGenericParameters(Class<?>[] parameterTypes,
+			Type genericType) {
+		Class<?> type = (Class<?>) getGenericType(genericType);
+		for (int i = 0; i < parameterTypes.length; i++) {
+			if (parameterTypes[i].isAssignableFrom(type)) {
+				parameterTypes[i] = type;
+			}
+		}
+		return parameterTypes;
+	}
+
+	private Type getGenericSuperClass(ControllerMethod method) {
+		Type genericType = method.getController().getType().getGenericSuperclass();
+		if (genericType instanceof ParameterizedType) {
+			return genericType;
+		}
+
+		return null;
+	}
+
+	private Type getGenericType(Type type) {
+		ParameterizedType paramType = (ParameterizedType) type;
+		return paramType.getActualTypeArguments()[0];
 	}
 }

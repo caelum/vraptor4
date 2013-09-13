@@ -1,38 +1,39 @@
 package br.com.caelum.vraptor4.http;
 
-import static br.com.caelum.vraptor4.config.BasicConfiguration.ENCODING;
-import static org.hamcrest.Matchers.instanceOf;
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
-import javax.servlet.ServletContext;
-
 import org.junit.Before;
 import org.junit.Test;
 
+import br.com.caelum.vraptor4.config.BasicConfiguration;
+import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.is;
+
+import static org.junit.Assert.assertThat;
+
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 public class EncodingHandlerFactoryTest {
 
-    private ServletContext context;
+    private BasicConfiguration configuration;
 
     @Before
     public void setUp() throws Exception {
-        context = mock(ServletContext.class);
+        configuration = mock(BasicConfiguration.class);
     }
 
     @Test
-    public void shouldReturnANullHandlerWhenThereIsNoEncodingInitParameter() throws Exception {
-        when(context.getInitParameter(ENCODING)).thenReturn(null);
+    public void shouldReturnAUTF8HandlerWhenThereIsNoEncodingInitParameter() throws Exception {
+        when(configuration.getEncoding()).thenReturn(null);
         
-        EncodingHandlerFactory handlerFactory = new EncodingHandlerFactory(context);
-        assertThat(handlerFactory.getInstance(), is(instanceOf(NullEncodingHandler.class)));
+        EncodingHandlerFactory handlerFactory = new EncodingHandlerFactory(configuration);
+        assertThat(handlerFactory.getInstance(), is(instanceOf(UTF8EncodingHandler.class)));
     }
     @Test
     public void shouldReturnAWebXmlHandlerWhenThereIsAnEncodingInitParameter() throws Exception {
-        when(context.getInitParameter(ENCODING)).thenReturn("UTF-8");
+    	when(configuration.getEncoding()).thenReturn("UTF-8");
         
-        EncodingHandlerFactory handlerFactory = new EncodingHandlerFactory(context);
+        EncodingHandlerFactory handlerFactory = new EncodingHandlerFactory(configuration);
         assertThat(handlerFactory.getInstance(), is(instanceOf(WebXmlEncodingHandler.class)));
-    }
+    }    
+    
 }

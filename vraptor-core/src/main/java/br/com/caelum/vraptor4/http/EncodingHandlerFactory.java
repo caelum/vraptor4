@@ -20,13 +20,12 @@ package br.com.caelum.vraptor4.http;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
-import javax.servlet.ServletContext;
 
 import br.com.caelum.vraptor4.config.BasicConfiguration;
 
 /**
  * Create an instance for {@link EncodingHandler}. If {@link BasicConfiguration#ENCODING} is defined into web.xml,
- * the {@link WebXmlEncodingHandler} instance is created, otherwise {@link NullEncodingHandler} is created.
+ * the {@link WebXmlEncodingHandler} instance is created, otherwise {@link UTF8EncodingHandler} is created.
  * 
  * @author Lucas Cavalcanti
  */
@@ -41,9 +40,9 @@ public class EncodingHandlerFactory{
 	}
 	
 	@Inject
-	public EncodingHandlerFactory(ServletContext context) {
-		String encoding = new BasicConfiguration(context).getEncoding();
-		this.handler = (encoding == null) ? new NullEncodingHandler() : new WebXmlEncodingHandler(encoding);
+	public EncodingHandlerFactory(BasicConfiguration configuration) {
+		String encoding = configuration.getEncoding();
+		this.handler = (encoding == null) ? new UTF8EncodingHandler() : new WebXmlEncodingHandler(encoding);
 	}
 	
 	@Produces @javax.enterprise.context.ApplicationScoped

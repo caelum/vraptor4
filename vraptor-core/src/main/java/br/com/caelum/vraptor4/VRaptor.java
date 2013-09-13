@@ -41,7 +41,7 @@ import br.com.caelum.vraptor4.events.VRaptorInitialized;
 import br.com.caelum.vraptor4.http.EncodingHandler;
 import br.com.caelum.vraptor4.http.VRaptorRequest;
 import br.com.caelum.vraptor4.http.VRaptorResponse;
-import br.com.caelum.vraptor4.interceptor.ControllerInvocationException;
+import br.com.caelum.vraptor4.interceptor.ApplicationLogicException;
 import br.com.caelum.vraptor4.ioc.Container;
 import br.com.caelum.vraptor4.ioc.ContainerProvider;
 
@@ -110,10 +110,10 @@ public class VRaptor implements Filter {
 
 			try {
 				provider.provideForRequest(request, execution);
-			} catch (ControllerInvocationException e) {
+			} catch (ApplicationLogicException e) {
 				// it is a business logic exception, we dont need to show
 				// all interceptors stack trace
-				throw new ServletException("Your controller threw an exception", e.getCause());
+				throw new ServletException(e.getMessage(), e.getCause());
 			}
 
 			logger.debug("VRaptor ended the request");

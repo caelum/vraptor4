@@ -2,7 +2,13 @@ package br.com.caelum.vraptor4.serialization.gson;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
+
+import javax.enterprise.context.Dependent;
+
+import br.com.caelum.vraptor4.serialization.xstream.Serializee;
 
 import com.google.gson.ExclusionStrategy;
 import com.google.gson.Gson;
@@ -14,22 +20,20 @@ import com.google.gson.JsonSerializer;
  * @author Renan Reis
  * @author Guilherme Mangabeira
  */
+@Dependent
+public class VRaptorGsonBuilder {
 
-public class VraptorGsonBuilder {
+	private boolean withoutRoot;
+	private String alias;
+	
+	protected final GsonBuilder builder = new GsonBuilder();
+	private final Collection<JsonSerializer> serializers;
+	private final Collection<ExclusionStrategy> exclusions;
 
-	protected GsonBuilder					builder	= new GsonBuilder();
-
-	private boolean							withoutRoot;
-
-	private String							alias;
-
-	private Collection<JsonSerializer<?>>	serializers;
-
-	private Collection<ExclusionStrategy>	exclusions;
-
-	public VraptorGsonBuilder(Collection<JsonSerializer<?>> serializers, Collection<ExclusionStrategy> exclusions) {
+	public VRaptorGsonBuilder(List<JsonSerializer> serializers, Serializee serializee) {
 		this.serializers = serializers;
-		this.exclusions = exclusions;
+		ExclusionStrategy exclusion = new Exclusions(serializee);
+		this.exclusions = Arrays.asList(exclusion);
 	}
 
 	public boolean isWithoutRoot() {

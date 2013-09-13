@@ -41,6 +41,7 @@ public class MockHttpServletResponse implements HttpServletResponse {
 	private PrintWriter writer;
 	private String contentType;
 	private ByteArrayOutputStream content =  new ByteArrayOutputStream();
+	private int status;
 	
 	public PrintWriter getWriter() {
 		if (this.writer == null) {
@@ -60,198 +61,129 @@ public class MockHttpServletResponse implements HttpServletResponse {
 	public void setContentType(String type) {
 		this.contentType = type;
 	}
-	/**
-	 * TODO Not implemented
-	 */
+
 	public String getCharacterEncoding() {
 		return null;
 	}
-	/**
-	 * TODO Not implemented
-	 */
+
 	public ServletOutputStream getOutputStream() throws IOException {
 		return null;
 	}
-	/**
-	 * TODO Not implemented
-	 */
+
 	public void setCharacterEncoding(String charset) {
 	}
-	
-	/**
-	 * TODO Not implemented
-	 */
+
 	public void setContentLength(int len) {
 	}
-	/**
-	 * TODO Not implemented
-	 */
+
 	public void setBufferSize(int size) {
 	}
 	
-	/**
-	 * TODO Not implemented
-	 */
 	public int getBufferSize() {
 		return 0;
 	}
-	/**
-	 * TODO Not implemented
-	 */
+
 	public void flushBuffer() throws IOException {
 	}
-	/**
-	 * TODO Not implemented
-	 */
+
 	public void resetBuffer() {
 	}
-	/**
-	 * TODO Not implemented
-	 */
+
 	public boolean isCommitted() {
 		return false;
 	}
-	/**
-	 * TODO Not implemented
-	 */
+
 	public void reset() {
 	}
-	/**
-	 * TODO Not implemented
-	 */
+
 	public void setLocale(Locale loc) {
 	}
-	/**
-	 * TODO Not implemented
-	 */
+
 	public Locale getLocale() {
 		return null;
 	}
-	/**
-	 * TODO Not implemented
-	 */
+
 	public void addCookie(Cookie cookie) {
 		
 	}
-	/**
-	 * TODO Not implemented
-	 */
+
 	public boolean containsHeader(String name) {
 		return false;
 	}
-	/**
-	 * TODO Not implemented
-	 */
+
 	public String encodeURL(String url) {
 		return null;
 	}
-	/**
-	 * TODO Not implemented
-	 */
+	
 	public String encodeRedirectURL(String url) {
 		return null;
 	}
-	/**
-	 * TODO Not implemented
-	 */
+
 	public String encodeUrl(String url) {
 		return null;
 	}
-	/**
-	 * TODO Not implemented
-	 */
+
 	public String encodeRedirectUrl(String url) {
 		return null;
 	}
-	/**
-	 * TODO Not implemented
-	 */
+
 	public void sendError(int sc, String msg) throws IOException {
 		
 	}
-	/**
-	 * TODO Not implemented
-	 */
+
 	public void sendError(int sc) throws IOException {
 		
 	}
-	/**
-	 * TODO Not implemented
-	 */
+
 	public void sendRedirect(String location) throws IOException {
 		
 	}
-	/**
-	 * TODO Not implemented
-	 */
+
 	public void setDateHeader(String name, long date) {
 		
 	}
-	/**
-	 * TODO Not implemented
-	 */
+
 	public void addDateHeader(String name, long date) {
 		
 	}
-	/**
-	 * TODO Not implemented
-	 */
+	
 	public void setHeader(String name, String value) {
 		
 	}
-	/**
-	 * TODO Not implemented
-	 */
+	
 	public void addHeader(String name, String value) {
 		
 	}
-	/**
-	 * TODO Not implemented
-	 */
+	
 	public void setIntHeader(String name, int value) {
 		
 	}
-	/**
-	 * TODO Not implemented
-	 */
+	
 	public void addIntHeader(String name, int value) {
 		
 	}
-	/**
-	 * TODO Not implemented
-	 */
+	
 	public void setStatus(int sc) {
-		
+		this.status = sc;
 	}
-	/**
-	 * TODO Not implemented
-	 */
+	
 	public void setStatus(int sc, String sm) {
 		
 	}
-	/**
-	 * TODO Not implemented
-	 */
+	
 	public int getStatus() {
-		return 0;
+		return status;
 	}
-	/**
-	 * TODO Not implemented
-	 */
+	
 	public String getHeader(String name) {
 		return null;
 	}
-	/**
-	 * TODO Not implemented
-	 */
+	
 	public Collection<String> getHeaders(String name) {
 		return null;
 	}
-	/**
-	 * TODO Not implemented
-	 */
+	
 	public Collection<String> getHeaderNames() {
 		return null;
 	}
-
 }

@@ -114,9 +114,6 @@ public class XStreamXmlDeserializerTest {
 		Calendar birthday = new GregorianCalendar(2013, 6, 23, 17, 14, 14);
 		birthday.setTimeZone(TimeZone.getTimeZone("GMT-0300"));
 		
-		System.out.println(birthday);
-		System.out.println(((Dog) deserialized[0]).birthday);
-
 		assertThat(deserialized.length, is(1));
 		assertThat(deserialized[0], is(instanceOf(Dog.class)));
 		

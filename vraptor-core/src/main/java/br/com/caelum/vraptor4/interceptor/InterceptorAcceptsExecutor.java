@@ -22,15 +22,17 @@ public class InterceptorAcceptsExecutor implements StepExecutor<Boolean>{
 	}
 
 	public boolean accept(Class<?> interceptorClass) {
-		InternalAcceptsSignature internalAcceptsSignature = new InternalAcceptsSignature(
-				new NoStackParameterSignatureAcceptor());
-		if (method != null) {
-			if (!internalAcceptsSignature.accepts(method)) {
-				throw new VRaptorException(internalAcceptsSignature.errorMessage());
-			}
-			return true;
+		if (method == null) return false;
+
+		if(!method.getReturnType().equals(Boolean.class)
+				&& !method.getReturnType().equals(boolean.class)) {
+			throw new VRaptorException("@Accepts method must return boolean");
 		}
-		return false;
+		SignatureAcceptor acceptor = new NoStackParameterSignatureAcceptor();
+		if (!acceptor.accepts(method)) {
+			throw new VRaptorException(acceptor.errorMessage());
+		}
+		return true;
 	}
 
 	public Boolean execute(Object interceptor) {

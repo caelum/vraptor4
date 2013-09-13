@@ -17,15 +17,12 @@ import com.google.gson.JsonSerializer;
 
 public class VraptorGsonBuilder {
 
-	protected GsonBuilder					builder	= new GsonBuilder();
-
-	private boolean							withoutRoot;
-
-	private String							alias;
-
-	private Collection<JsonSerializer<?>>	serializers;
-
-	private Collection<ExclusionStrategy>	exclusions;
+	private boolean withoutRoot;
+	private String alias;
+	
+	protected final GsonBuilder builder = new GsonBuilder();
+	private final Collection<JsonSerializer<?>> serializers;
+	private final Collection<ExclusionStrategy> exclusions;
 
 	public VraptorGsonBuilder(Collection<JsonSerializer<?>> serializers, Collection<ExclusionStrategy> exclusions) {
 		this.serializers = serializers;

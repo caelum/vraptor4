@@ -45,15 +45,11 @@ import com.google.gson.Gson;
 
 public class GsonSerializer implements SerializerBuilder {
 
-	private final Writer			writer;
-
-	private final TypeNameExtractor	extractor;
-
-	private final ProxyInitializer	initializer;
-
-	private final Serializee		serializee	= new Serializee();
-
-	protected VraptorGsonBuilder	builder;
+	private final Writer writer;
+	private final TypeNameExtractor extractor;
+	private final ProxyInitializer initializer;
+	private final Serializee serializee = new Serializee();
+	protected VraptorGsonBuilder builder;
 
 	public GsonSerializer(VraptorGsonBuilder builder, Writer writer, TypeNameExtractor extractor,
 			ProxyInitializer initializer) {

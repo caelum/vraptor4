@@ -11,12 +11,15 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import javax.enterprise.context.Dependent;
+
 import net.vidageek.mirror.dsl.Mirror;
 
 import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Sets;
 
+@Dependent
 public class Serializee {
 	private Object root;
 	private Class<?> rootClass;

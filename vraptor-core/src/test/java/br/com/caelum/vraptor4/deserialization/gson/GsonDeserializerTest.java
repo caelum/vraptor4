@@ -1,18 +1,25 @@
 package br.com.caelum.vraptor4.deserialization.gson;
 
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+
+import javax.servlet.http.HttpServletRequest;
+
+import net.vidageek.mirror.dsl.Mirror;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -23,6 +30,7 @@ import br.com.caelum.vraptor4.controller.DefaultBeanClass;
 import br.com.caelum.vraptor4.controller.DefaultControllerMethod;
 import br.com.caelum.vraptor4.core.Localization;
 import br.com.caelum.vraptor4.http.ParameterNameProvider;
+import br.com.caelum.vraptor4.view.GenericController;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
@@ -38,15 +46,17 @@ public class GsonDeserializerTest {
 	private ControllerMethod jump;
 	private ControllerMethod woof;
 	private ControllerMethod dropDead;
+	private HttpServletRequest request;
 
 	@Before
 	public void setUp() throws Exception {
 		provider = mock(ParameterNameProvider.class);
 		localization = mock(Localization.class);
+		request = mock(HttpServletRequest.class);
 
 		when(localization.getLocale()).thenReturn(new Locale("pt", "BR"));
 
-		deserializer = new GsonDeserialization(provider, Collections.<JsonDeserializer<?>> emptyList());
+		deserializer = new GsonDeserialization(provider, Collections.<JsonDeserializer> emptyList(), request);
 		BeanClass controllerClass = new DefaultBeanClass(DogController.class);
 
 		woof = new DefaultControllerMethod(controllerClass, DogController.class.getDeclaredMethod("woof"));
@@ -101,7 +111,6 @@ public class GsonDeserializerTest {
 		InputStream stream = new ByteArrayInputStream("{'dog':{'name':'Brutus','age':7}}".getBytes());
 
 		when(provider.parameterNamesFor(bark.getMethod())).thenReturn(new String[] { "dog" });
-		when(provider.parameterNamesFor(bark.getMethod())).thenReturn(new String[] { "dog" });
 
 		Object[] deserialized = deserializer.deserialize(stream, bark);
 
@@ -113,11 +122,26 @@ public class GsonDeserializerTest {
 	}
 
 	@Test
+	public void shouldBeAbleToDeserializeADogWithoutRoot() throws Exception {
+		InputStream stream = new ByteArrayInputStream("{'name':'Brutus','age':7}".getBytes());
+
+		when(provider.parameterNamesFor(bark.getMethod())).thenReturn(new String[] { "dog" });
+
+		Object[] deserialized = deserializer.deserialize(stream, bark);
+
+		assertThat(deserialized.length, is(1));
+		assertThat(deserialized[0], is(instanceOf(Dog.class)));
+		Dog dog = (Dog) deserialized[0];
+		assertThat(dog.name, is("Brutus"));
+		assertThat(dog.age, is(7));
+	}
+	
+	@Test
 	public void shouldBeAbleToDeserializeADogWithDeserializerAdapter() throws Exception {
-		List<JsonDeserializer<?>> deserializers = new ArrayList<>();
+		List<JsonDeserializer> deserializers = new ArrayList<>();
 		deserializers.add(new DogDeserializer());
 
-		deserializer = new GsonDeserialization(provider, deserializers);
+		deserializer = new GsonDeserialization(provider, deserializers, request);
 
 		InputStream stream = new ByteArrayInputStream("{'dog':{'name':'Renan Reis','age':'0'}}".getBytes());
 
@@ -178,4 +202,123 @@ public class GsonDeserializerTest {
 		assertThat(dog.age, is(7));
 	}
 
+	@Test
+	public void shouldHonorRequestHeaderAcceptCharset() throws Exception {
+		InputStream stream = new ByteArrayInputStream("{'pet':{'name':'Ã§'}}".getBytes("ISO-8859-1"));
+		when(provider.parameterNamesFor(bark.getMethod())).thenReturn(new String[] { "pet" });
+
+		when(request.getHeader("Accept-Charset")).thenReturn("UTF-8,*;q=0.5");
+		Object[] deserialized = deserializer.deserialize(stream, bark);
+
+		assertThat(deserialized.length, is(1));
+		assertThat(deserialized[0], is(instanceOf(Dog.class)));
+
+		Dog dog = (Dog) deserialized[0];
+
+		assertThat(dog.name, is("ç"));
+	}
+
+	@Test
+	public void whenNoCharsetHeaderIsFoundThanAssumeItIsUTF8() throws Exception {
+		InputStream stream = new ByteArrayInputStream("{'pet':{'name':'Ã§'}}".getBytes("ISO-8859-1"));
+		when(provider.parameterNamesFor(bark.getMethod())).thenReturn(new String[] { "pet" });
+
+		when(request.getHeader("Accept-Charset")).thenReturn(null);
+		Object[] deserialized = deserializer.deserialize(stream, bark);
+
+		assertThat(deserialized.length, is(1));
+		assertThat(deserialized[0], is(instanceOf(Dog.class)));
+
+		Dog dog = (Dog) deserialized[0];
+
+		assertThat(dog.name, is("ç"));
+	}
+
+	@Test
+	public void shouldByPassDeserializationWhenHasNoContent() {
+		InputStream stream = new ByteArrayInputStream("".getBytes());
+		when(provider.parameterNamesFor(bark.getMethod())).thenReturn(new String[] { "pet" });
+
+		Object[] deserialized = deserializer.deserialize(stream, bark);
+
+		assertThat(deserialized.length, is(1));
+		assertThat(deserialized[0], is(nullValue()));
+	}
+
+	@Test
+	public void shouldBeAbleToDeserializeADogWhenMethodHasMoreThanOneArgumentAndHasNotRoot()
+			throws Exception {
+		InputStream stream = new ByteArrayInputStream("{'name':'Brutus','age':7}".getBytes());
+
+		when(provider.parameterNamesFor(jump.getMethod())).thenReturn(new String[] { "dog", "times" });
+
+		Object[] deserialized = deserializer.deserialize(stream, jump);
+
+		assertThat(deserialized.length, is(2));
+		assertThat(deserialized[0], is(instanceOf(Dog.class)));
+		Dog dog = (Dog) deserialized[0];
+		assertThat(dog.name, is("Brutus"));
+		assertThat(dog.age, is(7));
+	}
+	
+	static class ExtGenericController extends GenericController<Dog> {
+
+	}
+
+	@Test
+	public void shouldDeserializeFromGenericTypeOneParam() {
+		InputStream stream = new ByteArrayInputStream(
+				"{'entity':{'name':'Brutus','age':7,'birthday':'06/01/1987'}}"
+						.getBytes());
+		BeanClass resourceClass = new DefaultBeanClass(ExtGenericController.class);
+		Method method = new Mirror().on(GenericController.class).reflect()
+				.method("method").withAnyArgs();
+		ControllerMethod resource = new DefaultControllerMethod(resourceClass, method);
+		when(provider.parameterNamesFor(resource.getMethod())).thenReturn(new String[] { "entity" });
+
+		Object[] deserialized = deserializer.deserialize(stream, resource);
+
+		Dog dog = (Dog) deserialized[0];
+
+		assertThat(dog.name, equalTo("Brutus"));
+	}
+
+	@Test
+	public void shouldDeserializeFromGenericTypeTwoParams() {
+		InputStream stream = new ByteArrayInputStream(
+				"{'entity':{'name':'Brutus','age':7,'birthday':'06/01/1987'}, 'param': 'test', 'over': 'value'}"
+						.getBytes());
+		BeanClass resourceClass = new DefaultBeanClass(ExtGenericController.class);
+		Method method = new Mirror().on(GenericController.class).reflect()
+				.method("anotherMethod").withAnyArgs();
+		ControllerMethod resource = new DefaultControllerMethod(resourceClass, method);
+		when(provider.parameterNamesFor(resource.getMethod())).thenReturn(
+				new String[] { "entity", "param", "over" });
+
+		Object[] deserialized = deserializer.deserialize(stream, resource);
+
+		Dog dog = (Dog) deserialized[0];
+		String param = (String) deserialized[1];
+
+		assertThat(dog.name, equalTo("Brutus"));
+		assertThat(param, equalTo("test"));
+		assertThat(deserialized.length, equalTo(2));
+	}
+
+	@Test
+	public void shouldDeserializeWithoutGenericType() {
+		InputStream stream = new ByteArrayInputStream( "{'param': 'test'}".getBytes());
+		BeanClass resourceClass = new DefaultBeanClass(ExtGenericController.class);
+		Method method = new Mirror().on(GenericController.class).reflect()
+				.method("methodWithoutGenericType").withArgs(String.class);
+		ControllerMethod resource = new DefaultControllerMethod(resourceClass, method);
+		when(provider.parameterNamesFor(resource.getMethod())).thenReturn(
+				new String[] { "param" });
+
+		Object[] deserialized = deserializer.deserialize(stream, resource);
+
+		String param = (String) deserialized[0];
+
+		assertThat(param, equalTo("test"));
+	}
 }

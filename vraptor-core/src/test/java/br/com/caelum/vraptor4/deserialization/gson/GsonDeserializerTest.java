@@ -291,7 +291,7 @@ public class GsonDeserializerTest {
 
 	@Test
 	public void shouldDeserializeFromGenericTypeTwoParams() {
-		InputStream stream = new ByteArrayInputStream("{'entity':{'name':'Brutus','age':7,'birthday':'06/01/1987'}, 'param': 'test', 'over': 'value'}"
+		InputStream stream = new ByteArrayInputStream("{'entity':{'name':'Brutus','age':7,'birthday':'2013-07-23T17:14:14-03:00'}, 'param': 'test', 'over': 'value'}"
 						.getBytes());
 		BeanClass resourceClass = new DefaultBeanClass(ExtGenericController.class);
 		Method method = new Mirror().on(GenericController.class).reflect()

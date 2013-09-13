@@ -45,4 +45,9 @@ public class WebXmlEncodingHandler implements EncodingHandler {
 			throw new VRaptorException(e);
 		}
 	}
+
+	@Override
+	public String getEncoding() {
+		return encoding;
+	}
 }

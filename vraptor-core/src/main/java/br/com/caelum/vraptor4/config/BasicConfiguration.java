@@ -19,6 +19,8 @@ package br.com.caelum.vraptor4.config;
 
 import java.lang.reflect.InvocationTargetException;
 
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 
@@ -34,6 +36,7 @@ import br.com.caelum.vraptor4.ioc.cdi.CDIProvider;
  *
  * @author Guilherme Silveira
  */
+@ApplicationScoped
 public class BasicConfiguration {
 
 	private static final Logger logger = LoggerFactory.getLogger(BasicConfiguration.class);
@@ -58,8 +61,12 @@ public class BasicConfiguration {
 	 */
 	public static final String SCANNING_PARAM = "br.com.caelum.vraptor4.scanning";
 
-	private final ServletContext servletContext;
+	private ServletContext servletContext;
+	
+	@Deprecated //CDI eyes only
+	public BasicConfiguration() {}
 
+	@Inject
 	public BasicConfiguration(ServletContext servletContext) {
 		this.servletContext = servletContext;
 	}

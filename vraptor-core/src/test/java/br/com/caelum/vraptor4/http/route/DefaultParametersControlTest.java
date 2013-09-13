@@ -17,15 +17,6 @@
 
 package br.com.caelum.vraptor4.http.route;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 import java.util.Collections;
 
 import org.junit.Before;
@@ -35,9 +26,21 @@ import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor4.TwoWayConverter;
 import br.com.caelum.vraptor4.core.Converters;
+import br.com.caelum.vraptor4.http.EncodingHandler;
 import br.com.caelum.vraptor4.http.MutableRequest;
 
 import com.google.common.collect.ImmutableMap;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 public class DefaultParametersControlTest {
 
@@ -45,6 +48,7 @@ public class DefaultParametersControlTest {
 	private @Mock Converters converters;
 	private @Mock TwoWayConverter converter;
     private Evaluator evaluator = new JavaEvaluator();
+    private @Mock EncodingHandler encodingHandler;
 
     @Before
 	public void setup() {
@@ -53,21 +57,25 @@ public class DefaultParametersControlTest {
 
 	@Test
 	public void registerExtraParametersFromAcessedUrl() throws SecurityException, NoSuchMethodException {
-		DefaultParametersControl control = new DefaultParametersControl("/clients/{dog.id}", converters, evaluator);
+		DefaultParametersControl control = getDefaultParameterControlForUrl("/clients/{dog.id}");
 		control.fillIntoRequest("/clients/45", request);
 		verify(request).setParameter("dog.id", new String[] {"45"});
 	}
 
+	private DefaultParametersControl getDefaultParameterControlForUrl(String url) {
+		return new DefaultParametersControl(url, converters, evaluator,encodingHandler);
+	}
+
 	@Test
 	public void registerParametersWithAsterisks() throws SecurityException, NoSuchMethodException {
-		DefaultParametersControl control = new DefaultParametersControl("/clients/{my.path*}", converters, evaluator);
+		DefaultParametersControl control = getDefaultParameterControlForUrl("/clients/{my.path*}");
 		control.fillIntoRequest("/clients/one/path", request);
 		verify(request).setParameter("my.path", new String[] {"one/path"});
 	}
 
 	@Test
 	public void registerParametersWithRegexes() throws SecurityException, NoSuchMethodException {
-		DefaultParametersControl control = new DefaultParametersControl("/clients/{hexa:[0-9A-Z]+}", converters, evaluator);
+		DefaultParametersControl control = getDefaultParameterControlForUrl("/clients/{hexa:[0-9A-Z]+}");
 
 		control.fillIntoRequest("/clients/FAF323", request);
 
@@ -76,7 +84,7 @@ public class DefaultParametersControlTest {
 
 	@Test
 	public void registerParametersWithMultipleRegexes() throws SecurityException, NoSuchMethodException {
-		DefaultParametersControl control = new DefaultParametersControl("/test/{hash1:[a-z0-9]{16}}{id}{hash2:[a-z0-9]{16}}/", Collections.singletonMap("id", "\\d+"), converters, evaluator);
+		DefaultParametersControl control = new DefaultParametersControl("/test/{hash1:[a-z0-9]{16}}{id}{hash2:[a-z0-9]{16}}/", Collections.singletonMap("id", "\\d+"), converters, evaluator,encodingHandler);
 
 		control.fillIntoRequest("/test/0123456789abcdef1234fedcba9876543210/", request);
 
@@ -87,13 +95,13 @@ public class DefaultParametersControlTest {
 
 	@Test
 	public void worksAsRegexWhenUsingParameters() throws SecurityException, NoSuchMethodException {
-		DefaultParametersControl control = new DefaultParametersControl("/clients/{dog.id}", converters, evaluator);
+		DefaultParametersControl control = getDefaultParameterControlForUrl("/clients/{dog.id}");
 		assertThat(control.matches("/clients/15"), is(equalTo(true)));
 	}
 
 	@Test
 	public void worksWithBasicRegexEvaluation() throws SecurityException, NoSuchMethodException {
-		DefaultParametersControl control = new DefaultParametersControl("/clients.*", converters, evaluator);
+		DefaultParametersControl control = getDefaultParameterControlForUrl("/clients.*");
 		assertThat(control.matches("/clientsWhatever"), is(equalTo(true)));
 	}
 
@@ -116,31 +124,31 @@ public class DefaultParametersControlTest {
 
 	@Test
 	public void shouldTranslateAsteriskAsEmpty() {
-		String uri = new DefaultParametersControl("/clients/.*", converters, evaluator).fillUri(new String[] {"client"}, client(3L));
+		String uri = getDefaultParameterControlForUrl("/clients/.*").fillUri(new String[] {"client"}, client(3L));
 		assertThat(uri, is(equalTo("/clients/")));
 	}
 
     @Test
     public void shouldTranslatePatternArgs() {
-        String uri = new DefaultParametersControl("/clients/{client.id}", converters, evaluator).fillUri(new String[] {"client"}, client(3L));
+        String uri = getDefaultParameterControlForUrl("/clients/{client.id}").fillUri(new String[] {"client"}, client(3L));
         assertThat(uri, is(equalTo("/clients/3")));
     }
 
     @Test
     public void shouldTranslatePatternArgsWithRegex() {
-        String uri = new DefaultParametersControl("/clients/{id:[0-9]{1,}}", converters, evaluator).fillUri(new String[] {"id"}, 30L);
+        String uri = getDefaultParameterControlForUrl("/clients/{id:[0-9]{1,}}").fillUri(new String[] {"id"}, 30L);
         assertThat(uri, is(equalTo("/clients/30")));
     }
 
     @Test
     public void shouldTranslatePatternArgsWithMultipleRegexes() {
-        String uri = new DefaultParametersControl("/test/{hash1:[a-z0-9]{16}}{id}{hash2:[a-z0-9]{16}}/", converters, evaluator).fillUri(new String[] {"hash1", "id", "hash2"}, "0123456789abcdef", "1234", "fedcba9876543210");
+        String uri = getDefaultParameterControlForUrl("/test/{hash1:[a-z0-9]{16}}{id}{hash2:[a-z0-9]{16}}/").fillUri(new String[] {"hash1", "id", "hash2"}, "0123456789abcdef", "1234", "fedcba9876543210");
         assertThat(uri, is(equalTo("/test/0123456789abcdef1234fedcba9876543210/")));
     }
     
 	@Test
 	public void shouldTranslatePatternArgNullAsEmpty() {
-		String uri = new DefaultParametersControl("/clients/{client.id}", converters, evaluator).fillUri(new String[] {"client"}, client(null));
+		String uri = getDefaultParameterControlForUrl("/clients/{client.id}").fillUri(new String[] {"client"}, client(null));
 		assertThat(uri, is(equalTo("/clients/")));
 	}
 
@@ -150,21 +158,21 @@ public class DefaultParametersControlTest {
 		when(converters.twoWayConverterFor(Client.class)).thenReturn(converter);
 		when(converter.convert(any(Client.class))).thenReturn("john");
 
-		String uri = new DefaultParametersControl("/clients/{client}", converters, evaluator).fillUri(new String[] {"client"}, client(null));
+		String uri = getDefaultParameterControlForUrl("/clients/{client}").fillUri(new String[] {"client"}, client(null));
 		assertThat(uri, is(equalTo("/clients/john")));
 
 	}
 
 	@Test
 	public void shouldTranslatePatternArgInternalNullAsEmpty() {
-		String uri = new DefaultParametersControl("/clients/{client.child.id}", converters, evaluator) .fillUri(new String[] {"client"}, client(null));
+		String uri = getDefaultParameterControlForUrl("/clients/{client.child.id}") .fillUri(new String[] {"client"}, client(null));
 		assertThat(uri, is(equalTo("/clients/")));
 	}
 
 	@Test
 	public void shouldMatchPatternLazily() throws Exception {
-		DefaultParametersControl wrong = new DefaultParametersControl("/clients/{client.id}/", converters, evaluator);
-		DefaultParametersControl right = new DefaultParametersControl("/clients/{client.id}/subtask/", converters, evaluator);
+		DefaultParametersControl wrong = getDefaultParameterControlForUrl("/clients/{client.id}/");
+		DefaultParametersControl right = getDefaultParameterControlForUrl("/clients/{client.id}/subtask/");
 		String uri = "/clients/3/subtask/";
 
 		assertThat(wrong.matches(uri), is(false));
@@ -174,7 +182,7 @@ public class DefaultParametersControlTest {
 
 	@Test
 	public void shouldMatchMoreThanOneVariable() throws Exception {
-		DefaultParametersControl control = new DefaultParametersControl("/clients/{client.id}/subtask/{task.id}/", converters, evaluator);
+		DefaultParametersControl control = getDefaultParameterControlForUrl("/clients/{client.id}/subtask/{task.id}/");
 
 		assertThat(control.matches("/clients/3/subtask/5/"), is(true));
 	}
@@ -184,13 +192,13 @@ public class DefaultParametersControlTest {
 
 	@Test
 	public void shouldBeGreedyWhenIPutAnAsteriskOnExpression() throws Exception {
-		DefaultParametersControl control = new DefaultParametersControl("/clients/{pathToFile*}", converters, evaluator);
+		DefaultParametersControl control = getDefaultParameterControlForUrl("/clients/{pathToFile*}");
 
 		assertThat(control.matches("/clients/my/path/to/file/"), is(true));
 	}
 	@Test
 	public void shouldNotBeGreedyAtPatternCompiling() throws Exception {
-		DefaultParametersControl control = new DefaultParametersControl("/project/{project.name}/build/{buildId}/view/{filename*}", converters, evaluator);
+		DefaultParametersControl control = getDefaultParameterControlForUrl("/project/{project.name}/build/{buildId}/view/{filename*}");
 
 		String uri = "/project/Vraptor3/build/12345/view/artifacts/vraptor.jar";
 		assertThat(control.matches(uri), is(true));
@@ -206,7 +214,7 @@ public class DefaultParametersControlTest {
 
 	@Test
 	public void registerExtraParametersFromAcessedUrlWithGreedyParameters() throws SecurityException, NoSuchMethodException {
-		DefaultParametersControl control = new DefaultParametersControl("/clients/{pathToFile*}", converters, evaluator);
+		DefaultParametersControl control = getDefaultParameterControlForUrl("/clients/{pathToFile*}");
 
 		control.fillIntoRequest("/clients/my/path/to/file", request);
 
@@ -215,7 +223,7 @@ public class DefaultParametersControlTest {
 
 	@Test
 	public void registerExtraParametersFromAcessedUrlWithGreedyAndDottedParameters() throws SecurityException, NoSuchMethodException {
-		DefaultParametersControl control = new DefaultParametersControl("/clients/{path.to.file*}", converters, evaluator);
+		DefaultParametersControl control = getDefaultParameterControlForUrl("/clients/{path.to.file*}");
 
 		control.fillIntoRequest("/clients/my/path/to/file", request);
 
@@ -230,7 +238,7 @@ public class DefaultParametersControlTest {
 	}
 	@Test
 	public void fillURLWithGreedyParameters() throws SecurityException, NoSuchMethodException {
-		DefaultParametersControl control = new DefaultParametersControl("/clients/{pathToFile*}", converters, evaluator);
+		DefaultParametersControl control = getDefaultParameterControlForUrl("/clients/{pathToFile*}");
 
 		String filled = control.fillUri(new String[] {"pathToFile"}, "my/path/to/file");
 
@@ -238,7 +246,7 @@ public class DefaultParametersControlTest {
 	}
 	@Test
 	public void fillURLWithoutGreedyParameters() throws SecurityException, NoSuchMethodException {
-		DefaultParametersControl control = new DefaultParametersControl("/clients/{pathToFile}", converters, evaluator);
+		DefaultParametersControl control = getDefaultParameterControlForUrl("/clients/{pathToFile}");
 
 		String filled = control.fillUri(new String[] {"pathToFile"}, "my/path/to/file");
 
@@ -247,13 +255,13 @@ public class DefaultParametersControlTest {
 
 	@Test
 	public void whenNoParameterPatternsAreGivenShouldMatchAnything() throws Exception {
-		ParametersControl control = new DefaultParametersControl("/any/{aParameter}/what", Collections.<String,String>emptyMap(), converters, evaluator);
+		ParametersControl control = new DefaultParametersControl("/any/{aParameter}/what", Collections.<String,String>emptyMap(), converters, evaluator,encodingHandler);
 		assertTrue(control.matches("/any/ICanPutAnythingInHere/what"));
 	}
 	@Test
 	public void whenParameterPatternsAreGivenShouldMatchAccordingToGivenPatterns() throws Exception {
 		ParametersControl control = new DefaultParametersControl("/any/{aParameter}/what",
-				new ImmutableMap.Builder<String, String>().put("aParameter", "aaa\\d{3}bbb").build(), converters, evaluator);
+				new ImmutableMap.Builder<String, String>().put("aParameter", "aaa\\d{3}bbb").build(), converters, evaluator,encodingHandler);
 		assertFalse(control.matches("/any/ICantPutAnythingInHere/what"));
 		assertFalse(control.matches("/any/aaa12bbb/what"));
 		assertTrue(control.matches("/any/aaa123bbb/what"));
@@ -262,7 +270,7 @@ public class DefaultParametersControlTest {
 	@Test
 	public void shouldFillRequestWhenAPatternIsSpecified() throws Exception {
 		DefaultParametersControl control = new DefaultParametersControl("/project/{project.id}/build/",
-				new ImmutableMap.Builder<String, String>().put("project.id", "\\d+").build(), converters, evaluator);
+				new ImmutableMap.Builder<String, String>().put("project.id", "\\d+").build(), converters, evaluator,encodingHandler);
 
 		String uri = "/project/15/build/";
 		assertThat(control.matches(uri), is(true));
@@ -276,7 +284,7 @@ public class DefaultParametersControlTest {
 
 	@Test
 	public void shouldDecodeUriParameters() throws Exception {
-		DefaultParametersControl control = new DefaultParametersControl("/clients/{name}", converters, evaluator);
+		DefaultParametersControl control = getDefaultParameterControlForUrl("/clients/{name}");
 
 		control.fillIntoRequest("/clients/Joao+Leno", request);
 
@@ -286,5 +294,14 @@ public class DefaultParametersControlTest {
 
 		verify(request).setParameter("name", "Paulo Macartinei");
 	}
+	
+	@Test
+	public void shouldEncodeUriParameters() throws Exception {
+		when(encodingHandler.getEncoding()).thenReturn("UTF-8");
+		String uri = getDefaultParameterControlForUrl("/language/{lang}/about").fillUri(new String[] {"lang"}, "c#");
+		assertThat(uri, is(equalTo("/language/c%23/about")));
+	}
+	
+	
 
 }

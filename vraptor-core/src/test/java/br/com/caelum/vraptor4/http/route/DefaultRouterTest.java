@@ -17,17 +17,6 @@
 
 package br.com.caelum.vraptor4.http.route;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.atLeastOnce;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 import java.lang.reflect.Method;
 import java.util.EnumSet;
 import java.util.List;
@@ -46,6 +35,7 @@ import br.com.caelum.vraptor4.controller.DefaultBeanClass;
 import br.com.caelum.vraptor4.controller.HttpMethod;
 import br.com.caelum.vraptor4.core.Converters;
 import br.com.caelum.vraptor4.http.DefaultParameterNameProvider;
+import br.com.caelum.vraptor4.http.EncodingHandler;
 import br.com.caelum.vraptor4.http.ParameterNameProvider;
 import br.com.caelum.vraptor4.http.VRaptorRequest;
 import br.com.caelum.vraptor4.interceptor.DefaultTypeNameExtractor;
@@ -53,6 +43,18 @@ import br.com.caelum.vraptor4.interceptor.VRaptorMatchers;
 import br.com.caelum.vraptor4.proxy.JavassistProxifier;
 import br.com.caelum.vraptor4.proxy.ObjenesisInstanceCreator;
 import br.com.caelum.vraptor4.proxy.Proxifier;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 /**
  * Those are more likely to be acceptance than unit tests.
@@ -66,6 +68,7 @@ public class DefaultRouterTest {
 	private ControllerMethod method;
 	private Converters converters;
 	private ParameterNameProvider nameProvider;
+	private EncodingHandler encodingHandler;
 
 	@Before
 	public void setup() {
@@ -73,9 +76,10 @@ public class DefaultRouterTest {
 		this.proxifier = new JavassistProxifier(new ObjenesisInstanceCreator());
 		this.method = mock(ControllerMethod.class);
 		this.converters = mock(Converters.class);
+		this.encodingHandler = mock(EncodingHandler.class);
 		this.nameProvider = new DefaultParameterNameProvider(new DefaultTypeNameExtractor());
 
-		router = new DefaultRouter(new NoRoutesConfiguration(), proxifier, new NoTypeFinder(), converters, nameProvider, new JavaEvaluator());
+		router = new DefaultRouter(new NoRoutesConfiguration(), proxifier, new NoTypeFinder(), converters, nameProvider, new JavaEvaluator(), encodingHandler);
 	}
 
 	@Test

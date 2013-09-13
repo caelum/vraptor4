@@ -6,6 +6,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
+import javax.enterprise.context.Dependent;
+
 import br.com.caelum.vraptor4.serialization.xstream.Serializee;
 
 import com.google.gson.ExclusionStrategy;
@@ -18,8 +20,7 @@ import com.google.gson.JsonSerializer;
  * @author Renan Reis
  * @author Guilherme Mangabeira
  */
-//TODO @Component
-//FIXME @PrototypeScoped 
+@Dependent
 public class VRaptorGsonBuilder {
 
 	private boolean withoutRoot;

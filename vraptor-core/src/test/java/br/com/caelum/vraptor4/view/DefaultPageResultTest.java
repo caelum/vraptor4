@@ -40,6 +40,7 @@ import br.com.caelum.vraptor4.controller.DefaultControllerMethod;
 import br.com.caelum.vraptor4.core.MethodInfo;
 import br.com.caelum.vraptor4.http.MutableRequest;
 import br.com.caelum.vraptor4.http.MutableResponse;
+import br.com.caelum.vraptor4.interceptor.ApplicationLogicException;
 import br.com.caelum.vraptor4.proxy.JavassistProxifier;
 import br.com.caelum.vraptor4.proxy.ObjenesisInstanceCreator;
 import br.com.caelum.vraptor4.proxy.Proxifier;
@@ -136,7 +137,7 @@ public class DefaultPageResultTest {
     	verify(dispatcher, only()).forward(request, response);
     }
     
-	@Test(expected=ResultException.class)
+	@Test(expected=ApplicationLogicException.class)
     public void shouldThrowResultExceptionIfServletExceptionOccursWhileForwardingView() throws Exception {
     	when(request.getRequestDispatcher(anyString())).thenReturn(dispatcher);
     	doThrow(new ServletException()).when(dispatcher).forward(request, response);

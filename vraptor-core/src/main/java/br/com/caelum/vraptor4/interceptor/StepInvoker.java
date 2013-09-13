@@ -49,7 +49,7 @@ public class StepInvoker {
 			return returnObject;
 		} catch (MirrorException e) {
 			// we dont wanna wrap it if it is a simple controller business logic exception
-			Throwables.propagateIfInstanceOf(e.getCause(), ControllerInvocationException.class);
+			Throwables.propagateIfInstanceOf(e.getCause(), ApplicationLogicException.class);
 			throw new InterceptionException(e.getCause());
 		}
 	}

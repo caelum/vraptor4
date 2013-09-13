@@ -330,8 +330,8 @@ public class GsonDeserializerTest {
 
 	@Test
 	public void shouldDeserializeADogWithCalendarWithISO8601() {
-		InputStream stream = new ByteArrayInputStream("{'dog':{'name':'Brutus','age':7,'birthday':'2013-07-23T17:14:14-03:00'}}"
-						.getBytes());
+		InputStream stream = new ByteArrayInputStream("{'dog':{'name':'Otto','age':2,'birthday':'2013-07-23T17:14:14-03:00'}}"
+				.getBytes());
 
 		when(provider.parameterNamesFor(bark.getMethod())).thenReturn(new String[] { "dog" });
 
@@ -340,8 +340,8 @@ public class GsonDeserializerTest {
 		assertThat(deserialized.length, is(1));
 		assertThat(deserialized[0], is(instanceOf(Dog.class)));
 		Dog dog = (Dog) deserialized[0];
-		assertThat(dog.name, is("Brutus"));
-		assertThat(dog.age, is(7));
+		assertThat(dog.name, is("Otto"));
+		assertThat(dog.age, is(2));
 
 		Calendar birthday = new GregorianCalendar(2013, 6, 23, 17, 14, 14);
 		birthday.setTimeZone(TimeZone.getTimeZone("GMT-0300"));

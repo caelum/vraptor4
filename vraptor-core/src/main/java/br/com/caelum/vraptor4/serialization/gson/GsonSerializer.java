@@ -48,15 +48,16 @@ public class GsonSerializer implements SerializerBuilder {
 	private final Writer writer;
 	private final TypeNameExtractor extractor;
 	private final ProxyInitializer initializer;
-	private final Serializee serializee = new Serializee();
+	private final Serializee serializee;
 	protected VraptorGsonBuilder builder;
 
 	public GsonSerializer(VraptorGsonBuilder builder, Writer writer, TypeNameExtractor extractor,
-			ProxyInitializer initializer) {
+			ProxyInitializer initializer, Serializee serializee) {
 		this.writer = writer;
 		this.extractor = extractor;
 		this.initializer = initializer;
 		this.builder = builder;
+		this.serializee = serializee;
 	}
 
 	public Serializer exclude(String... names) {

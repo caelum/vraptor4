@@ -50,7 +50,7 @@ public class GsonDeserializerTest {
 
 		when(localization.getLocale()).thenReturn(new Locale("pt", "BR"));
 
-		deserializer = new GsonDeserialization(provider, Collections.<JsonDeserializer<?>> emptyList(), request);
+		deserializer = new GsonDeserialization(provider, Collections.<JsonDeserializer> emptyList(), request);
 		BeanClass controllerClass = new DefaultBeanClass(DogController.class);
 
 		woof = new DefaultControllerMethod(controllerClass, DogController.class.getDeclaredMethod("woof"));
@@ -132,7 +132,7 @@ public class GsonDeserializerTest {
 	
 	@Test
 	public void shouldBeAbleToDeserializeADogWithDeserializerAdapter() throws Exception {
-		List<JsonDeserializer<?>> deserializers = new ArrayList<>();
+		List<JsonDeserializer> deserializers = new ArrayList<>();
 		deserializers.add(new DogDeserializer());
 
 		deserializer = new GsonDeserialization(provider, deserializers, request);

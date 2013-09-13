@@ -59,7 +59,7 @@ public class GsonJSONSerializationTest {
 		initializer = new NullProxyInitializer();
 
 		this.serialization = new GsonJSONSerialization(response, extractor, initializer,
-				Collections.<JsonSerializer<?>> emptyList(), Collections.<ExclusionStrategy> emptyList());
+				Collections.<JsonSerializer> emptyList());
 	}
 
 	public static class Address {
@@ -408,11 +408,11 @@ public class GsonJSONSerializationTest {
 	public void shouldUseCollectionConverterWhenItExists() {
 		String expectedResult = "[\"testing\"]";
 
-		List<JsonSerializer<?>> adapters = new ArrayList<>();
+		List<JsonSerializer> adapters = new ArrayList<>();
 		adapters.add(new CollectionSerializer());
 
 		GsonJSONSerialization serialization = new GsonJSONSerialization(response, extractor, initializer,
-				adapters, Collections.<ExclusionStrategy> emptyList());
+				adapters);
 
 		serialization.withoutRoot().from(new MyCollection()).serialize();
 		assertThat(result(), is(equalTo(expectedResult)));
@@ -420,11 +420,11 @@ public class GsonJSONSerializationTest {
 
 	@Test
 	public void shouldSerializeCalendarLikeXstream() {
-		List<JsonSerializer<?>> adapters = new ArrayList<>();
+		List<JsonSerializer> adapters = new ArrayList<>();
 		adapters.add(new CalendarSerializer());
 
 		GsonJSONSerialization serialization = new GsonJSONSerialization(response, extractor, initializer,
-				adapters, Collections.<ExclusionStrategy> emptyList());
+				adapters);
 
 		Client c = new Client("renan");
 		c.included = new GregorianCalendar(2012, 8, 3);
@@ -437,20 +437,6 @@ public class GsonJSONSerializationTest {
 				+ "\",\"timezone\":\"" + c.included.getTimeZone().getID() + "\"}}}";
 
 		assertThat(result, is(equalTo(expectedResult)));
-	}
-
-	@Test
-	public void shouldExcludeAttributeUsingExclusionStrategy() {
-		List<ExclusionStrategy> exclusions = new ArrayList<>();
-		exclusions.add(new ClientAddressExclusion());
-
-		GsonJSONSerialization serialization = new GsonJSONSerialization(response, extractor, initializer,
-				Collections.<JsonSerializer<?>> emptyList(), exclusions);
-
-		serialization.withoutRoot().from(new Client("renan", new Address("rua joao sbarai"))).include("address")
-				.serialize();
-
-		assertThat(result(), not(containsString("address")));
 	}
 
 	@Test

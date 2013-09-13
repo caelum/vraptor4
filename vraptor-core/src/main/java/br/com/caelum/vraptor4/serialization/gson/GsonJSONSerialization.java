@@ -16,7 +16,8 @@
 package br.com.caelum.vraptor4.serialization.gson;
 
 import java.io.IOException;
-import java.util.Collection;
+import java.util.Arrays;
+import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -26,6 +27,7 @@ import br.com.caelum.vraptor4.serialization.NoRootSerialization;
 import br.com.caelum.vraptor4.serialization.ProxyInitializer;
 import br.com.caelum.vraptor4.serialization.Serializer;
 import br.com.caelum.vraptor4.serialization.SerializerBuilder;
+import br.com.caelum.vraptor4.serialization.xstream.Serializee;
 import br.com.caelum.vraptor4.view.ResultException;
 
 import com.google.gson.ExclusionStrategy;
@@ -40,21 +42,21 @@ import com.google.gson.JsonSerializer;
 public class GsonJSONSerialization implements JSONSerialization {
 
 	protected final HttpServletResponse response;
-
 	protected final TypeNameExtractor extractor;
-
 	protected final ProxyInitializer initializer;
-
 	protected final VraptorGsonBuilder builder;
+	
+	protected final Serializee serializee;
 
 	public GsonJSONSerialization(HttpServletResponse response, TypeNameExtractor extractor,
-			ProxyInitializer initializer, Collection<JsonSerializer<?>> serializers,
-			Collection<ExclusionStrategy> exclusions) {
+			ProxyInitializer initializer, List<JsonSerializer> serializers) {
 		this.response = response;
 		this.extractor = extractor;
 		this.initializer = initializer;
-
-		this.builder = new VraptorGsonBuilder(serializers, exclusions);
+		
+		this.serializee = new Serializee();
+		ExclusionStrategy exclusion = new Exclusions(serializee);
+		this.builder = new VraptorGsonBuilder(serializers, Arrays.asList(exclusion));
 	}
 
 	public boolean accepts(String format) {
@@ -72,7 +74,7 @@ public class GsonJSONSerialization implements JSONSerialization {
 
 	protected SerializerBuilder getSerializer() {
 		try {
-			return new GsonSerializer(builder, response.getWriter(), extractor, initializer);
+			return new GsonSerializer(builder, response.getWriter(), extractor, initializer, serializee);
 		} catch (IOException e) {
 			throw new ResultException("Unable to serialize data", e);
 		}

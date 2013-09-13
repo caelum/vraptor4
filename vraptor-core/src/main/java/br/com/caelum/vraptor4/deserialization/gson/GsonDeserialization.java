@@ -9,7 +9,6 @@ import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Collection;
-import java.util.Objects;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -56,8 +55,7 @@ public class GsonDeserialization implements Deserializer {
 		Method jMethod = method.getMethod();
 		Class<?>[] types = jMethod.getParameterTypes();
 		if (types.length == 0) {
-			throw new IllegalArgumentException(
-					"Methods that consumes representations must receive just one argument");
+			throw new IllegalArgumentException("Methods that consumes representations must receive just one argument");
 		}
 
 		Gson gson = getGson();
@@ -67,7 +65,7 @@ public class GsonDeserialization implements Deserializer {
 
 		try {
 			String content = getContentOfStream(inputStream);
-			logger.debug("json retrieved: " + content);
+			logger.debug("json retrieved: {}", content);
 
 			JsonParser parser = new JsonParser();
 			JsonObject root = (JsonObject) parser.parse(content);
@@ -75,9 +73,16 @@ public class GsonDeserialization implements Deserializer {
 			for (int i = 0; i < types.length; i++) {
 				String name = parameterNames[i];
 				JsonElement node = root.get(name);
-				if (node != null) {
+				
+				if (isWithoutRoot(types, node)) {
+					params[i] = gson.fromJson(root, types[i]);
+					logger.info("json without root deserialized");
+					
+				} else if (node != null) {
 					params[i] = gson.fromJson(node, types[i]);
 				}
+				
+				logger.debug("json deserialized: {}", params[i]);
 			}
 		} catch (Exception e) {
 			throw new ResultException("Unable to deserialize data", e);
@@ -114,5 +119,9 @@ public class GsonDeserialization implements Deserializer {
 	private String getRequestCharset() {
 		String charset = firstNonNull(request.getHeader("Accept-Charset"), "UTF-8");
 		return charset.split(",")[0];
+	}
+
+	private boolean isWithoutRoot(Class<?>[] types, JsonElement node) {
+		return node == null && types.length == 1;
 	}
 }

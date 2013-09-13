@@ -61,7 +61,7 @@ public class DefaultRouter implements Router {
 	private  Converters converters;
 	private  ParameterNameProvider nameProvider;
     private  Evaluator evaluator;
-    private Map<Invocation, Route> cache = new ConcurrentHashMap<Invocation, Route>();
+    private ConcurrentHashMap<Invocation, Route> cache = new ConcurrentHashMap<Invocation, Route>();
 
     //CDI eyes only
 	@Deprecated
@@ -150,8 +150,7 @@ public class DefaultRouter implements Router {
 		ControllerMethod controllerMethod = r.getControllerMethod();
 		BeanClass controller = controllerMethod.getController();
 		Invocation invocation = new Invocation(controller.getType(), controllerMethod.getMethod());
-		cache.put(invocation, r);
-	
+		cache.putIfAbsent(invocation, r);
 	}
 
 	@Override
@@ -191,7 +190,9 @@ public class DefaultRouter implements Router {
 					* result
 					+ ((controllerType == null) ? 0 : controllerType.hashCode());
 			result = prime * result
-					+ ((method == null) ? 0 : method.hashCode());
+					+ ((method == null) ? 0 : method.getName().hashCode());
+			result = prime * result
+					+ ((method == null) ? 0 : Arrays.hashCode(method.getParameterTypes()));
 			return result;
 		}
 
@@ -212,9 +213,10 @@ public class DefaultRouter implements Router {
 			if (method == null) {
 				if (other.method != null)
 					return false;
-			} else if (!method.equals(other.method))
-				return false;
-			return true;
+			} else if (method.getName().equals(other.method.getName())
+					&& Arrays.equals(method.getParameterTypes(), other.method.getParameterTypes()))
+				return true;
+			return false;
 		}
 		
 	}

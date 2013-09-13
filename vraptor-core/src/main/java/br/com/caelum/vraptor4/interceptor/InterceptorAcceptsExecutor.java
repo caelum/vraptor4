@@ -9,23 +9,23 @@ public class InterceptorAcceptsExecutor implements StepExecutor<Boolean>{
 
 	private StepInvoker stepInvoker;
 	private InterceptorMethodParametersResolver parameterResolver;
+	private Method method;
 
 	public InterceptorAcceptsExecutor(StepInvoker stepInvoker,
-			InterceptorMethodParametersResolver parameterResolver) {
+			InterceptorMethodParametersResolver parameterResolver,
+			Class<?> interceptorClass) {
 		super();
 		this.stepInvoker = stepInvoker;
 		this.parameterResolver = parameterResolver;
+		method = stepInvoker.findMethod(Accepts.class, interceptorClass);
 	}
 
 	public boolean accept(Class<?> interceptorClass) {
-		Method acceptsMethod = stepInvoker.findMethod(Accepts.class,
-				interceptorClass);
 		InternalAcceptsSignature internalAcceptsSignature = new InternalAcceptsSignature(
 				new NoStackParameterSignatureAcceptor());
-		if (acceptsMethod != null) {
-			if (!internalAcceptsSignature.accepts(acceptsMethod)) {
-				throw new VRaptorException(
-						internalAcceptsSignature.errorMessage());
+		if (method != null) {
+			if (!internalAcceptsSignature.accepts(method)) {
+				throw new VRaptorException(internalAcceptsSignature.errorMessage());
 			}
 			return true;
 		}
@@ -34,9 +34,11 @@ public class InterceptorAcceptsExecutor implements StepExecutor<Boolean>{
 
 	public Boolean execute(Object interceptor) {
 		boolean interceptorAccepts = true;
-		Object returnObject = stepInvoker.tryToInvoke(interceptor,
-				Accepts.class,
-				parameterResolver.parametersFor(Accepts.class, interceptor));
+		Object returnObject = null;
+		if(method != null) {
+			Object[] params = parameterResolver.parametersFor(method);
+			returnObject = stepInvoker.tryToInvoke(interceptor, method, params);
+		}
 		if (returnObject != null) {
 			interceptorAccepts = (Boolean) returnObject;
 		}

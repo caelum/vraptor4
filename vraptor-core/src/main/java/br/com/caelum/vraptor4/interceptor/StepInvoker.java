@@ -3,13 +3,13 @@ package br.com.caelum.vraptor4.interceptor;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
-import com.google.common.base.Throwables;
-
 import net.vidageek.mirror.dsl.Mirror;
 import net.vidageek.mirror.exception.MirrorException;
 import net.vidageek.mirror.list.dsl.Matcher;
 import net.vidageek.mirror.list.dsl.MirrorList;
 import br.com.caelum.vraptor4.InterceptionException;
+
+import com.google.common.base.Throwables;
 
 public class StepInvoker {
 
@@ -30,8 +30,7 @@ public class StepInvoker {
 		}
 	}
 
-	public Object tryToInvoke(Object interceptor,Class<? extends Annotation> step,Object... params) {
-		Method stepMethod = findMethod(step, interceptor.getClass());
+	public Object tryToInvoke(Object interceptor, Method stepMethod, Object... params) {
 		if (stepMethod==null){
 			return null;
 		}
@@ -42,8 +41,7 @@ public class StepInvoker {
 		return returnObject;
 	}
 
-	private Object invokeMethod(Object interceptor, Method stepMethod,
-			Object... params) {
+	private Object invokeMethod(Object interceptor, Method stepMethod, Object... params) {
 		try {
 			Object returnObject = new Mirror().on(interceptor).invoke().method(stepMethod).withArgs(params);
 			return returnObject;
@@ -53,7 +51,6 @@ public class StepInvoker {
 			throw new InterceptionException(e.getCause());
 		}
 	}
-	
 
 	public Method findMethod(Class<? extends Annotation> step,Class<?> interceptorClass) {
 		MirrorList<Method> possibleMethods = findPossibleMethods(step, interceptorClass);

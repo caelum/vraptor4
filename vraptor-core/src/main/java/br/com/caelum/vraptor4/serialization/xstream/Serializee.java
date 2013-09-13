@@ -17,6 +17,7 @@ import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Sets;
 
+//FIXME @Component
 public class Serializee {
 	private Object root;
 	private Class<?> rootClass;

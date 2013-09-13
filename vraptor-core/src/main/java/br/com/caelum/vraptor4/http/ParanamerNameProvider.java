@@ -60,7 +60,7 @@ public class ParanamerNameProvider implements ParameterNameProvider {
 		} catch (ParameterNamesNotFoundException e) {
 			throw new IllegalStateException("Paranamer were not able to find your parameter names for " + method
 					+ "You must compile your code with debug information (javac -g) or register another "
-					+ "name provider. Try to use " + DefaultParameterNameProvider.class.getName() + " instead.");
+					+ "name provider. Try to use " + DefaultParameterNameProvider.class.getName() + " instead.", e);
 		}
 	}
 

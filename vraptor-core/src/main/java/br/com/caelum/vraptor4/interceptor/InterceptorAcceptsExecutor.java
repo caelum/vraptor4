@@ -5,6 +5,8 @@ import java.lang.reflect.Method;
 import br.com.caelum.vraptor4.Accepts;
 import br.com.caelum.vraptor4.VRaptorException;
 
+import com.google.common.base.Objects;
+
 public class InterceptorAcceptsExecutor implements StepExecutor<Boolean>{
 
 	private StepInvoker stepInvoker;
@@ -14,7 +16,6 @@ public class InterceptorAcceptsExecutor implements StepExecutor<Boolean>{
 	public InterceptorAcceptsExecutor(StepInvoker stepInvoker,
 			InterceptorMethodParametersResolver parameterResolver,
 			Class<?> interceptorClass) {
-		super();
 		this.stepInvoker = stepInvoker;
 		this.parameterResolver = parameterResolver;
 		method = stepInvoker.findMethod(Accepts.class, interceptorClass);
@@ -33,15 +34,11 @@ public class InterceptorAcceptsExecutor implements StepExecutor<Boolean>{
 	}
 
 	public Boolean execute(Object interceptor) {
-		boolean interceptorAccepts = true;
-		Object returnObject = null;
 		if(method != null) {
 			Object[] params = parameterResolver.parametersFor(method);
-			returnObject = stepInvoker.tryToInvoke(interceptor, method, params);
+			Object returnObject = stepInvoker.tryToInvoke(interceptor, method, params);
+			return Objects.firstNonNull((Boolean) returnObject, false);
 		}
-		if (returnObject != null) {
-			interceptorAccepts = (Boolean) returnObject;
-		}
-		return interceptorAccepts;
+		return true;
 	}
 }

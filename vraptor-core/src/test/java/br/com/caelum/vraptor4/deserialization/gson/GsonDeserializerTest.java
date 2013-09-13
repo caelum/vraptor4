@@ -239,4 +239,20 @@ public class GsonDeserializerTest {
 		assertThat(deserialized.length, is(1));
 		assertThat(deserialized[0], is(nullValue()));
 	}
+
+	@Test
+	public void shouldBeAbleToDeserializeADogWhenMethodHasMoreThanOneArgumentAndHasNotRoot()
+			throws Exception {
+		InputStream stream = new ByteArrayInputStream("{'name':'Brutus','age':7}".getBytes());
+
+		when(provider.parameterNamesFor(jump.getMethod())).thenReturn(new String[] { "dog", "times" });
+
+		Object[] deserialized = deserializer.deserialize(stream, jump);
+
+		assertThat(deserialized.length, is(2));
+		assertThat(deserialized[0], is(instanceOf(Dog.class)));
+		Dog dog = (Dog) deserialized[0];
+		assertThat(dog.name, is("Brutus"));
+		assertThat(dog.age, is(7));
+	}
 }

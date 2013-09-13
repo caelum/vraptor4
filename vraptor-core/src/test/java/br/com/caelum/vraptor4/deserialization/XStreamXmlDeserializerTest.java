@@ -8,6 +8,9 @@ import static org.mockito.Mockito.when;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.TimeZone;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -35,7 +38,7 @@ public class XStreamXmlDeserializerTest {
 	public void setUp() throws Exception {
 		provider = mock(ParameterNameProvider.class);
 
-        deserializer = new XStreamXMLDeserializer(provider, XStreamBuilderImpl.cleanInstance());
+        deserializer = new XStreamXMLDeserializer(provider, XStreamBuilderImpl.cleanInstance(new CalendarConverter()));
 		BeanClass controllerClass = new DefaultBeanClass(DogController.class);
 
 		woof = new DefaultControllerMethod(controllerClass, DogController.class.getDeclaredMethod("woof"));
@@ -58,6 +61,7 @@ public class XStreamXmlDeserializerTest {
 	static class Dog {
 		private String name;
 		private Integer age;
+		private Calendar birthday;
 	}
 
 	static class DogController {
@@ -95,6 +99,34 @@ public class XStreamXmlDeserializerTest {
 		assertThat(dog.name, is("Brutus"));
 		assertThat(dog.age, is(7));
 	}
+	
+	@Test
+	public void shouldBeAbleToDeserializeADogAsISO8601() throws Exception {
+		InputStream stream = new ByteArrayInputStream("<dog><name>Otto</name><age>2</age><birthday>2013-07-23T17:14:14-03:00</birthday></dog>"
+				.getBytes());
+
+
+		when(provider.parameterNamesFor(bark.getMethod())).thenReturn(new String[] {"dog"});
+
+		Object[] deserialized = deserializer.deserialize(stream, bark);
+		
+		Calendar birthday = new GregorianCalendar(2013, 6, 23, 17, 14, 14);
+		birthday.setTimeZone(TimeZone.getTimeZone("GMT-0300"));
+		
+		System.out.println(birthday);
+		System.out.println(((Dog) deserialized[0]).birthday);
+
+		assertThat(deserialized.length, is(1));
+		assertThat(deserialized[0], is(instanceOf(Dog.class)));
+		
+		Dog dog = (Dog) deserialized[0];
+		assertThat(dog.name, is("Otto"));
+		assertThat(dog.age, is(2));
+		
+		// calendar.equals is too bad :)
+		assertThat(dog.birthday.compareTo(birthday), is(0));
+	}
+	
 	@Test
 	public void shouldBeAbleToDeserializeADogWhenMethodHasMoreThanOneArgument() throws Exception {
 		InputStream stream = new ByteArrayInputStream("<dog><name>Brutus</name><age>7</age></dog>".getBytes());

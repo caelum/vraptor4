@@ -1,11 +1,17 @@
 package br.com.caelum.vraptor4.deserialization.gson;
 
+import static com.google.common.base.Objects.firstNonNull;
+
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Collection;
+import java.util.Objects;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +22,7 @@ import br.com.caelum.vraptor4.deserialization.Deserializes;
 import br.com.caelum.vraptor4.http.ParameterNameProvider;
 import br.com.caelum.vraptor4.view.ResultException;
 
+import com.google.common.io.CharStreams;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializer;
@@ -35,12 +42,14 @@ public class GsonDeserialization implements Deserializer {
 	private static final Logger logger = LoggerFactory.getLogger(GsonDeserialization.class);
 
 	private final ParameterNameProvider paramNameProvider;
-
 	private final Collection<JsonDeserializer<?>> adapters;
+	private final HttpServletRequest request;
 
-	public GsonDeserialization(ParameterNameProvider paramNameProvider, Collection<JsonDeserializer<?>> adapters) {
+	public GsonDeserialization(ParameterNameProvider paramNameProvider, Collection<JsonDeserializer<?>> adapters, 
+			HttpServletRequest request) {
 		this.paramNameProvider = paramNameProvider;
 		this.adapters = adapters;
+		this.request = request;
 	}
 
 	public Object[] deserialize(InputStream inputStream, ControllerMethod method) {
@@ -96,14 +105,14 @@ public class GsonDeserialization implements Deserializer {
 	}
 
 	private String getContentOfStream(InputStream input) throws IOException {
-		StringBuilder content = new StringBuilder();
+		String charset = getRequestCharset();
+		logger.debug("Using charset {}", charset);
 
-		byte[] buffer = new byte[1024];
-		int readed = 0;
-		while ((readed = input.read(buffer)) != -1) {
-			content.append(new String(buffer, 0, readed));
-		}
+		return CharStreams.toString(new InputStreamReader(input, charset));
+	}
 
-		return content.toString();
+	private String getRequestCharset() {
+		String charset = firstNonNull(request.getHeader("Accept-Charset"), "UTF-8");
+		return charset.split(",")[0];
 	}
 }

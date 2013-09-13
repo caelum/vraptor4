@@ -14,6 +14,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -38,15 +40,17 @@ public class GsonDeserializerTest {
 	private ControllerMethod jump;
 	private ControllerMethod woof;
 	private ControllerMethod dropDead;
+	private HttpServletRequest request;
 
 	@Before
 	public void setUp() throws Exception {
 		provider = mock(ParameterNameProvider.class);
 		localization = mock(Localization.class);
+		request = mock(HttpServletRequest.class);
 
 		when(localization.getLocale()).thenReturn(new Locale("pt", "BR"));
 
-		deserializer = new GsonDeserialization(provider, Collections.<JsonDeserializer<?>> emptyList());
+		deserializer = new GsonDeserialization(provider, Collections.<JsonDeserializer<?>> emptyList(), request);
 		BeanClass controllerClass = new DefaultBeanClass(DogController.class);
 
 		woof = new DefaultControllerMethod(controllerClass, DogController.class.getDeclaredMethod("woof"));
@@ -117,7 +121,7 @@ public class GsonDeserializerTest {
 		List<JsonDeserializer<?>> deserializers = new ArrayList<>();
 		deserializers.add(new DogDeserializer());
 
-		deserializer = new GsonDeserialization(provider, deserializers);
+		deserializer = new GsonDeserialization(provider, deserializers, request);
 
 		InputStream stream = new ByteArrayInputStream("{'dog':{'name':'Renan Reis','age':'0'}}".getBytes());
 
@@ -178,4 +182,35 @@ public class GsonDeserializerTest {
 		assertThat(dog.age, is(7));
 	}
 
+	@Test
+	public void shouldHonorRequestHeaderAcceptCharset() throws Exception {
+		InputStream stream = new ByteArrayInputStream("{'pet':{'name':'Ã§'}}".getBytes("ISO-8859-1"));
+		when(provider.parameterNamesFor(bark.getMethod())).thenReturn(new String[] { "pet" });
+
+		when(request.getHeader("Accept-Charset")).thenReturn("UTF-8,*;q=0.5");
+		Object[] deserialized = deserializer.deserialize(stream, bark);
+
+		assertThat(deserialized.length, is(1));
+		assertThat(deserialized[0], is(instanceOf(Dog.class)));
+
+		Dog dog = (Dog) deserialized[0];
+
+		assertThat(dog.name, is("ç"));
+	}
+
+	@Test
+	public void whenNoCharsetHeaderIsFoundThanAssumeItIsUTF8() throws Exception {
+		InputStream stream = new ByteArrayInputStream("{'pet':{'name':'Ã§'}}".getBytes("ISO-8859-1"));
+		when(provider.parameterNamesFor(bark.getMethod())).thenReturn(new String[] { "pet" });
+
+		when(request.getHeader("Accept-Charset")).thenReturn(null);
+		Object[] deserialized = deserializer.deserialize(stream, bark);
+
+		assertThat(deserialized.length, is(1));
+		assertThat(deserialized[0], is(instanceOf(Dog.class)));
+
+		Dog dog = (Dog) deserialized[0];
+
+		assertThat(dog.name, is("ç"));
+	}
 }

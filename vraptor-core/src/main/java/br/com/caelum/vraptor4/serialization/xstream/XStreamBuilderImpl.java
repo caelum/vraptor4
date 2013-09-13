@@ -40,7 +40,6 @@ import com.thoughtworks.xstream.io.json.JsonWriter;
  * @since 3.4.0
  */
 @Dependent
-@Deprecated
 public class XStreamBuilderImpl implements XStreamBuilder {
 
 	private final XStreamConverters converters;

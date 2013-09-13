@@ -15,6 +15,7 @@ import com.google.gson.JsonSerializer;
  * 
  * @author Renan Reis
  * @author Otávio Garcia
+ * @since vraptor 4.0.0
  */
 public class CalendarSerializer implements JsonSerializer<Calendar> {
 

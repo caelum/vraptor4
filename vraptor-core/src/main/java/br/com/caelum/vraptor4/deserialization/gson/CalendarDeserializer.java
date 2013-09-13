@@ -14,6 +14,7 @@ import com.google.gson.JsonParseException;
  * Deserialize {@link Calendar} using ISO8601 format.
  * 
  * @author Otávio Garcia
+ * @since vraptor 4.0.0
  */
 public class CalendarDeserializer implements JsonDeserializer<Calendar> {
 

@@ -5,7 +5,9 @@ import static org.mockito.Mockito.when;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -14,6 +16,7 @@ import org.junit.Before;
 import br.com.caelum.vraptor4.interceptor.DefaultTypeNameExtractor;
 import br.com.caelum.vraptor4.serialization.NullProxyInitializer;
 
+import com.google.common.collect.Lists;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.converters.Converter;
 import com.thoughtworks.xstream.converters.SingleValueConverter;
@@ -35,10 +38,12 @@ public class XStreamSerializerTest extends XStreamXMLSerializationTest {
         HttpServletResponse response = mock(HttpServletResponse.class);
         when(response.getWriter()).thenReturn(new PrintWriter(stream));
         
+        List<Converter> converters = new ArrayList<>();
+        converters.add(new CalendarConverter());
         
 		final DefaultTypeNameExtractor extractor = new DefaultTypeNameExtractor();
 		this.serialization = new XStreamXMLSerialization(response, extractor, new NullProxyInitializer(), new XStreamBuilderImpl(
-                new XStreamConverters(Collections.<Converter>emptyList(), Collections.<SingleValueConverter>emptyList()),
+                new XStreamConverters(converters, Collections.<SingleValueConverter>emptyList()),
                 extractor) {
 			@Override
 			public XStream xmlInstance() {

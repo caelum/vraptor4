@@ -16,6 +16,7 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.TimeZone;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -25,7 +26,6 @@ import org.junit.Test;
 
 import br.com.caelum.vraptor4.interceptor.DefaultTypeNameExtractor;
 import br.com.caelum.vraptor4.serialization.NullProxyInitializer;
-import br.com.caelum.vraptor4.serialization.gson.adapters.CalendarSerializer;
 import br.com.caelum.vraptor4.serialization.xstream.Serializee;
 
 import com.google.common.collect.ForwardingCollection;
@@ -46,6 +46,7 @@ public class GsonJSONSerializationTest {
 	private HttpServletResponse response;
 	private DefaultTypeNameExtractor extractor;
 	private NullProxyInitializer initializer;
+	private List<JsonSerializer> adapters;
 
 	@Before
 	public void setup() throws Exception {
@@ -56,7 +57,7 @@ public class GsonJSONSerializationTest {
 		extractor = new DefaultTypeNameExtractor();
 		initializer = new NullProxyInitializer();
 
-		List<JsonSerializer> adapters = new ArrayList<>();
+		adapters = new ArrayList<>();
 		adapters.add(new CalendarSerializer());
 		adapters.add(new CollectionSerializer());
 		
@@ -418,17 +419,30 @@ public class GsonJSONSerializationTest {
 	public void shouldSerializeCalendarLikeXstream() {
 		Client c = new Client("renan");
 		c.included = new GregorianCalendar(2012, 8, 3);
+		c.included.setTimeZone(TimeZone.getTimeZone("GMT-0300"));
 
 		serialization.from(c).serialize();
 		String result = result();
 
-		String expectedResult = "{\"client\":{\"name\":\"renan\",\"included\":{\"time\":\""
-				+ c.included.getTimeInMillis()
-				+ "\",\"timezone\":\"" + c.included.getTimeZone().getID() + "\"}}}";
+		String expectedResult = "{\"client\":{\"name\":\"renan\",\"included\":\"2012-09-03T00:00:00-03:00\"}}";
 
 		assertThat(result, is(equalTo(expectedResult)));
 	}
 
+	@Test
+	public void shouldSerializeCalendarTimeWithISO8601() {
+		Client c = new Client("renan");
+		c.included = new GregorianCalendar(2012, 8, 3, 1, 5, 9);
+		c.included.setTimeZone(TimeZone.getTimeZone("GMT-0300"));
+
+		serialization.from(c).serialize();
+		String result = result();
+
+		String expectedResult = "{\"client\":{\"name\":\"renan\",\"included\":\"2012-09-03T01:05:09-03:00\"}}";
+
+		assertThat(result, is(equalTo(expectedResult)));
+	}
+	
 	@Test
 	public void shouldExcludeAllPrimitiveFields() {
 		String expectedResult = "{\"order\":{}}";

@@ -17,6 +17,8 @@
 
 package br.com.caelum.vraptor4.http.route;
 
+import static com.google.common.collect.Collections2.filter;
+
 import java.lang.reflect.Method;
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -26,11 +28,13 @@ import java.util.Collections;
 import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
-import br.com.caelum.vraptor4.VRaptorException;
+import br.com.caelum.vraptor4.controller.BeanClass;
 import br.com.caelum.vraptor4.controller.ControllerMethod;
 import br.com.caelum.vraptor4.controller.HttpMethod;
 import br.com.caelum.vraptor4.core.Converters;
@@ -38,11 +42,9 @@ import br.com.caelum.vraptor4.http.EncodingHandler;
 import br.com.caelum.vraptor4.http.MutableRequest;
 import br.com.caelum.vraptor4.http.ParameterNameProvider;
 import br.com.caelum.vraptor4.proxy.Proxifier;
-import br.com.caelum.vraptor4.util.collections.Filters;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
-import com.google.common.collect.Iterators;
 
 /**
  * The default implementation of controller localization rules. It also uses a
@@ -60,6 +62,7 @@ public class DefaultRouter implements Router {
 	private  Converters converters;
 	private  ParameterNameProvider nameProvider;
     private  Evaluator evaluator;
+    private ConcurrentHashMap<Invocation, Route> cache = new ConcurrentHashMap<Invocation, Route>();
 	private EncodingHandler encodingHandler;
 
     //CDI eyes only
@@ -69,8 +72,8 @@ public class DefaultRouter implements Router {
 
     @Inject
     public DefaultRouter(RoutesConfiguration config,
-			Proxifier proxifier, TypeFinder finder, Converters converters, ParameterNameProvider nameProvider, Evaluator evaluator, EncodingHandler encodingHandler) {
-    	
+			Proxifier proxifier, TypeFinder finder, Converters converters, 
+			ParameterNameProvider nameProvider, Evaluator evaluator, EncodingHandler encodingHandler) {
 		this.proxifier = proxifier;
 		this.finder = finder;
 		this.converters = converters;
@@ -90,6 +93,7 @@ public class DefaultRouter implements Router {
 	 */
 	@Override
 	public void add(Route r) {
+		cacheRoute(r);
 		this.routes.add(r);
 	}
 
@@ -120,7 +124,7 @@ public class DefaultRouter implements Router {
 
 
 	private Collection<Route> routesMatchingUriAndMethod(String uri, HttpMethod method) {
-		Collection<Route> routesMatchingMethod = Collections2.filter(routesMatchingUri(uri), allow(method));
+		Collection<Route> routesMatchingMethod = filter(routesMatchingUri(uri), allow(method));
 		if (routesMatchingMethod.isEmpty()) {
 			EnumSet<HttpMethod> allowed = allowedMethodsFor(uri);
 			throw new MethodNotAllowedException(allowed, method.toString());
@@ -138,31 +142,33 @@ public class DefaultRouter implements Router {
 	}
 
 	private Collection<Route> routesMatchingUri(String uri) {
-		Collection<Route> routesMatchingURI = Collections2.filter(routes, canHandle(uri));
+		Collection<Route> routesMatchingURI = filter(routes, canHandle(uri));
 		if (routesMatchingURI.isEmpty()) {
 			throw new ControllerNotFoundException();
 		}
 		return routesMatchingURI;
 	}
+	
+	public void cacheRoute(Route r) {
+		ControllerMethod controllerMethod = r.getControllerMethod();
+		BeanClass controller = controllerMethod.getController();
+		Invocation invocation = new Invocation(controller.getType(), controllerMethod.getMethod());
+		cache.putIfAbsent(invocation, r);
+	}
 
 	@Override
 	public <T> String urlFor(Class<T> type, Method method, Object... params) {
-
 		Class<?> rawtype = type;
-
-		if (proxifier.isProxyType(type)) rawtype = type.getSuperclass();
-
-		Iterator<Route> matches = Iterators.filter(routes.iterator(), canHandle(rawtype, method));
-		if (matches.hasNext()) {
-			try {
-				return matches.next().urlFor(rawtype, method, params);
-			} catch (Exception e) {
-				throw new VRaptorException("The selected route is invalid for redirection: " + rawtype.getName() + "."
-						+ method.getName(), e);
-			}
+		if (proxifier.isProxyType(type)) {
+			rawtype = type.getSuperclass();
 		}
-		throw new RouteNotFoundException("The selected route is invalid for redirection: " + rawtype.getName() + "."
-				+ method.getName());
+		Invocation invocation = new Invocation(rawtype, method);
+		Route route = cache.get(invocation);
+		if (route == null) {
+			throw new RouteNotFoundException("The selected route is invalid for redirection: " + type.getName() + "."
+					+ method.getName());
+		}
+		return route.urlFor(type, method, params);
 	}
 
 	@Override
@@ -170,14 +176,54 @@ public class DefaultRouter implements Router {
 		return Collections.unmodifiableList(new ArrayList<>(routes));
 	}
 
-    private Predicate<Route> canHandle(final Class<?> type, final Method method) {
-        return new Predicate<Route>() {
-            public boolean apply(Route route) {
-                return route.canHandle(type, method);
-            }
-        };
-    }
+	private static class Invocation {
+		private Class<?> controllerType;
+		private Method method;
 
+		public Invocation(Class<?> type, Method method) {
+			controllerType = type;
+			this.method = method;
+		}
+
+		@Override
+		public int hashCode() {
+			final int prime = 31;
+			int result = 1;
+			result = prime
+					* result
+					+ ((controllerType == null) ? 0 : controllerType.hashCode());
+			result = prime * result
+					+ ((method == null) ? 0 : method.getName().hashCode());
+			result = prime * result
+					+ ((method == null) ? 0 : Arrays.hashCode(method.getParameterTypes()));
+			return result;
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (this == obj)
+				return true;
+			if (obj == null)
+				return false;
+			if (getClass() != obj.getClass())
+				return false;
+			Invocation other = (Invocation) obj;
+			if (controllerType == null) {
+				if (other.controllerType != null)
+					return false;
+			} else if (!controllerType.equals(other.controllerType))
+				return false;
+			if (method == null) {
+				if (other.method != null)
+					return false;
+			} else if (method.getName().equals(other.method.getName())
+					&& Arrays.equals(method.getParameterTypes(), other.method.getParameterTypes()))
+				return true;
+			return false;
+		}
+		
+	}
+	
     private Predicate<Route> canHandle(final String uri) {
         return new Predicate<Route>() {
             public boolean apply(Route route) {
@@ -194,3 +240,4 @@ public class DefaultRouter implements Router {
         };
     }
 }
+

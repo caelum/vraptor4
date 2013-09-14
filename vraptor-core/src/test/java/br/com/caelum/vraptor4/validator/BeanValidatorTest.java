@@ -36,15 +36,15 @@ public class BeanValidatorTest {
     	MockitoAnnotations.initMocks(this);
 
     	ValidatorFactoryCreator creator = new ValidatorFactoryCreator();
-    	creator.buildFactory();
+    	//creator.buildFactory();
 
     	ValidatorCreator validatorFactory = new ValidatorCreator(creator.getInstance());
-    	validatorFactory.createValidator();
+    	//validatorFactory.createValidator();
 
     	MessageInterpolatorFactory interpolatorFactory = new MessageInterpolatorFactory(creator.getInstance());
     	interpolatorFactory.createInterpolator();
 
-        beanValidator = new DefaultBeanValidator(localization, validatorFactory.getInstance(), interpolatorFactory.getInstance());
+    	//beanValidator = new DefaultBeanValidator(localization, validatorFactory.getInstance(), interpolatorFactory.getInstance());
     }
 
     @Test

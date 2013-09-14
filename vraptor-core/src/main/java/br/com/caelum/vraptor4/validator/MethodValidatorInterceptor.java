@@ -22,6 +22,7 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.validation.ConstraintViolation;
 import javax.validation.MessageInterpolator;
+import javax.validation.executable.ExecutableValidator;
 import javax.validation.metadata.BeanDescriptor;
 import javax.validation.metadata.MethodDescriptor;
 
@@ -54,28 +55,31 @@ public class MethodValidatorInterceptor implements Interceptor {
 
 	private static final Logger logger = LoggerFactory.getLogger(MethodValidatorInterceptor.class);
 
-	private javax.validation.Validator methodValidator;
 	private Localization localization;
 	private MessageInterpolator interpolator;
 	private MethodInfo methodInfo;
 	private Validator validator;
+	
+	private ExecutableValidator executableValidator;
+	private javax.validation.Validator bvalidator;
 
 	@Deprecated
 	public MethodValidatorInterceptor() {}
 
 	@Inject
 	public MethodValidatorInterceptor(Localization localization, MessageInterpolator interpolator, Validator validator,
-			MethodInfo methodInfo, javax.validation.Validator methodValidator) {
+			MethodInfo methodInfo, ExecutableValidator executableValidator, javax.validation.Validator bvalidator) {
 		this.localization = localization;
 		this.interpolator = interpolator;
 		this.validator = validator;
 		this.methodInfo = methodInfo;
-		this.methodValidator = methodValidator;
+		this.executableValidator = executableValidator;
+		this.bvalidator = bvalidator;
 	}
 
 	@Override
-	public boolean accepts(ControllerMethod method) {
-		BeanDescriptor bean = methodValidator.getConstraintsForClass(method.getController().getType());
+	public boolean accepts(ControllerMethod method) { // TODO cache?
+		BeanDescriptor bean = bvalidator.getConstraintsForClass(method.getController().getType());
 		MethodDescriptor descriptor = bean.getConstraintsForMethod(method.getMethod().getName(), method.getMethod()
 				.getParameterTypes());
 		return descriptor != null && descriptor.hasConstrainedParameters();
@@ -85,16 +89,14 @@ public class MethodValidatorInterceptor implements Interceptor {
 	public void intercept(InterceptorStack stack, ControllerMethod method, Object controllerInstance)
 			throws InterceptionException {
 
-		Set<ConstraintViolation<Object>> violations = methodValidator.forExecutables().validateParameters(
-				controllerInstance, method.getMethod(), methodInfo.getParameters());
+		Set<ConstraintViolation<Object>> violations = executableValidator
+				.validateParameters(controllerInstance, method.getMethod(), methodInfo.getParameters());
 		logger.debug("there are {} violations at method {}.", violations.size(), method);
 
-		for (ConstraintViolation<Object> violation : violations) {
-			BeanValidatorContext ctx = BeanValidatorContext.of(violation);
-			String msg = interpolator.interpolate(violation.getMessageTemplate(), ctx, getLocale());
-
-			validator.add(new ValidationMessage(msg, violation.getPropertyPath().toString()));
-			logger.debug("added message {} to validation of bean {}", msg, violation.getRootBean());
+		for (ConstraintViolation<Object> v : violations) {
+			BeanValidatorContext ctx = new BeanValidatorContext(v);
+			String msg = interpolator.interpolate(v.getMessageTemplate(), ctx, getLocale());
+			validator.add(new ValidationMessage(msg, v.getPropertyPath().toString()));
 		}
 
 		stack.next(method, controllerInstance);

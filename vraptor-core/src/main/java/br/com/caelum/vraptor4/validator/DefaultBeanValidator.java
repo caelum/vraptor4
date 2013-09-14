@@ -89,7 +89,7 @@ public class DefaultBeanValidator
     	
     	List<Message> messages = new ArrayList<>();
     	
-    	for(String property : properties) {        
+    	for(String property : properties) {
             Set<ConstraintViolation<Object>> violations = validator.validateProperty(bean, property);
             logger.debug("there are {} violations at bean {}.", violations.size(), bean);
 
@@ -115,12 +115,12 @@ public class DefaultBeanValidator
     private List<Message> getMessages(final Set<ConstraintViolation<Object>> violations) {
     	List<Message> messages = new ArrayList<>();
     	
-    	for(ConstraintViolation<Object> violation : violations) {
-    		BeanValidatorContext ctx = BeanValidatorContext.of(violation);
-    		String msg = interpolator.interpolate(violation.getMessageTemplate(), ctx, getLocale());
+    	for(ConstraintViolation<Object> v : violations) {
+    		BeanValidatorContext ctx = new BeanValidatorContext(v);
+    		String msg = interpolator.interpolate(v.getMessageTemplate(), ctx, getLocale());
+    		messages.add(new ValidationMessage(msg, v.getPropertyPath().toString()));
     		
-    		messages.add(new ValidationMessage(msg, violation.getPropertyPath().toString()));
-    		logger.debug("added message {} to validation of bean {}", msg, violation.getRootBean());
+    		logger.debug("added message {} to validation of bean {}", msg, v.getRootBean());
     	}
     	
     	return messages;

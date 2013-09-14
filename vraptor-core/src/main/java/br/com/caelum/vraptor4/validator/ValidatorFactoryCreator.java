@@ -21,13 +21,13 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.List;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Alternative;
 import javax.enterprise.inject.Default;
+import javax.enterprise.inject.Disposes;
 import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
+import javax.validation.Configuration;
 import javax.validation.Validation;
 import javax.validation.ValidatorFactory;
 
@@ -50,7 +50,6 @@ public class ValidatorFactoryCreator {
     private static final Logger logger = LoggerFactory.getLogger(ValidatorFactoryCreator.class);
     private static final List<Method> OBJECT_METHODS = asList(Object.class.getDeclaredMethods());
 
-    private ValidatorFactory instance;
     private ParameterNameProvider nameProvider;
     
     //CDI eyes only
@@ -63,27 +62,21 @@ public class ValidatorFactoryCreator {
         this.nameProvider = nameProvider;
     }
     
-    @PostConstruct
-    public void buildFactory() {
-        instance = Validation.byDefaultProvider().configure()
-            .parameterNameProvider(new CustomParameterNameProvider(nameProvider))
-            .buildValidatorFactory();
-        
-        logger.debug("Initializing Bean Validator");
-    }
-    
-    @PreDestroy
-    public void close() {
-        instance.close();
-    }
-
     @Produces 
     @Default 
     @javax.enterprise.context.ApplicationScoped
 	public ValidatorFactory getInstance() {
-        return instance;
+        logger.debug("Initializing Bean Validator");
+        Configuration<?> cfg = Validation.byDefaultProvider().configure();
+		return cfg
+                .parameterNameProvider(new CustomParameterNameProvider(nameProvider))
+                .buildValidatorFactory();
     }
 
+    public void close(@Disposes ValidatorFactory validatorFactory) {
+    	validatorFactory.close();
+    }
+    
     /**
      * Allow vraptor to use paranamer to discovery method parameter names.
      * @author Otávio Scherer Garcia
@@ -113,7 +106,7 @@ public class ValidatorFactoryCreator {
          */
         @Override
 		public List<String> getParameterNames(Method method) {
-            if (OBJECT_METHODS.contains(method)) {
+            if (OBJECT_METHODS.contains(method) || method.toString().contains("jboss.weld")) {
                 return emptyParameters(method.getParameterTypes().length);
             }
             

@@ -31,24 +31,23 @@ class BeanValidatorContext
 
     private final ConstraintDescriptor<?> descriptor;
     private final Object validatedValue;
-
-    private BeanValidatorContext(ConstraintDescriptor<?> descriptor, Object validatedValue) {
-        this.descriptor = descriptor;
-        this.validatedValue = validatedValue;
+    
+    public BeanValidatorContext(ConstraintViolation<Object> violation) {
+        descriptor = violation.getConstraintDescriptor();
+        validatedValue = violation.getInvalidValue();
     }
 
+    @Override
     public ConstraintDescriptor<?> getConstraintDescriptor() {
         return descriptor;
     }
 
+    @Override
     public Object getValidatedValue() {
         return validatedValue;
     }
 
-    public static BeanValidatorContext of(ConstraintViolation<Object> violation) {
-        return new BeanValidatorContext(violation.getConstraintDescriptor(), violation.getInvalidValue());
-    }
-    
+    @Override
     public <T> T unwrap(Class<T> clazz) {
         return clazz.cast(this);
     }

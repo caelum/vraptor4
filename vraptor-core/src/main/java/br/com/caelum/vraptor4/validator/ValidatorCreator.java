@@ -15,17 +15,13 @@
  */
 package br.com.caelum.vraptor4.validator;
 
-import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Alternative;
-import javax.enterprise.inject.Default;
 import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import javax.validation.executable.ExecutableValidator;
 
 /**
  * Bring up Bean Validation factory. This class builds the {@link Validator} once when application
@@ -38,11 +34,7 @@ import org.slf4j.LoggerFactory;
 @Alternative
 public class ValidatorCreator {
 
-    private static final Logger logger = LoggerFactory.getLogger(ValidatorCreator.class);
-
 	private ValidatorFactory factory;
-
-	private Validator validator;
 	
 	//CDI eyes only
 	@Deprecated
@@ -54,16 +46,13 @@ public class ValidatorCreator {
         this.factory = factory;
     }
 	
-    @PostConstruct
-    public void createValidator() {
-    	validator = factory.getValidator();
-    	logger.debug("Initializing Bean Validator");
-    }
-
-	
-	@Produces @Default @javax.enterprise.context.ApplicationScoped
-	public Validator getInstance() {
-		return validator;
+	@Produces @javax.enterprise.context.RequestScoped
+	public Validator getInstanceValidator() {
+		return factory.getValidator();
 	}
-
+	
+	@Produces @javax.enterprise.context.RequestScoped
+	public ExecutableValidator getInstanceExecutable() {
+		return factory.getValidator().forExecutables();
+	}
 }

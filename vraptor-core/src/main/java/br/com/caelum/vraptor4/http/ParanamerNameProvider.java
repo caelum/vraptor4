@@ -47,21 +47,25 @@ public class ParanamerNameProvider implements ParameterNameProvider {
 
 	public String[] parameterNamesFor(AccessibleObject method) {
 		try {
-			String[] parameterNames = info.lookupParameterNames(method);
-			if (logger.isDebugEnabled()) {
-				logger.debug("Found parameter names with paranamer for {} as {}",
-					Stringnifier.simpleNameFor(method), Arrays.toString(parameterNames));
+			String[] parameterNames;
+			
+			synchronized (info) {
+				parameterNames = info.lookupParameterNames(method);
+				if (logger.isDebugEnabled()) {
+					logger.debug("Found parameter names with paranamer for {} as {}",
+						Stringnifier.simpleNameFor(method), Arrays.toString(parameterNames));
+				}
 			}
-
+			
 			// maybe paranamer cache already provides defensive copies?
 			String[] defensiveCopy = new String[parameterNames.length];
 			System.arraycopy(parameterNames, 0, defensiveCopy, 0, parameterNames.length);
 			return defensiveCopy;
+			
 		} catch (ParameterNamesNotFoundException e) {
 			throw new IllegalStateException("Paranamer were not able to find your parameter names for " + method
 					+ "You must compile your code with debug information (javac -g) or register another "
 					+ "name provider. Try to use " + DefaultParameterNameProvider.class.getName() + " instead.", e);
 		}
 	}
-
 }

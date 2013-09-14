@@ -2,7 +2,6 @@ package br.com.caelum.vraptor4.util.test;
 
 import javax.validation.MessageInterpolator;
 import javax.validation.Validation;
-import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 
 import br.com.caelum.vraptor4.validator.DefaultBeanValidator;
@@ -27,14 +26,13 @@ public class JSR303MockValidator extends MockValidator {
 	}
 
 	public JSR303MockValidator() {
-		Validator validator = validatorFactory.getValidator();
 		MessageInterpolatorFactory factoryMessageInterpolator = new MessageInterpolatorFactory(validatorFactory);
 
 		// @PostConstruct not works out of container.
 		factoryMessageInterpolator.createInterpolator();
 		MessageInterpolator interpolator = factoryMessageInterpolator.getInstance();
 
-		that = new DefaultBeanValidator(new MockLocalization(), validator, interpolator);
+		that = new DefaultBeanValidator(new MockLocalization(), validatorFactory, interpolator);
 	}
 
 	@Override

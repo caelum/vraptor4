@@ -27,7 +27,7 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.validation.ConstraintViolation;
 import javax.validation.MessageInterpolator;
-import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,10 +48,8 @@ public class DefaultBeanValidator
     private static final Logger logger = LoggerFactory.getLogger(DefaultBeanValidator.class);
 
     private Localization localization;
-
-    private Validator validator;
-
     private MessageInterpolator interpolator;
+	private ValidatorFactory validatorFactory;
 
     //CDI eyes only
 	@Deprecated
@@ -59,9 +57,9 @@ public class DefaultBeanValidator
 	}
     
     @Inject
-    public DefaultBeanValidator(Localization localization, Validator validator, MessageInterpolator interpolator) {
+    public DefaultBeanValidator(Localization localization, ValidatorFactory validatorFactory, MessageInterpolator interpolator) {
         this.localization = localization;
-        this.validator = validator;
+		this.validatorFactory = validatorFactory;
         this.interpolator = interpolator;
     }
 
@@ -72,7 +70,7 @@ public class DefaultBeanValidator
             return emptyList();
         }
 
-        final Set<ConstraintViolation<Object>> violations = validator.validate(bean, groups);
+        final Set<ConstraintViolation<Object>> violations = validatorFactory.getValidator().validate(bean, groups);
         logger.debug("there are {} violations at bean {}.", violations.size(), bean);
 
         return getMessages(violations);
@@ -90,7 +88,7 @@ public class DefaultBeanValidator
     	List<Message> messages = new ArrayList<>();
     	
     	for(String property : properties) {        
-            Set<ConstraintViolation<Object>> violations = validator.validateProperty(bean, property);
+            Set<ConstraintViolation<Object>> violations = validatorFactory.getValidator().validateProperty(bean, property);
             logger.debug("there are {} violations at bean {}.", violations.size(), bean);
 
             messages.addAll(getMessages(violations));
@@ -106,7 +104,7 @@ public class DefaultBeanValidator
 			return emptyList();
 		}
 
-		Set<ConstraintViolation<Object>> violations = validator.validateProperty(bean, property, groups);
+		Set<ConstraintViolation<Object>> violations = validatorFactory.getValidator().validateProperty(bean, property, groups);
 		logger.debug("there are {} violations at bean {}.", violations.size(), bean);
 
 		return getMessages(violations);

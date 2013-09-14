@@ -17,6 +17,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor4.core.Localization;
+import br.com.caelum.vraptor4.http.ParanamerNameProvider;
 
 /**
  * A simple class to test JSR303Validator and HibernateValidator3 components.
@@ -35,16 +36,13 @@ public class BeanValidatorTest {
     	Locale.setDefault(new Locale("en"));
     	MockitoAnnotations.initMocks(this);
 
-    	ValidatorFactoryCreator creator = new ValidatorFactoryCreator();
+    	ValidatorFactoryCreator creator = new ValidatorFactoryCreator(new ParanamerNameProvider());
     	creator.buildFactory();
-
-    	ValidatorCreator validatorFactory = new ValidatorCreator(creator.getInstance());
-    	validatorFactory.createValidator();
 
     	MessageInterpolatorFactory interpolatorFactory = new MessageInterpolatorFactory(creator.getInstance());
     	interpolatorFactory.createInterpolator();
 
-        beanValidator = new DefaultBeanValidator(localization, validatorFactory.getInstance(), interpolatorFactory.getInstance());
+        beanValidator = new DefaultBeanValidator(localization, creator.getInstance(), interpolatorFactory.getInstance());
     }
 
     @Test

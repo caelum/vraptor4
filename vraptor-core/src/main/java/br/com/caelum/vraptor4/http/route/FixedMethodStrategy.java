@@ -90,6 +90,10 @@ public class FixedMethodStrategy implements Route {
 	public String getOriginalUri() {
 		return this.originalUri;
 	}
+	
+	public ControllerMethod getControllerMethod() {
+		return controllerMethod;
+	}
 
 	@Override
 	public String toString() {

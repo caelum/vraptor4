@@ -72,4 +72,6 @@ public interface Route {
 	 * Returns the original uri for this route
 	 */
 	String getOriginalUri();
+
+	ControllerMethod getControllerMethod();
 }

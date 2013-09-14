@@ -32,6 +32,7 @@ import br.com.caelum.vraptor4.Path;
 import br.com.caelum.vraptor4.controller.BeanClass;
 import br.com.caelum.vraptor4.controller.ControllerMethod;
 import br.com.caelum.vraptor4.controller.DefaultBeanClass;
+import br.com.caelum.vraptor4.controller.DefaultControllerMethod;
 import br.com.caelum.vraptor4.controller.HttpMethod;
 import br.com.caelum.vraptor4.core.Converters;
 import br.com.caelum.vraptor4.http.DefaultParameterNameProvider;
@@ -86,6 +87,7 @@ public class DefaultRouterTest {
 	public void shouldThrowControllerNotFoundExceptionWhenNoRoutesMatchTheURI() throws Exception {
 		Route route = mock(Route.class);
 		when(route.canHandle(anyString())).thenReturn(false);
+		when(route.getControllerMethod()).thenReturn(anyControllerMethod());
 
 		router.add(route);
 
@@ -101,6 +103,7 @@ public class DefaultRouterTest {
 	public void shouldThrowMethodNotAllowedExceptionWhenNoRoutesMatchTheURIWithGivenHttpMethod() throws Exception {
 		Route route = mock(Route.class);
 		when(route.canHandle(anyString())).thenReturn(true);
+		when(route.getControllerMethod()).thenReturn(anyControllerMethod());
 		when(route.allowedMethods()).thenReturn(EnumSet.of(HttpMethod.GET));
 
 		router.add(route);
@@ -112,11 +115,17 @@ public class DefaultRouterTest {
 			assertThat(e.getAllowedMethods(), is((Set<HttpMethod>)EnumSet.of(HttpMethod.GET)));
 		}
 	}
+	
+	private DefaultControllerMethod anyControllerMethod() throws NoSuchMethodException {
+		return new DefaultControllerMethod(new DefaultBeanClass(MyController.class), MyController.class.getMethod("customizedPath"));
+	}
 
 	@Test
 	public void shouldObeyPriorityOfRoutes() throws Exception {
 		Route first = mock(Route.class);
+		when(first.getControllerMethod()).thenReturn(anyControllerMethod());
 		Route second = mock(Route.class);
+		when(second.getControllerMethod()).thenReturn(anyControllerMethod());
 
 		ControllerMethod method2 = second.controllerMethod(request, "second");
 
@@ -140,6 +149,7 @@ public class DefaultRouterTest {
 	@Test
 	public void acceptsASingleMappingRule() throws SecurityException, NoSuchMethodException {
 		Route route = mock(Route.class);
+		when(route.getControllerMethod()).thenReturn(anyControllerMethod());
 
 		when(route.canHandle("/clients/add")).thenReturn(true);
 		when(route.allowedMethods()).thenReturn(EnumSet.of(HttpMethod.POST));
@@ -157,6 +167,7 @@ public class DefaultRouterTest {
 	public void passesTheWebMethod() throws SecurityException, NoSuchMethodException {
 		HttpMethod delete = HttpMethod.DELETE;
 		Route route = mock(Route.class);
+		when(route.getControllerMethod()).thenReturn(anyControllerMethod());
 
 		when(route.canHandle("/clients/add")).thenReturn(true);
 		when(route.allowedMethods()).thenReturn(EnumSet.of(delete));
@@ -172,6 +183,8 @@ public class DefaultRouterTest {
 	public void usesTheFirstRegisteredRuleMatchingThePattern() throws SecurityException, NoSuchMethodException {
 		Route route = mock(Route.class);
 		Route second = mock(Route.class, "second");
+		when(route.getControllerMethod()).thenReturn(anyControllerMethod());
+		when(second.getControllerMethod()).thenReturn(anyControllerMethod());
 
 		when(route.canHandle("/clients/add")).thenReturn(true);
 		when(second.canHandle("/clients/add")).thenReturn(true);
@@ -192,9 +205,11 @@ public class DefaultRouterTest {
 		assertThat(found, is(equalTo(method)));
 	}
 	@Test
-	public void throwsExceptionIfMoreThanOneUriMatchesWithSamePriority() {
+	public void throwsExceptionIfMoreThanOneUriMatchesWithSamePriority() throws NoSuchMethodException {
 		Route route = mock(Route.class);
 		Route second = mock(Route.class, "second");
+		when(route.getControllerMethod()).thenReturn(anyControllerMethod());
+		when(second.getControllerMethod()).thenReturn(anyControllerMethod());
 
 		when(route.canHandle("/clients/add")).thenReturn(true);
 		when(second.canHandle("/clients/add")).thenReturn(true);
@@ -285,7 +300,7 @@ public class DefaultRouterTest {
 		@Path("/myPath")
 		public void customizedPath() {
 		}
-
+		
 		@Path("/*/customPath")
 		public void starPath() {
 		}
@@ -299,6 +314,15 @@ public class DefaultRouterTest {
 	public void usesAsteriskBothWays() throws NoSuchMethodException {
 		registerRulesFor(MyController.class);
 		final Method method = MyController.class.getMethod("starPath");
+		String url = router.urlFor(MyController.class, method, new Object[] {});
+		assertThat(router.parse(url, HttpMethod.POST, null).getMethod(), is(equalTo(method)));
+	}
+	
+	@Test
+	public void shouldCacheInvocationsAfterFirstCall() throws NoSuchMethodException {
+		registerRulesFor(MyController.class);
+		final Method method = MyController.class.getMethod("starPath");
+		router.urlFor(MyController.class, method, new Object[] {});
 		String url = router.urlFor(MyController.class, method, new Object[] {});
 		assertThat(router.parse(url, HttpMethod.POST, null).getMethod(), is(equalTo(method)));
 	}

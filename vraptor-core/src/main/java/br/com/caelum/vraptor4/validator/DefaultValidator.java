@@ -86,6 +86,11 @@ public class DefaultValidator extends AbstractValidator {
 	public void validateProperties(Object object, String... properties) {
     	addAll(beanValidator.validateProperties(object, properties));
 	}
+    
+    @Override
+    public void validateProperty(Object object, String property, Class<?>... groups) {
+    	addAll(beanValidator.validateProperty(object, property, groups));
+    }
 
     @Override
 	public <T extends View> T onErrorUse(Class<T> view) {

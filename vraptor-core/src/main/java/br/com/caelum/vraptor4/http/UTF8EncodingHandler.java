@@ -17,17 +17,35 @@
 
 package br.com.caelum.vraptor4.http;
 
+import java.io.UnsupportedEncodingException;
+
+import javax.enterprise.inject.Vetoed;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import br.com.caelum.vraptor4.VRaptorException;
 
 /**
  * {@link EncodingHandler} that does nothing.
  * 
  * @author Lucas Cavalcanti
  */
-public class NullEncodingHandler implements EncodingHandler {
+@Vetoed
+public class UTF8EncodingHandler implements EncodingHandler {
+	
+	private final String DEFAULT_ENCODING = "UTF-8";
     
 	public void setEncoding(HttpServletRequest request, HttpServletResponse response) {
-	    
+		try {
+			request.setCharacterEncoding(DEFAULT_ENCODING);
+			response.setCharacterEncoding(DEFAULT_ENCODING);
+		} catch (UnsupportedEncodingException e) {
+			throw new VRaptorException(e);
+		}
+	}
+
+	@Override
+	public String getEncoding() {
+		return DEFAULT_ENCODING;
 	}
 }

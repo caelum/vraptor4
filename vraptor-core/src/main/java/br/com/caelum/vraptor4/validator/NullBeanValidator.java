@@ -34,14 +34,24 @@ public class NullBeanValidator implements BeanValidator {
 
 	private static final Logger logger = LoggerFactory.getLogger(NullBeanValidator.class);
 
+	@Override
 	public List<Message> validate(Object object, Class<?>... groups) {
+		return returnEmptyList();
+	}
+
+	@Override
+	public List<Message> validateProperties(Object object, String... properties) {
+		return returnEmptyList();
+	}
+	
+	@Override
+	public List<Message> validateProperty(Object object, String property, Class<?>... groups) {
+		return returnEmptyList();
+	}
+	
+	private List<Message> returnEmptyList() {
 		logger.warn("You are willing to validate an object, but there is no bean validation engine " +
 				"registered. Please add the jars of some implementation of Bean Validator.");
 		return emptyList();
 	}
-
-	public List<Message> validateProperties(Object object, String... properties) {
-		return validate(object);
-	}
-
 }

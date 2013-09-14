@@ -12,11 +12,13 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -38,12 +40,14 @@ public class XStreamXMLSerializationTest {
 
 	@Before
     public void setup() throws Exception {
-        this.stream = new ByteArrayOutputStream();
+        stream = new ByteArrayOutputStream();
 
         HttpServletResponse response = mock(HttpServletResponse.class);
         when(response.getWriter()).thenReturn(new PrintWriter(stream));
         
-		this.serialization = new XStreamXMLSerialization(response, new DefaultTypeNameExtractor(), new NullProxyInitializer(), XStreamBuilderImpl.cleanInstance());
+		XStreamBuilder builder = XStreamBuilderImpl.cleanInstance(new CalendarConverter());
+		
+		serialization = new XStreamXMLSerialization(response, new DefaultTypeNameExtractor(), new NullProxyInitializer(), builder);
     }
 
 	public static class Address {
@@ -55,6 +59,7 @@ public class XStreamXMLSerializationTest {
 	public static class Client {
 		String name;
 		Address address;
+		Calendar creation;
 
 		public Client(String name) {
 			this.name = name;
@@ -62,6 +67,11 @@ public class XStreamXMLSerializationTest {
 		public Client(String name, Address address) {
 			this.name = name;
 			this.address = address;
+		}
+		public Client(String name, Address address, Calendar creation) {
+			this.name = name;
+			this.address = address;
+			this.creation = creation;
 		}
 	}
 	public static class Item {
@@ -130,6 +140,22 @@ public class XStreamXMLSerializationTest {
 		GenericWrapper<Client> wrapper = new GenericWrapper<>(entityList, entityList.size());
 
         serialization.from(wrapper).include("entityList").serialize();
+
+        assertThat(result(), is(equalTo(expectedResult)));
+    }
+
+	@Test
+    public void shouldSerializeCalendarAsISO8601() {
+		String expectedResult = "<client>\n  <name>Otto</name>\n  <creation>2013-09-12T22:09:13-03:00</creation>\n</client>";
+
+		Calendar calendar = Calendar.getInstance();
+		calendar.set(2013, 8, 12, 22, 9, 13);
+		calendar.set(Calendar.MILLISECOND, 0);
+		calendar.setTimeZone(TimeZone.getTimeZone("America/Sao_Paulo"));
+		
+		Client otto = new Client("Otto", null, calendar);
+
+        serialization.from(otto).serialize();
 
         assertThat(result(), is(equalTo(expectedResult)));
     }

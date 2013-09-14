@@ -21,12 +21,17 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 
+import javax.enterprise.inject.Alternative;
+import javax.inject.Inject;
+
 import br.com.caelum.vraptor4.interceptor.TypeNameExtractor;
 
+@Alternative
 public class DefaultParameterNameProvider implements ParameterNameProvider{
 
 	private final TypeNameExtractor extractor;
 
+	@Inject
 	public DefaultParameterNameProvider(TypeNameExtractor extractor) {
 		this.extractor = extractor;
 	}

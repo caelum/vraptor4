@@ -14,9 +14,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.TimeZone;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -26,7 +26,7 @@ import org.junit.Test;
 
 import br.com.caelum.vraptor4.interceptor.DefaultTypeNameExtractor;
 import br.com.caelum.vraptor4.serialization.NullProxyInitializer;
-import br.com.caelum.vraptor4.serialization.gson.adapters.CalendarSerializer;
+import br.com.caelum.vraptor4.serialization.xstream.Serializee;
 
 import com.google.common.collect.ForwardingCollection;
 import com.google.common.collect.Lists;
@@ -38,16 +38,15 @@ import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
 public class GsonJSONSerializationTest {
+	
+	private Serializee serializee = new Serializee();
 
 	private GsonJSONSerialization serialization;
-
 	private ByteArrayOutputStream stream;
-
 	private HttpServletResponse response;
-
 	private DefaultTypeNameExtractor extractor;
-
 	private NullProxyInitializer initializer;
+	private List<JsonSerializer> adapters;
 
 	@Before
 	public void setup() throws Exception {
@@ -58,8 +57,12 @@ public class GsonJSONSerializationTest {
 		extractor = new DefaultTypeNameExtractor();
 		initializer = new NullProxyInitializer();
 
-		this.serialization = new GsonJSONSerialization(response, extractor, initializer,
-				Collections.<JsonSerializer<?>> emptyList(), Collections.<ExclusionStrategy> emptyList());
+		adapters = new ArrayList<>();
+		adapters.add(new CalendarSerializer());
+		adapters.add(new CollectionSerializer());
+		
+		VRaptorGsonBuilder builder = new VRaptorGsonBuilder(adapters, serializee);
+		this.serialization = new GsonJSONSerialization(response, extractor, initializer, builder, serializee);
 	}
 
 	public static class Address {
@@ -408,51 +411,38 @@ public class GsonJSONSerializationTest {
 	public void shouldUseCollectionConverterWhenItExists() {
 		String expectedResult = "[\"testing\"]";
 
-		List<JsonSerializer<?>> adapters = new ArrayList<>();
-		adapters.add(new CollectionSerializer());
-
-		GsonJSONSerialization serialization = new GsonJSONSerialization(response, extractor, initializer,
-				adapters, Collections.<ExclusionStrategy> emptyList());
-
 		serialization.withoutRoot().from(new MyCollection()).serialize();
 		assertThat(result(), is(equalTo(expectedResult)));
 	}
 
 	@Test
 	public void shouldSerializeCalendarLikeXstream() {
-		List<JsonSerializer<?>> adapters = new ArrayList<>();
-		adapters.add(new CalendarSerializer());
-
-		GsonJSONSerialization serialization = new GsonJSONSerialization(response, extractor, initializer,
-				adapters, Collections.<ExclusionStrategy> emptyList());
-
 		Client c = new Client("renan");
 		c.included = new GregorianCalendar(2012, 8, 3);
+		c.included.setTimeZone(TimeZone.getTimeZone("GMT-0300"));
 
 		serialization.from(c).serialize();
 		String result = result();
 
-		String expectedResult = "{\"client\":{\"name\":\"renan\",\"included\":{\"time\":\""
-				+ c.included.getTimeInMillis()
-				+ "\",\"timezone\":\"" + c.included.getTimeZone().getID() + "\"}}}";
+		String expectedResult = "{\"client\":{\"name\":\"renan\",\"included\":\"2012-09-03T00:00:00-03:00\"}}";
 
 		assertThat(result, is(equalTo(expectedResult)));
 	}
 
 	@Test
-	public void shouldExcludeAttributeUsingExclusionStrategy() {
-		List<ExclusionStrategy> exclusions = new ArrayList<>();
-		exclusions.add(new ClientAddressExclusion());
+	public void shouldSerializeCalendarTimeWithISO8601() {
+		Client c = new Client("renan");
+		c.included = new GregorianCalendar(2012, 8, 3, 1, 5, 9);
+		c.included.setTimeZone(TimeZone.getTimeZone("GMT-0300"));
 
-		GsonJSONSerialization serialization = new GsonJSONSerialization(response, extractor, initializer,
-				Collections.<JsonSerializer<?>> emptyList(), exclusions);
+		serialization.from(c).serialize();
+		String result = result();
 
-		serialization.withoutRoot().from(new Client("renan", new Address("rua joao sbarai"))).include("address")
-				.serialize();
+		String expectedResult = "{\"client\":{\"name\":\"renan\",\"included\":\"2012-09-03T01:05:09-03:00\"}}";
 
-		assertThat(result(), not(containsString("address")));
+		assertThat(result, is(equalTo(expectedResult)));
 	}
-
+	
 	@Test
 	public void shouldExcludeAllPrimitiveFields() {
 		String expectedResult = "{\"order\":{}}";
@@ -476,5 +466,4 @@ public class GsonJSONSerializationTest {
 		serialization.from(order).excludeAll().include("price").serialize();
 		assertThat(result(), is(equalTo(expectedResult)));
 	}
-
 }

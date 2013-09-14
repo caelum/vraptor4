@@ -28,4 +28,6 @@ import javax.servlet.http.HttpServletResponse;
 public interface EncodingHandler {
 
 	void setEncoding(HttpServletRequest request, HttpServletResponse response);
+	
+	String getEncoding();
 }

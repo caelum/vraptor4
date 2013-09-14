@@ -38,6 +38,8 @@ import javax.inject.Inject;
 import net.vidageek.mirror.dsl.Mirror;
 import br.com.caelum.vraptor4.Delete;
 import br.com.caelum.vraptor4.Get;
+import br.com.caelum.vraptor4.Options;
+import br.com.caelum.vraptor4.Patch;
 import br.com.caelum.vraptor4.Path;
 import br.com.caelum.vraptor4.Post;
 import br.com.caelum.vraptor4.Put;
@@ -228,7 +230,7 @@ public class PathAnnotationRoutesParser implements RoutesParser {
 
 
 	private Predicate<Annotation> instanceOfMethodAnnotation() {
-		return or(instanceOf(Get.class), instanceOf(Post.class), instanceOf(Put.class), instanceOf(Delete.class));
+		return or(instanceOf(Get.class), instanceOf(Post.class), instanceOf(Put.class), instanceOf(Delete.class), instanceOf(Options.class), instanceOf(Patch.class));
 	}
 
 }

@@ -22,6 +22,7 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.validation.ConstraintViolation;
 import javax.validation.MessageInterpolator;
+import javax.validation.executable.ExecutableValidator;
 import javax.validation.metadata.BeanDescriptor;
 import javax.validation.metadata.MethodDescriptor;
 
@@ -54,7 +55,7 @@ public class MethodValidatorInterceptor implements Interceptor {
 
 	private static final Logger logger = LoggerFactory.getLogger(MethodValidatorInterceptor.class);
 
-	private javax.validation.Validator methodValidator;
+	private javax.validation.ValidatorFactory methodValidator;
 	private Localization localization;
 	private MessageInterpolator interpolator;
 	private MethodInfo methodInfo;
@@ -65,7 +66,7 @@ public class MethodValidatorInterceptor implements Interceptor {
 
 	@Inject
 	public MethodValidatorInterceptor(Localization localization, MessageInterpolator interpolator, Validator validator,
-			MethodInfo methodInfo, javax.validation.Validator methodValidator) {
+			MethodInfo methodInfo, javax.validation.ValidatorFactory methodValidator) {
 		this.localization = localization;
 		this.interpolator = interpolator;
 		this.validator = validator;
@@ -75,7 +76,7 @@ public class MethodValidatorInterceptor implements Interceptor {
 
 	@Override
 	public boolean accepts(ControllerMethod method) {
-		BeanDescriptor bean = methodValidator.getConstraintsForClass(method.getController().getType());
+		BeanDescriptor bean = methodValidator.getValidator().getConstraintsForClass(method.getController().getType());
 		MethodDescriptor descriptor = bean.getConstraintsForMethod(method.getMethod().getName(), method.getMethod()
 				.getParameterTypes());
 		return descriptor != null && descriptor.hasConstrainedParameters();
@@ -84,8 +85,10 @@ public class MethodValidatorInterceptor implements Interceptor {
 	@Override
 	public void intercept(InterceptorStack stack, ControllerMethod method, Object controllerInstance)
 			throws InterceptionException {
-
-		Set<ConstraintViolation<Object>> violations = methodValidator.forExecutables().validateParameters(
+		
+		ExecutableValidator executables = methodValidator.getValidator().forExecutables();
+		
+		Set<ConstraintViolation<Object>> violations = executables.validateParameters(
 				controllerInstance, method.getMethod(), methodInfo.getParameters());
 		logger.debug("there are {} violations at method {}.", violations.size(), method);
 

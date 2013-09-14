@@ -113,7 +113,7 @@ public class ValidatorFactoryCreator {
          */
         @Override
 		public List<String> getParameterNames(Method method) {
-            if (OBJECT_METHODS.contains(method)) {
+            if (OBJECT_METHODS.contains(method) || isCDIProxy(method)) {
                 return emptyParameters(method.getParameterTypes().length);
             }
             
@@ -122,6 +122,10 @@ public class ValidatorFactoryCreator {
         
         private List<String> emptyParameters(int length) {
             return asList(new String[length]);
+        }
+        
+        private boolean isCDIProxy(Method method) {
+        	return method.toString().contains("org.jboss.weld"); // FIXME too ugly
         }
     }
 }

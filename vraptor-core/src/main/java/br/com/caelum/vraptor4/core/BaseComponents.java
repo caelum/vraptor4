@@ -169,7 +169,6 @@ import br.com.caelum.vraptor4.validator.MethodValidatorInterceptor;
 import br.com.caelum.vraptor4.validator.NullBeanValidator;
 import br.com.caelum.vraptor4.validator.Outjector;
 import br.com.caelum.vraptor4.validator.ReplicatorOutjector;
-import br.com.caelum.vraptor4.validator.ValidatorCreator;
 import br.com.caelum.vraptor4.validator.ValidatorFactoryCreator;
 import br.com.caelum.vraptor4.view.AcceptHeaderToFormat;
 import br.com.caelum.vraptor4.view.DefaultAcceptHeaderToFormat;
@@ -336,7 +335,6 @@ public class BaseComponents {
         APPLICATION_COMPONENTS.put(DependencyProvider.class, VRaptorDependencyProvider.class);
 
         if (isClassPresent("javax.validation.executable.ExecutableValidator")) {
-            APPLICATION_COMPONENTS.put(ValidatorCreator.class, ValidatorCreator.class);
             APPLICATION_COMPONENTS.put(ValidatorFactoryCreator.class, ValidatorFactoryCreator.class);
             APPLICATION_COMPONENTS.put(ValidatorFactoryCreator.class, ValidatorFactoryCreator.class);
             APPLICATION_COMPONENTS.put(MessageInterpolatorFactory.class, MessageInterpolatorFactory.class);

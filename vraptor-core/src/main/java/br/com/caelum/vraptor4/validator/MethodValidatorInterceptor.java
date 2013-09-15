@@ -15,6 +15,7 @@
  */
 package br.com.caelum.vraptor4.validator;
 
+import java.util.Iterator;
 import java.util.Locale;
 import java.util.Set;
 
@@ -22,6 +23,8 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.validation.ConstraintViolation;
 import javax.validation.MessageInterpolator;
+import javax.validation.Path.Node;
+import javax.validation.Path.ParameterNode;
 import javax.validation.executable.ExecutableValidator;
 import javax.validation.metadata.BeanDescriptor;
 import javax.validation.metadata.MethodDescriptor;
@@ -36,9 +39,12 @@ import br.com.caelum.vraptor4.controller.ControllerMethod;
 import br.com.caelum.vraptor4.core.InterceptorStack;
 import br.com.caelum.vraptor4.core.Localization;
 import br.com.caelum.vraptor4.core.MethodInfo;
+import br.com.caelum.vraptor4.http.ParameterNameProvider;
 import br.com.caelum.vraptor4.interceptor.ExecuteMethodInterceptor;
 import br.com.caelum.vraptor4.interceptor.Interceptor;
 import br.com.caelum.vraptor4.interceptor.ParametersInstantiatorInterceptor;
+
+import com.google.common.base.Joiner;
 
 /**
  * Validate method parameters using Bean Validation 1.1. The method will be
@@ -59,22 +65,26 @@ public class MethodValidatorInterceptor implements Interceptor {
 	private MessageInterpolator interpolator;
 	private MethodInfo methodInfo;
 	private Validator validator;
+	private ParameterNameProvider parameterNameProvider;
 	
 	private ExecutableValidator executableValidator;
 	private javax.validation.Validator bvalidator;
+
 
 	@Deprecated
 	public MethodValidatorInterceptor() {}
 
 	@Inject
 	public MethodValidatorInterceptor(Localization localization, MessageInterpolator interpolator, Validator validator,
-			MethodInfo methodInfo, ExecutableValidator executableValidator, javax.validation.Validator bvalidator) {
+			MethodInfo methodInfo, ExecutableValidator executableValidator, javax.validation.Validator bvalidator, 
+			ParameterNameProvider parameterNameProvider) {
 		this.localization = localization;
 		this.interpolator = interpolator;
 		this.validator = validator;
 		this.methodInfo = methodInfo;
 		this.executableValidator = executableValidator;
 		this.bvalidator = bvalidator;
+		this.parameterNameProvider = parameterNameProvider;
 	}
 
 	@Override
@@ -93,10 +103,21 @@ public class MethodValidatorInterceptor implements Interceptor {
 				.validateParameters(controllerInstance, method.getMethod(), methodInfo.getParameters());
 		logger.debug("there are {} violations at method {}.", violations.size(), method);
 
+		String[] names = violations.isEmpty() ? null 
+				: parameterNameProvider.parameterNamesFor(method.getMethod());
+
 		for (ConstraintViolation<Object> v : violations) {
+			Iterator<Node> property = v.getPropertyPath().iterator();
+			property.next();
+			ParameterNode parameterNode = property.next().as(ParameterNode.class);
+			
+			int index = parameterNode.getParameterIndex();
+			String category = Joiner.on(".").join(v.getPropertyPath())
+					.replace("arg" + parameterNode.getParameterIndex(), names[index]);
+			
 			BeanValidatorContext ctx = new BeanValidatorContext(v);
 			String msg = interpolator.interpolate(v.getMessageTemplate(), ctx, getLocale());
-			validator.add(new ValidationMessage(msg, v.getPropertyPath().toString()));
+			validator.add(new ValidationMessage(msg, category));
 		}
 
 		stack.next(method, controllerInstance);

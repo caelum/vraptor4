@@ -15,6 +15,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor4.core.Localization;
 
@@ -35,8 +36,7 @@ public class BeanValidatorTest {
     	Locale.setDefault(new Locale("en"));
     	MockitoAnnotations.initMocks(this);
 
-    	ValidatorFactoryCreator creator = new ValidatorFactoryCreator();
-    	//creator.buildFactory();
+    	ValidatorFactoryCreator creator = new ValidatorFactoryCreator(LoggerFactory.getLogger(getClass()));
 
     	ValidatorCreator validatorFactory = new ValidatorCreator(creator.getInstance());
     	//validatorFactory.createValidator();
@@ -44,7 +44,7 @@ public class BeanValidatorTest {
     	MessageInterpolatorFactory interpolatorFactory = new MessageInterpolatorFactory(creator.getInstance());
     	interpolatorFactory.createInterpolator();
 
-    	//beanValidator = new DefaultBeanValidator(localization, validatorFactory.getInstance(), interpolatorFactory.getInstance());
+    	beanValidator = new DefaultBeanValidator(localization, validatorFactory.getInstanceValidator(), interpolatorFactory.getInstance());
     }
 
     @Test

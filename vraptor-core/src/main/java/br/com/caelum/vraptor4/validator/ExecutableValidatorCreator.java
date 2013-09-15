@@ -19,33 +19,33 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Alternative;
 import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
-import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
+import javax.validation.executable.ExecutableValidator;
 
 /**
- * Creates an instance for {@link Validator}.
+ * Creates an instance for {@link ExecutableValidator}.
  *
  * @author Otávio Scherer Garcia
- * @since 3.1.2
+ * @since 4.0.0
  */
 @ApplicationScoped
 @Alternative
-public class ValidatorCreator {
+public class ExecutableValidatorCreator {
 
 	private ValidatorFactory factory;
 	
 	//CDI eyes only
 	@Deprecated
-	public ValidatorCreator() {
+	public ExecutableValidatorCreator() {
 	}
 
 	@Inject
-    public ValidatorCreator(ValidatorFactory factory) {
+    public ExecutableValidatorCreator(ValidatorFactory factory) {
         this.factory = factory;
     }
 	
 	@Produces @javax.enterprise.context.ApplicationScoped
-	public Validator getInstanceValidator() {
-		return factory.getValidator();
+	public ExecutableValidator getInstanceExecutable() {
+		return factory.getValidator().forExecutables();
 	}
 }

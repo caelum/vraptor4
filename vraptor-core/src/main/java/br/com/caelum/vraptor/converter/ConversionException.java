@@ -15,7 +15,7 @@
  * limitations under the License. 
  */
 
-package br.com.caelum.vraptor4.converter;
+package br.com.caelum.vraptor.converter;
 
 /**
  * A conversion error. The message should already be i18n.

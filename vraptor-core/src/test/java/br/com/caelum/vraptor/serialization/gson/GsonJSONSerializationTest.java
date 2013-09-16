@@ -24,11 +24,11 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import br.com.caelum.vraptor.deserialization.gson.VRaptorGsonBuilder;
 import br.com.caelum.vraptor.interceptor.DefaultTypeNameExtractor;
 import br.com.caelum.vraptor.serialization.NullProxyInitializer;
 import br.com.caelum.vraptor.serialization.gson.adapters.CalendarSerializer;
 import br.com.caelum.vraptor.serialization.xstream.Serializee;
-import br.com.caelum.vraptor4.serialization.gson.VRaptorGsonBuilder;
 
 import com.google.common.collect.ForwardingCollection;
 import com.google.common.collect.Lists;

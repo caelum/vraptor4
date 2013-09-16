@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package br.com.caelum.vraptor4.http;
+package br.com.caelum.vraptor.http;
 
 import java.io.UnsupportedEncodingException;
 
@@ -24,7 +24,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import br.com.caelum.vraptor.VRaptorException;
-import br.com.caelum.vraptor.http.EncodingHandler;
 
 /**
  * {@link EncodingHandler} that does nothing.

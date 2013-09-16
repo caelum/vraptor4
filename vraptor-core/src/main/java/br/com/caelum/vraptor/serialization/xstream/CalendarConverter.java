@@ -1,4 +1,4 @@
-package br.com.caelum.vraptor4.serialization.xstream;
+package br.com.caelum.vraptor.serialization.xstream;
 
 import java.util.Calendar;
 

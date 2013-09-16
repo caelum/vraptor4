@@ -22,7 +22,6 @@ import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 
 import br.com.caelum.vraptor.config.BasicConfiguration;
-import br.com.caelum.vraptor4.http.UTF8EncodingHandler;
 
 /**
  * Create an instance for {@link EncodingHandler}. If {@link BasicConfiguration#ENCODING} is defined into web.xml,

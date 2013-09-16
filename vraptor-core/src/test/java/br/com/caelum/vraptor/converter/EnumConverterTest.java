@@ -29,7 +29,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.Converter;
-import br.com.caelum.vraptor4.converter.ConversionException;
 
 public class EnumConverterTest {
 

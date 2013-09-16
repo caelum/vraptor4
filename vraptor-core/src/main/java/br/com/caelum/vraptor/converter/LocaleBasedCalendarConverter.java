@@ -33,7 +33,6 @@ import javax.inject.Inject;
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.core.Localization;
-import br.com.caelum.vraptor4.converter.ConversionException;
 
 /**
  * Locale based calendar converter.

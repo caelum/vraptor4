@@ -41,9 +41,9 @@ import br.com.caelum.vraptor.events.VRaptorInitialized;
 import br.com.caelum.vraptor.http.EncodingHandler;
 import br.com.caelum.vraptor.http.VRaptorRequest;
 import br.com.caelum.vraptor.http.VRaptorResponse;
+import br.com.caelum.vraptor.interceptor.ApplicationLogicException;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.ioc.ContainerProvider;
-import br.com.caelum.vraptor4.interceptor.ApplicationLogicException;
 
 /**
  * VRaptor entry point.<br>

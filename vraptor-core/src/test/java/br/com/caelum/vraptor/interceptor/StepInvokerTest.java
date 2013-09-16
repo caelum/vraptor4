@@ -14,7 +14,6 @@ import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.interceptor.example.ExampleOfSimpleStackInterceptor;
 import br.com.caelum.vraptor.interceptor.example.InterceptorWithInheritance;
 import br.com.caelum.vraptor.interceptor.example.WeldProxy$$$StyleInterceptor;
-import br.com.caelum.vraptor4.interceptor.InterceptorWithMoreThanOneBeforeCallMethod;
 
 public class StepInvokerTest {
 

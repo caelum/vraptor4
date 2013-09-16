@@ -37,13 +37,13 @@ import br.com.caelum.iogi.reflection.Target;
 import br.com.caelum.iogi.spi.DependencyProvider;
 import br.com.caelum.iogi.spi.ParameterNamesProvider;
 import br.com.caelum.vraptor.Converter;
+import br.com.caelum.vraptor.converter.ConversionException;
 import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.core.Localization;
 import br.com.caelum.vraptor.http.InvalidParameterException;
 import br.com.caelum.vraptor.validator.Message;
 import br.com.caelum.vraptor.validator.ValidationMessage;
 import br.com.caelum.vraptor.validator.annotation.ValidationException;
-import br.com.caelum.vraptor4.converter.ConversionException;
 
 import com.google.common.collect.ImmutableList;
 

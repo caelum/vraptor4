@@ -24,7 +24,6 @@ import java.util.ResourceBundle;
 
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
-import br.com.caelum.vraptor4.converter.ConversionException;
 
 /**
  * Accepts either the ordinal value or name. Null and empty strings are treated

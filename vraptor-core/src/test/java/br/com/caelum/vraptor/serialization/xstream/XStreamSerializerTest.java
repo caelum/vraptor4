@@ -15,7 +15,6 @@ import org.junit.Before;
 
 import br.com.caelum.vraptor.interceptor.DefaultTypeNameExtractor;
 import br.com.caelum.vraptor.serialization.NullProxyInitializer;
-import br.com.caelum.vraptor4.serialization.xstream.CalendarConverter;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.converters.Converter;

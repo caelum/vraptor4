@@ -27,8 +27,8 @@ import org.joda.time.DateTime;
 
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
+import br.com.caelum.vraptor.converter.ConversionException;
 import br.com.caelum.vraptor.core.Localization;
-import br.com.caelum.vraptor4.converter.ConversionException;
 
 /**
  * VRaptor converter for {@link DateMidnight}. {@link DateMidnight} is part of Joda Time library.

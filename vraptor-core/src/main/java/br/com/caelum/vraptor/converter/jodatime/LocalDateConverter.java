@@ -29,8 +29,8 @@ import org.joda.time.LocalDate;
 
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
+import br.com.caelum.vraptor.converter.ConversionException;
 import br.com.caelum.vraptor.core.Localization;
-import br.com.caelum.vraptor4.converter.ConversionException;
 
 /**
  * VRaptor converter for {@link LocalDate}. {@link LocalDate} is part of Joda Time library.

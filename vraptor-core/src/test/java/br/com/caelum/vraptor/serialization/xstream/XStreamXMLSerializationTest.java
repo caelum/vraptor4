@@ -29,7 +29,6 @@ import org.junit.Test;
 import br.com.caelum.vraptor.interceptor.DefaultTypeNameExtractor;
 import br.com.caelum.vraptor.serialization.NullProxyInitializer;
 import br.com.caelum.vraptor.serialization.Serialization;
-import br.com.caelum.vraptor4.serialization.xstream.CalendarConverter;
 
 import com.google.common.collect.Lists;
 import com.thoughtworks.xstream.annotations.XStreamAlias;

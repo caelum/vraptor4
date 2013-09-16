@@ -1,4 +1,4 @@
-package br.com.caelum.vraptor4.serialization.gson;
+package br.com.caelum.vraptor.deserialization.gson;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;

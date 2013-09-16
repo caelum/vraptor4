@@ -35,7 +35,6 @@ import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.util.Stringnifier;
 import br.com.caelum.vraptor.validator.ValidationException;
-import br.com.caelum.vraptor4.interceptor.ApplicationLogicException;
 
 /**
  * Interceptor that executes the logic method.

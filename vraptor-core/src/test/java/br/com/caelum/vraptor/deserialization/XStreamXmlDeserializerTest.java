@@ -20,8 +20,8 @@ import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.controller.DefaultBeanClass;
 import br.com.caelum.vraptor.controller.DefaultControllerMethod;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
+import br.com.caelum.vraptor.serialization.xstream.CalendarConverter;
 import br.com.caelum.vraptor.serialization.xstream.XStreamBuilderImpl;
-import br.com.caelum.vraptor4.serialization.xstream.CalendarConverter;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 

@@ -44,7 +44,6 @@ import org.mockito.MockitoAnnotations;
 import br.com.caelum.vraptor.core.JstlLocalization;
 import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.http.MutableRequest;
-import br.com.caelum.vraptor4.converter.ConversionException;
 
 public class LocaleBasedTimeConverterTest {
 

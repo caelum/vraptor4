@@ -10,7 +10,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.config.BasicConfiguration;
-import br.com.caelum.vraptor4.http.UTF8EncodingHandler;
 
 public class EncodingHandlerFactoryTest {
 

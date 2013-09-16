@@ -1,4 +1,4 @@
-package br.com.caelum.vraptor4.interceptor;
+package br.com.caelum.vraptor.interceptor;
 
 import br.com.caelum.vraptor.InterceptionException;
 

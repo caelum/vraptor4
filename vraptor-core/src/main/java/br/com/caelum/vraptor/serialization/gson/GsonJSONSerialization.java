@@ -19,6 +19,7 @@ import java.io.IOException;
 
 import javax.servlet.http.HttpServletResponse;
 
+import br.com.caelum.vraptor.deserialization.gson.VRaptorGsonBuilder;
 import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
 import br.com.caelum.vraptor.serialization.JSONSerialization;
 import br.com.caelum.vraptor.serialization.NoRootSerialization;
@@ -27,7 +28,6 @@ import br.com.caelum.vraptor.serialization.Serializer;
 import br.com.caelum.vraptor.serialization.SerializerBuilder;
 import br.com.caelum.vraptor.serialization.xstream.Serializee;
 import br.com.caelum.vraptor.view.ResultException;
-import br.com.caelum.vraptor4.serialization.gson.VRaptorGsonBuilder;
 
 /**
  * Gson implementation for JSONSerialization

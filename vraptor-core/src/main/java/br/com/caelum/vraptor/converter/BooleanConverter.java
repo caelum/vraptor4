@@ -27,7 +27,6 @@ import javax.enterprise.context.ApplicationScoped;
 
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
-import br.com.caelum.vraptor4.converter.ConversionException;
 
 import com.google.common.collect.Sets;
 

@@ -8,7 +8,6 @@ import net.vidageek.mirror.exception.MirrorException;
 import net.vidageek.mirror.list.dsl.Matcher;
 import net.vidageek.mirror.list.dsl.MirrorList;
 import br.com.caelum.vraptor.InterceptionException;
-import br.com.caelum.vraptor4.interceptor.ApplicationLogicException;
 
 import com.google.common.base.Throwables;
 

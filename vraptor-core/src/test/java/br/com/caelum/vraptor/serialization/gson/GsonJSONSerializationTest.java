@@ -426,7 +426,9 @@ public class GsonJSONSerializationTest {
 		serialization.from(c).serialize();
 		String result = result();
 
-		String expectedResult = "{\"client\":{\"name\":\"renan\",\"included\":\"2012-09-03T00:00:00-03:00\"}}";
+		String expectedResult = "{\"client\":{\"name\":\"renan\",\"included\":{\"time\":\""
+			+ c.included.getTimeInMillis()
+			+ "\",\"timezone\":\"" + c.included.getTimeZone().getID() + "\"}}}";
 
 		assertThat(result, is(equalTo(expectedResult)));
 	}

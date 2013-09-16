@@ -20,7 +20,6 @@ package br.com.caelum.vraptor;
 import java.util.Map;
 
 import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
-import br.com.caelum.vraptor.proxy.JavassistProxifierTest.A;
 import br.com.caelum.vraptor.view.LogicResult;
 import br.com.caelum.vraptor.view.PageResult;
 import br.com.caelum.vraptor.view.Status;
@@ -60,7 +59,7 @@ public interface Result {
      * Add an {@link Exception} to be handled by Exception Handler.
      *
      * @param exception The exception to handle.
-     * @throws A {@link NullPointerException} if exception is null.
+     * @throws a {@link NullPointerException} if exception is null.
      */
 	Result on(Class<? extends Exception> exception);
 

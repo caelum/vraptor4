@@ -17,18 +17,19 @@
 
 package br.com.caelum.vraptor.proxy;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.nullValue;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-
 import java.lang.reflect.Method;
 
 import net.vidageek.mirror.dsl.Mirror;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 /**
  * @author Fabio Kung
@@ -158,7 +159,7 @@ public class JavassistProxifierTest {
 		assertEquals(firstProxy.getClass(), secondProxy.getClass());
 	}
 
-	public static class A<T> {
+	static class A<T> {
 		public T getT(T t) { return t; }
 	}
 

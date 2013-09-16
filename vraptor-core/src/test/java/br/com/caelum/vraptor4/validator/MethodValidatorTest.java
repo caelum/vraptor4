@@ -81,7 +81,7 @@ public class MethodValidatorTest {
     
     @Test
     public void shouldAcceptIfMethodHasConstraint() {
-    	interceptor = new MethodValidatorInterceptor(null, null, null, null, null, factory.getValidator(), null);
+    	interceptor = new MethodValidatorInterceptor(null, null, null, null, factory.getValidator(), null);
     	
     	assertThat(interceptor.accepts(withConstraint), is(true));
     	assertThat(interceptor.accepts(withTwoConstraints), is(true));
@@ -90,7 +90,7 @@ public class MethodValidatorTest {
 
     @Test
     public void shouldNotAcceptIfMethodHasConstraint() {
-    	interceptor = new MethodValidatorInterceptor(null, null, null, null, null, factory.getValidator(), null);
+    	interceptor = new MethodValidatorInterceptor(null, null, null, null, factory.getValidator(), null);
     	assertThat(interceptor.accepts(withoutConstraint), is(false));
     }
 
@@ -102,7 +102,7 @@ public class MethodValidatorTest {
         info.setControllerMethod(withConstraint);
 
         interceptor = new MethodValidatorInterceptor(l10n, interpolator, validator, info, 
-        		factory.getValidator().forExecutables(), factory.getValidator(), provider);
+        		factory.getValidator(), provider);
         when(l10n.getLocale()).thenReturn(new Locale("pt", "br"));
 
         MyController controller = new MyController();
@@ -120,7 +120,7 @@ public class MethodValidatorTest {
         info.setControllerMethod(withConstraint);
 
         interceptor = new MethodValidatorInterceptor(l10n, interpolator, validator, info, 
-        		factory.getValidator().forExecutables(), factory.getValidator(), provider);
+        		factory.getValidator(), provider);
 
         MyController controller = new MyController();
         interceptor.intercept(stack, info.getControllerMethod(), controller);
@@ -138,7 +138,7 @@ public class MethodValidatorTest {
         info.setControllerMethod(withTwoConstraints);
 
         interceptor = new MethodValidatorInterceptor(l10n, interpolator, validator, info, 
-        		factory.getValidator().forExecutables(), factory.getValidator(), provider);
+        		factory.getValidator(), provider);
         when(l10n.getLocale()).thenReturn(new Locale("pt", "br"));
 
         MyController controller = new MyController();

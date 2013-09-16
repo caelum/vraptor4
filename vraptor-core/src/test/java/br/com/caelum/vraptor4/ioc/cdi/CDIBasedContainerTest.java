@@ -35,7 +35,6 @@ import br.com.caelum.vraptor4.ioc.GenericContainerTest;
 import br.com.caelum.vraptor4.ioc.WhatToDo;
 import br.com.caelum.vraptor4.ioc.fixture.ComponentFactoryInTheClasspath;
 import br.com.caelum.vraptor4.ioc.fixture.CustomComponentWithLifecycleInTheClasspath;
-import br.com.caelum.vraptor4.validator.ExecutableValidatorCreator;
 import br.com.caelum.vraptor4.validator.MessageInterpolatorFactory;
 import br.com.caelum.vraptor4.validator.ValidatorCreator;
 import br.com.caelum.vraptor4.validator.ValidatorFactoryCreator;
@@ -191,7 +190,6 @@ public class CDIBasedContainerTest extends GenericContainerTest {
 		Set<Class<?>> components = new HashSet<>(BaseComponents.getApplicationScoped().keySet());
 		components.remove(ValidatorFactoryCreator.class);
 		components.remove(ValidatorCreator.class);
-		components.remove(ExecutableValidatorCreator.class);
 		components.remove(MessageInterpolatorFactory.class);
 		checkAvailabilityFor(true, components);
 	}

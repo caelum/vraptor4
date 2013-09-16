@@ -1,13 +1,5 @@
 package br.com.caelum.vraptor.serialization.gson;
 
-import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
-import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
 import java.io.ByteArrayOutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -38,6 +30,16 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
+
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
+
+import static org.junit.Assert.assertThat;
+
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class GsonJSONSerializationTest {
 
@@ -442,7 +444,7 @@ public class GsonJSONSerializationTest {
 		serialization.from(c).serialize();
 		String result = result();
 
-		String expectedResult = "{\"client\":{\"name\":\"renan\",\"included\":\"2012-09-03T01:05:09-03:00\"}}";
+		String expectedResult = "{\"client\":{\"name\":\"renan\",\"included\":{\"time\":\"1346645109000\",\"timezone\":\"GMT-03:00\"}}}";
 
 		assertThat(result, is(equalTo(expectedResult)));
 	}

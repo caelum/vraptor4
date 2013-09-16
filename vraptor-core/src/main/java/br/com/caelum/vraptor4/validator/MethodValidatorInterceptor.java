@@ -25,7 +25,6 @@ import javax.validation.ConstraintViolation;
 import javax.validation.MessageInterpolator;
 import javax.validation.Path.Node;
 import javax.validation.Path.ParameterNode;
-import javax.validation.executable.ExecutableValidator;
 import javax.validation.metadata.BeanDescriptor;
 import javax.validation.metadata.MethodDescriptor;
 
@@ -67,7 +66,6 @@ public class MethodValidatorInterceptor implements Interceptor {
 	private Validator validator;
 	private ParameterNameProvider parameterNameProvider;
 	
-	private ExecutableValidator executableValidator;
 	private javax.validation.Validator bvalidator;
 
 
@@ -76,19 +74,22 @@ public class MethodValidatorInterceptor implements Interceptor {
 
 	@Inject
 	public MethodValidatorInterceptor(Localization localization, MessageInterpolator interpolator, Validator validator,
-			MethodInfo methodInfo, ExecutableValidator executableValidator, javax.validation.Validator bvalidator, 
-			ParameterNameProvider parameterNameProvider) {
+			MethodInfo methodInfo, javax.validation.Validator bvalidator, ParameterNameProvider parameterNameProvider) {
 		this.localization = localization;
 		this.interpolator = interpolator;
 		this.validator = validator;
 		this.methodInfo = methodInfo;
-		this.executableValidator = executableValidator;
 		this.bvalidator = bvalidator;
 		this.parameterNameProvider = parameterNameProvider;
 	}
 
 	@Override
-	public boolean accepts(ControllerMethod method) { // TODO cache?
+	public boolean accepts(ControllerMethod method) {
+		Class<?>[] params = method.getMethod().getParameterTypes();
+		if (params == null || params.length == 0) { // skip parameterless methods
+			return false;
+		}
+		
 		BeanDescriptor bean = bvalidator.getConstraintsForClass(method.getController().getType());
 		MethodDescriptor descriptor = bean.getConstraintsForMethod(method.getMethod().getName(), method.getMethod()
 				.getParameterTypes());
@@ -98,8 +99,8 @@ public class MethodValidatorInterceptor implements Interceptor {
 	@Override
 	public void intercept(InterceptorStack stack, ControllerMethod method, Object controllerInstance)
 			throws InterceptionException {
-
-		Set<ConstraintViolation<Object>> violations = executableValidator
+		
+		Set<ConstraintViolation<Object>> violations = bvalidator.forExecutables() // FIXME weld proxy problem here
 				.validateParameters(controllerInstance, method.getMethod(), methodInfo.getParameters());
 		logger.debug("there are {} violations at method {}.", violations.size(), method);
 

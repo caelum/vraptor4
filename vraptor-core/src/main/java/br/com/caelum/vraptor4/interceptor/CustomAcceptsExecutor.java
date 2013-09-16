@@ -1,6 +1,7 @@
 package br.com.caelum.vraptor4.interceptor;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
 import java.util.List;
 
 import br.com.caelum.vraptor4.controller.ControllerInstance;
@@ -11,17 +12,19 @@ public class CustomAcceptsExecutor implements StepExecutor<Boolean> {
 
 	private StepInvoker stepInvoker;
 	private Container container;
+	private Method method;
 
-	public CustomAcceptsExecutor(StepInvoker stepInvoker, Container container) {
+	public CustomAcceptsExecutor(StepInvoker stepInvoker, Container container, Class<?> interceptorClass) {
 		super();
 		this.stepInvoker = stepInvoker;
 		this.container = container;
+		method = stepInvoker.findMethod(CustomAcceptsFailCallback.class, interceptorClass);
 	}
-	
+
 
 	@Override
 	public boolean accept(Class<?> interceptorClass){
-		List<Annotation> constraints = CustomAcceptsVerifier.getCustomAcceptsAnnotations(interceptorClass);		
+		List<Annotation> constraints = CustomAcceptsVerifier.getCustomAcceptsAnnotations(interceptorClass);
 		return !constraints.isEmpty();
 	}
 
@@ -30,8 +33,7 @@ public class CustomAcceptsExecutor implements StepExecutor<Boolean> {
 		boolean customAccepts = new CustomAcceptsVerifier(container.instanceFor(ControllerMethod.class),
 				container.instanceFor(ControllerInstance.class), container, interceptor).isValid();
 		if (!customAccepts) {
-			stepInvoker.tryToInvoke(interceptor,
-					CustomAcceptsFailCallback.class);
+			stepInvoker.tryToInvoke(interceptor, method);
 		}
 		return customAccepts;
 	}

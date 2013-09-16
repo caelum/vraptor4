@@ -6,22 +6,19 @@ import java.lang.reflect.Method;
 public class NoStackParameterStepExecutor implements StepExecutor<Void> {
 
 	private StepInvoker stepInvoker;
-	private Class<? extends Annotation> step;
+	private Method method;
 
 	public NoStackParameterStepExecutor(StepInvoker stepInvoker,
-			Class<? extends Annotation> step) {
-		super();
+			Class<? extends Annotation> step, Class<?> interceptorClass) {
 		this.stepInvoker = stepInvoker;
-		this.step = step;
+		this.method = stepInvoker.findMethod(step, interceptorClass);
 	}
 
 	public boolean accept(Class<?> interceptorClass) {
 		NoStackParameterSignatureAcceptor noStackAcceptor = new NoStackParameterSignatureAcceptor();
-		Method stepMethod = stepInvoker.findMethod(step, interceptorClass);
-		if (stepMethod != null) {
-			if (!noStackAcceptor.accepts(stepMethod)) {
-				throw new IllegalArgumentException(
-						noStackAcceptor.errorMessage());
+		if (method != null) {
+			if (!noStackAcceptor.accepts(method)) {
+				throw new IllegalArgumentException(noStackAcceptor.errorMessage());
 			}
 			return true;
 		}
@@ -29,8 +26,7 @@ public class NoStackParameterStepExecutor implements StepExecutor<Void> {
 	}
 
 	public Void execute(Object interceptor) {
-		stepInvoker.tryToInvoke(interceptor, step);
+		stepInvoker.tryToInvoke(interceptor, method);
 		return null;
 	}
-
 }

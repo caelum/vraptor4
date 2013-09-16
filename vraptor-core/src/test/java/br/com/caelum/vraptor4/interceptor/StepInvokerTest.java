@@ -44,7 +44,8 @@ public class StepInvokerTest {
 
 	@Test(expected=InterceptionException.class)
 	public void shouldWrapMirrorException() throws SecurityException, NoSuchMethodException {
-		assertNotNull(stepInvoker.findMethod(BeforeCall.class, ExceptionThrowerInterceptor.class));
-		stepInvoker.tryToInvoke(new ExceptionThrowerInterceptor(), BeforeCall.class);
+		Method method = stepInvoker.findMethod(BeforeCall.class, ExceptionThrowerInterceptor.class);
+		assertNotNull(method);
+		stepInvoker.tryToInvoke(new ExceptionThrowerInterceptor(), method);
 	}
 }

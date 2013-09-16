@@ -5,41 +5,42 @@ import java.lang.reflect.Method;
 import br.com.caelum.vraptor4.Accepts;
 import br.com.caelum.vraptor4.VRaptorException;
 
+import com.google.common.base.Objects;
+
 public class InterceptorAcceptsExecutor implements StepExecutor<Boolean>{
 
 	private StepInvoker stepInvoker;
 	private InterceptorMethodParametersResolver parameterResolver;
+	private Method method;
 
 	public InterceptorAcceptsExecutor(StepInvoker stepInvoker,
-			InterceptorMethodParametersResolver parameterResolver) {
-		super();
+			InterceptorMethodParametersResolver parameterResolver,
+			Class<?> interceptorClass) {
 		this.stepInvoker = stepInvoker;
 		this.parameterResolver = parameterResolver;
+		method = stepInvoker.findMethod(Accepts.class, interceptorClass);
 	}
 
 	public boolean accept(Class<?> interceptorClass) {
-		Method acceptsMethod = stepInvoker.findMethod(Accepts.class,
-				interceptorClass);
-		InternalAcceptsSignature internalAcceptsSignature = new InternalAcceptsSignature(
-				new NoStackParameterSignatureAcceptor());
-		if (acceptsMethod != null) {
-			if (!internalAcceptsSignature.accepts(acceptsMethod)) {
-				throw new VRaptorException(
-						internalAcceptsSignature.errorMessage());
-			}
-			return true;
+		if (method == null) return false;
+
+		if(!method.getReturnType().equals(Boolean.class)
+				&& !method.getReturnType().equals(boolean.class)) {
+			throw new VRaptorException("@Accepts method must return boolean");
 		}
-		return false;
+		SignatureAcceptor acceptor = new NoStackParameterSignatureAcceptor();
+		if (!acceptor.accepts(method)) {
+			throw new VRaptorException(acceptor.errorMessage());
+		}
+		return true;
 	}
 
 	public Boolean execute(Object interceptor) {
-		boolean interceptorAccepts = true;
-		Object returnObject = stepInvoker.tryToInvoke(interceptor,
-				Accepts.class,
-				parameterResolver.parametersFor(Accepts.class, interceptor));
-		if (returnObject != null) {
-			interceptorAccepts = (Boolean) returnObject;
+		if(method != null) {
+			Object[] params = parameterResolver.parametersFor(method);
+			Object returnObject = stepInvoker.tryToInvoke(interceptor, method, params);
+			return Objects.firstNonNull((Boolean) returnObject, false);
 		}
-		return interceptorAccepts;
+		return true;
 	}
 }

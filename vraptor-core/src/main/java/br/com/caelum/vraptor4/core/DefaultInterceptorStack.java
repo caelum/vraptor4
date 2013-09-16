@@ -48,7 +48,6 @@ public class DefaultInterceptorStack implements InterceptorStack {
 	@Deprecated
 	public DefaultInterceptorStack() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	@Inject

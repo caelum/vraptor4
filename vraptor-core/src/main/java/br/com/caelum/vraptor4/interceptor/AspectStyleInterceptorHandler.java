@@ -25,23 +25,21 @@ public class AspectStyleInterceptorHandler implements InterceptorHandler {
 	private StepExecutor<?> around;
 	private StepExecutor<?> before;
 
-
 	public AspectStyleInterceptorHandler(Class<?> interceptorClass,
 			StepInvoker stepInvoker, Container container) {
 		this.interceptorClass = interceptorClass;
 		this.stepInvoker = stepInvoker;
 		this.container = container;
-		parametersResolver = new InterceptorMethodParametersResolver(
-				stepInvoker, container);
+		parametersResolver = new InterceptorMethodParametersResolver(container);
 		configure();
 
 	}
 
 	private void configure() {
 
-		after = new NoStackParameterStepExecutor(stepInvoker, AfterCall.class);
-		around = new AroundExecutor(stepInvoker,parametersResolver, container);
-		before = new NoStackParameterStepExecutor(stepInvoker, BeforeCall.class);
+		after = new NoStackParameterStepExecutor(stepInvoker, AfterCall.class, interceptorClass);
+		around = new AroundExecutor(stepInvoker,parametersResolver, interceptorClass);
+		before = new NoStackParameterStepExecutor(stepInvoker, BeforeCall.class, interceptorClass);
 
 		boolean doNotAcceptAfter = !after.accept(interceptorClass);
 		boolean doNotAcceptAround = !around.accept(interceptorClass);
@@ -56,8 +54,8 @@ public class AspectStyleInterceptorHandler implements InterceptorHandler {
 				"at least one method whith @AfterCall, @AroundCall or @BeforeCall annotation");
 		}
 
-		CustomAcceptsExecutor customAcceptsExecutor = new CustomAcceptsExecutor(stepInvoker, container);
-		InterceptorAcceptsExecutor interceptorAcceptsExecutor = new InterceptorAcceptsExecutor(stepInvoker, parametersResolver);
+		CustomAcceptsExecutor customAcceptsExecutor = new CustomAcceptsExecutor(stepInvoker, container, interceptorClass);
+		InterceptorAcceptsExecutor interceptorAcceptsExecutor = new InterceptorAcceptsExecutor(stepInvoker, parametersResolver, interceptorClass);
 		boolean customAccepts = customAcceptsExecutor.accept(interceptorClass);
 		boolean internalAccepts = interceptorAcceptsExecutor.accept(interceptorClass);
 		if(customAccepts && internalAccepts){

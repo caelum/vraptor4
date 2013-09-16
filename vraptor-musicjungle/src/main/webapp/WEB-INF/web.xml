@@ -15,4 +15,16 @@
 		<listener-class>org.jboss.weld.environment.servlet.Listener</listener-class>
 	</listener>
 
+	<filter>
+		<filter-name>vraptor</filter-name>
+		<filter-class>br.com.caelum.vraptor.VRaptor</filter-class>
+	</filter>
+
+	<filter-mapping>
+		<filter-name>vraptor</filter-name>
+		<url-pattern>/*</url-pattern>
+		<dispatcher>FORWARD</dispatcher>
+		<dispatcher>REQUEST</dispatcher>
+	</filter-mapping>
+
 </web-app>

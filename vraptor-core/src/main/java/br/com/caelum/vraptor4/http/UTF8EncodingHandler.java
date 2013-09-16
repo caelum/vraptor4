@@ -23,18 +23,19 @@ import javax.enterprise.inject.Vetoed;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import br.com.caelum.vraptor4.VRaptorException;
+import br.com.caelum.vraptor.VRaptorException;
+import br.com.caelum.vraptor.http.EncodingHandler;
 
 /**
  * {@link EncodingHandler} that does nothing.
- * 
+ *
  * @author Lucas Cavalcanti
  */
 @Vetoed
 public class UTF8EncodingHandler implements EncodingHandler {
-	
+
 	private final String DEFAULT_ENCODING = "UTF-8";
-    
+
 	public void setEncoding(HttpServletRequest request, HttpServletResponse response) {
 		try {
 			request.setCharacterEncoding(DEFAULT_ENCODING);

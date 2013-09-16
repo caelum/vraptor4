@@ -1,6 +1,7 @@
 package br.com.caelum.vraptor4.interceptor;
 
-import br.com.caelum.vraptor4.InterceptionException;
+import br.com.caelum.vraptor.InterceptionException;
+
 
 /**
  * When a controller or JSP throws an exception, we use this one to wrap it, so

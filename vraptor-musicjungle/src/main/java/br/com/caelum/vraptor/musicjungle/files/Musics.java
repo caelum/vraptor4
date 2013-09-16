@@ -6,8 +6,8 @@ import java.io.IOException;
 
 import org.apache.commons.io.IOUtils;
 
+import br.com.caelum.vraptor.interceptor.multipart.UploadedFile;
 import br.com.caelum.vraptor.musicjungle.model.Music;
-import br.com.caelum.vraptor4.interceptor.multipart.UploadedFile;
 
 public class Musics {
 	

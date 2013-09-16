@@ -17,10 +17,10 @@
 package br.com.caelum.vraptor.musicjungle.controller;
 
 import static br.com.caelum.vraptor.musicjungle.validation.CustomMatchers.notEmpty;
-import static br.com.caelum.vraptor4.view.Results.http;
-import static br.com.caelum.vraptor4.view.Results.json;
-import static br.com.caelum.vraptor4.view.Results.representation;
-import static br.com.caelum.vraptor4.view.Results.xml;
+import static br.com.caelum.vraptor.view.Results.http;
+import static br.com.caelum.vraptor.view.Results.json;
+import static br.com.caelum.vraptor.view.Results.representation;
+import static br.com.caelum.vraptor.view.Results.xml;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 
@@ -30,22 +30,22 @@ import javax.inject.Inject;
 
 import org.apache.log4j.Logger;
 
+import br.com.caelum.vraptor.Controller;
+import br.com.caelum.vraptor.Get;
+import br.com.caelum.vraptor.Path;
+import br.com.caelum.vraptor.Post;
+import br.com.caelum.vraptor.Result;
+import br.com.caelum.vraptor.Validator;
+import br.com.caelum.vraptor.interceptor.download.Download;
+import br.com.caelum.vraptor.interceptor.download.FileDownload;
+import br.com.caelum.vraptor.interceptor.multipart.UploadedFile;
 import br.com.caelum.vraptor.musicjungle.dao.MusicDao;
 import br.com.caelum.vraptor.musicjungle.files.Musics;
 import br.com.caelum.vraptor.musicjungle.interceptor.Public;
 import br.com.caelum.vraptor.musicjungle.interceptor.UserInfo;
 import br.com.caelum.vraptor.musicjungle.model.Music;
 import br.com.caelum.vraptor.musicjungle.model.MusicOwner;
-import br.com.caelum.vraptor4.Controller;
-import br.com.caelum.vraptor4.Get;
-import br.com.caelum.vraptor4.Path;
-import br.com.caelum.vraptor4.Post;
-import br.com.caelum.vraptor4.Result;
-import br.com.caelum.vraptor4.Validator;
-import br.com.caelum.vraptor4.interceptor.download.Download;
-import br.com.caelum.vraptor4.interceptor.download.FileDownload;
-import br.com.caelum.vraptor4.interceptor.multipart.UploadedFile;
-import br.com.caelum.vraptor4.validator.Validations;
+import br.com.caelum.vraptor.validator.Validations;
 
 import com.google.common.base.Objects;
 

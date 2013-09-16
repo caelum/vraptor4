@@ -1,6 +1,6 @@
 package br.com.caelum.vrapto4.test;
 
-import br.com.caelum.vraptor4.Controller;
+import br.com.caelum.vraptor.Controller;
 
 @Controller
 public class HomeController {

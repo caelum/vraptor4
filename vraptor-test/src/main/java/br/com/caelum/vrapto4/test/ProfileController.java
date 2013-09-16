@@ -2,9 +2,9 @@ package br.com.caelum.vrapto4.test;
 
 import javax.inject.Inject;
 
-import br.com.caelum.vraptor4.Controller;
-import br.com.caelum.vraptor4.Result;
-import br.com.caelum.vraptor4.interceptor.IncludeParameters;
+import br.com.caelum.vraptor.Controller;
+import br.com.caelum.vraptor.Result;
+import br.com.caelum.vraptor.interceptor.IncludeParameters;
 
 @Controller
 public class ProfileController {

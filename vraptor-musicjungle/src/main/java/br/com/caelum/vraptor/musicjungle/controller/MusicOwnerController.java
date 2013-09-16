@@ -22,18 +22,18 @@ import static org.hamcrest.Matchers.not;
 
 import javax.inject.Inject;
 
+import br.com.caelum.vraptor.Controller;
+import br.com.caelum.vraptor.Path;
+import br.com.caelum.vraptor.Put;
+import br.com.caelum.vraptor.Result;
+import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.musicjungle.dao.MusicDao;
 import br.com.caelum.vraptor.musicjungle.dao.UserDao;
 import br.com.caelum.vraptor.musicjungle.interceptor.UserInfo;
 import br.com.caelum.vraptor.musicjungle.model.Music;
 import br.com.caelum.vraptor.musicjungle.model.MusicOwner;
 import br.com.caelum.vraptor.musicjungle.model.User;
-import br.com.caelum.vraptor4.Controller;
-import br.com.caelum.vraptor4.Path;
-import br.com.caelum.vraptor4.Put;
-import br.com.caelum.vraptor4.Result;
-import br.com.caelum.vraptor4.Validator;
-import br.com.caelum.vraptor4.validator.Validations;
+import br.com.caelum.vraptor.validator.Validations;
 
 /**
  * The resource <code>MusicOwnerController</code> handles all 

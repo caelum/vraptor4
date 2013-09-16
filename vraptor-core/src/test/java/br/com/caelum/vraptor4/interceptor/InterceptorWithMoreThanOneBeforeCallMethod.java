@@ -1,7 +1,7 @@
 package br.com.caelum.vraptor4.interceptor;
 
-import br.com.caelum.vraptor4.BeforeCall;
-import br.com.caelum.vraptor4.Intercepts;
+import br.com.caelum.vraptor.BeforeCall;
+import br.com.caelum.vraptor.Intercepts;
 
 @Intercepts
 public class InterceptorWithMoreThanOneBeforeCallMethod {

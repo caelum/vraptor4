@@ -27,7 +27,6 @@ import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.controller.ControllerMethod;
-import br.com.caelum.vraptor.interceptor.ForwardToDefaultViewInterceptor;
 
 /**
  * Default implementation of a interceptor stack.
@@ -38,12 +37,8 @@ import br.com.caelum.vraptor.interceptor.ForwardToDefaultViewInterceptor;
 @RequestScoped
 public class DefaultInterceptorStack implements InterceptorStack {
 
-	private static final Logger logger = LoggerFactory
-			.getLogger(DefaultInterceptorStack.class);
-
-	private final LinkedList<InterceptorHandler> interceptors = new LinkedList<>();
-	private InterceptorHandlerFactory handlerFactory;
-
+	private static final Logger logger = LoggerFactory.getLogger(DefaultInterceptorStack.class);
+	private LinkedList<InterceptorHandler> interceptors;
 
 	@Deprecated
 	public DefaultInterceptorStack() {
@@ -51,12 +46,12 @@ public class DefaultInterceptorStack implements InterceptorStack {
 	}
 
 	@Inject
-	public DefaultInterceptorStack(InterceptorHandlerFactory handlerFactory) {
-		this.handlerFactory = handlerFactory;
+	public DefaultInterceptorStack(InterceptorStackHandlersCache cache) {
+		interceptors = cache.getInterceptors();
 	}
 
-	public void next(ControllerMethod method, Object controllerInstance)
-			throws InterceptionException {
+	public void next(ControllerMethod method, Object controllerInstance) throws InterceptionException {
+		
 		if (interceptors.isEmpty()) {
 			logger.debug("All registered interceptors have been called. End of VRaptor Request Execution.");
 			return;
@@ -66,16 +61,12 @@ public class DefaultInterceptorStack implements InterceptorStack {
 	}
 
 	public void add(Class<?> type) {
-		this.interceptors.addLast(handlerFactory.handlerFor(type));
+		//FIXME EEEE		
 	}
 
 	// XXX this method will be removed soon
 	public void addAsNext(Class<?> type) {
-		if (!type.getPackage().getName()
-				.startsWith("br.com.caelum.vraptor.interceptor")
-				&& !type.equals(ForwardToDefaultViewInterceptor.class)) {
-			this.interceptors.addFirst(handlerFactory.handlerFor(type));
-		}
+		//FIXME EEEE
 	}
 
 	@Override

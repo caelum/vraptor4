@@ -13,9 +13,11 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package br.com.caelum.vraptor.validator;
+package br.com.caelum.vraptor.serialization.xstream;
 
 import javax.enterprise.context.RequestScoped;
+
+import br.com.caelum.vraptor.validator.Message;
 
 import com.thoughtworks.xstream.converters.Converter;
 import com.thoughtworks.xstream.converters.MarshallingContext;

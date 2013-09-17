@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.validation.Valid;
 
 import br.com.caelum.vraptor.Controller;
 import br.com.caelum.vraptor.Get;
@@ -116,10 +117,9 @@ public class UsersController {
 	@Path("/users")
 	@Post
 	@Public
-	public void add(final User user) {
-		// will add all validation errors from Hibernate Validator
-		validator.validate(user); 
-		
+	public void add(final @Valid User user) {
+        validator.onErrorUsePageOf(HomeController.class).login();
+        
 	    validator.checking(new Validations() {{
 		    // checks if there is already an user with the specified login
 		    boolean loginDoesNotExist = !dao.containsUserWithLogin(user.getLogin());

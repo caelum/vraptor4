@@ -102,7 +102,7 @@ public class MethodValidatorInterceptor implements Interceptor {
 	public void intercept(InterceptorStack stack, ControllerMethod method, Object controllerInstance)
 			throws InterceptionException {
 
-		Set<ConstraintViolation<Object>> violations = bvalidator.forExecutables() // FIXME weld proxy problem here
+		Set<ConstraintViolation<Object>> violations = bvalidator.forExecutables()
 				.validateParameters(controllerInstance, method.getMethod(), methodInfo.getParameters());
 		logger.debug("there are {} violations at method {}.", violations.size(), method);
 

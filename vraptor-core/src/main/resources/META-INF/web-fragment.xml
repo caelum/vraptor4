@@ -5,7 +5,7 @@
 	version="3.0">
 	<filter>
 		<filter-name>vraptor</filter-name>
-		<filter-class>br.com.caelum.vraptor4.VRaptor</filter-class>
+		<filter-class>br.com.caelum.vraptor.VRaptor</filter-class>
 	</filter>
 	<filter-mapping>
 		<filter-name>vraptor</filter-name>

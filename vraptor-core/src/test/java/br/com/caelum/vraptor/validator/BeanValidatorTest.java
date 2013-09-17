@@ -9,19 +9,18 @@ import static org.mockito.Mockito.when;
 import java.util.List;
 import java.util.Locale;
 
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 import javax.validation.groups.Default;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.core.Localization;
 import br.com.caelum.vraptor.validator.beanvalidation.DefaultBeanValidator;
 import br.com.caelum.vraptor.validator.beanvalidation.MessageInterpolatorFactory;
-import br.com.caelum.vraptor.validator.beanvalidation.ValidatorCreator;
-import br.com.caelum.vraptor.validator.beanvalidation.ValidatorFactoryCreator;
 
 /**
  * A simple class to test JSR303Validator and HibernateValidator3 components.
@@ -40,15 +39,13 @@ public class BeanValidatorTest {
     	Locale.setDefault(new Locale("en"));
     	MockitoAnnotations.initMocks(this);
 
-    	ValidatorFactoryCreator creator = new ValidatorFactoryCreator(LoggerFactory.getLogger(getClass()));
+    	ValidatorFactory validatorFactory = javax.validation.Validation.buildDefaultValidatorFactory();
+    	Validator validator = validatorFactory.getValidator();
 
-    	ValidatorCreator validatorFactory = new ValidatorCreator(creator.getInstance());
-    	//validatorFactory.createValidator();
-
-    	MessageInterpolatorFactory interpolatorFactory = new MessageInterpolatorFactory(creator.getInstance());
+    	MessageInterpolatorFactory interpolatorFactory = new MessageInterpolatorFactory(validatorFactory);
     	interpolatorFactory.createInterpolator();
 
-    	beanValidator = new DefaultBeanValidator(localization, validatorFactory.getInstanceValidator(), interpolatorFactory.getInstance());
+    	beanValidator = new DefaultBeanValidator(localization, validator, interpolatorFactory.getInstance());
     }
 
     @Test

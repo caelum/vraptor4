@@ -22,7 +22,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.controller.ControllerMethod;
@@ -35,7 +34,6 @@ import br.com.caelum.vraptor.http.ParanamerNameProvider;
 import br.com.caelum.vraptor.util.test.MockValidator;
 import br.com.caelum.vraptor.validator.beanvalidation.MessageInterpolatorFactory;
 import br.com.caelum.vraptor.validator.beanvalidation.MethodValidatorInterceptor;
-import br.com.caelum.vraptor.validator.beanvalidation.ValidatorFactoryCreator;
 
 /**
  * Test method validator feature.
@@ -51,7 +49,7 @@ public class MethodValidatorTest {
     private MethodValidatorInterceptor interceptor;
     private ParameterNameProvider provider;
     private Validator validator;
-    private ValidatorFactory factory;
+    private ValidatorFactory validatorFactory;
     private MessageInterpolator interpolator;
     
 	private ControllerMethod withConstraint;
@@ -67,10 +65,9 @@ public class MethodValidatorTest {
 
         provider = new ParanamerNameProvider();
         
-        ValidatorFactoryCreator validatorFactoryCreator = new ValidatorFactoryCreator(LoggerFactory.getLogger(getClass()));
-        factory = validatorFactoryCreator.getInstance();
+    	validatorFactory = javax.validation.Validation.buildDefaultValidatorFactory();
 
-        MessageInterpolatorFactory interpolatorFactory = new MessageInterpolatorFactory(factory);
+        MessageInterpolatorFactory interpolatorFactory = new MessageInterpolatorFactory(validatorFactory);
         interpolatorFactory.createInterpolator();
         interpolator = interpolatorFactory.getInstance();
 
@@ -84,7 +81,7 @@ public class MethodValidatorTest {
     
     @Test
     public void shouldAcceptIfMethodHasConstraint() {
-    	interceptor = new MethodValidatorInterceptor(null, null, null, null, factory.getValidator(), null);
+    	interceptor = new MethodValidatorInterceptor(null, null, null, null, validatorFactory.getValidator(), null);
     	
     	assertThat(interceptor.accepts(withConstraint), is(true));
     	assertThat(interceptor.accepts(withTwoConstraints), is(true));
@@ -93,7 +90,7 @@ public class MethodValidatorTest {
 
     @Test
     public void shouldNotAcceptIfMethodHasConstraint() {
-    	interceptor = new MethodValidatorInterceptor(null, null, null, null, factory.getValidator(), null);
+    	interceptor = new MethodValidatorInterceptor(null, null, null, null, validatorFactory.getValidator(), null);
     	assertThat(interceptor.accepts(withoutConstraint), is(false));
     }
 
@@ -105,7 +102,7 @@ public class MethodValidatorTest {
         info.setControllerMethod(withConstraint);
 
         interceptor = new MethodValidatorInterceptor(l10n, interpolator, validator, info, 
-        		factory.getValidator(), provider);
+        		validatorFactory.getValidator(), provider);
         when(l10n.getLocale()).thenReturn(new Locale("pt", "br"));
 
         MyController controller = new MyController();
@@ -123,7 +120,7 @@ public class MethodValidatorTest {
         info.setControllerMethod(withConstraint);
 
         interceptor = new MethodValidatorInterceptor(l10n, interpolator, validator, info, 
-        		factory.getValidator(), provider);
+        		validatorFactory.getValidator(), provider);
 
         MyController controller = new MyController();
         interceptor.intercept(stack, info.getControllerMethod(), controller);
@@ -141,7 +138,7 @@ public class MethodValidatorTest {
         info.setControllerMethod(withTwoConstraints);
 
         interceptor = new MethodValidatorInterceptor(l10n, interpolator, validator, info, 
-        		factory.getValidator(), provider);
+        		validatorFactory.getValidator(), provider);
         when(l10n.getLocale()).thenReturn(new Locale("pt", "br"));
 
         MyController controller = new MyController();

@@ -80,6 +80,12 @@
 			<artifactId>hibernate-validator</artifactId>
 			<version>5.0.0.Final</version>
 		</dependency>
+
+		<dependency>
+		    <groupId>org.hibernate</groupId>
+		    <artifactId>hibernate-validator-cdi</artifactId>
+		    <version>5.0.0.Final</version>
+		</dependency>
 		
 		<dependency>
 			<groupId>log4j</groupId>

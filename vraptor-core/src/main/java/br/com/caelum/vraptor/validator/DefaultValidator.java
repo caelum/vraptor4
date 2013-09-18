@@ -49,10 +49,10 @@ import com.google.common.base.Supplier;
  */
 @RequestScoped
 public class DefaultValidator extends AbstractValidator {
-    
-    private static final Logger logger = LoggerFactory.getLogger(DefaultValidator.class);
+	
+	private static final Logger logger = LoggerFactory.getLogger(DefaultValidator.class);
 
-    private Result result;
+	private Result result;
 	private List<Message> errors = new ArrayList<>();
 	private ValidationViewsFactory viewsFactory;
 	private BeanValidator beanValidator;
@@ -66,84 +66,84 @@ public class DefaultValidator extends AbstractValidator {
 	}
 
 	@Inject
-    public DefaultValidator(Result result, ValidationViewsFactory factory, Outjector outjector, Proxifier proxifier, BeanValidator beanValidator, Localization localization) {
-        this.result = result;
+	public DefaultValidator(Result result, ValidationViewsFactory factory, Outjector outjector, Proxifier proxifier, BeanValidator beanValidator, Localization localization) {
+		this.result = result;
 		this.viewsFactory = factory;
 		this.outjector = outjector;
 		this.proxifier = proxifier;
 		this.beanValidator = beanValidator;
 		this.localization = localization;
-    }
+	}
 	
-    @Override
+	@Override
 	public void checking(Validations validations) {
-        addAll(validations.getErrors(new LocalizationSupplier(localization)));
-    }
+		addAll(validations.getErrors(new LocalizationSupplier(localization)));
+	}
 
 	public <T> void check(T actual, Matcher<? super T> matcher, String category) {
 		if (!matcher.matches(actual)) {
-            Description description = new ResourceBundleDescription();
-            description.appendDescriptionOf(matcher);
-            errors.add(new ValidationMessage(description.toString(), category));
+			Description description = new ResourceBundleDescription();
+			description.appendDescriptionOf(matcher);
+			errors.add(new ValidationMessage(description.toString(), category));
 		}
 	}
-    
+	
 	public <T> void check(T actual, Matcher<? super T> matcher, String category, String reason) {
 		if (!matcher.matches(actual)) {
-            errors.add(new ValidationMessage(reason, category));
-        }
-	}
-    
-	public <T> void check(T actual, Matcher<? super T> matcher, Message message) {
-		if (!matcher.matches(actual)) {
-            errors.add(message);
-        }
+			errors.add(new ValidationMessage(reason, category));
+		}
 	}
 	
-    @Override
-	public void validate(Object object, Class<?>... groups) {
-        addAll(beanValidator.validate(object, groups));
-    }
-    
-    @Override
-	public void validateProperties(Object object, String... properties) {
-    	addAll(beanValidator.validateProperties(object, properties));
+	public <T> void check(T actual, Matcher<? super T> matcher, Message message) {
+		if (!matcher.matches(actual)) {
+			errors.add(message);
+		}
 	}
-    
-    @Override
-    public void validateProperty(Object object, String property, Class<?>... groups) {
-    	addAll(beanValidator.validateProperty(object, property, groups));
-    }
+	
+	@Override
+	public void validate(Object object, Class<?>... groups) {
+		addAll(beanValidator.validate(object, groups));
+	}
+	
+	@Override
+	public void validateProperties(Object object, String... properties) {
+		addAll(beanValidator.validateProperties(object, properties));
+	}
+	
+	@Override
+	public void validateProperty(Object object, String property, Class<?>... groups) {
+		addAll(beanValidator.validateProperty(object, property, groups));
+	}
 
-    @Override
+	@Override
 	public <T extends View> T onErrorUse(Class<T> view) {
-    	if (!hasErrors()) {
-    		return new MockResult(proxifier).use(view); //ignore anything, no errors occurred
-    	}
-    	
-    	if (logger.isDebugEnabled()) {
-    	    logger.debug("there are errors on result: {}", errors);
-    	}
-    	
-    	result.include("errors", errors);
-    	outjector.outjectRequestMap();
-    	return viewsFactory.instanceFor(view, errors);
-    }
+		if (!hasErrors()) {
+			return new MockResult(proxifier).use(view); //ignore anything, no errors occurred
+		}
+		
+		if (logger.isDebugEnabled()) {
+			logger.debug("there are errors on result: {}", errors);
+		}
+		
+		result.include("errors", errors);
+		outjector.outjectRequestMap();
+		return viewsFactory.instanceFor(view, errors);
+	}
 
-    @Override
+	@Override
 	public void addAll(Collection<? extends Message> messages) {
 		for (Message message : messages) {
 			add(message);
 		}
 	}
 
-    @Override
+	@Override
 	public void add(Message message) {
-    	if (message instanceof I18nMessage && !((I18nMessage) message).hasBundle()) {
-    		((I18nMessage) message).setLazyBundle(new LocalizationSupplier(localization));
-    	}
-    	errors.add(message);
-    }
+		if (message instanceof I18nMessage && !((I18nMessage) message).hasBundle()) {
+			((I18nMessage) message).setLazyBundle(new LocalizationSupplier(localization));
+		}
+		errors.add(message);
+	}
 
 	@Override
 	public boolean hasErrors() {

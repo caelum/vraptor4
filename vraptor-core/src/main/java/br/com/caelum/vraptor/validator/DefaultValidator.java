@@ -27,6 +27,9 @@ import java.util.ResourceBundle;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 
+import org.hamcrest.Description;
+import org.hamcrest.Matcher;
+import org.hamcrest.ResourceBundleDescription;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -77,6 +80,26 @@ public class DefaultValidator extends AbstractValidator {
         addAll(validations.getErrors(new LocalizationSupplier(localization)));
     }
 
+	public <T> void check(T actual, Matcher<? super T> matcher, String category) {
+		if (!matcher.matches(actual)) {
+            Description description = new ResourceBundleDescription();
+            description.appendDescriptionOf(matcher);
+            errors.add(new ValidationMessage(description.toString(), category));
+		}
+	}
+    
+	public <T> void check(T actual, Matcher<? super T> matcher, String category, String reason) {
+		if (!matcher.matches(actual)) {
+            errors.add(new ValidationMessage(reason, category));
+        }
+	}
+    
+	public <T> void check(T actual, Matcher<? super T> matcher, Message message) {
+		if (!matcher.matches(actual)) {
+            errors.add(message);
+        }
+	}
+	
     @Override
 	public void validate(Object object, Class<?>... groups) {
         addAll(beanValidator.validate(object, groups));

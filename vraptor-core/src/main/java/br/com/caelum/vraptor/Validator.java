@@ -20,19 +20,28 @@ package br.com.caelum.vraptor;
 import java.util.Collection;
 import java.util.List;
 
+import org.hamcrest.Matcher;
+
 import br.com.caelum.vraptor.validator.Message;
 import br.com.caelum.vraptor.validator.Validations;
 
 /**
- * A validator interface for vraptor3.<br>
- * Based on hamcrest, it allows you to assert for specific situations.
+ * A validator interface for VRaptor. It allows you to assert for specific situations.
  *
  * @author Guilherme Silveira
  */
 public interface Validator {
 
+	@Deprecated
     void checking(Validations rules);
 
+	<T> void check(T actual, Matcher<? super T> matcher, String category);
+    
+	<T> void check(T actual, Matcher<? super T> matcher, String category, String reason);
+		
+	<T> void check(T actual, Matcher<? super T> matcher, Message message);
+    
+    
     /**
      * Validate an object using some Bean Validation engine. If the object is null,
      * the validation will be skipped.
@@ -70,7 +79,7 @@ public interface Validator {
     void add(Message message);
 
     List<Message> getErrors();
-    
+
     boolean hasErrors();
 
     /**

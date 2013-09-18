@@ -25,6 +25,8 @@ import java.util.ResourceBundle;
 
 import javax.enterprise.inject.Alternative;
 
+import org.hamcrest.Matcher;
+
 import br.com.caelum.vraptor.View;
 import br.com.caelum.vraptor.validator.AbstractValidator;
 import br.com.caelum.vraptor.validator.I18nMessage;
@@ -58,13 +60,28 @@ public class MockValidator extends AbstractValidator {
 
 	private final List<Message> errors = new ArrayList<>();
 
+	@Override
 	public void checking(Validations validations) {
 		this.errors.addAll(validations.getErrors());
 	}
+	
+	@Override
+	public <T> void check(T actual, Matcher<? super T> matcher, Message message) {
+	}
+	
+	@Override
+	public <T> void check(T actual, Matcher<? super T> matcher, String category) {
+	}
+	
+	@Override
+	public <T> void check(T actual, Matcher<? super T> matcher, String category, String reason) {
+	}
 
+	@Override
 	public void validate(Object object, Class<?>... groups) {
 	}
 
+	@Override
 	public void validateProperties(Object object, String... properties) {
 	}
 	
@@ -72,6 +89,7 @@ public class MockValidator extends AbstractValidator {
 	public void validateProperty(Object object, String property, Class<?>... groups) {
 	}
 
+	@Override
 	public <T extends View> T onErrorUse(Class<T> view) {
 		if(!this.errors.isEmpty()) {
 			throw new ValidationException(errors);
@@ -79,18 +97,22 @@ public class MockValidator extends AbstractValidator {
 		return new MockResult().use(view);
 	}
 
+	@Override
 	public void addAll(Collection<? extends Message> messages) {
 		this.errors.addAll(messages);
 	}
 
+	@Override
 	public void add(Message message) {
 		this.errors.add(message);
 	}
 
+	@Override
 	public boolean hasErrors() {
 		return !this.errors.isEmpty();
 	}
 
+	@Override
 	public List<Message> getErrors() {
 		return Collections.unmodifiableList(errors);
 	}

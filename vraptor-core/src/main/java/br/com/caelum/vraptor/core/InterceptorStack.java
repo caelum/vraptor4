@@ -32,15 +32,4 @@ public interface InterceptorStack {
 	 */
     void next(ControllerMethod method, Object controllerInstance) throws InterceptionException;
 
-    /**
-     * Adds this interceptor at the end of the stack.
-     */
-    void add(Class<?> interceptor);
-
-    /**
-     * Adds this interceptor at the head of the stack.
-     */
-    @Deprecated
-    void addAsNext(Class<?> interceptor);
-
 }

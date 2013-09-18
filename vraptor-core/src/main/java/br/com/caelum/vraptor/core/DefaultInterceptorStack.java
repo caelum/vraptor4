@@ -41,9 +41,7 @@ public class DefaultInterceptorStack implements InterceptorStack {
 	private LinkedList<InterceptorHandler> interceptors;
 
 	@Deprecated
-	public DefaultInterceptorStack() {
-		super();
-	}
+	public DefaultInterceptorStack() {}
 
 	@Inject
 	public DefaultInterceptorStack(InterceptorStackHandlersCache cache) {
@@ -58,10 +56,6 @@ public class DefaultInterceptorStack implements InterceptorStack {
 		}
 		InterceptorHandler handler = interceptors.poll();
 		handler.execute(this, method, controllerInstance);
-	}
-
-	public void add(Class<?> type) {
-		//FIXME EEEE
 	}
 
 	@Override

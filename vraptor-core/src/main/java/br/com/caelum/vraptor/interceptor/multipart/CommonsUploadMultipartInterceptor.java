@@ -44,7 +44,6 @@ import br.com.caelum.vraptor.http.InvalidParameterException;
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.interceptor.ControllerLookupInterceptor;
 import br.com.caelum.vraptor.validator.I18nMessage;
-import br.com.caelum.vraptor.validator.Validations;
 
 import com.google.common.base.Strings;
 import com.google.common.collect.HashMultiset;
@@ -152,8 +151,7 @@ public class CommonsUploadMultipartInterceptor
     }
 
     /**
-     * This method is called when the {@link SizeLimitExceededException} was thrown. By default, add the key
-     * file.limit.exceeded using {@link Validations}.
+     * This method is called when the {@link SizeLimitExceededException} was thrown.
      *
      * @param e
      */

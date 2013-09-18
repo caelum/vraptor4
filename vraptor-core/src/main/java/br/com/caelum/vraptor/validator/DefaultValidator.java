@@ -75,11 +75,6 @@ public class DefaultValidator extends AbstractValidator {
 		this.localization = localization;
 	}
 	
-	@Override
-	public void checking(Validations validations) {
-		addAll(validations.getErrors(new LocalizationSupplier(localization)));
-	}
-
 	public <T> void check(T actual, Matcher<? super T> matcher, String category) {
 		if (!matcher.matches(actual)) {
 			Description description = new ResourceBundleDescription();

@@ -32,7 +32,6 @@ import br.com.caelum.vraptor.validator.AbstractValidator;
 import br.com.caelum.vraptor.validator.I18nMessage;
 import br.com.caelum.vraptor.validator.Message;
 import br.com.caelum.vraptor.validator.ValidationException;
-import br.com.caelum.vraptor.validator.Validations;
 
 /**
  * Mocked Validator for testing your controllers.
@@ -60,11 +59,6 @@ public class MockValidator extends AbstractValidator {
 
 	private final List<Message> errors = new ArrayList<>();
 
-	@Override
-	public void checking(Validations validations) {
-		this.errors.addAll(validations.getErrors());
-	}
-	
 	@Override
 	public <T> void check(T actual, Matcher<? super T> matcher, Message message) {
 	}

@@ -23,7 +23,6 @@ import java.util.List;
 import org.hamcrest.Matcher;
 
 import br.com.caelum.vraptor.validator.Message;
-import br.com.caelum.vraptor.validator.Validations;
 
 /**
  * A validator interface for VRaptor. It allows you to assert for specific situations.
@@ -31,9 +30,6 @@ import br.com.caelum.vraptor.validator.Validations;
  * @author Guilherme Silveira
  */
 public interface Validator {
-
-	@Deprecated
-    void checking(Validations rules);
 
 	/**
 	 * Validation based on Hamcrest matcher.

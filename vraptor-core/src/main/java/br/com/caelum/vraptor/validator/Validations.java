@@ -47,6 +47,7 @@ import com.google.common.base.Suppliers;
  * @author Guilherme Silveira
  * @author Lucas Cavalcanti
  */
+@Deprecated
 public class Validations {
 
     private final List<Message> errors = new ArrayList<>();

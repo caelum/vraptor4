@@ -37,7 +37,7 @@ import com.thoughtworks.xstream.XStream;
  */
 @RequestScoped
 @Deserializes({"application/xml","xml", "text/xml"})
-public class XStreamXMLDeserializer implements XMLDeserializer {
+public class XStreamXMLDeserializer implements Deserializer {
 
 	private ParameterNameProvider provider;
 	private XStreamBuilder builder;

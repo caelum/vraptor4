@@ -24,6 +24,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
 import org.hibernate.validator.constraints.Length;
 
@@ -43,6 +44,7 @@ public class User implements Serializable {
 	@Id
 	@NotNull
 	@Length(min = 3, max = 20)
+	@Pattern(regexp = "[a-z0-9_]+", message = "{invalid_login}")
 	private String login;
 
 	@NotNull

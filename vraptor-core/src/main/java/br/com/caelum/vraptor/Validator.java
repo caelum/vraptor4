@@ -93,14 +93,35 @@ public interface Validator {
 	 */
 	void validateProperty(Object object, String property, Class<?>... groups);    
 
+	/**
+	 * If validator has errors, you can use this method to define what to do. WARN: this method don't stop the flow.
+	 * @param view
+	 * @return
+	 */
     <T extends View> T onErrorUse(Class<T> view);
 
-    void addAll(Collection<? extends Message> message);
+    /**
+     * Adds the list of messages.
+     * @param messages
+     */
+    void addAll(Collection<? extends Message> messages);
 
+    /**
+     * Adds the message.
+     * @param message
+     */
     void add(Message message);
 
+    /**
+     * Returns a list of errors.
+     * @return
+     */
     List<Message> getErrors();
 
+    /**
+     * Return true if has validation errors. False otherwise.
+     * @return
+     */
     boolean hasErrors();
 
     /**

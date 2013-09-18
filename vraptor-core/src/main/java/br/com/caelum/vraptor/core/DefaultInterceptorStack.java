@@ -51,7 +51,7 @@ public class DefaultInterceptorStack implements InterceptorStack {
 	}
 
 	public void next(ControllerMethod method, Object controllerInstance) throws InterceptionException {
-		
+
 		if (interceptors.isEmpty()) {
 			logger.debug("All registered interceptors have been called. End of VRaptor Request Execution.");
 			return;
@@ -61,11 +61,6 @@ public class DefaultInterceptorStack implements InterceptorStack {
 	}
 
 	public void add(Class<?> type) {
-		//FIXME EEEE		
-	}
-
-	// XXX this method will be removed soon
-	public void addAsNext(Class<?> type) {
 		//FIXME EEEE
 	}
 

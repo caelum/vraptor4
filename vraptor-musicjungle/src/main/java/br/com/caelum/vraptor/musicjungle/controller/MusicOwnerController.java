@@ -45,7 +45,7 @@ public class MusicOwnerController {
 	private Result result;
 	private Validator validator;
 	private UserInfo userInfo;
-	private MusicDao dao;
+	private MusicDao musicDao;
 	private UserDao userDao;
 	
 	//CDI eyes only
@@ -62,10 +62,10 @@ public class MusicOwnerController {
 	 * @param validator VRaptor validator.
 	 */
 	@Inject
-	public MusicOwnerController(MusicDao dao, UserDao userDao, 
+	public MusicOwnerController(MusicDao musicDao, UserDao userDao, 
 			UserInfo userInfo, Result result, Validator validator) {
 		
-		this.dao = dao;
+		this.musicDao = musicDao;
 		this.userDao = userDao;
 		this.result = result;
         this.validator = validator;
@@ -100,7 +100,7 @@ public class MusicOwnerController {
 
 		validator.onErrorUsePageOf(UsersController.class).home();
 
-		dao.add(new MusicOwner(user, music));
+		musicDao.add(new MusicOwner(user, music));
 
 		result.redirectTo(UsersController.class).home();
 	}

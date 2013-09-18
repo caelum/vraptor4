@@ -24,6 +24,10 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
+import org.hibernate.validator.constraints.NotEmpty;
 
 import br.com.caelum.vraptor.musicjungle.enums.MusicType;
 
@@ -39,13 +43,18 @@ public class Music {
 	@GeneratedValue
 	private Long id;
 
+	@NotEmpty
+	@Size(min = 6)
 	private String title;
 
+    @NotEmpty
+    @Size(min = 6)
 	private String description;
 
 	@OneToMany(mappedBy = "music")
 	private Set<MusicOwner> musicOwners;
 
+	@NotNull
 	@Enumerated(EnumType.STRING)
 	private MusicType type;
 

@@ -90,7 +90,7 @@
 		<div class="alert alert-error">
 			<button type="button" class="close" data-dismiss="alert">&times;</button>
 			<c:forEach items="${errors }" var="error">
-				<b>${error.category}</b> - ${error.message}
+				<b><fmt:message key="${error.category}" /></b> - ${error.message}
 			</c:forEach>
 		</div>
 	</c:if>

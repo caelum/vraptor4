@@ -16,19 +16,19 @@
  */
 package br.com.caelum.vraptor.musicjungle.controller;
 
-import static br.com.caelum.vraptor.musicjungle.validation.CustomMatchers.notEmpty;
 import static br.com.caelum.vraptor.view.Results.http;
 import static br.com.caelum.vraptor.view.Results.json;
 import static br.com.caelum.vraptor.view.Results.representation;
 import static br.com.caelum.vraptor.view.Results.xml;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
 
 import java.io.File;
 
 import javax.inject.Inject;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.Controller;
 import br.com.caelum.vraptor.Get;
@@ -45,7 +45,6 @@ import br.com.caelum.vraptor.musicjungle.interceptor.Public;
 import br.com.caelum.vraptor.musicjungle.interceptor.UserInfo;
 import br.com.caelum.vraptor.musicjungle.model.Music;
 import br.com.caelum.vraptor.musicjungle.model.MusicOwner;
-import br.com.caelum.vraptor.validator.Validations;
 
 import com.google.common.base.Objects;
 
@@ -63,12 +62,12 @@ import com.google.common.base.Objects;
 @Controller
 public class MusicController {
 
-	private static final Logger LOG = Logger.getLogger(MusicController.class);
+	private static final Logger logger = LoggerFactory.getLogger(MusicController.class);
 
 	private Result result;
 	private Validator validator;
 	private UserInfo userInfo;
-	private MusicDao dao;
+	private MusicDao musicDao;
 	private Musics musics;
 
 	// CDI eyes only
@@ -85,10 +84,10 @@ public class MusicController {
 	 * @param factory dao factory.
 	 */
 	@Inject
-	public MusicController(MusicDao dao, UserInfo userInfo, 
+	public MusicController(MusicDao musicDao, UserInfo userInfo, 
 				Result result, Validator validator, Musics musics) {
 		
-		this.dao = dao;
+		this.musicDao = musicDao;
 		this.result = result;
         this.validator = validator;
         this.userInfo = userInfo;
@@ -109,27 +108,17 @@ public class MusicController {
 	 */
 	@Path("/musics")
 	@Post
-	public void add(final Music music, UploadedFile file) {
-		
-	    validator.checking(new Validations() {{
-	    	if (music != null) {
-	    		that(music.getTitle(), is(notEmpty()), "login", "invalid_title");
-	    		that(music.getType(), is(notNullValue()), "name", "invalid_type");
-	    		that(music.getDescription(), is(notEmpty()), "description", "invalid_description");
-	    		that(music.getDescription().length() >= 6, "description", "invalid_description");
-	    	}
-		}});
-
+	public void add(final @NotNull @Valid Music music, UploadedFile file) {
 		validator.onErrorForwardTo(UsersController.class).home();
 
-		dao.add(music);
-		dao.add(new MusicOwner(userInfo.getUser(), music));
+		musicDao.add(music);
+		musicDao.add(new MusicOwner(userInfo.getUser(), music));
 		
 		// is there a file?
 		if (file != null) {
 		    // Let's save the file
 			musics.save(file, music);
-			LOG.info("Uploaded file: " + file.getFileName());
+			logger.info("Uploaded file: {}", file.getFileName());
 		}
 
 		// you can add objects to result even in redirects. Added objects will
@@ -159,7 +148,7 @@ public class MusicController {
 	@Path("/musics/{music.id}")
 	@Get
 	public void show(Music music) {
-	    result.include("music", dao.load(music));
+	    result.include("music", musicDao.load(music));
 	}
 
     /**
@@ -174,14 +163,14 @@ public class MusicController {
 	@Get("/musics/search")
 	public void search(Music music) {
 		String title = Objects.firstNonNull(music.getTitle(), "");
-        result.include("musics", this.dao.searchSimilarTitle(title));
+        result.include("musics", this.musicDao.searchSimilarTitle(title));
     }
 	
 	@Path("/musics/download/{m.id}")
 	@Get
 	public Download download(Music m){
 		
-		Music music = dao.load(m);
+		Music music = musicDao.load(m);
 		File file = musics.getFile(music);
 		String contentType = "audio/mpeg";
         String filename = music.getTitle() + ".mp3";
@@ -194,7 +183,7 @@ public class MusicController {
 	 */
 	@Public @Path("/musics/list/json")
 	public void showAllMusicsAsJSON() {
-		result.use(json()).from(dao.listAll()).serialize();
+		result.use(json()).from(musicDao.listAll()).serialize();
 	}
 
 	/**
@@ -202,7 +191,7 @@ public class MusicController {
 	 */
 	@Public @Path("/musics/list/xml")
 	public void showAllMusicsAsXML() {
-		result.use(xml()).from(dao.listAll()).serialize();
+		result.use(xml()).from(musicDao.listAll()).serialize();
 	}
 	
 	/**
@@ -211,7 +200,7 @@ public class MusicController {
 	@Public @Path("/musics/list/http")
 	public void showAllMusicsAsHTTP() {
 		result.use(http()).body("<p class=\"content\">"+
-			dao.listAll().toString()+"</p>");
+			musicDao.listAll().toString()+"</p>");
 	}
 
 	@Public @Path("/musics/list/form")
@@ -220,6 +209,6 @@ public class MusicController {
 	@Public @Path("musics/listAs")
 	public void listAs() {
 		result.use(representation())
-			.from(dao.listAll()).serialize();
+			.from(musicDao.listAll()).serialize();
 	}
 }

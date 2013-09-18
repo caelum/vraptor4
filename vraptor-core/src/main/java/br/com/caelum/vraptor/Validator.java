@@ -19,6 +19,7 @@ package br.com.caelum.vraptor;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import br.com.caelum.vraptor.validator.Message;
 
@@ -94,6 +95,12 @@ public interface Validator {
      */
     List<Message> getErrors();
 
+    /**
+     * Returns errors grouped by category.
+     * @return
+     */
+    Map<String, Collection<String>> getErrorsAsMap();
+		
     /**
      * Return true if has validation errors. False otherwise.
      * @return

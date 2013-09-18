@@ -17,10 +17,13 @@
 
 package br.com.caelum.vraptor.util.test;
 
+import static java.util.Collections.emptyMap;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 import javax.enterprise.inject.Alternative;
@@ -31,6 +34,9 @@ import br.com.caelum.vraptor.validator.AbstractValidator;
 import br.com.caelum.vraptor.validator.I18nMessage;
 import br.com.caelum.vraptor.validator.Message;
 import br.com.caelum.vraptor.validator.ValidationException;
+
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Multimap;
 
 /**
  * Mocked Validator for testing your controllers.
@@ -101,6 +107,20 @@ public class MockValidator extends AbstractValidator {
 	@Override
 	public List<Message> getErrors() {
 		return Collections.unmodifiableList(errors);
+	}
+	
+	@Override
+	public Map<String, Collection<String>> getErrorsAsMap() {
+		if (hasErrors()) {
+			Multimap<String, String> messages = ArrayListMultimap.create();
+			for (Message m : errors) {
+				messages.put(m.getCategory(), m.getMessage());
+			}
+			
+			return messages.asMap();
+		}
+		
+		return emptyMap();
 	}
 
 	public boolean containsMessage(String messageKey, Object... messageParameters) {

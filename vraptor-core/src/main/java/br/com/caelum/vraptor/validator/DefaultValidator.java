@@ -17,11 +17,13 @@
 
 package br.com.caelum.vraptor.validator;
 
+import static java.util.Collections.emptyMap;
 import static java.util.Collections.unmodifiableList;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 import javax.enterprise.context.RequestScoped;
@@ -39,6 +41,8 @@ import br.com.caelum.vraptor.util.test.MockResult;
 import br.com.caelum.vraptor.view.ValidationViewsFactory;
 
 import com.google.common.base.Supplier;
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Multimap;
 
 /**
  * The default validator implementation.
@@ -136,7 +140,20 @@ public class DefaultValidator extends AbstractValidator {
 	public List<Message> getErrors() {
 		return unmodifiableList(errors);
 	}
-
+	
+	@Override
+	public Map<String, Collection<String>> getErrorsAsMap() {
+		if (hasErrors()) {
+			Multimap<String, String> messages = ArrayListMultimap.create();
+			for (Message m : errors) {
+				messages.put(m.getCategory(), m.getMessage());
+			}
+			
+			return messages.asMap();
+		}
+		
+		return emptyMap();
+	}
 }
 
 class LocalizationSupplier implements Supplier<ResourceBundle> {

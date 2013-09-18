@@ -35,10 +35,35 @@ public interface Validator {
 	@Deprecated
     void checking(Validations rules);
 
+	/**
+	 * Validation based on Hamcrest matcher.
+	 * 
+	 * @since 4.0.0
+	 * @param actual the actual value
+	 * @param matcher matcher to test
+	 * @param category validation category
+	 */
 	<T> void check(T actual, Matcher<? super T> matcher, String category);
     
+	/**
+	 * Validation based on Hamcrest matcher.
+	 * 
+	 * @since 4.0.0
+	 * @param actual the actual value
+	 * @param matcher matcher to test
+	 * @param category validation category
+	 * @param reason
+	 */
 	<T> void check(T actual, Matcher<? super T> matcher, String category, String reason);
 		
+	/**
+	 * Validation based on Hamcrest matcher.
+	 * 
+	 * @since 4.0.0
+	 * @param actual the actual value
+	 * @param matcher matcher to test
+	 * @param message {@link Message} object
+	 */
 	<T> void check(T actual, Matcher<? super T> matcher, Message message);
     
     

@@ -16,7 +16,7 @@ import br.com.caelum.vraptor.validator.beanvalidation.MessageInterpolatorFactory
  * @since 3.4.0
  */
 @Alternative
-public class JSR303MockValidator extends MockValidator {
+public class MockBeanValidator extends MockValidator {
 
 	private final DefaultBeanValidator that;
 
@@ -26,7 +26,7 @@ public class JSR303MockValidator extends MockValidator {
 		validatorFactory = Validation.buildDefaultValidatorFactory();
 	}
 
-	public JSR303MockValidator() {
+	public MockBeanValidator() {
 		Validator validator = validatorFactory.getValidator();
 		MessageInterpolatorFactory factoryMessageInterpolator = new MessageInterpolatorFactory(validatorFactory);
 

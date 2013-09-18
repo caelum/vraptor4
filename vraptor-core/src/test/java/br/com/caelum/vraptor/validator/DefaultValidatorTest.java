@@ -17,10 +17,12 @@
 
 package br.com.caelum.vraptor.validator;
 
+import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 import static org.mockito.Matchers.any;
@@ -30,7 +32,6 @@ import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
@@ -79,14 +80,6 @@ public class DefaultValidatorTest {
 		when(logicResult.forwardTo(MyComponent.class)).thenReturn(instance);
 		when(pageResult.of(MyComponent.class)).thenReturn(instance);
 		when(localization.getBundle()).thenReturn(new EmptyBundle());
-	}
-
-	@Test
-	public void shouldDoNothingWhenYouDontSpecifyTheValidationPage() throws Exception {
-		validator.checking(new Validations() {{
-			that(false, "", "");
-		}});
-		verifyZeroInteractions(result, outjector, instance);
 	}
 
 	@Test
@@ -165,9 +158,6 @@ public class DefaultValidatorTest {
 		try {
 			// call all other validation methods and don't expect them to redirect
 			validator.addAll(Arrays.asList(new ValidationMessage("test", "test")));
-			validator.checking(new Validations(){{
-				that(false, "", "");
-			}});
 
 			when(pageResult.of(MyComponent.class)).thenReturn(instance);
 
@@ -214,10 +204,42 @@ public class DefaultValidatorTest {
 
 		verify(message, never()).setBundle(any(ResourceBundle.class));
 	}
+	
+	@Test
+	public void doNothingIfCheckingSuccess() {
+		Client c = new Client();
+		c.name = "The name";
+		
+		validator.check(c.name, notNullValue(), "a.category");
+		assertThat(validator.getErrors(), hasSize(0));
+	}
 
+	@Test
+	public void shouldAddMessageIfCheckingFails() {
+		Client c = new Client();
+		
+		validator.check(c.name, notNullValue(), "a.category");
+		assertThat(validator.getErrors(), hasSize(1));
+		assertThat(validator.getErrors().get(0).getMessage(), containsString("not null"));
+	}
+	
+	@Test
+	public void shouldUseHamcrestDescriptionIfMessageWasNotSuplied() {
+		Client c = new Client();
+		
+		validator.check(c.name, notNullValue(), "a.category", "a message");
+		assertThat(validator.getErrors(), hasSize(1));
+		assertThat(validator.getErrors().get(0).getMessage(), containsString("a message"));
+	}
+	
 	@Controller
 	public static interface MyComponent {
 		public void logic();
+	}
+	
+	static class Client {
+		public String name;
+		public int age;
 	}
 
 }

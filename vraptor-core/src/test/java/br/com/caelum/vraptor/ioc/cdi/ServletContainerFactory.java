@@ -1,7 +1,5 @@
 package br.com.caelum.vraptor.ioc.cdi;
 
-import static br.com.caelum.vraptor.config.BasicConfiguration.BASE_PACKAGES_PARAMETER_NAME;
-import static br.com.caelum.vraptor.config.BasicConfiguration.SCANNING_PARAM;
 import static java.lang.Thread.currentThread;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -51,17 +49,8 @@ public class ServletContainerFactory {
 		ServletContext context = mock(ServletContext.class, "servlet context");
 
 		when(context.getMajorVersion()).thenReturn(3);
-		when(context.getInitParameter(BASE_PACKAGES_PARAMETER_NAME)).thenReturn("br.com.caelum.vraptor.ioc.fixture");
 		when(context.getRealPath("/WEB-INF/classes")).thenReturn(getClassDir());
 
-		when(context.getClassLoader()).thenReturn(
-				new URLClassLoader(new URL[] {Object.class.getResource("/test-fixture.jar")},
-						currentThread().getContextClassLoader()));
-
-        //allowing(context).getInitParameter(ENCODING);
-        //allowing(context).setAttribute(with(any(String.class)), with(any(Object.class)));
-
-        when(context.getInitParameter(SCANNING_PARAM)).thenReturn("enabled");
 		configureExpectations(context);
 		return context;
 	}

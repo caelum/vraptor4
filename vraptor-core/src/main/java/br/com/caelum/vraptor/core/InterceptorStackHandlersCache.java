@@ -2,7 +2,6 @@ package br.com.caelum.vraptor.core;
 
 import java.util.LinkedList;
 
-import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
@@ -14,7 +13,7 @@ public class InterceptorStackHandlersCache {
 	private InterceptorRegistry registry;
 	private InterceptorHandlerFactory handlerFactory;
 	
-	private final LinkedList<InterceptorHandler> interceptors = new LinkedList<>();
+	private final LinkedList<InterceptorHandler> interceptorHandlers = new LinkedList<>();
 	
 	@Deprecated //CDI eyes only
 	public InterceptorStackHandlersCache() {}
@@ -23,17 +22,14 @@ public class InterceptorStackHandlersCache {
 	public InterceptorStackHandlersCache(InterceptorRegistry registry,InterceptorHandlerFactory handlerFactory){
 		this.registry = registry;
 		this.handlerFactory = handlerFactory;
-	}
-	
-	@PostConstruct
-	public void cache(){
+
 		for (Class<?> interceptor : registry.all()) {
-			this.interceptors.addLast(handlerFactory.handlerFor(interceptor));
+			this.interceptorHandlers.addLast(handlerFactory.handlerFor(interceptor));
 		}
 	}
 	
-	public LinkedList<InterceptorHandler> getInterceptors() {
-		return new LinkedList<>(interceptors);
+	public LinkedList<InterceptorHandler> getInterceptorHandlers() {
+		return new LinkedList<>(interceptorHandlers);
 	}
 
 }

@@ -16,26 +16,21 @@
  */
 package br.com.caelum.vraptor.core;
 
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.io.IOException;
+import java.util.LinkedList;
 
 import org.junit.Before;
-import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.controller.ControllerMethod;
-import br.com.caelum.vraptor.interceptor.Interceptor;
+import static org.mockito.Mockito.when;
 
 public class DefaultInterceptorStackTest {
 
 	private static final ControllerMethod A_METHOD = null;
 	private static final Object AN_INSTANCE = null;
 
-	private @Mock InterceptorHandlerFactory handlerFactory;
+	private @Mock InterceptorStackHandlersCache handlersCache;
 	private @Mock(name = "first") InterceptorHandler firstHandler;
 	private @Mock(name = "second") InterceptorHandler secondHandler;
 
@@ -44,24 +39,13 @@ public class DefaultInterceptorStackTest {
 	@Before
 	public void setUp() throws Exception {
 		MockitoAnnotations.initMocks(this);
-		stack = new DefaultInterceptorStack(handlerFactory);
-		when(handlerFactory.handlerFor(FirstInterceptor.class)).thenReturn(firstHandler);
-		when(handlerFactory.handlerFor(SecondInterceptor.class)).thenReturn(secondHandler);
+		
+		stack = new DefaultInterceptorStack(handlersCache);
+		
+		LinkedList<InterceptorHandler> handlers = new LinkedList<>();
+		handlers.add(firstHandler);
+		handlers.add(secondHandler);
+		when(handlersCache.getInterceptorHandlers()).thenReturn(handlers);
+		
 	}
-
-	static interface FirstInterceptor extends Interceptor {}
-	static interface SecondInterceptor extends Interceptor {}
-
-    @Test
-    public void testInvokesAllInterceptorsInItsCorrectOrder() throws IOException, InterceptionException {
-        stack.add(FirstInterceptor.class);
-        stack.add(SecondInterceptor.class);
-
-        stack.next(A_METHOD, AN_INSTANCE);
-        verify(firstHandler).execute(stack, A_METHOD, AN_INSTANCE);
-
-        stack.next(A_METHOD, AN_INSTANCE);
-        verify(secondHandler).execute(stack, A_METHOD, AN_INSTANCE);
-    }
-
 }

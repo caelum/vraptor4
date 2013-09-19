@@ -38,29 +38,28 @@ import br.com.caelum.vraptor.controller.ControllerMethod;
 public class DefaultInterceptorStack implements InterceptorStack {
 
 	private static final Logger logger = LoggerFactory.getLogger(DefaultInterceptorStack.class);
-	private LinkedList<InterceptorHandler> interceptors;
+	private LinkedList<InterceptorHandler> handlers;
 
 	@Deprecated
 	public DefaultInterceptorStack() {}
 
 	@Inject
 	public DefaultInterceptorStack(InterceptorStackHandlersCache cache) {
-		interceptors = cache.getInterceptors();
+		handlers = cache.getInterceptorHandlers();
 	}
 
 	public void next(ControllerMethod method, Object controllerInstance) throws InterceptionException {
-
-		if (interceptors.isEmpty()) {
+		if (handlers.isEmpty()) {
 			logger.debug("All registered interceptors have been called. End of VRaptor Request Execution.");
 			return;
 		}
-		InterceptorHandler handler = interceptors.poll();
+		InterceptorHandler handler = handlers.poll();
 		handler.execute(this, method, controllerInstance);
 	}
 
 	@Override
 	public String toString() {
-		return "DefaultInterceptorStack " + interceptors;
+		return "DefaultInterceptorStack " + handlers;
 	}
 
 }

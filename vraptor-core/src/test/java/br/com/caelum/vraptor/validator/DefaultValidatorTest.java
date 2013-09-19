@@ -19,7 +19,6 @@ package br.com.caelum.vraptor.validator;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.empty;
-import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
@@ -36,9 +35,7 @@ import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 import java.util.ResourceBundle;
 
 import org.junit.Before;
@@ -216,18 +213,6 @@ public class DefaultValidatorTest {
 		assertThat(validator.getErrors(), hasSize(0));
 	}
 	
-	@Test
-	public void returnErrorsGroupedByCategory() {
-		validator.add(new ValidationMessage("1st msg", "category.a"));
-		validator.add(new ValidationMessage("2nd msg", "category.a"));
-		validator.add(new ValidationMessage("1st msg", "category.b"));
-		
-		Map<String, Collection<String>> errors = validator.getErrorMap();
-		
-		assertThat(errors.get("category.a"), hasItems("1st msg", "2nd msg"));
-		assertThat(errors.get("category.b"), hasItems("1st msg"));
-	}
-
 	@Test
 	public void shouldAddMessageIfCheckingFails() {
 		Client c = new Client();

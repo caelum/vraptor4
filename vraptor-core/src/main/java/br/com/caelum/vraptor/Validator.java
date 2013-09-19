@@ -99,7 +99,7 @@ public interface Validator {
      * Returns errors grouped by category.
      * @return
      */
-    Map<String, Collection<String>> getErrorMap();
+    Map<String, Collection<Message>> getErrorMap();
 		
     /**
      * Return true if has validation errors. False otherwise.

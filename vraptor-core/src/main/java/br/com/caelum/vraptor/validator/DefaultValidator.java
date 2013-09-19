@@ -17,9 +17,6 @@
 
 package br.com.caelum.vraptor.validator;
 
-import static java.util.Collections.emptyMap;
-import static java.util.Collections.unmodifiableList;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -55,7 +52,7 @@ public class DefaultValidator extends AbstractValidator {
 	private static final Logger logger = LoggerFactory.getLogger(DefaultValidator.class);
 
 	private Result result;
-	private List<Message> errors = new ArrayList<>();
+	private Multimap<String, Message> errors;
 	private ValidationViewsFactory viewsFactory;
 	private BeanValidator beanValidator;
 	private Outjector outjector;
@@ -80,7 +77,7 @@ public class DefaultValidator extends AbstractValidator {
 	@Override
 	public Validator check(boolean condition, Message message) {
 		if (!condition) {
-			errors.add(message);
+			errors.put(message.getCategory(), message);
 		}
 		
 		return this;
@@ -111,9 +108,10 @@ public class DefaultValidator extends AbstractValidator {
 			logger.debug("there are errors on result: {}", errors);
 		}
 		
-		result.include("errors", errors);
+		result.include("errors", errors).include("errorMap", errors.asMap());
 		outjector.outjectRequestMap();
-		return viewsFactory.instanceFor(view, errors);
+		
+		return viewsFactory.instanceFor(view, new ArrayList<>(errors.values()));
 	}
 
 	@Override
@@ -128,7 +126,12 @@ public class DefaultValidator extends AbstractValidator {
 		if (message instanceof I18nMessage && !((I18nMessage) message).hasBundle()) {
 			((I18nMessage) message).setLazyBundle(new LocalizationSupplier(localization));
 		}
-		errors.add(message);
+		
+		if (errors == null) {
+			errors = ArrayListMultimap.create();
+		}
+		
+		errors.put(message.getCategory(), message);
 	}
 
 	@Override
@@ -138,21 +141,12 @@ public class DefaultValidator extends AbstractValidator {
 
 	@Override
 	public List<Message> getErrors() {
-		return unmodifiableList(errors);
+		return new ArrayList<>(errors.values());
 	}
 	
 	@Override
-	public Map<String, Collection<String>> getErrorMap() {
-		if (hasErrors()) {
-			Multimap<String, String> messages = ArrayListMultimap.create();
-			for (Message m : errors) {
-				messages.put(m.getCategory(), m.getMessage());
-			}
-			
-			return messages.asMap();
-		}
-		
-		return emptyMap();
+	public Map<String, Collection<Message>> getErrorMap() {
+		return errors.asMap();
 	}
 }
 

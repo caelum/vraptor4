@@ -17,11 +17,8 @@
 
 package br.com.caelum.vraptor.util.test;
 
-import static java.util.Collections.emptyMap;
-
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -62,7 +59,7 @@ import com.google.common.collect.Multimap;
 @Alternative
 public class MockValidator extends AbstractValidator {
 
-	private final List<Message> errors = new ArrayList<>();
+	private Multimap<String, Message> errors = ArrayListMultimap.create();
 	
 	@Override
 	public Validator check(boolean condition, Message message) {
@@ -84,19 +81,21 @@ public class MockValidator extends AbstractValidator {
 	@Override
 	public <T extends View> T onErrorUse(Class<T> view) {
 		if(!this.errors.isEmpty()) {
-			throw new ValidationException(errors);
+			throw new ValidationException(new ArrayList<>(errors.values()));
 		}
 		return new MockResult().use(view);
 	}
 
 	@Override
 	public void addAll(Collection<? extends Message> messages) {
-		this.errors.addAll(messages);
+		for(Message message: messages) {
+			add(message);
+		}
 	}
 
 	@Override
 	public void add(Message message) {
-		this.errors.add(message);
+		errors.put(message.getCategory(), message);
 	}
 
 	@Override
@@ -106,21 +105,12 @@ public class MockValidator extends AbstractValidator {
 
 	@Override
 	public List<Message> getErrors() {
-		return Collections.unmodifiableList(errors);
+		return new ArrayList<>(errors.values());
 	}
 	
 	@Override
-	public Map<String, Collection<String>> getErrorMap() {
-		if (hasErrors()) {
-			Multimap<String, String> messages = ArrayListMultimap.create();
-			for (Message m : errors) {
-				messages.put(m.getCategory(), m.getMessage());
-			}
-			
-			return messages.asMap();
-		}
-		
-		return emptyMap();
+	public Map<String, Collection<Message>> getErrorMap() {
+		return errors.asMap();
 	}
 
 	public boolean containsMessage(String messageKey, Object... messageParameters) {

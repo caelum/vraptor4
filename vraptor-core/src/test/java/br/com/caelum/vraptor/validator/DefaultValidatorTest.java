@@ -222,7 +222,7 @@ public class DefaultValidatorTest {
 		validator.add(new ValidationMessage("2nd msg", "category.a"));
 		validator.add(new ValidationMessage("1st msg", "category.b"));
 		
-		Map<String, Collection<String>> errors = validator.getErrorsAsMap();
+		Map<String, Collection<String>> errors = validator.getErrorMap();
 		
 		assertThat(errors.get("category.a"), hasItems("1st msg", "2nd msg"));
 		assertThat(errors.get("category.b"), hasItems("1st msg"));

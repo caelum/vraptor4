@@ -110,7 +110,7 @@ public class MockValidator extends AbstractValidator {
 	}
 	
 	@Override
-	public Map<String, Collection<String>> getErrorsAsMap() {
+	public Map<String, Collection<String>> getErrorMap() {
 		if (hasErrors()) {
 			Multimap<String, String> messages = ArrayListMultimap.create();
 			for (Message m : errors) {

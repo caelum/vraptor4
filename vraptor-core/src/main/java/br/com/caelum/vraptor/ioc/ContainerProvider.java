@@ -19,10 +19,14 @@ package br.com.caelum.vraptor.ioc;
 
 import javax.servlet.ServletContext;
 
+import br.com.caelum.vraptor.core.RequestInfo;
+
 /**
  * @author guilherme silveira
  */
 public interface ContainerProvider {
+
+	void provideForRequest(RequestInfo requestInfo);
 
 	void stop();
 

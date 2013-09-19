@@ -84,7 +84,6 @@ import br.com.caelum.vraptor.converter.ShortConverter;
 import br.com.caelum.vraptor.converter.jodatime.LocalDateConverter;
 import br.com.caelum.vraptor.converter.jodatime.LocalTimeConverter;
 import br.com.caelum.vraptor.core.Converters;
-import br.com.caelum.vraptor.core.Execution;
 import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.deserialization.Deserializer;
@@ -215,15 +214,12 @@ public abstract class GenericContainerTest {
 		executeInsideRequest(new WhatToDo<Object>() {
 			@Override
 			public Object execute(RequestInfo request, int counter) {
-				return provider.provideForRequest(request, new Execution<Object>() {
-					@Override
-					public Object insideRequest(Container container) {
-						MyDependentComponent instance1 = instanceFor(MyDependentComponent.class,container);
-						MyDependentComponent instance2 = instanceFor(MyDependentComponent.class,container);
-						assertThat(instance1, not(sameInstance(instance2)));
-						return null;
-					}
-				});
+				provider.provideForRequest(request);
+				Container container = provider.getContainer();
+				MyDependentComponent instance1 = instanceFor(MyDependentComponent.class,container);
+				MyDependentComponent instance2 = instanceFor(MyDependentComponent.class,container);
+				assertThat(instance1, not(sameInstance(instance2)));
+				return null;
 			}
 		});
 	}
@@ -248,15 +244,11 @@ public abstract class GenericContainerTest {
 		T secondInstance = executeInsideRequest(new WhatToDo<T>() {
 			@Override
 			public T execute(RequestInfo request, final int counter) {
-				return provider.provideForRequest(request, new Execution<T>() {
-					@Override
-					public T insideRequest(Container secondContainer) {
-						ControllerMethod secondMethod = mock(ControllerMethod.class, "rm" + counter);
-						secondContainer.instanceFor(MethodInfo.class).setControllerMethod(secondMethod);
-						return instanceFor(component, secondContainer);
-					}
-				});
-
+				provider.provideForRequest(request);
+				ControllerMethod secondMethod = mock(ControllerMethod.class, "rm" + counter);
+				Container secondContainer = provider.getContainer();
+				secondContainer.instanceFor(MethodInfo.class).setControllerMethod(secondMethod);
+				return instanceFor(component, secondContainer);
 			}
 		});
 
@@ -283,22 +275,15 @@ public abstract class GenericContainerTest {
 	}
 
 	protected <T> T getFromContainerInCurrentThread(final Class<T> componentToBeRetrieved, RequestInfo request) {
-		return provider.provideForRequest(request, new Execution<T>() {
-			@Override
-			public T insideRequest(Container firstContainer) {
-				return instanceFor(componentToBeRetrieved,firstContainer);
-			}
-		});
+		provider.provideForRequest(request);
+		return instanceFor(componentToBeRetrieved, provider.getContainer());
 	}
+
 	protected <T> T getFromContainerInCurrentThread(final Class<T> componentToBeRetrieved, RequestInfo request,final Code<T> code) {
-		return provider.provideForRequest(request, new Execution<T>() {
-			@Override
-			public T insideRequest(Container firstContainer) {
-				T bean = instanceFor(componentToBeRetrieved,firstContainer);
-				code.execute(bean);
-				return bean;
-			}
-		});
+		provider.provideForRequest(request);
+		T bean = instanceFor(componentToBeRetrieved, provider.getContainer());
+		code.execute(bean);
+		return bean;
 	}
 
 	protected void checkSimilarity(Class<?> component, boolean shouldBeTheSame, Object firstInstance,
@@ -383,15 +368,11 @@ public abstract class GenericContainerTest {
 		executeInsideRequest(new WhatToDo<Converters>() {
 			@Override
 			public Converters execute(RequestInfo request, final int counter) {
-				return provider.provideForRequest(request, new Execution<Converters>() {
-					@Override
-					public Converters insideRequest(Container container) {
-						Converters converters = container.instanceFor(Converters.class);
-						Converter<?> converter = converters.to(Void.class);
-						assertThat(converter, is(instanceOf(ConverterInTheClasspath.class)));
-						return null;
-					}
-				});
+				provider.provideForRequest(request);
+				Converters converters = provider.getContainer().instanceFor(Converters.class);
+				Converter<?> converter = converters.to(Void.class);
+				assertThat(converter, is(instanceOf(ConverterInTheClasspath.class)));
+				return null;
 			}
 		});
 	}
@@ -406,19 +387,16 @@ public abstract class GenericContainerTest {
 
 			public Void execute(RequestInfo request, int counter) {
 
-				return provider.provideForRequest(request, new Execution<Void>() {
+				provider.provideForRequest(request);
+				Container container = provider.getContainer();
+				Deserializers deserializers = container.instanceFor(Deserializers.class);
+				List<String> types = asList("application/json", "json", "application/xml",
+					"xml", "text/xml", "application/x-www-form-urlencoded");
 
-					public Void insideRequest(Container container) {
-						Deserializers deserializers = container.instanceFor(Deserializers.class);
-						List<String> types = asList("application/json", "json", "application/xml",
-							"xml", "text/xml", "application/x-www-form-urlencoded");
-
-						for (String type : types) {
-							assertThat(deserializers.deserializerFor(type, container), is(notNullValue()));
-						}
-						return null;
-					}
-				});
+				for (String type : types) {
+					assertThat(deserializers.deserializerFor(type, container), is(notNullValue()));
+				}
+				return null;
 			}
 		});
 	}
@@ -427,43 +405,40 @@ public abstract class GenericContainerTest {
 	public void shouldReturnAllDefaultConverters() {
 		executeInsideRequest(new WhatToDo<Void>(){
 			public Void execute(RequestInfo request, int counter) {
-				return provider.provideForRequest(request, new Execution<Void>() {
-					public Void insideRequest(Container container) {
+				provider.provideForRequest(request);
 
-					Converters converters = container.instanceFor(Converters.class);
+				Converters converters = provider.getContainer().instanceFor(Converters.class);
 
-					final HashMap<Class, Class<?>> EXPECTED_CONVERTERS = new HashMap<Class, Class<?>>() {
-					    {
-					        put(int.class, PrimitiveIntConverter.class);
-					        put(long.class, PrimitiveLongConverter.class);
-					        put(short.class, PrimitiveShortConverter.class);
-					        put(byte.class, PrimitiveByteConverter.class);
-					        put(double.class, PrimitiveDoubleConverter.class);
-					        put(float.class, PrimitiveFloatConverter.class);
-					        put(boolean.class, PrimitiveBooleanConverter.class);
-					        put(Integer.class, IntegerConverter.class);
-					        put(Long.class, LongConverter.class);
-					        put(Short.class, ShortConverter.class);
-					        put(Byte.class, ByteConverter.class);
-					        put(Double.class, DoubleConverter.class);
-					        put(Float.class, FloatConverter.class);
-					        put(Boolean.class, BooleanConverter.class);
-					        put(Calendar.class, LocaleBasedCalendarConverter.class);
-					        put(Date.class, LocaleBasedDateConverter.class);
-					        put(Enum.class, EnumConverter.class);
-					    }
-					    private static final long serialVersionUID = 8559316558416038474L;
-					};
+				final HashMap<Class, Class<?>> EXPECTED_CONVERTERS = new HashMap<Class, Class<?>>() {
+				    {
+				        put(int.class, PrimitiveIntConverter.class);
+				        put(long.class, PrimitiveLongConverter.class);
+				        put(short.class, PrimitiveShortConverter.class);
+				        put(byte.class, PrimitiveByteConverter.class);
+				        put(double.class, PrimitiveDoubleConverter.class);
+				        put(float.class, PrimitiveFloatConverter.class);
+				        put(boolean.class, PrimitiveBooleanConverter.class);
+				        put(Integer.class, IntegerConverter.class);
+				        put(Long.class, LongConverter.class);
+				        put(Short.class, ShortConverter.class);
+				        put(Byte.class, ByteConverter.class);
+				        put(Double.class, DoubleConverter.class);
+				        put(Float.class, FloatConverter.class);
+				        put(Boolean.class, BooleanConverter.class);
+				        put(Calendar.class, LocaleBasedCalendarConverter.class);
+				        put(Date.class, LocaleBasedDateConverter.class);
+				        put(Enum.class, EnumConverter.class);
+				    }
+				    private static final long serialVersionUID = 8559316558416038474L;
+				};
 
-					for (Entry<Class, Class<?>> entry : EXPECTED_CONVERTERS.entrySet()) {
-					    Converter<?> converter = converters.to((Class<?>) entry.getKey());
-					    assertThat(converter, is(instanceOf(entry.getValue())));
-					}
-					return null;
+				for (Entry<Class, Class<?>> entry : EXPECTED_CONVERTERS.entrySet()) {
+				    Converter<?> converter = converters.to((Class<?>) entry.getKey());
+				    assertThat(converter, is(instanceOf(entry.getValue())));
 				}
-			});
-		}
-	});
+				return null;
+			}
+		});
 	}
 
 	@Test

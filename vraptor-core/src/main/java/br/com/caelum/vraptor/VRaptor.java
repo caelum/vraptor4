@@ -33,6 +33,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 
+import br.com.caelum.vraptor.core.RequestExecution;
 import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.core.StaticContentHandler;
 import br.com.caelum.vraptor.events.VRaptorInitialized;
@@ -71,6 +72,9 @@ public class VRaptor implements Filter {
 	@Inject
 	private Logger logger;
 
+	@Inject
+	private RequestExecution requestExecution;
+
 	@Override
 	public void destroy() {
 		servletContext = null;
@@ -102,6 +106,7 @@ public class VRaptor implements Filter {
 			try {
 				encodingHandler.setEncoding(baseRequest, baseResponse);
 				provider.provideForRequest(request);
+				requestExecution.execute();
 			} catch (ApplicationLogicException e) {
 				// it is a business logic exception, we dont need to show
 				// all interceptors stack trace

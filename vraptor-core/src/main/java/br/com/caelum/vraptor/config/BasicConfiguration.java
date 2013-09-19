@@ -17,19 +17,9 @@
 
 package br.com.caelum.vraptor.config;
 
-import java.lang.reflect.InvocationTargetException;
-
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import br.com.caelum.vraptor.ioc.ContainerProvider;
-import br.com.caelum.vraptor.ioc.MissingConfigurationException;
-import br.com.caelum.vraptor.ioc.cdi.CDIProvider;
 
 /**
  * VRaptors servlet context init parameter configuration reader.
@@ -39,27 +29,10 @@ import br.com.caelum.vraptor.ioc.cdi.CDIProvider;
 @ApplicationScoped
 public class BasicConfiguration {
 
-	private static final Logger logger = LoggerFactory.getLogger(BasicConfiguration.class);
-
-	/**
-	 * context parameter that represents the class of IoC provider
-	 */
-	public static final String CONTAINER_PROVIDER = "br.com.caelum.vraptor.provider";
-
 	/**
 	 * context parameter that represents application character encoding
 	 */
 	public static final String ENCODING = "br.com.caelum.vraptor.encoding";
-
-	/**
-	 * context parameter that represents the base package(s) of your application
-	 */
-	public static final String BASE_PACKAGES_PARAMETER_NAME = "br.com.caelum.vraptor.packages";
-
-	/**
-	 * Disables/enables classpath scanning
-	 */
-	public static final String SCANNING_PARAM = "br.com.caelum.vraptor.scanning";
 
 	private ServletContext servletContext;
 	
@@ -71,60 +44,7 @@ public class BasicConfiguration {
 		this.servletContext = servletContext;
 	}
 
-	public ContainerProvider getProvider() throws ServletException {
-		Class<? extends ContainerProvider> providerType = getProviderType();
-		logger.info("Using {} as Container Provider", providerType);
-		try {
-			return providerType.getDeclaredConstructor().newInstance();
-		} catch (InvocationTargetException e) {
-			throw new ServletException(e.getCause());
-		} catch (Exception e) {
-			throw new ServletException(e);
-		}
-	}
-
-	private Class<? extends ContainerProvider> getProviderType() {
-		return CDIProvider.class;
-	}
-
-	protected boolean classExists(String className) {
-		try {
-			Class.forName(className);
-			return true;
-		} catch (ClassNotFoundException e) {
-			return false;
-		}
-	}
-
-	public boolean hasBasePackages() {
-		return servletContext.getInitParameter(BasicConfiguration.BASE_PACKAGES_PARAMETER_NAME) != null;
-	}
-
-	public String[] getBasePackages() {
-		String packages = servletContext.getInitParameter(BasicConfiguration.BASE_PACKAGES_PARAMETER_NAME);
-		if (packages == null) {
-			throw new MissingConfigurationException(BasicConfiguration.BASE_PACKAGES_PARAMETER_NAME
-					+ " context-param not found in web.xml. Set this parameter with your base package");
-		}
-		return packages.trim().split(",\\s*");
-	}
-
 	public String getEncoding() {
 		return servletContext.getInitParameter(ENCODING);
 	}
-
-	public String getWebinfClassesDirectory() {
-		return servletContext.getRealPath("/WEB-INF/classes/");
-	}
-
-	public ServletContext getServletContext() {
-		return servletContext;
-	}
-
-	public boolean isClasspathScanningEnabled() {
-		String scanningParam = servletContext.getInitParameter(SCANNING_PARAM);
-		logger.info("{} = {}", SCANNING_PARAM, servletContext.getInitParameter(SCANNING_PARAM));
-		return scanningParam == null || !scanningParam.trim().equals("disabled");
-	}
-
 }

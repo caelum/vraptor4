@@ -51,10 +51,6 @@ public class ServletContainerFactory {
 		when(context.getMajorVersion()).thenReturn(3);
 		when(context.getRealPath("/WEB-INF/classes")).thenReturn(getClassDir());
 
-		when(context.getClassLoader()).thenReturn(
-				new URLClassLoader(new URL[] {Object.class.getResource("/test-fixture.jar")},
-						currentThread().getContextClassLoader()));
-
 		configureExpectations(context);
 		return context;
 	}

@@ -19,7 +19,6 @@ package br.com.caelum.vraptor.ioc;
 
 import static br.com.caelum.vraptor.VRaptorMatchers.canHandle;
 import static br.com.caelum.vraptor.VRaptorMatchers.hasOneCopyOf;
-import static java.lang.Thread.currentThread;
 import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -34,8 +33,6 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import java.net.URL;
-import java.net.URLClassLoader;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
@@ -117,14 +114,9 @@ public abstract class GenericContainerTest {
 
 	@Before
 	public void setup() throws Exception {
-
-		ClassLoader contextClassLoader = currentThread().getContextClassLoader();
-		URL[] urls = new URL[] {Object.class.getResource("/test-fixture.jar")};
-
 		context = mock(ServletContext.class, "servlet context");
 		when(context.getMajorVersion()).thenReturn(3);
 		when(context.getRealPath("/WEB-INF/classes")).thenReturn(getClassDir());
-		when(context.getClassLoader()).thenReturn(new URLClassLoader(urls, contextClassLoader));
 
 		configureExpectations();
 		getStartedProvider();

@@ -20,8 +20,6 @@ package br.com.caelum.vraptor.ioc;
 import javax.servlet.ServletContext;
 
 /**
- * A container provider, i.e. spring, pico, guice, tapestry and so on.
- *
  * @author guilherme silveira
  */
 public interface ContainerProvider {

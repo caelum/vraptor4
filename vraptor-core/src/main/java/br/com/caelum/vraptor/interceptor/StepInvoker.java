@@ -3,6 +3,8 @@ package br.com.caelum.vraptor.interceptor;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
+import javax.enterprise.context.ApplicationScoped;
+
 import net.vidageek.mirror.dsl.Mirror;
 import net.vidageek.mirror.exception.MirrorException;
 import net.vidageek.mirror.list.dsl.Matcher;
@@ -11,6 +13,7 @@ import br.com.caelum.vraptor.InterceptionException;
 
 import com.google.common.base.Throwables;
 
+@ApplicationScoped
 public class StepInvoker {
 
 	private class InvokeMatcher implements Matcher<Method> {

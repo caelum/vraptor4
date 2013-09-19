@@ -27,13 +27,11 @@ import java.util.ResourceBundle;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 
-import org.hamcrest.Description;
-import org.hamcrest.Matcher;
-import org.hamcrest.ResourceBundleDescription;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.Result;
+import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.View;
 import br.com.caelum.vraptor.core.Localization;
 import br.com.caelum.vraptor.proxy.Proxifier;
@@ -75,24 +73,13 @@ public class DefaultValidator extends AbstractValidator {
 		this.localization = localization;
 	}
 	
-	public <T> void check(T actual, Matcher<? super T> matcher, String category) {
-		if (!matcher.matches(actual)) {
-			Description description = new ResourceBundleDescription();
-			description.appendDescriptionOf(matcher);
-			errors.add(new ValidationMessage(description.toString(), category));
-		}
-	}
-	
-	public <T> void check(T actual, Matcher<? super T> matcher, String category, String reason) {
-		if (!matcher.matches(actual)) {
-			errors.add(new ValidationMessage(reason, category));
-		}
-	}
-	
-	public <T> void check(T actual, Matcher<? super T> matcher, Message message) {
-		if (!matcher.matches(actual)) {
+	@Override
+	public Validator check(boolean condition, Message message) {
+		if (condition) {
 			errors.add(message);
 		}
+		
+		return this;
 	}
 	
 	@Override

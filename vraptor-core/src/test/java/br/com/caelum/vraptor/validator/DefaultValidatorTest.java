@@ -22,7 +22,6 @@ import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
-import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 import static org.mockito.Matchers.any;
@@ -210,7 +209,7 @@ public class DefaultValidatorTest {
 		Client c = new Client();
 		c.name = "The name";
 		
-		validator.check(c.name, notNullValue(), "a.category");
+		validator.check(c.name == null, new ValidationMessage("not null", "client.name"));
 		assertThat(validator.getErrors(), hasSize(0));
 	}
 
@@ -218,18 +217,9 @@ public class DefaultValidatorTest {
 	public void shouldAddMessageIfCheckingFails() {
 		Client c = new Client();
 		
-		validator.check(c.name, notNullValue(), "a.category");
+		validator.check(c.name == null, new ValidationMessage("not null", "client.name"));
 		assertThat(validator.getErrors(), hasSize(1));
 		assertThat(validator.getErrors().get(0).getMessage(), containsString("not null"));
-	}
-	
-	@Test
-	public void shouldUseHamcrestDescriptionIfMessageWasNotSuplied() {
-		Client c = new Client();
-		
-		validator.check(c.name, notNullValue(), "a.category", "a message");
-		assertThat(validator.getErrors(), hasSize(1));
-		assertThat(validator.getErrors().get(0).getMessage(), containsString("a message"));
 	}
 	
 	@Controller

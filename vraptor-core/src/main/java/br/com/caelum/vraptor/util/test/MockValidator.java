@@ -25,8 +25,7 @@ import java.util.ResourceBundle;
 
 import javax.enterprise.inject.Alternative;
 
-import org.hamcrest.Matcher;
-
+import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.View;
 import br.com.caelum.vraptor.validator.AbstractValidator;
 import br.com.caelum.vraptor.validator.I18nMessage;
@@ -58,17 +57,10 @@ import br.com.caelum.vraptor.validator.ValidationException;
 public class MockValidator extends AbstractValidator {
 
 	private final List<Message> errors = new ArrayList<>();
-
-	@Override
-	public <T> void check(T actual, Matcher<? super T> matcher, Message message) {
-	}
 	
 	@Override
-	public <T> void check(T actual, Matcher<? super T> matcher, String category) {
-	}
-	
-	@Override
-	public <T> void check(T actual, Matcher<? super T> matcher, String category, String reason) {
+	public Validator check(boolean condition, Message message) {
+		return this;
 	}
 
 	@Override

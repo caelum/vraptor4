@@ -17,6 +17,8 @@
 
 package br.com.caelum.vraptor.http;
 
+import static com.google.common.base.Objects.firstNonNull;
+
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
@@ -25,7 +27,7 @@ import br.com.caelum.vraptor.config.BasicConfiguration;
 
 /**
  * Create an instance for {@link EncodingHandler}. If {@link BasicConfiguration#ENCODING} is defined into web.xml,
- * the {@link WebXmlEncodingHandler} instance is created, otherwise {@link UTF8EncodingHandler} is created.
+ * the {@link DefaultEncodingHandler} instance is created with the value, or UTF-8 otherwise.
  * 
  * @author Lucas Cavalcanti
  */
@@ -41,8 +43,8 @@ public class EncodingHandlerFactory{
 	
 	@Inject
 	public EncodingHandlerFactory(BasicConfiguration configuration) {
-		String encoding = configuration.getEncoding();
-		this.handler = (encoding == null) ? new UTF8EncodingHandler() : new WebXmlEncodingHandler(encoding);
+		String encoding = firstNonNull(configuration.getEncoding(), "UTF-8");
+		handler = new DefaultEncodingHandler(encoding);
 	}
 	
 	@Produces @javax.enterprise.context.ApplicationScoped

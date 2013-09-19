@@ -34,7 +34,7 @@ public class WebXmlEncodingHandlerTest {
     public void shouldSetEncodingToUTF8() throws Exception {
         when(context.getInitParameter(ENCODING)).thenReturn("UTF-8");
 
-        new WebXmlEncodingHandler("UTF-8").setEncoding(request, response);
+        new DefaultEncodingHandler("UTF-8").setEncoding(request, response);
 
         verify(request).setCharacterEncoding("UTF-8");
         verify(response).setCharacterEncoding("UTF-8");
@@ -43,6 +43,6 @@ public class WebXmlEncodingHandlerTest {
     @Test(expected=VRaptorException.class)
     public void shouldThrowExceptionWhenAnUnsupportedEncodingExceptionOccurs() throws Exception {
         doThrow(new UnsupportedEncodingException()).when(request).setCharacterEncoding(anyString());
-        new WebXmlEncodingHandler("UTF-8").setEncoding(request, response);
+        new DefaultEncodingHandler("UTF-8").setEncoding(request, response);
     }
 }

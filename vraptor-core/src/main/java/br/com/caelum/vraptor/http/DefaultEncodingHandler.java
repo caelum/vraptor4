@@ -31,11 +31,11 @@ import br.com.caelum.vraptor.VRaptorException;
  * @author Lucas Cavalcanti
  */
 @Alternative
-public class WebXmlEncodingHandler implements EncodingHandler {
+public class DefaultEncodingHandler implements EncodingHandler {
 
 	private final String encoding;
 
-	public WebXmlEncodingHandler(String encoding) {
+	public DefaultEncodingHandler(String encoding) {
 		this.encoding = encoding;
 	}
 

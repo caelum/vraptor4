@@ -19,8 +19,6 @@ package br.com.caelum.vraptor.ioc;
 
 import static br.com.caelum.vraptor.VRaptorMatchers.canHandle;
 import static br.com.caelum.vraptor.VRaptorMatchers.hasOneCopyOf;
-import static br.com.caelum.vraptor.config.BasicConfiguration.BASE_PACKAGES_PARAMETER_NAME;
-import static br.com.caelum.vraptor.config.BasicConfiguration.SCANNING_PARAM;
 import static java.lang.Thread.currentThread;
 import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -112,7 +110,6 @@ public abstract class GenericContainerTest {
 
 	protected ContainerProvider provider;
 	protected ServletContext context;
-	private static final String PACKAGENAME = "br.com.caelum.vraptor.ioc.fixture";
 
 	protected abstract ContainerProvider getProvider();
 	protected abstract <T> T executeInsideRequest(WhatToDo<T> execution);
@@ -126,10 +123,8 @@ public abstract class GenericContainerTest {
 
 		context = mock(ServletContext.class, "servlet context");
 		when(context.getMajorVersion()).thenReturn(3);
-		when(context.getInitParameter(BASE_PACKAGES_PARAMETER_NAME)).thenReturn(PACKAGENAME);
 		when(context.getRealPath("/WEB-INF/classes")).thenReturn(getClassDir());
 		when(context.getClassLoader()).thenReturn(new URLClassLoader(urls, contextClassLoader));
-        when(context.getInitParameter(SCANNING_PARAM)).thenReturn("enabled");
 
 		configureExpectations();
 		getStartedProvider();

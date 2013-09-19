@@ -31,7 +31,7 @@ import br.com.caelum.vraptor.controller.ControllerMethod;
 /**
  * Default implementation of a interceptor stack.
  *
- * @author guilherme silveira
+ * @author guilherme silveira, mariofts
  *
  */
 @RequestScoped

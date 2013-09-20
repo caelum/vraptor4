@@ -1,6 +1,5 @@
 package br.com.caelum.vraptor.http;
 
-import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
@@ -21,18 +20,18 @@ public class EncodingHandlerFactoryTest {
     }
 
     @Test
-    public void shouldReturnAUTF8HandlerWhenThereIsNoEncodingInitParameter() throws Exception {
+    public void shouldReturnUTF8WhenThereIsNoEncodingInitParameter() throws Exception {
         when(configuration.getEncoding()).thenReturn(null);
 
         EncodingHandlerFactory handlerFactory = new EncodingHandlerFactory(configuration);
-        assertThat(handlerFactory.getInstance(), is(instanceOf(UTF8EncodingHandler.class)));
+        assertThat(handlerFactory.getInstance().getEncoding(), is("UTF-8"));
     }
     @Test
-    public void shouldReturnAWebXmlHandlerWhenThereIsAnEncodingInitParameter() throws Exception {
-    	when(configuration.getEncoding()).thenReturn("UTF-8");
+    public void shouldReturnWebxmlValueWhenThereIsAnEncodingInitParameter() throws Exception {
+    	when(configuration.getEncoding()).thenReturn("ISO-8859-1");
 
         EncodingHandlerFactory handlerFactory = new EncodingHandlerFactory(configuration);
-        assertThat(handlerFactory.getInstance(), is(instanceOf(WebXmlEncodingHandler.class)));
+        assertThat(handlerFactory.getInstance().getEncoding(), is("ISO-8859-1"));
     }
 
 }

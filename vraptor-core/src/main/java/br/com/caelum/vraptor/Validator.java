@@ -20,19 +20,27 @@ package br.com.caelum.vraptor;
 import java.util.Collection;
 import java.util.List;
 
+import org.hamcrest.Matcher;
+
 import br.com.caelum.vraptor.validator.Message;
-import br.com.caelum.vraptor.validator.Validations;
 
 /**
- * A validator interface for vraptor3.<br>
- * Based on hamcrest, it allows you to assert for specific situations.
+ * A validator interface for VRaptor. It allows you to assert for specific situations.
  *
  * @author Guilherme Silveira
  */
 public interface Validator {
 
-    void checking(Validations rules);
-
+	/**
+	 * If the condition is true, add the message to validation errors.
+	 * 
+	 * @since 4.0.0
+	 * @param condition
+	 * @param message {@link Message} object
+	 */
+	Validator check(boolean condition, Message message);
+    
+    
     /**
      * Validate an object using some Bean Validation engine. If the object is null,
      * the validation will be skipped.
@@ -63,14 +71,35 @@ public interface Validator {
 	 */
 	void validateProperty(Object object, String property, Class<?>... groups);    
 
+	/**
+	 * If validator has errors, you can use this method to define what to do. WARN: this method don't stop the flow.
+	 * @param view
+	 * @return
+	 */
     <T extends View> T onErrorUse(Class<T> view);
 
-    void addAll(Collection<? extends Message> message);
+    /**
+     * Adds the list of messages.
+     * @param messages
+     */
+    void addAll(Collection<? extends Message> messages);
 
+    /**
+     * Adds the message.
+     * @param message
+     */
     void add(Message message);
 
+    /**
+     * Returns a list of errors.
+     * @return
+     */
     List<Message> getErrors();
-    
+
+    /**
+     * Return true if has validation errors. False otherwise.
+     * @return
+     */
     boolean hasErrors();
 
     /**

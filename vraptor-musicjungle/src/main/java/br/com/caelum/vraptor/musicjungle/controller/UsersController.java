@@ -16,10 +16,8 @@
  */
 package br.com.caelum.vraptor.musicjungle.controller;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.inject.Inject;
+import javax.validation.Valid;
 
 import br.com.caelum.vraptor.Controller;
 import br.com.caelum.vraptor.Get;
@@ -31,9 +29,7 @@ import br.com.caelum.vraptor.musicjungle.dao.UserDao;
 import br.com.caelum.vraptor.musicjungle.enums.MusicType;
 import br.com.caelum.vraptor.musicjungle.interceptor.Public;
 import br.com.caelum.vraptor.musicjungle.model.User;
-import br.com.caelum.vraptor.validator.Validations;
-
-import com.google.common.base.Objects;
+import br.com.caelum.vraptor.musicjungle.validation.LoginAvailable;
 
 /**
  * The resource <code>UsersController</code> handles all user 
@@ -44,7 +40,7 @@ public class UsersController {
 
 	private Validator validator;
 	private Result result;
-	private UserDao dao;
+	private UserDao userDao;
 
 	// CDI eyes only
 	@Deprecated
@@ -61,8 +57,7 @@ public class UsersController {
 	 */
 	@Inject
 	public UsersController(UserDao dao, Result result, Validator validator) {
-		
-		this.dao = dao;
+		this.userDao = dao;
 		this.result = result;
 		this.validator = validator;
 	}
@@ -90,9 +85,7 @@ public class UsersController {
      */
 	@Get("/users")
 	public void list() {
-        List<User> users = this.dao.listAll();
-        users = Objects.firstNonNull(users, new ArrayList<User>());
-        result.include("users", users);
+        result.include("users", userDao.listAll());
     }
 
 	/**
@@ -116,20 +109,10 @@ public class UsersController {
 	@Path("/users")
 	@Post
 	@Public
-	public void add(final User user) {
-		// will add all validation errors from Hibernate Validator
-		validator.validate(user); 
-		
-	    validator.checking(new Validations() {{
-		    // checks if there is already an user with the specified login
-		    boolean loginDoesNotExist = !dao.containsUserWithLogin(user.getLogin());
-		    that(loginDoesNotExist, "login", "login_already_exists");
-		    that(user.getLogin().matches("[a-z0-9_]+"), "login", "invalid_login");
-		}});
-
-		// redirects to the index page if any validation errors occur.
-		validator.onErrorUsePageOf(HomeController.class).login();
-		this.dao.add(user);
+	public void add(@Valid @LoginAvailable User user) {
+        validator.onErrorUsePageOf(HomeController.class).login();
+        
+		userDao.add(user);
 
 		// you can add objects to result even in redirects. Added objects will
 		// survive one more request when redirecting.
@@ -150,7 +133,6 @@ public class UsersController {
 	@Path("/users/{user.login}")
 	@Get
 	public void view(User user) {
-	    result.include("user", dao.find(user.getLogin()));
+	    result.include("user", userDao.find(user.getLogin()));
 	}
-
 }

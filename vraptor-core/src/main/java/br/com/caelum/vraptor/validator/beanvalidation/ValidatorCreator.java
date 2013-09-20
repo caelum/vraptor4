@@ -17,13 +17,14 @@ package br.com.caelum.vraptor.validator.beanvalidation;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Alternative;
+import javax.enterprise.inject.Default;
 import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 
 /**
- * Creates an instance for {@link Validator}.
+ * Produces an instance for {@link Validator}.
  *
  * @author Otávio Scherer Garcia
  * @since 3.1.2
@@ -44,7 +45,7 @@ public class ValidatorCreator {
         this.factory = factory;
     }
 
-	@Produces @javax.enterprise.context.ApplicationScoped
+	@Produces @Default @javax.enterprise.context.ApplicationScoped
 	public Validator getInstanceValidator() {
 		return factory.getValidator();
 	}

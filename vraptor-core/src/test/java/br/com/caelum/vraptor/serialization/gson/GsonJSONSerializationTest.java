@@ -1,5 +1,13 @@
 package br.com.caelum.vraptor.serialization.gson;
 
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
+import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 import java.io.ByteArrayOutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -19,7 +27,6 @@ import org.junit.Test;
 import br.com.caelum.vraptor.deserialization.gson.VRaptorGsonBuilder;
 import br.com.caelum.vraptor.interceptor.DefaultTypeNameExtractor;
 import br.com.caelum.vraptor.serialization.NullProxyInitializer;
-import br.com.caelum.vraptor.serialization.gson.adapters.CalendarSerializer;
 import br.com.caelum.vraptor.serialization.xstream.Serializee;
 
 import com.google.common.collect.ForwardingCollection;
@@ -30,16 +37,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
-
-import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
-
-import static org.junit.Assert.assertThat;
-
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 public class GsonJSONSerializationTest {
 
@@ -420,22 +417,6 @@ public class GsonJSONSerializationTest {
 	}
 
 	@Test
-	public void shouldSerializeCalendarLikeXstream() {
-		Client c = new Client("renan");
-		c.included = new GregorianCalendar(2012, 8, 3);
-		c.included.setTimeZone(TimeZone.getTimeZone("GMT-0300"));
-
-		serialization.from(c).serialize();
-		String result = result();
-
-		String expectedResult = "{\"client\":{\"name\":\"renan\",\"included\":{\"time\":\""
-			+ c.included.getTimeInMillis()
-			+ "\",\"timezone\":\"" + c.included.getTimeZone().getID() + "\"}}}";
-
-		assertThat(result, is(equalTo(expectedResult)));
-	}
-
-	@Test
 	public void shouldSerializeCalendarTimeWithISO8601() {
 		Client c = new Client("renan");
 		c.included = new GregorianCalendar(2012, 8, 3, 1, 5, 9);
@@ -444,7 +425,7 @@ public class GsonJSONSerializationTest {
 		serialization.from(c).serialize();
 		String result = result();
 
-		String expectedResult = "{\"client\":{\"name\":\"renan\",\"included\":{\"time\":\"1346645109000\",\"timezone\":\"GMT-03:00\"}}}";
+		String expectedResult = "{\"client\":{\"name\":\"renan\",\"included\":\"2012-09-03T01:05:09-03:00\"}}";
 
 		assertThat(result, is(equalTo(expectedResult)));
 	}

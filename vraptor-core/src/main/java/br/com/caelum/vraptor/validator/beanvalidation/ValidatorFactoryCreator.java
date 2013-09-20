@@ -27,8 +27,7 @@ import javax.validation.ValidatorFactory;
 import org.slf4j.Logger;
 
 /**
- * Bring up Bean Validation factory. This class builds the {@link ValidatorFactory} factory once when
- * application starts.
+ * Produces an instance for {@link ValidatorFactory}.
  * 
  * @author Otávio Scherer Garcia
  * @since 3.5.1

@@ -1,20 +1,13 @@
 package br.com.caelum.vraptor.validator;
 
-import static java.lang.annotation.ElementType.PARAMETER;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
-import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.when;
 
-import java.lang.annotation.Documented;
-import java.lang.annotation.Retention;
-import java.lang.annotation.Target;
 import java.util.Locale;
 
 import javax.validation.MessageInterpolator;
-import javax.validation.Valid;
 import javax.validation.ValidatorFactory;
 import javax.validation.constraints.NotNull;
 
@@ -22,7 +15,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.controller.ControllerMethod;
@@ -35,7 +27,6 @@ import br.com.caelum.vraptor.http.ParanamerNameProvider;
 import br.com.caelum.vraptor.util.test.MockValidator;
 import br.com.caelum.vraptor.validator.beanvalidation.MessageInterpolatorFactory;
 import br.com.caelum.vraptor.validator.beanvalidation.MethodValidatorInterceptor;
-import br.com.caelum.vraptor.validator.beanvalidation.ValidatorFactoryCreator;
 
 /**
  * Test method validator feature.
@@ -51,13 +42,11 @@ public class MethodValidatorTest {
     private MethodValidatorInterceptor interceptor;
     private ParameterNameProvider provider;
     private Validator validator;
-    private ValidatorFactory factory;
+    private ValidatorFactory validatorFactory;
     private MessageInterpolator interpolator;
     
 	private ControllerMethod withConstraint;
-	private ControllerMethod withTwoConstraints;
 	private ControllerMethod withoutConstraint;
-	private ControllerMethod cascadeConstraint;
 
     @Before
     public void setup() throws Exception {
@@ -67,33 +56,28 @@ public class MethodValidatorTest {
 
         provider = new ParanamerNameProvider();
         
-        ValidatorFactoryCreator validatorFactoryCreator = new ValidatorFactoryCreator(LoggerFactory.getLogger(getClass()));
-        factory = validatorFactoryCreator.getInstance();
+    	validatorFactory = javax.validation.Validation.buildDefaultValidatorFactory();
 
-        MessageInterpolatorFactory interpolatorFactory = new MessageInterpolatorFactory(factory);
+        MessageInterpolatorFactory interpolatorFactory = new MessageInterpolatorFactory(validatorFactory);
         interpolatorFactory.createInterpolator();
         interpolator = interpolatorFactory.getInstance();
 
         validator = new MockValidator();
         
         withConstraint = DefaultControllerMethod.instanceFor(MyController.class, MyController.class.getMethod("withConstraint", String.class));
-        withTwoConstraints = DefaultControllerMethod.instanceFor(MyController.class, MyController.class.getMethod("withTwoConstraints", String.class, Customer.class));
         withoutConstraint = DefaultControllerMethod.instanceFor(MyController.class, MyController.class.getMethod("withoutConstraint", String.class));
-        cascadeConstraint = DefaultControllerMethod.instanceFor(MyController.class, MyController.class.getMethod("cascadeConstraint", Customer.class));
     }
     
     @Test
     public void shouldAcceptIfMethodHasConstraint() {
-    	interceptor = new MethodValidatorInterceptor(null, null, null, null, factory.getValidator(), null);
+    	interceptor = new MethodValidatorInterceptor(null, null, null, null, validatorFactory.getValidator(), null);
     	
     	assertThat(interceptor.accepts(withConstraint), is(true));
-    	assertThat(interceptor.accepts(withTwoConstraints), is(true));
-    	assertThat(interceptor.accepts(cascadeConstraint), is(true));
     }
 
     @Test
     public void shouldNotAcceptIfMethodHasConstraint() {
-    	interceptor = new MethodValidatorInterceptor(null, null, null, null, factory.getValidator(), null);
+    	interceptor = new MethodValidatorInterceptor(null, null, null, null, validatorFactory.getValidator(), null);
     	assertThat(interceptor.accepts(withoutConstraint), is(false));
     }
 
@@ -105,7 +89,7 @@ public class MethodValidatorTest {
         info.setControllerMethod(withConstraint);
 
         interceptor = new MethodValidatorInterceptor(l10n, interpolator, validator, info, 
-        		factory.getValidator(), provider);
+        		validatorFactory.getValidator(), provider);
         when(l10n.getLocale()).thenReturn(new Locale("pt", "br"));
 
         MyController controller = new MyController();
@@ -123,7 +107,7 @@ public class MethodValidatorTest {
         info.setControllerMethod(withConstraint);
 
         interceptor = new MethodValidatorInterceptor(l10n, interpolator, validator, info, 
-        		factory.getValidator(), provider);
+        		validatorFactory.getValidator(), provider);
 
         MyController controller = new MyController();
         interceptor.intercept(stack, info.getControllerMethod(), controller);
@@ -133,36 +117,12 @@ public class MethodValidatorTest {
         assertThat(validator.getErrors().get(0).getMessage(), is("may not be null"));
     }
 
-    @Test
-    public void shouldValidateMethodWithTwoConstraints()
-        throws Exception {
-        MethodInfo info = new MethodInfo();
-        info.setParameters(new Object[] { null, new Customer(null, null) });
-        info.setControllerMethod(withTwoConstraints);
-
-        interceptor = new MethodValidatorInterceptor(l10n, interpolator, validator, info, 
-        		factory.getValidator(), provider);
-        when(l10n.getLocale()).thenReturn(new Locale("pt", "br"));
-
-        MyController controller = new MyController();
-        interceptor.intercept(stack, info.getControllerMethod(), controller);
-        String messages = validator.getErrors().toString();
-
-        assertThat(validator.getErrors(), hasSize(3));
-        
-        assertThat(messages, containsString("não pode ser nulo"));
-        assertThat(messages, containsString("withTwoConstraints.name"));
-        assertThat(messages, containsString("withTwoConstraints.customer.name"));
-        assertThat(messages, containsString("withTwoConstraints.customer.id"));
-    }
-    
     /**
      * Customer for using in bean validator tests.
      */
     public class Customer {
 
         @NotNull public Integer id;
-
         @NotNull public String name;
 
         public Customer(Integer id, String name) {
@@ -173,27 +133,8 @@ public class MethodValidatorTest {
 
     public class MyController {
 
-        public void withConstraint(@NotNull String email) {
+        public void withConstraint(@NotNull String email) { }
 
-        }
-
-        public void withTwoConstraints(@NotNull String name, @Valid Customer customer) {
-
-        }
-        
-        public void withoutConstraint(@Foo String foo) {
-        	
-        }
-        
-        public void cascadeConstraint(@Valid Customer customer) {
-
-        }
-    }
-    
-	@Target(value = { PARAMETER })
-	@Retention(value = RUNTIME)
-	@Documented
-    public @interface Foo {
-    	
+        public void withoutConstraint(String foo) { }
     }
 }

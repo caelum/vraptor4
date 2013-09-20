@@ -10,6 +10,7 @@ import org.junit.Test;
 
 import br.com.caelum.vraptor.interceptor.AspectStyleInterceptorHandler;
 import br.com.caelum.vraptor.interceptor.Interceptor;
+import br.com.caelum.vraptor.interceptor.StepInvoker;
 import br.com.caelum.vraptor.ioc.Container;
 
 public class DefaultInterceptorHandlerFactoryTest {
@@ -20,7 +21,7 @@ public class DefaultInterceptorHandlerFactoryTest {
 
 	@Before
 	public void setUp() throws Exception {
-		factory = new DefaultInterceptorHandlerFactory(container);
+		factory = new DefaultInterceptorHandlerFactory(container, new StepInvoker());
 	}
 
 	static interface RegularInterceptor extends Interceptor {}

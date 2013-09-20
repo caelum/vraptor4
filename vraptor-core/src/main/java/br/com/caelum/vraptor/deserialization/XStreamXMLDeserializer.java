@@ -37,7 +37,7 @@ import com.thoughtworks.xstream.XStream;
  */
 @RequestScoped
 @Deserializes({"application/xml","xml", "text/xml"})
-public class XStreamXMLDeserializer implements XMLDeserializer {
+public class XStreamXMLDeserializer implements Deserializer {
 
 	private ParameterNameProvider provider;
 	private XStreamBuilder builder;
@@ -70,7 +70,7 @@ public class XStreamXMLDeserializer implements XMLDeserializer {
 	 * @return an xstream instance already configured.
 	 */
 	public XStream getConfiguredXStream(Method javaMethod, Class<?>[] types) {
-		XStream xStream = getXStream();
+		XStream xStream = builder.xmlInstance();
 
 		xStream.processAnnotations(types);
 
@@ -91,16 +91,6 @@ public class XStreamXMLDeserializer implements XMLDeserializer {
 		for (int i = 0; i < names.length; i++) {
 			deserializer.alias(names[i], types[i]);
 		}
-	}
-
-	/**
-	 * Extension point to configure your xstream instance.
-	 * @return the configured xstream instance
-     * @deprecated prefer overriding XStreamBuilder
-	 */
-	@Deprecated
-	protected XStream getXStream() {
-		return builder.xmlInstance();
 	}
 
 }

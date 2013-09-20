@@ -29,11 +29,9 @@ import br.com.caelum.vraptor.interceptor.StepInvoker;
 import br.com.caelum.vraptor.ioc.Container;
 
 /**
- *
  * @author Lucas Cavalcanti
  * @author Alberto Souza
  * @since 3.2.0
- *
  */
 @ApplicationScoped
 @Default
@@ -43,14 +41,17 @@ public class DefaultInterceptorHandlerFactory implements InterceptorHandlerFacto
 
 	private final Map<Class<?>, InterceptorHandler> cachedHandlers = new HashMap<>();
 
+	private StepInvoker stepInvoker;
+
 	//CDI eyes only
 	@Deprecated
 	public DefaultInterceptorHandlerFactory() {
 	}
 
 	@Inject
-	public DefaultInterceptorHandlerFactory(Container container) {
+	public DefaultInterceptorHandlerFactory(Container container, StepInvoker stepInvoker) {
 		this.container = container;
+		this.stepInvoker = stepInvoker;
 	}
 
 	@Override
@@ -62,11 +63,11 @@ public class DefaultInterceptorHandlerFactory implements InterceptorHandlerFacto
 		}
 			
 		if(type.isAnnotationPresent(Intercepts.class) && !Interceptor.class.isAssignableFrom(type)){
-			AspectStyleInterceptorHandler handler = new AspectStyleInterceptorHandler(type, new StepInvoker(), container);
+			AspectStyleInterceptorHandler handler = new AspectStyleInterceptorHandler(type, stepInvoker, container);
 			cachedHandlers.put(type,handler);
+
 			return handler;
 		}
 		return new ToInstantiateInterceptorHandler(container, type);
 	}
-
 }

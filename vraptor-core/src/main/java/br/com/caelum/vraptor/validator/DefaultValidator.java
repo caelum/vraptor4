@@ -20,7 +20,6 @@ package br.com.caelum.vraptor.validator;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 import java.util.ResourceBundle;
 
 import javax.enterprise.context.RequestScoped;
@@ -38,9 +37,6 @@ import br.com.caelum.vraptor.util.test.MockResult;
 import br.com.caelum.vraptor.view.ValidationViewsFactory;
 
 import com.google.common.base.Supplier;
-import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.ForwardingList;
-import com.google.common.collect.Multimap;
 
 /**
  * The default validator implementation.
@@ -138,28 +134,6 @@ public class DefaultValidator extends AbstractValidator {
 	@Override
 	public List<Message> getErrors() {
 		return new ErrorList(errors);
-	}
-	
-	public class ErrorList extends ForwardingList<Message> {
-		
-		private final List<Message> delegate;
-
-		public ErrorList(List<Message> delegate) {
-			this.delegate = delegate;
-		}
-		
-		public Map<String, Collection<String>> asMap() {
-			Multimap<String, String> out = ArrayListMultimap.create();
-			for(Message message: delegate) {
-				out.put(message.getCategory(), message.getMessage());
-			}
-			return out.asMap();
-		}
-
-		@Override
-		protected List<Message> delegate() {
-			return delegate;
-		}
 	}
 }
 

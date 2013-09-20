@@ -19,7 +19,6 @@ package br.com.caelum.vraptor.util.test;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -56,7 +55,7 @@ import br.com.caelum.vraptor.validator.ValidationException;
 @Alternative
 public class MockValidator extends AbstractValidator {
 
-	private final List<Message> errors = new ArrayList<>();
+	private List<Message> errors = new ArrayList<>();
 	
 	@Override
 	public Validator check(boolean condition, Message message) {
@@ -85,24 +84,26 @@ public class MockValidator extends AbstractValidator {
 
 	@Override
 	public void addAll(Collection<? extends Message> messages) {
-		this.errors.addAll(messages);
+		for(Message message: messages) {
+			add(message);
+		}
 	}
 
 	@Override
 	public void add(Message message) {
-		this.errors.add(message);
+		errors.add(message);
 	}
 
 	@Override
 	public boolean hasErrors() {
-		return !this.errors.isEmpty();
+		return !errors.isEmpty();
 	}
 
 	@Override
 	public List<Message> getErrors() {
-		return Collections.unmodifiableList(errors);
+		return errors;
 	}
-
+	
 	public boolean containsMessage(String messageKey, Object... messageParameters) {
 		I18nMessage expectedMessage = new I18nMessage("validation", messageKey, messageParameters);
 		expectedMessage.setBundle(ResourceBundle.getBundle("messages"));

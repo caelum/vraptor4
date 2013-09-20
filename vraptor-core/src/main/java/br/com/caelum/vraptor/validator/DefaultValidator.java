@@ -17,6 +17,8 @@
 
 package br.com.caelum.vraptor.validator;
 
+import java.io.Serializable;
+import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -52,7 +54,7 @@ public class DefaultValidator extends AbstractValidator {
 	private static final Logger logger = LoggerFactory.getLogger(DefaultValidator.class);
 
 	private Result result;
-	private Multimap<String, Message> errors;
+	private List<Message> errors = new ArrayList<>();
 	private ValidationViewsFactory viewsFactory;
 	private BeanValidator beanValidator;
 	private Outjector outjector;
@@ -108,10 +110,10 @@ public class DefaultValidator extends AbstractValidator {
 			logger.debug("there are errors on result: {}", errors);
 		}
 		
-		result.include("errors", errors).include("errorMap", errors.asMap());
+		result.include("errors", getErrors());
 		outjector.outjectRequestMap();
 		
-		return viewsFactory.instanceFor(view, new ArrayList<>(errors.values()));
+		return viewsFactory.instanceFor(view, errors);
 	}
 
 	@Override
@@ -126,12 +128,7 @@ public class DefaultValidator extends AbstractValidator {
 		if (message instanceof I18nMessage && !((I18nMessage) message).hasBundle()) {
 			((I18nMessage) message).setLazyBundle(new LocalizationSupplier(localization));
 		}
-		
-		if (errors == null) {
-			errors = ArrayListMultimap.create();
-		}
-		
-		errors.put(message.getCategory(), message);
+		errors.add(message);
 	}
 
 	@Override
@@ -141,12 +138,36 @@ public class DefaultValidator extends AbstractValidator {
 
 	@Override
 	public List<Message> getErrors() {
-		return new ArrayList<>(errors.values());
+		return new ErrorList(errors);
 	}
 	
-	@Override
-	public Map<String, Collection<Message>> getErrorMap() {
-		return errors.asMap();
+	public class ErrorList extends AbstractList<Message> 
+		implements List<Message>, Serializable {
+		
+		private static final long serialVersionUID = -5276117278369632403L;
+		private final List<Message> delegate;
+
+		public ErrorList(List<Message> delegate) {
+			this.delegate = delegate;
+		}
+		
+		public Map<String, Collection<String>> asMap() {
+			Multimap<String, String> out = ArrayListMultimap.create();
+			for(Message message: delegate) {
+				out.put(message.getCategory(), message.getMessage());
+			}
+			return out.asMap();
+		}
+
+		@Override
+		public Message get(int index) {
+			return delegate.get(index);
+		}
+
+		@Override
+		public int size() {
+			return delegate.size();
+		}
 	}
 }
 

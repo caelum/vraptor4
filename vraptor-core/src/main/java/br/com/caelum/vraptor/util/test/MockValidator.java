@@ -20,7 +20,6 @@ package br.com.caelum.vraptor.util.test;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 import java.util.ResourceBundle;
 
 import javax.enterprise.inject.Alternative;
@@ -31,9 +30,6 @@ import br.com.caelum.vraptor.validator.AbstractValidator;
 import br.com.caelum.vraptor.validator.I18nMessage;
 import br.com.caelum.vraptor.validator.Message;
 import br.com.caelum.vraptor.validator.ValidationException;
-
-import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.Multimap;
 
 /**
  * Mocked Validator for testing your controllers.
@@ -59,7 +55,7 @@ import com.google.common.collect.Multimap;
 @Alternative
 public class MockValidator extends AbstractValidator {
 
-	private Multimap<String, Message> errors = ArrayListMultimap.create();
+	private List<Message> errors = new ArrayList<>();
 	
 	@Override
 	public Validator check(boolean condition, Message message) {
@@ -81,7 +77,7 @@ public class MockValidator extends AbstractValidator {
 	@Override
 	public <T extends View> T onErrorUse(Class<T> view) {
 		if(!this.errors.isEmpty()) {
-			throw new ValidationException(new ArrayList<>(errors.values()));
+			throw new ValidationException(errors);
 		}
 		return new MockResult().use(view);
 	}
@@ -95,24 +91,19 @@ public class MockValidator extends AbstractValidator {
 
 	@Override
 	public void add(Message message) {
-		errors.put(message.getCategory(), message);
+		errors.add(message);
 	}
 
 	@Override
 	public boolean hasErrors() {
-		return !this.errors.isEmpty();
+		return !errors.isEmpty();
 	}
 
 	@Override
 	public List<Message> getErrors() {
-		return new ArrayList<>(errors.values());
+		return errors;
 	}
 	
-	@Override
-	public Map<String, Collection<Message>> getErrorMap() {
-		return errors.asMap();
-	}
-
 	public boolean containsMessage(String messageKey, Object... messageParameters) {
 		I18nMessage expectedMessage = new I18nMessage("validation", messageKey, messageParameters);
 		expectedMessage.setBundle(ResourceBundle.getBundle("messages"));

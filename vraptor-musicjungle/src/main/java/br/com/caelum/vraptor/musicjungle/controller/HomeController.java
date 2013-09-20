@@ -16,14 +16,12 @@
  */
 package br.com.caelum.vraptor.musicjungle.controller;
 
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
-
 import javax.inject.Inject;
 
 import org.hibernate.SessionFactory;
 import org.hsqldb.Session;
 
+import sun.awt.ComponentFactory;
 import br.com.caelum.vraptor.Controller;
 import br.com.caelum.vraptor.Get;
 import br.com.caelum.vraptor.Post;
@@ -34,7 +32,7 @@ import br.com.caelum.vraptor.musicjungle.dao.UserDao;
 import br.com.caelum.vraptor.musicjungle.interceptor.Public;
 import br.com.caelum.vraptor.musicjungle.interceptor.UserInfo;
 import br.com.caelum.vraptor.musicjungle.model.User;
-import br.com.caelum.vraptor.validator.Validations;
+import br.com.caelum.vraptor.validator.ValidationMessage;
 
 /**
  * This class will be responsible to login/logout users.
@@ -96,9 +94,8 @@ public class HomeController {
 		// if no user is found, adds an error message to the validator
 		// "invalid_login_or_password" is the message key from messages.properties,
 		// and that key is used with the fmt taglib in index.jsp, for example: <fmt:message key="error.key">
-		validator.checking(new Validations() {{
-		    that(currentUser, is(notNullValue()), "login", "invalid_login_or_password");
-		}});
+		validator.check(currentUser == null, new ValidationMessage("login", "invalid_login_or_password"));
+		
 		// you can use "this" to redirect to another logic from this controller
 		validator.onErrorUsePageOf(this).login();
 

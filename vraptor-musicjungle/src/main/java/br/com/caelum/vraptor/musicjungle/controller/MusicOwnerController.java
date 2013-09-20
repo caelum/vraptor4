@@ -16,10 +16,6 @@
  */
 package br.com.caelum.vraptor.musicjungle.controller;
 
-import static org.hamcrest.Matchers.hasItem;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
-
 import javax.inject.Inject;
 
 import br.com.caelum.vraptor.Controller;
@@ -33,7 +29,7 @@ import br.com.caelum.vraptor.musicjungle.interceptor.UserInfo;
 import br.com.caelum.vraptor.musicjungle.model.Music;
 import br.com.caelum.vraptor.musicjungle.model.MusicOwner;
 import br.com.caelum.vraptor.musicjungle.model.User;
-import br.com.caelum.vraptor.validator.Validations;
+import br.com.caelum.vraptor.validator.ValidationMessage;
 
 /**
  * The resource <code>MusicOwnerController</code> handles all 
@@ -93,10 +89,11 @@ public class MusicOwnerController {
     	
 	    final User sessionUser = refreshUser();
 	    
-	    validator.checking(new Validations() {{
-	    	that(user.getLogin(), is(sessionUser.getLogin()),"user", "you_cant_add_to_others_list");
-		    that(sessionUser.getMusics(), not(hasItem(music)), "music", "you_already_have_this_music");
-		}});
+	    validator.check(!user.getLogin().equals(sessionUser.getLogin()), 
+	            new ValidationMessage("user", "you_cant_add_to_others_list"));
+
+	    validator.check(sessionUser.getMusics().contains(music), 
+	            new ValidationMessage("music", "you_already_have_this_music"));
 
 		validator.onErrorUsePageOf(UsersController.class).home();
 

@@ -74,7 +74,7 @@ public class DefaultValidator extends AbstractValidator {
 	@Override
 	public Validator check(boolean condition, Message message) {
 		if (!condition) {
-			errors.put(message.getCategory(), message);
+			errors.add(message);
 		}
 		
 		return this;

@@ -20,8 +20,6 @@ package br.com.caelum.vraptor;
 import java.util.Collection;
 import java.util.List;
 
-import org.hamcrest.Matcher;
-
 import br.com.caelum.vraptor.validator.Message;
 
 /**
@@ -32,13 +30,13 @@ import br.com.caelum.vraptor.validator.Message;
 public interface Validator {
 
 	/**
-	 * If the condition is true, add the message to validation errors.
+	 * Ensure that expression is true, otherwise adds the message to validation errors.
 	 * 
 	 * @since 4.0.0
-	 * @param condition
+	 * @param expression expression to test
 	 * @param message {@link Message} object
 	 */
-	Validator check(boolean condition, Message message);
+	Validator check(boolean expression, Message message);
     
     
     /**

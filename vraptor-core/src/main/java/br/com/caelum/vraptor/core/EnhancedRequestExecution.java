@@ -32,19 +32,14 @@ import br.com.caelum.vraptor.interceptor.InterceptorRegistry;
 @Default
 public class EnhancedRequestExecution implements RequestExecution {
 
-	private final InterceptorRegistry registry;
 	private final InterceptorStack stack;
 
 	@Inject
-	public EnhancedRequestExecution(InterceptorStack stack, InterceptorRegistry registry) {
+	public EnhancedRequestExecution(InterceptorStack stack) {
 		this.stack = stack;
-		this.registry = registry;
 	}
 
 	public void execute() throws VRaptorException {
-		for (Class<?> interceptor : registry.all()) {
-			stack.add(interceptor);
-		}
 		stack.next(null, null);
 	}
 

@@ -27,60 +27,39 @@ import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.controller.ControllerMethod;
-import br.com.caelum.vraptor.interceptor.ForwardToDefaultViewInterceptor;
 
 /**
  * Default implementation of a interceptor stack.
  *
- * @author guilherme silveira
+ * @author guilherme silveira, mariofts
  *
  */
 @RequestScoped
 public class DefaultInterceptorStack implements InterceptorStack {
 
-	private static final Logger logger = LoggerFactory
-			.getLogger(DefaultInterceptorStack.class);
-
-	private final LinkedList<InterceptorHandler> interceptors = new LinkedList<>();
-	private InterceptorHandlerFactory handlerFactory;
-
+	private static final Logger logger = LoggerFactory.getLogger(DefaultInterceptorStack.class);
+	private LinkedList<InterceptorHandler> handlers;
 
 	@Deprecated
-	public DefaultInterceptorStack() {
-		super();
-	}
+	public DefaultInterceptorStack() {}
 
 	@Inject
-	public DefaultInterceptorStack(InterceptorHandlerFactory handlerFactory) {
-		this.handlerFactory = handlerFactory;
+	public DefaultInterceptorStack(InterceptorStackHandlersCache cache) {
+		handlers = cache.getInterceptorHandlers();
 	}
 
-	public void next(ControllerMethod method, Object controllerInstance)
-			throws InterceptionException {
-		if (interceptors.isEmpty()) {
+	public void next(ControllerMethod method, Object controllerInstance) throws InterceptionException {
+		if (handlers.isEmpty()) {
 			logger.debug("All registered interceptors have been called. End of VRaptor Request Execution.");
 			return;
 		}
-		InterceptorHandler handler = interceptors.poll();
+		InterceptorHandler handler = handlers.poll();
 		handler.execute(this, method, controllerInstance);
-	}
-
-	public void add(Class<?> type) {
-		this.interceptors.addLast(handlerFactory.handlerFor(type));
-	}
-
-	// XXX this method will be removed soon
-	public void addAsNext(Class<?> type) {
-		if (!type.getPackage().getName()
-				.startsWith("br.com.caelum.vraptor.interceptor")
-				&& !type.equals(ForwardToDefaultViewInterceptor.class)) {
-			this.interceptors.addFirst(handlerFactory.handlerFor(type));
-		}
 	}
 
 	@Override
 	public String toString() {
-		return "DefaultInterceptorStack " + interceptors;
+		return "DefaultInterceptorStack " + handlers;
 	}
 
 }

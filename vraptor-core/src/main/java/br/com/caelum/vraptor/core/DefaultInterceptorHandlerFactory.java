@@ -15,7 +15,8 @@
  */
 package br.com.caelum.vraptor.core;
 
-import java.util.concurrent.ConcurrentMap;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Default;
@@ -26,8 +27,6 @@ import br.com.caelum.vraptor.interceptor.AspectStyleInterceptorHandler;
 import br.com.caelum.vraptor.interceptor.Interceptor;
 import br.com.caelum.vraptor.interceptor.StepInvoker;
 import br.com.caelum.vraptor.ioc.Container;
-
-import com.google.common.collect.MapMaker;
 
 /**
  * @author Lucas Cavalcanti
@@ -40,7 +39,7 @@ public class DefaultInterceptorHandlerFactory implements InterceptorHandlerFacto
 
 	private Container container;
 
-	private final ConcurrentMap<Class<?>, InterceptorHandler> cachedHandlers = new MapMaker().makeMap();
+	private final Map<Class<?>, InterceptorHandler> cachedHandlers = new HashMap<>();
 
 	private StepInvoker stepInvoker;
 
@@ -57,12 +56,16 @@ public class DefaultInterceptorHandlerFactory implements InterceptorHandlerFacto
 
 	@Override
 	public InterceptorHandler handlerFor(Class<?> type) {
-		if(cachedHandlers.containsKey(type)){
-			return cachedHandlers.get(type);
+			
+		InterceptorHandler interceptorHandler = cachedHandlers.get(type);
+		if(interceptorHandler != null){
+			return interceptorHandler;
 		}
+			
 		if(type.isAnnotationPresent(Intercepts.class) && !Interceptor.class.isAssignableFrom(type)){
 			AspectStyleInterceptorHandler handler = new AspectStyleInterceptorHandler(type, stepInvoker, container);
-			cachedHandlers.putIfAbsent(type,handler);
+			cachedHandlers.put(type,handler);
+
 			return handler;
 		}
 		return new ToInstantiateInterceptorHandler(container, type);

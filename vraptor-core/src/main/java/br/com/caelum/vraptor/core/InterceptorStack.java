@@ -1,3 +1,4 @@
+
 /***
  * Copyright (c) 2009 Caelum - www.caelum.com.br/opensource
  * All rights reserved.
@@ -31,16 +32,5 @@ public interface InterceptorStack {
 	 * Invokes the next interceptor on the stack.
 	 */
     void next(ControllerMethod method, Object controllerInstance) throws InterceptionException;
-
-    /**
-     * Adds this interceptor at the end of the stack.
-     */
-    void add(Class<?> interceptor);
-
-    /**
-     * Adds this interceptor at the head of the stack.
-     */
-    @Deprecated
-    void addAsNext(Class<?> interceptor);
 
 }

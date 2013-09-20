@@ -17,8 +17,6 @@
 
 package br.com.caelum.vraptor.validator;
 
-import java.io.Serializable;
-import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -41,6 +39,7 @@ import br.com.caelum.vraptor.view.ValidationViewsFactory;
 
 import com.google.common.base.Supplier;
 import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.ForwardingList;
 import com.google.common.collect.Multimap;
 
 /**
@@ -141,10 +140,8 @@ public class DefaultValidator extends AbstractValidator {
 		return new ErrorList(errors);
 	}
 	
-	public class ErrorList extends AbstractList<Message> 
-		implements List<Message>, Serializable {
+	public class ErrorList extends ForwardingList<Message> {
 		
-		private static final long serialVersionUID = -5276117278369632403L;
 		private final List<Message> delegate;
 
 		public ErrorList(List<Message> delegate) {
@@ -160,13 +157,8 @@ public class DefaultValidator extends AbstractValidator {
 		}
 
 		@Override
-		public Message get(int index) {
-			return delegate.get(index);
-		}
-
-		@Override
-		public int size() {
-			return delegate.size();
+		protected List<Message> delegate() {
+			return delegate;
 		}
 	}
 }

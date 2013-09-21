@@ -17,8 +17,6 @@
 
 package br.com.caelum.vraptor.validator;
 
-import static java.util.Collections.unmodifiableList;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -107,8 +105,9 @@ public class DefaultValidator extends AbstractValidator {
 			logger.debug("there are errors on result: {}", errors);
 		}
 		
-		result.include("errors", errors);
+		result.include("errors", getErrors());
 		outjector.outjectRequestMap();
+		
 		return viewsFactory.instanceFor(view, errors);
 	}
 
@@ -134,9 +133,8 @@ public class DefaultValidator extends AbstractValidator {
 
 	@Override
 	public List<Message> getErrors() {
-		return unmodifiableList(errors);
+		return new ErrorList(errors);
 	}
-
 }
 
 class LocalizationSupplier implements Supplier<ResourceBundle> {

@@ -202,8 +202,9 @@ public abstract class GenericContainerTest {
 			@Override
 			public Object execute(RequestInfo request, int counter) {
 				provider.provideForRequest(request);
-				MyDependentComponent instance1 = getFromContainer(MyDependentComponent.class);
-				MyDependentComponent instance2 = getFromContainer(MyDependentComponent.class);
+				Container container = provider.getContainer();
+				MyDependentComponent instance1 = instanceFor(MyDependentComponent.class,container);
+				MyDependentComponent instance2 = instanceFor(MyDependentComponent.class,container);
 				assertThat(instance1, not(sameInstance(instance2)));
 				return null;
 			}
@@ -232,10 +233,12 @@ public abstract class GenericContainerTest {
 			public T execute(RequestInfo request, final int counter) {
 				provider.provideForRequest(request);
 				ControllerMethod secondMethod = mock(ControllerMethod.class, "rm" + counter);
-				getFromContainer(MethodInfo.class).setControllerMethod(secondMethod);
-				return getFromContainer(component);
+				Container secondContainer = provider.getContainer();
+				secondContainer.instanceFor(MethodInfo.class).setControllerMethod(secondMethod);
+				return instanceFor(component, secondContainer);
 			}
 		});
+
 		checkSimilarity(component, shouldBeTheSame, firstInstance, secondInstance);
 	}
 
@@ -260,12 +263,12 @@ public abstract class GenericContainerTest {
 
 	protected <T> T getFromContainerInCurrentThread(final Class<T> componentToBeRetrieved, RequestInfo request) {
 		provider.provideForRequest(request);
-		return getFromContainer(componentToBeRetrieved);
+		return instanceFor(componentToBeRetrieved, provider.getContainer());
 	}
 
 	protected <T> T getFromContainerInCurrentThread(final Class<T> componentToBeRetrieved, RequestInfo request,final Code<T> code) {
 		provider.provideForRequest(request);
-		T bean = getFromContainer(componentToBeRetrieved);
+		T bean = instanceFor(componentToBeRetrieved, provider.getContainer());
 		code.execute(bean);
 		return bean;
 	}
@@ -353,7 +356,7 @@ public abstract class GenericContainerTest {
 			@Override
 			public Converters execute(RequestInfo request, final int counter) {
 				provider.provideForRequest(request);
-				Converters converters = getFromContainer(Converters.class);
+				Converters converters = provider.getContainer().instanceFor(Converters.class);
 				Converter<?> converter = converters.to(Void.class);
 				assertThat(converter, is(instanceOf(ConverterInTheClasspath.class)));
 				return null;
@@ -391,7 +394,7 @@ public abstract class GenericContainerTest {
 			public Void execute(RequestInfo request, int counter) {
 				provider.provideForRequest(request);
 
-				Converters converters = getFromContainer(Converters.class);
+				Converters converters = provider.getContainer().instanceFor(Converters.class);
 
 				final HashMap<Class, Class<?>> EXPECTED_CONVERTERS = new HashMap<Class, Class<?>>() {
 				    {

@@ -60,7 +60,6 @@ public class MusicOwnerController {
 	@Inject
 	public MusicOwnerController(MusicDao musicDao, UserDao userDao, 
 			UserInfo userInfo, Result result, Validator validator) {
-		
 		this.musicDao = musicDao;
 		this.userDao = userDao;
 		this.result = result;
@@ -86,13 +85,12 @@ public class MusicOwnerController {
     @Path("/users/{user.login}/musics/{music.id}")
     @Put
 	public void addToMyList(final User user, final Music music) {
-    	
 	    final User sessionUser = refreshUser();
 	    
-	    validator.check(!user.getLogin().equals(sessionUser.getLogin()), 
+	    validator.check(user.getLogin().equals(sessionUser.getLogin()), 
 	            new ValidationMessage("user", "you_cant_add_to_others_list"));
 
-	    validator.check(sessionUser.getMusics().contains(music), 
+	    validator.check(!sessionUser.getMusics().contains(music), 
 	            new ValidationMessage("music", "you_already_have_this_music"));
 
 		validator.onErrorUsePageOf(UsersController.class).home();

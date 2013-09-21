@@ -24,6 +24,7 @@ import javax.inject.Inject;
 
 import org.hibernate.Criteria;
 import org.hibernate.Session;
+import org.hibernate.criterion.Projections;
 
 import br.com.caelum.vraptor.musicjungle.model.User;
 
@@ -35,8 +36,11 @@ import br.com.caelum.vraptor.musicjungle.model.User;
  */
 public class DefaultUserDao implements UserDao {
 
-	@Inject
 	private Session session;
+
+	@Deprecated // CDI eyes only
+	public DefaultUserDao() {
+    }
 
 	/**
 	 * Creates a new UserDao. You can receive dependencies 
@@ -46,9 +50,10 @@ public class DefaultUserDao implements UserDao {
 	 * 
 	 * @param session Hibernate's Session.
 	 */
-//	public DefaultUserDao(Session session) {
-//		this.session = session;
-//	}
+	@Inject
+	public DefaultUserDao(Session session) {
+		this.session = session;
+	}
 
 	@Override
 	public User find(String login, String password) {
@@ -59,7 +64,9 @@ public class DefaultUserDao implements UserDao {
 
 	@Override
 	public User find(String login) {
-		Criteria criteria = findUserByLogin(login);
+        Criteria criteria = session.createCriteria(User.class);
+        criteria.add(eq("login", login));
+        
 		return (User) criteria.uniqueResult();
 	}
 
@@ -71,12 +78,11 @@ public class DefaultUserDao implements UserDao {
 	
 	@Override
 	public boolean containsUserWithLogin(String login) {
-		return !findUserByLogin(login).list().isEmpty();
-	}
-	
-	private Criteria findUserByLogin(String login) {
-		Criteria criteria = session.createCriteria(User.class);
-		return criteria.add(eq("login", login));
+        Criteria criteria = session.createCriteria(User.class);
+        criteria.add(eq("login", login));
+        criteria.setProjection(Projections.count("id"));
+        
+		return ((Number) criteria.uniqueResult()).intValue() > 0;
 	}
 	
 	@Override
@@ -93,5 +99,4 @@ public class DefaultUserDao implements UserDao {
 	public void update(User user) {
 		session.update(user);
 	}
-
 }

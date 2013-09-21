@@ -212,7 +212,7 @@ public class DefaultValidatorTest {
 		validator.check(c.name == null, new ValidationMessage("not null", "client.name"));
 		assertThat(validator.getErrors(), hasSize(0));
 	}
-
+	
 	@Test
 	public void shouldAddMessageIfCheckingFails() {
 		Client c = new Client();

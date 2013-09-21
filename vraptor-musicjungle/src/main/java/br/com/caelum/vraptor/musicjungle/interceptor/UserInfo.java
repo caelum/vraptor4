@@ -27,8 +27,9 @@ import br.com.caelum.vraptor.musicjungle.model.User;
  * @author Caio Filipini
  */
 @SessionScoped
-public class UserInfo implements Serializable{
+public class UserInfo implements Serializable {
 
+    private static final long serialVersionUID = 773496171272411714L;
     private User user;
 
     public User getUser() {
@@ -42,5 +43,4 @@ public class UserInfo implements Serializable{
     public void logout() {
         this.user = null;
     }
-
 }

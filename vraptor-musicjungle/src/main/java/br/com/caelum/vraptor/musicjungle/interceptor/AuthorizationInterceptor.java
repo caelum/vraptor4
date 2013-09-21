@@ -16,7 +16,7 @@
  */
 package br.com.caelum.vraptor.musicjungle.interceptor;
 
-import java.util.Arrays;
+import static java.util.Arrays.asList;
 
 import javax.inject.Inject;
 
@@ -61,7 +61,7 @@ public class AuthorizationInterceptor{
     	 */
     	if (info.getUser() == null) {
     		// remember added parameters will survive one more request, when there is a redirect
-    		result.include("errors", Arrays.asList(new ValidationMessage("user is not logged in", "user")));
+    		result.include("errors", asList(new ValidationMessage("user is not logged in", "user")));
     		result.redirectTo(HomeController.class).login();
     	} else {
 	    	dao.refresh(info.getUser());

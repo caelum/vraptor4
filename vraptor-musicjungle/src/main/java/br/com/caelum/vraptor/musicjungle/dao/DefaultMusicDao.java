@@ -40,7 +40,6 @@ import br.com.caelum.vraptor.musicjungle.model.MusicOwner;
  */
 public class DefaultMusicDao implements MusicDao {
 
-	// current hibernate session
 	private Session session;
 
 	//CDI eyes only

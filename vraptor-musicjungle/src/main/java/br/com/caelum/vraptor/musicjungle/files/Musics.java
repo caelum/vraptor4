@@ -1,34 +1,38 @@
 package br.com.caelum.vraptor.musicjungle.files;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-
-import org.apache.commons.io.IOUtils;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import br.com.caelum.vraptor.interceptor.multipart.UploadedFile;
 import br.com.caelum.vraptor.musicjungle.model.Music;
 
 public class Musics {
 	
-	private File DEFAULT_FOLDER = new File("/tmp/uploads/");
+	private Path DEFAULT_FOLDER = Paths.get("/tmp/uploads/");
 	
 	public Musics(){
-		//creates the directory if not exists
-		if(!DEFAULT_FOLDER.exists())
-			DEFAULT_FOLDER.mkdirs();
+		if(!Files.exists(DEFAULT_FOLDER)) {
+			try {
+			    Files.createDirectories(DEFAULT_FOLDER);
+			} catch (IOException e) {
+			    throw new IllegalStateException(e);
+			}
+		}
 	}
 	
 	public void save(UploadedFile file, Music music) {
-		
-		if(file == null)
-			return;
-
-		File path = new File(DEFAULT_FOLDER, getFileName(music));
-		try {
-			IOUtils.copyLarge(file.getFile(), new FileOutputStream(path));
-		} catch (IOException e) {
-			throw new RuntimeException("Can't write music file.", e);
+		if(file != null) {
+    		Path path = DEFAULT_FOLDER.resolve(getFileName(music));
+    		
+    		try(InputStream in = file.getFile()) {
+    		    Files.copy(in, path);
+    		} catch (IOException e) {
+    		    throw new IllegalStateException(e);
+    		}
 		}
 	}
 
@@ -37,7 +41,6 @@ public class Musics {
 	}
 	
 	public File getFile(Music music) {
-		return new File(DEFAULT_FOLDER, getFileName(music));
+		return DEFAULT_FOLDER.resolve(getFileName(music)).toFile();
 	}
-
 }

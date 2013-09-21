@@ -38,6 +38,7 @@ import br.com.caelum.vraptor.interceptor.example.MethodLevelAcceptsController;
 import br.com.caelum.vraptor.interceptor.example.NonBooleanAcceptsInterceptor;
 import br.com.caelum.vraptor.interceptor.example.VoidAcceptsInterceptor;
 import br.com.caelum.vraptor.interceptor.example.WithoutAroundInterceptor;
+import br.com.caelum.vraptor.ioc.Container;
 
 public class AspectStyleInterceptorHandlerTest {
 
@@ -127,17 +128,18 @@ public class AspectStyleInterceptorHandlerTest {
 
 	@Test(expected = VRaptorException.class)
 	public void shouldVerifyIfAcceptsMethodReturnsVoid() {
-		VoidAcceptsInterceptor weirdInterceptor = new VoidAcceptsInterceptor();
-		new AspectStyleInterceptorHandler(VoidAcceptsInterceptor.class,
-				stepInvoker, new InstanceContainer(weirdInterceptor,controllerMethod));
+		newInterceptorHandlerFor(new VoidAcceptsInterceptor());
 	}
 
 	@Test(expected = VRaptorException.class)
 	public void shouldVerifyIfAcceptsMethodReturnsNonBooleanType() {
-		NonBooleanAcceptsInterceptor weirdInterceptor = new NonBooleanAcceptsInterceptor();
+		newInterceptorHandlerFor(new NonBooleanAcceptsInterceptor());
+	}
 
-		new AspectStyleInterceptorHandler(NonBooleanAcceptsInterceptor.class,
-				stepInvoker, new InstanceContainer(weirdInterceptor,controllerMethod));
+	private void newInterceptorHandlerFor(Object interceptor) {
+		Container container = new InstanceContainer(interceptor,controllerMethod);
+		InterceptorMethodParametersResolver parametersResolver = new InterceptorMethodParametersResolver(container);
+		new AspectStyleInterceptorHandler(VoidAcceptsInterceptor.class, stepInvoker, container, parametersResolver);
 	}
 
 	@Test
@@ -315,8 +317,10 @@ public class AspectStyleInterceptorHandlerTest {
 		deps.add(stack);
 		deps.add(controllerMethod);
 		deps.add(simpleInterceptorStack);
+		Container container = new InstanceContainer(deps.toArray());
+		InterceptorMethodParametersResolver parametersResolver = new InterceptorMethodParametersResolver(container);
 		AspectStyleInterceptorHandler aspectHandler = new AspectStyleInterceptorHandler(
-				interceptorClass, stepInvoker, new InstanceContainer(deps.toArray()));
+				interceptorClass, stepInvoker, container, parametersResolver);
 		return aspectHandler;
 	}
 

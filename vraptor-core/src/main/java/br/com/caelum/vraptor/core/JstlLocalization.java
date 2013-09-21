@@ -52,6 +52,7 @@ public class JstlLocalization
 
     private RequestInfo request;
     private ResourceBundle bundle;
+    private Locale locale;
 
     //CDI eyes only
 	@Deprecated
@@ -104,8 +105,16 @@ public class JstlLocalization
 
     @Override
 	public Locale getLocale() {
-        return localeFor(Config.FMT_LOCALE);
+    	if (locale == null) {
+    		locale = initializeLocale();
+    	}
+    	
+        return locale;
     }
+
+	private Locale initializeLocale() {
+		return localeFor(Config.FMT_LOCALE);
+	}
 
     @Override
 	public Locale getFallbackLocale() {

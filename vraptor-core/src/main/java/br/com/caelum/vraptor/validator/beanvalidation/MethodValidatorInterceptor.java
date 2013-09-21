@@ -110,13 +110,7 @@ public class MethodValidatorInterceptor implements Interceptor {
 				: parameterNameProvider.parameterNamesFor(method.getMethod());
 
 		for (ConstraintViolation<Object> v : violations) {
-			Iterator<Node> property = v.getPropertyPath().iterator();
-			property.next();
-			ParameterNode parameterNode = property.next().as(ParameterNode.class);
-
-			int index = parameterNode.getParameterIndex();
-			String category = Joiner.on(".").join(v.getPropertyPath())
-					.replace("arg" + parameterNode.getParameterIndex(), names[index]);
+			String category = extractCategory(names, v);
 
 			BeanValidatorContext ctx = new BeanValidatorContext(v);
 			String msg = interpolator.interpolate(v.getMessageTemplate(), ctx, getLocale());
@@ -124,6 +118,17 @@ public class MethodValidatorInterceptor implements Interceptor {
 		}
 
 		stack.next(method, controllerInstance);
+	}
+
+	protected String extractCategory(String[] names, ConstraintViolation<Object> v) {
+		Iterator<Node> property = v.getPropertyPath().iterator();
+		property.next();
+		ParameterNode parameterNode = property.next().as(ParameterNode.class);
+
+		int index = parameterNode.getParameterIndex();
+		String category = Joiner.on(".").join(v.getPropertyPath())
+				.replace("arg" + parameterNode.getParameterIndex(), names[index]);
+		return category;
 	}
 
 	private Locale getLocale() {

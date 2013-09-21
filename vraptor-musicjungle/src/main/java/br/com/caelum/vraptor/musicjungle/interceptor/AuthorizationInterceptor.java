@@ -18,8 +18,6 @@ package br.com.caelum.vraptor.musicjungle.interceptor;
 
 import static java.util.Arrays.asList;
 
-import java.util.Arrays;
-
 import javax.inject.Inject;
 
 import br.com.caelum.vraptor.Accepts;

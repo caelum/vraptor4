@@ -51,7 +51,6 @@ public class DefaultValidator extends AbstractValidator {
 	private Result result;
 	private List<Message> errors = new ArrayList<>();
 	private ValidationViewsFactory viewsFactory;
-	private BeanValidator beanValidator;
 	private Outjector outjector;
 	private Proxifier proxifier;
 	private Localization localization;
@@ -62,12 +61,11 @@ public class DefaultValidator extends AbstractValidator {
 	}
 
 	@Inject
-	public DefaultValidator(Result result, ValidationViewsFactory factory, Outjector outjector, Proxifier proxifier, BeanValidator beanValidator, Localization localization) {
+	public DefaultValidator(Result result, ValidationViewsFactory factory, Outjector outjector, Proxifier proxifier, Localization localization) {
 		this.result = result;
 		this.viewsFactory = factory;
 		this.outjector = outjector;
 		this.proxifier = proxifier;
-		this.beanValidator = beanValidator;
 		this.localization = localization;
 	}
 	
@@ -80,21 +78,6 @@ public class DefaultValidator extends AbstractValidator {
 		return this;
 	}
 	
-	@Override
-	public void validate(Object object, Class<?>... groups) {
-		addAll(beanValidator.validate(object, groups));
-	}
-	
-	@Override
-	public void validateProperties(Object object, String... properties) {
-		addAll(beanValidator.validateProperties(object, properties));
-	}
-	
-	@Override
-	public void validateProperty(Object object, String property, Class<?>... groups) {
-		addAll(beanValidator.validateProperty(object, property, groups));
-	}
-
 	@Override
 	public <T extends View> T onErrorUse(Class<T> view) {
 		if (!hasErrors()) {

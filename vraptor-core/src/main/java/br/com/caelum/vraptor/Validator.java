@@ -38,37 +38,6 @@ public interface Validator {
 	 */
 	Validator check(boolean expression, Message message);
     
-    
-    /**
-     * Validate an object using some Bean Validation engine. If the object is null,
-     * the validation will be skipped.
-     *
-     * @param object The object to be validated.
-     * @param groups The groups to be validated.
-     * @since vraptor3.1.2
-     */
-    void validate(Object object, Class<?>... groups);
-
-    /**
-     * Validate the specifics propeties of an object using some Bean Validation engine. If the object is null,
-     * the validation will be skipped.
-     * 
-     * @param object The object to be validated.
-     * @param properties The names of properties to be validated.
-     */
-    void validateProperties(Object object, String... properties);
-    
-    
-	/**
-	 * Validate the specific property of an object using some Bean Validation engine. If the object is null, 
-	 * the validation will be skipped.
-	 * 
-	 * @param object The object to be validated.
-	 * @param property The name of property to be validated.
-	 * @param groups The groups to be validated.
-	 */
-	void validateProperty(Object object, String property, Class<?>... groups);    
-
 	/**
 	 * If validator has errors, you can use this method to define what to do. WARN: this method don't stop the flow.
 	 * @param view

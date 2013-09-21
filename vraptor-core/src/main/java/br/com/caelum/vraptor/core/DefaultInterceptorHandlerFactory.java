@@ -25,6 +25,7 @@ import javax.inject.Inject;
 import br.com.caelum.vraptor.Intercepts;
 import br.com.caelum.vraptor.interceptor.AspectStyleInterceptorHandler;
 import br.com.caelum.vraptor.interceptor.Interceptor;
+import br.com.caelum.vraptor.interceptor.InterceptorMethodParametersResolver;
 import br.com.caelum.vraptor.interceptor.StepInvoker;
 import br.com.caelum.vraptor.ioc.Container;
 
@@ -43,27 +44,32 @@ public class DefaultInterceptorHandlerFactory implements InterceptorHandlerFacto
 
 	private StepInvoker stepInvoker;
 
+	private InterceptorMethodParametersResolver parametersResolver;
+
 	//CDI eyes only
 	@Deprecated
 	public DefaultInterceptorHandlerFactory() {
 	}
 
 	@Inject
-	public DefaultInterceptorHandlerFactory(Container container, StepInvoker stepInvoker) {
+	public DefaultInterceptorHandlerFactory(Container container, StepInvoker
+			stepInvoker, InterceptorMethodParametersResolver parametersResolver) {
+
 		this.container = container;
 		this.stepInvoker = stepInvoker;
+		this.parametersResolver = parametersResolver;
 	}
 
 	@Override
 	public InterceptorHandler handlerFor(Class<?> type) {
-			
+
 		InterceptorHandler interceptorHandler = cachedHandlers.get(type);
 		if(interceptorHandler != null){
 			return interceptorHandler;
 		}
-			
+
 		if(type.isAnnotationPresent(Intercepts.class) && !Interceptor.class.isAssignableFrom(type)){
-			AspectStyleInterceptorHandler handler = new AspectStyleInterceptorHandler(type, stepInvoker, container);
+			AspectStyleInterceptorHandler handler = new AspectStyleInterceptorHandler(type, stepInvoker, container, parametersResolver);
 			cachedHandlers.put(type,handler);
 
 			return handler;

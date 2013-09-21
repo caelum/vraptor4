@@ -10,6 +10,10 @@ import br.com.caelum.vraptor.Intercepts;
 import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.interceptor.SimpleInterceptorStack;
 
+/**
+ * Open session in view interceptor, that open a Hibernate Session before a request, and 
+ * closes at the end of request.
+ */
 @Intercepts
 public class TransactionInterceptor {
 	
@@ -25,7 +29,7 @@ public class TransactionInterceptor {
         try {
             transaction = session.beginTransaction();
             stack.next();
-            if (!validator.hasErrors()) {
+            if (!validator.hasErrors() && transaction.isActive()) {
                 transaction.commit();
             }
         } finally {

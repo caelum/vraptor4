@@ -20,7 +20,6 @@ public class Musics {
 	}
 	
 	public void save(UploadedFile file, Music music) {
-		
 		if(file == null)
 			return;
 

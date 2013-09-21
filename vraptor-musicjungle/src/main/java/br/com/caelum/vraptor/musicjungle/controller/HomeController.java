@@ -94,7 +94,7 @@ public class HomeController {
 		// if no user is found, adds an error message to the validator
 		// "invalid_login_or_password" is the message key from messages.properties,
 		// and that key is used with the fmt taglib in index.jsp, for example: <fmt:message key="error.key">
-		validator.check(currentUser == null, new ValidationMessage("login", "invalid_login_or_password"));
+		validator.check(currentUser != null, new ValidationMessage("login", "invalid_login_or_password"));
 		
 		// you can use "this" to redirect to another logic from this controller
 		validator.onErrorUsePageOf(this).login();

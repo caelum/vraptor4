@@ -86,7 +86,6 @@ public class MusicController {
 	@Inject
 	public MusicController(MusicDao musicDao, UserInfo userInfo, 
 				Result result, Validator validator, Musics musics) {
-		
 		this.musicDao = musicDao;
 		this.result = result;
         this.validator = validator;
@@ -169,7 +168,6 @@ public class MusicController {
 	@Path("/musics/download/{m.id}")
 	@Get
 	public Download download(Music m){
-		
 		Music music = musicDao.load(m);
 		File file = musics.getFile(music);
 		String contentType = "audio/mpeg";

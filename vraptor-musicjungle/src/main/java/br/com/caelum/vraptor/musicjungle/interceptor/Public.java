@@ -6,8 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * The easiest way to control intercepted methods is through annotations
- *
+ * Defines that the page has public access.
  */
 @Target({ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)

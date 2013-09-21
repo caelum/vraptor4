@@ -33,9 +33,7 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.ResourceBundle;
 
 import org.junit.Before;
@@ -73,7 +71,7 @@ public class DefaultValidatorTest {
 	@Before
 	public void setup() {
 		Proxifier proxifier = new JavassistProxifier(new ObjenesisInstanceCreator());
-		this.validator = new DefaultValidator(result, new DefaultValidationViewsFactory(result, proxifier), outjector, proxifier, beanValidator, localization);
+		this.validator = new DefaultValidator(result, new DefaultValidationViewsFactory(result, proxifier), outjector, proxifier, localization);
 		when(result.use(LogicResult.class)).thenReturn(logicResult);
 		when(result.use(PageResult.class)).thenReturn(pageResult);
 		when(logicResult.forwardTo(MyComponent.class)).thenReturn(instance);
@@ -122,34 +120,6 @@ public class DefaultValidatorTest {
 		} catch (ValidationException e) {
 			fail("no error occurs");
 		}
-	}
-
-	@Test
-	public void shouldAddBeanValidatorErrorsIfPossible() {
-		List<Message> messages = new ArrayList<>();
-		
-		when(beanValidator.validate(any())).thenReturn(messages);
-		validator.validate(new Object());
-		assertThat(validator.getErrors(), hasSize(0));
-		
-		messages.add(new ValidationMessage("", ""));
-		when(beanValidator.validate(any())).thenReturn(messages);
-		validator.validate(new Object());
-		assertThat(validator.getErrors(), hasSize(1));
-	}
-	
-	@Test
-	public void shouldAddBeanValidatorErrorsIfPossibleForSpecificProperties() {
-		List<Message> messages = new ArrayList<>();
-		
-		when(beanValidator.validateProperties(any())).thenReturn(messages);
-		validator.validateProperties(new Object());
-		assertThat(validator.getErrors(), hasSize(0));
-		
-		messages.add(new ValidationMessage("", ""));
-		when(beanValidator.validateProperties(any())).thenReturn(messages);
-		validator.validateProperties(new Object());
-		assertThat(validator.getErrors(), hasSize(1));
 	}
 
 	@Test
@@ -209,7 +179,7 @@ public class DefaultValidatorTest {
 		Client c = new Client();
 		c.name = "The name";
 		
-		validator.check(c.name == null, new ValidationMessage("not null", "client.name"));
+		validator.check(c.name != null, new ValidationMessage("not null", "client.name"));
 		assertThat(validator.getErrors(), hasSize(0));
 	}
 	
@@ -217,7 +187,7 @@ public class DefaultValidatorTest {
 	public void shouldAddMessageIfCheckingFails() {
 		Client c = new Client();
 		
-		validator.check(c.name == null, new ValidationMessage("not null", "client.name"));
+		validator.check(c.name != null, new ValidationMessage("not null", "client.name"));
 		assertThat(validator.getErrors(), hasSize(1));
 		assertThat(validator.getErrors().get(0).getMessage(), containsString("not null"));
 	}

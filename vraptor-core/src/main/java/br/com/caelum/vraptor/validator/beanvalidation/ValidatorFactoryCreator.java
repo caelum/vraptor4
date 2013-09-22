@@ -20,11 +20,11 @@ import javax.enterprise.inject.Alternative;
 import javax.enterprise.inject.Default;
 import javax.enterprise.inject.Disposes;
 import javax.enterprise.inject.Produces;
-import javax.inject.Inject;
 import javax.validation.Validation;
 import javax.validation.ValidatorFactory;
 
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Produces an instance for {@link ValidatorFactory}.
@@ -35,18 +35,13 @@ import org.slf4j.Logger;
 @ApplicationScoped
 @Alternative
 public class ValidatorFactoryCreator {
+	
+	private static final Logger logger = LoggerFactory.getLogger(ValidatorFactoryCreator.class);
     
-    private Logger logger;
-
 	//CDI eyes only
 	@Deprecated
 	public ValidatorFactoryCreator() {
 	}
-    
-	@Inject
-    public ValidatorFactoryCreator(Logger logger) {
-        this.logger = logger;
-    }
     
     @Produces 
     @Default 

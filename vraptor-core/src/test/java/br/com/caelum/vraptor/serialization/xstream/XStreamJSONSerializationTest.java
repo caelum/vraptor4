@@ -22,6 +22,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.interceptor.DefaultTypeNameExtractor;
+import br.com.caelum.vraptor.serialization.JSONPSerialization;
 import br.com.caelum.vraptor.serialization.NullProxyInitializer;
 
 import com.google.common.collect.ForwardingCollection;
@@ -390,5 +391,14 @@ public class XStreamJSONSerializationTest {
 		assertThat(result(), is(equalTo(expectedResult)));
 	}
 
+    @Test
+    public void shouldSerializeWithCallback() {
+        JSONPSerialization serialization = new XStreamJSONPSerialization(response, extractor, initializer, builder);
+        
+        String expectedResult = "calculate({\"order\": {\"price\": 15.0}})";
+        Order order = new Order(new Client("nykolas lima"), 15.0, "gift bags, please");
+        serialization.withCallback("calculate").from(order).excludeAll().include("price").serialize();
+        assertThat(result(), is(equalTo(expectedResult)));
+    }
 
 }

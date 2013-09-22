@@ -460,8 +460,7 @@ public class GsonJSONSerializationTest {
 	
 	@Test
 	public void shouldSerializeWithCallback() {
-	    JSONPSerialization serialization;
-	    serialization = new GsonJSONPSerialization(response, extractor, initializer, builder, serializee);
+	    JSONPSerialization serialization = new GsonJSONPSerialization(response, extractor, initializer, builder, serializee);
 	    
         String expectedResult = "calculate({\"order\":{\"price\":15.0}})";
         Order order = new Order(new Client("nykolas lima"), 15.0, "gift bags, please");

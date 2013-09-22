@@ -137,12 +137,8 @@ public class XStreamSerializer implements SerializerBuilder {
 	}
 
 	public void serialize() {
-		if (xstream instanceof VRaptorXStream) {
-			VRaptorClassMapper mapper = ((VRaptorXStream) xstream).getVRaptorMapper();
-			mapper.setSerializee(serializee);
-		} else {
-			new OldAndProbablyBuggyConfigurer(xstream).configure(serializee);
-		}
+		VRaptorClassMapper mapper = ((VRaptorXStream) xstream).getVRaptorMapper();
+		mapper.setSerializee(serializee);
 		
 		registerProxyInitializer();
 		xstream.toXML(serializee.getRoot(), writer);

@@ -19,7 +19,7 @@ package br.com.caelum.vraptor.http;
 
 import java.io.UnsupportedEncodingException;
 
-import javax.enterprise.inject.Alternative;
+import javax.enterprise.context.ApplicationScoped;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -30,7 +30,7 @@ import br.com.caelum.vraptor.VRaptorException;
  *
  * @author Lucas Cavalcanti
  */
-@Alternative
+@ApplicationScoped
 public class DefaultEncodingHandler implements EncodingHandler {
 
 	private final String encoding;

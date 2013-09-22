@@ -3,14 +3,21 @@ package br.com.caelum.vraptor.interceptor;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
+
 import br.com.caelum.vraptor.ioc.Container;
 
+@ApplicationScoped
 public class InterceptorMethodParametersResolver {
 
 	private Container container;
 
+	@Deprecated // CDI eyes only
+	public InterceptorMethodParametersResolver() {}
+
+	@Inject
 	public InterceptorMethodParametersResolver(Container container) {
-		super();
 		this.container = container;
 	}
 
@@ -25,6 +32,5 @@ public class InterceptorMethodParametersResolver {
 			parameters.add(container.instanceFor(parameterType));
 		}
 		return parameters.toArray();
-
 	}
 }

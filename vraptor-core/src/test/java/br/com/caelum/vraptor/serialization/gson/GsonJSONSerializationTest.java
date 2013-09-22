@@ -26,6 +26,8 @@ import org.junit.Test;
 
 import br.com.caelum.vraptor.deserialization.gson.VRaptorGsonBuilder;
 import br.com.caelum.vraptor.interceptor.DefaultTypeNameExtractor;
+import br.com.caelum.vraptor.serialization.JSONPSerialization;
+import br.com.caelum.vraptor.serialization.JSONSerialization;
 import br.com.caelum.vraptor.serialization.NullProxyInitializer;
 import br.com.caelum.vraptor.serialization.Serializee;
 
@@ -42,12 +44,14 @@ public class GsonJSONSerializationTest {
 
 	private Serializee serializee = new Serializee();
 
-	private GsonJSONSerialization serialization;
+	private JSONSerialization serialization;
 	private ByteArrayOutputStream stream;
 	private HttpServletResponse response;
 	private DefaultTypeNameExtractor extractor;
 	private NullProxyInitializer initializer;
 	private List<JsonSerializer> adapters;
+
+    private VRaptorGsonBuilder builder;
 
 	@Before
 	public void setup() throws Exception {
@@ -62,7 +66,7 @@ public class GsonJSONSerializationTest {
 		adapters.add(new CalendarSerializer());
 		adapters.add(new CollectionSerializer());
 
-		VRaptorGsonBuilder builder = new VRaptorGsonBuilder(adapters, serializee);
+		builder = new VRaptorGsonBuilder(adapters, serializee);
 		this.serialization = new GsonJSONSerialization(response, extractor, initializer, builder, serializee);
 	}
 
@@ -452,5 +456,16 @@ public class GsonJSONSerializationTest {
 		Order order = new Order(new Client("nykolas lima"), 15.0, "gift bags, please");
 		serialization.from(order).excludeAll().include("price").serialize();
 		assertThat(result(), is(equalTo(expectedResult)));
+	}
+	
+	@Test
+	public void shouldSerializeWithCallback() {
+	    JSONPSerialization serialization;
+	    serialization = new GsonJSONPSerialization(response, extractor, initializer, builder, serializee);
+	    
+        String expectedResult = "calculate({\"order\":{\"price\":15.0}})";
+        Order order = new Order(new Client("nykolas lima"), 15.0, "gift bags, please");
+        serialization.withCallback("calculate").from(order).excludeAll().include("price").serialize();
+        assertThat(result(), is(equalTo(expectedResult)));
 	}
 }

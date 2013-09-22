@@ -23,8 +23,8 @@ import com.google.common.collect.Sets;
 public class Serializee {
 	private Object root;
 	private Class<?> rootClass;
-	private Multimap<String, Class<?>> includes = LinkedListMultimap.create();
-	private Multimap<String, Class<?>> excludes = LinkedListMultimap.create();
+	private Multimap<String, Class<?>> includes;
+	private Multimap<String, Class<?>> excludes;
 	private Set<Class<?>> elementTypes;
 	private boolean recursive;
 
@@ -45,10 +45,12 @@ public class Serializee {
 	}
 
 	public Multimap<String, Class<?>> getIncludes() {
+	    initializeIncludesIfNull();
 		return includes;
 	}
 
 	public Multimap<String, Class<?>> getExcludes() {
+	    initializeExcludesIfNull();
 		return excludes;
 	}
 
@@ -69,22 +71,37 @@ public class Serializee {
 	}
 
 	public void excludeAll(String... names) {
+	    initializeExcludesIfNull();
 		for (String name : names) {
 			excludes.putAll(name, getParentTypesFor(name));
 		}
 	}
 	
 	public void excludeAll() {
+	    initializeExcludesIfNull();
 		for(Field field : new Mirror().on(getRootClass()).reflectAll().fields()) {
 			excludes.putAll(field.getName(), getParentTypes(field.getName(), getRootClass()));
 		}
 	}
 
 	public void includeAll(String... names) {
+	    initializeIncludesIfNull();
 		for (String name : names) {
 			includes.putAll(name, getParentTypesFor(name));
 		}
 	}
+	
+    private void initializeExcludesIfNull() {
+        if (excludes == null) {
+            excludes = LinkedListMultimap.create();
+        }
+    }
+
+    private void initializeIncludesIfNull() {
+        if (includes == null) {
+            includes = LinkedListMultimap.create();
+        }
+    }
 
 	private Set<Class<?>> getParentTypesFor(String name) {
 		if (getElementTypes() == null) {

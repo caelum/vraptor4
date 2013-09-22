@@ -1,4 +1,4 @@
-package br.com.caelum.vraptor.serialization.xstream;
+package br.com.caelum.vraptor.serialization;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -120,7 +120,7 @@ public class Serializee {
 		return types;
 	}
 
-	static Class<?> getActualType(Type genericType) {
+	public static Class<?> getActualType(Type genericType) {
 		if (genericType instanceof ParameterizedType) {
 			ParameterizedType type = (ParameterizedType) genericType;
 

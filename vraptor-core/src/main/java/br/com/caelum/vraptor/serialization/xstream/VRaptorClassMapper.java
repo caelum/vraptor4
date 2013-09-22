@@ -23,6 +23,7 @@ import java.util.Map.Entry;
 
 import net.vidageek.mirror.dsl.Mirror;
 import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
+import br.com.caelum.vraptor.serialization.Serializee;
 import br.com.caelum.vraptor.validator.Message;
 
 import com.google.common.base.Supplier;

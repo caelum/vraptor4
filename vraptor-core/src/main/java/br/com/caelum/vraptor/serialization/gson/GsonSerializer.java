@@ -144,7 +144,7 @@ public class GsonSerializer implements SerializerBuilder {
 			} else {
 				Map<String, Object> tree = new HashMap<>();
 				tree.put(alias, root);
-				writer.write(gson.toJson(tree));
+				write(writer, gson.toJson(tree));
 			}
 
 			writer.flush();
@@ -152,6 +152,10 @@ public class GsonSerializer implements SerializerBuilder {
 		} catch (IOException e) {
 			throw new RuntimeException("Não pode serializar", e);
 		}
+	}
+	
+	protected void write(Writer writer, String json) throws IOException {
+	    writer.write(json);
 	}
 
 	public Serializer recursive() {

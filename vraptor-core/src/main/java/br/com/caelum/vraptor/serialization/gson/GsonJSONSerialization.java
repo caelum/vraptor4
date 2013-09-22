@@ -41,7 +41,6 @@ public class GsonJSONSerialization implements JSONSerialization {
 	protected final TypeNameExtractor extractor;
 	protected final ProxyInitializer initializer;
 	protected final VRaptorGsonBuilder builder;
-
 	protected final Serializee serializee;
 
 	public GsonJSONSerialization(HttpServletResponse response, TypeNameExtractor extractor,

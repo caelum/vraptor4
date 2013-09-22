@@ -19,7 +19,6 @@ import br.com.caelum.vraptor.serialization.NullProxyInitializer;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.converters.Converter;
 import com.thoughtworks.xstream.converters.SingleValueConverter;
-import com.thoughtworks.xstream.mapper.MapperWrapper;
 
 /**
  * testing the same cases as {@link XStreamXMLSerializationTest}
@@ -42,29 +41,7 @@ public class XStreamSerializerTest extends XStreamXMLSerializationTest {
 
 		final DefaultTypeNameExtractor extractor = new DefaultTypeNameExtractor();
 		this.serialization = new XStreamXMLSerialization(response, extractor, new NullProxyInitializer(), new XStreamBuilderImpl(
-                new XStreamConverters(converters, Collections.<SingleValueConverter>emptyList()),
-                extractor) {
-			@Override
-			public XStream xmlInstance() {
-				return configure(new XStream() {
-					{setMode(NO_REFERENCES);}
-					@Override
-					protected MapperWrapper wrapMapper(MapperWrapper next) {
-
-					    return new MapperWrapper(next) {
-					    	@Override
-					    	public String serializedClass(Class type) {
-					    		String superName = super.serializedClass(type);
-					    		if (type.getName().equals(superName)) {
-					    			return extractor.nameFor(type);
-					    		}
-					    		return superName;
-					    	}
-						};
-					}
-				});
-			}
-		});
+                new XStreamConverters(converters, Collections.<SingleValueConverter>emptyList()), extractor));
     }
 
 }

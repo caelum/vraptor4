@@ -120,7 +120,7 @@ public class Serializee {
 		return types;
 	}
 
-	public static Class<?> getActualType(Type genericType) {
+	private static Class<?> getActualType(Type genericType) {
 		if (genericType instanceof ParameterizedType) {
 			ParameterizedType type = (ParameterizedType) genericType;
 

@@ -25,14 +25,14 @@ public class AspectStyleInterceptorHandler implements InterceptorHandler {
 	private StepExecutor<?> around;
 	private StepExecutor<?> before;
 
-	public AspectStyleInterceptorHandler(Class<?> interceptorClass,
-			StepInvoker stepInvoker, Container container) {
+	public AspectStyleInterceptorHandler(Class<?> interceptorClass, StepInvoker stepInvoker,
+			Container container, InterceptorMethodParametersResolver parametersResolver) {
+
 		this.interceptorClass = interceptorClass;
 		this.stepInvoker = stepInvoker;
 		this.container = container;
-		parametersResolver = new InterceptorMethodParametersResolver(container);
+		this.parametersResolver = parametersResolver;
 		configure();
-
 	}
 
 	private void configure() {

@@ -4,9 +4,8 @@ import java.lang.reflect.Method;
 
 import br.com.caelum.vraptor.core.InterceptorStack;
 
-public class NoStackParameterSignatureAcceptor implements SignatureAcceptor {
+public class NoStackParameterSignatureAcceptor {
 
-	@Override
 	public boolean accepts(Method method){
 		return !new MustReceiveStackAsParameterAcceptor().accepts(method);
 	}

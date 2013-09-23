@@ -19,9 +19,8 @@ package br.com.caelum.vraptor.util;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import javax.inject.Inject;
+import javax.enterprise.inject.Vetoed;
 
-import br.com.caelum.vraptor.cache.LRUCapacity;
 import br.com.caelum.vraptor.cache.VRaptorCache;
 
 /**
@@ -30,18 +29,13 @@ import br.com.caelum.vraptor.cache.VRaptorCache;
  * @author Sérgio Lopes
  * @author Paulo Silveira
  */
-@br.com.caelum.vraptor.cache.LRUCache
+//Not registering it because it is already produced by LRUCacheFactory.
+@Vetoed
 public class LRUCache<K, V> extends LinkedHashMap<K, V> implements VRaptorCache<K,V> {
 	private static final long serialVersionUID = 1L;
 	private int capacity;
 	
-	
-	@Deprecated
-	public LRUCache(){		
-	}
-	
-	@Inject
-	public LRUCache(@LRUCapacity int capacity) {
+	public LRUCache(int capacity) {
 		super(capacity, 0.75f, true);
 		this.capacity = capacity;
 	}

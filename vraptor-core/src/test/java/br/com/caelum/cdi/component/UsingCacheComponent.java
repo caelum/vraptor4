@@ -8,7 +8,7 @@ import br.com.caelum.vraptor.cache.VRaptorCache;
 public class UsingCacheComponent {
 
 	@Inject
-	@LRUCache
+	@LRUCache(capacity=200)
 	private VRaptorCache<String,String> cacheLRU;
 	
 	@Inject

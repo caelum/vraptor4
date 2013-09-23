@@ -6,6 +6,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import javax.enterprise.util.Nonbinding;
 import javax.inject.Qualifier;
 
 /**
@@ -14,9 +15,12 @@ import javax.inject.Qualifier;
  *
  */
 @Qualifier
-@Target(value={ElementType.TYPE,ElementType.FIELD,ElementType.PARAMETER})
+@Target(value={ElementType.TYPE,ElementType.FIELD,ElementType.PARAMETER,ElementType.METHOD})
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
 public @interface LRUCache {
+	
+	@Nonbinding
+	int capacity() default 100;
 
 }

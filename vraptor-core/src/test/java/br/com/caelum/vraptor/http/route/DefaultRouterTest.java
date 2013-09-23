@@ -19,9 +19,11 @@ package br.com.caelum.vraptor.http.route;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
+
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.mock;
@@ -40,6 +42,8 @@ import org.junit.Test;
 
 import br.com.caelum.vraptor.Controller;
 import br.com.caelum.vraptor.Path;
+import br.com.caelum.vraptor.cache.VRaptorCache;
+import br.com.caelum.vraptor.cache.VRaptorDefaultCache;
 import br.com.caelum.vraptor.controller.BeanClass;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.controller.DefaultBeanClass;
@@ -69,6 +73,7 @@ public class DefaultRouterTest {
 	private Converters converters;
 	private ParameterNameProvider nameProvider;
 	private EncodingHandler encodingHandler;
+	private VRaptorCache<Invocation,Route> cache;
 
 	@Before
 	public void setup() {
@@ -78,8 +83,9 @@ public class DefaultRouterTest {
 		this.converters = mock(Converters.class);
 		this.encodingHandler = mock(EncodingHandler.class);
 		this.nameProvider = new DefaultParameterNameProvider(new DefaultTypeNameExtractor());
+		this.cache = new VRaptorDefaultCache<>();
 
-		router = new DefaultRouter(new NoRoutesConfiguration(), proxifier, new NoTypeFinder(), converters, nameProvider, new JavaEvaluator(), encodingHandler);
+		router = new DefaultRouter(new NoRoutesConfiguration(), proxifier, new NoTypeFinder(), converters, nameProvider, new JavaEvaluator(), encodingHandler,cache);
 	}
 
 	@Test

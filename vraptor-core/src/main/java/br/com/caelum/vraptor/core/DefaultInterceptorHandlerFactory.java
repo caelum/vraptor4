@@ -23,6 +23,7 @@ import javax.enterprise.inject.Default;
 import javax.inject.Inject;
 
 import br.com.caelum.vraptor.Intercepts;
+import br.com.caelum.vraptor.cache.VRaptorCache;
 import br.com.caelum.vraptor.interceptor.AspectStyleInterceptorHandler;
 import br.com.caelum.vraptor.interceptor.Interceptor;
 import br.com.caelum.vraptor.interceptor.InterceptorMethodParametersResolver;
@@ -40,7 +41,7 @@ public class DefaultInterceptorHandlerFactory implements InterceptorHandlerFacto
 
 	private Container container;
 
-	private final Map<Class<?>, InterceptorHandler> cachedHandlers = new HashMap<>();
+	private VRaptorCache<Class<?>, InterceptorHandler> cachedHandlers;
 
 	private StepInvoker stepInvoker;
 
@@ -53,11 +54,13 @@ public class DefaultInterceptorHandlerFactory implements InterceptorHandlerFacto
 
 	@Inject
 	public DefaultInterceptorHandlerFactory(Container container, StepInvoker
-			stepInvoker, InterceptorMethodParametersResolver parametersResolver) {
+			stepInvoker, InterceptorMethodParametersResolver parametersResolver,
+			VRaptorCache<Class<?>,InterceptorHandler> cachedHandlers) {
 
 		this.container = container;
 		this.stepInvoker = stepInvoker;
 		this.parametersResolver = parametersResolver;
+		this.cachedHandlers = cachedHandlers;
 	}
 
 	@Override

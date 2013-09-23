@@ -3,9 +3,12 @@ package br.com.caelum.vraptor.ioc.cdi;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
+
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
+
 import static org.mockito.Mockito.when;
 
 import java.util.Collections;
@@ -24,6 +27,7 @@ import org.junit.Test;
 
 import br.com.caelum.cdi.component.CDIControllerComponent;
 import br.com.caelum.cdi.component.CDISessionComponent;
+import br.com.caelum.cdi.component.UsingCacheComponent;
 import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.interceptor.PackagesAcceptor;
 import br.com.caelum.vraptor.ioc.Container;
@@ -176,6 +180,15 @@ public class CDIBasedContainerTest extends GenericContainerTest {
 	public void shouldStereotypeControllerWithRequestAndNamed(){
 		Bean<?> bean = cdiContainer.getBeanManager().getBeans(CDIControllerComponent.class).iterator().next();
 		assertTrue(bean.getScope().equals(RequestScoped.class));
+	}
+	
+	@Test
+	public void shouldCreateComponentsWithCache(){
+		UsingCacheComponent component = getProvider().getContainer().instanceFor(UsingCacheComponent.class);
+		component.putWithLRU("test","test");
+		component.putWithDefault("test2","test2");
+		assertEquals(component.putWithLRU("test","test"),"test");
+		assertEquals(component.putWithDefault("test2","test2"),"test2");
 	}
 
 	protected void configureExpectations() {

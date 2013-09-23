@@ -19,17 +19,29 @@ package br.com.caelum.vraptor.util;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import javax.inject.Inject;
+
+import br.com.caelum.vraptor.cache.LRUCapacity;
+import br.com.caelum.vraptor.cache.VRaptorCache;
+
 /**
  * A LRU cache based on LinkedHashMap.
  *
  * @author Sérgio Lopes
  * @author Paulo Silveira
  */
-public class LRUCache<K, V> extends LinkedHashMap<K, V> {
+@br.com.caelum.vraptor.cache.LRUCache
+public class LRUCache<K, V> extends LinkedHashMap<K, V> implements VRaptorCache<K,V> {
 	private static final long serialVersionUID = 1L;
-	private final int capacity;
+	private int capacity;
 	
-	public LRUCache(int capacity) {
+	
+	@Deprecated
+	public LRUCache(){		
+	}
+	
+	@Inject
+	public LRUCache(@LRUCapacity int capacity) {
 		super(capacity, 0.75f, true);
 		this.capacity = capacity;
 	}
@@ -37,4 +49,13 @@ public class LRUCache<K, V> extends LinkedHashMap<K, V> {
 	protected boolean removeEldestEntry(Map.Entry<K, V> eldest) {
 		return this.size() > capacity;
 	}
+
+	@Override
+	public V putIfAbsent(K key, V value) {
+		if(!this.containsKey(key)){
+			return this.put(key, value);
+		}
+		return value;
+	}
+	
 }

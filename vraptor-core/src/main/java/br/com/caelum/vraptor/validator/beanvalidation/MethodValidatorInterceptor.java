@@ -93,21 +93,21 @@ public class MethodValidatorInterceptor implements Interceptor {
 	@Override
 	public boolean accepts(ControllerMethod method) {
 		if (method.getMethod().getParameterTypes().length == 0) {
-		    logger.debug("method {} has no parameters, skipping", method);
+			logger.debug("method {} has no parameters, skipping", method);
 			return false;
 		}
 		
-        Boolean hasConstraints = CACHE.get(method.getMethod());
-        
+		Boolean hasConstraints = CACHE.get(method.getMethod());
+		
 		if (hasConstraints == null) {
-	        hasConstraints = methodHasConstraints(method);
-	        
-	        CACHE.put(method.getMethod(), hasConstraints);
-	        logger.debug("putting method {} into cache as {}", method, hasConstraints);
+			hasConstraints = methodHasConstraints(method);
+			
+			CACHE.put(method.getMethod(), hasConstraints);
+			logger.debug("putting method {} into cache as {}", method, hasConstraints);
 		}
 		
-        logger.debug("returning method {} from cache as {}", method, hasConstraints);
-        return hasConstraints;
+		logger.debug("returning method {} from cache as {}", method, hasConstraints);
+		return hasConstraints;
 	}
 
 	@Override
@@ -124,7 +124,7 @@ public class MethodValidatorInterceptor implements Interceptor {
 		for (ConstraintViolation<Object> v : violations) {
 			BeanValidatorContext ctx = new BeanValidatorContext(v);
 			String msg = interpolator.interpolate(v.getMessageTemplate(), ctx, getLocale());
-            String category = extractCategory(names, v);
+			String category = extractCategory(names, v);
 			validator.add(new ValidationMessage(msg, category));
 			
 			logger.debug("added message {}={} for contraint violation", msg, category);
@@ -147,10 +147,10 @@ public class MethodValidatorInterceptor implements Interceptor {
 		return localization.getLocale() == null ? Locale.getDefault() : localization.getLocale();
 	}
 
-    private boolean methodHasConstraints(ControllerMethod method) {
-        BeanDescriptor bean = bvalidator.getConstraintsForClass(method.getController().getType());
-        MethodDescriptor descriptor = bean.getConstraintsForMethod(method.getMethod().getName(), method.getMethod()
-                .getParameterTypes());
-        return descriptor != null && descriptor.hasConstrainedParameters();
-    }
+	private boolean methodHasConstraints(ControllerMethod method) {
+		BeanDescriptor bean = bvalidator.getConstraintsForClass(method.getController().getType());
+		MethodDescriptor descriptor = bean.getConstraintsForMethod(method.getMethod().getName(), method.getMethod()
+				.getParameterTypes());
+		return descriptor != null && descriptor.hasConstrainedParameters();
+	}
 }

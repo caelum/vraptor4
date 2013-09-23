@@ -6,11 +6,11 @@ import br.com.caelum.vraptor.core.InterceptorStack;
 
 public class NoStackParameterSignatureAcceptor {
 
-	public boolean accepts(Method method){
-		return !new MustReceiveStackAsParameterAcceptor().accepts(method);
+	public static boolean accepts(Method method){
+		return !MustReceiveStackAsParameterAcceptor.accepts(method);
 	}
 
-	public String errorMessage() {
+	public static String errorMessage() {
 		return "Non @Around method must not receive "+InterceptorStack.class.getName()+" or "+SimpleInterceptorStack.class.getName();
 	}
 }

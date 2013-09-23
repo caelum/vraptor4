@@ -63,7 +63,6 @@ public class DefaultValidatorTest {
 	private @Mock PageResult pageResult;
 	private @Mock Outjector outjector;
 	private @Mock Localization localization;
-	private @Mock BeanValidator beanValidator;
 
 	private @Mock MyComponent instance;
 	private DefaultValidator validator;

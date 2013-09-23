@@ -17,8 +17,6 @@
 
 package br.com.caelum.vraptor.ioc;
 
-import javax.servlet.ServletContext;
-
 import br.com.caelum.vraptor.core.RequestInfo;
 
 /**
@@ -30,7 +28,7 @@ public interface ContainerProvider {
 
 	void stop();
 
-	void start(ServletContext context);
+	void start();
 
 	Container getContainer();
 }

@@ -72,9 +72,6 @@ public class VRaptor implements Filter {
 	@Inject
 	private Logger logger;
 
-	@Inject
-	private RequestExecution requestExecution;
-
 	@Override
 	public void destroy() {
 		servletContext = null;
@@ -106,7 +103,8 @@ public class VRaptor implements Filter {
 			try {
 				encodingHandler.setEncoding(baseRequest, baseResponse);
 				provider.provideForRequest(request);
-				requestExecution.execute();
+				provider.getContainer().instanceFor(RequestExecution.class).execute();
+				
 			} catch (ApplicationLogicException e) {
 				// it is a business logic exception, we dont need to show
 				// all interceptors stack trace

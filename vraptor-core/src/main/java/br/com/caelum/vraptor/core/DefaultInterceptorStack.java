@@ -19,7 +19,7 @@ package br.com.caelum.vraptor.core;
 
 import java.util.LinkedList;
 
-import javax.enterprise.context.RequestScoped;
+import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 
 import org.slf4j.Logger;
@@ -34,7 +34,7 @@ import br.com.caelum.vraptor.controller.ControllerMethod;
  * @author guilherme silveira, mariofts
  *
  */
-@RequestScoped
+@Dependent
 public class DefaultInterceptorStack implements InterceptorStack {
 
 	private static final Logger logger = LoggerFactory.getLogger(DefaultInterceptorStack.class);

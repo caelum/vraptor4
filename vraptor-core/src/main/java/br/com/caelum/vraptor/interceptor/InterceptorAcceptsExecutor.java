@@ -28,9 +28,8 @@ public class InterceptorAcceptsExecutor implements StepExecutor<Boolean>{
 				&& !method.getReturnType().equals(boolean.class)) {
 			throw new VRaptorException("@Accepts method must return boolean");
 		}
-		NoStackParameterSignatureAcceptor acceptor = new NoStackParameterSignatureAcceptor();
-		if (!acceptor.accepts(method)) {
-			throw new VRaptorException(acceptor.errorMessage());
+		if (!NoStackParameterSignatureAcceptor.accepts(method)) {
+			throw new VRaptorException(NoStackParameterSignatureAcceptor.errorMessage());
 		}
 		return true;
 	}

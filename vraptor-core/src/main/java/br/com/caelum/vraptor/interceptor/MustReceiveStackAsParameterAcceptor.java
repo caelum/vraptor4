@@ -13,7 +13,7 @@ import com.google.common.collect.Collections2;
 
 public class MustReceiveStackAsParameterAcceptor {
 
-	public boolean accepts(Method method){
+	public static boolean accepts(Method method){
 		List<Class<?>> parameterTypes = Arrays.asList(method.getParameterTypes());
 		Collection<Class<?>> possibleStackParams = Collections2.filter(parameterTypes,new Predicate<Class<?>>() {
 
@@ -25,7 +25,7 @@ public class MustReceiveStackAsParameterAcceptor {
 		return !possibleStackParams.isEmpty();
 	}
 
-	public String errorMessage() {
+	public static String errorMessage() {
 		return AroundCall.class.getSimpleName()+" method must receive "+InterceptorStack.class.getName()+" or "+SimpleInterceptorStack.class.getName();
 	}
 }

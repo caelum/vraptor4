@@ -15,9 +15,11 @@
  */
 package br.com.caelum.vraptor.validator.beanvalidation;
 
+import java.lang.reflect.Method;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.Set;
+import java.util.concurrent.ConcurrentMap;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -46,6 +48,7 @@ import br.com.caelum.vraptor.validator.BeanValidatorContext;
 import br.com.caelum.vraptor.validator.ValidationMessage;
 
 import com.google.common.base.Joiner;
+import com.google.common.collect.MapMaker;
 
 /**
  * Validate method parameters using Bean Validation 1.1. The method will be
@@ -61,6 +64,8 @@ import com.google.common.base.Joiner;
 public class MethodValidatorInterceptor implements Interceptor {
 
 	private static final Logger logger = LoggerFactory.getLogger(MethodValidatorInterceptor.class);
+	
+	private static final ConcurrentMap<Method, Boolean> CACHE = new MapMaker().makeMap();
 
 	private Localization localization;
 	private MessageInterpolator interpolator;
@@ -91,11 +96,23 @@ public class MethodValidatorInterceptor implements Interceptor {
 		if (params == null || params.length == 0) { // skip parameterless methods
 			return false;
 		}
-
-		BeanDescriptor bean = bvalidator.getConstraintsForClass(method.getController().getType());
-		MethodDescriptor descriptor = bean.getConstraintsForMethod(method.getMethod().getName(), method.getMethod()
-				.getParameterTypes());
-		return descriptor != null && descriptor.hasConstrainedParameters();
+		
+		if (!CACHE.containsKey(method.getMethod())) {
+	        BeanDescriptor bean = bvalidator.getConstraintsForClass(method.getController().getType());
+	        MethodDescriptor descriptor = bean.getConstraintsForMethod(method.getMethod().getName(), method.getMethod()
+	                .getParameterTypes());
+	        boolean hasConstraints = descriptor != null && descriptor.hasConstrainedParameters();
+	        
+	        CACHE.put(method.getMethod(), hasConstraints);
+	        logger.debug("putting method {} into cache as {}", method, hasConstraints);
+	        
+	        return hasConstraints;
+		}
+		
+        boolean hasConstraints = CACHE.get(method.getMethod());
+        logger.debug("returning method {} from cache as {}", method, hasConstraints);
+        
+        return hasConstraints;
 	}
 
 	@Override
@@ -115,6 +132,8 @@ public class MethodValidatorInterceptor implements Interceptor {
 			BeanValidatorContext ctx = new BeanValidatorContext(v);
 			String msg = interpolator.interpolate(v.getMessageTemplate(), ctx, getLocale());
 			validator.add(new ValidationMessage(msg, category));
+			
+			logger.debug("added message {}={} for contraint violation", msg, category);
 		}
 
 		stack.next(method, controllerInstance);

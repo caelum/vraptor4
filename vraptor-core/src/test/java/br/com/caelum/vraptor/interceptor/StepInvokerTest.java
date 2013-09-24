@@ -6,6 +6,8 @@ import static org.mockito.Mockito.spy;
 
 import java.lang.reflect.Method;
 
+import net.vidageek.mirror.list.dsl.MirrorList;
+
 import org.junit.Test;
 
 import br.com.caelum.vraptor.AroundCall;
@@ -22,29 +24,37 @@ public class StepInvokerTest {
 	@Test
 	public void shouldNotReadInheritedMethods() throws Exception {
 		Class<?> interceptorClass = InterceptorWithInheritance.class;
-		Method method = stepInvoker.findMethod(BeforeCall.class,interceptorClass);
+		MirrorList<Method> methods = stepInvoker.findAllMethods(interceptorClass);
+		Method method = stepInvoker.findMethod(methods, BeforeCall.class,interceptorClass);
 		assertEquals(method, interceptorClass.getDeclaredMethod("begin"));
 	}
 
 	@Test(expected=IllegalStateException.class)
 	public void shouldThrowsExceptionWhenInterceptorHasMoreThanOneAnnotatedMethod() {
-		stepInvoker.findMethod(BeforeCall.class,InterceptorWithMoreThanOneBeforeCallMethod.class);
+		Class<?> interceptorClass = InterceptorWithMoreThanOneBeforeCallMethod.class;
+		MirrorList<Method> methods = stepInvoker.findAllMethods(interceptorClass);
+		stepInvoker.findMethod(methods, BeforeCall.class, interceptorClass);
 	}
 
 	@Test
 	public void shouldFindFirstMethodAnnotatedWithInterceptorStep(){
 		ExampleOfSimpleStackInterceptor proxy = spy(new ExampleOfSimpleStackInterceptor());
-		assertNotNull(stepInvoker.findMethod(AroundCall.class, proxy.getClass()));
+		MirrorList<Method> methods = stepInvoker.findAllMethods(proxy.getClass());
+		assertNotNull(stepInvoker.findMethod(methods, AroundCall.class, proxy.getClass()));
 	}
 
 	@Test
 	public void shouldFindMethodFromWeldStyleInterceptor() throws SecurityException, NoSuchMethodException{
-		assertNotNull(stepInvoker.findMethod(AroundCall.class, WeldProxy$$$StyleInterceptor.class));
+		Class<?> interceptorClass = WeldProxy$$$StyleInterceptor.class;
+		MirrorList<Method> methods = stepInvoker.findAllMethods(interceptorClass);
+		assertNotNull(stepInvoker.findMethod(methods, AroundCall.class, interceptorClass));
 	}
 
 	@Test(expected=InterceptionException.class)
 	public void shouldWrapMirrorException() throws SecurityException, NoSuchMethodException {
-		Method method = stepInvoker.findMethod(BeforeCall.class, ExceptionThrowerInterceptor.class);
+		Class<ExceptionThrowerInterceptor> interceptorClass = ExceptionThrowerInterceptor.class;
+		MirrorList<Method> methods = stepInvoker.findAllMethods(interceptorClass);
+		Method method = stepInvoker.findMethod(methods, BeforeCall.class, interceptorClass);
 		assertNotNull(method);
 		stepInvoker.tryToInvoke(new ExceptionThrowerInterceptor(), method);
 	}

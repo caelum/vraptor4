@@ -7,7 +7,7 @@ import javax.enterprise.inject.Default;
 @Default
 public class VRaptorDefaultCache<K,V> implements VRaptorCache<K,V>{
 	
-	private ConcurrentHashMap<K,V> cache = new ConcurrentHashMap<>();			
+	private final ConcurrentHashMap<K,V> cache = new ConcurrentHashMap<>();			
 		
 	@Override
 	public V get(K key) {

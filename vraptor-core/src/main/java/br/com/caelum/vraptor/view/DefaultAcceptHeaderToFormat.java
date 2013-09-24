@@ -28,7 +28,7 @@ import java.util.regex.Pattern;
 
 import javax.enterprise.context.ApplicationScoped;
 
-import br.com.caelum.vraptor.util.LRUCache;
+import br.com.caelum.vraptor.cache.LRUCache;
 
 import com.google.common.base.Function;
 

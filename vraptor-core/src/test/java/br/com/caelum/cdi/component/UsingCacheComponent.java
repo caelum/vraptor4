@@ -2,13 +2,13 @@ package br.com.caelum.cdi.component;
 
 import javax.inject.Inject;
 
-import br.com.caelum.vraptor.cache.LRUCache;
+import br.com.caelum.vraptor.cache.LRU;
 import br.com.caelum.vraptor.cache.VRaptorCache;
 
 public class UsingCacheComponent {
 
 	@Inject
-	@LRUCache(capacity=200)
+	@LRU(capacity=200)
 	private VRaptorCache<String,String> cacheLRU;
 	
 	@Inject

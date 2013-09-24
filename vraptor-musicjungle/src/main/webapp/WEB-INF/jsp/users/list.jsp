@@ -16,7 +16,7 @@
   	<c:forEach items="${users}" var="user">
 		<tr>
 			<td>
-				<a href="${linkTo[UsersController].view[user]}">
+				<a href="${linkTo[UsersController].show[user]}">
 					<fmt:message key="view"/>
 				</a>
 			</td>

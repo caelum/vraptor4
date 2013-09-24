@@ -19,6 +19,7 @@ package br.com.caelum.vraptor.musicjungle.interceptor;
 import java.io.Serializable;
 
 import javax.enterprise.context.SessionScoped;
+import javax.inject.Named;
 
 import br.com.caelum.vraptor.musicjungle.model.User;
 
@@ -27,6 +28,7 @@ import br.com.caelum.vraptor.musicjungle.model.User;
  * @author Caio Filipini
  */
 @SessionScoped
+@Named
 public class UserInfo implements Serializable {
 
     private static final long serialVersionUID = 773496171272411714L;

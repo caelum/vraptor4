@@ -78,4 +78,10 @@ public class AspectStyleInterceptorHandler implements InterceptorHandler {
 			stack.next(controllerMethod, currentController);
 		}
 	}
+	
+	@Override
+	public String toString() {
+		return "AspectStyleInterceptorHandler for " + interceptorClass.getName();
+	}
+	
 }

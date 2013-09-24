@@ -40,7 +40,7 @@ public class EnhancedRequestExecution implements RequestExecution {
 	}
 
 	public void execute() throws VRaptorException {
-		stack.next(null, null);
+		stack.start();
 	}
 
 }

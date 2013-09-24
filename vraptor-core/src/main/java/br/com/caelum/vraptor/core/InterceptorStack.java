@@ -33,4 +33,9 @@ public interface InterceptorStack {
 	 */
     void next(ControllerMethod method, Object controllerInstance) throws InterceptionException;
 
+    /**
+     * Start stack execution
+     */
+	void start();
+
 }

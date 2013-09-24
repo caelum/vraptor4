@@ -54,8 +54,6 @@ public class ControllerLookupInterceptor implements Interceptor {
 	private ControllerNotFoundHandler controllerNotFoundHandler;
 	private MethodNotAllowedHandler methodNotAllowedHandler;
 	private ControllerMethod method;
-	
-	@Inject
 	private Event<ControllerMethod> event;
 	
 
@@ -67,12 +65,13 @@ public class ControllerLookupInterceptor implements Interceptor {
 	@Inject
 	public ControllerLookupInterceptor(UrlToControllerTranslator translator, MethodInfo methodInfo,
 			ControllerNotFoundHandler controllerNotFoundHandler, MethodNotAllowedHandler methodNotAllowedHandler,
-			RequestInfo requestInfo) {
+			RequestInfo requestInfo, Event<ControllerMethod> event) {
 		this.translator = translator;
 		this.methodInfo = methodInfo;
 		this.methodNotAllowedHandler = methodNotAllowedHandler;
 		this.controllerNotFoundHandler = controllerNotFoundHandler;
 		this.requestInfo = requestInfo;
+		this.event = event;
 	}
 
 	@Override

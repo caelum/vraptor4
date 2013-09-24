@@ -17,9 +17,10 @@
 
 package br.com.caelum.vraptor.core;
 
+import java.util.Iterator;
 import java.util.LinkedList;
 
-import javax.enterprise.context.Dependent;
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 
 import org.slf4j.Logger;
@@ -34,11 +35,12 @@ import br.com.caelum.vraptor.controller.ControllerMethod;
  * @author guilherme silveira, mariofts
  *
  */
-@Dependent
+@RequestScoped
 public class DefaultInterceptorStack implements InterceptorStack {
 
 	private static final Logger logger = LoggerFactory.getLogger(DefaultInterceptorStack.class);
 	private LinkedList<InterceptorHandler> handlers;
+	private LinkedList<Iterator<InterceptorHandler>> internalStack = new LinkedList<>();
 
 	@Deprecated
 	public DefaultInterceptorStack() {}
@@ -49,17 +51,28 @@ public class DefaultInterceptorStack implements InterceptorStack {
 	}
 
 	public void next(ControllerMethod method, Object controllerInstance) throws InterceptionException {
-		if (handlers.isEmpty()) {
+		
+		Iterator<InterceptorHandler> iterator = internalStack.peek();
+		
+		if (!iterator.hasNext()) {
 			logger.debug("All registered interceptors have been called. End of VRaptor Request Execution.");
 			return;
 		}
-		InterceptorHandler handler = handlers.poll();
+		InterceptorHandler handler = iterator.next();
 		handler.execute(this, method, controllerInstance);
+		
 	}
 
 	@Override
 	public String toString() {
 		return "DefaultInterceptorStack " + handlers;
+	}
+
+	@Override
+	public void start() {
+		internalStack.addFirst(handlers.iterator());
+		this.next(null,null);
+		internalStack.poll();
 	}
 
 }

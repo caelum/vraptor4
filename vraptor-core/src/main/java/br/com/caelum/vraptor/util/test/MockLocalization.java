@@ -40,7 +40,7 @@ public class MockLocalization implements Localization {
 	}
 
 	public Locale getFallbackLocale() {
-        return Locale.getDefault();
+		return Locale.getDefault();
 	}
 
 	public Locale getLocale() {

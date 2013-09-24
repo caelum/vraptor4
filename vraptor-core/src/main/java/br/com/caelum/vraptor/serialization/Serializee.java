@@ -45,12 +45,18 @@ public class Serializee {
 	}
 
 	public Multimap<String, Class<?>> getIncludes() {
-	    initializeIncludesIfNull();
+        if (includes == null) {
+            includes = LinkedListMultimap.create();
+        }
+        
 		return includes;
 	}
 
 	public Multimap<String, Class<?>> getExcludes() {
-	    initializeExcludesIfNull();
+        if (excludes == null) {
+            excludes = LinkedListMultimap.create();
+        }
+        
 		return excludes;
 	}
 
@@ -71,38 +77,23 @@ public class Serializee {
 	}
 
 	public void excludeAll(String... names) {
-	    initializeExcludesIfNull();
 		for (String name : names) {
-			excludes.putAll(name, getParentTypesFor(name));
+			getExcludes().putAll(name, getParentTypesFor(name));
 		}
 	}
 	
 	public void excludeAll() {
-	    initializeExcludesIfNull();
 		for(Field field : new Mirror().on(getRootClass()).reflectAll().fields()) {
-			excludes.putAll(field.getName(), getParentTypes(field.getName(), getRootClass()));
+			getExcludes().putAll(field.getName(), getParentTypes(field.getName(), getRootClass()));
 		}
 	}
 
 	public void includeAll(String... names) {
-	    initializeIncludesIfNull();
 		for (String name : names) {
-			includes.putAll(name, getParentTypesFor(name));
+		    getIncludes().putAll(name, getParentTypesFor(name));
 		}
 	}
 	
-    private void initializeExcludesIfNull() {
-        if (excludes == null) {
-            excludes = LinkedListMultimap.create();
-        }
-    }
-
-    private void initializeIncludesIfNull() {
-        if (includes == null) {
-            includes = LinkedListMultimap.create();
-        }
-    }
-
 	private Set<Class<?>> getParentTypesFor(String name) {
 		if (getElementTypes() == null) {
 			Class<?> type = getRootClass();

@@ -74,7 +74,7 @@ public class StepInvoker {
 
 		MirrorList<Method> possibleMethods = interceptorMethods.matching(new InvokeMatcher(step));
 		if (possibleMethods.size() > 1 && isNotSameClass(possibleMethods, interceptorClass)) {
-			throw new IllegalStateException("You should not " +
+			throw new IllegalStateException(interceptorClass.getCanonicalName() + " - You should not " +
 				"have more than one @"+step.getSimpleName()+" annotated method");
 		}
 		return possibleMethods.isEmpty() ? null : possibleMethods.get(0);

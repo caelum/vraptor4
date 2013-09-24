@@ -2,9 +2,16 @@ package br.com.caelum.vraptor.interceptor;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
+
+import net.vidageek.mirror.list.dsl.MirrorList;
+
 import org.slf4j.Logger;
 
+import br.com.caelum.vraptor.Accepts;
 import br.com.caelum.vraptor.AfterCall;
+import br.com.caelum.vraptor.AroundCall;
 import br.com.caelum.vraptor.BeforeCall;
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.VRaptorException;
@@ -24,6 +31,7 @@ public class AspectStyleInterceptorHandler implements InterceptorHandler {
 	private StepExecutor<?> after;
 	private StepExecutor<?> around;
 	private StepExecutor<?> before;
+	private MirrorList<Method> interceptorMethods;
 
 	public AspectStyleInterceptorHandler(Class<?> interceptorClass, StepInvoker stepInvoker,
 			Container container, InterceptorMethodParametersResolver parametersResolver) {
@@ -32,14 +40,15 @@ public class AspectStyleInterceptorHandler implements InterceptorHandler {
 		this.stepInvoker = stepInvoker;
 		this.container = container;
 		this.parametersResolver = parametersResolver;
+		this.interceptorMethods = stepInvoker.findAllMethods(interceptorClass);
 		configure();
 	}
 
 	private void configure() {
 
-		after = new NoStackParameterStepExecutor(stepInvoker, AfterCall.class, interceptorClass);
-		around = new AroundExecutor(stepInvoker,parametersResolver, interceptorClass);
-		before = new NoStackParameterStepExecutor(stepInvoker, BeforeCall.class, interceptorClass);
+		after = new NoStackParameterStepExecutor(stepInvoker, find(AfterCall.class), interceptorClass);
+		around = new AroundExecutor(stepInvoker,parametersResolver, find(AroundCall.class), interceptorClass);
+		before = new NoStackParameterStepExecutor(stepInvoker, find(BeforeCall.class), interceptorClass);
 
 		boolean doNotAcceptAfter = !after.accept(interceptorClass);
 		boolean doNotAcceptAround = !around.accept(interceptorClass);
@@ -54,14 +63,18 @@ public class AspectStyleInterceptorHandler implements InterceptorHandler {
 				"at least one method whith @AfterCall, @AroundCall or @BeforeCall annotation");
 		}
 
-		CustomAcceptsExecutor customAcceptsExecutor = new CustomAcceptsExecutor(stepInvoker, container, interceptorClass);
-		InterceptorAcceptsExecutor interceptorAcceptsExecutor = new InterceptorAcceptsExecutor(stepInvoker, parametersResolver, interceptorClass);
+		CustomAcceptsExecutor customAcceptsExecutor = new CustomAcceptsExecutor(stepInvoker, container, find(CustomAcceptsFailCallback.class), interceptorClass);
+		InterceptorAcceptsExecutor interceptorAcceptsExecutor = new InterceptorAcceptsExecutor(stepInvoker, parametersResolver, find(Accepts.class), interceptorClass);
 		boolean customAccepts = customAcceptsExecutor.accept(interceptorClass);
 		boolean internalAccepts = interceptorAcceptsExecutor.accept(interceptorClass);
 		if(customAccepts && internalAccepts){
 			throw new VRaptorException("Interceptor "+interceptorClass+" must declare internal accepts or custom, not both.");
 		}
 		this.acceptsExecutor = customAccepts?customAcceptsExecutor:interceptorAcceptsExecutor;
+	}
+
+	private Method find(Class<? extends Annotation> step) {
+		return stepInvoker.findMethod(interceptorMethods, step, interceptorClass);
 	}
 
 	public void execute(InterceptorStack stack,

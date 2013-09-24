@@ -16,16 +16,15 @@
 package br.com.caelum.vraptor.serialization.gson;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.io.Flushables.flushQuietly;
+import static java.util.Collections.singletonMap;
 
-import java.io.IOException;
 import java.io.Writer;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import br.com.caelum.vraptor.deserialization.gson.VRaptorGsonBuilder;
@@ -137,33 +136,21 @@ public class GsonSerializer implements SerializerBuilder {
 
     @Override
 	public void serialize() {
-		try {
-			Object root = serializee.getRoot();
+		builder.setExclusionStrategies(new Exclusions(serializee));
+		Gson gson = builder.create();
+		
+        String alias = builder.getAlias();
+        Object root = serializee.getRoot();
 
-			builder.setExclusionStrategies(new Exclusions(serializee));
-
-			Gson gson = builder.create();
-
-			String alias = builder.getAlias();
-			if (builder.isWithoutRoot()) {
-				writer.write(gson.toJson(root));
-			} else {
-				Map<String, Object> tree = new HashMap<>();
-				tree.put(alias, root);
-				write(writer, gson.toJson(tree));
-			}
-
-			writer.flush();
-			writer.close();
-		} catch (IOException e) {
-			throw new RuntimeException("Não pode serializar", e);
+		if (builder.isWithoutRoot()) {
+			gson.toJson(root, writer);
+		} else {
+			gson.toJson(singletonMap(alias, root), writer);
 		}
+		
+		flushQuietly(writer);
 	}
 	
-	protected void write(Writer writer, String json) throws IOException {
-	    writer.write(json);
-	}
-
     @Override
 	public Serializer recursive() {
 		this.serializee.setRecursive(true);

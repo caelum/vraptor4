@@ -16,7 +16,6 @@
 package br.com.caelum.vraptor.serialization.gson;
 
 import java.io.IOException;
-import java.io.Writer;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -59,9 +58,15 @@ public class GsonJSONPSerialization implements JSONPSerialization {
                 try {
                     return new GsonSerializer(builder, response.getWriter(), extractor, initializer, serializee) {
                         @Override
-                        protected void write(Writer writer, String json)
-                            throws IOException {
-                            writer.write(callbackName + "(" + json + ")");
+                        public void serialize() {
+                            try {
+                                response.getWriter().append(callbackName).append("(");
+                                super.serialize();
+                                response.getWriter().append(")");
+                                response.getWriter().flush();
+                            } catch (IOException e) {
+                                throw new ResultException("Unable to serialize data", e);
+                            }
                         }
                     };
                 } catch (IOException e) {

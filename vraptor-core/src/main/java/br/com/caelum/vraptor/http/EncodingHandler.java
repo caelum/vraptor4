@@ -17,17 +17,50 @@
 
 package br.com.caelum.vraptor.http;
 
+import static java.nio.charset.Charset.defaultCharset;
+
+import java.io.UnsupportedEncodingException;
+
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import br.com.caelum.vraptor.VRaptorException;
+import br.com.caelum.vraptor.config.BasicConfiguration;
+
 /**
- * Component for setting request and response encoding.
- * 
+ * {@link EncodingHandler} that uses Encoding from web.xml.
+ *
  * @author Lucas Cavalcanti
  */
-public interface EncodingHandler {
+@ApplicationScoped
+public class EncodingHandler {
 
-	void setEncoding(HttpServletRequest request, HttpServletResponse response);
-	
-	String getEncoding();
+	private String encoding;
+
+	@Deprecated // CDI eyes only
+	public EncodingHandler() {
+    }
+
+	@Inject
+	public EncodingHandler(BasicConfiguration configuration) {
+        encoding = configuration.getEncoding();
+        if (encoding == null) {
+            encoding = defaultCharset().name();
+        }
+	}
+
+	public void setEncoding(HttpServletRequest request, HttpServletResponse response) {
+		try {
+			request.setCharacterEncoding(getEncoding());
+			response.setCharacterEncoding(getEncoding());
+		} catch (UnsupportedEncodingException e) {
+			throw new VRaptorException(e);
+		}
+	}
+
+	public String getEncoding() {
+		return encoding;
+	}
 }

@@ -31,7 +31,6 @@ import static org.hamcrest.Matchers.sameInstance;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 import java.util.Calendar;
 import java.util.Collection;
@@ -47,7 +46,6 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.Dependent;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Named;
-import javax.servlet.ServletContext;
 
 import org.hamcrest.Matcher;
 import org.hamcrest.MatcherAssert;
@@ -105,25 +103,18 @@ import br.com.caelum.vraptor.ioc.fixture.InterceptorInTheClasspath;
 public abstract class GenericContainerTest {
 
 	protected ContainerProvider provider;
-	protected ServletContext context;
 
 	protected abstract ContainerProvider getProvider();
 	protected abstract <T> T executeInsideRequest(WhatToDo<T> execution);
-	protected abstract void configureExpectations();
 
 	@Before
 	public void setup() throws Exception {
-		context = mock(ServletContext.class, "servlet context");
-		when(context.getMajorVersion()).thenReturn(3);
-		when(context.getRealPath("/WEB-INF/classes")).thenReturn(getClassDir());
-
-		configureExpectations();
 		getStartedProvider();
 	}
 
 	protected void getStartedProvider() {
 		provider = getProvider();
-		provider.start(context);
+		provider.start();
 	}
 
 	@After
@@ -452,12 +443,7 @@ public abstract class GenericContainerTest {
 		getStartedProvider();
 	}
 
-	protected String getClassDir() {
-		return getClass().getResource("/br/com/caelum/vraptor/test").getFile();
-	}
-
 	protected <T> T instanceFor(final Class<T> component, Container container) {
 		return container.instanceFor(component);
 	}
-
 }

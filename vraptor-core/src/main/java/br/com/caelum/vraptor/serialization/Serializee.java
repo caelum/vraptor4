@@ -1,4 +1,4 @@
-package br.com.caelum.vraptor.serialization.xstream;
+package br.com.caelum.vraptor.serialization;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -23,8 +23,8 @@ import com.google.common.collect.Sets;
 public class Serializee {
 	private Object root;
 	private Class<?> rootClass;
-	private Multimap<String, Class<?>> includes = LinkedListMultimap.create();
-	private Multimap<String, Class<?>> excludes = LinkedListMultimap.create();
+	private Multimap<String, Class<?>> includes;
+	private Multimap<String, Class<?>> excludes;
 	private Set<Class<?>> elementTypes;
 	private boolean recursive;
 
@@ -45,10 +45,18 @@ public class Serializee {
 	}
 
 	public Multimap<String, Class<?>> getIncludes() {
+		if (includes == null) {
+			includes = LinkedListMultimap.create();
+		}
+		
 		return includes;
 	}
 
 	public Multimap<String, Class<?>> getExcludes() {
+		if (excludes == null) {
+			excludes = LinkedListMultimap.create();
+		}
+		
 		return excludes;
 	}
 
@@ -70,22 +78,22 @@ public class Serializee {
 
 	public void excludeAll(String... names) {
 		for (String name : names) {
-			excludes.putAll(name, getParentTypesFor(name));
+			getExcludes().putAll(name, getParentTypesFor(name));
 		}
 	}
 	
 	public void excludeAll() {
 		for(Field field : new Mirror().on(getRootClass()).reflectAll().fields()) {
-			excludes.putAll(field.getName(), getParentTypes(field.getName(), getRootClass()));
+			getExcludes().putAll(field.getName(), getParentTypes(field.getName(), getRootClass()));
 		}
 	}
 
 	public void includeAll(String... names) {
 		for (String name : names) {
-			includes.putAll(name, getParentTypesFor(name));
+			getIncludes().putAll(name, getParentTypesFor(name));
 		}
 	}
-
+	
 	private Set<Class<?>> getParentTypesFor(String name) {
 		if (getElementTypes() == null) {
 			Class<?> type = getRootClass();
@@ -120,7 +128,7 @@ public class Serializee {
 		return types;
 	}
 
-	static Class<?> getActualType(Type genericType) {
+	private static Class<?> getActualType(Type genericType) {
 		if (genericType instanceof ParameterizedType) {
 			ParameterizedType type = (ParameterizedType) genericType;
 

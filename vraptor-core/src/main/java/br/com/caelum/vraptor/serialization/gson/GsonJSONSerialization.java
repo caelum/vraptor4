@@ -24,9 +24,9 @@ import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
 import br.com.caelum.vraptor.serialization.JSONSerialization;
 import br.com.caelum.vraptor.serialization.NoRootSerialization;
 import br.com.caelum.vraptor.serialization.ProxyInitializer;
+import br.com.caelum.vraptor.serialization.Serializee;
 import br.com.caelum.vraptor.serialization.Serializer;
 import br.com.caelum.vraptor.serialization.SerializerBuilder;
-import br.com.caelum.vraptor.serialization.xstream.Serializee;
 import br.com.caelum.vraptor.view.ResultException;
 
 /**
@@ -41,7 +41,6 @@ public class GsonJSONSerialization implements JSONSerialization {
 	protected final TypeNameExtractor extractor;
 	protected final ProxyInitializer initializer;
 	protected final VRaptorGsonBuilder builder;
-
 	protected final Serializee serializee;
 
 	public GsonJSONSerialization(HttpServletResponse response, TypeNameExtractor extractor,

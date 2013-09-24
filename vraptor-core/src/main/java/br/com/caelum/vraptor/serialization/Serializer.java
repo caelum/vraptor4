@@ -23,16 +23,34 @@ package br.com.caelum.vraptor.serialization;
  * @since 3.0.2
  */
 public interface Serializer {
+    
+    /**
+     * Exclude these properties in serialization.
+     * @param names
+     * @return
+     */
 	Serializer exclude(String... names);
+
+	/**
+	 * Include all properties in serialization.
+	 * @return
+	 */
 	Serializer excludeAll();
+
+	/**
+	 * Include these properties in serialization.
+	 * @param names
+	 * @return
+	 */
 	Serializer include(String... names);
 
 	/**
 	 * Include all fields, recursively.
 	 */
 	Serializer recursive();
+	
 	/**
-	 * end method for this fluent interface
+	 * End method for this fluent interface
 	 */
 	void serialize();
 }

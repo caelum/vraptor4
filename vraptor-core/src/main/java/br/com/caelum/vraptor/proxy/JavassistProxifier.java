@@ -74,7 +74,7 @@ public class JavassistProxifier implements Proxifier {
 	public <T> T proxify(Class<T> type, MethodInvocation<? super T> handler) {
         final ProxyFactory factory = new ProxyFactory();
         factory.setFilter(IGNORE_BRIDGE_AND_OBJECT_METHODS);
-		Class<?> rawType = extractRawType(type);
+        Class<?> rawType = extractRawType(type);
 
         if (type.isInterface()) {
             factory.setInterfaces(new Class[] { rawType });
@@ -103,11 +103,16 @@ public class JavassistProxifier implements Proxifier {
 
     @Override
 	public boolean isProxyType(Class<?> type) {
-        boolean proxy = isProxyClass(type) || org.jboss.weld.bean.proxy.ProxyFactory.isProxy(type);
+        boolean proxy = isProxyClass(type) || isWeldProxy(type);
         logger.debug("Class {} is proxy: {}", type.getName(), proxy);
         
 		return proxy;
 	}
+
+    // FIXME only works with weld, and can throws ClassNotFoundException in another CDI implementations
+    private boolean isWeldProxy(Class<?> type) {
+        return org.jboss.weld.bean.proxy.ProxyFactory.isProxy(type);
+    }
 
     private <T> void setHandler(Object proxyInstance, final MethodInvocation<? super T> handler) {
         ProxyObject proxyObject = (ProxyObject) proxyInstance;

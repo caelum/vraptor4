@@ -8,8 +8,8 @@ import java.util.List;
 
 import javax.enterprise.context.Dependent;
 
+import br.com.caelum.vraptor.serialization.Serializee;
 import br.com.caelum.vraptor.serialization.gson.Exclusions;
-import br.com.caelum.vraptor.serialization.xstream.Serializee;
 
 import com.google.gson.ExclusionStrategy;
 import com.google.gson.Gson;

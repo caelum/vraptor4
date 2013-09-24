@@ -27,6 +27,7 @@ import java.util.Set;
 
 import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
 import br.com.caelum.vraptor.serialization.ProxyInitializer;
+import br.com.caelum.vraptor.serialization.Serializee;
 import br.com.caelum.vraptor.serialization.Serializer;
 import br.com.caelum.vraptor.serialization.SerializerBuilder;
 
@@ -136,12 +137,8 @@ public class XStreamSerializer implements SerializerBuilder {
 	}
 
 	public void serialize() {
-		if (xstream instanceof VRaptorXStream) {
-			VRaptorClassMapper mapper = ((VRaptorXStream) xstream).getVRaptorMapper();
-			mapper.setSerializee(serializee);
-		} else {
-			new OldAndProbablyBuggyConfigurer(xstream).configure(serializee);
-		}
+		VRaptorClassMapper mapper = ((VRaptorXStream) xstream).getVRaptorMapper();
+		mapper.setSerializee(serializee);
 		
 		registerProxyInitializer();
 		xstream.toXML(serializee.getRoot(), writer);

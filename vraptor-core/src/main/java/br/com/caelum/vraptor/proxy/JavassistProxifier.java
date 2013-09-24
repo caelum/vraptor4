@@ -71,14 +71,10 @@ public class JavassistProxifier implements Proxifier {
     }
 
     @Override
-    @SuppressWarnings("rawtypes")
 	public <T> T proxify(Class<T> type, MethodInvocation<? super T> handler) {
         final ProxyFactory factory = new ProxyFactory();
         factory.setFilter(IGNORE_BRIDGE_AND_OBJECT_METHODS);
-		Class rawType = type;
-        if (isProxyClass(type)) {
-        	rawType = type.getSuperclass();
-        }
+		Class<?> rawType = extractRawType(type);
 
         if (type.isInterface()) {
             factory.setInterfaces(new Class[] { rawType });
@@ -91,19 +87,26 @@ public class JavassistProxifier implements Proxifier {
         Object proxyInstance = instanceCreator.instanceFor(proxyClass);
         setHandler(proxyInstance, handler);
 
-        logger.debug("a proxy for {} is created as {}", type, proxyClass);
+        logger.debug("a proxy for {} was created as {}", type, proxyClass);
 
         return type.cast(proxyInstance);
     }
 
+    private <T> Class<?> extractRawType(Class<T> type) {
+        return isProxyType(type) ? type.getSuperclass() : type;
+    }
+
     @Override
 	public boolean isProxy(Object o) {
-        return o != null && isProxyClass(o.getClass());
+        return o != null && isProxyType(o.getClass());
     }
 
     @Override
 	public boolean isProxyType(Class<?> type) {
-		return isProxyClass(type) || org.jboss.weld.bean.proxy.ProxyFactory.isProxy(type);
+        boolean proxy = isProxyClass(type) || org.jboss.weld.bean.proxy.ProxyFactory.isProxy(type);
+        logger.debug("Class {} is proxy: {}", type.getName(), proxy);
+        
+		return proxy;
 	}
 
     private <T> void setHandler(Object proxyInstance, final MethodInvocation<? super T> handler) {

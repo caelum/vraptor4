@@ -65,6 +65,7 @@ public class InterceptorStackHandlersCacheTest {
 		});
         
         cache = new InterceptorStackHandlersCache(registry, handlerFactory);
+        cache.init();
     }
 
 	@Test

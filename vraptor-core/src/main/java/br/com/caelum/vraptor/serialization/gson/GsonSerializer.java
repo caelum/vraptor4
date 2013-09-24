@@ -65,7 +65,7 @@ public class GsonSerializer implements SerializerBuilder {
 		return this;
 	}
 
-    @Override
+	@Override
 	public Serializer excludeAll() {
 		serializee.excludeAll();
 		return this;
@@ -106,13 +106,13 @@ public class GsonSerializer implements SerializerBuilder {
 		return list;
 	}
 
-    @Override
+	@Override
 	public <T> Serializer from(T object, String alias) {
 		preConfigure(object, alias);
 		return this;
 	}
 
-    @Override
+	@Override
 	public <T> Serializer from(T object) {
 		preConfigure(object, null);
 		return this;
@@ -128,19 +128,19 @@ public class GsonSerializer implements SerializerBuilder {
 		return set;
 	}
 
-    @Override
+	@Override
 	public Serializer include(String... fields) {
 		serializee.includeAll(fields);
 		return this;
 	}
 
-    @Override
+	@Override
 	public void serialize() {
 		builder.setExclusionStrategies(new Exclusions(serializee));
 		Gson gson = builder.create();
 		
-        String alias = builder.getAlias();
-        Object root = serializee.getRoot();
+		String alias = builder.getAlias();
+		Object root = serializee.getRoot();
 
 		if (builder.isWithoutRoot()) {
 			gson.toJson(root, writer);
@@ -151,7 +151,7 @@ public class GsonSerializer implements SerializerBuilder {
 		flushQuietly(writer);
 	}
 	
-    @Override
+	@Override
 	public Serializer recursive() {
 		this.serializee.setRecursive(true);
 		return this;

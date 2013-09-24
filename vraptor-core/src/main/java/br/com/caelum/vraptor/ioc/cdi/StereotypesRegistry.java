@@ -17,6 +17,7 @@ import br.com.caelum.vraptor.controller.DefaultBeanClass;
 import br.com.caelum.vraptor.core.ControllerQualifier;
 import br.com.caelum.vraptor.core.ConvertQualifier;
 import br.com.caelum.vraptor.core.DeserializesQualifier;
+import br.com.caelum.vraptor.core.InterceptorStackHandlersCache;
 import br.com.caelum.vraptor.core.InterceptsQualifier;
 import br.com.caelum.vraptor.core.StereotypeInfo;
 import br.com.caelum.vraptor.deserialization.Deserializes;
@@ -30,9 +31,9 @@ import com.google.common.collect.ImmutableMap;
 @ApplicationScoped
 public class StereotypesRegistry {
 
-
 	private static final Map<Class<?>, StereotypeInfo> STEREOTYPES_INFO;
 	@Inject private BeanManager beanManager;
+	@Inject private InterceptorStackHandlersCache interceptorsCache;
 
 	public void configure(){
 		Set<Bean<?>> beans = beanManager.getBeans(Object.class);
@@ -42,6 +43,7 @@ public class StereotypesRegistry {
 				beanManager.fireEvent(new DefaultBeanClass(bean.getBeanClass()),qualifier);
 			}
 		}
+		interceptorsCache.init();
 	}
 
 	private Annotation tryToFindAStereotypeQualifier(Bean<?> bean) {

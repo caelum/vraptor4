@@ -40,11 +40,11 @@ public class MockLocalization implements Localization {
 	}
 
 	public Locale getFallbackLocale() {
-		return null;
+        return Locale.getDefault();
 	}
 
 	public Locale getLocale() {
-		return null;
+		return Locale.getDefault();
 	}
 
 	public String getMessage(String key, Object... parameters) {

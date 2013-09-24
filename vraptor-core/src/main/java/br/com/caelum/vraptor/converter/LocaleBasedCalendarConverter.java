@@ -61,12 +61,9 @@ public class LocaleBasedCalendarConverter implements Converter<Calendar> {
             return null;
         }
 
-        Locale locale = localization.getLocale();
-        if (locale == null) {
-            locale = Locale.getDefault();
-        }
-
+        final Locale locale = localization.getLocale();
         DateFormat format = DateFormat.getDateInstance(DateFormat.SHORT, locale);
+        
         try {
             Date date = format.parse(value);
             Calendar calendar = new GregorianCalendar();

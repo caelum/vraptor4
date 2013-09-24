@@ -17,7 +17,6 @@ package br.com.caelum.vraptor.validator.beanvalidation;
 
 import java.lang.reflect.Method;
 import java.util.Iterator;
-import java.util.Locale;
 import java.util.Set;
 import java.util.concurrent.ConcurrentMap;
 
@@ -123,7 +122,7 @@ public class MethodValidatorInterceptor implements Interceptor {
 
 		for (ConstraintViolation<Object> v : violations) {
 			BeanValidatorContext ctx = new BeanValidatorContext(v);
-			String msg = interpolator.interpolate(v.getMessageTemplate(), ctx, getLocale());
+			String msg = interpolator.interpolate(v.getMessageTemplate(), ctx, localization.getLocale());
 			String category = extractCategory(names, v);
 			validator.add(new ValidationMessage(msg, category));
 			
@@ -141,10 +140,6 @@ public class MethodValidatorInterceptor implements Interceptor {
 		int index = parameterNode.getParameterIndex();
 		return Joiner.on(".").join(v.getPropertyPath())
 				.replace("arg" + parameterNode.getParameterIndex(), names[index]);
-	}
-
-	private Locale getLocale() {
-		return localization.getLocale() == null ? Locale.getDefault() : localization.getLocale();
 	}
 
 	private boolean methodHasConstraints(ControllerMethod method) {

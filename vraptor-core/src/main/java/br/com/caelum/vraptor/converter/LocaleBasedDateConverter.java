@@ -61,16 +61,13 @@ public class LocaleBasedDateConverter
         if (isNullOrEmpty(value)) {
             return null;
         }
-
-        Locale locale = localization.getLocale();
-        if (locale == null) {
-            locale = Locale.getDefault();
-        }
-
+        
+        final Locale locale = localization.getLocale();
         DateFormat formatDateTime = DateFormat.getDateTimeInstance(MEDIUM, MEDIUM, locale);
 
         try {
             return formatDateTime.parse(value);
+            
         } catch (ParseException pe) {
             DateFormat formatDate = DateFormat.getDateInstance(SHORT, locale);
             try {

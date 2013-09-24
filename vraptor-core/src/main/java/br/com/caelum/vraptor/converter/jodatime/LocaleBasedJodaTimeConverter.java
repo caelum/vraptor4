@@ -38,14 +38,7 @@ class LocaleBasedJodaTimeConverter {
 			return null;
 		}
 	    
-		return formatter.withLocale(getLocale()).parseDateTime(value);
-	}
-
-	public Locale getLocale() {
-		Locale locale = localization.getLocale();
-		if (locale == null) {
-			locale = Locale.getDefault();
-		}
-		return locale;
+		final Locale locale = localization.getLocale();
+        return formatter.withLocale(locale).parseDateTime(value);
 	}
 }

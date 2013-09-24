@@ -25,7 +25,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.sql.Time;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -75,21 +74,6 @@ public class LocaleBasedTimeConverterTest {
 		Date date = new SimpleDateFormat("HH:mm:ss").parse("23:52:00");
 		assertThat(converter.convert("23:52", Time.class, bundle), is(equalTo(date)));
 		assertThat(converter.convert("23:52:00", Time.class, bundle), is(equalTo(date)));
-	}
-
-	@Test
-	public void shouldUseTheDefaultLocale() throws ParseException {
-        when(request.getAttribute(LOCALE_KEY + ".request")).thenReturn(null);
-        when(request.getSession()).thenReturn(session);
-        when(session.getAttribute(LOCALE_KEY + ".session")). thenReturn(null);
-        when(context.getAttribute(LOCALE_KEY + ".application")). thenReturn(null);
-        when(context.getInitParameter(LOCALE_KEY)). thenReturn(null);
-        when(request.getLocale()).thenReturn(null);
-
-		Date date = new SimpleDateFormat("HH:mm:ss").parse("23:52:00");
-		String formattedHour = DateFormat.getTimeInstance(DateFormat.SHORT).format(date);
-		assertThat(converter.convert(formattedHour, Time.class, bundle), is(equalTo(date)));
-
 	}
 
 	@Test

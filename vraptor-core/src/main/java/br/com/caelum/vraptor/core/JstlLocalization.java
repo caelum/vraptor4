@@ -106,14 +106,19 @@ public class JstlLocalization
     @Override
 	public Locale getLocale() {
     	if (locale == null) {
-    		locale = initializeLocale();
+    		initializeLocale();
     	}
     	
         return locale;
     }
 
-	private Locale initializeLocale() {
-		return localeFor(Config.FMT_LOCALE);
+	private void initializeLocale() {
+		Locale locale = localeFor(Config.FMT_LOCALE);
+		if (locale == null) {
+		    Locale.getDefault();
+		}
+		
+        this.locale = locale;
 	}
 
     @Override

@@ -32,12 +32,8 @@ public class LocaleBasedTimeConverter implements Converter<Time> {
 			return null;
 		}
 
-		Locale locale = localization.getLocale();
-		if (locale == null) {
-			locale = Locale.getDefault();
-		}
-
-		DateFormat formatHour = DateFormat.getTimeInstance(DateFormat.SHORT, locale);
+		DateFormat formatHour = DateFormat.getTimeInstance(DateFormat.SHORT, localization.getLocale());
+		
 		try {
 			if (isUncompleteTime(value)) {
 				value = value + ":00";

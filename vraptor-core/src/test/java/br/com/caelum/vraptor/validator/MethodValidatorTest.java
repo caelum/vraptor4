@@ -99,24 +99,6 @@ public class MethodValidatorTest {
         assertThat(validator.getErrors().get(0).getCategory(), is("withConstraint.email"));
     }
 
-    @Test
-    public void shouldUseDefaultLocale()
-        throws Exception {
-        MethodInfo info = new MethodInfo();
-        info.setParameters(new Object[] { null });
-        info.setControllerMethod(withConstraint);
-
-        interceptor = new MethodValidatorInterceptor(l10n, interpolator, validator, info, 
-        		validatorFactory.getValidator(), provider);
-
-        MyController controller = new MyController();
-        interceptor.intercept(stack, info.getControllerMethod(), controller);
-
-        assertThat(validator.getErrors(), hasSize(1));
-        assertThat(validator.getErrors().get(0).getCategory(), is("withConstraint.email"));
-        assertThat(validator.getErrors().get(0).getMessage(), is("may not be null"));
-    }
-
     /**
      * Customer for using in bean validator tests.
      */

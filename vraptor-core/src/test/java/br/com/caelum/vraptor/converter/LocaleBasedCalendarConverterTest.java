@@ -24,11 +24,7 @@ import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -75,22 +71,6 @@ public class LocaleBasedCalendarConverterTest {
 
 		assertThat(converter.convert("10/06/2008", Calendar.class, bundle),
 				is(equalTo((Calendar) new GregorianCalendar(2008, 5, 10))));
-	}
-
-	@Test
-	public void shouldUseTheDefaultLocale() throws ParseException {
-		when(request.getAttribute(LOCALE_KEY + ".request")).thenReturn(null);
-		when(request.getSession()).thenReturn(session);
-		when(session.getAttribute(LOCALE_KEY + ".session")). thenReturn(null);
-		when(context.getAttribute(LOCALE_KEY + ".application")). thenReturn(null);
-		when(context.getInitParameter(LOCALE_KEY)). thenReturn(null);
-		when(request.getLocale()).thenReturn(null);
-
-		Date date = new SimpleDateFormat("dd/MM/yyyy").parse("10/05/2010");
-		Calendar cal = new GregorianCalendar();
-		cal.setTime(date);
-		String formattedToday = DateFormat.getDateInstance(DateFormat.SHORT).format(date);
-		assertThat(converter.convert(formattedToday, Calendar.class, bundle), is(equalTo(cal)));
 	}
 
 	@Test

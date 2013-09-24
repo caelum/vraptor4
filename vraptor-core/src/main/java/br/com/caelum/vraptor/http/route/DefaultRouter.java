@@ -17,8 +17,6 @@
 
 package br.com.caelum.vraptor.http.route;
 
-import static com.google.common.collect.Collections2.filter;
-
 import java.lang.reflect.Method;
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -28,11 +26,11 @@ import java.util.Collections;
 import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
+import br.com.caelum.vraptor.cache.VRaptorCache;
 import br.com.caelum.vraptor.controller.BeanClass;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.controller.HttpMethod;
@@ -43,6 +41,8 @@ import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.proxy.Proxifier;
 
 import com.google.common.base.Predicate;
+
+import static com.google.common.collect.Collections2.filter;
 
 /**
  * The default implementation of controller localization rules. It also uses a
@@ -60,7 +60,7 @@ public class DefaultRouter implements Router {
 	private  Converters converters;
 	private  ParameterNameProvider nameProvider;
     private  Evaluator evaluator;
-    private ConcurrentHashMap<Invocation, Route> cache = new ConcurrentHashMap<Invocation, Route>();
+    private VRaptorCache<Invocation,Route> cache;
 	private EncodingHandler encodingHandler;
 
     //CDI eyes only
@@ -71,13 +71,15 @@ public class DefaultRouter implements Router {
     @Inject
     public DefaultRouter(RoutesConfiguration config,
 			Proxifier proxifier, TypeFinder finder, Converters converters,
-			ParameterNameProvider nameProvider, Evaluator evaluator, EncodingHandler encodingHandler) {
+			ParameterNameProvider nameProvider, Evaluator evaluator, EncodingHandler encodingHandler,
+			VRaptorCache<Invocation,Route> cache) {
 		this.proxifier = proxifier;
 		this.finder = finder;
 		this.converters = converters;
 		this.nameProvider = nameProvider;
         this.evaluator = evaluator;
 		this.encodingHandler = encodingHandler;
+		this.cache = cache;
 		config.config(this);
 	}
 
@@ -172,54 +174,6 @@ public class DefaultRouter implements Router {
 	@Override
 	public List<Route> allRoutes() {
 		return Collections.unmodifiableList(new ArrayList<>(routes));
-	}
-
-	private static class Invocation {
-		private Class<?> controllerType;
-		private Method method;
-
-		public Invocation(Class<?> type, Method method) {
-			controllerType = type;
-			this.method = method;
-		}
-
-		@Override
-		public int hashCode() {
-			final int prime = 31;
-			int result = 1;
-			result = prime
-					* result
-					+ ((controllerType == null) ? 0 : controllerType.hashCode());
-			result = prime * result
-					+ ((method == null) ? 0 : method.getName().hashCode());
-			result = prime * result
-					+ ((method == null) ? 0 : Arrays.hashCode(method.getParameterTypes()));
-			return result;
-		}
-
-		@Override
-		public boolean equals(Object obj) {
-			if (this == obj)
-				return true;
-			if (obj == null)
-				return false;
-			if (getClass() != obj.getClass())
-				return false;
-			Invocation other = (Invocation) obj;
-			if (controllerType == null) {
-				if (other.controllerType != null)
-					return false;
-			} else if (!controllerType.equals(other.controllerType))
-				return false;
-			if (method == null) {
-				if (other.method != null)
-					return false;
-			} else if (method.getName().equals(other.method.getName())
-					&& Arrays.equals(method.getParameterTypes(), other.method.getParameterTypes()))
-				return true;
-			return false;
-		}
-
 	}
 
     private Predicate<Route> canHandle(final String uri) {

@@ -68,6 +68,9 @@ public class VRaptor implements Filter {
 
 	@Inject
 	private EncodingHandler encodingHandler;
+	
+	@Inject
+	private RequestExecution execution;
 
 	@Inject
 	private Logger logger;
@@ -103,7 +106,7 @@ public class VRaptor implements Filter {
 			try {
 				encodingHandler.setEncoding(baseRequest, baseResponse);
 				provider.provideForRequest(request);
-				provider.getContainer().instanceFor(RequestExecution.class).execute();
+				execution.execute();
 				
 			} catch (ApplicationLogicException e) {
 				// it is a business logic exception, we dont need to show

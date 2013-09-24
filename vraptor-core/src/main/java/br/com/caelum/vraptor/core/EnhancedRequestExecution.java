@@ -15,8 +15,6 @@
  */
 package br.com.caelum.vraptor.core;
 
-import javax.enterprise.context.Dependent;
-import javax.enterprise.inject.Default;
 import javax.inject.Inject;
 
 import br.com.caelum.vraptor.VRaptorException;
@@ -28,8 +26,6 @@ import br.com.caelum.vraptor.interceptor.InterceptorRegistry;
  * @since 3.3.0
  *
  */
-@Dependent
-@Default
 public class EnhancedRequestExecution implements RequestExecution {
 
 	private final InterceptorStack stack;

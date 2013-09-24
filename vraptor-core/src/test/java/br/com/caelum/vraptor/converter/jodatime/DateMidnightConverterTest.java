@@ -39,10 +39,9 @@ public class DateMidnightConverterTest {
 		MockitoAnnotations.initMocks(this);
 
 		bundle = ResourceBundle.getBundle("messages");
-		FilterChain chain = mock(FilterChain.class);
 
-		final RequestInfo webRequest = new RequestInfo(context, chain, request, null);
-        jstlLocalization = new JstlLocalization(webRequest);
+		when(request.getServletContext()).thenReturn(context);
+		jstlLocalization = new JstlLocalization(request);
 
 		converter = new DateMidnightConverter(jstlLocalization);
 	}

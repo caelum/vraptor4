@@ -25,6 +25,7 @@ import javax.enterprise.context.RequestScoped;
 import javax.enterprise.inject.Default;
 import javax.inject.Inject;
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.jstl.core.Config;
 import javax.servlet.jsp.jstl.fmt.LocalizationContext;
 
@@ -43,14 +44,14 @@ import com.google.common.base.Strings;
  */
 @RequestScoped
 @Default
-public class JstlLocalization
-	implements Localization {
+public class JstlLocalization implements Localization {
 
 	private static final Logger logger = LoggerFactory.getLogger(JstlLocalization.class);
 
 	private static final String DEFAULT_BUNDLE_NAME = "messages";
 
-	private RequestInfo request;
+	private HttpServletRequest request;
+	
 	private ResourceBundle bundle;
 	private Locale locale;
 
@@ -60,7 +61,7 @@ public class JstlLocalization
 	}
 	
 	@Inject
-	public JstlLocalization(RequestInfo request) {
+	public JstlLocalization(HttpServletRequest request) {
 		this.request = request;
 	}
 
@@ -115,7 +116,7 @@ public class JstlLocalization
 	private void initializeLocale() {
 		Locale locale = localeFor(Config.FMT_LOCALE);
 		if (locale == null) {
-			Locale.getDefault();
+			locale = Locale.getDefault();
 		}
 		
 		this.locale = locale;
@@ -135,7 +136,7 @@ public class JstlLocalization
 			return (Locale) localeValue;
 		}
 
-		return request.getRequest().getLocale();
+		return request.getLocale();
 	}
 
 	/**
@@ -146,12 +147,12 @@ public class JstlLocalization
 	 * @return
 	 */
 	private Object findByKey(String key) {
-		Object value = Config.get(request.getRequest(), key);
+		Object value = Config.get(request, key);
 		if (value != null) {
 			return value;
 		}
 
-		value = Config.get(request.getRequest().getSession(), key);
+		value = Config.get(request.getSession(), key);
 		if (value != null) {
 			return value;
 		}

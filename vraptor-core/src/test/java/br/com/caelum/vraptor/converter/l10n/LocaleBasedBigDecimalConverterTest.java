@@ -22,7 +22,6 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.fail;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
@@ -31,7 +30,6 @@ import java.text.ParseException;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-import javax.servlet.FilterChain;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
 
@@ -42,7 +40,6 @@ import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor.converter.ConversionException;
 import br.com.caelum.vraptor.core.JstlLocalization;
-import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.http.MutableRequest;
 
 public class LocaleBasedBigDecimalConverterTest {
@@ -60,9 +57,9 @@ public class LocaleBasedBigDecimalConverterTest {
     public void setup() {
     	MockitoAnnotations.initMocks(this);
 
-        FilterChain chain = mock(FilterChain.class);
-        final RequestInfo webRequest = new RequestInfo(context, chain, request, null);
-        jstlLocalization = new JstlLocalization(webRequest);
+    	when(request.getServletContext()).thenReturn(context);
+    	jstlLocalization = new JstlLocalization(request);
+
         converter = new LocaleBasedBigDecimalConverter(jstlLocalization);
         bundle = ResourceBundle.getBundle("messages");
         Locale.setDefault(Locale.ENGLISH);

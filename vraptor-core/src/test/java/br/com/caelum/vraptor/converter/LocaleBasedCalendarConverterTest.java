@@ -21,7 +21,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.util.Calendar;
@@ -29,7 +28,6 @@ import java.util.GregorianCalendar;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-import javax.servlet.FilterChain;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
 
@@ -39,7 +37,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor.core.JstlLocalization;
-import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.http.MutableRequest;
 
 public class LocaleBasedCalendarConverterTest {
@@ -57,9 +54,9 @@ public class LocaleBasedCalendarConverterTest {
 	public void setup() {
 		MockitoAnnotations.initMocks(this);
 
-		FilterChain chain = mock(FilterChain.class);
-		final RequestInfo webRequest = new RequestInfo(context, chain, request, null);
-		jstlLocalization = new JstlLocalization(webRequest);
+		when(request.getServletContext()).thenReturn(context);
+		jstlLocalization = new JstlLocalization(request);
+
 		converter = new LocaleBasedCalendarConverter(jstlLocalization);
 		bundle = ResourceBundle.getBundle("messages");
         Locale.setDefault(Locale.ENGLISH);

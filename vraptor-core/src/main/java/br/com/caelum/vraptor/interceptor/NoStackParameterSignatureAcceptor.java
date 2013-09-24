@@ -4,14 +4,13 @@ import java.lang.reflect.Method;
 
 import br.com.caelum.vraptor.core.InterceptorStack;
 
-public class NoStackParameterSignatureAcceptor implements SignatureAcceptor {
+public class NoStackParameterSignatureAcceptor {
 
-	@Override
-	public boolean accepts(Method method){
-		return !new MustReceiveStackAsParameterAcceptor().accepts(method);
+	public static boolean accepts(Method method){
+		return !MustReceiveStackAsParameterAcceptor.accepts(method);
 	}
 
-	public String errorMessage() {
+	public static String errorMessage() {
 		return "Non @Around method must not receive "+InterceptorStack.class.getName()+" or "+SimpleInterceptorStack.class.getName();
 	}
 }

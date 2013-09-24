@@ -1,33 +1,24 @@
 package br.com.caelum.vraptor.interceptor;
 
 import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
 
 import br.com.caelum.vraptor.AroundCall;
 import br.com.caelum.vraptor.core.InterceptorStack;
 
-import com.google.common.base.Predicate;
-import com.google.common.collect.Collections2;
+public class MustReceiveStackAsParameterAcceptor {
 
-public class MustReceiveStackAsParameterAcceptor implements SignatureAcceptor {
+	public static boolean accepts(Method method){
 
-	@Override
-	public boolean accepts(Method method){
-		List<Class<?>> parameterTypes = Arrays.asList(method.getParameterTypes());
-		Collection<Class<?>> possibleStackParams = Collections2.filter(parameterTypes,new Predicate<Class<?>>() {
-
-			@Override
-			public boolean apply(Class<?> input) {
-				return SimpleInterceptorStack.class.isAssignableFrom(input) || InterceptorStack.class.isAssignableFrom(input);
+		for (Class<?> parameterType : method.getParameterTypes()) {
+			if (SimpleInterceptorStack.class.isAssignableFrom(parameterType)
+				|| InterceptorStack.class.isAssignableFrom(parameterType)) {
+				return true;
 			}
-		});
-		return !possibleStackParams.isEmpty();
+		}
+		return false;
 	}
-	
-	@Override
-	public String errorMessage() {
+
+	public static String errorMessage() {
 		return AroundCall.class.getSimpleName()+" method must receive "+InterceptorStack.class.getName()+" or "+SimpleInterceptorStack.class.getName();
 	}
 }

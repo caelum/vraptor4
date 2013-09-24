@@ -20,9 +20,8 @@ public class AroundExecutor implements StepExecutor<Object> {
 
 	public boolean accept(Class<?> interceptorClass) {
 		if (method != null) {
-			MustReceiveStackAsParameterAcceptor stackAcceptor = new MustReceiveStackAsParameterAcceptor();
-			if (!stackAcceptor.accepts(method)) {
-				throw new IllegalArgumentException(stackAcceptor.errorMessage());
+			if (!MustReceiveStackAsParameterAcceptor.accepts(method)) {
+				throw new IllegalArgumentException(MustReceiveStackAsParameterAcceptor.errorMessage());
 			}
 			return true;
 		}

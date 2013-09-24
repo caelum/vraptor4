@@ -47,5 +47,5 @@ public interface Proxifier {
      * @param o The object to test
      * @return <code>true</code> if the object is a proxy, false otherwise.
      */
-	public abstract boolean isProxyType(Class<?> type);
+	boolean isProxyType(Class<?> type);
 }

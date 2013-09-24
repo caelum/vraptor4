@@ -19,7 +19,7 @@ import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor.VRaptorException;
 
-public class WebXmlEncodingHandlerTest {
+public class DefaultEncodingHandlerTest {
 
     private @Mock ServletContext context;
     private @Mock HttpServletRequest request;

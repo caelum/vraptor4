@@ -16,7 +16,6 @@
  */
 package br.com.caelum.vraptor.core;
 
-import java.text.MessageFormat;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
@@ -122,11 +121,6 @@ public class JstlLocalization implements Localization {
 		this.locale = locale;
 	}
 
-	@Override
-	public Locale getFallbackLocale() {
-		return localeFor(Config.FMT_FALLBACK_LOCALE);
-	}
-
 	private Locale localeFor(String key) {
 		Object localeValue = findByKey(key);
 
@@ -163,16 +157,6 @@ public class JstlLocalization implements Localization {
 		}
 
 		return request.getServletContext().getInitParameter(key);
-	}
-
-	@Override
-	public String getMessage(String key, Object... parameters) {
-		try {
-			String content = getBundle().getString(key);
-			return MessageFormat.format(content, parameters);
-		} catch (MissingResourceException e) {
-			return "???" + key + "???";
-		}
 	}
 
 	/**

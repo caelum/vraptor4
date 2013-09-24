@@ -1,12 +1,9 @@
 package br.com.caelum.vraptor.core;
 
-import static javax.servlet.jsp.jstl.core.Config.FMT_FALLBACK_LOCALE;
 import static javax.servlet.jsp.jstl.core.Config.FMT_LOCALE;
 import static javax.servlet.jsp.jstl.core.Config.FMT_LOCALIZATION_CONTEXT;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.endsWith;
 import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.startsWith;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -62,19 +59,6 @@ public class JstlLocalizationTest {
     }
 
     @Test
-    public void keyNotFound() {
-        String value = localization.getMessage("my.notfound.key");
-        assertThat(value, startsWith("???"));
-        assertThat(value, endsWith("???"));
-    }
-
-    @Test
-    public void keyFound() {
-        String value = localization.getMessage("my.key");
-        assertThat(value, equalTo("abc"));
-    }
-
-    @Test
     public void findLocaleFromRequest() {
         when(request.getAttribute(FMT_LOCALE + ".request")).thenReturn(PT_BR);
         assertThat(localization.getLocale(), equalTo(PT_BR));
@@ -108,11 +92,5 @@ public class JstlLocalizationTest {
         when(request.getAttribute(FMT_LOCALE + ".request")).thenReturn(PT_BR);
         when(session.getAttribute(FMT_LOCALE + ".session")).thenReturn(Locale.ENGLISH);
         assertThat(localization.getLocale(), equalTo(PT_BR));
-    }
-
-    @Test
-    public void testFallbackLocale() {
-        when(request.getAttribute(FMT_FALLBACK_LOCALE + ".request")).thenReturn(PT_BR);
-        assertThat(localization.getFallbackLocale(), equalTo(PT_BR));
     }
 }

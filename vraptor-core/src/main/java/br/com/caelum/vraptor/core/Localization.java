@@ -37,19 +37,6 @@ public interface Localization {
     Locale getLocale();
 
     /**
-     * Get the fallback locale for current request. Locale is found by looking into request, session and application
-     * scoped (in this order).
-     * 
-     * @return
-     */
-    Locale getFallbackLocale();
-
-    /**
-     * Returns a formated message or '???key???' if the key was not found.
-     */
-    String getMessage(String key, Object... parameters);
-
-    /**
      * Get the resource bundle for current locale. If the resource bundle is not found, an empty resource bundle is
      * returned, to avoid {@link MissingResourceException}.
      * 

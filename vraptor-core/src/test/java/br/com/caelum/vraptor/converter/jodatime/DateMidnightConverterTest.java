@@ -4,12 +4,11 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.util.Locale;
 import java.util.ResourceBundle;
 
-import javax.servlet.FilterChain;
 import javax.servlet.ServletContext;
 
 import org.joda.time.DateMidnight;
@@ -19,8 +18,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor.converter.ConversionException;
-import br.com.caelum.vraptor.core.JstlLocalization;
-import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.http.MutableRequest;
 
 /**
@@ -32,7 +29,6 @@ public class DateMidnightConverterTest {
 	private @Mock MutableRequest request;
 	private @Mock ServletContext context;
 	private @Mock ResourceBundle bundle;
-	private @Mock JstlLocalization jstlLocalization;
 
 	@Before
 	public void setup() {
@@ -41,16 +37,12 @@ public class DateMidnightConverterTest {
 		bundle = ResourceBundle.getBundle("messages");
 
 		when(request.getServletContext()).thenReturn(context);
-		jstlLocalization = new JstlLocalization(request);
 
-		converter = new DateMidnightConverter(jstlLocalization);
+		converter = new DateMidnightConverter(new Locale("pt", "BR"));
 	}
 
 	@Test
 	public void shouldBeAbleToConvert() {
-		when(request.getAttribute("javax.servlet.jsp.jstl.fmt.locale.request"))
-				.thenReturn("pt_br");
-
 		assertThat(converter.convert("05/06/2010", DateMidnight.class, bundle),
 				is(equalTo(new DateMidnight(2010, 6, 5))));
 	}
@@ -67,9 +59,6 @@ public class DateMidnightConverterTest {
 
 	@Test
 	public void shouldThrowExceptionWhenUnableToParse() {
-		when(request.getAttribute("javax.servlet.jsp.jstl.fmt.locale.request"))
-			.thenReturn("pt_br");
-
 		try {
 			converter.convert("a,10/06/2008/a/b/c", DateMidnight.class, bundle);
 		} catch (ConversionException e) {

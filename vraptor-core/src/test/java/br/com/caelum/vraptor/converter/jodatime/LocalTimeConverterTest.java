@@ -6,6 +6,7 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.Mockito.when;
 
+import java.util.Locale;
 import java.util.ResourceBundle;
 
 import javax.servlet.ServletContext;
@@ -17,7 +18,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor.converter.ConversionException;
-import br.com.caelum.vraptor.core.JstlLocalization;
 import br.com.caelum.vraptor.http.MutableRequest;
 
 /**
@@ -29,24 +29,19 @@ public class LocalTimeConverterTest {
 	private LocalTimeConverter converter;
 	private @Mock MutableRequest request;
 	private @Mock ServletContext context;
-	private @Mock JstlLocalization jstlLocalization;
 
 	@Before
 	public void setup() {
 		MockitoAnnotations.initMocks(this);
 
 		when(request.getServletContext()).thenReturn(context);
-		jstlLocalization = new JstlLocalization(request);
 
-		converter = new LocalTimeConverter(jstlLocalization);
+		converter = new LocalTimeConverter(new Locale("pt", "BR"));
 		bundle = ResourceBundle.getBundle("messages");
 	}
 
 	@Test
 	public void shouldBeAbleToConvert() {
-		when(request.getAttribute("javax.servlet.jsp.jstl.fmt.locale.request"))
-			.thenReturn("pt_br");
-
 		assertThat(converter.convert("15:38", LocalTime.class, bundle),
 				is(equalTo(new LocalTime(15, 38))));
 	}
@@ -63,9 +58,6 @@ public class LocalTimeConverterTest {
 
 	@Test
 	public void shouldThrowExceptionWhenUnableToParse() {
-		when(request.getAttribute("javax.servlet.jsp.jstl.fmt.locale.request"))
-			.thenReturn("pt_br");
-
 		try {
 			converter.convert("xx:yy:ff", LocalTime.class, bundle);
 		} catch (ConversionException e) {

@@ -36,7 +36,6 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import br.com.caelum.vraptor.core.JstlLocalization;
 import br.com.caelum.vraptor.http.MutableRequest;
 
 public class LocaleBasedCalendarConverterTest {
@@ -48,24 +47,19 @@ public class LocaleBasedCalendarConverterTest {
 	private @Mock HttpSession session;
 	private @Mock ServletContext context;
 	private @Mock ResourceBundle bundle;
-    private @Mock JstlLocalization jstlLocalization;
 
 	@Before
 	public void setup() {
 		MockitoAnnotations.initMocks(this);
 
 		when(request.getServletContext()).thenReturn(context);
-		jstlLocalization = new JstlLocalization(request);
 
-		converter = new LocaleBasedCalendarConverter(jstlLocalization);
+		converter = new LocaleBasedCalendarConverter(new Locale("pt", "BR"));
 		bundle = ResourceBundle.getBundle("messages");
-        Locale.setDefault(Locale.ENGLISH);
 	}
 
 	@Test
 	public void shouldBeAbleToConvert() {
-		when(request.getAttribute(LOCALE_KEY + ".request")).thenReturn("pt_br");
-
 		assertThat(converter.convert("10/06/2008", Calendar.class, bundle),
 				is(equalTo((Calendar) new GregorianCalendar(2008, 5, 10))));
 	}
@@ -82,7 +76,6 @@ public class LocaleBasedCalendarConverterTest {
 
 	@Test
 	public void shouldThrowExceptionWhenUnableToParse() {
-		when(request.getAttribute(LOCALE_KEY + ".request")).thenReturn("pt_br");
 		try {
 			converter.convert("a,10/06/2008/a/b/c", Calendar.class, bundle);
 		} catch (ConversionException e) {

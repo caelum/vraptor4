@@ -37,7 +37,6 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import br.com.caelum.vraptor.core.JstlLocalization;
 import br.com.caelum.vraptor.http.MutableRequest;
 
 public class LocaleBasedDateConverterTest {
@@ -49,24 +48,19 @@ public class LocaleBasedDateConverterTest {
 	private @Mock HttpSession session;
 	private @Mock ServletContext context;
 	private @Mock ResourceBundle bundle;
-    private @Mock JstlLocalization jstlLocalization;
 
 	@Before
 	public void setup() {
 		MockitoAnnotations.initMocks(this);
 
 		when(request.getServletContext()).thenReturn(context);
-		jstlLocalization = new JstlLocalization(request);
 
-		converter = new LocaleBasedDateConverter(jstlLocalization);
+		converter = new LocaleBasedDateConverter(new Locale("pt", "BR"));
 		bundle = ResourceBundle.getBundle("messages");
-        Locale.setDefault(Locale.ENGLISH);
 	}
 
 	@Test
 	public void shouldBeAbleToConvert() throws ParseException {
-		when(request.getAttribute(LOCALE_KEY + ".request")).thenReturn("pt_br");
-
 		assertThat(converter.convert("10/06/2008", Date.class, bundle), is(equalTo(new SimpleDateFormat("dd/MM/yyyy")
 				.parse("10/06/2008"))));
 	}
@@ -83,8 +77,6 @@ public class LocaleBasedDateConverterTest {
 
 	@Test
 	public void shouldThrowExceptionWhenUnableToParse() {
-		when(request.getAttribute(LOCALE_KEY + ".request")).thenReturn("pt_br");
-
 		try {
 			converter.convert("a,10/06/2008/a/b/c", Date.class, bundle);
 		} catch (ConversionException e) {

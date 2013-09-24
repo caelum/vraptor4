@@ -25,7 +25,9 @@ import java.util.ResourceBundle;
  * A i18n messages provider.
  * 
  * @author Guilherme Silveira
+ * @deprecated replaced by producer
  */
+@Deprecated
 public interface Localization {
 
     /**

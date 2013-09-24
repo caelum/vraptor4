@@ -20,14 +20,16 @@ package br.com.caelum.vraptor.converter.jodatime;
 import static org.joda.time.format.DateTimeFormat.shortDateTime;
 
 import java.text.MessageFormat;
+import java.util.Locale;
 import java.util.ResourceBundle;
+
+import javax.inject.Inject;
 
 import org.joda.time.DateTime;
 
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.converter.ConversionException;
-import br.com.caelum.vraptor.core.Localization;
 
 /**
  * VRaptor converter for {@link DateTime}. {@link DateTime} is part of Joda Time library.
@@ -38,15 +40,20 @@ import br.com.caelum.vraptor.core.Localization;
 @Convert(DateTime.class)
 public class DateTimeConverter implements Converter<DateTime> {
 
-    private final Localization localization;
+    private Locale locale;
 
-	public DateTimeConverter(Localization localization) {
-        this.localization = localization;
+    @Deprecated // CDI eyes only
+    public DateTimeConverter() {
+    }
+
+    @Inject
+	public DateTimeConverter(Locale locale) {
+        this.locale = locale;
     }
 
     public DateTime convert(String value, Class<? extends DateTime> type, ResourceBundle bundle) {
         try {
-            DateTime out = new LocaleBasedJodaTimeConverter(localization).convert(value, shortDateTime());
+            DateTime out = new LocaleBasedJodaTimeConverter(locale).convert(value, shortDateTime());
             if (out == null) {
                 return null;
             }

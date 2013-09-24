@@ -38,7 +38,6 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import br.com.caelum.vraptor.core.JstlLocalization;
 import br.com.caelum.vraptor.http.MutableRequest;
 
 public class LocaleBasedTimeConverterTest {
@@ -50,24 +49,20 @@ public class LocaleBasedTimeConverterTest {
     private @Mock HttpSession session;
     private @Mock ServletContext context;
     private @Mock ResourceBundle bundle;
-    private @Mock JstlLocalization jstlLocalization;
 
 	@Before
 	public void setup() {
         MockitoAnnotations.initMocks(this);
 
         when(request.getServletContext()).thenReturn(context);
-        jstlLocalization = new JstlLocalization(request);
 
-        converter = new LocaleBasedTimeConverter(jstlLocalization);
+        converter = new LocaleBasedTimeConverter(new Locale("pt", "BR"));
         bundle = ResourceBundle.getBundle("messages");
         Locale.setDefault(Locale.ENGLISH);
 	}
 
 	@Test
 	public void shouldBeAbleToConvert() throws ParseException {
-        when(request.getAttribute(LOCALE_KEY + ".request")).thenReturn("pt_br");
-
 		Date date = new SimpleDateFormat("HH:mm:ss").parse("23:52:00");
 		assertThat(converter.convert("23:52", Time.class, bundle), is(equalTo(date)));
 		assertThat(converter.convert("23:52:00", Time.class, bundle), is(equalTo(date)));
@@ -85,8 +80,6 @@ public class LocaleBasedTimeConverterTest {
 
 	@Test
 	public void shouldThrowExceptionWhenUnableToParse() {
-        when(request.getAttribute(LOCALE_KEY + ".request")).thenReturn("pt_br");
-
 		try {
 			converter.convert("25:dd:88", Time.class, bundle);
 		} catch (ConversionException e) {

@@ -20,6 +20,7 @@ package br.com.caelum.vraptor.converter.jodatime;
 import static org.joda.time.format.DateTimeFormat.shortTime;
 
 import java.text.MessageFormat;
+import java.util.Locale;
 import java.util.ResourceBundle;
 
 import javax.inject.Inject;
@@ -30,7 +31,6 @@ import org.joda.time.LocalTime;
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.converter.ConversionException;
-import br.com.caelum.vraptor.core.Localization;
 
 /**
  * VRaptor converter for {@link LocalTime}. {@link LocalTime} is part of Joda
@@ -41,29 +41,27 @@ import br.com.caelum.vraptor.core.Localization;
 @Convert(LocalTime.class)
 public class LocalTimeConverter implements Converter<LocalTime> {
 
-	private Localization localization;
+	private Locale locale;
 
 	@Deprecated // CDI eyes only
 	public LocalTimeConverter() {}
 
 	@Inject
-	public LocalTimeConverter(Localization localization) {
-		this.localization = localization;
+	public LocalTimeConverter(Locale locale) {
+		this.locale = locale;
 	}
 
 	public LocalTime convert(String value, Class<? extends LocalTime> type,
 			ResourceBundle bundle) {
 		try {
-			DateTime out = new LocaleBasedJodaTimeConverter(localization)
-					.convert(value, shortTime());
+			DateTime out = new LocaleBasedJodaTimeConverter(locale).convert(value, shortTime());
 			if (out == null) {
 				return null;
 			}
 
 			return out.toLocalTime();
 		} catch (Exception e) {
-			throw new ConversionException(MessageFormat.format(
-					bundle.getString("is_not_a_valid_time"), value));
+			throw new ConversionException(MessageFormat.format(bundle.getString("is_not_a_valid_time"), value));
 		}
 	}
 }

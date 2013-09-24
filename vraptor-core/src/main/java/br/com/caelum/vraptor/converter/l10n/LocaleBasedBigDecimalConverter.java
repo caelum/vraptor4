@@ -26,11 +26,11 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 import javax.enterprise.context.RequestScoped;
+import javax.inject.Inject;
 
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.converter.ConversionException;
-import br.com.caelum.vraptor.core.Localization;
 
 /**
  * Localized version of VRaptor's BigDecimal converter. This component is optional and must be declared in web.xml
@@ -45,10 +45,15 @@ import br.com.caelum.vraptor.core.Localization;
 public class LocaleBasedBigDecimalConverter
     implements Converter<BigDecimal> {
 
-    private final Localization localization;
+    private Locale locale;
+    
+    @Deprecated // CDI eyes only
+    public LocaleBasedBigDecimalConverter() {
+    }
 
-    public LocaleBasedBigDecimalConverter(Localization localization) {
-        this.localization = localization;
+    @Inject
+    public LocaleBasedBigDecimalConverter(Locale locale) {
+        this.locale = locale;
     }
 
     public BigDecimal convert(String value, Class<? extends BigDecimal> type, ResourceBundle bundle) {
@@ -57,7 +62,6 @@ public class LocaleBasedBigDecimalConverter
         }
 
         try {
-            final Locale locale = localization.getLocale();
             DecimalFormat fmt = ((DecimalFormat) DecimalFormat.getInstance(locale));
             fmt.setParseBigDecimal(true);
 

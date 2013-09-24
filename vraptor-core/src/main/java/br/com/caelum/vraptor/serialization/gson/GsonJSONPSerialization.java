@@ -23,7 +23,6 @@ import br.com.caelum.vraptor.deserialization.gson.VRaptorGsonBuilder;
 import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
 import br.com.caelum.vraptor.serialization.JSONPSerialization;
 import br.com.caelum.vraptor.serialization.JSONSerialization;
-import br.com.caelum.vraptor.serialization.ProxyInitializer;
 import br.com.caelum.vraptor.serialization.Serializee;
 import br.com.caelum.vraptor.serialization.SerializerBuilder;
 import br.com.caelum.vraptor.view.ResultException;
@@ -37,26 +36,24 @@ public class GsonJSONPSerialization implements JSONPSerialization {
     
     protected final HttpServletResponse response;
     protected final TypeNameExtractor extractor;
-    protected final ProxyInitializer initializer;
     protected final VRaptorGsonBuilder builder;
     protected final Serializee serializee;
 
     public GsonJSONPSerialization(HttpServletResponse response, TypeNameExtractor extractor,
-            ProxyInitializer initializer,  VRaptorGsonBuilder builder, Serializee serializee) {
+            VRaptorGsonBuilder builder, Serializee serializee) {
         this.response = response;
         this.extractor = extractor;
-        this.initializer = initializer;
         this.builder = builder;
         this.serializee = serializee;
     }
     
     @Override
     public JSONSerialization withCallback(final String callbackName) {
-        return new GsonJSONSerialization(response, extractor, initializer, builder, serializee) {
+        return new GsonJSONSerialization(response, extractor, builder, serializee) {
             @Override
             protected SerializerBuilder getSerializer() {
                 try {
-                    return new GsonSerializer(builder, response.getWriter(), extractor, initializer, serializee) {
+                    return new GsonSerializer(builder, response.getWriter(), extractor, serializee) {
                         @Override
                         public void serialize() {
                             try {

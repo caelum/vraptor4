@@ -6,10 +6,7 @@ import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.when;
 
-import java.util.Collections;
-import java.util.Enumeration;
 import java.util.concurrent.Callable;
 
 import javax.enterprise.context.RequestScoped;
@@ -62,7 +59,7 @@ public class CDIBasedContainerTest extends GenericContainerTest {
 			public T call() throws Exception {
 				cdiContainer.startRequest();
 				cdiContainer.startSession();
-				RequestInfo request = new RequestInfo(context, null,
+				RequestInfo request = new RequestInfo(null, null,
 						servletContainerFactory.getRequest(),
 						servletContainerFactory.getResponse());
 
@@ -176,12 +173,6 @@ public class CDIBasedContainerTest extends GenericContainerTest {
 	public void shouldStereotypeControllerWithRequestAndNamed(){
 		Bean<?> bean = cdiContainer.getBeanManager().getBeans(CDIControllerComponent.class).iterator().next();
 		assertTrue(bean.getScope().equals(RequestScoped.class));
-	}
-
-	protected void configureExpectations() {
-    	Enumeration<String> emptyEnumeration = Collections.enumeration(Collections.<String>emptyList());
-    	when(context.getInitParameterNames()).thenReturn(emptyEnumeration);
-    	when(context.getAttributeNames()).thenReturn(emptyEnumeration);
 	}
 
 }

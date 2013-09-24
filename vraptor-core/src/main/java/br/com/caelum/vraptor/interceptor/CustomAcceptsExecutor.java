@@ -14,13 +14,13 @@ public class CustomAcceptsExecutor implements StepExecutor<Boolean> {
 	private Container container;
 	private Method method;
 
-	public CustomAcceptsExecutor(StepInvoker stepInvoker, Container container, Class<?> interceptorClass) {
-		super();
+	public CustomAcceptsExecutor(StepInvoker stepInvoker,
+			Container container, Method method, Class<?> interceptorClass) {
+
 		this.stepInvoker = stepInvoker;
 		this.container = container;
-		method = stepInvoker.findMethod(CustomAcceptsFailCallback.class, interceptorClass);
+		this.method = method;
 	}
-
 
 	@Override
 	public boolean accept(Class<?> interceptorClass){

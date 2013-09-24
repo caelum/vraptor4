@@ -2,8 +2,6 @@ package br.com.caelum.vraptor.interceptor;
 
 import java.lang.reflect.Method;
 
-import br.com.caelum.vraptor.AroundCall;
-
 public class AroundExecutor implements StepExecutor<Object> {
 
 	private final StepInvoker stepInvoker;
@@ -12,10 +10,10 @@ public class AroundExecutor implements StepExecutor<Object> {
 
 	public AroundExecutor(StepInvoker stepInvoker,
 			InterceptorMethodParametersResolver parametersResolver,
-			Class<?> interceptorClass) {
+			Method method, Class<?> interceptorClass) {
 		this.stepInvoker = stepInvoker;
 		this.parametersResolver = parametersResolver;
-		this.method = stepInvoker.findMethod(AroundCall.class,interceptorClass);
+		this.method = method;
 	}
 
 	public boolean accept(Class<?> interceptorClass) {

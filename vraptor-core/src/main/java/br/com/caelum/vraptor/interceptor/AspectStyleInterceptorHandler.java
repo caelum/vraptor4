@@ -1,7 +1,8 @@
 package br.com.caelum.vraptor.interceptor;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.AfterCall;
 import br.com.caelum.vraptor.BeforeCall;
@@ -17,8 +18,7 @@ public class AspectStyleInterceptorHandler implements InterceptorHandler {
 	private final StepInvoker stepInvoker;
 	private final Container container;
 	private final Class<?> interceptorClass;
-	private static final Logger logger = LoggerFactory
-			.getLogger(AspectStyleInterceptorHandler.class);
+	private static final Logger logger = getLogger(AspectStyleInterceptorHandler.class);
 	private final InterceptorMethodParametersResolver parametersResolver;
 	private StepExecutor<Boolean> acceptsExecutor;
 	private StepExecutor<?> after;

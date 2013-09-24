@@ -22,6 +22,8 @@ import java.util.LinkedList;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
+import org.slf4j.Logger;
+
 import br.com.caelum.vraptor.interceptor.InterceptorRegistry;
 
 @ApplicationScoped
@@ -30,6 +32,8 @@ public class InterceptorStackHandlersCache {
 	private final LinkedList<InterceptorHandler> interceptorHandlers = new LinkedList<>();
 	private InterceptorRegistry registry;
 	private InterceptorHandlerFactory handlerFactory;
+
+	@Inject private Logger logger;
 
 	@Deprecated //CDI eyes only
 	public InterceptorStackHandlersCache() {}
@@ -44,6 +48,7 @@ public class InterceptorStackHandlersCache {
 
 	public void init() {
 		for (Class<?> interceptor : registry.all()) {
+			logger.debug("Caching {} ", interceptor.getName());
 			InterceptorHandler handlerFor = handlerFactory.handlerFor(interceptor);
 			this.interceptorHandlers.addLast(handlerFor);
 		}

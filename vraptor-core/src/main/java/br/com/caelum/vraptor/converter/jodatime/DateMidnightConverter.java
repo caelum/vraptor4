@@ -60,7 +60,7 @@ public class DateMidnightConverter implements Converter<DateMidnight> {
 		
 		try {
 			return getFormatter().parseDateTime(value).toDateMidnight();
-		} catch (Exception e) {
+		} catch (UnsupportedOperationException | IllegalArgumentException  e) {
 			throw new ConversionException(new ConversionMessage("is_not_a_valid_datetime", value));
 		}
 	}

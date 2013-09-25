@@ -59,7 +59,7 @@ public class LocalDateTimeConverter implements Converter<LocalDateTime> {
 		
 		try {
 			return getFormatter().parseDateTime(value).toLocalDateTime();
-		} catch (Exception e) {
+		} catch (UnsupportedOperationException | IllegalArgumentException  e) {
 			throw new ConversionException(new ConversionMessage("is_not_a_valid_datetime", value));
 		}
 	}

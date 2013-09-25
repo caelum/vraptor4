@@ -45,7 +45,7 @@ public class LocaleBasedTimeConverter implements Converter<Time> {
 			return new Time(formatHour.parse(value).getTime());
 		} catch (ParseException pe) {
 
-			throw new ConversionException(new I18nMessage("", "is_not_a_valid_time"));
+			throw new ConversionException(new I18nMessage("", "is_not_a_valid_time", value));
 		}
 	}
 

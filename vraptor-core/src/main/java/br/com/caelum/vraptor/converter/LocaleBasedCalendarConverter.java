@@ -67,7 +67,7 @@ public class LocaleBasedCalendarConverter implements Converter<Calendar> {
             calendar.setTime(date);
             return calendar;
         } catch (ParseException e) {
-			throw new ConversionException(new I18nMessage("", "is_not_a_valid_date"));
+			throw new ConversionException(new I18nMessage("", "is_not_a_valid_date", value));
         }
     }
 

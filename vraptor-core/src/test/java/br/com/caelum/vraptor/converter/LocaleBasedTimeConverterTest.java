@@ -17,6 +17,7 @@
 
 package br.com.caelum.vraptor.converter;
 
+import static br.com.caelum.vraptor.VRaptorMatchers.hasMessage;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
@@ -80,7 +81,7 @@ public class LocaleBasedTimeConverterTest {
 		try {
 			converter.convert("25:dd:88", Time.class);
 		} catch (ConversionException e) {
-			assertThat(e.getMessage(), is(equalTo("25:dd:88 is not a valid time.")));
+			assertThat(e.getValidationMessage(), hasMessage("25:dd:88 is not a valid time."));
 		}
 	}
 }

@@ -17,6 +17,7 @@
 
 package br.com.caelum.vraptor.converter;
 
+import static br.com.caelum.vraptor.VRaptorMatchers.hasMessage;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
@@ -45,7 +46,7 @@ public class ByteConverterTest {
 		try {
 			converter.convert("---", Byte.class);
 		} catch (ConversionException e) {
-			assertThat(e.getMessage(), is(equalTo("--- is not a valid integer.")));
+			assertThat(e.getValidationMessage(), hasMessage("--- is not a valid integer."));
 		}
 	}
 

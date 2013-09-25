@@ -25,6 +25,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import br.com.caelum.vraptor.VRaptorMatchers;
+
 
 public class PrimitiveBooleanConverterTest {
 
@@ -85,8 +87,8 @@ public class PrimitiveBooleanConverterTest {
 			converter.convert("not a boolean!", boolean.class);
 			Assert.assertTrue(false);
 		} catch (ConversionException e) {
-			assertThat(e.getMessage(),
-					is(equalTo("NOT A BOOLEAN! is not a valid boolean. Please use true/false, yes/no, y/n or on/off")));
+			assertThat(e.getValidationMessage(),
+					VRaptorMatchers.hasMessage("NOT A BOOLEAN! is not a valid boolean. Please use true/false, yes/no, y/n or on/off"));
 		}
 	}
 }

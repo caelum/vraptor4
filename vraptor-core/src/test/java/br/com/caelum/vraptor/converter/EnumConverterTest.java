@@ -17,9 +17,9 @@
 
 package br.com.caelum.vraptor.converter;
 
+import static br.com.caelum.vraptor.VRaptorMatchers.hasMessage;
 import static junit.framework.Assert.assertEquals;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 
@@ -62,7 +62,7 @@ public class EnumConverterTest {
 		try {
 			converter.convert("3200", MyCustomEnum.class);
 		} catch (ConversionException e) {
-			assertThat(e.getMessage(), is(equalTo("3200 is not a valid option.")));
+			assertThat(e.getValidationMessage(), hasMessage("3200 is not a valid option."));
 		}
 	}
 
@@ -71,7 +71,7 @@ public class EnumConverterTest {
 		try {
 			converter.convert("32a00", MyCustomEnum.class);
 		} catch (ConversionException e) {
-			assertThat(e.getMessage(), is(equalTo("32a00 is not a valid option.")));
+			assertThat(e.getValidationMessage(), hasMessage("32a00 is not a valid option."));
 		}
 	}
 
@@ -80,7 +80,7 @@ public class EnumConverterTest {
 		try {
 			converter.convert("THIRD", MyCustomEnum.class);
 		} catch (ConversionException e) {
-			assertThat(e.getMessage(), is(equalTo("THIRD is not a valid option.")));
+			assertThat(e.getValidationMessage(), hasMessage("THIRD is not a valid option."));
 		}
 	}
 
@@ -92,5 +92,4 @@ public class EnumConverterTest {
 	enum MyCustomEnum {
 		FIRST, SECOND
 	}
-
 }

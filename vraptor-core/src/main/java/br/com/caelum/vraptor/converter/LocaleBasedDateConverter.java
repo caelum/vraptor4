@@ -70,7 +70,7 @@ public class LocaleBasedDateConverter
             try {
                 return formatDate.parse(value);
             } catch (ParseException pe1) {
-                throw new ConversionException(new I18nMessage("", "is_not_a_valid_date"));
+                throw new ConversionException(new I18nMessage("", "is_not_a_valid_date", value));
             }
         }
     }

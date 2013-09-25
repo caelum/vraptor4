@@ -17,6 +17,7 @@
 
 package br.com.caelum.vraptor.converter;
 
+import static br.com.caelum.vraptor.VRaptorMatchers.hasMessage;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
@@ -77,7 +78,7 @@ public class LocaleBasedDateConverterTest {
 		try {
 			converter.convert("a,10/06/2008/a/b/c", Date.class);
 		} catch (ConversionException e) {
-			assertThat(e.getMessage(), is(equalTo("a,10/06/2008/a/b/c is not a valid date.")));
+			assertThat(e.getValidationMessage(), hasMessage("a,10/06/2008/a/b/c is not a valid date."));
 		}
 	}
 }

@@ -43,7 +43,7 @@ public class IntegerConverter implements Converter<Integer> {
         try {
             return Integer.valueOf(value);
         } catch (NumberFormatException e) {
-			throw new ConversionException(new I18nMessage("", "is_not_a_valid_integer"));
+			throw new ConversionException(new I18nMessage("", "is_not_a_valid_integer", value));
         }
     }
 

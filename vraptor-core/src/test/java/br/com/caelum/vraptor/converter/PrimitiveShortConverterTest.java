@@ -24,6 +24,8 @@ import static org.hamcrest.Matchers.is;
 import org.junit.Before;
 import org.junit.Test;
 
+import br.com.caelum.vraptor.VRaptorMatchers;
+
 
 public class PrimitiveShortConverterTest {
 
@@ -39,14 +41,14 @@ public class PrimitiveShortConverterTest {
         assertThat(converter.convert("5", short.class), is(equalTo((short) 5)));
     }
 
-    @Test
-    public void shouldComplainAboutInvalidNumber() {
-    	try {
-        converter.convert("---", short.class);
-	} catch (ConversionException e) {
-			assertThat(e.getMessage(), is(equalTo("--- is not a valid integer.")));
+	@Test
+	public void shouldComplainAboutInvalidNumber() {
+		try {
+			converter.convert("---", short.class);
+		} catch (ConversionException e) {
+			assertThat(e.getValidationMessage(), VRaptorMatchers.hasMessage("--- is not a valid integer."));
 		}
-    }
+	}
 
     @Test
     public void shouldConvertToZeroWhenNull() {

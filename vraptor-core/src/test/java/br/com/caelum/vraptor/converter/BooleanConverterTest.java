@@ -17,6 +17,7 @@
 
 package br.com.caelum.vraptor.converter;
 
+import static br.com.caelum.vraptor.VRaptorMatchers.hasMessage;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
@@ -82,7 +83,7 @@ public class BooleanConverterTest {
     		converter.convert("not a boolean!", Boolean.class);
     		Assert.assertTrue(false);
     	} catch(ConversionException e) {
-    		assertThat(e.getMessage(), is(equalTo("NOT A BOOLEAN! is not a valid boolean. Please use true/false, yes/no, y/n or on/off")));
+    		assertThat(e.getValidationMessage(), hasMessage("NOT A BOOLEAN! is not a valid boolean. Please use true/false, yes/no, y/n or on/off"));
     	}
     }
 }

@@ -43,7 +43,7 @@ public class LongConverter implements Converter<Long> {
         try {
             return Long.valueOf(value);
         } catch (NumberFormatException e) {
-			throw new ConversionException(new I18nMessage("", "is_not_a_valid_integer"));
+			throw new ConversionException(new I18nMessage("", "is_not_a_valid_integer", value));
         }
     }
 

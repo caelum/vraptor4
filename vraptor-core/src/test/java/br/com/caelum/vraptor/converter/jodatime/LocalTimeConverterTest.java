@@ -1,5 +1,6 @@
 package br.com.caelum.vraptor.converter.jodatime;
 
+import static br.com.caelum.vraptor.VRaptorMatchers.hasMessage;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
@@ -58,7 +59,7 @@ public class LocalTimeConverterTest {
 		try {
 			converter.convert("xx:yy:ff", LocalTime.class);
 		} catch (ConversionException e) {
-			assertThat(e.getMessage(), is(equalTo("xx:yy:ff is not a valid time.")));
+			assertThat(e.getValidationMessage(), hasMessage("xx:yy:ff is not a valid time."));
 		}
 	}
 }

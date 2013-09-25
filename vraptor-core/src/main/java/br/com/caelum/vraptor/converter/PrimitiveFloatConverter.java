@@ -42,7 +42,7 @@ public class PrimitiveFloatConverter implements Converter<Float> {
         try {
             return Float.parseFloat(value);
         } catch (NumberFormatException e) {
-            throw new ConversionException(new I18nMessage("", "is_not_a_valid_number"));
+            throw new ConversionException(new I18nMessage("", "is_not_a_valid_number", value));
         }
     }
 

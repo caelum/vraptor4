@@ -17,6 +17,7 @@
 
 package br.com.caelum.vraptor.converter.l10n;
 
+import static br.com.caelum.vraptor.VRaptorMatchers.hasMessage;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
@@ -84,7 +85,7 @@ public class LocaleBasedDoubleConverterTest {
             converter.convert("vr3.9", Double.class);
             fail("Should throw exception");
         } catch (ConversionException e) {
-            assertThat(e.getMessage(), is(equalTo("vr3.9 is not a valid number.")));
+            assertThat(e.getValidationMessage(), hasMessage("vr3.9 is not a valid number."));
         }
     }
 }

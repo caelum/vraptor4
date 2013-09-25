@@ -43,7 +43,7 @@ public class FloatConverter implements Converter<Float> {
         try {
             return Float.valueOf(value);
         } catch (NumberFormatException e) {
-			throw new ConversionException(new I18nMessage("", "is_not_a_valid_number"));
+			throw new ConversionException(new I18nMessage("", "is_not_a_valid_number", value));
         }
     }
 

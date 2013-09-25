@@ -40,7 +40,7 @@ public class PrimitiveCharConverter implements Converter<Character> {
         }
 
         if (value.length() != 1) {
-            throw new ConversionException(new I18nMessage("", "is_not_a_valid_character"));
+            throw new ConversionException(new I18nMessage("", "is_not_a_valid_character", value));
         }
         return value.charAt(0);
     }

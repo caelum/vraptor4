@@ -59,11 +59,11 @@ public class EnumConverter implements Converter {
         try {
             int ordinal = Integer.parseInt(value);
             if (ordinal >= enumType.getEnumConstants().length) {
-    			throw new ConversionException(new I18nMessage("", "is_not_a_valid_enum_value"));
+    			throw new ConversionException(new I18nMessage("", "is_not_a_valid_enum_value", value));
             }
             return enumType.getEnumConstants()[ordinal];
         } catch (NumberFormatException e) {
-			throw new ConversionException(new I18nMessage("", "is_not_a_valid_enum_value"));
+			throw new ConversionException(new I18nMessage("", "is_not_a_valid_enum_value", value));
         }
     }
 

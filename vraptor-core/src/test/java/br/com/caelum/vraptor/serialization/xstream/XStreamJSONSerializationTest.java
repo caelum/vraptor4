@@ -23,7 +23,6 @@ import org.junit.Test;
 
 import br.com.caelum.vraptor.interceptor.DefaultTypeNameExtractor;
 import br.com.caelum.vraptor.serialization.JSONPSerialization;
-import br.com.caelum.vraptor.serialization.NullProxyInitializer;
 
 import com.google.common.collect.ForwardingCollection;
 import com.google.common.collect.Lists;
@@ -41,7 +40,6 @@ public class XStreamJSONSerializationTest {
 	private ByteArrayOutputStream stream;
 	private HttpServletResponse response;
 	private DefaultTypeNameExtractor extractor;
-	private NullProxyInitializer initializer;
     private final XStreamBuilder builder = XStreamBuilderImpl.cleanInstance();
 
     @Before
@@ -51,8 +49,7 @@ public class XStreamJSONSerializationTest {
         response = mock(HttpServletResponse.class);
         when(response.getWriter()).thenReturn(new PrintWriter(stream));
         extractor = new DefaultTypeNameExtractor();
-		initializer = new NullProxyInitializer();
-		this.serialization = new XStreamJSONSerialization(response, extractor, initializer, builder);
+		this.serialization = new XStreamJSONSerialization(response, extractor, builder);
     }
 
 	public static class Address {
@@ -379,7 +376,7 @@ public class XStreamJSONSerializationTest {
 	@Test
 	public void shouldUseCollectionConverterWhenItExists() {
 		String expectedResult = "[\"testing\"]";
-		XStreamJSONSerialization serialization = new XStreamJSONSerialization(response, extractor, initializer, builder) {
+		XStreamJSONSerialization serialization = new XStreamJSONSerialization(response, extractor, builder) {
 			@Override
 			protected XStream getXStream() {
 				XStream xStream = super.getXStream();
@@ -393,7 +390,7 @@ public class XStreamJSONSerializationTest {
 
     @Test
     public void shouldSerializeWithCallback() {
-        JSONPSerialization serialization = new XStreamJSONPSerialization(response, extractor, initializer, builder);
+        JSONPSerialization serialization = new XStreamJSONPSerialization(response, extractor, builder);
         
         String expectedResult = "calculate({\"order\": {\"price\": 15.0}})";
         Order order = new Order(new Client("nykolas lima"), 15.0, "gift bags, please");

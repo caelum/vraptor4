@@ -25,8 +25,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
-import br.com.caelum.vraptor.serialization.ProxyInitializer;
 import br.com.caelum.vraptor.serialization.Serializee;
 import br.com.caelum.vraptor.serialization.Serializer;
 import br.com.caelum.vraptor.serialization.SerializerBuilder;
@@ -42,15 +40,11 @@ public class XStreamSerializer implements SerializerBuilder {
 
 	private final XStream xstream;
 	private final Writer writer;
-	private final TypeNameExtractor extractor;
-	private final ProxyInitializer initializer;
 	private final Serializee serializee = new Serializee();
 
-	public XStreamSerializer(XStream xstream, Writer writer, TypeNameExtractor extractor, ProxyInitializer initializer) {
+	public XStreamSerializer(XStream xstream, Writer writer) {
 		this.xstream = xstream;
 		this.writer = writer;
-		this.extractor = extractor;
-		this.initializer = initializer;
 	}
 
 	public Serializer exclude(String... names) {
@@ -68,13 +62,8 @@ public class XStreamSerializer implements SerializerBuilder {
 
 		xstream.processAnnotations(obj.getClass());
 
-		serializee.setRootClass(initializer.getActualClass(obj));
-		if (alias == null && initializer.isProxy(obj.getClass())) {
-			alias = extractor.nameFor(serializee.getRootClass());
-		}
-
+		serializee.setRootClass(obj.getClass());
 		setRoot(obj);
-
 		setAlias(obj, alias);
 	}
 
@@ -125,7 +114,7 @@ public class XStreamSerializer implements SerializerBuilder {
 		Set<Class<?>> set = new HashSet<>();
 		for (Object element : list) {
 			if (element != null && !isPrimitive(element.getClass())) {
-				set.add(initializer.getActualClass(element));
+				set.add(element.getClass());
 			}
 		}
 		return set;
@@ -140,7 +129,6 @@ public class XStreamSerializer implements SerializerBuilder {
 		VRaptorClassMapper mapper = ((VRaptorXStream) xstream).getVRaptorMapper();
 		mapper.setSerializee(serializee);
 		
-		registerProxyInitializer();
 		xstream.toXML(serializee.getRoot(), writer);
 	}
 
@@ -148,9 +136,4 @@ public class XStreamSerializer implements SerializerBuilder {
 		this.serializee.setRecursive(true);
 		return this;
 	}
-
-	private void registerProxyInitializer() {
-		xstream.registerConverter(new ProxyConverter(initializer, xstream));
-	}
-	
 }

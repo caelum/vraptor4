@@ -24,7 +24,6 @@ import javax.servlet.http.HttpServletResponse;
 import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
 import br.com.caelum.vraptor.serialization.JSONSerialization;
 import br.com.caelum.vraptor.serialization.NoRootSerialization;
-import br.com.caelum.vraptor.serialization.ProxyInitializer;
 import br.com.caelum.vraptor.serialization.Serializer;
 import br.com.caelum.vraptor.serialization.SerializerBuilder;
 import br.com.caelum.vraptor.view.ResultException;
@@ -42,17 +41,15 @@ public class XStreamJSONSerialization implements JSONSerialization {
 
     protected HttpServletResponse response;
     protected TypeNameExtractor extractor;
-    protected ProxyInitializer initializer;
     protected XStreamBuilder builder;
 
 	@Deprecated // CDI eyes only
 	public XStreamJSONSerialization() {}
 
     @Inject
-    public XStreamJSONSerialization(HttpServletResponse response, TypeNameExtractor extractor, ProxyInitializer initializer, XStreamBuilder builder) {
+    public XStreamJSONSerialization(HttpServletResponse response, TypeNameExtractor extractor, XStreamBuilder builder) {
         this.response = response;
         this.extractor = extractor;
-        this.initializer = initializer;
         this.builder = builder;
     }
 
@@ -71,7 +68,7 @@ public class XStreamJSONSerialization implements JSONSerialization {
 
     protected SerializerBuilder getSerializer() {
         try {
-        	return new XStreamSerializer(getXStream(), response.getWriter(), extractor, initializer);
+        	return new XStreamSerializer(getXStream(), response.getWriter());
         } catch (IOException e) {
             throw new ResultException("Unable to serialize data", e);
         }

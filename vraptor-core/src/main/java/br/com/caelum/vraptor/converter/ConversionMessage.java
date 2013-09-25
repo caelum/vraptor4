@@ -4,6 +4,7 @@ import static com.google.common.base.Objects.toStringHelper;
 
 import java.util.ResourceBundle;
 
+import br.com.caelum.vraptor.validator.I18nMessage;
 import br.com.caelum.vraptor.validator.Message;
 
 import com.google.common.base.Objects;
@@ -17,6 +18,10 @@ public class ConversionMessage implements Message {
 
 	public ConversionMessage(Message message) {
 		this.message = message;
+	}
+
+	public ConversionMessage(String key, Object... parameters) {
+		this.message = new I18nMessage((String) null, key, parameters);
 	}
 
 	@Override

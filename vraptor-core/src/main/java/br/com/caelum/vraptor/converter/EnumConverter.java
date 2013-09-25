@@ -20,7 +20,6 @@ package br.com.caelum.vraptor.converter;
 import static com.google.common.base.Strings.isNullOrEmpty;
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
-import br.com.caelum.vraptor.validator.I18nMessage;
 
 /**
  * Accepts either the ordinal value or name. Null and empty strings are treated
@@ -51,7 +50,7 @@ public class EnumConverter implements Converter {
         try {
             return Enum.valueOf(enumType, value);
         } catch (IllegalArgumentException e) {
-			throw new ConversionException(new I18nMessage("", "is_not_a_valid_enum_value", value));
+			throw new ConversionException(new ConversionMessage("is_not_a_valid_enum_value", value));
         }
     }
 
@@ -59,11 +58,11 @@ public class EnumConverter implements Converter {
         try {
             int ordinal = Integer.parseInt(value);
             if (ordinal >= enumType.getEnumConstants().length) {
-    			throw new ConversionException(new I18nMessage("", "is_not_a_valid_enum_value", value));
+    			throw new ConversionException(new ConversionMessage("is_not_a_valid_enum_value", value));
             }
             return enumType.getEnumConstants()[ordinal];
         } catch (NumberFormatException e) {
-			throw new ConversionException(new I18nMessage("", "is_not_a_valid_enum_value", value));
+			throw new ConversionException(new ConversionMessage("is_not_a_valid_enum_value", value));
         }
     }
 

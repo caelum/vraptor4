@@ -23,7 +23,6 @@ import javax.enterprise.context.ApplicationScoped;
 
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
-import br.com.caelum.vraptor.validator.I18nMessage;
 
 /**
  * VRaptor's primitive float converter.
@@ -42,7 +41,7 @@ public class PrimitiveFloatConverter implements Converter<Float> {
         try {
             return Float.parseFloat(value);
         } catch (NumberFormatException e) {
-            throw new ConversionException(new I18nMessage("", "is_not_a_valid_number", value));
+            throw new ConversionException(new ConversionMessage("is_not_a_valid_number", value));
         }
     }
 

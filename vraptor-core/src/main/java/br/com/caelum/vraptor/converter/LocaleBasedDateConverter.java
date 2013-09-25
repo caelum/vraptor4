@@ -30,7 +30,6 @@ import javax.inject.Inject;
 
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
-import br.com.caelum.vraptor.validator.I18nMessage;
 
 /**
  * Locale based date converter.
@@ -70,7 +69,7 @@ public class LocaleBasedDateConverter
             try {
                 return formatDate.parse(value);
             } catch (ParseException pe1) {
-                throw new ConversionException(new I18nMessage("", "is_not_a_valid_date", value));
+                throw new ConversionException(new ConversionMessage("is_not_a_valid_date", value));
             }
         }
     }

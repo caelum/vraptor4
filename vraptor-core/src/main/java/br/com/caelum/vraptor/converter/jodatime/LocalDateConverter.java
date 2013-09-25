@@ -29,7 +29,7 @@ import org.joda.time.LocalDate;
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.converter.ConversionException;
-import br.com.caelum.vraptor.validator.I18nMessage;
+import br.com.caelum.vraptor.converter.ConversionMessage;
 
 /**
  * VRaptor converter for {@link LocalDate}. {@link LocalDate} is part of Joda Time library.
@@ -59,7 +59,7 @@ public class LocalDateConverter implements Converter<LocalDate> {
 
             return out.toLocalDate();
 		} catch (Exception e) {
-			throw new ConversionException(new I18nMessage("", "is_not_a_valid_date", value));
+			throw new ConversionException(new ConversionMessage("is_not_a_valid_date", value));
 		}
 	}
 }

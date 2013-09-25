@@ -28,7 +28,7 @@ import org.joda.time.DateTime;
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.converter.ConversionException;
-import br.com.caelum.vraptor.validator.I18nMessage;
+import br.com.caelum.vraptor.converter.ConversionMessage;
 
 /**
  * VRaptor converter for {@link DateTime}. {@link DateTime} is part of Joda Time library.
@@ -60,7 +60,7 @@ public class DateTimeConverter implements Converter<DateTime> {
 
             return out.toDateTime();
 		} catch (Exception e) {
-			throw new ConversionException(new I18nMessage("", "is_not_a_valid_datetime", value));
+			throw new ConversionException(new ConversionMessage("is_not_a_valid_datetime", value));
 		}
 	}
 }

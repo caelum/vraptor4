@@ -24,7 +24,6 @@ import javax.enterprise.context.ApplicationScoped;
 
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
-import br.com.caelum.vraptor.validator.I18nMessage;
 
 /**
  * VRaptor's BigInteger converter.
@@ -44,7 +43,7 @@ public class BigIntegerConverter implements Converter<BigInteger> {
 		try {
 			return new BigInteger(value);
 		} catch (NumberFormatException e) {
-			throw new ConversionException(new I18nMessage("", "is_not_a_valid_integer", value));
+			throw new ConversionException(new ConversionMessage("is_not_a_valid_integer", value));
 		}
 
 	}

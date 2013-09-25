@@ -23,7 +23,6 @@ import javax.enterprise.context.ApplicationScoped;
 
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
-import br.com.caelum.vraptor.validator.I18nMessage;
 
 /**
  * VRaptor's primitive int converter.
@@ -43,7 +42,7 @@ public class PrimitiveIntConverter implements Converter<Integer> {
         try {
             return Integer.parseInt(value);
         } catch (NumberFormatException e) {
-        	throw new ConversionException(new I18nMessage("", "is_not_a_valid_integer", value));
+        	throw new ConversionException(new ConversionMessage("is_not_a_valid_integer", value));
         }
     }
 

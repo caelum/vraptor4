@@ -13,7 +13,6 @@ import javax.inject.Inject;
 
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
-import br.com.caelum.vraptor.validator.I18nMessage;
 
 @Convert(Time.class)
 @RequestScoped
@@ -45,7 +44,7 @@ public class LocaleBasedTimeConverter implements Converter<Time> {
 			return new Time(formatHour.parse(value).getTime());
 		} catch (ParseException pe) {
 
-			throw new ConversionException(new I18nMessage("", "is_not_a_valid_time", value));
+			throw new ConversionException(new ConversionMessage("is_not_a_valid_time", value));
 		}
 	}
 

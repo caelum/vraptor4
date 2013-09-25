@@ -30,7 +30,7 @@ import javax.inject.Inject;
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.converter.ConversionException;
-import br.com.caelum.vraptor.validator.I18nMessage;
+import br.com.caelum.vraptor.converter.ConversionMessage;
 
 /**
  * Localized version of VRaptor's Double converter. This component is optional and must be declared in web.xml before
@@ -68,7 +68,7 @@ public class LocaleBasedDoubleConverter
 
             return fmt.parse(value).doubleValue();
         } catch (ParseException e) {
-            throw new ConversionException(new I18nMessage("", "is_not_a_valid_number", value));
+            throw new ConversionException(new ConversionMessage("is_not_a_valid_number", value));
         }
     }
 

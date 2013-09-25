@@ -25,7 +25,6 @@ import javax.enterprise.context.ApplicationScoped;
 
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
-import br.com.caelum.vraptor.validator.I18nMessage;
 
 import com.google.common.collect.Sets;
 
@@ -57,7 +56,7 @@ public class BooleanConverter implements Converter<Boolean> {
 			return false;
 		}
 
-		throw new ConversionException(new I18nMessage("", "is_not_a_valid_boolean", value));
+		throw new ConversionException(new ConversionMessage("is_not_a_valid_boolean", value));
 	}
 
 	private boolean matches(Set<String> words, String value) {

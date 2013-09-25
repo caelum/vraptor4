@@ -30,7 +30,6 @@ import javax.inject.Inject;
 
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
-import br.com.caelum.vraptor.validator.I18nMessage;
 
 /**
  * Locale based calendar converter.
@@ -67,7 +66,7 @@ public class LocaleBasedCalendarConverter implements Converter<Calendar> {
             calendar.setTime(date);
             return calendar;
         } catch (ParseException e) {
-			throw new ConversionException(new I18nMessage("", "is_not_a_valid_date", value));
+			throw new ConversionException(new ConversionMessage("is_not_a_valid_date", value));
         }
     }
 

@@ -23,7 +23,6 @@ import javax.enterprise.context.ApplicationScoped;
 
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
-import br.com.caelum.vraptor.validator.I18nMessage;
 
 /**
  * VRaptor's Character converter.
@@ -41,7 +40,7 @@ public class CharacterConverter implements Converter<Character> {
         }
 
         if (value.length() != 1) {
-			throw new ConversionException(new I18nMessage("", "is_not_a_valid_character", value));
+			throw new ConversionException(new ConversionMessage("is_not_a_valid_character", value));
         }
 
         return value.charAt(0);

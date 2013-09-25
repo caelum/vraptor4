@@ -24,7 +24,6 @@ import javax.enterprise.context.ApplicationScoped;
 
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
-import br.com.caelum.vraptor.validator.I18nMessage;
 
 /**
  * VRaptor's BigDecimal converter.
@@ -44,7 +43,7 @@ public class BigDecimalConverter implements Converter<BigDecimal> {
 		try {
 			return new BigDecimal(value);
 		} catch (NumberFormatException e) {
-			throw new ConversionException(new I18nMessage("", "is_not_a_valid_number", value));
+			throw new ConversionException(new ConversionMessage("is_not_a_valid_number", value));
 		}
 
 	}

@@ -29,7 +29,7 @@ import org.joda.time.LocalTime;
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.converter.ConversionException;
-import br.com.caelum.vraptor.validator.I18nMessage;
+import br.com.caelum.vraptor.converter.ConversionMessage;
 
 /**
  * VRaptor converter for {@link LocalTime}. {@link LocalTime} is part of Joda
@@ -60,7 +60,7 @@ public class LocalTimeConverter implements Converter<LocalTime> {
 
 			return out.toLocalTime();
 		} catch (Exception e) {
-			throw new ConversionException(new I18nMessage("", "is_not_a_valid_time", value));
+			throw new ConversionException(new ConversionMessage("is_not_a_valid_time", value));
 		}
 	}
 }

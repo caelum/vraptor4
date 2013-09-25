@@ -43,7 +43,6 @@ import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.interceptor.ExecuteMethodInterceptor;
 import br.com.caelum.vraptor.interceptor.Interceptor;
 import br.com.caelum.vraptor.interceptor.ParametersInstantiatorInterceptor;
-import br.com.caelum.vraptor.validator.BeanValidatorContext;
 import br.com.caelum.vraptor.validator.ValidationMessage;
 
 import com.google.common.base.Joiner;

@@ -23,6 +23,7 @@ import java.text.MessageFormat;
 import java.util.ResourceBundle;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
@@ -35,8 +36,19 @@ import br.com.caelum.vraptor.Converter;
 @Convert(char.class)
 @ApplicationScoped
 public class PrimitiveCharConverter implements Converter<Character> {
+    
+    private ResourceBundle bundle;
 
-    public Character convert(String value, Class<? extends Character> type, ResourceBundle bundle) {
+    @Deprecated
+    public PrimitiveCharConverter() {
+    }
+
+    @Inject
+    public PrimitiveCharConverter(ResourceBundle bundle) {
+        this.bundle = bundle;
+    }
+
+    public Character convert(String value, Class<? extends Character> type) {
         if (isNullOrEmpty(value)) {
             return '\u0000';
         }

@@ -35,19 +35,19 @@ public class ByteConverterTest {
 
 	@Before
 	public void setup() {
-		this.converter = new ByteConverter();
 		this.bundle = ResourceBundle.getBundle("messages");
+        this.converter = new ByteConverter(bundle);
 	}
 
 	@Test
 	public void shouldBeAbleToConvertNumbers() {
-		assertThat(converter.convert("2", Byte.class, bundle), is(equalTo((byte) 2)));
+		assertThat(converter.convert("2", Byte.class), is(equalTo((byte) 2)));
 	}
 
 	@Test
 	public void shouldComplainAboutInvalidNumber() {
 		try {
-			converter.convert("---", Byte.class, bundle);
+			converter.convert("---", Byte.class);
 		} catch (ConversionException e) {
 			assertThat(e.getMessage(), is(equalTo("--- is not a valid integer.")));
 		}
@@ -55,12 +55,12 @@ public class ByteConverterTest {
 
 	@Test
 	public void shouldNotComplainAboutNull() {
-		assertThat(converter.convert(null, Byte.class, bundle), is(nullValue()));
+		assertThat(converter.convert(null, Byte.class), is(nullValue()));
 	}
 
 	@Test
 	public void shouldNotComplainAboutEmpty() {
-		assertThat(converter.convert("", Byte.class, bundle), is(nullValue()));
+		assertThat(converter.convert("", Byte.class), is(nullValue()));
 	}
 
 }

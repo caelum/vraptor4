@@ -23,6 +23,7 @@ import java.text.MessageFormat;
 import java.util.ResourceBundle;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
@@ -35,8 +36,19 @@ import br.com.caelum.vraptor.Converter;
 @Convert(short.class)
 @ApplicationScoped
 public class PrimitiveShortConverter implements Converter<Short> {
+    
+    private ResourceBundle bundle;
 
-    public Short convert(String value, Class<? extends Short> type, ResourceBundle bundle) {
+    @Deprecated
+    public PrimitiveShortConverter() {
+    }
+
+    @Inject
+    public PrimitiveShortConverter(ResourceBundle bundle) {
+        this.bundle = bundle;
+    }
+
+    public Short convert(String value, Class<? extends Short> type) {
         if (isNullOrEmpty(value)) {
             return (short) 0;
         }

@@ -26,11 +26,12 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 import javax.enterprise.context.RequestScoped;
+import javax.enterprise.inject.Alternative;
+import javax.inject.Inject;
 
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.converter.ConversionException;
-import br.com.caelum.vraptor.core.Localization;
 
 /**
  * Localized version of VRaptor's Double converter. This component is optional and must be declared in web.xml before
@@ -42,22 +43,29 @@ import br.com.caelum.vraptor.core.Localization;
  */
 @Convert(Double.class)
 @RequestScoped
+@Alternative
 public class LocaleBasedDoubleConverter
     implements Converter<Double> {
 
-    private final Localization localization;
-
-    public LocaleBasedDoubleConverter(Localization localization) {
-        this.localization = localization;
+    private Locale locale;
+    private ResourceBundle bundle;
+    
+    @Deprecated // CDI eyes only
+    public LocaleBasedDoubleConverter() {
     }
 
-    public Double convert(String value, Class<? extends Double> type, ResourceBundle bundle) {
+    @Inject
+    public LocaleBasedDoubleConverter(Locale locale, ResourceBundle bundle) {
+        this.locale = locale;
+        this.bundle = bundle;
+    }
+
+    public Double convert(String value, Class<? extends Double> type) {
         if (isNullOrEmpty(value)) {
             return null;
         }
 
         try {
-            final Locale locale = localization.getLocale();
             DecimalFormat fmt = ((DecimalFormat) DecimalFormat.getInstance(locale));
 
             return fmt.parse(value).doubleValue();

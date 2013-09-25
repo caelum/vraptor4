@@ -22,8 +22,6 @@ import static org.hamcrest.Matchers.typeCompatibleWith;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
 
-import java.util.ResourceBundle;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -57,7 +55,7 @@ public class DefaultConvertersTest {
 
     class WrongConverter implements Converter<String> {
 
-        public String convert(String value, Class<? extends String> type, ResourceBundle bundle) {
+        public String convert(String value, Class<? extends String> type) {
             return null;
         }
     }
@@ -67,14 +65,14 @@ public class DefaultConvertersTest {
 
     @Convert(MyData.class)
     class MyConverter implements Converter<MyData> {
-        public MyData convert(String value, Class<? extends MyData> type, ResourceBundle bundle) {
+        public MyData convert(String value, Class<? extends MyData> type) {
             return null;
         }
     }
 
     @Convert(MyData.class)
     class MySecondConverter implements Converter<MyData> {
-        public MyData convert(String value, Class<? extends MyData> type, ResourceBundle bundle) {
+        public MyData convert(String value, Class<? extends MyData> type) {
             return null;
         }
     }

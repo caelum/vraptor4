@@ -35,19 +35,19 @@ public class FloatConverterTest {
 
 	@Before
 	public void setup() {
-		this.converter = new FloatConverter();
 		this.bundle = ResourceBundle.getBundle("messages");
+        this.converter = new FloatConverter(bundle);
 	}
 
 	@Test
 	public void shouldBeAbleToConvertNumbers() {
-		assertThat(converter.convert("2.3", Float.class, bundle), is(equalTo(2.3f)));
+		assertThat(converter.convert("2.3", Float.class), is(equalTo(2.3f)));
 	}
 
 	@Test
 	public void shouldComplainAboutInvalidNumber() {
 		try {
-			converter.convert("---", Float.class, bundle);
+			converter.convert("---", Float.class);
 		} catch (ConversionException e) {
 			assertThat(e.getMessage(), is(equalTo("--- is not a valid number.")));
 		}
@@ -55,12 +55,12 @@ public class FloatConverterTest {
 
 	@Test
 	public void shouldNotComplainAboutNull() {
-		assertThat(converter.convert(null, Float.class, bundle), is(nullValue()));
+		assertThat(converter.convert(null, Float.class), is(nullValue()));
 	}
 
 	@Test
 	public void shouldNotComplainAboutEmpty() {
-		assertThat(converter.convert("", Float.class, bundle), is(nullValue()));
+		assertThat(converter.convert("", Float.class), is(nullValue()));
 	}
 
 }

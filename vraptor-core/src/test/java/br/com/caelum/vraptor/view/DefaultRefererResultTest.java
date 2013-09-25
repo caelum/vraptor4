@@ -19,7 +19,6 @@ import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.controller.DefaultControllerMethod;
 import br.com.caelum.vraptor.controller.HttpMethod;
-import br.com.caelum.vraptor.core.Localization;
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.http.ParametersProvider;
 import br.com.caelum.vraptor.http.route.ControllerNotFoundException;
@@ -30,14 +29,13 @@ public class DefaultRefererResultTest {
 	private @Mock Result result;
 	private @Mock MutableRequest request;
 	private @Mock Router router;
-	private @Mock Localization localization;
 	private @Mock ParametersProvider provider;
 	private DefaultRefererResult refererResult;
 
 	@Before
 	public void setUp() throws Exception {
 		MockitoAnnotations.initMocks(this);
-		refererResult = new DefaultRefererResult(result, request, router, provider, localization);
+		refererResult = new DefaultRefererResult(result, request, router, provider);
 	}
 
 	@Test

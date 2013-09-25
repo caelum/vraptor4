@@ -34,19 +34,19 @@ public class PrimitiveCharConverterTest {
 
 	@Before
 	public void setup() {
-		this.converter = new PrimitiveCharConverter();
-		this.bundle = ResourceBundle.getBundle("messages");
+        this.bundle = ResourceBundle.getBundle("messages");
+		this.converter = new PrimitiveCharConverter(bundle);
 	}
 
 	@Test
 	public void shouldBeAbleToConvertNumbers() {
-		assertThat(converter.convert("r", char.class, bundle), is(equalTo('r')));
+		assertThat(converter.convert("r", char.class), is(equalTo('r')));
 	}
 
 	@Test
 	public void shouldComplainAboutInvalidNumber() {
 		try {
-			converter.convert("---", char.class, bundle);
+			converter.convert("---", char.class);
 		} catch (ConversionException e) {
 			assertThat(e.getMessage(), is(equalTo("--- is not a valid character.")));
 		}
@@ -54,12 +54,12 @@ public class PrimitiveCharConverterTest {
 
 	@Test
 	public void shouldConvertToZeroWhenNull() {
-		assertThat(converter.convert(null, char.class, bundle), is(equalTo('\u0000')));
+		assertThat(converter.convert(null, char.class), is(equalTo('\u0000')));
 	}
 
 	@Test
 	public void shouldConvertToZeroWhenEmpty() {
-		assertThat(converter.convert("", char.class, bundle), is(equalTo('\u0000')));
+		assertThat(converter.convert("", char.class), is(equalTo('\u0000')));
 	}
 
 }

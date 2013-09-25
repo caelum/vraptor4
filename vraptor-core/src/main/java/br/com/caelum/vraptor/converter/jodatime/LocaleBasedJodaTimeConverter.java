@@ -23,29 +23,19 @@ import java.util.Locale;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormatter;
 
-import br.com.caelum.vraptor.core.Localization;
-
 class LocaleBasedJodaTimeConverter {
 
-    private final Localization localization;
+	private final Locale locale;
 
-	public LocaleBasedJodaTimeConverter(Localization localization) {
-		this.localization = localization;
+	public LocaleBasedJodaTimeConverter(Locale locale) {
+		this.locale = locale;
 	}
 
 	public DateTime convert(String value, DateTimeFormatter formatter) throws ParseException {
-	    if (isNullOrEmpty(value)) {
+		if (isNullOrEmpty(value)) {
 			return null;
 		}
-	    
-		return formatter.withLocale(getLocale()).parseDateTime(value);
-	}
-
-	public Locale getLocale() {
-		Locale locale = localization.getLocale();
-		if (locale == null) {
-			locale = Locale.getDefault();
-		}
-		return locale;
+		
+		return formatter.withLocale(locale).parseDateTime(value);
 	}
 }

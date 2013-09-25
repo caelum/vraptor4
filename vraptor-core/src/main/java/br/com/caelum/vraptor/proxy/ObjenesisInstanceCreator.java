@@ -17,6 +17,7 @@ package br.com.caelum.vraptor.proxy;
 
 import javax.enterprise.context.ApplicationScoped;
 
+import org.objenesis.Objenesis;
 import org.objenesis.ObjenesisStd;
 
 /**
@@ -26,12 +27,11 @@ import org.objenesis.ObjenesisStd;
  * @since 3.3.1
  */
 @ApplicationScoped
-public class ObjenesisInstanceCreator
-	implements InstanceCreator {
+public class ObjenesisInstanceCreator implements InstanceCreator {
+	
+	private final Objenesis objenesis = new ObjenesisStd(true);
 
-	@SuppressWarnings("unchecked")
 	public <T> T instanceFor(Class<T> clazz) {
-		return (T) new ObjenesisStd().newInstance(clazz);
+		return objenesis.getInstantiatorOf(clazz).newInstance();
 	}
-
 }

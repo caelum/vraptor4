@@ -23,6 +23,7 @@ import java.text.MessageFormat;
 import java.util.ResourceBundle;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
@@ -35,8 +36,19 @@ import br.com.caelum.vraptor.Converter;
 @Convert(float.class)
 @ApplicationScoped
 public class PrimitiveFloatConverter implements Converter<Float> {
+    
+    private ResourceBundle bundle;
 
-    public Float convert(String value, Class<? extends Float> type, ResourceBundle bundle) {
+    @Deprecated
+    public PrimitiveFloatConverter() {
+    }
+
+    @Inject
+    public PrimitiveFloatConverter(ResourceBundle bundle) {
+        this.bundle = bundle;
+    }
+
+    public Float convert(String value, Class<? extends Float> type) {
         if (isNullOrEmpty(value)) {
             return 0f;
         }

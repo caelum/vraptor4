@@ -35,19 +35,19 @@ public class ShortConverterTest {
 
 	@Before
 	public void setup() {
-		this.converter = new ShortConverter();
 		this.bundle = ResourceBundle.getBundle("messages");
+        this.converter = new ShortConverter(bundle);
 	}
 
 	@Test
 	public void shouldBeAbleToConvertNumbers() {
-		assertThat(converter.convert("2", Short.class, bundle), is(equalTo((short) 2)));
+		assertThat(converter.convert("2", Short.class), is(equalTo((short) 2)));
 	}
 
 	@Test
 	public void shouldComplainAboutInvalidNumber() {
 		try {
-			converter.convert("---", Short.class, bundle);
+			converter.convert("---", Short.class);
 		} catch (ConversionException e) {
 			assertThat(e.getMessage(), is(equalTo("--- is not a valid integer.")));
 		}
@@ -55,12 +55,12 @@ public class ShortConverterTest {
 
 	@Test
 	public void shouldComplainAboutNull() {
-		assertThat(converter.convert(null, Short.class, bundle), is(nullValue()));
+		assertThat(converter.convert(null, Short.class), is(nullValue()));
 	}
 
     @Test
     public void shouldComplainAboutEmpty() {
-        assertThat(converter.convert("", Short.class, bundle), is(nullValue()));
+        assertThat(converter.convert("", Short.class), is(nullValue()));
     }
 
 }

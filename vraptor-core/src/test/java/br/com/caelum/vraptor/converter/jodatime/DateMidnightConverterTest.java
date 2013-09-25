@@ -34,33 +34,32 @@ public class DateMidnightConverterTest {
 	public void setup() {
 		MockitoAnnotations.initMocks(this);
 
-		bundle = ResourceBundle.getBundle("messages");
-
 		when(request.getServletContext()).thenReturn(context);
 
-		converter = new DateMidnightConverter(new Locale("pt", "BR"));
+        bundle = ResourceBundle.getBundle("messages");
+		converter = new DateMidnightConverter(new Locale("pt", "BR"), bundle);
 	}
 
 	@Test
 	public void shouldBeAbleToConvert() {
-		assertThat(converter.convert("05/06/2010", DateMidnight.class, bundle),
+		assertThat(converter.convert("05/06/2010", DateMidnight.class),
 				is(equalTo(new DateMidnight(2010, 6, 5))));
 	}
 
 	@Test
 	public void shouldBeAbleToConvertEmpty() {
-		assertThat(converter.convert("", DateMidnight.class, bundle), is(nullValue()));
+		assertThat(converter.convert("", DateMidnight.class), is(nullValue()));
 	}
 
 	@Test
 	public void shouldBeAbleToConvertNull() {
-		assertThat(converter.convert(null, DateMidnight.class, bundle), is(nullValue()));
+		assertThat(converter.convert(null, DateMidnight.class), is(nullValue()));
 	}
 
 	@Test
 	public void shouldThrowExceptionWhenUnableToParse() {
 		try {
-			converter.convert("a,10/06/2008/a/b/c", DateMidnight.class, bundle);
+			converter.convert("a,10/06/2008/a/b/c", DateMidnight.class);
 		} catch (ConversionException e) {
 			assertThat(e.getMessage(), is(equalTo("a,10/06/2008/a/b/c is not a valid datetime.")));
 		}

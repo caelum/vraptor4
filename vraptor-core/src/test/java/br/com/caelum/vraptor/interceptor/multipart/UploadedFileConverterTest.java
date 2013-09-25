@@ -26,7 +26,7 @@ public class UploadedFileConverterTest {
 		
 		UploadedFileConverter converter = new UploadedFileConverter(request);
 		
-		UploadedFile uploadedFile = converter.convert("myfile", UploadedFile.class, null);
+		UploadedFile uploadedFile = converter.convert("myfile", UploadedFile.class);
 		assertEquals(file, uploadedFile);
 	}
 }

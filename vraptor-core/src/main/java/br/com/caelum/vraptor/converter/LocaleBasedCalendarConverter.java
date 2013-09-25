@@ -43,6 +43,7 @@ import br.com.caelum.vraptor.Converter;
 public class LocaleBasedCalendarConverter implements Converter<Calendar> {
 
     private Locale locale;
+    private ResourceBundle bundle;
 
     //CDI eyes only
 	@Deprecated
@@ -50,12 +51,13 @@ public class LocaleBasedCalendarConverter implements Converter<Calendar> {
 	}
 
     @Inject
-    public LocaleBasedCalendarConverter(Locale locale) {
+    public LocaleBasedCalendarConverter(Locale locale, ResourceBundle bundle) {
         this.locale = locale;
+        this.bundle = bundle;
     }
 
     @Override
-	public Calendar convert(String value, Class<? extends Calendar> type, ResourceBundle bundle) {
+	public Calendar convert(String value, Class<? extends Calendar> type) {
         if (isNullOrEmpty(value)) {
             return null;
         }

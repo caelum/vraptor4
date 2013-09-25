@@ -39,7 +39,6 @@ import br.com.caelum.iogi.spi.ParameterNamesProvider;
 import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.converter.ConversionException;
 import br.com.caelum.vraptor.core.Converters;
-import br.com.caelum.vraptor.core.Localization;
 import br.com.caelum.vraptor.http.InvalidParameterException;
 import br.com.caelum.vraptor.validator.Message;
 import br.com.caelum.vraptor.validator.ValidationMessage;
@@ -49,7 +48,6 @@ import com.google.common.collect.ImmutableList;
 
 @RequestScoped
 public class VRaptorInstantiator implements InstantiatorWithErrors, Instantiator<Object> {
-	private Localization localization;
 	private MultiInstantiator multiInstantiator;
 	private List<Message> errors;
 	private DependencyProvider provider;
@@ -60,9 +58,8 @@ public class VRaptorInstantiator implements InstantiatorWithErrors, Instantiator
 	}
 
 	@Inject
-	public VRaptorInstantiator(Converters converters, DependencyProvider provider, Localization localization, ParameterNamesProvider parameterNameProvider, HttpServletRequest request) {
+	public VRaptorInstantiator(Converters converters, DependencyProvider provider, ParameterNamesProvider parameterNameProvider, HttpServletRequest request) {
 		this.provider = provider;
-		this.localization = localization;
 
 		ObjectInstantiator objectInstantiator = new ObjectInstantiator(this, provider, parameterNameProvider);
 		List<Instantiator<?>> instantiatorList = ImmutableList.of(
@@ -140,7 +137,7 @@ public class VRaptorInstantiator implements InstantiatorWithErrors, Instantiator
 		public Object instantiate(Target<?> target, Parameters parameters) {
 			try {
 				Parameter parameter = parameters.namedAfter(target);
-				return converterForTarget(target).convert(parameter.getValue(), target.getClassType(), localization.getBundle());
+				return converterForTarget(target).convert(parameter.getValue(), target.getClassType());
 			} catch (ConversionException ex) {
 				errors.add(new ValidationMessage(ex.getMessage(), target.getName()));
 			} catch (IllegalStateException e) {
@@ -153,7 +150,7 @@ public class VRaptorInstantiator implements InstantiatorWithErrors, Instantiator
 			List<Parameter> params = parameters.forTarget(target);
 			Parameter parameter = findParamFor(params, target);
 
-			Object converted = converterForTarget(target).convert(parameter.getValue(), target.getClassType(), localization.getBundle());
+			Object converted = converterForTarget(target).convert(parameter.getValue(), target.getClassType());
 
 			return new NewObject(this, parameters.focusedOn(target), converted).valueWithPropertiesSet();
 		}

@@ -54,30 +54,30 @@ public class LocaleBasedCalendarConverterTest {
 
 		when(request.getServletContext()).thenReturn(context);
 
-		converter = new LocaleBasedCalendarConverter(new Locale("pt", "BR"));
 		bundle = ResourceBundle.getBundle("messages");
+		converter = new LocaleBasedCalendarConverter(new Locale("pt", "BR"), bundle);
 	}
 
 	@Test
 	public void shouldBeAbleToConvert() {
-		assertThat(converter.convert("10/06/2008", Calendar.class, bundle),
+		assertThat(converter.convert("10/06/2008", Calendar.class),
 				is(equalTo((Calendar) new GregorianCalendar(2008, 5, 10))));
 	}
 
 	@Test
 	public void shouldBeAbleToConvertEmpty() {
-		assertThat(converter.convert("", Calendar.class, bundle), is(nullValue()));
+		assertThat(converter.convert("", Calendar.class), is(nullValue()));
 	}
 
 	@Test
 	public void shouldBeAbleToConvertNull() {
-		assertThat(converter.convert(null, Calendar.class, bundle), is(nullValue()));
+		assertThat(converter.convert(null, Calendar.class), is(nullValue()));
 	}
 
 	@Test
 	public void shouldThrowExceptionWhenUnableToParse() {
 		try {
-			converter.convert("a,10/06/2008/a/b/c", Calendar.class, bundle);
+			converter.convert("a,10/06/2008/a/b/c", Calendar.class);
 		} catch (ConversionException e) {
 			assertThat(e.getMessage(), is(equalTo("a,10/06/2008/a/b/c is not a valid date.")));
 		}

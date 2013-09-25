@@ -34,33 +34,32 @@ public class LocalDateTimeConverterTest {
 	public void setup() {
 		MockitoAnnotations.initMocks(this);
 
-		bundle = ResourceBundle.getBundle("messages");
-
 		when(request.getServletContext()).thenReturn(context);
 
-		converter = new LocalDateTimeConverter(new Locale("pt", "BR"));
+        bundle = ResourceBundle.getBundle("messages");
+		converter = new LocalDateTimeConverter(new Locale("pt", "BR"), bundle);
 	}
 
 	@Test
 	public void shouldBeAbleToConvert() {
-		assertThat(converter.convert("05/06/2010 3:38", LocalDateTime.class, bundle),
+		assertThat(converter.convert("05/06/2010 3:38", LocalDateTime.class),
 				is(equalTo(new LocalDateTime(2010, 6, 5, 3, 38))));
 	}
 
 	@Test
 	public void shouldBeAbleToConvertEmpty() {
-		assertThat(converter.convert("", LocalDateTime.class, bundle), is(nullValue()));
+		assertThat(converter.convert("", LocalDateTime.class), is(nullValue()));
 	}
 
 	@Test
 	public void shouldBeAbleToConvertNull() {
-		assertThat(converter.convert(null, LocalDateTime.class, bundle), is(nullValue()));
+		assertThat(converter.convert(null, LocalDateTime.class), is(nullValue()));
 	}
 
 	@Test
 	public void shouldThrowExceptionWhenUnableToParse() {
 		try {
-			converter.convert("a,10/06/2008/a/b/c", LocalDateTime.class, bundle);
+			converter.convert("a,10/06/2008/a/b/c", LocalDateTime.class);
 		} catch (ConversionException e) {
 			assertThat(e.getMessage(), is(equalTo("a,10/06/2008/a/b/c is not a valid datetime.")));
 		}

@@ -55,30 +55,30 @@ public class LocaleBasedDateConverterTest {
 
 		when(request.getServletContext()).thenReturn(context);
 
-		converter = new LocaleBasedDateConverter(new Locale("pt", "BR"));
 		bundle = ResourceBundle.getBundle("messages");
+        converter = new LocaleBasedDateConverter(new Locale("pt", "BR"), bundle);
 	}
 
 	@Test
 	public void shouldBeAbleToConvert() throws ParseException {
-		assertThat(converter.convert("10/06/2008", Date.class, bundle), is(equalTo(new SimpleDateFormat("dd/MM/yyyy")
+		assertThat(converter.convert("10/06/2008", Date.class), is(equalTo(new SimpleDateFormat("dd/MM/yyyy")
 				.parse("10/06/2008"))));
 	}
 
 	@Test
 	public void shouldBeAbleToConvertEmpty() {
-		assertThat(converter.convert("", Date.class, bundle), is(nullValue()));
+		assertThat(converter.convert("", Date.class), is(nullValue()));
 	}
 
 	@Test
 	public void shouldBeAbleToConvertNull() {
-		assertThat(converter.convert(null, Date.class, bundle), is(nullValue()));
+		assertThat(converter.convert(null, Date.class), is(nullValue()));
 	}
 
 	@Test
 	public void shouldThrowExceptionWhenUnableToParse() {
 		try {
-			converter.convert("a,10/06/2008/a/b/c", Date.class, bundle);
+			converter.convert("a,10/06/2008/a/b/c", Date.class);
 		} catch (ConversionException e) {
 			assertThat(e.getMessage(), is(equalTo("a,10/06/2008/a/b/c is not a valid date.")));
 		}

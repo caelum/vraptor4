@@ -17,6 +17,7 @@ package br.com.caelum.vraptor.validator.beanvalidation;
 
 import java.lang.reflect.Method;
 import java.util.Iterator;
+import java.util.Locale;
 import java.util.Set;
 import java.util.concurrent.ConcurrentMap;
 
@@ -37,7 +38,6 @@ import br.com.caelum.vraptor.Intercepts;
 import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.core.InterceptorStack;
-import br.com.caelum.vraptor.core.Localization;
 import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.interceptor.ExecuteMethodInterceptor;
@@ -66,7 +66,7 @@ public class MethodValidatorInterceptor implements Interceptor {
 	
 	private static final ConcurrentMap<Method, Boolean> CACHE = new MapMaker().makeMap();
 
-	private Localization localization;
+	private Locale locale;
 	private MessageInterpolator interpolator;
 	private MethodInfo methodInfo;
 	private Validator validator;
@@ -79,9 +79,9 @@ public class MethodValidatorInterceptor implements Interceptor {
 	public MethodValidatorInterceptor() {}
 
 	@Inject
-	public MethodValidatorInterceptor(Localization localization, MessageInterpolator interpolator, Validator validator,
+	public MethodValidatorInterceptor(Locale locale, MessageInterpolator interpolator, Validator validator,
 			MethodInfo methodInfo, javax.validation.Validator bvalidator, ParameterNameProvider parameterNameProvider) {
-		this.localization = localization;
+		this.locale = locale;
 		this.interpolator = interpolator;
 		this.validator = validator;
 		this.methodInfo = methodInfo;
@@ -122,7 +122,7 @@ public class MethodValidatorInterceptor implements Interceptor {
 
 		for (ConstraintViolation<Object> v : violations) {
 			BeanValidatorContext ctx = new BeanValidatorContext(v);
-			String msg = interpolator.interpolate(v.getMessageTemplate(), ctx, localization.getLocale());
+			String msg = interpolator.interpolate(v.getMessageTemplate(), ctx, locale);
 			String category = extractCategory(names, v);
 			validator.add(new ValidationMessage(msg, category));
 			

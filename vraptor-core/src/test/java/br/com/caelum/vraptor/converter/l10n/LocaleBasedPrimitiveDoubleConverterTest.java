@@ -53,38 +53,37 @@ public class LocaleBasedPrimitiveDoubleConverterTest {
 
     	when(request.getServletContext()).thenReturn(context);
 
-        converter = new LocaleBasedPrimitiveDoubleConverter(new Locale("pt", "BR"));
         bundle = ResourceBundle.getBundle("messages");
-        Locale.setDefault(Locale.ENGLISH);
+        converter = new LocaleBasedPrimitiveDoubleConverter(new Locale("pt", "BR"), bundle);
     }
 
     @Test
     public void shouldBeAbleToConvertWithPTBR() {
-        assertThat(converter.convert("10,00", double.class, bundle), is(equalTo(Double.parseDouble("10.00"))));
-        assertThat(converter.convert("10,01", double.class, bundle), is(equalTo(Double.parseDouble("10.01"))));
+        assertThat(converter.convert("10,00", double.class), is(equalTo(Double.parseDouble("10.00"))));
+        assertThat(converter.convert("10,01", double.class), is(equalTo(Double.parseDouble("10.01"))));
     }
 
     @Test
     public void shouldBeAbleToConvertWithENUS() {
-        converter = new LocaleBasedPrimitiveDoubleConverter(new Locale("en", "US"));
-        assertThat(converter.convert("10.00", double.class, bundle), is(equalTo(Double.parseDouble("10.00"))));
-        assertThat(converter.convert("10.01", double.class, bundle), is(equalTo(Double.parseDouble("10.01"))));
+        converter = new LocaleBasedPrimitiveDoubleConverter(new Locale("en", "US"), bundle);
+        assertThat(converter.convert("10.00", double.class), is(equalTo(Double.parseDouble("10.00"))));
+        assertThat(converter.convert("10.01", double.class), is(equalTo(Double.parseDouble("10.01"))));
     }
 
      @Test
      public void shouldBeAbleToConvertEmpty() {
-         assertThat(converter.convert("", double.class, bundle), is(equalTo(0d)));
+         assertThat(converter.convert("", double.class), is(equalTo(0d)));
      }
 
      @Test
      public void shouldBeAbleToConvertNull() {
-         assertThat(converter.convert(null, double.class, bundle), is(equalTo(0d)));
+         assertThat(converter.convert(null, double.class), is(equalTo(0d)));
      }
 
     @Test
     public void shouldThrowExceptionWhenUnableToParse() {
         try {
-            converter.convert("vr3.9", double.class, bundle);
+            converter.convert("vr3.9", double.class);
             fail("Should throw exception");
         } catch (ConversionException e) {
             assertThat(e.getMessage(), is(equalTo("vr3.9 is not a valid number.")));

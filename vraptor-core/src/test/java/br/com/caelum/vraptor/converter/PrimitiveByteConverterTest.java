@@ -34,19 +34,19 @@ public class PrimitiveByteConverterTest {
 
 	@Before
 	public void setup() {
-		this.converter = new PrimitiveByteConverter();
 		this.bundle = ResourceBundle.getBundle("messages");
+        this.converter = new PrimitiveByteConverter(bundle);
 	}
 
 	@Test
 	public void shouldBeAbleToConvertNumbers() {
-		assertThat(converter.convert("7", byte.class, bundle), is(equalTo((byte) 7)));
+		assertThat(converter.convert("7", byte.class), is(equalTo((byte) 7)));
 	}
 
 	@Test
 	public void shouldComplainAboutInvalidNumber() {
 		try {
-			converter.convert("---", byte.class, bundle);
+			converter.convert("---", byte.class);
 		} catch (ConversionException e) {
 			assertThat(e.getMessage(), is(equalTo("--- is not a valid integer.")));
 		}
@@ -54,12 +54,12 @@ public class PrimitiveByteConverterTest {
 
 	@Test
 	public void shouldConvertToZeroWhenNull() {
-		assertThat(converter.convert(null, byte.class, bundle), is(equalTo((byte) 0)));
+		assertThat(converter.convert(null, byte.class), is(equalTo((byte) 0)));
 	}
 
 	@Test
 	public void shouldConvertToZeroWhenEmpty() {
-		assertThat(converter.convert("", byte.class, bundle), is(equalTo((byte) 0)));
+		assertThat(converter.convert("", byte.class), is(equalTo((byte) 0)));
 	}
 
 }

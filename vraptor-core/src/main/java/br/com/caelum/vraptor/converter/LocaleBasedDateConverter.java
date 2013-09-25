@@ -44,6 +44,7 @@ public class LocaleBasedDateConverter
     implements Converter<Date> {
 
     private Locale locale;
+    private ResourceBundle bundle;
 
     //CDI eyes only
 	@Deprecated
@@ -51,12 +52,13 @@ public class LocaleBasedDateConverter
 	}
 
     @Inject
-    public LocaleBasedDateConverter(Locale locale) {
+    public LocaleBasedDateConverter(Locale locale, ResourceBundle bundle) {
         this.locale = locale;
+        this.bundle = bundle;
     }
 
     @Override
-	public Date convert(String value, Class<? extends Date> type, ResourceBundle bundle) {
+	public Date convert(String value, Class<? extends Date> type) {
         if (isNullOrEmpty(value)) {
             return null;
         }

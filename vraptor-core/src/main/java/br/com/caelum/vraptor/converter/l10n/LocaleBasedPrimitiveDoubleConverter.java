@@ -46,17 +46,19 @@ import br.com.caelum.vraptor.converter.ConversionException;
 public class LocaleBasedPrimitiveDoubleConverter implements Converter<Double> {
 
     private Locale locale;
+    private ResourceBundle bundle;
 
     @Deprecated // CDI eyes only
     public LocaleBasedPrimitiveDoubleConverter() {
     }
 
     @Inject
-	public LocaleBasedPrimitiveDoubleConverter(Locale locale) {
+	public LocaleBasedPrimitiveDoubleConverter(Locale locale, ResourceBundle bundle) {
 		this.locale = locale;
+        this.bundle = bundle;
 	}
 
-	public Double convert(String value, Class<? extends Double> type, ResourceBundle bundle) {
+	public Double convert(String value, Class<? extends Double> type) {
 		if (isNullOrEmpty(value)) {
 			return 0d;
 		}

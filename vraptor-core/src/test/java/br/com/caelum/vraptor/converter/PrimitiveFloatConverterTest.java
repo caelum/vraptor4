@@ -34,19 +34,19 @@ public class PrimitiveFloatConverterTest {
 
 	@Before
 	public void setup() {
-		this.converter = new PrimitiveFloatConverter();
 		this.bundle = ResourceBundle.getBundle("messages");
+        this.converter = new PrimitiveFloatConverter(bundle);
 	}
 
 	@Test
 	public void shouldBeAbleToConvertNumbers() {
-		assertThat(converter.convert("2.2", float.class, bundle), is(equalTo(2.2f)));
+		assertThat(converter.convert("2.2", float.class), is(equalTo(2.2f)));
 	}
 
 	@Test
 	public void shouldComplainAboutInvalidNumber() {
 		try {
-			converter.convert("---", float.class, bundle);
+			converter.convert("---", float.class);
 		} catch (ConversionException e) {
 			assertThat(e.getMessage(), is(equalTo("--- is not a valid number.")));
 		}
@@ -54,12 +54,12 @@ public class PrimitiveFloatConverterTest {
 
 	@Test
 	public void shouldConvertToZeroWhenNull() {
-		assertThat(converter.convert(null, float.class, bundle), is(equalTo(0F)));
+		assertThat(converter.convert(null, float.class), is(equalTo(0F)));
 	}
 
 	@Test
 	public void shouldConvertToZeroWhenEmpty() {
-		assertThat(converter.convert("", float.class, bundle), is(equalTo(0F)));
+		assertThat(converter.convert("", float.class), is(equalTo(0F)));
 	}
 
 }

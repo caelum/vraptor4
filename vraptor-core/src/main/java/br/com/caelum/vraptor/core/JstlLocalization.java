@@ -21,7 +21,7 @@ import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 import javax.enterprise.context.RequestScoped;
-import javax.enterprise.inject.Default;
+import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -42,8 +42,7 @@ import com.google.common.base.Strings;
  * @author Otávio Scherer Garcia
  */
 @RequestScoped
-@Default
-public class JstlLocalization implements Localization {
+public class JstlLocalization {
 
 	private static final Logger logger = LoggerFactory.getLogger(JstlLocalization.class);
 
@@ -64,7 +63,7 @@ public class JstlLocalization implements Localization {
 		this.request = request;
 	}
 
-	@Override
+	@Produces
 	public ResourceBundle getBundle() {
 		if (bundle == null) {
 			initializeBundle();
@@ -103,7 +102,7 @@ public class JstlLocalization implements Localization {
 		return new EmptyBundle();
 	}
 
-	@Override
+	@Produces
 	public Locale getLocale() {
 		if (locale == null) {
 			initializeLocale();

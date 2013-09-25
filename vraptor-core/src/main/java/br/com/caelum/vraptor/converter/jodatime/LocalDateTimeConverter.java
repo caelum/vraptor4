@@ -41,17 +41,19 @@ import br.com.caelum.vraptor.converter.ConversionException;
 public class LocalDateTimeConverter implements Converter<LocalDateTime> {
 
     private Locale locale;
+    private ResourceBundle bundle;
     
     @Deprecated // CDI eyes only
     public LocalDateTimeConverter() {
     }
 
     @Inject
-	public LocalDateTimeConverter(Locale locale) {
+	public LocalDateTimeConverter(Locale locale, ResourceBundle bundle) {
         this.locale = locale;
+        this.bundle = bundle;
     }
 
-    public LocalDateTime convert(String value, Class<? extends LocalDateTime> type, ResourceBundle bundle) {
+    public LocalDateTime convert(String value, Class<? extends LocalDateTime> type) {
         try {
             DateTime out = new LocaleBasedJodaTimeConverter(locale).convert(value, shortDateTime());
             if (out == null) {

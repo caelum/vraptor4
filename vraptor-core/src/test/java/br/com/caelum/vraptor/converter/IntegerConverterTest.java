@@ -35,19 +35,19 @@ public class IntegerConverterTest {
 
 	@Before
 	public void setup() {
-		this.converter = new IntegerConverter();
 		this.bundle = ResourceBundle.getBundle("messages");
+        this.converter = new IntegerConverter(bundle);
 	}
 
 	@Test
 	public void shouldBeAbleToConvertNumbers() {
-		assertThat(converter.convert("2", Integer.class, bundle), is(equalTo(2)));
+		assertThat(converter.convert("2", Integer.class), is(equalTo(2)));
 	}
 
 	@Test
 	public void shouldComplainAboutInvalidNumber() {
 		try {
-			converter.convert("---", Integer.class, bundle);
+			converter.convert("---", Integer.class);
 		} catch (ConversionException e) {
 			assertThat(e.getMessage(), is(equalTo("--- is not a valid integer.")));
 		}
@@ -55,11 +55,11 @@ public class IntegerConverterTest {
 
 	@Test
 	public void shouldNotComplainAboutNull() {
-		assertThat(converter.convert(null, Integer.class, bundle), is(nullValue()));
+		assertThat(converter.convert(null, Integer.class), is(nullValue()));
 	}
 
     @Test
     public void shouldNotComplainAboutEmpty() {
-        assertThat(converter.convert("", Integer.class, bundle), is(nullValue()));
+        assertThat(converter.convert("", Integer.class), is(nullValue()));
     }
 }

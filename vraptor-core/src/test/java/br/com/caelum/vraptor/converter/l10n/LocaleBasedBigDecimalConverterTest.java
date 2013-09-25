@@ -55,37 +55,37 @@ public class LocaleBasedBigDecimalConverterTest {
 
     	when(request.getServletContext()).thenReturn(context);
 
-        converter = new LocaleBasedBigDecimalConverter(new Locale("pt", "BR"));
         bundle = ResourceBundle.getBundle("messages");
+        converter = new LocaleBasedBigDecimalConverter(new Locale("pt", "BR"), bundle);
     }
 
     @Test
     public void shouldBeAbleToConvertWithPTBR() {
-        assertThat(converter.convert("10,00", BigDecimal.class, bundle), is(equalTo(new BigDecimal("10.00"))));
-        assertThat(converter.convert("10,01", BigDecimal.class, bundle), is(equalTo(new BigDecimal("10.01"))));
+        assertThat(converter.convert("10,00", BigDecimal.class), is(equalTo(new BigDecimal("10.00"))));
+        assertThat(converter.convert("10,01", BigDecimal.class), is(equalTo(new BigDecimal("10.01"))));
     }
 
     @Test
     public void shouldBeAbleToConvertWithENUS() {
-        converter = new LocaleBasedBigDecimalConverter(new Locale("en", "US"));
-        assertThat(converter.convert("10.00", BigDecimal.class, bundle), is(equalTo(new BigDecimal("10.00"))));
-        assertThat(converter.convert("10.01", BigDecimal.class, bundle), is(equalTo(new BigDecimal("10.01"))));
+        converter = new LocaleBasedBigDecimalConverter(new Locale("en", "US"), bundle);
+        assertThat(converter.convert("10.00", BigDecimal.class), is(equalTo(new BigDecimal("10.00"))));
+        assertThat(converter.convert("10.01", BigDecimal.class), is(equalTo(new BigDecimal("10.01"))));
     }
 
      @Test
      public void shouldBeAbleToConvertEmpty() {
-         assertThat(converter.convert("", BigDecimal.class, bundle), is(nullValue()));
+         assertThat(converter.convert("", BigDecimal.class), is(nullValue()));
      }
 
      @Test
      public void shouldBeAbleToConvertNull() {
-         assertThat(converter.convert(null, BigDecimal.class, bundle), is(nullValue()));
+         assertThat(converter.convert(null, BigDecimal.class), is(nullValue()));
      }
 
     @Test
     public void shouldThrowExceptionWhenUnableToParse() {
         try {
-            converter.convert("vr3.9", BigDecimal.class, bundle);
+            converter.convert("vr3.9", BigDecimal.class);
             fail("Should throw exception");
         } catch (ConversionException e) {
             assertThat(e.getMessage(), is(equalTo("vr3.9 is not a valid number.")));

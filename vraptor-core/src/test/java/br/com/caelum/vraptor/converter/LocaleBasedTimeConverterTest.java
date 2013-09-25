@@ -56,32 +56,32 @@ public class LocaleBasedTimeConverterTest {
 
         when(request.getServletContext()).thenReturn(context);
 
-        converter = new LocaleBasedTimeConverter(new Locale("pt", "BR"));
         bundle = ResourceBundle.getBundle("messages");
+        converter = new LocaleBasedTimeConverter(new Locale("pt", "BR"), bundle);
         Locale.setDefault(Locale.ENGLISH);
 	}
 
 	@Test
 	public void shouldBeAbleToConvert() throws ParseException {
 		Date date = new SimpleDateFormat("HH:mm:ss").parse("23:52:00");
-		assertThat(converter.convert("23:52", Time.class, bundle), is(equalTo(date)));
-		assertThat(converter.convert("23:52:00", Time.class, bundle), is(equalTo(date)));
+		assertThat(converter.convert("23:52", Time.class), is(equalTo(date)));
+		assertThat(converter.convert("23:52:00", Time.class), is(equalTo(date)));
 	}
 
 	@Test
 	public void shouldBeAbleToConvertEmpty() {
-		assertThat(converter.convert("", Time.class, bundle), is(nullValue()));
+		assertThat(converter.convert("", Time.class), is(nullValue()));
 	}
 
 	@Test
 	public void shouldBeAbleToConvertNull() {
-		assertThat(converter.convert(null, Time.class, bundle), is(nullValue()));
+		assertThat(converter.convert(null, Time.class), is(nullValue()));
 	}
 
 	@Test
 	public void shouldThrowExceptionWhenUnableToParse() {
 		try {
-			converter.convert("25:dd:88", Time.class, bundle);
+			converter.convert("25:dd:88", Time.class);
 		} catch (ConversionException e) {
 			assertThat(e.getMessage(), is(equalTo("25:dd:88 is not a valid time.")));
 		}

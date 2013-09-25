@@ -46,17 +46,19 @@ public class LocaleBasedDoubleConverter
     implements Converter<Double> {
 
     private Locale locale;
+    private ResourceBundle bundle;
     
     @Deprecated // CDI eyes only
     public LocaleBasedDoubleConverter() {
     }
 
     @Inject
-    public LocaleBasedDoubleConverter(Locale locale) {
+    public LocaleBasedDoubleConverter(Locale locale, ResourceBundle bundle) {
         this.locale = locale;
+        this.bundle = bundle;
     }
 
-    public Double convert(String value, Class<? extends Double> type, ResourceBundle bundle) {
+    public Double convert(String value, Class<? extends Double> type) {
         if (isNullOrEmpty(value)) {
             return null;
         }

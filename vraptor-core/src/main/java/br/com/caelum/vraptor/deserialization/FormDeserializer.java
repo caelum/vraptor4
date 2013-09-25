@@ -22,7 +22,6 @@ import java.util.List;
 import javax.inject.Inject;
 
 import br.com.caelum.vraptor.controller.ControllerMethod;
-import br.com.caelum.vraptor.core.Localization;
 import br.com.caelum.vraptor.http.ParametersProvider;
 import br.com.caelum.vraptor.validator.Message;
 
@@ -35,7 +34,6 @@ import br.com.caelum.vraptor.validator.Message;
 public class FormDeserializer implements Deserializer {
 
 	private ParametersProvider provider;
-	private Localization localization;
 	
 	//CDI eyes only
 	@Deprecated
@@ -43,15 +41,14 @@ public class FormDeserializer implements Deserializer {
 	}
 	
 	@Inject
-	public FormDeserializer(ParametersProvider provider, Localization localization) {
+	public FormDeserializer(ParametersProvider provider) {
 		this.provider = provider;
-		this.localization = localization;
 	}
 
 	@Override
 	public Object[] deserialize(InputStream inputStream, ControllerMethod method) {
 		List<Message> errors = new ArrayList<>();
-		return provider.getParametersFor(method, errors, localization.getBundle());
+		return provider.getParametersFor(method, errors);
 
 	}
 }

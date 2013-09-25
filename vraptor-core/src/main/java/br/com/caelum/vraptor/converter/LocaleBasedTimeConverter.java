@@ -21,18 +21,19 @@ import br.com.caelum.vraptor.Converter;
 public class LocaleBasedTimeConverter implements Converter<Time> {
 
 	private Locale locale;
+	private ResourceBundle bundle;
 
 	@Deprecated // CDI eyes only
 	public LocaleBasedTimeConverter() {
     }
 
 	@Inject
-	public LocaleBasedTimeConverter(Locale locale) {
+	public LocaleBasedTimeConverter(Locale locale, ResourceBundle bundle) {
 		this.locale = locale;
+        this.bundle = bundle;
 	}
 
-	public Time convert(String value, Class<? extends Time> type,
-			ResourceBundle bundle) {
+	public Time convert(String value, Class<? extends Time> type) {
 		if (isNullOrEmpty(value)) {
 			return null;
 		}

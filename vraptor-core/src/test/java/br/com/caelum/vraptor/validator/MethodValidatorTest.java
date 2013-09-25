@@ -3,7 +3,6 @@ package br.com.caelum.vraptor.validator;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.when;
 
 import java.util.Locale;
 
@@ -20,7 +19,6 @@ import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.controller.DefaultControllerMethod;
 import br.com.caelum.vraptor.core.InterceptorStack;
-import br.com.caelum.vraptor.core.Localization;
 import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.http.ParanamerNameProvider;
@@ -36,7 +34,6 @@ import br.com.caelum.vraptor.validator.beanvalidation.MethodValidatorInterceptor
  */
 public class MethodValidatorTest {
 
-    @Mock private Localization l10n;
     @Mock private InterceptorStack stack;
 
     private MethodValidatorInterceptor interceptor;
@@ -88,9 +85,8 @@ public class MethodValidatorTest {
         info.setParameters(new Object[] { null });
         info.setControllerMethod(withConstraint);
 
-        interceptor = new MethodValidatorInterceptor(l10n, interpolator, validator, info, 
+        interceptor = new MethodValidatorInterceptor(new Locale("pt", "br"), interpolator, validator, info, 
         		validatorFactory.getValidator(), provider);
-        when(l10n.getLocale()).thenReturn(new Locale("pt", "br"));
 
         MyController controller = new MyController();
         interceptor.intercept(stack, info.getControllerMethod(), controller);

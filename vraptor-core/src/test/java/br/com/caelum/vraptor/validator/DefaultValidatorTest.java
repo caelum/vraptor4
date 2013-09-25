@@ -27,7 +27,6 @@ import static org.junit.Assert.fail;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.argThat;
 import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -44,11 +43,10 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import br.com.caelum.vraptor.Controller;
 import br.com.caelum.vraptor.Result;
-import br.com.caelum.vraptor.core.Localization;
+import br.com.caelum.vraptor.core.SafeResourceBundle;
 import br.com.caelum.vraptor.proxy.JavassistProxifier;
 import br.com.caelum.vraptor.proxy.ObjenesisInstanceCreator;
 import br.com.caelum.vraptor.proxy.Proxifier;
-import br.com.caelum.vraptor.util.EmptyBundle;
 import br.com.caelum.vraptor.util.test.MockResult;
 import br.com.caelum.vraptor.view.DefaultValidationViewsFactory;
 import br.com.caelum.vraptor.view.LogicResult;
@@ -62,20 +60,20 @@ public class DefaultValidatorTest {
 	private @Mock LogicResult logicResult;
 	private @Mock PageResult pageResult;
 	private @Mock Outjector outjector;
-	private @Mock Localization localization;
 
 	private @Mock MyComponent instance;
 	private DefaultValidator validator;
 
 	@Before
 	public void setup() {
+	    ResourceBundle bundle = new SafeResourceBundle(ResourceBundle.getBundle("messages"));
+	    
 		Proxifier proxifier = new JavassistProxifier(new ObjenesisInstanceCreator());
-		this.validator = new DefaultValidator(result, new DefaultValidationViewsFactory(result, proxifier), outjector, proxifier, localization);
+		this.validator = new DefaultValidator(result, new DefaultValidationViewsFactory(result, proxifier), outjector, proxifier, bundle);
 		when(result.use(LogicResult.class)).thenReturn(logicResult);
 		when(result.use(PageResult.class)).thenReturn(pageResult);
 		when(logicResult.forwardTo(MyComponent.class)).thenReturn(instance);
 		when(pageResult.of(MyComponent.class)).thenReturn(instance);
-		when(localization.getBundle()).thenReturn(new EmptyBundle());
 	}
 
 	@Test
@@ -143,18 +141,6 @@ public class DefaultValidatorTest {
 		
 		assertThat(message0.getMessage(), is("The simple message"));
 		assertThat(message1.getMessage(), is("The simple message"));
-	}
-
-	@Test
-	public void shouldSetBundleOnI18nMessagesLazily() throws Exception {
-		I18nMessage message = new I18nMessage("cat", "msg");
-		when(localization.getBundle()).thenThrow(new AssertionError("should only call this method when calling I18nMessage's methods"));
-		
-		validator.add(message);
-		
-		doReturn(new SingletonResourceBundle("msg", "hoooooray!")).when(localization).getBundle();
-		
-		assertThat(message.getMessage(), is("hoooooray!"));
 	}
 
 	@Test(expected = IllegalStateException.class)

@@ -22,6 +22,8 @@ import static com.google.common.base.Strings.isNullOrEmpty;
 import java.text.MessageFormat;
 import java.util.ResourceBundle;
 
+import javax.inject.Inject;
+
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
 
@@ -33,23 +35,34 @@ import br.com.caelum.vraptor.Converter;
  */
 @Convert(Enum.class)
 public class EnumConverter implements Converter {
+    
+    private ResourceBundle bundle;
+    
+    @Deprecated
+    public EnumConverter() {
+    }
+
+    @Inject
+    public EnumConverter(ResourceBundle bundle) {
+        this.bundle = bundle;
+    }
 
 	/**
 	 * Enums are always final, so I can suppress this warning safely
 	 */
-    public Object convert(String value, Class type, ResourceBundle bundle) {
+    public Object convert(String value, Class type) {
 	    if (isNullOrEmpty(value)) {
             return null;
         }
 
         if (Character.isDigit(value.charAt(0))) {
-            return resolveByOrdinal(value, type, bundle);
+            return resolveByOrdinal(value, type);
         } else {
-            return resolveByName(value, type, bundle);
+            return resolveByName(value, type);
         }
     }
 
-    private Object resolveByName(String value, Class enumType, ResourceBundle bundle) {
+    private Object resolveByName(String value, Class enumType) {
         try {
             return Enum.valueOf(enumType, value);
         } catch (IllegalArgumentException e) {
@@ -57,7 +70,7 @@ public class EnumConverter implements Converter {
         }
     }
 
-    private Object resolveByOrdinal(String value, Class enumType, ResourceBundle bundle) {
+    private Object resolveByOrdinal(String value, Class enumType) {
         try {
             int ordinal = Integer.parseInt(value);
             if (ordinal >= enumType.getEnumConstants().length) {

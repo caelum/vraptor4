@@ -62,7 +62,7 @@ public class IogiParametersProvider implements ParametersProvider {
 	}
 	
 	@Override
-	public Object[] getParametersFor(ControllerMethod method, List<Message> errors, ResourceBundle bundle) {
+	public Object[] getParametersFor(ControllerMethod method, List<Message> errors) {
 		Parameters parameters = parseParameters(servletRequest);
 		List<Target<Object>> targets = createTargets(method);
 

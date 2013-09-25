@@ -36,30 +36,30 @@ public class LocalTimeConverterTest {
 
 		when(request.getServletContext()).thenReturn(context);
 
-		converter = new LocalTimeConverter(new Locale("pt", "BR"));
 		bundle = ResourceBundle.getBundle("messages");
+        converter = new LocalTimeConverter(new Locale("pt", "BR"), bundle);
 	}
 
 	@Test
 	public void shouldBeAbleToConvert() {
-		assertThat(converter.convert("15:38", LocalTime.class, bundle),
+		assertThat(converter.convert("15:38", LocalTime.class),
 				is(equalTo(new LocalTime(15, 38))));
 	}
 
 	@Test
 	public void shouldBeAbleToConvertEmpty() {
-		assertThat(converter.convert("", LocalTime.class, bundle), is(nullValue()));
+		assertThat(converter.convert("", LocalTime.class), is(nullValue()));
 	}
 
 	@Test
 	public void shouldBeAbleToConvertNull() {
-		assertThat(converter.convert(null, LocalTime.class, bundle), is(nullValue()));
+		assertThat(converter.convert(null, LocalTime.class), is(nullValue()));
 	}
 
 	@Test
 	public void shouldThrowExceptionWhenUnableToParse() {
 		try {
-			converter.convert("xx:yy:ff", LocalTime.class, bundle);
+			converter.convert("xx:yy:ff", LocalTime.class);
 		} catch (ConversionException e) {
 			assertThat(e.getMessage(), is(equalTo("xx:yy:ff is not a valid time.")));
 		}

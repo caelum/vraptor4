@@ -10,6 +10,7 @@ import static org.mockito.Mockito.when;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintWriter;
+import java.util.ResourceBundle;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -23,7 +24,6 @@ import br.com.caelum.vraptor.serialization.xstream.XStreamBuilder;
 import br.com.caelum.vraptor.serialization.xstream.XStreamBuilderImpl;
 import br.com.caelum.vraptor.serialization.xstream.XStreamJSONSerialization;
 import br.com.caelum.vraptor.serialization.xstream.XStreamXMLSerialization;
-import br.com.caelum.vraptor.util.test.MockLocalization;
 import br.com.caelum.vraptor.validator.SingletonResourceBundle;
 
 public class I18nMessageSerializationTest {
@@ -46,11 +46,8 @@ public class I18nMessageSerializationTest {
 		when(container.instanceFor(JSONSerialization.class)).thenReturn(jsonSerialization);
 		when(container.instanceFor(XMLSerialization.class)).thenReturn(xmlSerialization);
 
-		MockLocalization mockLocalization = mock(MockLocalization.class);
-		when(mockLocalization.getBundle()).thenReturn(new SingletonResourceBundle("message.cat", "Just another {0} in {1}"));
-
-		serialization = new I18nMessageSerialization(container , mockLocalization);
-
+		ResourceBundle bundle = new SingletonResourceBundle("message.cat", "Just another {0} in {1}");
+		serialization = new I18nMessageSerialization(container , bundle);
     }
 
     @Test

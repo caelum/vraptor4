@@ -42,17 +42,19 @@ import br.com.caelum.vraptor.converter.ConversionException;
 public class DateMidnightConverter implements Converter<DateMidnight> {
 
     private Locale locale;
+    private ResourceBundle bundle;
 
     @Deprecated // CDI eyes only
     public DateMidnightConverter() {
     }
 
     @Inject
-    public DateMidnightConverter(Locale locale) {
+    public DateMidnightConverter(Locale locale, ResourceBundle bundle) {
         this.locale = locale;
+        this.bundle = bundle;
     }
 
-    public DateMidnight convert(String value, Class<? extends DateMidnight> type, ResourceBundle bundle) {
+    public DateMidnight convert(String value, Class<? extends DateMidnight> type) {
         try {
             DateTime out = new LocaleBasedJodaTimeConverter(locale).convert(value, shortDate());
             if (out == null) {

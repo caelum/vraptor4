@@ -46,17 +46,19 @@ public class LocaleBasedBigDecimalConverter
     implements Converter<BigDecimal> {
 
     private Locale locale;
+    private ResourceBundle bundle;
     
     @Deprecated // CDI eyes only
     public LocaleBasedBigDecimalConverter() {
     }
 
     @Inject
-    public LocaleBasedBigDecimalConverter(Locale locale) {
+    public LocaleBasedBigDecimalConverter(Locale locale, ResourceBundle bundle) {
         this.locale = locale;
+        this.bundle = bundle;
     }
 
-    public BigDecimal convert(String value, Class<? extends BigDecimal> type, ResourceBundle bundle) {
+    public BigDecimal convert(String value, Class<? extends BigDecimal> type) {
         if (isNullOrEmpty(value)) {
             return null;
         }

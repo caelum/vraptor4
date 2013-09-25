@@ -47,17 +47,19 @@ public class LocaleBasedPrimitiveFloatConverter
     implements Converter<Float> {
 
     private Locale locale;
+    private ResourceBundle bundle;
 
     @Deprecated // CDI eyes only
     public LocaleBasedPrimitiveFloatConverter() {
     }
 
     @Inject
-    public LocaleBasedPrimitiveFloatConverter(Locale locale) {
+    public LocaleBasedPrimitiveFloatConverter(Locale locale, ResourceBundle bundle) {
         this.locale = locale;
+        this.bundle = bundle;
     }
 
-    public Float convert(String value, Class<? extends Float> type, ResourceBundle bundle) {
+    public Float convert(String value, Class<? extends Float> type) {
         if (isNullOrEmpty(value)) {
             return 0f;
         }

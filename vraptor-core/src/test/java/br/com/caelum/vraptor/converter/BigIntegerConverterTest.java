@@ -41,19 +41,19 @@ public class BigIntegerConverterTest {
 
 	@Before
 	public void setup() {
-		this.converter = new BigIntegerConverter();
 		this.bundle = ResourceBundle.getBundle("messages");
+        this.converter = new BigIntegerConverter(bundle);
 	}
 
 	@Test
 	public void shouldBeAbleToConvertIntegerNumbers() {
-		assertThat(converter.convert("3", BigInteger.class, bundle), is(equalTo(new BigInteger("3"))));
+		assertThat(converter.convert("3", BigInteger.class), is(equalTo(new BigInteger("3"))));
 	}
 
 	@Test
 	public void shouldComplainAboutNonIntegerNumbers() {
 		try {
-			converter.convert("2.3", BigInteger.class, bundle);
+			converter.convert("2.3", BigInteger.class);
 		} catch (ConversionException e) {
 			assertThat(e.getMessage(), is(equalTo("2.3 is not a valid integer.")));
 		}
@@ -62,7 +62,7 @@ public class BigIntegerConverterTest {
 	@Test
 	public void shouldComplainAboutInvalidNumber() {
 		try {
-			converter.convert("---", BigInteger.class, bundle);
+			converter.convert("---", BigInteger.class);
 		} catch (ConversionException e) {
 			assertThat(e.getMessage(), is(equalTo("--- is not a valid integer.")));
 		}
@@ -70,12 +70,12 @@ public class BigIntegerConverterTest {
 
 	@Test
 	public void shouldNotComplainAboutNull() {
-		assertThat(converter.convert(null, BigInteger.class, bundle), is(nullValue()));
+		assertThat(converter.convert(null, BigInteger.class), is(nullValue()));
 	}
 
 	@Test
 	public void shouldNotComplainAboutEmpty() {
-		assertThat(converter.convert("", BigInteger.class, bundle), is(nullValue()));
+		assertThat(converter.convert("", BigInteger.class), is(nullValue()));
 	}
 
 }

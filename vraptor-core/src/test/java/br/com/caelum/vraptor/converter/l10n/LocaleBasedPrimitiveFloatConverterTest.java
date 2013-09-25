@@ -50,38 +50,37 @@ public class LocaleBasedPrimitiveFloatConverterTest {
 
     	when(request.getServletContext()).thenReturn(context);
 
-        converter = new LocaleBasedPrimitiveFloatConverter(new Locale("pt", "BR"));
         bundle = ResourceBundle.getBundle("messages");
-        Locale.setDefault(Locale.ENGLISH);
+        converter = new LocaleBasedPrimitiveFloatConverter(new Locale("pt", "BR"), bundle);
     }
 
     @Test
     public void shouldBeAbleToConvertWithPTBR() {
-        assertThat(converter.convert("10,00", float.class, bundle), is(equalTo(Float.parseFloat("10.00"))));
-        assertThat(converter.convert("10,01", float.class, bundle), is(equalTo(Float.parseFloat("10.01"))));
+        assertThat(converter.convert("10,00", float.class), is(equalTo(Float.parseFloat("10.00"))));
+        assertThat(converter.convert("10,01", float.class), is(equalTo(Float.parseFloat("10.01"))));
     }
 
     @Test
     public void shouldBeAbleToConvertWithENUS() {
-        converter = new LocaleBasedPrimitiveFloatConverter(new Locale("en", "US"));
-        assertThat(converter.convert("10.00", float.class, bundle), is(equalTo(Float.parseFloat("10.00"))));
-        assertThat(converter.convert("10.01", float.class, bundle), is(equalTo(Float.parseFloat("10.01"))));
+        converter = new LocaleBasedPrimitiveFloatConverter(new Locale("en", "US"), bundle);
+        assertThat(converter.convert("10.00", float.class), is(equalTo(Float.parseFloat("10.00"))));
+        assertThat(converter.convert("10.01", float.class), is(equalTo(Float.parseFloat("10.01"))));
     }
 
      @Test
      public void shouldBeAbleToConvertEmpty() {
-         assertThat(converter.convert("", float.class, bundle), is(equalTo(0f)));
+         assertThat(converter.convert("", float.class), is(equalTo(0f)));
      }
 
      @Test
      public void shouldBeAbleToConvertNull() {
-         assertThat(converter.convert(null, float.class, bundle), is(equalTo(0f)));
+         assertThat(converter.convert(null, float.class), is(equalTo(0f)));
      }
 
     @Test
     public void shouldThrowExceptionWhenUnableToParse() {
         try {
-            converter.convert("vr3.9", float.class, bundle);
+            converter.convert("vr3.9", float.class);
             fail("Should throw exception");
         } catch (ConversionException e) {
             assertThat(e.getMessage(), is(equalTo("vr3.9 is not a valid number.")));

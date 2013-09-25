@@ -34,33 +34,32 @@ public class LocalDateConverterTest {
 	public void setup() {
 		MockitoAnnotations.initMocks(this);
 
-		bundle = ResourceBundle.getBundle("messages");
-
 		when(request.getServletContext()).thenReturn(context);
 
-		converter = new LocalDateConverter(new Locale("pt", "BR"));
+        bundle = ResourceBundle.getBundle("messages");
+		converter = new LocalDateConverter(new Locale("pt", "BR"), bundle);
 	}
 
 	@Test
 	public void shouldBeAbleToConvert() {
-		assertThat(converter.convert("05/06/2010", LocalDate.class, bundle),
+		assertThat(converter.convert("05/06/2010", LocalDate.class),
 				is(equalTo(new LocalDate(2010, 6, 5))));
 	}
 
 	@Test
 	public void shouldBeAbleToConvertEmpty() {
-		assertThat(converter.convert("", LocalDate.class, bundle), is(nullValue()));
+		assertThat(converter.convert("", LocalDate.class), is(nullValue()));
 	}
 
 	@Test
 	public void shouldBeAbleToConvertNull() {
-		assertThat(converter.convert(null, LocalDate.class, bundle), is(nullValue()));
+		assertThat(converter.convert(null, LocalDate.class), is(nullValue()));
 	}
 
 	@Test
 	public void shouldThrowExceptionWhenUnableToParse() {
 		try {
-			converter.convert("a,10/06/2008/a/b/c", LocalDate.class, bundle);
+			converter.convert("a,10/06/2008/a/b/c", LocalDate.class);
 		} catch (ConversionException e) {
 			assertThat(e.getMessage(), is(equalTo("a,10/06/2008/a/b/c is not a valid date.")));
 		}

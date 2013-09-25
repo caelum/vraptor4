@@ -19,14 +19,12 @@ package br.com.caelum.vraptor.converter;
 import static com.google.common.base.Strings.isNullOrEmpty;
 
 import java.math.BigDecimal;
-import java.text.MessageFormat;
-import java.util.ResourceBundle;
 
 import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
 
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
+import br.com.caelum.vraptor.validator.I18nMessage;
 
 /**
  * VRaptor's BigDecimal converter.
@@ -36,18 +34,8 @@ import br.com.caelum.vraptor.Converter;
 @Convert(BigDecimal.class)
 @ApplicationScoped
 public class BigDecimalConverter implements Converter<BigDecimal> {
-    
-    private ResourceBundle bundle;
-    
-    @Deprecated
-    public BigDecimalConverter() {
-    }
 
-    @Inject
-    public BigDecimalConverter(ResourceBundle bundle) {
-        this.bundle = bundle;
-    }
-
+    @Override
 	public BigDecimal convert(String value, Class<? extends BigDecimal> type) {
 		if (isNullOrEmpty(value)) {
 			return null;
@@ -56,7 +44,7 @@ public class BigDecimalConverter implements Converter<BigDecimal> {
 		try {
 			return new BigDecimal(value);
 		} catch (NumberFormatException e) {
-			throw new ConversionException(MessageFormat.format(bundle.getString("is_not_a_valid_number"), value));
+			throw new ConversionException(new I18nMessage("", "is_not_a_valid_number", value));
 		}
 
 	}

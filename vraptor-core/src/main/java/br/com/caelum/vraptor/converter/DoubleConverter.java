@@ -19,14 +19,11 @@ package br.com.caelum.vraptor.converter;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
 
-import java.text.MessageFormat;
-import java.util.ResourceBundle;
-
 import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
 
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
+import br.com.caelum.vraptor.validator.I18nMessage;
 
 /**
  * VRaptor's Double converter.
@@ -36,19 +33,9 @@ import br.com.caelum.vraptor.Converter;
 @Convert(Double.class)
 @ApplicationScoped
 public class DoubleConverter implements Converter<Double> {
-    
-    private ResourceBundle bundle;
 
-    @Deprecated
-    public DoubleConverter() {
-    }
-
-    @Inject
-    public DoubleConverter(ResourceBundle bundle) {
-        this.bundle = bundle;
-    }
-
-    public Double convert(String value, Class<? extends Double> type) {
+    @Override
+	public Double convert(String value, Class<? extends Double> type) {
         if (isNullOrEmpty(value)) {
             return null;
         }
@@ -56,7 +43,7 @@ public class DoubleConverter implements Converter<Double> {
         try {
             return Double.valueOf(value);
         } catch (NumberFormatException e) {
-			throw new ConversionException(MessageFormat.format(bundle.getString("is_not_a_valid_number"), value));
+			throw new ConversionException(new I18nMessage("", "is_not_a_valid_number", value));
         }
     }
 

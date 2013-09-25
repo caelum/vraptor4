@@ -19,14 +19,12 @@ package br.com.caelum.vraptor.converter;
 import static com.google.common.base.Strings.isNullOrEmpty;
 
 import java.math.BigInteger;
-import java.text.MessageFormat;
-import java.util.ResourceBundle;
 
 import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
 
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
+import br.com.caelum.vraptor.validator.I18nMessage;
 
 /**
  * VRaptor's BigInteger converter.
@@ -36,18 +34,8 @@ import br.com.caelum.vraptor.Converter;
 @Convert(BigInteger.class)
 @ApplicationScoped
 public class BigIntegerConverter implements Converter<BigInteger> {
-    
-    private ResourceBundle bundle;
 
-    @Deprecated
-    public BigIntegerConverter() {
-    }
-
-    @Inject
-    public BigIntegerConverter(ResourceBundle bundle) {
-        this.bundle = bundle;
-    }
-
+	@Override
 	public BigInteger convert(String value, Class<? extends BigInteger> type) {
 	    if (isNullOrEmpty(value)) {
 			return null;
@@ -56,7 +44,7 @@ public class BigIntegerConverter implements Converter<BigInteger> {
 		try {
 			return new BigInteger(value);
 		} catch (NumberFormatException e) {
-			throw new ConversionException(MessageFormat.format(bundle.getString("is_not_a_valid_integer"), value));
+			throw new ConversionException(new I18nMessage("", "is_not_a_valid_integer", value));
 		}
 
 	}

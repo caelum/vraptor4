@@ -19,14 +19,11 @@ package br.com.caelum.vraptor.converter;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
 
-import java.text.MessageFormat;
-import java.util.ResourceBundle;
-
 import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
 
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
+import br.com.caelum.vraptor.validator.I18nMessage;
 
 /**
  * VRaptor's primitive float converter.
@@ -36,19 +33,8 @@ import br.com.caelum.vraptor.Converter;
 @Convert(float.class)
 @ApplicationScoped
 public class PrimitiveFloatConverter implements Converter<Float> {
-    
-    private ResourceBundle bundle;
-
-    @Deprecated
-    public PrimitiveFloatConverter() {
-    }
-
-    @Inject
-    public PrimitiveFloatConverter(ResourceBundle bundle) {
-        this.bundle = bundle;
-    }
-
-    public Float convert(String value, Class<? extends Float> type) {
+    @Override
+	public Float convert(String value, Class<? extends Float> type) {
         if (isNullOrEmpty(value)) {
             return 0f;
         }
@@ -56,7 +42,7 @@ public class PrimitiveFloatConverter implements Converter<Float> {
         try {
             return Float.parseFloat(value);
         } catch (NumberFormatException e) {
-            throw new ConversionException(MessageFormat.format(bundle.getString("is_not_a_valid_number"), value));
+            throw new ConversionException(new I18nMessage("", "is_not_a_valid_number"));
         }
     }
 

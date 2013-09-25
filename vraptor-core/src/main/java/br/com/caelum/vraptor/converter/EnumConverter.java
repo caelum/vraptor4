@@ -18,14 +18,9 @@
 package br.com.caelum.vraptor.converter;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
-
-import java.text.MessageFormat;
-import java.util.ResourceBundle;
-
-import javax.inject.Inject;
-
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
+import br.com.caelum.vraptor.validator.I18nMessage;
 
 /**
  * Accepts either the ordinal value or name. Null and empty strings are treated
@@ -35,22 +30,12 @@ import br.com.caelum.vraptor.Converter;
  */
 @Convert(Enum.class)
 public class EnumConverter implements Converter {
-    
-    private ResourceBundle bundle;
-    
-    @Deprecated
-    public EnumConverter() {
-    }
-
-    @Inject
-    public EnumConverter(ResourceBundle bundle) {
-        this.bundle = bundle;
-    }
 
 	/**
 	 * Enums are always final, so I can suppress this warning safely
 	 */
-    public Object convert(String value, Class type) {
+    @Override
+	public Object convert(String value, Class type) {
 	    if (isNullOrEmpty(value)) {
             return null;
         }
@@ -66,7 +51,7 @@ public class EnumConverter implements Converter {
         try {
             return Enum.valueOf(enumType, value);
         } catch (IllegalArgumentException e) {
-			throw new ConversionException(MessageFormat.format(bundle.getString("is_not_a_valid_enum_value"), value));
+			throw new ConversionException(new I18nMessage("", "is_not_a_valid_enum_value", value));
         }
     }
 
@@ -74,11 +59,11 @@ public class EnumConverter implements Converter {
         try {
             int ordinal = Integer.parseInt(value);
             if (ordinal >= enumType.getEnumConstants().length) {
-    			throw new ConversionException(MessageFormat.format(bundle.getString("is_not_a_valid_enum_value"), value));
+    			throw new ConversionException(new I18nMessage("", "is_not_a_valid_enum_value"));
             }
             return enumType.getEnumConstants()[ordinal];
         } catch (NumberFormatException e) {
-			throw new ConversionException(MessageFormat.format(bundle.getString("is_not_a_valid_enum_value"), value));
+			throw new ConversionException(new I18nMessage("", "is_not_a_valid_enum_value"));
         }
     }
 

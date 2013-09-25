@@ -19,14 +19,11 @@ package br.com.caelum.vraptor.converter;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
 
-import java.text.MessageFormat;
-import java.util.ResourceBundle;
-
 import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
 
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
+import br.com.caelum.vraptor.validator.I18nMessage;
 
 /**
  * VRaptor's primitive short converter.
@@ -36,19 +33,8 @@ import br.com.caelum.vraptor.Converter;
 @Convert(short.class)
 @ApplicationScoped
 public class PrimitiveShortConverter implements Converter<Short> {
-    
-    private ResourceBundle bundle;
-
-    @Deprecated
-    public PrimitiveShortConverter() {
-    }
-
-    @Inject
-    public PrimitiveShortConverter(ResourceBundle bundle) {
-        this.bundle = bundle;
-    }
-
-    public Short convert(String value, Class<? extends Short> type) {
+    @Override
+	public Short convert(String value, Class<? extends Short> type) {
         if (isNullOrEmpty(value)) {
             return (short) 0;
         }
@@ -56,7 +42,7 @@ public class PrimitiveShortConverter implements Converter<Short> {
         try {
             return Short.parseShort(value);
         } catch (NumberFormatException e) {
-            throw new ConversionException(MessageFormat.format(bundle.getString("is_not_a_valid_integer"), value));
+            throw new ConversionException(new I18nMessage("", "is_not_a_valid_integer"));
         }
     }
 

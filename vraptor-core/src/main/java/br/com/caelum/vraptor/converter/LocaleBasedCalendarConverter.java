@@ -19,19 +19,18 @@ package br.com.caelum.vraptor.converter;
 import static com.google.common.base.Strings.isNullOrEmpty;
 
 import java.text.DateFormat;
-import java.text.MessageFormat;
 import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
-import java.util.ResourceBundle;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
+import br.com.caelum.vraptor.validator.I18nMessage;
 
 /**
  * Locale based calendar converter.
@@ -43,7 +42,6 @@ import br.com.caelum.vraptor.Converter;
 public class LocaleBasedCalendarConverter implements Converter<Calendar> {
 
     private Locale locale;
-    private ResourceBundle bundle;
 
     //CDI eyes only
 	@Deprecated
@@ -51,9 +49,8 @@ public class LocaleBasedCalendarConverter implements Converter<Calendar> {
 	}
 
     @Inject
-    public LocaleBasedCalendarConverter(Locale locale, ResourceBundle bundle) {
+    public LocaleBasedCalendarConverter(Locale locale) {
         this.locale = locale;
-        this.bundle = bundle;
     }
 
     @Override
@@ -63,14 +60,14 @@ public class LocaleBasedCalendarConverter implements Converter<Calendar> {
         }
 
         DateFormat format = DateFormat.getDateInstance(DateFormat.SHORT, locale);
-        
+
         try {
             Date date = format.parse(value);
             Calendar calendar = new GregorianCalendar();
             calendar.setTime(date);
             return calendar;
         } catch (ParseException e) {
-			throw new ConversionException(MessageFormat.format(bundle.getString("is_not_a_valid_date"), value));
+			throw new ConversionException(new I18nMessage("", "is_not_a_valid_date"));
         }
     }
 

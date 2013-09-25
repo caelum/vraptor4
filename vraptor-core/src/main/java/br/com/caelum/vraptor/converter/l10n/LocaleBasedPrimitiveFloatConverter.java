@@ -20,10 +20,8 @@ package br.com.caelum.vraptor.converter.l10n;
 import static com.google.common.base.Strings.isNullOrEmpty;
 
 import java.text.DecimalFormat;
-import java.text.MessageFormat;
 import java.text.ParseException;
 import java.util.Locale;
-import java.util.ResourceBundle;
 
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.inject.Alternative;
@@ -32,6 +30,7 @@ import javax.inject.Inject;
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.converter.ConversionException;
+import br.com.caelum.vraptor.validator.I18nMessage;
 
 /**
  * Localized version of VRaptor's Float converter. This component is optional and must be declared in web.xml before
@@ -49,19 +48,18 @@ public class LocaleBasedPrimitiveFloatConverter
     implements Converter<Float> {
 
     private Locale locale;
-    private ResourceBundle bundle;
 
     @Deprecated // CDI eyes only
     public LocaleBasedPrimitiveFloatConverter() {
     }
 
     @Inject
-    public LocaleBasedPrimitiveFloatConverter(Locale locale, ResourceBundle bundle) {
+    public LocaleBasedPrimitiveFloatConverter(Locale locale) {
         this.locale = locale;
-        this.bundle = bundle;
     }
 
-    public Float convert(String value, Class<? extends Float> type) {
+    @Override
+	public Float convert(String value, Class<? extends Float> type) {
         if (isNullOrEmpty(value)) {
             return 0f;
         }
@@ -71,7 +69,7 @@ public class LocaleBasedPrimitiveFloatConverter
 
             return fmt.parse(value).floatValue();
         } catch (ParseException e) {
-            throw new ConversionException(MessageFormat.format(bundle.getString("is_not_a_valid_number"), value));
+            throw new ConversionException(new I18nMessage("", "is_not_a_valid_number", value));
         }
     }
 }

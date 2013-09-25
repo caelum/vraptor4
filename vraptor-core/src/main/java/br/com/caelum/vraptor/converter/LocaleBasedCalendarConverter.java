@@ -58,10 +58,8 @@ public class LocaleBasedCalendarConverter implements Converter<Calendar> {
 			return null;
 		}
 
-		DateFormat format = DateFormat.getDateInstance(DateFormat.SHORT, locale);
-
 		try {
-			Date date = format.parse(value);
+			Date date = getDateFormat().parse(value);
 			Calendar calendar = new GregorianCalendar();
 			calendar.setTime(date);
 			return calendar;
@@ -70,4 +68,7 @@ public class LocaleBasedCalendarConverter implements Converter<Calendar> {
 		}
 	}
 
+	protected DateFormat getDateFormat() {
+		return DateFormat.getDateInstance(DateFormat.SHORT, locale);
+	}
 }

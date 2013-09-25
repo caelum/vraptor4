@@ -34,7 +34,7 @@ public class EnumConverterTest {
 
 	@Before
 	public void setup() {
-        this.converter = new EnumConverter();
+		this.converter = new EnumConverter();
 	}
 
 	@Test

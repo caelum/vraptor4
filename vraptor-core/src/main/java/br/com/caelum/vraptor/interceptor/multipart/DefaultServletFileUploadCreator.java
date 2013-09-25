@@ -30,9 +30,9 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
  */
 @RequestScoped
 public class DefaultServletFileUploadCreator
-    implements ServletFileUploadCreator {
+	implements ServletFileUploadCreator {
 
-    public ServletFileUpload create(FileItemFactory fileItemFactory) {
-        return new ServletFileUpload(fileItemFactory);
-    }
+	public ServletFileUpload create(FileItemFactory fileItemFactory) {
+		return new ServletFileUpload(fileItemFactory);
+	}
 }

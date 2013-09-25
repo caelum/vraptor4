@@ -35,7 +35,7 @@ public class I18nMessageSerialization implements View{
 
 	private Container container;
 	private I18nMessage i18nMessage;
-    private ResourceBundle bundle;
+	private ResourceBundle bundle;
 
 	//CDI eyes only
 	@Deprecated
@@ -44,8 +44,8 @@ public class I18nMessageSerialization implements View{
 
 	public I18nMessageSerialization(Container container, ResourceBundle bundle) {
 		this.container = container;
-        this.bundle = bundle;
-    }
+		this.bundle = bundle;
+	}
 
 	public I18nMessageSerialization from(String category, String key, Object...params) {
 		I18nMessage i18nMessage = new I18nMessage(category, key, params);

@@ -24,7 +24,7 @@ import javax.enterprise.inject.Produces;
 public class TheComponentFactory {
 	
 	@Produces
-    public NeedsCustomInstantiation getInstance() {
-        return new NeedsCustomInstantiation();
-    }
+	public NeedsCustomInstantiation getInstance() {
+		return new NeedsCustomInstantiation();
+	}
 }

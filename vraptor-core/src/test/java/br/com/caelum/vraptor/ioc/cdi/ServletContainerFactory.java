@@ -55,10 +55,10 @@ public class ServletContainerFactory {
 		return context;
 	}
 
-    private void configureExpectations(ServletContext context) {
-    	Enumeration<String> emptyEnumeration = Collections.enumeration(Collections.<String>emptyList());
-    	when(context.getInitParameterNames()).thenReturn(emptyEnumeration);
-    	when(context.getAttributeNames()).thenReturn(emptyEnumeration);
+	private void configureExpectations(ServletContext context) {
+		Enumeration<String> emptyEnumeration = Collections.enumeration(Collections.<String>emptyList());
+		when(context.getInitParameterNames()).thenReturn(emptyEnumeration);
+		when(context.getAttributeNames()).thenReturn(emptyEnumeration);
    }
 
 	private String getClassDir() {

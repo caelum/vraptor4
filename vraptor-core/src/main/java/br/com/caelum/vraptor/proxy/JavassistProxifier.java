@@ -41,98 +41,98 @@ import org.slf4j.LoggerFactory;
 @ApplicationScoped
 public class JavassistProxifier implements Proxifier {
 
-    private static final Logger logger = LoggerFactory.getLogger(JavassistProxifier.class);
+	private static final Logger logger = LoggerFactory.getLogger(JavassistProxifier.class);
 
-    /**
-     * Methods like toString and finalize will be ignored.
-     */
-    private static final List<Method> OBJECT_METHODS = Arrays.asList(Object.class.getDeclaredMethods());
+	/**
+	 * Methods like toString and finalize will be ignored.
+	 */
+	private static final List<Method> OBJECT_METHODS = Arrays.asList(Object.class.getDeclaredMethods());
 
-    /**
-     * Do not proxy these methods.
-     */
-    private static final MethodFilter IGNORE_BRIDGE_AND_OBJECT_METHODS = new MethodFilter() {
-        @Override
+	/**
+	 * Do not proxy these methods.
+	 */
+	private static final MethodFilter IGNORE_BRIDGE_AND_OBJECT_METHODS = new MethodFilter() {
+		@Override
 		public boolean isHandled(Method method) {
-            return !method.isBridge() && !OBJECT_METHODS.contains(method);
-        }
-    };
+			return !method.isBridge() && !OBJECT_METHODS.contains(method);
+		}
+	};
 
-    private InstanceCreator instanceCreator;
+	private InstanceCreator instanceCreator;
 
-    //CDI eyes only
+	//CDI eyes only
 	@Deprecated
 	public JavassistProxifier() {
 	}
 
 	@Inject
-    public JavassistProxifier(InstanceCreator instanceCreator) {
-        this.instanceCreator = instanceCreator;
-    }
+	public JavassistProxifier(InstanceCreator instanceCreator) {
+		this.instanceCreator = instanceCreator;
+	}
 
-    @Override
+	@Override
 	public <T> T proxify(Class<T> type, MethodInvocation<? super T> handler) {
-        final ProxyFactory factory = new ProxyFactory();
-        factory.setFilter(IGNORE_BRIDGE_AND_OBJECT_METHODS);
-        Class<?> rawType = extractRawType(type);
+		final ProxyFactory factory = new ProxyFactory();
+		factory.setFilter(IGNORE_BRIDGE_AND_OBJECT_METHODS);
+		Class<?> rawType = extractRawType(type);
 
-        if (type.isInterface()) {
-            factory.setInterfaces(new Class[] { rawType });
-        } else {
-            factory.setSuperclass(rawType);
-        }
+		if (type.isInterface()) {
+			factory.setInterfaces(new Class[] { rawType });
+		} else {
+			factory.setSuperclass(rawType);
+		}
 
-        Class<?> proxyClass = factory.createClass();
+		Class<?> proxyClass = factory.createClass();
 
-        Object proxyInstance = instanceCreator.instanceFor(proxyClass);
-        setHandler(proxyInstance, handler);
+		Object proxyInstance = instanceCreator.instanceFor(proxyClass);
+		setHandler(proxyInstance, handler);
 
-        logger.debug("a proxy for {} was created as {}", type, proxyClass);
+		logger.debug("a proxy for {} was created as {}", type, proxyClass);
 
-        return type.cast(proxyInstance);
-    }
+		return type.cast(proxyInstance);
+	}
 
-    private <T> Class<?> extractRawType(Class<T> type) {
-        return isProxyType(type) ? type.getSuperclass() : type;
-    }
+	private <T> Class<?> extractRawType(Class<T> type) {
+		return isProxyType(type) ? type.getSuperclass() : type;
+	}
 
-    @Override
+	@Override
 	public boolean isProxy(Object o) {
-        return o != null && isProxyType(o.getClass());
-    }
+		return o != null && isProxyType(o.getClass());
+	}
 
-    @Override
+	@Override
 	public boolean isProxyType(Class<?> type) {
-        boolean proxy = isProxyClass(type) || isWeldProxy(type);
-        logger.debug("Class {} is proxy: {}", type.getName(), proxy);
-        
+		boolean proxy = isProxyClass(type) || isWeldProxy(type);
+		logger.debug("Class {} is proxy: {}", type.getName(), proxy);
+		
 		return proxy;
 	}
 
-    // FIXME only works with weld, and can throws ClassNotFoundException in another CDI implementations
-    private boolean isWeldProxy(Class<?> type) {
-        return org.jboss.weld.bean.proxy.ProxyFactory.isProxy(type);
-    }
+	// FIXME only works with weld, and can throws ClassNotFoundException in another CDI implementations
+	private boolean isWeldProxy(Class<?> type) {
+		return org.jboss.weld.bean.proxy.ProxyFactory.isProxy(type);
+	}
 
-    private <T> void setHandler(Object proxyInstance, final MethodInvocation<? super T> handler) {
-        ProxyObject proxyObject = (ProxyObject) proxyInstance;
+	private <T> void setHandler(Object proxyInstance, final MethodInvocation<? super T> handler) {
+		ProxyObject proxyObject = (ProxyObject) proxyInstance;
 
-        proxyObject.setHandler(new MethodHandler() {
-            @Override
+		proxyObject.setHandler(new MethodHandler() {
+			@Override
 			public Object invoke(final Object self, final Method thisMethod, final Method proceed, Object[] args)
-                throws Throwable {
+				throws Throwable {
 
-                return handler.intercept((T) self, thisMethod, args, new SuperMethod() {
-                    @Override
+				return handler.intercept((T) self, thisMethod, args, new SuperMethod() {
+					@Override
 					public Object invoke(Object proxy, Object[] args) {
-                        try {
-                            return proceed.invoke(proxy, args);
-                        } catch (Throwable throwable) {
-                            throw new ProxyInvocationException(throwable);
-                        }
-                    }
-                });
-            }
-        });
-    }
+						try {
+							return proceed.invoke(proxy, args);
+						} catch (Throwable throwable) {
+							throw new ProxyInvocationException(throwable);
+						}
+					}
+				});
+			}
+		});
+	}
 }

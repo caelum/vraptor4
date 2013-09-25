@@ -16,29 +16,29 @@ import br.com.caelum.vraptor.config.BasicConfiguration;
 
 public class EncodingHandlerTest {
 
-    private BasicConfiguration configuration;
-    private ServletContext context;
+	private BasicConfiguration configuration;
+	private ServletContext context;
 
-    @Before
-    public void setUp() throws Exception {
-        configuration = mock(BasicConfiguration.class);
-        context = mock(ServletContext.class);
-    }
+	@Before
+	public void setUp() throws Exception {
+		configuration = mock(BasicConfiguration.class);
+		context = mock(ServletContext.class);
+	}
 
-    @Test
-    public void shouldReturnUTF8WhenThereIsNoEncodingInitParameter() throws Exception {
-        when(configuration.getEncoding()).thenReturn(null);
+	@Test
+	public void shouldReturnUTF8WhenThereIsNoEncodingInitParameter() throws Exception {
+		when(configuration.getEncoding()).thenReturn(null);
 
-        EncodingHandler encodingHandler = new EncodingHandler(configuration);
-        assertThat(encodingHandler.getEncoding(), is(defaultCharset().name()));
-    }
-    @Test
-    public void shouldReturnWebxmlValueWhenThereIsAnEncodingInitParameter() throws Exception {
-        configuration = new BasicConfiguration(context);
-    	when(context.getInitParameter(anyString())).thenReturn("ISO-8859-1");
+		EncodingHandler encodingHandler = new EncodingHandler(configuration);
+		assertThat(encodingHandler.getEncoding(), is(defaultCharset().name()));
+	}
+	@Test
+	public void shouldReturnWebxmlValueWhenThereIsAnEncodingInitParameter() throws Exception {
+		configuration = new BasicConfiguration(context);
+		when(context.getInitParameter(anyString())).thenReturn("ISO-8859-1");
 
-        EncodingHandler encodingHandler = new EncodingHandler(configuration);
-        assertThat(encodingHandler.getEncoding(), is("ISO-8859-1"));
-    }
+		EncodingHandler encodingHandler = new EncodingHandler(configuration);
+		assertThat(encodingHandler.getEncoding(), is("ISO-8859-1"));
+	}
 
 }

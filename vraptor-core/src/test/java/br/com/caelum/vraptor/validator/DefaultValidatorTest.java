@@ -64,7 +64,7 @@ public class DefaultValidatorTest {
 
 	@Before
 	public void setup() {
-	    ResourceBundle bundle = new SafeResourceBundle(ResourceBundle.getBundle("messages"));
+		ResourceBundle bundle = new SafeResourceBundle(ResourceBundle.getBundle("messages"));
 
 		Proxifier proxifier = new JavassistProxifier(new ObjenesisInstanceCreator());
 		this.validator = new DefaultValidator(result, new DefaultValidationViewsFactory(result, proxifier), outjector, proxifier, bundle);
@@ -109,9 +109,9 @@ public class DefaultValidatorTest {
 	@Test
 	public void shouldNotRedirectIfHasNotErrors() {
 		try {
-    		validator.onErrorRedirectTo(MyComponent.class).logic();
-    		assertThat(validator.getErrors(), hasSize(0));
-    		verify(outjector, never()).outjectRequestMap();
+			validator.onErrorRedirectTo(MyComponent.class).logic();
+			assertThat(validator.getErrors(), hasSize(0));
+			verify(outjector, never()).outjectRequestMap();
 		} catch (ValidationException e) {
 			fail("no error occurs");
 		}

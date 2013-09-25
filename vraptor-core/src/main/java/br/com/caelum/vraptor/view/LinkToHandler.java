@@ -57,16 +57,16 @@ public class LinkToHandler extends ForwardingMap<Class<?>, Object> {
 		context.setAttribute("linkTo", this);
 	}
 
-    @Override
-    protected Map<Class<?>, Object> delegate() {
-        return Collections.emptyMap();
-    }
+	@Override
+	protected Map<Class<?>, Object> delegate() {
+		return Collections.emptyMap();
+	}
 
-    @Override
-    public LinkMethod get(Object key) {
-    	BeanClass beanClass = (BeanClass) key;
-        return new LinkMethod(beanClass.getType());
-    }
+	@Override
+	public LinkMethod get(Object key) {
+		BeanClass beanClass = (BeanClass) key;
+		return new LinkMethod(beanClass.getType());
+	}
 
 	class LinkMethod extends ForwardingMap<String, Linker> {
 

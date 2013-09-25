@@ -66,7 +66,7 @@ import br.com.caelum.vraptor.proxy.Proxifier;
  */
 public class DefaultRouterTest {
 
-    private Proxifier proxifier;
+	private Proxifier proxifier;
 	private DefaultRouter router;
 	private VRaptorRequest request;
 	private ControllerMethod method;

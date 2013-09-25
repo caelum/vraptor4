@@ -9,7 +9,7 @@ import br.com.caelum.vraptor.Path;
 @Vetoed
 public class NoPath {
 
-    @Path( {})
-    public void noPaths() {
-    }
+	@Path( {})
+	public void noPaths() {
+	}
 }

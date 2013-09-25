@@ -12,9 +12,9 @@ public class DefaultXMLConfigurationTest {
 	private DefaultXMLConfiguration config;
 
 	@Before
-    public void setup() {
+	public void setup() {
 		this.config = new DefaultXMLConfiguration();
-    }
+	}
 
 	@Test
 	public void shouldUndernalizeAllCamelcase() {

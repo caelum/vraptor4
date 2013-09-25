@@ -44,37 +44,37 @@ import br.com.caelum.vraptor.ioc.Container;
 
 public class VRaptorTest {
 
-    private @Mock FilterConfig config;
-    private @Mock ServletContext context;
-    private @Mock static Container container;
-    private @Mock RequestExecution execution;
+	private @Mock FilterConfig config;
+	private @Mock ServletContext context;
+	private @Mock static Container container;
+	private @Mock RequestExecution execution;
 
-    @Before
-    public void setup() {
-    	MockitoAnnotations.initMocks(this);
-    }
+	@Before
+	public void setup() {
+		MockitoAnnotations.initMocks(this);
+	}
 
-    @Test(expected = ServletException.class)
-    public void shoudlComplainIfNotInAServletEnviroment() throws IOException, ServletException {
-        ServletRequest request = mock(ServletRequest.class);
-        ServletResponse response = mock(ServletResponse.class);
-        
-        new VRaptor().doFilter(request, response, null);
-    }
+	@Test(expected = ServletException.class)
+	public void shoudlComplainIfNotInAServletEnviroment() throws IOException, ServletException {
+		ServletRequest request = mock(ServletRequest.class);
+		ServletResponse response = mock(ServletResponse.class);
+		
+		new VRaptor().doFilter(request, response, null);
+	}
 
-    @Test
-    @Ignore
-    public void shouldDeferToContainerIfStaticFile() throws IOException, ServletException {
-        VRaptor vraptor = new VRaptor();
-        HttpServletRequest request = mock(HttpServletRequest.class);
-        HttpServletResponse response = mock(HttpServletResponse.class);
-        StaticContentHandler handler = mock(StaticContentHandler.class);
-        FilterChain chain = mock(FilterChain.class);
-        
-        when(handler.requestingStaticFile(request)).thenReturn(true);
-        
-        vraptor.doFilter(request, response, chain);
-        
-        verify(handler, times(1)).deferProcessingToContainer(chain, request, response);
-    }
+	@Test
+	@Ignore
+	public void shouldDeferToContainerIfStaticFile() throws IOException, ServletException {
+		VRaptor vraptor = new VRaptor();
+		HttpServletRequest request = mock(HttpServletRequest.class);
+		HttpServletResponse response = mock(HttpServletResponse.class);
+		StaticContentHandler handler = mock(StaticContentHandler.class);
+		FilterChain chain = mock(FilterChain.class);
+		
+		when(handler.requestingStaticFile(request)).thenReturn(true);
+		
+		vraptor.doFilter(request, response, chain);
+		
+		verify(handler, times(1)).deferProcessingToContainer(chain, request, response);
+	}
 }

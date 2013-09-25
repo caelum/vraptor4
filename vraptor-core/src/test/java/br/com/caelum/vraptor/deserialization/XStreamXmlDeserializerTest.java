@@ -39,7 +39,7 @@ public class XStreamXmlDeserializerTest {
 	public void setUp() throws Exception {
 		provider = mock(ParameterNameProvider.class);
 
-        deserializer = new XStreamXMLDeserializer(provider, XStreamBuilderImpl.cleanInstance(new CalendarConverter()));
+		deserializer = new XStreamXMLDeserializer(provider, XStreamBuilderImpl.cleanInstance(new CalendarConverter()));
 		BeanClass controllerClass = new DefaultBeanClass(DogController.class);
 
 		woof = new DefaultControllerMethod(controllerClass, DogController.class.getDeclaredMethod("woof"));

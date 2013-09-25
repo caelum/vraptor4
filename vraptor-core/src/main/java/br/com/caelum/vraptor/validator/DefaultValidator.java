@@ -63,7 +63,7 @@ public class DefaultValidator extends AbstractValidator {
 		this.viewsFactory = factory;
 		this.outjector = outjector;
 		this.proxifier = proxifier;
-        this.bundle = bundle;
+		this.bundle = bundle;
 	}
 
 	@Override

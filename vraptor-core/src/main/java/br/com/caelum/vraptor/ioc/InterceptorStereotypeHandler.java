@@ -48,11 +48,11 @@ public class InterceptorStereotypeHandler{
 	public void handle(@Observes @InterceptsQualifier BeanClass beanClass) {
 		Class<?> originalType = beanClass.getType();
 		if (Interceptor.class.isAssignableFrom(originalType) || originalType.isAnnotationPresent(Intercepts.class)) {
-            registerInterceptor(originalType);
-        } else {
-            throw new VRaptorException("Annotation " + Intercepts.class + " found in " + originalType
-                    + ", but it is neither an Interceptor nor an InterceptorSequence.");
-        }
+			registerInterceptor(originalType);
+		} else {
+			throw new VRaptorException("Annotation " + Intercepts.class + " found in " + originalType
+					+ ", but it is neither an Interceptor nor an InterceptorSequence.");
+		}
 	}
 
 	private void registerInterceptor(Class<?> type) {

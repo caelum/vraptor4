@@ -37,11 +37,11 @@ public class Filters {
 		};
 	}
 
-    public static Predicate<Annotation[]> hasAnnotation(final Class<?> annotation) {
-        return new Predicate<Annotation[]>() {
-            public boolean apply(Annotation[] param) {
-                return any(asList(param), instanceOf(annotation));
-            }
-        };
-    }
+	public static Predicate<Annotation[]> hasAnnotation(final Class<?> annotation) {
+		return new Predicate<Annotation[]>() {
+			public boolean apply(Annotation[] param) {
+				return any(asList(param), instanceOf(annotation));
+			}
+		};
+	}
 }

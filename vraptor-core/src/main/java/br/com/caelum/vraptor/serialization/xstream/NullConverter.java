@@ -9,9 +9,9 @@ import com.thoughtworks.xstream.converters.SingleValueConverter;
  */
 @ApplicationScoped
 public class NullConverter implements SingleValueConverter {
-    public String toString(Object o) {return null;}
+	public String toString(Object o) {return null;}
 
-    public Object fromString(String s) {return null;}
+	public Object fromString(String s) {return null;}
 
-    public boolean canConvert(Class aClass) {return false;}
+	public boolean canConvert(Class aClass) {return false;}
 }

@@ -54,7 +54,7 @@ public class LocaleBasedDateConverterTest {
 
 		when(request.getServletContext()).thenReturn(context);
 
-        converter = new LocaleBasedDateConverter(new Locale("pt", "BR"));
+		converter = new LocaleBasedDateConverter(new Locale("pt", "BR"));
 	}
 
 	@Test

@@ -13,16 +13,16 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
 @Alternative
 public class MockFilesCommonsFileUpload
-    implements ServletFileUploadCreator {
+	implements ServletFileUploadCreator {
 
-    public ServletFileUpload create(FileItemFactory fileItemFactory) {
-        return new ServletFileUpload(fileItemFactory) {
+	public ServletFileUpload create(FileItemFactory fileItemFactory) {
+		return new ServletFileUpload(fileItemFactory) {
 
-            @Override
+			@Override
 			public List<FileItem> parseRequest(HttpServletRequest request)
-                throws FileUploadException {
-                return Collections.emptyList();
-            }
-        };
-    }
+				throws FileUploadException {
+				return Collections.emptyList();
+			}
+		};
+	}
 }

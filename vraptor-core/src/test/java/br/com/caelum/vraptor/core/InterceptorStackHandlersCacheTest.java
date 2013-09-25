@@ -46,16 +46,16 @@ public class InterceptorStackHandlersCacheTest {
 	private List<Class<?>> interceptors;
 
 	@Before
-    public void setup() {
-        MockitoAnnotations.initMocks(this);
-        
-        interceptors = new ArrayList<>();
-        interceptors.add(FirstInterceptor.class);
-        interceptors.add(SecondInterceptor.class);
-        
-        when(registry.all()).thenReturn(interceptors);
-        
-        when(handlerFactory.handlerFor(Mockito.any(Class.class))).thenAnswer(new Answer<InterceptorHandler>() {
+	public void setup() {
+		MockitoAnnotations.initMocks(this);
+		
+		interceptors = new ArrayList<>();
+		interceptors.add(FirstInterceptor.class);
+		interceptors.add(SecondInterceptor.class);
+		
+		when(registry.all()).thenReturn(interceptors);
+		
+		when(handlerFactory.handlerFor(Mockito.any(Class.class))).thenAnswer(new Answer<InterceptorHandler>() {
 			@Override
 			public InterceptorHandler answer(InvocationOnMock invocation)
 					throws Throwable {
@@ -63,10 +63,10 @@ public class InterceptorStackHandlersCacheTest {
 				return new MockInterceptorHandler((Class<?>) arguments[0]);
 			}
 		});
-        
-        cache = new InterceptorStackHandlersCache(registry, handlerFactory);
-        cache.init();
-    }
+		
+		cache = new InterceptorStackHandlersCache(registry, handlerFactory);
+		cache.init();
+	}
 
 	@Test
 	public void shouldReturnHandlersListInTheSameOrderThatRegistry() {

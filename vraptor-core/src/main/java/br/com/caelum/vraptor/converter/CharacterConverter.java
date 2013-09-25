@@ -33,17 +33,17 @@ import br.com.caelum.vraptor.Converter;
 @ApplicationScoped
 public class CharacterConverter implements Converter<Character> {
 
-    @Override
+	@Override
 	public Character convert(String value, Class<? extends Character> type) {
-        if (isNullOrEmpty(value)) {
-            return null;
-        }
+		if (isNullOrEmpty(value)) {
+			return null;
+		}
 
-        if (value.length() != 1) {
+		if (value.length() != 1) {
 			throw new ConversionException(new ConversionMessage("is_not_a_valid_character", value));
-        }
+		}
 
-        return value.charAt(0);
-    }
+		return value.charAt(0);
+	}
 
 }

@@ -33,7 +33,7 @@ public class FloatConverterTest {
 
 	@Before
 	public void setup() {
-        this.converter = new FloatConverter();
+		this.converter = new FloatConverter();
 	}
 
 	@Test

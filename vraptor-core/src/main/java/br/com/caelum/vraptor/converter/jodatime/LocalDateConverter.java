@@ -39,25 +39,25 @@ import br.com.caelum.vraptor.converter.ConversionMessage;
 @Convert(LocalDate.class)
 public class LocalDateConverter implements Converter<LocalDate> {
 
-    private Locale locale;
+	private Locale locale;
 
 	@Deprecated // CDI eyes only
 	public LocalDateConverter() {}
 
 	@Inject
 	public LocalDateConverter(Locale locale) {
-	    this.locale = locale;
+		this.locale = locale;
 	}
 
-    @Override
+	@Override
 	public LocalDate convert(String value, Class<? extends LocalDate> type) {
-        try {
-            DateTime out = new LocaleBasedJodaTimeConverter(locale).convert(value, shortDate());
-            if (out == null) {
-                return null;
-            }
+		try {
+			DateTime out = new LocaleBasedJodaTimeConverter(locale).convert(value, shortDate());
+			if (out == null) {
+				return null;
+			}
 
-            return out.toLocalDate();
+			return out.toLocalDate();
 		} catch (Exception e) {
 			throw new ConversionException(new ConversionMessage("is_not_a_valid_date", value));
 		}

@@ -28,6 +28,6 @@ import br.com.caelum.vraptor.controller.BeanClass;
  */
 public interface RoutesParser {
 
-    List<Route> rulesFor(BeanClass controller);
+	List<Route> rulesFor(BeanClass controller);
 
 }

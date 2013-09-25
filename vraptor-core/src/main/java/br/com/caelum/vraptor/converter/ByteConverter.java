@@ -33,17 +33,17 @@ import br.com.caelum.vraptor.Converter;
 @ApplicationScoped
 public class ByteConverter implements Converter<Byte> {
 
-    @Override
+	@Override
 	public Byte convert(String value, Class<? extends Byte> type) {
-        if (isNullOrEmpty(value)) {
-            return null;
-        }
+		if (isNullOrEmpty(value)) {
+			return null;
+		}
 
-        try {
-            return Byte.valueOf(value);
-        } catch (NumberFormatException e) {
+		try {
+			return Byte.valueOf(value);
+		} catch (NumberFormatException e) {
 			throw new ConversionException(new ConversionMessage("is_not_a_valid_integer", value));
-        }
-    }
+		}
+	}
 
 }

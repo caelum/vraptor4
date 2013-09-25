@@ -32,17 +32,17 @@ import br.com.caelum.vraptor.Converter;
 @Convert(short.class)
 @ApplicationScoped
 public class PrimitiveShortConverter implements Converter<Short> {
-    @Override
+	@Override
 	public Short convert(String value, Class<? extends Short> type) {
-        if (isNullOrEmpty(value)) {
-            return (short) 0;
-        }
+		if (isNullOrEmpty(value)) {
+			return (short) 0;
+		}
 
-        try {
-            return Short.parseShort(value);
-        } catch (NumberFormatException e) {
-            throw new ConversionException(new ConversionMessage("is_not_a_valid_integer", value));
-        }
-    }
+		try {
+			return Short.parseShort(value);
+		} catch (NumberFormatException e) {
+			throw new ConversionException(new ConversionMessage("is_not_a_valid_integer", value));
+		}
+	}
 
 }

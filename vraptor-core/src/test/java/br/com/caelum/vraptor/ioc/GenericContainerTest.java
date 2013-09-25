@@ -390,31 +390,31 @@ public abstract class GenericContainerTest {
 				Converters converters = provider.getContainer().instanceFor(Converters.class);
 
 				final HashMap<Class, Class<?>> EXPECTED_CONVERTERS = new HashMap<Class, Class<?>>() {
-				    {
-				        put(int.class, PrimitiveIntConverter.class);
-				        put(long.class, PrimitiveLongConverter.class);
-				        put(short.class, PrimitiveShortConverter.class);
-				        put(byte.class, PrimitiveByteConverter.class);
-				        put(double.class, PrimitiveDoubleConverter.class);
-				        put(float.class, PrimitiveFloatConverter.class);
-				        put(boolean.class, PrimitiveBooleanConverter.class);
-				        put(Integer.class, IntegerConverter.class);
-				        put(Long.class, LongConverter.class);
-				        put(Short.class, ShortConverter.class);
-				        put(Byte.class, ByteConverter.class);
-				        put(Double.class, DoubleConverter.class);
-				        put(Float.class, FloatConverter.class);
-				        put(Boolean.class, BooleanConverter.class);
-				        put(Calendar.class, LocaleBasedCalendarConverter.class);
-				        put(Date.class, LocaleBasedDateConverter.class);
-				        put(Enum.class, EnumConverter.class);
-				    }
-				    private static final long serialVersionUID = 8559316558416038474L;
+					{
+						put(int.class, PrimitiveIntConverter.class);
+						put(long.class, PrimitiveLongConverter.class);
+						put(short.class, PrimitiveShortConverter.class);
+						put(byte.class, PrimitiveByteConverter.class);
+						put(double.class, PrimitiveDoubleConverter.class);
+						put(float.class, PrimitiveFloatConverter.class);
+						put(boolean.class, PrimitiveBooleanConverter.class);
+						put(Integer.class, IntegerConverter.class);
+						put(Long.class, LongConverter.class);
+						put(Short.class, ShortConverter.class);
+						put(Byte.class, ByteConverter.class);
+						put(Double.class, DoubleConverter.class);
+						put(Float.class, FloatConverter.class);
+						put(Boolean.class, BooleanConverter.class);
+						put(Calendar.class, LocaleBasedCalendarConverter.class);
+						put(Date.class, LocaleBasedDateConverter.class);
+						put(Enum.class, EnumConverter.class);
+					}
+					private static final long serialVersionUID = 8559316558416038474L;
 				};
 
 				for (Entry<Class, Class<?>> entry : EXPECTED_CONVERTERS.entrySet()) {
-				    Converter<?> converter = converters.to((Class<?>) entry.getKey());
-				    assertThat(converter, is(instanceOf(entry.getValue())));
+					Converter<?> converter = converters.to((Class<?>) entry.getKey());
+					assertThat(converter, is(instanceOf(entry.getValue())));
 				}
 				return null;
 			}

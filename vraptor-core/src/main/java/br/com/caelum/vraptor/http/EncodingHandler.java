@@ -41,14 +41,14 @@ public class EncodingHandler {
 
 	@Deprecated // CDI eyes only
 	public EncodingHandler() {
-    }
+	}
 
 	@Inject
 	public EncodingHandler(BasicConfiguration configuration) {
-        encoding = configuration.getEncoding();
-        if (encoding == null) {
-            encoding = defaultCharset().name();
-        }
+		encoding = configuration.getEncoding();
+		if (encoding == null) {
+			encoding = defaultCharset().name();
+		}
 	}
 
 	public void setEncoding(HttpServletRequest request, HttpServletResponse response) {

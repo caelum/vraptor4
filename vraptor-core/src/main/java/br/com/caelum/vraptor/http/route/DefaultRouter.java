@@ -59,17 +59,17 @@ public class DefaultRouter implements Router {
 	private  TypeFinder finder;
 	private  Converters converters;
 	private  ParameterNameProvider nameProvider;
-    private  Evaluator evaluator;
-    private VRaptorCache<Invocation,Route> cache;
+	private  Evaluator evaluator;
+	private VRaptorCache<Invocation,Route> cache;
 	private EncodingHandler encodingHandler;
 
-    //CDI eyes only
+	//CDI eyes only
 	@Deprecated
 	public DefaultRouter() {
 	}
 
-    @Inject
-    public DefaultRouter(RoutesConfiguration config,
+	@Inject
+	public DefaultRouter(RoutesConfiguration config,
 			Proxifier proxifier, TypeFinder finder, Converters converters,
 			ParameterNameProvider nameProvider, Evaluator evaluator, EncodingHandler encodingHandler,
 			VRaptorCache<Invocation,Route> cache) {
@@ -77,7 +77,7 @@ public class DefaultRouter implements Router {
 		this.finder = finder;
 		this.converters = converters;
 		this.nameProvider = nameProvider;
-        this.evaluator = evaluator;
+		this.evaluator = evaluator;
 		this.encodingHandler = encodingHandler;
 		this.cache = cache;
 		config.config(this);
@@ -176,20 +176,20 @@ public class DefaultRouter implements Router {
 		return Collections.unmodifiableList(new ArrayList<>(routes));
 	}
 
-    private Predicate<Route> canHandle(final String uri) {
-        return new Predicate<Route>() {
-            public boolean apply(Route route) {
-                return route.canHandle(uri);
-            }
-        };
-    }
+	private Predicate<Route> canHandle(final String uri) {
+		return new Predicate<Route>() {
+			public boolean apply(Route route) {
+				return route.canHandle(uri);
+			}
+		};
+	}
 
-    private Predicate<Route> allow(final HttpMethod method) {
-        return new Predicate<Route>() {
-            public boolean apply(Route route) {
-                return route.allowedMethods().contains(method);
-            }
-        };
-    }
+	private Predicate<Route> allow(final HttpMethod method) {
+		return new Predicate<Route>() {
+			public boolean apply(Route route) {
+				return route.allowedMethods().contains(method);
+			}
+		};
+	}
 }
 

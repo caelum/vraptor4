@@ -33,17 +33,17 @@ import br.com.caelum.vraptor.Converter;
 @ApplicationScoped
 public class LongConverter implements Converter<Long> {
 
-    @Override
+	@Override
 	public Long convert(String value, Class<? extends Long> type) {
-        if (isNullOrEmpty(value)) {
-            return null;
-        }
+		if (isNullOrEmpty(value)) {
+			return null;
+		}
 
-        try {
-            return Long.valueOf(value);
-        } catch (NumberFormatException e) {
+		try {
+			return Long.valueOf(value);
+		} catch (NumberFormatException e) {
 			throw new ConversionException(new ConversionMessage("is_not_a_valid_integer", value));
-        }
-    }
+		}
+	}
 
 }

@@ -39,63 +39,63 @@ import com.thoughtworks.xstream.XStream;
 @RequestScoped
 public class XStreamJSONSerialization implements JSONSerialization {
 
-    protected HttpServletResponse response;
-    protected TypeNameExtractor extractor;
-    protected XStreamBuilder builder;
+	protected HttpServletResponse response;
+	protected TypeNameExtractor extractor;
+	protected XStreamBuilder builder;
 
 	@Deprecated // CDI eyes only
 	public XStreamJSONSerialization() {}
 
-    @Inject
-    public XStreamJSONSerialization(HttpServletResponse response, TypeNameExtractor extractor, XStreamBuilder builder) {
-        this.response = response;
-        this.extractor = extractor;
-        this.builder = builder;
-    }
+	@Inject
+	public XStreamJSONSerialization(HttpServletResponse response, TypeNameExtractor extractor, XStreamBuilder builder) {
+		this.response = response;
+		this.extractor = extractor;
+		this.builder = builder;
+	}
 
-    public boolean accepts(String format) {
-        return "json".equals(format);
-    }
+	public boolean accepts(String format) {
+		return "json".equals(format);
+	}
 
-    public <T> Serializer from(T object) {
-        return from(object, null);
-    }
+	public <T> Serializer from(T object) {
+		return from(object, null);
+	}
 
-    public <T> Serializer from(T object, String alias) {
-        response.setContentType("application/json");
-        return getSerializer().from(object, alias);
-    }
+	public <T> Serializer from(T object, String alias) {
+		response.setContentType("application/json");
+		return getSerializer().from(object, alias);
+	}
 
-    protected SerializerBuilder getSerializer() {
-        try {
-        	return new XStreamSerializer(getXStream(), response.getWriter());
-        } catch (IOException e) {
-            throw new ResultException("Unable to serialize data", e);
-        }
-    }
+	protected SerializerBuilder getSerializer() {
+		try {
+			return new XStreamSerializer(getXStream(), response.getWriter());
+		} catch (IOException e) {
+			throw new ResultException("Unable to serialize data", e);
+		}
+	}
 
-    /**
-     * You can override this method for configuring Driver before serialization
-     */
-    public <T> NoRootSerialization withoutRoot() {
-       	builder.withoutRoot();
-        return this;
-    }
+	/**
+	 * You can override this method for configuring Driver before serialization
+	 */
+	public <T> NoRootSerialization withoutRoot() {
+	   	builder.withoutRoot();
+		return this;
+	}
 
-    public JSONSerialization indented() {
-        builder.indented();
-        return this;
-    }
+	public JSONSerialization indented() {
+		builder.indented();
+		return this;
+	}
 
-    /**
-     * You can override this method for configuring XStream before serialization
-     *
-     * @deprecated prefer overwriting XStreamBuilder
-     * @return a configured instance of xstream
-     */
-    @Deprecated
-    protected XStream getXStream() {
-        return builder.jsonInstance();
-    }
+	/**
+	 * You can override this method for configuring XStream before serialization
+	 *
+	 * @deprecated prefer overwriting XStreamBuilder
+	 * @return a configured instance of xstream
+	 */
+	@Deprecated
+	protected XStream getXStream() {
+		return builder.jsonInstance();
+	}
 
 }

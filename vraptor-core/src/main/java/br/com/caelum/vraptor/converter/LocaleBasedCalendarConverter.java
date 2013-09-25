@@ -40,34 +40,34 @@ import br.com.caelum.vraptor.Converter;
 @RequestScoped
 public class LocaleBasedCalendarConverter implements Converter<Calendar> {
 
-    private Locale locale;
+	private Locale locale;
 
-    //CDI eyes only
+	//CDI eyes only
 	@Deprecated
 	public LocaleBasedCalendarConverter() {
 	}
 
-    @Inject
-    public LocaleBasedCalendarConverter(Locale locale) {
-        this.locale = locale;
-    }
+	@Inject
+	public LocaleBasedCalendarConverter(Locale locale) {
+		this.locale = locale;
+	}
 
-    @Override
+	@Override
 	public Calendar convert(String value, Class<? extends Calendar> type) {
-        if (isNullOrEmpty(value)) {
-            return null;
-        }
+		if (isNullOrEmpty(value)) {
+			return null;
+		}
 
-        DateFormat format = DateFormat.getDateInstance(DateFormat.SHORT, locale);
+		DateFormat format = DateFormat.getDateInstance(DateFormat.SHORT, locale);
 
-        try {
-            Date date = format.parse(value);
-            Calendar calendar = new GregorianCalendar();
-            calendar.setTime(date);
-            return calendar;
-        } catch (ParseException e) {
+		try {
+			Date date = format.parse(value);
+			Calendar calendar = new GregorianCalendar();
+			calendar.setTime(date);
+			return calendar;
+		} catch (ParseException e) {
 			throw new ConversionException(new ConversionMessage("is_not_a_valid_date", value));
-        }
-    }
+		}
+	}
 
 }

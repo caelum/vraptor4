@@ -46,13 +46,13 @@ import br.com.caelum.vraptor.converter.ConversionMessage;
 @Alternative
 public class LocaleBasedPrimitiveDoubleConverter implements Converter<Double> {
 
-    private Locale locale;
+	private Locale locale;
 
-    @Deprecated // CDI eyes only
-    public LocaleBasedPrimitiveDoubleConverter() {
-    }
+	@Deprecated // CDI eyes only
+	public LocaleBasedPrimitiveDoubleConverter() {
+	}
 
-    @Inject
+	@Inject
 	public LocaleBasedPrimitiveDoubleConverter(Locale locale) {
 		this.locale = locale;
 	}
@@ -64,7 +64,7 @@ public class LocaleBasedPrimitiveDoubleConverter implements Converter<Double> {
 		}
 
 		try {
-            DecimalFormat fmt = ((DecimalFormat) DecimalFormat.getInstance(locale));
+			DecimalFormat fmt = ((DecimalFormat) DecimalFormat.getInstance(locale));
 
 			return fmt.parse(value).doubleValue();
 		} catch (ParseException e) {

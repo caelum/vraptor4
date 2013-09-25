@@ -27,18 +27,18 @@ import java.util.ResourceBundle;
  * @since 3.4.0
  */
 public class I18nParam {
-    private final String key;
+	private final String key;
 
-    public I18nParam(String key) {
-        this.key = key;
-    }
+	public I18nParam(String key) {
+		this.key = key;
+	}
 
-    public String getKey(ResourceBundle bundle) {
-        return bundle.getString(key);
-    }
+	public String getKey(ResourceBundle bundle) {
+		return bundle.getString(key);
+	}
 
-    @Override
-    public String toString() {
-        return String.format("i18n(%s)", key);
-    }
+	@Override
+	public String toString() {
+		return String.format("i18n(%s)", key);
+	}
 }

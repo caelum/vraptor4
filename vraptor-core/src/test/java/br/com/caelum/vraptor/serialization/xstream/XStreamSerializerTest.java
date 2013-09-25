@@ -29,19 +29,19 @@ public class XStreamSerializerTest extends XStreamXMLSerializationTest {
 
 	@Override
 	@Before
-    public void setup() throws Exception {
+	public void setup() throws Exception {
 		this.stream = new ByteArrayOutputStream();
 
-        HttpServletResponse response = mock(HttpServletResponse.class);
-        when(response.getWriter()).thenReturn(new PrintWriter(stream));
+		HttpServletResponse response = mock(HttpServletResponse.class);
+		when(response.getWriter()).thenReturn(new PrintWriter(stream));
 
-        List<Converter> converters = new ArrayList<>();
-        converters.add(new CalendarConverter());
+		List<Converter> converters = new ArrayList<>();
+		converters.add(new CalendarConverter());
 
 		final DefaultTypeNameExtractor extractor = new DefaultTypeNameExtractor();
 		this.serialization = new XStreamXMLSerialization(response, new XStreamBuilderImpl(
-                new XStreamConverters(converters, Collections.<SingleValueConverter>emptyList()), extractor));
-    }
+				new XStreamConverters(converters, Collections.<SingleValueConverter>emptyList()), extractor));
+	}
 
 }
 

@@ -40,7 +40,7 @@ public class BigIntegerConverterTest {
 
 	@Before
 	public void setup() {
-        this.converter = new BigIntegerConverter();
+		this.converter = new BigIntegerConverter();
 	}
 
 	@Test

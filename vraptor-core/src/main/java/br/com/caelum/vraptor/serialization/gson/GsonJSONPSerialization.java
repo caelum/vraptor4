@@ -33,44 +33,44 @@ import br.com.caelum.vraptor.view.ResultException;
  * @author Otávio Scherer Garcia
  */
 public class GsonJSONPSerialization implements JSONPSerialization {
-    
-    protected final HttpServletResponse response;
-    protected final TypeNameExtractor extractor;
-    protected final VRaptorGsonBuilder builder;
-    protected final Serializee serializee;
+	
+	protected final HttpServletResponse response;
+	protected final TypeNameExtractor extractor;
+	protected final VRaptorGsonBuilder builder;
+	protected final Serializee serializee;
 
-    public GsonJSONPSerialization(HttpServletResponse response, TypeNameExtractor extractor,
-            VRaptorGsonBuilder builder, Serializee serializee) {
-        this.response = response;
-        this.extractor = extractor;
-        this.builder = builder;
-        this.serializee = serializee;
-    }
-    
-    @Override
-    public JSONSerialization withCallback(final String callbackName) {
-        return new GsonJSONSerialization(response, extractor, builder, serializee) {
-            @Override
-            protected SerializerBuilder getSerializer() {
-                try {
-                    return new GsonSerializer(builder, response.getWriter(), extractor, serializee) {
-                        @Override
-                        public void serialize() {
-                            try {
-                                response.getWriter().append(callbackName).append("(");
-                                super.serialize();
-                                response.getWriter().append(")");
-                                response.getWriter().flush();
-                            } catch (IOException e) {
-                                throw new ResultException("Unable to serialize data", e);
-                            }
-                        }
-                    };
-                } catch (IOException e) {
-                    throw new ResultException("Unable to serialize data", e);
-                }
-            }
-        };
-    }
+	public GsonJSONPSerialization(HttpServletResponse response, TypeNameExtractor extractor,
+			VRaptorGsonBuilder builder, Serializee serializee) {
+		this.response = response;
+		this.extractor = extractor;
+		this.builder = builder;
+		this.serializee = serializee;
+	}
+	
+	@Override
+	public JSONSerialization withCallback(final String callbackName) {
+		return new GsonJSONSerialization(response, extractor, builder, serializee) {
+			@Override
+			protected SerializerBuilder getSerializer() {
+				try {
+					return new GsonSerializer(builder, response.getWriter(), extractor, serializee) {
+						@Override
+						public void serialize() {
+							try {
+								response.getWriter().append(callbackName).append("(");
+								super.serialize();
+								response.getWriter().append(")");
+								response.getWriter().flush();
+							} catch (IOException e) {
+								throw new ResultException("Unable to serialize data", e);
+							}
+						}
+					};
+				} catch (IOException e) {
+					throw new ResultException("Unable to serialize data", e);
+				}
+			}
+		};
+	}
 
 }

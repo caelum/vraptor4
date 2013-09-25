@@ -32,17 +32,17 @@ import br.com.caelum.vraptor.Converter;
 @Convert(float.class)
 @ApplicationScoped
 public class PrimitiveFloatConverter implements Converter<Float> {
-    @Override
+	@Override
 	public Float convert(String value, Class<? extends Float> type) {
-        if (isNullOrEmpty(value)) {
-            return 0f;
-        }
+		if (isNullOrEmpty(value)) {
+			return 0f;
+		}
 
-        try {
-            return Float.parseFloat(value);
-        } catch (NumberFormatException e) {
-            throw new ConversionException(new ConversionMessage("is_not_a_valid_number", value));
-        }
-    }
+		try {
+			return Float.parseFloat(value);
+		} catch (NumberFormatException e) {
+			throw new ConversionException(new ConversionMessage("is_not_a_valid_number", value));
+		}
+	}
 
 }

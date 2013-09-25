@@ -20,6 +20,7 @@ package br.com.caelum.vraptor.converter.l10n;
 import static com.google.common.base.Strings.isNullOrEmpty;
 
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.Locale;
 
@@ -43,8 +44,7 @@ import br.com.caelum.vraptor.converter.ConversionMessage;
 @Convert(Double.class)
 @RequestScoped
 @Alternative
-public class LocaleBasedDoubleConverter
-	implements Converter<Double> {
+public class LocaleBasedDoubleConverter implements Converter<Double> {
 
 	private Locale locale;
 
@@ -64,12 +64,13 @@ public class LocaleBasedDoubleConverter
 		}
 
 		try {
-			DecimalFormat fmt = ((DecimalFormat) DecimalFormat.getInstance(locale));
-
-			return fmt.parse(value).doubleValue();
+			return getNumberFormat().parse(value).doubleValue();
 		} catch (ParseException e) {
 			throw new ConversionException(new ConversionMessage("is_not_a_valid_number", value));
 		}
 	}
 
+	protected NumberFormat getNumberFormat() {
+		return DecimalFormat.getInstance(locale);
+	}
 }

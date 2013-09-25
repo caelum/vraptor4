@@ -17,14 +17,15 @@
 
 package br.com.caelum.vraptor.converter.jodatime;
 
-import static org.joda.time.format.DateTimeFormat.shortDate;
+import static com.google.common.base.Strings.isNullOrEmpty;
 
 import java.util.Locale;
 
 import javax.inject.Inject;
 
 import org.joda.time.DateMidnight;
-import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
@@ -53,15 +54,18 @@ public class DateMidnightConverter implements Converter<DateMidnight> {
 
 	@Override
 	public DateMidnight convert(String value, Class<? extends DateMidnight> type) {
+		if (isNullOrEmpty(value)) {
+			return null;
+		}
+		
 		try {
-			DateTime out = new LocaleBasedJodaTimeConverter(locale).convert(value, shortDate());
-			if (out == null) {
-				return null;
-			}
-
-			return out.toDateMidnight();
+			return getFormatter().parseDateTime(value).toDateMidnight();
 		} catch (Exception e) {
 			throw new ConversionException(new ConversionMessage("is_not_a_valid_datetime", value));
 		}
+	}
+
+	protected DateTimeFormatter getFormatter() {
+		return DateTimeFormat.shortDate().withLocale(locale); 
 	}
 }

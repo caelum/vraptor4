@@ -26,7 +26,6 @@ import static org.mockito.Mockito.when;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Locale;
-import java.util.ResourceBundle;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
@@ -46,7 +45,6 @@ public class LocaleBasedCalendarConverterTest {
 	private @Mock MutableRequest request;
 	private @Mock HttpSession session;
 	private @Mock ServletContext context;
-	private @Mock ResourceBundle bundle;
 
 	@Before
 	public void setup() {
@@ -54,8 +52,7 @@ public class LocaleBasedCalendarConverterTest {
 
 		when(request.getServletContext()).thenReturn(context);
 
-		bundle = ResourceBundle.getBundle("messages");
-		converter = new LocaleBasedCalendarConverter(new Locale("pt", "BR"), bundle);
+		converter = new LocaleBasedCalendarConverter(new Locale("pt", "BR"));
 	}
 
 	@Test

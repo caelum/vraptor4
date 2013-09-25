@@ -21,8 +21,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 
-import java.util.ResourceBundle;
-
 import org.junit.Before;
 import org.junit.Test;
 
@@ -30,12 +28,10 @@ import org.junit.Test;
 public class PrimitiveByteConverterTest {
 
 	private PrimitiveByteConverter converter;
-	private ResourceBundle bundle;
 
 	@Before
 	public void setup() {
-		this.bundle = ResourceBundle.getBundle("messages");
-        this.converter = new PrimitiveByteConverter(bundle);
+        this.converter = new PrimitiveByteConverter();
 	}
 
 	@Test

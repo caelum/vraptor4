@@ -25,7 +25,6 @@ import static org.junit.Assert.fail;
 import static org.mockito.Mockito.when;
 
 import java.util.Locale;
-import java.util.ResourceBundle;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
@@ -46,7 +45,6 @@ public class LocaleBasedFloatConverterTest {
     private @Mock MutableRequest request;
     private @Mock HttpSession session;
     private @Mock ServletContext context;
-    private ResourceBundle bundle;
 
     @Before
     public void setup() {
@@ -54,8 +52,7 @@ public class LocaleBasedFloatConverterTest {
 
     	when(request.getServletContext()).thenReturn(context);
 
-        bundle = ResourceBundle.getBundle("messages");
-        converter = new LocaleBasedFloatConverter(new Locale("pt", "BR"), bundle);
+        converter = new LocaleBasedFloatConverter(new Locale("pt", "BR"));
     }
 
     @Test
@@ -66,7 +63,7 @@ public class LocaleBasedFloatConverterTest {
 
     @Test
     public void shouldBeAbleToConvertWithENUS() {
-        converter = new LocaleBasedFloatConverter(new Locale("en", "US"), bundle);
+        converter = new LocaleBasedFloatConverter(new Locale("en", "US"));
         assertThat(converter.convert("10.00", Float.class), is(equalTo(new Float("10.00"))));
         assertThat(converter.convert("10.01", Float.class), is(equalTo(new Float("10.01"))));
     }

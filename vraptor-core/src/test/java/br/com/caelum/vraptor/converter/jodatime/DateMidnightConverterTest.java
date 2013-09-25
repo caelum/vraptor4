@@ -7,7 +7,6 @@ import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.Mockito.when;
 
 import java.util.Locale;
-import java.util.ResourceBundle;
 
 import javax.servlet.ServletContext;
 
@@ -28,7 +27,6 @@ public class DateMidnightConverterTest {
 	private DateMidnightConverter converter;
 	private @Mock MutableRequest request;
 	private @Mock ServletContext context;
-	private @Mock ResourceBundle bundle;
 
 	@Before
 	public void setup() {
@@ -36,8 +34,7 @@ public class DateMidnightConverterTest {
 
 		when(request.getServletContext()).thenReturn(context);
 
-        bundle = ResourceBundle.getBundle("messages");
-		converter = new DateMidnightConverter(new Locale("pt", "BR"), bundle);
+		converter = new DateMidnightConverter(new Locale("pt", "BR"));
 	}
 
 	@Test

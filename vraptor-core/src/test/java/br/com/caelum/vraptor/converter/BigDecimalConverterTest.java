@@ -23,7 +23,6 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 
 import java.math.BigDecimal;
-import java.util.ResourceBundle;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -37,12 +36,10 @@ import org.junit.Test;
 public class BigDecimalConverterTest {
 
 	private BigDecimalConverter converter;
-	private ResourceBundle bundle;
 
 	@Before
 	public void setup() {
-		bundle = ResourceBundle.getBundle("messages");
-        converter = new BigDecimalConverter(bundle);
+        converter = new BigDecimalConverter();
 	}
 
 	@Test

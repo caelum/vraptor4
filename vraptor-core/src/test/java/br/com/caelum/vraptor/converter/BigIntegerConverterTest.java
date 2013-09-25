@@ -23,7 +23,6 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 
 import java.math.BigInteger;
-import java.util.ResourceBundle;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -37,12 +36,10 @@ import org.junit.Test;
 public class BigIntegerConverterTest {
 
 	private BigIntegerConverter converter;
-	private ResourceBundle bundle;
 
 	@Before
 	public void setup() {
-		this.bundle = ResourceBundle.getBundle("messages");
-        this.converter = new BigIntegerConverter(bundle);
+        this.converter = new BigIntegerConverter();
 	}
 
 	@Test

@@ -22,8 +22,6 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 
-import java.util.ResourceBundle;
-
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -32,12 +30,10 @@ import org.junit.Test;
 public class BooleanConverterTest {
 
     private BooleanConverter converter;
-	private ResourceBundle bundle;
 
     @Before
     public void setup() {
-        this.bundle = ResourceBundle.getBundle("messages");
-        this.converter = new BooleanConverter(bundle);
+        this.converter = new BooleanConverter();
     }
 
     @Test

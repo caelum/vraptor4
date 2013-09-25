@@ -22,8 +22,6 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 
-import java.util.ResourceBundle;
-
 import org.junit.Before;
 import org.junit.Test;
 
@@ -31,12 +29,10 @@ import org.junit.Test;
 public class FloatConverterTest {
 
 	private FloatConverter converter;
-	private ResourceBundle bundle;
 
 	@Before
 	public void setup() {
-		this.bundle = ResourceBundle.getBundle("messages");
-        this.converter = new FloatConverter(bundle);
+        this.converter = new FloatConverter();
 	}
 
 	@Test

@@ -27,7 +27,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-import java.util.ResourceBundle;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
@@ -47,7 +46,6 @@ public class LocaleBasedDateConverterTest {
 	private @Mock MutableRequest request;
 	private @Mock HttpSession session;
 	private @Mock ServletContext context;
-	private @Mock ResourceBundle bundle;
 
 	@Before
 	public void setup() {
@@ -55,8 +53,7 @@ public class LocaleBasedDateConverterTest {
 
 		when(request.getServletContext()).thenReturn(context);
 
-		bundle = ResourceBundle.getBundle("messages");
-        converter = new LocaleBasedDateConverter(new Locale("pt", "BR"), bundle);
+        converter = new LocaleBasedDateConverter(new Locale("pt", "BR"));
 	}
 
 	@Test

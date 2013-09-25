@@ -26,7 +26,6 @@ import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
 import java.util.Locale;
-import java.util.ResourceBundle;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
@@ -47,7 +46,6 @@ public class LocaleBasedBigDecimalConverterTest {
     private @Mock MutableRequest request;
     private @Mock HttpSession session;
     private @Mock ServletContext context;
-    private ResourceBundle bundle;
 
     @Before
     public void setup() {
@@ -55,8 +53,7 @@ public class LocaleBasedBigDecimalConverterTest {
 
     	when(request.getServletContext()).thenReturn(context);
 
-        bundle = ResourceBundle.getBundle("messages");
-        converter = new LocaleBasedBigDecimalConverter(new Locale("pt", "BR"), bundle);
+        converter = new LocaleBasedBigDecimalConverter(new Locale("pt", "BR"));
     }
 
     @Test
@@ -67,7 +64,7 @@ public class LocaleBasedBigDecimalConverterTest {
 
     @Test
     public void shouldBeAbleToConvertWithENUS() {
-        converter = new LocaleBasedBigDecimalConverter(new Locale("en", "US"), bundle);
+        converter = new LocaleBasedBigDecimalConverter(new Locale("en", "US"));
         assertThat(converter.convert("10.00", BigDecimal.class), is(equalTo(new BigDecimal("10.00"))));
         assertThat(converter.convert("10.01", BigDecimal.class), is(equalTo(new BigDecimal("10.01"))));
     }

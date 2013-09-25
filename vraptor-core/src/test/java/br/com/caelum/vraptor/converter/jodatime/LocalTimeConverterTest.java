@@ -7,7 +7,6 @@ import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.Mockito.when;
 
 import java.util.Locale;
-import java.util.ResourceBundle;
 
 import javax.servlet.ServletContext;
 
@@ -25,7 +24,6 @@ import br.com.caelum.vraptor.http.MutableRequest;
  */
 public class LocalTimeConverterTest {
 
-	private ResourceBundle bundle;
 	private LocalTimeConverter converter;
 	private @Mock MutableRequest request;
 	private @Mock ServletContext context;
@@ -36,8 +34,7 @@ public class LocalTimeConverterTest {
 
 		when(request.getServletContext()).thenReturn(context);
 
-		bundle = ResourceBundle.getBundle("messages");
-        converter = new LocalTimeConverter(new Locale("pt", "BR"), bundle);
+        converter = new LocalTimeConverter(new Locale("pt", "BR"));
 	}
 
 	@Test

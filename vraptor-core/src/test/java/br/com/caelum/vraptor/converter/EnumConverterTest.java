@@ -23,8 +23,6 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 
-import java.util.ResourceBundle;
-
 import org.junit.Before;
 import org.junit.Test;
 
@@ -33,12 +31,10 @@ import br.com.caelum.vraptor.Converter;
 public class EnumConverterTest {
 
 	private Converter<Enum> converter;
-	private ResourceBundle bundle;
 
 	@Before
 	public void setup() {
-		this.bundle = ResourceBundle.getBundle("messages");
-        this.converter = new EnumConverter(bundle);
+        this.converter = new EnumConverter();
 	}
 
 	@Test

@@ -53,7 +53,7 @@ public class LocalTimeConverter implements Converter<LocalTime> {
 	public LocalTime convert(String value, Class<? extends LocalTime> type) {
 		try {
 			return getFormatter().parseDateTime(value).toLocalTime();
-		} catch (Exception e) {
+		} catch (UnsupportedOperationException | IllegalArgumentException  e) {
 			throw new ConversionException(new ConversionMessage("is_not_a_valid_time", value));
 		}
 	}

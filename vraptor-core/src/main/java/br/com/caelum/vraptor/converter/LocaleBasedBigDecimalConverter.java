@@ -14,64 +14,60 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-package br.com.caelum.vraptor.converter.l10n;
+package br.com.caelum.vraptor.converter;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
 
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.Locale;
 
 import javax.enterprise.context.RequestScoped;
-import javax.enterprise.inject.Alternative;
 import javax.inject.Inject;
 
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
-import br.com.caelum.vraptor.converter.ConversionException;
-import br.com.caelum.vraptor.converter.ConversionMessage;
 
 /**
- * Localized version of VRaptor's Float converter. This component is optional and must be declared in web.xml before
- * using. If the input value if empty or a null string, null values are returned. If the input string is not a number a
- * {@link ConversionException} will be throw.
+ * Localized version of VRaptor's BigDecimal converter. If the input value if empty or a null string, null value is 
+ * returned. If the input string is not a number a {@link ConversionException} will be throw.
  *
- * @author Rafael Dipold
  * @author Otávio Scherer Garcia
- * @since 3.4-snapshot
+ * @since 3.1.2
  */
-@Convert(float.class)
+@Convert(BigDecimal.class)
 @RequestScoped
-@Alternative
-public class LocaleBasedPrimitiveFloatConverter implements Converter<Float> {
+public class LocaleBasedBigDecimalConverter implements Converter<BigDecimal> {
 
 	private Locale locale;
 
 	@Deprecated // CDI eyes only
-	public LocaleBasedPrimitiveFloatConverter() {
+	public LocaleBasedBigDecimalConverter() {
 	}
 
 	@Inject
-	public LocaleBasedPrimitiveFloatConverter(Locale locale) {
+	public LocaleBasedBigDecimalConverter(Locale locale) {
 		this.locale = locale;
 	}
 
 	@Override
-	public Float convert(String value, Class<? extends Float> type) {
+	public BigDecimal convert(String value, Class<? extends BigDecimal> type) {
 		if (isNullOrEmpty(value)) {
-			return 0f;
+			return null;
 		}
 
 		try {
-			return getNumberFormat().parse(value).floatValue();
+			return (BigDecimal) getNumberFormat().parse(value);
 		} catch (ParseException e) {
 			throw new ConversionException(new ConversionMessage("is_not_a_valid_number", value));
 		}
 	}
 	
 	protected NumberFormat getNumberFormat() {
-		return DecimalFormat.getInstance(locale);
+		DecimalFormat fmt = ((DecimalFormat) DecimalFormat.getInstance(locale));
+		fmt.setParseBigDecimal(true);
+		return fmt;
 	}
 }

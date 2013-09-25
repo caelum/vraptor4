@@ -32,6 +32,7 @@ import br.com.caelum.vraptor.Converter;
 @Convert(short.class)
 @ApplicationScoped
 public class PrimitiveShortConverter implements Converter<Short> {
+	
 	@Override
 	public Short convert(String value, Class<? extends Short> type) {
 		if (isNullOrEmpty(value)) {

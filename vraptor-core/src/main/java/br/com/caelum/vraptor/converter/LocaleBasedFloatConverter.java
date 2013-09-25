@@ -14,37 +14,58 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package br.com.caelum.vraptor.converter;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
 
-import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.text.ParseException;
+import java.util.Locale;
 
-import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.RequestScoped;
+import javax.inject.Inject;
 
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
 
 /**
- * VRaptor's BigDecimal converter.
+ * Localized version of VRaptor's Float converter. If the input value if empty or a null string, null value is 
+ * returned. If the input string is not a number a {@link ConversionException} will be throw.
  *
- * @author Cecilia Fernandes
+ * @author Otávio Scherer Garcia
+ * @since 3.1.2
  */
-@Convert(BigDecimal.class)
-@ApplicationScoped
-public class BigDecimalConverter implements Converter<BigDecimal> {
+@Convert(Float.class)
+@RequestScoped
+public class LocaleBasedFloatConverter implements Converter<Float> {
+
+	private Locale locale;
+
+	@Deprecated // CDI eyes only
+	public LocaleBasedFloatConverter() {
+	}
+
+	@Inject
+	public LocaleBasedFloatConverter(Locale locale) {
+		this.locale = locale;
+	}
 
 	@Override
-	public BigDecimal convert(String value, Class<? extends BigDecimal> type) {
+	public Float convert(String value, Class<? extends Float> type) {
 		if (isNullOrEmpty(value)) {
 			return null;
 		}
 
 		try {
-			return new BigDecimal(value);
-		} catch (NumberFormatException e) {
+			return getNumberFormat().parse(value).floatValue();
+		} catch (ParseException e) {
 			throw new ConversionException(new ConversionMessage("is_not_a_valid_number", value));
 		}
-
+	}
+	
+	protected NumberFormat getNumberFormat() {
+		return DecimalFormat.getInstance(locale);
 	}
 }

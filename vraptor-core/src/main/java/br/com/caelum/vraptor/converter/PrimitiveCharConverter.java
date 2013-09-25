@@ -32,6 +32,7 @@ import br.com.caelum.vraptor.Converter;
 @Convert(char.class)
 @ApplicationScoped
 public class PrimitiveCharConverter implements Converter<Character> {
+
 	@Override
 	public Character convert(String value, Class<? extends Character> type) {
 		if (isNullOrEmpty(value)) {

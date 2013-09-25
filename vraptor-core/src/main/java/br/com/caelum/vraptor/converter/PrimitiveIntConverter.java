@@ -33,6 +33,7 @@ import br.com.caelum.vraptor.Converter;
 @Convert(int.class)
 @ApplicationScoped
 public class PrimitiveIntConverter implements Converter<Integer> {
+
 	@Override
 	public Integer convert(String value, Class<? extends Integer> type) {
 		if (isNullOrEmpty(value)) {

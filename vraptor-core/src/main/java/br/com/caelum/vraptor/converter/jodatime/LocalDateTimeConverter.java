@@ -17,14 +17,15 @@
 
 package br.com.caelum.vraptor.converter.jodatime;
 
-import static org.joda.time.format.DateTimeFormat.shortDateTime;
+import static com.google.common.base.Strings.isNullOrEmpty;
 
 import java.util.Locale;
 
 import javax.inject.Inject;
 
-import org.joda.time.DateTime;
 import org.joda.time.LocalDateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
@@ -52,15 +53,18 @@ public class LocalDateTimeConverter implements Converter<LocalDateTime> {
 
 	@Override
 	public LocalDateTime convert(String value, Class<? extends LocalDateTime> type) {
+		if (isNullOrEmpty(value)) {
+			return null;
+		}
+		
 		try {
-			DateTime out = new LocaleBasedJodaTimeConverter(locale).convert(value, shortDateTime());
-			if (out == null) {
-				return null;
-			}
-
-			return out.toLocalDateTime();
+			return getFormatter().parseDateTime(value).toLocalDateTime();
 		} catch (Exception e) {
 			throw new ConversionException(new ConversionMessage("is_not_a_valid_datetime", value));
 		}
+	}
+
+	protected DateTimeFormatter getFormatter() {
+		return DateTimeFormat.shortDateTime().withLocale(locale); 
 	}
 }

@@ -15,11 +15,9 @@
  */
 package br.com.caelum.vraptor.validator.beanvalidation;
 
-import java.lang.reflect.Method;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.Set;
-import java.util.concurrent.ConcurrentMap;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -46,7 +44,6 @@ import br.com.caelum.vraptor.interceptor.ParametersInstantiatorInterceptor;
 import br.com.caelum.vraptor.validator.ValidationMessage;
 
 import com.google.common.base.Joiner;
-import com.google.common.collect.MapMaker;
 
 /**
  * Validate method parameters using Bean Validation. The method will be
@@ -61,8 +58,6 @@ public class MethodValidatorInterceptor implements Interceptor {
 
 	private static final Logger logger = LoggerFactory.getLogger(MethodValidatorInterceptor.class);
 	
-	private static final ConcurrentMap<Method, Boolean> CACHE = new MapMaker().makeMap();
-
 	private Locale locale;
 	private MessageInterpolator interpolator;
 	private MethodInfo methodInfo;
@@ -96,17 +91,11 @@ public class MethodValidatorInterceptor implements Interceptor {
 			return false;
 		}
 		
-		Boolean hasConstraints = CACHE.get(method.getMethod());
+		BeanDescriptor bean = bvalidator.getConstraintsForClass(method.getController().getType());
+		MethodDescriptor descriptor = bean.getConstraintsForMethod(method.getMethod().getName(), method.getMethod()
+				.getParameterTypes());
 		
-		if (hasConstraints == null) {
-			hasConstraints = methodHasConstraints(method);
-			
-			CACHE.put(method.getMethod(), hasConstraints);
-			logger.debug("putting method {} into cache as {}", method, hasConstraints);
-		}
-		
-		logger.debug("returning method {} from cache as {}", method, hasConstraints);
-		return hasConstraints;
+		return descriptor != null && descriptor.hasConstrainedParameters();
 	}
 
 	@Override
@@ -145,12 +134,5 @@ public class MethodValidatorInterceptor implements Interceptor {
 		int index = parameterNode.getParameterIndex();
 		return Joiner.on(".").join(v.getPropertyPath())
 				.replace("arg" + parameterNode.getParameterIndex(), names[index]);
-	}
-
-	private boolean methodHasConstraints(ControllerMethod method) {
-		BeanDescriptor bean = bvalidator.getConstraintsForClass(method.getController().getType());
-		MethodDescriptor descriptor = bean.getConstraintsForMethod(method.getMethod().getName(), method.getMethod()
-				.getParameterTypes());
-		return descriptor != null && descriptor.hasConstrainedParameters();
 	}
 }

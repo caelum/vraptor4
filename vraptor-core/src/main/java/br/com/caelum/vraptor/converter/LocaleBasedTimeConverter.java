@@ -22,7 +22,7 @@ public class LocaleBasedTimeConverter implements Converter<Time> {
 
 	@Deprecated // CDI eyes only
 	public LocaleBasedTimeConverter() {
-    }
+	}
 
 	@Inject
 	public LocaleBasedTimeConverter(Locale locale) {

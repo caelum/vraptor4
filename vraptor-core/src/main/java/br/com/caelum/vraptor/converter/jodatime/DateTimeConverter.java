@@ -39,26 +39,26 @@ import br.com.caelum.vraptor.converter.ConversionMessage;
 @Convert(DateTime.class)
 public class DateTimeConverter implements Converter<DateTime> {
 
-    private Locale locale;
+	private Locale locale;
 
-    @Deprecated // CDI eyes only
-    public DateTimeConverter() {
-    }
+	@Deprecated // CDI eyes only
+	public DateTimeConverter() {
+	}
 
-    @Inject
+	@Inject
 	public DateTimeConverter(Locale locale) {
-        this.locale = locale;
-    }
+		this.locale = locale;
+	}
 
-    @Override
+	@Override
 	public DateTime convert(String value, Class<? extends DateTime> type) {
-        try {
-            DateTime out = new LocaleBasedJodaTimeConverter(locale).convert(value, shortDateTime());
-            if (out == null) {
-                return null;
-            }
+		try {
+			DateTime out = new LocaleBasedJodaTimeConverter(locale).convert(value, shortDateTime());
+			if (out == null) {
+				return null;
+			}
 
-            return out.toDateTime();
+			return out.toDateTime();
 		} catch (Exception e) {
 			throw new ConversionException(new ConversionMessage("is_not_a_valid_datetime", value));
 		}

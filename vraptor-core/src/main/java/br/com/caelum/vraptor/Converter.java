@@ -26,6 +26,6 @@ package br.com.caelum.vraptor;
  */
 public interface Converter<T> {
 
-    T convert(String value, Class<? extends T> type);
+	T convert(String value, Class<? extends T> type);
 
 }

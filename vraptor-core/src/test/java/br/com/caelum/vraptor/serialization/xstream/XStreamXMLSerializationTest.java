@@ -37,15 +37,15 @@ public class XStreamXMLSerializationTest {
 	protected ByteArrayOutputStream stream;
 
 	@Before
-    public void setup() throws Exception {
-        stream = new ByteArrayOutputStream();
+	public void setup() throws Exception {
+		stream = new ByteArrayOutputStream();
 
-        HttpServletResponse response = mock(HttpServletResponse.class);
-        when(response.getWriter()).thenReturn(new PrintWriter(stream));
-        
+		HttpServletResponse response = mock(HttpServletResponse.class);
+		when(response.getWriter()).thenReturn(new PrintWriter(stream));
+		
 		XStreamBuilder builder = XStreamBuilderImpl.cleanInstance(new CalendarConverter());
 		serialization = new XStreamXMLSerialization(response, builder);
-    }
+	}
 
 	public static class Address {
 		String street;
@@ -127,7 +127,7 @@ public class XStreamXMLSerializationTest {
 	}
 
 	@Test
-    public void shouldSerializeGenericClass() {
+	public void shouldSerializeGenericClass() {
 		String expectedResult = "<genericWrapper>\n  <entityList class=\"list\">\n    <client>\n      <name>washington botelho</name>\n    </client>\n    <client>\n      <name>washington botelho</name>\n    </client>\n  </entityList>\n  <total>2</total>\n</genericWrapper>";
 
 		Collection<Client> entityList = new ArrayList<>();
@@ -136,13 +136,13 @@ public class XStreamXMLSerializationTest {
 
 		GenericWrapper<Client> wrapper = new GenericWrapper<>(entityList, entityList.size());
 
-        serialization.from(wrapper).include("entityList").serialize();
+		serialization.from(wrapper).include("entityList").serialize();
 
-        assertThat(result(), is(equalTo(expectedResult)));
-    }
+		assertThat(result(), is(equalTo(expectedResult)));
+	}
 
 	@Test
-    public void shouldSerializeCalendarAsISO8601() {
+	public void shouldSerializeCalendarAsISO8601() {
 		String expectedResult = "<client>\n  <name>Otto</name>\n  <creation>2013-09-12T22:09:13-03:00</creation>\n</client>";
 
 		Calendar calendar = Calendar.getInstance();
@@ -152,10 +152,10 @@ public class XStreamXMLSerializationTest {
 		
 		Client otto = new Client("Otto", null, calendar);
 
-        serialization.from(otto).serialize();
+		serialization.from(otto).serialize();
 
-        assertThat(result(), is(equalTo(expectedResult)));
-    }
+		assertThat(result(), is(equalTo(expectedResult)));
+	}
 
 	@Test
 	public void shouldSerializeMaps() {

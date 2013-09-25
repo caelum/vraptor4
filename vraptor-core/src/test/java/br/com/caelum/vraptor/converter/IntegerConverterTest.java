@@ -33,7 +33,7 @@ public class IntegerConverterTest {
 
 	@Before
 	public void setup() {
-        this.converter = new IntegerConverter();
+		this.converter = new IntegerConverter();
 	}
 
 	@Test
@@ -55,8 +55,8 @@ public class IntegerConverterTest {
 		assertThat(converter.convert(null, Integer.class), is(nullValue()));
 	}
 
-    @Test
-    public void shouldNotComplainAboutEmpty() {
-        assertThat(converter.convert("", Integer.class), is(nullValue()));
-    }
+	@Test
+	public void shouldNotComplainAboutEmpty() {
+		assertThat(converter.convert("", Integer.class), is(nullValue()));
+	}
 }

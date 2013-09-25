@@ -15,10 +15,10 @@ public class UploadedFileConverterTest {
 	private @Mock HttpServletRequest request;
 	private @Mock UploadedFile file;
 	
-    @Before
-    public void setUp() throws Exception {
-        MockitoAnnotations.initMocks(this);
-    }
+	@Before
+	public void setUp() throws Exception {
+		MockitoAnnotations.initMocks(this);
+	}
 
 	@Test
 	public void testIfUploadedFileIsConverted() {

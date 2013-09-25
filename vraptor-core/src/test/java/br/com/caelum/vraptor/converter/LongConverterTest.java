@@ -29,35 +29,35 @@ import org.junit.Test;
 
 public class LongConverterTest {
 
-    private LongConverter converter;
+	private LongConverter converter;
 
-    @Before
-    public void setup() {
-        this.converter = new LongConverter();
-    }
+	@Before
+	public void setup() {
+		this.converter = new LongConverter();
+	}
 
-    @Test
-    public void shouldBeAbleToConvertNumbers(){
-        assertThat(converter.convert("2", long.class), is(equalTo(2L)));
-    }
+	@Test
+	public void shouldBeAbleToConvertNumbers(){
+		assertThat(converter.convert("2", long.class), is(equalTo(2L)));
+	}
 
-    @Test
-    public void shouldComplainAboutInvalidNumber() {
-        try {
+	@Test
+	public void shouldComplainAboutInvalidNumber() {
+		try {
 			converter.convert("---", long.class);
 		} catch (ConversionException e) {
 			assertThat(e.getValidationMessage(), hasMessage("--- is not a valid integer."));
 		}
-    }
+	}
 
-    @Test
-    public void shouldNotComplainAboutNull() {
-        assertThat(converter.convert(null, long.class), is(nullValue()));
-    }
+	@Test
+	public void shouldNotComplainAboutNull() {
+		assertThat(converter.convert(null, long.class), is(nullValue()));
+	}
 
-    @Test
-    public void shouldNotComplainAboutEmpty() {
-        assertThat(converter.convert("", long.class), is(nullValue()));
-    }
+	@Test
+	public void shouldNotComplainAboutEmpty() {
+		assertThat(converter.convert("", long.class), is(nullValue()));
+	}
 
 }

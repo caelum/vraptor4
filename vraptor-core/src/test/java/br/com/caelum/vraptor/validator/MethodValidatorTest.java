@@ -34,85 +34,85 @@ import br.com.caelum.vraptor.validator.beanvalidation.MethodValidatorInterceptor
  */
 public class MethodValidatorTest {
 
-    @Mock private InterceptorStack stack;
+	@Mock private InterceptorStack stack;
 
-    private MethodValidatorInterceptor interceptor;
-    private ParameterNameProvider provider;
-    private Validator validator;
-    private ValidatorFactory validatorFactory;
-    private MessageInterpolator interpolator;
-    
+	private MethodValidatorInterceptor interceptor;
+	private ParameterNameProvider provider;
+	private Validator validator;
+	private ValidatorFactory validatorFactory;
+	private MessageInterpolator interpolator;
+	
 	private ControllerMethod withConstraint;
 	private ControllerMethod withoutConstraint;
 
-    @Before
-    public void setup() throws Exception {
-        MockitoAnnotations.initMocks(this);
+	@Before
+	public void setup() throws Exception {
+		MockitoAnnotations.initMocks(this);
 
-        Locale.setDefault(Locale.ENGLISH);
+		Locale.setDefault(Locale.ENGLISH);
 
-        provider = new ParanamerNameProvider();
-        
-    	validatorFactory = javax.validation.Validation.buildDefaultValidatorFactory();
+		provider = new ParanamerNameProvider();
+		
+		validatorFactory = javax.validation.Validation.buildDefaultValidatorFactory();
 
-        MessageInterpolatorFactory interpolatorFactory = new MessageInterpolatorFactory(validatorFactory);
-        interpolatorFactory.createInterpolator();
-        interpolator = interpolatorFactory.getInstance();
+		MessageInterpolatorFactory interpolatorFactory = new MessageInterpolatorFactory(validatorFactory);
+		interpolatorFactory.createInterpolator();
+		interpolator = interpolatorFactory.getInstance();
 
-        validator = new MockValidator();
-        
-        withConstraint = DefaultControllerMethod.instanceFor(MyController.class, MyController.class.getMethod("withConstraint", String.class));
-        withoutConstraint = DefaultControllerMethod.instanceFor(MyController.class, MyController.class.getMethod("withoutConstraint", String.class));
-    }
-    
-    @Test
-    public void shouldAcceptIfMethodHasConstraint() {
-    	interceptor = new MethodValidatorInterceptor(null, null, null, null, validatorFactory.getValidator(), null);
-    	
-    	assertThat(interceptor.accepts(withConstraint), is(true));
-    }
+		validator = new MockValidator();
+		
+		withConstraint = DefaultControllerMethod.instanceFor(MyController.class, MyController.class.getMethod("withConstraint", String.class));
+		withoutConstraint = DefaultControllerMethod.instanceFor(MyController.class, MyController.class.getMethod("withoutConstraint", String.class));
+	}
+	
+	@Test
+	public void shouldAcceptIfMethodHasConstraint() {
+		interceptor = new MethodValidatorInterceptor(null, null, null, null, validatorFactory.getValidator(), null);
+		
+		assertThat(interceptor.accepts(withConstraint), is(true));
+	}
 
-    @Test
-    public void shouldNotAcceptIfMethodHasConstraint() {
-    	interceptor = new MethodValidatorInterceptor(null, null, null, null, validatorFactory.getValidator(), null);
-    	assertThat(interceptor.accepts(withoutConstraint), is(false));
-    }
+	@Test
+	public void shouldNotAcceptIfMethodHasConstraint() {
+		interceptor = new MethodValidatorInterceptor(null, null, null, null, validatorFactory.getValidator(), null);
+		assertThat(interceptor.accepts(withoutConstraint), is(false));
+	}
 
-    @Test
-    public void shouldValidateMethodWithConstraint()
-        throws Exception {
-        MethodInfo info = new MethodInfo();
-        info.setParameters(new Object[] { null });
-        info.setControllerMethod(withConstraint);
+	@Test
+	public void shouldValidateMethodWithConstraint()
+		throws Exception {
+		MethodInfo info = new MethodInfo();
+		info.setParameters(new Object[] { null });
+		info.setControllerMethod(withConstraint);
 
-        interceptor = new MethodValidatorInterceptor(new Locale("pt", "br"), interpolator, validator, info, 
-        		validatorFactory.getValidator(), provider);
+		interceptor = new MethodValidatorInterceptor(new Locale("pt", "br"), interpolator, validator, info, 
+				validatorFactory.getValidator(), provider);
 
-        MyController controller = new MyController();
-        interceptor.intercept(stack, info.getControllerMethod(), controller);
-        
-        assertThat(validator.getErrors(), hasSize(1));
-        assertThat(validator.getErrors().get(0).getCategory(), is("withConstraint.email"));
-    }
+		MyController controller = new MyController();
+		interceptor.intercept(stack, info.getControllerMethod(), controller);
+		
+		assertThat(validator.getErrors(), hasSize(1));
+		assertThat(validator.getErrors().get(0).getCategory(), is("withConstraint.email"));
+	}
 
-    /**
-     * Customer for using in bean validator tests.
-     */
-    public class Customer {
+	/**
+	 * Customer for using in bean validator tests.
+	 */
+	public class Customer {
 
-        @NotNull public Integer id;
-        @NotNull public String name;
+		@NotNull public Integer id;
+		@NotNull public String name;
 
-        public Customer(Integer id, String name) {
-            this.id = id;
-            this.name = name;
-        }
-    }
+		public Customer(Integer id, String name) {
+			this.id = id;
+			this.name = name;
+		}
+	}
 
-    public class MyController {
+	public class MyController {
 
-        public void withConstraint(@NotNull String email) { }
+		public void withConstraint(@NotNull String email) { }
 
-        public void withoutConstraint(String foo) { }
-    }
+		public void withoutConstraint(String foo) { }
+	}
 }

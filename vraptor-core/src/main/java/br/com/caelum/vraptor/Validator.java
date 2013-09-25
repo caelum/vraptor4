@@ -37,86 +37,86 @@ public interface Validator {
 	 * @param message {@link Message} object
 	 */
 	Validator check(boolean expression, Message message);
-    
+	
 	/**
 	 * If validator has errors, you can use this method to define what to do. WARN: this method don't stop the flow.
 	 * @param view
 	 * @return
 	 */
-    <T extends View> T onErrorUse(Class<T> view);
+	<T extends View> T onErrorUse(Class<T> view);
 
-    /**
-     * Adds the list of messages.
-     * @param messages
-     */
-    void addAll(Collection<? extends Message> messages);
+	/**
+	 * Adds the list of messages.
+	 * @param messages
+	 */
+	void addAll(Collection<? extends Message> messages);
 
-    /**
-     * Adds the message.
-     * @param message
-     */
-    void add(Message message);
+	/**
+	 * Adds the message.
+	 * @param message
+	 */
+	void add(Message message);
 
-    /**
-     * Returns a list of errors.
-     * @return
-     */
-    List<Message> getErrors();
+	/**
+	 * Returns a list of errors.
+	 * @return
+	 */
+	List<Message> getErrors();
 
-    /**
-     * Return true if has validation errors. False otherwise.
-     * @return
-     */
-    boolean hasErrors();
+	/**
+	 * Return true if has validation errors. False otherwise.
+	 * @return
+	 */
+	boolean hasErrors();
 
-    /**
-     * Shortcut for <br>
-     * <pre>onErrorUse(logic()).forwardTo(controller);</pre>
-     */
-    <T> T onErrorForwardTo(Class<T> controller);
-    /**
-     * Shortcut for <br>
-     * <pre>onErrorUse(logic()).forwardTo(controller.getClass());</pre>
-     *
-     * For usage in the same controller:<br>
-     * <pre>validator.onErrorForwardTo(this).someLogic();</pre>
-     */
-    <T> T onErrorForwardTo(T controller);
+	/**
+	 * Shortcut for <br>
+	 * <pre>onErrorUse(logic()).forwardTo(controller);</pre>
+	 */
+	<T> T onErrorForwardTo(Class<T> controller);
+	/**
+	 * Shortcut for <br>
+	 * <pre>onErrorUse(logic()).forwardTo(controller.getClass());</pre>
+	 *
+	 * For usage in the same controller:<br>
+	 * <pre>validator.onErrorForwardTo(this).someLogic();</pre>
+	 */
+	<T> T onErrorForwardTo(T controller);
 
-    /**
-     * Shortcut for <br>
-     * <pre>onErrorUse(logic()).redirectTo(controller);</pre>
-     */
-    <T> T onErrorRedirectTo(Class<T> controller);
-    /**
-     * Shortcut for <br>
-     * <pre>onErrorUse(logic()).redirectTo(controller.getClass());</pre>
-     *
-     * For usage in the same controller:<br>
-     * <pre>validator.onErrorRedirectTo(this).someLogic();</pre>
-     */
-    <T> T onErrorRedirectTo(T controller);
+	/**
+	 * Shortcut for <br>
+	 * <pre>onErrorUse(logic()).redirectTo(controller);</pre>
+	 */
+	<T> T onErrorRedirectTo(Class<T> controller);
+	/**
+	 * Shortcut for <br>
+	 * <pre>onErrorUse(logic()).redirectTo(controller.getClass());</pre>
+	 *
+	 * For usage in the same controller:<br>
+	 * <pre>validator.onErrorRedirectTo(this).someLogic();</pre>
+	 */
+	<T> T onErrorRedirectTo(T controller);
 
-    /**
-     * Shortcut for <br>
-     * <pre>onErrorUse(page()).of(controller);</pre>
-     */
-    <T> T onErrorUsePageOf(Class<T> controller);
-    /**
-     * Shortcut for <br>
-     * <pre>onErrorUse(page()).of(controller.getClass());</pre>
-     *
-     * For usage in the same controller:<br>
-     * <pre>validator.onErrorUsePageOf(this).someLogic();</pre>
-     */
-    <T> T onErrorUsePageOf(T controller);
+	/**
+	 * Shortcut for <br>
+	 * <pre>onErrorUse(page()).of(controller);</pre>
+	 */
+	<T> T onErrorUsePageOf(Class<T> controller);
+	/**
+	 * Shortcut for <br>
+	 * <pre>onErrorUse(page()).of(controller.getClass());</pre>
+	 *
+	 * For usage in the same controller:<br>
+	 * <pre>validator.onErrorUsePageOf(this).someLogic();</pre>
+	 */
+	<T> T onErrorUsePageOf(T controller);
 
-    /**
-     * Shortcut for <br>
-     * <pre>onErrorUse(status()).badRequest(errors);</pre>
-     *
-     * the actual validation errors list will be used.
-     */
-    void onErrorSendBadRequest();
+	/**
+	 * Shortcut for <br>
+	 * <pre>onErrorUse(status()).badRequest(errors);</pre>
+	 *
+	 * the actual validation errors list will be used.
+	 */
+	void onErrorSendBadRequest();
 
 }

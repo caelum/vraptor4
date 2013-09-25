@@ -48,7 +48,7 @@ public class XStreamConverters {
 	public XStreamConverters() {
 	}
 
-    @Inject
+	@Inject
 	public XStreamConverters(List<Converter> converters, List<SingleValueConverter> singleValueConverters)
 	{
 		this.converters = Objects.firstNonNull(converters, Lists.<Converter>newArrayList());

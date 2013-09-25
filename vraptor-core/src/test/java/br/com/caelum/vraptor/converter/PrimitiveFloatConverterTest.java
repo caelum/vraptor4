@@ -32,7 +32,7 @@ public class PrimitiveFloatConverterTest {
 
 	@Before
 	public void setup() {
-        this.converter = new PrimitiveFloatConverter();
+		this.converter = new PrimitiveFloatConverter();
 	}
 
 	@Test

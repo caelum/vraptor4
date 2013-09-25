@@ -32,7 +32,7 @@ public class PrimitiveIntConverterTest {
 
 	@Before
 	public void setup() {
-        this.converter = new PrimitiveIntConverter();
+		this.converter = new PrimitiveIntConverter();
 	}
 
 	@Test

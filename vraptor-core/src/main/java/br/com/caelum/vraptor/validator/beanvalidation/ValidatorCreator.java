@@ -41,9 +41,9 @@ public class ValidatorCreator {
 	}
 
 	@Inject
-    public ValidatorCreator(ValidatorFactory factory) {
-        this.factory = factory;
-    }
+	public ValidatorCreator(ValidatorFactory factory) {
+		this.factory = factory;
+	}
 
 	@Produces @Default @javax.enterprise.context.ApplicationScoped
 	public Validator getInstanceValidator() {

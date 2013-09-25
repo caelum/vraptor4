@@ -44,31 +44,31 @@ import br.com.caelum.vraptor.converter.ConversionMessage;
 @RequestScoped
 @Alternative
 public class LocaleBasedFloatConverter
-    implements Converter<Float> {
+	implements Converter<Float> {
 
-    private Locale locale;
+	private Locale locale;
 
-    @Deprecated // CDI eyes only
-    public LocaleBasedFloatConverter() {
-    }
+	@Deprecated // CDI eyes only
+	public LocaleBasedFloatConverter() {
+	}
 
-    @Inject
-    public LocaleBasedFloatConverter(Locale locale) {
-        this.locale = locale;
-    }
+	@Inject
+	public LocaleBasedFloatConverter(Locale locale) {
+		this.locale = locale;
+	}
 
-    @Override
+	@Override
 	public Float convert(String value, Class<? extends Float> type) {
-        if (isNullOrEmpty(value)) {
-            return null;
-        }
+		if (isNullOrEmpty(value)) {
+			return null;
+		}
 
-        try {
-            DecimalFormat fmt = ((DecimalFormat) DecimalFormat.getInstance(locale));
+		try {
+			DecimalFormat fmt = ((DecimalFormat) DecimalFormat.getInstance(locale));
 
-            return fmt.parse(value).floatValue();
-        } catch (ParseException e) {
-            throw new ConversionException(new ConversionMessage("is_not_a_valid_number", value));
-        }
-    }
+			return fmt.parse(value).floatValue();
+		} catch (ParseException e) {
+			throw new ConversionException(new ConversionMessage("is_not_a_valid_number", value));
+		}
+	}
 }

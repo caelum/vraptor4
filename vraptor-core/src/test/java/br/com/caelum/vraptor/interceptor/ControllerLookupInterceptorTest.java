@@ -48,55 +48,55 @@ import static org.mockito.Mockito.when;
 
 public class ControllerLookupInterceptorTest {
 
-    private @Mock UrlToControllerTranslator translator;
-    private @Mock MutableRequest webRequest;
-    private @Mock MutableResponse webResponse;
-    private @Mock RequestInfo info;
-    private ControllerLookupInterceptor lookup;
-    private @Mock MethodInfo methodInfo;
+	private @Mock UrlToControllerTranslator translator;
+	private @Mock MutableRequest webRequest;
+	private @Mock MutableResponse webResponse;
+	private @Mock RequestInfo info;
+	private ControllerLookupInterceptor lookup;
+	private @Mock MethodInfo methodInfo;
 	private @Mock ControllerNotFoundHandler notFoundHandler;
 	private @Mock MethodNotAllowedHandler methodNotAllowedHandler;
 	private @Mock Event<ControllerMethod> event;
 
-    @Before
-    public void config() {
-    	MockitoAnnotations.initMocks(this);
-        info = new RequestInfo(null, null, webRequest, webResponse);
-        lookup = new ControllerLookupInterceptor(translator, methodInfo, notFoundHandler, methodNotAllowedHandler, info, event);
-    }
-    
-    @Test
-    public void shouldAcceptAlways() {
-    	assertTrue(lookup.accepts(null));
-    }
+	@Before
+	public void config() {
+		MockitoAnnotations.initMocks(this);
+		info = new RequestInfo(null, null, webRequest, webResponse);
+		lookup = new ControllerLookupInterceptor(translator, methodInfo, notFoundHandler, methodNotAllowedHandler, info, event);
+	}
+	
+	@Test
+	public void shouldAcceptAlways() {
+		assertTrue(lookup.accepts(null));
+	}
 
-    @Test
-    public void shouldHandle404() throws IOException, InterceptionException {
-        when(translator.translate(info)).thenThrow(new ControllerNotFoundException());
-                
-        lookup.intercept(null, null, null);
-        verify(notFoundHandler).couldntFind(info);
-    }
+	@Test
+	public void shouldHandle404() throws IOException, InterceptionException {
+		when(translator.translate(info)).thenThrow(new ControllerNotFoundException());
+				
+		lookup.intercept(null, null, null);
+		verify(notFoundHandler).couldntFind(info);
+	}
 
-    @Test
-    public void shouldHandle405() throws IOException, InterceptionException {
-    	EnumSet<HttpMethod> allowedMethods = EnumSet.of(HttpMethod.GET);
-    	
-        when(translator.translate(info)).thenThrow(new MethodNotAllowedException(allowedMethods, HttpMethod.POST.toString()));
-                
-        lookup.intercept(null, null, null);
-        verify(methodNotAllowedHandler).deny(info, allowedMethods);
-    }
+	@Test
+	public void shouldHandle405() throws IOException, InterceptionException {
+		EnumSet<HttpMethod> allowedMethods = EnumSet.of(HttpMethod.GET);
+		
+		when(translator.translate(info)).thenThrow(new MethodNotAllowedException(allowedMethods, HttpMethod.POST.toString()));
+				
+		lookup.intercept(null, null, null);
+		verify(methodNotAllowedHandler).deny(info, allowedMethods);
+	}
 
-    @Test
-    public void shouldUseControllerMethodFoundWithNextInterceptor() throws IOException, InterceptionException {
-        final ControllerMethod method = mock(ControllerMethod.class);
-        final InterceptorStack stack = mock(InterceptorStack.class);
-        
-        when(translator.translate(info)).thenReturn(method);
-        
-        lookup.intercept(stack, null, null);
-        verify(stack).next(method, null);
-        verify(methodInfo).setControllerMethod(method);
-    }
+	@Test
+	public void shouldUseControllerMethodFoundWithNextInterceptor() throws IOException, InterceptionException {
+		final ControllerMethod method = mock(ControllerMethod.class);
+		final InterceptorStack stack = mock(InterceptorStack.class);
+		
+		when(translator.translate(info)).thenReturn(method);
+		
+		lookup.intercept(stack, null, null);
+		verify(stack).next(method, null);
+		verify(methodInfo).setControllerMethod(method);
+	}
 }

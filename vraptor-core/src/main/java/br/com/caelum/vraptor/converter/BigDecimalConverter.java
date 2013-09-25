@@ -34,7 +34,7 @@ import br.com.caelum.vraptor.Converter;
 @ApplicationScoped
 public class BigDecimalConverter implements Converter<BigDecimal> {
 
-    @Override
+	@Override
 	public BigDecimal convert(String value, Class<? extends BigDecimal> type) {
 		if (isNullOrEmpty(value)) {
 			return null;

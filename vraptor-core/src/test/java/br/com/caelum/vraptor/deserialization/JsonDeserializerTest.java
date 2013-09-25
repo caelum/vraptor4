@@ -41,7 +41,7 @@ public class JsonDeserializerTest {
 
 		extractor = new DefaultTypeNameExtractor();
 
-        deserializer = new JsonDeserializer(provider, extractor, XStreamBuilderImpl.cleanInstance());
+		deserializer = new JsonDeserializer(provider, extractor, XStreamBuilderImpl.cleanInstance());
 
 		BeanClass controllerClass = new DefaultBeanClass(CatController.class);
 

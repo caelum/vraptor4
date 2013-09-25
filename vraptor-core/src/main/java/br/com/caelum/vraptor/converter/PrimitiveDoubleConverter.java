@@ -32,17 +32,17 @@ import br.com.caelum.vraptor.Converter;
 @Convert(double.class)
 @ApplicationScoped
 public class PrimitiveDoubleConverter implements Converter<Double> {
-    @Override
+	@Override
 	public Double convert(String value, Class<? extends Double> type) {
-        if (isNullOrEmpty(value)) {
-            return 0d;
-        }
+		if (isNullOrEmpty(value)) {
+			return 0d;
+		}
 
-        try {
-            return Double.parseDouble(value);
-        } catch (NumberFormatException e) {
-            throw new ConversionException(new ConversionMessage("is_not_a_valid_number", value));
-        }
-    }
+		try {
+			return Double.parseDouble(value);
+		} catch (NumberFormatException e) {
+			throw new ConversionException(new ConversionMessage("is_not_a_valid_number", value));
+		}
+	}
 
 }

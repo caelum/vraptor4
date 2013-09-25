@@ -32,7 +32,7 @@ public class PrimitiveByteConverterTest {
 
 	@Before
 	public void setup() {
-        this.converter = new PrimitiveByteConverter();
+		this.converter = new PrimitiveByteConverter();
 	}
 
 	@Test

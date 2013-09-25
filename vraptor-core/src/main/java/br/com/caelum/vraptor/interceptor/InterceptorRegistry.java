@@ -21,8 +21,8 @@ import java.util.List;
 
 public interface InterceptorRegistry {
 
-    void register(Class<?> ... interceptors);
+	void register(Class<?> ... interceptors);
 
-    List<Class<?>> all();
+	List<Class<?>> all();
 
 }

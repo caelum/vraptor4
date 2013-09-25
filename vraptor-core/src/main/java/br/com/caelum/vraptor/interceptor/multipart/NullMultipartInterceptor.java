@@ -32,15 +32,15 @@ import br.com.caelum.vraptor.core.InterceptorStack;
 @RequestScoped
 public class NullMultipartInterceptor implements MultipartInterceptor {
 
-    /**
-     * Never accepts.
-     */
-    public boolean accepts(ControllerMethod method) {
-        return false;
-    }
+	/**
+	 * Never accepts.
+	 */
+	public boolean accepts(ControllerMethod method) {
+		return false;
+	}
 
-    public void intercept(InterceptorStack stack, ControllerMethod method, Object controllerInstance)
-        throws InterceptionException {
-        throw new UnsupportedOperationException();
-    }
+	public void intercept(InterceptorStack stack, ControllerMethod method, Object controllerInstance)
+		throws InterceptionException {
+		throw new UnsupportedOperationException();
+	}
 }

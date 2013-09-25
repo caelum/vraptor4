@@ -33,17 +33,17 @@ import br.com.caelum.vraptor.Converter;
 @ApplicationScoped
 public class IntegerConverter implements Converter<Integer> {
 
-    @Override
+	@Override
 	public Integer convert(String value, Class<? extends Integer> type) {
-        if (isNullOrEmpty(value)) {
-            return null;
-        }
+		if (isNullOrEmpty(value)) {
+			return null;
+		}
 
-        try {
-            return Integer.valueOf(value);
-        } catch (NumberFormatException e) {
+		try {
+			return Integer.valueOf(value);
+		} catch (NumberFormatException e) {
 			throw new ConversionException(new ConversionMessage("is_not_a_valid_integer", value));
-        }
-    }
+		}
+	}
 
 }

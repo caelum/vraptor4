@@ -34,69 +34,69 @@ import br.com.caelum.vraptor.ioc.Container;
 
 public class DefaultConvertersTest {
 
-    @Mock private Container container;
-    private DefaultConverters converters;
+	@Mock private Container container;
+	private DefaultConverters converters;
 
-    @Before
-    public void setup() {
-    	MockitoAnnotations.initMocks(this);
-        this.converters = new DefaultConverters(container);
-    }
+	@Before
+	public void setup() {
+		MockitoAnnotations.initMocks(this);
+		this.converters = new DefaultConverters(container);
+	}
 
-    @Test(expected = VRaptorException.class)
-    public void complainsIfNoConverterFound() {
-        converters.to(DefaultConvertersTest.class);
-    }
+	@Test(expected = VRaptorException.class)
+	public void complainsIfNoConverterFound() {
+		converters.to(DefaultConvertersTest.class);
+	}
 
-    @Test(expected = VRaptorException.class)
-    public void convertingANonAnnotatedConverterEndsUpComplaining() {
-        converters.register(WrongConverter.class);
-    }
+	@Test(expected = VRaptorException.class)
+	public void convertingANonAnnotatedConverterEndsUpComplaining() {
+		converters.register(WrongConverter.class);
+	}
 
-    class WrongConverter implements Converter<String> {
+	class WrongConverter implements Converter<String> {
 
-        public String convert(String value, Class<? extends String> type) {
-            return null;
-        }
-    }
+		public String convert(String value, Class<? extends String> type) {
+			return null;
+		}
+	}
 
-    class MyData {
-    }
+	class MyData {
+	}
 
-    @Convert(MyData.class)
-    class MyConverter implements Converter<MyData> {
-        public MyData convert(String value, Class<? extends MyData> type) {
-            return null;
-        }
-    }
+	@Convert(MyData.class)
+	class MyConverter implements Converter<MyData> {
+		public MyData convert(String value, Class<? extends MyData> type) {
+			return null;
+		}
+	}
 
-    @Convert(MyData.class)
-    class MySecondConverter implements Converter<MyData> {
-        public MyData convert(String value, Class<? extends MyData> type) {
-            return null;
-        }
-    }
+	@Convert(MyData.class)
+	class MySecondConverter implements Converter<MyData> {
+		public MyData convert(String value, Class<? extends MyData> type) {
+			return null;
+		}
+	}
 
-    @Test
-    public void registersAndUsesTheConverterInstaceForTheSpecifiedType() {
-        converters.register(MyConverter.class);
-        when(container.instanceFor(MyConverter.class)).thenReturn(new MyConverter());
+	@Test
+	public void registersAndUsesTheConverterInstaceForTheSpecifiedType() {
+		converters.register(MyConverter.class);
+		when(container.instanceFor(MyConverter.class)).thenReturn(new MyConverter());
 
-        Converter<?> found = converters.to(MyData.class);
-        assertThat(found.getClass(), is(typeCompatibleWith(MyConverter.class)));
-    }
+		Converter<?> found = converters.to(MyData.class);
+		assertThat(found.getClass(), is(typeCompatibleWith(MyConverter.class)));
+	}
 
-    @Test
-    public void usesTheLastConverterInstanceRegisteredForTheSpecifiedType() {
-        converters.register(MyConverter.class);
-        converters.register(MySecondConverter.class);
-        when(container.instanceFor(MySecondConverter.class)).thenReturn(new MySecondConverter());
+	@Test
+	public void usesTheLastConverterInstanceRegisteredForTheSpecifiedType() {
+		converters.register(MyConverter.class);
+		converters.register(MySecondConverter.class);
+		when(container.instanceFor(MySecondConverter.class)).thenReturn(new MySecondConverter());
 
-        Converter<?> found = converters.to(MyData.class);
-        assertThat(found.getClass(), is(typeCompatibleWith(MySecondConverter.class)));
-    }
+		Converter<?> found = converters.to(MyData.class);
+		assertThat(found.getClass(), is(typeCompatibleWith(MySecondConverter.class)));
+	}
 
-    @Test
+	@Test
 	public void existsForWillReturnTrueForRegisteredConverters() throws Exception {
 		converters.register(MyConverter.class);
 

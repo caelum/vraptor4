@@ -68,19 +68,19 @@ public class I18nMessage implements Message {
 		}
 	}
 
-    private Object[] i18n(Object[] parameters) {
-        for (int i = 0; i < parameters.length; i++) {
-            if (parameters[i] instanceof I18nParam) {
-                parameters[i] = ((I18nParam)parameters[i]).getKey(bundle);
-            }
-        }
-        return parameters;
-    }
+	private Object[] i18n(Object[] parameters) {
+		for (int i = 0; i < parameters.length; i++) {
+			if (parameters[i] instanceof I18nParam) {
+				parameters[i] = ((I18nParam)parameters[i]).getKey(bundle);
+			}
+		}
+		return parameters;
+	}
 
-    @Override
+	@Override
 	public String getCategory() {
-    	if (category instanceof I18nParam) {
-    		checkBundle();
+		if (category instanceof I18nParam) {
+			checkBundle();
 
 			return ((I18nParam) category).getKey(bundle);
 		}

@@ -23,12 +23,12 @@ package br.com.caelum.vraptor.serialization;
  * @since 3.0.2
  */
 public interface Serializer {
-    
-    /**
-     * Exclude these properties in serialization.
-     * @param names
-     * @return
-     */
+	
+	/**
+	 * Exclude these properties in serialization.
+	 * @param names
+	 * @return
+	 */
 	Serializer exclude(String... names);
 
 	/**

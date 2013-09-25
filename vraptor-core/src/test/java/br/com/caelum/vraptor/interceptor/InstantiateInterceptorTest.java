@@ -36,40 +36,40 @@ import br.com.caelum.vraptor.view.DogController;
 
 public class InstantiateInterceptorTest {
 
-    private @Mock InterceptorStack stack;
-    private @Mock ControllerMethod method;
+	private @Mock InterceptorStack stack;
+	private @Mock ControllerMethod method;
 
-    @Before
-    public void setup() {
-        MockitoAnnotations.initMocks(this);
-    }
+	@Before
+	public void setup() {
+		MockitoAnnotations.initMocks(this);
+	}
 
-    @Test
-    public void shouldAcceptAlways() {
-    	assertTrue(new InstantiateInterceptor(null).accepts(null));
-    }
+	@Test
+	public void shouldAcceptAlways() {
+		assertTrue(new InstantiateInterceptor(null).accepts(null));
+	}
 
-    @Test
-    public void shouldUseContainerForNewComponent() throws InterceptionException, IOException {
-        final DogController myDog = new DogController();
-        InstanceContainer container = new InstanceContainer(myDog);
-        InstantiateInterceptor interceptor = new InstantiateInterceptor(container);
+	@Test
+	public void shouldUseContainerForNewComponent() throws InterceptionException, IOException {
+		final DogController myDog = new DogController();
+		InstanceContainer container = new InstanceContainer(myDog);
+		InstantiateInterceptor interceptor = new InstantiateInterceptor(container);
 
-        when(method.getController()).thenReturn(new DefaultBeanClass(DogController.class));
+		when(method.getController()).thenReturn(new DefaultBeanClass(DogController.class));
 
-        interceptor.intercept(stack, method, null);
+		interceptor.intercept(stack, method, null);
 
-        verify(stack).next(method, myDog);
-        assertEquals(myDog,interceptor.createControllerInstance().getController());
-    }
+		verify(stack).next(method, myDog);
+		assertEquals(myDog,interceptor.createControllerInstance().getController());
+	}
 
-    @Test
-    public void shouldNotInstantiateIfThereIsAlreadyAController() throws InterceptionException, IOException {
-        final DogController myDog = new DogController();
-        InstantiateInterceptor interceptor = new InstantiateInterceptor(null);
+	@Test
+	public void shouldNotInstantiateIfThereIsAlreadyAController() throws InterceptionException, IOException {
+		final DogController myDog = new DogController();
+		InstantiateInterceptor interceptor = new InstantiateInterceptor(null);
 
-        interceptor.intercept(stack, method, myDog);
-        verify(stack).next(method, myDog);
-        assertEquals(myDog,interceptor.createControllerInstance().getController());
-    }
+		interceptor.intercept(stack, method, myDog);
+		verify(stack).next(method, myDog);
+		assertEquals(myDog,interceptor.createControllerInstance().getController());
+	}
 }

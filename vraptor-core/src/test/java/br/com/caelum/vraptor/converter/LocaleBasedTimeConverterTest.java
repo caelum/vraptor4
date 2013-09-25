@@ -42,21 +42,21 @@ import br.com.caelum.vraptor.http.MutableRequest;
 
 public class LocaleBasedTimeConverterTest {
 
-    static final String LOCALE_KEY = "javax.servlet.jsp.jstl.fmt.locale";
+	static final String LOCALE_KEY = "javax.servlet.jsp.jstl.fmt.locale";
 
-    private LocaleBasedTimeConverter converter;
-    private @Mock MutableRequest request;
-    private @Mock HttpSession session;
-    private @Mock ServletContext context;
+	private LocaleBasedTimeConverter converter;
+	private @Mock MutableRequest request;
+	private @Mock HttpSession session;
+	private @Mock ServletContext context;
 
 	@Before
 	public void setup() {
-        MockitoAnnotations.initMocks(this);
+		MockitoAnnotations.initMocks(this);
 
-        when(request.getServletContext()).thenReturn(context);
+		when(request.getServletContext()).thenReturn(context);
 
-        converter = new LocaleBasedTimeConverter(new Locale("pt", "BR"));
-        Locale.setDefault(Locale.ENGLISH);
+		converter = new LocaleBasedTimeConverter(new Locale("pt", "BR"));
+		Locale.setDefault(Locale.ENGLISH);
 	}
 
 	@Test

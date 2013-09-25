@@ -35,14 +35,14 @@ import com.google.common.collect.MapMaker;
 public class ObjenesisInstanceCreator implements InstanceCreator {
 	
 	// TODO use cache API
-	private final ConcurrentMap<Class<?>, ObjectInstantiator> CACHE = new MapMaker().makeMap();
+	private final ConcurrentMap<Class<?>, ObjectInstantiator> cache = new MapMaker().makeMap();
 	private final Objenesis objenesis = new ObjenesisStd();
 
 	public <T> T instanceFor(Class<T> clazz) {
-		ObjectInstantiator instantiator = CACHE.get(clazz);
+		ObjectInstantiator instantiator = cache.get(clazz);
 		if (instantiator == null) {
 			instantiator = objenesis.getInstantiatorOf(clazz);
-			CACHE.put(clazz, instantiator);
+			cache.put(clazz, instantiator);
 		}
 		
 		return clazz.cast(instantiator.newInstance());

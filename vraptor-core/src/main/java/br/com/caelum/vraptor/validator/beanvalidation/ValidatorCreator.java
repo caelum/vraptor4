@@ -24,7 +24,8 @@ import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 
 /**
- * Produces an instance for {@link Validator}.
+ * Produces an instance for {@link Validator}. To use this class, you need to register 
+ * then in your beans.xml as an alternative.
  *
  * @author Otávio Scherer Garcia
  * @since 3.1.2

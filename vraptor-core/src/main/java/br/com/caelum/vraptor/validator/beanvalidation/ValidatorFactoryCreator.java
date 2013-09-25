@@ -27,7 +27,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Produces an instance for {@link ValidatorFactory}.
+ * Produces an instance for {@link ValidatorFactory}.To use this class, you need to register 
+ * then in your beans.xml as an alternative.
  * 
  * @author Otávio Scherer Garcia
  * @since 3.5.1

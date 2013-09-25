@@ -50,13 +50,11 @@ import com.google.common.base.Joiner;
 import com.google.common.collect.MapMaker;
 
 /**
- * Validate method parameters using Bean Validation 1.1. The method will be
- * intercepted if any parameter contains Bean Validation annotations. This
- * component is enabled only if you have any Bean Validation provider that
- * implements method validation.
+ * Validate method parameters using Bean Validation. The method will be
+ * intercepted if any parameter contains a Bean Validation annotation.
  *
  * @author Otávio Scherer Garcia
- * @since 3.5.1-SNAPSHOT
+ * @since 3.5.1
  */
 @RequestScoped
 @Intercepts(before = ExecuteMethodInterceptor.class, after = ParametersInstantiatorInterceptor.class)
@@ -89,6 +87,9 @@ public class MethodValidatorInterceptor implements Interceptor {
 		this.parameterNameProvider = parameterNameProvider;
 	}
 
+	/**
+	 * Only accepts if method isn't parameterless and have at least one constraint.
+	 */
 	@Override
 	public boolean accepts(ControllerMethod method) {
 		if (method.getMethod().getParameterTypes().length == 0) {
@@ -132,6 +133,11 @@ public class MethodValidatorInterceptor implements Interceptor {
 		stack.next(method, controllerInstance);
 	}
 
+	/**
+	 * Returns the category for this constraint violation. By default, the category returned
+	 * is the name of method, plus full path for property. You can override this method to
+	 * change this behaviour.
+	 */
 	protected String extractCategory(String[] names, ConstraintViolation<Object> v) {
 		Iterator<Node> property = v.getPropertyPath().iterator();
 		property.next();

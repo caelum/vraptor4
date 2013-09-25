@@ -14,7 +14,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Factory for JSR303 MessageInterpolator
+ * Factory for {@link MessageInterpolator}.
+ * 
  * @author Lucas Cavalcanti
  * @since 3.1.3
  *

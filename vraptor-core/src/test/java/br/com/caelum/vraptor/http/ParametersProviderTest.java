@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.ResourceBundle;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
@@ -74,16 +73,14 @@ public abstract class ParametersProviderTest {
 
 	@Before
     public void setup() throws Exception {
-	    ResourceBundle bundle = ResourceBundle.getBundle("messages");
-	    
     	MockitoAnnotations.initMocks(this);
         this.provider = getProvider();
         this.errors = new ArrayList<>();
         when(converters.existsFor(Long.class)).thenReturn(true);
         when(converters.existsFor(long.class)).thenReturn(true);
         when(converters.existsFor(String.class)).thenReturn(true);
-        when(converters.to(Long.class)).thenReturn(new LongConverter(bundle));
-        when(converters.to(long.class)).thenReturn(new PrimitiveLongConverter(bundle));
+        when(converters.to(Long.class)).thenReturn(new LongConverter());
+        when(converters.to(long.class)).thenReturn(new PrimitiveLongConverter());
         when(converters.to(String.class)).thenReturn(new StringConverter());
 
         when(nameProvider.parameterNamesFor(any(AccessibleObject.class))).thenReturn(new String[0]);
@@ -351,6 +348,7 @@ public abstract class ParametersProviderTest {
 
     	when(converters.existsFor(ABC.class)).thenReturn(true);
     	when(converters.to(ABC.class)).thenReturn(new Converter<ABC>() {
+			@Override
 			public ABC convert(String value, Class<? extends ABC> type) {
 				return new ABC();
 			}

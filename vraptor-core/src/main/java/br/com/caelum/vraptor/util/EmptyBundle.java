@@ -9,7 +9,7 @@ import javax.enterprise.inject.Vetoed;
 
 /**
  * Representing an empty resource bundle.
- * 
+ *
  * @author Lucas Cavalcanti
  */
 @Vetoed

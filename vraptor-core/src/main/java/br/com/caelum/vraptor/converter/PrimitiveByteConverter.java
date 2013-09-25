@@ -19,11 +19,7 @@ package br.com.caelum.vraptor.converter;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
 
-import java.text.MessageFormat;
-import java.util.ResourceBundle;
-
 import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
 
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
@@ -37,19 +33,9 @@ import br.com.caelum.vraptor.Converter;
 @Convert(byte.class)
 @ApplicationScoped
 public class PrimitiveByteConverter implements Converter<Byte> {
-    
-    private ResourceBundle bundle;
 
-    @Deprecated
-    public PrimitiveByteConverter() {
-    }
-
-    @Inject
-    public PrimitiveByteConverter(ResourceBundle bundle) {
-        this.bundle = bundle;
-    }
-
-    public Byte convert(String value, Class<? extends Byte> type) {
+    @Override
+	public Byte convert(String value, Class<? extends Byte> type) {
         if (isNullOrEmpty(value)) {
             return (byte) 0;
         }
@@ -57,7 +43,7 @@ public class PrimitiveByteConverter implements Converter<Byte> {
         try {
             return Byte.parseByte(value);
         } catch (NumberFormatException e) {
-            throw new ConversionException(MessageFormat.format(bundle.getString("is_not_a_valid_integer"), value));
+            throw new ConversionException(new ConversionMessage("is_not_a_valid_integer", value));
         }
     }
 

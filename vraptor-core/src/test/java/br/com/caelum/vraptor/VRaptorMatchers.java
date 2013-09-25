@@ -16,15 +16,19 @@
  */
 package br.com.caelum.vraptor;
 
+import static org.hamcrest.Matchers.equalTo;
+
 import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.ResourceBundle;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 
 import br.com.caelum.vraptor.http.route.Route;
+import br.com.caelum.vraptor.validator.Message;
 
 public class VRaptorMatchers {
 	public static Matcher<Collection<?>> hasOneCopyOf(final Object item) {
@@ -66,6 +70,23 @@ public class VRaptorMatchers {
 			public void describeTo(Description description) {
 				description.appendText("a route that can handle class ")
 						.appendValue(type).appendText(" method ").appendValue(method);
+			}
+		};
+	}
+
+	public static Matcher<Message> hasMessage(String message) {
+		final Matcher<? super String> delegate = equalTo(message);
+		return new TypeSafeMatcher<Message>() {
+	
+			@Override
+			public void describeTo(Description description) {
+				delegate.describeTo(description);
+			}
+	
+			@Override
+			protected boolean matchesSafely(Message message) {
+				message.setBundle(ResourceBundle.getBundle("messages"));
+				return delegate.matches(message.getMessage());
 			}
 		};
 	}

@@ -24,10 +24,8 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
-import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.argThat;
 import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -67,7 +65,7 @@ public class DefaultValidatorTest {
 	@Before
 	public void setup() {
 	    ResourceBundle bundle = new SafeResourceBundle(ResourceBundle.getBundle("messages"));
-	    
+
 		Proxifier proxifier = new JavassistProxifier(new ObjenesisInstanceCreator());
 		this.validator = new DefaultValidator(result, new DefaultValidationViewsFactory(result, proxifier), outjector, proxifier, bundle);
 		when(result.use(LogicResult.class)).thenReturn(logicResult);
@@ -133,55 +131,39 @@ public class DefaultValidatorTest {
 			verify(instance).logic();
 		}
 	}
-	
+
 	@Test
 	public void shouldParametrizeMessage() {
 		Message message0 = new ValidationMessage("The simple message", "category");
 		Message message1 = new ValidationMessage("The {0} message", "category", "simple");
-		
+
 		assertThat(message0.getMessage(), is("The simple message"));
 		assertThat(message1.getMessage(), is("The simple message"));
 	}
 
-	@Test(expected = IllegalStateException.class)
-	public void shouldThrowIllegalStateExceptionIfI18nBundleHasNotBeenSet() throws Exception {
-		I18nMessage message = new I18nMessage("cat", "msg");
-		message.getMessage();
-	}
-	
-	@Test
-	public void shouldOnlySetBundleOnI18nMessagesThatHasNotBeenSetBefore() throws Exception {
-		I18nMessage message = mock(I18nMessage.class);
-		when(message.hasBundle()).thenReturn(true);
-
-		validator.add(message);
-
-		verify(message, never()).setBundle(any(ResourceBundle.class));
-	}
-	
 	@Test
 	public void doNothingIfCheckingSuccess() {
 		Client c = new Client();
 		c.name = "The name";
-		
+
 		validator.check(c.name != null, new ValidationMessage("not null", "client.name"));
 		assertThat(validator.getErrors(), hasSize(0));
 	}
-	
+
 	@Test
 	public void shouldAddMessageIfCheckingFails() {
 		Client c = new Client();
-		
+
 		validator.check(c.name != null, new ValidationMessage("not null", "client.name"));
 		assertThat(validator.getErrors(), hasSize(1));
 		assertThat(validator.getErrors().get(0).getMessage(), containsString("not null"));
 	}
-	
+
 	@Controller
 	public static interface MyComponent {
 		public void logic();
 	}
-	
+
 	static class Client {
 		public String name;
 		public int age;

@@ -17,6 +17,7 @@
 
 package br.com.caelum.vraptor.converter.l10n;
 
+import static br.com.caelum.vraptor.VRaptorMatchers.hasMessage;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
@@ -25,7 +26,6 @@ import static org.junit.Assert.fail;
 import static org.mockito.Mockito.when;
 
 import java.util.Locale;
-import java.util.ResourceBundle;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
@@ -46,16 +46,14 @@ public class LocaleBasedDoubleConverterTest {
     private @Mock MutableRequest request;
     private @Mock HttpSession session;
     private @Mock ServletContext context;
-    private ResourceBundle bundle;
 
     @Before
     public void setup() {
     	MockitoAnnotations.initMocks(this);
 
     	when(request.getServletContext()).thenReturn(context);
-        
-        bundle = ResourceBundle.getBundle("messages");
-        converter = new LocaleBasedDoubleConverter(new Locale("pt", "BR"), bundle);
+
+        converter = new LocaleBasedDoubleConverter(new Locale("pt", "BR"));
     }
 
     @Test
@@ -66,7 +64,7 @@ public class LocaleBasedDoubleConverterTest {
 
     @Test
     public void shouldBeAbleToConvertWithENUS() {
-        converter = new LocaleBasedDoubleConverter(new Locale("en", "US"), bundle);
+        converter = new LocaleBasedDoubleConverter(new Locale("en", "US"));
         assertThat(converter.convert("10.00", Double.class), is(equalTo(new Double("10.00"))));
         assertThat(converter.convert("10.01", Double.class), is(equalTo(new Double("10.01"))));
     }
@@ -87,7 +85,7 @@ public class LocaleBasedDoubleConverterTest {
             converter.convert("vr3.9", Double.class);
             fail("Should throw exception");
         } catch (ConversionException e) {
-            assertThat(e.getMessage(), is(equalTo("vr3.9 is not a valid number.")));
+            assertThat(e.getValidationMessage(), hasMessage("vr3.9 is not a valid number."));
         }
     }
 }

@@ -17,6 +17,7 @@
 
 package br.com.caelum.vraptor.converter;
 
+import static br.com.caelum.vraptor.VRaptorMatchers.hasMessage;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
@@ -28,7 +29,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-import java.util.ResourceBundle;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
@@ -48,7 +48,6 @@ public class LocaleBasedTimeConverterTest {
     private @Mock MutableRequest request;
     private @Mock HttpSession session;
     private @Mock ServletContext context;
-    private @Mock ResourceBundle bundle;
 
 	@Before
 	public void setup() {
@@ -56,8 +55,7 @@ public class LocaleBasedTimeConverterTest {
 
         when(request.getServletContext()).thenReturn(context);
 
-        bundle = ResourceBundle.getBundle("messages");
-        converter = new LocaleBasedTimeConverter(new Locale("pt", "BR"), bundle);
+        converter = new LocaleBasedTimeConverter(new Locale("pt", "BR"));
         Locale.setDefault(Locale.ENGLISH);
 	}
 
@@ -83,7 +81,7 @@ public class LocaleBasedTimeConverterTest {
 		try {
 			converter.convert("25:dd:88", Time.class);
 		} catch (ConversionException e) {
-			assertThat(e.getMessage(), is(equalTo("25:dd:88 is not a valid time.")));
+			assertThat(e.getValidationMessage(), hasMessage("25:dd:88 is not a valid time."));
 		}
 	}
 }

@@ -17,12 +17,11 @@
 
 package br.com.caelum.vraptor.converter;
 
+import static br.com.caelum.vraptor.VRaptorMatchers.hasMessage;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
-
-import java.util.ResourceBundle;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -32,12 +31,10 @@ import org.junit.Test;
 public class BooleanConverterTest {
 
     private BooleanConverter converter;
-	private ResourceBundle bundle;
 
     @Before
     public void setup() {
-        this.bundle = ResourceBundle.getBundle("messages");
-        this.converter = new BooleanConverter(bundle);
+        this.converter = new BooleanConverter();
     }
 
     @Test
@@ -86,7 +83,7 @@ public class BooleanConverterTest {
     		converter.convert("not a boolean!", Boolean.class);
     		Assert.assertTrue(false);
     	} catch(ConversionException e) {
-    		assertThat(e.getMessage(), is(equalTo("NOT A BOOLEAN! is not a valid boolean. Please use true/false, yes/no, y/n or on/off")));
+    		assertThat(e.getValidationMessage(), hasMessage("NOT A BOOLEAN! is not a valid boolean. Please use true/false, yes/no, y/n or on/off"));
     	}
     }
 }

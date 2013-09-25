@@ -4,10 +4,8 @@ import static com.google.common.base.Strings.isNullOrEmpty;
 
 import java.sql.Time;
 import java.text.DateFormat;
-import java.text.MessageFormat;
 import java.text.ParseException;
 import java.util.Locale;
-import java.util.ResourceBundle;
 import java.util.regex.Pattern;
 
 import javax.enterprise.context.RequestScoped;
@@ -21,25 +19,24 @@ import br.com.caelum.vraptor.Converter;
 public class LocaleBasedTimeConverter implements Converter<Time> {
 
 	private Locale locale;
-	private ResourceBundle bundle;
 
 	@Deprecated // CDI eyes only
 	public LocaleBasedTimeConverter() {
     }
 
 	@Inject
-	public LocaleBasedTimeConverter(Locale locale, ResourceBundle bundle) {
+	public LocaleBasedTimeConverter(Locale locale) {
 		this.locale = locale;
-        this.bundle = bundle;
 	}
 
+	@Override
 	public Time convert(String value, Class<? extends Time> type) {
 		if (isNullOrEmpty(value)) {
 			return null;
 		}
 
 		DateFormat formatHour = DateFormat.getTimeInstance(DateFormat.SHORT, locale);
-		
+
 		try {
 			if (isUncompleteTime(value)) {
 				value = value + ":00";
@@ -47,7 +44,7 @@ public class LocaleBasedTimeConverter implements Converter<Time> {
 			return new Time(formatHour.parse(value).getTime());
 		} catch (ParseException pe) {
 
-			throw new ConversionException(MessageFormat.format(bundle.getString("is_not_a_valid_time"), value));
+			throw new ConversionException(new ConversionMessage("is_not_a_valid_time", value));
 		}
 	}
 

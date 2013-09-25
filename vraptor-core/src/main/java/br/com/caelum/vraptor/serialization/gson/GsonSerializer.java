@@ -29,7 +29,6 @@ import java.util.Set;
 
 import br.com.caelum.vraptor.deserialization.gson.VRaptorGsonBuilder;
 import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
-import br.com.caelum.vraptor.serialization.ProxyInitializer;
 import br.com.caelum.vraptor.serialization.Serializee;
 import br.com.caelum.vraptor.serialization.Serializer;
 import br.com.caelum.vraptor.serialization.SerializerBuilder;
@@ -46,15 +45,13 @@ public class GsonSerializer implements SerializerBuilder {
 
 	private final Writer writer;
 	private final TypeNameExtractor extractor;
-	private final ProxyInitializer initializer;
 	private final Serializee serializee;
 	protected VRaptorGsonBuilder builder;
 
 	public GsonSerializer(VRaptorGsonBuilder builder, Writer writer, TypeNameExtractor extractor,
-			ProxyInitializer initializer, Serializee serializee) {
+			Serializee serializee) {
 		this.writer = writer;
 		this.extractor = extractor;
-		this.initializer = initializer;
 		this.builder = builder;
 		this.serializee = serializee;
 	}
@@ -74,7 +71,7 @@ public class GsonSerializer implements SerializerBuilder {
 	private void preConfigure(Object obj, String alias) {
 		checkNotNull(obj, "You can't serialize null objects");
 
-		serializee.setRootClass(initializer.getActualClass(obj));
+		serializee.setRootClass(obj.getClass());
 
 		if (alias == null) {
 			if (Collection.class.isInstance(obj) && (List.class.isInstance(obj))) {
@@ -122,7 +119,7 @@ public class GsonSerializer implements SerializerBuilder {
 		Set<Class<?>> set = new HashSet<>();
 		for (Object element : list) {
 			if (element != null && !isPrimitive(element.getClass())) {
-				set.add(initializer.getActualClass(element));
+				set.add(element.getClass());
 			}
 		}
 		return set;

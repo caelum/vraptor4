@@ -28,7 +28,6 @@ import br.com.caelum.vraptor.deserialization.gson.VRaptorGsonBuilder;
 import br.com.caelum.vraptor.interceptor.DefaultTypeNameExtractor;
 import br.com.caelum.vraptor.serialization.JSONPSerialization;
 import br.com.caelum.vraptor.serialization.JSONSerialization;
-import br.com.caelum.vraptor.serialization.NullProxyInitializer;
 import br.com.caelum.vraptor.serialization.Serializee;
 
 import com.google.common.collect.ForwardingCollection;
@@ -48,7 +47,6 @@ public class GsonJSONSerializationTest {
 	private ByteArrayOutputStream stream;
 	private HttpServletResponse response;
 	private DefaultTypeNameExtractor extractor;
-	private NullProxyInitializer initializer;
 	private List<JsonSerializer> adapters;
 
     private VRaptorGsonBuilder builder;
@@ -60,14 +58,13 @@ public class GsonJSONSerializationTest {
 		response = mock(HttpServletResponse.class);
 		when(response.getWriter()).thenReturn(new PrintWriter(stream));
 		extractor = new DefaultTypeNameExtractor();
-		initializer = new NullProxyInitializer();
 
 		adapters = new ArrayList<>();
 		adapters.add(new CalendarSerializer());
 		adapters.add(new CollectionSerializer());
 
 		builder = new VRaptorGsonBuilder(adapters, serializee);
-		this.serialization = new GsonJSONSerialization(response, extractor, initializer, builder, serializee);
+		this.serialization = new GsonJSONSerialization(response, extractor, builder, serializee);
 	}
 
 	public static class Address {
@@ -460,7 +457,7 @@ public class GsonJSONSerializationTest {
 	
 	@Test
 	public void shouldSerializeWithCallback() {
-	    JSONPSerialization serialization = new GsonJSONPSerialization(response, extractor, initializer, builder, serializee);
+	    JSONPSerialization serialization = new GsonJSONPSerialization(response, extractor, builder, serializee);
 	    
         String expectedResult = "calculate({\"order\":{\"price\":15.0}})";
         Order order = new Order(new Client("nykolas lima"), 15.0, "gift bags, please");

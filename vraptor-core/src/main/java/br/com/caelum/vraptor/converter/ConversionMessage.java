@@ -1,5 +1,7 @@
 package br.com.caelum.vraptor.converter;
 
+import static com.google.common.base.Objects.toStringHelper;
+
 import java.util.ResourceBundle;
 
 import br.com.caelum.vraptor.validator.Message;
@@ -36,4 +38,8 @@ public class ConversionMessage implements Message {
 		message.setBundle(bundle);
 	}
 
+	@Override
+	public String toString() {
+		return toStringHelper(this).add("category", getCategory()).add("message", getMessage()).toString();
+	}
 }

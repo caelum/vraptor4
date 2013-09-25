@@ -91,8 +91,9 @@ public class DefaultUserDao implements UserDao {
 	}
 
 	@Override
-	public void refresh(User user) {
+	public User refresh(User user) {
 		session.refresh(user);
+		return user;
 	}
 
 	@Override

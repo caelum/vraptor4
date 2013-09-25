@@ -16,14 +16,10 @@
  */
 package br.com.caelum.vraptor.interceptor;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 import java.io.IOException;
 import java.util.EnumSet;
+
+import javax.enterprise.event.Event;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -44,6 +40,12 @@ import br.com.caelum.vraptor.http.UrlToControllerTranslator;
 import br.com.caelum.vraptor.http.route.ControllerNotFoundException;
 import br.com.caelum.vraptor.http.route.MethodNotAllowedException;
 
+import static org.junit.Assert.assertTrue;
+
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 public class ControllerLookupInterceptorTest {
 
     private @Mock UrlToControllerTranslator translator;
@@ -54,12 +56,13 @@ public class ControllerLookupInterceptorTest {
     private @Mock MethodInfo methodInfo;
 	private @Mock ControllerNotFoundHandler notFoundHandler;
 	private @Mock MethodNotAllowedHandler methodNotAllowedHandler;
+	private @Mock Event<ControllerMethod> event;
 
     @Before
     public void config() {
     	MockitoAnnotations.initMocks(this);
         info = new RequestInfo(null, null, webRequest, webResponse);
-        lookup = new ControllerLookupInterceptor(translator, methodInfo, notFoundHandler, methodNotAllowedHandler, info);
+        lookup = new ControllerLookupInterceptor(translator, methodInfo, notFoundHandler, methodNotAllowedHandler, info, event);
     }
     
     @Test
@@ -95,6 +98,5 @@ public class ControllerLookupInterceptorTest {
         lookup.intercept(stack, null, null);
         verify(stack).next(method, null);
         verify(methodInfo).setControllerMethod(method);
-        assertEquals(method, lookup.createControllerMethod());
     }
 }

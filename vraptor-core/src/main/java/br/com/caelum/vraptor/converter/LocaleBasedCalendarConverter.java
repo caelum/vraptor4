@@ -68,7 +68,7 @@ public class LocaleBasedCalendarConverter implements Converter<Calendar> {
 		}
 	}
 
-	private DateFormat getDateFormat() {
+	protected DateFormat getDateFormat() {
 		return DateFormat.getDateInstance(DateFormat.SHORT, locale);
 	}
 }

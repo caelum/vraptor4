@@ -64,7 +64,7 @@ public class LocaleBasedDateConverter implements Converter<Date> {
 		}
 	}
 
-	private DateFormat getDateFormat() {
+	protected DateFormat getDateFormat() {
 		return DateFormat.getDateInstance(DateFormat.SHORT, locale);
 	}
 }

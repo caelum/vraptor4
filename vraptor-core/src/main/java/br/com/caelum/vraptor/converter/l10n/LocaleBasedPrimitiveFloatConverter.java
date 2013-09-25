@@ -26,6 +26,7 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 import javax.enterprise.context.RequestScoped;
+import javax.enterprise.inject.Alternative;
 import javax.inject.Inject;
 
 import br.com.caelum.vraptor.Convert;
@@ -43,6 +44,7 @@ import br.com.caelum.vraptor.converter.ConversionException;
  */
 @Convert(float.class)
 @RequestScoped
+@Alternative
 public class LocaleBasedPrimitiveFloatConverter
     implements Converter<Float> {
 

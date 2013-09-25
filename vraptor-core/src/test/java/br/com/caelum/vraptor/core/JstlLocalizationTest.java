@@ -35,12 +35,6 @@ public class JstlLocalizationTest {
     private ServletContext servletContext;
     private HttpSession session;
 
-    private static ResourceBundle bundle = new ListResourceBundle() {
-        protected Object[][] getContents() {
-            return new Object[][] { { "my.key", "abc" } };
-        }
-    };
-
     @Before
     public void setUp() {
         request = mock(MutableRequest.class);
@@ -48,6 +42,12 @@ public class JstlLocalizationTest {
         session = mock(HttpSession.class);
         
         localization = new JstlLocalization(request);
+
+        ResourceBundle bundle = new ListResourceBundle() {
+            protected Object[][] getContents() {
+                return new Object[][] { { "my.key", "abc" } };
+            }
+        };
 
         LocalizationContext context = new LocalizationContext(bundle);
         when(request.getAttribute(FMT_LOCALIZATION_CONTEXT + ".request")).thenReturn(context);

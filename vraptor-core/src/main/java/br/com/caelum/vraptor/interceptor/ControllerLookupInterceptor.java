@@ -17,8 +17,8 @@
 
 package br.com.caelum.vraptor.interceptor;
 
-import javax.enterprise.context.RequestScoped;
-import javax.enterprise.inject.Produces;
+import javax.enterprise.context.Dependent;
+import javax.enterprise.event.Event;
 import javax.inject.Inject;
 
 import org.slf4j.Logger;
@@ -44,6 +44,7 @@ import br.com.caelum.vraptor.http.route.MethodNotAllowedException;
  * @author Cecilia Fernandes
  */
 @Intercepts(after={})
+@Dependent
 public class ControllerLookupInterceptor implements Interceptor {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(ControllerLookupInterceptor.class);
@@ -53,6 +54,8 @@ public class ControllerLookupInterceptor implements Interceptor {
 	private ControllerNotFoundHandler controllerNotFoundHandler;
 	private MethodNotAllowedHandler methodNotAllowedHandler;
 	private ControllerMethod method;
+	private Event<ControllerMethod> event;
+	
 
 	//CDI eyes only
 	@Deprecated
@@ -62,12 +65,13 @@ public class ControllerLookupInterceptor implements Interceptor {
 	@Inject
 	public ControllerLookupInterceptor(UrlToControllerTranslator translator, MethodInfo methodInfo,
 			ControllerNotFoundHandler controllerNotFoundHandler, MethodNotAllowedHandler methodNotAllowedHandler,
-			RequestInfo requestInfo) {
+			RequestInfo requestInfo, Event<ControllerMethod> event) {
 		this.translator = translator;
 		this.methodInfo = methodInfo;
 		this.methodNotAllowedHandler = methodNotAllowedHandler;
 		this.controllerNotFoundHandler = controllerNotFoundHandler;
 		this.requestInfo = requestInfo;
+		this.event = event;
 	}
 
 	@Override
@@ -76,6 +80,7 @@ public class ControllerLookupInterceptor implements Interceptor {
 
 		try {
 			method = translator.translate(requestInfo);
+			event.fire(method);
 
 			methodInfo.setControllerMethod(method);
 			stack.next(method, controllerInstance);
@@ -90,11 +95,5 @@ public class ControllerLookupInterceptor implements Interceptor {
 	@Override
 	public boolean accepts(ControllerMethod method) {
 		return true;
-	}
-
-	@Produces
-	@RequestScoped
-	public ControllerMethod createControllerMethod() {
-		return this.method;
 	}
 }

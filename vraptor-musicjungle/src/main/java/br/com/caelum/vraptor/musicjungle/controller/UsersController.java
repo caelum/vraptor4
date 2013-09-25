@@ -132,7 +132,11 @@ public class UsersController {
 	 */
 	@Path("/users/{user.login}")
 	@Get
-	public void view(User user) {
+	public void show(User user) {
 	    result.include("user", userDao.find(user.getLogin()));
+
+	    //You can redirect to any page if you like.
+	    result.forwardTo("/WEB-INF/jsp/users/view.jsp");
+	    
 	}
 }

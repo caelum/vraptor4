@@ -27,6 +27,7 @@
  */
 package br.com.caelum.vraptor.http.iogi;
 
+import static br.com.caelum.vraptor.VRaptorMatchers.hasMessage;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasSize;
@@ -125,6 +126,8 @@ public class IogiParametersProviderTest extends ParametersProviderTest {
 		getParameters(setId);
 
 		assertThat(errors.size(), is(1));
+		assertThat(errors.get(0), hasMessage("asdf is not a valid integer."));
+		assertThat(errors.get(0).getCategory(), is("id"));
 	}
 
 	@Test

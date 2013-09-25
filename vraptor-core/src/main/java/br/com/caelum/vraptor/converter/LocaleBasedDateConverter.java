@@ -21,11 +21,9 @@ import static java.text.DateFormat.MEDIUM;
 import static java.text.DateFormat.SHORT;
 
 import java.text.DateFormat;
-import java.text.MessageFormat;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.Locale;
-import java.util.ResourceBundle;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -44,7 +42,6 @@ public class LocaleBasedDateConverter
     implements Converter<Date> {
 
     private Locale locale;
-    private ResourceBundle bundle;
 
     //CDI eyes only
 	@Deprecated
@@ -52,9 +49,8 @@ public class LocaleBasedDateConverter
 	}
 
     @Inject
-    public LocaleBasedDateConverter(Locale locale, ResourceBundle bundle) {
+    public LocaleBasedDateConverter(Locale locale) {
         this.locale = locale;
-        this.bundle = bundle;
     }
 
     @Override
@@ -62,18 +58,18 @@ public class LocaleBasedDateConverter
         if (isNullOrEmpty(value)) {
             return null;
         }
-        
+
         DateFormat formatDateTime = DateFormat.getDateTimeInstance(MEDIUM, MEDIUM, locale);
 
         try {
             return formatDateTime.parse(value);
-            
+
         } catch (ParseException pe) {
             DateFormat formatDate = DateFormat.getDateInstance(SHORT, locale);
             try {
                 return formatDate.parse(value);
             } catch (ParseException pe1) {
-                throw new ConversionException(MessageFormat.format(bundle.getString("is_not_a_valid_date"), value));
+                throw new ConversionException(new ConversionMessage("is_not_a_valid_date", value));
             }
         }
     }

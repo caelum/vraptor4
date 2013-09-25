@@ -363,6 +363,7 @@ public abstract class GenericContainerTest {
 
 		executeInsideRequest(new WhatToDo<Void>(){
 
+			@Override
 			public Void execute(RequestInfo request, int counter) {
 
 				provider.provideForRequest(request);
@@ -382,6 +383,7 @@ public abstract class GenericContainerTest {
 	@Test
 	public void shouldReturnAllDefaultConverters() {
 		executeInsideRequest(new WhatToDo<Void>(){
+			@Override
 			public Void execute(RequestInfo request, int counter) {
 				provider.provideForRequest(request);
 

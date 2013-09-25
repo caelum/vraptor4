@@ -17,11 +17,10 @@
 
 package br.com.caelum.vraptor.converter;
 
+import static br.com.caelum.vraptor.VRaptorMatchers.hasMessage;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
-
-import java.util.ResourceBundle;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -30,12 +29,10 @@ import org.junit.Test;
 public class PrimitiveFloatConverterTest {
 
 	private PrimitiveFloatConverter converter;
-	private ResourceBundle bundle;
 
 	@Before
 	public void setup() {
-		this.bundle = ResourceBundle.getBundle("messages");
-        this.converter = new PrimitiveFloatConverter(bundle);
+        this.converter = new PrimitiveFloatConverter();
 	}
 
 	@Test
@@ -48,7 +45,7 @@ public class PrimitiveFloatConverterTest {
 		try {
 			converter.convert("---", float.class);
 		} catch (ConversionException e) {
-			assertThat(e.getMessage(), is(equalTo("--- is not a valid number.")));
+			assertThat(e.getValidationMessage(), hasMessage("--- is not a valid number."));
 		}
 	}
 

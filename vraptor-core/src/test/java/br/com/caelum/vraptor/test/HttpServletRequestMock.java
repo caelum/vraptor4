@@ -240,11 +240,7 @@ public class HttpServletRequestMock implements MutableRequest {
 	public int getServerPort() {
 		return wrapper.getServerPort();
 	}
-
-	public ServletContext getServletContext() {
-		return wrapper.getServletContext();
-	}
-
+	
 	public String getServletPath() {
 		return wrapper.getServletPath();
 	}
@@ -358,6 +354,10 @@ public class HttpServletRequestMock implements MutableRequest {
 	}
 
 	public void setParameter(String key, String... value) {
+	}
+
+	public ServletContext getServletContext() {
+		return session.getServletContext();
 	}
 
 	@Override

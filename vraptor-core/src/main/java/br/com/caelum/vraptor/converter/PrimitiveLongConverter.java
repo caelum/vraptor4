@@ -19,11 +19,7 @@ package br.com.caelum.vraptor.converter;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
 
-import java.text.MessageFormat;
-import java.util.ResourceBundle;
-
 import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
 
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
@@ -37,19 +33,9 @@ import br.com.caelum.vraptor.Converter;
 @Convert(long.class)
 @ApplicationScoped
 public class PrimitiveLongConverter implements Converter<Long> {
-    
-    private ResourceBundle bundle;
-    
-    @Deprecated
-    public PrimitiveLongConverter() {
-    }
 
-    @Inject
-    public PrimitiveLongConverter(ResourceBundle bundle) {
-        this.bundle = bundle;
-    }
-
-    public Long convert(String value, Class<? extends Long> type) {
+    @Override
+	public Long convert(String value, Class<? extends Long> type) {
         if (isNullOrEmpty(value)) {
             return 0L;
         }
@@ -57,7 +43,7 @@ public class PrimitiveLongConverter implements Converter<Long> {
         try {
             return Long.parseLong(value);
         } catch (NumberFormatException e) {
-            throw new ConversionException(MessageFormat.format(bundle.getString("is_not_a_valid_integer"), value));
+            throw new ConversionException(new ConversionMessage("is_not_a_valid_integer", value));
         }
     }
 

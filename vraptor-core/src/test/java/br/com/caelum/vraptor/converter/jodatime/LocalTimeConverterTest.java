@@ -1,5 +1,6 @@
 package br.com.caelum.vraptor.converter.jodatime;
 
+import static br.com.caelum.vraptor.VRaptorMatchers.hasMessage;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
@@ -7,7 +8,6 @@ import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.Mockito.when;
 
 import java.util.Locale;
-import java.util.ResourceBundle;
 
 import javax.servlet.ServletContext;
 
@@ -25,7 +25,6 @@ import br.com.caelum.vraptor.http.MutableRequest;
  */
 public class LocalTimeConverterTest {
 
-	private ResourceBundle bundle;
 	private LocalTimeConverter converter;
 	private @Mock MutableRequest request;
 	private @Mock ServletContext context;
@@ -36,8 +35,7 @@ public class LocalTimeConverterTest {
 
 		when(request.getServletContext()).thenReturn(context);
 
-		bundle = ResourceBundle.getBundle("messages");
-        converter = new LocalTimeConverter(new Locale("pt", "BR"), bundle);
+        converter = new LocalTimeConverter(new Locale("pt", "BR"));
 	}
 
 	@Test
@@ -61,7 +59,7 @@ public class LocalTimeConverterTest {
 		try {
 			converter.convert("xx:yy:ff", LocalTime.class);
 		} catch (ConversionException e) {
-			assertThat(e.getMessage(), is(equalTo("xx:yy:ff is not a valid time.")));
+			assertThat(e.getValidationMessage(), hasMessage("xx:yy:ff is not a valid time."));
 		}
 	}
 }

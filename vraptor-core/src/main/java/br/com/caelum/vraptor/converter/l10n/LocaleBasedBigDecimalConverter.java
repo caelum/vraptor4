@@ -20,10 +20,8 @@ import static com.google.common.base.Strings.isNullOrEmpty;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
-import java.text.MessageFormat;
 import java.text.ParseException;
 import java.util.Locale;
-import java.util.ResourceBundle;
 
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.inject.Alternative;
@@ -32,6 +30,7 @@ import javax.inject.Inject;
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.converter.ConversionException;
+import br.com.caelum.vraptor.converter.ConversionMessage;
 
 /**
  * Localized version of VRaptor's BigDecimal converter. This component is optional and must be declared in web.xml
@@ -48,19 +47,18 @@ public class LocaleBasedBigDecimalConverter
     implements Converter<BigDecimal> {
 
     private Locale locale;
-    private ResourceBundle bundle;
-    
+
     @Deprecated // CDI eyes only
     public LocaleBasedBigDecimalConverter() {
     }
 
     @Inject
-    public LocaleBasedBigDecimalConverter(Locale locale, ResourceBundle bundle) {
+    public LocaleBasedBigDecimalConverter(Locale locale) {
         this.locale = locale;
-        this.bundle = bundle;
     }
 
-    public BigDecimal convert(String value, Class<? extends BigDecimal> type) {
+    @Override
+	public BigDecimal convert(String value, Class<? extends BigDecimal> type) {
         if (isNullOrEmpty(value)) {
             return null;
         }
@@ -71,7 +69,7 @@ public class LocaleBasedBigDecimalConverter
 
             return (BigDecimal) fmt.parse(value);
         } catch (ParseException e) {
-            throw new ConversionException(MessageFormat.format(bundle.getString("is_not_a_valid_number"), value));
+            throw new ConversionException(new ConversionMessage("is_not_a_valid_number", value));
         }
     }
 }

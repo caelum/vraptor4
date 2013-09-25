@@ -17,13 +17,13 @@
 
 package br.com.caelum.vraptor.converter;
 
+import static br.com.caelum.vraptor.VRaptorMatchers.hasMessage;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 
 import java.math.BigDecimal;
-import java.util.ResourceBundle;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -37,12 +37,10 @@ import org.junit.Test;
 public class BigDecimalConverterTest {
 
 	private BigDecimalConverter converter;
-	private ResourceBundle bundle;
 
 	@Before
 	public void setup() {
-		bundle = ResourceBundle.getBundle("messages");
-        converter = new BigDecimalConverter(bundle);
+        converter = new BigDecimalConverter();
 	}
 
 	@Test
@@ -55,7 +53,7 @@ public class BigDecimalConverterTest {
 		try {
 			converter.convert("---", BigDecimal.class);
 		} catch (ConversionException e) {
-			assertThat(e.getMessage(), is(equalTo("--- is not a valid number.")));
+			assertThat(e.getValidationMessage(), hasMessage("--- is not a valid number."));
 		}
 	}
 

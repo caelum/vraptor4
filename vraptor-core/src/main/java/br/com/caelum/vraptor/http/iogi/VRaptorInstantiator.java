@@ -139,7 +139,7 @@ public class VRaptorInstantiator implements InstantiatorWithErrors, Instantiator
 				Parameter parameter = parameters.namedAfter(target);
 				return converterForTarget(target).convert(parameter.getValue(), target.getClassType());
 			} catch (ConversionException ex) {
-				errors.add(new ValidationMessage(ex.getMessage(), target.getName()));
+				errors.add(ex.getValidationMessage().withCategory(target.getName()));
 			} catch (IllegalStateException e) {
 				return setPropertiesAfterConversions(target, parameters);
 			}

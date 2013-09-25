@@ -17,13 +17,13 @@
 
 package br.com.caelum.vraptor.converter;
 
+import static br.com.caelum.vraptor.VRaptorMatchers.hasMessage;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 
 import java.math.BigInteger;
-import java.util.ResourceBundle;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -37,12 +37,10 @@ import org.junit.Test;
 public class BigIntegerConverterTest {
 
 	private BigIntegerConverter converter;
-	private ResourceBundle bundle;
 
 	@Before
 	public void setup() {
-		this.bundle = ResourceBundle.getBundle("messages");
-        this.converter = new BigIntegerConverter(bundle);
+        this.converter = new BigIntegerConverter();
 	}
 
 	@Test
@@ -55,7 +53,7 @@ public class BigIntegerConverterTest {
 		try {
 			converter.convert("2.3", BigInteger.class);
 		} catch (ConversionException e) {
-			assertThat(e.getMessage(), is(equalTo("2.3 is not a valid integer.")));
+			assertThat(e.getValidationMessage(), hasMessage("2.3 is not a valid integer."));
 		}
 	}
 
@@ -64,7 +62,7 @@ public class BigIntegerConverterTest {
 		try {
 			converter.convert("---", BigInteger.class);
 		} catch (ConversionException e) {
-			assertThat(e.getMessage(), is(equalTo("--- is not a valid integer.")));
+			assertThat(e.getValidationMessage(), hasMessage("--- is not a valid integer."));
 		}
 	}
 

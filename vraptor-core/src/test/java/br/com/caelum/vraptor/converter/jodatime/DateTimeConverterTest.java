@@ -1,5 +1,6 @@
 package br.com.caelum.vraptor.converter.jodatime;
 
+import static br.com.caelum.vraptor.VRaptorMatchers.hasMessage;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
@@ -7,7 +8,6 @@ import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.Mockito.when;
 
 import java.util.Locale;
-import java.util.ResourceBundle;
 
 import javax.servlet.ServletContext;
 
@@ -28,7 +28,6 @@ public class DateTimeConverterTest {
 	private DateTimeConverter converter;
 	private @Mock MutableRequest request;
 	private @Mock ServletContext context;
-	private @Mock ResourceBundle bundle;
 
 	@Before
 	public void setup() {
@@ -36,8 +35,7 @@ public class DateTimeConverterTest {
 
 		when(request.getServletContext()).thenReturn(context);
 
-        bundle = ResourceBundle.getBundle("messages");
-		converter = new DateTimeConverter(new Locale("pt", "BR"), bundle);
+		converter = new DateTimeConverter(new Locale("pt", "BR"));
 	}
 
 	@Test
@@ -61,7 +59,7 @@ public class DateTimeConverterTest {
 		try {
 			converter.convert("a,10/06/2008/a/b/c", DateTime.class);
 		} catch (ConversionException e) {
-			assertThat(e.getMessage(), is(equalTo("a,10/06/2008/a/b/c is not a valid datetime.")));
+			assertThat(e.getValidationMessage(), hasMessage("a,10/06/2008/a/b/c is not a valid datetime."));
 		}
 	}
 }

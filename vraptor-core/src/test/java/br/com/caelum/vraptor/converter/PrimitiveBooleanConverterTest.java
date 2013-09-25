@@ -21,22 +21,20 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 
-import java.util.ResourceBundle;
-
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
+import br.com.caelum.vraptor.VRaptorMatchers;
 
 
 public class PrimitiveBooleanConverterTest {
 
 	private PrimitiveBooleanConverter converter;
-	private ResourceBundle bundle;
 
 	@Before
 	public void setup() {
-		this.bundle = ResourceBundle.getBundle("messages");
-        this.converter = new PrimitiveBooleanConverter(bundle);
+        this.converter = new PrimitiveBooleanConverter(new BooleanConverter());
 	}
 
 	@Test
@@ -89,8 +87,8 @@ public class PrimitiveBooleanConverterTest {
 			converter.convert("not a boolean!", boolean.class);
 			Assert.assertTrue(false);
 		} catch (ConversionException e) {
-			assertThat(e.getMessage(),
-					is(equalTo("NOT A BOOLEAN! is not a valid boolean. Please use true/false, yes/no, y/n or on/off")));
+			assertThat(e.getValidationMessage(),
+					VRaptorMatchers.hasMessage("NOT A BOOLEAN! is not a valid boolean. Please use true/false, yes/no, y/n or on/off"));
 		}
 	}
 }

@@ -17,11 +17,14 @@
 package br.com.caelum.vraptor.validator;
 
 import java.io.Serializable;
+import java.util.ResourceBundle;
 
 public interface Message extends Serializable {
 
 	String getMessage();
 
 	String getCategory();
+
+	void setBundle(ResourceBundle bundle);
 
 }

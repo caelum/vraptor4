@@ -17,12 +17,11 @@
 
 package br.com.caelum.vraptor.converter;
 
+import static br.com.caelum.vraptor.VRaptorMatchers.hasMessage;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
-
-import java.util.ResourceBundle;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -31,12 +30,10 @@ import org.junit.Test;
 public class CharacterConverterTest {
 
 	private CharacterConverter converter;
-	private ResourceBundle bundle;
 
 	@Before
 	public void setup() {
-		this.bundle = ResourceBundle.getBundle("messages");
-        this.converter = new CharacterConverter(bundle);
+        this.converter = new CharacterConverter();
 	}
 
 	@Test
@@ -49,7 +46,7 @@ public class CharacterConverterTest {
 		try {
 			converter.convert("---", Character.class);
 		} catch (ConversionException e) {
-			assertThat(e.getMessage(), is(equalTo("--- is not a valid character.")));
+			assertThat(e.getValidationMessage(), hasMessage("--- is not a valid character."));
 		}
 	}
 

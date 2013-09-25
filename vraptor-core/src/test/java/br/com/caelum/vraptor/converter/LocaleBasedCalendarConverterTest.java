@@ -17,6 +17,7 @@
 
 package br.com.caelum.vraptor.converter;
 
+import static br.com.caelum.vraptor.VRaptorMatchers.hasMessage;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
@@ -26,7 +27,6 @@ import static org.mockito.Mockito.when;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Locale;
-import java.util.ResourceBundle;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
@@ -46,7 +46,6 @@ public class LocaleBasedCalendarConverterTest {
 	private @Mock MutableRequest request;
 	private @Mock HttpSession session;
 	private @Mock ServletContext context;
-	private @Mock ResourceBundle bundle;
 
 	@Before
 	public void setup() {
@@ -54,8 +53,7 @@ public class LocaleBasedCalendarConverterTest {
 
 		when(request.getServletContext()).thenReturn(context);
 
-		bundle = ResourceBundle.getBundle("messages");
-		converter = new LocaleBasedCalendarConverter(new Locale("pt", "BR"), bundle);
+		converter = new LocaleBasedCalendarConverter(new Locale("pt", "BR"));
 	}
 
 	@Test
@@ -79,7 +77,7 @@ public class LocaleBasedCalendarConverterTest {
 		try {
 			converter.convert("a,10/06/2008/a/b/c", Calendar.class);
 		} catch (ConversionException e) {
-			assertThat(e.getMessage(), is(equalTo("a,10/06/2008/a/b/c is not a valid date.")));
+			assertThat(e.getValidationMessage(), hasMessage("a,10/06/2008/a/b/c is not a valid date."));
 		}
 	}
 }

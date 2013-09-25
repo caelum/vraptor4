@@ -19,9 +19,7 @@ package br.com.caelum.vraptor.converter.jodatime;
 
 import static org.joda.time.format.DateTimeFormat.shortDate;
 
-import java.text.MessageFormat;
 import java.util.Locale;
-import java.util.ResourceBundle;
 
 import javax.inject.Inject;
 
@@ -31,6 +29,7 @@ import org.joda.time.DateTime;
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.converter.ConversionException;
+import br.com.caelum.vraptor.converter.ConversionMessage;
 
 /**
  * VRaptor converter for {@link DateMidnight}. {@link DateMidnight} is part of Joda Time library.
@@ -42,19 +41,18 @@ import br.com.caelum.vraptor.converter.ConversionException;
 public class DateMidnightConverter implements Converter<DateMidnight> {
 
     private Locale locale;
-    private ResourceBundle bundle;
 
     @Deprecated // CDI eyes only
     public DateMidnightConverter() {
     }
 
     @Inject
-    public DateMidnightConverter(Locale locale, ResourceBundle bundle) {
+    public DateMidnightConverter(Locale locale) {
         this.locale = locale;
-        this.bundle = bundle;
     }
 
-    public DateMidnight convert(String value, Class<? extends DateMidnight> type) {
+    @Override
+	public DateMidnight convert(String value, Class<? extends DateMidnight> type) {
         try {
             DateTime out = new LocaleBasedJodaTimeConverter(locale).convert(value, shortDate());
             if (out == null) {
@@ -63,7 +61,7 @@ public class DateMidnightConverter implements Converter<DateMidnight> {
 
             return out.toDateMidnight();
 		} catch (Exception e) {
-			throw new ConversionException(MessageFormat.format(bundle.getString("is_not_a_valid_datetime"), value));
+			throw new ConversionException(new ConversionMessage("is_not_a_valid_datetime", value));
 		}
 	}
 }

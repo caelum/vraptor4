@@ -7,6 +7,7 @@ import java.util.ResourceBundle;
 import br.com.caelum.vraptor.validator.Message;
 
 import com.google.common.base.Objects;
+import com.google.common.base.Strings;
 
 public class ConversionMessage implements Message {
 
@@ -30,7 +31,7 @@ public class ConversionMessage implements Message {
 
 	@Override
 	public String getCategory() {
-		return Objects.firstNonNull(message.getCategory(), category);
+		return Objects.firstNonNull(Strings.emptyToNull(message.getCategory()), category);
 	}
 
 	@Override

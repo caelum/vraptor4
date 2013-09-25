@@ -42,7 +42,7 @@ import br.com.caelum.vraptor.view.ValidationViewsFactory;
  */
 @RequestScoped
 public class DefaultValidator extends AbstractValidator {
-	
+
 	private static final Logger logger = LoggerFactory.getLogger(DefaultValidator.class);
 
 	private Result result;
@@ -51,7 +51,7 @@ public class DefaultValidator extends AbstractValidator {
 	private Outjector outjector;
 	private Proxifier proxifier;
 	private ResourceBundle bundle;
-	
+
 	//CDI eyes only
 	@Deprecated
 	public DefaultValidator() {
@@ -65,29 +65,29 @@ public class DefaultValidator extends AbstractValidator {
 		this.proxifier = proxifier;
         this.bundle = bundle;
 	}
-	
+
 	@Override
 	public Validator check(boolean condition, Message message) {
 		if (!condition) {
 			errors.add(message);
 		}
-		
+
 		return this;
 	}
-	
+
 	@Override
 	public <T extends View> T onErrorUse(Class<T> view) {
 		if (!hasErrors()) {
 			return new MockResult(proxifier).use(view); //ignore anything, no errors occurred
 		}
-		
+
 		if (logger.isDebugEnabled()) {
 			logger.debug("there are errors on result: {}", errors);
 		}
-		
+
 		result.include("errors", getErrors());
 		outjector.outjectRequestMap();
-		
+
 		return viewsFactory.instanceFor(view, errors);
 	}
 
@@ -100,9 +100,7 @@ public class DefaultValidator extends AbstractValidator {
 
 	@Override
 	public void add(Message message) {
-		if (message instanceof I18nMessage && !((I18nMessage) message).hasBundle()) {
-			((I18nMessage) message).setBundle(bundle);
-		}
+		message.setBundle(bundle);
 		errors.add(message);
 	}
 

@@ -21,7 +21,8 @@ public class ConversionMessage implements Message {
 	}
 
 	public ConversionMessage(String key, Object... parameters) {
-		this.message = new I18nMessage((String) null, key, parameters);
+		this.message = new I18nMessage("", key, parameters);
+		this.category = "";
 	}
 
 	@Override

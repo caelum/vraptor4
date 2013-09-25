@@ -15,15 +15,10 @@
  */
 package br.com.caelum.vraptor.proxy;
 
-import java.util.concurrent.ConcurrentMap;
-
 import javax.enterprise.context.ApplicationScoped;
 
 import org.objenesis.Objenesis;
 import org.objenesis.ObjenesisStd;
-import org.objenesis.instantiator.ObjectInstantiator;
-
-import com.google.common.collect.MapMaker;
 
 /**
  * Objenesis implementation for {@link InstanceCreator}.
@@ -34,17 +29,9 @@ import com.google.common.collect.MapMaker;
 @ApplicationScoped
 public class ObjenesisInstanceCreator implements InstanceCreator {
 	
-	// TODO use cache API
-	private final ConcurrentMap<Class<?>, ObjectInstantiator> cache = new MapMaker().makeMap();
-	private final Objenesis objenesis = new ObjenesisStd();
+	private final Objenesis objenesis = new ObjenesisStd(true);
 
 	public <T> T instanceFor(Class<T> clazz) {
-		ObjectInstantiator instantiator = cache.get(clazz);
-		if (instantiator == null) {
-			instantiator = objenesis.getInstantiatorOf(clazz);
-			cache.put(clazz, instantiator);
-		}
-		
-		return clazz.cast(instantiator.newInstance());
+		return objenesis.getInstantiatorOf(clazz).newInstance();
 	}
 }

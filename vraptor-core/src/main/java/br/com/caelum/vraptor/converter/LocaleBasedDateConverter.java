@@ -17,8 +17,6 @@
 package br.com.caelum.vraptor.converter;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
-import static java.text.DateFormat.MEDIUM;
-import static java.text.DateFormat.SHORT;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -38,8 +36,7 @@ import br.com.caelum.vraptor.Converter;
  */
 @Convert(Date.class)
 @RequestScoped
-public class LocaleBasedDateConverter
-	implements Converter<Date> {
+public class LocaleBasedDateConverter implements Converter<Date> {
 
 	private Locale locale;
 
@@ -59,19 +56,15 @@ public class LocaleBasedDateConverter
 			return null;
 		}
 
-		DateFormat formatDateTime = DateFormat.getDateTimeInstance(MEDIUM, MEDIUM, locale);
-
 		try {
-			return formatDateTime.parse(value);
+			return getDateFormat().parse(value);
 
 		} catch (ParseException pe) {
-			DateFormat formatDate = DateFormat.getDateInstance(SHORT, locale);
-			try {
-				return formatDate.parse(value);
-			} catch (ParseException pe1) {
-				throw new ConversionException(new ConversionMessage("is_not_a_valid_date", value));
-			}
+			throw new ConversionException(new ConversionMessage("is_not_a_valid_date", value));
 		}
 	}
 
+	private DateFormat getDateFormat() {
+		return DateFormat.getDateInstance(DateFormat.SHORT, locale);
+	}
 }

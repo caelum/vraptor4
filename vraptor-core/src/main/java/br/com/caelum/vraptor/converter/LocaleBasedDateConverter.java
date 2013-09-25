@@ -38,8 +38,7 @@ import br.com.caelum.vraptor.Converter;
  */
 @Convert(Date.class)
 @RequestScoped
-public class LocaleBasedDateConverter
-	implements Converter<Date> {
+public class LocaleBasedDateConverter implements Converter<Date> {
 
 	private Locale locale;
 

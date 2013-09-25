@@ -15,8 +15,7 @@
  * limitations under the License.
  */
 
-package br.com.caelum.vraptor.converter.l10n;
-
+package br.com.caelum.vraptor.converter;
 import static br.com.caelum.vraptor.VRaptorMatchers.hasMessage;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -35,13 +34,12 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor.converter.ConversionException;
+import br.com.caelum.vraptor.converter.LocaleBasedPrimitiveFloatConverter;
 import br.com.caelum.vraptor.http.MutableRequest;
 
-public class LocaleBasedPrimitiveDoubleConverterTest {
+public class LocaleBasedPrimitiveFloatConverterTest {
 
-	static final String LOCALE_KEY = "javax.servlet.jsp.jstl.fmt.locale";
-
-	private LocaleBasedPrimitiveDoubleConverter converter;
+	private LocaleBasedPrimitiveFloatConverter converter;
 	private @Mock MutableRequest request;
 	private @Mock HttpSession session;
 	private @Mock ServletContext context;
@@ -52,36 +50,36 @@ public class LocaleBasedPrimitiveDoubleConverterTest {
 
 		when(request.getServletContext()).thenReturn(context);
 
-		converter = new LocaleBasedPrimitiveDoubleConverter(new Locale("pt", "BR"));
+		converter = new LocaleBasedPrimitiveFloatConverter(new Locale("pt", "BR"));
 	}
 
 	@Test
 	public void shouldBeAbleToConvertWithPTBR() {
-		assertThat(converter.convert("10,00", double.class), is(equalTo(Double.parseDouble("10.00"))));
-		assertThat(converter.convert("10,01", double.class), is(equalTo(Double.parseDouble("10.01"))));
+		assertThat(converter.convert("10,00", float.class), is(equalTo(Float.parseFloat("10.00"))));
+		assertThat(converter.convert("10,01", float.class), is(equalTo(Float.parseFloat("10.01"))));
 	}
 
 	@Test
 	public void shouldBeAbleToConvertWithENUS() {
-		converter = new LocaleBasedPrimitiveDoubleConverter(new Locale("en", "US"));
-		assertThat(converter.convert("10.00", double.class), is(equalTo(Double.parseDouble("10.00"))));
-		assertThat(converter.convert("10.01", double.class), is(equalTo(Double.parseDouble("10.01"))));
+		converter = new LocaleBasedPrimitiveFloatConverter(new Locale("en", "US"));
+		assertThat(converter.convert("10.00", float.class), is(equalTo(Float.parseFloat("10.00"))));
+		assertThat(converter.convert("10.01", float.class), is(equalTo(Float.parseFloat("10.01"))));
 	}
 
 	 @Test
 	 public void shouldBeAbleToConvertEmpty() {
-		 assertThat(converter.convert("", double.class), is(equalTo(0d)));
+		 assertThat(converter.convert("", float.class), is(equalTo(0f)));
 	 }
 
 	 @Test
 	 public void shouldBeAbleToConvertNull() {
-		 assertThat(converter.convert(null, double.class), is(equalTo(0d)));
+		 assertThat(converter.convert(null, float.class), is(equalTo(0f)));
 	 }
 
 	@Test
 	public void shouldThrowExceptionWhenUnableToParse() {
 		try {
-			converter.convert("vr3.9", double.class);
+			converter.convert("vr3.9", float.class);
 			fail("Should throw exception");
 		} catch (ConversionException e) {
 			assertThat(e.getValidationMessage(), hasMessage("vr3.9 is not a valid number."));

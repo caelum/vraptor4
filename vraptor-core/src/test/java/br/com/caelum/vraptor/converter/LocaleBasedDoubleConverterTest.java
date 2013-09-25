@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package br.com.caelum.vraptor.converter.l10n;
+package br.com.caelum.vraptor.converter;
 
 import static br.com.caelum.vraptor.VRaptorMatchers.hasMessage;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -25,7 +25,6 @@ import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.when;
 
-import java.math.BigDecimal;
 import java.util.Locale;
 
 import javax.servlet.ServletContext;
@@ -37,13 +36,14 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor.converter.ConversionException;
+import br.com.caelum.vraptor.converter.LocaleBasedDoubleConverter;
 import br.com.caelum.vraptor.http.MutableRequest;
 
-public class LocaleBasedBigDecimalConverterTest {
+public class LocaleBasedDoubleConverterTest {
 
 	static final String LOCALE_KEY = "javax.servlet.jsp.jstl.fmt.locale";
 
-	private LocaleBasedBigDecimalConverter converter;
+	private LocaleBasedDoubleConverter converter;
 	private @Mock MutableRequest request;
 	private @Mock HttpSession session;
 	private @Mock ServletContext context;
@@ -54,36 +54,36 @@ public class LocaleBasedBigDecimalConverterTest {
 
 		when(request.getServletContext()).thenReturn(context);
 
-		converter = new LocaleBasedBigDecimalConverter(new Locale("pt", "BR"));
+		converter = new LocaleBasedDoubleConverter(new Locale("pt", "BR"));
 	}
 
 	@Test
 	public void shouldBeAbleToConvertWithPTBR() {
-		assertThat(converter.convert("10,00", BigDecimal.class), is(equalTo(new BigDecimal("10.00"))));
-		assertThat(converter.convert("10,01", BigDecimal.class), is(equalTo(new BigDecimal("10.01"))));
+		assertThat(converter.convert("10,00", Double.class), is(equalTo(new Double("10.00"))));
+		assertThat(converter.convert("10,01", Double.class), is(equalTo(new Double("10.01"))));
 	}
 
 	@Test
 	public void shouldBeAbleToConvertWithENUS() {
-		converter = new LocaleBasedBigDecimalConverter(new Locale("en", "US"));
-		assertThat(converter.convert("10.00", BigDecimal.class), is(equalTo(new BigDecimal("10.00"))));
-		assertThat(converter.convert("10.01", BigDecimal.class), is(equalTo(new BigDecimal("10.01"))));
+		converter = new LocaleBasedDoubleConverter(new Locale("en", "US"));
+		assertThat(converter.convert("10.00", Double.class), is(equalTo(new Double("10.00"))));
+		assertThat(converter.convert("10.01", Double.class), is(equalTo(new Double("10.01"))));
 	}
 
 	 @Test
 	 public void shouldBeAbleToConvertEmpty() {
-		 assertThat(converter.convert("", BigDecimal.class), is(nullValue()));
+		 assertThat(converter.convert("", Double.class), is(nullValue()));
 	 }
 
 	 @Test
 	 public void shouldBeAbleToConvertNull() {
-		 assertThat(converter.convert(null, BigDecimal.class), is(nullValue()));
+		 assertThat(converter.convert(null, Double.class), is(nullValue()));
 	 }
 
 	@Test
 	public void shouldThrowExceptionWhenUnableToParse() {
 		try {
-			converter.convert("vr3.9", BigDecimal.class);
+			converter.convert("vr3.9", Double.class);
 			fail("Should throw exception");
 		} catch (ConversionException e) {
 			assertThat(e.getValidationMessage(), hasMessage("vr3.9 is not a valid number."));

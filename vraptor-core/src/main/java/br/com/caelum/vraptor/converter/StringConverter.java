@@ -15,6 +15,8 @@
  */
 package br.com.caelum.vraptor.converter;
 
+import javax.enterprise.context.ApplicationScoped;
+
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
 
@@ -26,6 +28,7 @@ import br.com.caelum.vraptor.Converter;
  *
  */
 @Convert(String.class)
+@ApplicationScoped
 public class StringConverter implements Converter<String> {
 
 	public String convert(String value, Class<? extends String> type) {

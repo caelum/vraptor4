@@ -20,6 +20,7 @@ import static com.google.common.base.Strings.isNullOrEmpty;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.Locale;
 
@@ -43,8 +44,7 @@ import br.com.caelum.vraptor.converter.ConversionMessage;
 @Convert(BigDecimal.class)
 @RequestScoped
 @Alternative
-public class LocaleBasedBigDecimalConverter
-	implements Converter<BigDecimal> {
+public class LocaleBasedBigDecimalConverter implements Converter<BigDecimal> {
 
 	private Locale locale;
 
@@ -64,12 +64,15 @@ public class LocaleBasedBigDecimalConverter
 		}
 
 		try {
-			DecimalFormat fmt = ((DecimalFormat) DecimalFormat.getInstance(locale));
-			fmt.setParseBigDecimal(true);
-
-			return (BigDecimal) fmt.parse(value);
+			return (BigDecimal) getNumberFormat().parse(value);
 		} catch (ParseException e) {
 			throw new ConversionException(new ConversionMessage("is_not_a_valid_number", value));
 		}
+	}
+	
+	protected NumberFormat getNumberFormat() {
+		DecimalFormat fmt = ((DecimalFormat) DecimalFormat.getInstance(locale));
+		fmt.setParseBigDecimal(true);
+		return fmt;
 	}
 }

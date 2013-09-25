@@ -18,6 +18,9 @@
 package br.com.caelum.vraptor.converter;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
+
+import javax.enterprise.context.ApplicationScoped;
+
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
 
@@ -28,6 +31,7 @@ import br.com.caelum.vraptor.Converter;
  * @author Guilherme Silveira
  */
 @Convert(Enum.class)
+@ApplicationScoped
 public class EnumConverter implements Converter {
 
 	/**

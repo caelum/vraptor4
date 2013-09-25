@@ -120,7 +120,7 @@ public class VRaptor implements Filter {
 	public void init(FilterConfig cfg) throws ServletException {
 		servletContext = cfg.getServletContext();
 		contextEvent.fire(servletContext);
-		this.provider.start(servletContext);
+		this.provider.start();
 		logger.info("VRaptor 4.0 successfuly initialized");
 		initializedEvent.fire(new VRaptorInitialized());
 	}

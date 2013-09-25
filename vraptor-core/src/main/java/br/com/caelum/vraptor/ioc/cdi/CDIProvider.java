@@ -2,7 +2,6 @@ package br.com.caelum.vraptor.ioc.cdi;
 
 import javax.enterprise.inject.spi.BeanManager;
 import javax.inject.Inject;
-import javax.servlet.ServletContext;
 
 import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.ioc.Container;
@@ -29,7 +28,7 @@ public class CDIProvider implements ContainerProvider {
 	}
 
 	@Override
-	public void start(ServletContext context) {
+	public void start() {
 		stereotypesRegistry.configure();
 	}
 

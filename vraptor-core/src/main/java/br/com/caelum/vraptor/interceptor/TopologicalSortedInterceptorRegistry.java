@@ -18,7 +18,6 @@ package br.com.caelum.vraptor.interceptor;
 import java.util.List;
 
 import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.Default;
 
 import br.com.caelum.vraptor.Intercepts;
 
@@ -31,7 +30,6 @@ import br.com.caelum.vraptor.Intercepts;
  *
  */
 @ApplicationScoped
-@Default
 public class TopologicalSortedInterceptorRegistry implements InterceptorRegistry {
 
 	private Graph<Class<?>> set = new Graph<>();

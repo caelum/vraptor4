@@ -1,18 +1,5 @@
 package br.com.caelum.vraptor.ioc.cdi;
 
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
-
-import static org.mockito.Mockito.when;
-
-import java.util.Collections;
-import java.util.Enumeration;
 import java.util.concurrent.Callable;
 
 import javax.enterprise.context.RequestScoped;
@@ -36,6 +23,15 @@ import br.com.caelum.vraptor.ioc.GenericContainerTest;
 import br.com.caelum.vraptor.ioc.WhatToDo;
 import br.com.caelum.vraptor.ioc.fixture.ComponentFactoryInTheClasspath;
 import br.com.caelum.vraptor.ioc.fixture.CustomComponentWithLifecycleInTheClasspath;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
+
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
 
 public class CDIBasedContainerTest extends GenericContainerTest {
 
@@ -66,7 +62,7 @@ public class CDIBasedContainerTest extends GenericContainerTest {
 			public T call() throws Exception {
 				cdiContainer.startRequest();
 				cdiContainer.startSession();
-				RequestInfo request = new RequestInfo(context, null,
+				RequestInfo request = new RequestInfo(null, null,
 						servletContainerFactory.getRequest(),
 						servletContainerFactory.getResponse());
 
@@ -189,12 +185,6 @@ public class CDIBasedContainerTest extends GenericContainerTest {
 		component.putWithDefault("test2","test2");
 		assertEquals(component.putWithLRU("test","test"),"test");
 		assertEquals(component.putWithDefault("test2","test2"),"test2");
-	}
-
-	protected void configureExpectations() {
-    	Enumeration<String> emptyEnumeration = Collections.enumeration(Collections.<String>emptyList());
-    	when(context.getInitParameterNames()).thenReturn(emptyEnumeration);
-    	when(context.getAttributeNames()).thenReturn(emptyEnumeration);
 	}
 
 }

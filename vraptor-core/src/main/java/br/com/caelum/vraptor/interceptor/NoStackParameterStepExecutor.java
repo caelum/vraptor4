@@ -1,6 +1,5 @@
 package br.com.caelum.vraptor.interceptor;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
 public class NoStackParameterStepExecutor implements StepExecutor<Void> {
@@ -9,9 +8,9 @@ public class NoStackParameterStepExecutor implements StepExecutor<Void> {
 	private Method method;
 
 	public NoStackParameterStepExecutor(StepInvoker stepInvoker,
-			Class<? extends Annotation> step, Class<?> interceptorClass) {
+			Method method, Class<?> interceptorClass) {
 		this.stepInvoker = stepInvoker;
-		this.method = stepInvoker.findMethod(step, interceptorClass);
+		this.method = method;
 	}
 
 	public boolean accept(Class<?> interceptorClass) {

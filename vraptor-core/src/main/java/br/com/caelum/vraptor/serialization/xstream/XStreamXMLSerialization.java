@@ -21,8 +21,6 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
 
-import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
-import br.com.caelum.vraptor.serialization.ProxyInitializer;
 import br.com.caelum.vraptor.serialization.Serializer;
 import br.com.caelum.vraptor.serialization.SerializerBuilder;
 import br.com.caelum.vraptor.serialization.XMLSerialization;
@@ -40,18 +38,14 @@ import com.thoughtworks.xstream.XStream;
 public class XStreamXMLSerialization implements XMLSerialization {
 
 	private HttpServletResponse response;
-	private TypeNameExtractor extractor;
-	private ProxyInitializer initializer;
 	private XStreamBuilder builder;
 
 	@Deprecated// CDI eyes only
 	public XStreamXMLSerialization() {}
 
 	@Inject
-	public XStreamXMLSerialization(HttpServletResponse response, TypeNameExtractor extractor, ProxyInitializer initializer, XStreamBuilder builder) {
+	public XStreamXMLSerialization(HttpServletResponse response, XStreamBuilder builder) {
 		this.response = response;
-		this.extractor = extractor;
-		this.initializer = initializer;
 		this.builder = builder;
 	}
 
@@ -66,7 +60,7 @@ public class XStreamXMLSerialization implements XMLSerialization {
 
 	protected SerializerBuilder getSerializer() {
 		try {
-			return new XStreamSerializer(getXStream(), response.getWriter(), extractor, initializer);
+			return new XStreamSerializer(getXStream(), response.getWriter());
 		} catch (IOException e) {
 			throw new ResultException("Unable to serialize data", e);
 		}

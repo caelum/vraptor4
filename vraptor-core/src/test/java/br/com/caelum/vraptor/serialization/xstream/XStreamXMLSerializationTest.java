@@ -26,8 +26,6 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import br.com.caelum.vraptor.interceptor.DefaultTypeNameExtractor;
-import br.com.caelum.vraptor.serialization.NullProxyInitializer;
 import br.com.caelum.vraptor.serialization.Serialization;
 
 import com.google.common.collect.Lists;
@@ -46,8 +44,7 @@ public class XStreamXMLSerializationTest {
         when(response.getWriter()).thenReturn(new PrintWriter(stream));
         
 		XStreamBuilder builder = XStreamBuilderImpl.cleanInstance(new CalendarConverter());
-		
-		serialization = new XStreamXMLSerialization(response, new DefaultTypeNameExtractor(), new NullProxyInitializer(), builder);
+		serialization = new XStreamXMLSerialization(response, builder);
     }
 
 	public static class Address {

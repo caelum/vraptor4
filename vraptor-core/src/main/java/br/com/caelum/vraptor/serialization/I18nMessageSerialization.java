@@ -16,10 +16,11 @@
 
 package br.com.caelum.vraptor.serialization;
 
+import java.util.ResourceBundle;
+
 import javax.enterprise.context.RequestScoped;
 
 import br.com.caelum.vraptor.View;
-import br.com.caelum.vraptor.core.Localization;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.validator.I18nMessage;
 
@@ -32,23 +33,23 @@ import br.com.caelum.vraptor.validator.I18nMessage;
 @RequestScoped
 public class I18nMessageSerialization implements View{
 
-	private Localization localization;
 	private Container container;
 	private I18nMessage i18nMessage;
+    private ResourceBundle bundle;
 
 	//CDI eyes only
 	@Deprecated
 	public I18nMessageSerialization() {
 	}
 
-	public I18nMessageSerialization(Container container, Localization localization) {
+	public I18nMessageSerialization(Container container, ResourceBundle bundle) {
 		this.container = container;
-		this.localization = localization;
+        this.bundle = bundle;
     }
 
 	public I18nMessageSerialization from(String category, String key, Object...params) {
 		I18nMessage i18nMessage = new I18nMessage(category, key, params);
-		i18nMessage.setBundle(localization.getBundle());
+		i18nMessage.setBundle(bundle);
 		this.i18nMessage = i18nMessage;
 		return this;
 	}

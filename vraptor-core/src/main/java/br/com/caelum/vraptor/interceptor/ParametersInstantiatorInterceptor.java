@@ -34,7 +34,6 @@ import br.com.caelum.vraptor.Intercepts;
 import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.core.InterceptorStack;
-import br.com.caelum.vraptor.core.Localization;
 import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
@@ -55,7 +54,6 @@ public class ParametersInstantiatorInterceptor implements Interceptor {
 
     private static final Logger logger = LoggerFactory.getLogger(ParametersInstantiatorInterceptor.class);
     private Validator validator;
-    private Localization localization;
 	private final List<Message> errors = new ArrayList<>();
 	private MutableRequest request;
 	private FlashScope flash;
@@ -66,12 +64,11 @@ public class ParametersInstantiatorInterceptor implements Interceptor {
 
 	@Inject
     public ParametersInstantiatorInterceptor(ParametersProvider provider, ParameterNameProvider parameterNameProvider, MethodInfo parameters,
-            Validator validator, Localization localization, MutableRequest request, FlashScope flash) {
+            Validator validator, MutableRequest request, FlashScope flash) {
         this.provider = provider;
         this.parameterNameProvider = parameterNameProvider;
         this.parameters = parameters;
         this.validator = validator;
-        this.localization = localization;
 		this.request = request;
 		this.flash = flash;
     }
@@ -134,7 +131,7 @@ public class ParametersInstantiatorInterceptor implements Interceptor {
 	private Object[] getParametersFor(ControllerMethod method) {
 		Object[] args = flash.consumeParameters(method);
 		if (args == null) {
-			return provider.getParametersFor(method, errors, localization.getBundle());
+			return provider.getParametersFor(method, errors);
 		}
 		return args;
 	}

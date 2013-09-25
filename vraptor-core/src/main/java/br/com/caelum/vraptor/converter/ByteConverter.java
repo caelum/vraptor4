@@ -19,9 +19,6 @@ package br.com.caelum.vraptor.converter;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
 
-import java.text.MessageFormat;
-import java.util.ResourceBundle;
-
 import javax.enterprise.context.ApplicationScoped;
 
 import br.com.caelum.vraptor.Convert;
@@ -36,7 +33,8 @@ import br.com.caelum.vraptor.Converter;
 @ApplicationScoped
 public class ByteConverter implements Converter<Byte> {
 
-    public Byte convert(String value, Class<? extends Byte> type, ResourceBundle bundle) {
+    @Override
+	public Byte convert(String value, Class<? extends Byte> type) {
         if (isNullOrEmpty(value)) {
             return null;
         }
@@ -44,7 +42,7 @@ public class ByteConverter implements Converter<Byte> {
         try {
             return Byte.valueOf(value);
         } catch (NumberFormatException e) {
-			throw new ConversionException(MessageFormat.format(bundle.getString("is_not_a_valid_integer"), value));
+			throw new ConversionException(new ConversionMessage("is_not_a_valid_integer", value));
         }
     }
 

@@ -17,11 +17,10 @@
 
 package br.com.caelum.vraptor.converter;
 
+import static br.com.caelum.vraptor.VRaptorMatchers.hasMessage;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
-
-import java.util.ResourceBundle;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -30,36 +29,34 @@ import org.junit.Test;
 public class PrimitiveIntConverterTest {
 
 	private PrimitiveIntConverter converter;
-	private ResourceBundle bundle;
 
 	@Before
 	public void setup() {
-		this.converter = new PrimitiveIntConverter();
-		this.bundle = ResourceBundle.getBundle("messages");
+        this.converter = new PrimitiveIntConverter();
 	}
 
 	@Test
 	public void shouldBeAbleToConvertNumbers() {
-		assertThat(converter.convert("2", int.class, bundle), is(equalTo(2)));
+		assertThat(converter.convert("2", int.class), is(equalTo(2)));
 	}
 
 	@Test
 	public void shouldComplainAboutInvalidNumber() {
 		try {
-			converter.convert("---", int.class, bundle);
+			converter.convert("---", int.class);
 		} catch (ConversionException e) {
-			assertThat(e.getMessage(), is(equalTo("--- is not a valid integer.")));
+			assertThat(e.getValidationMessage(), hasMessage("--- is not a valid integer."));
 		}
 	}
 
 	@Test
 	public void shouldConvertToZeroWhenNull() {
-		assertThat(converter.convert(null, int.class, bundle), is(equalTo(0)));
+		assertThat(converter.convert(null, int.class), is(equalTo(0)));
 	}
 
 	@Test
 	public void shouldConvertToZeroWhenEmpty() {
-		assertThat(converter.convert("", int.class, bundle), is(equalTo(0)));
+		assertThat(converter.convert("", int.class), is(equalTo(0)));
 	}
 
 }

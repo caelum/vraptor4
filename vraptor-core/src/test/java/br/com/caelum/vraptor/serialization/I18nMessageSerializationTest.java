@@ -10,6 +10,7 @@ import static org.mockito.Mockito.when;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintWriter;
+import java.util.ResourceBundle;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -23,7 +24,6 @@ import br.com.caelum.vraptor.serialization.xstream.XStreamBuilder;
 import br.com.caelum.vraptor.serialization.xstream.XStreamBuilderImpl;
 import br.com.caelum.vraptor.serialization.xstream.XStreamJSONSerialization;
 import br.com.caelum.vraptor.serialization.xstream.XStreamXMLSerialization;
-import br.com.caelum.vraptor.util.test.MockLocalization;
 import br.com.caelum.vraptor.validator.SingletonResourceBundle;
 
 public class I18nMessageSerializationTest {
@@ -37,20 +37,16 @@ public class I18nMessageSerializationTest {
         HttpServletResponse response = mock(HttpServletResponse.class);
         when(response.getWriter()).thenReturn(new PrintWriter(stream));
         DefaultTypeNameExtractor extractor = new DefaultTypeNameExtractor();
-		NullProxyInitializer initializer = new NullProxyInitializer();
 	    XStreamBuilder builder = XStreamBuilderImpl.cleanInstance(new MessageConverter());
-		XStreamJSONSerialization jsonSerialization = new XStreamJSONSerialization(response, extractor, initializer, builder);
-		XStreamXMLSerialization xmlSerialization = new XStreamXMLSerialization(response, extractor, initializer, builder);
+		XStreamJSONSerialization jsonSerialization = new XStreamJSONSerialization(response, extractor, builder);
+		XStreamXMLSerialization xmlSerialization = new XStreamXMLSerialization(response, builder);
 
 		Container container = mock(Container.class);
 		when(container.instanceFor(JSONSerialization.class)).thenReturn(jsonSerialization);
 		when(container.instanceFor(XMLSerialization.class)).thenReturn(xmlSerialization);
 
-		MockLocalization mockLocalization = mock(MockLocalization.class);
-		when(mockLocalization.getBundle()).thenReturn(new SingletonResourceBundle("message.cat", "Just another {0} in {1}"));
-
-		serialization = new I18nMessageSerialization(container , mockLocalization);
-
+		ResourceBundle bundle = new SingletonResourceBundle("message.cat", "Just another {0} in {1}");
+		serialization = new I18nMessageSerialization(container , bundle);
     }
 
     @Test

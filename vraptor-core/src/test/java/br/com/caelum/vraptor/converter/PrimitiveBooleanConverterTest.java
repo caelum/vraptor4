@@ -21,76 +21,74 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 
-import java.util.ResourceBundle;
-
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
+import br.com.caelum.vraptor.VRaptorMatchers;
 
 
 public class PrimitiveBooleanConverterTest {
 
 	private PrimitiveBooleanConverter converter;
-	private ResourceBundle bundle;
 
 	@Before
 	public void setup() {
-		this.converter = new PrimitiveBooleanConverter();
-		this.bundle = ResourceBundle.getBundle("messages");
+        this.converter = new PrimitiveBooleanConverter(new BooleanConverter());
 	}
 
 	@Test
 	public void shouldBeAbleToConvertNumbers() {
-		assertThat(converter.convert("", boolean.class, bundle), is(equalTo(false)));
-		assertThat(converter.convert("false", boolean.class, bundle), is(equalTo(false)));
-		assertThat(converter.convert("true", boolean.class, bundle), is(equalTo(true)));
-		assertThat(converter.convert("True", boolean.class, bundle), is(equalTo(true)));
+		assertThat(converter.convert("", boolean.class), is(equalTo(false)));
+		assertThat(converter.convert("false", boolean.class), is(equalTo(false)));
+		assertThat(converter.convert("true", boolean.class), is(equalTo(true)));
+		assertThat(converter.convert("True", boolean.class), is(equalTo(true)));
 	}
 
 	@Test
 	public void shouldConvertToZeroWhenNull() {
-		assertThat(converter.convert(null, boolean.class, bundle), is(equalTo(false)));
+		assertThat(converter.convert(null, boolean.class), is(equalTo(false)));
 	}
 
 	@Test
 	public void shouldConvertToZeroWhenEmpty() {
-		assertThat(converter.convert("", boolean.class, bundle), is(equalTo(false)));
+		assertThat(converter.convert("", boolean.class), is(equalTo(false)));
 	}
 
 	@Test
 	public void shouldConvertYesNo() {
-		assertThat(converter.convert("yes", boolean.class, bundle), is(equalTo(true)));
-		assertThat(converter.convert("no", boolean.class, bundle), is(equalTo(false)));
+		assertThat(converter.convert("yes", boolean.class), is(equalTo(true)));
+		assertThat(converter.convert("no", boolean.class), is(equalTo(false)));
 	}
 
 	@Test
 	public void shouldConvertYN() {
-		assertThat(converter.convert("y", boolean.class, bundle), is(equalTo(true)));
-		assertThat(converter.convert("n", boolean.class, bundle), is(equalTo(false)));
+		assertThat(converter.convert("y", boolean.class), is(equalTo(true)));
+		assertThat(converter.convert("n", boolean.class), is(equalTo(false)));
 	}
 
 	@Test
 	public void shouldConvertOnOff() {
-		assertThat(converter.convert("on", boolean.class, bundle), is(equalTo(true)));
-		assertThat(converter.convert("off", boolean.class, bundle), is(equalTo(false)));
+		assertThat(converter.convert("on", boolean.class), is(equalTo(true)));
+		assertThat(converter.convert("off", boolean.class), is(equalTo(false)));
 	}
 
 	@Test
 	public void shouldConvertIgnoringCase() {
-		assertThat(converter.convert("truE", boolean.class, bundle), is(equalTo(true)));
-		assertThat(converter.convert("FALSE", boolean.class, bundle), is(equalTo(false)));
-		assertThat(converter.convert("On", boolean.class, bundle), is(equalTo(true)));
-		assertThat(converter.convert("oFf", boolean.class, bundle), is(equalTo(false)));
+		assertThat(converter.convert("truE", boolean.class), is(equalTo(true)));
+		assertThat(converter.convert("FALSE", boolean.class), is(equalTo(false)));
+		assertThat(converter.convert("On", boolean.class), is(equalTo(true)));
+		assertThat(converter.convert("oFf", boolean.class), is(equalTo(false)));
 	}
 
 	@Test
 	public void shouldThrowExceptionForInvalidString() {
 		try {
-			converter.convert("not a boolean!", boolean.class, bundle);
+			converter.convert("not a boolean!", boolean.class);
 			Assert.assertTrue(false);
 		} catch (ConversionException e) {
-			assertThat(e.getMessage(),
-					is(equalTo("NOT A BOOLEAN! is not a valid boolean. Please use true/false, yes/no, y/n or on/off")));
+			assertThat(e.getValidationMessage(),
+					VRaptorMatchers.hasMessage("NOT A BOOLEAN! is not a valid boolean. Please use true/false, yes/no, y/n or on/off"));
 		}
 	}
 }

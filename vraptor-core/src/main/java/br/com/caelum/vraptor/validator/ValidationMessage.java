@@ -20,6 +20,7 @@ package br.com.caelum.vraptor.validator;
 import static com.google.common.base.Objects.toStringHelper;
 
 import java.text.MessageFormat;
+import java.util.ResourceBundle;
 
 /**
  * A simple validation message.
@@ -43,6 +44,7 @@ public class ValidationMessage implements Message {
 	    this.messageParameters = messageParameters;
 	}
 
+	@Override
 	public String getMessage() {
 	    if (messageParameters != null) {
 	        return MessageFormat.format(message, messageParameters);
@@ -50,9 +52,13 @@ public class ValidationMessage implements Message {
 		return message;
 	}
 
+	@Override
 	public String getCategory() {
 		return category;
 	}
+
+	@Override
+	public void setBundle(ResourceBundle bundle) {}
 
 	@Override
 	public String toString() {

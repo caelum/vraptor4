@@ -17,7 +17,6 @@
 
 package br.com.caelum.vraptor;
 
-import java.util.ResourceBundle;
 
 /**
  * Converts a string value to an object.
@@ -27,6 +26,6 @@ import java.util.ResourceBundle;
  */
 public interface Converter<T> {
 
-    T convert(String value, Class<? extends T> type, ResourceBundle bundle);
+    T convert(String value, Class<? extends T> type);
 
 }

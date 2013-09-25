@@ -17,13 +17,13 @@
 
 package br.com.caelum.vraptor.converter;
 
+import static br.com.caelum.vraptor.VRaptorMatchers.hasMessage;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 
 import java.math.BigInteger;
-import java.util.ResourceBundle;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -37,45 +37,43 @@ import org.junit.Test;
 public class BigIntegerConverterTest {
 
 	private BigIntegerConverter converter;
-	private ResourceBundle bundle;
 
 	@Before
 	public void setup() {
-		this.converter = new BigIntegerConverter();
-		this.bundle = ResourceBundle.getBundle("messages");
+        this.converter = new BigIntegerConverter();
 	}
 
 	@Test
 	public void shouldBeAbleToConvertIntegerNumbers() {
-		assertThat(converter.convert("3", BigInteger.class, bundle), is(equalTo(new BigInteger("3"))));
+		assertThat(converter.convert("3", BigInteger.class), is(equalTo(new BigInteger("3"))));
 	}
 
 	@Test
 	public void shouldComplainAboutNonIntegerNumbers() {
 		try {
-			converter.convert("2.3", BigInteger.class, bundle);
+			converter.convert("2.3", BigInteger.class);
 		} catch (ConversionException e) {
-			assertThat(e.getMessage(), is(equalTo("2.3 is not a valid integer.")));
+			assertThat(e.getValidationMessage(), hasMessage("2.3 is not a valid integer."));
 		}
 	}
 
 	@Test
 	public void shouldComplainAboutInvalidNumber() {
 		try {
-			converter.convert("---", BigInteger.class, bundle);
+			converter.convert("---", BigInteger.class);
 		} catch (ConversionException e) {
-			assertThat(e.getMessage(), is(equalTo("--- is not a valid integer.")));
+			assertThat(e.getValidationMessage(), hasMessage("--- is not a valid integer."));
 		}
 	}
 
 	@Test
 	public void shouldNotComplainAboutNull() {
-		assertThat(converter.convert(null, BigInteger.class, bundle), is(nullValue()));
+		assertThat(converter.convert(null, BigInteger.class), is(nullValue()));
 	}
 
 	@Test
 	public void shouldNotComplainAboutEmpty() {
-		assertThat(converter.convert("", BigInteger.class, bundle), is(nullValue()));
+		assertThat(converter.convert("", BigInteger.class), is(nullValue()));
 	}
 
 }

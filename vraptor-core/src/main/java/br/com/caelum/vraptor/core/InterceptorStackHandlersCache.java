@@ -23,6 +23,7 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.interceptor.InterceptorRegistry;
 
@@ -33,7 +34,7 @@ public class InterceptorStackHandlersCache {
 	private InterceptorRegistry registry;
 	private InterceptorHandlerFactory handlerFactory;
 
-	@Inject private Logger logger;
+	private Logger logger = LoggerFactory.getLogger(InterceptorStackHandlersCache.class);
 
 	@Deprecated //CDI eyes only
 	public InterceptorStackHandlersCache() {}

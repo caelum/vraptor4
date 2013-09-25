@@ -19,9 +19,6 @@ package br.com.caelum.vraptor.converter;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
 
-import java.text.MessageFormat;
-import java.util.ResourceBundle;
-
 import javax.enterprise.context.ApplicationScoped;
 
 import br.com.caelum.vraptor.Convert;
@@ -35,14 +32,14 @@ import br.com.caelum.vraptor.Converter;
 @Convert(char.class)
 @ApplicationScoped
 public class PrimitiveCharConverter implements Converter<Character> {
-
-    public Character convert(String value, Class<? extends Character> type, ResourceBundle bundle) {
+    @Override
+	public Character convert(String value, Class<? extends Character> type) {
         if (isNullOrEmpty(value)) {
             return '\u0000';
         }
 
         if (value.length() != 1) {
-            throw new ConversionException(MessageFormat.format(bundle.getString("is_not_a_valid_character"), value));
+            throw new ConversionException(new ConversionMessage("is_not_a_valid_character", value));
         }
         return value.charAt(0);
     }

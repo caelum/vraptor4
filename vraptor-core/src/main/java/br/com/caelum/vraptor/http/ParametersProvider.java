@@ -30,6 +30,6 @@ import br.com.caelum.vraptor.validator.Message;
  */
 public interface ParametersProvider {
 
-    Object[] getParametersFor(ControllerMethod method, List<Message> errors, ResourceBundle bundle);
+    Object[] getParametersFor(ControllerMethod method, List<Message> errors);
 
 }

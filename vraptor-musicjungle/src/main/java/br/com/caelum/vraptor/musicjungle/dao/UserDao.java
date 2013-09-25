@@ -54,8 +54,9 @@ public interface UserDao {
 	/**
 	 * Synchronize the user data with the database. 
 	 * Any not saved modification on user will be overwritten.
+	 * @return 
 	 */
-	void refresh(User user);
+	User refresh(User user);
 
 	/**
 	 * Update the user on database.

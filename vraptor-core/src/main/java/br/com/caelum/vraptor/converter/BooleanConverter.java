@@ -19,8 +19,6 @@ package br.com.caelum.vraptor.converter;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
 
-import java.text.MessageFormat;
-import java.util.ResourceBundle;
 import java.util.Set;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -44,7 +42,8 @@ public class BooleanConverter implements Converter<Boolean> {
 	private static final Set<String> IS_TRUE  = Sets.newHashSet("TRUE", "1", "YES", "Y", "ON");
 	private static final Set<String> IS_FALSE = Sets.newHashSet("FALSE", "0", "NO", "N", "OFF");
 
-	public Boolean convert(String value, Class<? extends Boolean> type, ResourceBundle bundle) {
+	@Override
+	public Boolean convert(String value, Class<? extends Boolean> type) {
 	    if (isNullOrEmpty(value)) {
 			return null;
 		}
@@ -57,7 +56,7 @@ public class BooleanConverter implements Converter<Boolean> {
 			return false;
 		}
 
-		throw new ConversionException(MessageFormat.format(bundle.getString("is_not_a_valid_boolean"), value));
+		throw new ConversionException(new ConversionMessage("is_not_a_valid_boolean", value));
 	}
 
 	private boolean matches(Set<String> words, String value) {

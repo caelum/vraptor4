@@ -46,7 +46,6 @@ import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.controller.DefaultControllerMethod;
 import br.com.caelum.vraptor.core.InterceptorStack;
-import br.com.caelum.vraptor.core.Localization;
 import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
@@ -61,7 +60,6 @@ public class ParametersInstantiatorInterceptorTest {
     private @Mock ParametersProvider parametersProvider;
     private @Mock ParameterNameProvider parameterNameProvider;
 	private @Mock Validator validator;
-	private @Mock Localization localization;
 	private @Mock InterceptorStack stack;
 	private @Mock ResourceBundle bundle;
 	private @Mock MutableRequest request;
@@ -77,10 +75,9 @@ public class ParametersInstantiatorInterceptorTest {
 	@SuppressWarnings("unchecked")
     public void setup() throws Exception {
 		MockitoAnnotations.initMocks(this);
-		when(localization.getBundle()).thenReturn(bundle);
 		when(request.getParameterNames()).thenReturn(Collections.enumeration(Collections.EMPTY_LIST));
 
-        this.instantiator = new ParametersInstantiatorInterceptor(parametersProvider, parameterNameProvider, params, validator, localization, request, flash);
+        this.instantiator = new ParametersInstantiatorInterceptor(parametersProvider, parameterNameProvider, params, validator, request, flash);
 
         this.errors = (List<Message>) new Mirror().on(instantiator).get().field("errors");
         this.method = DefaultControllerMethod.instanceFor(Component.class, Component.class.getDeclaredMethod("method"));
@@ -114,7 +111,7 @@ public class ParametersInstantiatorInterceptorTest {
 
     	Object[] values = new Object[] { new Object() };
 
-    	when(parametersProvider.getParametersFor(method, errors, bundle)).thenReturn(values);
+    	when(parametersProvider.getParametersFor(method, errors)).thenReturn(values);
 
         instantiator.intercept(stack, method, null);
 
@@ -160,14 +157,14 @@ public class ParametersInstantiatorInterceptorTest {
     	verify(params).setParameters(values);
     	verify(stack).next(method, null);
     	verify(validator).addAll(Collections.<Message>emptyList());
-    	verify(parametersProvider, never()).getParametersFor(method, errors, bundle);
+    	verify(parametersProvider, never()).getParametersFor(method, errors);
     }
 
     @Test
     public void shouldValidateParameters() throws Exception {
     	Object[] values = new Object[]{0};
 
-    	when(parametersProvider.getParametersFor(otherMethod, errors, bundle)).thenAnswer(addErrorsToListAndReturn(values, "error1"));
+    	when(parametersProvider.getParametersFor(otherMethod, errors)).thenAnswer(addErrorsToListAndReturn(values, "error1"));
 
         instantiator.intercept(stack, otherMethod, null);
 
@@ -179,7 +176,7 @@ public class ParametersInstantiatorInterceptorTest {
 	@Test(expected=RuntimeException.class)
     public void shouldThrowException() throws Exception {
 
-    	when(parametersProvider.getParametersFor(method, errors, bundle)).thenThrow(new RuntimeException());
+    	when(parametersProvider.getParametersFor(method, errors)).thenThrow(new RuntimeException());
 
         instantiator.intercept(stack, method, null);
     }
@@ -191,7 +188,7 @@ public class ParametersInstantiatorInterceptorTest {
 		ControllerMethod controllerMethod = DefaultControllerMethod.instanceFor(HeaderParamComponent.class, method);
 		
 		when(request.getHeader("X-MyApp-Password")).thenReturn("123");
-    	when(parametersProvider.getParametersFor(controllerMethod, errors, bundle)).thenReturn(values);
+    	when(parametersProvider.getParametersFor(controllerMethod, errors)).thenReturn(values);
     	when(parameterNameProvider.parameterNamesFor(method)).thenReturn(new String[]{"password"});
 
         instantiator.intercept(stack, controllerMethod, null);
@@ -208,7 +205,7 @@ public class ParametersInstantiatorInterceptorTest {
 		Method method = Component.class.getDeclaredMethod("method");
 		ControllerMethod controllerMethod = DefaultControllerMethod.instanceFor(Component.class, method);
 		
-    	when(parametersProvider.getParametersFor(controllerMethod, errors, bundle)).thenReturn(values);
+    	when(parametersProvider.getParametersFor(controllerMethod, errors)).thenReturn(values);
     	when(parameterNameProvider.parameterNamesFor(method)).thenReturn(new String[]{"password"});
 
         instantiator.intercept(stack, controllerMethod, null);
@@ -228,7 +225,7 @@ public class ParametersInstantiatorInterceptorTest {
 		when(request.getHeader("X-MyApp-User")).thenReturn("user");
 		when(request.getHeader("X-MyApp-Password")).thenReturn("123");
 		when(request.getHeader("X-MyApp-Token")).thenReturn("daek2321");
-    	when(parametersProvider.getParametersFor(resouceMethod, errors, bundle)).thenReturn(values);
+    	when(parametersProvider.getParametersFor(resouceMethod, errors)).thenReturn(values);
     	when(parameterNameProvider.parameterNamesFor(method)).thenReturn(new String[]{"user", "password", "token"});
 
         instantiator.intercept(stack, resouceMethod, null);

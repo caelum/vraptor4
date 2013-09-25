@@ -41,6 +41,13 @@ public class CdiContainer {
 		weld.shutdown();
 	}
 	
+	public void stopAllContexts(){
+		contexts.stopRequestScope();
+		contexts.stopConversationScope();
+		contexts.stopSessionScope();
+		contexts.stopApplicationScope();
+	}
+	
 	public void startRequest(){
 		contexts.startRequestScope();
 	}

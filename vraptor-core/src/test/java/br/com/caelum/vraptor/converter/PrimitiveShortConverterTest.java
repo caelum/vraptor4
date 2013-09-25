@@ -21,45 +21,43 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 
-import java.util.ResourceBundle;
-
 import org.junit.Before;
 import org.junit.Test;
+
+import br.com.caelum.vraptor.VRaptorMatchers;
 
 
 public class PrimitiveShortConverterTest {
 
     private PrimitiveShortConverter converter;
-	private ResourceBundle bundle;
 
     @Before
     public void setup() {
         this.converter = new PrimitiveShortConverter();
-        this.bundle = ResourceBundle.getBundle("messages");
     }
 
     @Test
     public void shouldBeAbleToConvertNumbers(){
-        assertThat(converter.convert("5", short.class, bundle), is(equalTo((short) 5)));
+        assertThat(converter.convert("5", short.class), is(equalTo((short) 5)));
     }
 
-    @Test
-    public void shouldComplainAboutInvalidNumber() {
-    	try {
-        converter.convert("---", short.class, bundle);
-	} catch (ConversionException e) {
-			assertThat(e.getMessage(), is(equalTo("--- is not a valid integer.")));
+	@Test
+	public void shouldComplainAboutInvalidNumber() {
+		try {
+			converter.convert("---", short.class);
+		} catch (ConversionException e) {
+			assertThat(e.getValidationMessage(), VRaptorMatchers.hasMessage("--- is not a valid integer."));
 		}
-    }
+	}
 
     @Test
     public void shouldConvertToZeroWhenNull() {
-    	assertThat(converter.convert(null, short.class, bundle), is(equalTo((short) 0)));
+    	assertThat(converter.convert(null, short.class), is(equalTo((short) 0)));
     }
 
     @Test
     public void shouldConvertToZeroWhenEmpty() {
-    	assertThat(converter.convert("", short.class, bundle), is(equalTo((short) 0)));
+    	assertThat(converter.convert("", short.class), is(equalTo((short) 0)));
     }
 
 }

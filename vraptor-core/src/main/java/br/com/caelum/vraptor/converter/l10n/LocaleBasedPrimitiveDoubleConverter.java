@@ -20,17 +20,17 @@ package br.com.caelum.vraptor.converter.l10n;
 import static com.google.common.base.Strings.isNullOrEmpty;
 
 import java.text.DecimalFormat;
-import java.text.MessageFormat;
 import java.text.ParseException;
 import java.util.Locale;
-import java.util.ResourceBundle;
 
 import javax.enterprise.context.RequestScoped;
+import javax.enterprise.inject.Alternative;
+import javax.inject.Inject;
 
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.converter.ConversionException;
-import br.com.caelum.vraptor.core.Localization;
+import br.com.caelum.vraptor.converter.ConversionMessage;
 
 /**
  * Localized version of VRaptor's Double converter. This component is optional and must be declared in web.xml before
@@ -43,26 +43,32 @@ import br.com.caelum.vraptor.core.Localization;
  */
 @Convert(double.class)
 @RequestScoped
+@Alternative
 public class LocaleBasedPrimitiveDoubleConverter implements Converter<Double> {
 
-	private final Localization localization;
+    private Locale locale;
 
-	public LocaleBasedPrimitiveDoubleConverter(Localization localization) {
-		this.localization = localization;
+    @Deprecated // CDI eyes only
+    public LocaleBasedPrimitiveDoubleConverter() {
+    }
+
+    @Inject
+	public LocaleBasedPrimitiveDoubleConverter(Locale locale) {
+		this.locale = locale;
 	}
 
-	public Double convert(String value, Class<? extends Double> type, ResourceBundle bundle) {
+	@Override
+	public Double convert(String value, Class<? extends Double> type) {
 		if (isNullOrEmpty(value)) {
 			return 0d;
 		}
 
 		try {
-            final Locale locale = localization.getLocale();
             DecimalFormat fmt = ((DecimalFormat) DecimalFormat.getInstance(locale));
 
 			return fmt.parse(value).doubleValue();
 		} catch (ParseException e) {
-			throw new ConversionException(MessageFormat.format(bundle.getString("is_not_a_valid_number"), value));
+			throw new ConversionException(new ConversionMessage("is_not_a_valid_number", value));
 		}
 	}
 }

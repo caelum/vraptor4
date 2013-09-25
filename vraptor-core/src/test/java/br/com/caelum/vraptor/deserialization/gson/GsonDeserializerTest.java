@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.Locale;
 import java.util.TimeZone;
 
 import javax.servlet.http.HttpServletRequest;
@@ -30,7 +29,6 @@ import br.com.caelum.vraptor.controller.BeanClass;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.controller.DefaultBeanClass;
 import br.com.caelum.vraptor.controller.DefaultControllerMethod;
-import br.com.caelum.vraptor.core.Localization;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.view.GenericController;
 
@@ -44,7 +42,6 @@ public class GsonDeserializerTest {
 	private GsonDeserialization deserializer;
 	private ControllerMethod bark;
 	private ParameterNameProvider provider;
-	private Localization localization;
 	private ControllerMethod jump;
 	private ControllerMethod woof;
 	private ControllerMethod dropDead;
@@ -53,10 +50,7 @@ public class GsonDeserializerTest {
 	@Before
 	public void setUp() throws Exception {
 		provider = mock(ParameterNameProvider.class);
-		localization = mock(Localization.class);
 		request = mock(HttpServletRequest.class);
-
-		when(localization.getLocale()).thenReturn(new Locale("pt", "BR"));
 
 		List<JsonDeserializer> adapters = new ArrayList<>();
 		adapters.add(new CalendarDeserializer());

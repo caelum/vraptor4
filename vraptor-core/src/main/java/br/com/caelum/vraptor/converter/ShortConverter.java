@@ -19,9 +19,6 @@ package br.com.caelum.vraptor.converter;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
 
-import java.text.MessageFormat;
-import java.util.ResourceBundle;
-
 import javax.enterprise.context.ApplicationScoped;
 
 import br.com.caelum.vraptor.Convert;
@@ -36,7 +33,8 @@ import br.com.caelum.vraptor.Converter;
 @ApplicationScoped
 public class ShortConverter implements Converter<Short> {
 
-    public Short convert(String value, Class<? extends Short> type, ResourceBundle bundle) {
+    @Override
+	public Short convert(String value, Class<? extends Short> type) {
         if (isNullOrEmpty(value)) {
             return null;
         }
@@ -44,8 +42,7 @@ public class ShortConverter implements Converter<Short> {
         try {
             return Short.valueOf(value);
         } catch (NumberFormatException e) {
-        	throw new ConversionException(MessageFormat.format(bundle.getString("is_not_a_valid_integer"), value));
+        	throw new ConversionException(new ConversionMessage("is_not_a_valid_integer", value));
         }
     }
-
 }

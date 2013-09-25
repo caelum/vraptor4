@@ -27,6 +27,7 @@
  */
 package br.com.caelum.vraptor.http.iogi;
 
+import static br.com.caelum.vraptor.VRaptorMatchers.hasMessage;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasSize;
@@ -47,26 +48,20 @@ import java.util.Arrays;
 import java.util.Set;
 
 import org.junit.Test;
-import org.mockito.Mock;
 
 import br.com.caelum.iogi.parameters.Parameter;
 import br.com.caelum.iogi.parameters.Parameters;
 import br.com.caelum.iogi.reflection.Target;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.controller.DefaultControllerMethod;
-import br.com.caelum.vraptor.core.Localization;
-import br.com.caelum.vraptor.core.SafeResourceBundle;
 import br.com.caelum.vraptor.http.ParametersProvider;
 import br.com.caelum.vraptor.http.ParametersProviderTest;
-import br.com.caelum.vraptor.util.EmptyBundle;
 
 public class IogiParametersProviderTest extends ParametersProviderTest {
-	private @Mock Localization mockLocalization;
 
 	@Override
 	protected ParametersProvider getProvider() {
-		when(mockLocalization.getBundle()).thenReturn(new SafeResourceBundle(new EmptyBundle()));
-		return new IogiParametersProvider(nameProvider, request, new VRaptorInstantiator(converters, new VRaptorDependencyProvider(container), mockLocalization, new VRaptorParameterNamesProvider(nameProvider), request));
+		return new IogiParametersProvider(nameProvider, request, new VRaptorInstantiator(converters, new VRaptorDependencyProvider(container), new VRaptorParameterNamesProvider(nameProvider), request));
 	}
 
     @Test
@@ -74,7 +69,7 @@ public class IogiParametersProviderTest extends ParametersProviderTest {
     	thereAreNoParameters();
     	final ControllerMethod method = string;
 
-    	Object[] params = provider.getParametersFor(method, errors, null);
+    	Object[] params = provider.getParametersFor(method, errors);
 
     	assertArrayEquals(new Object[] {null}, params);
     }
@@ -89,7 +84,7 @@ public class IogiParametersProviderTest extends ParametersProviderTest {
     	when(container.canProvide(MyResource.class)).thenReturn(true);
     	when(container.instanceFor(MyResource.class)).thenReturn(providedInstance);
 
-    	Object[] params = provider.getParametersFor(controllerMethod, errors, null);
+    	Object[] params = provider.getParametersFor(controllerMethod, errors);
 		assertThat(((NeedsMyResource)params[0]).getMyResource(), is(sameInstance(providedInstance)));
 	}
     //---------- The Following tests mock iogi to unit test the ParametersProvider impl.
@@ -104,7 +99,7 @@ public class IogiParametersProviderTest extends ParametersProviderTest {
 
 		IogiParametersProvider iogiProvider = new IogiParametersProvider(nameProvider, request, mockInstantiator);
 
-		iogiProvider.getParametersFor(anyMethod, errors, null);
+		iogiProvider.getParametersFor(anyMethod, errors);
 
 		verify(mockInstantiator).instantiate(any(Target.class), eq(expectedParamters), eq(errors));
 	}
@@ -118,7 +113,7 @@ public class IogiParametersProviderTest extends ParametersProviderTest {
 		IogiParametersProvider iogiProvider = new IogiParametersProvider(nameProvider, request, mockInstantiator);
 		final Target<House> expectedTarget = Target.create(House.class, "house");
 
-		iogiProvider.getParametersFor(buyAHouse, errors, null);
+		iogiProvider.getParametersFor(buyAHouse, errors);
 
 		verify(mockInstantiator).instantiate(eq(expectedTarget), any(Parameters.class), eq(errors));
 	}
@@ -131,6 +126,8 @@ public class IogiParametersProviderTest extends ParametersProviderTest {
 		getParameters(setId);
 
 		assertThat(errors.size(), is(1));
+		assertThat(errors.get(0), hasMessage("asdf is not a valid integer."));
+		assertThat(errors.get(0).getCategory(), is("id"));
 	}
 
 	@Test

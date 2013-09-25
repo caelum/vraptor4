@@ -1,7 +1,5 @@
 package br.com.caelum.vraptor.interceptor;
 
-import static org.slf4j.LoggerFactory.getLogger;
-
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
@@ -19,6 +17,7 @@ import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.core.InterceptorHandler;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.ioc.Container;
+import static org.slf4j.LoggerFactory.getLogger;
 
 public class AspectStyleInterceptorHandler implements InterceptorHandler {
 
@@ -59,7 +58,7 @@ public class AspectStyleInterceptorHandler implements InterceptorHandler {
 		if(doNotAcceptBefore) before = new DoNothingStepExecutor();
 
 		if (doNotAcceptAfter && doNotAcceptAround && doNotAcceptBefore) {
-			throw new InterceptionException("Interceptor " + interceptorClass + " must declare " +
+			throw new InterceptionException("Interceptor " + interceptorClass.getCanonicalName() + " must declare " +
 				"at least one method whith @AfterCall, @AroundCall or @BeforeCall annotation");
 		}
 
@@ -91,4 +90,10 @@ public class AspectStyleInterceptorHandler implements InterceptorHandler {
 			stack.next(controllerMethod, currentController);
 		}
 	}
+	
+	@Override
+	public String toString() {
+		return "AspectStyleInterceptorHandler for " + interceptorClass.getName();
+	}
+	
 }

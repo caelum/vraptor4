@@ -19,9 +19,6 @@ package br.com.caelum.vraptor.converter;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
 
-import java.text.MessageFormat;
-import java.util.ResourceBundle;
-
 import javax.enterprise.context.ApplicationScoped;
 
 import br.com.caelum.vraptor.Convert;
@@ -36,7 +33,8 @@ import br.com.caelum.vraptor.Converter;
 @ApplicationScoped
 public class IntegerConverter implements Converter<Integer> {
 
-    public Integer convert(String value, Class<? extends Integer> type, ResourceBundle bundle) {
+    @Override
+	public Integer convert(String value, Class<? extends Integer> type) {
         if (isNullOrEmpty(value)) {
             return null;
         }
@@ -44,7 +42,7 @@ public class IntegerConverter implements Converter<Integer> {
         try {
             return Integer.valueOf(value);
         } catch (NumberFormatException e) {
-			throw new ConversionException(MessageFormat.format(bundle.getString("is_not_a_valid_integer"), value));
+			throw new ConversionException(new ConversionMessage("is_not_a_valid_integer", value));
         }
     }
 

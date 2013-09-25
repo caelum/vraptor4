@@ -19,20 +19,17 @@ package br.com.caelum.vraptor.converter;
 import static com.google.common.base.Strings.isNullOrEmpty;
 
 import java.text.DateFormat;
-import java.text.MessageFormat;
 import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
-import java.util.ResourceBundle;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
-import br.com.caelum.vraptor.core.Localization;
 
 /**
  * Locale based calendar converter.
@@ -43,7 +40,7 @@ import br.com.caelum.vraptor.core.Localization;
 @RequestScoped
 public class LocaleBasedCalendarConverter implements Converter<Calendar> {
 
-    private Localization localization;
+    private Locale locale;
 
     //CDI eyes only
 	@Deprecated
@@ -51,29 +48,25 @@ public class LocaleBasedCalendarConverter implements Converter<Calendar> {
 	}
 
     @Inject
-    public LocaleBasedCalendarConverter(Localization localization) {
-        this.localization = localization;
+    public LocaleBasedCalendarConverter(Locale locale) {
+        this.locale = locale;
     }
 
     @Override
-	public Calendar convert(String value, Class<? extends Calendar> type, ResourceBundle bundle) {
+	public Calendar convert(String value, Class<? extends Calendar> type) {
         if (isNullOrEmpty(value)) {
             return null;
         }
 
-        Locale locale = localization.getLocale();
-        if (locale == null) {
-            locale = Locale.getDefault();
-        }
-
         DateFormat format = DateFormat.getDateInstance(DateFormat.SHORT, locale);
+
         try {
             Date date = format.parse(value);
             Calendar calendar = new GregorianCalendar();
             calendar.setTime(date);
             return calendar;
         } catch (ParseException e) {
-			throw new ConversionException(MessageFormat.format(bundle.getString("is_not_a_valid_date"), value));
+			throw new ConversionException(new ConversionMessage("is_not_a_valid_date", value));
         }
     }
 

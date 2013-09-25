@@ -30,7 +30,7 @@ public class InterceptorAcceptsExecutor implements StepExecutor<Boolean>{
 		}
 		SignatureAcceptor acceptor = new NoStackParameterSignatureAcceptor();
 		if (!acceptor.accepts(method)) {
-			throw new VRaptorException(acceptor.errorMessage());
+			throw new VRaptorException(method.getDeclaringClass().getCanonicalName() + " - " + acceptor.errorMessage());
 		}
 		return true;
 	}

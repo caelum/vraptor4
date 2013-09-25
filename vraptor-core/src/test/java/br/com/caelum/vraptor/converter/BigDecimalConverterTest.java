@@ -17,13 +17,13 @@
 
 package br.com.caelum.vraptor.converter;
 
+import static br.com.caelum.vraptor.VRaptorMatchers.hasMessage;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 
 import java.math.BigDecimal;
-import java.util.ResourceBundle;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -37,36 +37,34 @@ import org.junit.Test;
 public class BigDecimalConverterTest {
 
 	private BigDecimalConverter converter;
-	private ResourceBundle bundle;
 
 	@Before
 	public void setup() {
-		converter = new BigDecimalConverter();
-		bundle = ResourceBundle.getBundle("messages");
+        converter = new BigDecimalConverter();
 	}
 
 	@Test
 	public void shouldBeAbleToConvertIntegerNumbers() {
-		assertThat(converter.convert("2.3", BigDecimal.class, bundle), is(equalTo(new BigDecimal("2.3"))));
+		assertThat(converter.convert("2.3", BigDecimal.class), is(equalTo(new BigDecimal("2.3"))));
 	}
 
 	@Test
 	public void shouldComplainAboutInvalidNumber() {
 		try {
-			converter.convert("---", BigDecimal.class, bundle);
+			converter.convert("---", BigDecimal.class);
 		} catch (ConversionException e) {
-			assertThat(e.getMessage(), is(equalTo("--- is not a valid number.")));
+			assertThat(e.getValidationMessage(), hasMessage("--- is not a valid number."));
 		}
 	}
 
 	@Test
 	public void shouldNotComplainAboutNull() {
-		assertThat(converter.convert(null, BigDecimal.class, bundle), is(nullValue()));
+		assertThat(converter.convert(null, BigDecimal.class), is(nullValue()));
 	}
 
 	@Test
 	public void shouldNotComplainAboutEmpty() {
-		assertThat(converter.convert("", BigDecimal.class, bundle), is(nullValue()));
+		assertThat(converter.convert("", BigDecimal.class), is(nullValue()));
 	}
 
 }

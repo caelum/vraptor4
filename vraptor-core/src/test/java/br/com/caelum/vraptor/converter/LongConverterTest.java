@@ -17,12 +17,11 @@
 
 package br.com.caelum.vraptor.converter;
 
+import static br.com.caelum.vraptor.VRaptorMatchers.hasMessage;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
-
-import java.util.ResourceBundle;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -31,36 +30,34 @@ import org.junit.Test;
 public class LongConverterTest {
 
     private LongConverter converter;
-	private ResourceBundle bundle;
 
     @Before
     public void setup() {
         this.converter = new LongConverter();
-        this.bundle = ResourceBundle.getBundle("messages");
     }
 
     @Test
     public void shouldBeAbleToConvertNumbers(){
-        assertThat(converter.convert("2", long.class, bundle), is(equalTo(2L)));
+        assertThat(converter.convert("2", long.class), is(equalTo(2L)));
     }
 
     @Test
     public void shouldComplainAboutInvalidNumber() {
         try {
-			converter.convert("---", long.class, bundle);
+			converter.convert("---", long.class);
 		} catch (ConversionException e) {
-			assertThat(e.getMessage(), is(equalTo("--- is not a valid integer.")));
+			assertThat(e.getValidationMessage(), hasMessage("--- is not a valid integer."));
 		}
     }
 
     @Test
     public void shouldNotComplainAboutNull() {
-        assertThat(converter.convert(null, long.class, bundle), is(nullValue()));
+        assertThat(converter.convert(null, long.class), is(nullValue()));
     }
 
     @Test
     public void shouldNotComplainAboutEmpty() {
-        assertThat(converter.convert("", long.class, bundle), is(nullValue()));
+        assertThat(converter.convert("", long.class), is(nullValue()));
     }
 
 }

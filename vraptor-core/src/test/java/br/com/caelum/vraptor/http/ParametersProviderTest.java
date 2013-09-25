@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.ResourceBundle;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
@@ -38,9 +37,7 @@ import br.com.caelum.vraptor.converter.LongConverter;
 import br.com.caelum.vraptor.converter.PrimitiveLongConverter;
 import br.com.caelum.vraptor.converter.StringConverter;
 import br.com.caelum.vraptor.core.Converters;
-import br.com.caelum.vraptor.core.SafeResourceBundle;
 import br.com.caelum.vraptor.ioc.Container;
-import br.com.caelum.vraptor.util.EmptyBundle;
 import br.com.caelum.vraptor.validator.DefaultValidationException;
 import br.com.caelum.vraptor.validator.Message;
 
@@ -351,7 +348,8 @@ public abstract class ParametersProviderTest {
 
     	when(converters.existsFor(ABC.class)).thenReturn(true);
     	when(converters.to(ABC.class)).thenReturn(new Converter<ABC>() {
-			public ABC convert(String value, Class<? extends ABC> type, ResourceBundle bundle) {
+			@Override
+			public ABC convert(String value, Class<? extends ABC> type) {
 				return new ABC();
 			}
 		});
@@ -363,7 +361,7 @@ public abstract class ParametersProviderTest {
     @Test
 	public void returnsAnEmptyObjectArrayForZeroArityMethods() throws Exception {
     	thereAreNoParameters();
-        Object[] params = provider.getParametersFor(doNothing, errors, null);
+        Object[] params = provider.getParametersFor(doNothing, errors);
 
         assertArrayEquals(new Object[] {}, params);
     }
@@ -372,7 +370,7 @@ public abstract class ParametersProviderTest {
     public void returnsNullWhenInstantiatingAListForWhichThereAreNoParameters() throws Exception {
     	thereAreNoParameters();
 
-    	Object[] params = provider.getParametersFor(list, errors, null);
+    	Object[] params = provider.getParametersFor(list, errors);
 
     	assertArrayEquals(new Object[] {null}, params);
     }
@@ -397,7 +395,7 @@ public abstract class ParametersProviderTest {
 
     @SuppressWarnings("unchecked")
 	protected <T> T getParameters(ControllerMethod method) {
-		return (T) provider.getParametersFor(method, errors, new SafeResourceBundle(new EmptyBundle()))[0];
+		return (T) provider.getParametersFor(method, errors)[0];
 	}
 
     protected static class MyResource {

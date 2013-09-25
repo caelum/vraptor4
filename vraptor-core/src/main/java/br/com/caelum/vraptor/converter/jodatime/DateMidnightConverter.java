@@ -20,7 +20,10 @@ package br.com.caelum.vraptor.converter.jodatime;
 import static org.joda.time.format.DateTimeFormat.shortDate;
 
 import java.text.MessageFormat;
+import java.util.Locale;
 import java.util.ResourceBundle;
+
+import javax.inject.Inject;
 
 import org.joda.time.DateMidnight;
 import org.joda.time.DateTime;
@@ -28,7 +31,6 @@ import org.joda.time.DateTime;
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.converter.ConversionException;
-import br.com.caelum.vraptor.core.Localization;
 
 /**
  * VRaptor converter for {@link DateMidnight}. {@link DateMidnight} is part of Joda Time library.
@@ -39,15 +41,22 @@ import br.com.caelum.vraptor.core.Localization;
 @Convert(DateMidnight.class)
 public class DateMidnightConverter implements Converter<DateMidnight> {
 
-    private final Localization localization;
+    private Locale locale;
+    private ResourceBundle bundle;
 
-	public DateMidnightConverter(Localization localization) {
-        this.localization = localization;
+    @Deprecated // CDI eyes only
+    public DateMidnightConverter() {
     }
 
-    public DateMidnight convert(String value, Class<? extends DateMidnight> type, ResourceBundle bundle) {
+    @Inject
+    public DateMidnightConverter(Locale locale, ResourceBundle bundle) {
+        this.locale = locale;
+        this.bundle = bundle;
+    }
+
+    public DateMidnight convert(String value, Class<? extends DateMidnight> type) {
         try {
-            DateTime out = new LocaleBasedJodaTimeConverter(localization).convert(value, shortDate());
+            DateTime out = new LocaleBasedJodaTimeConverter(locale).convert(value, shortDate());
             if (out == null) {
                 return null;
             }

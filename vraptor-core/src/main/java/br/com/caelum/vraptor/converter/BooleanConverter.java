@@ -24,6 +24,7 @@ import java.util.ResourceBundle;
 import java.util.Set;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
@@ -43,8 +44,19 @@ import com.google.common.collect.Sets;
 public class BooleanConverter implements Converter<Boolean> {
 	private static final Set<String> IS_TRUE  = Sets.newHashSet("TRUE", "1", "YES", "Y", "ON");
 	private static final Set<String> IS_FALSE = Sets.newHashSet("FALSE", "0", "NO", "N", "OFF");
+	
+    private ResourceBundle bundle;
 
-	public Boolean convert(String value, Class<? extends Boolean> type, ResourceBundle bundle) {
+    @Deprecated
+    public BooleanConverter() {
+    }
+
+    @Inject
+	public BooleanConverter(ResourceBundle bundle) {
+        this.bundle = bundle;
+    }
+
+	public Boolean convert(String value, Class<? extends Boolean> type) {
 	    if (isNullOrEmpty(value)) {
 			return null;
 		}

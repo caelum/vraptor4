@@ -1,12 +1,10 @@
 package br.com.caelum.vraptor.core;
 
-import static javax.servlet.jsp.jstl.core.Config.FMT_FALLBACK_LOCALE;
 import static javax.servlet.jsp.jstl.core.Config.FMT_LOCALE;
 import static javax.servlet.jsp.jstl.core.Config.FMT_LOCALIZATION_CONTEXT;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.endsWith;
 import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.startsWith;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.util.ListResourceBundle;
@@ -19,8 +17,6 @@ import javax.servlet.jsp.jstl.fmt.LocalizationContext;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor.http.MutableRequest;
 
@@ -35,12 +31,9 @@ public class JstlLocalizationTest {
 
     private JstlLocalization localization;
 
-    @Mock
-    MutableRequest request;
-    @Mock
-    ServletContext servletContext;
-    @Mock
-    HttpSession session;
+    private MutableRequest request;
+    private ServletContext servletContext;
+    private HttpSession session;
 
     private static ResourceBundle bundle = new ListResourceBundle() {
         protected Object[][] getContents() {
@@ -50,29 +43,19 @@ public class JstlLocalizationTest {
 
     @Before
     public void setUp() {
-        MockitoAnnotations.initMocks(this);
-        RequestInfo webRequest = new RequestInfo(servletContext, null, request, null);
-        localization = new JstlLocalization(webRequest);
+        request = mock(MutableRequest.class);
+        servletContext = mock(ServletContext.class);
+        session = mock(HttpSession.class);
+        
+        localization = new JstlLocalization(request);
 
         LocalizationContext context = new LocalizationContext(bundle);
         when(request.getAttribute(FMT_LOCALIZATION_CONTEXT + ".request")).thenReturn(context);
 
         when(request.getSession()).thenReturn(session);
-    }
-
-    @Test
-    public void keyNotFound() {
-        String value = localization.getMessage("my.notfound.key");
-        assertThat(value, startsWith("???"));
-        assertThat(value, endsWith("???"));
-    }
-
-    @Test
-    public void keyFound() {
-        String value = localization.getMessage("my.key");
-        assertThat(value, equalTo("abc"));
-
-        System.out.println(localization.getBundle().getKeys());
+        when(request.getServletContext()).thenReturn(servletContext);
+        
+        Locale.setDefault(Locale.ENGLISH);
     }
 
     @Test
@@ -100,15 +83,14 @@ public class JstlLocalizationTest {
     }
 
     @Test
+    public void findLocaleFromDefaultWhenNotFoundInAnyScope() {
+        assertThat(localization.getLocale(), equalTo(Locale.ENGLISH));
+    }
+
+    @Test
     public void testLocaleWithSessionNotRequest() {
         when(request.getAttribute(FMT_LOCALE + ".request")).thenReturn(PT_BR);
         when(session.getAttribute(FMT_LOCALE + ".session")).thenReturn(Locale.ENGLISH);
         assertThat(localization.getLocale(), equalTo(PT_BR));
-    }
-
-    @Test
-    public void testFallbackLocale() {
-        when(request.getAttribute(FMT_FALLBACK_LOCALE + ".request")).thenReturn(PT_BR);
-        assertThat(localization.getFallbackLocale(), equalTo(PT_BR));
     }
 }

@@ -35,19 +35,19 @@ public class CharacterConverterTest {
 
 	@Before
 	public void setup() {
-		this.converter = new CharacterConverter();
 		this.bundle = ResourceBundle.getBundle("messages");
+        this.converter = new CharacterConverter(bundle);
 	}
 
 	@Test
 	public void shouldBeAbleToConvertCharacters() {
-		assertThat(converter.convert("Z", Character.class, bundle), is(equalTo('Z')));
+		assertThat(converter.convert("Z", Character.class), is(equalTo('Z')));
 	}
 
 	@Test
 	public void shouldComplainAboutStringTooBig() {
 		try {
-			converter.convert("---", Character.class, bundle);
+			converter.convert("---", Character.class);
 		} catch (ConversionException e) {
 			assertThat(e.getMessage(), is(equalTo("--- is not a valid character.")));
 		}
@@ -55,8 +55,8 @@ public class CharacterConverterTest {
 
 	@Test
 	public void shouldNotComplainAboutNullAndEmpty() {
-		assertThat(converter.convert(null, Character.class, bundle), is(nullValue()));
-		assertThat(converter.convert("", Character.class, bundle), is(nullValue()));
+		assertThat(converter.convert(null, Character.class), is(nullValue()));
+		assertThat(converter.convert("", Character.class), is(nullValue()));
 	}
 
 }

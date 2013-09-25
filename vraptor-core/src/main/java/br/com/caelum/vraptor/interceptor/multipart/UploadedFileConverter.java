@@ -17,8 +17,6 @@
 package br.com.caelum.vraptor.interceptor.multipart;
 
 
-import java.util.ResourceBundle;
-
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
@@ -44,7 +42,7 @@ public class UploadedFileConverter implements Converter<UploadedFile> {
         this.request = request;
     }
 
-    public UploadedFile convert(String value, Class<? extends UploadedFile> type, ResourceBundle bundle) {
+    public UploadedFile convert(String value, Class<? extends UploadedFile> type) {
         Object upload = request.getAttribute(value);
         return upload == null ? null : type.cast(upload); 
     }

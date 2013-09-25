@@ -32,7 +32,6 @@ import javax.inject.Inject;
 
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
-import br.com.caelum.vraptor.core.Localization;
 
 /**
  * Locale based date converter.
@@ -44,7 +43,8 @@ import br.com.caelum.vraptor.core.Localization;
 public class LocaleBasedDateConverter
     implements Converter<Date> {
 
-    private Localization localization;
+    private Locale locale;
+    private ResourceBundle bundle;
 
     //CDI eyes only
 	@Deprecated
@@ -52,25 +52,22 @@ public class LocaleBasedDateConverter
 	}
 
     @Inject
-    public LocaleBasedDateConverter(Localization localization) {
-        this.localization = localization;
+    public LocaleBasedDateConverter(Locale locale, ResourceBundle bundle) {
+        this.locale = locale;
+        this.bundle = bundle;
     }
 
     @Override
-	public Date convert(String value, Class<? extends Date> type, ResourceBundle bundle) {
+	public Date convert(String value, Class<? extends Date> type) {
         if (isNullOrEmpty(value)) {
             return null;
         }
-
-        Locale locale = localization.getLocale();
-        if (locale == null) {
-            locale = Locale.getDefault();
-        }
-
+        
         DateFormat formatDateTime = DateFormat.getDateTimeInstance(MEDIUM, MEDIUM, locale);
 
         try {
             return formatDateTime.parse(value);
+            
         } catch (ParseException pe) {
             DateFormat formatDate = DateFormat.getDateInstance(SHORT, locale);
             try {

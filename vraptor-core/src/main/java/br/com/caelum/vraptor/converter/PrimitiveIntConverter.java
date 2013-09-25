@@ -23,6 +23,7 @@ import java.text.MessageFormat;
 import java.util.ResourceBundle;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
@@ -36,8 +37,19 @@ import br.com.caelum.vraptor.Converter;
 @Convert(int.class)
 @ApplicationScoped
 public class PrimitiveIntConverter implements Converter<Integer> {
+    
+    private ResourceBundle bundle;
 
-    public Integer convert(String value, Class<? extends Integer> type, ResourceBundle bundle) {
+    @Deprecated
+    public PrimitiveIntConverter() {
+    }
+
+    @Inject
+    public PrimitiveIntConverter(ResourceBundle bundle) {
+        this.bundle = bundle;
+    }
+
+    public Integer convert(String value, Class<? extends Integer> type) {
         if (isNullOrEmpty(value)) {
             return 0;
         }

@@ -38,9 +38,7 @@ import br.com.caelum.vraptor.converter.LongConverter;
 import br.com.caelum.vraptor.converter.PrimitiveLongConverter;
 import br.com.caelum.vraptor.converter.StringConverter;
 import br.com.caelum.vraptor.core.Converters;
-import br.com.caelum.vraptor.core.SafeResourceBundle;
 import br.com.caelum.vraptor.ioc.Container;
-import br.com.caelum.vraptor.util.EmptyBundle;
 import br.com.caelum.vraptor.validator.DefaultValidationException;
 import br.com.caelum.vraptor.validator.Message;
 
@@ -76,14 +74,16 @@ public abstract class ParametersProviderTest {
 
 	@Before
     public void setup() throws Exception {
+	    ResourceBundle bundle = ResourceBundle.getBundle("messages");
+	    
     	MockitoAnnotations.initMocks(this);
         this.provider = getProvider();
         this.errors = new ArrayList<>();
         when(converters.existsFor(Long.class)).thenReturn(true);
         when(converters.existsFor(long.class)).thenReturn(true);
         when(converters.existsFor(String.class)).thenReturn(true);
-        when(converters.to(Long.class)).thenReturn(new LongConverter());
-        when(converters.to(long.class)).thenReturn(new PrimitiveLongConverter());
+        when(converters.to(Long.class)).thenReturn(new LongConverter(bundle));
+        when(converters.to(long.class)).thenReturn(new PrimitiveLongConverter(bundle));
         when(converters.to(String.class)).thenReturn(new StringConverter());
 
         when(nameProvider.parameterNamesFor(any(AccessibleObject.class))).thenReturn(new String[0]);
@@ -351,7 +351,7 @@ public abstract class ParametersProviderTest {
 
     	when(converters.existsFor(ABC.class)).thenReturn(true);
     	when(converters.to(ABC.class)).thenReturn(new Converter<ABC>() {
-			public ABC convert(String value, Class<? extends ABC> type, ResourceBundle bundle) {
+			public ABC convert(String value, Class<? extends ABC> type) {
 				return new ABC();
 			}
 		});
@@ -363,7 +363,7 @@ public abstract class ParametersProviderTest {
     @Test
 	public void returnsAnEmptyObjectArrayForZeroArityMethods() throws Exception {
     	thereAreNoParameters();
-        Object[] params = provider.getParametersFor(doNothing, errors, null);
+        Object[] params = provider.getParametersFor(doNothing, errors);
 
         assertArrayEquals(new Object[] {}, params);
     }
@@ -372,7 +372,7 @@ public abstract class ParametersProviderTest {
     public void returnsNullWhenInstantiatingAListForWhichThereAreNoParameters() throws Exception {
     	thereAreNoParameters();
 
-    	Object[] params = provider.getParametersFor(list, errors, null);
+    	Object[] params = provider.getParametersFor(list, errors);
 
     	assertArrayEquals(new Object[] {null}, params);
     }
@@ -397,7 +397,7 @@ public abstract class ParametersProviderTest {
 
     @SuppressWarnings("unchecked")
 	protected <T> T getParameters(ControllerMethod method) {
-		return (T) provider.getParametersFor(method, errors, new SafeResourceBundle(new EmptyBundle()))[0];
+		return (T) provider.getParametersFor(method, errors)[0];
 	}
 
     protected static class MyResource {

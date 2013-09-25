@@ -23,6 +23,7 @@ import static com.google.common.base.Strings.isNullOrEmpty;
 import java.util.ResourceBundle;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
@@ -35,14 +36,22 @@ import br.com.caelum.vraptor.Converter;
 @Convert(boolean.class)
 @ApplicationScoped
 public class PrimitiveBooleanConverter implements Converter<Boolean> {
-	private final BooleanConverter booleanConverter = new BooleanConverter();
+    private BooleanConverter booleanConverter;
 
-    public Boolean convert(String value, Class<? extends Boolean> type, ResourceBundle bundle) {
+    @Deprecated
+    public PrimitiveBooleanConverter() {
+    }
+
+    @Inject
+	public PrimitiveBooleanConverter(ResourceBundle bundle) {
+        booleanConverter = new BooleanConverter(bundle);
+    }
+	
+    public Boolean convert(String value, Class<? extends Boolean> type) {
         if (isNullOrEmpty(value)) {
         	return false;
         }
         
-        return booleanConverter.convert(value, type, bundle);
+        return booleanConverter.convert(value, type);
     }
-
 }

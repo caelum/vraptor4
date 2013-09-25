@@ -31,12 +31,9 @@ import org.slf4j.LoggerFactory;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.View;
-import br.com.caelum.vraptor.core.Localization;
 import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.util.test.MockResult;
 import br.com.caelum.vraptor.view.ValidationViewsFactory;
-
-import com.google.common.base.Supplier;
 
 /**
  * The default validator implementation.
@@ -53,7 +50,7 @@ public class DefaultValidator extends AbstractValidator {
 	private ValidationViewsFactory viewsFactory;
 	private Outjector outjector;
 	private Proxifier proxifier;
-	private Localization localization;
+	private ResourceBundle bundle;
 	
 	//CDI eyes only
 	@Deprecated
@@ -61,12 +58,12 @@ public class DefaultValidator extends AbstractValidator {
 	}
 
 	@Inject
-	public DefaultValidator(Result result, ValidationViewsFactory factory, Outjector outjector, Proxifier proxifier, Localization localization) {
+	public DefaultValidator(Result result, ValidationViewsFactory factory, Outjector outjector, Proxifier proxifier, ResourceBundle bundle) {
 		this.result = result;
 		this.viewsFactory = factory;
 		this.outjector = outjector;
 		this.proxifier = proxifier;
-		this.localization = localization;
+        this.bundle = bundle;
 	}
 	
 	@Override
@@ -104,7 +101,7 @@ public class DefaultValidator extends AbstractValidator {
 	@Override
 	public void add(Message message) {
 		if (message instanceof I18nMessage && !((I18nMessage) message).hasBundle()) {
-			((I18nMessage) message).setLazyBundle(new LocalizationSupplier(localization));
+			((I18nMessage) message).setBundle(bundle);
 		}
 		errors.add(message);
 	}
@@ -119,18 +116,3 @@ public class DefaultValidator extends AbstractValidator {
 		return new ErrorList(errors);
 	}
 }
-
-class LocalizationSupplier implements Supplier<ResourceBundle> {
-	
-	private final Localization localization;
-
-	public LocalizationSupplier(Localization localization) {
-		this.localization = localization;
-	}
-
-	@Override
-	public ResourceBundle get() {
-		return localization.getBundle();
-	}
-}
-

@@ -34,19 +34,19 @@ public class PrimitiveLongConverterTest {
 
 	@Before
 	public void setup() {
-		this.converter = new PrimitiveLongConverter();
 		this.bundle = ResourceBundle.getBundle("messages");
+        this.converter = new PrimitiveLongConverter(bundle);
 	}
 
 	@Test
 	public void shouldBeAbleToConvertNumbers() {
-		assertThat(converter.convert("2", long.class, bundle), is(equalTo(2L)));
+		assertThat(converter.convert("2", long.class), is(equalTo(2L)));
 	}
 
 	@Test
 	public void shouldComplainAboutInvalidNumber() {
 		try {
-			converter.convert("---", long.class, bundle);
+			converter.convert("---", long.class);
 		} catch (ConversionException e) {
 			assertThat(e.getMessage(), is(equalTo("--- is not a valid integer.")));
 		}
@@ -54,12 +54,12 @@ public class PrimitiveLongConverterTest {
 
 	@Test
 	public void shouldConvertToZeroWhenNull() {
-		assertThat(converter.convert(null, long.class, bundle), is(equalTo(0L)));
+		assertThat(converter.convert(null, long.class), is(equalTo(0L)));
 	}
 
 	@Test
 	public void shouldConvertToZeroWhenEmpty() {
-		assertThat(converter.convert("", long.class, bundle), is(equalTo(0L)));
+		assertThat(converter.convert("", long.class), is(equalTo(0L)));
 	}
 
 }

@@ -41,19 +41,19 @@ public class BigDecimalConverterTest {
 
 	@Before
 	public void setup() {
-		converter = new BigDecimalConverter();
 		bundle = ResourceBundle.getBundle("messages");
+        converter = new BigDecimalConverter(bundle);
 	}
 
 	@Test
 	public void shouldBeAbleToConvertIntegerNumbers() {
-		assertThat(converter.convert("2.3", BigDecimal.class, bundle), is(equalTo(new BigDecimal("2.3"))));
+		assertThat(converter.convert("2.3", BigDecimal.class), is(equalTo(new BigDecimal("2.3"))));
 	}
 
 	@Test
 	public void shouldComplainAboutInvalidNumber() {
 		try {
-			converter.convert("---", BigDecimal.class, bundle);
+			converter.convert("---", BigDecimal.class);
 		} catch (ConversionException e) {
 			assertThat(e.getMessage(), is(equalTo("--- is not a valid number.")));
 		}
@@ -61,12 +61,12 @@ public class BigDecimalConverterTest {
 
 	@Test
 	public void shouldNotComplainAboutNull() {
-		assertThat(converter.convert(null, BigDecimal.class, bundle), is(nullValue()));
+		assertThat(converter.convert(null, BigDecimal.class), is(nullValue()));
 	}
 
 	@Test
 	public void shouldNotComplainAboutEmpty() {
-		assertThat(converter.convert("", BigDecimal.class, bundle), is(nullValue()));
+		assertThat(converter.convert("", BigDecimal.class), is(nullValue()));
 	}
 
 }

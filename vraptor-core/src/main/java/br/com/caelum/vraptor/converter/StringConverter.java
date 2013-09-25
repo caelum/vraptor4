@@ -15,8 +15,6 @@
  */
 package br.com.caelum.vraptor.converter;
 
-import java.util.ResourceBundle;
-
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
 
@@ -30,7 +28,7 @@ import br.com.caelum.vraptor.Converter;
 @Convert(String.class)
 public class StringConverter implements Converter<String> {
 
-	public String convert(String value, Class<? extends String> type, ResourceBundle bundle) {
+	public String convert(String value, Class<? extends String> type) {
 		return value;
 	}
 }

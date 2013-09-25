@@ -23,6 +23,7 @@ import java.text.MessageFormat;
 import java.util.ResourceBundle;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
@@ -35,8 +36,19 @@ import br.com.caelum.vraptor.Converter;
 @Convert(double.class)
 @ApplicationScoped
 public class PrimitiveDoubleConverter implements Converter<Double> {
+    
+    private ResourceBundle bundle;
+    
+    @Deprecated
+    public PrimitiveDoubleConverter() {
+    }
 
-    public Double convert(String value, Class<? extends Double> type, ResourceBundle bundle) {
+    @Inject
+    public PrimitiveDoubleConverter(ResourceBundle bundle) {
+        this.bundle = bundle;
+    }
+    
+    public Double convert(String value, Class<? extends Double> type) {
         if (isNullOrEmpty(value)) {
             return 0d;
         }

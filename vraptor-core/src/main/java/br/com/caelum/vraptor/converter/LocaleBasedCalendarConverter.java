@@ -32,7 +32,6 @@ import javax.inject.Inject;
 
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
-import br.com.caelum.vraptor.core.Localization;
 
 /**
  * Locale based calendar converter.
@@ -43,7 +42,8 @@ import br.com.caelum.vraptor.core.Localization;
 @RequestScoped
 public class LocaleBasedCalendarConverter implements Converter<Calendar> {
 
-    private Localization localization;
+    private Locale locale;
+    private ResourceBundle bundle;
 
     //CDI eyes only
 	@Deprecated
@@ -51,22 +51,19 @@ public class LocaleBasedCalendarConverter implements Converter<Calendar> {
 	}
 
     @Inject
-    public LocaleBasedCalendarConverter(Localization localization) {
-        this.localization = localization;
+    public LocaleBasedCalendarConverter(Locale locale, ResourceBundle bundle) {
+        this.locale = locale;
+        this.bundle = bundle;
     }
 
     @Override
-	public Calendar convert(String value, Class<? extends Calendar> type, ResourceBundle bundle) {
+	public Calendar convert(String value, Class<? extends Calendar> type) {
         if (isNullOrEmpty(value)) {
             return null;
         }
 
-        Locale locale = localization.getLocale();
-        if (locale == null) {
-            locale = Locale.getDefault();
-        }
-
         DateFormat format = DateFormat.getDateInstance(DateFormat.SHORT, locale);
+        
         try {
             Date date = format.parse(value);
             Calendar calendar = new GregorianCalendar();

@@ -37,13 +37,13 @@ public class EnumConverterTest {
 
 	@Before
 	public void setup() {
-		this.converter = new EnumConverter();
 		this.bundle = ResourceBundle.getBundle("messages");
+        this.converter = new EnumConverter(bundle);
 	}
 
 	@Test
 	public void shouldBeAbleToConvertByOrdinal() {
-		Enum value = converter.convert("1", MyCustomEnum.class, bundle);
+		Enum value = converter.convert("1", MyCustomEnum.class);
 		MyCustomEnum second = MyCustomEnum.SECOND;
 		assertEquals(value, second);
 	}
@@ -51,20 +51,20 @@ public class EnumConverterTest {
 	@Test
 	public void shouldBeAbleToConvertByName() {
 
-		Enum value = converter.convert("FIRST", MyCustomEnum.class, bundle);
+		Enum value = converter.convert("FIRST", MyCustomEnum.class);
 		MyCustomEnum first = MyCustomEnum.FIRST;
 		assertEquals(value, first);
 	}
 
 	@Test
 	public void shouldConvertEmptyToNull() {
-		assertThat(converter.convert("", MyCustomEnum.class, bundle), is(nullValue()));
+		assertThat(converter.convert("", MyCustomEnum.class), is(nullValue()));
 	}
 
 	@Test
 	public void shouldComplainAboutInvalidIndex() {
 		try {
-			converter.convert("3200", MyCustomEnum.class, bundle);
+			converter.convert("3200", MyCustomEnum.class);
 		} catch (ConversionException e) {
 			assertThat(e.getMessage(), is(equalTo("3200 is not a valid option.")));
 		}
@@ -73,7 +73,7 @@ public class EnumConverterTest {
 	@Test
 	public void shouldComplainAboutInvalidNumber() {
 		try {
-			converter.convert("32a00", MyCustomEnum.class, bundle);
+			converter.convert("32a00", MyCustomEnum.class);
 		} catch (ConversionException e) {
 			assertThat(e.getMessage(), is(equalTo("32a00 is not a valid option.")));
 		}
@@ -82,7 +82,7 @@ public class EnumConverterTest {
 	@Test
 	public void shouldComplainAboutInvalidOrdinal() {
 		try {
-			converter.convert("THIRD", MyCustomEnum.class, bundle);
+			converter.convert("THIRD", MyCustomEnum.class);
 		} catch (ConversionException e) {
 			assertThat(e.getMessage(), is(equalTo("THIRD is not a valid option.")));
 		}
@@ -90,7 +90,7 @@ public class EnumConverterTest {
 
 	@Test
 	public void shouldAcceptNull() {
-		assertThat(converter.convert(null, MyCustomEnum.class, bundle), is(nullValue()));
+		assertThat(converter.convert(null, MyCustomEnum.class), is(nullValue()));
 	}
 
 	enum MyCustomEnum {

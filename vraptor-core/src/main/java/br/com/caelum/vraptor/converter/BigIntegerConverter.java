@@ -23,6 +23,7 @@ import java.text.MessageFormat;
 import java.util.ResourceBundle;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
@@ -34,9 +35,20 @@ import br.com.caelum.vraptor.Converter;
  */
 @Convert(BigInteger.class)
 @ApplicationScoped
-public class BigIntegerConverter implements Converter<BigInteger>{
+public class BigIntegerConverter implements Converter<BigInteger> {
+    
+    private ResourceBundle bundle;
 
-	public BigInteger convert(String value, Class<? extends BigInteger> type, ResourceBundle bundle) {
+    @Deprecated
+    public BigIntegerConverter() {
+    }
+
+    @Inject
+    public BigIntegerConverter(ResourceBundle bundle) {
+        this.bundle = bundle;
+    }
+
+	public BigInteger convert(String value, Class<? extends BigInteger> type) {
 	    if (isNullOrEmpty(value)) {
 			return null;
 		}

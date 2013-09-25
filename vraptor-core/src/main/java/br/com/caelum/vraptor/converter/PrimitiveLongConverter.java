@@ -23,6 +23,7 @@ import java.text.MessageFormat;
 import java.util.ResourceBundle;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
@@ -36,8 +37,19 @@ import br.com.caelum.vraptor.Converter;
 @Convert(long.class)
 @ApplicationScoped
 public class PrimitiveLongConverter implements Converter<Long> {
+    
+    private ResourceBundle bundle;
+    
+    @Deprecated
+    public PrimitiveLongConverter() {
+    }
 
-    public Long convert(String value, Class<? extends Long> type, ResourceBundle bundle) {
+    @Inject
+    public PrimitiveLongConverter(ResourceBundle bundle) {
+        this.bundle = bundle;
+    }
+
+    public Long convert(String value, Class<? extends Long> type) {
         if (isNullOrEmpty(value)) {
             return 0L;
         }

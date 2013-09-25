@@ -35,19 +35,19 @@ public class DoubleConverterTest {
 
 	@Before
 	public void setup() {
-		this.converter = new DoubleConverter();
 		this.bundle = ResourceBundle.getBundle("messages");
+        this.converter = new DoubleConverter(bundle);
 	}
 
 	@Test
 	public void shouldBeAbleToConvertNumbers() {
-		assertThat(converter.convert("2.3", Double.class, bundle), is(equalTo(2.3d)));
+		assertThat(converter.convert("2.3", Double.class), is(equalTo(2.3d)));
 	}
 
 	@Test
 	public void shouldComplainAboutInvalidNumber() {
 		try {
-			converter.convert("---", Double.class, bundle);
+			converter.convert("---", Double.class);
 		} catch (ConversionException e) {
 			assertThat(e.getMessage(), is(equalTo("--- is not a valid number.")));
 		}
@@ -55,12 +55,12 @@ public class DoubleConverterTest {
 
 	@Test
 	public void shouldNotComplainAboutNull() {
-		assertThat(converter.convert(null, Double.class, bundle), is(nullValue()));
+		assertThat(converter.convert(null, Double.class), is(nullValue()));
 	}
 
 	@Test
 	public void shouldNotComplainAboutEmpty() {
-		assertThat(converter.convert("", Double.class, bundle), is(nullValue()));
+		assertThat(converter.convert("", Double.class), is(nullValue()));
 	}
 
 }

@@ -11,33 +11,35 @@ import java.util.ResourceBundle;
 import java.util.regex.Pattern;
 
 import javax.enterprise.context.RequestScoped;
+import javax.inject.Inject;
 
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
-import br.com.caelum.vraptor.core.Localization;
 
 @Convert(Time.class)
 @RequestScoped
 public class LocaleBasedTimeConverter implements Converter<Time> {
 
-	private final Localization localization;
+	private Locale locale;
+	private ResourceBundle bundle;
 
-	public LocaleBasedTimeConverter(Localization localization) {
-		this.localization = localization;
+	@Deprecated // CDI eyes only
+	public LocaleBasedTimeConverter() {
+    }
+
+	@Inject
+	public LocaleBasedTimeConverter(Locale locale, ResourceBundle bundle) {
+		this.locale = locale;
+        this.bundle = bundle;
 	}
 
-	public Time convert(String value, Class<? extends Time> type,
-			ResourceBundle bundle) {
+	public Time convert(String value, Class<? extends Time> type) {
 		if (isNullOrEmpty(value)) {
 			return null;
 		}
 
-		Locale locale = localization.getLocale();
-		if (locale == null) {
-			locale = Locale.getDefault();
-		}
-
 		DateFormat formatHour = DateFormat.getTimeInstance(DateFormat.SHORT, locale);
+		
 		try {
 			if (isUncompleteTime(value)) {
 				value = value + ":00";

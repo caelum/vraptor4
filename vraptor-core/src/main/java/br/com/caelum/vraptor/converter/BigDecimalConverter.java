@@ -23,6 +23,7 @@ import java.text.MessageFormat;
 import java.util.ResourceBundle;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
@@ -34,9 +35,20 @@ import br.com.caelum.vraptor.Converter;
  */
 @Convert(BigDecimal.class)
 @ApplicationScoped
-public class BigDecimalConverter implements Converter<BigDecimal>{
+public class BigDecimalConverter implements Converter<BigDecimal> {
+    
+    private ResourceBundle bundle;
+    
+    @Deprecated
+    public BigDecimalConverter() {
+    }
 
-	public BigDecimal convert(String value, Class<? extends BigDecimal> type, ResourceBundle bundle) {
+    @Inject
+    public BigDecimalConverter(ResourceBundle bundle) {
+        this.bundle = bundle;
+    }
+
+	public BigDecimal convert(String value, Class<? extends BigDecimal> type) {
 		if (isNullOrEmpty(value)) {
 			return null;
 		}

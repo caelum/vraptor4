@@ -23,6 +23,7 @@ import java.text.MessageFormat;
 import java.util.ResourceBundle;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
@@ -35,8 +36,19 @@ import br.com.caelum.vraptor.Converter;
 @Convert(Byte.class)
 @ApplicationScoped
 public class ByteConverter implements Converter<Byte> {
+    
+    private ResourceBundle bundle;
+    
+    @Deprecated
+    public ByteConverter() {
+    }
 
-    public Byte convert(String value, Class<? extends Byte> type, ResourceBundle bundle) {
+    @Inject
+    public ByteConverter(ResourceBundle bundle) {
+        this.bundle = bundle;
+    }
+
+    public Byte convert(String value, Class<? extends Byte> type) {
         if (isNullOrEmpty(value)) {
             return null;
         }

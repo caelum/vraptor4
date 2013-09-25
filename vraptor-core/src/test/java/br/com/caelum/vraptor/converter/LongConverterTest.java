@@ -35,19 +35,19 @@ public class LongConverterTest {
 
     @Before
     public void setup() {
-        this.converter = new LongConverter();
         this.bundle = ResourceBundle.getBundle("messages");
+        this.converter = new LongConverter(bundle);
     }
 
     @Test
     public void shouldBeAbleToConvertNumbers(){
-        assertThat(converter.convert("2", long.class, bundle), is(equalTo(2L)));
+        assertThat(converter.convert("2", long.class), is(equalTo(2L)));
     }
 
     @Test
     public void shouldComplainAboutInvalidNumber() {
         try {
-			converter.convert("---", long.class, bundle);
+			converter.convert("---", long.class);
 		} catch (ConversionException e) {
 			assertThat(e.getMessage(), is(equalTo("--- is not a valid integer.")));
 		}
@@ -55,12 +55,12 @@ public class LongConverterTest {
 
     @Test
     public void shouldNotComplainAboutNull() {
-        assertThat(converter.convert(null, long.class, bundle), is(nullValue()));
+        assertThat(converter.convert(null, long.class), is(nullValue()));
     }
 
     @Test
     public void shouldNotComplainAboutEmpty() {
-        assertThat(converter.convert("", long.class, bundle), is(nullValue()));
+        assertThat(converter.convert("", long.class), is(nullValue()));
     }
 
 }

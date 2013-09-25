@@ -29,7 +29,6 @@ import net.vidageek.mirror.dsl.Mirror;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.controller.HttpMethod;
-import br.com.caelum.vraptor.core.Localization;
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.http.ParametersProvider;
 import br.com.caelum.vraptor.http.route.ControllerNotFoundException;
@@ -44,19 +43,17 @@ public class DefaultRefererResult implements RefererResult {
 	private Result result;
 	private Router router;
 	private ParametersProvider provider;
-	private Localization localization;
 
 	@Deprecated// CDI eyes only
 	public DefaultRefererResult() {}
 
 	@Inject
 	public DefaultRefererResult(Result result, MutableRequest request, Router router,
-				ParametersProvider provider, Localization localization) {
+				ParametersProvider provider) {
 		this.result = result;
 		this.request = request;
 		this.router = router;
 		this.provider = provider;
-		this.localization = localization;
 	}
 
 	public void forward() throws IllegalStateException {
@@ -74,7 +71,7 @@ public class DefaultRefererResult implements RefererResult {
 
 	private void executeMethod(ControllerMethod method, Object instance) {
 		new Mirror().on(instance).invoke().method(method.getMethod())
-			.withArgs(provider.getParametersFor(method, new ArrayList<Message>(), localization.getBundle()));
+			.withArgs(provider.getParametersFor(method, new ArrayList<Message>()));
 	}
 
 	public void redirect() throws IllegalStateException {

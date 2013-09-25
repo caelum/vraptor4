@@ -33,37 +33,37 @@ public class EnumConverter implements Converter {
 	/**
 	 * Enums are always final, so I can suppress this warning safely
 	 */
-    @Override
+	@Override
 	public Object convert(String value, Class type) {
-	    if (isNullOrEmpty(value)) {
-            return null;
-        }
+		if (isNullOrEmpty(value)) {
+			return null;
+		}
 
-        if (Character.isDigit(value.charAt(0))) {
-            return resolveByOrdinal(value, type);
-        } else {
-            return resolveByName(value, type);
-        }
-    }
+		if (Character.isDigit(value.charAt(0))) {
+			return resolveByOrdinal(value, type);
+		} else {
+			return resolveByName(value, type);
+		}
+	}
 
-    private Object resolveByName(String value, Class enumType) {
-        try {
-            return Enum.valueOf(enumType, value);
-        } catch (IllegalArgumentException e) {
+	private Object resolveByName(String value, Class enumType) {
+		try {
+			return Enum.valueOf(enumType, value);
+		} catch (IllegalArgumentException e) {
 			throw new ConversionException(new ConversionMessage("is_not_a_valid_enum_value", value));
-        }
-    }
+		}
+	}
 
-    private Object resolveByOrdinal(String value, Class enumType) {
-        try {
-            int ordinal = Integer.parseInt(value);
-            if (ordinal >= enumType.getEnumConstants().length) {
-    			throw new ConversionException(new ConversionMessage("is_not_a_valid_enum_value", value));
-            }
-            return enumType.getEnumConstants()[ordinal];
-        } catch (NumberFormatException e) {
+	private Object resolveByOrdinal(String value, Class enumType) {
+		try {
+			int ordinal = Integer.parseInt(value);
+			if (ordinal >= enumType.getEnumConstants().length) {
+				throw new ConversionException(new ConversionMessage("is_not_a_valid_enum_value", value));
+			}
+			return enumType.getEnumConstants()[ordinal];
+		} catch (NumberFormatException e) {
 			throw new ConversionException(new ConversionMessage("is_not_a_valid_enum_value", value));
-        }
-    }
+		}
+	}
 
 }

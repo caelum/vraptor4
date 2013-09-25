@@ -17,13 +17,13 @@ public class ListProducer {
 	@Produces
 	public <T> List<T> producesList(InjectionPoint injectionPoint){
 		ParameterizedType type = (ParameterizedType) injectionPoint.getType();
-	    Class klass = (Class) type.getActualTypeArguments()[0];
-	    CDI<Object> currentCDI = CDI.current();
+		Class klass = (Class) type.getActualTypeArguments()[0];
+		CDI<Object> currentCDI = CDI.current();
 		BeanManager beanManager = currentCDI.getBeanManager();
-	    Set<Bean<?>> beans = beanManager.getBeans(klass);
-	    ArrayList objects = new ArrayList();
-	    for (Bean<?> bean : beans) {			
-	    	objects.add(currentCDI.select(bean.getBeanClass()).get());
+		Set<Bean<?>> beans = beanManager.getBeans(klass);
+		ArrayList objects = new ArrayList();
+		for (Bean<?> bean : beans) {			
+			objects.add(currentCDI.select(bean.getBeanClass()).get());
 		}
 		return objects;
 	}

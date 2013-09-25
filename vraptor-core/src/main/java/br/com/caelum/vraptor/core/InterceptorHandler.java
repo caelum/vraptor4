@@ -32,6 +32,6 @@ import br.com.caelum.vraptor.controller.ControllerMethod;
  */
 public interface InterceptorHandler {
 
-    void execute(InterceptorStack stack, ControllerMethod method, Object controllerInstance) throws InterceptionException;
+	void execute(InterceptorStack stack, ControllerMethod method, Object controllerInstance) throws InterceptionException;
 
 }

@@ -26,6 +26,6 @@ import br.com.caelum.vraptor.controller.ControllerMethod;
  */
 public interface PathResolver {
 
-    String pathFor(ControllerMethod method);
+	String pathFor(ControllerMethod method);
 
 }

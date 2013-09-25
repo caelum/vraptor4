@@ -44,7 +44,7 @@ public class BooleanConverter implements Converter<Boolean> {
 
 	@Override
 	public Boolean convert(String value, Class<? extends Boolean> type) {
-	    if (isNullOrEmpty(value)) {
+		if (isNullOrEmpty(value)) {
 			return null;
 		}
 

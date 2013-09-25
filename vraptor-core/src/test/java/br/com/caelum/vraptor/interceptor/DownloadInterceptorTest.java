@@ -60,23 +60,23 @@ import br.com.caelum.vraptor.interceptor.download.DownloadInterceptor;
 
 public class DownloadInterceptorTest {
 
-    private DownloadInterceptor interceptor;
+	private DownloadInterceptor interceptor;
 
-    @Mock private MethodInfo info;
+	@Mock private MethodInfo info;
 	@Mock private HttpServletResponse response;
 	@Mock private ControllerMethod controllerMethod;
 	@Mock private InterceptorStack stack;
 	@Mock private ServletOutputStream outputStream;
 	@Mock private Result result;
 
-    @Before
-    public void setup() throws Exception {
-    	MockitoAnnotations.initMocks(this);
+	@Before
+	public void setup() throws Exception {
+		MockitoAnnotations.initMocks(this);
 
 		when(response.getOutputStream()).thenReturn(outputStream);
 
-        interceptor = new DownloadInterceptor(response, info, result);
-    }
+		interceptor = new DownloadInterceptor(response, info, result);
+	}
 
 	@Test
 	public void whenResultIsADownloadShouldUseIt() throws Exception {
@@ -148,54 +148,54 @@ public class DownloadInterceptorTest {
 		}
 	}
 
-    @Test
-    public void shouldThrowInterceptionExceptionIfIOExceptionOccurs() throws Exception {
-        Download download = mock(Download.class);
+	@Test
+	public void shouldThrowInterceptionExceptionIfIOExceptionOccurs() throws Exception {
+		Download download = mock(Download.class);
 
-        when(info.getResult()).thenReturn(download);
-        when(result.used()).thenReturn(false);
-        doThrow(new IOException()).when(download).write(any(HttpServletResponse.class));
+		when(info.getResult()).thenReturn(download);
+		when(result.used()).thenReturn(false);
+		doThrow(new IOException()).when(download).write(any(HttpServletResponse.class));
 
-        try {
-            interceptor.intercept(stack, controllerMethod, null);
-            fail("expected InterceptionException");
-        } catch (InterceptionException e) {
+		try {
+			interceptor.intercept(stack, controllerMethod, null);
+			fail("expected InterceptionException");
+		} catch (InterceptionException e) {
 
-        }
-    }
+		}
+	}
 
-    @Test
-    public void shouldNotAcceptStringReturn() throws Exception {
-        Method method = FakeController.class.getMethod("string");
-        assertThat(interceptor, not(accepts(method)));
-    }
+	@Test
+	public void shouldNotAcceptStringReturn() throws Exception {
+		Method method = FakeController.class.getMethod("string");
+		assertThat(interceptor, not(accepts(method)));
+	}
 
 	@Test
 	public void shouldAcceptFile() throws Exception {
-	    Method method = FakeController.class.getMethod("file");
-        assertThat(interceptor, accepts(method));
+		Method method = FakeController.class.getMethod("file");
+		assertThat(interceptor, accepts(method));
 	}
 
-    @Test
-    public void shouldAcceptInput() throws Exception {
-        Method method = FakeController.class.getMethod("input");
-        assertThat(interceptor, accepts(method));
-    }
+	@Test
+	public void shouldAcceptInput() throws Exception {
+		Method method = FakeController.class.getMethod("input");
+		assertThat(interceptor, accepts(method));
+	}
 
-    @Test
-    public void shouldAcceptDownload() throws Exception {
-        Method method = FakeController.class.getMethod("download");
-        assertThat(interceptor, accepts(method));
-    }
+	@Test
+	public void shouldAcceptDownload() throws Exception {
+		Method method = FakeController.class.getMethod("download");
+		assertThat(interceptor, accepts(method));
+	}
 
-    @Test
-    public void shouldAcceptByte() throws Exception {
-        Method method = FakeController.class.getMethod("asByte");
-        assertThat(interceptor, accepts(method));
-    }
+	@Test
+	public void shouldAcceptByte() throws Exception {
+		Method method = FakeController.class.getMethod("asByte");
+		assertThat(interceptor, accepts(method));
+	}
 
-    private Matcher<Interceptor> accepts(final Method method) {
-    	return new TypeSafeMatcher<Interceptor>() {
+	private Matcher<Interceptor> accepts(final Method method) {
+		return new TypeSafeMatcher<Interceptor>() {
 
 			public void describeTo(Description description) {
 				description.appendText("the method ").appendValue(method);
@@ -209,7 +209,7 @@ public class DownloadInterceptorTest {
 			protected void describeMismatchSafely(Interceptor item, Description mismatchDescription) {
 			}
 		};
-    }
+	}
 
 	private Matcher<byte[]> arrayStartingWith(final byte[] array) {
 		return new TypeSafeMatcher<byte[]>() {
@@ -247,7 +247,7 @@ public class DownloadInterceptorTest {
 			return null;
 		}
 		public byte[] asByte() {
-		    return null;
+			return null;
 		}
 	}
 }

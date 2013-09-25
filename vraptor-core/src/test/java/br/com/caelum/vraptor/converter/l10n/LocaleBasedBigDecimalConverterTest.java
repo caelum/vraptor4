@@ -43,50 +43,50 @@ public class LocaleBasedBigDecimalConverterTest {
 
 	static final String LOCALE_KEY = "javax.servlet.jsp.jstl.fmt.locale";
 
-    private LocaleBasedBigDecimalConverter converter;
-    private @Mock MutableRequest request;
-    private @Mock HttpSession session;
-    private @Mock ServletContext context;
+	private LocaleBasedBigDecimalConverter converter;
+	private @Mock MutableRequest request;
+	private @Mock HttpSession session;
+	private @Mock ServletContext context;
 
-    @Before
-    public void setup() {
-    	MockitoAnnotations.initMocks(this);
+	@Before
+	public void setup() {
+		MockitoAnnotations.initMocks(this);
 
-    	when(request.getServletContext()).thenReturn(context);
+		when(request.getServletContext()).thenReturn(context);
 
-        converter = new LocaleBasedBigDecimalConverter(new Locale("pt", "BR"));
-    }
+		converter = new LocaleBasedBigDecimalConverter(new Locale("pt", "BR"));
+	}
 
-    @Test
-    public void shouldBeAbleToConvertWithPTBR() {
-        assertThat(converter.convert("10,00", BigDecimal.class), is(equalTo(new BigDecimal("10.00"))));
-        assertThat(converter.convert("10,01", BigDecimal.class), is(equalTo(new BigDecimal("10.01"))));
-    }
+	@Test
+	public void shouldBeAbleToConvertWithPTBR() {
+		assertThat(converter.convert("10,00", BigDecimal.class), is(equalTo(new BigDecimal("10.00"))));
+		assertThat(converter.convert("10,01", BigDecimal.class), is(equalTo(new BigDecimal("10.01"))));
+	}
 
-    @Test
-    public void shouldBeAbleToConvertWithENUS() {
-        converter = new LocaleBasedBigDecimalConverter(new Locale("en", "US"));
-        assertThat(converter.convert("10.00", BigDecimal.class), is(equalTo(new BigDecimal("10.00"))));
-        assertThat(converter.convert("10.01", BigDecimal.class), is(equalTo(new BigDecimal("10.01"))));
-    }
+	@Test
+	public void shouldBeAbleToConvertWithENUS() {
+		converter = new LocaleBasedBigDecimalConverter(new Locale("en", "US"));
+		assertThat(converter.convert("10.00", BigDecimal.class), is(equalTo(new BigDecimal("10.00"))));
+		assertThat(converter.convert("10.01", BigDecimal.class), is(equalTo(new BigDecimal("10.01"))));
+	}
 
-     @Test
-     public void shouldBeAbleToConvertEmpty() {
-         assertThat(converter.convert("", BigDecimal.class), is(nullValue()));
-     }
+	 @Test
+	 public void shouldBeAbleToConvertEmpty() {
+		 assertThat(converter.convert("", BigDecimal.class), is(nullValue()));
+	 }
 
-     @Test
-     public void shouldBeAbleToConvertNull() {
-         assertThat(converter.convert(null, BigDecimal.class), is(nullValue()));
-     }
+	 @Test
+	 public void shouldBeAbleToConvertNull() {
+		 assertThat(converter.convert(null, BigDecimal.class), is(nullValue()));
+	 }
 
-    @Test
-    public void shouldThrowExceptionWhenUnableToParse() {
-        try {
-            converter.convert("vr3.9", BigDecimal.class);
-            fail("Should throw exception");
-        } catch (ConversionException e) {
-            assertThat(e.getValidationMessage(), hasMessage("vr3.9 is not a valid number."));
-        }
-    }
+	@Test
+	public void shouldThrowExceptionWhenUnableToParse() {
+		try {
+			converter.convert("vr3.9", BigDecimal.class);
+			fail("Should throw exception");
+		} catch (ConversionException e) {
+			assertThat(e.getValidationMessage(), hasMessage("vr3.9 is not a valid number."));
+		}
+	}
 }

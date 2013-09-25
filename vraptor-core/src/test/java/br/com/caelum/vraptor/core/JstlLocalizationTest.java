@@ -27,70 +27,70 @@ import br.com.caelum.vraptor.http.MutableRequest;
  */
 public class JstlLocalizationTest {
 
-    static final Locale PT_BR = new Locale("pt", "BR");
+	static final Locale PT_BR = new Locale("pt", "BR");
 
-    private JstlLocalization localization;
+	private JstlLocalization localization;
 
-    private MutableRequest request;
-    private ServletContext servletContext;
-    private HttpSession session;
+	private MutableRequest request;
+	private ServletContext servletContext;
+	private HttpSession session;
 
-    @Before
-    public void setUp() {
-        request = mock(MutableRequest.class);
-        servletContext = mock(ServletContext.class);
-        session = mock(HttpSession.class);
-        
-        localization = new JstlLocalization(request);
+	@Before
+	public void setUp() {
+		request = mock(MutableRequest.class);
+		servletContext = mock(ServletContext.class);
+		session = mock(HttpSession.class);
+		
+		localization = new JstlLocalization(request);
 
-        ResourceBundle bundle = new ListResourceBundle() {
-            protected Object[][] getContents() {
-                return new Object[][] { { "my.key", "abc" } };
-            }
-        };
+		ResourceBundle bundle = new ListResourceBundle() {
+			protected Object[][] getContents() {
+				return new Object[][] { { "my.key", "abc" } };
+			}
+		};
 
-        LocalizationContext context = new LocalizationContext(bundle);
-        when(request.getAttribute(FMT_LOCALIZATION_CONTEXT + ".request")).thenReturn(context);
+		LocalizationContext context = new LocalizationContext(bundle);
+		when(request.getAttribute(FMT_LOCALIZATION_CONTEXT + ".request")).thenReturn(context);
 
-        when(request.getSession()).thenReturn(session);
-        when(request.getServletContext()).thenReturn(servletContext);
-        
-        Locale.setDefault(Locale.ENGLISH);
-    }
+		when(request.getSession()).thenReturn(session);
+		when(request.getServletContext()).thenReturn(servletContext);
+		
+		Locale.setDefault(Locale.ENGLISH);
+	}
 
-    @Test
-    public void findLocaleFromRequest() {
-        when(request.getAttribute(FMT_LOCALE + ".request")).thenReturn(PT_BR);
-        assertThat(localization.getLocale(), equalTo(PT_BR));
-    }
+	@Test
+	public void findLocaleFromRequest() {
+		when(request.getAttribute(FMT_LOCALE + ".request")).thenReturn(PT_BR);
+		assertThat(localization.getLocale(), equalTo(PT_BR));
+	}
 
-    @Test
-    public void findLocaleFromSession() {
-        when(session.getAttribute(FMT_LOCALE + ".session")).thenReturn(PT_BR);
-        assertThat(localization.getLocale(), equalTo(PT_BR));
-    }
+	@Test
+	public void findLocaleFromSession() {
+		when(session.getAttribute(FMT_LOCALE + ".session")).thenReturn(PT_BR);
+		assertThat(localization.getLocale(), equalTo(PT_BR));
+	}
 
-    @Test
-    public void findLocaleFromServletContext() {
-        when(servletContext.getInitParameter(FMT_LOCALE)).thenReturn(PT_BR.toString());
-        assertThat(localization.getLocale(), equalTo(PT_BR));
-    }
+	@Test
+	public void findLocaleFromServletContext() {
+		when(servletContext.getInitParameter(FMT_LOCALE)).thenReturn(PT_BR.toString());
+		assertThat(localization.getLocale(), equalTo(PT_BR));
+	}
 
-    @Test
-    public void findLocaleFromRequestLocale() {
-        when(request.getLocale()).thenReturn(PT_BR);
-        assertThat(localization.getLocale(), equalTo(PT_BR));
-    }
+	@Test
+	public void findLocaleFromRequestLocale() {
+		when(request.getLocale()).thenReturn(PT_BR);
+		assertThat(localization.getLocale(), equalTo(PT_BR));
+	}
 
-    @Test
-    public void findLocaleFromDefaultWhenNotFoundInAnyScope() {
-        assertThat(localization.getLocale(), equalTo(Locale.ENGLISH));
-    }
+	@Test
+	public void findLocaleFromDefaultWhenNotFoundInAnyScope() {
+		assertThat(localization.getLocale(), equalTo(Locale.ENGLISH));
+	}
 
-    @Test
-    public void testLocaleWithSessionNotRequest() {
-        when(request.getAttribute(FMT_LOCALE + ".request")).thenReturn(PT_BR);
-        when(session.getAttribute(FMT_LOCALE + ".session")).thenReturn(Locale.ENGLISH);
-        assertThat(localization.getLocale(), equalTo(PT_BR));
-    }
+	@Test
+	public void testLocaleWithSessionNotRequest() {
+		when(request.getAttribute(FMT_LOCALE + ".request")).thenReturn(PT_BR);
+		when(session.getAttribute(FMT_LOCALE + ".session")).thenReturn(Locale.ENGLISH);
+		assertThat(localization.getLocale(), equalTo(PT_BR));
+	}
 }

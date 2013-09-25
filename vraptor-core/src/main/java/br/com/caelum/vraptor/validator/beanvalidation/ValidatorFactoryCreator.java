@@ -37,21 +37,21 @@ import org.slf4j.LoggerFactory;
 public class ValidatorFactoryCreator {
 	
 	private static final Logger logger = LoggerFactory.getLogger(ValidatorFactoryCreator.class);
-    
+	
 	//CDI eyes only
 	@Deprecated
 	public ValidatorFactoryCreator() {
 	}
-    
-    @Produces 
-    @Default 
-    @javax.enterprise.context.ApplicationScoped
+	
+	@Produces 
+	@Default 
+	@javax.enterprise.context.ApplicationScoped
 	public ValidatorFactory getInstance() {
-        logger.debug("Initializing Bean Validator");
-        return Validation.byDefaultProvider().configure().buildValidatorFactory();
-    }
+		logger.debug("Initializing Bean Validator");
+		return Validation.byDefaultProvider().configure().buildValidatorFactory();
+	}
 
-    public void close(@Disposes ValidatorFactory validatorFactory) {
-    	validatorFactory.close();
-    }
+	public void close(@Disposes ValidatorFactory validatorFactory) {
+		validatorFactory.close();
+	}
 }

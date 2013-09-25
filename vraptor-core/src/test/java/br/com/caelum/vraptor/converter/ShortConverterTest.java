@@ -33,7 +33,7 @@ public class ShortConverterTest {
 
 	@Before
 	public void setup() {
-        this.converter = new ShortConverter();
+		this.converter = new ShortConverter();
 	}
 
 	@Test
@@ -55,9 +55,9 @@ public class ShortConverterTest {
 		assertThat(converter.convert(null, Short.class), is(nullValue()));
 	}
 
-    @Test
-    public void shouldComplainAboutEmpty() {
-        assertThat(converter.convert("", Short.class), is(nullValue()));
-    }
+	@Test
+	public void shouldComplainAboutEmpty() {
+		assertThat(converter.convert("", Short.class), is(nullValue()));
+	}
 
 }

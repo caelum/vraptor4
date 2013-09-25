@@ -44,32 +44,32 @@ import br.com.caelum.vraptor.converter.ConversionMessage;
 @RequestScoped
 @Alternative
 public class LocaleBasedBigDecimalConverter
-    implements Converter<BigDecimal> {
+	implements Converter<BigDecimal> {
 
-    private Locale locale;
+	private Locale locale;
 
-    @Deprecated // CDI eyes only
-    public LocaleBasedBigDecimalConverter() {
-    }
+	@Deprecated // CDI eyes only
+	public LocaleBasedBigDecimalConverter() {
+	}
 
-    @Inject
-    public LocaleBasedBigDecimalConverter(Locale locale) {
-        this.locale = locale;
-    }
+	@Inject
+	public LocaleBasedBigDecimalConverter(Locale locale) {
+		this.locale = locale;
+	}
 
-    @Override
+	@Override
 	public BigDecimal convert(String value, Class<? extends BigDecimal> type) {
-        if (isNullOrEmpty(value)) {
-            return null;
-        }
+		if (isNullOrEmpty(value)) {
+			return null;
+		}
 
-        try {
-            DecimalFormat fmt = ((DecimalFormat) DecimalFormat.getInstance(locale));
-            fmt.setParseBigDecimal(true);
+		try {
+			DecimalFormat fmt = ((DecimalFormat) DecimalFormat.getInstance(locale));
+			fmt.setParseBigDecimal(true);
 
-            return (BigDecimal) fmt.parse(value);
-        } catch (ParseException e) {
-            throw new ConversionException(new ConversionMessage("is_not_a_valid_number", value));
-        }
-    }
+			return (BigDecimal) fmt.parse(value);
+		} catch (ParseException e) {
+			throw new ConversionException(new ConversionMessage("is_not_a_valid_number", value));
+		}
+	}
 }

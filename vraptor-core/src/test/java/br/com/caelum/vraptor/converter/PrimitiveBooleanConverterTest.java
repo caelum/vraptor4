@@ -34,7 +34,7 @@ public class PrimitiveBooleanConverterTest {
 
 	@Before
 	public void setup() {
-        this.converter = new PrimitiveBooleanConverter(new BooleanConverter());
+		this.converter = new PrimitiveBooleanConverter(new BooleanConverter());
 	}
 
 	@Test

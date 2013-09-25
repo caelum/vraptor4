@@ -34,23 +34,23 @@ import br.com.caelum.vraptor.Converter;
 @Convert(boolean.class)
 @ApplicationScoped
 public class PrimitiveBooleanConverter implements Converter<Boolean> {
-    private BooleanConverter booleanConverter;
+	private BooleanConverter booleanConverter;
 
-    @Deprecated
-    public PrimitiveBooleanConverter() {
-    }
+	@Deprecated
+	public PrimitiveBooleanConverter() {
+	}
 
-    @Inject
+	@Inject
 	public PrimitiveBooleanConverter(BooleanConverter converter) {
-        booleanConverter = converter;
-    }
+		booleanConverter = converter;
+	}
 
-    @Override
+	@Override
 	public Boolean convert(String value, Class<? extends Boolean> type) {
-        if (isNullOrEmpty(value)) {
-        	return false;
-        }
+		if (isNullOrEmpty(value)) {
+			return false;
+		}
 
-        return booleanConverter.convert(value, type);
-    }
+		return booleanConverter.convert(value, type);
+	}
 }

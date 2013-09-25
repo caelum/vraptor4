@@ -40,7 +40,7 @@ public class BigDecimalConverterTest {
 
 	@Before
 	public void setup() {
-        converter = new BigDecimalConverter();
+		converter = new BigDecimalConverter();
 	}
 
 	@Test

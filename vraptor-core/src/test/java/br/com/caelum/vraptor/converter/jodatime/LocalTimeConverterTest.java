@@ -35,7 +35,7 @@ public class LocalTimeConverterTest {
 
 		when(request.getServletContext()).thenReturn(context);
 
-        converter = new LocalTimeConverter(new Locale("pt", "BR"));
+		converter = new LocalTimeConverter(new Locale("pt", "BR"));
 	}
 
 	@Test

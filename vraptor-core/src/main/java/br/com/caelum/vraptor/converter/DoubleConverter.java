@@ -33,17 +33,17 @@ import br.com.caelum.vraptor.Converter;
 @ApplicationScoped
 public class DoubleConverter implements Converter<Double> {
 
-    @Override
+	@Override
 	public Double convert(String value, Class<? extends Double> type) {
-        if (isNullOrEmpty(value)) {
-            return null;
-        }
+		if (isNullOrEmpty(value)) {
+			return null;
+		}
 
-        try {
-            return Double.valueOf(value);
-        } catch (NumberFormatException e) {
+		try {
+			return Double.valueOf(value);
+		} catch (NumberFormatException e) {
 			throw new ConversionException(new ConversionMessage("is_not_a_valid_number", value));
-        }
-    }
+		}
+	}
 
 }

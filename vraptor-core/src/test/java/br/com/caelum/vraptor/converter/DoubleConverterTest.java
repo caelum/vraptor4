@@ -33,7 +33,7 @@ public class DoubleConverterTest {
 
 	@Before
 	public void setup() {
-        this.converter = new DoubleConverter();
+		this.converter = new DoubleConverter();
 	}
 
 	@Test

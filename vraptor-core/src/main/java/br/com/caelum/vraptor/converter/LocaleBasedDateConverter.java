@@ -39,39 +39,39 @@ import br.com.caelum.vraptor.Converter;
 @Convert(Date.class)
 @RequestScoped
 public class LocaleBasedDateConverter
-    implements Converter<Date> {
+	implements Converter<Date> {
 
-    private Locale locale;
+	private Locale locale;
 
-    //CDI eyes only
+	//CDI eyes only
 	@Deprecated
 	public LocaleBasedDateConverter() {
 	}
 
-    @Inject
-    public LocaleBasedDateConverter(Locale locale) {
-        this.locale = locale;
-    }
+	@Inject
+	public LocaleBasedDateConverter(Locale locale) {
+		this.locale = locale;
+	}
 
-    @Override
+	@Override
 	public Date convert(String value, Class<? extends Date> type) {
-        if (isNullOrEmpty(value)) {
-            return null;
-        }
+		if (isNullOrEmpty(value)) {
+			return null;
+		}
 
-        DateFormat formatDateTime = DateFormat.getDateTimeInstance(MEDIUM, MEDIUM, locale);
+		DateFormat formatDateTime = DateFormat.getDateTimeInstance(MEDIUM, MEDIUM, locale);
 
-        try {
-            return formatDateTime.parse(value);
+		try {
+			return formatDateTime.parse(value);
 
-        } catch (ParseException pe) {
-            DateFormat formatDate = DateFormat.getDateInstance(SHORT, locale);
-            try {
-                return formatDate.parse(value);
-            } catch (ParseException pe1) {
-                throw new ConversionException(new ConversionMessage("is_not_a_valid_date", value));
-            }
-        }
-    }
+		} catch (ParseException pe) {
+			DateFormat formatDate = DateFormat.getDateInstance(SHORT, locale);
+			try {
+				return formatDate.parse(value);
+			} catch (ParseException pe1) {
+				throw new ConversionException(new ConversionMessage("is_not_a_valid_date", value));
+			}
+		}
+	}
 
 }

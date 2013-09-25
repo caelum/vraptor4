@@ -32,16 +32,16 @@ import br.com.caelum.vraptor.Converter;
 @Convert(char.class)
 @ApplicationScoped
 public class PrimitiveCharConverter implements Converter<Character> {
-    @Override
+	@Override
 	public Character convert(String value, Class<? extends Character> type) {
-        if (isNullOrEmpty(value)) {
-            return '\u0000';
-        }
+		if (isNullOrEmpty(value)) {
+			return '\u0000';
+		}
 
-        if (value.length() != 1) {
-            throw new ConversionException(new ConversionMessage("is_not_a_valid_character", value));
-        }
-        return value.charAt(0);
-    }
+		if (value.length() != 1) {
+			throw new ConversionException(new ConversionMessage("is_not_a_valid_character", value));
+		}
+		return value.charAt(0);
+	}
 
 }

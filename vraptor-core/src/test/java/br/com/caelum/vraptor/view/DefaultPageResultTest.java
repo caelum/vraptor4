@@ -48,135 +48,135 @@ import br.com.caelum.vraptor.proxy.ProxyInvocationException;
 
 public class DefaultPageResultTest {
 
-    private @Mock MutableRequest request;
-    private @Mock MutableResponse response;
-    private @Mock RequestDispatcher dispatcher;
-    private Proxifier proxifier;
-    private ControllerMethod method;
-    private PathResolver fixedResolver;
-    private MethodInfo requestInfo;
+	private @Mock MutableRequest request;
+	private @Mock MutableResponse response;
+	private @Mock RequestDispatcher dispatcher;
+	private Proxifier proxifier;
+	private ControllerMethod method;
+	private PathResolver fixedResolver;
+	private MethodInfo requestInfo;
 	private DefaultPageResult view;
 
-    @Before
-    public void setup() {
-    	MockitoAnnotations.initMocks(this);
-        method = DefaultControllerMethod.instanceFor(AnyResource.class, AnyResource.class.getDeclaredMethods()[0]);
-        proxifier = new JavassistProxifier(new ObjenesisInstanceCreator());
-        requestInfo = new MethodInfo();
-        requestInfo.setControllerMethod(method);
-        fixedResolver = new PathResolver() {
-            public String pathFor(ControllerMethod method) {
-                return "fixed";
-            }
-        };
+	@Before
+	public void setup() {
+		MockitoAnnotations.initMocks(this);
+		method = DefaultControllerMethod.instanceFor(AnyResource.class, AnyResource.class.getDeclaredMethods()[0]);
+		proxifier = new JavassistProxifier(new ObjenesisInstanceCreator());
+		requestInfo = new MethodInfo();
+		requestInfo.setControllerMethod(method);
+		fixedResolver = new PathResolver() {
+			public String pathFor(ControllerMethod method) {
+				return "fixed";
+			}
+		};
 		view = new DefaultPageResult(request, response, requestInfo, fixedResolver, proxifier);
 		when(request.getOriginalRequest()).thenReturn(request);
 		when(response.getOriginalResponse()).thenReturn(response);
-    }
-
-    public static class AnyResource {
-    	public void method() {
-    	}
-    }
-
-    @Test
-	public void shouldRedirectIncludingContext() throws Exception {
-    	when(request.getContextPath()).thenReturn("/context");
-
-		view.redirectTo("/any/url");
-
-    	verify(response).sendRedirect("/context/any/url");
 	}
 
-    @Test
-    public void shouldNotIncludeContextPathIfURIIsAbsolute() throws Exception {
-    	view.redirectTo("http://vraptor.caelum.com.br");
+	public static class AnyResource {
+		public void method() {
+		}
+	}
 
-    	verify(request, never()).getContextPath();
-    	verify(response, only()).sendRedirect("http://vraptor.caelum.com.br");
-    }
-
-	@Test(expected=ResultException.class)
-    public void shouldThrowResultExceptionIfIOExceptionOccursWhileRedirect() throws Exception {
-    	doThrow(new IOException()).when(response).sendRedirect(anyString());
+	@Test
+	public void shouldRedirectIncludingContext() throws Exception {
+		when(request.getContextPath()).thenReturn("/context");
 
 		view.redirectTo("/any/url");
-    }
 
-    @Test
-    public void shouldForwardToGivenURI() throws Exception {
-    	when(request.getRequestDispatcher("/any/url")).thenReturn(dispatcher);
+		verify(response).sendRedirect("/context/any/url");
+	}
 
-    	view.forwardTo("/any/url");
-    	verify(dispatcher, only()).forward(request, response);
-    }
+	@Test
+	public void shouldNotIncludeContextPathIfURIIsAbsolute() throws Exception {
+		view.redirectTo("http://vraptor.caelum.com.br");
+
+		verify(request, never()).getContextPath();
+		verify(response, only()).sendRedirect("http://vraptor.caelum.com.br");
+	}
+
+	@Test(expected=ResultException.class)
+	public void shouldThrowResultExceptionIfIOExceptionOccursWhileRedirect() throws Exception {
+		doThrow(new IOException()).when(response).sendRedirect(anyString());
+
+		view.redirectTo("/any/url");
+	}
+
+	@Test
+	public void shouldForwardToGivenURI() throws Exception {
+		when(request.getRequestDispatcher("/any/url")).thenReturn(dispatcher);
+
+		view.forwardTo("/any/url");
+		verify(dispatcher, only()).forward(request, response);
+	}
 
 
 	@Test(expected=ResultException.class)
-    public void shouldThrowResultExceptionIfServletExceptionOccursWhileForwarding() throws Exception {
-    	when(request.getRequestDispatcher(anyString())).thenReturn(dispatcher);
-    	doThrow(new ServletException()).when(dispatcher).forward(request, response);
+	public void shouldThrowResultExceptionIfServletExceptionOccursWhileForwarding() throws Exception {
+		when(request.getRequestDispatcher(anyString())).thenReturn(dispatcher);
+		doThrow(new ServletException()).when(dispatcher).forward(request, response);
 
-    	view.forwardTo("/any/url");
-    }
+		view.forwardTo("/any/url");
+	}
 
 	@Test(expected=ResultException.class)
-    public void shouldThrowResultExceptionIfIOExceptionOccursWhileForwarding() throws Exception {
-    	when(request.getRequestDispatcher(anyString())).thenReturn(dispatcher);
-    	doThrow(new IOException()).when(dispatcher).forward(request, response);
+	public void shouldThrowResultExceptionIfIOExceptionOccursWhileForwarding() throws Exception {
+		when(request.getRequestDispatcher(anyString())).thenReturn(dispatcher);
+		doThrow(new IOException()).when(dispatcher).forward(request, response);
 
-    	view.forwardTo("/any/url");
-    }
+		view.forwardTo("/any/url");
+	}
 
-    @Test
-    public void shouldAllowCustomPathResolverWhileForwardingView() throws ServletException, IOException {
-    	when(request.getRequestDispatcher("fixed")).thenReturn(dispatcher);
+	@Test
+	public void shouldAllowCustomPathResolverWhileForwardingView() throws ServletException, IOException {
+		when(request.getRequestDispatcher("fixed")).thenReturn(dispatcher);
 
-        view.defaultView();
+		view.defaultView();
 
-    	verify(dispatcher, only()).forward(request, response);
-    }
+		verify(dispatcher, only()).forward(request, response);
+	}
 
 	@Test(expected=ApplicationLogicException.class)
-    public void shouldThrowResultExceptionIfServletExceptionOccursWhileForwardingView() throws Exception {
-    	when(request.getRequestDispatcher(anyString())).thenReturn(dispatcher);
-    	doThrow(new ServletException()).when(dispatcher).forward(request, response);
+	public void shouldThrowResultExceptionIfServletExceptionOccursWhileForwardingView() throws Exception {
+		when(request.getRequestDispatcher(anyString())).thenReturn(dispatcher);
+		doThrow(new ServletException()).when(dispatcher).forward(request, response);
 
-        view.defaultView();
-    }
-
-	@Test(expected=ResultException.class)
-    public void shouldThrowResultExceptionIfIOExceptionOccursWhileForwardingView() throws Exception {
-    	when(request.getRequestDispatcher(anyString())).thenReturn(dispatcher);
-    	doThrow(new IOException()).when(dispatcher).forward(request, response);
-
-        view.defaultView();
-    }
-
-    @Test
-    public void shouldAllowCustomPathResolverWhileIncluding() throws ServletException, IOException {
-    	when(request.getRequestDispatcher("fixed")).thenReturn(dispatcher);
-
-        view.include();
-
-    	verify(dispatcher, only()).include(request, response);
-    }
+		view.defaultView();
+	}
 
 	@Test(expected=ResultException.class)
-    public void shouldThrowResultExceptionIfServletExceptionOccursWhileIncluding() throws Exception {
-    	when(request.getRequestDispatcher(anyString())).thenReturn(dispatcher);
-    	doThrow(new ServletException()).when(dispatcher).include(request, response);
+	public void shouldThrowResultExceptionIfIOExceptionOccursWhileForwardingView() throws Exception {
+		when(request.getRequestDispatcher(anyString())).thenReturn(dispatcher);
+		doThrow(new IOException()).when(dispatcher).forward(request, response);
 
-        view.include();
-    }
+		view.defaultView();
+	}
+
+	@Test
+	public void shouldAllowCustomPathResolverWhileIncluding() throws ServletException, IOException {
+		when(request.getRequestDispatcher("fixed")).thenReturn(dispatcher);
+
+		view.include();
+
+		verify(dispatcher, only()).include(request, response);
+	}
 
 	@Test(expected=ResultException.class)
-    public void shouldThrowResultExceptionIfIOExceptionOccursWhileIncluding() throws Exception {
-    	when(request.getRequestDispatcher(anyString())).thenReturn(dispatcher);
-    	doThrow(new IOException()).when(dispatcher).include(request, response);
+	public void shouldThrowResultExceptionIfServletExceptionOccursWhileIncluding() throws Exception {
+		when(request.getRequestDispatcher(anyString())).thenReturn(dispatcher);
+		doThrow(new ServletException()).when(dispatcher).include(request, response);
 
-        view.include();
-    }
+		view.include();
+	}
+
+	@Test(expected=ResultException.class)
+	public void shouldThrowResultExceptionIfIOExceptionOccursWhileIncluding() throws Exception {
+		when(request.getRequestDispatcher(anyString())).thenReturn(dispatcher);
+		doThrow(new IOException()).when(dispatcher).include(request, response);
+
+		view.include();
+	}
 
 	@Test
 	public void shoudNotExecuteLogicWhenUsingResultOf() {

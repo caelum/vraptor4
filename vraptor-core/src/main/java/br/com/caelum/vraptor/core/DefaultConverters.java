@@ -35,27 +35,27 @@ import br.com.caelum.vraptor.ioc.Container;
 public class DefaultConverters implements Converters {
 
 	private  final Logger logger = LoggerFactory.getLogger(DefaultConverters.class);
-    private LinkedList<Class<? extends Converter<?>>> classes;
+	private LinkedList<Class<? extends Converter<?>>> classes;
 	private Container container;
 
 	@Deprecated //CDI eyes only
 	public DefaultConverters() {}
 
 	@Inject
-    public DefaultConverters(Container container) {
-        this.container = container;
+	public DefaultConverters(Container container) {
+		this.container = container;
 		this.classes = new LinkedList<>();
-        logger.info("Registering bundled converters");
-    }
+		logger.info("Registering bundled converters");
+	}
 
-    @Override
+	@Override
 	public void register(Class<? extends Converter<?>> converterClass) {
-        if (!converterClass.isAnnotationPresent(Convert.class)) {
-            throw new VRaptorException("The converter type " + converterClass.getName()
-                    + " should have the Convert annotation");
-        }
+		if (!converterClass.isAnnotationPresent(Convert.class)) {
+			throw new VRaptorException("The converter type " + converterClass.getName()
+					+ " should have the Convert annotation");
+		}
 		classes.addFirst(converterClass);
-    }
+	}
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -68,11 +68,11 @@ public class DefaultConverters implements Converters {
 
 	private Class<? extends Converter<?>> findConverterType(Class<?> clazz) {
 		for (Class<? extends Converter<?>> converterType : classes) {
-            Class<?> boundType = converterType.getAnnotation(Convert.class).value();
-            if (boundType.isAssignableFrom(clazz)) {
-                return converterType;
-            }
-        }
+			Class<?> boundType = converterType.getAnnotation(Convert.class).value();
+			if (boundType.isAssignableFrom(clazz)) {
+				return converterType;
+			}
+		}
 		return null;
 	}
 
@@ -92,6 +92,6 @@ public class DefaultConverters implements Converters {
 		if (!existsTwoWayFor(type)) {
 			throw new VRaptorException("Unable to find two way converter for " + type.getName());
 		}
-        return (TwoWayConverter<?>) container.instanceFor(findConverterType(type));
+		return (TwoWayConverter<?>) container.instanceFor(findConverterType(type));
 	}
 }

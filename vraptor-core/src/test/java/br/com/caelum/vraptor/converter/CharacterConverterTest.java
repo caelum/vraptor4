@@ -33,7 +33,7 @@ public class CharacterConverterTest {
 
 	@Before
 	public void setup() {
-        this.converter = new CharacterConverter();
+		this.converter = new CharacterConverter();
 	}
 
 	@Test

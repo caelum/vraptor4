@@ -29,17 +29,17 @@ import br.com.caelum.vraptor.VRaptorMatchers;
 
 public class PrimitiveShortConverterTest {
 
-    private PrimitiveShortConverter converter;
+	private PrimitiveShortConverter converter;
 
-    @Before
-    public void setup() {
-        this.converter = new PrimitiveShortConverter();
-    }
+	@Before
+	public void setup() {
+		this.converter = new PrimitiveShortConverter();
+	}
 
-    @Test
-    public void shouldBeAbleToConvertNumbers(){
-        assertThat(converter.convert("5", short.class), is(equalTo((short) 5)));
-    }
+	@Test
+	public void shouldBeAbleToConvertNumbers(){
+		assertThat(converter.convert("5", short.class), is(equalTo((short) 5)));
+	}
 
 	@Test
 	public void shouldComplainAboutInvalidNumber() {
@@ -50,14 +50,14 @@ public class PrimitiveShortConverterTest {
 		}
 	}
 
-    @Test
-    public void shouldConvertToZeroWhenNull() {
-    	assertThat(converter.convert(null, short.class), is(equalTo((short) 0)));
-    }
+	@Test
+	public void shouldConvertToZeroWhenNull() {
+		assertThat(converter.convert(null, short.class), is(equalTo((short) 0)));
+	}
 
-    @Test
-    public void shouldConvertToZeroWhenEmpty() {
-    	assertThat(converter.convert("", short.class), is(equalTo((short) 0)));
-    }
+	@Test
+	public void shouldConvertToZeroWhenEmpty() {
+		assertThat(converter.convert("", short.class), is(equalTo((short) 0)));
+	}
 
 }

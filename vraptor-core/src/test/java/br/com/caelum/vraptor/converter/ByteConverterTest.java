@@ -33,7 +33,7 @@ public class ByteConverterTest {
 
 	@Before
 	public void setup() {
-        this.converter = new ByteConverter();
+		this.converter = new ByteConverter();
 	}
 
 	@Test

@@ -43,8 +43,8 @@ import br.com.caelum.vraptor.core.InterceptorStack;
  */
 public interface Interceptor {
 
-    void intercept(InterceptorStack stack, ControllerMethod method, Object controllerInstance) throws InterceptionException;
+	void intercept(InterceptorStack stack, ControllerMethod method, Object controllerInstance) throws InterceptionException;
 
-    boolean accepts(ControllerMethod method);
+	boolean accepts(ControllerMethod method);
 
 }

@@ -57,12 +57,12 @@ public class StereotypesRegistry {
 		return null;
 	}
 
-    static {
+	static {
 		STEREOTYPES_INFO = ImmutableMap.<Class<?>, StereotypeInfo>of(
 			Controller.class,new StereotypeInfo(Controller.class,ControllerHandler.class,new AnnotationLiteral<ControllerQualifier>() {}),
 			Convert.class,new StereotypeInfo(Convert.class,ConverterHandler.class,new AnnotationLiteral<ConvertQualifier>() {}),
 			Deserializes.class,new StereotypeInfo(Deserializes.class,DeserializesHandler.class,new AnnotationLiteral<DeserializesQualifier>() {}),
 			Intercepts.class,new StereotypeInfo(Intercepts.class,InterceptorStereotypeHandler.class,new AnnotationLiteral<InterceptsQualifier>(){})
 		);
-    }
+	}
 }

@@ -25,7 +25,7 @@ import java.io.IOException;
  * @version 3.0.2
  */
 public interface JSONSerialization extends Serialization {
-    
+	
 	/**
 	 * Exclude the root alias from serialization.
 	 * @since 3.1.2

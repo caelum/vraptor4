@@ -40,26 +40,26 @@ import br.com.caelum.vraptor.converter.ConversionMessage;
 @Convert(DateMidnight.class)
 public class DateMidnightConverter implements Converter<DateMidnight> {
 
-    private Locale locale;
+	private Locale locale;
 
-    @Deprecated // CDI eyes only
-    public DateMidnightConverter() {
-    }
+	@Deprecated // CDI eyes only
+	public DateMidnightConverter() {
+	}
 
-    @Inject
-    public DateMidnightConverter(Locale locale) {
-        this.locale = locale;
-    }
+	@Inject
+	public DateMidnightConverter(Locale locale) {
+		this.locale = locale;
+	}
 
-    @Override
+	@Override
 	public DateMidnight convert(String value, Class<? extends DateMidnight> type) {
-        try {
-            DateTime out = new LocaleBasedJodaTimeConverter(locale).convert(value, shortDate());
-            if (out == null) {
-                return null;
-            }
+		try {
+			DateTime out = new LocaleBasedJodaTimeConverter(locale).convert(value, shortDate());
+			if (out == null) {
+				return null;
+			}
 
-            return out.toDateMidnight();
+			return out.toDateMidnight();
 		} catch (Exception e) {
 			throw new ConversionException(new ConversionMessage("is_not_a_valid_datetime", value));
 		}

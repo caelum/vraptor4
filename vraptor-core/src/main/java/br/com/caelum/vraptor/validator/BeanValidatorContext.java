@@ -27,27 +27,27 @@ import javax.validation.metadata.ConstraintDescriptor;
  * @version $Revision$
  */
 public class BeanValidatorContext
-    implements MessageInterpolator.Context {
+	implements MessageInterpolator.Context {
 
-    private final ConstraintDescriptor<?> descriptor;
-    private final Object validatedValue;
+	private final ConstraintDescriptor<?> descriptor;
+	private final Object validatedValue;
 
-    public BeanValidatorContext(ConstraintViolation<Object> violation) {
-        descriptor = violation.getConstraintDescriptor();
-        validatedValue = violation.getInvalidValue();
-    }
+	public BeanValidatorContext(ConstraintViolation<Object> violation) {
+		descriptor = violation.getConstraintDescriptor();
+		validatedValue = violation.getInvalidValue();
+	}
 
-    @Override
-    public ConstraintDescriptor<?> getConstraintDescriptor() {
-        return descriptor;
-    }
+	@Override
+	public ConstraintDescriptor<?> getConstraintDescriptor() {
+		return descriptor;
+	}
 
-    @Override
-    public Object getValidatedValue() {
-        return validatedValue;
-    }
+	@Override
+	public Object getValidatedValue() {
+		return validatedValue;
+	}
 
-    public <T> T unwrap(Class<T> clazz) {
-        return clazz.cast(this);
-    }
+	public <T> T unwrap(Class<T> clazz) {
+		return clazz.cast(this);
+	}
 }

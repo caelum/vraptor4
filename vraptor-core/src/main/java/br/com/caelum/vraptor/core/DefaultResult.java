@@ -42,14 +42,14 @@ import br.com.caelum.vraptor.ioc.Container;
 @RequestScoped
 @Named("result")
 public class DefaultResult extends AbstractResult {
-    
-    private static final Logger logger = LoggerFactory.getLogger(DefaultResult.class);
+	
+	private static final Logger logger = LoggerFactory.getLogger(DefaultResult.class);
 
-    private HttpServletRequest request;
-    private Container container;
-    private Map<String, Object> includedAttributes;
-    private boolean responseCommitted = false;
-    private ExceptionMapper exceptions;
+	private HttpServletRequest request;
+	private Container container;
+	private Map<String, Object> includedAttributes;
+	private boolean responseCommitted = false;
+	private ExceptionMapper exceptions;
 	private TypeNameExtractor extractor;
 
 	//CDI eyes only
@@ -58,38 +58,38 @@ public class DefaultResult extends AbstractResult {
 	}
 
 	@Inject
-    public DefaultResult(HttpServletRequest request, Container container, ExceptionMapper exceptions, TypeNameExtractor extractor) {
-        this.request = request;
-        this.container = container;
+	public DefaultResult(HttpServletRequest request, Container container, ExceptionMapper exceptions, TypeNameExtractor extractor) {
+		this.request = request;
+		this.container = container;
 		this.extractor = extractor;
-        this.includedAttributes = new HashMap<>();
-        this.exceptions = exceptions;
-    }
+		this.includedAttributes = new HashMap<>();
+		this.exceptions = exceptions;
+	}
 	
-    @Override
+	@Override
 	public <T extends View> T use(Class<T> view) {
-        responseCommitted = true;
-        return container.instanceFor(view);
-    }
-    
-    @Override
+		responseCommitted = true;
+		return container.instanceFor(view);
+	}
+	
+	@Override
 	public Result on(Class<? extends Exception> exception) {
-        return exceptions.record(exception);
-    }
+		return exceptions.record(exception);
+	}
 
-    @Override
+	@Override
 	public Result include(String key, Object value) {
-        logger.debug("including attribute {}: {}", key, value);
-        
-    	includedAttributes.put(key, value);
-        request.setAttribute(key, value);
-        return this;
-    }
+		logger.debug("including attribute {}: {}", key, value);
+		
+		includedAttributes.put(key, value);
+		request.setAttribute(key, value);
+		return this;
+	}
 
-    @Override
+	@Override
 	public boolean used() {
-        return responseCommitted;
-    }
+		return responseCommitted;
+	}
 
 	@Override
 	public Map<String, Object> included() {

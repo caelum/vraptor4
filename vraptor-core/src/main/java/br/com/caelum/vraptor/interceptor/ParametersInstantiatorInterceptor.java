@@ -48,12 +48,12 @@ import br.com.caelum.vraptor.view.FlashScope;
  */
 @Intercepts(after=ControllerLookupInterceptor.class)
 public class ParametersInstantiatorInterceptor implements Interceptor {
-    private ParametersProvider provider;
-    private ParameterNameProvider parameterNameProvider;
-    private MethodInfo parameters;
+	private ParametersProvider provider;
+	private ParameterNameProvider parameterNameProvider;
+	private MethodInfo parameters;
 
-    private static final Logger logger = LoggerFactory.getLogger(ParametersInstantiatorInterceptor.class);
-    private Validator validator;
+	private static final Logger logger = LoggerFactory.getLogger(ParametersInstantiatorInterceptor.class);
+	private Validator validator;
 	private final List<Message> errors = new ArrayList<>();
 	private MutableRequest request;
 	private FlashScope flash;
@@ -63,56 +63,56 @@ public class ParametersInstantiatorInterceptor implements Interceptor {
 	}
 
 	@Inject
-    public ParametersInstantiatorInterceptor(ParametersProvider provider, ParameterNameProvider parameterNameProvider, MethodInfo parameters,
-            Validator validator, MutableRequest request, FlashScope flash) {
-        this.provider = provider;
-        this.parameterNameProvider = parameterNameProvider;
-        this.parameters = parameters;
-        this.validator = validator;
+	public ParametersInstantiatorInterceptor(ParametersProvider provider, ParameterNameProvider parameterNameProvider, MethodInfo parameters,
+			Validator validator, MutableRequest request, FlashScope flash) {
+		this.provider = provider;
+		this.parameterNameProvider = parameterNameProvider;
+		this.parameters = parameters;
+		this.validator = validator;
 		this.request = request;
 		this.flash = flash;
-    }
+	}
 
-    public boolean accepts(ControllerMethod method) {
-        return method.getMethod().getParameterTypes().length > 0;
-    }
+	public boolean accepts(ControllerMethod method) {
+		return method.getMethod().getParameterTypes().length > 0;
+	}
 
 	public void intercept(InterceptorStack stack, ControllerMethod method, Object controllerInstance) throws InterceptionException {
-    	Enumeration<String> names = request.getParameterNames();
-    	while (names.hasMoreElements()) {
+		Enumeration<String> names = request.getParameterNames();
+		while (names.hasMoreElements()) {
 			fixParameter(names.nextElement());
 		}
 
-    	addHeaderParametersToAttribute(method);
+		addHeaderParametersToAttribute(method);
 
-        Object[] values = getParametersFor(method);
+		Object[] values = getParametersFor(method);
 
-        validator.addAll(errors);
+		validator.addAll(errors);
 
-    	if (!errors.isEmpty()) {
-    		logger.debug("There are conversion errors: {}", errors);
-    	}
-        logger.debug("Parameter values for {} are {}", method, values);
+		if (!errors.isEmpty()) {
+			logger.debug("There are conversion errors: {}", errors);
+		}
+		logger.debug("Parameter values for {} are {}", method, values);
 
-        parameters.setParameters(values);
-        stack.next(method, controllerInstance);
-    }
+		parameters.setParameters(values);
+		stack.next(method, controllerInstance);
+	}
 
 	private void addHeaderParametersToAttribute(ControllerMethod method) {
 		Method trueMethod = method.getMethod();
 
-        String[] parameters = parameterNameProvider.parameterNamesFor(trueMethod);
+		String[] parameters = parameterNameProvider.parameterNamesFor(trueMethod);
 
-        Annotation[][] annotations = trueMethod.getParameterAnnotations();
-        for (int i = 0; i < annotations.length; i++) {
-            for (Annotation annotation : annotations[i]) {
-                if (annotation instanceof HeaderParam) {
-                    HeaderParam headerParam = (HeaderParam) annotation;
-                    String value = request.getHeader(headerParam.value());
-                    request.setAttribute(parameters[i], value);
-                }
-            }
-        }
+		Annotation[][] annotations = trueMethod.getParameterAnnotations();
+		for (int i = 0; i < annotations.length; i++) {
+			for (Annotation annotation : annotations[i]) {
+				if (annotation instanceof HeaderParam) {
+					HeaderParam headerParam = (HeaderParam) annotation;
+					String value = request.getHeader(headerParam.value());
+					request.setAttribute(parameters[i], value);
+				}
+			}
+		}
 
 	}
 

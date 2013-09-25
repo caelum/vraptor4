@@ -49,7 +49,7 @@ public class GsonJSONSerializationTest {
 	private DefaultTypeNameExtractor extractor;
 	private List<JsonSerializer> adapters;
 
-    private VRaptorGsonBuilder builder;
+	private VRaptorGsonBuilder builder;
 
 	@Before
 	public void setup() throws Exception {
@@ -457,11 +457,11 @@ public class GsonJSONSerializationTest {
 	
 	@Test
 	public void shouldSerializeWithCallback() {
-	    JSONPSerialization serialization = new GsonJSONPSerialization(response, extractor, builder, serializee);
-	    
-        String expectedResult = "calculate({\"order\":{\"price\":15.0}})";
-        Order order = new Order(new Client("nykolas lima"), 15.0, "gift bags, please");
-        serialization.withCallback("calculate").from(order).excludeAll().include("price").serialize();
-        assertThat(result(), is(equalTo(expectedResult)));
+		JSONPSerialization serialization = new GsonJSONPSerialization(response, extractor, builder, serializee);
+		
+		String expectedResult = "calculate({\"order\":{\"price\":15.0}})";
+		Order order = new Order(new Client("nykolas lima"), 15.0, "gift bags, please");
+		serialization.withCallback("calculate").from(order).excludeAll().include("price").serialize();
+		assertThat(result(), is(equalTo(expectedResult)));
 	}
 }

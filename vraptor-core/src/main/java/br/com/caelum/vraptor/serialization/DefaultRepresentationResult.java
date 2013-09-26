@@ -25,8 +25,6 @@ import javax.inject.Inject;
 
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.http.FormatResolver;
-import br.com.caelum.vraptor.restfulie.RestHeadersHandler;
-import br.com.caelum.vraptor.restfulie.hypermedia.HypermediaResource;
 
 /**
  * Default implementation for RepresentationResult that uses request Accept format to
@@ -41,17 +39,15 @@ public class DefaultRepresentationResult implements RepresentationResult {
 	private FormatResolver formatResolver;
 	private List<Serialization> serializations;
 	private Result result;
-	private RestHeadersHandler headersHandler;
 
 	@Deprecated // CDI eyes only
 	public DefaultRepresentationResult() {}
 
 	@Inject
-	public DefaultRepresentationResult(FormatResolver formatResolver, Result result, List<Serialization> serializations, RestHeadersHandler headersHandler) {
+	public DefaultRepresentationResult(FormatResolver formatResolver, Result result, List<Serialization> serializations) {
 		this.formatResolver = formatResolver;
 		this.result = result;
 		this.serializations = serializations;
-		this.headersHandler = headersHandler;
 	}
 
 	public <T> Serializer from(T object) {
@@ -72,9 +68,7 @@ public class DefaultRepresentationResult implements RepresentationResult {
 			result.use(status()).notFound();
 			return new IgnoringSerializer();
 		}
-		if(HypermediaResource.class.isAssignableFrom(object.getClass())) {
-			headersHandler.handle(HypermediaResource.class.cast(object));
-		}
+		
 		sortSerializations();
 		String format = formatResolver.getAcceptFormat();
 		for (Serialization serialization : serializations) {

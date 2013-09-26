@@ -180,7 +180,7 @@ public class DefaultStatusTest {
 						return "json";
 					}
 					
-				}, this, Arrays.<Serialization>asList(super.use(JSONSerialization.class)), null));
+				}, this, Arrays.<Serialization>asList(super.use(JSONSerialization.class))));
 			}
 		};
 		DefaultStatus status = new DefaultStatus(response, result, config, new JavassistProxifier(new ObjenesisInstanceCreator()), router);

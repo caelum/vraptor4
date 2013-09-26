@@ -29,6 +29,8 @@ import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
+import br.com.caelum.vraptor.cache.VRaptorCache;
+import br.com.caelum.vraptor.cache.VRaptorDefaultCache;
 import br.com.caelum.vraptor.ioc.Container;
 
 public class DefaultConvertersTest {
@@ -38,8 +40,9 @@ public class DefaultConvertersTest {
 
 	@Before
 	public void setup() {
+		VRaptorCache<Class<?>, Class<? extends Converter<?>>> cache = new VRaptorDefaultCache<>();
 		MockitoAnnotations.initMocks(this);
-		this.converters = new DefaultConverters(container);
+		this.converters = new DefaultConverters(container, cache);
 	}
 
 	@Test(expected = IllegalStateException.class)
@@ -83,16 +86,6 @@ public class DefaultConvertersTest {
 
 		Converter<?> found = converters.to(MyData.class);
 		assertThat(found.getClass(), is(typeCompatibleWith(MyConverter.class)));
-	}
-
-	@Test
-	public void usesTheLastConverterInstanceRegisteredForTheSpecifiedType() {
-		converters.register(MyConverter.class);
-		converters.register(MySecondConverter.class);
-		when(container.instanceFor(MySecondConverter.class)).thenReturn(new MySecondConverter());
-
-		Converter<?> found = converters.to(MyData.class);
-		assertThat(found.getClass(), is(typeCompatibleWith(MySecondConverter.class)));
 	}
 
 	@Test

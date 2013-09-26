@@ -20,8 +20,7 @@ package br.com.caelum.vraptor.core;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.LinkedList;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -32,21 +31,27 @@ import org.slf4j.LoggerFactory;
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.TwoWayConverter;
+import br.com.caelum.vraptor.cache.LRU;
+import br.com.caelum.vraptor.cache.VRaptorCache;
 import br.com.caelum.vraptor.ioc.Container;
 
 @ApplicationScoped
 public class DefaultConverters implements Converters {
 
-	private  final Logger logger = LoggerFactory.getLogger(DefaultConverters.class);
-	private final Map<Class<?>, Class<? extends Converter<?>>> classes = new LinkedHashMap<>();
+	private final Logger logger = LoggerFactory.getLogger(DefaultConverters.class);
+	private final LinkedList<Class<? extends Converter<?>>> classes = new LinkedList<>();
+
+	@LRU
+	private VRaptorCache<Class<?>, Class<? extends Converter<?>>> cache;
 	private Container container;
 
 	@Deprecated //CDI eyes only
 	public DefaultConverters() {}
 
 	@Inject
-	public DefaultConverters(Container container) {
+	public DefaultConverters(Container container, VRaptorCache<Class<?>, Class<? extends Converter<?>>> cache) {
 		this.container = container;
+		this.cache = cache;
 		logger.info("Registering bundled converters");
 	}
 
@@ -56,7 +61,7 @@ public class DefaultConverters implements Converters {
 		checkNotNull(type, "The converter type %s should have the Convert annotation", converterClass.getName());
 		
 		logger.debug("adding converter {} to {}", converterClass, type.value());
-		classes.put(type.value(), converterClass);
+		classes.add(converterClass);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -69,12 +74,32 @@ public class DefaultConverters implements Converters {
 	}
 
 	private Class<? extends Converter<?>> findConverterType(Class<?> clazz) {
-		return classes.get(clazz);
+		Class<? extends Converter<?>> cachedConverter = cache.get(clazz);
+		if (cachedConverter == null) {
+			Class<? extends Converter<?>> fromList = findConverterFromList(clazz);
+			if (fromList != null) {
+				cachedConverter = cache.putIfAbsent(clazz, fromList);
+				if (cachedConverter == null) {
+					cachedConverter = fromList;
+				}
+			}
+		}
+		return cachedConverter;
+	}
+	
+	private Class<? extends Converter<?>> findConverterFromList(Class<?> clazz) {
+		for (Class<? extends Converter<?>> converterType : classes) {
+			Class<?> boundType = converterType.getAnnotation(Convert.class).value();
+			if (boundType.isAssignableFrom(clazz)) {
+				return converterType;
+			}
+		}
+		return null;
 	}
 
 	@Override
 	public boolean existsFor(Class<?> type) {
-		return classes.containsKey(type);
+		return findConverterType(type) != null;
 	}
 
 	@Override

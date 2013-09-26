@@ -3,7 +3,6 @@ package br.com.caelum.vraptor.serialization;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -17,8 +16,6 @@ import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.http.FormatResolver;
-import br.com.caelum.vraptor.restfulie.RestHeadersHandler;
-import br.com.caelum.vraptor.restfulie.hypermedia.HypermediaResource;
 import br.com.caelum.vraptor.view.PageResult;
 import br.com.caelum.vraptor.view.Status;
 
@@ -29,7 +26,6 @@ public class DefaultRepresentationResultTest {
 	private @Mock Result result;
 	private @Mock PageResult pageResult;
 	private @Mock Status status;
-	private @Mock RestHeadersHandler headerHandler;
 
 	private RepresentationResult representation;
 
@@ -38,7 +34,7 @@ public class DefaultRepresentationResultTest {
 		MockitoAnnotations.initMocks(this);
 		when(result.use(PageResult.class)).thenReturn(pageResult);
 		when(result.use(Status.class)).thenReturn(status);
-		representation = new DefaultRepresentationResult(formatResolver, result, Arrays.asList(serialization), headerHandler);
+		representation = new DefaultRepresentationResult(formatResolver, result, Arrays.asList(serialization));
 	}
 
 	@Test
@@ -108,18 +104,4 @@ public class DefaultRepresentationResultTest {
 
 		verify(serialization, never()).from(object);
 	}
-
-	@Test
-	public void whenTheResourceIsHypermediaAddRestHeaders() throws Exception {
-		when(formatResolver.getAcceptFormat()).thenReturn("xml");
-
-		when(serialization.accepts("xml")).thenReturn(true);
-		HypermediaResource object = mock(HypermediaResource.class);
-		representation.from(object);
-
-		verify(serialization).from(object);
-		verify(headerHandler).handle(object);
-	}
-
-
 }

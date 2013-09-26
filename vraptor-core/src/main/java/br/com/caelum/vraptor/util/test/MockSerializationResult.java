@@ -107,7 +107,7 @@ public class MockSerializationResult extends MockResult {
 					return "xml";
 				}
 				
-			}, this, Arrays.asList(this.serialization), null));
+			}, this, Arrays.asList(this.serialization)));
 		}
 		
 		return proxifier.proxify(view, returnOnFinalMethods(view));

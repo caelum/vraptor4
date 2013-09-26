@@ -17,7 +17,6 @@
 
 package br.com.caelum.vraptor.core;
 
-import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
 
 import java.util.LinkedList;
@@ -58,7 +57,7 @@ public class DefaultConverters implements Converters {
 	@Override
 	public void register(Class<? extends Converter<?>> converterClass) {
 		Convert type = converterClass.getAnnotation(Convert.class);
-		checkNotNull(type, "The converter type %s should have the Convert annotation", converterClass.getName());
+		checkState(type != null, "The converter type %s should have the Convert annotation", converterClass.getName());
 		
 		logger.debug("adding converter {} to {}", converterClass, type.value());
 		classes.add(converterClass);

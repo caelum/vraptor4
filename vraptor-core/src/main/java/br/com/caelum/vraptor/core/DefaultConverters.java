@@ -17,7 +17,11 @@
 
 package br.com.caelum.vraptor.core;
 
-import java.util.LinkedList;
+import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.checkState;
+
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -28,14 +32,13 @@ import org.slf4j.LoggerFactory;
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.TwoWayConverter;
-import br.com.caelum.vraptor.VRaptorException;
 import br.com.caelum.vraptor.ioc.Container;
 
 @ApplicationScoped
 public class DefaultConverters implements Converters {
 
 	private  final Logger logger = LoggerFactory.getLogger(DefaultConverters.class);
-	private LinkedList<Class<? extends Converter<?>>> classes;
+	private final Map<Class<?>, Class<? extends Converter<?>>> classes = new LinkedHashMap<>();
 	private Container container;
 
 	@Deprecated //CDI eyes only
@@ -44,41 +47,34 @@ public class DefaultConverters implements Converters {
 	@Inject
 	public DefaultConverters(Container container) {
 		this.container = container;
-		this.classes = new LinkedList<>();
 		logger.info("Registering bundled converters");
 	}
 
 	@Override
 	public void register(Class<? extends Converter<?>> converterClass) {
-		if (!converterClass.isAnnotationPresent(Convert.class)) {
-			throw new VRaptorException("The converter type " + converterClass.getName()
-					+ " should have the Convert annotation");
-		}
-		classes.addFirst(converterClass);
+		Convert type = converterClass.getAnnotation(Convert.class);
+		checkNotNull(type, "The converter type %s should have the Convert annotation", converterClass.getName());
+		
+		logger.debug("adding converter {} to {}", converterClass, type.value());
+		classes.put(type.value(), converterClass);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T> Converter<T> to(Class<T> clazz) {
-		if (!existsFor(clazz)) {
-			throw new VRaptorException("Unable to find converter for " + clazz.getName());
-		}
-		return (Converter<T>) container.instanceFor(findConverterType(clazz));
+		Class<? extends Converter<?>> converterType = findConverterType(clazz);
+		checkState(converterType != null, "Unable to find converter for %s", clazz.getName());
+		
+		return (Converter<T>) container.instanceFor(converterType);
 	}
 
 	private Class<? extends Converter<?>> findConverterType(Class<?> clazz) {
-		for (Class<? extends Converter<?>> converterType : classes) {
-			Class<?> boundType = converterType.getAnnotation(Convert.class).value();
-			if (boundType.isAssignableFrom(clazz)) {
-				return converterType;
-			}
-		}
-		return null;
+		return classes.get(clazz);
 	}
 
 	@Override
 	public boolean existsFor(Class<?> type) {
-		return findConverterType(type) != null;
+		return classes.containsKey(type);
 	}
 
 	@Override
@@ -89,9 +85,8 @@ public class DefaultConverters implements Converters {
 
 	@Override
 	public TwoWayConverter<?> twoWayConverterFor(Class<?> type) {
-		if (!existsTwoWayFor(type)) {
-			throw new VRaptorException("Unable to find two way converter for " + type.getName());
-		}
+		checkState(existsTwoWayFor(type), "Unable to find two way converter for %s", type.getName());
+		
 		return (TwoWayConverter<?>) container.instanceFor(findConverterType(type));
 	}
 }

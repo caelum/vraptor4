@@ -29,7 +29,6 @@ import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
-import br.com.caelum.vraptor.VRaptorException;
 import br.com.caelum.vraptor.ioc.Container;
 
 public class DefaultConvertersTest {
@@ -43,12 +42,12 @@ public class DefaultConvertersTest {
 		this.converters = new DefaultConverters(container);
 	}
 
-	@Test(expected = VRaptorException.class)
+	@Test(expected = IllegalStateException.class)
 	public void complainsIfNoConverterFound() {
 		converters.to(DefaultConvertersTest.class);
 	}
 
-	@Test(expected = VRaptorException.class)
+	@Test(expected = NullPointerException.class)
 	public void convertingANonAnnotatedConverterEndsUpComplaining() {
 		converters.register(WrongConverter.class);
 	}

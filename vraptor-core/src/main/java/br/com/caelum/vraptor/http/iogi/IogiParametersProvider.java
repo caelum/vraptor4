@@ -22,9 +22,9 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.List;
-import java.util.ResourceBundle;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -44,6 +44,7 @@ import br.com.caelum.vraptor.validator.Message;
 @RequestScoped
 public class IogiParametersProvider implements ParametersProvider {
 	private static final Logger LOGGER = LoggerFactory.getLogger(IogiParametersProvider.class);
+	
 	private ParameterNameProvider nameProvider;
 	private HttpServletRequest servletRequest;
 	private InstantiatorWithErrors instantiator;
@@ -66,15 +67,13 @@ public class IogiParametersProvider implements ParametersProvider {
 		Parameters parameters = parseParameters(servletRequest);
 		List<Target<Object>> targets = createTargets(method);
 
-		List<Object> arguments = instantiateParameters(parameters, targets, errors);
-
-		return arguments.toArray();
+		return instantiateParameters(parameters, targets, errors).toArray();
 	}
 
 	private List<Object> instantiateParameters(Parameters parameters, List<Target<Object>> targets, List<Message> errors) {
 		LOGGER.debug("getParametersFor() called with parameters {} and targets {}.", parameters, targets);
 
-		List<Object> arguments = new ArrayList<>();
+		List<Object> arguments = new ArrayList<>(targets.size());
 		for (Target<Object> target : targets) {
 			Object newObject = instantiateOrAddError(parameters, errors, target);
 			arguments.add(newObject);
@@ -94,14 +93,18 @@ public class IogiParametersProvider implements ParametersProvider {
 		String[] parameterNames = nameProvider.parameterNamesFor(javaMethod);
 		for (int i = 0; i < methodArity(javaMethod); i++) {
 			if (parameterTypes[i] instanceof TypeVariable) {
-				ParameterizedType superclass = (ParameterizedType) method.getController().getType().getGenericSuperclass();
-				parameterTypes[i] = superclass.getActualTypeArguments()[0];
+				parameterTypes[i] = extractType(method);
 			}
-			Target<Object> newTarget = new Target<>(parameterTypes[i], parameterNames[i]);
-			targets.add(newTarget);
+			
+			targets.add(new Target<>(parameterTypes[i], parameterNames[i]));
 		}
 
 		return targets;
+	}
+	
+	private Type extractType(ControllerMethod method) {
+		ParameterizedType superclass = (ParameterizedType) method.getController().getType().getGenericSuperclass();
+		return superclass.getActualTypeArguments()[0];
 	}
 
 	private int methodArity(Method method) {
@@ -109,19 +112,15 @@ public class IogiParametersProvider implements ParametersProvider {
 	}
 
 	private Parameters parseParameters(HttpServletRequest request) {
-		List<Parameter> parameterList = new ArrayList<>();
+		Map<String, String[]> parameters = request.getParameterMap();
+		List<Parameter> parameterList = new ArrayList<>(parameters.size() * 2);
 
-		Enumeration<?> enumeration = request.getParameterNames();
-		while (enumeration.hasMoreElements()) {
-			String parameterName = (String) enumeration.nextElement();
-			String[] parameterValues = request.getParameterValues(parameterName);
-			for (String value : parameterValues) {
-				Parameter newParameter = new Parameter(parameterName, value);
-				parameterList.add(newParameter);
+		for (Entry<String, String[]> param: parameters.entrySet()) {
+			for (String value : param.getValue()) {
+				parameterList.add(new Parameter(param.getKey(), value));
 			}
 		}
 
 		return new Parameters(parameterList);
 	}
-
 }

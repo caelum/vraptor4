@@ -50,7 +50,7 @@ public class DefaultConvertersTest {
 		converters.to(DefaultConvertersTest.class);
 	}
 
-	@Test(expected = NullPointerException.class)
+	@Test(expected = IllegalStateException.class)
 	public void convertingANonAnnotatedConverterEndsUpComplaining() {
 		converters.register(WrongConverter.class);
 	}

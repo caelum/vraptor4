@@ -17,8 +17,9 @@
 
 package br.com.caelum.vraptor.http;
 
+import static java.util.Collections.enumeration;
+
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -59,10 +60,9 @@ public class VRaptorRequest extends HttpServletRequestWrapper implements Mutable
 		return super.getParameter(name);
 	}
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
-	public Enumeration getParameterNames() {
-		return Collections.enumeration(getParameterMap().keySet());
+	public Enumeration<String> getParameterNames() {
+		return enumeration(getParameterMap().keySet());
 	}
 
 	@Override
@@ -73,10 +73,9 @@ public class VRaptorRequest extends HttpServletRequestWrapper implements Mutable
 		return super.getParameterValues(name);
 	}
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
-	public Map getParameterMap() {
-		Map complete = new HashMap(super.getParameterMap());
+	public Map<String, String[]> getParameterMap() {
+		Map<String, String[]> complete = new HashMap<>(super.getParameterMap());
 		complete.putAll(this.extraParameters);
 		return complete;
 	}

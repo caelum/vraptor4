@@ -84,7 +84,7 @@ public class DefaultParametersControl implements ParametersControl {
 		}
 
 		if (logger.isDebugEnabled()) {
-			logger.debug("For {} retrieved {} with {}", new Object[] { originalPattern, patternUri, parameters });
+			logger.debug("For {} retrieved {} with {}", originalPattern, patternUri, parameters);
 		}
 		return Pattern.compile(patternUri);
 	}
@@ -121,7 +121,7 @@ public class DefaultParametersControl implements ParametersControl {
 		try {
 			return URLEncoder.encode(parameter, encodingHandler.getEncoding());
 		} catch (Exception e) {
-			logger.warn("Can't encode parameter : {} with encoding : {}", new Object[]{parameter, encodingHandler.getEncoding() });
+			logger.warn("Can't encode parameter : {} with encoding : {}", parameter, encodingHandler.getEncoding());
 			return parameter;
 		}
 	}

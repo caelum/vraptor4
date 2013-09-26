@@ -18,7 +18,6 @@
 package br.com.caelum.vraptor.http;
 
 import java.util.List;
-import java.util.ResourceBundle;
 
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.validator.Message;

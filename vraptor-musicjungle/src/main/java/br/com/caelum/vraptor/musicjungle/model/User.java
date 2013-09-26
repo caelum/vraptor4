@@ -20,6 +20,7 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.enterprise.inject.Vetoed;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
@@ -39,7 +40,10 @@ import com.google.common.collect.Collections2;
  * injected to other classes who depend on Users.
  */
 @Entity
+@Vetoed
 public class User implements Serializable {
+
+	private static final long serialVersionUID = 4548298563023480676L;
 
 	@Id
 	@NotNull

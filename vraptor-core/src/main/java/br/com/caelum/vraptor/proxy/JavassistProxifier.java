@@ -70,7 +70,7 @@ public class JavassistProxifier implements Proxifier {
 
 		Object instance;
 		try {
-			instance = factory.create(null, null, new CustomHandler<T>(handler));
+			instance = factory.create(null, null, new ProxifierMethodHandler<T>(handler));
 		} catch (ReflectiveOperationException | IllegalArgumentException e) {
 			logger.error("An error occurs when create a proxy for type " + type, e);
 			throw new ProxyCreationException(e);
@@ -102,11 +102,11 @@ public class JavassistProxifier implements Proxifier {
 		return org.jboss.weld.bean.proxy.ProxyFactory.isProxy(type);
 	}
 
-	class CustomHandler<T>
+	class ProxifierMethodHandler<T>
 		implements MethodHandler {
 		private MethodInvocation<? super T> handler;
 
-		public CustomHandler(MethodInvocation<? super T> handler) {
+		public ProxifierMethodHandler(MethodInvocation<? super T> handler) {
 			this.handler = handler;
 		}
 

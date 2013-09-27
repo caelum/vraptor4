@@ -22,7 +22,6 @@ import javax.enterprise.inject.Alternative;
 
 import br.com.caelum.vraptor.proxy.JavassistProxifier;
 import br.com.caelum.vraptor.proxy.MethodInvocation;
-import br.com.caelum.vraptor.proxy.ObjenesisInstanceCreator;
 import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.proxy.SuperMethod;
 
@@ -32,7 +31,7 @@ public class MockedPage implements PageResult {
 	private final Proxifier proxifier;
 
 	public MockedPage() {
-		proxifier = new JavassistProxifier(new ObjenesisInstanceCreator());
+		proxifier = new JavassistProxifier();
 	}
 
 	public void forwardTo() {

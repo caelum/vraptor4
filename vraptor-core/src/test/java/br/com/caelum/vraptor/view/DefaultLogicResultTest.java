@@ -55,7 +55,6 @@ import br.com.caelum.vraptor.http.route.Router;
 import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.proxy.JavassistProxifier;
-import br.com.caelum.vraptor.proxy.ObjenesisInstanceCreator;
 import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.validator.Message;
 import br.com.caelum.vraptor.validator.ValidationException;
@@ -111,7 +110,7 @@ public class DefaultLogicResultTest {
 	public void setup() {
 		MockitoAnnotations.initMocks(this);
 
-		proxifier = new JavassistProxifier(new ObjenesisInstanceCreator());
+		proxifier = new JavassistProxifier();
 		methodInfo = new MethodInfo();
 		this.logicResult = new DefaultLogicResult(proxifier, router, request, response, container,
 				resolver, extractor, flash, methodInfo);
@@ -230,8 +229,12 @@ public class DefaultLogicResultTest {
 		logicResult.forwardTo(MyComponent.class).throwsValidationException();
 	}
 	
-	class TheComponent {
-		private final Result result;
+	static class TheComponent {
+		private Result result;
+
+		// CDI eyes only
+		public TheComponent() {
+		}
 
 		public TheComponent(Result result) {
 			this.result = result;

@@ -13,7 +13,6 @@ import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.proxy.JavassistProxifier;
-import br.com.caelum.vraptor.proxy.ObjenesisInstanceCreator;
 import br.com.caelum.vraptor.proxy.Proxifier;
 
 public class ExceptionRecorderTest {
@@ -26,7 +25,7 @@ public class ExceptionRecorderTest {
 	@Before
 	public void setUp() {
 		MockitoAnnotations.initMocks(this);
-		Proxifier proxifier = new JavassistProxifier(new ObjenesisInstanceCreator());
+		Proxifier proxifier = new JavassistProxifier();
 		mapper = new DefaultExceptionMapper(proxifier);
 	}
 

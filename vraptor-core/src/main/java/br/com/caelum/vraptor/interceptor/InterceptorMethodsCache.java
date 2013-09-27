@@ -1,12 +1,16 @@
 package br.com.caelum.vraptor.interceptor;
 
+import java.lang.annotation.Annotation;
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
+import java.lang.invoke.MethodHandles.Lookup;
 import java.lang.invoke.MethodType;
 import java.lang.reflect.Method;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+
+import com.headius.invokebinder.Binder;
 
 import net.vidageek.mirror.list.dsl.MirrorList;
 import br.com.caelum.vraptor.Accepts;
@@ -37,6 +41,11 @@ public class InterceptorMethodsCache {
 	public void put(Class<?> type) {
 		cache.put(type, buildAllMethodHandles(type));
 	}
+	
+	public MethodHandle get(Class<?> type,Class<? extends Annotation> step){
+		AllMethodHandles handles = cache.get(type);
+		return handles.get(step);
+	}
 
 	private AllMethodHandles buildAllMethodHandles(Class<?> type) {
 		MirrorList<Method> methods = stepInvoker.findAllMethods(type);
@@ -57,17 +66,33 @@ public class InterceptorMethodsCache {
 		if(method==null){
 			return null;
 		}
-		MethodHandle methodHandle;
-		MethodType description = MethodType.methodType(method.getReturnType(),
-				method.getParameterTypes());
 
-		try {
-			methodHandle = MethodHandles.lookup().findVirtual(type,
+		try {			
+			Class<?>[] parameterTypes = method.getParameterTypes();
+			
+			MethodType description = MethodType.methodType(method.getReturnType(),
+					parameterTypes);
+			
+			Lookup lookup = MethodHandles.lookup();
+			
+			MethodHandle originalHandle = lookup.findVirtual(type,
 					method.getName(), description);
-			return methodHandle;
+			
+			Binder binder = createBinder(method,	parameterTypes.length)
+					.cast(originalHandle.type());
+						
+			return binder.invokeVirtual(lookup, method.getName());
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
 
+	}		
+
+	private Binder createBinder(Method method,
+			int numberOfArguments) {	
+		if(numberOfArguments==0){
+			return Binder.from(Object.class,Object.class);
+		}
+		return Binder.from(Object.class,Object.class,Object[].class).spread(numberOfArguments);
 	}
 }

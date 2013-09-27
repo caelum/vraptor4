@@ -15,9 +15,6 @@
  */
 package br.com.caelum.vraptor.core;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Default;
 import javax.inject.Inject;

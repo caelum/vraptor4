@@ -1,6 +1,6 @@
 package br.com.caelum.vraptor.interceptor.multipart;
 
-import static junit.framework.Assert.assertEquals;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 
 import javax.servlet.http.HttpServletRequest;

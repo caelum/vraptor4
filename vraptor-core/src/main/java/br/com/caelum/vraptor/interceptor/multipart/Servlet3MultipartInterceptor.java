@@ -16,6 +16,8 @@
  */
 package br.com.caelum.vraptor.interceptor.multipart;
 
+import static com.google.common.base.Strings.isNullOrEmpty;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
@@ -49,7 +51,6 @@ import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multiset;
 import com.google.common.io.ByteStreams;
-import com.google.common.io.Closeables;
 
 /**
  * <p>
@@ -148,10 +149,7 @@ public class Servlet3MultipartInterceptor
 		} catch (IllegalStateException e) {
 			reportSizeLimitExceeded(e);
 
-		} catch (IOException e) {
-			throw new InterceptionException(e);
-
-		} catch (ServletException e) {
+		} catch (IOException | ServletException e) {
 			throw new InterceptionException(e);
 		}
 
@@ -196,19 +194,19 @@ public class Servlet3MultipartInterceptor
 		throws IOException {
 		String encoding = request.getCharacterEncoding();
 
-		InputStream in = part.getInputStream();
-		byte[] out = ByteStreams.toByteArray(in);
-		Closeables.closeQuietly(in);
-
-		if (!Strings.isNullOrEmpty(encoding)) {
-			try {
-				return new String(out, encoding);
-			} catch (UnsupportedEncodingException e) {
-				logger.warn("Request have an invalid encoding. Ignoring it");
+		try (InputStream in = part.getInputStream()) {
+			byte[] out = ByteStreams.toByteArray(in);
+			
+			if (!isNullOrEmpty(encoding)) {
+				try {
+					return new String(out, encoding);
+				} catch (UnsupportedEncodingException e) {
+					logger.warn("Request have an invalid encoding. Ignoring it");
+				}
 			}
-		}
 
-		return new String(out);
+			return new String(out);
+		}
 	}
 
 	protected String fixIndexedParameters(String name) {

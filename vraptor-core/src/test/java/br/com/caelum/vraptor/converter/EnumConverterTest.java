@@ -18,7 +18,7 @@
 package br.com.caelum.vraptor.converter;
 
 import static br.com.caelum.vraptor.VRaptorMatchers.hasMessage;
-import static junit.framework.Assert.assertEquals;
+import static org.junit.Assert.assertEquals;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;

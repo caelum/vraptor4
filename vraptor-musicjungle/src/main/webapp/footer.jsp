@@ -7,7 +7,7 @@
               <p>
               	<a href="http://www.apache.org/licenses/LICENSE-2.0">
               		Licença Apache 
-              	</a> | VRaptor @2009 Caelum - Ensino e Inovação
+              	</a> | VRaptor @2013 Caelum - Ensino e Inovação
              </p>
      </div>
       

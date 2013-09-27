@@ -1,12 +1,9 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html>
 <head>
-
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<meta name="author" content="Caelum - Ensino e Inovação"/>
 	<meta name="reply-to" content="contato@caelum.com.br"/>
@@ -34,60 +31,53 @@
 		<fmt:setLocale value="${param.language}" scope="session"/>
 	</c:if>
 	
-	<div class="navbar">
-	
-      <div class="navbar-inner">
-      
-        <div class="container">
-        
-            <ul class="nav">
-              <li class="active"><a href="${path}"></i> Home</a></li>
-              <li><a href="${path}"></i> About</a></li>
-              <li>
-              	<a href="${linkTo[UsersController].list}"> 
-              		<fmt:message key="list_users" />
-				</a>
-			  </li>
-			  <li>
-			  	<a href="${linkTo[MusicController].listForm}"> 
-			  		<fmt:message key="export_all_musics" /> 
-			  	</a>
-			  </li>
-            </ul>
+	<div class="navbar navbar-default">
+		<div class="navbar-inner">
+			<div class="collapse navbar-collapse navbar-ex1-collapse">
+				<ul class="nav navbar-nav">
+					<li class="active"><a href="${path}"></i> Home</a></li>
+					<li><a href="${path}"></i> About</a></li>
+					<li>
+						<a href="${linkTo[UsersController].list}"> 
+							<fmt:message key="list_users" />
+						</a>
+					</li>
+					<li>
+						<a href="${linkTo[MusicController].listForm}"> 
+							<fmt:message key="export_all_musics" /> 
+						</a>
+					</li>
+				</ul>
             
-             <ul class="nav">
-              <li class="divider-vertical"></li>
-            	<li class="active"><a href="?language=en">ENGLISH</a></li>
-                <li><a href="?language=pt_BR">PORTUGUÊS</a></li>
-				<li class="divider-vertical"></li>
-            </ul>
-            
-            <span class="pull-right ${not empty userInfo.user ? '' : 'hidden'}">
-            	${userInfo.user.name} (<a href="${linkTo[HomeController].logout}">Logout</a>)
-            </span>
-            
-        </div>
-      </div>
-    </div>
-	
-    
-    <c:if test="${not empty userInfo.user}">
-    
-    	<div class="navbar">
-    	
-			<form class="navbar-form pull-right" action="${path}musics/search">
-			  <input type="text" name="music.title" class="span6"
-			  		placeholder="<fmt:message key="search.music"/>"/>
-			  <button type="submit" class="btn btn-primary">
-			  		<fmt:message key="search"/> </button>
+				<ul class="nav navbar-nav">
+					<li class="divider-vertical"></li>
+					<li class="active"><a href="?language=en">ENGLISH</a></li>
+					<li><a href="?language=pt_BR">PORTUGUÊS</a></li>
+					<li class="divider-vertical"></li>
+				</ul>
+
+				<span class="pull-right ${not empty userInfo.user ? '' : 'hidden'}">
+					${userInfo.user.name} (<a href="${linkTo[HomeController].logout}">Logout</a>)
+				</span>
+			</div>
+		</div>
+	</div>
+
+	<c:if test="${not empty userInfo.user}">
+		<div class="navbar navbar-default">
+			<form class="navbar-form navbar-right" action="${path}musics/search">
+				<div class="form-group">
+					<input type="text" class="form-control" name="music.title" placeholder="<fmt:message key="search.music"/>"/>
+				</div>	
+				<button type="submit" class="btn btn-primary">
+					<fmt:message key="search"/>
+				</button>
 			</form>
-			
-	    </div>
-	    
-    </c:if>
+		</div>
+	</c:if>
     
 	<c:if test="${not empty errors}">
-		<div class="alert alert-error">
+		<div class="alert alert-danger">
 			<button type="button" class="close" data-dismiss="alert">&times;</button>
 			<c:forEach items="${errors }" var="error">
 				<b><fmt:message key="${error.category}" /></b> - ${error.message}

@@ -1,4 +1,4 @@
-﻿<%@ include file="/header.jsp" %> 
+<%@ include file="/header.jsp" %> 
 
 <link href="<c:url value="/css/bootstrap-fileupload.min.css"/>" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="<c:url value="/js/bootstrap-fileupload.min.js"/>"></script>
@@ -37,7 +37,7 @@
 		  				<span class="btn btn-file">
 		  					<span class="fileupload-new">Select file</span>
 		  					<span class="fileupload-exists">Change</span>
-		  					<input type="file" name="file" class="form-control" />
+		  					<input type="file" name="file" />
 		  				</span>
 		  				<span class="fileupload-preview"></span>
 		  				<a href="#" class="close fileupload-exists" data-dismiss="fileupload" style="float: none">&times;</a>

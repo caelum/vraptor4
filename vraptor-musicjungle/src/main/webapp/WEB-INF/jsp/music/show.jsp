@@ -1,4 +1,4 @@
-<%@ include file="/header.jsp" %> 
+﻿<%@ include file="/header.jsp" %> 
 
 <div class="well well-small">
 	<h1>${music.title}</h1>

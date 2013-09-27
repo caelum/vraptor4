@@ -1,4 +1,4 @@
-<%@ include file="/header.jsp" %> 
+﻿<%@ include file="/header.jsp" %> 
 
 <h1><fmt:message key="search_results"/></h1>
 

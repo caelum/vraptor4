@@ -8,5 +8,13 @@
 		<class>br.com.caelum.vraptor.validator.beanvalidation.ValidatorFactoryCreator</class>
 		<class>br.com.caelum.vraptor.validator.beanvalidation.ValidatorCreator</class>
 	</alternatives-->
-
+	
+	<scan>
+		<!-- 
+			Exclude all persistent entities is considered a best practice in most cases. 
+			See more details at:
+			http://www.cdi-spec.org/faq/#accordion12
+		 -->
+		<exclude name="br.com.caelum.vraptor.musicjungle.model.*"></exclude>
+	</scan>
 </beans>

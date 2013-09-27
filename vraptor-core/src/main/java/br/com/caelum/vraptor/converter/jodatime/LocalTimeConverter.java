@@ -17,6 +17,8 @@
 
 package br.com.caelum.vraptor.converter.jodatime;
 
+import static com.google.common.base.Strings.isNullOrEmpty;
+
 import java.util.Locale;
 
 import javax.inject.Inject;
@@ -51,6 +53,10 @@ public class LocalTimeConverter implements Converter<LocalTime> {
 
 	@Override
 	public LocalTime convert(String value, Class<? extends LocalTime> type) {
+		if (isNullOrEmpty(value)) {
+			return null;
+		}
+		
 		try {
 			return getFormatter().parseDateTime(value).toLocalTime();
 		} catch (UnsupportedOperationException | IllegalArgumentException  e) {

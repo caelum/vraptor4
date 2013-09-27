@@ -26,7 +26,6 @@ import br.com.caelum.vraptor.controller.HttpMethod;
 import br.com.caelum.vraptor.http.FormatResolver;
 import br.com.caelum.vraptor.http.route.Router;
 import br.com.caelum.vraptor.proxy.JavassistProxifier;
-import br.com.caelum.vraptor.proxy.ObjenesisInstanceCreator;
 import br.com.caelum.vraptor.serialization.DefaultRepresentationResult;
 import br.com.caelum.vraptor.serialization.JSONSerialization;
 import br.com.caelum.vraptor.serialization.Serialization;
@@ -52,7 +51,7 @@ public class DefaultStatusTest {
 	@Before
 	public void setUp() throws Exception {
 		MockitoAnnotations.initMocks(this);
-		status = new DefaultStatus(response, result, config, new JavassistProxifier(new ObjenesisInstanceCreator()), router);
+		status = new DefaultStatus(response, result, config, new JavassistProxifier(), router);
 	}
 
 	@Test
@@ -155,7 +154,7 @@ public class DefaultStatusTest {
 		i18ned.setBundle(new SingletonResourceBundle("message", "Something else"));
 		
 		MockSerializationResult result = new MockSerializationResult(XStreamBuilderImpl.cleanInstance(new MessageConverter()));
-		DefaultStatus status = new DefaultStatus(response, result, config, new JavassistProxifier(new ObjenesisInstanceCreator()), router);
+		DefaultStatus status = new DefaultStatus(response, result, config, new JavassistProxifier(), router);
 		
 		status.badRequest(Lists.newArrayList(normal, i18ned));
 		
@@ -183,7 +182,7 @@ public class DefaultStatusTest {
 				}, this, Arrays.<Serialization>asList(super.use(JSONSerialization.class))));
 			}
 		};
-		DefaultStatus status = new DefaultStatus(response, result, config, new JavassistProxifier(new ObjenesisInstanceCreator()), router);
+		DefaultStatus status = new DefaultStatus(response, result, config, new JavassistProxifier(), router);
 		
 		status.badRequest(Lists.newArrayList(normal, i18ned));
 		

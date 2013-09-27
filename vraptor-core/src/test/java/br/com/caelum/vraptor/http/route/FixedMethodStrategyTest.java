@@ -41,7 +41,6 @@ import br.com.caelum.vraptor.controller.HttpMethod;
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.interceptor.VRaptorMatchers;
 import br.com.caelum.vraptor.proxy.JavassistProxifier;
-import br.com.caelum.vraptor.proxy.ObjenesisInstanceCreator;
 import br.com.caelum.vraptor.proxy.Proxifier;
 
 import com.google.common.collect.Sets;
@@ -61,7 +60,7 @@ public class FixedMethodStrategyTest {
 		list = DefaultControllerMethod.instanceFor(MyControl.class, method("list"));
 		get = EnumSet.of(HttpMethod.GET);
 		post = EnumSet.of(HttpMethod.POST);
-		proxifier = new JavassistProxifier(new ObjenesisInstanceCreator());
+		proxifier = new JavassistProxifier();
 	}
 
 	@Test

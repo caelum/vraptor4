@@ -19,11 +19,9 @@ package br.com.caelum.vraptor.http.route;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
-
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.mock;
@@ -57,7 +55,6 @@ import br.com.caelum.vraptor.http.VRaptorRequest;
 import br.com.caelum.vraptor.interceptor.DefaultTypeNameExtractor;
 import br.com.caelum.vraptor.interceptor.VRaptorMatchers;
 import br.com.caelum.vraptor.proxy.JavassistProxifier;
-import br.com.caelum.vraptor.proxy.ObjenesisInstanceCreator;
 import br.com.caelum.vraptor.proxy.Proxifier;
 
 /**
@@ -78,7 +75,7 @@ public class DefaultRouterTest {
 	@Before
 	public void setup() {
 		this.request = new VRaptorRequest(mock(HttpServletRequest.class));
-		this.proxifier = new JavassistProxifier(new ObjenesisInstanceCreator());
+		this.proxifier = new JavassistProxifier();
 		this.method = mock(ControllerMethod.class);
 		this.converters = mock(Converters.class);
 		this.encodingHandler = mock(EncodingHandler.class);

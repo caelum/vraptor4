@@ -16,14 +16,12 @@
  */
 package br.com.caelum.vraptor.musicjungle.model;
 
-import javax.enterprise.inject.Vetoed;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
 @Entity
-@Vetoed
 public class MusicOwner {
 
 	@Id

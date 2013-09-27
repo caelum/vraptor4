@@ -18,7 +18,6 @@ package br.com.caelum.vraptor.musicjungle.model;
 
 import java.util.Set;
 
-import javax.enterprise.inject.Vetoed;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -38,7 +37,6 @@ import br.com.caelum.vraptor.musicjungle.enums.MusicType;
  * represents a record in the database.
  */
 @Entity 
-@Vetoed
 public class Music {
 
 	@Id

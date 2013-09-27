@@ -42,7 +42,6 @@ public class SetInstantiator implements Instantiator<Set<Object>> {
 	@Inject
 	public SetInstantiator(Instantiator<Object> listElementInstantiator) {
 		listInstantiator = new ListInstantiator(listElementInstantiator);
-
 	}
 
 	public boolean isAbleToInstantiate(Target<?> target) {
@@ -51,11 +50,6 @@ public class SetInstantiator implements Instantiator<Set<Object>> {
 
 	public Set<Object> instantiate(Target<?> target, Parameters parameters) {
 		List<Object> list = listInstantiator.instantiate(target, parameters);
-
-		if (list == null) {
-			return null;
-		}
-
-		return new HashSet<>(list);
+		return (list == null) ? null : new HashSet<>(list);
 	}
 }

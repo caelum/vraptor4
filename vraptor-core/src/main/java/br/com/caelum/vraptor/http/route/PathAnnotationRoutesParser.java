@@ -20,6 +20,7 @@ package br.com.caelum.vraptor.http.route;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Predicates.instanceOf;
 import static com.google.common.base.Predicates.or;
+import static com.google.common.base.Strings.isNullOrEmpty;
 import static com.google.common.collect.Iterables.find;
 
 import java.lang.annotation.Annotation;
@@ -170,9 +171,9 @@ public class PathAnnotationRoutesParser implements RoutesParser {
 	protected void fixURIs(Class<?> type, String[] uris) {
 		String prefix = extractPrefix(type);
 		for (int i = 0; i < uris.length; i++) {
-			if ("".equals(prefix)) {
+			if (isNullOrEmpty(prefix)) {
 				uris[i] = fixLeadingSlash(uris[i]);
-			} else if ("".equals(uris[i])) {
+			} else if (isNullOrEmpty(uris[i])) {
 				uris[i] = prefix;
 			} else {
 				uris[i] = removeTrailingSlash(prefix) + fixLeadingSlash(uris[i]);
@@ -209,7 +210,7 @@ public class PathAnnotationRoutesParser implements RoutesParser {
 	 */
 	protected String extractControllerNameFrom(Class<?> type) {
 		String prefix = extractPrefix(type);
-		if ("".equals(prefix)) {
+		if (isNullOrEmpty(prefix)) {
 			String baseName = StringUtils.lowercaseFirst(type.getSimpleName());
 			if (baseName.endsWith("Controller")) {
 				return "/" + baseName.substring(0, baseName.lastIndexOf("Controller"));

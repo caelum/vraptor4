@@ -26,7 +26,6 @@ import br.com.caelum.vraptor.View;
 import br.com.caelum.vraptor.http.FormatResolver;
 import br.com.caelum.vraptor.interceptor.DefaultTypeNameExtractor;
 import br.com.caelum.vraptor.proxy.JavassistProxifier;
-import br.com.caelum.vraptor.proxy.ObjenesisInstanceCreator;
 import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.serialization.DefaultRepresentationResult;
 import br.com.caelum.vraptor.serialization.JSONSerialization;
@@ -69,7 +68,7 @@ public class MockSerializationResult extends MockResult {
 	}
 
 	public MockSerializationResult() {
-		this(new JavassistProxifier(new ObjenesisInstanceCreator()));
+		this(new JavassistProxifier());
 	}
 	
 	public MockSerializationResult(MockHttpServletResponse response) {
@@ -78,7 +77,7 @@ public class MockSerializationResult extends MockResult {
 	}
 	
 	public MockSerializationResult(XStreamBuilder builder) {
-		this(new JavassistProxifier(new ObjenesisInstanceCreator()), builder);
+		this(new JavassistProxifier(), builder);
 	}
 
 	public <T extends View> T use(final Class<T> view) {

@@ -43,7 +43,6 @@ import br.com.caelum.vraptor.Controller;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.core.SafeResourceBundle;
 import br.com.caelum.vraptor.proxy.JavassistProxifier;
-import br.com.caelum.vraptor.proxy.ObjenesisInstanceCreator;
 import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.util.test.MockResult;
 import br.com.caelum.vraptor.view.DefaultValidationViewsFactory;
@@ -66,7 +65,7 @@ public class DefaultValidatorTest {
 	public void setup() {
 		ResourceBundle bundle = new SafeResourceBundle(ResourceBundle.getBundle("messages"));
 
-		Proxifier proxifier = new JavassistProxifier(new ObjenesisInstanceCreator());
+		Proxifier proxifier = new JavassistProxifier();
 		this.validator = new DefaultValidator(result, new DefaultValidationViewsFactory(result, proxifier), outjector, proxifier, bundle);
 		when(result.use(LogicResult.class)).thenReturn(logicResult);
 		when(result.use(PageResult.class)).thenReturn(pageResult);

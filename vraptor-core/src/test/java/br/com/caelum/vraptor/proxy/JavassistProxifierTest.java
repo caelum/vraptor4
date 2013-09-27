@@ -17,19 +17,17 @@
 
 package br.com.caelum.vraptor.proxy;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+
 import java.lang.reflect.Method;
 
 import net.vidageek.mirror.dsl.Mirror;
 
 import org.junit.Before;
 import org.junit.Test;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.nullValue;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
 
 /**
  * @author Fabio Kung
@@ -40,7 +38,7 @@ public class JavassistProxifierTest {
 	
 	@Before
 	public void setUp() throws Exception {
-		proxifier= new JavassistProxifier(new ObjenesisInstanceCreator());
+		proxifier= new JavassistProxifier();
 	}
 	
 	@Test
@@ -61,28 +59,6 @@ public class JavassistProxifierTest {
 			}
 		});
 		assertThat(proxy.wasCalled(), is(true));
-	}
-
-	@Test
-	public void shouldProxifyConcreteClassesWithComplexConstructorsAndPassNullForAllParameters() {
-		TheClassWithComplexConstructor proxy = proxifier.proxify(TheClassWithComplexConstructor.class, new MethodInvocation<TheClassWithComplexConstructor>() {
-			public Object intercept(TheClassWithComplexConstructor proxy, Method method, Object[] args, SuperMethod superMethod) {
-				return superMethod.invoke(proxy, args);
-			}
-		});
-		assertThat(proxy.getFirstDependency(), is(nullValue()));
-		assertThat(proxy.getSecondDependency(), is(nullValue()));
-	}
-
-	@Test
-	public void shouldNeverCallSuperclassConstructors() {
-		TheClassWithManyConstructors proxy = proxifier.proxify(TheClassWithManyConstructors.class, new MethodInvocation<TheClassWithManyConstructors>() {
-			public Object intercept(TheClassWithManyConstructors proxy, Method method, Object[] args, SuperMethod superMethod) {
-				return superMethod.invoke(proxy, args);
-			}
-		});
-		assertThat(proxy.wasNumberConstructorCalled(), is(false));
-		assertThat(proxy.getNumber(), is(nullValue()));
 	}
 
 	@Test

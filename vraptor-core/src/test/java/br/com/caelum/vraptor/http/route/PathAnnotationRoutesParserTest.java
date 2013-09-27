@@ -53,7 +53,6 @@ import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.http.EncodingHandler;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.proxy.JavassistProxifier;
-import br.com.caelum.vraptor.proxy.ObjenesisInstanceCreator;
 import br.com.caelum.vraptor.proxy.Proxifier;
 
 public class PathAnnotationRoutesParserTest {
@@ -71,7 +70,7 @@ public class PathAnnotationRoutesParserTest {
 	public void setup() {
 		MockitoAnnotations.initMocks(this);
 
-		this.proxifier = new JavassistProxifier(new ObjenesisInstanceCreator());
+		this.proxifier = new JavassistProxifier();
 		this.typeFinder = new NoTypeFinder();
 
 		when(router.builderFor(anyString())).thenAnswer(new Answer<DefaultRouteBuilder>() {

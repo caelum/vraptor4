@@ -22,7 +22,6 @@ import javax.enterprise.inject.Alternative;
 
 import br.com.caelum.vraptor.proxy.JavassistProxifier;
 import br.com.caelum.vraptor.proxy.MethodInvocation;
-import br.com.caelum.vraptor.proxy.ObjenesisInstanceCreator;
 import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.proxy.SuperMethod;
 import br.com.caelum.vraptor.view.LogicResult;
@@ -32,7 +31,7 @@ public class MockedLogic implements LogicResult {
 	private final Proxifier proxifier;
 
 	public MockedLogic() {
-		proxifier = new JavassistProxifier(new ObjenesisInstanceCreator());
+		proxifier = new JavassistProxifier();
 	}
 
 	public <T> T forwardTo(Class<T> type) {

@@ -15,10 +15,6 @@ table thead tr {
 	display: none;
 }
 
-#contentWrap {
-	margin-top: 90px;
-}
-
 .hidden {
 	display: none;
 }
@@ -34,10 +30,6 @@ a.brand.logo {
 	color: #074D70;
 	font-weight: bold;
 	font-size: xx-large;
-}
-
-.td-options {
-	width: 340px;
 }
 
 .v-footer {
@@ -72,28 +64,5 @@ span.logo {
 span.logo-message {
 	font-size: 25px;
 	margin-left: 200px;
-}
-
-.form{
-	margin: 10px auto 20px;
-	border: 1px solid #e5e5e5;
-	padding: 20px 20px 30px;
-	border-radius: 5px;
-}
-
-.form label, .form input {
-  display:inline-block;
-}
-
-.form label {
-  width: 150px;
-}
-
-.form-sign{
-	width: 300px;
-}
-
-.form-music{
-	width: 500px;
 }
 

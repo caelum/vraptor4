@@ -57,13 +57,13 @@ public class LinkToHandlerTest {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void shouldThrowExceptionWhenMethodIsAmbiguous() throws Throwable {
-		//${linkTo[TestController].method}
+		//${linkTo[TestController].method()}
 		invoke(handler.get(new DefaultBeanClass(TestController.class)), "method");
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void shouldThrowExceptionWhenUsingParametersOfWrongTypes() throws Throwable {
-		//${linkTo[TestController].method[123]}
+		//${linkTo[TestController].method(123)}
 		invoke(handler.get(new DefaultBeanClass(TestController.class)), "method", 123);
 	}
 
@@ -72,69 +72,81 @@ public class LinkToHandlerTest {
 	public void shouldReturnWantedUrlWithoutArgs() throws Throwable {
 		when(router.urlFor(TestController.class, anotherMethod, new Object[2])).thenReturn("/expectedURL");
 
-		//${linkTo[TestController].anotherMethod}
+		//${linkTo[TestController].anotherMethod()}
 		String uri = invoke(handler.get(new DefaultBeanClass(TestController.class)), "anotherMethod");
 		assertThat(uri, is("/path/expectedURL"));
 	}
-//
-//	@Test
-//	public void shouldReturnWantedUrlWithParamArgs() {
-//		String a = "test";
-//		int b = 3;
-//		when(router.urlFor(TestController.class, method2params, new Object[]{a, b})).thenReturn("/expectedURL");
-//		//${linkTo[TestController].method['test'][3]}
-//		String uri = handler.get(new DefaultBeanClass(TestController.class)).get("method").get(a).get(b).toString();
-//		assertThat(uri, is("/path/expectedURL"));
-//	}
-//
-//	@Test
-//	public void shouldReturnWantedUrlWithPartialParamArgs() {
-//		String a = "test";
-//		when(router.urlFor(TestController.class, anotherMethod, new Object[]{a, null})).thenReturn("/expectedUrl");
-//		//${linkTo[TestController].anotherMethod['test']}
-//		String uri = handler.get(new DefaultBeanClass(TestController.class)).get("anotherMethod").get(a).toString();
-//		assertThat(uri, is("/path/expectedUrl"));
-//	}
-//
-//	@Test
-//	public void shouldReturnWantedUrlForOverrideMethodWithParamArgs() throws NoSuchMethodException, SecurityException {
-//		String a = "test";
-//		when(router.urlFor(SubGenericController.class, SubGenericController.class.getDeclaredMethod("method", new Class[]{String.class}), new Object[]{a})).thenReturn("/expectedURL");
-//		//${linkTo[TestSubGenericController].method['test']}]
-//		String uri = handler.get(new DefaultBeanClass(SubGenericController.class)).get("method").get(a).toString();
-//		assertThat(uri, is("/path/expectedURL"));
-//	}
-//
-//	@Test
-//	public void shouldReturnWantedUrlForOverrideMethodWithParialParamArgs() throws SecurityException, NoSuchMethodException {
-//		String a = "test";
-//		when(router.urlFor(SubGenericController.class, SubGenericController.class.getDeclaredMethod("anotherMethod", new Class[]{String.class, String.class}), new Object[]{a, null})).thenReturn("/expectedURL");
-//		//${linkTo[TestSubGenericController].anotherMethod['test']}]
-//		String uri = handler.get(new DefaultBeanClass(SubGenericController.class)).get("anotherMethod").get(a).toString();
-//		assertThat(uri, is("/path/expectedURL"));
-//	}
-//
-//	@Test
-//	public void shouldUseExactlyMatchedMethodIfTheMethodIsOverloaded() {
-//		String a = "test";
-//		when(router.urlFor(TestController.class, method1param, a)).thenReturn("/expectedUrl");
-//		//${linkTo[TestController].method['test']}
-//		String uri = handler.get(new DefaultBeanClass(TestController.class)).get("method").get(a).toString();
-//		assertThat(uri, is("/path/expectedUrl"));
-//	}
-//
-//	@Test(expected = IllegalArgumentException.class)
-//	public void shouldThrowExceptionWhenPassingMoreArgsThanMethodSupports() {
-//		String a = "test";
-//		int b = 3;
-//		String c = "anotherTest";
-//		//${linkTo[TestController].anotherMethod['test'][3]['anotherTest']}
-//		handler.get(new DefaultBeanClass(TestController.class)).get("anotherMethod").get(a).get(b).get(c).toString();
-//	}
+
+	@Test
+	public void shouldReturnWantedUrlWithoutArgsUsingPropertyAccess() throws Throwable {
+		when(router.urlFor(TestController.class, anotherMethod, new Object[2])).thenReturn("/expectedURL");
+
+		//${linkTo[TestController].anotherMethod}
+		String uri = invoke(handler.get(new DefaultBeanClass(TestController.class)), "getAnotherMethod");
+		assertThat(uri, is("/path/expectedURL"));
+	}
+
+	@Test
+	public void shouldReturnWantedUrlWithParamArgs() throws Throwable {
+		String a = "test";
+		int b = 3;
+		when(router.urlFor(TestController.class, method2params, new Object[]{a, b})).thenReturn("/expectedURL");
+		//${linkTo[TestController].method('test', 3)}
+		String uri = invoke(handler.get(new DefaultBeanClass(TestController.class)), "method", a, b);
+		assertThat(uri, is("/path/expectedURL"));
+	}
+
+	@Test
+	public void shouldReturnWantedUrlWithPartialParamArgs() throws Throwable {
+		String a = "test";
+		when(router.urlFor(TestController.class, anotherMethod, new Object[]{a, null})).thenReturn("/expectedUrl");
+		//${linkTo[TestController].anotherMethod('test')}
+		String uri = invoke(handler.get(new DefaultBeanClass(TestController.class)), "anotherMethod", a);
+		assertThat(uri, is("/path/expectedUrl"));
+	}
+
+	@Test
+	public void shouldReturnWantedUrlForOverrideMethodWithParamArgs() throws Throwable {
+		String a = "test";
+		when(router.urlFor(SubGenericController.class, SubGenericController.class.getDeclaredMethod("method", new Class[]{String.class}), new Object[]{a})).thenReturn("/expectedURL");
+		//${linkTo[TestSubGenericController].method('test')}]
+		String uri = invoke(handler.get(new DefaultBeanClass(SubGenericController.class)), "method", a);
+		assertThat(uri, is("/path/expectedURL"));
+	}
+
+	@Test
+	public void shouldReturnWantedUrlForOverrideMethodWithParialParamArgs() throws Throwable {
+		String a = "test";
+		when(router.urlFor(SubGenericController.class, SubGenericController.class.getDeclaredMethod("anotherMethod", new Class[]{String.class, String.class}), new Object[]{a, null})).thenReturn("/expectedURL");
+		//${linkTo[TestSubGenericController].anotherMethod('test')}]
+		String uri = invoke(handler.get(new DefaultBeanClass(SubGenericController.class)), "anotherMethod", a);
+		assertThat(uri, is("/path/expectedURL"));
+	}
+
+	@Test
+	public void shouldUseExactlyMatchedMethodIfTheMethodIsOverloaded() throws Throwable {
+		String a = "test";
+		when(router.urlFor(TestController.class, method1param, a)).thenReturn("/expectedUrl");
+		//${linkTo[TestController].method('test')}
+		String uri = invoke(handler.get(new DefaultBeanClass(TestController.class)), "method", a);
+		assertThat(uri, is("/path/expectedUrl"));
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void shouldThrowExceptionWhenPassingMoreArgsThanMethodSupports() throws Throwable {
+		String a = "test";
+		int b = 3;
+		String c = "anotherTest";
+		//${linkTo[TestController].anotherMethod('test', 3, 'anotherTest')}
+		invoke(handler.get(new DefaultBeanClass(TestController.class)), "anotherMethod", a, b, c);
+	}
 
 	private String invoke(Object obj, String methodName, Object...args) throws Throwable {
 		try {
 			Method method = new Mirror().on(obj.getClass()).reflect().method(methodName).withAnyArgs();
+			if (methodName.startsWith("get")) {
+				return method.invoke(obj).toString();
+			}
 			return method.invoke(obj, (Object) args).toString();
 		} catch (MirrorException | InvocationTargetException e) {
 			throw e.getCause() == null? e : e.getCause();

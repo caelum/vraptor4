@@ -46,6 +46,7 @@ import br.com.caelum.vraptor.http.route.Router;
 import br.com.caelum.vraptor.proxy.MethodInvocation;
 import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.proxy.SuperMethod;
+import br.com.caelum.vraptor.util.StringUtils;
 
 import com.google.common.collect.ForwardingMap;
 
@@ -101,7 +102,9 @@ public class LinkToHandler extends ForwardingMap<Class<?>, Object> {
 		return proxifier.proxify(linkToInterface, new MethodInvocation<Object>() {
 			@Override
 			public Object intercept(Object proxy, Method method, Object[] args, SuperMethod superMethod) {
-				return new Linker(controller, method.getName(), Arrays.asList(args)).toString();
+				String methodName = StringUtils.decapitalize(method.getName().replaceFirst("^get", ""));
+				List<Object> params = args.length == 0 ? Collections.emptyList() : Arrays.asList((Object[]) args[0]);
+				return new Linker(controller, methodName, params).toString();
 			}
 		});
 	}
@@ -114,8 +117,8 @@ public class LinkToHandler extends ForwardingMap<Class<?>, Object> {
 				CtMethod method = CtNewMethod.make(String.format("abstract String %s(Object[] args);", name), inter);
 				method.setModifiers(method.getModifiers() | 128 /* Modifier.VARARGS */);
 				inter.addMethod(method);
-//				CtMethod getter = CtNewMethod.make(String.format("abstract String get%s();", StringUtils.capitalize(name)), inter);
-//				inter.addMethod(getter);
+				CtMethod getter = CtNewMethod.make(String.format("abstract String get%s();", StringUtils.capitalize(name)), inter);
+				inter.addMethod(getter);
 			}
 			return inter.toClass();
 		} catch (CannotCompileException e) {

@@ -1,7 +1,10 @@
 package br.com.caelum.vraptor.view;
 
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.when;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import javax.servlet.ServletContext;
@@ -63,16 +66,16 @@ public class LinkToHandlerTest {
 		//${linkTo[TestController].method[123]}
 		invoke(handler.get(new DefaultBeanClass(TestController.class)), "method", 123);
 	}
-//
-//
-//	@Test
-//	public void shouldReturnWantedUrlWithoutArgs() {
-//		when(router.urlFor(TestController.class, anotherMethod, new Object[2])).thenReturn("/expectedURL");
-//
-//		//${linkTo[TestController].anotherMethod}
-//		String uri = handler.get(new DefaultBeanClass(TestController.class)).get("anotherMethod").toString();
-//		assertThat(uri, is("/path/expectedURL"));
-//	}
+
+
+	@Test
+	public void shouldReturnWantedUrlWithoutArgs() throws Throwable {
+		when(router.urlFor(TestController.class, anotherMethod, new Object[2])).thenReturn("/expectedURL");
+
+		//${linkTo[TestController].anotherMethod}
+		String uri = invoke(handler.get(new DefaultBeanClass(TestController.class)), "anotherMethod");
+		assertThat(uri, is("/path/expectedURL"));
+	}
 //
 //	@Test
 //	public void shouldReturnWantedUrlWithParamArgs() {
@@ -129,10 +132,11 @@ public class LinkToHandlerTest {
 //		handler.get(new DefaultBeanClass(TestController.class)).get("anotherMethod").get(a).get(b).get(c).toString();
 //	}
 
-	private String invoke(Object obj, String method, Object...args) throws Throwable {
+	private String invoke(Object obj, String methodName, Object...args) throws Throwable {
 		try {
-			return new Mirror().on(obj).invoke().method(method).withArgs((Object)args).toString();
-		} catch (MirrorException e) {
+			Method method = new Mirror().on(obj.getClass()).reflect().method(methodName).withAnyArgs();
+			return method.invoke(obj, (Object) args).toString();
+		} catch (MirrorException | InvocationTargetException e) {
 			throw e.getCause() == null? e : e.getCause();
 		}
 	}

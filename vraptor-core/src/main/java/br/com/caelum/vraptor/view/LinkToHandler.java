@@ -16,7 +16,6 @@
 package br.com.caelum.vraptor.view;
 
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
@@ -45,6 +44,7 @@ import br.com.caelum.vraptor.controller.BeanClass;
 import br.com.caelum.vraptor.http.route.Router;
 import br.com.caelum.vraptor.proxy.MethodInvocation;
 import br.com.caelum.vraptor.proxy.Proxifier;
+import br.com.caelum.vraptor.proxy.ProxyCreationException;
 import br.com.caelum.vraptor.proxy.SuperMethod;
 import br.com.caelum.vraptor.util.StringUtils;
 
@@ -104,7 +104,7 @@ public class LinkToHandler extends ForwardingMap<Class<?>, Object> {
 			public Object intercept(Object proxy, Method method, Object[] args, SuperMethod superMethod) {
 				String methodName = StringUtils.decapitalize(method.getName().replaceFirst("^get", ""));
 				List<Object> params = args.length == 0 ? Collections.emptyList() : Arrays.asList((Object[]) args[0]);
-				return new Linker(controller, methodName, params).toString();
+				return new Linker(controller, methodName, params).getLink();
 			}
 		});
 	}
@@ -113,7 +113,7 @@ public class LinkToHandler extends ForwardingMap<Class<?>, Object> {
 		ClassPool pool = ClassPool.getDefault();
 		CtClass inter = pool.makeInterface(interfaceName);
 		try {
-			for(String name : getMethodNames(new Mirror().on(controller).reflectAll().methods())) {
+			for(String name : getMethodNames(controller)) {
 				CtMethod method = CtNewMethod.make(String.format("abstract String %s(Object[] args);", name), inter);
 				method.setModifiers(method.getModifiers() | 128 /* Modifier.VARARGS */);
 				inter.addMethod(method);
@@ -122,13 +122,13 @@ public class LinkToHandler extends ForwardingMap<Class<?>, Object> {
 			}
 			return inter.toClass();
 		} catch (CannotCompileException e) {
-			throw new RuntimeException(e);
+			throw new ProxyCreationException(e);
 		}
 	}
 
-	private Set<String> getMethodNames(List<Method> methods) {
+	private Set<String> getMethodNames(Class<?> controller) {
 		Set<String> names = new HashSet<>();
-		for (Method method : methods) {
+		for (Method method : new Mirror().on(controller).reflectAll().methods()) {
 			if (!method.getDeclaringClass().equals(Object.class)) {
 				names.add(method.getName());
 			}
@@ -136,15 +136,11 @@ public class LinkToHandler extends ForwardingMap<Class<?>, Object> {
 		return names;
 	}
 
-	class Linker extends ForwardingMap<Object, Linker> {
+	class Linker {
 
 		private final List<Object> args;
 		private final String methodName;
 		private final Class<?> controller;
-
-		public Linker(Class<?> controller, String methodName) {
-			this(controller, methodName, new ArrayList<>());
-		}
 
 		public Linker(Class<?> controller, String methodName, List<Object> args) {
 			this.controller = controller;
@@ -152,20 +148,7 @@ public class LinkToHandler extends ForwardingMap<Class<?>, Object> {
 			this.args = args;
 		}
 
-		@Override
-		public Linker get(Object key) {
-			List<Object> newArgs = new ArrayList<>(args);
-			newArgs.add(key);
-			return new Linker(controller, methodName, newArgs);
-		}
-
-		@Override
-		protected Map<Object, Linker> delegate() {
-			return Collections.emptyMap();
-		}
-
-		@Override
-		public String toString() {
+		public String getLink() {
 			Method method = null;
 
 			if (getMethodsAmountWithSameName() > 1) {

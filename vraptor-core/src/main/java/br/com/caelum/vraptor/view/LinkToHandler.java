@@ -22,6 +22,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.PostConstruct;
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
+import javax.inject.Named;
 import javax.servlet.ServletContext;
 
 import net.vidageek.mirror.dsl.Mirror;
@@ -40,21 +44,28 @@ import com.google.common.collect.ForwardingMap;
  * @since 3.4.0
  *
  */
+@Named("linkTo")
+@ApplicationScoped
 public class LinkToHandler extends ForwardingMap<Class<?>, Object> {
 
 	private static final Logger logger = LoggerFactory.getLogger(LinkToHandler.class);
 
-	private final ServletContext context;
-	private final Router router;
+	private ServletContext context;
+	private Router router;
 
+	@Deprecated // CDI eyes only
+	public LinkToHandler() {
+	}
+	
+	@Inject
 	public LinkToHandler(ServletContext context, Router router) {
 		this.context = context;
 		this.router = router;
 	}
 
+	@PostConstruct
 	public void start() {
 		logger.info("Registering linkTo component");
-		context.setAttribute("linkTo", this);
 	}
 
 	@Override

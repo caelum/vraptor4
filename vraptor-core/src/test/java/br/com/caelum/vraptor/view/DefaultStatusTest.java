@@ -31,7 +31,7 @@ import br.com.caelum.vraptor.proxy.JavassistProxifier;
 import br.com.caelum.vraptor.serialization.DefaultRepresentationResult;
 import br.com.caelum.vraptor.serialization.JSONSerialization;
 import br.com.caelum.vraptor.serialization.Serialization;
-import br.com.caelum.vraptor.serialization.gson.MessageSerializer;
+import br.com.caelum.vraptor.serialization.gson.MessageGsonConverter;
 import br.com.caelum.vraptor.serialization.gson.VRaptorGsonBuilder;
 import br.com.caelum.vraptor.serialization.xstream.MessageConverter;
 import br.com.caelum.vraptor.serialization.xstream.XStreamBuilder;
@@ -180,7 +180,7 @@ public class DefaultStatusTest {
 		i18ned.setBundle(new SingletonResourceBundle("message", "Something else"));
 
 		List<JsonSerializer> gsonSerializers = new ArrayList<>();
-		gsonSerializers.add(new MessageSerializer());
+		gsonSerializers.add(new MessageGsonConverter());
 		
 		VRaptorGsonBuilder gsonBuilder = new VRaptorGsonBuilder(gsonSerializers);
 		MockSerializationResult result = new MockSerializationResult(null, null, gsonBuilder) {

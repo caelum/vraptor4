@@ -20,22 +20,30 @@ import java.util.Calendar;
 
 import javax.xml.bind.DatatypeConverter;
 
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonParseException;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
 /**
- * Serializes {@link Calendar} using ISO8601 format.
+ * Serializes and deserializes {@link Calendar} using ISO8601 format.
  * 
  * @author Renan Reis
  * @author Otávio Garcia
  * @since 4.0.0
  */
-public class CalendarSerializer implements JsonSerializer<Calendar> {
+public class CalendarGsonConverter implements JsonSerializer<Calendar>, JsonDeserializer<Calendar> {
 
 	@Override
 	public JsonElement serialize(Calendar calendar, Type typeOfSrc, JsonSerializationContext context) {
 		return new JsonPrimitive(DatatypeConverter.printDateTime(calendar));
+	}
+
+	@Override
+	public Calendar deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+		return DatatypeConverter.parseDate(json.getAsString());
 	}
 }

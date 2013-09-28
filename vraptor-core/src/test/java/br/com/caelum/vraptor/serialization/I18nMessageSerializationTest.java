@@ -22,7 +22,7 @@ import org.junit.Test;
 import br.com.caelum.vraptor.interceptor.DefaultTypeNameExtractor;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.serialization.gson.GsonJSONSerialization;
-import br.com.caelum.vraptor.serialization.gson.MessageSerializer;
+import br.com.caelum.vraptor.serialization.gson.MessageGsonConverter;
 import br.com.caelum.vraptor.serialization.gson.VRaptorGsonBuilder;
 import br.com.caelum.vraptor.serialization.xstream.MessageConverter;
 import br.com.caelum.vraptor.serialization.xstream.XStreamBuilder;
@@ -47,7 +47,7 @@ public class I18nMessageSerializationTest {
 		XStreamXMLSerialization xmlSerialization = new XStreamXMLSerialization(response, builder);
 		
 		List<JsonSerializer> gsonSerializers = new ArrayList<>();
-		gsonSerializers.add(new MessageSerializer());
+		gsonSerializers.add(new MessageGsonConverter());
 		
 		VRaptorGsonBuilder gsonBuilder =  new VRaptorGsonBuilder(gsonSerializers);
 		GsonJSONSerialization jsonSerialization = new GsonJSONSerialization(response, extractor, gsonBuilder);

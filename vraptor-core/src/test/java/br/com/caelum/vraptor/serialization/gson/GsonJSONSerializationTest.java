@@ -57,7 +57,7 @@ public class GsonJSONSerializationTest {
 		extractor = new DefaultTypeNameExtractor();
 
 		adapters = new ArrayList<>();
-		adapters.add(new CalendarSerializer());
+		adapters.add(new CalendarGsonConverter());
 		adapters.add(new CollectionSerializer());
 
 		builder = new VRaptorGsonBuilder(adapters);

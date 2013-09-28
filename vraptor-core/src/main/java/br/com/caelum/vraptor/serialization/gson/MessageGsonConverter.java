@@ -15,7 +15,7 @@ import com.google.gson.JsonSerializer;
  * @author Otávio Garcia
  * @since 4.0.0
  */
-public class MessageSerializer implements JsonSerializer<Message> {
+public class MessageGsonConverter implements JsonSerializer<Message> {
 	
 	@Override
 	public JsonElement serialize(Message src, Type typeOfSrc, JsonSerializationContext context) {

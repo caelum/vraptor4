@@ -18,7 +18,7 @@ import br.com.caelum.vraptor.VRaptorException;
 import br.com.caelum.vraptor.controller.ControllerInstance;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.core.InterceptorStack;
-import br.com.caelum.vraptor.factory.StepInvokerFactory;
+import br.com.caelum.vraptor.factory.Factories;
 import br.com.caelum.vraptor.interceptor.example.AcceptsInterceptor;
 import br.com.caelum.vraptor.interceptor.example.AcceptsInterceptorWithStackAsParameter;
 import br.com.caelum.vraptor.interceptor.example.AcceptsWithoutArgsInterceptor;
@@ -45,7 +45,7 @@ import static org.mockito.Mockito.when;
 
 public class AspectStyleInterceptorHandlerTest {
 
-	private static final StepInvoker stepInvoker = StepInvokerFactory.create();
+	private static final StepInvoker stepInvoker = Factories.createStepInvoker();
 	private @Mock
 	InterceptorStack stack;
 	private @Mock

@@ -33,6 +33,8 @@ import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.core.MethodInfo;
+import br.com.caelum.vraptor.reflection.MethodExecutor;
+import br.com.caelum.vraptor.reflection.MethodExecutorException;
 import br.com.caelum.vraptor.util.Stringnifier;
 import br.com.caelum.vraptor.validator.ValidationException;
 
@@ -46,6 +48,7 @@ public class ExecuteMethodInterceptor implements Interceptor {
 
 	private MethodInfo info;
 	private Validator validator;
+	private MethodExecutor methodExecutor;
 	private final static Logger log = LoggerFactory.getLogger(ExecuteMethodInterceptor.class);
 
 
@@ -54,9 +57,10 @@ public class ExecuteMethodInterceptor implements Interceptor {
 	}
 
 	@Inject
-	public ExecuteMethodInterceptor(MethodInfo info, Validator validator) {
+	public ExecuteMethodInterceptor(MethodInfo info, Validator validator,MethodExecutor methodExecutor) {
 		this.info = info;
 		this.validator = validator;
+		this.methodExecutor = methodExecutor;
 	}
 
 	public void intercept(InterceptorStack stack, ControllerMethod method, Object controllerInstance)
@@ -65,8 +69,8 @@ public class ExecuteMethodInterceptor implements Interceptor {
 			Method reflectionMethod = method.getMethod();
 			Object[] parameters = this.info.getParameters();
 
-			log.debug("Invoking {}", Stringnifier.simpleNameFor(reflectionMethod));
-			Object result = reflectionMethod.invoke(controllerInstance, parameters);
+			log.debug("Invoking {}", Stringnifier.simpleNameFor(reflectionMethod));			
+			Object result = methodExecutor.invoke(reflectionMethod,controllerInstance,parameters);
 
 			if (validator.hasErrors()) { // method should have thrown ValidationException
 				if (log.isDebugEnabled()) {
@@ -93,9 +97,7 @@ public class ExecuteMethodInterceptor implements Interceptor {
 			stack.next(method, controllerInstance);
 		} catch (IllegalArgumentException e) {
 			throw new InterceptionException(e);
-		} catch (IllegalAccessException e) {
-			throw new InterceptionException(e);
-		} catch (InvocationTargetException e) {
+		} catch (MethodExecutorException e) {
 			Throwable cause = e.getCause();
 			if (cause instanceof ValidationException) {
 				// fine... already parsed

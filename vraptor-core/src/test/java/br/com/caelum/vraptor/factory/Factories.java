@@ -9,12 +9,15 @@ import br.com.caelum.vraptor.reflection.DefaultMethodExecutor;
 import br.com.caelum.vraptor.reflection.MethodExecutor;
 import br.com.caelum.vraptor.reflection.MethodHandleFactory;
 
-public class StepInvokerFactory {
+public class Factories {
 
-	public static StepInvoker create(){
+	public static StepInvoker createStepInvoker(){
+		return new StepInvoker(Factories.createMethodExecutor());		
+	}
+	
+	public static MethodExecutor createMethodExecutor(){
 		MethodHandleFactory methodHandleFactory = new MethodHandleFactory();
 		LRUCache<Method, MethodHandle> cache = new LRUCache<Method,MethodHandle>(500);
-		MethodExecutor methodExecutor = new DefaultMethodExecutor(cache,methodHandleFactory);
-		return new StepInvoker(methodExecutor);		
-	}
+		return new DefaultMethodExecutor(cache,methodHandleFactory); 		
+	}	
 }

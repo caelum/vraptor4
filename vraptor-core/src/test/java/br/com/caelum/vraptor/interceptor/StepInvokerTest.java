@@ -10,7 +10,7 @@ import org.junit.Test;
 import br.com.caelum.vraptor.AroundCall;
 import br.com.caelum.vraptor.BeforeCall;
 import br.com.caelum.vraptor.InterceptionException;
-import br.com.caelum.vraptor.factory.StepInvokerFactory;
+import br.com.caelum.vraptor.factory.Factories;
 import br.com.caelum.vraptor.interceptor.example.ExampleOfSimpleStackInterceptor;
 import br.com.caelum.vraptor.interceptor.example.InterceptorWithInheritance;
 import br.com.caelum.vraptor.interceptor.example.WeldProxy$$$StyleInterceptor;
@@ -22,7 +22,7 @@ import static org.mockito.Mockito.spy;
 
 public class StepInvokerTest {
 
-	private StepInvoker stepInvoker = StepInvokerFactory.create();
+	private StepInvoker stepInvoker = Factories.createStepInvoker();
 	
 	@Test
 	public void shouldNotReadInheritedMethods() throws Exception {

@@ -29,8 +29,6 @@ import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.CtMethod;
 import javassist.CtNewMethod;
-import javassist.util.proxy.MethodHandler;
-import javassist.util.proxy.ProxyFactory;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
@@ -45,8 +43,9 @@ import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.controller.BeanClass;
 import br.com.caelum.vraptor.http.route.Router;
-import br.com.caelum.vraptor.proxy.ProxyCreationException;
-import br.com.caelum.vraptor.util.StringUtils;
+import br.com.caelum.vraptor.proxy.MethodInvocation;
+import br.com.caelum.vraptor.proxy.Proxifier;
+import br.com.caelum.vraptor.proxy.SuperMethod;
 
 import com.google.common.collect.ForwardingMap;
 
@@ -65,14 +64,17 @@ public class LinkToHandler extends ForwardingMap<Class<?>, Object> {
 	private ServletContext context;
 	private Router router;
 
+	private Proxifier proxifier;
+
 	@Deprecated // CDI eyes only
 	public LinkToHandler() {
 	}
 
 	@Inject
-	public LinkToHandler(ServletContext context, Router router) {
+	public LinkToHandler(ServletContext context, Router router, Proxifier proxifier) {
 		this.context = context;
 		this.router = router;
+		this.proxifier = proxifier;
 	}
 
 	@PostConstruct
@@ -94,36 +96,30 @@ public class LinkToHandler extends ForwardingMap<Class<?>, Object> {
 		try {
 			linkToInterface = Class.forName(interfaceName);
 		} catch (ClassNotFoundException _) {
-			ClassPool pool = ClassPool.getDefault();
-			CtClass inter = pool.makeInterface(interfaceName);
-			try {
-				for(String name : getMethodNames(new Mirror().on(controller).reflectAll().methods())) {
-					CtMethod method = CtNewMethod.make(String.format("abstract String %s(Object[] args);", name), inter);
-					method.setModifiers(method.getModifiers() | 128 /* Modifier.VARARGS */);
-					inter.addMethod(method);
-					CtMethod getter = CtNewMethod.make(String.format("abstract String get%s();", StringUtils.capitalize(name)), inter);
-					inter.addMethod(getter);
-				}
-				linkToInterface = inter.toClass();
-			} catch (CannotCompileException e) {
-				throw new RuntimeException(e);
-			}
+			linkToInterface = createLinkToInterface(controller, interfaceName);
 		}
-		ProxyFactory factory = new ProxyFactory();
-		factory.setInterfaces(new Class[] { linkToInterface });
-		factory.setUseCache(true);
+		return proxifier.proxify(linkToInterface, new MethodInvocation<Object>() {
+			@Override
+			public Object intercept(Object proxy, Method method, Object[] args, SuperMethod superMethod) {
+				return new Linker(controller, method.getName(), Arrays.asList(args)).toString();
+			}
+		});
+	}
+
+	private Class<?> createLinkToInterface(final Class<?> controller, String interfaceName) {
+		ClassPool pool = ClassPool.getDefault();
+		CtClass inter = pool.makeInterface(interfaceName);
 		try {
-			return factory.create(null, null, new MethodHandler() {
-				@Override
-				public Object invoke(Object instance, Method method, Method superMethod, Object[] args) throws Throwable {
-					if (method.getName().equals("toString")) {
-						throw new IllegalArgumentException("uncomplete linkTo[" + controller.getSimpleName() + "]. You must specify the method.");
-					}
-					return "HAHAHA";
-				}
-			});
-		} catch (ReflectiveOperationException | IllegalArgumentException e) {
-			throw new ProxyCreationException(e);
+			for(String name : getMethodNames(new Mirror().on(controller).reflectAll().methods())) {
+				CtMethod method = CtNewMethod.make(String.format("abstract String %s(Object[] args);", name), inter);
+				method.setModifiers(method.getModifiers() | 128 /* Modifier.VARARGS */);
+				inter.addMethod(method);
+//				CtMethod getter = CtNewMethod.make(String.format("abstract String get%s();", StringUtils.capitalize(name)), inter);
+//				inter.addMethod(getter);
+			}
+			return inter.toClass();
+		} catch (CannotCompileException e) {
+			throw new RuntimeException(e);
 		}
 	}
 
@@ -135,28 +131,6 @@ public class LinkToHandler extends ForwardingMap<Class<?>, Object> {
 			}
 		}
 		return names;
-	}
-
-	class LinkMethod extends ForwardingMap<String, Linker> {
-
-		private final Class<?> controller;
-		public LinkMethod(Class<?> controller) {
-			this.controller = controller;
-		}
-		@Override
-		protected Map<String, Linker> delegate() {
-			return Collections.emptyMap();
-		}
-
-		@Override
-		public Linker get(Object key) {
-			return new Linker(controller, key.toString());
-		}
-
-		@Override
-		public String toString() {
-			throw new IllegalArgumentException("uncomplete linkTo[" + controller.getSimpleName() + "]. You must specify the method.");
-		}
 	}
 
 	class Linker extends ForwardingMap<Object, Linker> {

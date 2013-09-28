@@ -1,13 +1,17 @@
 package br.com.caelum.vraptor.serialization;
 
+import static java.util.Collections.sort;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -16,6 +20,9 @@ import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.http.FormatResolver;
+import br.com.caelum.vraptor.other.pack4ge.DumbSerialization;
+import br.com.caelum.vraptor.serialization.xstream.XStreamJSONSerialization;
+import br.com.caelum.vraptor.serialization.xstream.XStreamXMLSerialization;
 import br.com.caelum.vraptor.view.PageResult;
 import br.com.caelum.vraptor.view.Status;
 
@@ -103,5 +110,34 @@ public class DefaultRepresentationResultTest {
 		representation.from(object);
 
 		verify(serialization, never()).from(object);
+	}
+
+	@Test
+	public void shouldSortBasedOnPackageNamesLessPriorityToCaelumInitialList3rdPartyFirst() {
+		List<Serialization> serializers = new ArrayList<>();
+
+		serializers.add(new DumbSerialization());
+		serializers.add(new XStreamXMLSerialization(null, null));
+		serializers.add(new XStreamJSONSerialization(null, null, null));
+		serializers.add(new HTMLSerialization(null, null));
+
+		sort(serializers, new DefaultRepresentationResult.ApplicationPackageFirst());
+
+		assertEquals("br.com.caelum.vraptor.other.pack4ge", serializers.get(0).getClass().getPackage().getName());
+
+	}
+
+	@Test
+	public void shouldSortBasedOnPackageNamesLessPriorityToCaelumInitialList3rdPartyLast() {
+		List<Serialization> serializers = new ArrayList<>();
+
+		serializers.add(new XStreamXMLSerialization(null, null));
+		serializers.add(new XStreamJSONSerialization(null, null, null));
+		serializers.add(new HTMLSerialization(null, null));
+		serializers.add(new DumbSerialization());
+
+		sort(serializers, new DefaultRepresentationResult.ApplicationPackageFirst());
+
+		assertEquals("br.com.caelum.vraptor.other.pack4ge", serializers.get(0).getClass().getPackage().getName());
 	}
 }

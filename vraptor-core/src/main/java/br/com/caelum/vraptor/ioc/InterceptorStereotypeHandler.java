@@ -57,7 +57,7 @@ public class InterceptorStereotypeHandler{
 
 	private void registerInterceptor(Class<?> type) {
 		logger.debug("Found interceptor for {}", type);
-		Class<?> interceptorType = type;
+		Class<?> interceptorType = type;		
 		registry.register(interceptorType);
 	}
 }

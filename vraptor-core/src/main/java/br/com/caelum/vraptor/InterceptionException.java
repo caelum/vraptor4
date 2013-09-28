@@ -17,6 +17,9 @@
 
 package br.com.caelum.vraptor;
 
+import javax.enterprise.inject.Vetoed;
+
+@Vetoed
 public class InterceptionException extends VRaptorException {
 	private static final long serialVersionUID = -1964321560573946245L;
 

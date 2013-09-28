@@ -1,5 +1,8 @@
 package br.com.caelum.vraptor.interceptor.example;
 
+import java.io.File;
+import java.sql.DriverManager;
+
 import br.com.caelum.vraptor.AfterCall;
 import br.com.caelum.vraptor.AroundCall;
 import br.com.caelum.vraptor.BeforeCall;
@@ -19,7 +22,7 @@ public class InterceptorWithCustomizedAccepts {
 	@AroundCall
 	public void intercept(SimpleInterceptorStack stack) {
 		this.interceptCalled = true;
-	}
+	}		
 
 	@BeforeCall
 	public void before() {

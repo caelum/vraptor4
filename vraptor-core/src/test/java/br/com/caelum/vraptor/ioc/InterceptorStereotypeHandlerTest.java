@@ -16,9 +16,6 @@
  */
 package br.com.caelum.vraptor.ioc;
 
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -31,6 +28,9 @@ import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.interceptor.Interceptor;
 import br.com.caelum.vraptor.interceptor.InterceptorRegistry;
 
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+
 public class InterceptorStereotypeHandlerTest {
 
 	private @Mock InterceptorRegistry interceptorRegistry;
@@ -38,7 +38,7 @@ public class InterceptorStereotypeHandlerTest {
 
 	@Before
 	public void setUp() throws Exception {
-		MockitoAnnotations.initMocks(this);
+		MockitoAnnotations.initMocks(this);		
 		handler = new InterceptorStereotypeHandler(interceptorRegistry);
 	}
 
@@ -47,18 +47,9 @@ public class InterceptorStereotypeHandlerTest {
 		handler.handle(new DefaultBeanClass(InterceptorA.class));
 		verify(interceptorRegistry, times(1)).register(InterceptorA.class);
 	}
+	
 
 	static class InterceptorA implements Interceptor {
-
-		public boolean accepts(ControllerMethod method) {
-			return false;
-		}
-
-		public void intercept(InterceptorStack stack, ControllerMethod method,
-				Object controllerInstance) throws InterceptionException {
-		}
-	}
-	static class InterceptorB implements Interceptor {
 
 		public boolean accepts(ControllerMethod method) {
 			return false;

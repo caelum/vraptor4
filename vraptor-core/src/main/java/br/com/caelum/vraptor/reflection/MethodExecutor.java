@@ -1,4 +1,6 @@
-package br.com.caelum.vraptor.core;
+package br.com.caelum.vraptor.reflection;
+
+import java.lang.reflect.Method;
 
 /**
  * Interface to abstract how we invoke methods. With reflection
@@ -8,5 +10,5 @@ package br.com.caelum.vraptor.core;
  */
 public interface MethodExecutor {
 
-	public <T> T invoke(Object instance,Object...args);
+	public <T> T invoke(Method method,Object instance,Object...args);
 }

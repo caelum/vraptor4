@@ -28,14 +28,12 @@ import br.com.caelum.vraptor.VRaptorException;
 import br.com.caelum.vraptor.controller.BeanClass;
 import br.com.caelum.vraptor.core.InterceptsQualifier;
 import br.com.caelum.vraptor.interceptor.Interceptor;
-import br.com.caelum.vraptor.interceptor.InterceptorMethodsCache;
 import br.com.caelum.vraptor.interceptor.InterceptorRegistry;
 
 @ApplicationScoped
 public class InterceptorStereotypeHandler{
 	private static final Logger logger = LoggerFactory.getLogger(InterceptorStereotypeHandler.class);
 	private InterceptorRegistry registry;
-	private InterceptorMethodsCache methodsCache;
 
 	//CDI eyes only
 	@Deprecated
@@ -43,14 +41,13 @@ public class InterceptorStereotypeHandler{
 	}
 
 	@Inject
-	public InterceptorStereotypeHandler(InterceptorRegistry registry,InterceptorMethodsCache methodsCache) {
+	public InterceptorStereotypeHandler(InterceptorRegistry registry) {
 		this.registry = registry;
-		this.methodsCache = methodsCache;
 	}
 
 	public void handle(@Observes @InterceptsQualifier BeanClass beanClass) {
 		Class<?> originalType = beanClass.getType();
-		if (isImplementingInterceptor(originalType) || originalType.isAnnotationPresent(Intercepts.class)) {
+		if (Interceptor.class.isAssignableFrom(originalType) || originalType.isAnnotationPresent(Intercepts.class)) {
 			registerInterceptor(originalType);
 		} else {
 			throw new VRaptorException("Annotation " + Intercepts.class + " found in " + originalType
@@ -58,16 +55,9 @@ public class InterceptorStereotypeHandler{
 		}
 	}
 
-	private boolean isImplementingInterceptor(Class<?> type) {
-		return Interceptor.class.isAssignableFrom(type);
-	}
-
 	private void registerInterceptor(Class<?> type) {
 		logger.debug("Found interceptor for {}", type);
 		Class<?> interceptorType = type;		
 		registry.register(interceptorType);
-		if(!isImplementingInterceptor(type)){
-			methodsCache.put(type);
-		}
 	}
 }

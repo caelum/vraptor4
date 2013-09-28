@@ -20,13 +20,7 @@ public class InterceptorWithCustomizedAccepts {
 	private boolean afterCalled;
 
 	@AroundCall
-	public void intercept(SimpleInterceptorStack stack,File dir) {
-		if(dir.isDirectory()){
-			String[] files = dir.list();
-			for (String string : files) {
-				
-			}
-		}
+	public void intercept(SimpleInterceptorStack stack) {
 		this.interceptCalled = true;
 	}		
 

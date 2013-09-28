@@ -16,38 +16,30 @@
  */
 package br.com.caelum.vraptor.ioc;
 
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import br.com.caelum.vraptor.Accepts;
-import br.com.caelum.vraptor.AroundCall;
 import br.com.caelum.vraptor.InterceptionException;
-import br.com.caelum.vraptor.Intercepts;
-import br.com.caelum.vraptor.cache.VRaptorDefaultCache;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.controller.DefaultBeanClass;
 import br.com.caelum.vraptor.core.InterceptorStack;
-import br.com.caelum.vraptor.interceptor.AllMethodHandles;
 import br.com.caelum.vraptor.interceptor.Interceptor;
-import br.com.caelum.vraptor.interceptor.InterceptorMethodsCache;
 import br.com.caelum.vraptor.interceptor.InterceptorRegistry;
-import br.com.caelum.vraptor.interceptor.StepInvoker;
+
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 public class InterceptorStereotypeHandlerTest {
 
 	private @Mock InterceptorRegistry interceptorRegistry;
 	private InterceptorStereotypeHandler handler;
-	private @Mock InterceptorMethodsCache interceptorMethodsCache;
 
 	@Before
 	public void setUp() throws Exception {
 		MockitoAnnotations.initMocks(this);		
-		handler = new InterceptorStereotypeHandler(interceptorRegistry,interceptorMethodsCache);
+		handler = new InterceptorStereotypeHandler(interceptorRegistry);
 	}
 
 	@Test
@@ -56,13 +48,6 @@ public class InterceptorStereotypeHandlerTest {
 		verify(interceptorRegistry, times(1)).register(InterceptorA.class);
 	}
 	
-	@Test
-	public void shouldRegisterAspectStyleInterceptorAndCacheMethods() throws Exception {
-		handler.handle(new DefaultBeanClass(InterceptorB.class));
-		verify(interceptorRegistry, times(1)).register(InterceptorB.class);
-		verify(interceptorMethodsCache).put(InterceptorB.class);
-		
-	}
 
 	static class InterceptorA implements Interceptor {
 
@@ -70,20 +55,6 @@ public class InterceptorStereotypeHandlerTest {
 			return false;
 		}
 
-		public void intercept(InterceptorStack stack, ControllerMethod method,
-				Object controllerInstance) throws InterceptionException {
-		}
-	}
-
-	@Intercepts
-	static class InterceptorB{
-
-		@Accepts
-		public boolean accepts() {
-			return false;
-		}
-
-		@AroundCall
 		public void intercept(InterceptorStack stack, ControllerMethod method,
 				Object controllerInstance) throws InterceptionException {
 		}

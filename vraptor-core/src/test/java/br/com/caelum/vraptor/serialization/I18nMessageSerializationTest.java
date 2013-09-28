@@ -62,7 +62,6 @@ public class I18nMessageSerializationTest {
 
 	@Test
 	public void shouldCallJsonSerialization() {
-		//String expectedResult = "{\"message\": {\"message\": \"Just another {0} in {1}\",\"category\": \"success\"}}";
 		String expectedResult = "{\"message\":{\"category\":\"success\",\"message\":\"Just another {0} in {1}\"}}";
 		serialization.from("success", "message.cat").as(json());
 		assertThat(result(), is(equalTo(expectedResult)));

@@ -64,7 +64,7 @@ public class GsonJSONSerializationTest {
 		adapters.add(new CollectionSerializer());
 
 		builder = new VRaptorGsonBuilder(adapters, serializee);
-		this.serialization = new GsonJSONSerialization(response, extractor, builder, serializee);
+		this.serialization = new GsonJSONSerialization(response, extractor, builder);
 	}
 
 	public static class Address {

@@ -58,11 +58,11 @@ public class GsonJSONPSerialization implements JSONPSerialization {
 	
 	@Override
 	public JSONSerialization withCallback(final String callbackName) {
-		return new GsonJSONSerialization(response, extractor, builder, serializee) {
+		return new GsonJSONSerialization(response, extractor, builder) {
 			@Override
 			protected SerializerBuilder getSerializer() {
 				try {
-					return new GsonSerializer(builder, response.getWriter(), extractor, serializee) {
+					return new GsonSerializer(builder, response.getWriter(), extractor) {
 						@Override
 						public void serialize() {
 							try {

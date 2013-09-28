@@ -29,7 +29,6 @@ import java.util.Set;
 
 import br.com.caelum.vraptor.deserialization.gson.VRaptorGsonBuilder;
 import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
-import br.com.caelum.vraptor.serialization.Serializee;
 import br.com.caelum.vraptor.serialization.Serializer;
 import br.com.caelum.vraptor.serialization.SerializerBuilder;
 
@@ -46,37 +45,35 @@ public class GsonSerializer implements SerializerBuilder {
 	private VRaptorGsonBuilder builder;
 	private Writer writer;
 	private TypeNameExtractor extractor;
-	private Serializee serializee;
 
-	public GsonSerializer(VRaptorGsonBuilder builder, Writer writer, TypeNameExtractor extractor, Serializee serializee) {
+	public GsonSerializer(VRaptorGsonBuilder builder, Writer writer, TypeNameExtractor extractor) {
 		this.writer = writer;
 		this.extractor = extractor;
 		this.builder = builder;
-		this.serializee = serializee;
 	}
 
 	@Override
 	public Serializer exclude(String... names) {
-		serializee.excludeAll(names);
+		builder.getSerializee().excludeAll(names);
 		return this;
 	}
 
 	@Override
 	public Serializer excludeAll() {
-		serializee.excludeAll();
+		builder.getSerializee().excludeAll();
 		return this;
 	}
 
 	private void preConfigure(Object obj, String alias) {
 		checkNotNull(obj, "You can't serialize null objects");
 
-		serializee.setRootClass(obj.getClass());
+		builder.getSerializee().setRootClass(obj.getClass());
 
 		if (alias == null) {
 			if (Collection.class.isInstance(obj) && (List.class.isInstance(obj))) {
 				alias = "list";
 			} else {
-				alias = extractor.nameFor(serializee.getRootClass());
+				alias = extractor.nameFor(builder.getSerializee().getRootClass());
 			}
 		}
 
@@ -87,15 +84,15 @@ public class GsonSerializer implements SerializerBuilder {
 
 	private void setRoot(Object obj) {
 		if (Collection.class.isInstance(obj)) {
-			this.serializee.setRoot(normalizeList(obj));
+			builder.getSerializee().setRoot(normalizeList(obj));
 		} else {
-			this.serializee.setRoot(obj);
+			builder.getSerializee().setRoot(obj);
 		}
 	}
 
 	private Collection<Object> normalizeList(Object obj) {
 		Collection<Object> list = (Collection<Object>) obj;
-		serializee.setElementTypes(findElementTypes(list));
+		builder.getSerializee().setElementTypes(findElementTypes(list));
 
 		return list;
 	}
@@ -124,17 +121,17 @@ public class GsonSerializer implements SerializerBuilder {
 
 	@Override
 	public Serializer include(String... fields) {
-		serializee.includeAll(fields);
+		builder.getSerializee().includeAll(fields);
 		return this;
 	}
 
 	@Override
 	public void serialize() {
-		builder.setExclusionStrategies(new Exclusions(serializee));
+		builder.setExclusionStrategies(new Exclusions(builder.getSerializee()));
 		Gson gson = builder.create();
 		
 		String alias = builder.getAlias();
-		Object root = serializee.getRoot();
+		Object root = builder.getSerializee().getRoot();
 
 		if (builder.isWithoutRoot()) {
 			gson.toJson(root, writer);
@@ -147,7 +144,7 @@ public class GsonSerializer implements SerializerBuilder {
 	
 	@Override
 	public Serializer recursive() {
-		this.serializee.setRecursive(true);
+		builder.getSerializee().setRecursive(true);
 		return this;
 	}
 

@@ -28,16 +28,22 @@ import br.com.caelum.vraptor.view.Status;
 
 public class DefaultRepresentationResultTest {
 
-	private @Mock FormatResolver formatResolver;
-	private @Mock Serialization serialization;
-	private @Mock Result result;
-	private @Mock PageResult pageResult;
-	private @Mock Status status;
+	private @Mock
+	FormatResolver formatResolver;
+	private @Mock
+	Serialization serialization;
+	private @Mock
+	Result result;
+	private @Mock
+	PageResult pageResult;
+	private @Mock
+	Status status;
 
 	private RepresentationResult representation;
 
 	@Before
-	public void setUp() throws Exception {
+	public void setUp()
+		throws Exception {
 		MockitoAnnotations.initMocks(this);
 		when(result.use(PageResult.class)).thenReturn(pageResult);
 		when(result.use(Status.class)).thenReturn(status);
@@ -45,7 +51,8 @@ public class DefaultRepresentationResultTest {
 	}
 
 	@Test
-	public void whenThereIsNoFormatGivenShouldForwardToDefaultPage() throws Exception {
+	public void whenThereIsNoFormatGivenShouldForwardToDefaultPage()
+		throws Exception {
 		when(formatResolver.getAcceptFormat()).thenReturn(null);
 
 		Serializer serializer = representation.from(new Object());
@@ -55,9 +62,9 @@ public class DefaultRepresentationResultTest {
 		verify(status).notAcceptable();
 	}
 
-
 	@Test
-	public void shouldSend404IfNothingIsRendered() throws Exception {
+	public void shouldSend404IfNothingIsRendered()
+		throws Exception {
 		when(formatResolver.getAcceptFormat()).thenReturn(null);
 
 		Serializer serializer = representation.from(null);
@@ -68,7 +75,8 @@ public class DefaultRepresentationResultTest {
 	}
 
 	@Test
-	public void whenThereIsNoFormatGivenShouldForwardToDefaultPageWithAlias() throws Exception {
+	public void whenThereIsNoFormatGivenShouldForwardToDefaultPageWithAlias()
+		throws Exception {
 		when(formatResolver.getAcceptFormat()).thenReturn(null);
 
 		Object object = new Object();
@@ -78,8 +86,10 @@ public class DefaultRepresentationResultTest {
 
 		verify(status).notAcceptable();
 	}
+
 	@Test
-	public void whenThereIsAFormatGivenShouldUseCorrectSerializer() throws Exception {
+	public void whenThereIsAFormatGivenShouldUseCorrectSerializer()
+		throws Exception {
 		when(formatResolver.getAcceptFormat()).thenReturn("xml");
 
 		when(serialization.accepts("xml")).thenReturn(true);
@@ -89,8 +99,10 @@ public class DefaultRepresentationResultTest {
 
 		verify(serialization).from(object);
 	}
+
 	@Test
-	public void whenThereIsAFormatGivenShouldUseCorrectSerializerWithAlias() throws Exception {
+	public void whenThereIsAFormatGivenShouldUseCorrectSerializerWithAlias()
+		throws Exception {
 		when(formatResolver.getAcceptFormat()).thenReturn("xml");
 
 		when(serialization.accepts("xml")).thenReturn(true);
@@ -100,8 +112,10 @@ public class DefaultRepresentationResultTest {
 
 		verify(serialization).from(object, "Alias!");
 	}
+
 	@Test
-	public void whenSerializationDontAcceptsFormatItShouldntBeUsed() throws Exception {
+	public void whenSerializationDontAcceptsFormatItShouldntBeUsed()
+		throws Exception {
 		when(formatResolver.getAcceptFormat()).thenReturn("xml");
 
 		when(serialization.accepts("xml")).thenReturn(false);
@@ -118,7 +132,7 @@ public class DefaultRepresentationResultTest {
 
 		serializers.add(new DumbSerialization());
 		serializers.add(new XStreamXMLSerialization(null, null));
-		serializers.add(new GsonJSONSerialization(null, null, null, null));
+		serializers.add(new GsonJSONSerialization(null, null, null));
 		serializers.add(new HTMLSerialization(null, null));
 
 		sort(serializers, new DefaultRepresentationResult.ApplicationPackageFirst());
@@ -132,7 +146,7 @@ public class DefaultRepresentationResultTest {
 		List<Serialization> serializers = new ArrayList<>();
 
 		serializers.add(new XStreamXMLSerialization(null, null));
-		serializers.add(new GsonJSONSerialization(null, null, null, null));
+		serializers.add(new GsonJSONSerialization(null, null, null));
 		serializers.add(new HTMLSerialization(null, null));
 		serializers.add(new DumbSerialization());
 

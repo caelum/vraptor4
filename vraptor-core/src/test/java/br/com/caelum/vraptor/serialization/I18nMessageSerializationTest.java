@@ -50,8 +50,7 @@ public class I18nMessageSerializationTest {
 		gsonSerializers.add(new MessageSerializer());
 		
 		VRaptorGsonBuilder gsonBuilder =  new VRaptorGsonBuilder(gsonSerializers, new Serializee());
-		GsonJSONSerialization jsonSerialization = new GsonJSONSerialization(response, extractor, gsonBuilder, new Serializee());
-
+		GsonJSONSerialization jsonSerialization = new GsonJSONSerialization(response, extractor, gsonBuilder);
 
 		Container container = mock(Container.class);
 		when(container.instanceFor(JSONSerialization.class)).thenReturn(jsonSerialization);

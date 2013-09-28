@@ -33,7 +33,7 @@ import com.thoughtworks.xstream.mapper.MapperWrapper;
 public class VRaptorClassMapper extends MapperWrapper {
 
 	private final Supplier<TypeNameExtractor> extractor;
-	private Serializee serializee = new Serializee();
+	private final Serializee serializee = new Serializee();
 
 	public VRaptorClassMapper(Mapper wrapped, Supplier<TypeNameExtractor> supplier) {
 		super(wrapped);
@@ -86,10 +86,8 @@ public class VRaptorClassMapper extends MapperWrapper {
 		}
 		return superName;
 	}
-
-	public void setSerializee(Serializee serializee) {
-		this.serializee = serializee;
+	
+	public Serializee getSerializee() {
+		return serializee;
 	}
-
-
 }

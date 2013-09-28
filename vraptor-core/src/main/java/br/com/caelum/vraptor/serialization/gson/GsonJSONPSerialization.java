@@ -37,10 +37,11 @@ import br.com.caelum.vraptor.view.ResultException;
 @RequestScoped
 public class GsonJSONPSerialization implements JSONPSerialization {
 	
+	protected final Serializee serializee = new Serializee();
+	
 	protected HttpServletResponse response;
 	protected TypeNameExtractor extractor;
 	protected VRaptorGsonBuilder builder;
-	protected Serializee serializee;
 	
 	@Deprecated
 	public GsonJSONPSerialization() {
@@ -48,11 +49,10 @@ public class GsonJSONPSerialization implements JSONPSerialization {
 
 	@Inject
 	public GsonJSONPSerialization(HttpServletResponse response, TypeNameExtractor extractor,
-			VRaptorGsonBuilder builder, Serializee serializee) {
+			VRaptorGsonBuilder builder) {
 		this.response = response;
 		this.extractor = extractor;
 		this.builder = builder;
-		this.serializee = serializee;
 	}
 	
 	@Override

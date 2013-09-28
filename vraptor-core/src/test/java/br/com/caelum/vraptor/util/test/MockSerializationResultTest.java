@@ -12,7 +12,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.proxy.JavassistProxifier;
-import br.com.caelum.vraptor.serialization.Serializee;
 import br.com.caelum.vraptor.serialization.gson.VRaptorGsonBuilder;
 import br.com.caelum.vraptor.serialization.xstream.XStreamBuilderImpl;
 
@@ -27,7 +26,7 @@ public class MockSerializationResultTest {
 	public void setUp() throws Exception {
 		List<JsonSerializer> serializers = new ArrayList<>();
 		result = new MockSerializationResult(new JavassistProxifier(), XStreamBuilderImpl.cleanInstance(), 
-				new VRaptorGsonBuilder(serializers, new Serializee()));
+				new VRaptorGsonBuilder(serializers));
 	}
 	
 	public static class Car {

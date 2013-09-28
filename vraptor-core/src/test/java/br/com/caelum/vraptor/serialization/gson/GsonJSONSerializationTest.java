@@ -40,8 +40,6 @@ import com.google.gson.JsonSerializer;
 
 public class GsonJSONSerializationTest {
 
-	private Serializee serializee = new Serializee();
-
 	private JSONSerialization serialization;
 	private ByteArrayOutputStream stream;
 	private HttpServletResponse response;
@@ -62,7 +60,7 @@ public class GsonJSONSerializationTest {
 		adapters.add(new CalendarSerializer());
 		adapters.add(new CollectionSerializer());
 
-		builder = new VRaptorGsonBuilder(adapters, serializee);
+		builder = new VRaptorGsonBuilder(adapters);
 		this.serialization = new GsonJSONSerialization(response, extractor, builder);
 	}
 
@@ -456,7 +454,7 @@ public class GsonJSONSerializationTest {
 	
 	@Test
 	public void shouldSerializeWithCallback() {
-		JSONPSerialization serialization = new GsonJSONPSerialization(response, extractor, builder, serializee);
+		JSONPSerialization serialization = new GsonJSONPSerialization(response, extractor, builder);
 		
 		String expectedResult = "calculate({\"order\":{\"price\":15.0}})";
 		Order order = new Order(new Client("nykolas lima"), 15.0, "gift bags, please");

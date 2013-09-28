@@ -25,22 +25,21 @@ import com.google.gson.JsonSerializer;
 @Dependent
 public class VRaptorGsonBuilder {
 
+	private final Serializee serializee = new Serializee();
 	private boolean withoutRoot;
 	private String alias;
 
 	private GsonBuilder builder = new GsonBuilder();
 	private Collection<JsonSerializer> serializers;
 	private Collection<ExclusionStrategy> exclusions;
-	private Serializee serializee;
 
 	@Deprecated
 	public VRaptorGsonBuilder() {
 	}
 
 	@Inject
-	public VRaptorGsonBuilder(List<JsonSerializer> serializers, Serializee serializee) {
+	public VRaptorGsonBuilder(List<JsonSerializer> serializers) {
 		this.serializers = serializers;
-		this.serializee = serializee;
 		ExclusionStrategy exclusion = new Exclusions(serializee);
 		exclusions = singletonList(exclusion);
 	}

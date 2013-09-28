@@ -49,7 +49,7 @@ public class I18nMessageSerializationTest {
 		List<JsonSerializer> gsonSerializers = new ArrayList<>();
 		gsonSerializers.add(new MessageSerializer());
 		
-		VRaptorGsonBuilder gsonBuilder =  new VRaptorGsonBuilder(gsonSerializers, new Serializee());
+		VRaptorGsonBuilder gsonBuilder =  new VRaptorGsonBuilder(gsonSerializers);
 		GsonJSONSerialization jsonSerialization = new GsonJSONSerialization(response, extractor, gsonBuilder);
 
 		Container container = mock(Container.class);

@@ -19,8 +19,18 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+
+import javassist.CannotCompileException;
+import javassist.ClassPool;
+import javassist.CtClass;
+import javassist.CtMethod;
+import javassist.CtNewMethod;
+import javassist.util.proxy.MethodHandler;
+import javassist.util.proxy.ProxyFactory;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
@@ -35,6 +45,8 @@ import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.controller.BeanClass;
 import br.com.caelum.vraptor.http.route.Router;
+import br.com.caelum.vraptor.proxy.ProxyCreationException;
+import br.com.caelum.vraptor.util.StringUtils;
 
 import com.google.common.collect.ForwardingMap;
 
@@ -56,7 +68,7 @@ public class LinkToHandler extends ForwardingMap<Class<?>, Object> {
 	@Deprecated // CDI eyes only
 	public LinkToHandler() {
 	}
-	
+
 	@Inject
 	public LinkToHandler(ServletContext context, Router router) {
 		this.context = context;
@@ -74,9 +86,55 @@ public class LinkToHandler extends ForwardingMap<Class<?>, Object> {
 	}
 
 	@Override
-	public LinkMethod get(Object key) {
+	public Object get(Object key) {
 		BeanClass beanClass = (BeanClass) key;
-		return new LinkMethod(beanClass.getType());
+		final Class<?> controller = beanClass.getType();
+		String interfaceName = controller.getName() + "$linkTo";
+		Class<?> linkToInterface;
+		try {
+			linkToInterface = Class.forName(interfaceName);
+		} catch (ClassNotFoundException _) {
+			ClassPool pool = ClassPool.getDefault();
+			CtClass inter = pool.makeInterface(interfaceName);
+			try {
+				for(String name : getMethodNames(new Mirror().on(controller).reflectAll().methods())) {
+					CtMethod method = CtNewMethod.make(String.format("abstract String %s(Object[] args);", name), inter);
+					method.setModifiers(method.getModifiers() | 128 /* Modifier.VARARGS */);
+					inter.addMethod(method);
+					CtMethod getter = CtNewMethod.make(String.format("abstract String get%s();", StringUtils.capitalize(name)), inter);
+					inter.addMethod(getter);
+				}
+				linkToInterface = inter.toClass();
+			} catch (CannotCompileException e) {
+				throw new RuntimeException(e);
+			}
+		}
+		ProxyFactory factory = new ProxyFactory();
+		factory.setInterfaces(new Class[] { linkToInterface });
+		factory.setUseCache(true);
+		try {
+			return factory.create(null, null, new MethodHandler() {
+				@Override
+				public Object invoke(Object instance, Method method, Method superMethod, Object[] args) throws Throwable {
+					if (method.getName().equals("toString")) {
+						throw new IllegalArgumentException("uncomplete linkTo[" + controller.getSimpleName() + "]. You must specify the method.");
+					}
+					return "HAHAHA";
+				}
+			});
+		} catch (ReflectiveOperationException | IllegalArgumentException e) {
+			throw new ProxyCreationException(e);
+		}
+	}
+
+	private Set<String> getMethodNames(List<Method> methods) {
+		Set<String> names = new HashSet<>();
+		for (Method method : methods) {
+			if (!method.getDeclaringClass().equals(Object.class)) {
+				names.add(method.getName());
+			}
+		}
+		return names;
 	}
 
 	class LinkMethod extends ForwardingMap<String, Linker> {

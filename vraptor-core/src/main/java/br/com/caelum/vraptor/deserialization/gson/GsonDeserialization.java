@@ -11,7 +11,6 @@ import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.List;
 
-import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
@@ -38,7 +37,6 @@ import com.google.gson.JsonParser;
  * @author Guilherme Mangabeira
  */
 
-@RequestScoped
 @Deserializes({ "application/json", "json" })
 public class GsonDeserialization implements Deserializer {
 

@@ -88,7 +88,8 @@ public class XStreamSerializer implements SerializerBuilder {
 	}
 
 	private boolean hasDefaultConverter() {
-		return xstream.getConverterLookup().lookupConverterForType(serializee.getRootClass()).equals(xstream.getConverterLookup().lookupConverterForType(Object.class));
+		return xstream.getConverterLookup().lookupConverterForType(serializee.getRootClass())
+				.equals(xstream.getConverterLookup().lookupConverterForType(Object.class));
 	}
 
 	private void setAlias(Object obj, String alias) {

@@ -17,7 +17,7 @@ package br.com.caelum.vraptor.serialization.xstream;
 
 import java.io.IOException;
 
-import javax.enterprise.context.RequestScoped;
+import javax.enterprise.inject.Alternative;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
 
@@ -36,7 +36,7 @@ import com.thoughtworks.xstream.XStream;
  * @author Lucas Cavalcanti
  * @since 3.0.2
  */
-@RequestScoped
+@Alternative
 public class XStreamJSONSerialization implements JSONSerialization {
 
 	protected HttpServletResponse response;

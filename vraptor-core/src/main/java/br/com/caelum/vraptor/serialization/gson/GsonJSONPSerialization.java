@@ -17,6 +17,8 @@ package br.com.caelum.vraptor.serialization.gson;
 
 import java.io.IOException;
 
+import javax.enterprise.context.RequestScoped;
+import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
 
 import br.com.caelum.vraptor.deserialization.gson.VRaptorGsonBuilder;
@@ -31,14 +33,21 @@ import br.com.caelum.vraptor.view.ResultException;
  * Gson implementation for JSONPSerialization
  *
  * @author Otávio Scherer Garcia
+ * @since 4.0.0
  */
+@RequestScoped
 public class GsonJSONPSerialization implements JSONPSerialization {
 	
-	protected final HttpServletResponse response;
-	protected final TypeNameExtractor extractor;
-	protected final VRaptorGsonBuilder builder;
-	protected final Serializee serializee;
+	protected HttpServletResponse response;
+	protected TypeNameExtractor extractor;
+	protected VRaptorGsonBuilder builder;
+	protected Serializee serializee;
+	
+	@Deprecated
+	public GsonJSONPSerialization() {
+	}
 
+	@Inject
 	public GsonJSONPSerialization(HttpServletResponse response, TypeNameExtractor extractor,
 			VRaptorGsonBuilder builder, Serializee serializee) {
 		this.response = response;

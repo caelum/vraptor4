@@ -17,6 +17,8 @@ package br.com.caelum.vraptor.serialization.gson;
 
 import java.io.IOException;
 
+import javax.enterprise.context.RequestScoped;
+import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
 
 import br.com.caelum.vraptor.deserialization.gson.VRaptorGsonBuilder;
@@ -34,13 +36,19 @@ import br.com.caelum.vraptor.view.ResultException;
  * @author Renan Reis
  * @author Guilherme Mangabeira
  */
+@RequestScoped
 public class GsonJSONSerialization implements JSONSerialization {
 
-	protected final HttpServletResponse response;
-	protected final TypeNameExtractor extractor;
-	protected final VRaptorGsonBuilder builder;
-	protected final Serializee serializee;
+	private HttpServletResponse response;
+	private TypeNameExtractor extractor;
+	private VRaptorGsonBuilder builder;
+	private Serializee serializee;
 
+	@Deprecated
+	public GsonJSONSerialization() {
+	}
+
+	@Inject
 	public GsonJSONSerialization(HttpServletResponse response, TypeNameExtractor extractor,
 			VRaptorGsonBuilder builder, Serializee serializee) {
 		this.response = response;
@@ -49,14 +57,17 @@ public class GsonJSONSerialization implements JSONSerialization {
 		this.serializee = serializee;
 	}
 
+	@Override
 	public boolean accepts(String format) {
 		return "json".equals(format);
 	}
 
+	@Override
 	public <T> Serializer from(T object) {
 		return from(object, null);
 	}
 
+	@Override
 	public <T> Serializer from(T object, String alias) {
 		response.setContentType("application/json");
 		return getSerializer().from(object, alias);
@@ -73,11 +84,13 @@ public class GsonJSONSerialization implements JSONSerialization {
 	/**
 	 * You can override this method for configuring Driver before serialization
 	 */
+	@Override
 	public <T> NoRootSerialization withoutRoot() {
 		builder.setWithoutRoot(true);
 		return this;
 	}
 
+	@Override
 	public JSONSerialization indented() {
 		builder.indented();
 		return this;

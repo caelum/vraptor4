@@ -19,7 +19,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
-import javax.enterprise.context.RequestScoped;
+import javax.enterprise.inject.Alternative;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
 
@@ -39,7 +39,7 @@ import br.com.caelum.vraptor.view.ResultException;
  * @since 3.3.0
  *
  */
-@RequestScoped
+@Alternative
 public class XStreamJSONPSerialization implements JSONPSerialization {
 
 	private HttpServletResponse response;

@@ -36,20 +36,19 @@ import br.com.caelum.vraptor.serialization.SerializerBuilder;
 import com.google.gson.Gson;
 
 /**
- * A SerializerBuilder based on Gson
+ * A SerializerBuilder based on Gson.
  *
  * @author Renan Reis
  * @author Guilherme Mangabeira
  */
 public class GsonSerializer implements SerializerBuilder {
 
-	private final Writer writer;
-	private final TypeNameExtractor extractor;
-	private final Serializee serializee;
-	protected VRaptorGsonBuilder builder;
+	private VRaptorGsonBuilder builder;
+	private Writer writer;
+	private TypeNameExtractor extractor;
+	private Serializee serializee;
 
-	public GsonSerializer(VRaptorGsonBuilder builder, Writer writer, TypeNameExtractor extractor,
-			Serializee serializee) {
+	public GsonSerializer(VRaptorGsonBuilder builder, Writer writer, TypeNameExtractor extractor, Serializee serializee) {
 		this.writer = writer;
 		this.extractor = extractor;
 		this.builder = builder;
@@ -94,10 +93,8 @@ public class GsonSerializer implements SerializerBuilder {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	private Collection<Object> normalizeList(Object obj) {
-		Collection<Object> list;
-		list = (Collection<Object>) obj;
+		Collection<Object> list = (Collection<Object>) obj;
 		serializee.setElementTypes(findElementTypes(list));
 
 		return list;

@@ -21,7 +21,6 @@ package br.com.caelum.vraptor.ioc;
 
 import java.util.List;
 
-import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
@@ -35,7 +34,6 @@ import br.com.caelum.vraptor.core.ControllerQualifier;
 import br.com.caelum.vraptor.http.route.Route;
 import br.com.caelum.vraptor.http.route.Router;
 import br.com.caelum.vraptor.http.route.RoutesParser;
-import br.com.caelum.vraptor.view.LinkToHandler;
 
 @ApplicationScoped
 public class ControllerHandler{
@@ -55,11 +53,6 @@ public class ControllerHandler{
 		this.router = router;
 		this.parser = parser;
 		this.context = context;
-	}
-
-	@PostConstruct
-	public void configureLinkToHandler() {
-		new LinkToHandler(context, router).start();
 	}
 
 	public void handle(@Observes @ControllerQualifier BeanClass annotatedType) {

@@ -15,6 +15,8 @@
  */
 package br.com.caelum.vraptor.deserialization;
 
+import static com.google.common.base.Preconditions.checkArgument;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -38,6 +40,7 @@ public class DefaultDeserializers implements Deserializers {
 	public DefaultDeserializers() {
 	}
 
+	@Override
 	public Deserializer deserializerFor(String contentType, Container container) {
 		if (deserializers.containsKey(contentType)) {
 			return container.instanceFor(deserializers.get(contentType));
@@ -72,9 +75,8 @@ public class DefaultDeserializers implements Deserializers {
 	}
 
 	public void register(Class<? extends Deserializer> type) {
-		if (!type.isAnnotationPresent(Deserializes.class)) {
-			throw new IllegalArgumentException("You must annotate your deserializers with @Deserializes");
-		}
+		checkArgument(type.isAnnotationPresent(Deserializes.class),
+				"You must annotate your deserializers with @Deserializes");
 
 		String[] contentTypes = type.getAnnotation(Deserializes.class).value();
 
@@ -82,5 +84,4 @@ public class DefaultDeserializers implements Deserializers {
 			deserializers.put(contentType, type);
 		}
 	}
-
 }

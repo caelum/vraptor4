@@ -33,7 +33,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 /**
- * 
+ * A GSON deserializer.
  * @author Renan Reis
  * @author Guilherme Mangabeira
  */
@@ -60,6 +60,7 @@ public class GsonDeserialization implements Deserializer {
 		this.request = request;
 	}
 
+	@Override
 	public Object[] deserialize(InputStream inputStream, ControllerMethod method) {
 		Class<?>[] types = getTypes(method);
 		if (types.length == 0) {

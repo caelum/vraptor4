@@ -11,6 +11,8 @@ import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.List;
 
+import javax.enterprise.context.RequestScoped;
+import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
@@ -36,15 +38,21 @@ import com.google.gson.JsonParser;
  * @author Guilherme Mangabeira
  */
 
+@RequestScoped
 @Deserializes({ "application/json", "json" })
 public class GsonDeserialization implements Deserializer {
 
 	private static final Logger logger = LoggerFactory.getLogger(GsonDeserialization.class);
 
-	private final ParameterNameProvider paramNameProvider;
-	private final Collection<JsonDeserializer> adapters; 
-	private final HttpServletRequest request;
+	private ParameterNameProvider paramNameProvider;
+	private Collection<JsonDeserializer> adapters; 
+	private HttpServletRequest request;
 
+	@Deprecated // CDI eyes only
+	public GsonDeserialization() {
+	}
+	
+	@Inject
 	public GsonDeserialization(ParameterNameProvider paramNameProvider, List<JsonDeserializer> adapters, 
 			HttpServletRequest request) {
 		this.paramNameProvider = paramNameProvider;

@@ -1,4 +1,4 @@
-package br.com.caelum.vraptor.deserialization.gson;
+package br.com.caelum.vraptor.serialization.gson;
 
 import static java.util.Collections.singletonList;
 
@@ -11,7 +11,6 @@ import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 
 import br.com.caelum.vraptor.serialization.Serializee;
-import br.com.caelum.vraptor.serialization.gson.Exclusions;
 
 import com.google.gson.ExclusionStrategy;
 import com.google.gson.Gson;

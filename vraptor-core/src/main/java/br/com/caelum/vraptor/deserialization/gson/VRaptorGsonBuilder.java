@@ -19,7 +19,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSerializer;
 
 /**
- *
+ * Builder for JSON using GSON.
  * @author Renan Reis
  * @author Guilherme Mangabeira
  */

@@ -32,6 +32,7 @@ public class VRaptorGsonBuilder {
 	private GsonBuilder builder = new GsonBuilder();
 	private Collection<JsonSerializer> serializers;
 	private Collection<ExclusionStrategy> exclusions;
+	private Serializee serializee;
 
 	@Deprecated
 	public VRaptorGsonBuilder() {
@@ -40,6 +41,7 @@ public class VRaptorGsonBuilder {
 	@Inject
 	public VRaptorGsonBuilder(List<JsonSerializer> serializers, Serializee serializee) {
 		this.serializers = serializers;
+		this.serializee = serializee;
 		ExclusionStrategy exclusion = new Exclusions(serializee);
 		exclusions = singletonList(exclusion);
 	}
@@ -86,5 +88,9 @@ public class VRaptorGsonBuilder {
 		Type actualType = type.getActualTypeArguments()[0];
 
 		return (Class<?>) actualType;
+	}
+	
+	public Serializee getSerializee() {
+		return serializee;
 	}
 }

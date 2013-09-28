@@ -26,7 +26,7 @@ import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
 /**
- * Serialize {@link Calendar} using ISO8601 format.
+ * Serializes {@link Calendar} using ISO8601 format.
  * 
  * @author Renan Reis
  * @author Otávio Garcia

@@ -22,6 +22,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import javassist.CannotCompileException;
 import javassist.ClassPool;
@@ -67,6 +71,8 @@ public class LinkToHandler extends ForwardingMap<Class<?>, Object> {
 
 	private Proxifier proxifier;
 
+	private ConcurrentMap<Class<?>, Class<?>> interfaces = new ConcurrentHashMap<>();
+
 	@Deprecated // CDI eyes only
 	public LinkToHandler() {
 	}
@@ -88,16 +94,25 @@ public class LinkToHandler extends ForwardingMap<Class<?>, Object> {
 		return Collections.emptyMap();
 	}
 
+	private Lock lock = new ReentrantLock();
+
 	@Override
 	public Object get(Object key) {
 		BeanClass beanClass = (BeanClass) key;
 		final Class<?> controller = beanClass.getType();
-		String interfaceName = controller.getName() + "$linkTo";
-		Class<?> linkToInterface;
-		try {
-			linkToInterface = Class.forName(interfaceName);
-		} catch (ClassNotFoundException _) {
-			linkToInterface = createLinkToInterface(controller, interfaceName);
+		Class<?> linkToInterface = interfaces.get(controller);
+		if (linkToInterface == null) {
+			lock.lock();
+			try {
+				linkToInterface = interfaces.get(controller);
+				if (linkToInterface == null) {
+					String interfaceName = controller.getName() + "$linkTo";
+					linkToInterface = createLinkToInterface(controller, interfaceName);
+					interfaces.put(controller, linkToInterface);
+				}
+			} finally {
+				lock.unlock();
+			}
 		}
 		return proxifier.proxify(linkToInterface, new MethodInvocation<Object>() {
 			@Override

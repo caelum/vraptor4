@@ -4,7 +4,6 @@ import static java.util.Collections.singletonList;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.util.Arrays;
 import java.util.List;
 
 import javax.enterprise.context.Dependent;
@@ -83,9 +82,6 @@ public class VRaptorGsonBuilder {
 	}
 
 	private Class<?> getAdapterType(JsonSerializer<?> adapter) {
-		System.out.println(adapter.getClass());
-		System.out.println(Arrays.asList(adapter.getClass().getGenericInterfaces()));
-		
 		Type[] genericInterfaces = adapter.getClass().getGenericInterfaces();
 		ParameterizedType type = (ParameterizedType) genericInterfaces[0];
 		Type actualType = type.getActualTypeArguments()[0];

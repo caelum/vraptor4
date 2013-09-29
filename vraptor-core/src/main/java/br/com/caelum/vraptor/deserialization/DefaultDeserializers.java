@@ -48,8 +48,7 @@ public class DefaultDeserializers implements Deserializers {
 		return subpathDeserializerFor(contentType, container);
 	}
 
-	private Deserializer subpathDeserializerFor(String contentType,
-			Container container) {
+	private Deserializer subpathDeserializerFor(String contentType, Container container) {
 		if(contentType.contains("/")) {
 			String newType = removeChar(contentType, "/");
 			if (deserializers.containsKey(newType)) {
@@ -59,8 +58,7 @@ public class DefaultDeserializers implements Deserializers {
 		return subpathDeserializerForPlus(contentType, container);
 	}
 
-	private Deserializer subpathDeserializerForPlus(String contentType,
-			Container container) {
+	private Deserializer subpathDeserializerForPlus(String contentType, Container container) {
 		if(contentType.contains("+")) {
 			String newType = removeChar(contentType, "+");
 			if (deserializers.containsKey(newType)) {
@@ -75,12 +73,10 @@ public class DefaultDeserializers implements Deserializers {
 	}
 
 	public void register(Class<? extends Deserializer> type) {
-		checkArgument(type.isAnnotationPresent(Deserializes.class),
-				"You must annotate your deserializers with @Deserializes");
+		Deserializes deserializes = type.getAnnotation(Deserializes.class);
+		checkArgument(deserializes != null, "You must annotate your deserializers with @Deserializes");
 
-		String[] contentTypes = type.getAnnotation(Deserializes.class).value();
-
-		for (String contentType : contentTypes) {
+		for (String contentType : deserializes.value()) {
 			deserializers.put(contentType, type);
 		}
 	}

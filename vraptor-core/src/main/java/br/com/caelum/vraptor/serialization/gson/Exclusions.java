@@ -15,7 +15,7 @@
  */
 package br.com.caelum.vraptor.serialization.gson;
 
-import static br.com.caelum.vraptor.serialization.gson.GsonSerializer.isPrimitive;
+import static br.com.caelum.vraptor.serialization.gson.GsonSerializer.shouldSerializeField;
 
 import java.util.Map.Entry;
 
@@ -58,7 +58,7 @@ public class Exclusions implements ExclusionStrategy {
 		boolean skip = false;
 
 		if (!serializee.isRecursive())
-			skip = !isPrimitive(new Mirror().on(definedIn).reflect().field(fieldName).getType());
+			skip = !shouldSerializeField(new Mirror().on(definedIn).reflect().field(fieldName).getType());
 
 		return skip;
 	}

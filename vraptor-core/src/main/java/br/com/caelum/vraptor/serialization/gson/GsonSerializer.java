@@ -111,7 +111,7 @@ public class GsonSerializer implements SerializerBuilder {
 	private Set<Class<?>> findElementTypes(Collection<Object> list) {
 		Set<Class<?>> set = new HashSet<>();
 		for (Object element : list) {
-			if (element != null && !isPrimitive(element.getClass())) {
+			if (element != null && !shouldSerializeField(element.getClass())) {
 				set.add(element.getClass());
 			}
 		}
@@ -147,7 +147,7 @@ public class GsonSerializer implements SerializerBuilder {
 		return this;
 	}
 
-	static boolean isPrimitive(Class<?> type) {
+	static boolean shouldSerializeField(Class<?> type) {
 		return type.isPrimitive() || type.isEnum() || Number.class.isAssignableFrom(type) || type.equals(String.class)
 				|| Date.class.isAssignableFrom(type) || Calendar.class.isAssignableFrom(type)
 				|| Boolean.class.equals(type) || Character.class.equals(type);

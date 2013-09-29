@@ -55,12 +55,8 @@ public class Exclusions implements ExclusionStrategy {
 			}
 		}
 
-		boolean skip = false;
-
-		if (!serializee.isRecursive())
-			skip = !shouldSerializeField(new Mirror().on(definedIn).reflect().field(fieldName).getType());
-
-		return skip;
+		return !serializee.isRecursive() 
+				&& !shouldSerializeField(new Mirror().on(definedIn).reflect().field(fieldName).getType());
 	}
 
 	private boolean isCompatiblePath(Entry<String, Class<?>> path, Class<?> definedIn, String fieldName) {

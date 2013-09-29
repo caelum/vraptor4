@@ -58,7 +58,7 @@ public class LocalTimeConverter implements Converter<LocalTime> {
 		}
 		
 		try {
-			return getFormatter().parseDateTime(value).toLocalTime();
+			return getFormatter().parseLocalTime(value);
 		} catch (UnsupportedOperationException | IllegalArgumentException  e) {
 			throw new ConversionException(new ConversionMessage("is_not_a_valid_time", value));
 		}

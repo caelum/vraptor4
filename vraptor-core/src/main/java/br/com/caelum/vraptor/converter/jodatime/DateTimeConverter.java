@@ -59,7 +59,7 @@ public class DateTimeConverter implements Converter<DateTime> {
 		}
 		
 		try {
-			return getFormatter().parseDateTime(value).toDateTime();
+			return getFormatter().parseDateTime(value);
 		} catch (UnsupportedOperationException | IllegalArgumentException  e) {
 			throw new ConversionException(new ConversionMessage("is_not_a_valid_datetime", value));
 		}

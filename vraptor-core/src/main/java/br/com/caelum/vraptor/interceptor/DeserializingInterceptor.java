@@ -76,15 +76,14 @@ public class DeserializingInterceptor implements Interceptor {
 
 		String contentType = mime(request.getContentType());
 		if (!supported.isEmpty() && !supported.contains(contentType)) {
-			unsupported(String.format("Request with media type [%s]. Expecting one of %s.",
-					contentType, supported));
+			unsupported("Request with media type [%s]. Expecting one of %s.", contentType, supported);
 			return;
 		}
 
 		try {
 			Deserializer deserializer = deserializers.deserializerFor(contentType, container);
 			if (deserializer == null) {
-				unsupported(String.format("Unable to handle media type [%s]: no deserializer found.", contentType));
+				unsupported("Unable to handle media type [%s]: no deserializer found.", contentType);
 				return;
 			}
 
@@ -116,8 +115,8 @@ public class DeserializingInterceptor implements Interceptor {
 		return contentType;
 	}
 
-	private void unsupported(String message) {
-		this.status.unsupportedMediaType(message);
+	private void unsupported(String message, Object... params) {
+		this.status.unsupportedMediaType(String.format(message, params));
 	}
 
 }

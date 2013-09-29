@@ -34,7 +34,6 @@ public class AspectStyleInterceptorHandler implements InterceptorHandler {
 
 	public AspectStyleInterceptorHandler(Class<?> interceptorClass, StepInvoker stepInvoker,
 			Container container, InterceptorMethodParametersResolver parametersResolver) {
-
 		this.interceptorClass = interceptorClass;
 		this.stepInvoker = stepInvoker;
 		this.container = container;
@@ -44,7 +43,6 @@ public class AspectStyleInterceptorHandler implements InterceptorHandler {
 	}
 
 	private void configure() {
-
 		after = new NoStackParameterStepExecutor(stepInvoker, find(AfterCall.class), interceptorClass);
 		around = new AroundExecutor(stepInvoker,parametersResolver, find(AroundCall.class), interceptorClass);
 		before = new NoStackParameterStepExecutor(stepInvoker, find(BeforeCall.class), interceptorClass);
@@ -95,5 +93,4 @@ public class AspectStyleInterceptorHandler implements InterceptorHandler {
 	public String toString() {
 		return "AspectStyleInterceptorHandler for " + interceptorClass.getName();
 	}
-	
 }

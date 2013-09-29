@@ -16,7 +16,6 @@ public class CustomAcceptsExecutor implements StepExecutor<Boolean> {
 
 	public CustomAcceptsExecutor(StepInvoker stepInvoker,
 			Container container, Method method, Class<?> interceptorClass) {
-
 		this.stepInvoker = stepInvoker;
 		this.container = container;
 		this.method = method;

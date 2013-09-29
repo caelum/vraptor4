@@ -11,16 +11,12 @@ public class ControllerMethodFactory {
 	
 	private ControllerMethod method;
 	
-	
 	public void configure(@Observes ControllerMethod method){
 		this.method = method;
 	}
-	
 	
 	@Produces
 	public ControllerMethod getMethod() {
 		return method;
 	}
-	
-
 }

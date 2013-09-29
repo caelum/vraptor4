@@ -14,6 +14,10 @@ public class DefaultSimpleInterceptorStack implements SimpleInterceptorStack {
 	private ControllerMethod controllerMethod;
 	private ControllerInstance controllerInstance;
 
+	@Deprecated // CDI eyes only
+	public DefaultSimpleInterceptorStack() {
+	}
+
 	@Inject
 	public DefaultSimpleInterceptorStack(InterceptorStack delegate,
 			ControllerMethod controllerMethod,
@@ -24,11 +28,6 @@ public class DefaultSimpleInterceptorStack implements SimpleInterceptorStack {
 		this.controllerInstance = controllerInstance;
 	}
 	
-	@Deprecated
-	public DefaultSimpleInterceptorStack() {
-		// TODO Auto-generated constructor stub
-	}
-
 	@Override
 	public void next() {
 		delegate.next(controllerMethod, controllerInstance.getController());

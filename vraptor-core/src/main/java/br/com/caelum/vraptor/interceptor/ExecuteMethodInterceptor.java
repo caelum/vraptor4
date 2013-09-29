@@ -91,10 +91,10 @@ public class ExecuteMethodInterceptor implements Interceptor {
 				this.info.setResult(result);
 			}
 			stack.next(method, controllerInstance);
-		} catch (IllegalArgumentException e) {
+			
+		} catch (IllegalArgumentException | IllegalAccessException e) {
 			throw new InterceptionException(e);
-		} catch (IllegalAccessException e) {
-			throw new InterceptionException(e);
+			
 		} catch (InvocationTargetException e) {
 			Throwable cause = e.getCause();
 			if (cause instanceof ValidationException) {

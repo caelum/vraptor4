@@ -51,9 +51,8 @@ public class CustomAcceptsVerifier {
 	}
 	
 	public static List<Annotation> getCustomAcceptsAnnotations(Class<?> klass){
-		MirrorList<Annotation> constraints = new Mirror().on((AnnotatedElement) klass).reflectAll()
-				.annotations().matching(new AcceptsConstraintMatcher());		
-		return constraints;
+		return new Mirror().on((AnnotatedElement) klass).reflectAll()
+				.annotations().matching(new AcceptsConstraintMatcher());
 	}
 
 }

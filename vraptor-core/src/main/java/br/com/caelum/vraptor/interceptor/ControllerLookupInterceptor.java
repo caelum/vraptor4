@@ -56,7 +56,6 @@ public class ControllerLookupInterceptor implements Interceptor {
 	private ControllerMethod method;
 	private Event<ControllerMethod> event;
 	
-
 	//CDI eyes only
 	@Deprecated
 	public ControllerLookupInterceptor() {

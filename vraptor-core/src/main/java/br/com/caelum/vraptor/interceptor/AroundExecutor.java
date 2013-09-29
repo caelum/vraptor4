@@ -8,8 +8,7 @@ public class AroundExecutor implements StepExecutor<Object> {
 	private final InterceptorMethodParametersResolver parametersResolver;
 	private Method method;
 
-	public AroundExecutor(StepInvoker stepInvoker,
-			InterceptorMethodParametersResolver parametersResolver,
+	public AroundExecutor(StepInvoker stepInvoker, InterceptorMethodParametersResolver parametersResolver,
 			Method method, Class<?> interceptorClass) {
 		this.stepInvoker = stepInvoker;
 		this.parametersResolver = parametersResolver;

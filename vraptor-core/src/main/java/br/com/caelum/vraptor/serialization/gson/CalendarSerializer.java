@@ -18,32 +18,27 @@ package br.com.caelum.vraptor.serialization.gson;
 import java.lang.reflect.Type;
 import java.util.Calendar;
 
+import javax.enterprise.context.Dependent;
 import javax.xml.bind.DatatypeConverter;
 
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonParseException;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
 /**
- * Serializes and deserializes {@link Calendar} using ISO8601 format.
+ * Deserializes {@link Calendar} using ISO8601 format. This class must be in {@link Dependent} to allow us to
+ * discover generic type.
  * 
  * @author Renan Reis
  * @author Otávio Garcia
  * @since 4.0.0
  */
-public class CalendarGsonConverter implements JsonSerializer<Calendar>, JsonDeserializer<Calendar> {
+@Dependent
+public class CalendarSerializer implements JsonSerializer<Calendar> {
 
 	@Override
 	public JsonElement serialize(Calendar calendar, Type typeOfSrc, JsonSerializationContext context) {
 		return new JsonPrimitive(DatatypeConverter.printDateTime(calendar));
-	}
-
-	@Override
-	public Calendar deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-		return DatatypeConverter.parseDate(json.getAsString());
 	}
 }

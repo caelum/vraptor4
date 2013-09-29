@@ -43,7 +43,7 @@ public class GsonDeserialization implements Deserializer {
 	private static final Logger logger = LoggerFactory.getLogger(GsonDeserialization.class);
 
 	private ParameterNameProvider paramNameProvider;
-	private Collection<JsonDeserializer> adapters; 
+	private Collection<JsonDeserializer<?>> adapters; 
 	private HttpServletRequest request;
 
 	@Deprecated // CDI eyes only
@@ -51,7 +51,7 @@ public class GsonDeserialization implements Deserializer {
 	}
 	
 	@Inject
-	public GsonDeserialization(ParameterNameProvider paramNameProvider, List<JsonDeserializer> adapters, 
+	public GsonDeserialization(ParameterNameProvider paramNameProvider, List<JsonDeserializer<?>> adapters, 
 			HttpServletRequest request) {
 		this.paramNameProvider = paramNameProvider;
 		this.adapters = adapters;

@@ -4,10 +4,12 @@ import static java.util.Collections.singletonList;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.util.Collection;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.enterprise.context.Dependent;
+import javax.enterprise.inject.Any;
+import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 
 import br.com.caelum.vraptor.serialization.Serializee;
@@ -30,15 +32,15 @@ public class VRaptorGsonBuilder {
 	private String alias;
 
 	private GsonBuilder builder = new GsonBuilder();
-	private Collection<JsonSerializer> serializers;
-	private Collection<ExclusionStrategy> exclusions;
+	private Instance<JsonSerializer<?>> serializers;
+	private List<ExclusionStrategy> exclusions;
 
 	@Deprecated
 	public VRaptorGsonBuilder() {
 	}
 
 	@Inject
-	public VRaptorGsonBuilder(List<JsonSerializer> serializers) {
+	public VRaptorGsonBuilder(@Any Instance<JsonSerializer<?>> serializers) {
 		this.serializers = serializers;
 		ExclusionStrategy exclusion = new Exclusions(serializee);
 		exclusions = singletonList(exclusion);
@@ -81,6 +83,9 @@ public class VRaptorGsonBuilder {
 	}
 
 	private Class<?> getAdapterType(JsonSerializer<?> adapter) {
+		System.out.println(adapter.getClass());
+		System.out.println(Arrays.asList(adapter.getClass().getGenericInterfaces()));
+		
 		Type[] genericInterfaces = adapter.getClass().getGenericInterfaces();
 		ParameterizedType type = (ParameterizedType) genericInterfaces[0];
 		Type actualType = type.getActualTypeArguments()[0];

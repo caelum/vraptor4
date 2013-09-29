@@ -27,11 +27,12 @@ import br.com.caelum.vraptor.config.Configuration;
 import br.com.caelum.vraptor.controller.HttpMethod;
 import br.com.caelum.vraptor.http.FormatResolver;
 import br.com.caelum.vraptor.http.route.Router;
+import br.com.caelum.vraptor.ioc.cdi.FakeInstanceImpl;
 import br.com.caelum.vraptor.proxy.JavassistProxifier;
 import br.com.caelum.vraptor.serialization.DefaultRepresentationResult;
 import br.com.caelum.vraptor.serialization.JSONSerialization;
 import br.com.caelum.vraptor.serialization.Serialization;
-import br.com.caelum.vraptor.serialization.gson.MessageGsonConverter;
+import br.com.caelum.vraptor.serialization.gson.MessageSerializer;
 import br.com.caelum.vraptor.serialization.gson.VRaptorGsonBuilder;
 import br.com.caelum.vraptor.serialization.xstream.MessageConverter;
 import br.com.caelum.vraptor.serialization.xstream.XStreamBuilder;
@@ -179,10 +180,10 @@ public class DefaultStatusTest {
 		I18nMessage i18ned = new I18nMessage("category", "message");
 		i18ned.setBundle(new SingletonResourceBundle("message", "Something else"));
 
-		List<JsonSerializer> gsonSerializers = new ArrayList<>();
-		gsonSerializers.add(new MessageGsonConverter());
+		List<JsonSerializer<?>> gsonSerializers = new ArrayList<>();
+		gsonSerializers.add(new MessageSerializer());
 		
-		VRaptorGsonBuilder gsonBuilder = new VRaptorGsonBuilder(gsonSerializers);
+		VRaptorGsonBuilder gsonBuilder = new VRaptorGsonBuilder(new FakeInstanceImpl<>(gsonSerializers));
 		MockSerializationResult result = new MockSerializationResult(null, null, gsonBuilder) {
 			@Override
 			public <T extends View> T use(Class<T> view) {

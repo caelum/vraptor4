@@ -24,7 +24,6 @@ import javax.servlet.http.HttpServletResponse;
 import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
 import br.com.caelum.vraptor.serialization.JSONPSerialization;
 import br.com.caelum.vraptor.serialization.JSONSerialization;
-import br.com.caelum.vraptor.serialization.Serializee;
 import br.com.caelum.vraptor.serialization.SerializerBuilder;
 import br.com.caelum.vraptor.view.ResultException;
 
@@ -37,11 +36,9 @@ import br.com.caelum.vraptor.view.ResultException;
 @RequestScoped
 public class GsonJSONPSerialization implements JSONPSerialization {
 	
-	protected final Serializee serializee = new Serializee();
-	
-	protected HttpServletResponse response;
-	protected TypeNameExtractor extractor;
-	protected VRaptorGsonBuilder builder;
+	private HttpServletResponse response;
+	private TypeNameExtractor extractor;
+	private VRaptorGsonBuilder builder;
 	
 	@Deprecated
 	public GsonJSONPSerialization() {

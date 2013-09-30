@@ -21,11 +21,11 @@ import static java.util.Arrays.asList;
 import javax.inject.Inject;
 
 import br.com.caelum.vraptor.Accepts;
-import br.com.caelum.vraptor.BeforeCall;
-import br.com.caelum.vraptor.InterceptionException;
+import br.com.caelum.vraptor.AroundCall;
 import br.com.caelum.vraptor.Intercepts;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.controller.ControllerMethod;
+import br.com.caelum.vraptor.interceptor.SimpleInterceptorStack;
 import br.com.caelum.vraptor.musicjungle.controller.HomeController;
 import br.com.caelum.vraptor.musicjungle.dao.UserDao;
 import br.com.caelum.vraptor.musicjungle.model.User;
@@ -55,8 +55,8 @@ public class AuthorizationInterceptor{
     /**
      * Intercepts the request and checks if there is a user logged in.
      */
-	@BeforeCall
-    public void intercept() throws InterceptionException {
+	@AroundCall
+    public void intercept(SimpleInterceptorStack stack) {
 		
 		User current = null;
 		try {
@@ -73,6 +73,8 @@ public class AuthorizationInterceptor{
     		result.include("errors", asList(new ValidationMessage("user is not logged in", "user")));
     		result.redirectTo(HomeController.class).login();
     	}
+		
+		stack.next();
     }
 
 }

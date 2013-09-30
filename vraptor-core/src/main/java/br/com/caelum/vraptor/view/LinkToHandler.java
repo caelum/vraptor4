@@ -16,11 +16,22 @@
 package br.com.caelum.vraptor.view;
 
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
+import javassist.CannotCompileException;
+import javassist.ClassPool;
+import javassist.CtClass;
+import javassist.CtMethod;
+import javassist.CtNewMethod;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
@@ -35,6 +46,11 @@ import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.controller.BeanClass;
 import br.com.caelum.vraptor.http.route.Router;
+import br.com.caelum.vraptor.proxy.MethodInvocation;
+import br.com.caelum.vraptor.proxy.Proxifier;
+import br.com.caelum.vraptor.proxy.ProxyCreationException;
+import br.com.caelum.vraptor.proxy.SuperMethod;
+import br.com.caelum.vraptor.util.StringUtils;
 
 import com.google.common.collect.ForwardingMap;
 
@@ -53,14 +69,19 @@ public class LinkToHandler extends ForwardingMap<Class<?>, Object> {
 	private ServletContext context;
 	private Router router;
 
+	private Proxifier proxifier;
+
+	private ConcurrentMap<Class<?>, Class<?>> interfaces = new ConcurrentHashMap<>();
+
 	@Deprecated // CDI eyes only
 	public LinkToHandler() {
 	}
-	
+
 	@Inject
-	public LinkToHandler(ServletContext context, Router router) {
+	public LinkToHandler(ServletContext context, Router router, Proxifier proxifier) {
 		this.context = context;
 		this.router = router;
+		this.proxifier = proxifier;
 	}
 
 	@PostConstruct
@@ -73,43 +94,68 @@ public class LinkToHandler extends ForwardingMap<Class<?>, Object> {
 		return Collections.emptyMap();
 	}
 
+	private Lock lock = new ReentrantLock();
+
 	@Override
-	public LinkMethod get(Object key) {
+	public Object get(Object key) {
 		BeanClass beanClass = (BeanClass) key;
-		return new LinkMethod(beanClass.getType());
+		final Class<?> controller = beanClass.getType();
+		Class<?> linkToInterface = interfaces.get(controller);
+		if (linkToInterface == null) {
+			lock.lock();
+			try {
+				linkToInterface = interfaces.get(controller);
+				if (linkToInterface == null) {
+					String interfaceName = controller.getName() + "$linkTo";
+					linkToInterface = createLinkToInterface(controller, interfaceName);
+					interfaces.put(controller, linkToInterface);
+				}
+			} finally {
+				lock.unlock();
+			}
+		}
+		return proxifier.proxify(linkToInterface, new MethodInvocation<Object>() {
+			@Override
+			public Object intercept(Object proxy, Method method, Object[] args, SuperMethod superMethod) {
+				String methodName = StringUtils.decapitalize(method.getName().replaceFirst("^get", ""));
+				List<Object> params = args.length == 0 ? Collections.emptyList() : Arrays.asList((Object[]) args[0]);
+				return new Linker(controller, methodName, params).getLink();
+			}
+		});
 	}
 
-	class LinkMethod extends ForwardingMap<String, Linker> {
-
-		private final Class<?> controller;
-		public LinkMethod(Class<?> controller) {
-			this.controller = controller;
-		}
-		@Override
-		protected Map<String, Linker> delegate() {
-			return Collections.emptyMap();
-		}
-
-		@Override
-		public Linker get(Object key) {
-			return new Linker(controller, key.toString());
-		}
-
-		@Override
-		public String toString() {
-			throw new IllegalArgumentException("uncomplete linkTo[" + controller.getSimpleName() + "]. You must specify the method.");
+	private Class<?> createLinkToInterface(final Class<?> controller, String interfaceName) {
+		ClassPool pool = ClassPool.getDefault();
+		CtClass inter = pool.makeInterface(interfaceName);
+		try {
+			for(String name : getMethodNames(controller)) {
+				CtMethod method = CtNewMethod.make(String.format("abstract String %s(Object[] args);", name), inter);
+				method.setModifiers(method.getModifiers() | 128 /* Modifier.VARARGS */);
+				inter.addMethod(method);
+				CtMethod getter = CtNewMethod.make(String.format("abstract String get%s();", StringUtils.capitalize(name)), inter);
+				inter.addMethod(getter);
+			}
+			return inter.toClass();
+		} catch (CannotCompileException e) {
+			throw new ProxyCreationException(e);
 		}
 	}
 
-	class Linker extends ForwardingMap<Object, Linker> {
+	private Set<String> getMethodNames(Class<?> controller) {
+		Set<String> names = new HashSet<>();
+		for (Method method : new Mirror().on(controller).reflectAll().methods()) {
+			if (!method.getDeclaringClass().equals(Object.class)) {
+				names.add(method.getName());
+			}
+		}
+		return names;
+	}
+
+	class Linker {
 
 		private final List<Object> args;
 		private final String methodName;
 		private final Class<?> controller;
-
-		public Linker(Class<?> controller, String methodName) {
-			this(controller, methodName, new ArrayList<>());
-		}
 
 		public Linker(Class<?> controller, String methodName, List<Object> args) {
 			this.controller = controller;
@@ -117,20 +163,7 @@ public class LinkToHandler extends ForwardingMap<Class<?>, Object> {
 			this.args = args;
 		}
 
-		@Override
-		public Linker get(Object key) {
-			List<Object> newArgs = new ArrayList<>(args);
-			newArgs.add(key);
-			return new Linker(controller, methodName, newArgs);
-		}
-
-		@Override
-		protected Map<Object, Linker> delegate() {
-			return Collections.emptyMap();
-		}
-
-		@Override
-		public String toString() {
+		public String getLink() {
 			Method method = null;
 
 			if (getMethodsAmountWithSameName() > 1) {

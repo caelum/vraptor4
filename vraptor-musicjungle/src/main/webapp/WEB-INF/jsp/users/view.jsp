@@ -19,7 +19,7 @@
 			   <td>${music.description}</td>
 			   <td><fmt:message key="${music.type}"/></td>
 			   <td width="1px">
-					<form action="${linkTo[MusicOwnerController].addToMyList[userInfo.user][music]}" method="post">
+					<form action="${linkTo[MusicOwnerController].addToMyList(userInfo.user, music)}" method="post">
 						<input type="hidden" name="_method" value="PUT"/>
 						<button type="submit" class="btn btn-primary">
 							<span class="glyphicon glyphicon-plus"></span>
@@ -28,7 +28,7 @@
 					</form>
 			   </td>
 			   <td width="1px">
-					<a href="${linkTo[MusicController].download[music]}" class="btn btn-primary" download>
+					<a href="${linkTo[MusicController].download(music)}" class="btn btn-primary" download>
 						<span class="glyphicon glyphicon-download-alt"></span>
 						download
 					</a>

@@ -15,7 +15,7 @@
 </strong>
 
 <c:forEach items="${music.musicOwners}" var="mo" varStatus="s">
-	<a href="${linkTo[UsersController].show[mo.owner]}">${mo.owner.name}</a> 
+	<a href="${linkTo[UsersController].show(mo.owner)}">${mo.owner.name}</a>
 	${s.last ? '.' : ', ' }
 </c:forEach>
 

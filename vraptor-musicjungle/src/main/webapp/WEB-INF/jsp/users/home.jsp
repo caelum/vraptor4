@@ -63,10 +63,10 @@
 	<tbody>
 		<c:forEach var="music" items="${userInfo.user.musics}" varStatus="s">
 			<tr>
-				<td><a href="${linkTo[MusicController].show[music]}">${music.title}</a></td>
+				<td><a href="${linkTo[MusicController].show(music)}">${music.title}</a></td>
 				<td>${music.description}</td>
 				<td><fmt:message key="${music.type}"/></td>
-				<td><a href="${linkTo[MusicController].download[music]}" download>download</a></td>
+				<td><a href="${linkTo[MusicController].download(music)}" download>download</a></td>
 			</tr>
 		</c:forEach>
 	</tbody>

@@ -4,19 +4,23 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.when;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import javax.servlet.ServletContext;
 
 import net.vidageek.mirror.dsl.Mirror;
+import net.vidageek.mirror.exception.MirrorException;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor.controller.DefaultBeanClass;
 import br.com.caelum.vraptor.http.route.Router;
+import br.com.caelum.vraptor.proxy.JavassistProxifier;
 
 public class LinkToHandlerTest {
 	private @Mock ServletContext context;
@@ -29,7 +33,7 @@ public class LinkToHandlerTest {
 	@Before
 	public void setUp() throws Exception {
 		MockitoAnnotations.initMocks(this);
-		this.handler = new LinkToHandler(context, router);
+		this.handler = new LinkToHandler(context, router, new JavassistProxifier());
 		when(context.getContextPath()).thenReturn("/path");
 
 		this.method2params = new Mirror().on(TestController.class).reflect().method("method").withArgs(String.class, int.class);
@@ -37,93 +41,116 @@ public class LinkToHandlerTest {
 		this.anotherMethod = new Mirror().on(TestController.class).reflect().method("anotherMethod").withArgs(String.class, int.class);
 	}
 
+	@Ignore("Does it worth?")
 	@Test(expected = IllegalArgumentException.class)
 	public void shouldThrowExceptionWhenInvocationIsIncomplete() {
 		//${linkTo[TestController]}
 		handler.get(new DefaultBeanClass(TestController.class)).toString();
 	}
 
+	@Ignore("The method won't exist")
 	@Test(expected = IllegalArgumentException.class)
-	public void shouldThrowExceptionWhenInvokingInexistantMethod() {
+	public void shouldThrowExceptionWhenInvokingInexistantMethod() throws Throwable {
 		//${linkTo[TestController].nonExists}
-		handler.get(new DefaultBeanClass(TestController.class)).get("nonExists").toString();
+		invoke(handler.get(new DefaultBeanClass(TestController.class)), "nonExists");
 	}
 
 	@Test(expected = IllegalArgumentException.class)
-	public void shouldThrowExceptionWhenMethodIsAmbiguous() {
-		//${linkTo[TestController].method}
-		handler.get(new DefaultBeanClass(TestController.class)).get("method").toString();
+	public void shouldThrowExceptionWhenMethodIsAmbiguous() throws Throwable {
+		//${linkTo[TestController].method()}
+		invoke(handler.get(new DefaultBeanClass(TestController.class)), "method");
 	}
 
 	@Test(expected = IllegalArgumentException.class)
-	public void shouldThrowExceptionWhenUsingParametersOfWrongTypes() {
-		//${linkTo[TestController].method[123]}
-		handler.get(new DefaultBeanClass(TestController.class)).get("method").get(123).toString();
+	public void shouldThrowExceptionWhenUsingParametersOfWrongTypes() throws Throwable {
+		//${linkTo[TestController].method(123)}
+		invoke(handler.get(new DefaultBeanClass(TestController.class)), "method", 123);
 	}
 
 
 	@Test
-	public void shouldReturnWantedUrlWithoutArgs() {
+	public void shouldReturnWantedUrlWithoutArgs() throws Throwable {
+		when(router.urlFor(TestController.class, anotherMethod, new Object[2])).thenReturn("/expectedURL");
+
+		//${linkTo[TestController].anotherMethod()}
+		String uri = invoke(handler.get(new DefaultBeanClass(TestController.class)), "anotherMethod");
+		assertThat(uri, is("/path/expectedURL"));
+	}
+
+	@Test
+	public void shouldReturnWantedUrlWithoutArgsUsingPropertyAccess() throws Throwable {
 		when(router.urlFor(TestController.class, anotherMethod, new Object[2])).thenReturn("/expectedURL");
 
 		//${linkTo[TestController].anotherMethod}
-		String uri = handler.get(new DefaultBeanClass(TestController.class)).get("anotherMethod").toString();
+		String uri = invoke(handler.get(new DefaultBeanClass(TestController.class)), "getAnotherMethod");
 		assertThat(uri, is("/path/expectedURL"));
 	}
 
 	@Test
-	public void shouldReturnWantedUrlWithParamArgs() {
+	public void shouldReturnWantedUrlWithParamArgs() throws Throwable {
 		String a = "test";
 		int b = 3;
 		when(router.urlFor(TestController.class, method2params, new Object[]{a, b})).thenReturn("/expectedURL");
-		//${linkTo[TestController].method['test'][3]}
-		String uri = handler.get(new DefaultBeanClass(TestController.class)).get("method").get(a).get(b).toString();
+		//${linkTo[TestController].method('test', 3)}
+		String uri = invoke(handler.get(new DefaultBeanClass(TestController.class)), "method", a, b);
 		assertThat(uri, is("/path/expectedURL"));
 	}
 
 	@Test
-	public void shouldReturnWantedUrlWithPartialParamArgs() {
+	public void shouldReturnWantedUrlWithPartialParamArgs() throws Throwable {
 		String a = "test";
 		when(router.urlFor(TestController.class, anotherMethod, new Object[]{a, null})).thenReturn("/expectedUrl");
-		//${linkTo[TestController].anotherMethod['test']}
-		String uri = handler.get(new DefaultBeanClass(TestController.class)).get("anotherMethod").get(a).toString();
+		//${linkTo[TestController].anotherMethod('test')}
+		String uri = invoke(handler.get(new DefaultBeanClass(TestController.class)), "anotherMethod", a);
 		assertThat(uri, is("/path/expectedUrl"));
 	}
 
 	@Test
-	public void shouldReturnWantedUrlForOverrideMethodWithParamArgs() throws NoSuchMethodException, SecurityException {
+	public void shouldReturnWantedUrlForOverrideMethodWithParamArgs() throws Throwable {
 		String a = "test";
 		when(router.urlFor(SubGenericController.class, SubGenericController.class.getDeclaredMethod("method", new Class[]{String.class}), new Object[]{a})).thenReturn("/expectedURL");
-		//${linkTo[TestSubGenericController].method['test']}]
-		String uri = handler.get(new DefaultBeanClass(SubGenericController.class)).get("method").get(a).toString();
+		//${linkTo[TestSubGenericController].method('test')}]
+		String uri = invoke(handler.get(new DefaultBeanClass(SubGenericController.class)), "method", a);
 		assertThat(uri, is("/path/expectedURL"));
 	}
 
 	@Test
-	public void shouldReturnWantedUrlForOverrideMethodWithParialParamArgs() throws SecurityException, NoSuchMethodException {
+	public void shouldReturnWantedUrlForOverrideMethodWithParialParamArgs() throws Throwable {
 		String a = "test";
 		when(router.urlFor(SubGenericController.class, SubGenericController.class.getDeclaredMethod("anotherMethod", new Class[]{String.class, String.class}), new Object[]{a, null})).thenReturn("/expectedURL");
-		//${linkTo[TestSubGenericController].anotherMethod['test']}]
-		String uri = handler.get(new DefaultBeanClass(SubGenericController.class)).get("anotherMethod").get(a).toString();
+		//${linkTo[TestSubGenericController].anotherMethod('test')}]
+		String uri = invoke(handler.get(new DefaultBeanClass(SubGenericController.class)), "anotherMethod", a);
 		assertThat(uri, is("/path/expectedURL"));
 	}
 
 	@Test
-	public void shouldUseExactlyMatchedMethodIfTheMethodIsOverloaded() {
+	public void shouldUseExactlyMatchedMethodIfTheMethodIsOverloaded() throws Throwable {
 		String a = "test";
 		when(router.urlFor(TestController.class, method1param, a)).thenReturn("/expectedUrl");
-		//${linkTo[TestController].method['test']}
-		String uri = handler.get(new DefaultBeanClass(TestController.class)).get("method").get(a).toString();
+		//${linkTo[TestController].method('test')}
+		String uri = invoke(handler.get(new DefaultBeanClass(TestController.class)), "method", a);
 		assertThat(uri, is("/path/expectedUrl"));
 	}
 
 	@Test(expected = IllegalArgumentException.class)
-	public void shouldThrowExceptionWhenPassingMoreArgsThanMethodSupports() {
+	public void shouldThrowExceptionWhenPassingMoreArgsThanMethodSupports() throws Throwable {
 		String a = "test";
 		int b = 3;
 		String c = "anotherTest";
-		//${linkTo[TestController].anotherMethod['test'][3]['anotherTest']}
-		handler.get(new DefaultBeanClass(TestController.class)).get("anotherMethod").get(a).get(b).get(c).toString();
+		//${linkTo[TestController].anotherMethod('test', 3, 'anotherTest')}
+		invoke(handler.get(new DefaultBeanClass(TestController.class)), "anotherMethod", a, b, c);
+	}
+
+	private String invoke(Object obj, String methodName, Object...args) throws Throwable {
+		try {
+			Method method = new Mirror().on(obj.getClass()).reflect().method(methodName).withAnyArgs();
+			if (methodName.startsWith("get")) {
+				return method.invoke(obj).toString();
+			}
+			return method.invoke(obj, (Object) args).toString();
+		} catch (MirrorException | InvocationTargetException e) {
+			throw e.getCause() == null? e : e.getCause();
+		}
 	}
 
 	static class TestController {

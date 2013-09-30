@@ -15,6 +15,7 @@
  */
 package br.com.caelum.vraptor.interceptor;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -68,12 +69,10 @@ public class FlashInterceptor implements Interceptor {
 	@Override
 	public void intercept(InterceptorStack stack, ControllerMethod method, Object controllerInstance)
 			throws InterceptionException {
-		if (session.getAttribute(FLASH_INCLUDED_PARAMETERS) != null) {			
-			// TODO: concurrent modification exception if the same user makes two requests here
-			// but we dont want to add a syncrhonozed(session). not yet.
-			
-			@SuppressWarnings("unchecked")
-			Map<String, Object> parameters = (Map<String, Object>) session.getAttribute(FLASH_INCLUDED_PARAMETERS);
+		Map<String, Object> parameters = (Map<String, Object>) session.getAttribute(FLASH_INCLUDED_PARAMETERS);
+		
+		if (parameters != null) {
+			parameters = new HashMap<>(parameters);
 			
 			session.removeAttribute(FLASH_INCLUDED_PARAMETERS);
 			for (Entry<String, Object> parameter : parameters.entrySet()) {
@@ -86,7 +85,7 @@ public class FlashInterceptor implements Interceptor {
 				Map<String, Object> included = result.included();
 				if (!included.isEmpty()) {
 					try {
-						session.setAttribute(FLASH_INCLUDED_PARAMETERS, included);
+						session.setAttribute(FLASH_INCLUDED_PARAMETERS, new HashMap<>(included));
 					} catch (IllegalStateException e) {
 						LOGGER.info("HTTP Session was invalidated. It is not possible to include " +
 								"Result parameters on Flash Scope");

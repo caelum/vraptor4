@@ -373,7 +373,8 @@ public abstract class GenericContainerTest {
 					"xml", "text/xml", "application/x-www-form-urlencoded");
 
 				for (String type : types) {
-					assertThat(deserializers.deserializerFor(type, container), is(notNullValue()));
+					assertThat("deserializer not found: " + type,
+							deserializers.deserializerFor(type, container), is(notNullValue()));
 				}
 				return null;
 			}

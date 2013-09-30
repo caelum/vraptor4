@@ -15,7 +15,8 @@
  */
 package br.com.caelum.vraptor.serialization.xstream;
 
-import javax.enterprise.context.RequestScoped;
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.Dependent;
 
 import br.com.caelum.vraptor.validator.Message;
 
@@ -30,7 +31,7 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
  * @author Lucas Cavalcanti
  * @since 3.4.0
  */
-@RequestScoped
+@ApplicationScoped
 public class MessageConverter implements Converter {
 
 	public boolean canConvert(Class type) {

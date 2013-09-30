@@ -4,9 +4,19 @@ import static br.com.caelum.vraptor.view.Results.json;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
+import br.com.caelum.vraptor.ioc.cdi.FakeInstanceImpl;
+import br.com.caelum.vraptor.proxy.JavassistProxifier;
+import br.com.caelum.vraptor.serialization.gson.VRaptorGsonBuilder;
+import br.com.caelum.vraptor.serialization.xstream.XStreamBuilderImpl;
+
+import com.google.gson.JsonSerializer;
 
 public class MockSerializationResultTest {
 
@@ -15,7 +25,10 @@ public class MockSerializationResultTest {
 
 	@Before
 	public void setUp() throws Exception {
-		result = new MockSerializationResult();
+		List<JsonSerializer<?>> adapters = new ArrayList<>();
+		
+		result = new MockSerializationResult(new JavassistProxifier(), XStreamBuilderImpl.cleanInstance(), 
+				new VRaptorGsonBuilder(new FakeInstanceImpl<>(adapters)));
 	}
 	
 	public static class Car {
@@ -35,7 +48,7 @@ public class MockSerializationResultTest {
 	@Test 
 	public void shouldReturnStringWithObjectSerialized() throws Exception {
 		Car car = new Car("XXU-5569", "Caelum", "VW", "Polo");
-		String expectedResult = "{\"car\": {\"licensePlate\": \"XXU-5569\",\"owner\": \"Caelum\",\"make\": \"VW\",\"model\": \"Polo\"}}";
+		String expectedResult = "{\"car\":{\"licensePlate\":\"XXU-5569\",\"owner\":\"Caelum\",\"make\":\"VW\",\"model\":\"Polo\"}}";
 		result.use(json()).from(car).serialize();
 		Assert.assertThat(result.serializedResult(), is(equalTo(expectedResult)));
 	}

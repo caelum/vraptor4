@@ -10,6 +10,8 @@ import static org.mockito.Mockito.when;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import javax.servlet.http.HttpServletResponse;
@@ -19,12 +21,18 @@ import org.junit.Test;
 
 import br.com.caelum.vraptor.interceptor.DefaultTypeNameExtractor;
 import br.com.caelum.vraptor.ioc.Container;
+import br.com.caelum.vraptor.ioc.cdi.FakeInstanceImpl;
+import br.com.caelum.vraptor.serialization.gson.CalendarSerializer;
+import br.com.caelum.vraptor.serialization.gson.GsonJSONSerialization;
+import br.com.caelum.vraptor.serialization.gson.MessageSerializer;
+import br.com.caelum.vraptor.serialization.gson.VRaptorGsonBuilder;
 import br.com.caelum.vraptor.serialization.xstream.MessageConverter;
 import br.com.caelum.vraptor.serialization.xstream.XStreamBuilder;
 import br.com.caelum.vraptor.serialization.xstream.XStreamBuilderImpl;
-import br.com.caelum.vraptor.serialization.xstream.XStreamJSONSerialization;
 import br.com.caelum.vraptor.serialization.xstream.XStreamXMLSerialization;
 import br.com.caelum.vraptor.validator.SingletonResourceBundle;
+
+import com.google.gson.JsonSerializer;
 
 public class I18nMessageSerializationTest {
 	private I18nMessageSerialization serialization;
@@ -38,8 +46,14 @@ public class I18nMessageSerializationTest {
 		when(response.getWriter()).thenReturn(new PrintWriter(stream));
 		DefaultTypeNameExtractor extractor = new DefaultTypeNameExtractor();
 		XStreamBuilder builder = XStreamBuilderImpl.cleanInstance(new MessageConverter());
-		XStreamJSONSerialization jsonSerialization = new XStreamJSONSerialization(response, extractor, builder);
 		XStreamXMLSerialization xmlSerialization = new XStreamXMLSerialization(response, builder);
+		
+		List<JsonSerializer<?>> adapters = new ArrayList<>();
+		adapters.add(new CalendarSerializer());
+		adapters.add(new MessageSerializer());
+		
+		VRaptorGsonBuilder gsonBuilder =  new VRaptorGsonBuilder(new FakeInstanceImpl<>(adapters));
+		GsonJSONSerialization jsonSerialization = new GsonJSONSerialization(response, extractor, gsonBuilder);
 
 		Container container = mock(Container.class);
 		when(container.instanceFor(JSONSerialization.class)).thenReturn(jsonSerialization);
@@ -50,8 +64,8 @@ public class I18nMessageSerializationTest {
 	}
 
 	@Test
-	public void shouldCallXStreamJsonSerialization() {
-		String expectedResult = "{\"message\": {\"message\": \"Just another {0} in {1}\",\"category\": \"success\"}}";
+	public void shouldCallJsonSerialization() {
+		String expectedResult = "{\"message\":{\"category\":\"success\",\"message\":\"Just another {0} in {1}\"}}";
 		serialization.from("success", "message.cat").as(json());
 		assertThat(result(), is(equalTo(expectedResult)));
 	}

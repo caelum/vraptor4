@@ -15,6 +15,8 @@
  */
 package br.com.caelum.vraptor.deserialization;
 
+import static com.google.common.base.Preconditions.checkArgument;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -38,6 +40,7 @@ public class DefaultDeserializers implements Deserializers {
 	public DefaultDeserializers() {
 	}
 
+	@Override
 	public Deserializer deserializerFor(String contentType, Container container) {
 		if (deserializers.containsKey(contentType)) {
 			return container.instanceFor(deserializers.get(contentType));
@@ -45,8 +48,7 @@ public class DefaultDeserializers implements Deserializers {
 		return subpathDeserializerFor(contentType, container);
 	}
 
-	private Deserializer subpathDeserializerFor(String contentType,
-			Container container) {
+	private Deserializer subpathDeserializerFor(String contentType, Container container) {
 		if(contentType.contains("/")) {
 			String newType = removeChar(contentType, "/");
 			if (deserializers.containsKey(newType)) {
@@ -56,8 +58,7 @@ public class DefaultDeserializers implements Deserializers {
 		return subpathDeserializerForPlus(contentType, container);
 	}
 
-	private Deserializer subpathDeserializerForPlus(String contentType,
-			Container container) {
+	private Deserializer subpathDeserializerForPlus(String contentType, Container container) {
 		if(contentType.contains("+")) {
 			String newType = removeChar(contentType, "+");
 			if (deserializers.containsKey(newType)) {
@@ -72,15 +73,11 @@ public class DefaultDeserializers implements Deserializers {
 	}
 
 	public void register(Class<? extends Deserializer> type) {
-		if (!type.isAnnotationPresent(Deserializes.class)) {
-			throw new IllegalArgumentException("You must annotate your deserializers with @Deserializes");
-		}
+		Deserializes deserializes = type.getAnnotation(Deserializes.class);
+		checkArgument(deserializes != null, "You must annotate your deserializers with @Deserializes");
 
-		String[] contentTypes = type.getAnnotation(Deserializes.class).value();
-
-		for (String contentType : contentTypes) {
+		for (String contentType : deserializes.value()) {
 			deserializers.put(contentType, type);
 		}
 	}
-
 }

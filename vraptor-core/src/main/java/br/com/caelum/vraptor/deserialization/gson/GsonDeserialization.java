@@ -8,9 +8,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.util.Collection;
-import java.util.List;
 
+import javax.enterprise.inject.Any;
+import javax.enterprise.inject.Instance;
+import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
@@ -31,7 +32,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 /**
- * 
+ * A GSON deserializer.
  * @author Renan Reis
  * @author Guilherme Mangabeira
  */
@@ -41,17 +42,23 @@ public class GsonDeserialization implements Deserializer {
 
 	private static final Logger logger = LoggerFactory.getLogger(GsonDeserialization.class);
 
-	private final ParameterNameProvider paramNameProvider;
-	private final Collection<JsonDeserializer> adapters; 
-	private final HttpServletRequest request;
+	private ParameterNameProvider paramNameProvider;
+	private Instance<JsonDeserializer<?>> adapters; 
+	private HttpServletRequest request;
 
-	public GsonDeserialization(ParameterNameProvider paramNameProvider, List<JsonDeserializer> adapters, 
+	@Deprecated // CDI eyes only
+	public GsonDeserialization() {
+	}
+	
+	@Inject
+	public GsonDeserialization(ParameterNameProvider paramNameProvider, @Any Instance<JsonDeserializer<?>> adapters, 
 			HttpServletRequest request) {
 		this.paramNameProvider = paramNameProvider;
 		this.adapters = adapters;
 		this.request = request;
 	}
 
+	@Override
 	public Object[] deserialize(InputStream inputStream, ControllerMethod method) {
 		Class<?>[] types = getTypes(method);
 		if (types.length == 0) {

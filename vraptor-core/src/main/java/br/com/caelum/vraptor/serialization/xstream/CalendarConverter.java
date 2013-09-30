@@ -14,7 +14,7 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 /**
  * Converter for {@link Calendar} using ISO8601. 
  * @author Otávio Scherer Garcia
- * @since vraptor 4.0.0
+ * @since 4.0.0
  */
 @ApplicationScoped
 public class CalendarConverter implements Converter {

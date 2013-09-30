@@ -17,13 +17,13 @@ package br.com.caelum.vraptor.serialization.gson;
 
 import java.io.IOException;
 
+import javax.enterprise.context.RequestScoped;
+import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
 
-import br.com.caelum.vraptor.deserialization.gson.VRaptorGsonBuilder;
 import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
 import br.com.caelum.vraptor.serialization.JSONSerialization;
 import br.com.caelum.vraptor.serialization.NoRootSerialization;
-import br.com.caelum.vraptor.serialization.Serializee;
 import br.com.caelum.vraptor.serialization.Serializer;
 import br.com.caelum.vraptor.serialization.SerializerBuilder;
 import br.com.caelum.vraptor.view.ResultException;
@@ -34,29 +34,36 @@ import br.com.caelum.vraptor.view.ResultException;
  * @author Renan Reis
  * @author Guilherme Mangabeira
  */
+@RequestScoped
 public class GsonJSONSerialization implements JSONSerialization {
 
-	protected final HttpServletResponse response;
-	protected final TypeNameExtractor extractor;
-	protected final VRaptorGsonBuilder builder;
-	protected final Serializee serializee;
+	private HttpServletResponse response;
+	private TypeNameExtractor extractor;
+	private VRaptorGsonBuilder builder;
 
+	@Deprecated
+	public GsonJSONSerialization() {
+	}
+
+	@Inject
 	public GsonJSONSerialization(HttpServletResponse response, TypeNameExtractor extractor,
-			VRaptorGsonBuilder builder, Serializee serializee) {
+			VRaptorGsonBuilder builder) {
 		this.response = response;
 		this.extractor = extractor;
 		this.builder = builder;
-		this.serializee = serializee;
 	}
 
+	@Override
 	public boolean accepts(String format) {
 		return "json".equals(format);
 	}
 
+	@Override
 	public <T> Serializer from(T object) {
 		return from(object, null);
 	}
 
+	@Override
 	public <T> Serializer from(T object, String alias) {
 		response.setContentType("application/json");
 		return getSerializer().from(object, alias);
@@ -64,7 +71,7 @@ public class GsonJSONSerialization implements JSONSerialization {
 
 	protected SerializerBuilder getSerializer() {
 		try {
-			return new GsonSerializer(builder, response.getWriter(), extractor,  serializee);
+			return new GsonSerializer(builder, response.getWriter(), extractor);
 		} catch (IOException e) {
 			throw new ResultException("Unable to serialize data", e);
 		}
@@ -73,11 +80,13 @@ public class GsonJSONSerialization implements JSONSerialization {
 	/**
 	 * You can override this method for configuring Driver before serialization
 	 */
+	@Override
 	public <T> NoRootSerialization withoutRoot() {
 		builder.setWithoutRoot(true);
 		return this;
 	}
 
+	@Override
 	public JSONSerialization indented() {
 		builder.indented();
 		return this;

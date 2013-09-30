@@ -8,9 +8,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.util.Collection;
-import java.util.List;
 
+import javax.enterprise.inject.Any;
+import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
@@ -43,7 +43,7 @@ public class GsonDeserialization implements Deserializer {
 	private static final Logger logger = LoggerFactory.getLogger(GsonDeserialization.class);
 
 	private ParameterNameProvider paramNameProvider;
-	private Collection<JsonDeserializer<?>> adapters; 
+	private Instance<JsonDeserializer<?>> adapters; 
 	private HttpServletRequest request;
 
 	@Deprecated // CDI eyes only
@@ -51,7 +51,7 @@ public class GsonDeserialization implements Deserializer {
 	}
 	
 	@Inject
-	public GsonDeserialization(ParameterNameProvider paramNameProvider, List<JsonDeserializer<?>> adapters, 
+	public GsonDeserialization(ParameterNameProvider paramNameProvider, @Any Instance<JsonDeserializer<?>> adapters, 
 			HttpServletRequest request) {
 		this.paramNameProvider = paramNameProvider;
 		this.adapters = adapters;

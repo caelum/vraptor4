@@ -7,8 +7,6 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
-import org.hibernate.Session;
-
 @RequestScoped
 public class EntityManagerCreator {
 
@@ -25,7 +23,7 @@ public class EntityManagerCreator {
 	}
 
 	/**
-	 * Closes {@link Session}.
+	 * Closes {@link EntityManager}.
 	 */
 	public void close(@Disposes EntityManager entityManager) {
 		if (entityManager.isOpen()) {

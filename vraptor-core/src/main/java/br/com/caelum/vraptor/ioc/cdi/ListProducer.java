@@ -11,8 +11,11 @@ import javax.enterprise.inject.spi.BeanManager;
 import javax.enterprise.inject.spi.CDI;
 import javax.enterprise.inject.spi.InjectionPoint;
 
+/**
+ * @deprecated This class will be deleted very soon
+ */
 public class ListProducer {
-	
+
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Produces
 	public <T> List<T> producesList(InjectionPoint injectionPoint){
@@ -22,7 +25,7 @@ public class ListProducer {
 		BeanManager beanManager = currentCDI.getBeanManager();
 		Set<Bean<?>> beans = beanManager.getBeans(klass);
 		ArrayList objects = new ArrayList();
-		for (Bean<?> bean : beans) {			
+		for (Bean<?> bean : beans) {
 			objects.add(currentCDI.select(bean.getBeanClass()).get());
 		}
 		return objects;

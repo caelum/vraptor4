@@ -3,9 +3,11 @@ package br.com.caelum.vraptor.musicjungle.interceptor;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
+
 import br.com.caelum.vraptor.AroundCall;
 import br.com.caelum.vraptor.Intercepts;
 import br.com.caelum.vraptor.Validator;
+import br.com.caelum.vraptor.http.MutableResponse;
 import br.com.caelum.vraptor.interceptor.SimpleInterceptorStack;
 
 /**
@@ -21,8 +23,14 @@ public class TransactionInterceptor {
 	@Inject
 	private Validator validator;
 	
+	@Inject
+	private MutableResponse response;
+	
 	@AroundCall
     public void intercept(SimpleInterceptorStack stack) {
+		
+		addRedirectListener();
+		
 		EntityTransaction transaction = null;
         try {
             transaction = entityManager.getTransaction();
@@ -39,5 +47,16 @@ public class TransactionInterceptor {
             }
         }
     }
+	
+	private void addRedirectListener() {
+		response.addRedirectListener(new MutableResponse.RedirectListener() {
+			@Override
+			public void beforeRedirect() {
+				if (!validator.hasErrors() && entityManager.getTransaction().isActive()) {
+					entityManager.getTransaction().commit();
+				}
+			}
+		});
+	}
 
 }

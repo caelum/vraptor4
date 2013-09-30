@@ -65,7 +65,8 @@ public class AuthorizationInterceptor {
 		}
 
 		/**
-		 * You can use the result even in interceptors.
+		 * You can use the result even in interceptors, but you can't use Validator.onError* methods because
+		 * they throw ValidationException.
 		 */
 		if (current == null) {
 			// remember added parameters will survive one more request, when there is a redirect

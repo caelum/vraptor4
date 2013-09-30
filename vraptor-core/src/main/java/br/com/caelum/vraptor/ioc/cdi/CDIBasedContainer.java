@@ -36,10 +36,11 @@ public class CDIBasedContainer implements Container {
 	}
 
 	private <T> Instance<T> selectFromContainer(Class<T> type) {
-		if(cache.get(type)==null){
-			Instance<T> instance = CDI.current().select(type);
-			cache.putIfAbsent(type,instance);
+		Instance<T> instance = cache.get(type);
+		if(instance == null){
+			 instance = CDI.current().select(type);
+			cache.put(type,instance);
 		}
-		return cache.get(type);
+		return instance;
 	}
 }

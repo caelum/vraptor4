@@ -16,16 +16,10 @@
  */
 package br.com.caelum.vraptor.musicjungle.dao;
 
-import static org.hibernate.criterion.MatchMode.ANYWHERE;
-import static org.hibernate.criterion.Restrictions.ilike;
-
 import java.util.List;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
-
-import org.hibernate.Criteria;
-import org.hibernate.Session;
 
 import br.com.caelum.vraptor.musicjungle.model.Music;
 import br.com.caelum.vraptor.musicjungle.model.MusicOwner;
@@ -60,36 +54,31 @@ public class DefaultMusicDao implements MusicDao {
 
 	@Override
 	public void add(Music music) {
-		getSession().save(music);
+		entityManager.persist(music);
 	}
 
 	@Override
 	public void add(MusicOwner copy) {
-		getSession().save(copy);
+		entityManager.persist(copy);
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
 	public List<Music> searchSimilarTitle(String title) {
-		// creates a criteria based on the Music class and adds
-		// the "title" restriction and then returns the list.
-		Criteria criteria = getSession().createCriteria(Music.class);
-		return criteria.add(ilike("title", title, ANYWHERE)).list();
+		List<Music> musics = entityManager
+			.createQuery("select m from Music m where lower(m.title) like lower(:title)", Music.class)
+				.setParameter("title", "%" + title+ "%")
+				.getResultList();
+		return musics;
 	}
 	
 	@Override
 	public Music load(Music music) {
-		return (Music) getSession().load(Music.class, music.getId());
+		return (Music) entityManager.find(Music.class, music.getId());
 	}
 	
 	@Override
-	@SuppressWarnings("unchecked")
 	public List<Music> listAll() {
-		return getSession().createCriteria(Music.class).list();
-	}
-	
-	private Session getSession() {
-		return entityManager.unwrap(Session.class);
+		return entityManager.createQuery("select m from Music m", Music.class).getResultList();
 	}
 
 }

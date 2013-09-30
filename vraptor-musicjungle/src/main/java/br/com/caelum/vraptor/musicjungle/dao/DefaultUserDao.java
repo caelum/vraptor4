@@ -16,16 +16,13 @@
  */
 package br.com.caelum.vraptor.musicjungle.dao;
 
-import static org.hibernate.criterion.Restrictions.eq;
-
 import java.util.List;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 
-import org.hibernate.Criteria;
 import org.hibernate.Session;
-import org.hibernate.criterion.Projections;
 
 import br.com.caelum.vraptor.musicjungle.model.User;
 
@@ -49,7 +46,7 @@ public class DefaultUserDao implements UserDao {
 	 * with <code>@Component</code>. This class can be used
 	 * as dependency of another class, as well.
 	 * 
-	 * @param session Hibernate's Session.
+	 * @param entityManager JPA's EntityManager.
 	 */
 	@Inject
 	public DefaultUserDao(EntityManager entityManager) {
@@ -58,48 +55,51 @@ public class DefaultUserDao implements UserDao {
 
 	@Override
 	public User find(String login, String password) {
-		Criteria criteria = getSession().createCriteria(User.class);
-		criteria.add(eq("login", login)).add(eq("password", password));
-		return (User) criteria.uniqueResult();
+		try {
+			User user = entityManager
+				.createQuery("select u from User u where u.login = :login and u.password = :password", User.class)
+					.setParameter("login", login)
+					.setParameter("password", password)
+					.getSingleResult();
+			return user;
+		} catch (NoResultException e) {
+			return null;
+		}
 	}
 
 	@Override
 	public User find(String login) {
-        Criteria criteria = getSession().createCriteria(User.class);
-        criteria.add(eq("login", login));
-        
-		return (User) criteria.uniqueResult();
+		return entityManager.find(User.class, login);
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
 	public List<User> listAll() {
-		return getSession().createCriteria(User.class).list();
+		return entityManager.createQuery("select u from User u", User.class).getResultList();
 	}
 	
 	@Override
 	public boolean containsUserWithLogin(String login) {
-        Criteria criteria = getSession().createCriteria(User.class);
-        criteria.add(eq("login", login));
-        criteria.setProjection(Projections.count("id"));
-        
-		return ((Number) criteria.uniqueResult()).intValue() > 0;
+		Long count = entityManager
+				.createQuery("select count(u) from User u where u.login = :login", Long.class)
+				.setParameter("login", login)
+				.getSingleResult();
+		return count > 0;
 	}
 	
 	@Override
 	public void add(User user) {
-		getSession().save(user);
+		entityManager.persist(user);
 	}
 
 	@Override
 	public User refresh(User user) {
-		getSession().refresh(user);
+		getSession().refresh(user); // it's possible use Hibernate Session!
 		return user;
 	}
 
 	@Override
 	public void update(User user) {
-		getSession().update(user);
+		entityManager.merge(user);
 	}
 	
 	private Session getSession() {

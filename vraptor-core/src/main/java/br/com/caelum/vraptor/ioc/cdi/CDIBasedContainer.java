@@ -13,14 +13,14 @@ import br.com.caelum.vraptor.ioc.Container;
 @SuppressWarnings("rawtypes")
 public class CDIBasedContainer implements Container {
 	
-	private VRaptorCache<String,Instance> cache;
+	private VRaptorCache<Class<?>,Instance> cache;
 
 	@Deprecated
 	public CDIBasedContainer() {
 	}
 	
 	@Inject
-	public CDIBasedContainer(@LRU(capacity=1000) VRaptorCache<String, Instance> cache) {
+	public CDIBasedContainer(@LRU(capacity=1000) VRaptorCache<Class<?>, Instance> cache) {
 		super();
 		this.cache = cache;
 	}
@@ -36,11 +36,10 @@ public class CDIBasedContainer implements Container {
 	}
 
 	private <T> Instance<T> selectFromContainer(Class<T> type) {
-		String className = type.getCanonicalName();
-		if(cache.get(className)==null){
+		if(cache.get(type)==null){
 			Instance<T> instance = CDI.current().select(type);
-			cache.put(className,instance);
+			cache.putIfAbsent(type,instance);
 		}
-		return cache.get(className);
+		return cache.get(type);
 	}
 }

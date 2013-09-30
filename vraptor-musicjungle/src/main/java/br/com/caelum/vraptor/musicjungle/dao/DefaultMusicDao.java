@@ -22,6 +22,7 @@ import static org.hibernate.criterion.Restrictions.ilike;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.persistence.EntityManager;
 
 import org.hibernate.Criteria;
 import org.hibernate.Session;
@@ -40,7 +41,7 @@ import br.com.caelum.vraptor.musicjungle.model.MusicOwner;
  */
 public class DefaultMusicDao implements MusicDao {
 
-	private Session session;
+	private EntityManager entityManager;
 
 	//CDI eyes only
 	@Deprecated
@@ -50,21 +51,21 @@ public class DefaultMusicDao implements MusicDao {
 	/**
 	 * Creates a new MusicDao.
 	 *
-	 * @param session hibernate session.
+	 * @param entityManager JPA's EntityManager.
 	 */
 	@Inject
-	public DefaultMusicDao(Session session) {
-		this.session = session;
+	public DefaultMusicDao(EntityManager entityManager) {
+		this.entityManager = entityManager;
 	}
 
 	@Override
 	public void add(Music music) {
-		session.save(music);
+		getSession().save(music);
 	}
 
 	@Override
 	public void add(MusicOwner copy) {
-		session.save(copy);
+		getSession().save(copy);
 	}
 
 	@Override
@@ -72,19 +73,23 @@ public class DefaultMusicDao implements MusicDao {
 	public List<Music> searchSimilarTitle(String title) {
 		// creates a criteria based on the Music class and adds
 		// the "title" restriction and then returns the list.
-		Criteria criteria = session.createCriteria(Music.class);
+		Criteria criteria = getSession().createCriteria(Music.class);
 		return criteria.add(ilike("title", title, ANYWHERE)).list();
 	}
 	
 	@Override
 	public Music load(Music music) {
-		return (Music) session.load(Music.class, music.getId());
+		return (Music) getSession().load(Music.class, music.getId());
 	}
 	
 	@Override
 	@SuppressWarnings("unchecked")
 	public List<Music> listAll() {
-		return session.createCriteria(Music.class).list();
+		return getSession().createCriteria(Music.class).list();
+	}
+	
+	private Session getSession() {
+		return entityManager.unwrap(Session.class);
 	}
 
 }

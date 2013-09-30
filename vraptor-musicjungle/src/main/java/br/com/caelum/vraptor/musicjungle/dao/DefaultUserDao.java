@@ -21,6 +21,7 @@ import static org.hibernate.criterion.Restrictions.eq;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.persistence.EntityManager;
 
 import org.hibernate.Criteria;
 import org.hibernate.Session;
@@ -36,7 +37,7 @@ import br.com.caelum.vraptor.musicjungle.model.User;
  */
 public class DefaultUserDao implements UserDao {
 
-	private Session session;
+	private EntityManager entityManager;
 
 	@Deprecated // CDI eyes only
 	public DefaultUserDao() {
@@ -51,20 +52,20 @@ public class DefaultUserDao implements UserDao {
 	 * @param session Hibernate's Session.
 	 */
 	@Inject
-	public DefaultUserDao(Session session) {
-		this.session = session;
+	public DefaultUserDao(EntityManager entityManager) {
+		this.entityManager = entityManager;
 	}
 
 	@Override
 	public User find(String login, String password) {
-		Criteria criteria = session.createCriteria(User.class);
+		Criteria criteria = getSession().createCriteria(User.class);
 		criteria.add(eq("login", login)).add(eq("password", password));
 		return (User) criteria.uniqueResult();
 	}
 
 	@Override
 	public User find(String login) {
-        Criteria criteria = session.createCriteria(User.class);
+        Criteria criteria = getSession().createCriteria(User.class);
         criteria.add(eq("login", login));
         
 		return (User) criteria.uniqueResult();
@@ -73,12 +74,12 @@ public class DefaultUserDao implements UserDao {
 	@Override
 	@SuppressWarnings("unchecked")
 	public List<User> listAll() {
-		return session.createCriteria(User.class).list();
+		return getSession().createCriteria(User.class).list();
 	}
 	
 	@Override
 	public boolean containsUserWithLogin(String login) {
-        Criteria criteria = session.createCriteria(User.class);
+        Criteria criteria = getSession().createCriteria(User.class);
         criteria.add(eq("login", login));
         criteria.setProjection(Projections.count("id"));
         
@@ -87,17 +88,21 @@ public class DefaultUserDao implements UserDao {
 	
 	@Override
 	public void add(User user) {
-		session.save(user);
+		getSession().save(user);
 	}
 
 	@Override
 	public User refresh(User user) {
-		session.refresh(user);
+		getSession().refresh(user);
 		return user;
 	}
 
 	@Override
 	public void update(User user) {
-		session.update(user);
+		getSession().update(user);
+	}
+	
+	private Session getSession() {
+		return entityManager.unwrap(Session.class);
 	}
 }

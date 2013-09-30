@@ -25,16 +25,15 @@ import javax.enterprise.inject.Alternative;
 import br.com.caelum.vraptor.View;
 import br.com.caelum.vraptor.http.FormatResolver;
 import br.com.caelum.vraptor.interceptor.DefaultTypeNameExtractor;
-import br.com.caelum.vraptor.proxy.JavassistProxifier;
 import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.serialization.DefaultRepresentationResult;
 import br.com.caelum.vraptor.serialization.JSONSerialization;
 import br.com.caelum.vraptor.serialization.RepresentationResult;
 import br.com.caelum.vraptor.serialization.Serialization;
 import br.com.caelum.vraptor.serialization.XMLSerialization;
+import br.com.caelum.vraptor.serialization.gson.GsonJSONSerialization;
+import br.com.caelum.vraptor.serialization.gson.VRaptorGsonBuilder;
 import br.com.caelum.vraptor.serialization.xstream.XStreamBuilder;
-import br.com.caelum.vraptor.serialization.xstream.XStreamBuilderImpl;
-import br.com.caelum.vraptor.serialization.xstream.XStreamJSONSerialization;
 import br.com.caelum.vraptor.serialization.xstream.XStreamXMLSerialization;
 import br.com.caelum.vraptor.view.EmptyResult;
 
@@ -53,31 +52,16 @@ public class MockSerializationResult extends MockResult {
 	private Serialization serialization;
 	private MockHttpServletResponse response;
 	private DefaultTypeNameExtractor extractor;
-	private XStreamBuilder builder;
+	private XStreamBuilder xstreambuilder;
+	private VRaptorGsonBuilder gsonBuilder;
 	
 	
-	public MockSerializationResult(Proxifier proxifier) {
-		this(proxifier, XStreamBuilderImpl.cleanInstance());
-	}
-
-	public MockSerializationResult(Proxifier proxifier, XStreamBuilder builder) {
+	public MockSerializationResult(Proxifier proxifier, XStreamBuilder xstreambuilder, VRaptorGsonBuilder gsonBuilder) {
 		super(proxifier);
 		this.response = new MockHttpServletResponse();
 		this.extractor = new DefaultTypeNameExtractor();
-		this.builder = builder;
-	}
-
-	public MockSerializationResult() {
-		this(new JavassistProxifier());
-	}
-	
-	public MockSerializationResult(MockHttpServletResponse response) {
-		this();
-		this.response = response;
-	}
-	
-	public MockSerializationResult(XStreamBuilder builder) {
-		this(new JavassistProxifier(), builder);
+		this.xstreambuilder = xstreambuilder;
+		this.gsonBuilder = gsonBuilder;
 	}
 
 	public <T extends View> T use(final Class<T> view) {
@@ -90,17 +74,17 @@ public class MockSerializationResult extends MockResult {
 
 	private <T extends View> T instanceView(Class<T> view){
 		if (view.isAssignableFrom(JSONSerialization.class)){
-			this.serialization = new XStreamJSONSerialization(response, extractor, builder);
+			serialization = new GsonJSONSerialization(response, extractor, gsonBuilder);
 			return view.cast(serialization);
 		}
 		
 		if (view.isAssignableFrom(XMLSerialization.class)){
-			this.serialization = new XStreamXMLSerialization(response, builder);
+			serialization = new XStreamXMLSerialization(response, xstreambuilder);
 			return view.cast(serialization);
 		}
 		
 		if (view.isAssignableFrom(RepresentationResult.class)) {
-			this.serialization = new XStreamXMLSerialization(response, builder);
+			serialization = new XStreamXMLSerialization(response, xstreambuilder);
 			return view.cast(new DefaultRepresentationResult(new FormatResolver() {
 				public String getAcceptFormat() {
 					return "xml";

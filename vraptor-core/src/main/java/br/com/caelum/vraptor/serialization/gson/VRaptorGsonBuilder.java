@@ -1,15 +1,17 @@
-package br.com.caelum.vraptor.deserialization.gson;
+package br.com.caelum.vraptor.serialization.gson;
+
+import static java.util.Collections.singletonList;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 
 import javax.enterprise.context.Dependent;
+import javax.enterprise.inject.Any;
+import javax.enterprise.inject.Instance;
+import javax.inject.Inject;
 
 import br.com.caelum.vraptor.serialization.Serializee;
-import br.com.caelum.vraptor.serialization.gson.Exclusions;
 
 import com.google.gson.ExclusionStrategy;
 import com.google.gson.Gson;
@@ -17,24 +19,30 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSerializer;
 
 /**
- *
+ * Builder for JSON using GSON.
  * @author Renan Reis
  * @author Guilherme Mangabeira
  */
 @Dependent
 public class VRaptorGsonBuilder {
 
+	private final Serializee serializee = new Serializee();
 	private boolean withoutRoot;
 	private String alias;
 
-	protected final GsonBuilder builder = new GsonBuilder();
-	private final Collection<JsonSerializer> serializers;
-	private final Collection<ExclusionStrategy> exclusions;
+	private GsonBuilder builder = new GsonBuilder();
+	private Instance<JsonSerializer<?>> serializers;
+	private List<ExclusionStrategy> exclusions;
 
-	public VRaptorGsonBuilder(List<JsonSerializer> serializers, Serializee serializee) {
+	@Deprecated
+	public VRaptorGsonBuilder() {
+	}
+
+	@Inject
+	public VRaptorGsonBuilder(@Any Instance<JsonSerializer<?>> serializers) {
 		this.serializers = serializers;
 		ExclusionStrategy exclusion = new Exclusions(serializee);
-		this.exclusions = Arrays.asList(exclusion);
+		exclusions = singletonList(exclusion);
 	}
 
 	public boolean isWithoutRoot() {
@@ -79,5 +87,9 @@ public class VRaptorGsonBuilder {
 		Type actualType = type.getActualTypeArguments()[0];
 
 		return (Class<?>) actualType;
+	}
+	
+	public Serializee getSerializee() {
+		return serializee;
 	}
 }

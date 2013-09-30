@@ -16,8 +16,9 @@
 package br.com.caelum.vraptor.serialization;
 
 import static br.com.caelum.vraptor.view.Results.status;
+import static java.util.Collections.sort;
 
-import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.enterprise.context.RequestScoped;
@@ -60,7 +61,7 @@ public class DefaultRepresentationResult implements RepresentationResult {
 	 * @since 3.4.0
 	 */
 	protected void sortSerializations() {
-		Collections.sort(this.serializations, new PackageComparator());
+		sort(serializations, new ApplicationPackageFirst());
 	}
 
 	public <T> Serializer from(T object, String alias) {
@@ -83,5 +84,24 @@ public class DefaultRepresentationResult implements RepresentationResult {
 		result.use(status()).notAcceptable();
 
 		return new IgnoringSerializer();
+	}
+	
+	/**
+	 * Comparator that give more priority to application classes.
+	 * @author A.C de Souza
+	 * @since 3.4.0
+	 */
+	static final class ApplicationPackageFirst implements Comparator<Serialization> {
+		
+		private static final String VRAPTOR_PACKAGE = "br.com.caelum.vraptor.serialization";
+		
+		private int priority(Serialization s) {
+			return s.getClass().getPackage().getName().startsWith(VRAPTOR_PACKAGE)?  1 : 0;
+		}
+
+		@Override
+		public int compare(Serialization o1, Serialization o2) {
+			return priority(o1) - priority(o2);
+		}
 	}
 }

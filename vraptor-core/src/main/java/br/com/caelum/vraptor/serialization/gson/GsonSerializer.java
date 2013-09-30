@@ -27,57 +27,52 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import br.com.caelum.vraptor.deserialization.gson.VRaptorGsonBuilder;
 import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
-import br.com.caelum.vraptor.serialization.Serializee;
 import br.com.caelum.vraptor.serialization.Serializer;
 import br.com.caelum.vraptor.serialization.SerializerBuilder;
 
 import com.google.gson.Gson;
 
 /**
- * A SerializerBuilder based on Gson
+ * A SerializerBuilder based on Gson.
  *
  * @author Renan Reis
  * @author Guilherme Mangabeira
  */
 public class GsonSerializer implements SerializerBuilder {
 
-	private final Writer writer;
-	private final TypeNameExtractor extractor;
-	private final Serializee serializee;
-	protected VRaptorGsonBuilder builder;
+	private VRaptorGsonBuilder builder;
+	private Writer writer;
+	private TypeNameExtractor extractor;
 
-	public GsonSerializer(VRaptorGsonBuilder builder, Writer writer, TypeNameExtractor extractor,
-			Serializee serializee) {
+	public GsonSerializer(VRaptorGsonBuilder builder, Writer writer, TypeNameExtractor extractor) {
 		this.writer = writer;
 		this.extractor = extractor;
 		this.builder = builder;
-		this.serializee = serializee;
 	}
 
 	@Override
 	public Serializer exclude(String... names) {
-		serializee.excludeAll(names);
+		builder.getSerializee().excludeAll(names);
 		return this;
 	}
 
 	@Override
 	public Serializer excludeAll() {
-		serializee.excludeAll();
+		builder.getSerializee().excludeAll();
 		return this;
 	}
 
 	private void preConfigure(Object obj, String alias) {
 		checkNotNull(obj, "You can't serialize null objects");
 
-		serializee.setRootClass(obj.getClass());
+		builder.getSerializee().setRootClass(obj.getClass());
 
 		if (alias == null) {
 			if (Collection.class.isInstance(obj) && (List.class.isInstance(obj))) {
 				alias = "list";
 			} else {
-				alias = extractor.nameFor(serializee.getRootClass());
+				alias = extractor.nameFor(builder.getSerializee().getRootClass());
 			}
 		}
 
@@ -88,17 +83,15 @@ public class GsonSerializer implements SerializerBuilder {
 
 	private void setRoot(Object obj) {
 		if (Collection.class.isInstance(obj)) {
-			this.serializee.setRoot(normalizeList(obj));
+			builder.getSerializee().setRoot(normalizeList(obj));
 		} else {
-			this.serializee.setRoot(obj);
+			builder.getSerializee().setRoot(obj);
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	private Collection<Object> normalizeList(Object obj) {
-		Collection<Object> list;
-		list = (Collection<Object>) obj;
-		serializee.setElementTypes(findElementTypes(list));
+		Collection<Object> list = (Collection<Object>) obj;
+		builder.getSerializee().setElementTypes(findElementTypes(list));
 
 		return list;
 	}
@@ -118,7 +111,7 @@ public class GsonSerializer implements SerializerBuilder {
 	private Set<Class<?>> findElementTypes(Collection<Object> list) {
 		Set<Class<?>> set = new HashSet<>();
 		for (Object element : list) {
-			if (element != null && !isPrimitive(element.getClass())) {
+			if (element != null && !shouldSerializeField(element.getClass())) {
 				set.add(element.getClass());
 			}
 		}
@@ -127,17 +120,17 @@ public class GsonSerializer implements SerializerBuilder {
 
 	@Override
 	public Serializer include(String... fields) {
-		serializee.includeAll(fields);
+		builder.getSerializee().includeAll(fields);
 		return this;
 	}
 
 	@Override
 	public void serialize() {
-		builder.setExclusionStrategies(new Exclusions(serializee));
+		builder.setExclusionStrategies(new Exclusions(builder.getSerializee()));
 		Gson gson = builder.create();
 		
 		String alias = builder.getAlias();
-		Object root = serializee.getRoot();
+		Object root = builder.getSerializee().getRoot();
 
 		if (builder.isWithoutRoot()) {
 			gson.toJson(root, writer);
@@ -150,11 +143,11 @@ public class GsonSerializer implements SerializerBuilder {
 	
 	@Override
 	public Serializer recursive() {
-		this.serializee.setRecursive(true);
+		builder.getSerializee().setRecursive(true);
 		return this;
 	}
 
-	static boolean isPrimitive(Class<?> type) {
+	static boolean shouldSerializeField(Class<?> type) {
 		return type.isPrimitive() || type.isEnum() || Number.class.isAssignableFrom(type) || type.equals(String.class)
 				|| Date.class.isAssignableFrom(type) || Calendar.class.isAssignableFrom(type)
 				|| Boolean.class.equals(type) || Character.class.equals(type);

@@ -24,11 +24,10 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import br.com.caelum.vraptor.deserialization.gson.VRaptorGsonBuilder;
 import br.com.caelum.vraptor.interceptor.DefaultTypeNameExtractor;
+import br.com.caelum.vraptor.ioc.cdi.FakeInstanceImpl;
 import br.com.caelum.vraptor.serialization.JSONPSerialization;
 import br.com.caelum.vraptor.serialization.JSONSerialization;
-import br.com.caelum.vraptor.serialization.Serializee;
 
 import com.google.common.collect.ForwardingCollection;
 import com.google.common.collect.Lists;
@@ -41,13 +40,10 @@ import com.google.gson.JsonSerializer;
 
 public class GsonJSONSerializationTest {
 
-	private Serializee serializee = new Serializee();
-
 	private JSONSerialization serialization;
 	private ByteArrayOutputStream stream;
 	private HttpServletResponse response;
 	private DefaultTypeNameExtractor extractor;
-	private List<JsonSerializer> adapters;
 
 	private VRaptorGsonBuilder builder;
 
@@ -59,12 +55,12 @@ public class GsonJSONSerializationTest {
 		when(response.getWriter()).thenReturn(new PrintWriter(stream));
 		extractor = new DefaultTypeNameExtractor();
 
-		adapters = new ArrayList<>();
+		List<JsonSerializer<?>> adapters = new ArrayList<>();
 		adapters.add(new CalendarSerializer());
 		adapters.add(new CollectionSerializer());
 
-		builder = new VRaptorGsonBuilder(adapters, serializee);
-		this.serialization = new GsonJSONSerialization(response, extractor, builder, serializee);
+		builder = new VRaptorGsonBuilder(new FakeInstanceImpl<>(adapters));
+		this.serialization = new GsonJSONSerialization(response, extractor, builder);
 	}
 
 	public static class Address {
@@ -457,7 +453,7 @@ public class GsonJSONSerializationTest {
 	
 	@Test
 	public void shouldSerializeWithCallback() {
-		JSONPSerialization serialization = new GsonJSONPSerialization(response, extractor, builder, serializee);
+		JSONPSerialization serialization = new GsonJSONPSerialization(response, extractor, builder);
 		
 		String expectedResult = "calculate({\"order\":{\"price\":15.0}})";
 		Order order = new Order(new Client("nykolas lima"), 15.0, "gift bags, please");

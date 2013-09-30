@@ -40,11 +40,12 @@ public class XStreamSerializer implements SerializerBuilder {
 
 	private final XStream xstream;
 	private final Writer writer;
-	private final Serializee serializee = new Serializee();
+	private final Serializee serializee;
 
 	public XStreamSerializer(XStream xstream, Writer writer) {
 		this.xstream = xstream;
 		this.writer = writer;
+		this.serializee = ((VRaptorXStream) xstream).getVRaptorMapper().getSerializee();
 	}
 
 	public Serializer exclude(String... names) {
@@ -88,7 +89,8 @@ public class XStreamSerializer implements SerializerBuilder {
 	}
 
 	private boolean hasDefaultConverter() {
-		return xstream.getConverterLookup().lookupConverterForType(serializee.getRootClass()).equals(xstream.getConverterLookup().lookupConverterForType(Object.class));
+		return xstream.getConverterLookup().lookupConverterForType(serializee.getRootClass())
+				.equals(xstream.getConverterLookup().lookupConverterForType(Object.class));
 	}
 
 	private void setAlias(Object obj, String alias) {
@@ -126,9 +128,6 @@ public class XStreamSerializer implements SerializerBuilder {
 	}
 
 	public void serialize() {
-		VRaptorClassMapper mapper = ((VRaptorXStream) xstream).getVRaptorMapper();
-		mapper.setSerializee(serializee);
-		
 		xstream.toXML(serializee.getRoot(), writer);
 	}
 

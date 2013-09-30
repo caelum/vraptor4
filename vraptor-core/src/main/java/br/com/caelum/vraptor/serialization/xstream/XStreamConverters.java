@@ -15,6 +15,8 @@
  */
 package br.com.caelum.vraptor.serialization.xstream;
 
+import static com.google.common.base.Objects.firstNonNull;
+
 import java.util.List;
 
 import javax.enterprise.context.RequestScoped;
@@ -23,7 +25,6 @@ import javax.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.converters.Converter;
@@ -49,29 +50,24 @@ public class XStreamConverters {
 	}
 
 	@Inject
-	public XStreamConverters(List<Converter> converters, List<SingleValueConverter> singleValueConverters)
-	{
-		this.converters = Objects.firstNonNull(converters, Lists.<Converter>newArrayList());
-		this.singleValueConverters = Objects.firstNonNull(singleValueConverters, Lists.<SingleValueConverter>newArrayList());
+	public XStreamConverters(List<Converter> converters, List<SingleValueConverter> singleValueConverters) {
+		this.converters = firstNonNull(converters, Lists.<Converter>newArrayList());
+		this.singleValueConverters = firstNonNull(singleValueConverters, Lists.<SingleValueConverter>newArrayList());
 	}
 
 	/**
 	 * Method used to register all the XStream converters scanned to a XStream instance
 	 * @param xstream
 	 */
-	public void registerComponents(XStream xstream)
-	{
-		for(Converter converter : converters)
-		{
+	public void registerComponents(XStream xstream) {
+		for(Converter converter : converters) {
 			xstream.registerConverter(converter);
 			logger.debug("registered Xstream converter for {}", converter.getClass().getName());
 		}
 
-		for(SingleValueConverter converter : singleValueConverters)
-		{
+		for(SingleValueConverter converter : singleValueConverters) {
 			xstream.registerConverter(converter);
 			logger.debug("registered Xstream converter for {}", converter.getClass().getName());
 		}
 	}
-
 }

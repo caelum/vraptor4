@@ -22,6 +22,7 @@ import static java.nio.charset.Charset.defaultCharset;
 import java.io.UnsupportedEncodingException;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.TransientReference;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -44,7 +45,7 @@ public class EncodingHandler {
 	}
 
 	@Inject
-	public EncodingHandler(BasicConfiguration configuration) {
+	public EncodingHandler(@TransientReference BasicConfiguration configuration) {
 		encoding = configuration.getEncoding();
 		if (encoding == null) {
 			encoding = defaultCharset().name();

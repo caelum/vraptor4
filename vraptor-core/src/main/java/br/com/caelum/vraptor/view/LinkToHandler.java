@@ -125,6 +125,12 @@ public class LinkToHandler extends ForwardingMap<Class<?>, Object> {
 	}
 
 	private Class<?> createLinkToInterface(final Class<?> controller, String interfaceName) {
+		try {
+			return Class.forName(interfaceName);
+		} catch (ClassNotFoundException e1) {
+			// ok, continue
+		}
+
 		ClassPool pool = ClassPool.getDefault();
 		CtClass inter = pool.makeInterface(interfaceName);
 		try {

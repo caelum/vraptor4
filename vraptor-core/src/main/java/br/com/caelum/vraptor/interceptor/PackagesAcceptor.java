@@ -3,12 +3,9 @@ package br.com.caelum.vraptor.interceptor;
 import java.util.Arrays;
 import java.util.List;
 
-import javax.enterprise.inject.Vetoed;
-
 import br.com.caelum.vraptor.controller.ControllerInstance;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 
-@Vetoed
 public class PackagesAcceptor implements AcceptsValidator<AcceptsForPackages> {
 
 	private List<String> allowedPackages;

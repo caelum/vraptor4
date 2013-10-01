@@ -3,11 +3,27 @@ package br.com.caelum.vraptor.ioc.cdi;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Instance;
 import javax.enterprise.inject.spi.CDI;
+import javax.inject.Inject;
 
+import br.com.caelum.vraptor.cache.LRU;
+import br.com.caelum.vraptor.cache.VRaptorCache;
 import br.com.caelum.vraptor.ioc.Container;
 
 @ApplicationScoped
+@SuppressWarnings("rawtypes")
 public class CDIBasedContainer implements Container {
+	
+	private VRaptorCache<Class<?>,Instance> cache;
+
+	@Deprecated
+	public CDIBasedContainer() {
+	}
+	
+	@Inject
+	public CDIBasedContainer(@LRU(capacity=1000) VRaptorCache<Class<?>, Instance> cache) {
+		super();
+		this.cache = cache;
+	}
 
 	@Override
 	public <T> T instanceFor(Class<T> type) {
@@ -20,6 +36,11 @@ public class CDIBasedContainer implements Container {
 	}
 
 	private <T> Instance<T> selectFromContainer(Class<T> type) {
-		return CDI.current().select(type);
+		Instance<T> instance = cache.get(type);
+		if(instance == null){
+			 instance = CDI.current().select(type);
+			cache.put(type,instance);
+		}
+		return instance;
 	}
 }

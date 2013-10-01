@@ -93,7 +93,7 @@ public class DefaultUserDao implements UserDao {
 
 	@Override
 	public User refresh(User user) {
-		getSession().refresh(user); // it's possible use Hibernate Session!
+		getSession().refresh(user); // You still can use Hibernate Session
 		return user;
 	}
 

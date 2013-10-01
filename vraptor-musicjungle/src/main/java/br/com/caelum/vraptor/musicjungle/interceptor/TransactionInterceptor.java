@@ -48,6 +48,10 @@ public class TransactionInterceptor {
         }
     }
 	
+	/**
+	 * We force the commit before the redirect, this way we can abort the
+	 * redirect if a database error occurs.
+	 */
 	private void addRedirectListener() {
 		response.addRedirectListener(new MutableResponse.RedirectListener() {
 			@Override

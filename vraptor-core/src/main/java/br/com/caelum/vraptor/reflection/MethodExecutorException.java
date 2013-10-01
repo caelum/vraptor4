@@ -2,6 +2,8 @@ package br.com.caelum.vraptor.reflection;
 
 import java.lang.invoke.MethodHandle;
 
+import javax.enterprise.inject.Vetoed;
+
 import br.com.caelum.vraptor.VRaptorException;
 
 /**
@@ -9,6 +11,7 @@ import br.com.caelum.vraptor.VRaptorException;
  * @author Alberto Souza
  *
  */
+@Vetoed
 public class MethodExecutorException extends VRaptorException{
 
 	public MethodExecutorException(Throwable e) {

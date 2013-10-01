@@ -45,7 +45,7 @@ import static org.mockito.Mockito.when;
 
 public class AspectStyleInterceptorHandlerTest {
 
-	private static final StepInvoker stepInvoker = Factories.createStepInvoker();
+	private StepInvoker stepInvoker;
 	private @Mock
 	InterceptorStack stack;
 	private @Mock
@@ -62,6 +62,7 @@ public class AspectStyleInterceptorHandlerTest {
 	@Before
 	public void setup() {
 		MockitoAnnotations.initMocks(this);
+		stepInvoker = Factories.createStepInvoker();
 	}
 
 	@Test

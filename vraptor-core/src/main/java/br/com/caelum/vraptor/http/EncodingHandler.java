@@ -17,6 +17,7 @@
 
 package br.com.caelum.vraptor.http;
 
+import static com.google.common.base.Objects.firstNonNull;
 import static java.nio.charset.Charset.defaultCharset;
 
 import java.io.UnsupportedEncodingException;
@@ -46,10 +47,7 @@ public class EncodingHandler {
 
 	@Inject
 	public EncodingHandler(@TransientReference BasicConfiguration configuration) {
-		encoding = configuration.getEncoding();
-		if (encoding == null) {
-			encoding = defaultCharset().name();
-		}
+		encoding = firstNonNull(configuration.getEncoding(), defaultCharset().name());
 	}
 
 	public void setEncoding(HttpServletRequest request, HttpServletResponse response) {

@@ -6,13 +6,6 @@
 	version="2.0">
 	
 	<persistence-unit name="default">
-	
-		<provider>org.hibernate.ejb.HibernatePersistence</provider>
-		
-		<class>br.com.caelum.vraptor.musicjungle.model.Music</class>
-		<class>br.com.caelum.vraptor.musicjungle.model.MusicOwner</class>
-		<class>br.com.caelum.vraptor.musicjungle.model.User</class>
-		
 		<properties>
 			<property name="javax.persistence.jdbc.driver" value="org.hsqldb.jdbcDriver" />
 			<property name="javax.persistence.jdbc.url" value="jdbc:hsqldb:mem:musicjungleDB" />

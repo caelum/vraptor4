@@ -1,10 +1,13 @@
 package br.com.caelum.vraptor.interceptor;
 
+import javax.enterprise.inject.Vetoed;
+
 import br.com.caelum.vraptor.controller.ControllerInstance;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.ioc.Container;
 
+@Vetoed
 public class StackNextExecutor implements StepExecutor<Void> {
 
 	private Container container;

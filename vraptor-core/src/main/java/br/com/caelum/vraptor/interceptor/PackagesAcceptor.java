@@ -3,16 +3,19 @@ package br.com.caelum.vraptor.interceptor;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.enterprise.inject.Vetoed;
+
 import br.com.caelum.vraptor.controller.ControllerInstance;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 
+@Vetoed
 public class PackagesAcceptor implements AcceptsValidator<AcceptsForPackages> {
 
 	private List<String> allowedPackages;
 
 	@Override
-	public boolean validate(ControllerMethod method, ControllerInstance instance) {		
-		String controllerPackageName = instance.getBeanClass().getPackageName();		
+	public boolean validate(ControllerMethod method, ControllerInstance instance) {
+		String controllerPackageName = instance.getBeanClass().getPackageName();
 		for (String packageName : allowedPackages) {
 			if(controllerPackageName.contains(packageName)){
 				return true;

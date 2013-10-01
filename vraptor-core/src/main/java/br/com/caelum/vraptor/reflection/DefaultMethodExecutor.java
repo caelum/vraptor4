@@ -6,7 +6,8 @@ import java.lang.reflect.Method;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
-import br.com.caelum.vraptor.VRaptorException;
+import com.google.common.base.Throwables;
+
 import br.com.caelum.vraptor.cache.LRU;
 import br.com.caelum.vraptor.cache.VRaptorCache;
 
@@ -17,7 +18,6 @@ import br.com.caelum.vraptor.cache.VRaptorCache;
  * @author Alberto Souza
  * 
  */
-// TODO unit tests
 @ApplicationScoped
 public class DefaultMethodExecutor implements MethodExecutor {
 
@@ -48,6 +48,7 @@ public class DefaultMethodExecutor implements MethodExecutor {
 			return (T) cache.get(method)
 					.invokeExact(instance, args);
 		} catch (Throwable e) {
+			Throwables.propagateIfPossible(e);
 			throw new MethodExecutorException(e);
 		}
 	}

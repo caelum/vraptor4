@@ -1,7 +1,14 @@
 package br.com.caelum.vraptor.reflection;
 
+import java.lang.invoke.MethodHandle;
+
 import br.com.caelum.vraptor.VRaptorException;
 
+/**
+ * This exception is used to handle {@link MethodHandle} invokeExact failures.
+ * @author Alberto Souza
+ *
+ */
 public class MethodExecutorException extends VRaptorException{
 
 	public MethodExecutorException(Throwable e) {

@@ -8,12 +8,13 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.enterprise.inject.Instance;
 import javax.servlet.http.HttpServletResponse;
 
 import org.junit.Before;
 
 import br.com.caelum.vraptor.interceptor.DefaultTypeNameExtractor;
-import br.com.caelum.vraptor.ioc.cdi.FakeInstanceImpl;
+import br.com.caelum.vraptor.util.test.MockInstanceImpl;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.converters.Converter;
@@ -40,8 +41,8 @@ public class XStreamSerializerTest extends XStreamXMLSerializationTest {
 
 		final DefaultTypeNameExtractor extractor = new DefaultTypeNameExtractor();
 
-		FakeInstanceImpl<Converter> convertersInst = new FakeInstanceImpl<>(converters);
-		FakeInstanceImpl<SingleValueConverter> singleValueConverters = new FakeInstanceImpl<>();
+		Instance<Converter> convertersInst = new MockInstanceImpl<>(converters);
+		Instance<SingleValueConverter> singleValueConverters = new MockInstanceImpl<>();
 		XStreamConverters xStreamConverters = new XStreamConverters(convertersInst, singleValueConverters);
 		this.serialization = new XStreamXMLSerialization(response, new XStreamBuilderImpl(xStreamConverters, extractor));
 	}

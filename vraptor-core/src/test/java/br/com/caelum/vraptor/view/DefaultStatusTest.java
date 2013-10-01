@@ -27,7 +27,6 @@ import br.com.caelum.vraptor.config.Configuration;
 import br.com.caelum.vraptor.controller.HttpMethod;
 import br.com.caelum.vraptor.http.FormatResolver;
 import br.com.caelum.vraptor.http.route.Router;
-import br.com.caelum.vraptor.ioc.cdi.FakeInstanceImpl;
 import br.com.caelum.vraptor.proxy.JavassistProxifier;
 import br.com.caelum.vraptor.serialization.DefaultRepresentationResult;
 import br.com.caelum.vraptor.serialization.JSONSerialization;
@@ -36,6 +35,7 @@ import br.com.caelum.vraptor.serialization.gson.MessageSerializer;
 import br.com.caelum.vraptor.serialization.gson.VRaptorGsonBuilder;
 import br.com.caelum.vraptor.serialization.xstream.MessageConverter;
 import br.com.caelum.vraptor.serialization.xstream.XStreamBuilder;
+import br.com.caelum.vraptor.util.test.MockInstanceImpl;
 import br.com.caelum.vraptor.util.test.MockSerializationResult;
 import br.com.caelum.vraptor.validator.I18nMessage;
 import br.com.caelum.vraptor.validator.Message;
@@ -182,7 +182,7 @@ public class DefaultStatusTest {
 		List<JsonSerializer<?>> gsonSerializers = new ArrayList<>();
 		gsonSerializers.add(new MessageSerializer());
 
-		VRaptorGsonBuilder gsonBuilder = new VRaptorGsonBuilder(new FakeInstanceImpl<>(gsonSerializers));
+		VRaptorGsonBuilder gsonBuilder = new VRaptorGsonBuilder(new MockInstanceImpl<>(gsonSerializers));
 		MockSerializationResult result = new MockSerializationResult(null, null, gsonBuilder) {
 			@Override
 			public <T extends View> T use(Class<T> view) {
@@ -191,7 +191,7 @@ public class DefaultStatusTest {
 						return "json";
 					}
 
-				}, this, new FakeInstanceImpl<Serialization>(super.use(JSONSerialization.class))));
+				}, this, new MockInstanceImpl<Serialization>(super.use(JSONSerialization.class))));
 			}
 		};
 		DefaultStatus status = new DefaultStatus(response, result, config, new JavassistProxifier(), router);

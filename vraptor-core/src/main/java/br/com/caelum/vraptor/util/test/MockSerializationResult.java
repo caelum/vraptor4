@@ -23,7 +23,6 @@ import javax.enterprise.inject.Alternative;
 import br.com.caelum.vraptor.View;
 import br.com.caelum.vraptor.http.FormatResolver;
 import br.com.caelum.vraptor.interceptor.DefaultTypeNameExtractor;
-import br.com.caelum.vraptor.ioc.cdi.FakeInstanceImpl;
 import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.serialization.DefaultRepresentationResult;
 import br.com.caelum.vraptor.serialization.JSONSerialization;
@@ -88,7 +87,7 @@ public class MockSerializationResult extends MockResult {
 				public String getAcceptFormat() {
 					return "xml";
 				}
-			}, this, new FakeInstanceImpl<Serialization>(this.serialization)));
+			}, this, new MockInstanceImpl<Serialization>(this.serialization)));
 		}
 
 		return proxifier.proxify(view, returnOnFinalMethods(view));

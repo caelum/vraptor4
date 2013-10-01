@@ -1,5 +1,6 @@
 package br.com.caelum.vraptor.view;
 
+import static br.com.caelum.vraptor.serialization.xstream.XStreamBuilderFactory.cleanInstance;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertThat;
@@ -35,7 +36,6 @@ import br.com.caelum.vraptor.serialization.gson.MessageSerializer;
 import br.com.caelum.vraptor.serialization.gson.VRaptorGsonBuilder;
 import br.com.caelum.vraptor.serialization.xstream.MessageConverter;
 import br.com.caelum.vraptor.serialization.xstream.XStreamBuilder;
-import br.com.caelum.vraptor.serialization.xstream.XStreamBuilderImpl;
 import br.com.caelum.vraptor.util.test.MockSerializationResult;
 import br.com.caelum.vraptor.validator.I18nMessage;
 import br.com.caelum.vraptor.validator.Message;
@@ -159,7 +159,7 @@ public class DefaultStatusTest {
 		I18nMessage i18ned = new I18nMessage("category", "message");
 		i18ned.setBundle(new SingletonResourceBundle("message", "Something else"));
 
-		XStreamBuilder xstreamBuilder = XStreamBuilderImpl.cleanInstance(new MessageConverter());
+		XStreamBuilder xstreamBuilder = cleanInstance(new MessageConverter());
 		MockSerializationResult result = new MockSerializationResult(null, xstreamBuilder, null);
 		DefaultStatus status = new DefaultStatus(response, result, config, new JavassistProxifier(), router);
 

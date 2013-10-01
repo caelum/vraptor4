@@ -20,13 +20,9 @@ import java.io.Writer;
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 
-import br.com.caelum.vraptor.interceptor.DefaultTypeNameExtractor;
 import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
-import br.com.caelum.vraptor.ioc.cdi.FakeInstanceImpl;
 
 import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.converters.Converter;
-import com.thoughtworks.xstream.converters.SingleValueConverter;
 import com.thoughtworks.xstream.io.HierarchicalStreamDriver;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 import com.thoughtworks.xstream.io.json.JsonHierarchicalStreamDriver;
@@ -51,13 +47,6 @@ public class XStreamBuilderImpl implements XStreamBuilder {
 	public XStreamBuilderImpl(XStreamConverters converters, TypeNameExtractor extractor) {
 		this.converters = converters;
 		this.extractor = extractor;
-	}
-
-	public static XStreamBuilder cleanInstance(Converter...converters) {
-		FakeInstanceImpl<Converter> convertersInst = new FakeInstanceImpl<>(converters);
-		FakeInstanceImpl<SingleValueConverter> singleValueConverters = new FakeInstanceImpl<>();
-		XStreamConverters xStreamConverters = new XStreamConverters(convertersInst, singleValueConverters);
-		return new XStreamBuilderImpl(xStreamConverters, new DefaultTypeNameExtractor());
 	}
 
 	public XStream xmlInstance() {

@@ -1,5 +1,6 @@
 package br.com.caelum.vraptor.serialization.xstream;
 
+import static br.com.caelum.vraptor.serialization.xstream.XStreamBuilderFactory.cleanInstance;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
@@ -42,9 +43,8 @@ public class XStreamXMLSerializationTest {
 
 		HttpServletResponse response = mock(HttpServletResponse.class);
 		when(response.getWriter()).thenReturn(new PrintWriter(stream));
-		
-		XStreamBuilder builder = XStreamBuilderImpl.cleanInstance(new CalendarConverter());
-		serialization = new XStreamXMLSerialization(response, builder);
+
+		serialization = new XStreamXMLSerialization(response, cleanInstance(new CalendarConverter()));
 	}
 
 	public static class Address {
@@ -149,7 +149,7 @@ public class XStreamXMLSerializationTest {
 		calendar.set(2013, 8, 12, 22, 9, 13);
 		calendar.set(Calendar.MILLISECOND, 0);
 		calendar.setTimeZone(TimeZone.getTimeZone("America/Sao_Paulo"));
-		
+
 		Client otto = new Client("Otto", null, calendar);
 
 		serialization.from(otto).serialize();
@@ -228,11 +228,11 @@ public class XStreamXMLSerializationTest {
 		assertThat(result(), containsString("<price>12.99</price>"));
 		assertThat(result(), containsString("</items>"));
 	}
-	
+
 	@Test
 	public void shouldWorkWithEmptyCollections() {
 		serialization.from(new ArrayList<Order>(), "orders").serialize();
-		
+
 		assertThat(result(), containsString("<orders/>"));
 	}
 	@Test
@@ -258,7 +258,7 @@ public class XStreamXMLSerializationTest {
 				new Item("name", 12.99));
 		serialization.from(order).include("wrongFieldName").serialize();
 	}
-	
+
 	@Test(expected=IllegalArgumentException.class)
 	public void shouldThrowAnExceptionWhenYouIncludeANonExistantFieldInsideOther() {
 		Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please",
@@ -338,7 +338,7 @@ public class XStreamXMLSerializationTest {
 		assertThat(result(), not(containsString("12.99")));
 		assertThat(result(), containsString("</items>"));
 	}
-	
+
 	@Test
 	public void shouldExcludeAllPrimitiveFields() {
 		String expectedResult = "<order/>";
@@ -346,7 +346,7 @@ public class XStreamXMLSerializationTest {
 		serialization.from(order).excludeAll().serialize();
 		assertThat(result(), is(equalTo(expectedResult)));
 	}
-	
+
 	@Test
 	public void shouldExcludeAllPrimitiveParentFields() {
 		String expectedResult = "<advancedOrder/>";
@@ -354,7 +354,7 @@ public class XStreamXMLSerializationTest {
 		serialization.from(order).excludeAll().serialize();
 		assertThat(result(), is(equalTo(expectedResult)));
 	}
-	
+
 	@Test
 	public void shouldExcludeAllThanIncludeAndSerialize() {
 		Order order = new Order(new Client("nykolas lima"), 15.0, "gift bags, please");
@@ -399,7 +399,7 @@ public class XStreamXMLSerializationTest {
 	private String result() {
 		return new String(stream.toByteArray());
 	}
-	
+
 	/**
 	 * @bug #400
 	 */
@@ -411,9 +411,9 @@ public class XStreamXMLSerializationTest {
 		C field2 = new C();
 	}
 	class C {
-		
+
 	}
-	
+
 	@Test
 	public void shouldBeAbleToIncludeSubclassesFields() throws Exception {
 		serialization.from(new B()).include("field2").serialize();

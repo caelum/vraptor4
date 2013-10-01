@@ -47,7 +47,7 @@ public class HomeController {
     private Result result;
     private Validator validator;
     private UserInfo userInfo;
-	private Users userRepository;
+	private Users users;
 
 	//CDI eyes only
 	@Deprecated
@@ -61,8 +61,8 @@ public class HomeController {
 	 * - all of the classes that have a {@link ComponentFactory}, e.g {@link Session} or {@link SessionFactory}
 	 */
 	@Inject
-	public HomeController(Users userRepository, UserInfo userInfo, Result result, Validator validator) {
-	    this.userRepository = userRepository;
+	public HomeController(Users users, UserInfo userInfo, Result result, Validator validator) {
+	    this.users = users;
 		this.result = result;
 	    this.validator = validator;
         this.userInfo = userInfo;
@@ -88,7 +88,7 @@ public class HomeController {
 	@Public
 	public void login(String login, String password) {
 		// search for the user in the database
-		final User currentUser = userRepository.validateCredentials(login, password);
+		final User currentUser = users.validateCredentials(login, password);
 
 		// if no user is found, adds an error message to the validator
 		// "invalid_login_or_password" is the message key from messages.properties,

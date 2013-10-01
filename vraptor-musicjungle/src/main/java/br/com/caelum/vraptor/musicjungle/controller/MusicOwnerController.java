@@ -41,8 +41,8 @@ public class MusicOwnerController {
 	private Result result;
 	private Validator validator;
 	private UserInfo userInfo;
-	private OwnersMusic musicOwnerRepository;
-	private Users userRepository;
+	private OwnersMusic ownersMusic;
+	private Users users;
 	
 	//CDI eyes only
 	@Deprecated
@@ -58,10 +58,10 @@ public class MusicOwnerController {
 	 * @param validator VRaptor validator.
 	 */
 	@Inject
-	public MusicOwnerController(OwnersMusic musicOwnerRepository, Users userRepository, 
+	public MusicOwnerController(OwnersMusic ownersMusic, Users users, 
 			UserInfo userInfo, Result result, Validator validator) {
-		this.musicOwnerRepository = musicOwnerRepository;
-		this.userRepository = userRepository;
+		this.ownersMusic = ownersMusic;
+		this.users = users;
 		this.result = result;
         this.validator = validator;
         this.userInfo = userInfo;
@@ -95,7 +95,7 @@ public class MusicOwnerController {
 
 		validator.onErrorUsePageOf(UsersController.class).home();
 
-		musicOwnerRepository.add(new MusicOwner(user, music));
+		ownersMusic.add(new MusicOwner(user, music));
 
 		result.redirectTo(UsersController.class).home();
 	}
@@ -105,7 +105,7 @@ public class MusicOwnerController {
      */
     private User refreshUser() {
         User user = userInfo.getUser();
-        userRepository.refresh(user);
+        users.refresh(user);
         return user;
     }
 }

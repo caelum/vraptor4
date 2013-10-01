@@ -12,7 +12,7 @@ public class LoginAvailableValidator
     implements ConstraintValidator<LoginAvailable, User> {
     
     @Inject
-    private Users repository;
+    private Users users;
 
     @Override
     public void initialize(LoginAvailable constraintAnnotation) {
@@ -21,6 +21,6 @@ public class LoginAvailableValidator
 
     @Override
     public boolean isValid(User user, ConstraintValidatorContext context) {
-        return repository.load(user) == null;
+        return users.load(user) == null;
     }
 }

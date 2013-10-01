@@ -40,7 +40,7 @@ public class UsersController {
 
 	private Validator validator;
 	private Result result;
-	private Users repository;
+	private Users users;
 
 	// CDI eyes only
 	@Deprecated
@@ -56,8 +56,8 @@ public class UsersController {
 	 * @param validator VRaptor validator.
 	 */
 	@Inject
-	public UsersController(Users repository, Result result, Validator validator) {
-		this.repository = repository;
+	public UsersController(Users users, Result result, Validator validator) {
+		this.users = users;
 		this.result = result;
 		this.validator = validator;
 	}
@@ -85,7 +85,7 @@ public class UsersController {
      */
 	@Get("/users")
 	public void list() {
-        result.include("users", repository.listAll());
+        result.include("users", users.listAll());
     }
 
 	/**
@@ -112,7 +112,7 @@ public class UsersController {
 	public void add(@Valid @LoginAvailable User user) {
         validator.onErrorUsePageOf(HomeController.class).login();
         
-        repository.add(user);
+        users.add(user);
 
 		// you can add objects to result even in redirects. Added objects will
 		// survive one more request when redirecting.
@@ -133,7 +133,7 @@ public class UsersController {
 	@Path("/users/{user.login}")
 	@Get
 	public void show(User user) {
-	    result.include("user", repository.load(user));
+	    result.include("user", users.load(user));
 
 	    //You can redirect to any page if you like.
 	    result.forwardTo("/WEB-INF/jsp/users/view.jsp");

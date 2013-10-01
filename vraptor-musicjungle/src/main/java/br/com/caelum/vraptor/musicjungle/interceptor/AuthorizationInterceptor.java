@@ -35,8 +35,7 @@ import br.com.caelum.vraptor.validator.ValidationMessage;
  * Interceptor to check if the user is in the session.
  */
 @Intercepts
-public class AuthorizationInterceptor{
-
+public class AuthorizationInterceptor {
 
 	@Inject
 	private UserInfo info;
@@ -48,31 +47,34 @@ public class AuthorizationInterceptor{
 	private Result result;
 
 	@Accepts
-	public boolean accepts(ControllerMethod method){
+	public boolean accepts(ControllerMethod method) {
 		return !method.containsAnnotation(Public.class);
 	}
 
-    /**
-     * Intercepts the request and checks if there is a user logged in.
-     */
+	/**
+	 * Intercepts the request and checks if there is a user logged in.
+	 */
 	@BeforeCall
-    public void intercept() throws InterceptionException {
-		
+	public void intercept() throws InterceptionException {
+
 		User current = null;
 		try {
 			current = dao.refresh(info.getUser());
 		} catch (Exception e) {
-			//could happen if the user does not exist in the database or if there's no user logged in.
+			// could happen if the user does not exist in the database or if
+			// there's no user logged in.
 		}
-		
-    	/**
-    	 * You can use the result even in interceptors.
-    	 */
-    	if (current == null) {
-    		// remember added parameters will survive one more request, when there is a redirect
-    		result.include("errors", asList(new ValidationMessage("user is not logged in", "user")));
-    		result.redirectTo(HomeController.class).login();
-    	}
-    }
+
+		/**
+		 * You can use the result even in interceptors.
+		 */
+		if (current == null) {
+			// remember added parameters will survive one more request, when
+			// there is a redirect
+			result.include("errors", asList(new ValidationMessage(
+					"user is not logged in", "user")));
+			result.redirectTo(HomeController.class).login();
+		}
+	}
 
 }

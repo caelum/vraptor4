@@ -13,11 +13,11 @@ public class EntityManagerCreator {
 	@Inject
 	private EntityManagerFactory factory;
 
-	 /**
-     * Create an instance for {@link EntityManager}.
-     */
-    @Produces
-    @RequestScoped
+	/**
+	 * Create an instance for {@link EntityManager}.
+	 */
+	@Produces
+	@RequestScoped
 	public EntityManager getEntityManager() {
 		return factory.createEntityManager();
 	}

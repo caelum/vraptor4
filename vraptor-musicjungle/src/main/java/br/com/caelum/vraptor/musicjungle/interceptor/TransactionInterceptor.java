@@ -11,43 +11,43 @@ import br.com.caelum.vraptor.http.MutableResponse;
 import br.com.caelum.vraptor.interceptor.SimpleInterceptorStack;
 
 /**
- * Open EntityManager in view interceptor, that opens an EntityManager and a transaction before a request, and 
- * closes at the end of request.
+ * Open EntityManager in view interceptor, that opens an EntityManager and a
+ * transaction before a request, and closes at the end of request.
  */
 @Intercepts
 public class TransactionInterceptor {
-	
+
 	@Inject
 	private EntityManager entityManager;
-	
+
 	@Inject
 	private Validator validator;
-	
+
 	@Inject
 	private MutableResponse response;
-	
+
 	@AroundCall
-    public void intercept(SimpleInterceptorStack stack) {
-		
+	public void intercept(SimpleInterceptorStack stack) {
+
 		addRedirectListener();
-		
+
 		EntityTransaction transaction = null;
-        try {
-            transaction = entityManager.getTransaction();
-            transaction.begin();
-            
-            stack.next();
-            
-            if (!validator.hasErrors() && transaction.isActive()) {
-                transaction.commit();
-            }
-        } finally {
-            if (transaction != null && transaction.isActive()) {
-                transaction.rollback();
-            }
-        }
-    }
-	
+		try {
+			transaction = entityManager.getTransaction();
+			transaction.begin();
+
+			stack.next();
+
+			if (!validator.hasErrors() && transaction.isActive()) {
+				transaction.commit();
+			}
+		} finally {
+			if (transaction != null && transaction.isActive()) {
+				transaction.rollback();
+			}
+		}
+	}
+
 	/**
 	 * We force the commit before the redirect, this way we can abort the
 	 * redirect if a database error occurs.
@@ -56,7 +56,8 @@ public class TransactionInterceptor {
 		response.addRedirectListener(new MutableResponse.RedirectListener() {
 			@Override
 			public void beforeRedirect() {
-				if (!validator.hasErrors() && entityManager.getTransaction().isActive()) {
+				if (!validator.hasErrors()
+						&& entityManager.getTransaction().isActive()) {
 					entityManager.getTransaction().commit();
 				}
 			}

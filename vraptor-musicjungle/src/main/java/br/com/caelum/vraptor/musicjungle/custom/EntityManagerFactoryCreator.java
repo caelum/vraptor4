@@ -13,8 +13,8 @@ import javax.persistence.Persistence;
 public class EntityManagerFactoryCreator {
 
 	/**
-     * Produces an instance for {@link EntityManagerFactory}.
-     */
+	 * Produces an instance for {@link EntityManagerFactory}.
+	 */
 	@Produces
 	@ApplicationScoped
 	public EntityManagerFactory getInstance() {

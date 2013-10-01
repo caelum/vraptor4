@@ -1,13 +1,13 @@
-package br.com.caelum.vraptor.musicjungle.dao.repository;
+package br.com.caelum.vraptor.musicjungle.dao;
 
 import java.util.List;
 
-import br.com.caelum.vraptor.musicjungle.dao.GenericDAO;
+import br.com.caelum.vraptor.musicjungle.dao.repository.Playlist;
 import br.com.caelum.vraptor.musicjungle.model.Music;
 
-public class MusicDAO extends GenericDAO<Music> implements IMusicRepository {
+public class MusicDao extends GenericJPADao<Music> implements Playlist {
 
-	public MusicDAO() {
+	public MusicDao() {
 		super(Music.class);
 	}
 

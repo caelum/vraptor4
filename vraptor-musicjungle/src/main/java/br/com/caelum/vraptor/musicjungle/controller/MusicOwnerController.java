@@ -23,8 +23,8 @@ import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.Put;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.Validator;
-import br.com.caelum.vraptor.musicjungle.dao.repository.IMusicOwnerRepository;
-import br.com.caelum.vraptor.musicjungle.dao.repository.IUserRepository;
+import br.com.caelum.vraptor.musicjungle.dao.repository.OwnersMusic;
+import br.com.caelum.vraptor.musicjungle.dao.repository.Users;
 import br.com.caelum.vraptor.musicjungle.interceptor.UserInfo;
 import br.com.caelum.vraptor.musicjungle.model.Music;
 import br.com.caelum.vraptor.musicjungle.model.MusicOwner;
@@ -41,8 +41,8 @@ public class MusicOwnerController {
 	private Result result;
 	private Validator validator;
 	private UserInfo userInfo;
-	private IMusicOwnerRepository musicOwnerRepository;
-	private IUserRepository userRepository;
+	private OwnersMusic musicOwnerRepository;
+	private Users userRepository;
 	
 	//CDI eyes only
 	@Deprecated
@@ -58,7 +58,7 @@ public class MusicOwnerController {
 	 * @param validator VRaptor validator.
 	 */
 	@Inject
-	public MusicOwnerController(IMusicOwnerRepository musicOwnerRepository, IUserRepository userRepository, 
+	public MusicOwnerController(OwnersMusic musicOwnerRepository, Users userRepository, 
 			UserInfo userInfo, Result result, Validator validator) {
 		this.musicOwnerRepository = musicOwnerRepository;
 		this.userRepository = userRepository;

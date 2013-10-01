@@ -1,15 +1,15 @@
-package br.com.caelum.vraptor.musicjungle.dao.repository;
+package br.com.caelum.vraptor.musicjungle.dao;
 
 import java.util.List;
 
 import javax.persistence.criteria.Predicate;
 
-import br.com.caelum.vraptor.musicjungle.dao.GenericDAO;
+import br.com.caelum.vraptor.musicjungle.dao.repository.Users;
 import br.com.caelum.vraptor.musicjungle.model.User;
 
-public class UserDAO extends GenericDAO<User> implements IUserRepository {
+public class UserDao extends GenericJPADao<User> implements Users {
 
-	public UserDAO() {
+	public UserDao() {
 		super(User.class);
 	}
 
@@ -29,7 +29,7 @@ public class UserDAO extends GenericDAO<User> implements IUserRepository {
 	}
 
 	@Override
-	public User find(String login, String password) {
+	public User validateCredentials(String login, String password) {
 		Predicate loginEqual = builder.equal(from.<String>get("login"), login);
 		Predicate passwordEqual = builder.equal(from.<String>get("password"), password);
 		return findUniqueByPredicate(builder.and(loginEqual, passwordEqual));

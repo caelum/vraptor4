@@ -13,13 +13,13 @@ import javax.persistence.criteria.Root;
 
 import org.hibernate.Session;
 
-public class GenericDAO<T> implements IGenericDAO<T> {
+public class GenericJPADao<T> implements Dao<T> {
 
 	@Inject protected EntityManager em;
 
 	private final Class<T> clazz;
 	
-	public GenericDAO(Class<T> clazz) {
+	public GenericJPADao(Class<T> clazz) {
 		this.clazz = clazz;
 	}
 

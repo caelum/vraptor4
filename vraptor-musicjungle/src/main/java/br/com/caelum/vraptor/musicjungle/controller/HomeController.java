@@ -27,7 +27,7 @@ import br.com.caelum.vraptor.Get;
 import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.Validator;
-import br.com.caelum.vraptor.musicjungle.dao.repository.IUserRepository;
+import br.com.caelum.vraptor.musicjungle.dao.repository.Users;
 import br.com.caelum.vraptor.musicjungle.interceptor.Public;
 import br.com.caelum.vraptor.musicjungle.interceptor.UserInfo;
 import br.com.caelum.vraptor.musicjungle.model.User;
@@ -47,7 +47,7 @@ public class HomeController {
     private Result result;
     private Validator validator;
     private UserInfo userInfo;
-	private IUserRepository userRepository;
+	private Users userRepository;
 
 	//CDI eyes only
 	@Deprecated
@@ -61,7 +61,7 @@ public class HomeController {
 	 * - all of the classes that have a {@link ComponentFactory}, e.g {@link Session} or {@link SessionFactory}
 	 */
 	@Inject
-	public HomeController(IUserRepository userRepository, UserInfo userInfo, Result result, Validator validator) {
+	public HomeController(Users userRepository, UserInfo userInfo, Result result, Validator validator) {
 	    this.userRepository = userRepository;
 		this.result = result;
 	    this.validator = validator;
@@ -88,7 +88,7 @@ public class HomeController {
 	@Public
 	public void login(String login, String password) {
 		// search for the user in the database
-		final User currentUser = userRepository.find(login, password);
+		final User currentUser = userRepository.validateCredentials(login, password);
 
 		// if no user is found, adds an error message to the validator
 		// "invalid_login_or_password" is the message key from messages.properties,

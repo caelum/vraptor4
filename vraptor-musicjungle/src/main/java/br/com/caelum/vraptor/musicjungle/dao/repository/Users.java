@@ -4,10 +4,10 @@ import java.util.List;
 
 import br.com.caelum.vraptor.musicjungle.model.User;
 
-public interface IUserRepository {
+public interface Users {
 	public User add(User user);
 	public User load(User user);
-	public User find(String login, String password);
+	public User validateCredentials(String login, String password);
 	public User refresh(User user);
 	public List<User> listAll();
 }

@@ -27,7 +27,7 @@ import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.interceptor.SimpleInterceptorStack;
 import br.com.caelum.vraptor.musicjungle.controller.HomeController;
-import br.com.caelum.vraptor.musicjungle.dao.repository.IUserRepository;
+import br.com.caelum.vraptor.musicjungle.dao.repository.Users;
 import br.com.caelum.vraptor.musicjungle.model.User;
 import br.com.caelum.vraptor.validator.ValidationMessage;
 
@@ -41,7 +41,7 @@ public class AuthorizationInterceptor {
 	private UserInfo info;
 
 	@Inject
-	private IUserRepository repository;
+	private Users repository;
 
 	@Inject
 	private Result result;

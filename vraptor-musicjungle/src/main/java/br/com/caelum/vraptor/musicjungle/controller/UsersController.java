@@ -25,7 +25,7 @@ import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.Validator;
-import br.com.caelum.vraptor.musicjungle.dao.repository.IUserRepository;
+import br.com.caelum.vraptor.musicjungle.dao.repository.Users;
 import br.com.caelum.vraptor.musicjungle.enums.MusicType;
 import br.com.caelum.vraptor.musicjungle.interceptor.Public;
 import br.com.caelum.vraptor.musicjungle.model.User;
@@ -40,7 +40,7 @@ public class UsersController {
 
 	private Validator validator;
 	private Result result;
-	private IUserRepository repository;
+	private Users repository;
 
 	// CDI eyes only
 	@Deprecated
@@ -56,7 +56,7 @@ public class UsersController {
 	 * @param validator VRaptor validator.
 	 */
 	@Inject
-	public UsersController(IUserRepository repository, Result result, Validator validator) {
+	public UsersController(Users repository, Result result, Validator validator) {
 		this.repository = repository;
 		this.result = result;
 		this.validator = validator;

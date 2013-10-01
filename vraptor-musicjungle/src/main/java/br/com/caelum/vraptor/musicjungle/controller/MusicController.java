@@ -39,8 +39,8 @@ import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.interceptor.download.Download;
 import br.com.caelum.vraptor.interceptor.download.FileDownload;
 import br.com.caelum.vraptor.interceptor.multipart.UploadedFile;
-import br.com.caelum.vraptor.musicjungle.dao.repository.IMusicOwnerRepository;
-import br.com.caelum.vraptor.musicjungle.dao.repository.IMusicRepository;
+import br.com.caelum.vraptor.musicjungle.dao.repository.OwnersMusic;
+import br.com.caelum.vraptor.musicjungle.dao.repository.Playlist;
 import br.com.caelum.vraptor.musicjungle.files.Musics;
 import br.com.caelum.vraptor.musicjungle.interceptor.Public;
 import br.com.caelum.vraptor.musicjungle.interceptor.UserInfo;
@@ -68,8 +68,8 @@ public class MusicController {
 	private Result result;
 	private Validator validator;
 	private UserInfo userInfo;
-	private IMusicRepository musicRepository;
-	private IMusicOwnerRepository musicOwnerRepository;
+	private Playlist musicRepository;
+	private OwnersMusic musicOwnerRepository;
 	private Musics musics;
 
 	// CDI eyes only
@@ -86,7 +86,7 @@ public class MusicController {
 	 * @param factory dao factory.
 	 */
 	@Inject
-	public MusicController(IMusicRepository musicRepository, IMusicOwnerRepository musicOwnerRepository, 
+	public MusicController(Playlist musicRepository, OwnersMusic musicOwnerRepository, 
 			UserInfo userInfo, Result result, Validator validator, Musics musics) {
 		this.musicRepository = musicRepository;
 		this.musicOwnerRepository = musicOwnerRepository;

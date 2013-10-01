@@ -5,7 +5,7 @@ import java.util.Collection;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 
-public interface IGenericDAO<T> {
+public interface Dao<T> {
 
 	public Collection<T> findAll();
 

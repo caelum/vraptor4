@@ -6,14 +6,13 @@ import java.lang.reflect.Method;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
-import com.google.common.base.Throwables;
-
 import br.com.caelum.vraptor.cache.LRU;
 import br.com.caelum.vraptor.cache.VRaptorCache;
 
+import com.google.common.base.Throwables;
+
 /**
- * This class should decide what kind of dynamic invocation will be used.
- * MethodHandle or pure Reflection.
+ * This class should use method handle to invoke methods.
  * 
  * @author Alberto Souza
  * 
@@ -38,15 +37,12 @@ public class DefaultMethodExecutor implements MethodExecutor {
 	@Override
 	public <T> T invoke(Method method, Object instance, Object... args) {
 		MethodHandle methodHandle = cache.get(method);
-		// can not use put ifAbsent because i don't want to build MH all time
 		if (methodHandle == null) {
-			cache.put(method,
-					methodHandleFactory.create(instance.getClass(), method));
-			
+			methodHandle = methodHandleFactory.create(instance.getClass(), method);
+			cache.put(method, methodHandle);
 		}
 		try {
-			return (T) cache.get(method)
-					.invokeExact(instance, args);
+			return (T) methodHandle.invokeExact(instance, args);
 		} catch (Throwable e) {
 			Throwables.propagateIfPossible(e);
 			throw new MethodExecutorException(e);

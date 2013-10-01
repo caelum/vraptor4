@@ -17,8 +17,6 @@
 
 package br.com.caelum.vraptor.http.route;
 
-import javax.enterprise.inject.Vetoed;
-
 import br.com.caelum.vraptor.VRaptorException;
 
 /**
@@ -26,7 +24,6 @@ import br.com.caelum.vraptor.VRaptorException;
  * 
  * @author guilherme silveira
  */
-@Vetoed
 public class RouteNotFoundException extends VRaptorException {
 
 	public RouteNotFoundException(String msg) {

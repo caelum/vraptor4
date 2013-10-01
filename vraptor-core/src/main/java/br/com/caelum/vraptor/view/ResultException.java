@@ -16,14 +16,11 @@
  */
 package br.com.caelum.vraptor.view;
 
-import javax.enterprise.inject.Vetoed;
-
 import br.com.caelum.vraptor.VRaptorException;
 
 /**
  * @author Fabio Kung
  */
-@Vetoed
 public class ResultException extends VRaptorException {
 	private static final long serialVersionUID = 613016550272361973L;
 

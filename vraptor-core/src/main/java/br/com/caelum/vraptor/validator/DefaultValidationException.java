@@ -16,8 +16,6 @@
  */
 package br.com.caelum.vraptor.validator;
 
-import javax.enterprise.inject.Vetoed;
-
 /**
  * VRaptor's default implementation of a {@link ValidationException}.
  * Users can use this class if they don't want to implement their own business exceptions
@@ -26,7 +24,6 @@ import javax.enterprise.inject.Vetoed;
  * @see ValidationException
  */
 @br.com.caelum.vraptor.validator.annotation.ValidationException
-@Vetoed
 public class DefaultValidationException extends RuntimeException {
 
 	private static final long serialVersionUID = 1L;

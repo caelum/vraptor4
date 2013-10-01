@@ -16,8 +16,6 @@
  */
 package br.com.caelum.vraptor.proxy;
 
-import javax.enterprise.inject.Vetoed;
-
 import br.com.caelum.vraptor.VRaptorException;
 
 /**
@@ -25,7 +23,6 @@ import br.com.caelum.vraptor.VRaptorException;
  * 
  * @author Fabio Kung
  */
-@Vetoed
 public class ProxyInvocationException extends VRaptorException {
 	private static final long serialVersionUID = 5465881268532840163L;
 

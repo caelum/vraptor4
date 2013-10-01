@@ -43,7 +43,7 @@ public class DefaultRepresentationResultTest {
 		MockitoAnnotations.initMocks(this);
 		when(result.use(PageResult.class)).thenReturn(pageResult);
 		when(result.use(Status.class)).thenReturn(status);
-		Instance<Serialization> serializations = new FakeInstanceImpl<Serialization>(serialization);
+		Instance<Serialization> serializations = new FakeInstanceImpl<>(serialization);
 		representation = new DefaultRepresentationResult(formatResolver, result, serializations);
 	}
 

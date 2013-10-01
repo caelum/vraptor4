@@ -236,7 +236,6 @@
 			<groupId>com.headius</groupId>
 			<artifactId>invokebinder</artifactId>
 			<version>1.2</version>
-			<scope>compile</scope>			
 		</dependency>
 		
 	</dependencies>

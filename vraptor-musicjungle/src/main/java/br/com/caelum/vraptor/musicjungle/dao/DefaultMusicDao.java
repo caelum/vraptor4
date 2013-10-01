@@ -16,15 +16,10 @@
  */
 package br.com.caelum.vraptor.musicjungle.dao;
 
-import static org.hibernate.criterion.MatchMode.ANYWHERE;
-import static org.hibernate.criterion.Restrictions.ilike;
-
 import java.util.List;
 
 import javax.inject.Inject;
-
-import org.hibernate.Criteria;
-import org.hibernate.Session;
+import javax.persistence.EntityManager;
 
 import br.com.caelum.vraptor.musicjungle.model.Music;
 import br.com.caelum.vraptor.musicjungle.model.MusicOwner;
@@ -40,7 +35,7 @@ import br.com.caelum.vraptor.musicjungle.model.MusicOwner;
  */
 public class DefaultMusicDao implements MusicDao {
 
-	private Session session;
+	private EntityManager entityManager;
 
 	//CDI eyes only
 	@Deprecated
@@ -50,41 +45,40 @@ public class DefaultMusicDao implements MusicDao {
 	/**
 	 * Creates a new MusicDao.
 	 *
-	 * @param session hibernate session.
+	 * @param entityManager JPA's EntityManager.
 	 */
 	@Inject
-	public DefaultMusicDao(Session session) {
-		this.session = session;
+	public DefaultMusicDao(EntityManager entityManager) {
+		this.entityManager = entityManager;
 	}
 
 	@Override
 	public void add(Music music) {
-		session.save(music);
+		entityManager.persist(music);
 	}
 
 	@Override
 	public void add(MusicOwner copy) {
-		session.save(copy);
+		entityManager.persist(copy);
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
 	public List<Music> searchSimilarTitle(String title) {
-		// creates a criteria based on the Music class and adds
-		// the "title" restriction and then returns the list.
-		Criteria criteria = session.createCriteria(Music.class);
-		return criteria.add(ilike("title", title, ANYWHERE)).list();
+		List<Music> musics = entityManager
+			.createQuery("select m from Music m where lower(m.title) like lower(:title)", Music.class)
+				.setParameter("title", "%" + title+ "%")
+				.getResultList();
+		return musics;
 	}
 	
 	@Override
 	public Music load(Music music) {
-		return (Music) session.load(Music.class, music.getId());
+		return (Music) entityManager.find(Music.class, music.getId());
 	}
 	
 	@Override
-	@SuppressWarnings("unchecked")
 	public List<Music> listAll() {
-		return session.createCriteria(Music.class).list();
+		return entityManager.createQuery("select m from Music m", Music.class).getResultList();
 	}
 
 }

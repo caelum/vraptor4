@@ -38,13 +38,18 @@ public class TransactionInterceptor {
 
 			stack.next();
 
-			if (!validator.hasErrors() && transaction.isActive()) {
-				transaction.commit();
-			}
+			commit(transaction);
+			
 		} finally {
 			if (transaction != null && transaction.isActive()) {
 				transaction.rollback();
 			}
+		}
+	}
+
+	private void commit(EntityTransaction transaction) {
+		if (!validator.hasErrors() && transaction.isActive()) {
+			transaction.commit();
 		}
 	}
 
@@ -56,10 +61,7 @@ public class TransactionInterceptor {
 		response.addRedirectListener(new MutableResponse.RedirectListener() {
 			@Override
 			public void beforeRedirect() {
-				if (!validator.hasErrors()
-						&& entityManager.getTransaction().isActive()) {
-					entityManager.getTransaction().commit();
-				}
+				commit(entityManager.getTransaction());
 			}
 		});
 	}

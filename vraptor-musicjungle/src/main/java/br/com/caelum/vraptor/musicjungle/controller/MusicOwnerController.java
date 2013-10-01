@@ -95,7 +95,7 @@ public class MusicOwnerController {
 
 		validator.onErrorUsePageOf(UsersController.class).home();
 
-		ownersMusic.add(new MusicOwner(user, music));
+		ownersMusic.define(new MusicOwner(user, music));
 
 		result.redirectTo(UsersController.class).home();
 	}

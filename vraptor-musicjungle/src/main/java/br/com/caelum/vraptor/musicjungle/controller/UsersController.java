@@ -112,7 +112,7 @@ public class UsersController {
 	public void add(@Valid @LoginAvailable User user) {
         validator.onErrorUsePageOf(HomeController.class).login();
         
-        users.add(user);
+        users.register(user);
 
 		// you can add objects to result even in redirects. Added objects will
 		// survive one more request when redirecting.

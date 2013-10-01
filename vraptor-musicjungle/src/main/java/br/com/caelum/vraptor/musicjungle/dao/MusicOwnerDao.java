@@ -10,7 +10,7 @@ public class MusicOwnerDao extends GenericJPADao<MusicOwner> implements OwnersMu
 	}
 
 	@Override
-	public MusicOwner add(MusicOwner musicOwner) {
+	public MusicOwner define(MusicOwner musicOwner) {
 		return persist(musicOwner);
 	}
 }

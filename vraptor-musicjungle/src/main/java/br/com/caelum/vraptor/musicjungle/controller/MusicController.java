@@ -114,7 +114,7 @@ public class MusicController {
 		validator.onErrorForwardTo(UsersController.class).home();
 
 		playlist.add(music);
-		ownersMusic.add(new MusicOwner(userInfo.getUser(), music));
+		ownersMusic.define(new MusicOwner(userInfo.getUser(), music));
 		
 		// is there a file?
 		if (file != null) {

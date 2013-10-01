@@ -14,7 +14,7 @@ public class UserDao extends GenericJPADao<User> implements Users {
 	}
 
 	@Override
-	public User add(User user) {
+	public User register(User user) {
 		return persist(user);
 	}
 	

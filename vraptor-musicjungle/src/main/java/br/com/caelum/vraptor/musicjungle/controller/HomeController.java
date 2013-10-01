@@ -21,7 +21,6 @@ import javax.inject.Inject;
 import org.hibernate.SessionFactory;
 import org.hsqldb.Session;
 
-import sun.awt.ComponentFactory;
 import br.com.caelum.vraptor.Controller;
 import br.com.caelum.vraptor.Get;
 import br.com.caelum.vraptor.Post;

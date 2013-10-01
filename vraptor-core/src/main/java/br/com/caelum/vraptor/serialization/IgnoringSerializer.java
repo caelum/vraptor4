@@ -15,6 +15,7 @@
  */
 package br.com.caelum.vraptor.serialization;
 
+
 /**
  * Doesn't serialize anything
  * @author Lucas Cavalcanti
@@ -23,30 +24,20 @@ package br.com.caelum.vraptor.serialization;
  */
 public class IgnoringSerializer implements SerializerBuilder {
 
-	public Serializer exclude(String... names) {
-		return this;
-	}
-
 	public <T> Serializer from(T object) {
 		return this;
 	}
-
-	public Serializer include(String... names) {
+	
+	@Override
+	public <T> Serializer from(T object, String alias) {
 		return this;
 	}
-	public Serializer recursive() {
+	
+	@Override
+	public Serializer with(Option... options) {
 		return this;
 	}
 
 	public void serialize() {
 	}
-
-	public <T> Serializer from(T object, String alias) {
-		return this;
-	}
-
-	public Serializer excludeAll() {
-		return this;
-	}
-
 }

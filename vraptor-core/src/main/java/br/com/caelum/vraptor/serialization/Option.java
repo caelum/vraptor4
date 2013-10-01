@@ -1,4 +1,4 @@
-package br.com.caelum.vraptor.serializationx;
+package br.com.caelum.vraptor.serialization;
 
 import com.google.gson.Gson;
 import com.thoughtworks.xstream.XStream;

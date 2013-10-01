@@ -15,18 +15,12 @@
  */
 package br.com.caelum.vraptor.serialization.gson;
 
-import java.io.IOException;
-
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
 
-import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
 import br.com.caelum.vraptor.serialization.JSONSerialization;
-import br.com.caelum.vraptor.serialization.NoRootSerialization;
 import br.com.caelum.vraptor.serialization.Serializer;
-import br.com.caelum.vraptor.serialization.SerializerBuilder;
-import br.com.caelum.vraptor.view.ResultException;
 
 /**
  * Gson implementation for JSONSerialization
@@ -38,19 +32,16 @@ import br.com.caelum.vraptor.view.ResultException;
 public class GsonJSONSerialization implements JSONSerialization {
 
 	private HttpServletResponse response;
-	private TypeNameExtractor extractor;
-	private VRaptorGsonBuilder builder;
+	private GsonSerializer serializer;
 
 	@Deprecated
 	public GsonJSONSerialization() {
 	}
 
 	@Inject
-	public GsonJSONSerialization(HttpServletResponse response, TypeNameExtractor extractor,
-			VRaptorGsonBuilder builder) {
+	public GsonJSONSerialization(GsonSerializer serializer, HttpServletResponse response) {
+		this.serializer = serializer;
 		this.response = response;
-		this.extractor = extractor;
-		this.builder = builder;
 	}
 
 	@Override
@@ -66,29 +57,6 @@ public class GsonJSONSerialization implements JSONSerialization {
 	@Override
 	public <T> Serializer from(T object, String alias) {
 		response.setContentType("application/json");
-		return getSerializer().from(object, alias);
-	}
-
-	protected SerializerBuilder getSerializer() {
-		try {
-			return new GsonSerializer(builder, response.getWriter(), extractor);
-		} catch (IOException e) {
-			throw new ResultException("Unable to serialize data", e);
-		}
-	}
-
-	/**
-	 * You can override this method for configuring Driver before serialization
-	 */
-	@Override
-	public <T> NoRootSerialization withoutRoot() {
-		builder.setWithoutRoot(true);
-		return this;
-	}
-
-	@Override
-	public JSONSerialization indented() {
-		builder.indented();
-		return this;
+		return serializer.from(object, alias);
 	}
 }

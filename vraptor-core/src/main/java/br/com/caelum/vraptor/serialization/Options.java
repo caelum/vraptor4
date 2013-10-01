@@ -1,4 +1,5 @@
-package br.com.caelum.vraptor.serializationx;
+package br.com.caelum.vraptor.serialization;
+
 
 public final class Options {
 

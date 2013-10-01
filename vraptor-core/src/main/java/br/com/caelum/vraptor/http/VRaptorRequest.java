@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
 
+import javax.enterprise.inject.Vetoed;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 
@@ -37,6 +38,7 @@ import org.slf4j.LoggerFactory;
  * @author guilherme silveira
  *
  */
+@Vetoed
 public class VRaptorRequest extends HttpServletRequestWrapper implements MutableRequest {
 
 	private static final Logger logger = LoggerFactory.getLogger(VRaptorRequest.class);

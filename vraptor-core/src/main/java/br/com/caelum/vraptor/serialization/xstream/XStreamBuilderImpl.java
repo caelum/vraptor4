@@ -16,14 +16,13 @@
 package br.com.caelum.vraptor.serialization.xstream;
 
 import java.io.Writer;
-import java.util.Arrays;
-import java.util.Collections;
 
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 
 import br.com.caelum.vraptor.interceptor.DefaultTypeNameExtractor;
 import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
+import br.com.caelum.vraptor.ioc.cdi.FakeInstanceImpl;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.converters.Converter;
@@ -55,9 +54,10 @@ public class XStreamBuilderImpl implements XStreamBuilder {
 	}
 
 	public static XStreamBuilder cleanInstance(Converter...converters) {
-		return new XStreamBuilderImpl(
-				new XStreamConverters(Arrays.asList(converters), Collections.<SingleValueConverter>emptyList()),
-				new DefaultTypeNameExtractor());
+		FakeInstanceImpl<Converter> convertersInst = new FakeInstanceImpl<>(converters);
+		FakeInstanceImpl<SingleValueConverter> singleValueConverters = new FakeInstanceImpl<>();
+		XStreamConverters xStreamConverters = new XStreamConverters(convertersInst, singleValueConverters);
+		return new XStreamBuilderImpl(xStreamConverters, new DefaultTypeNameExtractor());
 	}
 
 	public XStream xmlInstance() {

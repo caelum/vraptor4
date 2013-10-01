@@ -9,7 +9,6 @@ import static org.mockito.Mockito.when;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
 
@@ -105,13 +104,13 @@ public class DefaultStatusTest {
 		verify(response).sendError(409);
 	}
 
-	@Test 
+	@Test
 	public void shouldSetAcceptedStatus() throws Exception {
 		status.accepted();
-		
+
 		verify(response).setStatus(202);
 	}
-	
+
 	@Test
 	public void shouldSetMethodNotAllowedStatus() throws Exception {
 		status.methodNotAllowed(EnumSet.of(HttpMethod.GET, HttpMethod.POST));
@@ -159,13 +158,13 @@ public class DefaultStatusTest {
 		Message normal = new ValidationMessage("The message", "category");
 		I18nMessage i18ned = new I18nMessage("category", "message");
 		i18ned.setBundle(new SingletonResourceBundle("message", "Something else"));
-		
+
 		XStreamBuilder xstreamBuilder = XStreamBuilderImpl.cleanInstance(new MessageConverter());
 		MockSerializationResult result = new MockSerializationResult(null, xstreamBuilder, null);
 		DefaultStatus status = new DefaultStatus(response, result, config, new JavassistProxifier(), router);
-		
+
 		status.badRequest(Lists.newArrayList(normal, i18ned));
-		
+
 		String serialized = result.serializedResult();
 		assertThat(serialized, containsString("<message>The message</message>"));
 		assertThat(serialized, containsString("<category>category</category>"));
@@ -173,7 +172,7 @@ public class DefaultStatusTest {
 		assertThat(serialized, not(containsString("<validationMessage>")));
 		assertThat(serialized, not(containsString("<i18nMessage>")));
 	}
-	
+
 	@Test
 	public void shouldSerializeErrorMessagesInJSON() throws Exception {
 		Message normal = new ValidationMessage("The message", "category");
@@ -182,7 +181,7 @@ public class DefaultStatusTest {
 
 		List<JsonSerializer<?>> gsonSerializers = new ArrayList<>();
 		gsonSerializers.add(new MessageSerializer());
-		
+
 		VRaptorGsonBuilder gsonBuilder = new VRaptorGsonBuilder(new FakeInstanceImpl<>(gsonSerializers));
 		MockSerializationResult result = new MockSerializationResult(null, null, gsonBuilder) {
 			@Override
@@ -191,14 +190,14 @@ public class DefaultStatusTest {
 					public String getAcceptFormat() {
 						return "json";
 					}
-					
-				}, this, Arrays.<Serialization>asList(super.use(JSONSerialization.class))));
+
+				}, this, new FakeInstanceImpl<Serialization>(super.use(JSONSerialization.class))));
 			}
 		};
 		DefaultStatus status = new DefaultStatus(response, result, config, new JavassistProxifier(), router);
-		
+
 		status.badRequest(Lists.newArrayList(normal, i18ned));
-		
+
 		String serialized = result.serializedResult();
 		assertThat(serialized, containsString("\"message\":\"The message\""));
 		assertThat(serialized, containsString("\"category\":\"category\""));

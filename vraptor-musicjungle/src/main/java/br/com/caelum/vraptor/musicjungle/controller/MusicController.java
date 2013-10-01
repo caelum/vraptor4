@@ -39,7 +39,8 @@ import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.interceptor.download.Download;
 import br.com.caelum.vraptor.interceptor.download.FileDownload;
 import br.com.caelum.vraptor.interceptor.multipart.UploadedFile;
-import br.com.caelum.vraptor.musicjungle.dao.MusicDao;
+import br.com.caelum.vraptor.musicjungle.dao.repository.IMusicOwnerRepository;
+import br.com.caelum.vraptor.musicjungle.dao.repository.IMusicRepository;
 import br.com.caelum.vraptor.musicjungle.files.Musics;
 import br.com.caelum.vraptor.musicjungle.interceptor.Public;
 import br.com.caelum.vraptor.musicjungle.interceptor.UserInfo;
@@ -67,7 +68,8 @@ public class MusicController {
 	private Result result;
 	private Validator validator;
 	private UserInfo userInfo;
-	private MusicDao musicDao;
+	private IMusicRepository musicRepository;
+	private IMusicOwnerRepository musicOwnerRepository;
 	private Musics musics;
 
 	// CDI eyes only
@@ -84,9 +86,10 @@ public class MusicController {
 	 * @param factory dao factory.
 	 */
 	@Inject
-	public MusicController(MusicDao musicDao, UserInfo userInfo, 
-				Result result, Validator validator, Musics musics) {
-		this.musicDao = musicDao;
+	public MusicController(IMusicRepository musicRepository, IMusicOwnerRepository musicOwnerRepository, 
+			UserInfo userInfo, Result result, Validator validator, Musics musics) {
+		this.musicRepository = musicRepository;
+		this.musicOwnerRepository = musicOwnerRepository;
 		this.result = result;
         this.validator = validator;
         this.userInfo = userInfo;
@@ -110,8 +113,8 @@ public class MusicController {
 	public void add(final @NotNull @Valid Music music, UploadedFile file) {
 		validator.onErrorForwardTo(UsersController.class).home();
 
-		musicDao.add(music);
-		musicDao.add(new MusicOwner(userInfo.getUser(), music));
+		musicRepository.add(music);
+		musicOwnerRepository.add(new MusicOwner(userInfo.getUser(), music));
 		
 		// is there a file?
 		if (file != null) {
@@ -147,7 +150,7 @@ public class MusicController {
 	@Path("/musics/{music.id}")
 	@Get
 	public void show(Music music) {
-	    result.include("music", musicDao.load(music));
+	    result.include("music", musicRepository.load(music));
 	}
 
     /**
@@ -162,13 +165,13 @@ public class MusicController {
 	@Get("/musics/search")
 	public void search(Music music) {
 		String title = Objects.firstNonNull(music.getTitle(), "");
-        result.include("musics", this.musicDao.searchSimilarTitle(title));
+        result.include("musics", musicRepository.searchSimilarTitle(title));
     }
 	
 	@Path("/musics/download/{m.id}")
 	@Get
 	public Download download(Music m){
-		Music music = musicDao.load(m);
+		Music music = musicRepository.load(m);
 		File file = musics.getFile(music);
 		String contentType = "audio/mpeg";
         String filename = music.getTitle() + ".mp3";
@@ -181,7 +184,7 @@ public class MusicController {
 	 */
 	@Public @Path("/musics/list/json")
 	public void showAllMusicsAsJSON() {
-		result.use(json()).from(musicDao.listAll()).serialize();
+		result.use(json()).from(musicRepository.listAll()).serialize();
 	}
 
 	/**
@@ -189,7 +192,7 @@ public class MusicController {
 	 */
 	@Public @Path("/musics/list/xml")
 	public void showAllMusicsAsXML() {
-		result.use(xml()).from(musicDao.listAll()).serialize();
+		result.use(xml()).from(musicRepository.listAll()).serialize();
 	}
 	
 	/**
@@ -198,7 +201,7 @@ public class MusicController {
 	@Public @Path("/musics/list/http")
 	public void showAllMusicsAsHTTP() {
 		result.use(http()).body("<p class=\"content\">"+
-			musicDao.listAll().toString()+"</p>");
+				musicRepository.listAll().toString()+"</p>");
 	}
 
 	@Public @Path("/musics/list/form")
@@ -207,6 +210,6 @@ public class MusicController {
 	@Public @Path("musics/listAs")
 	public void listAs() {
 		result.use(representation())
-			.from(musicDao.listAll()).serialize();
+			.from(musicRepository.listAll()).serialize();
 	}
 }

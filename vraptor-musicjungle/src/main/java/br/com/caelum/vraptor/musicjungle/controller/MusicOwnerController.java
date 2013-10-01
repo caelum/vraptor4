@@ -23,8 +23,8 @@ import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.Put;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.Validator;
-import br.com.caelum.vraptor.musicjungle.dao.MusicDao;
-import br.com.caelum.vraptor.musicjungle.dao.UserDao;
+import br.com.caelum.vraptor.musicjungle.dao.repository.IMusicOwnerRepository;
+import br.com.caelum.vraptor.musicjungle.dao.repository.IUserRepository;
 import br.com.caelum.vraptor.musicjungle.interceptor.UserInfo;
 import br.com.caelum.vraptor.musicjungle.model.Music;
 import br.com.caelum.vraptor.musicjungle.model.MusicOwner;
@@ -41,8 +41,8 @@ public class MusicOwnerController {
 	private Result result;
 	private Validator validator;
 	private UserInfo userInfo;
-	private MusicDao musicDao;
-	private UserDao userDao;
+	private IMusicOwnerRepository musicOwnerRepository;
+	private IUserRepository userRepository;
 	
 	//CDI eyes only
 	@Deprecated
@@ -58,10 +58,10 @@ public class MusicOwnerController {
 	 * @param validator VRaptor validator.
 	 */
 	@Inject
-	public MusicOwnerController(MusicDao musicDao, UserDao userDao, 
+	public MusicOwnerController(IMusicOwnerRepository musicOwnerRepository, IUserRepository userRepository, 
 			UserInfo userInfo, Result result, Validator validator) {
-		this.musicDao = musicDao;
-		this.userDao = userDao;
+		this.musicOwnerRepository = musicOwnerRepository;
+		this.userRepository = userRepository;
 		this.result = result;
         this.validator = validator;
         this.userInfo = userInfo;
@@ -95,7 +95,7 @@ public class MusicOwnerController {
 
 		validator.onErrorUsePageOf(UsersController.class).home();
 
-		musicDao.add(new MusicOwner(user, music));
+		musicOwnerRepository.add(new MusicOwner(user, music));
 
 		result.redirectTo(UsersController.class).home();
 	}
@@ -105,8 +105,7 @@ public class MusicOwnerController {
      */
     private User refreshUser() {
         User user = userInfo.getUser();
-		userDao.refresh(user);
+        userRepository.refresh(user);
         return user;
     }
-
 }

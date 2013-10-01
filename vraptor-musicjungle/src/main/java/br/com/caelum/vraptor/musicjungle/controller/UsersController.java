@@ -25,7 +25,7 @@ import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.Validator;
-import br.com.caelum.vraptor.musicjungle.dao.UserDao;
+import br.com.caelum.vraptor.musicjungle.dao.repository.IUserRepository;
 import br.com.caelum.vraptor.musicjungle.enums.MusicType;
 import br.com.caelum.vraptor.musicjungle.interceptor.Public;
 import br.com.caelum.vraptor.musicjungle.model.User;
@@ -40,7 +40,7 @@ public class UsersController {
 
 	private Validator validator;
 	private Result result;
-	private UserDao userDao;
+	private IUserRepository repository;
 
 	// CDI eyes only
 	@Deprecated
@@ -56,8 +56,8 @@ public class UsersController {
 	 * @param validator VRaptor validator.
 	 */
 	@Inject
-	public UsersController(UserDao dao, Result result, Validator validator) {
-		this.userDao = dao;
+	public UsersController(IUserRepository repository, Result result, Validator validator) {
+		this.repository = repository;
 		this.result = result;
 		this.validator = validator;
 	}
@@ -85,7 +85,7 @@ public class UsersController {
      */
 	@Get("/users")
 	public void list() {
-        result.include("users", userDao.listAll());
+        result.include("users", repository.listAll());
     }
 
 	/**
@@ -112,7 +112,7 @@ public class UsersController {
 	public void add(@Valid @LoginAvailable User user) {
         validator.onErrorUsePageOf(HomeController.class).login();
         
-		userDao.add(user);
+        repository.add(user);
 
 		// you can add objects to result even in redirects. Added objects will
 		// survive one more request when redirecting.
@@ -133,7 +133,7 @@ public class UsersController {
 	@Path("/users/{user.login}")
 	@Get
 	public void show(User user) {
-	    result.include("user", userDao.find(user.getLogin()));
+	    result.include("user", repository.load(user));
 
 	    //You can redirect to any page if you like.
 	    result.forwardTo("/WEB-INF/jsp/users/view.jsp");

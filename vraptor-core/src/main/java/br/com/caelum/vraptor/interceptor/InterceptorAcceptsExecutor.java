@@ -2,10 +2,13 @@ package br.com.caelum.vraptor.interceptor;
 
 import java.lang.reflect.Method;
 
+import javax.enterprise.inject.Vetoed;
+
 import br.com.caelum.vraptor.VRaptorException;
 
 import com.google.common.base.Objects;
 
+@Vetoed
 public class InterceptorAcceptsExecutor implements StepExecutor<Boolean>{
 
 	private StepInvoker stepInvoker;
@@ -27,12 +30,12 @@ public class InterceptorAcceptsExecutor implements StepExecutor<Boolean>{
 		if(!method.getReturnType().equals(Boolean.class) && !method.getReturnType().equals(boolean.class)) {
 			throw new VRaptorException("@Accepts method must return boolean");
 		}
-		
+
 		SignatureAcceptor acceptor = new NoStackParameterSignatureAcceptor();
 		if (!acceptor.accepts(method)) {
 			throw new VRaptorException(method.getDeclaringClass().getCanonicalName() + " - " + acceptor.errorMessage());
 		}
-		
+
 		return true;
 	}
 

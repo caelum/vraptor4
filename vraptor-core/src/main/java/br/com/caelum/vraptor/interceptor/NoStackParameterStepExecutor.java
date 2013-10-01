@@ -2,6 +2,9 @@ package br.com.caelum.vraptor.interceptor;
 
 import java.lang.reflect.Method;
 
+import javax.enterprise.inject.Vetoed;
+
+@Vetoed
 public class NoStackParameterStepExecutor implements StepExecutor<Void> {
 
 	private StepInvoker stepInvoker;

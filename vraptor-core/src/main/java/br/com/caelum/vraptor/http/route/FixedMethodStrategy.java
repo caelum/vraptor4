@@ -48,7 +48,6 @@ public class FixedMethodStrategy implements Route {
 
 	private final String[] parameterNames;
 
-
 	public FixedMethodStrategy(String originalUri, ControllerMethod method, Set<HttpMethod> methods,
 			ParametersControl control, int priority, String[] parameterNames) {
 		this.originalUri = originalUri;
@@ -90,7 +89,7 @@ public class FixedMethodStrategy implements Route {
 	public String getOriginalUri() {
 		return this.originalUri;
 	}
-	
+
 	public ControllerMethod getControllerMethod() {
 		return controllerMethod;
 	}

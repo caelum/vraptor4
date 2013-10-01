@@ -17,12 +17,14 @@
 
 package br.com.caelum.vraptor.http.iogi;
 
+import javax.enterprise.inject.Vetoed;
 import javax.servlet.http.HttpServletRequest;
 
 import br.com.caelum.iogi.Instantiator;
 import br.com.caelum.iogi.parameters.Parameters;
 import br.com.caelum.iogi.reflection.Target;
 
+@Vetoed
 final class RequestAttributeInstantiator implements Instantiator<Object> {
 	private final HttpServletRequest request;
 

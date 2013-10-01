@@ -53,6 +53,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import javax.enterprise.inject.Vetoed;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -80,6 +82,7 @@ import com.google.common.base.Joiner;
  *
  * @author Guilherme Silveira
  */
+@Vetoed
 public class DefaultRouteBuilder implements RouteBuilder {
 	private final Set<HttpMethod> supportedMethods = EnumSet.noneOf(HttpMethod.class);
 

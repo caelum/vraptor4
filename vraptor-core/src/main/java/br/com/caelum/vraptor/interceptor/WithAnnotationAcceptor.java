@@ -6,6 +6,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import javax.enterprise.inject.Vetoed;
+
 import br.com.caelum.vraptor.controller.ControllerInstance;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 
@@ -14,10 +16,11 @@ import com.google.common.collect.Collections2;
 
 /**
  * Verify if certain annotations are presents in class or method.
- * 
+ *
  * @author Alberto Souza
- * 
+ *
  */
+@Vetoed
 public class WithAnnotationAcceptor implements
 		AcceptsValidator<AcceptsWithAnnotations> {
 

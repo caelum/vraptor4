@@ -17,9 +17,6 @@
 
 package br.com.caelum.vraptor.interceptor;
 
-import static br.com.caelum.vraptor.view.Results.nothing;
-
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import javax.inject.Inject;
@@ -37,6 +34,7 @@ import br.com.caelum.vraptor.reflection.MethodExecutor;
 import br.com.caelum.vraptor.reflection.MethodExecutorException;
 import br.com.caelum.vraptor.util.Stringnifier;
 import br.com.caelum.vraptor.validator.ValidationException;
+import static br.com.caelum.vraptor.view.Results.nothing;
 
 /**
  * Interceptor that executes the logic method.
@@ -98,13 +96,20 @@ public class ExecuteMethodInterceptor implements Interceptor {
 		} catch (IllegalArgumentException e) {
 			throw new InterceptionException(e);
 		} catch (MethodExecutorException e) {
-			Throwable cause = e.getCause();
-			if (cause instanceof ValidationException) {
-				// fine... already parsed
-				log.trace("swallowing {}", cause);
-			} else {
-				throw new ApplicationLogicException("your controller raised an exception", cause);
-			}
+			throwIfNotValidationException(e,new ApplicationLogicException("your controller raised an exception", e.getCause()));
+		}catch(Exception e){
+			throwIfNotValidationException(e,new InterceptionException(e));
+		}
+	}
+
+	private void throwIfNotValidationException(Throwable original, RuntimeException alternative) {
+		Throwable cause = original.getCause();
+		
+		if (original instanceof ValidationException || cause instanceof ValidationException) {
+			// fine... already parsed
+			log.trace("swallowing {}", cause);
+		} else {
+			throw alternative;
 		}
 	}
 

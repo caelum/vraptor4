@@ -10,8 +10,9 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+
+import javax.enterprise.inject.Instance;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -20,6 +21,7 @@ import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.http.FormatResolver;
+import br.com.caelum.vraptor.ioc.cdi.FakeInstanceImpl;
 import br.com.caelum.vraptor.other.pack4ge.DumbSerialization;
 import br.com.caelum.vraptor.serialization.gson.GsonJSONSerialization;
 import br.com.caelum.vraptor.serialization.xstream.XStreamXMLSerialization;
@@ -41,7 +43,8 @@ public class DefaultRepresentationResultTest {
 		MockitoAnnotations.initMocks(this);
 		when(result.use(PageResult.class)).thenReturn(pageResult);
 		when(result.use(Status.class)).thenReturn(status);
-		representation = new DefaultRepresentationResult(formatResolver, result, Arrays.asList(serialization));
+		Instance<Serialization> serializations = new FakeInstanceImpl<Serialization>(serialization);
+		representation = new DefaultRepresentationResult(formatResolver, result, serializations);
 	}
 
 	@Test

@@ -16,12 +16,15 @@
 package br.com.caelum.vraptor.serialization;
 
 import static br.com.caelum.vraptor.view.Results.status;
+import static com.google.common.collect.Lists.newArrayList;
 import static java.util.Collections.sort;
 
 import java.util.Comparator;
 import java.util.List;
 
 import javax.enterprise.context.RequestScoped;
+import javax.enterprise.inject.Any;
+import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 
 import br.com.caelum.vraptor.Result;
@@ -45,10 +48,12 @@ public class DefaultRepresentationResult implements RepresentationResult {
 	public DefaultRepresentationResult() {}
 
 	@Inject
-	public DefaultRepresentationResult(FormatResolver formatResolver, Result result, List<Serialization> serializations) {
+	public DefaultRepresentationResult(FormatResolver formatResolver,
+			Result result, @Any Instance<Serialization> serializations) {
+
 		this.formatResolver = formatResolver;
 		this.result = result;
-		this.serializations = serializations;
+		this.serializations = newArrayList(serializations);
 	}
 
 	public <T> Serializer from(T object) {
@@ -69,7 +74,7 @@ public class DefaultRepresentationResult implements RepresentationResult {
 			result.use(status()).notFound();
 			return new IgnoringSerializer();
 		}
-		
+
 		sortSerializations();
 		String format = formatResolver.getAcceptFormat();
 		for (Serialization serialization : serializations) {
@@ -85,16 +90,16 @@ public class DefaultRepresentationResult implements RepresentationResult {
 
 		return new IgnoringSerializer();
 	}
-	
+
 	/**
 	 * Comparator that give more priority to application classes.
 	 * @author A.C de Souza
 	 * @since 3.4.0
 	 */
 	static final class ApplicationPackageFirst implements Comparator<Serialization> {
-		
+
 		private static final String VRAPTOR_PACKAGE = "br.com.caelum.vraptor.serialization";
-		
+
 		private int priority(Serialization s) {
 			return s.getClass().getPackage().getName().startsWith(VRAPTOR_PACKAGE)?  1 : 0;
 		}

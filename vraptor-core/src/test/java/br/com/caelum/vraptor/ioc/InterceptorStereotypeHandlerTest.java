@@ -27,7 +27,6 @@ import br.com.caelum.vraptor.controller.DefaultBeanClass;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.interceptor.Interceptor;
 import br.com.caelum.vraptor.interceptor.InterceptorRegistry;
-
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -38,7 +37,7 @@ public class InterceptorStereotypeHandlerTest {
 
 	@Before
 	public void setUp() throws Exception {
-		MockitoAnnotations.initMocks(this);		
+		MockitoAnnotations.initMocks(this);
 		handler = new InterceptorStereotypeHandler(interceptorRegistry);
 	}
 

@@ -7,7 +7,6 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
 import net.vidageek.mirror.dsl.Mirror;
-import net.vidageek.mirror.exception.MirrorException;
 import net.vidageek.mirror.list.dsl.Matcher;
 import net.vidageek.mirror.list.dsl.MirrorList;
 import br.com.caelum.vraptor.InterceptionException;
@@ -26,8 +25,8 @@ public class StepInvoker {
 		this.methodExecutor = methodExecutor;
 	}
 
-	@Deprecated
-	public StepInvoker() {
+	/** @deprecated CDI eyes only*/
+	protected StepInvoker() {
 	}
 
 	private class InvokeMatcher implements Matcher<Method> {
@@ -40,15 +39,14 @@ public class StepInvoker {
 
 		@Override
 		public boolean accepts(Method element) {
-			if (element.getDeclaringClass().getName().contains("$")) {
+			if(element.getDeclaringClass().getName().contains("$")) {
 				return false;
 			}
 			return element.isAnnotationPresent(this.step);
 		}
 	}
 
-	public Object tryToInvoke(Object interceptor, Method stepMethod,
-			Object... params) {
+	public Object tryToInvoke(Object interceptor, Method stepMethod, Object... params) {
 		if (stepMethod == null) {
 			return null;
 		}
@@ -59,21 +57,18 @@ public class StepInvoker {
 		return returnObject;
 	}
 
-	private Object invokeMethod(Object interceptor, Method stepMethod,
-			Object... params) {
-		try {			
+	private Object invokeMethod(Object interceptor, Method stepMethod, Object... params) {
+		try {
 			return methodExecutor.invoke(stepMethod, interceptor, params);
 		} catch (MethodExecutorException e) {
 			// we dont wanna wrap it if it is a simple controller business logic
 			// exception
-			Throwables.propagateIfInstanceOf(e.getCause(),
-					ApplicationLogicException.class);
+			Throwables.propagateIfInstanceOf(e.getCause(), ApplicationLogicException.class);
 			throw new InterceptionException(e.getCause());
 		}
 	}
 
-	private boolean isNotSameClass(MirrorList<Method> methods,
-			Class<?> interceptorClass) {
+	private boolean isNotSameClass(MirrorList<Method> methods, Class<?> interceptorClass) {
 
 		for (Method possibleMethod : methods) {
 			if (!possibleMethod.getDeclaringClass().equals(interceptorClass)) {
@@ -87,16 +82,13 @@ public class StepInvoker {
 		return new Mirror().on(interceptorClass).reflectAll().methods();
 	}
 
-	public Method findMethod(MirrorList<Method> interceptorMethods,
-			Class<? extends Annotation> step, Class<?> interceptorClass) {
+	public Method findMethod(MirrorList<Method> interceptorMethods, Class<? extends Annotation> step,
+			Class<?> interceptorClass) {
 
-		MirrorList<Method> possibleMethods = interceptorMethods
-				.matching(new InvokeMatcher(step));
-		if (possibleMethods.size() > 1
-				&& isNotSameClass(possibleMethods, interceptorClass)) {
-			throw new IllegalStateException(interceptorClass.getCanonicalName()
-					+ " - You should not " + "have more than one @"
-					+ step.getSimpleName() + " annotated method");
+		MirrorList<Method> possibleMethods = interceptorMethods.matching(new InvokeMatcher(step));
+		if (possibleMethods.size() > 1 && isNotSameClass(possibleMethods, interceptorClass)) {
+			throw new IllegalStateException(interceptorClass.getCanonicalName() + " - You should not "
+					+ "have more than one @" + step.getSimpleName() + " annotated method");
 		}
 		return possibleMethods.isEmpty() ? null : possibleMethods.get(0);
 	}

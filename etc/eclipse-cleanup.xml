@@ -5,7 +5,7 @@
 <setting id="cleanup.always_use_parentheses_in_expressions" value="false"/>
 <setting id="cleanup.never_use_blocks" value="false"/>
 <setting id="cleanup.remove_unused_private_methods" value="true"/>
-<setting id="cleanup.add_missing_deprecated_annotations" value="true"/>
+<setting id="cleanup.add_missing_deprecated_annotations" value="false"/>
 <setting id="cleanup.convert_to_enhanced_for_loop" value="false"/>
 <setting id="cleanup.remove_unnecessary_nls_tags" value="true"/>
 <setting id="cleanup.sort_members" value="false"/>

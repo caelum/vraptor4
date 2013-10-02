@@ -63,7 +63,7 @@
 	<modules>
 		<module>vraptor-core</module>
 		<module>vraptor-musicjungle</module>
-		<!--module>vraptor-test</module-->
+		<module>vraptor-blank-project</module>
 	</modules>
 	
 	<properties>

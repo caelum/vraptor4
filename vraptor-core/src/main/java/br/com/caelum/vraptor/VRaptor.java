@@ -54,6 +54,8 @@ import br.com.caelum.vraptor.ioc.ContainerProvider;
  */
 @WebFilter(filterName="vraptor", urlPatterns="/*", dispatcherTypes={DispatcherType.FORWARD, DispatcherType.REQUEST})
 public class VRaptor implements Filter {
+	
+	private static final String VERSION = "4.0.0.beta-SNAPSHOT";
 
 	@Inject
 	private ContainerProvider provider;
@@ -125,7 +127,7 @@ public class VRaptor implements Filter {
 		servletContext = cfg.getServletContext();
 		contextEvent.fire(servletContext);
 		this.provider.start();
-		logger.info("VRaptor 4.0 successfuly initialized");
+		logger.info("VRaptor {} successfuly initialized", VERSION);
 		initializedEvent.fire(new VRaptorInitialized());
 	}
 }

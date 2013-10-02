@@ -21,7 +21,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import javax.inject.Inject;
+import javax.enterprise.inject.Vetoed;
 
 import br.com.caelum.iogi.Instantiator;
 import br.com.caelum.iogi.collections.ListInstantiator;
@@ -35,11 +35,11 @@ import br.com.caelum.iogi.reflection.Target;
  * @author Lucas Cavalcanti
  * @since 3.5.0
  */
+@Vetoed
 public class SetInstantiator implements Instantiator<Set<Object>> {
-	
+
 	private final ListInstantiator listInstantiator;
 
-	@Inject
 	public SetInstantiator(Instantiator<Object> listElementInstantiator) {
 		listInstantiator = new ListInstantiator(listElementInstantiator);
 	}

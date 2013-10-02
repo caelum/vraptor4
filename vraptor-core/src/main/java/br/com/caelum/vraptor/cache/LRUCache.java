@@ -29,7 +29,7 @@ import javax.enterprise.inject.Vetoed;
  */
 //Not registering it because it is already produced by LRUCacheFactory.
 @Vetoed
-public class LRUCache<K, V> extends LinkedHashMap<K, V> implements VRaptorCache<K,V> {
+public class LRUCache<K, V> extends LinkedHashMap<K, V> implements Cache<K,V> {
 	private static final long serialVersionUID = 1L;
 	private int capacity;
 	

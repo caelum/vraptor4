@@ -40,7 +40,7 @@ import org.junit.Test;
 
 import br.com.caelum.vraptor.Controller;
 import br.com.caelum.vraptor.Path;
-import br.com.caelum.vraptor.cache.VRaptorCache;
+import br.com.caelum.vraptor.cache.Cache;
 import br.com.caelum.vraptor.cache.VRaptorDefaultCache;
 import br.com.caelum.vraptor.controller.BeanClass;
 import br.com.caelum.vraptor.controller.ControllerMethod;
@@ -70,7 +70,7 @@ public class DefaultRouterTest {
 	private Converters converters;
 	private ParameterNameProvider nameProvider;
 	private EncodingHandler encodingHandler;
-	private VRaptorCache<Invocation,Route> cache;
+	private Cache<Invocation,Route> cache;
 
 	@Before
 	public void setup() {

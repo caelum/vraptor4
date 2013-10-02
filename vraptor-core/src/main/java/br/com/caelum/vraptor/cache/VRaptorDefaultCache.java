@@ -5,7 +5,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import javax.enterprise.inject.Default;
 
 @Default
-public class VRaptorDefaultCache<K,V> implements VRaptorCache<K,V>{
+public class VRaptorDefaultCache<K,V> implements Cache<K,V>{
 	
 	private final ConcurrentHashMap<K,V> cache = new ConcurrentHashMap<>();			
 		

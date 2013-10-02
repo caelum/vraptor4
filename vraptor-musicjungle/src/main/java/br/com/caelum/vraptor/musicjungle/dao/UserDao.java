@@ -1,78 +1,42 @@
-/***
- * Copyright (c) 2009 Caelum - www.caelum.com.br/opensource
- * All rights reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License"); 
- * you may not use this file except in compliance with the License. 
- * You may obtain a copy of the License at 
- * 
- * 	http://www.apache.org/licenses/LICENSE-2.0 
- * 
- * Unless required by applicable law or agreed to in writing, software 
- * distributed under the License is distributed on an "AS IS" BASIS, 
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
- * See the License for the specific language governing permissions and 
- * limitations under the License. 
- */
 package br.com.caelum.vraptor.musicjungle.dao;
 
 import java.util.List;
 
-import org.hibernate.HibernateException;
+import javax.persistence.criteria.Predicate;
 
+import br.com.caelum.vraptor.musicjungle.dao.repository.Users;
 import br.com.caelum.vraptor.musicjungle.model.User;
 
-/**
- * Data Access Object of User entity.
- * 
- * @author Lucas Cavalcanti
- * @author Rodrigo Turini
- */
-public interface UserDao {
+public class UserDao extends GenericJPADao<User> implements Users {
 
-	/**
-	 * Finds an user by login and password.
-	 *
-	 * @return found user if it is unique
-	 * @throws HibernateException, if there are more than one user
-	 */
-	User find(String login, String password);
+	public UserDao() {
+		super(User.class);
+	}
 
-	/**
-	 * Finds an user by login
-	 *
-	 * @return found user if it is unique
-	 * @throws HibernateException, if there are more than one user
-	 */
-	User find(String login);
+	@Override
+	public User register(User user) {
+		return persist(user);
+	}
+	
+	@Override
+	public User load(User user) {
+		return findByPK(user.getLogin());
+	}
 
-	/**
-	 * Adds the user on database
-	 */
-	void add(User user);
+	@Override
+	public List<User> listAll() {
+		return findAll();
+	}
 
-	/**
-	 * Synchronize the user data with the database. 
-	 * Any not saved modification on user will be overwritten.
-	 * @return 
-	 */
-	User refresh(User user);
+	@Override
+	public User validateCredentials(String login, String password) {
+		Predicate loginEqual = builder.equal(from.<String>get("login"), login);
+		Predicate passwordEqual = builder.equal(from.<String>get("password"), password);
+		return findUniqueByPredicate(builder.and(loginEqual, passwordEqual));
+	}
 
-	/**
-	 * Update the user on database.
-	 */
-	void update(User user);
-
-	/**
-	 * Retrieves all users from database.
-	 */
-	List<User> listAll();
-
-	/**
-	 * Checks if there is already an user with given login.
-	 *
-	 * @return true if there exists a user
-	 */
-	boolean containsUserWithLogin(String login);
-
+	@Override
+	public User refresh(User user) {
+		return super.refresh(user);
+	}
 }

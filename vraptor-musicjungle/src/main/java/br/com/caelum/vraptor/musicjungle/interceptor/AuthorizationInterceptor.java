@@ -27,7 +27,7 @@ import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.interceptor.SimpleInterceptorStack;
 import br.com.caelum.vraptor.musicjungle.controller.HomeController;
-import br.com.caelum.vraptor.musicjungle.dao.UserDao;
+import br.com.caelum.vraptor.musicjungle.dao.repository.Users;
 import br.com.caelum.vraptor.musicjungle.model.User;
 import br.com.caelum.vraptor.validator.ValidationMessage;
 
@@ -41,7 +41,7 @@ public class AuthorizationInterceptor {
 	private UserInfo info;
 
 	@Inject
-	private UserDao dao;
+	private Users repository;
 
 	@Inject
 	private Result result;
@@ -59,7 +59,7 @@ public class AuthorizationInterceptor {
 
 		User current = null;
 		try {
-			current = dao.refresh(info.getUser());
+			current = repository.refresh(info.getUser());
 		} catch (Exception e) {
 			// could happen if the user does not exist in the database or if there's no user logged in.
 		}

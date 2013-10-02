@@ -55,7 +55,7 @@ import br.com.caelum.vraptor.ioc.ContainerProvider;
 @WebFilter(filterName="vraptor", urlPatterns="/*", dispatcherTypes={DispatcherType.FORWARD, DispatcherType.REQUEST})
 public class VRaptor implements Filter {
 	
-	private static final String VERSION = "4.0.0.beta-SNAPSHOT";
+	private static final String VERSION = "4.0.0-beta-1-SNAPSHOT";
 
 	@Inject
 	private ContainerProvider provider;

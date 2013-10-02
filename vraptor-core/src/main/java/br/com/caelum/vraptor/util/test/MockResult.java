@@ -30,7 +30,7 @@ import br.com.caelum.vraptor.proxy.JavassistProxifier;
 import br.com.caelum.vraptor.proxy.MethodInvocation;
 import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.proxy.SuperMethod;
-import br.com.caelum.vraptor.serialization.NoRootSerialization;
+import br.com.caelum.vraptor.serialization.Serialization;
 import br.com.caelum.vraptor.serialization.Serializer;
 import br.com.caelum.vraptor.serialization.SerializerBuilder;
 import br.com.caelum.vraptor.view.EmptyResult;
@@ -96,7 +96,7 @@ public class MockResult extends AbstractResult {
 
 				if (Serializer.class.isAssignableFrom(type)
 						|| SerializerBuilder.class.isAssignableFrom(type)
-						|| NoRootSerialization.class.isAssignableFrom(type)) {
+						|| Serialization.class.isAssignableFrom(type)) {
 					return proxifier.proxify(type, returnOnFinalMethods(type));
 				}
 				throw new ResultException("It's not possible to create a mocked version of " + method + ". Please inform this corner case to VRaptor developers");

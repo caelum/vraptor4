@@ -24,7 +24,7 @@ import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
 
 /**
- * delegates the serialization for the default view
+ * Delegates the serialization for the default view
  * @author Lucas Cavalcanti
  * @since 3.1.3
  */
@@ -63,5 +63,4 @@ public class HTMLSerialization implements Serialization {
 		result.use(page()).defaultView();
 		return new IgnoringSerializer();
 	}
-
 }

@@ -30,8 +30,9 @@ import br.com.caelum.vraptor.View;
  * @version 3.3.0
  */
 public interface JSONPSerialization extends View {
+	
 	/**
-	 * sets the jsonp callback
+	 * Sets the jsonp callback
 	 */
 	public JSONSerialization withCallback(String callbackName);
 }

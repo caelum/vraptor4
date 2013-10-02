@@ -183,14 +183,6 @@ public class GsonJSONSerializationTest {
 	}
 
 	@Test
-	public void shouldSerializeAllBasicFieldsIdented() {
-		String expectedResult = "{\n  \"order\": {\n    \"price\": 15.0,\n    \"comments\": \"pack it nicely, please\"\n  }\n}";
-		Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please");
-		serialization.indented().from(order).serialize();
-		assertThat(result(), is(equalTo(expectedResult)));
-	}
-
-	@Test
 	public void shouldUseAlias() {
 		String expectedResult = "{\"customOrder\":{\"price\":15.0,\"comments\":\"pack it nicely, please\"}}";
 		Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please");
@@ -374,16 +366,6 @@ public class GsonJSONSerializationTest {
 		assertThat(result(), containsString("\"name\":\"any item\""));
 		assertThat(result(), not(containsString("12.99")));
 		assertThat(result(), not(containsString("\"order\":")));
-	}
-
-	@Test
-	public void shouldOptionallyRemoveRootIdented() {
-		String expected = "{\n  \"price\": 15.0,\n  \"comments\": \"pack it nicely, please\",\n  \"items\": [\n    {\n      \"name\": \"any item\"\n    }\n  ]\n}";
-		Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please", new Item(
-				"any item", 12.99));
-		serialization.indented().withoutRoot().from(order).include("items").exclude("items.price")
-				.serialize();
-		assertThat(result(), equalTo(expected));
 	}
 
 	private String result() {

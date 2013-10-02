@@ -28,9 +28,4 @@ public interface XStreamBuilder {
 	public XStream xmlInstance();
 	
 	public XStream configure(XStream xstream);
-	
-	public XStreamBuilder indented();
-	
-	public XStreamBuilder withoutRoot();
-	
 }

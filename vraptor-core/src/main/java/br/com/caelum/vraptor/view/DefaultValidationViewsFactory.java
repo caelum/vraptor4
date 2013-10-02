@@ -28,7 +28,7 @@ import br.com.caelum.vraptor.View;
 import br.com.caelum.vraptor.proxy.MethodInvocation;
 import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.proxy.SuperMethod;
-import br.com.caelum.vraptor.serialization.NoRootSerialization;
+import br.com.caelum.vraptor.serialization.Serialization;
 import br.com.caelum.vraptor.serialization.Serializer;
 import br.com.caelum.vraptor.serialization.SerializerBuilder;
 import br.com.caelum.vraptor.validator.Message;
@@ -94,7 +94,7 @@ public class DefaultValidationViewsFactory implements ValidationViewsFactory {
 
 				if (Serializer.class.isAssignableFrom(type)
 						|| SerializerBuilder.class.isAssignableFrom(type)
-						|| NoRootSerialization.class.isAssignableFrom(type)) {
+						|| Serialization.class.isAssignableFrom(type)) {
 					return proxifier.proxify(type,
 							throwValidationErrorOnFinalMethods(type, errors, type.cast(instance)));
 				}

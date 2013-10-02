@@ -37,8 +37,8 @@ import com.thoughtworks.xstream.converters.SingleValueConverter;
 @RequestScoped
 public class XStreamConverters {
 
-	private Instance<Converter> converters;
-	private Instance<SingleValueConverter> singleValueConverters;
+	private Iterable<Converter> converters;
+	private Iterable<SingleValueConverter> singleValueConverters;
 
 	private static final Logger logger = getLogger(XStreamConverters.class);
 

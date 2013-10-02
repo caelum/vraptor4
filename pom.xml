@@ -18,6 +18,39 @@
 
 	<developers>
 		<developer>
+			<id>Turini</id>
+			<name>Rodrigo Turini</name>
+			<email>rdrg.turini@gmail.com</email>
+			<organization>Caelum</organization>
+			<organizationUrl>http://www.caelum.com.br</organizationUrl>
+			<roles>
+				<role>developer</role>
+			</roles>
+			<timezone>-3</timezone>
+		</developer>
+		<developer>
+			<id>mariofts</id>
+			<name>Mario Amaral</name>
+			<email>mario.fts@gmail.com</email>
+			<organization>Caelum</organization>
+			<organizationUrl>http://www.caelum.com.br</organizationUrl>
+			<roles>
+				<role>developer</role>
+			</roles>
+			<timezone>-3</timezone>
+		</developer>
+		<developer>
+			<id>asouza</id>
+			<name>Alberto Souza</name>
+			<email>alots.ssa@gmail.com</email>
+			<organization>Caelum</organization>
+			<organizationUrl>http://www.caelum.com.br</organizationUrl>
+			<roles>
+				<role>developer</role>
+			</roles>
+			<timezone>-3</timezone>
+		</developer>
+		<developer>
 			<id>lucascs</id>
 			<name>Lucas Cavalcanti</name>
 			<email>lucasmrtuner@gmail.com</email>

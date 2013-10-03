@@ -16,18 +16,13 @@
 package br.com.caelum.vraptor.serialization.xstream;
 
 import java.io.Writer;
-import java.util.Arrays;
-import java.util.Collections;
 
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 
-import br.com.caelum.vraptor.interceptor.DefaultTypeNameExtractor;
 import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
 
 import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.converters.Converter;
-import com.thoughtworks.xstream.converters.SingleValueConverter;
 import com.thoughtworks.xstream.io.HierarchicalStreamDriver;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 import com.thoughtworks.xstream.io.json.JsonHierarchicalStreamDriver;
@@ -52,12 +47,6 @@ public class XStreamBuilderImpl implements XStreamBuilder {
 	public XStreamBuilderImpl(XStreamConverters converters, TypeNameExtractor extractor) {
 		this.converters = converters;
 		this.extractor = extractor;
-	}
-
-	public static XStreamBuilder cleanInstance(Converter...converters) {
-		return new XStreamBuilderImpl(
-				new XStreamConverters(Arrays.asList(converters), Collections.<SingleValueConverter>emptyList()),
-				new DefaultTypeNameExtractor());
 	}
 
 	public XStream xmlInstance() {

@@ -98,10 +98,14 @@ public class LinkToHandler extends ForwardingMap<Class<?>, Object> {
 
 	@Override
 	public Object get(Object key) {
+		logger.debug("getting key {}", key);
+		
 		BeanClass beanClass = (BeanClass) key;
 		final Class<?> controller = beanClass.getType();
 		Class<?> linkToInterface = interfaces.get(controller);
 		if (linkToInterface == null) {
+			logger.debug("interface not found, creating one {}", controller);
+			
 			lock.lock();
 			try {
 				linkToInterface = interfaces.get(controller);
@@ -109,6 +113,8 @@ public class LinkToHandler extends ForwardingMap<Class<?>, Object> {
 					String interfaceName = controller.getName() + "$linkTo";
 					linkToInterface = createLinkToInterface(controller, interfaceName);
 					interfaces.put(controller, linkToInterface);
+					
+					logger.debug("created interface {} to {}", interfaceName, controller);
 				}
 			} finally {
 				lock.unlock();
@@ -140,6 +146,8 @@ public class LinkToHandler extends ForwardingMap<Class<?>, Object> {
 				inter.addMethod(method);
 				CtMethod getter = CtNewMethod.make(String.format("abstract String get%s();", StringUtils.capitalize(name)), inter);
 				inter.addMethod(getter);
+				
+				logger.debug("added method {} to interface {}", method.getName(), controller);
 			}
 			return inter.toClass();
 		} catch (CannotCompileException e) {

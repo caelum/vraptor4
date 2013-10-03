@@ -9,7 +9,7 @@ import static org.junit.Assert.assertThat;
 import org.junit.Before;
 import org.junit.Test;
 
-import br.com.caelum.vraptor.cache.VRaptorCache;
+import br.com.caelum.vraptor.cache.Cache;
 import br.com.caelum.vraptor.cache.VRaptorDefaultCache;
 import br.com.caelum.vraptor.interceptor.AspectStyleInterceptorHandler;
 import br.com.caelum.vraptor.interceptor.Interceptor;
@@ -27,7 +27,7 @@ public class DefaultInterceptorHandlerFactoryTest {
 	public void setUp() throws Exception {
 		InterceptorMethodParametersResolver parametersResolver = new InterceptorMethodParametersResolver(container);
 		
-		VRaptorCache<Class<?>, InterceptorHandler> cachedHandlers = new VRaptorDefaultCache<>();
+		Cache<Class<?>, InterceptorHandler> cachedHandlers = new VRaptorDefaultCache<>();
 		factory = new DefaultInterceptorHandlerFactory(container, new StepInvoker(), parametersResolver, cachedHandlers);
 	}
 

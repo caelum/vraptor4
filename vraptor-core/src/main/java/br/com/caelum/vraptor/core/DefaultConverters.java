@@ -31,7 +31,7 @@ import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.TwoWayConverter;
 import br.com.caelum.vraptor.cache.LRU;
-import br.com.caelum.vraptor.cache.VRaptorCache;
+import br.com.caelum.vraptor.cache.Cache;
 import br.com.caelum.vraptor.ioc.Container;
 
 @ApplicationScoped
@@ -41,14 +41,14 @@ public class DefaultConverters implements Converters {
 	private final LinkedList<Class<? extends Converter<?>>> classes = new LinkedList<>();
 
 	@LRU
-	private VRaptorCache<Class<?>, Class<? extends Converter<?>>> cache;
+	private Cache<Class<?>, Class<? extends Converter<?>>> cache;
 	private Container container;
 
 	@Deprecated //CDI eyes only
 	public DefaultConverters() {}
 
 	@Inject
-	public DefaultConverters(Container container, VRaptorCache<Class<?>, Class<? extends Converter<?>>> cache) {
+	public DefaultConverters(Container container, Cache<Class<?>, Class<? extends Converter<?>>> cache) {
 		this.container = container;
 		this.cache = cache;
 		logger.info("Registering bundled converters");

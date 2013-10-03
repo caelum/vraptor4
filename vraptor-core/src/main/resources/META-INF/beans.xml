@@ -34,6 +34,22 @@
 		<exclude name="br.com.caelum.vraptor.interceptor.multipart.NullMultipartInterceptor">
 			<if-class-available name="javax.servlet.http.Part"/>
 		</exclude>
+
+		<exclude name="br.com.caelum.vraptor.serialization.xstream.*">
+			<if-class-not-available name="com.thoughtworks.xstream.XStream"/>
+		</exclude>
+
+		<exclude name="br.com.caelum.vraptor.deserialization.xstream.*">
+			<if-class-not-available name="com.thoughtworks.xstream.XStream"/>
+		</exclude>
+
+		<exclude name="br.com.caelum.vraptor.serialization.gson.*">
+			<if-class-not-available name="com.google.gson.Gson"/>
+		</exclude>
+
+		<exclude name="br.com.caelum.vraptor.deserialization.gson.*">
+			<if-class-not-available name="com.google.gson.Gson"/>
+		</exclude>
 	</scan>
 	
 </beans>

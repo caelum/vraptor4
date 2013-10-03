@@ -28,7 +28,7 @@ import java.util.regex.Pattern;
 
 import javax.enterprise.context.ApplicationScoped;
 
-import br.com.caelum.vraptor.cache.LRUCache;
+import br.com.caelum.vraptor.cache.LRUCacheStore;
 
 import com.google.common.base.Function;
 
@@ -43,7 +43,7 @@ import com.google.common.base.Function;
 @ApplicationScoped
 public class DefaultAcceptHeaderToFormat implements AcceptHeaderToFormat {
 
-	private static final Map<String, String> acceptToFormatCache = Collections.synchronizedMap(new LRUCache<String, String>(100));
+	private static final Map<String, String> acceptToFormatCache = Collections.synchronizedMap(new LRUCacheStore<String, String>(100));
 	private static final String DEFAULT_FORMAT = "html";
 	private static final double DEFAULT_QUALIFIER_VALUE = 0.01;
 	protected final Map<String, String> mimeToFormat;

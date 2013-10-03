@@ -30,7 +30,7 @@ import java.util.List;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
-import br.com.caelum.vraptor.cache.Cache;
+import br.com.caelum.vraptor.cache.CacheStore;
 import br.com.caelum.vraptor.controller.BeanClass;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.controller.HttpMethod;
@@ -60,7 +60,7 @@ public class DefaultRouter implements Router {
 	private  Converters converters;
 	private  ParameterNameProvider nameProvider;
 	private  Evaluator evaluator;
-	private Cache<Invocation,Route> cache;
+	private CacheStore<Invocation,Route> cache;
 	private EncodingHandler encodingHandler;
 
 	//CDI eyes only
@@ -72,7 +72,7 @@ public class DefaultRouter implements Router {
 	public DefaultRouter(RoutesConfiguration config,
 			Proxifier proxifier, TypeFinder finder, Converters converters,
 			ParameterNameProvider nameProvider, Evaluator evaluator, EncodingHandler encodingHandler,
-			Cache<Invocation,Route> cache) {
+			CacheStore<Invocation,Route> cache) {
 		this.proxifier = proxifier;
 		this.finder = finder;
 		this.converters = converters;

@@ -40,10 +40,6 @@ import com.google.common.base.Throwables;
  * </p>
  *
  * @author Otávio Scherer Garcia
- * @see ExceptionRecorder
- * @see ExceptionRecorderParameter
- * @see ExceptionMapper
- * @see DefaultExceptionMapper
  * @since 3.2
  */
 @Intercepts

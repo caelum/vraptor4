@@ -25,9 +25,9 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.interceptor.DefaultTypeNameExtractor;
-import br.com.caelum.vraptor.ioc.cdi.FakeInstanceImpl;
 import br.com.caelum.vraptor.serialization.JSONPSerialization;
 import br.com.caelum.vraptor.serialization.JSONSerialization;
+import br.com.caelum.vraptor.util.test.MockInstanceImpl;
 
 import com.google.common.collect.ForwardingCollection;
 import com.google.common.collect.Lists;
@@ -59,7 +59,7 @@ public class GsonJSONSerializationTest {
 		adapters.add(new CalendarSerializer());
 		adapters.add(new CollectionSerializer());
 
-		builder = new VRaptorGsonBuilder(new FakeInstanceImpl<>(adapters));
+		builder = new VRaptorGsonBuilder(new MockInstanceImpl<>(adapters));
 		this.serialization = new GsonJSONSerialization(response, extractor, builder);
 	}
 
@@ -450,11 +450,11 @@ public class GsonJSONSerializationTest {
 		serialization.from(order).excludeAll().include("price").serialize();
 		assertThat(result(), is(equalTo(expectedResult)));
 	}
-	
+
 	@Test
 	public void shouldSerializeWithCallback() {
 		JSONPSerialization serialization = new GsonJSONPSerialization(response, extractor, builder);
-		
+
 		String expectedResult = "calculate({\"order\":{\"price\":15.0}})";
 		Order order = new Order(new Client("nykolas lima"), 15.0, "gift bags, please");
 		serialization.withCallback("calculate").from(order).excludeAll().include("price").serialize();

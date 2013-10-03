@@ -1,8 +1,7 @@
-package br.com.caelum.vraptor.ioc.cdi;
+package br.com.caelum.vraptor.util.test;
 
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -13,15 +12,15 @@ import javax.enterprise.util.TypeLiteral;
  * Fake implementation for {@link Instance} to test injection with list of elements.
  * @author Otávio Scherer Garcia
  */
-public class FakeInstanceImpl<T> implements Instance<T> {
-	
+public class MockInstanceImpl<T> implements Instance<T> {
+
 	private List<T> elements;
 
-	public FakeInstanceImpl(List<T> elements) {
+	public MockInstanceImpl(List<T> elements) {
 		this.elements = elements;
 	}
 
-	public FakeInstanceImpl(Object... elements) {
+	public MockInstanceImpl(Object... elements) {
 		this.elements = new ArrayList<>();
 		for(Object element: elements)
 			this.elements.add((T) element);
@@ -64,6 +63,6 @@ public class FakeInstanceImpl<T> implements Instance<T> {
 
 	@Override
 	public void destroy(T instance) {
-		
+
 	}
 }

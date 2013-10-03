@@ -18,8 +18,6 @@
 package br.com.caelum.vraptor.util.test;
 
 
-import java.util.Arrays;
-
 import javax.enterprise.inject.Alternative;
 
 import br.com.caelum.vraptor.View;
@@ -54,8 +52,8 @@ public class MockSerializationResult extends MockResult {
 	private DefaultTypeNameExtractor extractor;
 	private XStreamBuilder xstreambuilder;
 	private VRaptorGsonBuilder gsonBuilder;
-	
-	
+
+
 	public MockSerializationResult(Proxifier proxifier, XStreamBuilder xstreambuilder, VRaptorGsonBuilder gsonBuilder) {
 		super(proxifier);
 		this.response = new MockHttpServletResponse();
@@ -77,41 +75,40 @@ public class MockSerializationResult extends MockResult {
 			serialization = new GsonJSONSerialization(response, extractor, gsonBuilder);
 			return view.cast(serialization);
 		}
-		
+
 		if (view.isAssignableFrom(XMLSerialization.class)){
 			serialization = new XStreamXMLSerialization(response, xstreambuilder);
 			return view.cast(serialization);
 		}
-		
+
 		if (view.isAssignableFrom(RepresentationResult.class)) {
 			serialization = new XStreamXMLSerialization(response, xstreambuilder);
 			return view.cast(new DefaultRepresentationResult(new FormatResolver() {
 				public String getAcceptFormat() {
 					return "xml";
 				}
-				
-			}, this, Arrays.asList(this.serialization)));
+			}, this, new MockInstanceImpl<Serialization>(this.serialization)));
 		}
-		
+
 		return proxifier.proxify(view, returnOnFinalMethods(view));
 	}
-	
-		
+
+
 	/**
-	 * Retrieve the string with the serialized (JSON/XML) Object if have one as response. 
-	 * 
-	 * @return String with the object serialized 
+	 * Retrieve the string with the serialized (JSON/XML) Object if have one as response.
+	 *
+	 * @return String with the object serialized
 	 */
 	public String serializedResult() throws Exception {
-		
+
 		if("application/xml".equals(response.getContentType())){
 			return response.getContentAsString();
 		}
-		
+
 		if("application/json".equals(response.getContentType())){
 			return response.getContentAsString();
 		}
-		
+
 		return null;
 	}
 

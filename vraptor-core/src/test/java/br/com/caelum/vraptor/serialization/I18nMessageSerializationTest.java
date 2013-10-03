@@ -21,15 +21,15 @@ import org.junit.Test;
 
 import br.com.caelum.vraptor.interceptor.DefaultTypeNameExtractor;
 import br.com.caelum.vraptor.ioc.Container;
-import br.com.caelum.vraptor.ioc.cdi.FakeInstanceImpl;
 import br.com.caelum.vraptor.serialization.gson.CalendarSerializer;
 import br.com.caelum.vraptor.serialization.gson.GsonJSONSerialization;
 import br.com.caelum.vraptor.serialization.gson.MessageSerializer;
 import br.com.caelum.vraptor.serialization.gson.VRaptorGsonBuilder;
 import br.com.caelum.vraptor.serialization.xstream.MessageConverter;
 import br.com.caelum.vraptor.serialization.xstream.XStreamBuilder;
-import br.com.caelum.vraptor.serialization.xstream.XStreamBuilderImpl;
+import br.com.caelum.vraptor.serialization.xstream.XStreamBuilderFactory;
 import br.com.caelum.vraptor.serialization.xstream.XStreamXMLSerialization;
+import br.com.caelum.vraptor.util.test.MockInstanceImpl;
 import br.com.caelum.vraptor.validator.SingletonResourceBundle;
 
 import com.google.gson.JsonSerializer;
@@ -45,14 +45,14 @@ public class I18nMessageSerializationTest {
 		HttpServletResponse response = mock(HttpServletResponse.class);
 		when(response.getWriter()).thenReturn(new PrintWriter(stream));
 		DefaultTypeNameExtractor extractor = new DefaultTypeNameExtractor();
-		XStreamBuilder builder = XStreamBuilderImpl.cleanInstance(new MessageConverter());
+		XStreamBuilder builder = XStreamBuilderFactory.cleanInstance(new MessageConverter());
 		XStreamXMLSerialization xmlSerialization = new XStreamXMLSerialization(response, builder);
-		
+
 		List<JsonSerializer<?>> adapters = new ArrayList<>();
 		adapters.add(new CalendarSerializer());
 		adapters.add(new MessageSerializer());
-		
-		VRaptorGsonBuilder gsonBuilder =  new VRaptorGsonBuilder(new FakeInstanceImpl<>(adapters));
+
+		VRaptorGsonBuilder gsonBuilder =  new VRaptorGsonBuilder(new MockInstanceImpl<>(adapters));
 		GsonJSONSerialization jsonSerialization = new GsonJSONSerialization(response, extractor, gsonBuilder);
 
 		Container container = mock(Container.class);

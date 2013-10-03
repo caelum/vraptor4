@@ -1,5 +1,6 @@
 package br.com.caelum.vraptor.deserialization.xstream;
 
+import static br.com.caelum.vraptor.serialization.xstream.XStreamBuilderFactory.cleanInstance;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
@@ -19,10 +20,8 @@ import br.com.caelum.vraptor.controller.BeanClass;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.controller.DefaultBeanClass;
 import br.com.caelum.vraptor.controller.DefaultControllerMethod;
-import br.com.caelum.vraptor.deserialization.xstream.XStreamXMLDeserializer;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.serialization.xstream.CalendarConverter;
-import br.com.caelum.vraptor.serialization.xstream.XStreamBuilderImpl;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
@@ -40,7 +39,7 @@ public class XStreamXmlDeserializerTest {
 	public void setUp() throws Exception {
 		provider = mock(ParameterNameProvider.class);
 
-		deserializer = new XStreamXMLDeserializer(provider, XStreamBuilderImpl.cleanInstance(new CalendarConverter()));
+		deserializer = new XStreamXMLDeserializer(provider, cleanInstance(new CalendarConverter()));
 		BeanClass controllerClass = new DefaultBeanClass(DogController.class);
 
 		woof = new DefaultControllerMethod(controllerClass, DogController.class.getDeclaredMethod("woof"));

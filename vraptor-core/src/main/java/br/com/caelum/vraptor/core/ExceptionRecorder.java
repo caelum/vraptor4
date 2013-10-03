@@ -16,15 +16,13 @@
  */
 package br.com.caelum.vraptor.core;
 
-import static com.google.common.collect.Lists.newArrayList;
-
 import java.lang.reflect.Method;
 import java.lang.reflect.TypeVariable;
+import java.util.ArrayList;
 import java.util.List;
 
 import net.vidageek.mirror.dsl.Mirror;
 import br.com.caelum.vraptor.Result;
-import br.com.caelum.vraptor.interceptor.ExceptionHandlerInterceptor;
 import br.com.caelum.vraptor.proxy.MethodInvocation;
 import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.proxy.SuperMethod;
@@ -36,21 +34,16 @@ import br.com.caelum.vraptor.proxy.SuperMethod;
  *
  * @author Otávio Scherer Garcia
  * @author Lucas Cavalcanti
- * @see ExceptionRecorderParameter
- * @see ExceptionMapper
- * @see DefaultExceptionMapper
- * @see ExceptionHandlerInterceptor
  * @since 3.2
  */
-public class ExceptionRecorder<T>
-	implements MethodInvocation<T> {
+public class ExceptionRecorder<T> implements MethodInvocation<T> {
 
 	private final Proxifier proxifier;
 	private final List<ExceptionRecorderParameter> parameters;
 
 	public ExceptionRecorder(Proxifier proxifier) {
 		this.proxifier = proxifier;
-		parameters = newArrayList();
+		parameters = new ArrayList<>();
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })

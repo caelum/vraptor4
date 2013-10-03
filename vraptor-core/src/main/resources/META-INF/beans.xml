@@ -36,19 +36,19 @@
 		</exclude>
 
 		<exclude name="br.com.caelum.vraptor.serialization.xstream.*">
-			<if-class-available name="com.thoughtworks.xstream.XStream"/>
+			<if-class-not-available name="com.thoughtworks.xstream.XStream"/>
 		</exclude>
 
 		<exclude name="br.com.caelum.vraptor.deserialization.xstream.*">
-			<if-class-available name="com.thoughtworks.xstream.XStream"/>
+			<if-class-not-available name="com.thoughtworks.xstream.XStream"/>
 		</exclude>
 
 		<exclude name="br.com.caelum.vraptor.serialization.gson.*">
-			<if-class-available name="com.google.gson.Gson"/>
+			<if-class-not-available name="com.google.gson.Gson"/>
 		</exclude>
 
 		<exclude name="br.com.caelum.vraptor.deserialization.gson.*">
-			<if-class-available name="com.google.gson.Gson"/>
+			<if-class-not-available name="com.google.gson.Gson"/>
 		</exclude>
 	</scan>
 	

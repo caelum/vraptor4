@@ -6,21 +6,21 @@ import javax.enterprise.inject.spi.CDI;
 import javax.inject.Inject;
 
 import br.com.caelum.vraptor.cache.LRU;
-import br.com.caelum.vraptor.cache.VRaptorCache;
+import br.com.caelum.vraptor.cache.Cache;
 import br.com.caelum.vraptor.ioc.Container;
 
 @ApplicationScoped
 @SuppressWarnings("rawtypes")
 public class CDIBasedContainer implements Container {
 	
-	private VRaptorCache<Class<?>,Instance> cache;
+	private Cache<Class<?>,Instance> cache;
 
 	@Deprecated
 	public CDIBasedContainer() {
 	}
 	
 	@Inject
-	public CDIBasedContainer(@LRU(capacity=1000) VRaptorCache<Class<?>, Instance> cache) {
+	public CDIBasedContainer(@LRU(capacity=1000) Cache<Class<?>, Instance> cache) {
 		super();
 		this.cache = cache;
 	}

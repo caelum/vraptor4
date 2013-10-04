@@ -36,7 +36,6 @@ import javax.servlet.ServletInputStream;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -358,10 +357,5 @@ public class HttpServletRequestMock implements MutableRequest {
 
 	public ServletContext getServletContext() {
 		return session.getServletContext();
-	}
-
-	@Override
-	public HttpServletRequest getOriginalRequest() {
-		return this;
 	}
 }

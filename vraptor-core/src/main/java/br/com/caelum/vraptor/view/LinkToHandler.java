@@ -154,7 +154,7 @@ public class LinkToHandler extends ForwardingMap<Class<?>, Object> {
 				
 				CtMethod method = CtNewMethod.abstractMethod(returnType, name, m.getParameterTypes(), new CtClass[0], inter);
 				inter.addMethod(method);
-				CtMethod getter = CtNewMethod.make(String.format("abstract String get%s();", StringUtils.capitalize(name)), inter);
+				CtMethod getter = CtNewMethod.abstractMethod(returnType, String.format("get%s", StringUtils.capitalize(name)), m.getParameterTypes(), new CtClass[0], inter);
 				inter.addMethod(getter);
 				
 				logger.debug("added method {} to interface {}", method.getName(), controller);

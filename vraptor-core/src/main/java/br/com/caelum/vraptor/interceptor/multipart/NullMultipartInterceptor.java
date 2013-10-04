@@ -16,31 +16,53 @@
  */
 package br.com.caelum.vraptor.interceptor.multipart;
 
+import static com.google.common.base.Strings.nullToEmpty;
+
 import javax.enterprise.context.RequestScoped;
+import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.core.InterceptorStack;
 
 /**
- * A null implementation of {@link MultipartInterceptor}. This class does nothing.
+ * A null implementation of {@link MultipartInterceptor}.
  *
  * @author Otávio Scherer Garcia
  * @since 3.1.3
- * @see CommonsUploadMultipartInterceptor
  */
 @RequestScoped
 public class NullMultipartInterceptor implements MultipartInterceptor {
+	
+	private static final Logger logger = LoggerFactory.getLogger(NullMultipartInterceptor.class);
+	
+	private HttpServletRequest request;
+
+	@Deprecated // CDI eyes only
+	public NullMultipartInterceptor() {
+	}
+
+	@Inject
+	public NullMultipartInterceptor(HttpServletRequest request) {
+		this.request = request;
+	}
 
 	/**
-	 * Never accepts.
+	 * Only accepts multipart requests.
 	 */
 	public boolean accepts(ControllerMethod method) {
-		return false;
+		return request.getMethod().toUpperCase().equals("POST") && 
+				nullToEmpty(request.getContentType()).startsWith("multipart/form-data");
 	}
 
 	public void intercept(InterceptorStack stack, ControllerMethod method, Object controllerInstance)
 		throws InterceptionException {
-		throw new UnsupportedOperationException();
+		logger.warn("There is no fil eupload handlers registered. If you are willing to upload a file, please "
+				+ "add the commons-fileupload in your classpath");
+		stack.next(method, controllerInstance);
 	}
 }

@@ -153,7 +153,7 @@ public class DefaultRouter implements Router {
 		ControllerMethod controllerMethod = r.getControllerMethod();
 		BeanClass controller = controllerMethod.getController();
 		Invocation invocation = new Invocation(controller.getType(), controllerMethod.getMethod());
-		cache.putIfAbsent(invocation, r);
+		cache.write(invocation, r);
 	}
 
 	@Override
@@ -163,7 +163,7 @@ public class DefaultRouter implements Router {
 			rawtype = type.getSuperclass();
 		}
 		Invocation invocation = new Invocation(rawtype, method);
-		Route route = cache.get(invocation);
+		Route route = cache.fetch(invocation);
 		if (route == null) {
 			throw new RouteNotFoundException("The selected route is invalid for redirection: " + type.getName() + "."
 					+ method.getName());

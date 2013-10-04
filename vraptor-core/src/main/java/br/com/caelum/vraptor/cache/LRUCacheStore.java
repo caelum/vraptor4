@@ -59,4 +59,13 @@ public class LRUCacheStore<K, V> extends LinkedHashMap<K, V> implements CacheSto
 		return get(key);
 	}
 
+	@Override
+	public void write(K key, V value) {
+		put(key, value);
+	}
+
+	@Override
+	public V fetch(K key) {
+		return get(key);
+	}
 }

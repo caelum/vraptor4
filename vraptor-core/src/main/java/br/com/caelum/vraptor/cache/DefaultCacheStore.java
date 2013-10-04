@@ -24,4 +24,14 @@ public class DefaultCacheStore<K,V> implements CacheStore<K,V> {
 		}
 		return cache.get(key);
 	}
+
+	@Override
+	public void write(K key, V value) {
+		cache.put(key, value);
+	}
+
+	@Override
+	public V fetch(K key) {
+		return cache.get(key);
+	}
 }

@@ -20,6 +20,7 @@ package br.com.caelum.vraptor.core;
 import static com.google.common.base.Preconditions.checkState;
 
 import java.util.LinkedList;
+import java.util.concurrent.Callable;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -30,8 +31,8 @@ import org.slf4j.LoggerFactory;
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.TwoWayConverter;
-import br.com.caelum.vraptor.cache.LRU;
 import br.com.caelum.vraptor.cache.CacheStore;
+import br.com.caelum.vraptor.cache.LRU;
 import br.com.caelum.vraptor.ioc.Container;
 
 @ApplicationScoped
@@ -58,7 +59,7 @@ public class DefaultConverters implements Converters {
 	public void register(Class<? extends Converter<?>> converterClass) {
 		Convert type = converterClass.getAnnotation(Convert.class);
 		checkState(type != null, "The converter type %s should have the Convert annotation", converterClass.getName());
-		
+
 		logger.debug("adding converter {} to {}", converterClass, type.value());
 		classes.add(converterClass);
 	}
@@ -68,24 +69,19 @@ public class DefaultConverters implements Converters {
 	public <T> Converter<T> to(Class<T> clazz) {
 		Class<? extends Converter<?>> converterType = findConverterType(clazz);
 		checkState(converterType != null, "Unable to find converter for %s", clazz.getName());
-		
+
 		return (Converter<T>) container.instanceFor(converterType);
 	}
 
-	private Class<? extends Converter<?>> findConverterType(Class<?> clazz) {
-		Class<? extends Converter<?>> cachedConverter = cache.get(clazz);
-		if (cachedConverter == null) {
-			Class<? extends Converter<?>> fromList = findConverterFromList(clazz);
-			if (fromList != null) {
-				cachedConverter = cache.putIfAbsent(clazz, fromList);
-				if (cachedConverter == null) {
-					cachedConverter = fromList;
-				}
+	private Class<? extends Converter<?>> findConverterType(final Class<?> clazz) {
+		return cache.fetch(clazz, new Callable<Class<? extends Converter<?>>>() {
+			@Override
+			public Class<? extends Converter<?>> call() throws Exception {
+				return findConverterFromList(clazz);
 			}
-		}
-		return cachedConverter;
+		});
 	}
-	
+
 	private Class<? extends Converter<?>> findConverterFromList(Class<?> clazz) {
 		for (Class<? extends Converter<?>> converterType : classes) {
 			Class<?> boundType = converterType.getAnnotation(Convert.class).value();
@@ -110,7 +106,7 @@ public class DefaultConverters implements Converters {
 	@Override
 	public TwoWayConverter<?> twoWayConverterFor(Class<?> type) {
 		checkState(existsTwoWayFor(type), "Unable to find two way converter for %s", type.getName());
-		
+
 		return (TwoWayConverter<?>) container.instanceFor(findConverterType(type));
 	}
 }

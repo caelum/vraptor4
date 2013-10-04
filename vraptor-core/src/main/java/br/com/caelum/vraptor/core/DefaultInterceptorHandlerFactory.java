@@ -15,6 +15,8 @@
  */
 package br.com.caelum.vraptor.core;
 
+import java.util.concurrent.Callable;
+
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Default;
 import javax.inject.Inject;
@@ -61,19 +63,15 @@ public class DefaultInterceptorHandlerFactory implements InterceptorHandlerFacto
 	}
 
 	@Override
-	public InterceptorHandler handlerFor(Class<?> type) {
-
-		InterceptorHandler interceptorHandler = cachedHandlers.get(type);
-		if(interceptorHandler != null){
-			return interceptorHandler;
-		}
-
-		if(type.isAnnotationPresent(Intercepts.class) && !Interceptor.class.isAssignableFrom(type)){
-			AspectStyleInterceptorHandler handler = new AspectStyleInterceptorHandler(type, stepInvoker, container, parametersResolver);
-			cachedHandlers.put(type,handler);
-
-			return handler;
-		}
-		return new ToInstantiateInterceptorHandler(container, type);
+	public InterceptorHandler handlerFor(final Class<?> type) {
+		return cachedHandlers.fetch(type, new Callable<InterceptorHandler>() {
+			@Override
+			public InterceptorHandler call() throws Exception {
+				if(type.isAnnotationPresent(Intercepts.class) && !Interceptor.class.isAssignableFrom(type)){
+					return new AspectStyleInterceptorHandler(type, stepInvoker, container, parametersResolver);
+				}
+				return new ToInstantiateInterceptorHandler(container, type);
+			}
+		});
 	}
 }

@@ -17,6 +17,8 @@
 
 package br.com.caelum.vraptor.http.route;
 
+import static com.google.common.collect.Collections2.filter;
+
 import java.lang.reflect.Method;
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -41,8 +43,6 @@ import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.proxy.Proxifier;
 
 import com.google.common.base.Predicate;
-
-import static com.google.common.collect.Collections2.filter;
 
 /**
  * The default implementation of controller localization rules. It also uses a
@@ -178,6 +178,7 @@ public class DefaultRouter implements Router {
 
 	private Predicate<Route> canHandle(final String uri) {
 		return new Predicate<Route>() {
+			@Override
 			public boolean apply(Route route) {
 				return route.canHandle(uri);
 			}
@@ -186,6 +187,7 @@ public class DefaultRouter implements Router {
 
 	private Predicate<Route> allow(final HttpMethod method) {
 		return new Predicate<Route>() {
+			@Override
 			public boolean apply(Route route) {
 				return route.allowedMethods().contains(method);
 			}

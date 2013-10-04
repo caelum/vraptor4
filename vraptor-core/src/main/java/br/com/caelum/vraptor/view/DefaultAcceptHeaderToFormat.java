@@ -19,16 +19,18 @@ package br.com.caelum.vraptor.view;
 import static com.google.common.collect.Collections2.transform;
 import static com.google.common.collect.Sets.newTreeSet;
 
-import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 
-import br.com.caelum.vraptor.cache.LRUCacheStore;
+import br.com.caelum.vraptor.cache.CacheStore;
+import br.com.caelum.vraptor.cache.LRU;
 
 import com.google.common.base.Function;
 
@@ -43,12 +45,19 @@ import com.google.common.base.Function;
 @ApplicationScoped
 public class DefaultAcceptHeaderToFormat implements AcceptHeaderToFormat {
 
-	private static final Map<String, String> acceptToFormatCache = Collections.synchronizedMap(new LRUCacheStore<String, String>(100));
+	private final CacheStore<String, String> acceptToFormatCache;
 	private static final String DEFAULT_FORMAT = "html";
 	private static final double DEFAULT_QUALIFIER_VALUE = 0.01;
 	protected final Map<String, String> mimeToFormat;
 
-	public DefaultAcceptHeaderToFormat() {
+	@Deprecated
+	protected DefaultAcceptHeaderToFormat() {
+		this(null);
+	}
+
+	@Inject
+	public DefaultAcceptHeaderToFormat(@LRU(capacity=100) CacheStore<String, String> acceptToFormatCache) {
+		this.acceptToFormatCache = acceptToFormatCache;
 		mimeToFormat = new ConcurrentHashMap<>();
 		mimeToFormat.put("text/html", "html");
 		mimeToFormat.put("application/json", "json");
@@ -57,7 +66,8 @@ public class DefaultAcceptHeaderToFormat implements AcceptHeaderToFormat {
 		mimeToFormat.put("xml", "xml");
 	}
 
-	public String getFormat(String acceptHeader) {
+	@Override
+	public String getFormat(final String acceptHeader) {
 		if (acceptHeader == null || acceptHeader.trim().equals("")) {
 			return DEFAULT_FORMAT;
 		}
@@ -67,11 +77,12 @@ public class DefaultAcceptHeaderToFormat implements AcceptHeaderToFormat {
 			return DEFAULT_FORMAT;
 		}
 
-		if (acceptToFormatCache.containsKey(acceptHeader)) {
-			return acceptToFormatCache.get(acceptHeader);
-		}
-
-		return chooseMimeType(acceptHeader);
+		return acceptToFormatCache.fetch(acceptHeader, new Callable<String>() {
+			@Override
+			public String call() throws Exception {
+				return chooseMimeType(acceptHeader);
+			}
+		});
 	}
 
 	private String chooseMimeType(String acceptHeader) {
@@ -79,9 +90,7 @@ public class DefaultAcceptHeaderToFormat implements AcceptHeaderToFormat {
 
 		for (String mimeType : mimeTypes) {
 			if (mimeToFormat.containsKey(mimeType)) {
-				String format = mimeToFormat.get(mimeType);
-				acceptToFormatCache.put(acceptHeader, format);
-				return format;
+				return mimeToFormat.get(mimeType);
 			}
 		}
 
@@ -97,6 +106,7 @@ public class DefaultAcceptHeaderToFormat implements AcceptHeaderToFormat {
 			this.qualifier = qualifier;
 		}
 
+		@Override
 		public int compareTo(MimeType mime) {
 			// reverse order
 			return Double.compare(mime.qualifier, this.qualifier);
@@ -129,6 +139,7 @@ public class DefaultAcceptHeaderToFormat implements AcceptHeaderToFormat {
 
 	private Function<MimeType, String> mimeType() {
 		return new Function<MimeType, String>() {
+			@Override
 			public String apply(MimeType mime) {
 				return mime.getType().trim();
 			}

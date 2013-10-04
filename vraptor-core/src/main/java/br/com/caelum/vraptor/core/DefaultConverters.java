@@ -68,7 +68,7 @@ public class DefaultConverters implements Converters {
 	@Override
 	public <T> Converter<T> to(Class<T> clazz) {
 		Class<? extends Converter<?>> converterType = findConverterType(clazz);
-		checkState(converterType != null, "Unable to find converter for %s", clazz.getName());
+		checkState(!converterType.equals(NullConverter.class), "Unable to find converter for %s", clazz.getName());
 
 		return (Converter<T>) container.instanceFor(converterType);
 	}
@@ -79,6 +79,7 @@ public class DefaultConverters implements Converters {
 			public Class<? extends Converter<?>> call() throws Exception {
 				return findConverterFromList(clazz);
 			}
+
 		});
 	}
 
@@ -89,18 +90,19 @@ public class DefaultConverters implements Converters {
 				return converterType;
 			}
 		}
-		return null;
+		return NullConverter.class;
 	}
+
+	private interface NullConverter extends Converter<Object> {};
 
 	@Override
 	public boolean existsFor(Class<?> type) {
-		return findConverterType(type) != null;
+		return !findConverterType(type).equals(NullConverter.class);
 	}
 
 	@Override
 	public boolean existsTwoWayFor(Class<?> type) {
-		Class<? extends Converter<?>> found = findConverterType(type);
-		return found != null && TwoWayConverter.class.isAssignableFrom(found);
+		return TwoWayConverter.class.isAssignableFrom(findConverterType(type));
 	}
 
 	@Override

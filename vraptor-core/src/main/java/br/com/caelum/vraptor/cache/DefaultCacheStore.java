@@ -2,6 +2,7 @@ package br.com.caelum.vraptor.cache;
 
 import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 import javax.enterprise.inject.Default;
 
@@ -10,7 +11,7 @@ import com.google.common.base.Throwables;
 @Default
 public class DefaultCacheStore<K,V> implements CacheStore<K,V> {
 
-	private final ConcurrentHashMap<K,V> cache = new ConcurrentHashMap<>();
+	private final ConcurrentMap<K,V> cache = new ConcurrentHashMap<>();
 
 	@Override
 	public V fetch(K key, Callable<V> valueProvider) {
@@ -26,8 +27,8 @@ public class DefaultCacheStore<K,V> implements CacheStore<K,V> {
 	}
 
 	@Override
-	public void write(K key, V value) {
-		cache.put(key, value);
+	public V write(K key, V value) {
+		return cache.put(key, value);
 	}
 
 	@Override

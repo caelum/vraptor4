@@ -61,7 +61,7 @@ public class NullMultipartInterceptor implements MultipartInterceptor {
 
 	public void intercept(InterceptorStack stack, ControllerMethod method, Object controllerInstance)
 		throws InterceptionException {
-		logger.warn("There is no fil eupload handlers registered. If you are willing to upload a file, please "
+		logger.warn("There is no file upload handlers registered. If you are willing to upload a file, please "
 				+ "add the commons-fileupload in your classpath");
 		stack.next(method, controllerInstance);
 	}

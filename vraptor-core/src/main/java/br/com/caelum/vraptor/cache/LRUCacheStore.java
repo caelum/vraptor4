@@ -18,8 +18,11 @@ package br.com.caelum.vraptor.cache;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.concurrent.Callable;
 
 import javax.enterprise.inject.Vetoed;
+
+import com.google.common.base.Throwables;
 
 /**
  * A LRU cache based on LinkedHashMap.
@@ -29,25 +32,40 @@ import javax.enterprise.inject.Vetoed;
  */
 //Not registering it because it is already produced by LRUCacheFactory.
 @Vetoed
-public class LRUCache<K, V> extends LinkedHashMap<K, V> implements Cache<K,V> {
+public class LRUCacheStore<K, V> extends LinkedHashMap<K, V> implements CacheStore<K,V> {
 	private static final long serialVersionUID = 1L;
 	private int capacity;
-	
-	public LRUCache(int capacity) {
+
+	public LRUCacheStore(int capacity) {
 		super(capacity, 0.75f, true);
 		this.capacity = capacity;
 	}
-	
+
+	@Override
 	protected boolean removeEldestEntry(Map.Entry<K, V> eldest) {
 		return this.size() > capacity;
 	}
 
 	@Override
-	public V putIfAbsent(K key, V value) {
-		if(!this.containsKey(key)){
-			return this.put(key, value);
+	public V fetch(K key, Callable<V> valueProvider) {
+		if (!this.containsKey(key)){
+			try {
+				this.put(key, valueProvider.call());
+			} catch (Exception e) {
+				Throwables.propagateIfPossible(e);
+				throw new CacheException("Error computing the value", e);
+			}
 		}
-		return value;
+		return get(key);
 	}
-	
+
+	@Override
+	public V write(K key, V value) {
+		return put(key, value);
+	}
+
+	@Override
+	public V fetch(K key) {
+		return get(key);
+	}
 }

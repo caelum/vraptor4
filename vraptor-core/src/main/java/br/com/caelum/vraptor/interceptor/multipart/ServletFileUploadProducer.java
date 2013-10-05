@@ -1,6 +1,6 @@
 package br.com.caelum.vraptor.interceptor.multipart;
 
-import javax.enterprise.context.RequestScoped;
+import javax.enterprise.context.Dependent;
 import javax.enterprise.inject.Produces;
 
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
@@ -16,7 +16,7 @@ public class ServletFileUploadProducer {
 	 * Creates a new instance for {@link ServletFileUpload}. You can override this method to
 	 * configure if you want.
 	 */
-	@RequestScoped
+	@Dependent
 	@Produces
 	public ServletFileUpload getServletFileUpload() {
 		ServletFileUpload uploader = new ServletFileUpload();

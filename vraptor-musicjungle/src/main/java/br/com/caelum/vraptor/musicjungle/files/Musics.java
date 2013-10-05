@@ -30,7 +30,7 @@ public class Musics {
 		if(file != null) {
     		Path path = DEFAULT_FOLDER.resolve(getFileName(music));
     		
-    		try(InputStream in = file.getFile()) {
+    		try(InputStream in = file.getContent()) {
     		    Files.copy(in, path,StandardCopyOption.REPLACE_EXISTING);
     		} catch (IOException e) {
     		    throw new IllegalStateException(e);

@@ -32,6 +32,7 @@ import org.apache.commons.fileupload.FileUploadBase.SizeLimitExceededException;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.fileupload.util.Streams;
+import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -144,7 +145,8 @@ public class CommonsUploadMultipartInterceptor implements Interceptor {
 
 	protected void processFile(FileItemStream item, String name) {
 		try {
-			UploadedFile upload = new DefaultUploadedFile(item.openStream(), item.getName(), item.getContentType());
+			String fileName = FilenameUtils.getName(item.getName());
+			UploadedFile upload = new DefaultUploadedFile(item.openStream(), fileName, item.getContentType());
 			request.setParameter(name, name);
 			request.setAttribute(name, upload);
 

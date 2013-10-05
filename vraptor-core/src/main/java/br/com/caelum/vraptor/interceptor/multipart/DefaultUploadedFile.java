@@ -16,36 +16,25 @@
  */
 package br.com.caelum.vraptor.interceptor.multipart;
 
+import static com.google.common.base.Objects.toStringHelper;
+
 import java.io.InputStream;
-import java.util.regex.Pattern;
 
 /**
  * Default implementation for {@link UploadedFile}.
  */
 public class DefaultUploadedFile implements UploadedFile {
 	
-	static final Pattern REGEX_REMOVE_SLASHES = Pattern.compile(".*(?:\\\\|\\/)(.+)$");
-
 	private final String contentType;
 
 	private final String fileName;
 
-	private final String completeFileName;
-
 	private final InputStream content;
 
-	public DefaultUploadedFile(InputStream content, String completeFileName, String contentType) {
+	public DefaultUploadedFile(InputStream content, String fileName, String contentType) {
 		this.content = content;
-		this.fileName = REGEX_REMOVE_SLASHES.matcher(completeFileName).replaceAll("$1");
-		this.completeFileName = completeFileName;
+		this.fileName = fileName;
 		this.contentType = contentType;
-	}
-
-	@Override
-	public String toString() {
-		return "[uploadedFile uploadedCompleteName="
-				+ this.completeFileName + " uploadedName=" + this.fileName
-				+ " contentType=" + this.contentType + "]";
 	}
 
 	@Override
@@ -63,7 +52,9 @@ public class DefaultUploadedFile implements UploadedFile {
 		return this.fileName;
 	}
 
-	public String getCompleteFileName() {
-		return this.completeFileName;
+	@Override
+	public String toString() {
+		return toStringHelper(this).add("fileName", fileName)
+				.add("contentType", contentType).toString();
 	}
 }

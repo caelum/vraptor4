@@ -25,18 +25,23 @@ import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import br.com.caelum.vraptor.InterceptionException;
+import br.com.caelum.vraptor.Intercepts;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.core.InterceptorStack;
+import br.com.caelum.vraptor.interceptor.Interceptor;
+import br.com.caelum.vraptor.interceptor.ParametersInstantiatorInterceptor;
 
 /**
- * A null implementation of {@link MultipartInterceptor}.
+ * A null implementation of {@link MultipartInterceptor}. This interceptor will be activated when
+ * no commons-fileupload was found in classpath. If application try to upload any files, this 
+ * interceptor will warn a message in console.
  *
  * @author Otávio Scherer Garcia
  * @since 3.1.3
  */
+@Intercepts(before=ParametersInstantiatorInterceptor.class)
 @RequestScoped
-public class NullMultipartInterceptor implements MultipartInterceptor {
+public class NullMultipartInterceptor implements Interceptor {
 	
 	private static final Logger logger = LoggerFactory.getLogger(NullMultipartInterceptor.class);
 	
@@ -50,17 +55,18 @@ public class NullMultipartInterceptor implements MultipartInterceptor {
 	public NullMultipartInterceptor(HttpServletRequest request) {
 		this.request = request;
 	}
-
+	
 	/**
 	 * Only accepts multipart requests.
 	 */
+	@Override
 	public boolean accepts(ControllerMethod method) {
 		return request.getMethod().toUpperCase().equals("POST") && 
 				nullToEmpty(request.getContentType()).startsWith("multipart/form-data");
 	}
-
-	public void intercept(InterceptorStack stack, ControllerMethod method, Object controllerInstance)
-		throws InterceptionException {
+	
+	@Override
+	public void intercept(InterceptorStack stack, ControllerMethod method, Object controllerInstance) {
 		logger.warn("There is no file upload handlers registered. If you are willing to upload a file, please "
 				+ "add the commons-fileupload in your classpath");
 		stack.next(method, controllerInstance);

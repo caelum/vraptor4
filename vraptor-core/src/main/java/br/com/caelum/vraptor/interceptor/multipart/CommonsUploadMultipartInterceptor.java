@@ -35,14 +35,14 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.Intercepts;
 import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.http.InvalidParameterException;
 import br.com.caelum.vraptor.http.MutableRequest;
-import br.com.caelum.vraptor.interceptor.ControllerLookupInterceptor;
+import br.com.caelum.vraptor.interceptor.Interceptor;
+import br.com.caelum.vraptor.interceptor.ParametersInstantiatorInterceptor;
 import br.com.caelum.vraptor.validator.I18nMessage;
 
 import com.google.common.base.Strings;
@@ -53,20 +53,18 @@ import com.google.common.collect.Multiset;
 
 /**
  * A multipart interceptor based on Apache Commons Upload. Provided parameters are injected through
- * RequestParameters.set and uploaded files are made available through
+ * {@link HttpServletRequest#setAttribute(String, Object)} and uploaded files are made available through.
  *
  * @author Guilherme Silveira
  * @author Otávio Scherer Garcia
  */
-@Intercepts(before = ControllerLookupInterceptor.class, after = {})
+@Intercepts(before=ParametersInstantiatorInterceptor.class)
 @RequestScoped
-public class CommonsUploadMultipartInterceptor
-	implements MultipartInterceptor {
+public class CommonsUploadMultipartInterceptor implements Interceptor {
 
 	private static final Logger logger = LoggerFactory.getLogger(CommonsUploadMultipartInterceptor.class);
 
-	private HttpServletRequest request;
-	private MutableRequest parameters;
+	private MutableRequest request;
 	private MultipartConfig config;
 	private Validator validator;
 	private ServletFileUploadCreator fileUploadCreator;
@@ -79,10 +77,9 @@ public class CommonsUploadMultipartInterceptor
 	}
 
 	@Inject
-	public CommonsUploadMultipartInterceptor(HttpServletRequest request, MutableRequest parameters, MultipartConfig cfg,
-			Validator validator, ServletFileUploadCreator fileUploadCreator) {
+	public CommonsUploadMultipartInterceptor(MutableRequest request, MultipartConfig cfg, Validator validator, 
+			ServletFileUploadCreator fileUploadCreator) {
 		this.request = request;
-		this.parameters = parameters;
 		this.validator = validator;
 		this.config = cfg;
 		this.fileUploadCreator = fileUploadCreator;
@@ -95,10 +92,9 @@ public class CommonsUploadMultipartInterceptor
 	public boolean accepts(ControllerMethod method) {
 		return ServletFileUpload.isMultipartContent(request);
 	}
-
+	
 	@Override
-	public void intercept(InterceptorStack stack, ControllerMethod method, Object instance)
-		throws InterceptionException {
+	public void intercept(InterceptorStack stack, ControllerMethod method, Object controllerInstance) {
 		logger.info("Request contains multipart data. Try to parse with commons-upload.");
 
 		FileItemFactory factory = createFactoryForDiskBasedFileItems(config.getDirectory());
@@ -132,7 +128,7 @@ public class CommonsUploadMultipartInterceptor
 
 			for (String paramName : params.keySet()) {
 				Collection<String> paramValues = params.get(paramName);
-				parameters.setParameter(paramName, paramValues.toArray(new String[paramValues.size()]));
+				request.setParameter(paramName, paramValues.toArray(new String[paramValues.size()]));
 			}
 
 		} catch (final SizeLimitExceededException e) {
@@ -143,7 +139,7 @@ public class CommonsUploadMultipartInterceptor
 					+ "or someone is not sending a RFC1867 compatible multipart request.", e);
 		}
 
-		stack.next(method, instance);
+		stack.next(method, controllerInstance);
 	}
 
 	private boolean isNotEmpty(FileItem item) {
@@ -163,7 +159,7 @@ public class CommonsUploadMultipartInterceptor
 	protected void processFile(FileItem item, String name) {
 		try {
 			UploadedFile upload = new DefaultUploadedFile(item.getInputStream(), item.getName(), item.getContentType(), item.getSize());
-			parameters.setParameter(name, name);
+			request.setParameter(name, name);
 			request.setAttribute(name, upload);
 
 			logger.debug("Uploaded file: {} with {}", name, upload);

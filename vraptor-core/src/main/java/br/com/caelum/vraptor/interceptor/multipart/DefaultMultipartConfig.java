@@ -19,11 +19,16 @@ package br.com.caelum.vraptor.interceptor.multipart;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import javax.enterprise.context.ApplicationScoped;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.google.common.base.Throwables;
 
 /**
  * Default implementation for {@link MultipartConfig}.
@@ -38,28 +43,48 @@ public class DefaultMultipartConfig implements MultipartConfig {
 
 	private final Logger logger = LoggerFactory.getLogger(DefaultMultipartConfig.class);
 
+	@Override
 	public long getSizeLimit() {
 		return 2 * 1024 * 1024;
 	}
 
+	@Override
 	public File getDirectory() {
+		Path tmp = getTemporaryDirectory();
+		if (tmp == null) {
+			tmp = createDirInsideApplication();
+		}
+		
+		return tmp.toFile();
+	}
+
+	protected Path getTemporaryDirectory() {
 		try {
-			File tempFile = createTempFile();
-			tempFile.delete();
-			return tempFile.getParentFile();
+			Path tmp = Files.createTempFile("vraptor", "upload");
+			Path parent = tmp.getParent();
+			logger.debug("Using temporary directory as {}", parent);
+			
+			Files.delete(tmp);
+			return parent;
 		} catch (IOException e) {
-			logger.warn("Unable to find temp directory, creating a dir inside the application", e);
-			File tmp = createDirInsideApplication();
-			tmp.mkdirs();
-			return tmp;
+			logger.warn("Unable to find temp directory", e);
+			return null;
 		}
 	}
-
-	protected File createDirInsideApplication() {
-		return new File(".tmp-multipart-upload");
-	}
-
-	protected File createTempFile() throws IOException {
-		return File.createTempFile("raptor.", ".upload");
+	
+	protected Path createDirInsideApplication() {
+		logger.debug("Creating a dir inside the application");
+		
+		Path path = Paths.get(".tmp-multipart-upload");
+		
+		try {
+			path = Files.createDirectories(path);
+			logger.debug("Using temporary directory as {}", path);
+		} catch (IOException e) {
+			logger.error("Unable to use temp directory inside application", e);
+			throw Throwables.propagate(e);
+		}
+		
+		return path;
 	}
 }

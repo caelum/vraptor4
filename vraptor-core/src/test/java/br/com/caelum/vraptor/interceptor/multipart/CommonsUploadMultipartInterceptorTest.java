@@ -8,6 +8,7 @@ import static org.hamcrest.Matchers.is;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
@@ -242,7 +243,7 @@ public class CommonsUploadMultipartInterceptorTest {
 	@Test
 	public void shouldCreateDirInsideAppIfTempDirAreNotAvailable() throws Exception {
 		DefaultMultipartConfig configSpy = (DefaultMultipartConfig) spy(config);
-		doThrow(new IOException()).when(configSpy).createTempFile();
+		doReturn(null).when(configSpy).getTemporaryDirectory();
 
 		interceptor = new CommonsUploadMultipartInterceptor(request, configSpy, validator, mockCreator);
 

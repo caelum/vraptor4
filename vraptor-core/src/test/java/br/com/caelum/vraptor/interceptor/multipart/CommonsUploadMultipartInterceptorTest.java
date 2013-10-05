@@ -202,6 +202,6 @@ public class CommonsUploadMultipartInterceptorTest {
 		UploadedFile file = argument.getValue();
 		assertThat(file.getFileName(), is("file.txt"));
 		assertThat(file.getContentType(), is("text/plain"));
-		assertThat(toByteArray(file.getFile()), is(content));
+		assertThat(toByteArray(file.getContent()), is(content));
 	}
 }

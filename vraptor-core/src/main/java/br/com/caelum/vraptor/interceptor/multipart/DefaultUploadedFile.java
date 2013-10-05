@@ -54,7 +54,7 @@ public class DefaultUploadedFile implements UploadedFile {
 	}
 
 	@Override
-	public InputStream getFile() {
+	public InputStream getContent() {
 		return content;
 	}
 

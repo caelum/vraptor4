@@ -35,18 +35,11 @@ public interface UploadedFile {
 	/**
 	 * @return Returns the contents of uploaded file.
 	 */
-	InputStream getFile();
+	InputStream getContent();
 
 	/**
 	 * @return Returns the fileName of the uploaded as it was uploaded from the
 	 * client
 	 */
 	String getFileName();
-	
-	/**
-	 * 
-	 * @return Returns the file of uploaded file.
-	 */
-	long getSize();
-
 }

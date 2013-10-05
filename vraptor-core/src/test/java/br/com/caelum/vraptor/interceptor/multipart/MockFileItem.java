@@ -1,19 +1,13 @@
 package br.com.caelum.vraptor.interceptor.multipart;
 
 import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
-import java.nio.charset.Charset;
 
-import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemHeaders;
+import org.apache.commons.fileupload.FileItemStream;
 
-public class MockFileItem implements FileItem {
-
-	private static final long serialVersionUID = 5566658661323774136L;
+public class MockFileItem implements FileItemStream {
 
 	private String fieldName;
 	private String contentType;
@@ -40,70 +34,32 @@ public class MockFileItem implements FileItem {
 		this.name = name;
 		this.content = content;
 	}
-
-	public void delete() {
-
+	
+	@Override
+	public InputStream openStream()
+		throws IOException {
+		return new ByteArrayInputStream(content);
 	}
+	
 
-	public byte[] get() {
-		return content;
-	}
-
+	@Override
 	public String getContentType() {
 		return contentType;
 	}
 
+	@Override
 	public String getFieldName() {
 		return fieldName;
 	}
 
-	public InputStream getInputStream() throws IOException {
-		return new ByteArrayInputStream(content);
-	}
-
+	@Override
 	public String getName() {
 		return name;
 	}
 
-	public OutputStream getOutputStream() throws IOException {
-		return null;
-	}
-
-	public long getSize() {
-		return content == null ? 0 : content.length;
-	}
-
-	public String getString() {
-		return new String(content);
-	}
-
-	public String getString(String charsetName) throws UnsupportedEncodingException {
-		try {
-			return new String(content, Charset.forName(charsetName));
-		}catch (Exception e) {
-			throw new UnsupportedEncodingException();
-		}
-	}
-
+	@Override
 	public boolean isFormField() {
 		return formField;
-	}
-
-	public boolean isInMemory() {
-		return false;
-	}
-
-	public void setFieldName(String arg0) {
-
-	}
-
-	public void setFormField(boolean arg0) {
-
-	}
-
-	public void write(File arg0)
-		throws Exception {
-
 	}
 
 	@Override

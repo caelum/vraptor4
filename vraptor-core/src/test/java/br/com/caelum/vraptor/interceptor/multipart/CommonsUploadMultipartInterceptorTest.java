@@ -32,9 +32,9 @@ import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.controller.ControllerMethod;
+import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.http.InvalidParameterException;
 import br.com.caelum.vraptor.http.MutableRequest;
-import br.com.caelum.vraptor.interceptor.SimpleInterceptorStack;
 import br.com.caelum.vraptor.validator.I18nMessage;
 
 /**
@@ -44,7 +44,7 @@ import br.com.caelum.vraptor.validator.I18nMessage;
  */
 public class CommonsUploadMultipartInterceptorTest {
 
-	@Mock private SimpleInterceptorStack stack;
+	@Mock private InterceptorStack stack;
 	@Mock private ControllerMethod method;
 	@Mock private MutableRequest request;
 	@Mock private Validator validator;
@@ -97,7 +97,7 @@ public class CommonsUploadMultipartInterceptorTest {
 		when(request.getMethod()).thenReturn("POST");
 		when(mockUpload.parseRequest(request)).thenReturn(elements);
 
-		interceptor.intercept(stack);
+		interceptor.intercept(stack, null, null);
 
 		verify(request).setParameter("foo", "blah");
 		verify(request).setParameter("bar", "blah blah");
@@ -116,7 +116,7 @@ public class CommonsUploadMultipartInterceptorTest {
 		when(request.getMethod()).thenReturn("POST");
 		when(mockUpload.parseRequest(request)).thenReturn(elements);
 
-		interceptor.intercept(stack);
+		interceptor.intercept(stack, null, null);
 
 		verify(request).setParameter("foo", "blah");
 		verify(request).setParameter("bar", "blah blah");
@@ -136,7 +136,7 @@ public class CommonsUploadMultipartInterceptorTest {
 		when(request.getMethod()).thenReturn("POST");
 		when(mockUpload.parseRequest(request)).thenReturn(elements);
 
-		interceptor.intercept(stack);
+		interceptor.intercept(stack, null, null);
 
 		verify(request).setParameter("foo", "blah");
 		verify(request).setParameter("bar", "blah blah");
@@ -159,7 +159,7 @@ public class CommonsUploadMultipartInterceptorTest {
 		when(request.getMethod()).thenReturn("POST");
 		when(mockUpload.parseRequest(request)).thenReturn(elements);
 
-		interceptor.intercept(stack);
+		interceptor.intercept(stack, null, null);
 	}
 
 	@Test(expected = InvalidParameterException.class)
@@ -175,7 +175,7 @@ public class CommonsUploadMultipartInterceptorTest {
 		when(request.getMethod()).thenReturn("POST");
 		when(mockUpload.parseRequest(request)).thenReturn(newArrayList(item));
 
-		interceptor.intercept(stack);
+		interceptor.intercept(stack, null, null);
 	}
 
 	@Test
@@ -190,7 +190,7 @@ public class CommonsUploadMultipartInterceptorTest {
 		when(request.getMethod()).thenReturn("POST");
 		when(mockUpload.parseRequest(request)).thenReturn(elements);
 
-		interceptor.intercept(stack);
+		interceptor.intercept(stack, null, null);
 
 		verify(request).setParameter("myfile0", "myfile0");
 		verify(request).setParameter("myfile1", "myfile1");
@@ -211,7 +211,7 @@ public class CommonsUploadMultipartInterceptorTest {
 		when(request.getMethod()).thenReturn("POST");
 		when(mockUpload.parseRequest(request)).thenReturn(elements);
 
-		interceptor.intercept(stack);
+		interceptor.intercept(stack, null, null);
 
 		verify(request).setParameter("myfile0[0]", "myfile0[0]");
 		verify(request).setParameter("myfile0[1]", "myfile0[1]");
@@ -226,7 +226,7 @@ public class CommonsUploadMultipartInterceptorTest {
 
 		when(mockUpload.parseRequest(request)).thenThrow(new FileUploadException());
 
-		interceptor.intercept(stack);
+		interceptor.intercept(stack, null, null);
 	}
 
 	@Test
@@ -235,7 +235,7 @@ public class CommonsUploadMultipartInterceptorTest {
 
 		when(mockUpload.parseRequest(request)).thenThrow(new FileUploadBase.SizeLimitExceededException("", 0L, 0L));
 
-		interceptor.intercept(stack);
+		interceptor.intercept(stack, null, null);
 
 		verify(validator).add(any(I18nMessage.class));
 	}
@@ -254,7 +254,7 @@ public class CommonsUploadMultipartInterceptorTest {
 		when(request.getMethod()).thenReturn("POST");
 		when(mockUpload.parseRequest(request)).thenReturn(elements);
 
-		interceptor.intercept(stack);
+		interceptor.intercept(stack, null, null);
 
 		verify(configSpy).createDirInsideApplication();
 	}
@@ -272,7 +272,7 @@ public class CommonsUploadMultipartInterceptorTest {
 
 		when(mockUpload.parseRequest(request)).thenReturn(elements);
 
-		interceptor.intercept(stack);
+		interceptor.intercept(stack, null, null);
 
 		ArgumentCaptor<UploadedFile> argument = ArgumentCaptor.forClass(UploadedFile.class);
 		verify(request).setAttribute(anyString(), argument.capture());

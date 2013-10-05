@@ -35,16 +35,14 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import br.com.caelum.vraptor.Accepts;
-import br.com.caelum.vraptor.AroundCall;
-import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.Intercepts;
 import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.controller.ControllerMethod;
+import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.http.InvalidParameterException;
 import br.com.caelum.vraptor.http.MutableRequest;
+import br.com.caelum.vraptor.interceptor.Interceptor;
 import br.com.caelum.vraptor.interceptor.ParametersInstantiatorInterceptor;
-import br.com.caelum.vraptor.interceptor.SimpleInterceptorStack;
 import br.com.caelum.vraptor.validator.I18nMessage;
 
 import com.google.common.base.Strings;
@@ -62,7 +60,7 @@ import com.google.common.collect.Multiset;
  */
 @Intercepts(before=ParametersInstantiatorInterceptor.class)
 @RequestScoped
-public class CommonsUploadMultipartInterceptor {
+public class CommonsUploadMultipartInterceptor implements Interceptor {
 
 	private static final Logger logger = LoggerFactory.getLogger(CommonsUploadMultipartInterceptor.class);
 
@@ -90,14 +88,13 @@ public class CommonsUploadMultipartInterceptor {
 	/**
 	 * Will intercept the request if apache file upload says that this request is multipart
 	 */
-	@Accepts
+	@Override
 	public boolean accepts(ControllerMethod method) {
 		return ServletFileUpload.isMultipartContent(request);
 	}
-
-	@AroundCall
-	public void intercept(SimpleInterceptorStack stack)
-		throws InterceptionException {
+	
+	@Override
+	public void intercept(InterceptorStack stack, ControllerMethod method, Object controllerInstance) {
 		logger.info("Request contains multipart data. Try to parse with commons-upload.");
 
 		FileItemFactory factory = createFactoryForDiskBasedFileItems(config.getDirectory());
@@ -142,7 +139,7 @@ public class CommonsUploadMultipartInterceptor {
 					+ "or someone is not sending a RFC1867 compatible multipart request.", e);
 		}
 
-		stack.next();
+		stack.next(method, controllerInstance);
 	}
 
 	private boolean isNotEmpty(FileItem item) {

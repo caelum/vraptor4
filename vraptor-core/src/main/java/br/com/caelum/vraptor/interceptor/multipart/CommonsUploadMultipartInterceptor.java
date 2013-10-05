@@ -119,6 +119,7 @@ public class CommonsUploadMultipartInterceptor implements Interceptor {
 				request.setParameter(paramName, paramValues.toArray(new String[paramValues.size()]));
 			}
 
+			//  TODO config max upload size
 		} catch (final SizeLimitExceededException e) {
 			reportSizeLimitExceeded(e);
 

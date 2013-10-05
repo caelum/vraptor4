@@ -16,22 +16,22 @@
  */
 package br.com.caelum.vraptor.interceptor.multipart;
 
-import java.io.File;
+import static com.google.common.base.Objects.firstNonNull;
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.util.Collection;
-import java.util.List;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.FileItemFactory;
+import org.apache.commons.fileupload.FileItemIterator;
+import org.apache.commons.fileupload.FileItemStream;
 import org.apache.commons.fileupload.FileUploadBase.SizeLimitExceededException;
 import org.apache.commons.fileupload.FileUploadException;
-import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.commons.fileupload.util.Streams;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,7 +45,7 @@ import br.com.caelum.vraptor.interceptor.Interceptor;
 import br.com.caelum.vraptor.interceptor.ParametersInstantiatorInterceptor;
 import br.com.caelum.vraptor.validator.I18nMessage;
 
-import com.google.common.base.Strings;
+import com.google.common.base.Throwables;
 import com.google.common.collect.HashMultiset;
 import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.Multimap;
@@ -65,11 +65,11 @@ public class CommonsUploadMultipartInterceptor implements Interceptor {
 	private static final Logger logger = LoggerFactory.getLogger(CommonsUploadMultipartInterceptor.class);
 
 	private MutableRequest request;
-	private MultipartConfig config;
 	private Validator validator;
-	private ServletFileUploadCreator fileUploadCreator;
+	private ServletFileUpload uploader;
 
 	private Multiset<String> indexes;
+	private Multimap<String, String> params;
 
 	//CDI eyes only
 	@Deprecated
@@ -77,12 +77,10 @@ public class CommonsUploadMultipartInterceptor implements Interceptor {
 	}
 
 	@Inject
-	public CommonsUploadMultipartInterceptor(MutableRequest request, MultipartConfig cfg, Validator validator, 
-			ServletFileUploadCreator fileUploadCreator) {
+	public CommonsUploadMultipartInterceptor(MutableRequest request, Validator validator, ServletFileUpload uploader) {
 		this.request = request;
 		this.validator = validator;
-		this.config = cfg;
-		this.fileUploadCreator = fileUploadCreator;
+		this.uploader = uploader;
 	}
 
 	/**
@@ -97,32 +95,22 @@ public class CommonsUploadMultipartInterceptor implements Interceptor {
 	public void intercept(InterceptorStack stack, ControllerMethod method, Object controllerInstance) {
 		logger.info("Request contains multipart data. Try to parse with commons-upload.");
 
-		FileItemFactory factory = createFactoryForDiskBasedFileItems(config.getDirectory());
+		params = LinkedListMultimap.create();
 		indexes = HashMultiset.create();
 
-		ServletFileUpload uploader = fileUploadCreator.create(factory);
-		uploader.setSizeMax(config.getSizeLimit());
-
 		try {
-			final List<FileItem> items = uploader.parseRequest(request);
-			logger.debug("Found {} attributes in the multipart form submission. Parsing them.", items.size());
+			FileItemIterator items = uploader.getItemIterator(request);
 
-			final Multimap<String, String> params = LinkedListMultimap.create();
-
-			for (FileItem item : items) {
-				String name = item.getFieldName();
-				name = fixIndexedParameters(name);
+			while(items.hasNext()) {
+				FileItemStream item = items.next();
+				
+				String name = fixIndexedParameters(item.getFieldName());
+				logger.debug("processing {} as {}", name, (item.isFormField() ? "field" : "file"));
 
 				if (item.isFormField()) {
-					logger.debug("{} is a field", name);
-					params.put(name, getValue(item));
-
-				} else if (isNotEmpty(item)) {
-					logger.debug("{} is a file", name);
-					processFile(item, name);
-
+					processField(item, name);
 				} else {
-					logger.debug("A file field was empty: {}", item.getFieldName());
+					processFile(item, name);
 				}
 			}
 
@@ -134,16 +122,13 @@ public class CommonsUploadMultipartInterceptor implements Interceptor {
 		} catch (final SizeLimitExceededException e) {
 			reportSizeLimitExceeded(e);
 
-		} catch (FileUploadException e) {
+		} catch (FileUploadException | IOException e) {
 			logger.warn("There was some problem parsing this multipart request, "
 					+ "or someone is not sending a RFC1867 compatible multipart request.", e);
+			throw Throwables.propagate(e);
 		}
 
 		stack.next(method, controllerInstance);
-	}
-
-	private boolean isNotEmpty(FileItem item) {
-		return item.getName().length() > 0;
 	}
 
 	/**
@@ -156,9 +141,9 @@ public class CommonsUploadMultipartInterceptor implements Interceptor {
 		logger.warn("The file size limit was exceeded.", e);
 	}
 
-	protected void processFile(FileItem item, String name) {
+	protected void processFile(FileItemStream item, String name) {
 		try {
-			UploadedFile upload = new DefaultUploadedFile(item.getInputStream(), item.getName(), item.getContentType(), item.getSize());
+			UploadedFile upload = new DefaultUploadedFile(item.openStream(), item.getName(), item.getContentType());
 			request.setParameter(name, name);
 			request.setAttribute(name, upload);
 
@@ -168,24 +153,14 @@ public class CommonsUploadMultipartInterceptor implements Interceptor {
 		}
 	}
 
-	protected FileItemFactory createFactoryForDiskBasedFileItems(File temporaryDirectory) {
-		DiskFileItemFactory factory = new DiskFileItemFactory();
-		factory.setRepository(temporaryDirectory);
-
-		logger.debug("Using repository {} for file upload", factory.getRepository());
-		return factory;
-	}
-
-	protected String getValue(FileItem item) {
-		String encoding = request.getCharacterEncoding();
-		if (!Strings.isNullOrEmpty(encoding)) {
-			try {
-				return item.getString(encoding);
-			} catch (UnsupportedEncodingException e) {
-				logger.warn("Request have an invalid encoding. Ignoring it");
-			}
+	protected void processField(FileItemStream item, String name) {
+		try {
+			String encoding = firstNonNull(request.getCharacterEncoding(), UTF_8.name());
+			String value = Streams.asString(item.openStream(), encoding);
+			params.put(name, value);
+		} catch (IOException e) {
+			throw new InvalidParameterException("Cant parse field " + item.getName(), e);
 		}
-		return item.getString();
 	}
 
 	protected String fixIndexedParameters(String name) {

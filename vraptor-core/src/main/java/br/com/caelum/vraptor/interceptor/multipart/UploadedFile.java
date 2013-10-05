@@ -42,11 +42,4 @@ public interface UploadedFile {
 	 * client
 	 */
 	String getFileName();
-	
-	/**
-	 * 
-	 * @return Returns the file of uploaded file.
-	 */
-	long getSize();
-
 }

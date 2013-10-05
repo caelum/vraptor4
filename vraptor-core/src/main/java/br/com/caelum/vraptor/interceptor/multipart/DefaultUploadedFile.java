@@ -34,14 +34,11 @@ public class DefaultUploadedFile implements UploadedFile {
 
 	private final InputStream content;
 
-	private final long size;
-	
-	public DefaultUploadedFile(InputStream content, String completeFileName, String contentType, long size) {
+	public DefaultUploadedFile(InputStream content, String completeFileName, String contentType) {
 		this.content = content;
 		this.fileName = REGEX_REMOVE_SLASHES.matcher(completeFileName).replaceAll("$1");
 		this.completeFileName = completeFileName;
 		this.contentType = contentType;
-		this.size = size;
 	}
 
 	@Override
@@ -68,10 +65,5 @@ public class DefaultUploadedFile implements UploadedFile {
 
 	public String getCompleteFileName() {
 		return this.completeFileName;
-	}
-
-	@Override
-	public long getSize() {
-		return size;
 	}
 }

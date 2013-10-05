@@ -42,6 +42,7 @@ public class UploadedFileConverter implements Converter<UploadedFile> {
 		this.request = request;
 	}
 
+	@Override
 	public UploadedFile convert(String value, Class<? extends UploadedFile> type) {
 		Object upload = request.getAttribute(value);
 		return upload == null ? null : type.cast(upload); 

@@ -174,7 +174,8 @@ public class CommonsUploadMultipartInterceptorTest {
 	public void shouldValidateWhenSizeLimitExceededExceptionOccurs() throws Exception {
 		interceptor = new CommonsUploadMultipartInterceptor(request, validator, uploader);
 
-		when(uploader.parseRequest(request)).thenThrow(new FileUploadBase.SizeLimitExceededException("", 0L, 0L));
+		when(uploader.getItemIterator(request))
+			.thenThrow(new FileUploadBase.SizeLimitExceededException("", 0L, 0L));
 
 		interceptor.intercept(stack, null, null);
 

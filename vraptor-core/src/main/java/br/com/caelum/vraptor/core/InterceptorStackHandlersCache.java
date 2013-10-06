@@ -27,6 +27,9 @@ import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.interceptor.InterceptorRegistry;
 
+/**
+ * Cache all instances of {@link InterceptorHandler} when application starts.
+ */
 @ApplicationScoped
 public class InterceptorStackHandlersCache {
 
@@ -42,7 +45,6 @@ public class InterceptorStackHandlersCache {
 	@Inject
 	public InterceptorStackHandlersCache(InterceptorRegistry registry,
 			InterceptorHandlerFactory handlerFactory){
-
 		this.registry = registry;
 		this.handlerFactory = handlerFactory;
 	}

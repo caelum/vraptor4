@@ -17,6 +17,7 @@
 
 package br.com.caelum.vraptor.http;
 
+import static javax.servlet.RequestDispatcher.INCLUDE_REQUEST_URI;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
@@ -64,7 +65,7 @@ public class DefaultControllerTranslatorTest {
 	@Test
 	public void handlesInclude() {
 
-		when(request.getAttribute(RequestInfo.INCLUDE_REQUEST_URI)).thenReturn("/url");
+		when(request.getAttribute(INCLUDE_REQUEST_URI)).thenReturn("/url");
 		when(request.getMethod()).thenReturn("POST");
 		when(router.parse("/url", HttpMethod.POST, webRequest)).thenReturn(method);
 

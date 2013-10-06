@@ -18,6 +18,7 @@ package br.com.caelum.vraptor.interceptor.multipart;
 
 import static com.google.common.base.Objects.firstNonNull;
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.apache.commons.fileupload.servlet.ServletFileUpload.isMultipartContent;
 
 import java.io.IOException;
 import java.util.Collection;
@@ -36,6 +37,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.Intercepts;
 import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.controller.ControllerMethod;
@@ -46,7 +48,6 @@ import br.com.caelum.vraptor.interceptor.Interceptor;
 import br.com.caelum.vraptor.interceptor.ParametersInstantiatorInterceptor;
 import br.com.caelum.vraptor.validator.I18nMessage;
 
-import com.google.common.base.Throwables;
 import com.google.common.collect.HashMultiset;
 import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.Multimap;
@@ -89,7 +90,7 @@ public class CommonsUploadMultipartInterceptor implements Interceptor {
 	 */
 	@Override
 	public boolean accepts(ControllerMethod method) {
-		return ServletFileUpload.isMultipartContent(request);
+		return isMultipartContent(request);
 	}
 	
 	@Override
@@ -117,17 +118,17 @@ public class CommonsUploadMultipartInterceptor implements Interceptor {
 
 			for (String paramName : params.keySet()) {
 				Collection<String> paramValues = params.get(paramName);
+				logger.debug("setting parameter {} as {}", paramName, paramValues);
 				request.setParameter(paramName, paramValues.toArray(new String[paramValues.size()]));
 			}
 
-			//  TODO config max upload size
 		} catch (final SizeLimitExceededException e) {
 			reportSizeLimitExceeded(e);
 
 		} catch (FileUploadException | IOException e) {
 			logger.warn("There was some problem parsing this multipart request, "
 					+ "or someone is not sending a RFC1867 compatible multipart request.", e);
-			throw Throwables.propagate(e);
+			throw new InterceptionException(e);
 		}
 
 		stack.next(method, controllerInstance);
@@ -140,7 +141,7 @@ public class CommonsUploadMultipartInterceptor implements Interceptor {
 	 */
 	protected void reportSizeLimitExceeded(final SizeLimitExceededException e) {
 		validator.add(new I18nMessage("upload", "file.limit.exceeded", e.getActualSize(), e.getPermittedSize()));
-		logger.warn("The file size limit was exceeded.", e);
+		logger.warn("The file size limit was exceeded", e);
 	}
 
 	protected void processFile(FileItemStream item, String name) {

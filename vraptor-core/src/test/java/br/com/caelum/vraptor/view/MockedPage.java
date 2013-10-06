@@ -34,25 +34,26 @@ public class MockedPage implements PageResult {
 		proxifier = new JavassistProxifier();
 	}
 
-	public void forwardTo() {
-
-	}
-
+	@Override
 	public void forwardTo(String url) {
 
 	}
 
+	@Override
 	public void defaultView() {
 
 	}
 
+	@Override
 	public void include() {
 	}
 
+	@Override
 	public void redirectTo(String url) {
 
 	}
 
+	@Override
 	public <T> T of(Class<T> controllerType) {
 		return proxifier.proxify(controllerType, new MethodInvocation<T>() {
 
@@ -62,19 +63,4 @@ public class MockedPage implements PageResult {
 
 		});
 	}
-
-	public void redirect(String url) {
-		this.redirectTo(url);
-	}
-
-	public void forward(String url) {
-		this.forwardTo(url);
-	}
-
-	public void forward() {
-		this.defaultView();
-	}
-
-
-
 }

@@ -17,6 +17,8 @@
 
 package br.com.caelum.vraptor.core;
 
+import static javax.servlet.RequestDispatcher.INCLUDE_REQUEST_URI;
+
 import javax.enterprise.inject.Alternative;
 import javax.inject.Inject;
 import javax.servlet.FilterChain;
@@ -38,8 +40,6 @@ public class RequestInfo {
 	private final MutableRequest request;
 	private final MutableResponse response;
 	private final FilterChain chain;
-
-	public static final String INCLUDE_REQUEST_URI = "javax.servlet.include.request_uri";
 
 	@Inject
 	public RequestInfo(ServletContext servletContext, FilterChain chain, MutableRequest request, MutableResponse response) {
@@ -69,9 +69,7 @@ public class RequestInfo {
 		if (request.getAttribute(INCLUDE_REQUEST_URI) != null) {
 			return (String) request.getAttribute(INCLUDE_REQUEST_URI);
 		}
-		String uri = request.getRequestURI().replaceFirst("(?i);jsessionid=.*$", "");
-		String contextName = request.getContextPath();
-		uri = uri.replaceFirst(contextName, "");
-		return uri;
+		String uri = request.getRequestURI().substring(request.getContextPath().length());
+		return uri.replaceFirst("(?i);jsessionid=.*$", "");
 	}
 }

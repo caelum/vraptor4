@@ -55,22 +55,4 @@ public interface PageResult extends View {
 	 */
 	<T> T of(Class<T> controllerType);
 	
-	/**
-	 * @deprecated  As of 3.2, replaced by
-	 *              {@link #redirectTo(String url)}
-	 */
-	void redirect(String url);
-	
-	/**
-	 * @deprecated  As of 3.2, replaced by
-	 *              {@link #forwardTo(String url)}
-	 */
-	void forward(String url);
-	
-	/**
-	 * @deprecated  As of 3.2, replaced by
-	 *              {@link #forwardTo()}
-	 */
-	void forward();
-
 }

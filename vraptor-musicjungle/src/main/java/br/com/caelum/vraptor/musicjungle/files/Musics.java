@@ -2,8 +2,6 @@ package br.com.caelum.vraptor.musicjungle.files;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.CopyOption;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -30,8 +28,8 @@ public class Musics {
 		if(file != null) {
     		Path path = DEFAULT_FOLDER.resolve(getFileName(music));
     		
-    		try(InputStream in = file.getContent()) {
-    		    Files.copy(in, path,StandardCopyOption.REPLACE_EXISTING);
+    		try {
+    		    Files.copy(file.getContent(), path,StandardCopyOption.REPLACE_EXISTING);
     		} catch (IOException e) {
     		    throw new IllegalStateException(e);
     		}

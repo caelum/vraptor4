@@ -20,7 +20,9 @@ import static com.google.common.base.Objects.firstNonNull;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.apache.commons.fileupload.servlet.ServletFileUpload.isMultipartContent;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Collection;
 
 import javax.enterprise.context.RequestScoped;
@@ -52,6 +54,7 @@ import com.google.common.collect.HashMultiset;
 import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multiset;
+import com.google.common.io.ByteStreams;
 
 /**
  * A multipart interceptor based on Apache Commons Upload. Provided parameters are injected through
@@ -106,13 +109,15 @@ public class CommonsUploadMultipartInterceptor implements Interceptor {
 			while(items.hasNext()) {
 				FileItemStream item = items.next();
 				
-				String name = fixIndexedParameters(item.getFieldName());
-				logger.debug("processing {} as {}", name, (item.isFormField() ? "field" : "file"));
+				String parameter = fixIndexedParameters(item.getFieldName());
+				logger.debug("processing {} as {}", parameter, (item.isFormField() ? "field" : "file"));
 
 				if (item.isFormField()) {
-					processField(item, name);
+					processField(item, parameter);
+				} else if (isEmptyFile(item)) {
+					logger.warn("file {} is empty", parameter);
 				} else {
-					processFile(item, name);
+					processFile(item, parameter);
 				}
 			}
 
@@ -133,6 +138,10 @@ public class CommonsUploadMultipartInterceptor implements Interceptor {
 
 		stack.next(method, controllerInstance);
 	}
+	
+	private boolean isEmptyFile(FileItemStream item) {
+		return item.getName().isEmpty();
+	}
 
 	/**
 	 * This method is called when the {@link SizeLimitExceededException} was thrown.
@@ -145,9 +154,11 @@ public class CommonsUploadMultipartInterceptor implements Interceptor {
 	}
 
 	protected void processFile(FileItemStream item, String name) {
-		try {
+		try (InputStream stream = item.openStream()) {
+			InputStream content = new ByteArrayInputStream(ByteStreams.toByteArray(stream));
+			
 			String fileName = FilenameUtils.getName(item.getName());
-			UploadedFile upload = new DefaultUploadedFile(item.openStream(), fileName, item.getContentType());
+			UploadedFile upload = new DefaultUploadedFile(content, fileName, item.getContentType());
 			request.setParameter(name, name);
 			request.setAttribute(name, upload);
 

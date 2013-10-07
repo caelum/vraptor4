@@ -43,12 +43,14 @@
  */
 package br.com.caelum.vraptor.http.route;
 
+import static java.util.Arrays.asList;
+
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -84,6 +86,11 @@ import com.google.common.base.Joiner;
  */
 @Vetoed
 public class DefaultRouteBuilder implements RouteBuilder {
+	private static final List<?> CHARACTER_TYPES = asList(char.class, Character.class);
+	private static final List<?> DECIMAL_TYPES = asList(Double.class, BigDecimal.class, double.class, Float.class, float.class);
+	private static final List<?> BOOLEAN_TYPES = asList(Boolean.class, boolean.class);
+	private static final List<?> NUMERIC_TYPES = asList(Integer.class, Long.class, int.class, long.class, BigInteger.class, Short.class, short.class);
+	
 	private final Set<HttpMethod> supportedMethods = EnumSet.noneOf(HttpMethod.class);
 
 	private final Proxifier proxifier;
@@ -126,21 +133,20 @@ public class DefaultRouteBuilder implements RouteBuilder {
 			return this;
 		}
 
+		@Override
 		public DefaultRouteBuilder ofType(Class<?> type) {
 			parameters.put(name, regexFor(type));
 			return DefaultRouteBuilder.this;
 		}
 
 		private String regexFor(Class<?> type) {
-			if (Arrays.asList(Integer.class, Long.class, int.class, long.class, BigInteger.class,
-					Short.class, short.class).contains(type)) {
+			if (NUMERIC_TYPES.contains(type)) {
 				return "-?\\d+";
-			} else if (Arrays.asList(char.class, Character.class).contains(type)){
+			} else if (CHARACTER_TYPES.contains(type)){
 				return ".";
-			} else if (Arrays.asList(Double.class, BigDecimal.class, double.class, Float.class, float.class).contains(
-					type)) {
+			} else if (DECIMAL_TYPES.contains(type)) {
 				return "-?\\d*\\.?\\d+";
-			} else if (Arrays.asList(Boolean.class, boolean.class).contains(type)) {
+			} else if (BOOLEAN_TYPES.contains(type)) {
 				return "true|false";
 			} else if (Enum.class.isAssignableFrom(type)) {
 				return Joiner.on("|").join(type.getEnumConstants());
@@ -148,6 +154,7 @@ public class DefaultRouteBuilder implements RouteBuilder {
 			return "[^/]+";
 		}
 
+		@Override
 		public DefaultRouteBuilder matching(String regex) {
 			parameters.put(name, regex);
 			return DefaultRouteBuilder.this;
@@ -158,10 +165,12 @@ public class DefaultRouteBuilder implements RouteBuilder {
 		}
 	}
 
+	@Override
 	public DefaultParameterControlBuilder withParameter(String name) {
 		return builder.withParameter(name);
 	}
 
+	@Override
 	public <T> T is(final Class<T> type) {
 		MethodInvocation<T> handler = new MethodInvocation<T>() {
 			public Object intercept(Object proxy, Method method, Object[] args, SuperMethod superMethod) {
@@ -177,6 +186,7 @@ public class DefaultRouteBuilder implements RouteBuilder {
 		return proxifier.proxify(type, handler);
 	}
 
+	@Override
 	public void is(Class<?> type, Method method) {
 		addParametersInfo(method);
 		ControllerMethod controllerMethod = DefaultControllerMethod.instanceFor(type, method);
@@ -219,11 +229,13 @@ public class DefaultRouteBuilder implements RouteBuilder {
 	 * @param method
 	 * @return
 	 */
+	@Override
 	public DefaultRouteBuilder with(HttpMethod method) {
 		this.supportedMethods.add(method);
 		return this;
 	}
 
+	@Override
 	public DefaultRouteBuilder with(Set<HttpMethod> methods) {
 		this.supportedMethods.addAll(methods);
 		return this;
@@ -235,11 +247,13 @@ public class DefaultRouteBuilder implements RouteBuilder {
 	 * @param priority
 	 * @return
 	 */
+	@Override
 	public DefaultRouteBuilder withPriority(int priority) {
 		this.priority = priority;
 		return this;
 	}
 
+	@Override
 	public Route build() {
 		if (strategy instanceof NoStrategy) {
 			throw new IllegalRouteException("You have created a route, but did not specify any method to be invoked: "

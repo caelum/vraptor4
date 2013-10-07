@@ -47,6 +47,7 @@ public class BeanValidatorContext
 		return validatedValue;
 	}
 
+	@Override
 	public <T> T unwrap(Class<T> clazz) {
 		return clazz.cast(this);
 	}

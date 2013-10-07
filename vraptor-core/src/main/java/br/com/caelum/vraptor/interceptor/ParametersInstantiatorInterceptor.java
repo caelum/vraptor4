@@ -77,10 +77,12 @@ public class ParametersInstantiatorInterceptor implements Interceptor {
 		this.flash = flash;
 	}
 
+	@Override
 	public boolean accepts(ControllerMethod method) {
 		return method.getMethod().getParameterTypes().length > 0;
 	}
 
+	@Override
 	public void intercept(InterceptorStack stack, ControllerMethod method, Object controllerInstance) throws InterceptionException {
 		Enumeration<String> names = request.getParameterNames();
 		while (names.hasMoreElements()) {

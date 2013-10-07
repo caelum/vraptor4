@@ -56,11 +56,13 @@ public class OutjectResult implements Interceptor {
 		this.extractor = extractor;
 	}
 
+	@Override
 	public boolean accepts(ControllerMethod method) {
 		Type returnType = method.getMethod().getGenericReturnType();
 		return !returnType.equals(void.class);
 	}
 
+	@Override
 	public void intercept(InterceptorStack stack, ControllerMethod method, Object controllerInstance)
 			throws InterceptionException {
 		Type returnType = method.getMethod().getGenericReturnType();

@@ -35,6 +35,7 @@ import br.com.caelum.vraptor.core.RequestInfo;
 @ApplicationScoped
 public class DefaultControllerNotFoundHandler implements ControllerNotFoundHandler {
 
+	@Override
 	public void couldntFind(RequestInfo request) {
 		FilterChain chain = request.getChain();
 		try {

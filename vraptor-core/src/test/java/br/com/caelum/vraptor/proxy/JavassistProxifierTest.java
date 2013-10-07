@@ -44,6 +44,7 @@ public class JavassistProxifierTest {
 	@Test
 	public void shouldProxifyInterfaces() {
 		TheInterface proxy = proxifier.proxify(TheInterface.class, new MethodInvocation<TheInterface>() {
+			@Override
 			public Object intercept(TheInterface proxy, Method method, Object[] args, SuperMethod superMethod) {
 				return true;
 			}
@@ -54,6 +55,7 @@ public class JavassistProxifierTest {
 	@Test
 	public void shouldProxifyConcreteClassesWithDefaultConstructors() {
 		TheClass proxy = proxifier.proxify(TheClass.class, new MethodInvocation<TheClass>() {
+			@Override
 			public Object intercept(TheClass proxy, Method method, Object[] args, SuperMethod superMethod) {
 				return true;
 			}
@@ -64,6 +66,7 @@ public class JavassistProxifierTest {
 	@Test
 	public void shouldNotProxifyJavaLangObjectMethods() throws Exception {
 		Object proxy = proxifier.proxify(JavassistProxifierTest.class, new MethodInvocation<Object>() {
+			@Override
 			public Object intercept(Object proxy, Method method, Object[] args, SuperMethod superMethod) {
 				fail("should not call this Method interceptor");
 				return null;
@@ -76,6 +79,7 @@ public class JavassistProxifierTest {
 	public void testIfObjectIsProxy() {
 		Object realObject = new Object();
 		Object objectAsProxy = proxifier.proxify(Object.class, new MethodInvocation<Object>() {
+			@Override
 			public Object intercept(Object proxy, Method method, Object[] args, SuperMethod superMethod) {
 				return null;
 			}
@@ -89,6 +93,7 @@ public class JavassistProxifierTest {
 	@Test
 	public void shouldThrowProxyInvocationExceptionIfAnErrorOccurs() {
 		C proxy = proxifier.proxify(C.class, new MethodInvocation<C>() {
+			@Override
 			public Object intercept(C proxy, Method method, Object[] args, SuperMethod superMethod) {
 				return superMethod.invoke(proxy, args);
 			}
@@ -105,6 +110,7 @@ public class JavassistProxifierTest {
 	@Test
 	public void shouldNotProxifyBridges() throws Exception {
 		B proxy = proxifier.proxify(B.class, new MethodInvocation<B>() {
+			@Override
 			public Object intercept(B proxy, Method method, Object[] args, SuperMethod superMethod) {
 				if (method.isBridge()) {
 					fail("Method " + method + " is a bridge");
@@ -140,6 +146,7 @@ public class JavassistProxifierTest {
 	}
 
 	static class B extends A<String> {
+		@Override
 		public String getT(String s) { return s; }
 	}
 

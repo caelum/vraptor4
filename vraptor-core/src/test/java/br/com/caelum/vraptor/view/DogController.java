@@ -22,30 +22,39 @@ import br.com.caelum.vraptor.interceptor.DogAlike;
 
 public class DogController implements DogAlike {
 
+	@Override
 	public void bark() {
 	}
 
+	@Override
 	public void bark(int times) {
 	}
 
+	@Override
 	public void bark(String phrase) {
 	}
 
+	@Override
 	public void dropDead(int[] positions) {
 	}
 
+	@Override
 	public void eat(List<String> portions) {
 	}
 
+	@Override
 	public void recurse(DogAlike[] dogs) {
 	}
 
+	@Override
 	public void jump(long times) {
 	}
 
+	@Override
 	public void dig(double amount) {
 	}
 
+	@Override
 	public void dig(float amount) {
 	}
 

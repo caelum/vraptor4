@@ -48,11 +48,13 @@ public class XStreamSerializer implements SerializerBuilder {
 		this.serializee = ((VRaptorXStream) xstream).getVRaptorMapper().getSerializee();
 	}
 
+	@Override
 	public Serializer exclude(String... names) {
 		serializee.excludeAll(names);
 		return this;
 	}
 
+	@Override
 	public Serializer excludeAll() {
 		serializee.excludeAll();
 		return this;
@@ -102,11 +104,13 @@ public class XStreamSerializer implements SerializerBuilder {
 		}
 	}
 
+	@Override
 	public <T> Serializer from(T object, String alias) {
 		preConfigure(object, alias);
 		return this;
 	}
 
+	@Override
 	public <T> Serializer from(T object) {
 		preConfigure(object, null);
 		return this;
@@ -122,15 +126,18 @@ public class XStreamSerializer implements SerializerBuilder {
 		return set;
 	}
 
+	@Override
 	public Serializer include(String... fields) {
 		serializee.includeAll(fields);
 		return this;
 	}
 
+	@Override
 	public void serialize() {
 		xstream.toXML(serializee.getRoot(), writer);
 	}
 
+	@Override
 	public Serializer recursive() {
 		this.serializee.setRecursive(true);
 		return this;

@@ -64,6 +64,7 @@ public class DefaultStatus implements Status {
 		this.router = router;
 	}
 
+	@Override
 	public void notFound() {
 		sendError(HttpServletResponse.SC_NOT_FOUND);
 	}
@@ -84,35 +85,42 @@ public class DefaultStatus implements Status {
 		}
 	}
 
+	@Override
 	public void header(String key, String value) {
 		response.addHeader(key, value);
 	}
 
+	@Override
 	public void created() {
 		response.setStatus(HttpServletResponse.SC_CREATED);
 		result.use(Results.nothing());
 	}
 
+	@Override
 	public void created(String location) {
 		header("Location", fixLocation(location));
 		created();
 	}
 
+	@Override
 	public void ok() {
 		response.setStatus(HttpServletResponse.SC_OK);
 		result.use(Results.nothing());
 	}
 
+	@Override
 	public void conflict() {
 		sendError(HttpServletResponse.SC_CONFLICT);
 	}
 
+	@Override
 	public void methodNotAllowed(EnumSet<HttpMethod> allowedMethods) {
 		header("Allow", allowedMethods.toString().replaceAll("\\[|\\]", ""));
 
 		sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
 	}
 
+	@Override
 	public void movedPermanentlyTo(String location) {
 		this.response.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
 		header("Location", fixLocation(location));
@@ -128,8 +136,10 @@ public class DefaultStatus implements Status {
 		return location;
 	}
 
+	@Override
 	public <T> T movedPermanentlyTo(final Class<T> controller) {
 		return proxifier.proxify(controller, new MethodInvocation<T>() {
+			@Override
 			public Object intercept(T proxy, Method method, Object[] args, SuperMethod superMethod) {
 				String uri = router.urlFor(controller, method, args);
 				movedPermanentlyTo(uri);
@@ -138,36 +148,44 @@ public class DefaultStatus implements Status {
 		});
 	}
 
+	@Override
 	public void unsupportedMediaType(String message) {
 		sendError(HttpServletResponse.SC_UNSUPPORTED_MEDIA_TYPE, message);
 	}
 
+	@Override
 	public void badRequest(String message) {
 		sendError(HttpServletResponse.SC_BAD_REQUEST, message);
 	}
 
+	@Override
 	public void badRequest(List<?> errors) {
 		response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 		result.use(representation()).from(errors, "errors").serialize();
 	}
 
+	@Override
 	public void forbidden(String message) {
 		sendError(HttpServletResponse.SC_FORBIDDEN, message);
 	}
 
+	@Override
 	public void noContent() {
 		response.setStatus(HttpServletResponse.SC_NO_CONTENT);
 	}
 
+	@Override
 	public void notAcceptable() {
 		sendError(HttpServletResponse.SC_NOT_ACCEPTABLE);
 	}
 
+	@Override
 	public void accepted(){
 		response.setStatus(HttpServletResponse.SC_ACCEPTED );
 		result.use(Results.nothing());
 	}
 
+	@Override
 	public void notModified() {
 		response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
 	}

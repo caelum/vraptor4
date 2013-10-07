@@ -49,10 +49,12 @@ public class XStreamXMLSerialization implements XMLSerialization {
 		this.builder = builder;
 	}
 
+	@Override
 	public boolean accepts(String format) {
 		return "xml".equals(format);
 	}
 
+	@Override
 	public <T> Serializer from(T object) {
 		response.setContentType("application/xml");
 		return getSerializer().from(object);
@@ -66,6 +68,7 @@ public class XStreamXMLSerialization implements XMLSerialization {
 		}
 	}
 
+	@Override
 	public <T> Serializer from(T object, String alias) {
 		response.setContentType("application/xml");
 		return getSerializer().from(object, alias);

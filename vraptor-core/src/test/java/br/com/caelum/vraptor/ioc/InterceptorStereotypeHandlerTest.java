@@ -50,10 +50,12 @@ public class InterceptorStereotypeHandlerTest {
 
 	static class InterceptorA implements Interceptor {
 
+		@Override
 		public boolean accepts(ControllerMethod method) {
 			return false;
 		}
 
+		@Override
 		public void intercept(InterceptorStack stack, ControllerMethod method,
 				Object controllerInstance) throws InterceptionException {
 		}

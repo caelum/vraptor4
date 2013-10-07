@@ -30,6 +30,7 @@ public class NoRoutesConfiguration implements RoutesConfiguration {
 	public NoRoutesConfiguration() {
 	}
 
+	@Override
 	public void config(Router router) {
 	}
 

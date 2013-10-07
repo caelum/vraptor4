@@ -59,6 +59,7 @@ public class DefaultRefererResult implements RefererResult {
 		this.provider = provider;
 	}
 
+	@Override
 	public void forward() throws IllegalStateException {
 		String referer = getReferer();
 
@@ -77,6 +78,7 @@ public class DefaultRefererResult implements RefererResult {
 			.withArgs(provider.getParametersFor(method, new ArrayList<Message>()));
 	}
 
+	@Override
 	public void redirect() throws IllegalStateException {
 		String referer = getReferer();
 		try {

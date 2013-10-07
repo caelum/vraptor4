@@ -74,6 +74,7 @@ public class AspectStyleInterceptorHandler implements InterceptorHandler {
 		return stepInvoker.findMethod(interceptorMethods, step, interceptorClass);
 	}
 
+	@Override
 	public void execute(InterceptorStack stack,
 			ControllerMethod controllerMethod, Object currentController) {
 		Object interceptor = container.instanceFor(interceptorClass);

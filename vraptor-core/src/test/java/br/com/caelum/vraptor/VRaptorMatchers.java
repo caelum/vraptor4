@@ -34,6 +34,7 @@ public class VRaptorMatchers {
 	public static Matcher<Collection<?>> hasOneCopyOf(final Object item) {
 		return new TypeSafeMatcher<Collection<?>>(){
 
+			@Override
 			public void describeTo(Description description) {
 				description.appendText("a collection containing one copy of").appendValue(item);
 			}
@@ -67,6 +68,7 @@ public class VRaptorMatchers {
 				return item.canHandle(type, method);
 			}
 
+			@Override
 			public void describeTo(Description description) {
 				description.appendText("a route that can handle class ")
 						.appendValue(type).appendText(" method ").appendValue(method);

@@ -38,14 +38,17 @@ public class DefaultControllerMethod implements ControllerMethod {
 		return new DefaultControllerMethod(new DefaultBeanClass(type), method);
 	}
 
+	@Override
 	public Method getMethod() {
 		return method;
 	}
 
+	@Override
 	public BeanClass getController() {
 		return controller;
 	}
 
+	@Override
 	public boolean containsAnnotation(Class<? extends Annotation> annotation) {
 		return method.isAnnotationPresent(annotation);
 	}

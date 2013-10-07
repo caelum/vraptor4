@@ -44,6 +44,7 @@ public class DefaultFormatResolver implements FormatResolver {
 		this.acceptHeaderToFormat = acceptHeaderToFormat;
 	}
 
+	@Override
 	public String getAcceptFormat() {
 		String format = request.getParameter("_format");
 		if (format != null) {

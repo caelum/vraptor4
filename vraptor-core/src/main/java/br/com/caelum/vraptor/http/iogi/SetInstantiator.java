@@ -44,10 +44,12 @@ public class SetInstantiator implements Instantiator<Set<Object>> {
 		listInstantiator = new ListInstantiator(listElementInstantiator);
 	}
 
+	@Override
 	public boolean isAbleToInstantiate(Target<?> target) {
 		return target.getClassType().isAssignableFrom(Set.class);
 	}
 
+	@Override
 	public Set<Object> instantiate(Target<?> target, Parameters parameters) {
 		List<Object> list = listInstantiator.instantiate(target, parameters);
 		return (list == null) ? null : new HashSet<>(list);

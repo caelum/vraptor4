@@ -50,6 +50,7 @@ public class DefaultInterceptorStack implements InterceptorStack {
 		handlers = cache.getInterceptorHandlers();
 	}
 
+	@Override
 	public void next(ControllerMethod method, Object controllerInstance) throws InterceptionException {
 		
 		Iterator<InterceptorHandler> iterator = internalStack.peek();

@@ -31,6 +31,7 @@ import br.com.caelum.vraptor.Converter;
 @ApplicationScoped
 public class StringConverter implements Converter<String> {
 
+	@Override
 	public String convert(String value, Class<? extends String> type) {
 		return value;
 	}

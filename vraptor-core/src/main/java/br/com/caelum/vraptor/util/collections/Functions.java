@@ -24,6 +24,7 @@ public class Functions {
 
 	public static <T> Function<Class<? extends T>, ? extends T> instanceWith(final Container container) {
 		return new Function<Class<? extends T>, T>() {
+			@Override
 			public T apply(Class<? extends T> type) {
 				return container.instanceFor(type);
 			}

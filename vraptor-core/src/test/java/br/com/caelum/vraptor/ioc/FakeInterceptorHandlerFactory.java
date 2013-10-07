@@ -10,6 +10,7 @@ import br.com.caelum.vraptor.core.InterceptorHandlerFactory;
 @Alternative
 public class FakeInterceptorHandlerFactory implements InterceptorHandlerFactory{
 
+	@Override
 	public InterceptorHandler handlerFor(Class<?> type) {
 		return null;
 	}

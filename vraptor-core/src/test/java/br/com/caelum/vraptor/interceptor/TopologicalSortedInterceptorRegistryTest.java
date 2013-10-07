@@ -133,6 +133,7 @@ public class TopologicalSortedInterceptorRegistryTest {
 				return true;
 			}
 
+			@Override
 			public void describeTo(Description description) {
 				description.appendText("A list with relative order ").appendValue(elements);
 			}

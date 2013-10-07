@@ -72,6 +72,7 @@ public class DefaultDeserializers implements Deserializers {
 		return type.substring(type.lastIndexOf(by)+1);
 	}
 
+	@Override
 	public void register(Class<? extends Deserializer> type) {
 		Deserializes deserializes = type.getAnnotation(Deserializes.class);
 		checkArgument(deserializes != null, "You must annotate your deserializers with @Deserializes");

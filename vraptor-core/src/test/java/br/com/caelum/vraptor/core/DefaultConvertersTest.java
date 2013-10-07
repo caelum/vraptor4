@@ -57,6 +57,7 @@ public class DefaultConvertersTest {
 
 	class WrongConverter implements Converter<String> {
 
+		@Override
 		public String convert(String value, Class<? extends String> type) {
 			return null;
 		}
@@ -67,6 +68,7 @@ public class DefaultConvertersTest {
 
 	@Convert(MyData.class)
 	class MyConverter implements Converter<MyData> {
+		@Override
 		public MyData convert(String value, Class<? extends MyData> type) {
 			return null;
 		}
@@ -74,6 +76,7 @@ public class DefaultConvertersTest {
 
 	@Convert(MyData.class)
 	class MySecondConverter implements Converter<MyData> {
+		@Override
 		public MyData convert(String value, Class<? extends MyData> type) {
 			return null;
 		}

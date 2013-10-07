@@ -20,14 +20,17 @@ public class TestExtension implements Extension{
 		final Producer<ServletContext> defaultProducer = producer.getProducer();
 		Producer<ServletContext> testProducer = new Producer<ServletContext>(){
 
+			@Override
 			public ServletContext produce(CreationalContext<ServletContext> ctx) {
 				return new ServletContainerFactory().createServletContext();
 			}
 
+			@Override
 			public void dispose(ServletContext instance) {
 
 			}
 
+			@Override
 			public Set<InjectionPoint> getInjectionPoints() {
 				return defaultProducer.getInjectionPoints();
 			}

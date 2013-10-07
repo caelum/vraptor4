@@ -197,15 +197,18 @@ public class DownloadInterceptorTest {
 	private Matcher<Interceptor> accepts(final Method method) {
 		return new TypeSafeMatcher<Interceptor>() {
 
+			@Override
 			public void describeTo(Description description) {
 				description.appendText("the method ").appendValue(method);
 			}
 
+			@Override
 			protected boolean matchesSafely(Interceptor item) {
 				ControllerMethod m = DefaultControllerMethod.instanceFor(method.getDeclaringClass(), method);
 				return interceptor.accepts(m);
 			}
 
+			@Override
 			protected void describeMismatchSafely(Interceptor item, Description mismatchDescription) {
 			}
 		};
@@ -213,9 +216,11 @@ public class DownloadInterceptorTest {
 
 	private Matcher<byte[]> arrayStartingWith(final byte[] array) {
 		return new TypeSafeMatcher<byte[]>() {
+			@Override
 			protected void describeMismatchSafely(byte[] item, Description mismatchDescription) {
 			}
 
+			@Override
 			protected boolean matchesSafely(byte[] item) {
 				if (item.length < array.length) {
 					return false;
@@ -228,6 +233,7 @@ public class DownloadInterceptorTest {
 				return true;
 			}
 
+			@Override
 			public void describeTo(Description description) {
 				description.appendText("a byte array starting with " + Arrays.toString(array));
 			}

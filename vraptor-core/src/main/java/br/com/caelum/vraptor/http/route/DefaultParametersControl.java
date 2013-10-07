@@ -92,6 +92,7 @@ public class DefaultParametersControl implements ParametersControl {
 		return Pattern.compile(patternUri);
 	}
 
+	@Override
 	public String fillUri(String[] paramNames, Object... paramValues) {
 		if (paramNames.length != paramValues.length) {
 			throw new IllegalArgumentException("paramNames must have the same length as paramValues. Names: " + Arrays.toString(paramNames) + " Values: " + Arrays.toString(paramValues));
@@ -138,10 +139,12 @@ public class DefaultParametersControl implements ParametersControl {
 		return null;
 	}
 
+	@Override
 	public boolean matches(String uri) {
 		return pattern.matcher(uri).matches();
 	}
 
+	@Override
 	public void fillIntoRequest(String uri, MutableRequest request) {
 		Matcher m = pattern.matcher(uri);
 		m.matches();
@@ -155,6 +158,7 @@ public class DefaultParametersControl implements ParametersControl {
 		}
 	}
 
+	@Override
 	public String apply(String[] values) {
 		String regex = "\\{.*?\\}";
 		String result = this.originalPattern;

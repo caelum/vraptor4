@@ -14,6 +14,7 @@ public class NoStackParameterSignatureAcceptor implements SignatureAcceptor {
 		return !new MustReceiveStackAsParameterAcceptor().accepts(method);
 	}
 
+	@Override
 	public String errorMessage() {
 		return "Non @Around method must not receive "+InterceptorStack.class.getName()+" or "+SimpleInterceptorStack.class.getName();
 	}

@@ -17,7 +17,10 @@
 
 package br.com.caelum.vraptor.core;
 
+import static com.google.common.base.Preconditions.checkState;
+
 import java.util.LinkedList;
+import java.util.concurrent.Callable;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -28,70 +31,84 @@ import org.slf4j.LoggerFactory;
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.TwoWayConverter;
-import br.com.caelum.vraptor.VRaptorException;
+import br.com.caelum.vraptor.cache.CacheStore;
+import br.com.caelum.vraptor.cache.LRU;
 import br.com.caelum.vraptor.ioc.Container;
 
 @ApplicationScoped
 public class DefaultConverters implements Converters {
 
-	private  final Logger logger = LoggerFactory.getLogger(DefaultConverters.class);
-	private LinkedList<Class<? extends Converter<?>>> classes;
+	private final Logger logger = LoggerFactory.getLogger(DefaultConverters.class);
+	private final LinkedList<Class<? extends Converter<?>>> classes = new LinkedList<>();
+
+	@LRU
+	private CacheStore<Class<?>, Class<? extends Converter<?>>> cache;
 	private Container container;
 
 	@Deprecated //CDI eyes only
 	public DefaultConverters() {}
 
 	@Inject
-	public DefaultConverters(Container container) {
+	public DefaultConverters(Container container, CacheStore<Class<?>, Class<? extends Converter<?>>> cache) {
 		this.container = container;
-		this.classes = new LinkedList<>();
+		this.cache = cache;
 		logger.info("Registering bundled converters");
 	}
 
 	@Override
 	public void register(Class<? extends Converter<?>> converterClass) {
-		if (!converterClass.isAnnotationPresent(Convert.class)) {
-			throw new VRaptorException("The converter type " + converterClass.getName()
-					+ " should have the Convert annotation");
-		}
-		classes.addFirst(converterClass);
+		Convert type = converterClass.getAnnotation(Convert.class);
+		checkState(type != null, "The converter type %s should have the Convert annotation", converterClass.getName());
+
+		logger.debug("adding converter {} to {}", converterClass, type.value());
+		classes.add(converterClass);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T> Converter<T> to(Class<T> clazz) {
-		if (!existsFor(clazz)) {
-			throw new VRaptorException("Unable to find converter for " + clazz.getName());
-		}
-		return (Converter<T>) container.instanceFor(findConverterType(clazz));
+		Class<? extends Converter<?>> converterType = findConverterType(clazz);
+		checkState(!converterType.equals(NullConverter.class), "Unable to find converter for %s", clazz.getName());
+
+		return (Converter<T>) container.instanceFor(converterType);
 	}
 
-	private Class<? extends Converter<?>> findConverterType(Class<?> clazz) {
+	private Class<? extends Converter<?>> findConverterType(final Class<?> clazz) {
+		return cache.fetch(clazz, new Callable<Class<? extends Converter<?>>>() {
+			@Override
+			public Class<? extends Converter<?>> call() throws Exception {
+				return findConverterFromList(clazz);
+			}
+
+		});
+	}
+
+	private Class<? extends Converter<?>> findConverterFromList(Class<?> clazz) {
 		for (Class<? extends Converter<?>> converterType : classes) {
 			Class<?> boundType = converterType.getAnnotation(Convert.class).value();
 			if (boundType.isAssignableFrom(clazz)) {
 				return converterType;
 			}
 		}
-		return null;
+		return NullConverter.class;
 	}
+
+	private interface NullConverter extends Converter<Object> {};
 
 	@Override
 	public boolean existsFor(Class<?> type) {
-		return findConverterType(type) != null;
+		return !findConverterType(type).equals(NullConverter.class);
 	}
 
 	@Override
 	public boolean existsTwoWayFor(Class<?> type) {
-		Class<? extends Converter<?>> found = findConverterType(type);
-		return found != null && TwoWayConverter.class.isAssignableFrom(found);
+		return TwoWayConverter.class.isAssignableFrom(findConverterType(type));
 	}
 
 	@Override
 	public TwoWayConverter<?> twoWayConverterFor(Class<?> type) {
-		if (!existsTwoWayFor(type)) {
-			throw new VRaptorException("Unable to find two way converter for " + type.getName());
-		}
+		checkState(existsTwoWayFor(type), "Unable to find two way converter for %s", type.getName());
+
 		return (TwoWayConverter<?>) container.instanceFor(findConverterType(type));
 	}
 }

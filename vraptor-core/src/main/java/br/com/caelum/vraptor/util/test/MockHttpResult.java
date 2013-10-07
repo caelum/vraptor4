@@ -21,7 +21,6 @@ import javax.enterprise.inject.Alternative;
 
 import br.com.caelum.vraptor.View;
 import br.com.caelum.vraptor.proxy.JavassistProxifier;
-import br.com.caelum.vraptor.proxy.ObjenesisInstanceCreator;
 import br.com.caelum.vraptor.view.DefaultHttpResult;
 import br.com.caelum.vraptor.view.DefaultStatus;
 import br.com.caelum.vraptor.view.HttpResult;
@@ -40,7 +39,7 @@ public class MockHttpResult extends MockResult{
 	private MockHttpServletResponse response = new MockHttpServletResponse();
 
 	public MockHttpResult() {
-		super(new JavassistProxifier(new ObjenesisInstanceCreator()));
+		super(new JavassistProxifier());
 	}
 
 	@Override

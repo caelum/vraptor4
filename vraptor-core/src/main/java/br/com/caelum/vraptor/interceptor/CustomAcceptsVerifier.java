@@ -4,13 +4,15 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedElement;
 import java.util.List;
 
+import javax.enterprise.inject.Vetoed;
+
 import net.vidageek.mirror.dsl.Mirror;
 import net.vidageek.mirror.list.dsl.Matcher;
-import net.vidageek.mirror.list.dsl.MirrorList;
 import br.com.caelum.vraptor.controller.ControllerInstance;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.ioc.Container;
 
+@Vetoed
 public class CustomAcceptsVerifier {
 
 	private static class AcceptsConstraintMatcher implements Matcher<Annotation> {
@@ -49,11 +51,10 @@ public class CustomAcceptsVerifier {
 		}
 		return true;
 	}
-	
+
 	public static List<Annotation> getCustomAcceptsAnnotations(Class<?> klass){
-		MirrorList<Annotation> constraints = new Mirror().on((AnnotatedElement) klass).reflectAll()
-				.annotations().matching(new AcceptsConstraintMatcher());		
-		return constraints;
+		return new Mirror().on((AnnotatedElement) klass).reflectAll()
+				.annotations().matching(new AcceptsConstraintMatcher());
 	}
 
 }

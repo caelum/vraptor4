@@ -15,26 +15,24 @@
  */
 package br.com.caelum.vraptor.proxy;
 
+import static java.util.Arrays.asList;
 import static javassist.util.proxy.ProxyFactory.isProxyClass;
 
 import java.lang.reflect.Method;
-import java.util.Arrays;
 import java.util.List;
 
 import javassist.util.proxy.MethodFilter;
 import javassist.util.proxy.MethodHandler;
 import javassist.util.proxy.ProxyFactory;
-import javassist.util.proxy.ProxyObject;
 
 import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
  * Javassist implementation for {@link Proxifier}.
- *
+ * 
  * @author Otávio Scherer Garcia
  * @since 3.3.1
  */
@@ -44,31 +42,19 @@ public class JavassistProxifier implements Proxifier {
 	private static final Logger logger = LoggerFactory.getLogger(JavassistProxifier.class);
 
 	/**
-	 * Methods like toString and finalize will be ignored.
-	 */
-	private static final List<Method> OBJECT_METHODS = Arrays.asList(Object.class.getDeclaredMethods());
-
-	/**
 	 * Do not proxy these methods.
 	 */
 	private static final MethodFilter IGNORE_BRIDGE_AND_OBJECT_METHODS = new MethodFilter() {
+		/**
+		 * Methods like toString and finalize will be ignored.
+		 */
+		final List<Method> OBJECT_METHODS = asList(Object.class.getDeclaredMethods());
+
 		@Override
 		public boolean isHandled(Method method) {
 			return !method.isBridge() && !OBJECT_METHODS.contains(method);
 		}
 	};
-
-	private InstanceCreator instanceCreator;
-
-	//CDI eyes only
-	@Deprecated
-	public JavassistProxifier() {
-	}
-
-	@Inject
-	public JavassistProxifier(InstanceCreator instanceCreator) {
-		this.instanceCreator = instanceCreator;
-	}
 
 	@Override
 	public <T> T proxify(Class<T> type, MethodInvocation<? super T> handler) {
@@ -82,14 +68,16 @@ public class JavassistProxifier implements Proxifier {
 			factory.setSuperclass(rawType);
 		}
 
-		Class<?> proxyClass = factory.createClass();
+		Object instance;
+		try {
+			instance = factory.create(null, null, new MethodInvocationAdapter<T>(handler));
+		} catch (ReflectiveOperationException | IllegalArgumentException e) {
+			logger.error("An error occurs when create a proxy for type " + type, e);
+			throw new ProxyCreationException(e);
+		}
 
-		Object proxyInstance = instanceCreator.instanceFor(proxyClass);
-		setHandler(proxyInstance, handler);
-
-		logger.debug("a proxy for {} was created as {}", type, proxyClass);
-
-		return type.cast(proxyInstance);
+		logger.debug("a proxy for {} was created as {}", type, instance.getClass());
+		return type.cast(instance);
 	}
 
 	private <T> Class<?> extractRawType(Class<T> type) {
@@ -105,7 +93,7 @@ public class JavassistProxifier implements Proxifier {
 	public boolean isProxyType(Class<?> type) {
 		boolean proxy = isProxyClass(type) || isWeldProxy(type);
 		logger.debug("Class {} is proxy: {}", type.getName(), proxy);
-		
+
 		return proxy;
 	}
 
@@ -114,25 +102,26 @@ public class JavassistProxifier implements Proxifier {
 		return org.jboss.weld.bean.proxy.ProxyFactory.isProxy(type);
 	}
 
-	private <T> void setHandler(Object proxyInstance, final MethodInvocation<? super T> handler) {
-		ProxyObject proxyObject = (ProxyObject) proxyInstance;
+	private static class MethodInvocationAdapter<T> implements MethodHandler {
+		private MethodInvocation<? super T> handler;
 
-		proxyObject.setHandler(new MethodHandler() {
-			@Override
-			public Object invoke(final Object self, final Method thisMethod, final Method proceed, Object[] args)
-				throws Throwable {
+		public MethodInvocationAdapter(MethodInvocation<? super T> handler) {
+			this.handler = handler;
+		}
 
-				return handler.intercept((T) self, thisMethod, args, new SuperMethod() {
-					@Override
-					public Object invoke(Object proxy, Object[] args) {
-						try {
-							return proceed.invoke(proxy, args);
-						} catch (Throwable throwable) {
-							throw new ProxyInvocationException(throwable);
-						}
+		@Override
+		public Object invoke(Object self, Method thisMethod, final Method proceed, Object[] args)
+			throws Throwable {
+			return handler.intercept((T) self, thisMethod, args, new SuperMethod() {
+				@Override
+				public Object invoke(Object proxy, Object[] args) {
+					try {
+						return proceed.invoke(proxy, args);
+					} catch (Throwable throwable) {
+						throw new ProxyInvocationException(throwable);
 					}
-				});
-			}
-		});
+				}
+			});
+		}
 	}
 }

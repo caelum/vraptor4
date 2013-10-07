@@ -15,15 +15,14 @@
  */
 package br.com.caelum.vraptor.core;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.concurrent.Callable;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Default;
 import javax.inject.Inject;
 
 import br.com.caelum.vraptor.Intercepts;
-import br.com.caelum.vraptor.cache.VRaptorCache;
+import br.com.caelum.vraptor.cache.CacheStore;
 import br.com.caelum.vraptor.interceptor.AspectStyleInterceptorHandler;
 import br.com.caelum.vraptor.interceptor.Interceptor;
 import br.com.caelum.vraptor.interceptor.InterceptorMethodParametersResolver;
@@ -41,7 +40,7 @@ public class DefaultInterceptorHandlerFactory implements InterceptorHandlerFacto
 
 	private Container container;
 
-	private VRaptorCache<Class<?>, InterceptorHandler> cachedHandlers;
+	private CacheStore<Class<?>, InterceptorHandler> cachedHandlers;
 
 	private StepInvoker stepInvoker;
 
@@ -55,7 +54,7 @@ public class DefaultInterceptorHandlerFactory implements InterceptorHandlerFacto
 	@Inject
 	public DefaultInterceptorHandlerFactory(Container container, StepInvoker
 			stepInvoker, InterceptorMethodParametersResolver parametersResolver,
-			VRaptorCache<Class<?>,InterceptorHandler> cachedHandlers) {
+			CacheStore<Class<?>,InterceptorHandler> cachedHandlers) {
 
 		this.container = container;
 		this.stepInvoker = stepInvoker;
@@ -64,19 +63,15 @@ public class DefaultInterceptorHandlerFactory implements InterceptorHandlerFacto
 	}
 
 	@Override
-	public InterceptorHandler handlerFor(Class<?> type) {
-
-		InterceptorHandler interceptorHandler = cachedHandlers.get(type);
-		if(interceptorHandler != null){
-			return interceptorHandler;
-		}
-
-		if(type.isAnnotationPresent(Intercepts.class) && !Interceptor.class.isAssignableFrom(type)){
-			AspectStyleInterceptorHandler handler = new AspectStyleInterceptorHandler(type, stepInvoker, container, parametersResolver);
-			cachedHandlers.put(type,handler);
-
-			return handler;
-		}
-		return new ToInstantiateInterceptorHandler(container, type);
+	public InterceptorHandler handlerFor(final Class<?> type) {
+		return cachedHandlers.fetch(type, new Callable<InterceptorHandler>() {
+			@Override
+			public InterceptorHandler call() throws Exception {
+				if(type.isAnnotationPresent(Intercepts.class) && !Interceptor.class.isAssignableFrom(type)){
+					return new AspectStyleInterceptorHandler(type, stepInvoker, container, parametersResolver);
+				}
+				return new ToInstantiateInterceptorHandler(container, type);
+			}
+		});
 	}
 }

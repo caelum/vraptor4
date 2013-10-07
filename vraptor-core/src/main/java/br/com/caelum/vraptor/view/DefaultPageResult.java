@@ -66,7 +66,7 @@ public class DefaultPageResult implements PageResult {
 		String to = resolver.pathFor(requestInfo.getControllerMethod());
 		logger.debug("forwarding to {}", to);
 		try {
-			request.getRequestDispatcher(to).forward(request.getOriginalRequest(), response.getOriginalResponse());
+			request.getRequestDispatcher(to).forward(request, response);
 		} catch (ServletException e) {
 			throw new ApplicationLogicException(to + " raised an exception", e);
 		} catch (IOException e) {
@@ -78,7 +78,7 @@ public class DefaultPageResult implements PageResult {
 		try {
 			String to = resolver.pathFor(requestInfo.getControllerMethod());
 			logger.debug("including {}", to);
-			request.getRequestDispatcher(to).include(request.getOriginalRequest(), response.getOriginalResponse());
+			request.getRequestDispatcher(to).include(request, response);
 		} catch (ServletException e) {
 			throw new ResultException(e);
 		} catch (IOException e) {
@@ -104,7 +104,7 @@ public class DefaultPageResult implements PageResult {
 		logger.debug("forwarding to {}", url);
 
 		try {
-			request.getRequestDispatcher(url).forward(request.getOriginalRequest(), response.getOriginalResponse());
+			request.getRequestDispatcher(url).forward(request, response);
 		} catch (ServletException e) {
 			throw new ResultException(e);
 		} catch (IOException e) {
@@ -118,7 +118,7 @@ public class DefaultPageResult implements PageResult {
 				try {
 					request.getRequestDispatcher(
 							resolver.pathFor(DefaultControllerMethod.instanceFor(controllerType, method))).forward(
-							request.getOriginalRequest(), response.getOriginalResponse());
+							request, response);
 					return null;
 				} catch (Exception e) {
 					throw new ProxyInvocationException(e);

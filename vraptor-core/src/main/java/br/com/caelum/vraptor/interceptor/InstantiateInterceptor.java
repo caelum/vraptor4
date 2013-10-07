@@ -53,12 +53,13 @@ public class InstantiateInterceptor implements Interceptor {
 	}
 
 	@Override
-	public void intercept(InterceptorStack invocation, ControllerMethod method,
-			Object instance) throws InterceptionException {
+	public void intercept(InterceptorStack invocation, ControllerMethod method, Object instance) 
+			throws InterceptionException {
 		if (instance == null) {
 			Class<?> type = method.getController().getType();
 			instance = container.instanceFor(type);
 		}
+		
 		this.controllerInstance = new DefaultControllerInstance(instance);
 		invocation.next(method, instance);
 	}

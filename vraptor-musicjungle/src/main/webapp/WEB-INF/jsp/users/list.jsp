@@ -1,4 +1,4 @@
-<%@ include file="/header.jsp" %> 
+﻿<%@ include file="/header.jsp" %> 
 
 <div class="well well-small">
 	<h2><fmt:message key="list_users"/></h2>
@@ -16,7 +16,7 @@
   	<c:forEach items="${users}" var="user">
 		<tr>
 			<td>
-				<a href="${linkTo[UsersController].show[user]}">
+				<a href="${linkTo[UsersController].show(user)}">
 					<fmt:message key="view"/>
 				</a>
 			</td>

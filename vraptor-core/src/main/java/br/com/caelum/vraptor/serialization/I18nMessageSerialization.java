@@ -31,7 +31,7 @@ import br.com.caelum.vraptor.validator.I18nMessage;
  * @since 3.5
  */
 @RequestScoped
-public class I18nMessageSerialization implements View{
+public class I18nMessageSerialization implements View {
 
 	private Container container;
 	private I18nMessage i18nMessage;
@@ -48,9 +48,8 @@ public class I18nMessageSerialization implements View{
 	}
 
 	public I18nMessageSerialization from(String category, String key, Object...params) {
-		I18nMessage i18nMessage = new I18nMessage(category, key, params);
+		i18nMessage = new I18nMessage(category, key, params);
 		i18nMessage.setBundle(bundle);
-		this.i18nMessage = i18nMessage;
 		return this;
 	}
 

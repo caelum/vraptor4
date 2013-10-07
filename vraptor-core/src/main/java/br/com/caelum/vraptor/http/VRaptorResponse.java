@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.enterprise.inject.Vetoed;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
 
@@ -30,18 +31,13 @@ import javax.servlet.http.HttpServletResponseWrapper;
  * @author Caires Vinicius
  * @author Adriano Almeida
  */
+@Vetoed
 public class VRaptorResponse extends HttpServletResponseWrapper implements MutableResponse {
 
 	private final List<RedirectListener> listeners = new ArrayList<>();
-	private final HttpServletResponse original;
 
 	public VRaptorResponse(HttpServletResponse response) {
 		super(response);
-		this.original = response;
-	}
-	
-	public HttpServletResponse getOriginalResponse() {
-		return this.original;
 	}
 
 	@Override

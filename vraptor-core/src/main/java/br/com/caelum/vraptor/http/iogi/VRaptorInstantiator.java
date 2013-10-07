@@ -69,7 +69,7 @@ public class VRaptorInstantiator implements InstantiatorWithErrors, Instantiator
 			new ArrayAdapter(new ArrayInstantiator(this)),
 			new NullDecorator(new ListInstantiator(this)), //NOTE: NullDecorator is here to preserve existing behaviour. Don't know if it is the ideal one, though.
 			new NullDecorator(new SetInstantiator(this)),
-			new DependencyInstantiator(objectInstantiator),
+			new DependencyInstantiator(),
 			objectInstantiator);
 		multiInstantiator = new MultiInstantiator(instantiatorList);
 	}
@@ -105,11 +105,7 @@ public class VRaptorInstantiator implements InstantiatorWithErrors, Instantiator
 	}
 
 	private final class DependencyInstantiator implements Instantiator<Object> {
-		private final Instantiator<Object> delegate;
 
-		public DependencyInstantiator(Instantiator<Object> delegate) {
-			this.delegate = delegate;
-		}
 		@Override
 		public Object instantiate(Target<?> target, Parameters params) {
 			return provider.provide(target);
@@ -128,6 +124,7 @@ public class VRaptorInstantiator implements InstantiatorWithErrors, Instantiator
 		public VRaptorTypeConverter(Converters converters) {
 			this.converters = converters;
 		}
+		
 		@Override
 		public boolean isAbleToInstantiate(Target<?> target) {
 			return !String.class.equals(target.getClassType()) && converters.existsFor(target.getClassType());
@@ -163,6 +160,7 @@ public class VRaptorInstantiator implements InstantiatorWithErrors, Instantiator
 			}
 			return null;
 		}
+		
 		@SuppressWarnings("unchecked")
 		private Converter<Object> converterForTarget(Target<?> target) {
 			return (Converter<Object>) converters.to(target.getClassType());

@@ -17,6 +17,8 @@
 
 package br.com.caelum.vraptor.interceptor;
 
+import static com.google.common.base.Preconditions.checkArgument;
+
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -27,6 +29,8 @@ import javax.inject.Inject;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.google.common.base.Preconditions;
 
 import br.com.caelum.vraptor.HeaderParam;
 import br.com.caelum.vraptor.InterceptionException;
@@ -89,9 +93,7 @@ public class ParametersInstantiatorInterceptor implements Interceptor {
 
 		validator.addAll(errors);
 
-		if (!errors.isEmpty()) {
-			logger.debug("There are conversion errors: {}", errors);
-		}
+		logger.debug("Conversion errors: {}", errors);
 		logger.debug("Parameter values for {} are {}", method, values);
 
 		parameters.setParameters(values);
@@ -117,9 +119,8 @@ public class ParametersInstantiatorInterceptor implements Interceptor {
 	}
 
 	private void fixParameter(String name) {
-		if (name.contains(".class.")) {
-			throw new IllegalArgumentException("Bug Exploit Attempt with parameter: " + name + "!!!");
-		}
+		checkArgument(!name.contains(".class."), "Bug Exploit Attempt with parameter: %s", name);
+		
 		if (name.contains("[]")) {
 			String[] values = request.getParameterValues(name);
 			for (int i = 0; i < values.length; i++) {

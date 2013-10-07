@@ -28,11 +28,14 @@ import java.util.TreeMap;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import javax.enterprise.inject.Vetoed;
+
 /**
  * Order Routes by priority
  * @author Lucas Cavalcanti
  *
  */
+@Vetoed
 public class PriorityRoutesList implements Collection<Route> {
 
 	private final SortedMap<Integer, Set<Route>> map;

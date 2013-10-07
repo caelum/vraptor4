@@ -15,6 +15,8 @@
  */
 package br.com.caelum.vraptor.deserialization;
 
+import static com.google.common.base.Preconditions.checkArgument;
+
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
@@ -23,7 +25,7 @@ import br.com.caelum.vraptor.controller.BeanClass;
 import br.com.caelum.vraptor.core.DeserializesQualifier;
 
 /**
- * Handles classes annotated with @Deserializes
+ * Handles classes annotated with {@link Deserializes}.
  *
  * @author Lucas Cavalcanti, Cecilia Fernandes
  * @since 3.0.2
@@ -46,9 +48,7 @@ public class DeserializesHandler{
 	@SuppressWarnings("unchecked")
 	public void handle(@Observes @DeserializesQualifier BeanClass beanClass) {
 		Class<?> originalType = beanClass.getType();
-		if (!Deserializer.class.isAssignableFrom(originalType)) {
-			throw new IllegalArgumentException(beanClass + " must implement Deserializer");
-		}
+		checkArgument(Deserializer.class.isAssignableFrom(originalType), "%s must implement Deserializer", beanClass);
 		deserializers.register((Class<? extends Deserializer>) originalType);
 	}
 }

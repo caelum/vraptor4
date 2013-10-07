@@ -30,6 +30,7 @@ import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.controller.DefaultBeanClass;
 import br.com.caelum.vraptor.controller.DefaultControllerMethod;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
+import br.com.caelum.vraptor.util.test.MockInstanceImpl;
 import br.com.caelum.vraptor.view.GenericController;
 
 import com.google.gson.JsonDeserializationContext;
@@ -52,10 +53,10 @@ public class GsonDeserializerTest {
 		provider = mock(ParameterNameProvider.class);
 		request = mock(HttpServletRequest.class);
 
-		List<JsonDeserializer> adapters = new ArrayList<>();
+		List<JsonDeserializer<?>> adapters = new ArrayList<>();
 		adapters.add(new CalendarDeserializer());
 
-		deserializer = new GsonDeserialization(provider, adapters, request);
+		deserializer = new GsonDeserialization(provider, new MockInstanceImpl<>(adapters), request);
 		BeanClass controllerClass = new DefaultBeanClass(DogController.class);
 
 		woof = new DefaultControllerMethod(controllerClass, DogController.class.getDeclaredMethod("woof"));
@@ -138,10 +139,10 @@ public class GsonDeserializerTest {
 
 	@Test
 	public void shouldBeAbleToDeserializeADogWithDeserializerAdapter() throws Exception {
-		List<JsonDeserializer> deserializers = new ArrayList<>();
+		List<JsonDeserializer<?>> deserializers = new ArrayList<>();
 		deserializers.add(new DogDeserializer());
 
-		deserializer = new GsonDeserialization(provider, deserializers, request);
+		deserializer = new GsonDeserialization(provider, new MockInstanceImpl<>(deserializers), request);
 
 		InputStream stream = new ByteArrayInputStream("{'dog':{'name':'Renan Reis','age':'0'}}".getBytes());
 

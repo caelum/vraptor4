@@ -57,7 +57,7 @@ public class LocalDateConverter implements Converter<LocalDate> {
 		}
 		
 		try {
-			return getFormatter().parseDateTime(value).toLocalDate();
+			return getFormatter().parseLocalDate(value);
 		} catch (UnsupportedOperationException | IllegalArgumentException  e) {
 			throw new ConversionException(new ConversionMessage("is_not_a_valid_date", value));
 		}

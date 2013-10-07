@@ -38,10 +38,10 @@ import static br.com.caelum.vraptor.view.Results.nothing;
 
 /**
  * Interceptor that executes the logic method.
- *
+ * 
  * @author Guilherme Silveira
  */
-@Intercepts(after=ParametersInstantiatorInterceptor.class, before={})
+@Intercepts(after = ParametersInstantiatorInterceptor.class, before = {})
 public class ExecuteMethodInterceptor implements Interceptor {
 
 	private MethodInfo info;
@@ -49,13 +49,12 @@ public class ExecuteMethodInterceptor implements Interceptor {
 	private MethodExecutor methodExecutor;
 	private final static Logger log = LoggerFactory.getLogger(ExecuteMethodInterceptor.class);
 
-
 	@Deprecated
 	public ExecuteMethodInterceptor() {
 	}
 
 	@Inject
-	public ExecuteMethodInterceptor(MethodInfo info, Validator validator,MethodExecutor methodExecutor) {
+	public ExecuteMethodInterceptor(MethodInfo info, Validator validator, MethodExecutor methodExecutor) {
 		this.info = info;
 		this.validator = validator;
 		this.methodExecutor = methodExecutor;
@@ -67,10 +66,11 @@ public class ExecuteMethodInterceptor implements Interceptor {
 			Method reflectionMethod = method.getMethod();
 			Object[] parameters = this.info.getParameters();
 
-			log.debug("Invoking {}", Stringnifier.simpleNameFor(reflectionMethod));			
-			Object result = methodExecutor.invoke(reflectionMethod,controllerInstance,parameters);
+			log.debug("Invoking {}", Stringnifier.simpleNameFor(reflectionMethod));
+			Object result = methodExecutor.invoke(reflectionMethod, controllerInstance, parameters);
 
-			if (validator.hasErrors()) { // method should have thrown ValidationException
+			if (validator.hasErrors()) { // method should have thrown
+											// ValidationException
 				if (log.isDebugEnabled()) {
 					try {
 						validator.onErrorUse(nothing());
@@ -80,10 +80,10 @@ public class ExecuteMethodInterceptor implements Interceptor {
 				}
 				throw new InterceptionException(
 						"There are validation errors and you forgot to specify where to go. Please add in your method "
-						+ "something like:\n"
-						+ "validator.onErrorUse(page()).of(AnyController.class).anyMethod();\n"
-						+ "or any view that you like.\n"
-						+ "If you didn't add any validation error, it is possible that a conversion error had happened.");
+								+ "something like:\n"
+								+ "validator.onErrorUse(page()).of(AnyController.class).anyMethod();\n"
+								+ "or any view that you like.\n"
+								+ "If you didn't add any validation error, it is possible that a conversion error had happened.");
 			}
 
 			if (reflectionMethod.getReturnType().equals(Void.TYPE)) {
@@ -96,15 +96,16 @@ public class ExecuteMethodInterceptor implements Interceptor {
 		} catch (IllegalArgumentException e) {
 			throw new InterceptionException(e);
 		} catch (MethodExecutorException e) {
-			throwIfNotValidationException(e,new ApplicationLogicException("your controller raised an exception", e.getCause()));
-		}catch(Exception e){
-			throwIfNotValidationException(e,new InterceptionException(e));
+			throwIfNotValidationException(e,
+					new ApplicationLogicException("your controller raised an exception", e.getCause()));
+		} catch (Exception e) {
+			throwIfNotValidationException(e, new InterceptionException(e));
 		}
 	}
 
 	private void throwIfNotValidationException(Throwable original, RuntimeException alternative) {
 		Throwable cause = original.getCause();
-		
+
 		if (original instanceof ValidationException || cause instanceof ValidationException) {
 			// fine... already parsed
 			log.trace("swallowing {}", cause);

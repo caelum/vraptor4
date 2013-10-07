@@ -41,6 +41,8 @@ import com.google.common.collect.Collections2;
 @Entity
 public class User implements Serializable {
 
+	private static final long serialVersionUID = 4548298563023480676L;
+
 	@Id
 	@NotNull
 	@Length(min = 3, max = 20)

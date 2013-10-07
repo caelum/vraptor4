@@ -4,19 +4,20 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.MockitoAnnotations;
 
-import br.com.caelum.vraptor.cache.VRaptorCache;
-import br.com.caelum.vraptor.cache.VRaptorDefaultCache;
+import br.com.caelum.vraptor.cache.CacheStore;
+import br.com.caelum.vraptor.cache.DefaultCacheStore;
 import br.com.caelum.vraptor.factory.Factories;
 import br.com.caelum.vraptor.interceptor.AspectStyleInterceptorHandler;
 import br.com.caelum.vraptor.interceptor.Interceptor;
 import br.com.caelum.vraptor.interceptor.InterceptorMethodParametersResolver;
 import br.com.caelum.vraptor.interceptor.StepInvoker;
 import br.com.caelum.vraptor.ioc.Container;
+
+import static org.junit.Assert.assertThat;
+
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.sameInstance;
-
-import static org.junit.Assert.assertThat;
 
 public class DefaultInterceptorHandlerFactoryTest {
 
@@ -32,7 +33,7 @@ public class DefaultInterceptorHandlerFactoryTest {
 		
 		InterceptorMethodParametersResolver parametersResolver = new InterceptorMethodParametersResolver(container);
 		
-		VRaptorCache<Class<?>, InterceptorHandler> cachedHandlers = new VRaptorDefaultCache<>();
+		CacheStore<Class<?>, InterceptorHandler> cachedHandlers = new DefaultCacheStore<>();
 		factory = new DefaultInterceptorHandlerFactory(container, stepInvoker, parametersResolver, cachedHandlers);
 	}
 

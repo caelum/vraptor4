@@ -42,7 +42,6 @@ import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.http.MutableResponse;
 import br.com.caelum.vraptor.interceptor.ApplicationLogicException;
 import br.com.caelum.vraptor.proxy.JavassistProxifier;
-import br.com.caelum.vraptor.proxy.ObjenesisInstanceCreator;
 import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.proxy.ProxyInvocationException;
 
@@ -61,7 +60,7 @@ public class DefaultPageResultTest {
 	public void setup() {
 		MockitoAnnotations.initMocks(this);
 		method = DefaultControllerMethod.instanceFor(AnyResource.class, AnyResource.class.getDeclaredMethods()[0]);
-		proxifier = new JavassistProxifier(new ObjenesisInstanceCreator());
+		proxifier = new JavassistProxifier();
 		requestInfo = new MethodInfo();
 		requestInfo.setControllerMethod(method);
 		fixedResolver = new PathResolver() {
@@ -70,8 +69,6 @@ public class DefaultPageResultTest {
 			}
 		};
 		view = new DefaultPageResult(request, response, requestInfo, fixedResolver, proxifier);
-		when(request.getOriginalRequest()).thenReturn(request);
-		when(response.getOriginalResponse()).thenReturn(response);
 	}
 
 	public static class AnyResource {

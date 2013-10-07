@@ -73,9 +73,9 @@ public class JavaEvaluator implements Evaluator {
 		if (current.getClass().isArray()) {
 			return Array.get(current, position);
 		} else if (List.class.isAssignableFrom(current.getClass())) {
-			return ((List) current).get(position);
+			return ((List<?>) current).get(position);
 		} else if (Collection.class.isAssignableFrom(current.getClass())) {
-			Iterator it = ((Collection) current).iterator();
+			Iterator<?> it = ((Collection<?>) current).iterator();
 			for (int i = 0; i < position; i++) {
 				it.next();
 			}

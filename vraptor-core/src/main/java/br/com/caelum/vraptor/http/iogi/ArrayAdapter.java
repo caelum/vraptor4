@@ -19,6 +19,8 @@ package br.com.caelum.vraptor.http.iogi;
 
 import java.util.List;
 
+import javax.enterprise.inject.Vetoed;
+
 import br.com.caelum.iogi.Instantiator;
 import br.com.caelum.iogi.collections.ArrayInstantiator;
 import br.com.caelum.iogi.parameters.Parameter;
@@ -28,6 +30,7 @@ import br.com.caelum.iogi.reflection.Target;
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 
+@Vetoed
 final class ArrayAdapter implements Instantiator<Object> {
 
 	private final ArrayInstantiator delegate;

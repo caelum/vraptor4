@@ -3,7 +3,7 @@
 
 	<groupId>br.com.caelum</groupId>
 	<artifactId>vraptor-parent</artifactId>
-	<version>4.0.0.beta-SNAPSHOT</version>
+	<version>4.0.0-beta-2-SNAPSHOT</version>
 	<name>VRaptor4</name>
 	<packaging>pom</packaging>
 
@@ -17,6 +17,39 @@
 	<url>http://vraptor.caelum.com.br</url>
 
 	<developers>
+		<developer>
+			<id>Turini</id>
+			<name>Rodrigo Turini</name>
+			<email>rdrg.turini@gmail.com</email>
+			<organization>Caelum</organization>
+			<organizationUrl>http://www.caelum.com.br</organizationUrl>
+			<roles>
+				<role>developer</role>
+			</roles>
+			<timezone>-3</timezone>
+		</developer>
+		<developer>
+			<id>mariofts</id>
+			<name>Mario Amaral</name>
+			<email>mario.fts@gmail.com</email>
+			<organization>Caelum</organization>
+			<organizationUrl>http://www.caelum.com.br</organizationUrl>
+			<roles>
+				<role>developer</role>
+			</roles>
+			<timezone>-3</timezone>
+		</developer>
+		<developer>
+			<id>asouza</id>
+			<name>Alberto Souza</name>
+			<email>alots.ssa@gmail.com</email>
+			<organization>Caelum</organization>
+			<organizationUrl>http://www.caelum.com.br</organizationUrl>
+			<roles>
+				<role>developer</role>
+			</roles>
+			<timezone>-3</timezone>
+		</developer>
 		<developer>
 			<id>lucascs</id>
 			<name>Lucas Cavalcanti</name>
@@ -63,7 +96,7 @@
 	<modules>
 		<module>vraptor-core</module>
 		<module>vraptor-musicjungle</module>
-		<!--module>vraptor-test</module-->
+		<module>vraptor-blank-project</module>
 	</modules>
 	
 	<properties>

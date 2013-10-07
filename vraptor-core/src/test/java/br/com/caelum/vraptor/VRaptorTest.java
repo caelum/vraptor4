@@ -38,7 +38,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import br.com.caelum.vraptor.core.RequestExecution;
+import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.core.StaticContentHandler;
 import br.com.caelum.vraptor.ioc.Container;
 
@@ -47,7 +47,7 @@ public class VRaptorTest {
 	private @Mock FilterConfig config;
 	private @Mock ServletContext context;
 	private @Mock static Container container;
-	private @Mock RequestExecution execution;
+	private @Mock InterceptorStack stack;
 
 	@Before
 	public void setup() {

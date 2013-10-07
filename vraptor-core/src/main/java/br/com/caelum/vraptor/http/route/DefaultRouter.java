@@ -17,6 +17,8 @@
 
 package br.com.caelum.vraptor.http.route;
 
+import static com.google.common.collect.Collections2.filter;
+
 import java.lang.reflect.Method;
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -30,7 +32,7 @@ import java.util.List;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
-import br.com.caelum.vraptor.cache.VRaptorCache;
+import br.com.caelum.vraptor.cache.CacheStore;
 import br.com.caelum.vraptor.controller.BeanClass;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.controller.HttpMethod;
@@ -41,8 +43,6 @@ import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.proxy.Proxifier;
 
 import com.google.common.base.Predicate;
-
-import static com.google.common.collect.Collections2.filter;
 
 /**
  * The default implementation of controller localization rules. It also uses a
@@ -60,7 +60,7 @@ public class DefaultRouter implements Router {
 	private  Converters converters;
 	private  ParameterNameProvider nameProvider;
 	private  Evaluator evaluator;
-	private VRaptorCache<Invocation,Route> cache;
+	private CacheStore<Invocation,Route> cache;
 	private EncodingHandler encodingHandler;
 
 	//CDI eyes only
@@ -72,7 +72,7 @@ public class DefaultRouter implements Router {
 	public DefaultRouter(RoutesConfiguration config,
 			Proxifier proxifier, TypeFinder finder, Converters converters,
 			ParameterNameProvider nameProvider, Evaluator evaluator, EncodingHandler encodingHandler,
-			VRaptorCache<Invocation,Route> cache) {
+			CacheStore<Invocation,Route> cache) {
 		this.proxifier = proxifier;
 		this.finder = finder;
 		this.converters = converters;
@@ -153,7 +153,7 @@ public class DefaultRouter implements Router {
 		ControllerMethod controllerMethod = r.getControllerMethod();
 		BeanClass controller = controllerMethod.getController();
 		Invocation invocation = new Invocation(controller.getType(), controllerMethod.getMethod());
-		cache.putIfAbsent(invocation, r);
+		cache.write(invocation, r);
 	}
 
 	@Override
@@ -163,7 +163,7 @@ public class DefaultRouter implements Router {
 			rawtype = type.getSuperclass();
 		}
 		Invocation invocation = new Invocation(rawtype, method);
-		Route route = cache.get(invocation);
+		Route route = cache.fetch(invocation);
 		if (route == null) {
 			throw new RouteNotFoundException("The selected route is invalid for redirection: " + type.getName() + "."
 					+ method.getName());
@@ -178,6 +178,7 @@ public class DefaultRouter implements Router {
 
 	private Predicate<Route> canHandle(final String uri) {
 		return new Predicate<Route>() {
+			@Override
 			public boolean apply(Route route) {
 				return route.canHandle(uri);
 			}
@@ -186,6 +187,7 @@ public class DefaultRouter implements Router {
 
 	private Predicate<Route> allow(final HttpMethod method) {
 		return new Predicate<Route>() {
+			@Override
 			public boolean apply(Route route) {
 				return route.allowedMethods().contains(method);
 			}

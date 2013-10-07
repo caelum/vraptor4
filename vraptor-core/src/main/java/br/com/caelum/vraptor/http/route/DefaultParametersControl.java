@@ -30,6 +30,8 @@ import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.enterprise.inject.Vetoed;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,6 +46,7 @@ import br.com.caelum.vraptor.util.StringUtils;
  *
  * @author guilherme silveira
  */
+@Vetoed
 public class DefaultParametersControl implements ParametersControl {
 
 	private final Logger logger = LoggerFactory.getLogger(DefaultParametersControl.class);

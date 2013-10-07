@@ -49,6 +49,5 @@ public class FormDeserializer implements Deserializer {
 	public Object[] deserialize(InputStream inputStream, ControllerMethod method) {
 		List<Message> errors = new ArrayList<>();
 		return provider.getParametersFor(method, errors);
-
 	}
 }

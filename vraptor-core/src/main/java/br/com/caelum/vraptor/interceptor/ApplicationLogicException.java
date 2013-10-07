@@ -8,8 +8,9 @@ import br.com.caelum.vraptor.InterceptionException;
  * we can unwrap after it leaves the interceptor stack
  *
  */
-@SuppressWarnings("serial")
 public class ApplicationLogicException extends InterceptionException {
+
+	private static final long serialVersionUID = -8388907262726903974L;
 
 	public ApplicationLogicException(String msg) {
 		super(msg);

@@ -16,6 +16,7 @@
  */
 package br.com.caelum.vraptor.core;
 
+import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.Maps.newLinkedHashMap;
 
 import java.util.Map;
@@ -28,7 +29,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.Result;
-import br.com.caelum.vraptor.interceptor.ExceptionHandlerInterceptor;
 import br.com.caelum.vraptor.proxy.Proxifier;
 
 /**
@@ -37,15 +37,10 @@ import br.com.caelum.vraptor.proxy.Proxifier;
  * <p>This class is a part of Exception Handling Feature.</p>
  *
  * @author Otávio Scherer Garcia
- * @see ExceptionRecorder
- * @see ExceptionRecorderParameter
- * @see ExceptionMapper
- * @see ExceptionHandlerInterceptor
  * @since 3.2
  */
 @RequestScoped
-public class DefaultExceptionMapper
-	implements ExceptionMapper {
+public class DefaultExceptionMapper implements ExceptionMapper {
 
 	private static final Logger logger = LoggerFactory.getLogger(DefaultExceptionMapper.class);
 
@@ -63,9 +58,7 @@ public class DefaultExceptionMapper
 	}
 
 	public Result record(Class<? extends Exception> exception) {
-		if (exception == null) {
-			throw new NullPointerException("Exception cannot be null.");
-		}
+		checkNotNull(exception, "Exception cannot be null.");
 
 		ExceptionRecorder<Result> instance = new ExceptionRecorder<>(proxifier);
 		exceptions.put(exception, instance);

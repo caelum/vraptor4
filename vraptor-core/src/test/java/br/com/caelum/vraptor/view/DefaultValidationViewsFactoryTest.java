@@ -33,7 +33,6 @@ import org.mockito.stubbing.Answer;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.controller.HttpMethod;
 import br.com.caelum.vraptor.proxy.JavassistProxifier;
-import br.com.caelum.vraptor.proxy.ObjenesisInstanceCreator;
 import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.serialization.JSONSerialization;
 import br.com.caelum.vraptor.serialization.SerializerBuilder;
@@ -54,7 +53,7 @@ public class DefaultValidationViewsFactoryTest {
 	public void setUp() throws Exception {
 		result = mock(Result.class);
 
-		proxifier = new JavassistProxifier(new ObjenesisInstanceCreator());
+		proxifier = new JavassistProxifier();
 		factory = new DefaultValidationViewsFactory(result, proxifier);
 		errors = Collections.emptyList();
 

@@ -36,7 +36,7 @@ import br.com.caelum.vraptor.musicjungle.enums.MusicType;
  * the database. A persisted object of this class 
  * represents a record in the database.
  */
-@Entity
+@Entity 
 public class Music {
 
 	@Id

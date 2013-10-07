@@ -1,13 +1,18 @@
 package br.com.caelum.vraptor.serialization;
 
+import static java.util.Collections.sort;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.enterprise.inject.Instance;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -16,6 +21,10 @@ import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.http.FormatResolver;
+import br.com.caelum.vraptor.other.pack4ge.DumbSerialization;
+import br.com.caelum.vraptor.serialization.gson.GsonJSONSerialization;
+import br.com.caelum.vraptor.serialization.xstream.XStreamXMLSerialization;
+import br.com.caelum.vraptor.util.test.MockInstanceImpl;
 import br.com.caelum.vraptor.view.PageResult;
 import br.com.caelum.vraptor.view.Status;
 
@@ -30,15 +39,16 @@ public class DefaultRepresentationResultTest {
 	private RepresentationResult representation;
 
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() {
 		MockitoAnnotations.initMocks(this);
 		when(result.use(PageResult.class)).thenReturn(pageResult);
 		when(result.use(Status.class)).thenReturn(status);
-		representation = new DefaultRepresentationResult(formatResolver, result, Arrays.asList(serialization));
+		Instance<Serialization> serializations = new MockInstanceImpl<>(serialization);
+		representation = new DefaultRepresentationResult(formatResolver, result, serializations);
 	}
 
 	@Test
-	public void whenThereIsNoFormatGivenShouldForwardToDefaultPage() throws Exception {
+	public void whenThereIsNoFormatGivenShouldForwardToDefaultPage() {
 		when(formatResolver.getAcceptFormat()).thenReturn(null);
 
 		Serializer serializer = representation.from(new Object());
@@ -48,9 +58,8 @@ public class DefaultRepresentationResultTest {
 		verify(status).notAcceptable();
 	}
 
-
 	@Test
-	public void shouldSend404IfNothingIsRendered() throws Exception {
+	public void shouldSend404IfNothingIsRendered() {
 		when(formatResolver.getAcceptFormat()).thenReturn(null);
 
 		Serializer serializer = representation.from(null);
@@ -61,7 +70,7 @@ public class DefaultRepresentationResultTest {
 	}
 
 	@Test
-	public void whenThereIsNoFormatGivenShouldForwardToDefaultPageWithAlias() throws Exception {
+	public void whenThereIsNoFormatGivenShouldForwardToDefaultPageWithAlias() {
 		when(formatResolver.getAcceptFormat()).thenReturn(null);
 
 		Object object = new Object();
@@ -71,8 +80,9 @@ public class DefaultRepresentationResultTest {
 
 		verify(status).notAcceptable();
 	}
+
 	@Test
-	public void whenThereIsAFormatGivenShouldUseCorrectSerializer() throws Exception {
+	public void whenThereIsAFormatGivenShouldUseCorrectSerializer() {
 		when(formatResolver.getAcceptFormat()).thenReturn("xml");
 
 		when(serialization.accepts("xml")).thenReturn(true);
@@ -82,8 +92,9 @@ public class DefaultRepresentationResultTest {
 
 		verify(serialization).from(object);
 	}
+
 	@Test
-	public void whenThereIsAFormatGivenShouldUseCorrectSerializerWithAlias() throws Exception {
+	public void whenThereIsAFormatGivenShouldUseCorrectSerializerWithAlias() {
 		when(formatResolver.getAcceptFormat()).thenReturn("xml");
 
 		when(serialization.accepts("xml")).thenReturn(true);
@@ -93,8 +104,9 @@ public class DefaultRepresentationResultTest {
 
 		verify(serialization).from(object, "Alias!");
 	}
+
 	@Test
-	public void whenSerializationDontAcceptsFormatItShouldntBeUsed() throws Exception {
+	public void whenSerializationDontAcceptsFormatItShouldntBeUsed() {
 		when(formatResolver.getAcceptFormat()).thenReturn("xml");
 
 		when(serialization.accepts("xml")).thenReturn(false);
@@ -103,5 +115,34 @@ public class DefaultRepresentationResultTest {
 		representation.from(object);
 
 		verify(serialization, never()).from(object);
+	}
+
+	@Test
+	public void shouldSortBasedOnPackageNamesLessPriorityToCaelumInitialList3rdPartyFirst() {
+		List<Serialization> serializers = new ArrayList<>();
+
+		serializers.add(new DumbSerialization());
+		serializers.add(new XStreamXMLSerialization(null, null));
+		serializers.add(new GsonJSONSerialization(null, null, null));
+		serializers.add(new HTMLSerialization(null, null));
+
+		sort(serializers, new DefaultRepresentationResult.ApplicationPackageFirst());
+
+		assertEquals("br.com.caelum.vraptor.other.pack4ge", serializers.get(0).getClass().getPackage().getName());
+
+	}
+
+	@Test
+	public void shouldSortBasedOnPackageNamesLessPriorityToCaelumInitialList3rdPartyLast() {
+		List<Serialization> serializers = new ArrayList<>();
+
+		serializers.add(new XStreamXMLSerialization(null, null));
+		serializers.add(new GsonJSONSerialization(null, null, null));
+		serializers.add(new HTMLSerialization(null, null));
+		serializers.add(new DumbSerialization());
+
+		sort(serializers, new DefaultRepresentationResult.ApplicationPackageFirst());
+
+		assertEquals("br.com.caelum.vraptor.other.pack4ge", serializers.get(0).getClass().getPackage().getName());
 	}
 }

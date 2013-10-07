@@ -104,7 +104,7 @@ public class DefaultLogicResult implements LogicResult {
 					if (!response.isCommitted()) {
 						String path = resolver.pathFor(DefaultControllerMethod.instanceFor(type, method));
 						logger.debug("Forwarding to {}", path);
-						request.getRequestDispatcher(path).forward(request.getOriginalRequest(), response);
+						request.getRequestDispatcher(path).forward(request, response);
 					}
 					return null;
 				} catch (InvocationTargetException e) {

@@ -14,9 +14,9 @@ import com.google.common.collect.Collections2;
 
 /**
  * Verify if certain annotations are presents in class or method.
- * 
+ *
  * @author Alberto Souza
- * 
+ *
  */
 public class WithAnnotationAcceptor implements
 		AcceptsValidator<AcceptsWithAnnotations> {

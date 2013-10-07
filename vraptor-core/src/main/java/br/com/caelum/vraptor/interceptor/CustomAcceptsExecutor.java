@@ -4,10 +4,13 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.List;
 
+import javax.enterprise.inject.Vetoed;
+
 import br.com.caelum.vraptor.controller.ControllerInstance;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.ioc.Container;
 
+@Vetoed
 public class CustomAcceptsExecutor implements StepExecutor<Boolean> {
 
 	private StepInvoker stepInvoker;
@@ -16,7 +19,6 @@ public class CustomAcceptsExecutor implements StepExecutor<Boolean> {
 
 	public CustomAcceptsExecutor(StepInvoker stepInvoker,
 			Container container, Method method, Class<?> interceptorClass) {
-
 		this.stepInvoker = stepInvoker;
 		this.container = container;
 		this.method = method;

@@ -2,8 +2,11 @@ package br.com.caelum.vraptor.interceptor;
 
 import java.lang.reflect.Method;
 
+import javax.enterprise.inject.Vetoed;
+
 import br.com.caelum.vraptor.core.InterceptorStack;
 
+@Vetoed
 public class NoStackParameterSignatureAcceptor implements SignatureAcceptor {
 
 	@Override

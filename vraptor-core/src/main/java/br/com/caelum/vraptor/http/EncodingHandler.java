@@ -17,11 +17,13 @@
 
 package br.com.caelum.vraptor.http;
 
+import static com.google.common.base.Objects.firstNonNull;
 import static java.nio.charset.Charset.defaultCharset;
 
 import java.io.UnsupportedEncodingException;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.TransientReference;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -44,11 +46,8 @@ public class EncodingHandler {
 	}
 
 	@Inject
-	public EncodingHandler(BasicConfiguration configuration) {
-		encoding = configuration.getEncoding();
-		if (encoding == null) {
-			encoding = defaultCharset().name();
-		}
+	public EncodingHandler(@TransientReference BasicConfiguration configuration) {
+		encoding = firstNonNull(configuration.getEncoding(), defaultCharset().name());
 	}
 
 	public void setEncoding(HttpServletRequest request, HttpServletResponse response) {

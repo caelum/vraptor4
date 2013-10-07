@@ -17,7 +17,6 @@
 package br.com.caelum.vraptor.core;
 
 import br.com.caelum.vraptor.Result;
-import br.com.caelum.vraptor.interceptor.ExceptionHandlerInterceptor;
 
 /**
  * Store the exception mapping for exception handling.
@@ -25,10 +24,6 @@ import br.com.caelum.vraptor.interceptor.ExceptionHandlerInterceptor;
  * <p>This class is a part of Exception Handling Feature.</p>
  *
  * @author Otávio Scherer Garcia
- * @see ExceptionRecorder
- * @see ExceptionRecorderParameter
- * @see DefaultExceptionMapper
- * @see ExceptionHandlerInterceptor
  * @since 3.2
  */
 public interface ExceptionMapper {

@@ -27,6 +27,8 @@ import java.util.Set;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import javax.enterprise.inject.Vetoed;
+
 import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
@@ -40,6 +42,7 @@ import com.google.common.collect.Multimap;
  * @since 3.3.0
  *
  */
+@Vetoed
 public class Graph<E> {
 
 	private final E DUMMY = null;

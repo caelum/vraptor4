@@ -36,6 +36,7 @@ public class DefaultMethodExecutor implements MethodExecutor {
 
 	@Override
 	public <T> T invoke(Method method, Object instance, Object... args) {
+		//TODO change to the new way of using lazy evaluation in cache.
 		MethodHandle methodHandle = cache.get(method);
 		if (methodHandle == null) {
 			methodHandle = methodHandleFactory.create(instance.getClass(), method);

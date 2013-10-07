@@ -2,6 +2,7 @@ package br.com.caelum.vraptor.reflection;
 
 import java.lang.invoke.MethodHandle;
 import java.lang.reflect.Method;
+import java.util.concurrent.Callable;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -35,13 +36,15 @@ public class DefaultMethodExecutor implements MethodExecutor {
 	}
 
 	@Override
-	public <T> T invoke(Method method, Object instance, Object... args) {
-		//TODO change to the new way of using lazy evaluation in cache.
-		MethodHandle methodHandle = cache.fetch(method);
-		if (methodHandle == null) {
-			methodHandle = methodHandleFactory.create(instance.getClass(), method);
-			cache.write(method, methodHandle);
-		}
+	public <T> T invoke(final Method method, final Object instance, Object... args) {
+		Callable<MethodHandle> newMethodHandleIfNotExists = new Callable<MethodHandle>() {
+
+			@Override
+			public MethodHandle call() throws Exception {
+				return methodHandleFactory.create(instance.getClass(), method);
+			}
+		};
+		MethodHandle methodHandle = cache.fetch(method,newMethodHandleIfNotExists);
 		try {
 			return (T) methodHandle.invokeExact(instance, args);
 		} catch (Throwable e) {

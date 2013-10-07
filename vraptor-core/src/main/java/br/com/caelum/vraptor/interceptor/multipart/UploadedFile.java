@@ -16,7 +16,6 @@
  */
 package br.com.caelum.vraptor.interceptor.multipart;
 
-import java.io.InputStream;
 
 /**
  * An interface which represents the information of an uploaded file.
@@ -35,7 +34,7 @@ public interface UploadedFile {
 	/**
 	 * @return Returns the contents of uploaded file.
 	 */
-	InputStream getContent();
+	byte[] getContent();
 
 	/**
 	 * @return Returns the fileName of the uploaded as it was uploaded from the

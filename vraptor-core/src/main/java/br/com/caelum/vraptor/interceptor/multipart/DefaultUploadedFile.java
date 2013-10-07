@@ -18,20 +18,16 @@ package br.com.caelum.vraptor.interceptor.multipart;
 
 import static com.google.common.base.Objects.toStringHelper;
 
-import java.io.InputStream;
-
 /**
  * Default implementation for {@link UploadedFile}.
  */
 public class DefaultUploadedFile implements UploadedFile {
 	
 	private final String contentType;
-
 	private final String fileName;
+	private final byte[] content;
 
-	private final InputStream content;
-
-	public DefaultUploadedFile(InputStream content, String fileName, String contentType) {
+	public DefaultUploadedFile(byte[] content, String fileName, String contentType) {
 		this.content = content;
 		this.fileName = fileName;
 		this.contentType = contentType;
@@ -43,7 +39,7 @@ public class DefaultUploadedFile implements UploadedFile {
 	}
 
 	@Override
-	public InputStream getContent() {
+	public byte[] getContent() {
 		return content;
 	}
 

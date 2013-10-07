@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 
 import br.com.caelum.vraptor.interceptor.multipart.UploadedFile;
 import br.com.caelum.vraptor.musicjungle.model.Music;
@@ -29,7 +28,7 @@ public class Musics {
     		Path path = DEFAULT_FOLDER.resolve(getFileName(music));
     		
     		try {
-    		    Files.copy(file.getContent(), path,StandardCopyOption.REPLACE_EXISTING);
+    		    Files.write(path, file.getContent());
     		} catch (IOException e) {
     		    throw new IllegalStateException(e);
     		}

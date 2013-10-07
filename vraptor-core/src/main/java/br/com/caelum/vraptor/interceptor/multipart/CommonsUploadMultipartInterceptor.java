@@ -20,7 +20,6 @@ import static com.google.common.base.Objects.firstNonNull;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.apache.commons.fileupload.servlet.ServletFileUpload.isMultipartContent;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collection;
@@ -155,7 +154,7 @@ public class CommonsUploadMultipartInterceptor implements Interceptor {
 
 	protected void processFile(FileItemStream item, String name) {
 		try (InputStream stream = item.openStream()) {
-			InputStream content = new ByteArrayInputStream(ByteStreams.toByteArray(stream));
+			byte[] content = ByteStreams.toByteArray(stream);
 			
 			String fileName = FilenameUtils.getName(item.getName());
 			UploadedFile upload = new DefaultUploadedFile(content, fileName, item.getContentType());

@@ -1,6 +1,5 @@
 package br.com.caelum.vraptor.interceptor.multipart;
 
-import static com.google.common.io.ByteStreams.toByteArray;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
@@ -182,7 +181,7 @@ public class CommonsUploadMultipartInterceptorTest {
 		UploadedFile file = argument.getValue();
 		assertThat(file.getFileName(), is("file.txt"));
 		assertThat(file.getContentType(), is("text/plain"));
-		assertThat(toByteArray(file.getContent()), is(content));
+		assertThat(file.getContent(), is(content));
 	}
 	
 	@Test

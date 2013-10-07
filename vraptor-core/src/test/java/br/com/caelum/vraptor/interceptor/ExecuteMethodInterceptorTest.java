@@ -19,9 +19,12 @@ package br.com.caelum.vraptor.interceptor;
 
 import static br.com.caelum.vraptor.view.Results.nothing;
 import static org.hamcrest.MatcherAssert.assertThat;
+
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
+
 import static org.junit.Assert.assertTrue;
+
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -43,6 +46,8 @@ import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.controller.DefaultControllerMethod;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.core.MethodInfo;
+import br.com.caelum.vraptor.factory.Factories;
+import br.com.caelum.vraptor.reflection.MethodExecutor;
 import br.com.caelum.vraptor.validator.Message;
 import br.com.caelum.vraptor.validator.ValidationException;
 
@@ -51,12 +56,13 @@ public class ExecuteMethodInterceptorTest {
 	private @Mock MethodInfo info;
 	private @Mock InterceptorStack stack;
 	private @Mock Validator validator;
+	private MethodExecutor methodExecutor = Factories.createMethodExecutor();
 	private ExecuteMethodInterceptor interceptor;
 
 	@Before
 	public void setup() throws NoSuchMethodException {
 		MockitoAnnotations.initMocks(this);
-		interceptor = new ExecuteMethodInterceptor(info, validator);
+		interceptor = new ExecuteMethodInterceptor(info, validator,methodExecutor);
 	}
 
 	@Test

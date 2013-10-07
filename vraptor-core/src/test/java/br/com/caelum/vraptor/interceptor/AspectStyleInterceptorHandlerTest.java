@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.JUnitCore;
 import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -17,6 +18,7 @@ import br.com.caelum.vraptor.VRaptorException;
 import br.com.caelum.vraptor.controller.ControllerInstance;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.core.InterceptorStack;
+import br.com.caelum.vraptor.factory.Factories;
 import br.com.caelum.vraptor.interceptor.example.AcceptsInterceptor;
 import br.com.caelum.vraptor.interceptor.example.AcceptsInterceptorWithStackAsParameter;
 import br.com.caelum.vraptor.interceptor.example.AcceptsWithoutArgsInterceptor;
@@ -43,7 +45,7 @@ import static org.mockito.Mockito.when;
 
 public class AspectStyleInterceptorHandlerTest {
 
-	private final StepInvoker stepInvoker = new StepInvoker();
+	private StepInvoker stepInvoker;
 	private @Mock
 	InterceptorStack stack;
 	private @Mock
@@ -60,6 +62,7 @@ public class AspectStyleInterceptorHandlerTest {
 	@Before
 	public void setup() {
 		MockitoAnnotations.initMocks(this);
+		stepInvoker = Factories.createStepInvoker();
 	}
 
 	@Test
@@ -323,5 +326,4 @@ public class AspectStyleInterceptorHandlerTest {
 				interceptorClass, stepInvoker, container, parametersResolver);
 		return aspectHandler;
 	}
-
 }

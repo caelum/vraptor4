@@ -4,17 +4,30 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 
 import net.vidageek.mirror.dsl.Mirror;
-import net.vidageek.mirror.exception.MirrorException;
 import net.vidageek.mirror.list.dsl.Matcher;
 import net.vidageek.mirror.list.dsl.MirrorList;
 import br.com.caelum.vraptor.InterceptionException;
+import br.com.caelum.vraptor.reflection.MethodExecutor;
+import br.com.caelum.vraptor.reflection.MethodExecutorException;
 
 import com.google.common.base.Throwables;
 
 @ApplicationScoped
 public class StepInvoker {
+
+	private MethodExecutor methodExecutor;
+
+	@Inject
+	public StepInvoker(MethodExecutor methodExecutor) {
+		this.methodExecutor = methodExecutor;
+	}
+
+	/** @deprecated CDI eyes only*/
+	protected StepInvoker() {
+	}
 
 	private class InvokeMatcher implements Matcher<Method> {
 
@@ -26,7 +39,7 @@ public class StepInvoker {
 
 		@Override
 		public boolean accepts(Method element) {
-			if(element.getDeclaringClass().getName().contains("$")){
+			if(element.getDeclaringClass().getName().contains("$")) {
 				return false;
 			}
 			return element.isAnnotationPresent(this.step);
@@ -34,11 +47,11 @@ public class StepInvoker {
 	}
 
 	public Object tryToInvoke(Object interceptor, Method stepMethod, Object... params) {
-		if (stepMethod==null){
+		if (stepMethod == null) {
 			return null;
 		}
 		Object returnObject = invokeMethod(interceptor, stepMethod, params);
-		if(stepMethod.getReturnType().equals(void.class)){
+		if (stepMethod.getReturnType().equals(void.class)) {
 			return new VoidReturn();
 		}
 		return returnObject;
@@ -46,10 +59,10 @@ public class StepInvoker {
 
 	private Object invokeMethod(Object interceptor, Method stepMethod, Object... params) {
 		try {
-			Object returnObject = new Mirror().on(interceptor).invoke().method(stepMethod).withArgs(params);
-			return returnObject;
-		} catch (MirrorException e) {
-			// we dont wanna wrap it if it is a simple controller business logic exception
+			return methodExecutor.invoke(stepMethod, interceptor, params);
+		} catch (MethodExecutorException e) {
+			// we dont wanna wrap it if it is a simple controller business logic
+			// exception
 			Throwables.propagateIfInstanceOf(e.getCause(), ApplicationLogicException.class);
 			throw new InterceptionException(e.getCause());
 		}
@@ -58,7 +71,7 @@ public class StepInvoker {
 	private boolean isNotSameClass(MirrorList<Method> methods, Class<?> interceptorClass) {
 
 		for (Method possibleMethod : methods) {
-			if(!possibleMethod.getDeclaringClass().equals(interceptorClass)) {
+			if (!possibleMethod.getDeclaringClass().equals(interceptorClass)) {
 				return false;
 			}
 		}
@@ -69,13 +82,13 @@ public class StepInvoker {
 		return new Mirror().on(interceptorClass).reflectAll().methods();
 	}
 
-	public Method findMethod(MirrorList<Method> interceptorMethods,
-			Class<? extends Annotation> step, Class<?> interceptorClass) {
+	public Method findMethod(MirrorList<Method> interceptorMethods, Class<? extends Annotation> step,
+			Class<?> interceptorClass) {
 
 		MirrorList<Method> possibleMethods = interceptorMethods.matching(new InvokeMatcher(step));
 		if (possibleMethods.size() > 1 && isNotSameClass(possibleMethods, interceptorClass)) {
-			throw new IllegalStateException(interceptorClass.getCanonicalName() + " - You should not " +
-				"have more than one @"+step.getSimpleName()+" annotated method");
+			throw new IllegalStateException(interceptorClass.getCanonicalName() + " - You should not "
+					+ "have more than one @" + step.getSimpleName() + " annotated method");
 		}
 		return possibleMethods.isEmpty() ? null : possibleMethods.get(0);
 	}

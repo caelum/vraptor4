@@ -1,9 +1,5 @@
 package br.com.caelum.vraptor.interceptor;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.mockito.Mockito.spy;
-
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
@@ -13,15 +9,20 @@ import org.junit.Test;
 
 import br.com.caelum.vraptor.AroundCall;
 import br.com.caelum.vraptor.BeforeCall;
-import br.com.caelum.vraptor.InterceptionException;
+import br.com.caelum.vraptor.factory.Factories;
 import br.com.caelum.vraptor.interceptor.example.ExampleOfSimpleStackInterceptor;
 import br.com.caelum.vraptor.interceptor.example.InterceptorWithInheritance;
 import br.com.caelum.vraptor.interceptor.example.WeldProxy$$$StyleInterceptor;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
+import static org.mockito.Mockito.spy;
+
 public class StepInvokerTest {
 
-	private StepInvoker stepInvoker = new StepInvoker();
-
+	private StepInvoker stepInvoker = Factories.createStepInvoker();
+	
 	@Test
 	public void shouldNotReadInheritedMethods() throws Exception {
 		Class<?> interceptorClass = InterceptorWithInheritance.class;
@@ -45,14 +46,6 @@ public class StepInvokerTest {
 	public void shouldFindMethodFromWeldStyleInterceptor() throws SecurityException, NoSuchMethodException{
 		Class<?> interceptorClass = WeldProxy$$$StyleInterceptor.class;
 		assertNotNull(findMethod(interceptorClass, AroundCall.class));
-	}
-
-	@Test(expected=InterceptionException.class)
-	public void shouldWrapMirrorException() throws SecurityException, NoSuchMethodException {
-		Class<ExceptionThrowerInterceptor> interceptorClass = ExceptionThrowerInterceptor.class;
-		Method method = findMethod(interceptorClass, BeforeCall.class);
-		assertNotNull(method);
-		stepInvoker.tryToInvoke(new ExceptionThrowerInterceptor(), method);
 	}
 
 	private Method findMethod(Class<?> interceptorClass, Class<? extends Annotation> step) {

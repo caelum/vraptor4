@@ -17,6 +17,8 @@
 
 package br.com.caelum.vraptor.http;
 
+import javax.enterprise.inject.Vetoed;
+
 import br.com.caelum.vraptor.VRaptorException;
 
 /**
@@ -24,6 +26,7 @@ import br.com.caelum.vraptor.VRaptorException;
  *
  * @author Guilherme Silveira
  */
+@Vetoed
 public class InvalidParameterException extends VRaptorException {
 	private static final long serialVersionUID = 4632893122633090126L;
 

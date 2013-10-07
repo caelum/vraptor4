@@ -22,7 +22,7 @@ public class InterceptorWithCustomizedAccepts {
 	@AroundCall
 	public void intercept(SimpleInterceptorStack stack) {
 		this.interceptCalled = true;
-	}
+	}		
 
 	@BeforeCall
 	public void before() {

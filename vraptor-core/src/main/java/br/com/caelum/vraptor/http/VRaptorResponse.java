@@ -47,8 +47,9 @@ public class VRaptorResponse extends HttpServletResponseWrapper implements Mutab
 		}
 		super.sendRedirect(location);
 	}
+	
+	@Override
 	public void addRedirectListener(RedirectListener listener) {
 		listeners.add(listener);
 	}
-
 }

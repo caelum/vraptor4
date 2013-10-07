@@ -53,6 +53,7 @@ public class XStreamXMLDeserializer implements Deserializer {
 		this.builder = builder;
 	}
 
+	@Override
 	public Object[] deserialize(InputStream inputStream, ControllerMethod method) {
 		Method javaMethod = method.getMethod();
 		Class<?>[] types = javaMethod.getParameterTypes();

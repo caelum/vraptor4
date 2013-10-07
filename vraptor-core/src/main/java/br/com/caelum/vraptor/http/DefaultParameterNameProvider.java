@@ -36,6 +36,7 @@ public class DefaultParameterNameProvider implements ParameterNameProvider{
 		this.extractor = extractor;
 	}
 
+	@Override
 	public String[] parameterNamesFor(AccessibleObject method) {
 		Type[] parameterTypes = parameterTypes(method);
 		String[] names = new String[parameterTypes.length];

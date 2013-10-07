@@ -89,8 +89,10 @@ public class DefaultLogicResult implements LogicResult {
 	 * forwarding. It runs forwarding logic, and renders its <b>default</b>
 	 * view.
 	 */
+	@Override
 	public <T> T forwardTo(final Class<T> type) {
 		return proxifier.proxify(type, new MethodInvocation<T>() {
+			@Override
 			public Object intercept(T proxy, Method method, Object[] args, SuperMethod superMethod) {
 				try {
 					logger.debug("Executing {}", Stringnifier.simpleNameFor(method));
@@ -127,10 +129,12 @@ public class DefaultLogicResult implements LogicResult {
 		}
 	}
 
+	@Override
 	public <T> T redirectTo(final Class<T> type) {
 		logger.debug("redirecting to class {}", type.getSimpleName());
 
 		return proxifier.proxify(type, new MethodInvocation<T>() {
+			@Override
 			public Object intercept(T proxy, Method method, Object[] args, SuperMethod superMethod) {
 				checkArgument(acceptsHttpGet(method), "Your logic method must accept HTTP GET method if you want to redirect to it");
 				

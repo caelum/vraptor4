@@ -66,10 +66,12 @@ public class DeserializingInterceptor implements Interceptor {
 		this.status = status;
 	}
 
+	@Override
 	public boolean accepts(ControllerMethod method) {
 		return method.containsAnnotation(Consumes.class);
 	}
 
+	@Override
 	public void intercept(InterceptorStack stack, ControllerMethod method, Object controllerInstance) throws InterceptionException {
 		Consumes consumesAnnotation = method.getMethod().getAnnotation(Consumes.class);
 		List<String> supported =  Arrays.asList(consumesAnnotation.value());

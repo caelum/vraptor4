@@ -34,10 +34,12 @@ public class TopologicalSortedInterceptorRegistry implements InterceptorRegistry
 
 	private Graph<Class<?>> set = new Graph<>();
 
+	@Override
 	public List<Class<?>> all() {
 		return set.topologicalOrder();
 	}
 
+	@Override
 	public void register(Class<?>... interceptors) {
 		for (Class<?> interceptor : interceptors) {
 			Intercepts intercepts = interceptor.getAnnotation(Intercepts.class);

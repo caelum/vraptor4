@@ -271,6 +271,7 @@ public class DefaultValidationViewsFactoryTest {
 		JSONSerialization serialization = mock(JSONSerialization.class);
 
 		serializerBuilder = mock(SerializerBuilder.class, new Answer<SerializerBuilder>() {
+			@Override
 			public SerializerBuilder answer(InvocationOnMock invocation) throws Throwable {
 				return serializerBuilder;
 			}
@@ -291,30 +292,37 @@ public class DefaultValidationViewsFactoryTest {
 
 	static class RandomSerializer implements SerializerBuilder {
 
+		@Override
 		public RandomSerializer exclude(String... names) {
 			return this;
 		}
 
+		@Override
 		public RandomSerializer excludeAll() {
 			return this;
 		}
 
+		@Override
 		public <T> RandomSerializer from(T object) {
 			return this;
 		}
 
+		@Override
 		public <T> RandomSerializer from(T object, String alias) {
 			return this;
 		}
 
+		@Override
 		public RandomSerializer include(String... names) {
 			return this;
 		}
 
+		@Override
 		public RandomSerializer recursive() {
 			return this;
 		}
 
+		@Override
 		public void serialize() {
 		}
 

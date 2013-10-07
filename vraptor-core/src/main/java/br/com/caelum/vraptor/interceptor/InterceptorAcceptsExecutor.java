@@ -22,6 +22,7 @@ public class InterceptorAcceptsExecutor implements StepExecutor<Boolean>{
 		this.method = method;
 	}
 
+	@Override
 	public boolean accept(Class<?> interceptorClass) {
 		if (method == null) {
 			return false;
@@ -39,6 +40,7 @@ public class InterceptorAcceptsExecutor implements StepExecutor<Boolean>{
 		return true;
 	}
 
+	@Override
 	public Boolean execute(Object interceptor) {
 		if(method != null) {
 			Object[] params = parameterResolver.parametersFor(method);

@@ -13,6 +13,7 @@ import br.com.caelum.vraptor.core.RequestInfo;
 @Alternative
 public class CustomMethodNotAllowedHandler implements MethodNotAllowedHandler {
 
+	@Override
 	public void deny(RequestInfo request, Set<HttpMethod> allowedMethods) {
 	}
 }

@@ -23,28 +23,35 @@ package br.com.caelum.vraptor.serialization;
  */
 public class IgnoringSerializer implements SerializerBuilder {
 
+	@Override
 	public Serializer exclude(String... names) {
 		return this;
 	}
 
+	@Override
 	public <T> Serializer from(T object) {
 		return this;
 	}
 
+	@Override
 	public Serializer include(String... names) {
 		return this;
 	}
+	@Override
 	public Serializer recursive() {
 		return this;
 	}
 
+	@Override
 	public void serialize() {
 	}
 
+	@Override
 	public <T> Serializer from(T object, String alias) {
 		return this;
 	}
 
+	@Override
 	public Serializer excludeAll() {
 		return this;
 	}

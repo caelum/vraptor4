@@ -60,6 +60,7 @@ public class ExecuteMethodInterceptor implements Interceptor {
 		this.methodExecutor = methodExecutor;
 	}
 
+	@Override
 	public void intercept(InterceptorStack stack, ControllerMethod method, Object controllerInstance)
 			throws InterceptionException {
 		try {
@@ -114,6 +115,7 @@ public class ExecuteMethodInterceptor implements Interceptor {
 		}
 	}
 
+	@Override
 	public boolean accepts(ControllerMethod method) {
 		return true;
 	}

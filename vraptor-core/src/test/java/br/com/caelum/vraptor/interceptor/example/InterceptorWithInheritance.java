@@ -12,16 +12,19 @@ import br.com.caelum.vraptor.interceptor.SimpleInterceptorStack;
 @Vetoed
 public class InterceptorWithInheritance extends BaseInterceptor{
 	
+	@Override
 	@BeforeCall
 	public void begin(){
 		
 	}
 
+	@Override
 	@AroundCall
 	public void intercept(SimpleInterceptorStack sis){
 	}
 		
 
+	@Override
 	@AfterCall
 	public void after() {
 		

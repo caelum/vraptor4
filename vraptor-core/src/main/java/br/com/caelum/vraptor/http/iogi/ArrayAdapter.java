@@ -39,9 +39,11 @@ final class ArrayAdapter implements Instantiator<Object> {
 		this.delegate = arrayInstantiator;
 	}
 
+	@Override
 	public Object instantiate(final Target<?> target, Parameters parameters) {
 		List<Parameter> fixed = Lists.transform(parameters.forTarget(target), new Function<Parameter, Parameter>() {
 			int i = 0;
+			@Override
 			public Parameter apply(Parameter parameter) {
 				if (target.getName().equals(parameter.getName())) {
 					return new Parameter(parameter.getName() + "[" + i++ + "]", parameter.getValue());
@@ -52,6 +54,7 @@ final class ArrayAdapter implements Instantiator<Object> {
 		return delegate.instantiate(target, new Parameters(fixed));
 	}
 
+	@Override
 	public boolean isAbleToInstantiate(Target<?> target) {
 		return delegate.isAbleToInstantiate(target);
 	}

@@ -39,6 +39,7 @@ public class FileDownloadTest {
 		fileStream.close();
 
 		this.socketStream = new ServletOutputStream() {
+			@Override
 			public void write(int b) throws IOException {
 				outputStream.write(b);
 			}

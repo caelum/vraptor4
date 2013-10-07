@@ -46,6 +46,7 @@ public class ExceptionRecorder<T> implements MethodInvocation<T> {
 		parameters = new ArrayList<>();
 	}
 
+	@Override
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public Object intercept(T proxy, Method method, Object[] args, SuperMethod superMethod) {
 		parameters.add(new ExceptionRecorderParameter(args, method));

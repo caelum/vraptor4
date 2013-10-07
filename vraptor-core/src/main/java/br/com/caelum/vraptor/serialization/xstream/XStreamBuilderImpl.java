@@ -49,6 +49,7 @@ public class XStreamBuilderImpl implements XStreamBuilder {
 		this.extractor = extractor;
 	}
 
+	@Override
 	public XStream xmlInstance() {
 		return configure(new VRaptorXStream(extractor));
 	}
@@ -63,6 +64,7 @@ public class XStreamBuilderImpl implements XStreamBuilder {
 		return configure(new VRaptorXStream(extractor, getHierarchicalStreamDriver()));
 	}
 
+	@Override
 	public XStream configure(XStream xstream) {
 		converters.registerComponents(xstream);
 		return xstream;
@@ -77,6 +79,7 @@ public class XStreamBuilderImpl implements XStreamBuilder {
 		final char[] lineIndenter = (indented ? INDENTED_LINE_INDENTER : DEFAULT_LINE_INDENTER);
 
 		return new JsonHierarchicalStreamDriver() {
+			@Override
 			public HierarchicalStreamWriter createWriter(Writer writer) {
 				if (withoutRoot) {
 					return new JsonWriter(writer, lineIndenter, newLine, JsonWriter.DROP_ROOT_MODE);
@@ -87,11 +90,13 @@ public class XStreamBuilderImpl implements XStreamBuilder {
 		};
 	}
 
+	@Override
 	public XStreamBuilder indented() {
 		indented = true;
 		return this;
 	}
 
+	@Override
 	public XStreamBuilder withoutRoot() {
 		withoutRoot = true;
 		return this;

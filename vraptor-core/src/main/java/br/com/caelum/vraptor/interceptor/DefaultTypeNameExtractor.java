@@ -36,6 +36,7 @@ import br.com.caelum.vraptor.util.StringUtils;
 @ApplicationScoped
 public class DefaultTypeNameExtractor implements TypeNameExtractor {
 
+	@Override
 	public String nameFor(Type generic) {
 		if (generic instanceof ParameterizedType) {
 			return nameFor((ParameterizedType) generic);

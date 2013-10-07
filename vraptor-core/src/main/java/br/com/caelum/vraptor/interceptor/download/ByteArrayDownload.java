@@ -45,6 +45,7 @@ public class ByteArrayDownload implements Download {
 		download = new InputStreamDownload(stream, contentType, fileName, doDownload, buff.length);
 	}
 	
+	@Override
 	public void write(HttpServletResponse response) throws IOException {
 		download.write(response);
 	}

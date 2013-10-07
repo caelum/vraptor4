@@ -50,6 +50,7 @@ public class HttpSessionMock implements HttpSession,Serializable {
 	public HttpSessionMock() {
 	}
 
+	@Override
 	public long getCreationTime() {
 		return creationTime;
 	}
@@ -58,10 +59,12 @@ public class HttpSessionMock implements HttpSession,Serializable {
 		this.creationTime = creationTime;
 	}
 
+	@Override
 	public String getId() {
 		return id;
 	}
 
+	@Override
 	public long getLastAccessedTime() {
 		return lastAccessedTime;
 	}
@@ -70,32 +73,40 @@ public class HttpSessionMock implements HttpSession,Serializable {
 		this.lastAccessedTime = lastAccessedTime;
 	}
 
+	@Override
 	public ServletContext getServletContext() {
 		return context;
 	}
 
+	@Override
 	public void setMaxInactiveInterval(int interval) {
 		this.maxInactiveInterval = interval;
 	}
 
+	@Override
 	public int getMaxInactiveInterval() {
 		return maxInactiveInterval;
 	}
 
+	@Override
 	public HttpSessionContext getSessionContext() {
 		return new HttpSessionContext() {
+			@Override
 			public HttpSession getSession(String s) {
 				return HttpSessionMock.this;
 			}
 
+			@Override
 			public Enumeration getIds() {
 				return new Enumeration() {
 					private boolean hasNext = true;
 
+					@Override
 					public boolean hasMoreElements() {
 						return hasNext;
 					}
 
+					@Override
 					public Object nextElement() {
 						hasNext = false;
 						return getId();
@@ -105,39 +116,48 @@ public class HttpSessionMock implements HttpSession,Serializable {
 		};
 	}
 
+	@Override
 	public Object getAttribute(String name) {
 		return attributes.get(name);  //To change body of implemented methods use File | Settings | File Templates.
 	}
 
+	@Override
 	public Object getValue(String name) {
 		return getAttribute(name);
 	}
 
+	@Override
 	public Enumeration getAttributeNames() {
 		return Collections.enumeration(attributes.keySet());
 	}
 
+	@Override
 	public String[] getValueNames() {
 		Set<String> names = attributes.keySet();
 		return names.toArray(new String[names.size()]);
 	}
 
+	@Override
 	public void setAttribute(String name, Object value) {
 		attributes.put(name, value);
 	}
 
+	@Override
 	public void putValue(String name, Object value) {
 		setAttribute(name, value);
 	}
 
+	@Override
 	public void removeAttribute(String name) {
 		attributes.remove(name);
 	}
 
+	@Override
 	public void invalidate() {
 		attributes.clear();
 	}
 
+	@Override
 	public boolean isNew() {
 		return isNew;
 	}
@@ -146,6 +166,7 @@ public class HttpSessionMock implements HttpSession,Serializable {
 		this.isNew = isNew;
 	}
 
+	@Override
 	public void removeValue(String name) {
 		removeAttribute(name);
 	}

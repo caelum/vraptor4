@@ -64,6 +64,7 @@ public class DefaultPageResultTest {
 		requestInfo = new MethodInfo();
 		requestInfo.setControllerMethod(method);
 		fixedResolver = new PathResolver() {
+			@Override
 			public String pathFor(ControllerMethod method) {
 				return "fixed";
 			}

@@ -10,14 +10,17 @@ import br.com.caelum.vraptor.serialization.Serializer;
  */
 public class DumbSerialization implements Serialization {
 
+	@Override
 	public <T> Serializer from(T object) {
 		return null;
 	}
 
+	@Override
 	public <T> Serializer from(T object, String alias) {
 		return null;
 	}
 
+	@Override
 	public boolean accepts(String format) {
 		return false;
 	}

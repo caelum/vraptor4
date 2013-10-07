@@ -62,6 +62,7 @@ public class MockSerializationResult extends MockResult {
 		this.gsonBuilder = gsonBuilder;
 	}
 
+	@Override
 	public <T extends View> T use(final Class<T> view) {
 		this.typeToUse = view;
 		if (view.equals(EmptyResult.class)) {
@@ -84,6 +85,7 @@ public class MockSerializationResult extends MockResult {
 		if (view.isAssignableFrom(RepresentationResult.class)) {
 			serialization = new XStreamXMLSerialization(response, xstreambuilder);
 			return view.cast(new DefaultRepresentationResult(new FormatResolver() {
+				@Override
 				public String getAcceptFormat() {
 					return "xml";
 				}

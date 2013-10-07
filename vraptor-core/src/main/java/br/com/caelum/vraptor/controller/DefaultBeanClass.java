@@ -52,10 +52,12 @@ public class DefaultBeanClass implements BeanClass {
 		return "{ControllerClass " + type.getName() + "}";
 	}
 
+	@Override
 	public Class<?> getType() {
 		return type;
 	}
 
+	@Override
 	public Annotation[] getAnnotations(){
 		return type.getAnnotations();
 	}

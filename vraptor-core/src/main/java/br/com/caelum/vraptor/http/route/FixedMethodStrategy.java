@@ -58,6 +58,7 @@ public class FixedMethodStrategy implements Route {
 		this.priority = priority;
 	}
 
+	@Override
 	public boolean canHandle(Class<?> type, Method method) {
 		Method getMethod = this.controllerMethod.getMethod();
 		return type.equals(this.controllerMethod.getController().getType())
@@ -65,31 +66,38 @@ public class FixedMethodStrategy implements Route {
 			&& Arrays.equals(method.getParameterTypes(), getMethod.getParameterTypes());
 	}
 
+	@Override
 	public ControllerMethod controllerMethod(MutableRequest request, String uri) {
 		parameters.fillIntoRequest(uri, request);
 		return this.controllerMethod;
 	}
 
+	@Override
 	public EnumSet<HttpMethod> allowedMethods() {
 		return methods;
 	}
 
+	@Override
 	public boolean canHandle(String uri) {
 		return parameters.matches(uri);
 	}
 
+	@Override
 	public String urlFor(Class<?> type, Method m, Object... params) {
 		return parameters.fillUri(parameterNames, params);
 	}
 
+	@Override
 	public int getPriority() {
 		return this.priority;
 	}
 
+	@Override
 	public String getOriginalUri() {
 		return this.originalUri;
 	}
 
+	@Override
 	public ControllerMethod getControllerMethod() {
 		return controllerMethod;
 	}

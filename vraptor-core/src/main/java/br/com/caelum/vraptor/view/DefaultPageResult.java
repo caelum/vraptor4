@@ -62,6 +62,7 @@ public class DefaultPageResult implements PageResult {
 		this.resolver = resolver;
 	}
 
+	@Override
 	public void defaultView() {
 		String to = resolver.pathFor(requestInfo.getControllerMethod());
 		logger.debug("forwarding to {}", to);
@@ -74,6 +75,7 @@ public class DefaultPageResult implements PageResult {
 		}
 	}
 
+	@Override
 	public void include() {
 		try {
 			String to = resolver.pathFor(requestInfo.getControllerMethod());
@@ -86,6 +88,7 @@ public class DefaultPageResult implements PageResult {
 		}
 	}
 
+	@Override
 	public void redirectTo(String url) {
 		logger.debug("redirection to {}", url);
 
@@ -100,6 +103,7 @@ public class DefaultPageResult implements PageResult {
 		}
 	}
 
+	@Override
 	public void forwardTo(String url) {
 		logger.debug("forwarding to {}", url);
 
@@ -112,6 +116,7 @@ public class DefaultPageResult implements PageResult {
 		}
 	}
 
+	@Override
 	public <T> T of(final Class<T> controllerType) {
 		return proxifier.proxify(controllerType, new MethodInvocation<T>() {
 			public Object intercept(T proxy, Method method, Object[] args, SuperMethod superMethod) {
@@ -126,18 +131,5 @@ public class DefaultPageResult implements PageResult {
 			}
 		});
 	}
-
-	public void redirect(String url) {
-		this.redirectTo(url);
-	}
-
-	public void forward(String url) {
-		this.forwardTo(url);
-	}
-
-	public void forward() {
-		this.defaultView();
-	}
-
 
 }

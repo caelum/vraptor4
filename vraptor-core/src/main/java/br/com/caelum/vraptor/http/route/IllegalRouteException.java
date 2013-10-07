@@ -27,9 +27,6 @@ import br.com.caelum.vraptor.VRaptorException;
  */
 public class IllegalRouteException extends VRaptorException {
 
-	/**
-	 * Random
-	 */
 	private static final long serialVersionUID = -3854707059890751018L;
 
 	public IllegalRouteException(String msg) {

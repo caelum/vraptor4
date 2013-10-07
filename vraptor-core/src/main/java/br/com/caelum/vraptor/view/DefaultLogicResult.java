@@ -17,6 +17,8 @@
 
 package br.com.caelum.vraptor.view;
 
+import static com.google.common.base.Preconditions.checkArgument;
+
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -130,16 +132,12 @@ public class DefaultLogicResult implements LogicResult {
 
 		return proxifier.proxify(type, new MethodInvocation<T>() {
 			public Object intercept(T proxy, Method method, Object[] args, SuperMethod superMethod) {
-				if (!acceptsHttpGet(method)) {
-					throw new IllegalArgumentException(
-							"Your logic method must accept HTTP GET method if you want to redirect to it");
-				}
+				checkArgument(acceptsHttpGet(method), "Your logic method must accept HTTP GET method if you want to redirect to it");
+				
 				try {
-					String path = request.getContextPath();
 					String url = router.urlFor(type, method, args);
+					String path = request.getContextPath() + url;
 					includeParametersInFlash(type, method, args);
-
-					path = path + url;
 
 					logger.debug("redirecting to {}", path);
 					response.sendRedirect(path);

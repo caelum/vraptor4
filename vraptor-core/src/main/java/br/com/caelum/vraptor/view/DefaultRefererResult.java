@@ -19,11 +19,14 @@ package br.com.caelum.vraptor.view;
 
 import static br.com.caelum.vraptor.view.Results.logic;
 import static br.com.caelum.vraptor.view.Results.page;
+import static com.google.common.base.Preconditions.checkState;
 
 import java.util.ArrayList;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+
+import com.google.common.base.Preconditions;
 
 import net.vidageek.mirror.dsl.Mirror;
 import br.com.caelum.vraptor.Result;
@@ -88,9 +91,7 @@ public class DefaultRefererResult implements RefererResult {
 
 	private String getReferer() {
 		String referer = request.getHeader("Referer");
-		if (referer == null) {
-			throw new IllegalStateException("The Referer header was not specified");
-		}
+		checkState(referer != null, "The Referer header was not specified");
 
 		String path = request.getContextPath();
 		return referer.substring(referer.indexOf(path) + path.length());

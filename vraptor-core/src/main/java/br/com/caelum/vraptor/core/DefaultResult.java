@@ -18,6 +18,8 @@
 package br.com.caelum.vraptor.core;
 
 
+import static java.util.Collections.unmodifiableMap;
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -93,7 +95,7 @@ public class DefaultResult extends AbstractResult {
 
 	@Override
 	public Map<String, Object> included() {
-		return Collections.unmodifiableMap(includedAttributes);
+		return unmodifiableMap(includedAttributes);
 	}
 
 	@Override

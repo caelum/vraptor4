@@ -81,13 +81,10 @@ public class DefaultValidator extends AbstractValidator {
 			return new MockResult(proxifier).use(view); //ignore anything, no errors occurred
 		}
 
-		if (logger.isDebugEnabled()) {
-			logger.debug("there are errors on result: {}", errors);
-		}
-
 		result.include("errors", getErrors());
 		outjector.outjectRequestMap();
-
+		
+		logger.debug("there are errors on result: {}", errors);
 		return viewsFactory.instanceFor(view, errors);
 	}
 

@@ -59,16 +59,18 @@ public class DefaultControllerTranslator implements UrlToControllerTranslator {
 
 		logger.debug("trying to access {}", controllerName);
 
-		HttpMethod method;
-		try {
-			method = HttpMethod.of(request);
-		} catch (IllegalArgumentException e) {
-			throw new MethodNotAllowedException(router.allowedMethodsFor(controllerName), request.getMethod());
-		}
+		HttpMethod method = getHttpMethod(request, controllerName);
 		ControllerMethod controller = router.parse(controllerName, method, request);
 
 		logger.debug("found controller {}", controller);
 		return controller;
 	}
 
+	private HttpMethod getHttpMethod(MutableRequest request, String controllerName) {
+		try {
+			return HttpMethod.of(request);
+		} catch (IllegalArgumentException e) {
+			throw new MethodNotAllowedException(router.allowedMethodsFor(controllerName), request.getMethod());
+		}
+	}
 }

@@ -22,11 +22,13 @@ import com.google.common.base.Throwables;
 public class DefaultMethodExecutor implements MethodExecutor {
 
 	private CacheStore<Method,MethodHandle> cache;
-	private MethodHandleFactory methodHandleFactory = new MethodHandleFactory();
+	private MethodHandleFactory methodHandleFactory;
 
 	@Inject
-	public DefaultMethodExecutor(@LRU(capacity=500) CacheStore<Method, MethodHandle> cache) {
+	public DefaultMethodExecutor(@LRU(capacity=500) CacheStore<Method, MethodHandle> cache,
+			MethodHandleFactory methodHandleFactory) {
 		this.cache = cache;
+		this.methodHandleFactory = methodHandleFactory;
 	}
 
 	@Deprecated

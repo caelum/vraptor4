@@ -1,5 +1,0 @@
-- tem que saber quais são os métodos
-- tem que criar os MethodTypes de todos eles
-- dá o lookup no MethodHandle de todos os achados e guardar
-
-cache.get(klass).invokeExact(instancia,params);

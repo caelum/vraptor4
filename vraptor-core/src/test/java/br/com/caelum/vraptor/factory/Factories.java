@@ -7,7 +7,6 @@ import br.com.caelum.vraptor.cache.LRUCacheStore;
 import br.com.caelum.vraptor.interceptor.StepInvoker;
 import br.com.caelum.vraptor.reflection.DefaultMethodExecutor;
 import br.com.caelum.vraptor.reflection.MethodExecutor;
-import br.com.caelum.vraptor.reflection.MethodHandleFactory;
 
 public class Factories {
 
@@ -16,8 +15,7 @@ public class Factories {
 	}
 	
 	public static MethodExecutor createMethodExecutor(){
-		MethodHandleFactory methodHandleFactory = new MethodHandleFactory();
 		LRUCacheStore<Method, MethodHandle> cache = new LRUCacheStore<Method,MethodHandle>(500);
-		return new DefaultMethodExecutor(cache,methodHandleFactory); 		
+		return new DefaultMethodExecutor(cache);
 	}	
 }

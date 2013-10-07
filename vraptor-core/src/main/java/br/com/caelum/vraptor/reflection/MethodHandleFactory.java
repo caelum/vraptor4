@@ -6,8 +6,6 @@ import java.lang.invoke.MethodHandles.Lookup;
 import java.lang.invoke.MethodType;
 import java.lang.reflect.Method;
 
-import javax.enterprise.context.ApplicationScoped;
-
 import com.headius.invokebinder.Binder;
 
 /**
@@ -15,9 +13,7 @@ import com.headius.invokebinder.Binder;
  * @author Alberto Souza
  *
  */
-@ApplicationScoped
 public class MethodHandleFactory {
-
 	
 	/**
 	 * Creates a MethodHandle for some method.
@@ -33,13 +29,9 @@ public class MethodHandleFactory {
 
 		try {
 			Class<?>[] parameterTypes = method.getParameterTypes();
-
 			MethodType description = MethodType.methodType(method.getReturnType(), parameterTypes);
-
 			Lookup lookup = MethodHandles.lookup();
-
 			MethodHandle originalHandle = lookup.findVirtual(type, method.getName(), description);
-
 			Binder binder = createBinder(method, parameterTypes.length).cast(originalHandle.type());
 
 			return binder.invokeVirtual(lookup, method.getName());

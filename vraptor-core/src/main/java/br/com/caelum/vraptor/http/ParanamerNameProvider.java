@@ -33,9 +33,8 @@ import com.thoughtworks.paranamer.ParameterNamesNotFoundException;
 import com.thoughtworks.paranamer.Paranamer;
 
 /**
- * Paranamer based parameter name provider provides parameter names based on
- * their local variable name during compile time. Information is retrieved using
- * paranamer's mechanism.
+ * Paranamer implementation for {@link ParameterNameProvider}, that reads parameter info using Named annotation on each
+ * parameter, or read bytecode to find parameter information, in this order.
  *
  * @author Guilherme Silveira
  */
@@ -45,6 +44,7 @@ public class ParanamerNameProvider implements ParameterNameProvider {
 
 	private static final Logger logger = LoggerFactory.getLogger(ParanamerNameProvider.class);
 
+	@Override
 	public String[] parameterNamesFor(AccessibleObject method) {
 		try {
 			String[] parameterNames = info.lookupParameterNames(method);
@@ -53,15 +53,18 @@ public class ParanamerNameProvider implements ParameterNameProvider {
 					Stringnifier.simpleNameFor(method), Arrays.toString(parameterNames));
 			}
 
-			// maybe paranamer cache already provides defensive copies?
-			String[] defensiveCopy = new String[parameterNames.length];
-			System.arraycopy(parameterNames, 0, defensiveCopy, 0, parameterNames.length);
-			return defensiveCopy;
+			return createDefensiveCopy(parameterNames);
 		} catch (ParameterNamesNotFoundException e) {
 			throw new IllegalStateException("Paranamer were not able to find your parameter names for " + method
-					+ "You must compile your code with debug information (javac -g) or register another "
-					+ "name provider. Try to use " + DefaultParameterNameProvider.class.getName() + " instead.", e);
+					+ "You must compile your code with debug information (javac -g), or using @Named on each method "
+					+ "parameter or register another name provider. Try to use " 
+					+ DefaultParameterNameProvider.class.getName() + " instead.", e);
 		}
 	}
 
+	private String[] createDefensiveCopy(String[] parameterNames) {
+		String[] defensiveCopy = new String[parameterNames.length];
+		System.arraycopy(parameterNames, 0, defensiveCopy, 0, parameterNames.length);
+		return defensiveCopy;
+	}
 }

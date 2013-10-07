@@ -32,30 +32,37 @@ import br.com.caelum.vraptor.http.MutableRequest;
  */
 public class NoStrategy implements Route {
 
+	@Override
 	public ControllerMethod controllerMethod(MutableRequest request, String uri) {
 		throw new IllegalRouteException("You have created a route, but did not specify any method to be invoked.");
 	}
 
+	@Override
 	public String urlFor(Class<?> type, Method m, Object... params) {
 		return "nothing";
 	}
 
+	@Override
 	public boolean canHandle(Class<?> type, Method method) {
 		return false;
 	}
 
+	@Override
 	public boolean canHandle(String uri) {
 		return false;
 	}
 
+	@Override
 	public int getPriority() {
 		return 0;
 	}
 
+	@Override
 	public EnumSet<HttpMethod> allowedMethods() {
 		return EnumSet.noneOf(HttpMethod.class);
 	}
 
+	@Override
 	public String getOriginalUri() {
 		return "NoStrategy";
 	}

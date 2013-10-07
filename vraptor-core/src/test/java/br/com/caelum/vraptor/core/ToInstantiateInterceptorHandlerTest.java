@@ -48,10 +48,12 @@ public class ToInstantiateInterceptorHandlerTest {
 		public MyWeirdInterceptor(Dependency d) {
 		}
 
+		@Override
 		public void intercept(InterceptorStack stack, ControllerMethod method, Object resourceInstance)
 				throws InterceptionException {
 		}
 
+		@Override
 		public boolean accepts(ControllerMethod method) {
 			return true;
 		}

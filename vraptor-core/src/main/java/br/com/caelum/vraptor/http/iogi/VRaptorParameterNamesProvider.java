@@ -46,6 +46,7 @@ public class VRaptorParameterNamesProvider implements br.com.caelum.iogi.spi.Par
 		this.parameterNameProvider = parameterNameProvider;
 	}
 
+	@Override
 	public List<String> lookupParameterNames(AccessibleObject methodOrConstructor) {
 		return Arrays.asList(parameterNameProvider.parameterNamesFor(methodOrConstructor));
 	}

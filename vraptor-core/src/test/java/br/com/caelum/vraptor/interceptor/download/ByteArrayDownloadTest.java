@@ -31,6 +31,7 @@ public class ByteArrayDownloadTest {
 		this.outputStream = new ByteArrayOutputStream();
 
 		this.socketStream = new ServletOutputStream() {
+			@Override
 			public void write(int b) throws IOException {
 				outputStream.write(b);
 			}

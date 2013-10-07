@@ -30,30 +30,37 @@ import br.com.caelum.vraptor.Validator;
  */
 public abstract class AbstractValidator implements Validator {
 
+	@Override
 	public <T> T onErrorForwardTo(Class<T> controller) {
 		return onErrorUse(logic()).forwardTo(controller);
 	}
 
+	@Override
 	public <T> T onErrorForwardTo(T controller) {
 		return (T) onErrorForwardTo(controller.getClass());
 	}
 
+	@Override
 	public <T> T onErrorRedirectTo(Class<T> controller) {
 		return onErrorUse(logic()).redirectTo(controller);
 	}
 
+	@Override
 	public <T> T onErrorRedirectTo(T controller) {
 		return (T) onErrorRedirectTo(controller.getClass());
 	}
 
+	@Override
 	public <T> T onErrorUsePageOf(Class<T> controller) {
 		return onErrorUse(page()).of(controller);
 	}
 
+	@Override
 	public <T> T onErrorUsePageOf(T controller) {
 		return (T) onErrorUsePageOf(controller.getClass());
 	}
 
+	@Override
 	public void onErrorSendBadRequest() {
 		onErrorUse(status()).badRequest(getErrors());
 	}

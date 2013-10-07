@@ -53,6 +53,7 @@ public class InputStreamDownload implements Download {
 		this.doDownload = doDownload;
 	}
 
+	@Override
 	public void write(HttpServletResponse response) throws IOException {
 		writeDetails(response);
 

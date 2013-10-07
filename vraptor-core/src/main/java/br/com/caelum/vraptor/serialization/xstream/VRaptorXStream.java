@@ -30,6 +30,7 @@ public final class VRaptorXStream extends XStream {
 		/* this method is called in the super constructor, so we cannot use instance variables, so we're
 		 * using this 'lazy' get */
 		new Supplier<TypeNameExtractor>() {
+			@Override
 			public TypeNameExtractor get() {
 				return extractor;
 			}

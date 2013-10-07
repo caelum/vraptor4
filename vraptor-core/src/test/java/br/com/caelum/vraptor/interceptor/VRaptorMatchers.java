@@ -38,10 +38,12 @@ public class VRaptorMatchers {
 	public static TypeSafeMatcher<ControllerMethod> controllerMethod(final Method method) {
 		return new TypeSafeMatcher<ControllerMethod>() {
 
+			@Override
 			public boolean matchesSafely(ControllerMethod other) {
 				return other.getMethod().equals(method);
 			}
 
+			@Override
 			public void describeTo(Description description) {
 				description.appendText(" an instance of a controller method for method " + method.getName() + " declared at " + method.getDeclaringClass().getName());
 			}
@@ -57,6 +59,7 @@ public class VRaptorMatchers {
 	public static Matcher<BeanClass> controller(final Class<?> type) {
 		return new BaseMatcher<BeanClass>() {
 
+			@Override
 			public boolean matches(Object item) {
 				if (!(item instanceof BeanClass)) {
 					return false;
@@ -65,6 +68,7 @@ public class VRaptorMatchers {
 				return other.getType().equals(type);
 			}
 
+			@Override
 			public void describeTo(Description description) {
 				description.appendText(" controller for " + type.getName());
 			}
@@ -75,14 +79,17 @@ public class VRaptorMatchers {
 	public static Matcher<ValidationMessage> error(final String category, final String message) {
 		return new TypeSafeMatcher<ValidationMessage>() {
 
+			@Override
 			protected void describeMismatchSafely(ValidationMessage item, Description mismatchDescription) {
 				mismatchDescription.appendText(" validation message='" +item.getMessage() + "', category = '"+item.getCategory()+"'");
 			}
 
+			@Override
 			protected boolean matchesSafely(ValidationMessage m) {
 				return message.equals(m.getMessage()) && category.equals(m.getCategory());
 			}
 
+			@Override
 			public void describeTo(Description description) {
 				description.appendText(" validation message='" +message + "', category = '"+category+"'");
 			}

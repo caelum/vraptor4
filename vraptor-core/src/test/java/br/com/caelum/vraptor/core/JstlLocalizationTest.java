@@ -44,6 +44,7 @@ public class JstlLocalizationTest {
 		localization = new JstlLocalization(request);
 
 		ResourceBundle bundle = new ListResourceBundle() {
+			@Override
 			protected Object[][] getContents() {
 				return new Object[][] { { "my.key", "abc" } };
 			}

@@ -187,6 +187,7 @@ public class DefaultStatusTest {
 			@Override
 			public <T extends View> T use(Class<T> view) {
 				return view.cast(new DefaultRepresentationResult(new FormatResolver() {
+					@Override
 					public String getAcceptFormat() {
 						return "json";
 					}

@@ -57,6 +57,7 @@ public class MockedPage implements PageResult {
 	public <T> T of(Class<T> controllerType) {
 		return proxifier.proxify(controllerType, new MethodInvocation<T>() {
 
+			@Override
 			public Object intercept(T proxy, Method method, Object[] args, SuperMethod superMethod) {
 				return null;
 			}

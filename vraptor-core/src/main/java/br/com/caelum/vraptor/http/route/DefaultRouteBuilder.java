@@ -173,6 +173,7 @@ public class DefaultRouteBuilder implements RouteBuilder {
 	@Override
 	public <T> T is(final Class<T> type) {
 		MethodInvocation<T> handler = new MethodInvocation<T>() {
+			@Override
 			public Object intercept(Object proxy, Method method, Object[] args, SuperMethod superMethod) {
 				boolean alreadySetTheStrategy = !strategy.getClass().equals(NoStrategy.class);
 				if (alreadySetTheStrategy) {

@@ -57,6 +57,7 @@ public class DefaultExceptionMapper implements ExceptionMapper {
 		this.exceptions = newLinkedHashMap();
 	}
 
+	@Override
 	public Result record(Class<? extends Exception> exception) {
 		checkNotNull(exception, "Exception cannot be null.");
 
@@ -66,6 +67,7 @@ public class DefaultExceptionMapper implements ExceptionMapper {
 		return proxifier.proxify(Result.class, instance);
 	}
 
+	@Override
 	public ExceptionRecorder<Result> findByException(Exception e) {
 		logger.debug("find for exception {}", e.getClass());
 

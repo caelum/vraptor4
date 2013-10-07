@@ -34,18 +34,21 @@ public class MockedLogic implements LogicResult {
 		proxifier = new JavassistProxifier();
 	}
 
+	@Override
 	public <T> T forwardTo(Class<T> type) {
 		return mock(type);
 	}
 
 	private <T> T mock(Class<T> type) {
 		return proxifier.proxify(type, new MethodInvocation<T>() {
+			@Override
 			public Object intercept(T proxy, Method method, Object[] args, SuperMethod superMethod) {
 				return null;
 			}
 		});
 	}
 
+	@Override
 	public <T> T redirectTo(Class<T> type) {
 		return mock(type);
 	}

@@ -34,6 +34,7 @@ import br.com.caelum.vraptor.core.RequestInfo;
 @ApplicationScoped
 public class DefaultMethodNotAllowedHandler implements MethodNotAllowedHandler {
 
+	@Override
 	public void deny(RequestInfo request, Set<HttpMethod> allowedMethods) {
 		request.getResponse().addHeader(
 				"Allow", allowedMethods.toString().replaceAll("\\[|\\]", ""));

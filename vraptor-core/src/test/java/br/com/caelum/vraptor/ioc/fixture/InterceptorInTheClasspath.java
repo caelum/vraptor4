@@ -28,10 +28,12 @@ import br.com.caelum.vraptor.interceptor.Interceptor;
 @RequestScoped
 public class InterceptorInTheClasspath implements Interceptor{
 
+	@Override
 	public boolean accepts(ControllerMethod method) {
 		return false;
 	}
 
+	@Override
 	public void intercept(InterceptorStack stack, ControllerMethod method, Object resourceInstance)
 			throws InterceptionException {
 	}

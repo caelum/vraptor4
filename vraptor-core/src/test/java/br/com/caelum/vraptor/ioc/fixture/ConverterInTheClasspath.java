@@ -21,6 +21,7 @@ import br.com.caelum.vraptor.Converter;
 
 @Convert(Void.class)
 public class ConverterInTheClasspath implements Converter<Void> {
+	@Override
 	public Void convert(String value, Class<? extends Void> type) {
 		return null;
 	}

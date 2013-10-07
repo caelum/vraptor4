@@ -42,6 +42,7 @@ public class ToInstantiateInterceptorHandler implements InterceptorHandler {
 		this.type = type;
 	}
 
+	@Override
 	public void execute(InterceptorStack stack, ControllerMethod method, Object controllerInstance)
 			throws InterceptionException {
 		Interceptor interceptor = (Interceptor) container.instanceFor(type);

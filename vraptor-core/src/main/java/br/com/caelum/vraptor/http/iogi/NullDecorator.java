@@ -31,10 +31,12 @@ final class NullDecorator implements Instantiator<Object> {
 		this.delegateInstantiator = delegateInstantiator;
 	}
 
+	@Override
 	public boolean isAbleToInstantiate(Target<?> target) {
 		return delegateInstantiator.isAbleToInstantiate(target);
 	}
 
+	@Override
 	public Object instantiate(Target<?> target, Parameters parameters) {
 		if (!parameters.hasRelatedTo(target)) {
 			return null;

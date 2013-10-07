@@ -16,6 +16,7 @@ public class NoStackParameterStepExecutor implements StepExecutor<Void> {
 		this.method = method;
 	}
 
+	@Override
 	public boolean accept(Class<?> interceptorClass) {
 		NoStackParameterSignatureAcceptor noStackAcceptor = new NoStackParameterSignatureAcceptor();
 		if (method != null) {
@@ -27,6 +28,7 @@ public class NoStackParameterStepExecutor implements StepExecutor<Void> {
 		return false;
 	}
 
+	@Override
 	public Void execute(Object interceptor) {
 		stepInvoker.tryToInvoke(interceptor, method);
 		return null;

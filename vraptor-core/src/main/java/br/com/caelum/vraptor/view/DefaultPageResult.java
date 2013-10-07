@@ -119,6 +119,7 @@ public class DefaultPageResult implements PageResult {
 	@Override
 	public <T> T of(final Class<T> controllerType) {
 		return proxifier.proxify(controllerType, new MethodInvocation<T>() {
+			@Override
 			public Object intercept(T proxy, Method method, Object[] args, SuperMethod superMethod) {
 				try {
 					request.getRequestDispatcher(

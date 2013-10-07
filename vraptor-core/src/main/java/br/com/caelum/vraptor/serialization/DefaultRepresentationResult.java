@@ -56,6 +56,7 @@ public class DefaultRepresentationResult implements RepresentationResult {
 		this.serializations = newArrayList(serializations);
 	}
 
+	@Override
 	public <T> Serializer from(T object) {
 		return from(object, null);
 	}
@@ -69,6 +70,7 @@ public class DefaultRepresentationResult implements RepresentationResult {
 		sort(serializations, new ApplicationPackageFirst());
 	}
 
+	@Override
 	public <T> Serializer from(T object, String alias) {
 		if(object == null) {
 			result.use(status()).notFound();

@@ -265,13 +265,16 @@ public class DefaultLogicResultTest {
 	private TypeSafeMatcher<ControllerMethod> sameMethodAs(final Method method) {
 		return new TypeSafeMatcher<ControllerMethod>() {
 
+			@Override
 			public void describeTo(Description description) {
 			}
 
+			@Override
 			protected boolean matchesSafely(ControllerMethod item) {
 				return item.getMethod().equals(method);
 			}
 
+			@Override
 			protected void describeMismatchSafely(ControllerMethod item,
 					Description mismatchDescription) {
 			}

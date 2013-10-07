@@ -31,6 +31,7 @@ public class Filters {
 
 	public static Predicate<Interceptor> accepts(final ControllerMethod method) {
 		return new Predicate<Interceptor>() {
+			@Override
 			public boolean apply(Interceptor interceptor) {
 				return interceptor.accepts(method);
 			}
@@ -39,6 +40,7 @@ public class Filters {
 
 	public static Predicate<Annotation[]> hasAnnotation(final Class<?> annotation) {
 		return new Predicate<Annotation[]>() {
+			@Override
 			public boolean apply(Annotation[] param) {
 				return any(asList(param), instanceOf(annotation));
 			}

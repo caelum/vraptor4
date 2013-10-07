@@ -36,6 +36,7 @@ import br.com.caelum.vraptor.VRaptorException;
 @ApplicationScoped
 public class JavaEvaluator implements Evaluator {
 
+	@Override
 	public Object get(Object root, String path) {
 		if (root == null) {
 			return null;

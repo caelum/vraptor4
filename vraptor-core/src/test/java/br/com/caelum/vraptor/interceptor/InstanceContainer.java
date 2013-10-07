@@ -21,6 +21,7 @@ public class InstanceContainer implements Container {
 		instances = new LinkedList(Arrays.asList(objects));
 	}
 
+	@Override
 	public <T> boolean canProvide(Class<T> type) {
 		for(Object o : instances) {
 			if(type.isAssignableFrom(o.getClass())) {
@@ -30,6 +31,7 @@ public class InstanceContainer implements Container {
 		return false;
 	}
 
+	@Override
 	public <T> T instanceFor(Class<T> type) {
 		T choosen = null;
 		for(Object o : instances) {

@@ -61,15 +61,18 @@ public class MockResult extends AbstractResult {
 		this(new JavassistProxifier());
 	}
 
+	@Override
 	public Result include(String key, Object value) {
 		this.values.put(key, value);
 		return this;
 	}
 
+	@Override
 	public Result on(Class<? extends Exception> exception) {
 		return this;
 	}
 
+	@Override
 	public <T extends View> T use(final Class<T> view) {
 		this.typeToUse = view;
 		if (view.equals(EmptyResult.class)) {
@@ -80,6 +83,7 @@ public class MockResult extends AbstractResult {
 
 	protected <T> MethodInvocation<T> returnOnFinalMethods(final Class<T> view) {
 		return new MethodInvocation<T>() {
+			@Override
 			public Object intercept(T proxy, Method method, Object[] args, SuperMethod superMethod) {
 				Class type = method.getReturnType();
 				if (type == void.class) {
@@ -107,12 +111,14 @@ public class MockResult extends AbstractResult {
 
 	private <T> MethodInvocation<T> returnOnFirstInvocation() {
 		return new MethodInvocation<T>() {
+			@Override
 			public Object intercept(Object proxy, Method method, Object[] args, SuperMethod superMethod) {
 				return null;
 			}
 		};
 	}
 
+	@Override
 	public boolean used() {
 		return typeToUse != null;
 	}
@@ -127,6 +133,7 @@ public class MockResult extends AbstractResult {
 		return (T) values.get(key);
 	}
 
+	@Override
 	public Map<String, Object> included() {
 		return values;
 	}
@@ -134,6 +141,7 @@ public class MockResult extends AbstractResult {
 	/**
 	 * Uses the type name to include.
 	 */
+	@Override
 	public Result include(Object value) {
 		return include(value.getClass().getSimpleName(), value);
 	}

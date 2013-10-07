@@ -41,6 +41,7 @@ public class SessionFlashScope implements FlashScope {
 		this.session = session;
 	}
 
+	@Override
 	public Object[] consumeParameters(ControllerMethod method) {
 		Object[] args = (Object[]) session.getAttribute(nameFor(method));
 		if (args != null) {
@@ -53,6 +54,7 @@ public class SessionFlashScope implements FlashScope {
 		return KEY_START + method.getMethod();
 	}
 
+	@Override
 	public void includeParameters(ControllerMethod method, Object[] args) {
 		session.setAttribute(nameFor(method), args);
 	}

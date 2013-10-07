@@ -52,6 +52,7 @@ public class FileDownload implements Download {
 		}
 	}
 	
+	@Override
 	public void write(HttpServletResponse response) throws IOException {
 		inputDownload.write(response);
 	}

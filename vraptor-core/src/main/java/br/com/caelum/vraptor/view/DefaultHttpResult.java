@@ -50,21 +50,25 @@ public class DefaultHttpResult implements HttpResult {
 		this.status = status;
 	}
 
+	@Override
 	public HttpResult addDateHeader(String name, long date) {
 		response.addDateHeader(name, date);
 		return this;
 	}
 
+	@Override
 	public HttpResult addHeader(String name, String value) {
 		response.addHeader(name, value);
 		return this;
 	}
 
+	@Override
 	public HttpResult addIntHeader(String name, int value) {
 		response.addIntHeader(name, value);
 		return this;
 	}
 
+	@Override
 	public void sendError(int statusCode) {
 		try {
 			response.sendError(statusCode);
@@ -73,6 +77,7 @@ public class DefaultHttpResult implements HttpResult {
 		}
 
 	}
+	@Override
 	public void sendError(int statusCode, String message) {
 		try {
 			response.sendError(statusCode, message);
@@ -82,6 +87,7 @@ public class DefaultHttpResult implements HttpResult {
 
 	}
 
+	@Override
 	public void setStatusCode(int statusCode) {
 		response.setStatus(statusCode);
 	}
@@ -95,6 +101,7 @@ public class DefaultHttpResult implements HttpResult {
 		return this.status.movedPermanentlyTo(controller);
 	}
 
+	@Override
 	public HttpResult body(String body) {
 		try {
 			response.getWriter().print(body);
@@ -104,6 +111,7 @@ public class DefaultHttpResult implements HttpResult {
 		return this;
 	}
 
+	@Override
 	public HttpResult body(InputStream body) {
 		try {
 			ByteStreams.copy(body, response.getOutputStream());
@@ -113,6 +121,7 @@ public class DefaultHttpResult implements HttpResult {
 		return this;
 	}
 
+	@Override
 	public HttpResult body(Reader body) {
 		try {
 			CharStreams.copy(body, response.getWriter());

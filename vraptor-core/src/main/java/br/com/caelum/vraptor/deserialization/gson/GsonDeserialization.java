@@ -26,6 +26,7 @@ import br.com.caelum.vraptor.view.ResultException;
 import com.google.common.io.CharStreams;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -61,6 +62,8 @@ public class GsonDeserialization implements Deserializer {
 	@Override
 	public Object[] deserialize(InputStream inputStream, ControllerMethod method) {
 		Class<?>[] types = getTypes(method);
+		Type[] pTypes = method.getMethod().getGenericParameterTypes();
+		
 		if (types.length == 0) {
 			throw new IllegalArgumentException("Methods that consumes representations must receive just one argument");
 		}
@@ -76,22 +79,44 @@ public class GsonDeserialization implements Deserializer {
 			
 			if (!isNullOrEmpty(content)) {
 				JsonParser parser = new JsonParser();
-				JsonObject root = (JsonObject) parser.parse(content);
-	
-				for (int i = 0; i < types.length; i++) {
-					String name = parameterNames[i];
-					JsonElement node = root.get(name);
-					
-					if (isWithoutRoot(parameterNames, root)) { 
-						params[i] = gson.fromJson(root, types[i]);
-						logger.info("json without root deserialized");
-						break;
+				JsonElement jsonElement = parser.parse(content);
+				if (jsonElement.isJsonObject()) {
+					JsonObject root = jsonElement.getAsJsonObject();
+		
+					for (int i = 0; i < types.length; i++) {
+						String name = parameterNames[i];
+						JsonElement node = root.get(name);
 						
-					} else if (node != null) {
-						params[i] = gson.fromJson(node, types[i]);
+						if (isWithoutRoot(parameterNames, root)) { 
+							params[i] = gson.fromJson(root, types[i]);
+							logger.info("json without root deserialized");
+							break;
+
+						} else if (node != null) {
+							if (node.isJsonArray()) {
+								JsonArray jsonArray= node.getAsJsonArray();
+								if (pTypes[i] instanceof ParameterizedType)
+									params[i] = gson.fromJson(jsonArray, pTypes[i]);
+								else
+									params[i] = gson.fromJson(jsonArray, types[i]);
+							} else {
+								params[i] = gson.fromJson(node, types[i]);
+							}
+						}
+
+						logger.debug("json deserialized: {}", params[i]);
 					}
+				} else if (jsonElement.isJsonArray()) {
+					if ((pTypes.length != 1) || (!(pTypes[0] instanceof ParameterizedType)))
+						throw new IllegalArgumentException("Methods that consumes an array representation must receive only just one collection generic typed argument");
+
+					JsonArray jsonArray= jsonElement.getAsJsonArray();
 					
-					logger.debug("json deserialized: {}", params[i]);
+					params[0] = gson.fromJson(jsonArray, pTypes[0]);
+					
+					logger.debug("array json deserialized: {}", params[0]);
+				} else {
+					throw new IllegalArgumentException("This is an invalid or not supported json content");
 				}
 			}
 		} catch (Exception e) {
@@ -116,7 +141,10 @@ public class GsonDeserialization implements Deserializer {
 		ParameterizedType type = (ParameterizedType) genericInterfaces[0];
 		Type actualType = type.getActualTypeArguments()[0];
 
-		return (Class<?>) actualType;
+		if (actualType instanceof ParameterizedType)
+			return (Class<?>) ((ParameterizedType) actualType).getRawType();
+		else
+			return (Class<?>) actualType;
 	}
 
 	private String getContentOfStream(InputStream input) throws IOException {

@@ -45,6 +45,7 @@ public class GsonDeserializerTest {
 	private ParameterNameProvider provider;
 	private ControllerMethod jump;
 	private ControllerMethod woof;
+	private ControllerMethod listDog;
 	private ControllerMethod dropDead;
 	private HttpServletRequest request;
 
@@ -65,6 +66,7 @@ public class GsonDeserializerTest {
 				Integer.class));
 		dropDead = new DefaultControllerMethod(controllerClass, DogController.class.getDeclaredMethod("dropDead",
 				Integer.class, Dog.class));
+		listDog = new DefaultControllerMethod(controllerClass, DogController.class.getDeclaredMethod("list", List.class));
 	}
 
 	static class Dog {
@@ -75,18 +77,15 @@ public class GsonDeserializerTest {
 
 	static class DogController {
 
-		public void woof() {
-		}
+		public void woof() {}
 
-		public void bark(Dog dog) {
-		}
+		public void bark(Dog dog) {}
+		
+		public void jump(Dog dog, Integer times) {}
 
-		public void jump(Dog dog, Integer times) {
-		}
+		public void dropDead(Integer times, Dog dog) {}
 
-		public void dropDead(Integer times, Dog dog) {
-		}
-
+		public void list(List<Dog> dogs) {}
 	}
 
 	private class DogDeserializer implements JsonDeserializer<Dog> {
@@ -100,7 +99,46 @@ public class GsonDeserializerTest {
 
 			return dog;
 		}
+	}
+	
+	@Test
+	public void shouldDeserializerWorksAndParseArrays(){
+		InputStream stream = new ByteArrayInputStream(
+			("[" + 
+				"{'name':'name1','age':1}," + 
+				"{'name':'name2','age':2}," + 
+				"{'name':'name3','age':3}" + 
+			"]").getBytes());
+ 
+		when(provider.parameterNamesFor(listDog.getMethod())).thenReturn(new String[] { "dogs" });
 
+		Object[] deserialized = deserializer.deserialize(stream, listDog);
+		List<Dog>  dogs = (List<Dog>) deserialized[0]; 
+		assertThat(dogs.size(), is(3));
+		assertThat(dogs.get(0), is(instanceOf(Dog.class)));
+		Dog dog = (Dog) dogs.get(0);
+		assertThat(dog.name, is("name1"));
+		assertThat(dog.age, is(1));
+	}
+
+	@Test
+	public void shouldDeserializerWorksAndParseObjectArrays(){
+		InputStream stream = new ByteArrayInputStream(
+			("{dogs : [" + 
+				"{'name':'name1','age':1}," + 
+				"{'name':'name2','age':2}," + 
+				"{'name':'name3','age':3}" + 
+			"]}").getBytes());
+ 
+		when(provider.parameterNamesFor(listDog.getMethod())).thenReturn(new String[] { "dogs" });
+
+		Object[] deserialized = deserializer.deserialize(stream, listDog);
+		List<Dog>  dogs = (List<Dog>) deserialized[0]; 
+		assertThat(dogs.size(), is(3));
+		assertThat(dogs.get(0), is(instanceOf(Dog.class)));
+		Dog dog = (Dog) dogs.get(0);
+		assertThat(dog.name, is("name1"));
+		assertThat(dog.age, is(1));
 	}
 
 	@Test(expected = IllegalArgumentException.class)

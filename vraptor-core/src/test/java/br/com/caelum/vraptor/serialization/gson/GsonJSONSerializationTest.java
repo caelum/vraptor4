@@ -35,6 +35,7 @@ import com.google.gson.ExclusionStrategy;
 import com.google.gson.FieldAttributes;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
+import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
@@ -58,6 +59,7 @@ public class GsonJSONSerializationTest {
 		List<JsonSerializer<?>> adapters = new ArrayList<>();
 		adapters.add(new CalendarSerializer());
 		adapters.add(new CollectionSerializer());
+		adapters.add(new EnumSerializer());
 
 		builder = new VRaptorGsonBuilder(new MockInstanceImpl<>(adapters));
 		this.serialization = new GsonJSONSerialization(response, extractor, builder);
@@ -407,7 +409,14 @@ public class GsonJSONSerializationTest {
 			return new JsonParser().parse("[testing]").getAsJsonArray();
 		}
 	}
-
+	
+	//Expect that a ParameterizedType should be registered
+	static class EnumSerializer implements JsonSerializer<Enum<?>> {
+		@Override public JsonElement serialize(Enum<?> src, java.lang.reflect.Type typeOfSrc, JsonSerializationContext context) {
+			return new JsonPrimitive(src.name());
+		}
+	}
+	
 	@Test
 	public void shouldUseCollectionConverterWhenItExists() {
 		String expectedResult = "[\"testing\"]";

@@ -85,8 +85,11 @@ public class VRaptorGsonBuilder {
 		Type[] genericInterfaces = adapter.getClass().getGenericInterfaces();
 		ParameterizedType type = (ParameterizedType) genericInterfaces[0];
 		Type actualType = type.getActualTypeArguments()[0];
-
-		return (Class<?>) actualType;
+		
+		if (actualType instanceof ParameterizedType)
+			return (Class<?>) ((ParameterizedType) actualType).getRawType();
+		else	
+			return (Class<?>) actualType;
 	}
 	
 	public Serializee getSerializee() {

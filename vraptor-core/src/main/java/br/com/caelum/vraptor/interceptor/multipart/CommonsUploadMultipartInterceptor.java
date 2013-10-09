@@ -32,6 +32,7 @@ import org.apache.commons.fileupload.FileUploadBase.SizeLimitExceededException;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -122,7 +123,7 @@ public class CommonsUploadMultipartInterceptor implements Interceptor {
 					processFile(item, name);
 
 				} else {
-					logger.debug("A file field was empty: {}", item.getFieldName());
+					logger.debug("A file field is empty: {}", item.getFieldName());
 				}
 			}
 
@@ -158,7 +159,8 @@ public class CommonsUploadMultipartInterceptor implements Interceptor {
 
 	protected void processFile(FileItem item, String name) {
 		try {
-			UploadedFile upload = new DefaultUploadedFile(item.getInputStream(), item.getName(), item.getContentType(), item.getSize());
+			String fileName = FilenameUtils.getName(item.getName());
+			UploadedFile upload = new DefaultUploadedFile(item.getInputStream(), fileName, item.getContentType(), item.getSize());
 			request.setParameter(name, name);
 			request.setAttribute(name, upload);
 

@@ -250,4 +250,34 @@ public class CommonsUploadMultipartInterceptorTest {
 		assertThat(file.getContentType(), is("text/plain"));
 		assertThat(toByteArray(file.getFile()), is(content));
 	}
+
+	@Test
+	public void mustConvertUnixPathToFileName() throws Exception {
+		List<FileItem> elements = new ArrayList<>();
+		elements.add(new MockFileItem("thefile0", "text/plain", "/unix/path/file0.txt", new byte[0]));
+		when(mockUpload.parseRequest(request)).thenReturn(elements);
+
+		interceptor = new CommonsUploadMultipartInterceptor(request, config, validator, mockCreator);
+		interceptor.intercept(stack, null, null);
+
+		ArgumentCaptor<UploadedFile> argument = ArgumentCaptor.forClass(UploadedFile.class);
+		verify(request).setAttribute(anyString(), argument.capture());
+
+		assertThat(argument.getValue().getFileName(), is("file0.txt"));
+	}
+
+	@Test
+	public void mustConvertWindowsPathToFileName() throws Exception {
+		List<FileItem> elements = new ArrayList<>();
+		elements.add(new MockFileItem("thefile0", "text/plain", "c:/windows/path/file0.txt", new byte[0]));
+		when(mockUpload.parseRequest(request)).thenReturn(elements);
+
+		interceptor = new CommonsUploadMultipartInterceptor(request, config, validator, mockCreator);
+		interceptor.intercept(stack, null, null);
+
+		ArgumentCaptor<UploadedFile> argument = ArgumentCaptor.forClass(UploadedFile.class);
+		verify(request).setAttribute(anyString(), argument.capture());
+
+		assertThat(argument.getValue().getFileName(), is("file0.txt"));
+	}
 }

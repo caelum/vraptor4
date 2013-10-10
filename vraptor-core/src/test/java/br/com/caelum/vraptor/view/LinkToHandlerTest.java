@@ -1,14 +1,15 @@
 package br.com.caelum.vraptor.view;
 
 import static org.hamcrest.Matchers.is;
-
+import static org.hamcrest.Matchers.startsWith;
 import static org.junit.Assert.assertThat;
-
+import static org.junit.Assert.fail;
 import static org.mockito.Mockito.when;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.servlet.ServletContext;
@@ -59,14 +60,17 @@ public class LinkToHandlerTest {
 		invoke(handler.get(new DefaultBeanClass(TestController.class)), "nonExists");
 	}
 
-	@Ignore
-	@Test(expected = IllegalArgumentException.class)
+	@Test
 	public void shouldThrowExceptionWhenMethodIsAmbiguous() throws Throwable {
-		//${linkTo[TestController].method()}
-		invoke(handler.get(new DefaultBeanClass(TestController.class)), "method");
+		try {
+			//${linkTo[TestController].method()}
+			invoke(handler.get(new DefaultBeanClass(TestController.class)), "method");
+			fail();
+		} catch (IllegalArgumentException e) {
+			assertThat(e.getMessage(), startsWith("Ambiguous method"));
+		}
 	}
 
-	@Ignore
 	@Test(expected = IllegalArgumentException.class)
 	public void shouldThrowExceptionWhenUsingParametersOfWrongTypes() throws Throwable {
 		//${linkTo[TestController].method(123)}
@@ -94,7 +98,6 @@ public class LinkToHandlerTest {
 		assertThat(uri, is("/path/expectedURL"));
 	}
 
-	@Ignore
 	@Test
 	public void shouldReturnWantedUrlWithParamArgs() throws Throwable {
 		String a = "test";
@@ -115,7 +118,6 @@ public class LinkToHandlerTest {
 		assertThat(uri, is("/path/expectedUrl"));
 	}
 
-	@Ignore
 	@Test
 	public void shouldReturnWantedUrlForOverrideMethodWithParamArgs() throws Throwable {
 		String a = "test";
@@ -135,7 +137,6 @@ public class LinkToHandlerTest {
 		assertThat(uri, is("/path/expectedURL"));
 	}
 
-	@Ignore
 	@Test
 	public void shouldUseExactlyMatchedMethodIfTheMethodIsOverloaded() throws Throwable {
 		String a = "test";
@@ -145,7 +146,6 @@ public class LinkToHandlerTest {
 		assertThat(uri, is("/path/expectedUrl"));
 	}
 
-	@Ignore
 	@Test(expected = IllegalArgumentException.class)
 	public void shouldThrowExceptionWhenPassingMoreArgsThanMethodSupports() throws Throwable {
 		String a = "test";
@@ -156,11 +156,17 @@ public class LinkToHandlerTest {
 	}
 
 	private String invoke(Object obj, String methodName, Object...args) throws Throwable {
-		
-		Class<?>[] clazzes = extractClass(args);
+		Class<?>[] types = extractTypes(args);
 		
 		try {
-			Method method = new Mirror().on(obj.getClass()).reflect().method(methodName).withArgs(clazzes);
+			Method method = null;
+			for (int length = types.length; length >= 0; length--) {
+				method = new Mirror().on(obj.getClass()).reflect().method(methodName)
+					.withArgs(Arrays.copyOf(types, length));
+				if (method != null) 
+					break;
+			}
+			
 			if (methodName.startsWith("get")) {
 				return method.invoke(obj).toString();
 			}
@@ -170,7 +176,7 @@ public class LinkToHandlerTest {
 		}
 	}
 
-	private Class<?>[] extractClass(Object... args) {
+	private Class<?>[] extractTypes(Object... args) {
 		List<Class<?>> classes = new ArrayList<>();
 		
 		for(Object o: args){

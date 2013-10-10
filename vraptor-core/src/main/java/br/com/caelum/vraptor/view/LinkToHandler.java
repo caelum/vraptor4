@@ -17,9 +17,11 @@ package br.com.caelum.vraptor.view;
 
 import static br.com.caelum.vraptor.util.StringUtils.capitalize;
 import static java.util.Arrays.fill;
+import static java.util.Collections.sort;
 import static javassist.CtNewMethod.abstractMethod;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
@@ -27,7 +29,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.locks.Lock;
@@ -186,14 +187,16 @@ public class LinkToHandler extends ForwardingMap<Class<?>, Object> {
 		return params;
 	}
 
-	private Set<Method> getMethods(Class<?> controller) {
-		Set<Method> methods = new TreeSet<>(new SortByArgumentsLengthDesc());
+	private List<Method> getMethods(Class<?> controller) {
+		List<Method> methods = new ArrayList<>();
 		
 		for (Method method : new Mirror().on(controller).reflectAll().methods()) {
 			if (!method.getDeclaringClass().equals(Object.class)) {
 				methods.add(method);
 			}
 		}
+		
+		sort(methods, new SortByArgumentsLengthDesc());
 		return methods;
 	}
 	

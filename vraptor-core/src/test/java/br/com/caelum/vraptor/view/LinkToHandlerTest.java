@@ -71,10 +71,15 @@ public class LinkToHandlerTest {
 		}
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test
 	public void shouldThrowExceptionWhenUsingParametersOfWrongTypes() throws Throwable {
 		//${linkTo[TestController].method(123)}
-		invoke(handler.get(new DefaultBeanClass(TestController.class)), "method", 123);
+		try {
+			invoke(handler.get(new DefaultBeanClass(TestController.class)), "method", 123);
+			fail();
+		} catch (IllegalArgumentException e) {
+			assertThat(e.getMessage(), startsWith("There are no methods"));
+		}
 	}
 
 
@@ -142,13 +147,18 @@ public class LinkToHandlerTest {
 		assertThat(uri, is("/path/expectedUrl"));
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test
 	public void shouldThrowExceptionWhenPassingMoreArgsThanMethodSupports() throws Throwable {
 		String a = "test";
 		int b = 3;
 		String c = "anotherTest";
 		//${linkTo[TestController].anotherMethod('test', 3, 'anotherTest')}
-		invoke(handler.get(new DefaultBeanClass(TestController.class)), "anotherMethod", a, b, c);
+		try {
+			invoke(handler.get(new DefaultBeanClass(TestController.class)), "anotherMethod", a, b, c);
+			fail();
+		} catch (IllegalArgumentException e) {
+			assertThat(e.getMessage(), startsWith("wrong number of arguments"));
+		}
 	}
 
 	private String invoke(Object obj, String methodName, Object...args) throws Throwable {

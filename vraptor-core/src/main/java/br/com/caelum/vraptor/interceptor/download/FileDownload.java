@@ -19,6 +19,7 @@ package br.com.caelum.vraptor.interceptor.download;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -39,16 +40,16 @@ public class FileDownload implements Download {
 	private final String fileName;
 	private final boolean doDownload;
 
-	public FileDownload(File file, String contentType, String fileName) {
+	public FileDownload(File file, String contentType, String fileName) throws IOException {
 		this(file, contentType, fileName, false);
 	}
 
-	public FileDownload(File file, String contentType) {
+	public FileDownload(File file, String contentType) throws IOException {
 		this(file, contentType, file.getName(), false);
 	}
 
-	public FileDownload(File file, String contentType, String fileName, boolean doDownload) {
-		this.file = file;
+	public FileDownload(File file, String contentType, String fileName, boolean doDownload) throws IOException {
+		this.file = checkFile(file);
 		this.contentType = contentType;
 		this.fileName = fileName;
 		this.doDownload = doDownload;
@@ -60,5 +61,13 @@ public class FileDownload implements Download {
 			Download download = new InputStreamDownload(stream, contentType, fileName, doDownload, file.length());
 			download.write(response);
 		}
+	}
+	
+	private File checkFile(File file) throws IOException {
+		if (!file.exists()) {
+			throw new FileNotFoundException("File " + file.getName() + "doesn't exists");
+		}
+		
+		return file;
 	}
 }

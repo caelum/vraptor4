@@ -13,6 +13,7 @@ import java.io.IOException;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -31,14 +32,15 @@ public class FileDownloadTest {
 		MockitoAnnotations.initMocks(this);
 
 		bytes = new byte[] { (byte) 0 };
-		this.outputStream = new ByteArrayOutputStream();
+		outputStream = new ByteArrayOutputStream();
 
-		this.file = File.createTempFile("test", "vraptor");
-		FileOutputStream fileStream = new FileOutputStream(file);
-		fileStream.write(bytes);
-		fileStream.close();
+		file = File.createTempFile("test", "vraptor");
+		
+		try (FileOutputStream fileStream = new FileOutputStream(file)) {
+			fileStream.write(bytes);
+		}
 
-		this.socketStream = new ServletOutputStream() {
+		socketStream = new ServletOutputStream() {
 			@Override
 			public void write(int b) throws IOException {
 				outputStream.write(b);
@@ -46,6 +48,11 @@ public class FileDownloadTest {
 		};
 
 		when(response.getOutputStream()).thenReturn(socketStream);
+	}
+
+	@After
+	public void tearDown() {
+		file.delete();
 	}
 
 	@Test
@@ -71,6 +78,5 @@ public class FileDownloadTest {
 		File file0 = new File("a.path.that.doesnot.exists");
 		FileDownload fd = new FileDownload(file0, "type", "x.txt", false);
 		fd.write(response);
-		
 	}
 }

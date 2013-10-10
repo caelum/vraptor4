@@ -68,9 +68,9 @@ public class CommonsUploadMultipartInterceptor implements Interceptor {
 	private MutableRequest request;
 	private MultipartConfig config;
 	private Validator validator;
-	private ServletFileUploadCreator fileUploadCreator;
 
 	private Multiset<String> indexes;
+	private Multimap<String, String> params;
 
 	//CDI eyes only
 	@Deprecated
@@ -78,12 +78,10 @@ public class CommonsUploadMultipartInterceptor implements Interceptor {
 	}
 
 	@Inject
-	public CommonsUploadMultipartInterceptor(MutableRequest request, MultipartConfig cfg, Validator validator, 
-			ServletFileUploadCreator fileUploadCreator) {
+	public CommonsUploadMultipartInterceptor(MutableRequest request, MultipartConfig cfg, Validator validator) {
 		this.request = request;
 		this.validator = validator;
 		this.config = cfg;
-		this.fileUploadCreator = fileUploadCreator;
 	}
 
 	/**
@@ -98,17 +96,16 @@ public class CommonsUploadMultipartInterceptor implements Interceptor {
 	public void intercept(InterceptorStack stack, ControllerMethod method, Object controllerInstance) {
 		logger.info("Request contains multipart data. Try to parse with commons-upload.");
 
-		FileItemFactory factory = createFactoryForDiskBasedFileItems(config.getDirectory());
 		indexes = HashMultiset.create();
+		params = LinkedListMultimap.create();
 
-		ServletFileUpload uploader = fileUploadCreator.create(factory);
+		ServletFileUpload uploader = createServletFileUpload(config);
 		uploader.setSizeMax(config.getSizeLimit());
 
 		try {
 			final List<FileItem> items = uploader.parseRequest(request);
 			logger.debug("Found {} attributes in the multipart form submission. Parsing them.", items.size());
 
-			final Multimap<String, String> params = LinkedListMultimap.create();
 
 			for (FileItem item : items) {
 				String name = item.getFieldName();
@@ -168,6 +165,15 @@ public class CommonsUploadMultipartInterceptor implements Interceptor {
 		} catch (IOException e) {
 			throw new InvalidParameterException("Cant parse uploaded file " + item.getName(), e);
 		}
+	}
+
+	protected ServletFileUpload createServletFileUpload(MultipartConfig config) {
+		DiskFileItemFactory factory = new DiskFileItemFactory();
+		factory.setRepository(config.getDirectory());
+
+		logger.debug("Using repository {} for file upload", factory.getRepository());
+		
+		return new ServletFileUpload(factory);
 	}
 
 	protected FileItemFactory createFactoryForDiskBasedFileItems(File temporaryDirectory) {

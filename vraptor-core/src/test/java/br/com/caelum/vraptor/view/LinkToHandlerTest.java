@@ -1,11 +1,14 @@
 package br.com.caelum.vraptor.view;
 
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.startsWith;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 import static org.mockito.Mockito.when;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Arrays;
 
 import javax.servlet.ServletContext;
 
@@ -55,16 +58,26 @@ public class LinkToHandlerTest {
 		invoke(handler.get(new DefaultBeanClass(TestController.class)), "nonExists");
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test
 	public void shouldThrowExceptionWhenMethodIsAmbiguous() throws Throwable {
-		//${linkTo[TestController].method()}
-		invoke(handler.get(new DefaultBeanClass(TestController.class)), "method");
+		try {
+			//${linkTo[TestController].method()}
+			invoke(handler.get(new DefaultBeanClass(TestController.class)), "method");
+			fail();
+		} catch (IllegalArgumentException e) {
+			assertThat(e.getMessage().toLowerCase(), startsWith("ambiguous method"));
+		}
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test
 	public void shouldThrowExceptionWhenUsingParametersOfWrongTypes() throws Throwable {
 		//${linkTo[TestController].method(123)}
-		invoke(handler.get(new DefaultBeanClass(TestController.class)), "method", 123);
+		try {
+			invoke(handler.get(new DefaultBeanClass(TestController.class)), "method", 123);
+			fail();
+		} catch (IllegalArgumentException e) {
+			assertThat(e.getMessage().toLowerCase(), startsWith("there are no methods"));
+		}
 	}
 
 
@@ -132,25 +145,48 @@ public class LinkToHandlerTest {
 		assertThat(uri, is("/path/expectedUrl"));
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test
 	public void shouldThrowExceptionWhenPassingMoreArgsThanMethodSupports() throws Throwable {
 		String a = "test";
 		int b = 3;
 		String c = "anotherTest";
 		//${linkTo[TestController].anotherMethod('test', 3, 'anotherTest')}
-		invoke(handler.get(new DefaultBeanClass(TestController.class)), "anotherMethod", a, b, c);
+		try {
+			invoke(handler.get(new DefaultBeanClass(TestController.class)), "anotherMethod", a, b, c);
+			fail();
+		} catch (IllegalArgumentException e) {
+			assertThat(e.getMessage().toLowerCase(), startsWith("wrong number of arguments"));
+		}
 	}
 
 	private String invoke(Object obj, String methodName, Object...args) throws Throwable {
+		Class<?>[] types = extractTypes(args);
+		
 		try {
-			Method method = new Mirror().on(obj.getClass()).reflect().method(methodName).withAnyArgs();
+			Method method = null;
+			for (int length = types.length; length >= 0; length--) {
+				method = new Mirror().on(obj.getClass()).reflect().method(methodName)
+					.withArgs(Arrays.copyOf(types, length));
+				if (method != null) 
+					break;
+			}
+			
 			if (methodName.startsWith("get")) {
 				return method.invoke(obj).toString();
 			}
-			return method.invoke(obj, (Object) args).toString();
+			return new Mirror().on(obj).invoke().method(method).withArgs(args).toString();
 		} catch (MirrorException | InvocationTargetException e) {
 			throw e.getCause() == null? e : e.getCause();
 		}
+	}
+
+	private Class<?>[] extractTypes(Object... args) {
+		Class<?>[] classes = new Class<?>[args.length];
+		
+		for (int i = 0; i < classes.length; i++) {
+			classes[i] = args[i].getClass();
+		}
+		return classes;
 	}
 
 	static class TestController {

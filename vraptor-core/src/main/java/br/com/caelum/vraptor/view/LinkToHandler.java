@@ -15,9 +15,16 @@
  */
 package br.com.caelum.vraptor.view;
 
+import static br.com.caelum.vraptor.util.StringUtils.capitalize;
+import static java.util.Arrays.fill;
+import static java.util.Collections.sort;
+import static javassist.CtNewMethod.abstractMethod;
+
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -31,7 +38,7 @@ import javassist.CannotCompileException;
 import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.CtMethod;
-import javassist.CtNewMethod;
+import javassist.NotFoundException;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
@@ -124,7 +131,7 @@ public class LinkToHandler extends ForwardingMap<Class<?>, Object> {
 			@Override
 			public Object intercept(Object proxy, Method method, Object[] args, SuperMethod superMethod) {
 				String methodName = StringUtils.decapitalize(method.getName().replaceFirst("^get", ""));
-				List<Object> params = args.length == 0 ? Collections.emptyList() : Arrays.asList((Object[]) args[0]);
+				List<Object> params = args.length == 0 ? Collections.emptyList() : Arrays.asList(args);
 				return new Linker(controller, methodName, params).getLink();
 			}
 		});
@@ -137,32 +144,67 @@ public class LinkToHandler extends ForwardingMap<Class<?>, Object> {
 			// ok, continue
 		}
 
+		final Set<CtMethod> used = new HashSet<>();
 		ClassPool pool = ClassPool.getDefault();
 		CtClass inter = pool.makeInterface(interfaceName);
+		
 		try {
-			for(String name : getMethodNames(controller)) {
-				CtMethod method = CtNewMethod.make(String.format("abstract String %s(Object[] args);", name), inter);
-				method.setModifiers(method.getModifiers() | 128 /* Modifier.VARARGS */);
-				inter.addMethod(method);
-				CtMethod getter = CtNewMethod.make(String.format("abstract String get%s();", StringUtils.capitalize(name)), inter);
-				inter.addMethod(getter);
-				
-				logger.debug("added method {} to interface {}", method.getName(), controller);
+			CtClass returnType = pool.get(String.class.getName());
+			CtClass objectType = pool.get(Object.class.getName());
+
+			for (Method m : getMethods(controller)) {
+				String name = m.getName();
+
+				CtClass[] params = createParameters(objectType, m.getParameterTypes().length);
+				CtClass[] empty = new CtClass[0];
+
+				for (int length = params.length; length >= 0; length--) {
+					CtMethod method = abstractMethod(returnType, m.getName(), Arrays.copyOf(params, length), empty, inter);
+					if (!used.contains(method)) {
+						used.add(method);
+						inter.addMethod(method);
+						logger.debug("added method {} to interface {}", method.getName(), controller);
+					}
+				}
+
+				CtMethod getter = abstractMethod(returnType, String.format("get%s", capitalize(name)), empty, empty, inter);
+				if (!used.contains(getter)) {
+					used.add(getter);
+					inter.addMethod(getter);
+					logger.debug("added getter {} to interface {}", getter.getName(), controller);
+				}
 			}
 			return inter.toClass();
-		} catch (CannotCompileException e) {
+		} catch (CannotCompileException | NotFoundException e) {
 			throw new ProxyCreationException(e);
 		}
 	}
+	
+	private CtClass[] createParameters(CtClass objectType, int num) {
+		CtClass[] params = new CtClass[num];
+		fill(params, objectType);
+		
+		return params;
+	}
 
-	private Set<String> getMethodNames(Class<?> controller) {
-		Set<String> names = new HashSet<>();
+	private List<Method> getMethods(Class<?> controller) {
+		List<Method> methods = new ArrayList<>();
+		
 		for (Method method : new Mirror().on(controller).reflectAll().methods()) {
 			if (!method.getDeclaringClass().equals(Object.class)) {
-				names.add(method.getName());
+				methods.add(method);
 			}
 		}
-		return names;
+		
+		sort(methods, new SortByArgumentsLengthDesc());
+		return methods;
+	}
+	
+	private final class SortByArgumentsLengthDesc implements Comparator<Method> {
+		@Override
+		public int compare(Method o1, Method o2) {
+			return Integer.compare(o2.getParameterTypes().length, o1.getParameterTypes().length);
+		}
 	}
 
 	class Linker {

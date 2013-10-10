@@ -28,10 +28,12 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 import javassist.CannotCompileException;
+import javassist.ClassClassPath;
 import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.CtMethod;
 import javassist.CtNewMethod;
+import javassist.NotFoundException;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
@@ -124,7 +126,7 @@ public class LinkToHandler extends ForwardingMap<Class<?>, Object> {
 			@Override
 			public Object intercept(Object proxy, Method method, Object[] args, SuperMethod superMethod) {
 				String methodName = StringUtils.decapitalize(method.getName().replaceFirst("^get", ""));
-				List<Object> params = args.length == 0 ? Collections.emptyList() : Arrays.asList((Object[]) args[0]);
+				List<Object> params = args.length == 0 ? Collections.emptyList() : Arrays.asList(args);
 				return new Linker(controller, methodName, params).getLink();
 			}
 		});
@@ -138,31 +140,29 @@ public class LinkToHandler extends ForwardingMap<Class<?>, Object> {
 		}
 
 		ClassPool pool = ClassPool.getDefault();
+		pool.insertClassPath(new ClassClassPath(controller));
+		 
 		CtClass inter = pool.makeInterface(interfaceName);
+		
 		try {
-			for(String name : getMethodNames(controller)) {
-				CtMethod method = CtNewMethod.make(String.format("abstract String %s(Object[] args);", name), inter);
-				method.setModifiers(method.getModifiers() | 128 /* Modifier.VARARGS */);
+			CtClass ctController = pool.get(controller.getName());
+			CtClass returnType = pool.get("java.lang.String");
+
+			CtMethod[] declaredMethods = ctController.getDeclaredMethods();
+			for(CtMethod m : declaredMethods) {
+				String name = m.getName();
+				
+				CtMethod method = CtNewMethod.abstractMethod(returnType, name, m.getParameterTypes(), new CtClass[0], inter);
 				inter.addMethod(method);
-				CtMethod getter = CtNewMethod.make(String.format("abstract String get%s();", StringUtils.capitalize(name)), inter);
+				CtMethod getter = CtNewMethod.abstractMethod(returnType, String.format("get%s", StringUtils.capitalize(name)), m.getParameterTypes(), new CtClass[0], inter);
 				inter.addMethod(getter);
 				
 				logger.debug("added method {} to interface {}", method.getName(), controller);
 			}
 			return inter.toClass();
-		} catch (CannotCompileException e) {
+		} catch (CannotCompileException | NotFoundException e) {
 			throw new ProxyCreationException(e);
 		}
-	}
-
-	private Set<String> getMethodNames(Class<?> controller) {
-		Set<String> names = new HashSet<>();
-		for (Method method : new Mirror().on(controller).reflectAll().methods()) {
-			if (!method.getDeclaringClass().equals(Object.class)) {
-				names.add(method.getName());
-			}
-		}
-		return names;
 	}
 
 	class Linker {

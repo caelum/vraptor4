@@ -70,7 +70,7 @@ public class AuthorizationInterceptor {
 		 */
 		if (current == null) {
 			// remember added parameters will survive one more request, when there is a redirect
-			result.include("errors", asList(new ValidationMessage("user is not logged in", "user")));
+			result.include("errors", asList(new ValidationMessage("user", "user is not logged in")));
 			result.redirectTo(HomeController.class).login();
 			return;
 		}

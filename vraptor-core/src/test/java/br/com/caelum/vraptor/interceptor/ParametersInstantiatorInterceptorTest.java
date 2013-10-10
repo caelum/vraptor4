@@ -244,7 +244,7 @@ public class ParametersInstantiatorInterceptorTest {
 			@Override
 			public T answer(InvocationOnMock invocation) throws Throwable {
 				for (String message : messages) {
-					errors.add(new ValidationMessage(message, "test"));
+					errors.add(new ValidationMessage("test", message));
 				}
 				return value;
 			}

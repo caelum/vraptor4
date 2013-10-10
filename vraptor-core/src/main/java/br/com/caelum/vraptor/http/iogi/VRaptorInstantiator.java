@@ -96,7 +96,7 @@ public class VRaptorInstantiator implements InstantiatorWithErrors, Instantiator
 	}
 	private void handleException(Target<?> target, Throwable e) {
 		if (e.getClass().isAnnotationPresent(ValidationException.class)) {
-			errors.add(new ValidationMessage(e.getLocalizedMessage(), target.getName()));
+			errors.add(new ValidationMessage(target.getName(), e.getLocalizedMessage()));
 		} else if (e.getCause() == null) {
 			throw new InvalidParameterException("Exception when trying to instantiate " + target, e);
 		} else {

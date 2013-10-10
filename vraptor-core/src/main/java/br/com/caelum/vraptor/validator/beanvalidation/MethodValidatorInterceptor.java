@@ -113,7 +113,7 @@ public class MethodValidatorInterceptor implements Interceptor {
 			BeanValidatorContext ctx = new BeanValidatorContext(v);
 			String msg = interpolator.interpolate(v.getMessageTemplate(), ctx, locale);
 			String category = extractCategory(names, v);
-			validator.add(new ValidationMessage(msg, category));
+			validator.add(new ValidationMessage(category, msg));
 			
 			logger.debug("added message {}={} for contraint violation", msg, category);
 		}

@@ -155,7 +155,7 @@ public class DefaultStatusTest {
 
 	@Test
 	public void shouldSerializeErrorMessages() throws Exception {
-		Message normal = new ValidationMessage("The message", "category");
+		Message normal = new ValidationMessage("category", "The message");
 		I18nMessage i18ned = new I18nMessage("category", "message");
 		i18ned.setBundle(new SingletonResourceBundle("message", "Something else"));
 
@@ -175,7 +175,7 @@ public class DefaultStatusTest {
 
 	@Test
 	public void shouldSerializeErrorMessagesInJSON() throws Exception {
-		Message normal = new ValidationMessage("The message", "category");
+		Message normal = new ValidationMessage("category", "The message");
 		I18nMessage i18ned = new I18nMessage("category", "message");
 		i18ned.setBundle(new SingletonResourceBundle("message", "Something else"));
 

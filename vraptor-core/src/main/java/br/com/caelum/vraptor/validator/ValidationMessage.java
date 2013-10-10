@@ -34,13 +34,9 @@ public class ValidationMessage implements Message {
 	private final String message, category;
 	private final Object[] messageParameters;
 
-	public ValidationMessage(String message, String category) {
-		this(message, category, (Object[]) null);
-	}
-
-	public ValidationMessage(String message, String category, Object... messageParameters) {
-		this.message = message;
+	public ValidationMessage(String category, String message, Object... messageParameters) {
 		this.category = category;
+		this.message = message;
 		this.messageParameters = messageParameters;
 	}
 

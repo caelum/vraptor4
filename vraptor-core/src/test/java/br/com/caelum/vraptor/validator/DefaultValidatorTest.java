@@ -133,8 +133,8 @@ public class DefaultValidatorTest {
 
 	@Test
 	public void shouldParametrizeMessage() {
-		Message message0 = new ValidationMessage("The simple message", "category");
-		Message message1 = new ValidationMessage("The {0} message", "category", "simple");
+		Message message0 = new ValidationMessage("category", "The simple message");
+		Message message1 = new ValidationMessage("category", "The {0} message", "simple");
 
 		assertThat(message0.getMessage(), is("The simple message"));
 		assertThat(message1.getMessage(), is("The simple message"));
@@ -145,7 +145,7 @@ public class DefaultValidatorTest {
 		Client c = new Client();
 		c.name = "The name";
 
-		validator.check(c.name != null, new ValidationMessage("not null", "client.name"));
+		validator.check(c.name != null, new ValidationMessage("client.name", "not null"));
 		assertThat(validator.getErrors(), hasSize(0));
 	}
 
@@ -153,7 +153,7 @@ public class DefaultValidatorTest {
 	public void shouldAddMessageIfCheckingFails() {
 		Client c = new Client();
 
-		validator.check(c.name != null, new ValidationMessage("not null", "client.name"));
+		validator.check(c.name != null, new ValidationMessage("client.name", "not null"));
 		assertThat(validator.getErrors(), hasSize(1));
 		assertThat(validator.getErrors().get(0).getMessage(), containsString("not null"));
 	}

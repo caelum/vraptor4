@@ -59,8 +59,6 @@ public class InputStreamDownload implements Download {
 
 		OutputStream out = response.getOutputStream();
 		ByteStreams.copy(stream, out);
-		
-		stream.close();
 	}
 
 	void writeDetails(HttpServletResponse response) {

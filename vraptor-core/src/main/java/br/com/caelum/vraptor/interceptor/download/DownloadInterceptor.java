@@ -96,7 +96,7 @@ public class DownloadInterceptor implements Interceptor {
 
 	}
 
-	private Download resolveDownload(Object result) {
+	private Download resolveDownload(Object result) throws IOException {
 		if (result instanceof InputStream) {
 			return new InputStreamDownload((InputStream) result, null, null);
 		}

@@ -19,8 +19,8 @@ package br.com.caelum.vraptor.interceptor.download;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -34,8 +34,10 @@ import javax.servlet.http.HttpServletResponse;
  * @see ByteArrayDownload
  */
 public class FileDownload implements Download {
-	private final InputStreamDownload inputDownload;
-	private final FileInputStream stream;
+	private final File file;
+	private final String contentType;
+	private final String fileName;
+	private final boolean doDownload;
 
 	public FileDownload(File file, String contentType, String fileName) {
 		this(file, contentType, fileName, false);
@@ -46,17 +48,17 @@ public class FileDownload implements Download {
 	}
 
 	public FileDownload(File file, String contentType, String fileName, boolean doDownload) {
-		try {
-			stream = new FileInputStream(file);
-			inputDownload = new InputStreamDownload(stream, contentType, fileName, doDownload, file.length());
-		} catch (FileNotFoundException e) {
-			throw new IllegalArgumentException(e);
-		}
+		this.file = file;
+		this.contentType = contentType;
+		this.fileName = fileName;
+		this.doDownload = doDownload;
 	}
 	
 	@Override
 	public void write(HttpServletResponse response) throws IOException {
-		inputDownload.write(response);
-		stream.close();
+		try (InputStream stream = new FileInputStream(file)) {
+			Download download = new InputStreamDownload(stream, contentType, fileName, doDownload, file.length());
+			download.write(response);
+		}
 	}
 }

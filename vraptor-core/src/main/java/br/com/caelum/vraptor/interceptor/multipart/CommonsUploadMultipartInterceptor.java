@@ -16,7 +16,6 @@
  */
 package br.com.caelum.vraptor.interceptor.multipart;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Collection;
@@ -27,7 +26,6 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.FileItemFactory;
 import org.apache.commons.fileupload.FileUploadBase.SizeLimitExceededException;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
@@ -68,9 +66,9 @@ public class CommonsUploadMultipartInterceptor implements Interceptor {
 	private MutableRequest request;
 	private MultipartConfig config;
 	private Validator validator;
-	private ServletFileUploadCreator fileUploadCreator;
 
 	private Multiset<String> indexes;
+	private Multimap<String, String> params;
 
 	//CDI eyes only
 	@Deprecated
@@ -78,12 +76,10 @@ public class CommonsUploadMultipartInterceptor implements Interceptor {
 	}
 
 	@Inject
-	public CommonsUploadMultipartInterceptor(MutableRequest request, MultipartConfig cfg, Validator validator, 
-			ServletFileUploadCreator fileUploadCreator) {
+	public CommonsUploadMultipartInterceptor(MutableRequest request, MultipartConfig cfg, Validator validator) {
 		this.request = request;
 		this.validator = validator;
 		this.config = cfg;
-		this.fileUploadCreator = fileUploadCreator;
 	}
 
 	/**
@@ -98,17 +94,16 @@ public class CommonsUploadMultipartInterceptor implements Interceptor {
 	public void intercept(InterceptorStack stack, ControllerMethod method, Object controllerInstance) {
 		logger.info("Request contains multipart data. Try to parse with commons-upload.");
 
-		FileItemFactory factory = createFactoryForDiskBasedFileItems(config.getDirectory());
 		indexes = HashMultiset.create();
+		params = LinkedListMultimap.create();
 
-		ServletFileUpload uploader = fileUploadCreator.create(factory);
+		ServletFileUpload uploader = createServletFileUpload(config);
 		uploader.setSizeMax(config.getSizeLimit());
 
 		try {
 			final List<FileItem> items = uploader.parseRequest(request);
 			logger.debug("Found {} attributes in the multipart form submission. Parsing them.", items.size());
 
-			final Multimap<String, String> params = LinkedListMultimap.create();
 
 			for (FileItem item : items) {
 				String name = item.getFieldName();
@@ -170,12 +165,13 @@ public class CommonsUploadMultipartInterceptor implements Interceptor {
 		}
 	}
 
-	protected FileItemFactory createFactoryForDiskBasedFileItems(File temporaryDirectory) {
+	protected ServletFileUpload createServletFileUpload(MultipartConfig config) {
 		DiskFileItemFactory factory = new DiskFileItemFactory();
-		factory.setRepository(temporaryDirectory);
+		factory.setRepository(config.getDirectory());
 
 		logger.debug("Using repository {} for file upload", factory.getRepository());
-		return factory;
+		
+		return new ServletFileUpload(factory);
 	}
 
 	protected String getValue(FileItem item) {

@@ -65,7 +65,7 @@ public class LinkToHandlerTest {
 			invoke(handler.get(new DefaultBeanClass(TestController.class)), "method");
 			fail();
 		} catch (IllegalArgumentException e) {
-			assertThat(e.getMessage(), startsWith("Ambiguous method"));
+			assertThat(e.getMessage().toLowerCase(), startsWith("ambiguous method"));
 		}
 	}
 
@@ -76,7 +76,7 @@ public class LinkToHandlerTest {
 			invoke(handler.get(new DefaultBeanClass(TestController.class)), "method", 123);
 			fail();
 		} catch (IllegalArgumentException e) {
-			assertThat(e.getMessage(), startsWith("There are no methods"));
+			assertThat(e.getMessage().toLowerCase(), startsWith("there are no methods"));
 		}
 	}
 
@@ -155,7 +155,7 @@ public class LinkToHandlerTest {
 			invoke(handler.get(new DefaultBeanClass(TestController.class)), "anotherMethod", a, b, c);
 			fail();
 		} catch (IllegalArgumentException e) {
-			assertThat(e.getMessage(), startsWith("wrong number of arguments"));
+			assertThat(e.getMessage().toLowerCase(), startsWith("wrong number of arguments"));
 		}
 	}
 
@@ -174,7 +174,7 @@ public class LinkToHandlerTest {
 			if (methodName.startsWith("get")) {
 				return method.invoke(obj).toString();
 			}
-			return method.invoke(obj, args).toString();
+			return new Mirror().on(obj).invoke().method(method).withArgs(args).toString();
 		} catch (MirrorException | InvocationTargetException e) {
 			throw e.getCause() == null? e : e.getCause();
 		}

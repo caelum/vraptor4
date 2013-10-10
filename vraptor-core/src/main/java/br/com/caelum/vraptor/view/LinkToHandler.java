@@ -203,7 +203,7 @@ public class LinkToHandler extends ForwardingMap<Class<?>, Object> {
 	private final class SortByArgumentsLengthDesc implements Comparator<Method> {
 		@Override
 		public int compare(Method o1, Method o2) {
-			return o2.getParameterTypes().length - o1.getParameterTypes().length;
+			return Integer.compare(o2.getParameterTypes().length, o1.getParameterTypes().length);
 		}
 	}
 

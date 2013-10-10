@@ -1,4 +1,4 @@
-package br.com.caelum.vraptor.reflection;
+package br.com.caelum.vraptor.invoke;
 
 import java.lang.reflect.Method;
 

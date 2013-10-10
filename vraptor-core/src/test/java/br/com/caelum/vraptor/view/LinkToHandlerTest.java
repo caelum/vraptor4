@@ -8,9 +8,7 @@ import static org.mockito.Mockito.when;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 import javax.servlet.ServletContext;
 
@@ -183,12 +181,12 @@ public class LinkToHandlerTest {
 	}
 
 	private Class<?>[] extractTypes(Object... args) {
-		List<Class<?>> classes = new ArrayList<>();
+		Class<?>[] classes = new Class<?>[args.length];
 		
-		for(Object o: args){
-			classes.add(o.getClass());
+		for (int i = 0; i < classes.length; i++) {
+			classes[i] = args[i].getClass();
 		}
-		return classes.toArray(new Class<?>[0]);
+		return classes;
 	}
 
 	static class TestController {

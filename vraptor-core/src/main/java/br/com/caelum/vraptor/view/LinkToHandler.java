@@ -15,6 +15,10 @@
  */
 package br.com.caelum.vraptor.view;
 
+import static br.com.caelum.vraptor.util.StringUtils.capitalize;
+import static java.util.Arrays.fill;
+import static javassist.CtNewMethod.abstractMethod;
+
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Collections;
@@ -28,11 +32,9 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 import javassist.CannotCompileException;
-import javassist.ClassClassPath;
 import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.CtMethod;
-import javassist.CtNewMethod;
 import javassist.NotFoundException;
 
 import javax.annotation.PostConstruct;
@@ -139,32 +141,59 @@ public class LinkToHandler extends ForwardingMap<Class<?>, Object> {
 			// ok, continue
 		}
 
+		final Set<CtMethod> used = new HashSet<>();
 		ClassPool pool = ClassPool.getDefault();
-		pool.insertClassPath(new ClassClassPath(controller));
-		 
 		CtClass inter = pool.makeInterface(interfaceName);
 		
 		try {
-			CtClass ctController = pool.get(controller.getName());
-			CtClass returnType = pool.get("java.lang.String");
+			CtClass returnType = pool.get(String.class.getName());
+			CtClass objectType = pool.get(Object.class.getName());
 
-			CtMethod[] declaredMethods = ctController.getDeclaredMethods();
-			for(CtMethod m : declaredMethods) {
+			for (Method m : getMethods(controller)) {
 				String name = m.getName();
-				
-				CtMethod method = CtNewMethod.abstractMethod(returnType, name, m.getParameterTypes(), new CtClass[0], inter);
-				inter.addMethod(method);
-				CtMethod getter = CtNewMethod.abstractMethod(returnType, String.format("get%s", StringUtils.capitalize(name)), m.getParameterTypes(), new CtClass[0], inter);
-				inter.addMethod(getter);
-				
-				logger.debug("added method {} to interface {}", method.getName(), controller);
+
+				CtClass[] params = createParameters(objectType, m.getParameterTypes().length);
+				CtClass[] empty = new CtClass[0];
+
+				for (int length = params.length; length >= 0; length--) {
+					CtMethod method = abstractMethod(returnType, name, params, empty, inter);
+					if (!used.contains(method)) {
+						used.add(method);
+						inter.addMethod(method);
+						logger.debug("added method {} to interface {}", method.getName(), controller);
+					}
+				}
+
+				CtMethod getter = abstractMethod(returnType, String.format("get%s", capitalize(name)), empty, empty, inter);
+				if (!used.contains(getter)) {
+					used.add(getter);
+					inter.addMethod(getter);
+					logger.debug("added getter {} to interface {}", getter.getName(), controller);
+				}
 			}
 			return inter.toClass();
 		} catch (CannotCompileException | NotFoundException e) {
 			throw new ProxyCreationException(e);
 		}
 	}
+	
+	private CtClass[] createParameters(CtClass objectType, int num) {
+		CtClass[] params = new CtClass[num];
+		fill(params, objectType);
+		
+		return params;
+	}
 
+	private Set<Method> getMethods(Class<?> controller) {
+		Set<Method> methods = new HashSet<>();
+		for (Method method : new Mirror().on(controller).reflectAll().methods()) {
+			if (!method.getDeclaringClass().equals(Object.class)) {
+				methods.add(method);
+			}
+		}
+		return methods;
+	}
+	
 	class Linker {
 
 		private final List<Object> args;

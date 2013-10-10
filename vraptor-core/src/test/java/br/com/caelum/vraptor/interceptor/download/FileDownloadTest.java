@@ -72,11 +72,4 @@ public class FileDownloadTest {
 		verify(response, times(1)).setHeader("Content-disposition", "inline; filename=x.txt");
 		assertArrayEquals(bytes, outputStream.toByteArray());
 	}
-	
-	@Test(expected = IllegalArgumentException.class)
-	public void shouldThrowIllegalArgumentExceptionIfFileDoesntExists() throws Exception {
-		File file0 = new File("a.path.that.doesnot.exists");
-		FileDownload fd = new FileDownload(file0, "type", "x.txt", false);
-		fd.write(response);
-	}
 }

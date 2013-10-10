@@ -78,7 +78,6 @@ public class LinkToHandlerTest {
 	}
 
 
-	@Ignore("shoud not work whitout passing the parameters")
 	@Test
 	public void shouldReturnWantedUrlWithoutArgs() throws Throwable {
 		when(router.urlFor(TestController.class, anotherMethod, new Object[2])).thenReturn("/expectedURL");
@@ -88,7 +87,6 @@ public class LinkToHandlerTest {
 		assertThat(uri, is("/path/expectedURL"));
 	}
 
-	@Ignore("shoud not work whitout passing the parameters")	
 	@Test
 	public void shouldReturnWantedUrlWithoutArgsUsingPropertyAccess() throws Throwable {
 		when(router.urlFor(TestController.class, anotherMethod, new Object[2])).thenReturn("/expectedURL");
@@ -108,7 +106,6 @@ public class LinkToHandlerTest {
 		assertThat(uri, is("/path/expectedURL"));
 	}
 
-	@Ignore("I don't think so...")
 	@Test
 	public void shouldReturnWantedUrlWithPartialParamArgs() throws Throwable {
 		String a = "test";
@@ -127,7 +124,6 @@ public class LinkToHandlerTest {
 		assertThat(uri, is("/path/expectedURL"));
 	}
 
-	@Ignore("I don't think so...")
 	@Test
 	public void shouldReturnWantedUrlForOverrideMethodWithParialParamArgs() throws Throwable {
 		String a = "test";

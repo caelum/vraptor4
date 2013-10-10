@@ -35,6 +35,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class FileDownload implements Download {
 	private final InputStreamDownload inputDownload;
+	private final FileInputStream stream;
 
 	public FileDownload(File file, String contentType, String fileName) {
 		this(file, contentType, fileName, false);
@@ -46,7 +47,8 @@ public class FileDownload implements Download {
 
 	public FileDownload(File file, String contentType, String fileName, boolean doDownload) {
 		try {
-			inputDownload = new InputStreamDownload(new FileInputStream(file), contentType, fileName, doDownload, file.length());
+			stream = new FileInputStream(file);
+			inputDownload = new InputStreamDownload(stream, contentType, fileName, doDownload, file.length());
 		} catch (FileNotFoundException e) {
 			throw new IllegalArgumentException(e);
 		}
@@ -55,5 +57,6 @@ public class FileDownload implements Download {
 	@Override
 	public void write(HttpServletResponse response) throws IOException {
 		inputDownload.write(response);
+		stream.close();
 	}
 }

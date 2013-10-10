@@ -41,7 +41,7 @@ import br.com.caelum.vraptor.converter.ConversionException;
 import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.http.InvalidParameterException;
 import br.com.caelum.vraptor.validator.Message;
-import br.com.caelum.vraptor.validator.ValidationMessage;
+import br.com.caelum.vraptor.validator.SimpleMessage;
 import br.com.caelum.vraptor.validator.annotation.ValidationException;
 
 import com.google.common.collect.ImmutableList;
@@ -96,7 +96,7 @@ public class VRaptorInstantiator implements InstantiatorWithErrors, Instantiator
 	}
 	private void handleException(Target<?> target, Throwable e) {
 		if (e.getClass().isAnnotationPresent(ValidationException.class)) {
-			errors.add(new ValidationMessage(e.getLocalizedMessage(), target.getName()));
+			errors.add(new SimpleMessage(target.getName(), e.getLocalizedMessage()));
 		} else if (e.getCause() == null) {
 			throw new InvalidParameterException("Exception when trying to instantiate " + target, e);
 		} else {

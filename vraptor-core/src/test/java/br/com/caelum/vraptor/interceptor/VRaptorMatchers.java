@@ -25,7 +25,7 @@ import org.hamcrest.TypeSafeMatcher;
 
 import br.com.caelum.vraptor.controller.BeanClass;
 import br.com.caelum.vraptor.controller.ControllerMethod;
-import br.com.caelum.vraptor.validator.ValidationMessage;
+import br.com.caelum.vraptor.validator.SimpleMessage;
 
 /**
  * Useful matchers to use while mocking and hamcresting tests with internal
@@ -76,16 +76,16 @@ public class VRaptorMatchers {
 		};
 	}
 
-	public static Matcher<ValidationMessage> error(final String category, final String message) {
-		return new TypeSafeMatcher<ValidationMessage>() {
+	public static Matcher<SimpleMessage> error(final String category, final String message) {
+		return new TypeSafeMatcher<SimpleMessage>() {
 
 			@Override
-			protected void describeMismatchSafely(ValidationMessage item, Description mismatchDescription) {
+			protected void describeMismatchSafely(SimpleMessage item, Description mismatchDescription) {
 				mismatchDescription.appendText(" validation message='" +item.getMessage() + "', category = '"+item.getCategory()+"'");
 			}
 
 			@Override
-			protected boolean matchesSafely(ValidationMessage m) {
+			protected boolean matchesSafely(SimpleMessage m) {
 				return message.equals(m.getMessage()) && category.equals(m.getCategory());
 			}
 

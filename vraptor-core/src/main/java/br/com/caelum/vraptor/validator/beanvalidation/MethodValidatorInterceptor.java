@@ -41,7 +41,7 @@ import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.interceptor.ExecuteMethodInterceptor;
 import br.com.caelum.vraptor.interceptor.Interceptor;
 import br.com.caelum.vraptor.interceptor.ParametersInstantiatorInterceptor;
-import br.com.caelum.vraptor.validator.ValidationMessage;
+import br.com.caelum.vraptor.validator.SimpleMessage;
 
 import com.google.common.base.Joiner;
 
@@ -113,7 +113,7 @@ public class MethodValidatorInterceptor implements Interceptor {
 			BeanValidatorContext ctx = new BeanValidatorContext(v);
 			String msg = interpolator.interpolate(v.getMessageTemplate(), ctx, locale);
 			String category = extractCategory(names, v);
-			validator.add(new ValidationMessage(msg, category));
+			validator.add(new SimpleMessage(category, msg));
 			
 			logger.debug("added message {}={} for contraint violation", msg, category);
 		}

@@ -27,14 +27,14 @@ import java.util.ResourceBundle;
  *
  * @author Guilherme Silveira
  */
-public class ValidationMessage implements Message {
+public class SimpleMessage implements Message {
 
 	private static final long serialVersionUID = 1L;
 
 	private final String message, category;
 	private final Object[] messageParameters;
 
-	public ValidationMessage(String category, String message, Object... messageParameters) {
+	public SimpleMessage(String category, String message, Object... messageParameters) {
 		this.category = category;
 		this.message = message;
 		this.messageParameters = messageParameters;

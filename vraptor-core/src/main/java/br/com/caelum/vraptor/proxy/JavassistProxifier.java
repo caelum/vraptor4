@@ -15,11 +15,9 @@
  */
 package br.com.caelum.vraptor.proxy;
 
-import static java.util.Arrays.asList;
 import static javassist.util.proxy.ProxyFactory.isProxyClass;
 
 import java.lang.reflect.Method;
-import java.util.List;
 
 import javassist.util.proxy.MethodFilter;
 import javassist.util.proxy.MethodHandler;
@@ -45,14 +43,9 @@ public class JavassistProxifier implements Proxifier {
 	 * Do not proxy these methods.
 	 */
 	private static final MethodFilter IGNORE_BRIDGE_AND_OBJECT_METHODS = new MethodFilter() {
-		/**
-		 * Methods like toString and finalize will be ignored.
-		 */
-		final List<Method> OBJECT_METHODS = asList(Object.class.getDeclaredMethods());
-
 		@Override
 		public boolean isHandled(Method method) {
-			return !method.isBridge() && !OBJECT_METHODS.contains(method);
+			return !method.isBridge() && !method.getDeclaringClass().equals(Object.class);
 		}
 	};
 

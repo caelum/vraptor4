@@ -50,8 +50,9 @@ public class DefaultStaticContentHandlerTest {
 		when(context.getResource(key)).thenReturn(file.toURI().toURL());
 
 		boolean result = new DefaultStaticContentHandler(context).requestingStaticFile(request);
-
 		assertThat(result, is(equalTo(true)));
+		
+		file.delete();
 	}
 	
 	@Test
@@ -63,8 +64,9 @@ public class DefaultStaticContentHandlerTest {
 		when(context.getResource(key)).thenReturn(file.toURI().toURL());
 
 		boolean result = new DefaultStaticContentHandler(context).requestingStaticFile(request);
-
 		assertThat(result, is(equalTo(true)));
+		
+		file.delete();
 	}
 	
 	@Test
@@ -76,8 +78,9 @@ public class DefaultStaticContentHandlerTest {
 		when(context.getResource(key)).thenReturn(file.toURI().toURL());
 
 		boolean result = new DefaultStaticContentHandler(context).requestingStaticFile(request);
-
 		assertThat(result, is(equalTo(true)));
+		
+		file.delete();
 	}
 
 	@Test
@@ -89,8 +92,8 @@ public class DefaultStaticContentHandlerTest {
 		when(context.getResource(key)).thenReturn(null);
 
 		boolean result = new DefaultStaticContentHandler(context).requestingStaticFile(request);
-
 		assertThat(result, is(equalTo(false)));
+		
+		file.delete();
 	}
-
 }

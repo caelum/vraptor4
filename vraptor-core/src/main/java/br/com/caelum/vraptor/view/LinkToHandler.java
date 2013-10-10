@@ -156,7 +156,7 @@ public class LinkToHandler extends ForwardingMap<Class<?>, Object> {
 				CtClass[] empty = new CtClass[0];
 
 				for (int length = params.length; length >= 0; length--) {
-					CtMethod method = abstractMethod(returnType, name, params, empty, inter);
+					CtMethod method = abstractMethod(returnType, m.getName(), Arrays.copyOf(params, length), empty, inter);
 					if (!used.contains(method)) {
 						used.add(method);
 						inter.addMethod(method);

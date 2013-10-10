@@ -22,10 +22,12 @@ import static javassist.CtNewMethod.abstractMethod;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.locks.Lock;
@@ -185,7 +187,8 @@ public class LinkToHandler extends ForwardingMap<Class<?>, Object> {
 	}
 
 	private Set<Method> getMethods(Class<?> controller) {
-		Set<Method> methods = new HashSet<>();
+		Set<Method> methods = new TreeSet<>(new SortByArgumentsLengthDesc());
+		
 		for (Method method : new Mirror().on(controller).reflectAll().methods()) {
 			if (!method.getDeclaringClass().equals(Object.class)) {
 				methods.add(method);
@@ -194,6 +197,13 @@ public class LinkToHandler extends ForwardingMap<Class<?>, Object> {
 		return methods;
 	}
 	
+	private final class SortByArgumentsLengthDesc implements Comparator<Method> {
+		@Override
+		public int compare(Method o1, Method o2) {
+			return o2.getParameterTypes().length - o1.getParameterTypes().length;
+		}
+	}
+
 	class Linker {
 
 		private final List<Object> args;

@@ -16,7 +16,6 @@
  */
 package br.com.caelum.vraptor.interceptor.multipart;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Collection;
@@ -27,7 +26,6 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.FileItemFactory;
 import org.apache.commons.fileupload.FileUploadBase.SizeLimitExceededException;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
@@ -174,14 +172,6 @@ public class CommonsUploadMultipartInterceptor implements Interceptor {
 		logger.debug("Using repository {} for file upload", factory.getRepository());
 		
 		return new ServletFileUpload(factory);
-	}
-
-	protected FileItemFactory createFactoryForDiskBasedFileItems(File temporaryDirectory) {
-		DiskFileItemFactory factory = new DiskFileItemFactory();
-		factory.setRepository(temporaryDirectory);
-
-		logger.debug("Using repository {} for file upload", factory.getRepository());
-		return factory;
 	}
 
 	protected String getValue(FileItem item) {

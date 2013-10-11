@@ -29,7 +29,7 @@ import br.com.caelum.vraptor.interceptor.SimpleInterceptorStack;
 import br.com.caelum.vraptor.musicjungle.controller.HomeController;
 import br.com.caelum.vraptor.musicjungle.dao.UserDao;
 import br.com.caelum.vraptor.musicjungle.model.User;
-import br.com.caelum.vraptor.validator.ValidationMessage;
+import br.com.caelum.vraptor.validator.SimpleMessage;
 
 /**
  * Interceptor to check if the user is in the session.
@@ -70,7 +70,7 @@ public class AuthorizationInterceptor {
 		 */
 		if (current == null) {
 			// remember added parameters will survive one more request, when there is a redirect
-			result.include("errors", asList(new ValidationMessage("user is not logged in", "user")));
+			result.include("errors", asList(new SimpleMessage("user", "user is not logged in")));
 			result.redirectTo(HomeController.class).login();
 			return;
 		}

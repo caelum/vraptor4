@@ -51,7 +51,7 @@ import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.http.ParametersProvider;
 import br.com.caelum.vraptor.validator.Message;
-import br.com.caelum.vraptor.validator.ValidationMessage;
+import br.com.caelum.vraptor.validator.SimpleMessage;
 import br.com.caelum.vraptor.view.FlashScope;
 
 public class ParametersInstantiatorInterceptorTest {
@@ -244,7 +244,7 @@ public class ParametersInstantiatorInterceptorTest {
 			@Override
 			public T answer(InvocationOnMock invocation) throws Throwable {
 				for (String message : messages) {
-					errors.add(new ValidationMessage(message, "test"));
+					errors.add(new SimpleMessage("test", message));
 				}
 				return value;
 			}

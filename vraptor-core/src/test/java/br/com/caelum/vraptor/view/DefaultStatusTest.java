@@ -40,7 +40,7 @@ import br.com.caelum.vraptor.util.test.MockSerializationResult;
 import br.com.caelum.vraptor.validator.I18nMessage;
 import br.com.caelum.vraptor.validator.Message;
 import br.com.caelum.vraptor.validator.SingletonResourceBundle;
-import br.com.caelum.vraptor.validator.ValidationMessage;
+import br.com.caelum.vraptor.validator.SimpleMessage;
 
 import com.google.common.collect.Lists;
 import com.google.gson.JsonSerializer;
@@ -155,7 +155,7 @@ public class DefaultStatusTest {
 
 	@Test
 	public void shouldSerializeErrorMessages() throws Exception {
-		Message normal = new ValidationMessage("The message", "category");
+		Message normal = new SimpleMessage("category", "The message");
 		I18nMessage i18ned = new I18nMessage("category", "message");
 		i18ned.setBundle(new SingletonResourceBundle("message", "Something else"));
 
@@ -175,7 +175,7 @@ public class DefaultStatusTest {
 
 	@Test
 	public void shouldSerializeErrorMessagesInJSON() throws Exception {
-		Message normal = new ValidationMessage("The message", "category");
+		Message normal = new SimpleMessage("category", "The message");
 		I18nMessage i18ned = new I18nMessage("category", "message");
 		i18ned.setBundle(new SingletonResourceBundle("message", "Something else"));
 

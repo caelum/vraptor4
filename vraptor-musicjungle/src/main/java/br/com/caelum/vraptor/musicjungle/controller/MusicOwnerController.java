@@ -29,7 +29,7 @@ import br.com.caelum.vraptor.musicjungle.interceptor.UserInfo;
 import br.com.caelum.vraptor.musicjungle.model.Music;
 import br.com.caelum.vraptor.musicjungle.model.MusicOwner;
 import br.com.caelum.vraptor.musicjungle.model.User;
-import br.com.caelum.vraptor.validator.ValidationMessage;
+import br.com.caelum.vraptor.validator.SimpleMessage;
 
 /**
  * The resource <code>MusicOwnerController</code> handles all 
@@ -88,10 +88,10 @@ public class MusicOwnerController {
 	    final User sessionUser = refreshUser();
 	    
 	    validator.check(user.getLogin().equals(sessionUser.getLogin()), 
-	            new ValidationMessage("user", "you_cant_add_to_others_list"));
+	            new SimpleMessage("user", "you_cant_add_to_others_list"));
 
 	    validator.check(!sessionUser.getMusics().contains(music), 
-	            new ValidationMessage("music", "you_already_have_this_music"));
+	            new SimpleMessage("music", "you_already_have_this_music"));
 
 		validator.onErrorUsePageOf(UsersController.class).home();
 

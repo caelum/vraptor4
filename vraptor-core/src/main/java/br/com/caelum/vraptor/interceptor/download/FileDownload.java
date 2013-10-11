@@ -40,15 +40,15 @@ public class FileDownload implements Download {
 	private final String fileName;
 	private final boolean doDownload;
 
-	public FileDownload(File file, String contentType, String fileName) throws IOException {
+	public FileDownload(File file, String contentType, String fileName) throws FileNotFoundException {
 		this(file, contentType, fileName, false);
 	}
 
-	public FileDownload(File file, String contentType) throws IOException {
+	public FileDownload(File file, String contentType) throws FileNotFoundException {
 		this(file, contentType, file.getName(), false);
 	}
 
-	public FileDownload(File file, String contentType, String fileName, boolean doDownload) throws IOException {
+	public FileDownload(File file, String contentType, String fileName, boolean doDownload) throws FileNotFoundException {
 		this.file = checkFile(file);
 		this.contentType = contentType;
 		this.fileName = fileName;
@@ -63,7 +63,7 @@ public class FileDownload implements Download {
 		}
 	}
 	
-	private File checkFile(File file) throws IOException {
+	private File checkFile(File file) throws FileNotFoundException {
 		if (!file.exists()) {
 			throw new FileNotFoundException("File " + file.getName() + "doesn't exists");
 		}

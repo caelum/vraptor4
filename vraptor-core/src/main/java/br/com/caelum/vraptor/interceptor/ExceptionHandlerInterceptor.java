@@ -26,7 +26,6 @@ import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.Intercepts;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.controller.ControllerMethod;
-import br.com.caelum.vraptor.core.DefaultExceptionMapper;
 import br.com.caelum.vraptor.core.ExceptionMapper;
 import br.com.caelum.vraptor.core.ExceptionRecorder;
 import br.com.caelum.vraptor.core.InterceptorStack;

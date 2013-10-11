@@ -8,15 +8,12 @@ import br.com.caelum.vraptor.ioc.cdi.ComponentToBeProduced;
 
 public class CDIComponent{
 	
-	private MyRequestComponent component;
-
 	//CDI eyes only
 	@Deprecated
 	public CDIComponent() {
 	}
 	
 	public CDIComponent(MyRequestComponent component) {
-		this.component = component;
 	}
 
 	@Produces

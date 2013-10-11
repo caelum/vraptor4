@@ -16,7 +16,6 @@
 package br.com.caelum.vraptor.serialization.xstream;
 
 import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.context.Dependent;
 
 import br.com.caelum.vraptor.validator.Message;
 

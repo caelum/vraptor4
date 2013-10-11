@@ -26,8 +26,6 @@ import java.util.ArrayList;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 
-import com.google.common.base.Preconditions;
-
 import net.vidageek.mirror.dsl.Mirror;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.controller.ControllerMethod;

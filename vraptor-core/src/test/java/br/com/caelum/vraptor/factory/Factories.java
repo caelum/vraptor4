@@ -5,9 +5,9 @@ import java.lang.reflect.Method;
 
 import br.com.caelum.vraptor.cache.LRUCacheStore;
 import br.com.caelum.vraptor.interceptor.StepInvoker;
-import br.com.caelum.vraptor.reflection.DefaultMethodExecutor;
-import br.com.caelum.vraptor.reflection.MethodExecutor;
-import br.com.caelum.vraptor.reflection.MethodHandleFactory;
+import br.com.caelum.vraptor.invoke.DefaultMethodExecutor;
+import br.com.caelum.vraptor.invoke.MethodExecutor;
+import br.com.caelum.vraptor.invoke.MethodHandleFactory;
 
 public class Factories {
 

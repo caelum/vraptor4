@@ -1,12 +1,12 @@
-package br.com.caelum.vraptor.reflection;
+package br.com.caelum.vraptor.invoke;
 
 import java.lang.reflect.Method;
 
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
-
 import br.com.caelum.vraptor.factory.Factories;
+import br.com.caelum.vraptor.invoke.MethodExecutor;
 
 public class DefaultMethodExecutorTest {
 

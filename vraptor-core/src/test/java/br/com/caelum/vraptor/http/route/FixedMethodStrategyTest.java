@@ -40,8 +40,6 @@ import br.com.caelum.vraptor.controller.DefaultControllerMethod;
 import br.com.caelum.vraptor.controller.HttpMethod;
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.interceptor.VRaptorMatchers;
-import br.com.caelum.vraptor.proxy.JavassistProxifier;
-import br.com.caelum.vraptor.proxy.Proxifier;
 
 import com.google.common.collect.Sets;
 
@@ -50,7 +48,6 @@ public class FixedMethodStrategyTest {
 	private @Mock MutableRequest request;
 	private @Mock ParametersControl control;
 	private ControllerMethod list;
-	private Proxifier proxifier;
 	private EnumSet<HttpMethod> get;
 	private EnumSet<HttpMethod> post;
 
@@ -60,7 +57,6 @@ public class FixedMethodStrategyTest {
 		list = DefaultControllerMethod.instanceFor(MyControl.class, method("list"));
 		get = EnumSet.of(HttpMethod.GET);
 		post = EnumSet.of(HttpMethod.POST);
-		proxifier = new JavassistProxifier();
 	}
 
 	@Test

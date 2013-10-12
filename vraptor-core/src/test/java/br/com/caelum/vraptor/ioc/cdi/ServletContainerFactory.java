@@ -1,11 +1,8 @@
 package br.com.caelum.vraptor.ioc.cdi;
 
-import static java.lang.Thread.currentThread;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import java.net.URL;
-import java.net.URLClassLoader;
 import java.util.Collections;
 import java.util.Enumeration;
 

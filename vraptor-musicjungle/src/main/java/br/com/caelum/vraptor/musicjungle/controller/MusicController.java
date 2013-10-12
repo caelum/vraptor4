@@ -22,6 +22,7 @@ import static br.com.caelum.vraptor.view.Results.representation;
 import static br.com.caelum.vraptor.view.Results.xml;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 
 import javax.inject.Inject;
 import javax.validation.Valid;
@@ -167,13 +168,13 @@ public class MusicController {
 	
 	@Path("/musics/download/{m.id}")
 	@Get
-	public Download download(Music m){
+	public Download download(Music m) throws FileNotFoundException {
 		Music music = musicDao.load(m);
 		File file = musics.getFile(music);
 		String contentType = "audio/mpeg";
-        String filename = music.getTitle() + ".mp3";
+		String filename = music.getTitle() + ".mp3";
 
-        return new FileDownload(file, contentType, filename);
+		return new FileDownload(file, contentType, filename);
 	}
 	
 	/**

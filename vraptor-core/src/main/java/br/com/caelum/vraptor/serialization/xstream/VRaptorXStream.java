@@ -18,6 +18,7 @@ public final class VRaptorXStream extends XStream {
 		super(new PureJavaReflectionProvider());
 		this.extractor = extractor;
 	}
+	
 	public VRaptorXStream(TypeNameExtractor extractor, HierarchicalStreamDriver hierarchicalStreamDriver) {
 		super(new PureJavaReflectionProvider(),hierarchicalStreamDriver);
 		this.extractor = extractor;
@@ -37,6 +38,7 @@ public final class VRaptorXStream extends XStream {
 		});
 		return vraptorMapper;
 	}
+	
 	public VRaptorClassMapper getVRaptorMapper() {
 		return vraptorMapper;
 	}

@@ -25,7 +25,7 @@ public class DefaultMethodExecutorTest {
 		assertEquals("testing",result);
 	}	
 	
-	private static class Example{
+	static class Example{
 		public void method(){
 			
 		}

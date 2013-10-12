@@ -1,12 +1,19 @@
 package br.com.caelum.vraptor.interceptor;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.JUnitCore;
 import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -33,15 +40,6 @@ import br.com.caelum.vraptor.interceptor.example.NonBooleanAcceptsInterceptor;
 import br.com.caelum.vraptor.interceptor.example.VoidAcceptsInterceptor;
 import br.com.caelum.vraptor.interceptor.example.WithoutAroundInterceptor;
 import br.com.caelum.vraptor.ioc.Container;
-
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
-import static org.mockito.Mockito.inOrder;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 public class AspectStyleInterceptorHandlerTest {
 

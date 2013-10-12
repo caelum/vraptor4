@@ -26,6 +26,7 @@ import java.io.File;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -35,15 +36,21 @@ public class DefaultStaticContentHandlerTest {
 
 	@Mock private HttpServletRequest request;
 	@Mock private ServletContext context;
+	private File file;
 
 	@Before
-	public void setup() {
+	public void setup() throws Exception {
 		MockitoAnnotations.initMocks(this);
+		file = File.createTempFile("_test", ".xml");
+	}
+	
+	@After
+	public void tearDown() {
+		file.delete();
 	}
 
 	@Test
 	public void returnsTrueForRealStaticResources() throws Exception {
-		File file = File.createTempFile("_test", ".xml");
 		String key = file.getAbsolutePath();
 		when(request.getRequestURI()).thenReturn("/contextName/" +key);
 		when(request.getContextPath()).thenReturn("/contextName/");
@@ -51,13 +58,10 @@ public class DefaultStaticContentHandlerTest {
 
 		boolean result = new DefaultStaticContentHandler(context).requestingStaticFile(request);
 		assertThat(result, is(equalTo(true)));
-		
-		file.delete();
 	}
 	
 	@Test
 	public void returnsTrueForRealStaticResourcesWithQueryString() throws Exception {
-		File file = File.createTempFile("_test", ".xml");
 		String key = file.getAbsolutePath();
 		when(request.getRequestURI()).thenReturn("/contextName/" + key + "?jsesssionid=12lkjahfsd12414");
 		when(request.getContextPath()).thenReturn("/contextName/");
@@ -65,13 +69,10 @@ public class DefaultStaticContentHandlerTest {
 
 		boolean result = new DefaultStaticContentHandler(context).requestingStaticFile(request);
 		assertThat(result, is(equalTo(true)));
-		
-		file.delete();
 	}
 	
 	@Test
 	public void returnsTrueForRealStaticResourcesWithJSessionId() throws Exception {
-		File file = File.createTempFile("_test", ".xml");
 		String key = file.getAbsolutePath();
 		when(request.getRequestURI()).thenReturn("/contextName/" + key + ";jsesssionid=12lkjahfsd12414");
 		when(request.getContextPath()).thenReturn("/contextName/");
@@ -79,21 +80,16 @@ public class DefaultStaticContentHandlerTest {
 
 		boolean result = new DefaultStaticContentHandler(context).requestingStaticFile(request);
 		assertThat(result, is(equalTo(true)));
-		
-		file.delete();
 	}
 
 	@Test
 	public void returnsFalseForNonStaticResources() throws Exception {
-		File file = new File("_test_unknown.xml");
-		String key = file.getAbsolutePath();
-		when(request.getRequestURI()).thenReturn("/contextName/" +key);
+		String key = "thefile.xml";
+		when(request.getRequestURI()).thenReturn("/contextName/" + key);
 		when(request.getContextPath()).thenReturn("/contextName/");
 		when(context.getResource(key)).thenReturn(null);
 
 		boolean result = new DefaultStaticContentHandler(context).requestingStaticFile(request);
 		assertThat(result, is(equalTo(false)));
-		
-		file.delete();
 	}
 }

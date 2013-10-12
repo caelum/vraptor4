@@ -34,8 +34,8 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.PrintWriter;
 import java.lang.reflect.Method;
+import java.nio.file.Files;
 import java.util.Arrays;
 
 import javax.servlet.ServletOutputStream;
@@ -114,20 +114,20 @@ public class DownloadInterceptorTest {
 	@Test
 	public void whenResultIsAFileShouldCreateAFileDownload() throws Exception {
 		File tmp = File.createTempFile("test", "test");
-		new PrintWriter(tmp).append("abc").close();
+		Files.write(tmp.toPath(), "abc".getBytes());
 
 		when(info.getResult()).thenReturn(tmp);
 
 		interceptor.intercept(stack, controllerMethod, null);
-
 		verify(outputStream).write(argThat(is(arrayStartingWith("abc".getBytes()))), eq(0), eq(3));
-
+		
+		tmp.delete();
 	}
+	
 	@Test
 	public void whenResultIsNullAndResultWasUsedShouldDoNothing() throws Exception {
 		when(info.getResult()).thenReturn(null);
 		when(result.used()).thenReturn(true);
-
 
 		interceptor.intercept(stack, controllerMethod, null);
 
@@ -239,6 +239,7 @@ public class DownloadInterceptorTest {
 			}
 		};
 	}
+	
 	static class FakeController {
 		public String string() {
 			return null;

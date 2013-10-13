@@ -109,9 +109,7 @@ public class DefaultPageResult implements PageResult {
 
 		try {
 			request.getRequestDispatcher(url).forward(request, response);
-		} catch (ServletException e) {
-			throw new ResultException(e);
-		} catch (IOException e) {
+		} catch (ServletException | IOException e) {
 			throw new ResultException(e);
 		}
 	}

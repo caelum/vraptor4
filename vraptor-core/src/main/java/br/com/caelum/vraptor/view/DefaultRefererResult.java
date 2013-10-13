@@ -64,9 +64,7 @@ public class DefaultRefererResult implements RefererResult {
 		try {
 			ControllerMethod method = router.parse(referer, HttpMethod.GET, request);
 			executeMethod(method, result.use(logic()).forwardTo(method.getController().getType()));
-		} catch (ControllerNotFoundException e) {
-			result.use(page()).forwardTo(referer);
-		} catch (MethodNotAllowedException e) {
+		} catch (ControllerNotFoundException | MethodNotAllowedException e) {
 			result.use(page()).forwardTo(referer);
 		}
 	}
@@ -82,9 +80,7 @@ public class DefaultRefererResult implements RefererResult {
 		try {
 			ControllerMethod method = router.parse(referer, HttpMethod.GET, request);
 			executeMethod(method, result.use(logic()).redirectTo(method.getController().getType()));
-		} catch (ControllerNotFoundException e) {
-			result.use(page()).redirectTo(referer);
-		} catch (MethodNotAllowedException e) {
+		} catch (ControllerNotFoundException | MethodNotAllowedException e) {
 			result.use(page()).redirectTo(referer);
 		}
 	}

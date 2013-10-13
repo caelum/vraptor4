@@ -40,9 +40,7 @@ public class DefaultControllerNotFoundHandler implements ControllerNotFoundHandl
 		FilterChain chain = request.getChain();
 		try {
 			chain.doFilter(request.getRequest(), request.getResponse());
-		} catch (IOException e) {
-			throw new InterceptionException(e);
-		} catch (ServletException e) {
+		} catch (IOException | ServletException e) {
 			throw new InterceptionException(e);
 		}
 	}

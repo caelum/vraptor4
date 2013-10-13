@@ -56,9 +56,8 @@ public class ParanamerNameProvider implements ParameterNameProvider {
 			return createDefensiveCopy(parameterNames);
 		} catch (ParameterNamesNotFoundException e) {
 			throw new IllegalStateException("Paranamer were not able to find your parameter names for " + method
-					+ "You must compile your code with debug information (javac -g), or using @Named on each method "
-					+ "parameter or register another name provider. Try to use " 
-					+ DefaultParameterNameProvider.class.getName() + " instead.", e);
+					+ "You must compile your code with debug information (javac -g), or using @Named on "
+					+ "each method parameter.", e);
 		}
 	}
 

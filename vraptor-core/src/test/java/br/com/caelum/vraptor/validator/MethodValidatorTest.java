@@ -56,7 +56,6 @@ public class MethodValidatorTest {
 		validatorFactory = javax.validation.Validation.buildDefaultValidatorFactory();
 
 		MessageInterpolatorFactory interpolatorFactory = new MessageInterpolatorFactory(validatorFactory);
-		interpolatorFactory.createInterpolator();
 		interpolator = interpolatorFactory.getInstance();
 
 		validator = new MockValidator();

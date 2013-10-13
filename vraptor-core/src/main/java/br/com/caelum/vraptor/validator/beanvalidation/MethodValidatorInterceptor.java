@@ -63,9 +63,7 @@ public class MethodValidatorInterceptor implements Interceptor {
 	private MethodInfo methodInfo;
 	private Validator validator;
 	private ParameterNameProvider parameterNameProvider;
-
 	private javax.validation.Validator bvalidator;
-
 
 	@Deprecated
 	public MethodValidatorInterceptor() {}
@@ -115,7 +113,7 @@ public class MethodValidatorInterceptor implements Interceptor {
 			String category = extractCategory(names, v);
 			validator.add(new SimpleMessage(category, msg));
 			
-			logger.debug("added message {}={} for contraint violation", msg, category);
+			logger.debug("added message {}={} for contraint violation", category, msg);
 		}
 
 		stack.next(method, controllerInstance);
@@ -123,7 +121,7 @@ public class MethodValidatorInterceptor implements Interceptor {
 
 	/**
 	 * Returns the category for this constraint violation. By default, the category returned
-	 * is the name of method, plus full path for property. You can override this method to
+	 * is the name of method with full path for property. You can override this method to
 	 * change this behaviour.
 	 */
 	protected String extractCategory(String[] names, ConstraintViolation<Object> v) {

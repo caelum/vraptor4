@@ -17,7 +17,6 @@ package br.com.caelum.vraptor.validator.beanvalidation;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Alternative;
-import javax.enterprise.inject.Default;
 import javax.enterprise.inject.Disposes;
 import javax.enterprise.inject.Produces;
 import javax.validation.Validation;
@@ -44,9 +43,8 @@ public class ValidatorFactoryCreator {
 	public ValidatorFactoryCreator() {
 	}
 	
-	@Produces 
-	@Default 
-	@javax.enterprise.context.ApplicationScoped
+	@Produces
+	@ApplicationScoped
 	public ValidatorFactory getInstance() {
 		logger.debug("Initializing Bean Validator");
 		return Validation.byDefaultProvider().configure().buildValidatorFactory();

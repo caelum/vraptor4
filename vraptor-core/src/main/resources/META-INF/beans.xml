@@ -41,6 +41,8 @@
 		<exclude name="br.com.caelum.vraptor.deserialization.gson.*">
 			<if-class-not-available name="com.google.gson.Gson"/>
 		</exclude>
+
+		<exclude name="br.com.caelum.vraptor.util.**" />
 	</scan>
 	
 </beans>

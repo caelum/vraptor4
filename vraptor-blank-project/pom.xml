@@ -7,7 +7,7 @@
 	<parent>
 		<groupId>br.com.caelum</groupId>
 		<artifactId>vraptor-parent</artifactId>
-		<version>4.0.0-beta-2-SNAPSHOT</version>
+		<version>4.0.0-beta-3-SNAPSHOT</version>
 	</parent>
 
 	<dependencies>
@@ -15,7 +15,7 @@
 		<dependency>
 			<groupId>br.com.caelum</groupId>
 			<artifactId>vraptor</artifactId>
-			<version>4.0.0-beta-2-SNAPSHOT</version>
+			<version>4.0.0-beta-3-SNAPSHOT</version>
 		</dependency>
 
 		<dependency>
@@ -86,7 +86,16 @@
 					</webAppConfig>
 				</configuration>
 			</plugin>
-			
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-deploy-plugin</artifactId>
+				<version>2.8</version>
+				<configuration>
+					<skip>true</skip>
+				</configuration>
+			</plugin>
+
 			<plugin>
 				<artifactId>maven-assembly-plugin</artifactId>
 				<version>2.3</version>

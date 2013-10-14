@@ -94,8 +94,8 @@ public class MockResult extends AbstractResult {
 					return proxy;
 				}
 
-				if (args.length > 0 && args[0] instanceof Class<?>) {
-					return proxifier.proxify((Class<?>) args[0], returnOnFirstInvocation());
+				if (args.length > 0 && args[0] instanceof Class) {
+					return proxifier.proxify((Class) args[0], returnOnFirstInvocation());
 				}
 
 				if (Serializer.class.isAssignableFrom(type)

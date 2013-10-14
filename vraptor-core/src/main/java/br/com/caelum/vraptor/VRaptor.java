@@ -124,6 +124,10 @@ public class VRaptor implements Filter {
 
 	@Override
 	public void init(FilterConfig cfg) throws ServletException {
+		if (this.provider == null) {
+			throw new ServletException("Container Provider is null. " +
+					"Do you have a Weld/CDI listener setup in your web.xml?");
+		}
 		servletContext = cfg.getServletContext();
 		contextEvent.fire(servletContext);
 		this.provider.start();

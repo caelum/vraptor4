@@ -24,12 +24,12 @@ import java.util.ResourceBundle;
 
 import javax.enterprise.inject.Alternative;
 
-import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.View;
 import br.com.caelum.vraptor.validator.AbstractValidator;
 import br.com.caelum.vraptor.validator.I18nMessage;
 import br.com.caelum.vraptor.validator.Message;
 import br.com.caelum.vraptor.validator.ValidationException;
+import br.com.caelum.vraptor.validator.Validator;
 
 /**
  * Mocked Validator for testing your controllers.

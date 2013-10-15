@@ -16,48 +16,51 @@
  */
 package br.com.caelum.vraptor.ioc;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import br.com.caelum.vraptor.Intercepts;
-import br.com.caelum.vraptor.VRaptorException;
 import br.com.caelum.vraptor.controller.BeanClass;
 import br.com.caelum.vraptor.core.InterceptsQualifier;
-import br.com.caelum.vraptor.interceptor.Interceptor;
 import br.com.caelum.vraptor.interceptor.InterceptorRegistry;
+import br.com.caelum.vraptor.interceptor.InterceptorValidator;
 
 @ApplicationScoped
 public class InterceptorStereotypeHandler{
-	private static final Logger logger = LoggerFactory.getLogger(InterceptorStereotypeHandler.class);
-	private InterceptorRegistry registry;
 
-	//CDI eyes only
-	@Deprecated
+	private static final Logger logger = getLogger(InterceptorStereotypeHandler.class);
+
+	private final InterceptorRegistry registry;
+
+	private InterceptorValidator interceptorValidator;
+
+	/**
+	 * @deprecated CDI eyes only
+	 */
 	public InterceptorStereotypeHandler() {
+		this(null, null);
 	}
 
 	@Inject
-	public InterceptorStereotypeHandler(InterceptorRegistry registry) {
+	public InterceptorStereotypeHandler(InterceptorRegistry registry,
+			InterceptorValidator interceptorValidator) {
+
 		this.registry = registry;
+		this.interceptorValidator = interceptorValidator;
 	}
 
 	public void handle(@Observes @InterceptsQualifier BeanClass beanClass) {
 		Class<?> originalType = beanClass.getType();
-		if (Interceptor.class.isAssignableFrom(originalType) || originalType.isAnnotationPresent(Intercepts.class)) {
-			registerInterceptor(originalType);
-		} else {
-			throw new VRaptorException("Annotation " + Intercepts.class + " found in " + originalType
-					+ ", but it is neither an Interceptor nor an InterceptorSequence.");
-		}
+		interceptorValidator.validate(originalType);
+		registerInterceptor(originalType);
 	}
 
 	private void registerInterceptor(Class<?> type) {
 		logger.debug("Found interceptor for {}", type);
-		Class<?> interceptorType = type;
-		registry.register(interceptorType);
+		registry.register(type);
 	}
 }

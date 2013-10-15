@@ -105,6 +105,7 @@ import br.com.caelum.vraptor.ioc.fixture.InterceptorInTheClasspath;
 public abstract class GenericContainerTest {
 
 	protected ContainerProvider provider;
+	private Container currentContainer;
 
 	protected abstract ContainerProvider getProvider();
 	protected abstract <T> T executeInsideRequest(WhatToDo<T> execution);
@@ -112,6 +113,7 @@ public abstract class GenericContainerTest {
 	@Before
 	public void setup() throws Exception {
 		getStartedProvider();
+		currentContainer = getCurrentContainer();
 	}
 
 	protected void getStartedProvider() {
@@ -195,9 +197,8 @@ public abstract class GenericContainerTest {
 			@Override
 			public Object execute(RequestInfo request, int counter) {
 				provider.provideForRequest(request);
-				Container container = getCurrentContainer();
-				MyDependentComponent instance1 = instanceFor(MyDependentComponent.class,container);
-				MyDependentComponent instance2 = instanceFor(MyDependentComponent.class,container);
+				MyDependentComponent instance1 = instanceFor(MyDependentComponent.class, currentContainer);
+				MyDependentComponent instance2 = instanceFor(MyDependentComponent.class, currentContainer);
 				assertThat(instance1, not(sameInstance(instance2)));
 				return null;
 			}
@@ -226,7 +227,7 @@ public abstract class GenericContainerTest {
 			public T execute(RequestInfo request, final int counter) {
 				provider.provideForRequest(request);
 				ControllerMethod secondMethod = mock(ControllerMethod.class, "rm" + counter);
-				Container secondContainer = getCurrentContainer();
+				Container secondContainer = currentContainer;
 				secondContainer.instanceFor(MethodInfo.class).setControllerMethod(secondMethod);
 				return instanceFor(component, secondContainer);
 			}
@@ -256,7 +257,7 @@ public abstract class GenericContainerTest {
 
 	protected <T> T getFromContainerInCurrentThread(final Class<T> componentToBeRetrieved, RequestInfo request) {
 		provider.provideForRequest(request);
-		return instanceFor(componentToBeRetrieved, getCurrentContainer());
+		return instanceFor(componentToBeRetrieved, currentContainer);
 	}
 
 	private CDIBasedContainer getCurrentContainer() {
@@ -265,7 +266,7 @@ public abstract class GenericContainerTest {
 
 	protected <T> T getFromContainerInCurrentThread(final Class<T> componentToBeRetrieved, RequestInfo request,final Code<T> code) {
 		provider.provideForRequest(request);
-		T bean = instanceFor(componentToBeRetrieved, getCurrentContainer());
+		T bean = instanceFor(componentToBeRetrieved, currentContainer);
 		code.execute(bean);
 		return bean;
 	}
@@ -353,7 +354,7 @@ public abstract class GenericContainerTest {
 			@Override
 			public Converters execute(RequestInfo request, final int counter) {
 				provider.provideForRequest(request);
-				Converters converters = getCurrentContainer().instanceFor(Converters.class);
+				Converters converters = currentContainer.instanceFor(Converters.class);
 				Converter<?> converter = converters.to(Void.class);
 				assertThat(converter, is(instanceOf(ConverterInTheClasspath.class)));
 				return null;
@@ -373,14 +374,13 @@ public abstract class GenericContainerTest {
 			public Void execute(RequestInfo request, int counter) {
 
 				provider.provideForRequest(request);
-				Container container = getCurrentContainer();
-				Deserializers deserializers = container.instanceFor(Deserializers.class);
+				Deserializers deserializers = currentContainer.instanceFor(Deserializers.class);
 				List<String> types = asList("application/json", "json", "application/xml",
 					"xml", "text/xml", "application/x-www-form-urlencoded");
 
 				for (String type : types) {
 					assertThat("deserializer not found: " + type,
-							deserializers.deserializerFor(type, container), is(notNullValue()));
+							deserializers.deserializerFor(type, currentContainer), is(notNullValue()));
 				}
 				return null;
 			}
@@ -394,7 +394,7 @@ public abstract class GenericContainerTest {
 			public Void execute(RequestInfo request, int counter) {
 				provider.provideForRequest(request);
 
-				Converters converters = getCurrentContainer().instanceFor(Converters.class);
+				Converters converters = currentContainer.instanceFor(Converters.class);
 
 				final HashMap<Class, Class<?>> EXPECTED_CONVERTERS = new HashMap<Class, Class<?>>() {
 					{

@@ -1,5 +1,7 @@
 package br.com.caelum.vraptor.interceptor;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
@@ -17,7 +19,6 @@ import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.core.InterceptorHandler;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.ioc.Container;
-import static org.slf4j.LoggerFactory.getLogger;
 
 public class AspectStyleInterceptorHandler implements InterceptorHandler {
 
@@ -43,9 +44,10 @@ public class AspectStyleInterceptorHandler implements InterceptorHandler {
 	}
 
 	private void configure() {
-		after = new NoStackParameterStepExecutor(stepInvoker, find(AfterCall.class), interceptorClass);
-		around = new AroundExecutor(stepInvoker,parametersResolver, find(AroundCall.class), interceptorClass);
-		before = new NoStackParameterStepExecutor(stepInvoker, find(BeforeCall.class), interceptorClass);
+
+		after = new NoStackParameterStepExecutor(stepInvoker, find(AfterCall.class));
+		around = new AroundExecutor(stepInvoker,parametersResolver, find(AroundCall.class));
+		before = new NoStackParameterStepExecutor(stepInvoker, find(BeforeCall.class));
 
 		boolean doNotAcceptAfter = !after.accept(interceptorClass);
 		boolean doNotAcceptAround = !around.accept(interceptorClass);
@@ -60,8 +62,8 @@ public class AspectStyleInterceptorHandler implements InterceptorHandler {
 				"at least one method whith @AfterCall, @AroundCall or @BeforeCall annotation");
 		}
 
-		CustomAcceptsExecutor customAcceptsExecutor = new CustomAcceptsExecutor(stepInvoker, container, find(CustomAcceptsFailCallback.class), interceptorClass);
-		InterceptorAcceptsExecutor interceptorAcceptsExecutor = new InterceptorAcceptsExecutor(stepInvoker, parametersResolver, find(Accepts.class), interceptorClass);
+		CustomAcceptsExecutor customAcceptsExecutor = new CustomAcceptsExecutor(stepInvoker, container, find(CustomAcceptsFailCallback.class));
+		InterceptorAcceptsExecutor interceptorAcceptsExecutor = new InterceptorAcceptsExecutor(stepInvoker, parametersResolver, find(Accepts.class));
 		boolean customAccepts = customAcceptsExecutor.accept(interceptorClass);
 		boolean internalAccepts = interceptorAcceptsExecutor.accept(interceptorClass);
 		if(customAccepts && internalAccepts){
@@ -89,7 +91,7 @@ public class AspectStyleInterceptorHandler implements InterceptorHandler {
 			stack.next(controllerMethod, currentController);
 		}
 	}
-	
+
 	@Override
 	public String toString() {
 		return "AspectStyleInterceptorHandler for " + interceptorClass.getName();

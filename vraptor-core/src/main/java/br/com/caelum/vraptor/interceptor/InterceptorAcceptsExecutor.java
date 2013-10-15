@@ -15,15 +15,16 @@ public class InterceptorAcceptsExecutor implements StepExecutor<Boolean>{
 	private InterceptorMethodParametersResolver parameterResolver;
 	private Method method;
 
-	public InterceptorAcceptsExecutor(StepInvoker stepInvoker, InterceptorMethodParametersResolver parameterResolver,
-			Method method, Class<?> interceptorClass) {
+	public InterceptorAcceptsExecutor(StepInvoker stepInvoker,
+			InterceptorMethodParametersResolver parameterResolver, Method method) {
+
 		this.stepInvoker = stepInvoker;
 		this.parameterResolver = parameterResolver;
 		this.method = method;
 	}
 
 	@Override
-	public boolean accept(Class<?> interceptorClass) {
+	public boolean accept() {
 		if (method == null) {
 			return false;
 		}

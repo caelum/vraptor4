@@ -45,6 +45,7 @@ import javax.annotation.PreDestroy;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.Dependent;
 import javax.enterprise.context.RequestScoped;
+import javax.enterprise.inject.spi.CDI;
 import javax.inject.Named;
 
 import org.hamcrest.Matcher;
@@ -84,6 +85,7 @@ import br.com.caelum.vraptor.deserialization.Deserializers;
 import br.com.caelum.vraptor.http.route.Route;
 import br.com.caelum.vraptor.http.route.Router;
 import br.com.caelum.vraptor.interceptor.InterceptorRegistry;
+import br.com.caelum.vraptor.ioc.cdi.CDIBasedContainer;
 import br.com.caelum.vraptor.ioc.cdi.Code;
 import br.com.caelum.vraptor.ioc.fixture.ComponentFactoryInTheClasspath;
 import br.com.caelum.vraptor.ioc.fixture.ComponentFactoryInTheClasspath.Provided;
@@ -193,7 +195,7 @@ public abstract class GenericContainerTest {
 			@Override
 			public Object execute(RequestInfo request, int counter) {
 				provider.provideForRequest(request);
-				Container container = provider.getContainer();
+				Container container = getCurrentContainer();
 				MyDependentComponent instance1 = instanceFor(MyDependentComponent.class,container);
 				MyDependentComponent instance2 = instanceFor(MyDependentComponent.class,container);
 				assertThat(instance1, not(sameInstance(instance2)));
@@ -224,7 +226,7 @@ public abstract class GenericContainerTest {
 			public T execute(RequestInfo request, final int counter) {
 				provider.provideForRequest(request);
 				ControllerMethod secondMethod = mock(ControllerMethod.class, "rm" + counter);
-				Container secondContainer = provider.getContainer();
+				Container secondContainer = getCurrentContainer();
 				secondContainer.instanceFor(MethodInfo.class).setControllerMethod(secondMethod);
 				return instanceFor(component, secondContainer);
 			}
@@ -254,12 +256,16 @@ public abstract class GenericContainerTest {
 
 	protected <T> T getFromContainerInCurrentThread(final Class<T> componentToBeRetrieved, RequestInfo request) {
 		provider.provideForRequest(request);
-		return instanceFor(componentToBeRetrieved, provider.getContainer());
+		return instanceFor(componentToBeRetrieved, getCurrentContainer());
+	}
+
+	private CDIBasedContainer getCurrentContainer() {
+		return CDI.current().select(CDIBasedContainer.class).get();
 	}
 
 	protected <T> T getFromContainerInCurrentThread(final Class<T> componentToBeRetrieved, RequestInfo request,final Code<T> code) {
 		provider.provideForRequest(request);
-		T bean = instanceFor(componentToBeRetrieved, provider.getContainer());
+		T bean = instanceFor(componentToBeRetrieved, getCurrentContainer());
 		code.execute(bean);
 		return bean;
 	}
@@ -347,7 +353,7 @@ public abstract class GenericContainerTest {
 			@Override
 			public Converters execute(RequestInfo request, final int counter) {
 				provider.provideForRequest(request);
-				Converters converters = provider.getContainer().instanceFor(Converters.class);
+				Converters converters = getCurrentContainer().instanceFor(Converters.class);
 				Converter<?> converter = converters.to(Void.class);
 				assertThat(converter, is(instanceOf(ConverterInTheClasspath.class)));
 				return null;
@@ -367,7 +373,7 @@ public abstract class GenericContainerTest {
 			public Void execute(RequestInfo request, int counter) {
 
 				provider.provideForRequest(request);
-				Container container = provider.getContainer();
+				Container container = getCurrentContainer();
 				Deserializers deserializers = container.instanceFor(Deserializers.class);
 				List<String> types = asList("application/json", "json", "application/xml",
 					"xml", "text/xml", "application/x-www-form-urlencoded");
@@ -388,7 +394,7 @@ public abstract class GenericContainerTest {
 			public Void execute(RequestInfo request, int counter) {
 				provider.provideForRequest(request);
 
-				Converters converters = provider.getContainer().instanceFor(Converters.class);
+				Converters converters = getCurrentContainer().instanceFor(Converters.class);
 
 				final HashMap<Class, Class<?>> EXPECTED_CONVERTERS = new HashMap<Class, Class<?>>() {
 					{

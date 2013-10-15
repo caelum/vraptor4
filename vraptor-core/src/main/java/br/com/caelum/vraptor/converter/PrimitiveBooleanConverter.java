@@ -24,7 +24,6 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
 import br.com.caelum.vraptor.Convert;
-import br.com.caelum.vraptor.Converter;
 
 /**
  * VRaptor's primitive boolean converter.

@@ -18,7 +18,6 @@ package br.com.caelum.vraptor.converter;
 import javax.enterprise.context.ApplicationScoped;
 
 import br.com.caelum.vraptor.Convert;
-import br.com.caelum.vraptor.Converter;
 
 /**
  * A no-op converter

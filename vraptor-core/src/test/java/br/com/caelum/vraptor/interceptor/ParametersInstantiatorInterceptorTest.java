@@ -42,7 +42,6 @@ import org.mockito.stubbing.Answer;
 
 import br.com.caelum.vraptor.HeaderParam;
 import br.com.caelum.vraptor.InterceptionException;
-import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.controller.DefaultControllerMethod;
 import br.com.caelum.vraptor.core.InterceptorStack;
@@ -52,6 +51,7 @@ import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.http.ParametersProvider;
 import br.com.caelum.vraptor.validator.Message;
 import br.com.caelum.vraptor.validator.SimpleMessage;
+import br.com.caelum.vraptor.validator.Validator;
 import br.com.caelum.vraptor.view.FlashScope;
 
 public class ParametersInstantiatorInterceptorTest {

@@ -15,12 +15,12 @@
  * limitations under the License.
  */
 
-package br.com.caelum.vraptor;
+package br.com.caelum.vraptor.validator;
 
 import java.util.Collection;
 import java.util.List;
 
-import br.com.caelum.vraptor.validator.Message;
+import br.com.caelum.vraptor.View;
 
 /**
  * A validator interface for VRaptor. It allows you to assert for specific situations.

@@ -26,8 +26,6 @@ import static org.hamcrest.Matchers.nullValue;
 import org.junit.Before;
 import org.junit.Test;
 
-import br.com.caelum.vraptor.Converter;
-
 public class EnumConverterTest {
 
 	private Converter<Enum> converter;

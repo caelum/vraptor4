@@ -15,7 +15,9 @@
  * limitations under the License. 
  */
 
-package br.com.caelum.vraptor;
+package br.com.caelum.vraptor.converter;
+
+import br.com.caelum.vraptor.TwoWayConverter;
 
 
 /**

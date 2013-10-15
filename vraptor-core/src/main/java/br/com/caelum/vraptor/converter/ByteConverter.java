@@ -22,7 +22,6 @@ import static com.google.common.base.Strings.isNullOrEmpty;
 import javax.enterprise.context.ApplicationScoped;
 
 import br.com.caelum.vraptor.Convert;
-import br.com.caelum.vraptor.Converter;
 
 /**
  * VRaptor's Byte converter.

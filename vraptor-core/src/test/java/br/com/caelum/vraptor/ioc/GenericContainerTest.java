@@ -55,10 +55,10 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.converter.BooleanConverter;
 import br.com.caelum.vraptor.converter.ByteConverter;
+import br.com.caelum.vraptor.converter.Converter;
 import br.com.caelum.vraptor.converter.EnumConverter;
 import br.com.caelum.vraptor.converter.IntegerConverter;
 import br.com.caelum.vraptor.converter.LocaleBasedCalendarConverter;

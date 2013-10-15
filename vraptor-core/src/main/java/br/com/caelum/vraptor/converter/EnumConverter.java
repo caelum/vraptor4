@@ -22,7 +22,6 @@ import static com.google.common.base.Strings.isNullOrEmpty;
 import javax.enterprise.context.ApplicationScoped;
 
 import br.com.caelum.vraptor.Convert;
-import br.com.caelum.vraptor.Converter;
 
 /**
  * Accepts either the ordinal value or name. Null and empty strings are treated

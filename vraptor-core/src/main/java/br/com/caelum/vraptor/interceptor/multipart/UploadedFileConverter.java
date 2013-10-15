@@ -21,7 +21,7 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
 import br.com.caelum.vraptor.Convert;
-import br.com.caelum.vraptor.Converter;
+import br.com.caelum.vraptor.converter.Converter;
 
 /**
  * A converter capable of setting UploadedFiles based on files parsed by the

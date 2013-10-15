@@ -17,8 +17,8 @@
 
 package br.com.caelum.vraptor.core;
 
-import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.TwoWayConverter;
+import br.com.caelum.vraptor.converter.Converter;
 
 /**
  * Represents a collection of converters.<br>

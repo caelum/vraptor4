@@ -20,9 +20,9 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 
-import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.VRaptorException;
 import br.com.caelum.vraptor.controller.BeanClass;
+import br.com.caelum.vraptor.converter.Converter;
 import br.com.caelum.vraptor.core.ConvertQualifier;
 import br.com.caelum.vraptor.core.Converters;
 

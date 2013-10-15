@@ -15,6 +15,8 @@
  */
 package br.com.caelum.vraptor;
 
+import br.com.caelum.vraptor.converter.Converter;
+
 /**
  * A converter that also converts an object to a safe string. Specially useful for URI parameters.
  *

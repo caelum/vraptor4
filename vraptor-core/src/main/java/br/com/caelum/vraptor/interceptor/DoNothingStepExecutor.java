@@ -6,7 +6,7 @@ import javax.enterprise.inject.Vetoed;
 public class DoNothingStepExecutor implements StepExecutor<Void> {
 
 	@Override
-	public boolean accept(Class<?> interceptorClass) {
+	public boolean accept() {
 		return true;
 	}
 

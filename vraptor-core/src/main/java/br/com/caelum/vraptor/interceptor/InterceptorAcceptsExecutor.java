@@ -24,7 +24,7 @@ public class InterceptorAcceptsExecutor implements StepExecutor<Boolean>{
 	}
 
 	@Override
-	public boolean accept(Class<?> interceptorClass) {
+	public boolean accept() {
 		if (method == null) {
 			return false;
 		}

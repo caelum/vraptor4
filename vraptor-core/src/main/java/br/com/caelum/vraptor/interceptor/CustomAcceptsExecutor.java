@@ -16,17 +16,19 @@ public class CustomAcceptsExecutor implements StepExecutor<Boolean> {
 	private StepInvoker stepInvoker;
 	private Container container;
 	private Method method;
+	private Class<?> interceptorClass;
 
 	public CustomAcceptsExecutor(StepInvoker stepInvoker,
-			Container container, Method method) {
+			Container container, Method method, Class<?> interceptorClass) {
 
 		this.stepInvoker = stepInvoker;
 		this.container = container;
 		this.method = method;
+		this.interceptorClass = interceptorClass;
 	}
 
 	@Override
-	public boolean accept(Class<?> interceptorClass){
+	public boolean accept(){
 		List<Annotation> constraints = CustomAcceptsVerifier.getCustomAcceptsAnnotations(interceptorClass);
 		return !constraints.isEmpty();
 	}

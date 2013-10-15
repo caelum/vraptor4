@@ -49,9 +49,9 @@ public class AspectStyleInterceptorHandler implements InterceptorHandler {
 		around = new AroundExecutor(stepInvoker,parametersResolver, find(AroundCall.class));
 		before = new NoStackParameterStepExecutor(stepInvoker, find(BeforeCall.class));
 
-		boolean doNotAcceptAfter = !after.accept(interceptorClass);
-		boolean doNotAcceptAround = !around.accept(interceptorClass);
-		boolean doNotAcceptBefore = !before.accept(interceptorClass);
+		boolean doNotAcceptAfter = !after.accept();
+		boolean doNotAcceptAround = !around.accept();
+		boolean doNotAcceptBefore = !before.accept();
 
 		if(doNotAcceptAfter) after = new DoNothingStepExecutor();
 		if(doNotAcceptAround) around = new StackNextExecutor(container);
@@ -62,14 +62,14 @@ public class AspectStyleInterceptorHandler implements InterceptorHandler {
 				"at least one method whith @AfterCall, @AroundCall or @BeforeCall annotation");
 		}
 
-		CustomAcceptsExecutor customAcceptsExecutor = new CustomAcceptsExecutor(stepInvoker, container, find(CustomAcceptsFailCallback.class));
+		CustomAcceptsExecutor customAcceptsExecutor = new CustomAcceptsExecutor(stepInvoker, container, find(CustomAcceptsFailCallback.class), interceptorClass);
 		InterceptorAcceptsExecutor interceptorAcceptsExecutor = new InterceptorAcceptsExecutor(stepInvoker, parametersResolver, find(Accepts.class));
-		boolean customAccepts = customAcceptsExecutor.accept(interceptorClass);
-		boolean internalAccepts = interceptorAcceptsExecutor.accept(interceptorClass);
+		boolean customAccepts = customAcceptsExecutor.accept();
+		boolean internalAccepts = interceptorAcceptsExecutor.accept();
 		if(customAccepts && internalAccepts){
 			throw new VRaptorException("Interceptor "+interceptorClass+" must declare internal accepts or custom, not both.");
 		}
-		this.acceptsExecutor = customAccepts?customAcceptsExecutor:interceptorAcceptsExecutor;
+		this.acceptsExecutor = customAccepts ? customAcceptsExecutor : interceptorAcceptsExecutor;
 	}
 
 	private Method find(Class<? extends Annotation> step) {

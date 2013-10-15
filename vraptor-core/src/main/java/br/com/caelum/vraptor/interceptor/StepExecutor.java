@@ -7,7 +7,7 @@ package br.com.caelum.vraptor.interceptor;
  */
 public interface StepExecutor<R> {
 
-	public abstract boolean accept(Class<?> interceptorClass);
+	public abstract boolean accept();
 
 	public abstract R execute(Object interceptor);
 

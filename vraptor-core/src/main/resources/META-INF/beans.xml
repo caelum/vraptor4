@@ -43,6 +43,9 @@
 		</exclude>
 
 		<exclude name="br.com.caelum.vraptor.util.**" />
+		
+		<exclude name="br.com.caelum.vraptor.*" />
+		
 	</scan>
 	
 </beans>

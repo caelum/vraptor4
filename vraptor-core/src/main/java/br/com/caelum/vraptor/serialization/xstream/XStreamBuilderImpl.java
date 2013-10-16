@@ -36,7 +36,7 @@ public class XStreamBuilderImpl implements XStreamBuilder {
 	private boolean indented = false;
 	
 	/** @Deprecated CDI eyes only */
-	public XStreamBuilderImpl() {
+	protected XStreamBuilderImpl() {
 		this(null, null);
 	}
 

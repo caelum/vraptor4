@@ -53,7 +53,7 @@ public class DefaultPageResult implements PageResult {
 	private final MethodInfo requestInfo;
 	
 	/** @Deprecated CDI eyes only */
-	public DefaultPageResult() {
+	protected DefaultPageResult() {
 		this(null, null, null, null, null);
 	}
 

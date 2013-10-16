@@ -19,8 +19,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
-import br.com.caelum.vraptor.InterceptionException;
-import br.com.caelum.vraptor.Intercepts;
 import br.com.caelum.vraptor.VRaptorException;
 import br.com.caelum.vraptor.controller.ControllerInstance;
 import br.com.caelum.vraptor.controller.ControllerMethod;
@@ -285,19 +283,6 @@ public class AspectStyleInterceptorHandlerTest {
 		aspectHandler.execute(stack, controllerMethod, aspectHandler);
 
 		verify(interceptor).customAcceptsFailCallback();
-
-
-	}
-
-	@Intercepts
-	class SimpleInterceptor {
-		public void dummyMethodWithoutInterceptorAnnotations() {}
-	}
-
-	@Test(expected=InterceptionException.class)
-	public void shoulThrowExceptionIfInterceptorDontHaveAnyCallableMethod() {
-		SimpleInterceptor interceptor = new SimpleInterceptor();
-		newAspectStyleInterceptorHandler(SimpleInterceptor.class, interceptor);
 	}
 
 	@SuppressWarnings("unchecked")

@@ -1,5 +1,7 @@
 package br.com.caelum.vraptor.interceptor;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
@@ -11,13 +13,11 @@ import br.com.caelum.vraptor.Accepts;
 import br.com.caelum.vraptor.AfterCall;
 import br.com.caelum.vraptor.AroundCall;
 import br.com.caelum.vraptor.BeforeCall;
-import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.VRaptorException;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.core.InterceptorHandler;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.ioc.Container;
-import static org.slf4j.LoggerFactory.getLogger;
 
 public class AspectStyleInterceptorHandler implements InterceptorHandler {
 
@@ -43,22 +43,14 @@ public class AspectStyleInterceptorHandler implements InterceptorHandler {
 	}
 
 	private void configure() {
+
 		after = new NoStackParameterStepExecutor(stepInvoker, find(AfterCall.class), interceptorClass);
 		around = new AroundExecutor(stepInvoker,parametersResolver, find(AroundCall.class), interceptorClass);
 		before = new NoStackParameterStepExecutor(stepInvoker, find(BeforeCall.class), interceptorClass);
 
-		boolean doNotAcceptAfter = !after.accept(interceptorClass);
-		boolean doNotAcceptAround = !around.accept(interceptorClass);
-		boolean doNotAcceptBefore = !before.accept(interceptorClass);
-
-		if(doNotAcceptAfter) after = new DoNothingStepExecutor();
-		if(doNotAcceptAround) around = new StackNextExecutor(container);
-		if(doNotAcceptBefore) before = new DoNothingStepExecutor();
-
-		if (doNotAcceptAfter && doNotAcceptAround && doNotAcceptBefore) {
-			throw new InterceptionException("Interceptor " + interceptorClass.getCanonicalName() + " must declare " +
-				"at least one method whith @AfterCall, @AroundCall or @BeforeCall annotation");
-		}
+		if(!after.accept(interceptorClass)) after = new DoNothingStepExecutor();
+		if(!around.accept(interceptorClass)) around = new StackNextExecutor(container);
+		if(!before.accept(interceptorClass)) before = new DoNothingStepExecutor();
 
 		CustomAcceptsExecutor customAcceptsExecutor = new CustomAcceptsExecutor(stepInvoker, container, find(CustomAcceptsFailCallback.class), interceptorClass);
 		InterceptorAcceptsExecutor interceptorAcceptsExecutor = new InterceptorAcceptsExecutor(stepInvoker, parametersResolver, find(Accepts.class), interceptorClass);
@@ -89,7 +81,7 @@ public class AspectStyleInterceptorHandler implements InterceptorHandler {
 			stack.next(controllerMethod, currentController);
 		}
 	}
-	
+
 	@Override
 	public String toString() {
 		return "AspectStyleInterceptorHandler for " + interceptorClass.getName();

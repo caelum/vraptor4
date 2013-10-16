@@ -61,7 +61,10 @@ public class IogiParametersProviderTest extends ParametersProviderTest {
 
 	@Override
 	protected ParametersProvider getProvider() {
-		return new IogiParametersProvider(nameProvider, request, new VRaptorInstantiator(converters, new VRaptorDependencyProvider(container), new VRaptorParameterNamesProvider(nameProvider), request));
+		VRaptorInstantiator instantiator = new VRaptorInstantiator(converters, new VRaptorDependencyProvider(container), new VRaptorParameterNamesProvider(nameProvider), request);
+		instantiator.createInstantiator();
+		
+		return new IogiParametersProvider(nameProvider, request, instantiator);
 	}
 
 	@Test

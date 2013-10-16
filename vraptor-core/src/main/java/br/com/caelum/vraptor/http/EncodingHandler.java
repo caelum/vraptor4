@@ -45,9 +45,9 @@ public class EncodingHandler {
 	public static final String ENCODING_KEY = "br.com.caelum.vraptor.encoding";
 
 	private String encoding;
-	private ServletContext context;
+	private final ServletContext context;
 	
-	/** @Deprecated CDI eyes only */ 
+	/** @deprecated CDI eyes only */ 
 	protected EncodingHandler() {
 		this(null);
 	}

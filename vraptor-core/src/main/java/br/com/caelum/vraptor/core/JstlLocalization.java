@@ -50,13 +50,14 @@ public class JstlLocalization {
 
 	private static final String DEFAULT_BUNDLE_NAME = "messages";
 
-	private HttpServletRequest request;
+	private final HttpServletRequest request;
 	
 	private ResourceBundle bundle;
 	private Locale locale;
 
 	/** @Deprecated CDI eyes only */
 	protected JstlLocalization() {
+		this(null);
 	}
 	
 	@Inject

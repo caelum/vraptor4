@@ -37,10 +37,11 @@ import br.com.caelum.vraptor.Convert;
 @RequestScoped
 public class LocaleBasedDateConverter implements Converter<Date> {
 
-	private Locale locale;
+	private final Locale locale;
 
 	/** @Deprecated CDI eyes only */
 	protected LocaleBasedDateConverter() {
+		this(null);
 	}
 
 	@Inject

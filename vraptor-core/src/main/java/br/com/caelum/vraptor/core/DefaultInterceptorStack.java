@@ -39,11 +39,13 @@ import br.com.caelum.vraptor.controller.ControllerMethod;
 public class DefaultInterceptorStack implements InterceptorStack {
 
 	private static final Logger logger = LoggerFactory.getLogger(DefaultInterceptorStack.class);
-	private LinkedList<InterceptorHandler> handlers;
+	private final LinkedList<InterceptorHandler> handlers;
 	private LinkedList<Iterator<InterceptorHandler>> internalStack = new LinkedList<>();
 
 	/** @Deprecated CDI eyes only */
-	protected DefaultInterceptorStack() {}
+	protected DefaultInterceptorStack() {
+		this(null);
+	}
 
 	@Inject
 	public DefaultInterceptorStack(InterceptorStackHandlersCache cache) {

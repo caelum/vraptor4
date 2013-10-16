@@ -35,11 +35,12 @@ import br.com.caelum.vraptor.proxy.Proxifier;
 @ApplicationScoped
 public class DefaultRoutes implements Routes{
 
-	private Proxifier proxifier;
-	private Router router;
+	private final Proxifier proxifier;
+	private final Router router;
 
 	/** @Deprecated CDI eyes only */
 	protected DefaultRoutes() {
+		this(null, null);
 	}
 	
 	@Inject

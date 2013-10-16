@@ -39,10 +39,11 @@ import br.com.caelum.vraptor.Convert;
 @RequestScoped
 public class LocaleBasedCalendarConverter implements Converter<Calendar> {
 
-	private Locale locale;
+	private final Locale locale;
 
 	/** @Deprecated CDI eyes only */
 	protected LocaleBasedCalendarConverter() {
+		this(null);
 	}
 
 	@Inject

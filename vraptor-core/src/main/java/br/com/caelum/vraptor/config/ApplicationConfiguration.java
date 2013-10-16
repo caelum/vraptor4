@@ -31,10 +31,11 @@ import javax.servlet.http.HttpServletRequest;
 @RequestScoped
 public class ApplicationConfiguration implements Configuration {
 
-	private HttpServletRequest request;
+	private final HttpServletRequest request;
 	
 	/** @Deprecated CDI eyes only */
 	protected ApplicationConfiguration() {
+		this(null);
 	}
 
 	@Inject

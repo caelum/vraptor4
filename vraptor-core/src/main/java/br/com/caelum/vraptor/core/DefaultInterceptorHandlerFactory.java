@@ -38,23 +38,20 @@ import br.com.caelum.vraptor.ioc.Container;
 @Default
 public class DefaultInterceptorHandlerFactory implements InterceptorHandlerFactory {
 
-	private Container container;
-
-	private CacheStore<Class<?>, InterceptorHandler> cachedHandlers;
-
-	private StepInvoker stepInvoker;
-
-	private InterceptorMethodParametersResolver parametersResolver;
+	private final Container container;
+	private final CacheStore<Class<?>, InterceptorHandler> cachedHandlers;
+	private final StepInvoker stepInvoker;
+	private final InterceptorMethodParametersResolver parametersResolver;
 
 	/** @Deprecated CDI eyes only */
 	protected DefaultInterceptorHandlerFactory() {
+		this(null, null, null, null);
 	}
 
 	@Inject
-	public DefaultInterceptorHandlerFactory(Container container, StepInvoker
-			stepInvoker, InterceptorMethodParametersResolver parametersResolver,
-			CacheStore<Class<?>,InterceptorHandler> cachedHandlers) {
-
+	public DefaultInterceptorHandlerFactory(Container container, StepInvoker stepInvoker, 
+			InterceptorMethodParametersResolver parametersResolver, CacheStore<Class<?>, 
+			InterceptorHandler> cachedHandlers) {
 		this.container = container;
 		this.stepInvoker = stepInvoker;
 		this.parametersResolver = parametersResolver;

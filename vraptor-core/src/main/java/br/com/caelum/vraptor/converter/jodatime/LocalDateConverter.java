@@ -40,10 +40,12 @@ import br.com.caelum.vraptor.converter.Converter;
 @Convert(LocalDate.class)
 public class LocalDateConverter implements Converter<LocalDate> {
 
-	private Locale locale;
+	private final Locale locale;
 
 	/** @Deprecated CDI eyes only */
-	protected LocalDateConverter() {}
+	protected LocalDateConverter() {
+		this(null);
+	}
 
 	@Inject
 	public LocalDateConverter(Locale locale) {

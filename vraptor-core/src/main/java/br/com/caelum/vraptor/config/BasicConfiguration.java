@@ -34,10 +34,12 @@ public class BasicConfiguration {
 	 */
 	public static final String ENCODING = "br.com.caelum.vraptor.encoding";
 
-	private ServletContext servletContext;
+	private final ServletContext servletContext;
 	
 	/** @Deprecated CDI eyes only */
-	protected BasicConfiguration() {}
+	protected BasicConfiguration() {
+		this(null);
+	}
 
 	@Inject
 	public BasicConfiguration(ServletContext servletContext) {

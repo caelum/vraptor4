@@ -40,10 +40,11 @@ import br.com.caelum.vraptor.Convert;
 @RequestScoped
 public class LocaleBasedDoubleConverter implements Converter<Double> {
 
-	private Locale locale;
+	private final Locale locale;
 
 	/** @Deprecated CDI eyes only */
 	protected LocaleBasedDoubleConverter() {
+		this(null);
 	}
 
 	@Inject

@@ -1,5 +1,13 @@
 package br.com.caelum.vraptor.ioc.cdi;
 
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
+
 import java.util.concurrent.Callable;
 
 import javax.enterprise.context.RequestScoped;
@@ -24,15 +32,6 @@ import br.com.caelum.vraptor.ioc.WhatToDo;
 import br.com.caelum.vraptor.ioc.fixture.ComponentFactoryInTheClasspath;
 import br.com.caelum.vraptor.ioc.fixture.CustomComponentWithLifecycleInTheClasspath;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
-
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
-
 public class CDIBasedContainerTest extends GenericContainerTest {
 
 	private static CdiContainer cdiContainer;
@@ -54,13 +53,13 @@ public class CDIBasedContainerTest extends GenericContainerTest {
 	protected ContainerProvider getProvider() {
 		return CDI.current().select(CDIProvider.class).get();
 	}
-	
+
 	@Override
 	public void tearDown() {
 		super.tearDown();
 		cdiContainer.stopAllContexts();
 	}
-	
+
 
 	@Override
 	protected <T> T executeInsideRequest(final WhatToDo<T> execution) {
@@ -184,14 +183,13 @@ public class CDIBasedContainerTest extends GenericContainerTest {
 		Bean<?> bean = cdiContainer.getBeanManager().getBeans(CDIControllerComponent.class).iterator().next();
 		assertTrue(bean.getScope().equals(RequestScoped.class));
 	}
-	
+
 	@Test
 	public void shouldCreateComponentsWithCache(){
-		UsingCacheComponent component = getProvider().getContainer().instanceFor(UsingCacheComponent.class);
+		UsingCacheComponent component = getFromContainer(UsingCacheComponent.class);
 		component.putWithLRU("test","test");
 		component.putWithDefault("test2","test2");
 		assertEquals(component.putWithLRU("test","test"),"test");
 		assertEquals(component.putWithDefault("test2","test2"),"test2");
 	}
-
 }

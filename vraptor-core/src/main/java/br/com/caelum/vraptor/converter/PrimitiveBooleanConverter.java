@@ -33,10 +33,14 @@ import br.com.caelum.vraptor.Convert;
 @Convert(boolean.class)
 @ApplicationScoped
 public class PrimitiveBooleanConverter implements Converter<Boolean> {
-	private BooleanConverter booleanConverter;
+	
+	private final BooleanConverter booleanConverter;
 
-	@Deprecated
-	public PrimitiveBooleanConverter() {
+	/** 
+	 * @deprecated CDI eyes only
+	 */
+	protected PrimitiveBooleanConverter() {
+		this(null);
 	}
 
 	@Inject

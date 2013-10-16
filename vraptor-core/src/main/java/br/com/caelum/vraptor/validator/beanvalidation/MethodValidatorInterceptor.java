@@ -58,15 +58,19 @@ public class MethodValidatorInterceptor implements Interceptor {
 
 	private static final Logger logger = LoggerFactory.getLogger(MethodValidatorInterceptor.class);
 	
-	private Locale locale;
-	private MessageInterpolator interpolator;
-	private MethodInfo methodInfo;
-	private Validator validator;
-	private ParameterNameProvider parameterNameProvider;
-	private javax.validation.Validator bvalidator;
+	private final Locale locale;
+	private final MessageInterpolator interpolator;
+	private final MethodInfo methodInfo;
+	private final Validator validator;
+	private final ParameterNameProvider parameterNameProvider;
+	private final javax.validation.Validator bvalidator;
 
-	@Deprecated
-	public MethodValidatorInterceptor() {}
+	/** 
+	 * @deprecated CDI eyes only
+	 */
+	protected MethodValidatorInterceptor() {
+		this(null, null, null, null, null, null);
+	}
 
 	@Inject
 	public MethodValidatorInterceptor(Locale locale, MessageInterpolator interpolator, Validator validator,

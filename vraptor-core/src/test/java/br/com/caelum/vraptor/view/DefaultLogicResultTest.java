@@ -231,7 +231,6 @@ public class DefaultLogicResultTest {
 	static class TheComponent {
 		private Result result;
 
-		// CDI eyes only
 		public TheComponent() {
 		}
 

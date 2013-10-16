@@ -43,12 +43,15 @@ public class GsonDeserialization implements Deserializer {
 
 	private static final Logger logger = LoggerFactory.getLogger(GsonDeserialization.class);
 
-	private ParameterNameProvider paramNameProvider;
-	private Instance<JsonDeserializer<?>> adapters; 
-	private HttpServletRequest request;
+	private final ParameterNameProvider paramNameProvider;
+	private final Instance<JsonDeserializer<?>> adapters; 
+	private final HttpServletRequest request;
 
-	@Deprecated // CDI eyes only
-	public GsonDeserialization() {
+	/** 
+	 * @deprecated CDI eyes only
+	 */
+	protected GsonDeserialization() {
+		this(null, null, null);
 	}
 	
 	@Inject

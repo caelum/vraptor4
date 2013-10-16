@@ -37,12 +37,15 @@ import br.com.caelum.vraptor.view.ResultException;
 @RequestScoped
 public class GsonJSONSerialization implements JSONSerialization {
 
-	private HttpServletResponse response;
-	private TypeNameExtractor extractor;
-	private VRaptorGsonBuilder builder;
+	private final HttpServletResponse response;
+	private final TypeNameExtractor extractor;
+	private final VRaptorGsonBuilder builder;
 
-	@Deprecated
-	public GsonJSONSerialization() {
+	/** 
+	 * @deprecated CDI eyes only
+	 */
+	protected GsonJSONSerialization() {
+		this(null, null, null);
 	}
 
 	@Inject

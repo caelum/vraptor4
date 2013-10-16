@@ -44,16 +44,19 @@ import br.com.caelum.vraptor.view.Status;
  */
 @Intercepts(after=ParametersInstantiatorInterceptor.class, before=ExecuteMethodInterceptor.class)
 public class DeserializingInterceptor implements Interceptor {
-	private HttpServletRequest request;
-	private Deserializers deserializers;
-	private MethodInfo methodInfo;
-	private Container container;
-	private Status status;
+	private final HttpServletRequest request;
+	private final Deserializers deserializers;
+	private final MethodInfo methodInfo;
+	private final Container container;
+	private final Status status;
 
 	private static final Logger logger = LoggerFactory.getLogger(DeserializingInterceptor.class);
 
-	@Deprecated
-	public DeserializingInterceptor() {
+	/** 
+	 * @deprecated CDI eyes only
+	 */
+	protected DeserializingInterceptor() {
+		this(null, null, null, null, null);
 	}
 
 	@Inject

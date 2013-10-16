@@ -33,11 +33,14 @@ import br.com.caelum.vraptor.interceptor.InterceptorRegistry;
 @ApplicationScoped
 public class InterceptorStereotypeHandler{
 	private static final Logger logger = LoggerFactory.getLogger(InterceptorStereotypeHandler.class);
-	private InterceptorRegistry registry;
+	
+	private final InterceptorRegistry registry;
 
-	//CDI eyes only
-	@Deprecated
-	public InterceptorStereotypeHandler() {
+	/** 
+	 * @deprecated CDI eyes only
+	 */
+	protected InterceptorStereotypeHandler() {
+		this(null);
 	}
 
 	@Inject

@@ -63,16 +63,18 @@ public class CommonsUploadMultipartInterceptor implements Interceptor {
 
 	private static final Logger logger = LoggerFactory.getLogger(CommonsUploadMultipartInterceptor.class);
 
-	private MutableRequest request;
-	private MultipartConfig config;
-	private Validator validator;
+	private final MutableRequest request;
+	private final MultipartConfig config;
+	private final Validator validator;
 
 	private Multiset<String> indexes;
 	private Multimap<String, String> params;
 
-	//CDI eyes only
-	@Deprecated
-	public CommonsUploadMultipartInterceptor() {
+	/** 
+	 * @deprecated CDI eyes only
+	 */
+	protected CommonsUploadMultipartInterceptor() {
+		this(null, null, null);
 	}
 
 	@Inject

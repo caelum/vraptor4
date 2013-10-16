@@ -29,6 +29,7 @@ import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
@@ -54,25 +55,28 @@ import com.google.common.base.Predicate;
 @ApplicationScoped
 public class DefaultRouter implements Router {
 
-	private  Proxifier proxifier;
-	private final  Collection<Route> routes = new PriorityRoutesList();
-	private  TypeFinder finder;
-	private  Converters converters;
-	private  ParameterNameProvider nameProvider;
-	private  Evaluator evaluator;
-	private CacheStore<Invocation,Route> cache;
-	private EncodingHandler encodingHandler;
+	private final RoutesConfiguration config;
+	private final Proxifier proxifier;
+	private final Collection<Route> routes = new PriorityRoutesList();
+	private final TypeFinder finder;
+	private final Converters converters;
+	private final ParameterNameProvider nameProvider;
+	private final Evaluator evaluator;
+	private final CacheStore<Invocation,Route> cache;
+	private final EncodingHandler encodingHandler;
 
-	//CDI eyes only
-	@Deprecated
-	public DefaultRouter() {
+	/** 
+	 * @deprecated CDI eyes only
+	 */
+	protected DefaultRouter() {
+		this(null, null, null, null, null, null, null, null);
 	}
 
 	@Inject
-	public DefaultRouter(RoutesConfiguration config,
-			Proxifier proxifier, TypeFinder finder, Converters converters,
+	public DefaultRouter(RoutesConfiguration config, Proxifier proxifier, TypeFinder finder, Converters converters,
 			ParameterNameProvider nameProvider, Evaluator evaluator, EncodingHandler encodingHandler,
 			CacheStore<Invocation,Route> cache) {
+		this.config = config;
 		this.proxifier = proxifier;
 		this.finder = finder;
 		this.converters = converters;
@@ -80,6 +84,10 @@ public class DefaultRouter implements Router {
 		this.evaluator = evaluator;
 		this.encodingHandler = encodingHandler;
 		this.cache = cache;
+	}
+
+	@PostConstruct
+	public void init() {
 		config.config(this);
 	}
 

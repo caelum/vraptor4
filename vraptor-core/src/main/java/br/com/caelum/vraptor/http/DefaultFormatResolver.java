@@ -32,11 +32,15 @@ import br.com.caelum.vraptor.view.AcceptHeaderToFormat;
 @RequestScoped
 public class DefaultFormatResolver implements FormatResolver {
 
-	private HttpServletRequest request;
-	private AcceptHeaderToFormat acceptHeaderToFormat;
+	private final HttpServletRequest request;
+	private final AcceptHeaderToFormat acceptHeaderToFormat;
 
-	@Deprecated // CDI eyes only
-	public DefaultFormatResolver() {}
+	/** 
+	 * @deprecated CDI eyes only
+	 */
+	protected DefaultFormatResolver() {
+		this(null, null);
+	}
 
 	@Inject
 	public DefaultFormatResolver(HttpServletRequest request, AcceptHeaderToFormat acceptHeaderToFormat) {

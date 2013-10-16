@@ -26,11 +26,8 @@ import java.io.InputStream;
 public class DefaultUploadedFile implements UploadedFile {
 	
 	private final String contentType;
-
 	private final String fileName;
-
 	private final InputStream content;
-
 	private final long size;
 	
 	public DefaultUploadedFile(InputStream content, String fileName, String contentType, long size) {

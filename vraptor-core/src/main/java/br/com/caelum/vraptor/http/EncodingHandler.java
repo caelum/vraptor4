@@ -40,7 +40,7 @@ public class EncodingHandler {
 
 	private final String encoding;
 
-	/** @Deprecated CDI eyes only */
+	/** @deprecated CDI eyes only */
 	protected EncodingHandler() {
 		this(null);
 	}

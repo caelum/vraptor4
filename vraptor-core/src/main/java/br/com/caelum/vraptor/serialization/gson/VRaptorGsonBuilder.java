@@ -34,7 +34,7 @@ public class VRaptorGsonBuilder {
 	private boolean withoutRoot;
 	private String alias;
 
-	/** @Deprecated CDI eyes only */
+	/** @deprecated CDI eyes only */
 	protected VRaptorGsonBuilder() {
 		this(null);
 	}

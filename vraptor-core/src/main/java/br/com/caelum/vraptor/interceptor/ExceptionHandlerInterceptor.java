@@ -51,7 +51,7 @@ public class ExceptionHandlerInterceptor
 	private final ExceptionMapper exceptions;
 	private final Result result;
 
-	/** @Deprecated CDI eyes only */
+	/** @deprecated CDI eyes only */
 	protected ExceptionHandlerInterceptor() {
 		this(null, null);
 	}

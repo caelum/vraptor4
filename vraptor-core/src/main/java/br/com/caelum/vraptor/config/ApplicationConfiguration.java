@@ -33,7 +33,7 @@ public class ApplicationConfiguration implements Configuration {
 
 	private final HttpServletRequest request;
 	
-	/** @Deprecated CDI eyes only */
+	/** @deprecated CDI eyes only */
 	protected ApplicationConfiguration() {
 		this(null);
 	}

@@ -43,7 +43,7 @@ public class DefaultInterceptorHandlerFactory implements InterceptorHandlerFacto
 	private final StepInvoker stepInvoker;
 	private final InterceptorMethodParametersResolver parametersResolver;
 
-	/** @Deprecated CDI eyes only */
+	/** @deprecated CDI eyes only */
 	protected DefaultInterceptorHandlerFactory() {
 		this(null, null, null, null);
 	}

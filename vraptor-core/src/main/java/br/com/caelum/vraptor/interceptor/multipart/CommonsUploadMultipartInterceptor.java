@@ -70,7 +70,7 @@ public class CommonsUploadMultipartInterceptor implements Interceptor {
 	private Multiset<String> indexes;
 	private Multimap<String, String> params;
 
-	/** @Deprecated CDI eyes only */
+	/** @deprecated CDI eyes only */
 	protected CommonsUploadMultipartInterceptor() {
 		this(null, null, null);
 	}

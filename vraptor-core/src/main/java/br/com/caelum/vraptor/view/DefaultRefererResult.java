@@ -45,7 +45,7 @@ public class DefaultRefererResult implements RefererResult {
 	private final Router router;
 	private final ParametersProvider provider;
 
-	/** @Deprecated CDI eyes only */
+	/** @deprecated CDI eyes only */
 	protected DefaultRefererResult() {
 		this(null, null, null, null);
 	}

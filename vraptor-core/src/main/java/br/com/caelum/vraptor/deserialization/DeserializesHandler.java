@@ -35,7 +35,7 @@ public class DeserializesHandler{
 
 	private final Deserializers deserializers;
 
-	/** @Deprecated CDI eyes only */
+	/** @deprecated CDI eyes only */
 	protected DeserializesHandler() {
 		this(null);
 	}

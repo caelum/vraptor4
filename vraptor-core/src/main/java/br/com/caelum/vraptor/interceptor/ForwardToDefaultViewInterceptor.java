@@ -41,7 +41,7 @@ public class ForwardToDefaultViewInterceptor implements Interceptor {
 
 	private static final Logger logger = LoggerFactory.getLogger(ForwardToDefaultViewInterceptor.class);
 
-	/** @Deprecated CDI eyes only */
+	/** @deprecated CDI eyes only */
 	protected ForwardToDefaultViewInterceptor() {
 		this(null);
 	}

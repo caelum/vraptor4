@@ -45,7 +45,7 @@ public class DefaultRepresentationResult implements RepresentationResult {
 	private final Iterable<Serialization> serializations;
 	private final Result result;
 
-	/** @Deprecated CDI eyes only */
+	/** @deprecated CDI eyes only */
 	protected DefaultRepresentationResult() {
 		this(null, null, null);
 	}

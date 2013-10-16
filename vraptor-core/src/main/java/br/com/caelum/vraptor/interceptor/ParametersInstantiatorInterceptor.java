@@ -61,7 +61,7 @@ public class ParametersInstantiatorInterceptor implements Interceptor {
 
 	private final List<Message> errors = new ArrayList<>();
 	
-	/** @Deprecated CDI eyes only */
+	/** @deprecated CDI eyes only */
 	protected ParametersInstantiatorInterceptor() {
 		this(null, null, null, null, null, null);
 	}

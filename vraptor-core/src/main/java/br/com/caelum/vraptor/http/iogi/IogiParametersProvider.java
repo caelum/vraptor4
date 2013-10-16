@@ -49,7 +49,7 @@ public class IogiParametersProvider implements ParametersProvider {
 	private final HttpServletRequest servletRequest;
 	private final InstantiatorWithErrors instantiator;
 
-	/** @Deprecated CDI eyes only */
+	/** @deprecated CDI eyes only */
 	protected IogiParametersProvider() {
 		this(null, null, null);
 	}

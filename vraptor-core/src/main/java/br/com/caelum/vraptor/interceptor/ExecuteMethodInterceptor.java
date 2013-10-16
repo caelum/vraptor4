@@ -50,7 +50,7 @@ public class ExecuteMethodInterceptor implements Interceptor {
 	private final Validator validator;
 	private final MethodExecutor methodExecutor;
 
-	/** @Deprecated CDI eyes only */
+	/** @deprecated CDI eyes only */
 	protected ExecuteMethodInterceptor() {
 		this(null, null, null);
 	}

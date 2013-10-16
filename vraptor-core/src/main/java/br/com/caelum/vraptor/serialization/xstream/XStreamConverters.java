@@ -42,7 +42,7 @@ public class XStreamConverters {
 
 	private static final Logger logger = getLogger(XStreamConverters.class);
 
-	/** @Deprecated CDI eyes only */
+	/** @deprecated CDI eyes only */
 	protected XStreamConverters() {
 		this(null, null);
 	}

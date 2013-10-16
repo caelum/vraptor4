@@ -42,7 +42,7 @@ public class LocalDateConverter implements Converter<LocalDate> {
 
 	private final Locale locale;
 
-	/** @Deprecated CDI eyes only */
+	/** @deprecated CDI eyes only */
 	protected LocalDateConverter() {
 		this(null);
 	}

@@ -36,7 +36,7 @@ public class InterceptorStereotypeHandler{
 	
 	private final InterceptorRegistry registry;
 
-	/** @Deprecated CDI eyes only */
+	/** @deprecated CDI eyes only */
 	protected InterceptorStereotypeHandler() {
 		this(null);
 	}

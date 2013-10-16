@@ -42,7 +42,7 @@ public class LocaleBasedDoubleConverter implements Converter<Double> {
 
 	private final Locale locale;
 
-	/** @Deprecated CDI eyes only */
+	/** @deprecated CDI eyes only */
 	protected LocaleBasedDoubleConverter() {
 		this(null);
 	}

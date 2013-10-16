@@ -51,7 +51,7 @@ public class DefaultValidator extends AbstractValidator {
 	private final Proxifier proxifier;
 	private final ResourceBundle bundle;
 
-	/** @Deprecated CDI eyes only */
+	/** @deprecated CDI eyes only */
 	protected DefaultValidator() {
 		this(null, null, null, null, null);
 	}

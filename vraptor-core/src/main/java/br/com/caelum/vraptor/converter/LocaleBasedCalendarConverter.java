@@ -41,7 +41,7 @@ public class LocaleBasedCalendarConverter implements Converter<Calendar> {
 
 	private final Locale locale;
 
-	/** @Deprecated CDI eyes only */
+	/** @deprecated CDI eyes only */
 	protected LocaleBasedCalendarConverter() {
 		this(null);
 	}

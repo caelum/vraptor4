@@ -79,7 +79,7 @@ public class LinkToHandler extends ForwardingMap<Class<?>, Object> {
 
 	private ConcurrentMap<Class<?>, Class<?>> interfaces = new ConcurrentHashMap<>();
 
-	/** @Deprecated CDI eyes only */
+	/** @deprecated CDI eyes only */
 	protected LinkToHandler() {
 		this(null, null, null);
 	}

@@ -67,7 +67,7 @@ public class DefaultLogicResult implements LogicResult {
 	private final FlashScope flash;
 	private final MethodInfo methodInfo;
 
-	/** @Deprecated CDI eyes only */
+	/** @deprecated CDI eyes only */
 	protected DefaultLogicResult() {
 		this(null, null, null, null, null, null, null, null, null);
 	}

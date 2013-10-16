@@ -45,7 +45,7 @@ public class OutjectResult implements Interceptor {
 	private final MethodInfo info;
 	private final TypeNameExtractor extractor;
 
-	/** @Deprecated CDI eyes only */
+	/** @deprecated CDI eyes only */
 	protected OutjectResult() {
 		this(null, null, null);
 	}

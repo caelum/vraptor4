@@ -55,7 +55,7 @@ public class JstlLocalization {
 	private ResourceBundle bundle;
 	private Locale locale;
 
-	/** @Deprecated CDI eyes only */
+	/** @deprecated CDI eyes only */
 	protected JstlLocalization() {
 		this(null);
 	}

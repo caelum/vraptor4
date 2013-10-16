@@ -39,7 +39,7 @@ public class InterceptorStackHandlersCache {
 
 	private Logger logger = LoggerFactory.getLogger(InterceptorStackHandlersCache.class);
 
-	/** @Deprecated CDI eyes only */
+	/** @deprecated CDI eyes only */
 	protected InterceptorStackHandlersCache() {
 		this(null, null);
 	}

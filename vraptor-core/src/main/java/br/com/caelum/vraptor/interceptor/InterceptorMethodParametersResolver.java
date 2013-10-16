@@ -11,10 +11,14 @@ import br.com.caelum.vraptor.ioc.Container;
 @ApplicationScoped
 public class InterceptorMethodParametersResolver {
 
-	private Container container;
+	private final Container container;
 
-	@Deprecated // CDI eyes only
-	public InterceptorMethodParametersResolver() {}
+	/** 
+	 * @deprecated CDI eyes only
+	 */
+	protected InterceptorMethodParametersResolver() {
+		this(null);
+	}
 
 	@Inject
 	public InterceptorMethodParametersResolver(Container container) {

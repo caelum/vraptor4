@@ -39,20 +39,23 @@ import br.com.caelum.vraptor.controller.ControllerMethod;
 public class DefaultInterceptorStack implements InterceptorStack {
 
 	private static final Logger logger = LoggerFactory.getLogger(DefaultInterceptorStack.class);
-	private LinkedList<InterceptorHandler> handlers;
+	private final InterceptorStackHandlersCache cache;
 	private LinkedList<Iterator<InterceptorHandler>> internalStack = new LinkedList<>();
 
-	@Deprecated
-	public DefaultInterceptorStack() {}
+	/** 
+	 * @deprecated CDI eyes only
+	 */
+	protected DefaultInterceptorStack() {
+		this(null);
+	}
 
 	@Inject
 	public DefaultInterceptorStack(InterceptorStackHandlersCache cache) {
-		handlers = cache.getInterceptorHandlers();
+		this.cache = cache;
 	}
 
 	@Override
 	public void next(ControllerMethod method, Object controllerInstance) throws InterceptionException {
-		
 		Iterator<InterceptorHandler> iterator = internalStack.peek();
 		
 		if (!iterator.hasNext()) {
@@ -65,15 +68,10 @@ public class DefaultInterceptorStack implements InterceptorStack {
 	}
 
 	@Override
-	public String toString() {
-		return "DefaultInterceptorStack " + handlers;
-	}
-
-	@Override
 	public void start() {
+		LinkedList<InterceptorHandler> handlers = cache.getInterceptorHandlers();
 		internalStack.addFirst(handlers.iterator());
 		this.next(null,null);
 		internalStack.poll();
 	}
-
 }

@@ -38,11 +38,6 @@ public class ValidatorFactoryCreator {
 	
 	private static final Logger logger = LoggerFactory.getLogger(ValidatorFactoryCreator.class);
 	
-	//CDI eyes only
-	@Deprecated
-	public ValidatorFactoryCreator() {
-	}
-	
 	@Produces
 	@ApplicationScoped
 	public ValidatorFactory getInstance() {

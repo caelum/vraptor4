@@ -47,7 +47,9 @@ public class EncodingHandler {
 	private String encoding;
 	private final ServletContext context;
 	
-	/** @deprecated CDI eyes only */ 
+	/** 
+	 * @deprecated CDI eyes only
+	 */
 	protected EncodingHandler() {
 		this(null);
 	}

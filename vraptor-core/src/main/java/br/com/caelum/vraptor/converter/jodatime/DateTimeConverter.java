@@ -41,10 +41,13 @@ import br.com.caelum.vraptor.converter.Converter;
 @Convert(DateTime.class)
 public class DateTimeConverter implements Converter<DateTime> {
 
-	private Locale locale;
+	private final Locale locale;
 
-	@Deprecated // CDI eyes only
-	public DateTimeConverter() {
+	/** 
+	 * @deprecated CDI eyes only
+	 */
+	protected DateTimeConverter() {
+		this(null);
 	}
 
 	@Inject

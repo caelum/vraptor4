@@ -48,12 +48,14 @@ public class ExceptionHandlerInterceptor
 
 	private static final Logger logger = LoggerFactory.getLogger(ExceptionHandlerInterceptor.class);
 
-	private ExceptionMapper exceptions;
-	private Result result;
+	private final ExceptionMapper exceptions;
+	private final Result result;
 
-	//CDI eyes only
-	@Deprecated
-	public ExceptionHandlerInterceptor() {
+	/** 
+	 * @deprecated CDI eyes only
+	 */
+	protected ExceptionHandlerInterceptor() {
+		this(null, null);
 	}
 
 	@Inject

@@ -41,10 +41,13 @@ import br.com.caelum.vraptor.Convert;
 @RequestScoped
 public class LocaleBasedPrimitiveFloatConverter implements Converter<Float> {
 
-	private Locale locale;
+	private final Locale locale;
 
-	@Deprecated // CDI eyes only
-	public LocaleBasedPrimitiveFloatConverter() {
+	/** 
+	 * @deprecated CDI eyes only
+	 */
+	protected LocaleBasedPrimitiveFloatConverter() {
+		this(null);
 	}
 
 	@Inject

@@ -51,6 +51,13 @@ public class DefaultPageResult implements PageResult {
 	private final PathResolver resolver;
 	private final Proxifier proxifier;
 	private final MethodInfo requestInfo;
+	
+	/** 
+	 * @deprecated CDI eyes only
+	 */
+	protected DefaultPageResult() {
+		this(null, null, null, null, null);
+	}
 
 	@Inject
 	public DefaultPageResult(MutableRequest req, MutableResponse res, MethodInfo requestInfo,

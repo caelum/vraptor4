@@ -52,8 +52,7 @@ public class DownloadInterceptor implements Interceptor {
 	private MethodInfo info;
 	private Result result;
 
-	//CDI eyes only
-	@Deprecated
+	/** @Deprecated CDI eyes only */
 	public DownloadInterceptor() {
 	}
 

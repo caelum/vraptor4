@@ -53,8 +53,7 @@ public class DefaultResult extends AbstractResult {
 	private ExceptionMapper exceptions;
 	private TypeNameExtractor extractor;
 
-	//CDI eyes only
-	@Deprecated
+	/** @Deprecated CDI eyes only */
 	public DefaultResult() {
 	}
 

@@ -14,7 +14,7 @@ public class DefaultSimpleInterceptorStack implements SimpleInterceptorStack {
 	private ControllerMethod controllerMethod;
 	private ControllerInstance controllerInstance;
 
-	@Deprecated // CDI eyes only
+	/** @Deprecated CDI eyes only */
 	public DefaultSimpleInterceptorStack() {
 	}
 

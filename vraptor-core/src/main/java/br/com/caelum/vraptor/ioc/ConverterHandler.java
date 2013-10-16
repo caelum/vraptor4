@@ -31,8 +31,7 @@ public class ConverterHandler{
 
 	private Converters converters;
 
-	//CDI eyes only
-	@Deprecated
+	/** @Deprecated CDI eyes only */
 	public ConverterHandler() {
 	}
 

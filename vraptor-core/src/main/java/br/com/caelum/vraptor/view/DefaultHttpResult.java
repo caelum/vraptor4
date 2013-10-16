@@ -41,7 +41,7 @@ public class DefaultHttpResult implements HttpResult {
 	private HttpServletResponse response;
 	private Status status;
 
-	@Deprecated // CDI eyes only
+	/** @Deprecated CDI eyes only */
 	public DefaultHttpResult() {}
 
 	@Inject

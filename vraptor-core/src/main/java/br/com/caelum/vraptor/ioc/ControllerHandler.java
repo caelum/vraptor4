@@ -42,8 +42,7 @@ public class ControllerHandler{
 	private RoutesParser parser;
 	private ServletContext context;
 
-	//CDI eyes only
-	@Deprecated
+	/** @Deprecated CDI eyes only */
 	public ControllerHandler() {
 	}
 

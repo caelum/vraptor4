@@ -38,7 +38,7 @@ public class VRaptorParameterNamesProvider implements br.com.caelum.iogi.spi.Par
 
 	private ParameterNameProvider parameterNameProvider;
 
-	@Deprecated // CDI eyes only
+	/** @Deprecated CDI eyes only */
 	public VRaptorParameterNamesProvider() {}
 
 	@Inject

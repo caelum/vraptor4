@@ -35,7 +35,7 @@ import br.com.caelum.vraptor.Convert;
 public class PrimitiveBooleanConverter implements Converter<Boolean> {
 	private BooleanConverter booleanConverter;
 
-	@Deprecated
+	/** @Deprecated CDI eyes only */
 	public PrimitiveBooleanConverter() {
 	}
 

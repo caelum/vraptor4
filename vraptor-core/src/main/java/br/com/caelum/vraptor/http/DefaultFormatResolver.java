@@ -35,7 +35,7 @@ public class DefaultFormatResolver implements FormatResolver {
 	private HttpServletRequest request;
 	private AcceptHeaderToFormat acceptHeaderToFormat;
 
-	@Deprecated // CDI eyes only
+	/** @Deprecated CDI eyes only */
 	public DefaultFormatResolver() {}
 
 	@Inject

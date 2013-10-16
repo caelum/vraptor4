@@ -52,8 +52,7 @@ public class VRaptorInstantiator implements InstantiatorWithErrors, Instantiator
 	private List<Message> errors;
 	private DependencyProvider provider;
 
-	//CDI eyes only
-	@Deprecated
+	/** @Deprecated CDI eyes only */
 	public VRaptorInstantiator() {
 	}
 

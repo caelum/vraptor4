@@ -34,7 +34,7 @@ public class ReplicatorOutjector implements Outjector {
 	private MethodInfo method;
 	private ParameterNameProvider provider;
 
-	@Deprecated // CDI eyes only
+	/** @Deprecated CDI eyes only */
 	public ReplicatorOutjector() {}
 
 	@Inject

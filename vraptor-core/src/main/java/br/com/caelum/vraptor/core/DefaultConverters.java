@@ -45,7 +45,7 @@ public class DefaultConverters implements Converters {
 	private CacheStore<Class<?>, Class<? extends Converter<?>>> cache;
 	private Container container;
 
-	@Deprecated //CDI eyes only
+	/** @Deprecated CDI eyes only */
 	public DefaultConverters() {}
 
 	@Inject

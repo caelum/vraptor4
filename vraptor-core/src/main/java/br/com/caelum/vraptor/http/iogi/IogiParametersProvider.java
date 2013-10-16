@@ -49,8 +49,7 @@ public class IogiParametersProvider implements ParametersProvider {
 	private HttpServletRequest servletRequest;
 	private InstantiatorWithErrors instantiator;
 
-	//CDI eyes only
-	@Deprecated
+	/** @Deprecated CDI eyes only */
 	public IogiParametersProvider() {
 	}
 	

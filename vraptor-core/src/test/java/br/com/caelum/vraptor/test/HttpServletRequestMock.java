@@ -396,7 +396,7 @@ public class HttpServletRequestMock implements MutableRequest {
 		this.wrapper = new HttpServletRequestWrapper(mock);
 	}
 
-	@Deprecated
+	/** @Deprecated CDI eyes only */
 	public HttpServletRequestMock() {
 	}
 

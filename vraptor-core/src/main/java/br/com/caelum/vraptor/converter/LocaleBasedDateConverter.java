@@ -39,8 +39,7 @@ public class LocaleBasedDateConverter implements Converter<Date> {
 
 	private Locale locale;
 
-	//CDI eyes only
-	@Deprecated
+	/** @Deprecated CDI eyes only */
 	public LocaleBasedDateConverter() {
 	}
 

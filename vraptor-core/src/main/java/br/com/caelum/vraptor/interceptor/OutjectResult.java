@@ -45,7 +45,7 @@ public class OutjectResult implements Interceptor {
 	private MethodInfo info;
 	private TypeNameExtractor extractor;
 
-	@Deprecated
+	/** @Deprecated CDI eyes only */
 	public OutjectResult() {
 	}
 

@@ -38,8 +38,7 @@ public class DefaultRoutes implements Routes{
 	private Proxifier proxifier;
 	private Router router;
 
-	//CDI eyes only
-	@Deprecated
+	/** @Deprecated CDI eyes only */
 	public DefaultRoutes() {
 	}
 	

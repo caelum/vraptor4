@@ -44,7 +44,7 @@ public class DefaultRepresentationResult implements RepresentationResult {
 	private List<Serialization> serializations;
 	private Result result;
 
-	@Deprecated // CDI eyes only
+	/** @Deprecated CDI eyes only */
 	public DefaultRepresentationResult() {}
 
 	@Inject

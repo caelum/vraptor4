@@ -29,7 +29,7 @@ public class ParameterIncluderInterceptor {
 	private ParameterNameProvider nameProvider;
 	private ControllerMethod controllerMethod;
 
-	@Deprecated // CDI eyes only
+	/** @Deprecated CDI eyes only */
 	public ParameterIncluderInterceptor() {}
 
 	@Inject

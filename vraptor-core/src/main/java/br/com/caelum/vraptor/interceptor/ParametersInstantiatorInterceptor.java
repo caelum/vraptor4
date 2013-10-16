@@ -60,7 +60,7 @@ public class ParametersInstantiatorInterceptor implements Interceptor {
 	private MutableRequest request;
 	private FlashScope flash;
 
-	@Deprecated
+	/** @Deprecated CDI eyes only */
 	public ParametersInstantiatorInterceptor() {
 	}
 

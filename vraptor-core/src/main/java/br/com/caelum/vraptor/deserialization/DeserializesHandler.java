@@ -35,8 +35,7 @@ public class DeserializesHandler{
 
 	private Deserializers deserializers;
 
-	//CDI eyes only
-	@Deprecated
+	/** @Deprecated CDI eyes only */
 	public DeserializesHandler() {
 	}
 

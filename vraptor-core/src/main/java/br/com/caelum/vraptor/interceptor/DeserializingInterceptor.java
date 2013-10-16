@@ -52,7 +52,7 @@ public class DeserializingInterceptor implements Interceptor {
 
 	private static final Logger logger = LoggerFactory.getLogger(DeserializingInterceptor.class);
 
-	@Deprecated
+	/** @Deprecated CDI eyes only */
 	public DeserializingInterceptor() {
 	}
 

@@ -73,8 +73,7 @@ public class PathAnnotationRoutesParser implements RoutesParser {
 
 	private Router router;
 
-	//CDI eyes only
-	@Deprecated
+	/** @Deprecated CDI eyes only */
 	public PathAnnotationRoutesParser() {
 	}
 

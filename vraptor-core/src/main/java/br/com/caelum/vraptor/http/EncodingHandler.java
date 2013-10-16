@@ -41,7 +41,7 @@ public class EncodingHandler {
 
 	private String encoding;
 
-	@Deprecated // CDI eyes only
+	/** @Deprecated CDI eyes only */
 	public EncodingHandler() {
 	}
 

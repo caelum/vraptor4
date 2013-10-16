@@ -47,7 +47,7 @@ public class DefaultExceptionMapper implements ExceptionMapper {
 	private final Map<Class<? extends Exception>, ExceptionRecorder<Result>> exceptions;
 	private final Proxifier proxifier;
 
-	@Deprecated
+	/** @Deprecated CDI eyes only */
 	public DefaultExceptionMapper() {
 		this(null);
 	}

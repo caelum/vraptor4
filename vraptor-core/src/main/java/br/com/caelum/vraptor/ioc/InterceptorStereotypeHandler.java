@@ -35,8 +35,7 @@ public class InterceptorStereotypeHandler{
 	private static final Logger logger = LoggerFactory.getLogger(InterceptorStereotypeHandler.class);
 	private InterceptorRegistry registry;
 
-	//CDI eyes only
-	@Deprecated
+	/** @Deprecated CDI eyes only */
 	public InterceptorStereotypeHandler() {
 	}
 

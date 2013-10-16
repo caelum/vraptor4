@@ -17,7 +17,7 @@ public class CDIBasedContainer implements Container {
 
 	private CacheStore<Class<?>,Instance> cache;
 
-	@Deprecated
+	/** @Deprecated CDI eyes only */
 	public CDIBasedContainer() {
 	}
 

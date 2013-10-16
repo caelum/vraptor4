@@ -24,15 +24,15 @@ public class DefaultMethodExecutor implements MethodExecutor {
 	private CacheStore<Method,MethodHandle> cache;
 	private MethodHandleFactory methodHandleFactory;
 
+	/** @Deprecated CDI eyes only */
+	public DefaultMethodExecutor() {
+	}
+
 	@Inject
 	public DefaultMethodExecutor(@LRU(capacity=500) CacheStore<Method, MethodHandle> cache,
 			MethodHandleFactory methodHandleFactory) {
 		this.cache = cache;
 		this.methodHandleFactory = methodHandleFactory;
-	}
-
-	@Deprecated
-	public DefaultMethodExecutor() {
 	}
 
 	@Override

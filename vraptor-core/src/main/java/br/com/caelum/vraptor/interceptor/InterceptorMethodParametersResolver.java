@@ -13,7 +13,7 @@ public class InterceptorMethodParametersResolver {
 
 	private Container container;
 
-	@Deprecated // CDI eyes only
+	/** @Deprecated CDI eyes only */
 	public InterceptorMethodParametersResolver() {}
 
 	@Inject

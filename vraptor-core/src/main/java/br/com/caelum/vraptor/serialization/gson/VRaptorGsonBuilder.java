@@ -34,7 +34,7 @@ public class VRaptorGsonBuilder {
 	private Instance<JsonSerializer<?>> serializers;
 	private List<ExclusionStrategy> exclusions;
 
-	@Deprecated
+	/** @Deprecated CDI eyes only */
 	public VRaptorGsonBuilder() {
 	}
 

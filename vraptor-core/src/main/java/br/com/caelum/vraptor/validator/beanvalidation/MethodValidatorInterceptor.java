@@ -65,7 +65,7 @@ public class MethodValidatorInterceptor implements Interceptor {
 	private ParameterNameProvider parameterNameProvider;
 	private javax.validation.Validator bvalidator;
 
-	@Deprecated
+	/** @Deprecated CDI eyes only */
 	public MethodValidatorInterceptor() {}
 
 	@Inject

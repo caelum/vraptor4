@@ -56,7 +56,7 @@ public class DefaultValidationViewsFactory implements ValidationViewsFactory {
 	private Result result;
 	private Proxifier proxifier;
 
-	@Deprecated // CDI eyes only
+	/** @Deprecated CDI eyes only */
 	public DefaultValidationViewsFactory() {}
 
 	@Inject

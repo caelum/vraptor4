@@ -47,7 +47,7 @@ public class GsonDeserialization implements Deserializer {
 	private Instance<JsonDeserializer<?>> adapters; 
 	private HttpServletRequest request;
 
-	@Deprecated // CDI eyes only
+	/** @Deprecated CDI eyes only */
 	public GsonDeserialization() {
 	}
 	

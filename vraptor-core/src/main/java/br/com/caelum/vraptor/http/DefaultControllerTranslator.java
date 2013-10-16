@@ -42,8 +42,7 @@ public class DefaultControllerTranslator implements UrlToControllerTranslator {
 
 	private Router router;
 
-	//CDI eyes only
-	@Deprecated
+	/** @Deprecated CDI eyes only */
 	public DefaultControllerTranslator() {
 	}
 

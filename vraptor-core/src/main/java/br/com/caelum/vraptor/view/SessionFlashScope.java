@@ -33,7 +33,7 @@ public class SessionFlashScope implements FlashScope {
 
 	private static final String KEY_START = "vraptor_flash_parameters_for_";
 
-	@Deprecated // CDI eyes only
+	/** @Deprecated CDI eyes only */
 	public SessionFlashScope() {}
 
 	@Inject

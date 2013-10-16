@@ -46,8 +46,7 @@ public class DefaultInterceptorHandlerFactory implements InterceptorHandlerFacto
 
 	private InterceptorMethodParametersResolver parametersResolver;
 
-	//CDI eyes only
-	@Deprecated
+	/** @Deprecated CDI eyes only */
 	public DefaultInterceptorHandlerFactory() {
 	}
 

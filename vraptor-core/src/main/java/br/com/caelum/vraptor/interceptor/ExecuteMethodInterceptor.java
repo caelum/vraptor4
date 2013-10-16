@@ -49,7 +49,7 @@ public class ExecuteMethodInterceptor implements Interceptor {
 	private MethodExecutor methodExecutor;
 	private final static Logger log = LoggerFactory.getLogger(ExecuteMethodInterceptor.class);
 
-	@Deprecated
+	/** @Deprecated CDI eyes only */
 	public ExecuteMethodInterceptor() {
 	}
 

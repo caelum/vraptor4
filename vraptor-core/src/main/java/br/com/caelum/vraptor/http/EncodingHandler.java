@@ -24,13 +24,12 @@ import java.io.UnsupportedEncodingException;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import br.com.caelum.vraptor.VRaptorException;
-
-import com.google.common.base.Objects;
 
 /**
  * {@link EncodingHandler} that uses Encoding from web.xml.
@@ -47,7 +46,13 @@ public class EncodingHandler {
 
 	private String encoding;
 	private ServletContext context;
+	
+	/** @Deprecated CDI eyes only */ 
+	protected EncodingHandler() {
+		this(null);
+	}
 
+	@Inject
 	public EncodingHandler(ServletContext context) {
 		this.context = context;
 	}

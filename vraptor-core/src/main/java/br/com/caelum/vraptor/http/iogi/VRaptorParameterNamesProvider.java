@@ -36,10 +36,12 @@ import br.com.caelum.vraptor.http.ParameterNameProvider;
 @RequestScoped
 public class VRaptorParameterNamesProvider implements br.com.caelum.iogi.spi.ParameterNamesProvider {
 
-	private ParameterNameProvider parameterNameProvider;
+	private final ParameterNameProvider parameterNameProvider;
 
 	/** @Deprecated CDI eyes only */
-	protected VRaptorParameterNamesProvider() {}
+	protected VRaptorParameterNamesProvider() {
+		this(null);
+	}
 
 	@Inject
 	public VRaptorParameterNamesProvider(ParameterNameProvider parameterNameProvider) {

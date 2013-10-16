@@ -45,12 +45,13 @@ import br.com.caelum.vraptor.validator.Message;
 public class IogiParametersProvider implements ParametersProvider {
 	private static final Logger LOGGER = LoggerFactory.getLogger(IogiParametersProvider.class);
 	
-	private ParameterNameProvider nameProvider;
-	private HttpServletRequest servletRequest;
-	private InstantiatorWithErrors instantiator;
+	private final ParameterNameProvider nameProvider;
+	private final HttpServletRequest servletRequest;
+	private final InstantiatorWithErrors instantiator;
 
 	/** @Deprecated CDI eyes only */
 	protected IogiParametersProvider() {
+		this(null, null, null);
 	}
 	
 	@Inject

@@ -48,12 +48,13 @@ import com.google.common.collect.ImmutableList;
 
 @RequestScoped
 public class VRaptorInstantiator implements InstantiatorWithErrors, Instantiator<Object> {
-	private MultiInstantiator multiInstantiator;
+	private final MultiInstantiator multiInstantiator;
+	private final DependencyProvider provider;
 	private List<Message> errors;
-	private DependencyProvider provider;
 
 	/** @Deprecated CDI eyes only */
 	protected VRaptorInstantiator() {
+		this(null, null, null, null);
 	}
 
 	@Inject

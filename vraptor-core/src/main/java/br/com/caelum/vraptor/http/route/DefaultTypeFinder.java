@@ -34,10 +34,11 @@ import br.com.caelum.vraptor.http.ParameterNameProvider;
 @ApplicationScoped
 public class DefaultTypeFinder implements TypeFinder {
 
-	private ParameterNameProvider provider;
+	private final ParameterNameProvider provider;
 	
 	/** @Deprecated CDI eyes only */
 	protected DefaultTypeFinder() {
+		this(null);
 	}
 	
 	@Inject

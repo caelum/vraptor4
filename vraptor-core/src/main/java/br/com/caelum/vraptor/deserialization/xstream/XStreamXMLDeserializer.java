@@ -41,11 +41,13 @@ import com.thoughtworks.xstream.XStream;
 @Deserializes({"application/xml","xml", "text/xml"})
 public class XStreamXMLDeserializer implements Deserializer {
 
-	private ParameterNameProvider provider;
-	private XStreamBuilder builder;
+	private final ParameterNameProvider provider;
+	private final XStreamBuilder builder;
 
 	/** @Deprecated CDI eyes only */
-	protected XStreamXMLDeserializer() {}
+	protected XStreamXMLDeserializer() {
+		this(null, null);
+	}
 
 	@Inject
 	public XStreamXMLDeserializer(ParameterNameProvider provider, XStreamBuilder builder) {

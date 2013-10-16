@@ -71,10 +71,11 @@ import com.google.common.base.Predicate;
 @ApplicationScoped
 public class PathAnnotationRoutesParser implements RoutesParser {
 
-	private Router router;
+	private final Router router;
 
 	/** @Deprecated CDI eyes only */
 	public PathAnnotationRoutesParser() {
+		this(null);
 	}
 
 	@Inject

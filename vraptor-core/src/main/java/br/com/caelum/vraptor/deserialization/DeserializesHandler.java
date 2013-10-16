@@ -33,10 +33,11 @@ import br.com.caelum.vraptor.core.DeserializesQualifier;
 @ApplicationScoped
 public class DeserializesHandler{
 
-	private Deserializers deserializers;
+	private final Deserializers deserializers;
 
 	/** @Deprecated CDI eyes only */
 	protected DeserializesHandler() {
+		this(null);
 	}
 
 	@Inject

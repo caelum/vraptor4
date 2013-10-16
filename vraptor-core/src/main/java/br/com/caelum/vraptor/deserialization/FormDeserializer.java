@@ -33,10 +33,11 @@ import br.com.caelum.vraptor.validator.Message;
 @Deserializes("application/x-www-form-urlencoded")
 public class FormDeserializer implements Deserializer {
 
-	private ParametersProvider provider;
+	private final ParametersProvider provider;
 	
 	/** @Deprecated CDI eyes only */
 	protected FormDeserializer() {
+		this(null);
 	}
 	
 	@Inject

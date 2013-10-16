@@ -40,10 +40,11 @@ public class DefaultControllerTranslator implements UrlToControllerTranslator {
 
 	private final Logger logger = LoggerFactory.getLogger(DefaultControllerTranslator.class);
 
-	private Router router;
+	private final Router router;
 
 	/** @Deprecated CDI eyes only */
 	protected DefaultControllerTranslator() {
+		this(null);
 	}
 
 	@Inject

@@ -39,10 +39,11 @@ import br.com.caelum.vraptor.config.BasicConfiguration;
 @ApplicationScoped
 public class EncodingHandler {
 
-	private String encoding;
+	private final String encoding;
 
 	/** @Deprecated CDI eyes only */
 	protected EncodingHandler() {
+		this(null);
 	}
 
 	@Inject

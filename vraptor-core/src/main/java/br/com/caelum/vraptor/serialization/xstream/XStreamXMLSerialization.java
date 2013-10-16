@@ -66,7 +66,7 @@ public class XStreamXMLSerialization implements XMLSerialization {
 
 	protected SerializerBuilder getSerializer() {
 		try {
-			return new XStreamSerializer(getXStream(), response.getWriter());
+			return new XStreamSerializer(builder.xmlInstance(), response.getWriter());
 		} catch (IOException e) {
 			throw new ResultException("Unable to serialize data", e);
 		}
@@ -77,16 +77,4 @@ public class XStreamXMLSerialization implements XMLSerialization {
 		response.setContentType("application/xml");
 		return getSerializer().from(object, alias);
 	}
-
-	/**
-	 * You can override this method for configuring XStream before serialization
-	 *
-	 * @deprecated prefer overwriting XStreamBuilderImpl
-	 * @return a configured instance of xstream
-	 */
-	@Deprecated
-	protected XStream getXStream() {
-		return builder.xmlInstance();
-	}
-
 }

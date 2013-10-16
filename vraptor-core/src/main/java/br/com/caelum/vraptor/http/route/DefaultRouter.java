@@ -79,7 +79,10 @@ public class DefaultRouter implements Router {
 		this.evaluator = evaluator;
 		this.encodingHandler = encodingHandler;
 		this.cache = cache;
-		config.config(this);
+		
+		//FIXME
+		if (config != null)
+			config.config(this);
 	}
 
 	@Override

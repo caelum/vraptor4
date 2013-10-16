@@ -24,19 +24,19 @@ import br.com.caelum.vraptor.http.ParameterNameProvider;
 @AcceptsWithAnnotations(IncludeParameters.class)
 public class ParameterIncluderInterceptor {
 
-	private MethodInfo info;
-	private Result result;
-	private ParameterNameProvider nameProvider;
-	private ControllerMethod controllerMethod;
+	private final MethodInfo info;
+	private final Result result;
+	private final ParameterNameProvider nameProvider;
+	private final ControllerMethod controllerMethod;
 
 	/** @Deprecated CDI eyes only */
-	protected ParameterIncluderInterceptor() {}
+	protected ParameterIncluderInterceptor() {
+		this(null, null, null, null);
+	}
 
 	@Inject
-	public ParameterIncluderInterceptor(MethodInfo info,
-			Result result, ParameterNameProvider nameProvider,
+	public ParameterIncluderInterceptor(MethodInfo info, Result result, ParameterNameProvider nameProvider,
 			ControllerMethod controllerMethod) {
-
 		this.info = info;
 		this.result = result;
 		this.nameProvider = nameProvider;
@@ -45,7 +45,6 @@ public class ParameterIncluderInterceptor {
 
 	@BeforeCall
 	public void intercept() {
-
 		Object[] parameters = info.getParameters();
 		Method method = controllerMethod.getMethod();
 		String[] names = nameProvider.parameterNamesFor(method);
@@ -54,5 +53,4 @@ public class ParameterIncluderInterceptor {
 			result.include(names[i], parameters[i]);
 		}
 	}
-
 }

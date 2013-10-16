@@ -27,15 +27,16 @@ import com.google.gson.JsonSerializer;
 public class VRaptorGsonBuilder {
 
 	private final Serializee serializee = new Serializee();
+	private final Instance<JsonSerializer<?>> serializers;
+	
+	private GsonBuilder builder = new GsonBuilder();
+	private List<ExclusionStrategy> exclusions;
 	private boolean withoutRoot;
 	private String alias;
 
-	private GsonBuilder builder = new GsonBuilder();
-	private Instance<JsonSerializer<?>> serializers;
-	private List<ExclusionStrategy> exclusions;
-
 	/** @Deprecated CDI eyes only */
 	protected VRaptorGsonBuilder() {
+		this(null);
 	}
 
 	@Inject

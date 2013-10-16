@@ -50,18 +50,20 @@ import br.com.caelum.vraptor.view.FlashScope;
  */
 @Intercepts(after=ControllerLookupInterceptor.class)
 public class ParametersInstantiatorInterceptor implements Interceptor {
-	private ParametersProvider provider;
-	private ParameterNameProvider parameterNameProvider;
-	private MethodInfo parameters;
-
 	private static final Logger logger = LoggerFactory.getLogger(ParametersInstantiatorInterceptor.class);
-	private Validator validator;
-	private final List<Message> errors = new ArrayList<>();
-	private MutableRequest request;
-	private FlashScope flash;
+	
+	private final ParametersProvider provider;
+	private final ParameterNameProvider parameterNameProvider;
+	private final MethodInfo parameters;
+	private final Validator validator;
+	private final MutableRequest request;
+	private final FlashScope flash;
 
+	private final List<Message> errors = new ArrayList<>();
+	
 	/** @Deprecated CDI eyes only */
 	protected ParametersInstantiatorInterceptor() {
+		this(null, null, null, null, null, null);
 	}
 
 	@Inject

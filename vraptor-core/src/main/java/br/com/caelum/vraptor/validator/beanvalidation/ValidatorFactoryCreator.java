@@ -38,10 +38,6 @@ public class ValidatorFactoryCreator {
 	
 	private static final Logger logger = LoggerFactory.getLogger(ValidatorFactoryCreator.class);
 	
-	/** @Deprecated CDI eyes only */
-	protected ValidatorFactoryCreator() {
-	}
-	
 	@Produces
 	@ApplicationScoped
 	public ValidatorFactory getInstance() {

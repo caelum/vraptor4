@@ -38,12 +38,14 @@ import br.com.caelum.vraptor.http.route.RoutesParser;
 @ApplicationScoped
 public class ControllerHandler{
 	private final Logger logger = LoggerFactory.getLogger(ControllerHandler.class);
-	private Router router;
-	private RoutesParser parser;
-	private ServletContext context;
+	
+	private final Router router;
+	private final RoutesParser parser;
+	private final ServletContext context;
 
 	/** @Deprecated CDI eyes only */
 	protected ControllerHandler() {
+		this(null, null, null);
 	}
 
 	@Inject

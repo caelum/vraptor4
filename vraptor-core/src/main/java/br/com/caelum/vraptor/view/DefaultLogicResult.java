@@ -57,18 +57,20 @@ public class DefaultLogicResult implements LogicResult {
 
 	private static final Logger logger = LoggerFactory.getLogger(DefaultLogicResult.class);
 
-	private Proxifier proxifier;
-	private Router router;
-	private MutableRequest request;
-	private HttpServletResponse response;
-	private Container container;
-	private PathResolver resolver;
-	private TypeNameExtractor extractor;
-	private FlashScope flash;
-	private MethodInfo methodInfo;
+	private final Proxifier proxifier;
+	private final Router router;
+	private final MutableRequest request;
+	private final HttpServletResponse response;
+	private final Container container;
+	private final PathResolver resolver;
+	private final TypeNameExtractor extractor;
+	private final FlashScope flash;
+	private final MethodInfo methodInfo;
 
 	/** @Deprecated CDI eyes only */
-	protected DefaultLogicResult() {}
+	protected DefaultLogicResult() {
+		this(null, null, null, null, null, null, null, null, null);
+	}
 
 	@Inject
 	public DefaultLogicResult(Proxifier proxifier, Router router, MutableRequest request, HttpServletResponse response,

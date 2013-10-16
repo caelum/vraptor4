@@ -45,14 +45,16 @@ import br.com.caelum.vraptor.proxy.SuperMethod;
 @RequestScoped
 public class DefaultStatus implements Status {
 
-	private HttpServletResponse response;
-	private Result result;
-	private Configuration config;
-	private Router router;
-	private Proxifier proxifier;
+	private final HttpServletResponse response;
+	private final Result result;
+	private final Configuration config;
+	private final Router router;
+	private final Proxifier proxifier;
 
 	/** @Deprecated CDI eyes only */
-	protected DefaultStatus() {}
+	protected DefaultStatus() {
+		this(null, null, null, null, null);
+	}
 
 	@Inject
 	public DefaultStatus(HttpServletResponse response, Result result, Configuration config,

@@ -48,12 +48,13 @@ public class DownloadInterceptor implements Interceptor {
 
 	private static final Logger logger = LoggerFactory.getLogger(DownloadInterceptor.class);
 
-	private HttpServletResponse response;
-	private MethodInfo info;
-	private Result result;
+	private final HttpServletResponse response;
+	private final MethodInfo info;
+	private final Result result;
 
 	/** @Deprecated CDI eyes only */
 	protected DownloadInterceptor() {
+		this(null, null, null);
 	}
 
 	@Inject

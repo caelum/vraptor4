@@ -34,10 +34,11 @@ import br.com.caelum.vraptor.http.FormatResolver;
 @RequestScoped
 public class DefaultPathResolver implements PathResolver {
 
-	private FormatResolver resolver;
+	private final FormatResolver resolver;
 	
 	/** @Deprecated CDI eyes only */
 	protected DefaultPathResolver() {
+		this(null);
 	}
 
 	@Inject

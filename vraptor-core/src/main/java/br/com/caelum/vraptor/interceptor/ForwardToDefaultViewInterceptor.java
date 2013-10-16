@@ -37,12 +37,13 @@ import br.com.caelum.vraptor.view.Results;
  */
 @Intercepts(after=ExecuteMethodInterceptor.class, before={})
 public class ForwardToDefaultViewInterceptor implements Interceptor {
-	private Result result;
+	private final Result result;
 
 	private static final Logger logger = LoggerFactory.getLogger(ForwardToDefaultViewInterceptor.class);
 
 	/** @Deprecated CDI eyes only */
 	protected ForwardToDefaultViewInterceptor() {
+		this(null);
 	}
 
 	@Inject

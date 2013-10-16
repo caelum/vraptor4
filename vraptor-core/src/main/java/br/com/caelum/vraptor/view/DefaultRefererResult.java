@@ -40,17 +40,18 @@ import br.com.caelum.vraptor.validator.Message;
 @RequestScoped
 public class DefaultRefererResult implements RefererResult {
 
-	private MutableRequest request;
-	private Result result;
-	private Router router;
-	private ParametersProvider provider;
+	private final MutableRequest request;
+	private final Result result;
+	private final Router router;
+	private final ParametersProvider provider;
 
 	/** @Deprecated CDI eyes only */
-	protected DefaultRefererResult() {}
+	protected DefaultRefererResult() {
+		this(null, null, null, null);
+	}
 
 	@Inject
-	public DefaultRefererResult(Result result, MutableRequest request, Router router,
-				ParametersProvider provider) {
+	public DefaultRefererResult(Result result, MutableRequest request, Router router, ParametersProvider provider) {
 		this.result = result;
 		this.request = request;
 		this.router = router;

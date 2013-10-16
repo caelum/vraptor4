@@ -31,11 +31,12 @@ import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
 @RequestScoped
 public class HTMLSerialization implements Serialization {
 
-	private Result result;
-	private TypeNameExtractor extractor;
+	private final Result result;
+	private final TypeNameExtractor extractor;
 
 	/** @Deprecated CDI eyes only */
 	protected HTMLSerialization() {
+		this(null, null);
 	}
 
 	@Inject

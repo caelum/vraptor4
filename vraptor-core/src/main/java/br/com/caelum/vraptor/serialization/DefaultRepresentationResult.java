@@ -40,17 +40,17 @@ import br.com.caelum.vraptor.http.FormatResolver;
 @RequestScoped
 public class DefaultRepresentationResult implements RepresentationResult {
 
-	private FormatResolver formatResolver;
-	private List<Serialization> serializations;
-	private Result result;
+	private final FormatResolver formatResolver;
+	private final List<Serialization> serializations;
+	private final Result result;
 
 	/** @Deprecated CDI eyes only */
-	protected DefaultRepresentationResult() {}
+	protected DefaultRepresentationResult() {
+		this(null, null, null);
+	}
 
 	@Inject
-	public DefaultRepresentationResult(FormatResolver formatResolver,
-			Result result, @Any Instance<Serialization> serializations) {
-
+	public DefaultRepresentationResult(FormatResolver formatResolver, Result result, @Any Instance<Serialization> serializations) {
 		this.formatResolver = formatResolver;
 		this.result = result;
 		this.serializations = newArrayList(serializations);

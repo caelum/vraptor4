@@ -38,11 +38,13 @@ import com.google.common.io.CharStreams;
 @RequestScoped
 public class DefaultHttpResult implements HttpResult {
 
-	private HttpServletResponse response;
-	private Status status;
+	private final HttpServletResponse response;
+	private final Status status;
 
 	/** @Deprecated CDI eyes only */
-	protected DefaultHttpResult() {}
+	protected DefaultHttpResult() {
+		this(null, null);
+	}
 
 	@Inject
 	public DefaultHttpResult(HttpServletResponse response, Status status) {

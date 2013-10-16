@@ -45,10 +45,11 @@ public class NullMultipartInterceptor implements Interceptor {
 	
 	private static final Logger logger = LoggerFactory.getLogger(NullMultipartInterceptor.class);
 	
-	private HttpServletRequest request;
+	private final HttpServletRequest request;
 
 	/** @Deprecated CDI eyes only */
 	protected NullMultipartInterceptor() {
+		this(null);
 	}
 
 	@Inject

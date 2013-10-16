@@ -48,16 +48,19 @@ import br.com.caelum.vraptor.http.route.MethodNotAllowedException;
 public class ControllerLookupInterceptor implements Interceptor {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(ControllerLookupInterceptor.class);
-	private UrlToControllerTranslator translator;
-	private MethodInfo methodInfo;
-	private RequestInfo requestInfo;
-	private ControllerNotFoundHandler controllerNotFoundHandler;
-	private MethodNotAllowedHandler methodNotAllowedHandler;
+	
+	private final UrlToControllerTranslator translator;
+	private final MethodInfo methodInfo;
+	private final RequestInfo requestInfo;
+	private final ControllerNotFoundHandler controllerNotFoundHandler;
+	private final MethodNotAllowedHandler methodNotAllowedHandler;
+	private final Event<ControllerMethod> event;
+	
 	private ControllerMethod method;
-	private Event<ControllerMethod> event;
 	
 	/** @Deprecated CDI eyes only */
 	protected ControllerLookupInterceptor() {
+		this(null, null, null, null, null, null);
 	}
 
 	@Inject

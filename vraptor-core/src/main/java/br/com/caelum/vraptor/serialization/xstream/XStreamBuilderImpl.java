@@ -34,6 +34,11 @@ public class XStreamBuilderImpl implements XStreamBuilder {
 	private final XStreamConverters converters;
 	private final TypeNameExtractor extractor;
 	private boolean indented = false;
+	
+	/** @Deprecated CDI eyes only */
+	public XStreamBuilderImpl() {
+		this(null, null);
+	}
 
 	@Inject
 	public XStreamBuilderImpl(XStreamConverters converters, TypeNameExtractor extractor) {

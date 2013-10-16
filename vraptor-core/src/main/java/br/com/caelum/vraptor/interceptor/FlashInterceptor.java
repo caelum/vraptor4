@@ -45,12 +45,13 @@ public class FlashInterceptor implements Interceptor {
 	final static String FLASH_INCLUDED_PARAMETERS = "br.com.caelum.vraptor.flash.parameters";
 	private static final Logger LOGGER = LoggerFactory.getLogger(FlashInterceptor.class);
 
-	private HttpSession session;
-	private Result result;
-	private MutableResponse response;
+	private final HttpSession session;
+	private final Result result;
+	private final MutableResponse response;
 
 	/** @Deprecated CDI eyes only */
 	protected FlashInterceptor() {
+		this(null, null, null);
 	}
 
 	@Inject

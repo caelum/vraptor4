@@ -113,7 +113,7 @@
 
 	<build>
 		<finalName>vraptor-musicjungle</finalName>
- 		<outputDirectory>${basedir}/src/main/webapp/WEB-INF/classes</outputDirectory>
+		<outputDirectory>${basedir}/src/main/webapp/WEB-INF/classes</outputDirectory>
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>

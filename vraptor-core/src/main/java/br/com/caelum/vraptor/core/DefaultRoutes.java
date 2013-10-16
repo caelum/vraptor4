@@ -39,7 +39,7 @@ public class DefaultRoutes implements Routes{
 	private Router router;
 
 	/** @Deprecated CDI eyes only */
-	public DefaultRoutes() {
+	protected DefaultRoutes() {
 	}
 	
 	@Inject

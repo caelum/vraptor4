@@ -25,7 +25,7 @@ public class DefaultMethodExecutor implements MethodExecutor {
 	private MethodHandleFactory methodHandleFactory;
 
 	/** @Deprecated CDI eyes only */
-	public DefaultMethodExecutor() {
+	protected DefaultMethodExecutor() {
 	}
 
 	@Inject

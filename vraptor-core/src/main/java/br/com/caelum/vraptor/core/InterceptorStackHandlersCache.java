@@ -40,7 +40,7 @@ public class InterceptorStackHandlersCache {
 	private Logger logger = LoggerFactory.getLogger(InterceptorStackHandlersCache.class);
 
 	/** @Deprecated CDI eyes only */
-	public InterceptorStackHandlersCache() {}
+	protected InterceptorStackHandlersCache() {}
 
 	@Inject
 	public InterceptorStackHandlersCache(InterceptorRegistry registry,

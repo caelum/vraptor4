@@ -45,7 +45,7 @@ public class DefaultRepresentationResult implements RepresentationResult {
 	private Result result;
 
 	/** @Deprecated CDI eyes only */
-	public DefaultRepresentationResult() {}
+	protected DefaultRepresentationResult() {}
 
 	@Inject
 	public DefaultRepresentationResult(FormatResolver formatResolver,

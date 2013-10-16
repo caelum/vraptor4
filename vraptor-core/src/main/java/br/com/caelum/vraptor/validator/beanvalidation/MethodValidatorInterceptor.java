@@ -66,7 +66,7 @@ public class MethodValidatorInterceptor implements Interceptor {
 	private javax.validation.Validator bvalidator;
 
 	/** @Deprecated CDI eyes only */
-	public MethodValidatorInterceptor() {}
+	protected MethodValidatorInterceptor() {}
 
 	@Inject
 	public MethodValidatorInterceptor(Locale locale, MessageInterpolator interpolator, Validator validator,

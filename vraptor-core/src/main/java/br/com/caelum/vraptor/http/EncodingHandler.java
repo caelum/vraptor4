@@ -42,7 +42,7 @@ public class EncodingHandler {
 	private String encoding;
 
 	/** @Deprecated CDI eyes only */
-	public EncodingHandler() {
+	protected EncodingHandler() {
 	}
 
 	@Inject

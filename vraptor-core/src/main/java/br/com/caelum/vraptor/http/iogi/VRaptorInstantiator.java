@@ -53,7 +53,7 @@ public class VRaptorInstantiator implements InstantiatorWithErrors, Instantiator
 	private DependencyProvider provider;
 
 	/** @Deprecated CDI eyes only */
-	public VRaptorInstantiator() {
+	protected VRaptorInstantiator() {
 	}
 
 	@Inject

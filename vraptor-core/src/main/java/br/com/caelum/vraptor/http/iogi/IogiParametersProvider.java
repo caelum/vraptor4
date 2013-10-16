@@ -50,7 +50,7 @@ public class IogiParametersProvider implements ParametersProvider {
 	private InstantiatorWithErrors instantiator;
 
 	/** @Deprecated CDI eyes only */
-	public IogiParametersProvider() {
+	protected IogiParametersProvider() {
 	}
 	
 	@Inject

@@ -36,7 +36,7 @@ public class DeserializesHandler{
 	private Deserializers deserializers;
 
 	/** @Deprecated CDI eyes only */
-	public DeserializesHandler() {
+	protected DeserializesHandler() {
 	}
 
 	@Inject

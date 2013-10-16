@@ -43,7 +43,7 @@ public class ControllerHandler{
 	private ServletContext context;
 
 	/** @Deprecated CDI eyes only */
-	public ControllerHandler() {
+	protected ControllerHandler() {
 	}
 
 	@Inject

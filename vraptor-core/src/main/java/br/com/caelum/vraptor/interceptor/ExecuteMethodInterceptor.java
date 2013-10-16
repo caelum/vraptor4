@@ -50,7 +50,7 @@ public class ExecuteMethodInterceptor implements Interceptor {
 	private final static Logger log = LoggerFactory.getLogger(ExecuteMethodInterceptor.class);
 
 	/** @Deprecated CDI eyes only */
-	public ExecuteMethodInterceptor() {
+	protected ExecuteMethodInterceptor() {
 	}
 
 	@Inject

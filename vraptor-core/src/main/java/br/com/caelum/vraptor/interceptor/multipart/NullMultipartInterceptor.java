@@ -48,7 +48,7 @@ public class NullMultipartInterceptor implements Interceptor {
 	private HttpServletRequest request;
 
 	/** @Deprecated CDI eyes only */
-	public NullMultipartInterceptor() {
+	protected NullMultipartInterceptor() {
 	}
 
 	@Inject

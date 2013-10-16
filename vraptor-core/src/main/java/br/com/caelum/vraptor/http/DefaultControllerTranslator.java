@@ -43,7 +43,7 @@ public class DefaultControllerTranslator implements UrlToControllerTranslator {
 	private Router router;
 
 	/** @Deprecated CDI eyes only */
-	public DefaultControllerTranslator() {
+	protected DefaultControllerTranslator() {
 	}
 
 	@Inject

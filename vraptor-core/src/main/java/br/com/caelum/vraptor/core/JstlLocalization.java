@@ -56,7 +56,7 @@ public class JstlLocalization {
 	private Locale locale;
 
 	/** @Deprecated CDI eyes only */
-	public JstlLocalization() {
+	protected JstlLocalization() {
 	}
 	
 	@Inject

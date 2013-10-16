@@ -54,7 +54,7 @@ public class DefaultResult extends AbstractResult {
 	private TypeNameExtractor extractor;
 
 	/** @Deprecated CDI eyes only */
-	public DefaultResult() {
+	protected DefaultResult() {
 	}
 
 	@Inject

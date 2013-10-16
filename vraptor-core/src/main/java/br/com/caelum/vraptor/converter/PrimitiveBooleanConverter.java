@@ -36,7 +36,7 @@ public class PrimitiveBooleanConverter implements Converter<Boolean> {
 	private BooleanConverter booleanConverter;
 
 	/** @Deprecated CDI eyes only */
-	public PrimitiveBooleanConverter() {
+	protected PrimitiveBooleanConverter() {
 	}
 
 	@Inject

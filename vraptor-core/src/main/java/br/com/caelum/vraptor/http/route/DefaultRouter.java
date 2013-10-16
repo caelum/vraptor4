@@ -64,7 +64,7 @@ public class DefaultRouter implements Router {
 	private EncodingHandler encodingHandler;
 
 	/** @Deprecated CDI eyes only */
-	public DefaultRouter() {
+	protected DefaultRouter() {
 	}
 
 	@Inject

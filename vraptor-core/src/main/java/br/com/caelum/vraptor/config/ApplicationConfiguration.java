@@ -34,7 +34,7 @@ public class ApplicationConfiguration implements Configuration {
 	private HttpServletRequest request;
 	
 	/** @Deprecated CDI eyes only */
-	public ApplicationConfiguration() {
+	protected ApplicationConfiguration() {
 	}
 
 	@Inject

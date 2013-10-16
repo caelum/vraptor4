@@ -61,7 +61,7 @@ public class ParametersInstantiatorInterceptor implements Interceptor {
 	private FlashScope flash;
 
 	/** @Deprecated CDI eyes only */
-	public ParametersInstantiatorInterceptor() {
+	protected ParametersInstantiatorInterceptor() {
 	}
 
 	@Inject

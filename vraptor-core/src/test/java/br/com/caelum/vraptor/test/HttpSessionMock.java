@@ -47,7 +47,7 @@ public class HttpSessionMock implements HttpSession,Serializable {
 	}
 
 	/** @Deprecated CDI eyes only */
-	public HttpSessionMock() {
+	protected HttpSessionMock() {
 	}
 
 	@Override

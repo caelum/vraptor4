@@ -36,7 +36,7 @@ public class FormDeserializer implements Deserializer {
 	private ParametersProvider provider;
 	
 	/** @Deprecated CDI eyes only */
-	public FormDeserializer() {
+	protected FormDeserializer() {
 	}
 	
 	@Inject

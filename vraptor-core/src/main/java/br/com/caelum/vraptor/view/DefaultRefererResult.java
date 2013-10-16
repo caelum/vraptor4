@@ -46,7 +46,7 @@ public class DefaultRefererResult implements RefererResult {
 	private ParametersProvider provider;
 
 	/** @Deprecated CDI eyes only */
-	public DefaultRefererResult() {}
+	protected DefaultRefererResult() {}
 
 	@Inject
 	public DefaultRefererResult(Result result, MutableRequest request, Router router,

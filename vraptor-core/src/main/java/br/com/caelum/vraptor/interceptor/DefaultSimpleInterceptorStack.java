@@ -15,7 +15,7 @@ public class DefaultSimpleInterceptorStack implements SimpleInterceptorStack {
 	private ControllerInstance controllerInstance;
 
 	/** @Deprecated CDI eyes only */
-	public DefaultSimpleInterceptorStack() {
+	protected DefaultSimpleInterceptorStack() {
 	}
 
 	@Inject

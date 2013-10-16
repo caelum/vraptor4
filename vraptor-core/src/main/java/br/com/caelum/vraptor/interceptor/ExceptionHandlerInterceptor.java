@@ -52,7 +52,7 @@ public class ExceptionHandlerInterceptor
 	private Result result;
 
 	/** @Deprecated CDI eyes only */
-	public ExceptionHandlerInterceptor() {
+	protected ExceptionHandlerInterceptor() {
 	}
 
 	@Inject

@@ -48,7 +48,7 @@ public class DefaultExceptionMapper implements ExceptionMapper {
 	private final Proxifier proxifier;
 
 	/** @Deprecated CDI eyes only */
-	public DefaultExceptionMapper() {
+	protected DefaultExceptionMapper() {
 		this(null);
 	}
 	@Inject

@@ -45,7 +45,7 @@ public class XStreamXMLDeserializer implements Deserializer {
 	private XStreamBuilder builder;
 
 	/** @Deprecated CDI eyes only */
-	public XStreamXMLDeserializer() {}
+	protected XStreamXMLDeserializer() {}
 
 	@Inject
 	public XStreamXMLDeserializer(ParameterNameProvider provider, XStreamBuilder builder) {

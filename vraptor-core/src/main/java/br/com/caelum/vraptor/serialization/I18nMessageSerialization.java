@@ -38,7 +38,7 @@ public class I18nMessageSerialization implements View {
 	private ResourceBundle bundle;
 
 	/** @Deprecated CDI eyes only */
-	public I18nMessageSerialization() {
+	protected I18nMessageSerialization() {
 	}
 
 	public I18nMessageSerialization(Container container, ResourceBundle bundle) {

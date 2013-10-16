@@ -30,7 +30,7 @@ public class ParameterIncluderInterceptor {
 	private ControllerMethod controllerMethod;
 
 	/** @Deprecated CDI eyes only */
-	public ParameterIncluderInterceptor() {}
+	protected ParameterIncluderInterceptor() {}
 
 	@Inject
 	public ParameterIncluderInterceptor(MethodInfo info,

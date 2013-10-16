@@ -50,7 +50,7 @@ public class FlashInterceptor implements Interceptor {
 	private MutableResponse response;
 
 	/** @Deprecated CDI eyes only */
-	public FlashInterceptor() {
+	protected FlashInterceptor() {
 	}
 
 	@Inject

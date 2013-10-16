@@ -43,7 +43,7 @@ public class LocaleBasedBigDecimalConverter implements Converter<BigDecimal> {
 	private Locale locale;
 
 	/** @Deprecated CDI eyes only */
-	public LocaleBasedBigDecimalConverter() {
+	protected LocaleBasedBigDecimalConverter() {
 	}
 
 	@Inject

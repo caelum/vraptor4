@@ -53,7 +53,7 @@ public class DownloadInterceptor implements Interceptor {
 	private Result result;
 
 	/** @Deprecated CDI eyes only */
-	public DownloadInterceptor() {
+	protected DownloadInterceptor() {
 	}
 
 	@Inject

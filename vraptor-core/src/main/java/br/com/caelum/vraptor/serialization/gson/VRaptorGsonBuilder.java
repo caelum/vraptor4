@@ -35,7 +35,7 @@ public class VRaptorGsonBuilder {
 	private List<ExclusionStrategy> exclusions;
 
 	/** @Deprecated CDI eyes only */
-	public VRaptorGsonBuilder() {
+	protected VRaptorGsonBuilder() {
 	}
 
 	@Inject

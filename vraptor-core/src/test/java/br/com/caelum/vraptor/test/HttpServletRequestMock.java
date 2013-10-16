@@ -397,7 +397,7 @@ public class HttpServletRequestMock implements MutableRequest {
 	}
 
 	/** @Deprecated CDI eyes only */
-	public HttpServletRequestMock() {
+	protected HttpServletRequestMock() {
 	}
 
 	@Override

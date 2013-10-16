@@ -52,7 +52,7 @@ public class DefaultValidator extends AbstractValidator {
 	private ResourceBundle bundle;
 
 	/** @Deprecated CDI eyes only */
-	public DefaultValidator() {
+	protected DefaultValidator() {
 	}
 
 	@Inject

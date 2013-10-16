@@ -37,7 +37,7 @@ public class DefaultTypeFinder implements TypeFinder {
 	private ParameterNameProvider provider;
 	
 	/** @Deprecated CDI eyes only */
-	public DefaultTypeFinder() {
+	protected DefaultTypeFinder() {
 	}
 	
 	@Inject

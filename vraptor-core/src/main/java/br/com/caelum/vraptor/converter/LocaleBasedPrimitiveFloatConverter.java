@@ -44,7 +44,7 @@ public class LocaleBasedPrimitiveFloatConverter implements Converter<Float> {
 	private Locale locale;
 
 	/** @Deprecated CDI eyes only */
-	public LocaleBasedPrimitiveFloatConverter() {
+	protected LocaleBasedPrimitiveFloatConverter() {
 	}
 
 	@Inject

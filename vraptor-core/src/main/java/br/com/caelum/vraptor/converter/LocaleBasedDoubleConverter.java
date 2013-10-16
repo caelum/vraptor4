@@ -43,7 +43,7 @@ public class LocaleBasedDoubleConverter implements Converter<Double> {
 	private Locale locale;
 
 	/** @Deprecated CDI eyes only */
-	public LocaleBasedDoubleConverter() {
+	protected LocaleBasedDoubleConverter() {
 	}
 
 	@Inject

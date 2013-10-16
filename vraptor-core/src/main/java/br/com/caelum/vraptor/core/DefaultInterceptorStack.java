@@ -43,7 +43,7 @@ public class DefaultInterceptorStack implements InterceptorStack {
 	private LinkedList<Iterator<InterceptorHandler>> internalStack = new LinkedList<>();
 
 	/** @Deprecated CDI eyes only */
-	public DefaultInterceptorStack() {}
+	protected DefaultInterceptorStack() {}
 
 	@Inject
 	public DefaultInterceptorStack(InterceptorStackHandlersCache cache) {

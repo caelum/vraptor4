@@ -35,7 +35,7 @@ public class UploadedFileConverter implements Converter<UploadedFile> {
 	private HttpServletRequest request;
 
 	/** @Deprecated CDI eyes only */
-	public UploadedFileConverter() {}
+	protected UploadedFileConverter() {}
 	
 	@Inject
 	public UploadedFileConverter(HttpServletRequest request) {

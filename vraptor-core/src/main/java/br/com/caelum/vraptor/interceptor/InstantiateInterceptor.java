@@ -43,7 +43,7 @@ public class InstantiateInterceptor implements Interceptor {
 	private ControllerInstance controllerInstance;
 
 	/** @Deprecated CDI eyes only */
-	public InstantiateInterceptor() {
+	protected InstantiateInterceptor() {
 	}
 
 	@Inject

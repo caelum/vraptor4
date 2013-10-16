@@ -43,7 +43,7 @@ public class LocalDateTimeConverter implements Converter<LocalDateTime> {
 	private Locale locale;
 
 	/** @Deprecated CDI eyes only */
-	public LocalDateTimeConverter() {
+	protected LocalDateTimeConverter() {
 	}
 
 	@Inject

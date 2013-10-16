@@ -71,7 +71,7 @@ public class CommonsUploadMultipartInterceptor implements Interceptor {
 	private Multimap<String, String> params;
 
 	/** @Deprecated CDI eyes only */
-	public CommonsUploadMultipartInterceptor() {
+	protected CommonsUploadMultipartInterceptor() {
 	}
 
 	@Inject

@@ -44,7 +44,7 @@ public class DateTimeConverter implements Converter<DateTime> {
 	private Locale locale;
 
 	/** @Deprecated CDI eyes only */
-	public DateTimeConverter() {
+	protected DateTimeConverter() {
 	}
 
 	@Inject

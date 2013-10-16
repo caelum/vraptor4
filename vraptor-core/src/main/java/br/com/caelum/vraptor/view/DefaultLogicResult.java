@@ -68,7 +68,7 @@ public class DefaultLogicResult implements LogicResult {
 	private MethodInfo methodInfo;
 
 	/** @Deprecated CDI eyes only */
-	public DefaultLogicResult() {}
+	protected DefaultLogicResult() {}
 
 	@Inject
 	public DefaultLogicResult(Proxifier proxifier, Router router, MutableRequest request, HttpServletResponse response,

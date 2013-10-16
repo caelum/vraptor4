@@ -37,7 +37,7 @@ public class BasicConfiguration {
 	private ServletContext servletContext;
 	
 	/** @Deprecated CDI eyes only */
-	public BasicConfiguration() {}
+	protected BasicConfiguration() {}
 
 	@Inject
 	public BasicConfiguration(ServletContext servletContext) {

@@ -41,7 +41,7 @@ public class GsonJSONPSerialization implements JSONPSerialization {
 	private VRaptorGsonBuilder builder;
 	
 	/** @Deprecated CDI eyes only */
-	public GsonJSONPSerialization() {
+	protected GsonJSONPSerialization() {
 	}
 
 	@Inject

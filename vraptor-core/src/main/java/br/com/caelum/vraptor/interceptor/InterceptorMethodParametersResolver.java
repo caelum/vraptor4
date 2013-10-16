@@ -14,7 +14,7 @@ public class InterceptorMethodParametersResolver {
 	private Container container;
 
 	/** @Deprecated CDI eyes only */
-	public InterceptorMethodParametersResolver() {}
+	protected InterceptorMethodParametersResolver() {}
 
 	@Inject
 	public InterceptorMethodParametersResolver(Container container) {

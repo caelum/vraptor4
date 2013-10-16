@@ -41,7 +41,7 @@ public class XStreamXMLSerialization implements XMLSerialization {
 	private XStreamBuilder builder;
 
 	/** @Deprecated CDI eyes only */
-	public XStreamXMLSerialization() {}
+	protected XStreamXMLSerialization() {}
 
 	@Inject
 	public XStreamXMLSerialization(HttpServletResponse response, XStreamBuilder builder) {

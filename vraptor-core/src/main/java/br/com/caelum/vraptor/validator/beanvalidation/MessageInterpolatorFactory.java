@@ -27,7 +27,7 @@ public class MessageInterpolatorFactory{
 	private ValidatorFactory factory;
 	
 	/** @Deprecated CDI eyes only */
-	public MessageInterpolatorFactory() {
+	protected MessageInterpolatorFactory() {
 	}
 
 	@Inject

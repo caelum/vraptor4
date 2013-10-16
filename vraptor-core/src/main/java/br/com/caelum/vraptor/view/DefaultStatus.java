@@ -52,7 +52,7 @@ public class DefaultStatus implements Status {
 	private Proxifier proxifier;
 
 	/** @Deprecated CDI eyes only */
-	public DefaultStatus() {}
+	protected DefaultStatus() {}
 
 	@Inject
 	public DefaultStatus(HttpServletResponse response, Result result, Configuration config,

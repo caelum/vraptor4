@@ -32,7 +32,7 @@ public class ConverterHandler{
 	private Converters converters;
 
 	/** @Deprecated CDI eyes only */
-	public ConverterHandler() {
+	protected ConverterHandler() {
 	}
 
 	@Inject

@@ -40,7 +40,7 @@ public class LocaleBasedDateConverter implements Converter<Date> {
 	private Locale locale;
 
 	/** @Deprecated CDI eyes only */
-	public LocaleBasedDateConverter() {
+	protected LocaleBasedDateConverter() {
 	}
 
 	@Inject

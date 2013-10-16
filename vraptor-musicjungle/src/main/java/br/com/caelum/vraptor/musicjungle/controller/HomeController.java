@@ -18,15 +18,10 @@ package br.com.caelum.vraptor.musicjungle.controller;
 
 import javax.inject.Inject;
 
-import org.hibernate.SessionFactory;
-import org.hsqldb.Session;
-
-import sun.awt.ComponentFactory;
 import br.com.caelum.vraptor.Controller;
 import br.com.caelum.vraptor.Get;
 import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.Result;
-import br.com.caelum.vraptor.musicjungle.dao.DefaultUserDao;
 import br.com.caelum.vraptor.musicjungle.dao.UserDao;
 import br.com.caelum.vraptor.musicjungle.interceptor.Public;
 import br.com.caelum.vraptor.musicjungle.interceptor.UserInfo;
@@ -58,8 +53,7 @@ public class HomeController {
 	 * You can receive any dependency on constructor. If VRaptor knows all dependencies, this
 	 * class will be created with no problem. You can use as dependencies:
 	 * - all VRaptor components, e.g {@link Result} and {@link Validator}
-	 * - all of your classes annotated with @Component, e.g {@link DefaultUserDao}
-	 * - all of the classes that have a {@link ComponentFactory}, e.g {@link Session} or {@link SessionFactory}
+	 * - all of your CDI classes, e.g {@link DefaultUserDao}
 	 */
 	@Inject
 	public HomeController(UserDao dao, UserInfo userInfo, Result result, Validator validator) {

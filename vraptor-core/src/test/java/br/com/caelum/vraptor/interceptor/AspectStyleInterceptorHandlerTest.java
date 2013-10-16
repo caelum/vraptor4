@@ -34,8 +34,6 @@ import br.com.caelum.vraptor.interceptor.example.ExampleOfSimpleStackInterceptor
 import br.com.caelum.vraptor.interceptor.example.InterceptorWithCustomizedAccepts;
 import br.com.caelum.vraptor.interceptor.example.InternalAndCustomAcceptsInterceptor;
 import br.com.caelum.vraptor.interceptor.example.MethodLevelAcceptsController;
-import br.com.caelum.vraptor.interceptor.example.NonBooleanAcceptsInterceptor;
-import br.com.caelum.vraptor.interceptor.example.VoidAcceptsInterceptor;
 import br.com.caelum.vraptor.interceptor.example.WithoutAroundInterceptor;
 import br.com.caelum.vraptor.ioc.Container;
 
@@ -124,22 +122,6 @@ public class AspectStyleInterceptorHandlerTest {
 				Mockito.same(controllerMethod),
 				Mockito.any(ControllerInstance.class));
 		verify(acceptsInterceptor, never()).after();
-	}
-
-	@Test(expected = VRaptorException.class)
-	public void shouldVerifyIfAcceptsMethodReturnsVoid() {
-		newInterceptorHandlerFor(new VoidAcceptsInterceptor());
-	}
-
-	@Test(expected = VRaptorException.class)
-	public void shouldVerifyIfAcceptsMethodReturnsNonBooleanType() {
-		newInterceptorHandlerFor(new NonBooleanAcceptsInterceptor());
-	}
-
-	private void newInterceptorHandlerFor(Object interceptor) {
-		Container container = new InstanceContainer(interceptor,controllerMethod);
-		InterceptorMethodParametersResolver parametersResolver = new InterceptorMethodParametersResolver(container);
-		new AspectStyleInterceptorHandler(VoidAcceptsInterceptor.class, stepInvoker, container, parametersResolver);
 	}
 
 	@Test

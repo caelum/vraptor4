@@ -16,7 +16,6 @@
 package br.com.caelum.vraptor.serialization;
 
 import static br.com.caelum.vraptor.view.Results.status;
-import static com.google.common.collect.Lists.newArrayList;
 import static java.util.Collections.sort;
 
 import java.util.Comparator;
@@ -30,6 +29,8 @@ import javax.inject.Inject;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.http.FormatResolver;
 
+import com.google.common.collect.Lists;
+
 /**
  * Default implementation for RepresentationResult that uses request Accept format to
  * decide which representation will be used
@@ -41,7 +42,7 @@ import br.com.caelum.vraptor.http.FormatResolver;
 public class DefaultRepresentationResult implements RepresentationResult {
 
 	private final FormatResolver formatResolver;
-	private final List<Serialization> serializations;
+	private final Iterable<Serialization> serializations;
 	private final Result result;
 
 	/** @Deprecated CDI eyes only */
@@ -53,7 +54,7 @@ public class DefaultRepresentationResult implements RepresentationResult {
 	public DefaultRepresentationResult(FormatResolver formatResolver, Result result, @Any Instance<Serialization> serializations) {
 		this.formatResolver = formatResolver;
 		this.result = result;
-		this.serializations = newArrayList(serializations);
+		this.serializations = serializations;
 	}
 
 	@Override
@@ -66,7 +67,7 @@ public class DefaultRepresentationResult implements RepresentationResult {
 	 *
 	 * @since 3.4.0
 	 */
-	protected void sortSerializations() {
+	protected void sortSerializations(List<Serialization> serializations) {
 		sort(serializations, new ApplicationPackageFirst());
 	}
 
@@ -76,8 +77,10 @@ public class DefaultRepresentationResult implements RepresentationResult {
 			result.use(status()).notFound();
 			return new IgnoringSerializer();
 		}
-
-		sortSerializations();
+		
+		List<Serialization> serializations = Lists.newArrayList(this.serializations);
+		sortSerializations(serializations);
+		
 		String format = formatResolver.getAcceptFormat();
 		for (Serialization serialization : serializations) {
 			if (serialization.accepts(format)) {

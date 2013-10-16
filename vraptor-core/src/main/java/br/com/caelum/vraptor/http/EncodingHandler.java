@@ -45,6 +45,7 @@ public class EncodingHandler {
 		this(null);
 	}
 
+	// TODO remove BasicConfiguration soon
 	@Inject
 	public EncodingHandler(@TransientReference BasicConfiguration configuration) {
 		if (configuration == null || configuration.getEncoding() == null) {

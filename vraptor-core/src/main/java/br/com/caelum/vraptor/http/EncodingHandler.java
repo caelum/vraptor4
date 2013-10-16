@@ -22,14 +22,15 @@ import static java.nio.charset.Charset.defaultCharset;
 
 import java.io.UnsupportedEncodingException;
 
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.TransientReference;
-import javax.inject.Inject;
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import br.com.caelum.vraptor.VRaptorException;
-import br.com.caelum.vraptor.config.BasicConfiguration;
+
+import com.google.common.base.Objects;
 
 /**
  * {@link EncodingHandler} that uses Encoding from web.xml.
@@ -39,15 +40,22 @@ import br.com.caelum.vraptor.config.BasicConfiguration;
 @ApplicationScoped
 public class EncodingHandler {
 
+	/**
+	 * context parameter that represents application character encoding
+	 */
+	public static final String ENCODING_KEY = "br.com.caelum.vraptor.encoding";
+
 	private String encoding;
+	private ServletContext context;
 
-	@Deprecated // CDI eyes only
-	public EncodingHandler() {
+	public EncodingHandler(ServletContext context) {
+		this.context = context;
 	}
-
-	@Inject
-	public EncodingHandler(@TransientReference BasicConfiguration configuration) {
-		encoding = firstNonNull(configuration.getEncoding(), defaultCharset().name());
+	
+	@PostConstruct
+	public void init() {
+		encoding = context.getInitParameter(ENCODING_KEY);
+		encoding = firstNonNull(encoding, defaultCharset().name());
 	}
 
 	public void setEncoding(HttpServletRequest request, HttpServletResponse response) {

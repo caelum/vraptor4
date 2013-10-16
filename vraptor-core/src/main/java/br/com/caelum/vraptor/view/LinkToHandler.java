@@ -73,15 +73,17 @@ public class LinkToHandler extends ForwardingMap<Class<?>, Object> {
 
 	private static final Logger logger = LoggerFactory.getLogger(LinkToHandler.class);
 
-	private ServletContext context;
-	private Router router;
-
-	private Proxifier proxifier;
+	private final ServletContext context;
+	private final Router router;
+	private final Proxifier proxifier;
 
 	private ConcurrentMap<Class<?>, Class<?>> interfaces = new ConcurrentHashMap<>();
 
-	@Deprecated // CDI eyes only
-	public LinkToHandler() {
+	/** 
+	 * @deprecated CDI eyes only
+	 */
+	protected LinkToHandler() {
+		this(null, null, null);
 	}
 
 	@Inject

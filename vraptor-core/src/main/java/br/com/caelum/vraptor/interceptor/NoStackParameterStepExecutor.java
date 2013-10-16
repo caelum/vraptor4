@@ -7,8 +7,8 @@ import javax.enterprise.inject.Vetoed;
 @Vetoed
 public class NoStackParameterStepExecutor implements StepExecutor<Void> {
 
-	private StepInvoker stepInvoker;
-	private Method method;
+	private final StepInvoker stepInvoker;
+	private final Method method;
 
 	public NoStackParameterStepExecutor(StepInvoker stepInvoker, Method method) {
 		this.stepInvoker = stepInvoker;

@@ -10,19 +10,20 @@ import br.com.caelum.vraptor.core.InterceptorStack;
 @RequestScoped
 public class DefaultSimpleInterceptorStack implements SimpleInterceptorStack {
 
-	private InterceptorStack delegate;
-	private ControllerMethod controllerMethod;
-	private ControllerInstance controllerInstance;
+	private final InterceptorStack delegate;
+	private final ControllerMethod controllerMethod;
+	private final ControllerInstance controllerInstance;
 
-	@Deprecated // CDI eyes only
-	public DefaultSimpleInterceptorStack() {
+	/** 
+	 * @deprecated CDI eyes only
+	 */
+	protected DefaultSimpleInterceptorStack() {
+		this(null, null, null);
 	}
 
 	@Inject
-	public DefaultSimpleInterceptorStack(InterceptorStack delegate,
-			ControllerMethod controllerMethod,
+	public DefaultSimpleInterceptorStack(InterceptorStack delegate, ControllerMethod controllerMethod,
 			ControllerInstance controllerInstance) {
-		super();
 		this.delegate = delegate;
 		this.controllerMethod = controllerMethod;
 		this.controllerInstance = controllerInstance;

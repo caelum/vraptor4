@@ -41,12 +41,15 @@ public class OutjectResult implements Interceptor {
 
 	private static final Logger logger = LoggerFactory.getLogger(OutjectResult.class);
 
-	private Result result;
-	private MethodInfo info;
-	private TypeNameExtractor extractor;
+	private final Result result;
+	private final MethodInfo info;
+	private final TypeNameExtractor extractor;
 
-	@Deprecated
-	public OutjectResult() {
+	/** 
+	 * @deprecated CDI eyes only
+	 */
+	protected OutjectResult() {
+		this(null, null, null);
 	}
 
 	@Inject

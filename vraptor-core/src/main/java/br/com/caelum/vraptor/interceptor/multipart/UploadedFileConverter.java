@@ -32,10 +32,14 @@ import br.com.caelum.vraptor.converter.Converter;
 @Convert(UploadedFile.class)
 public class UploadedFileConverter implements Converter<UploadedFile> {
 
-	private HttpServletRequest request;
+	private final HttpServletRequest request;
 
-	@Deprecated	//CDI eyes only
-	public UploadedFileConverter() {}
+	/** 
+	 * @deprecated CDI eyes only
+	 */
+	protected UploadedFileConverter() {
+		this(null);
+	}
 	
 	@Inject
 	public UploadedFileConverter(HttpServletRequest request) {

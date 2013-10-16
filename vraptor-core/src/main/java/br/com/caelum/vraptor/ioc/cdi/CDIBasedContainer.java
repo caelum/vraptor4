@@ -15,10 +15,13 @@ import br.com.caelum.vraptor.ioc.Container;
 @SuppressWarnings("rawtypes")
 public class CDIBasedContainer implements Container {
 
-	private CacheStore<Class<?>,Instance> cache;
+	private final CacheStore<Class<?>,Instance> cache;
 
-	@Deprecated
-	public CDIBasedContainer() {
+	/** 
+	 * @deprecated CDI eyes only
+	 */
+	protected CDIBasedContainer() {
+		this(null);
 	}
 
 	@Inject

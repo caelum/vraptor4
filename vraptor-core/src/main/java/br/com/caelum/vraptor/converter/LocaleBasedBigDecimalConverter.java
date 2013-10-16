@@ -40,10 +40,13 @@ import br.com.caelum.vraptor.Convert;
 @RequestScoped
 public class LocaleBasedBigDecimalConverter implements Converter<BigDecimal> {
 
-	private Locale locale;
+	private final Locale locale;
 
-	@Deprecated // CDI eyes only
-	public LocaleBasedBigDecimalConverter() {
+	/** 
+	 * @deprecated CDI eyes only
+	 */
+	protected LocaleBasedBigDecimalConverter() {
+		this(null);
 	}
 
 	@Inject

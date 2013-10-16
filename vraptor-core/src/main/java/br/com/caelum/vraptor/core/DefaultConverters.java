@@ -42,11 +42,15 @@ public class DefaultConverters implements Converters {
 	private final LinkedList<Class<? extends Converter<?>>> classes = new LinkedList<>();
 
 	@LRU
-	private CacheStore<Class<?>, Class<? extends Converter<?>>> cache;
-	private Container container;
+	private final CacheStore<Class<?>, Class<? extends Converter<?>>> cache;
+	private final Container container;
 
-	@Deprecated //CDI eyes only
-	public DefaultConverters() {}
+	/** 
+	 * @deprecated CDI eyes only
+	 */
+	protected DefaultConverters() {
+		this(null, null);
+	}
 
 	@Inject
 	public DefaultConverters(Container container, CacheStore<Class<?>, Class<? extends Converter<?>>> cache) {

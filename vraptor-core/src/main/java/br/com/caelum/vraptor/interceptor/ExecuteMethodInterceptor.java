@@ -44,13 +44,17 @@ import static br.com.caelum.vraptor.view.Results.nothing;
 @Intercepts(after = ParametersInstantiatorInterceptor.class, before = {})
 public class ExecuteMethodInterceptor implements Interceptor {
 
-	private MethodInfo info;
-	private Validator validator;
-	private MethodExecutor methodExecutor;
 	private final static Logger log = LoggerFactory.getLogger(ExecuteMethodInterceptor.class);
+	
+	private final MethodInfo info;
+	private final Validator validator;
+	private final MethodExecutor methodExecutor;
 
-	@Deprecated
-	public ExecuteMethodInterceptor() {
+	/** 
+	 * @deprecated CDI eyes only
+	 */
+	protected ExecuteMethodInterceptor() {
+		this(null, null, null);
 	}
 
 	@Inject

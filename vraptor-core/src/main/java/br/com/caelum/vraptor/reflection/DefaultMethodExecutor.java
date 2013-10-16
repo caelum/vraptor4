@@ -21,18 +21,21 @@ import com.google.common.base.Throwables;
 @ApplicationScoped
 public class DefaultMethodExecutor implements MethodExecutor {
 
-	private CacheStore<Method,MethodHandle> cache;
-	private MethodHandleFactory methodHandleFactory;
+	private final CacheStore<Method,MethodHandle> cache;
+	private final MethodHandleFactory methodHandleFactory;
+
+	/** 
+	 * @deprecated CDI eyes only
+	 */
+	protected DefaultMethodExecutor() {
+		this(null, null);
+	}
 
 	@Inject
 	public DefaultMethodExecutor(@LRU(capacity=500) CacheStore<Method, MethodHandle> cache,
 			MethodHandleFactory methodHandleFactory) {
 		this.cache = cache;
 		this.methodHandleFactory = methodHandleFactory;
-	}
-
-	@Deprecated
-	public DefaultMethodExecutor() {
 	}
 
 	@Override

@@ -18,15 +18,16 @@ import com.google.common.base.Throwables;
 @ApplicationScoped
 public class StepInvoker {
 
-	private MethodExecutor methodExecutor;
+	private final MethodExecutor methodExecutor;
+
+	/** @deprecated CDI eyes only*/
+	protected StepInvoker() {
+		this(null);
+	}
 
 	@Inject
 	public StepInvoker(MethodExecutor methodExecutor) {
 		this.methodExecutor = methodExecutor;
-	}
-
-	/** @deprecated CDI eyes only*/
-	protected StepInvoker() {
 	}
 
 	private class InvokeMatcher implements Matcher<Method> {

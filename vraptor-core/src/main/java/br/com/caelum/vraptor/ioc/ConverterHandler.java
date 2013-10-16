@@ -29,11 +29,13 @@ import br.com.caelum.vraptor.core.Converters;
 @ApplicationScoped
 public class ConverterHandler{
 
-	private Converters converters;
+	private final Converters converters;
 
-	//CDI eyes only
-	@Deprecated
-	public ConverterHandler() {
+	/** 
+	 * @deprecated CDI eyes only
+	 */
+	protected ConverterHandler() {
+		this(null);
 	}
 
 	@Inject

@@ -39,12 +39,14 @@ import br.com.caelum.vraptor.ioc.Container;
 @Intercepts(after=ControllerLookupInterceptor.class)
 public class InstantiateInterceptor implements Interceptor {
 
-	private Container container;
+	private final Container container;
 	private ControllerInstance controllerInstance;
 
-	//CDI eyes only
-	@Deprecated
-	public InstantiateInterceptor() {
+	/** 
+	 * @deprecated CDI eyes only
+	 */
+	protected InstantiateInterceptor() {
+		this(null);
 	}
 
 	@Inject

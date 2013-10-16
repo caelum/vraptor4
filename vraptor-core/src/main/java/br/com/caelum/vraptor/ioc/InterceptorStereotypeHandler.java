@@ -56,11 +56,7 @@ public class InterceptorStereotypeHandler{
 	public void handle(@Observes @InterceptsQualifier BeanClass beanClass) {
 		Class<?> originalType = beanClass.getType();
 		interceptorValidator.validate(originalType);
-		registerInterceptor(originalType);
-	}
-
-	private void registerInterceptor(Class<?> type) {
-		logger.debug("Found interceptor for {}", type);
-		registry.register(type);
+		logger.debug("Found interceptor for {}", originalType);
+		registry.register(originalType);
 	}
 }

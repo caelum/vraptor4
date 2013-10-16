@@ -36,7 +36,9 @@ public class DefaultPathResolver implements PathResolver {
 
 	private final FormatResolver resolver;
 	
-	/** @deprecated CDI eyes only */
+	/** 
+	 * @deprecated CDI eyes only
+	 */
 	protected DefaultPathResolver() {
 		this(null);
 	}

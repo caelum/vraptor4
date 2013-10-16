@@ -34,7 +34,9 @@ public class UploadedFileConverter implements Converter<UploadedFile> {
 
 	private final HttpServletRequest request;
 
-	/** @deprecated CDI eyes only */
+	/** 
+	 * @deprecated CDI eyes only
+	 */
 	protected UploadedFileConverter() {
 		this(null);
 	}

@@ -44,7 +44,9 @@ public class DefaultStaticContentHandler implements StaticContentHandler {
 
 	private final ServletContext context;
 
-	/** @deprecated CDI eyes only */
+	/** 
+	 * @deprecated CDI eyes only
+	 */
 	protected DefaultStaticContentHandler() {
 		this(null);
 	}

@@ -42,7 +42,9 @@ public class InstantiateInterceptor implements Interceptor {
 	private final Container container;
 	private ControllerInstance controllerInstance;
 
-	/** @deprecated CDI eyes only */
+	/** 
+	 * @deprecated CDI eyes only
+	 */
 	protected InstantiateInterceptor() {
 		this(null);
 	}

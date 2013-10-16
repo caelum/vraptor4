@@ -58,7 +58,9 @@ public class ControllerLookupInterceptor implements Interceptor {
 	
 	private ControllerMethod method;
 	
-	/** @deprecated CDI eyes only */
+	/** 
+	 * @deprecated CDI eyes only
+	 */
 	protected ControllerLookupInterceptor() {
 		this(null, null, null, null, null, null);
 	}

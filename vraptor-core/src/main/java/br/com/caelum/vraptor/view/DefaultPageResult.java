@@ -52,7 +52,9 @@ public class DefaultPageResult implements PageResult {
 	private final Proxifier proxifier;
 	private final MethodInfo requestInfo;
 	
-	/** @deprecated CDI eyes only */
+	/** 
+	 * @deprecated CDI eyes only
+	 */
 	protected DefaultPageResult() {
 		this(null, null, null, null, null);
 	}

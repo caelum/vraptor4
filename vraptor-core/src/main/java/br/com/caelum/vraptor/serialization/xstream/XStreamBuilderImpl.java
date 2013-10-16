@@ -35,7 +35,9 @@ public class XStreamBuilderImpl implements XStreamBuilder {
 	private final TypeNameExtractor extractor;
 	private boolean indented = false;
 	
-	/** @deprecated CDI eyes only */
+	/** 
+	 * @deprecated CDI eyes only
+	 */
 	protected XStreamBuilderImpl() {
 		this(null, null);
 	}

@@ -65,7 +65,9 @@ public class DefaultRouter implements Router {
 	private final CacheStore<Invocation,Route> cache;
 	private final EncodingHandler encodingHandler;
 
-	/** @deprecated CDI eyes only */
+	/** 
+	 * @deprecated CDI eyes only
+	 */
 	protected DefaultRouter() {
 		this(null, null, null, null, null, null, null, null);
 	}

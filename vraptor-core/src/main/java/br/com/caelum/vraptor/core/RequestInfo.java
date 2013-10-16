@@ -41,7 +41,9 @@ public class RequestInfo {
 	private final MutableResponse response;
 	private final FilterChain chain;
 	
-	/** @deprecated CDI eyes only */
+	/** 
+	 * @deprecated CDI eyes only
+	 */
 	protected RequestInfo() {
 		this(null, null, null, null);
 	}

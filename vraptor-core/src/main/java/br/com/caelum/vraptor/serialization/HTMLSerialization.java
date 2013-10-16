@@ -34,7 +34,9 @@ public class HTMLSerialization implements Serialization {
 	private final Result result;
 	private final TypeNameExtractor extractor;
 
-	/** @deprecated CDI eyes only */
+	/** 
+	 * @deprecated CDI eyes only
+	 */
 	protected HTMLSerialization() {
 		this(null, null);
 	}

@@ -31,7 +31,9 @@ public class ConverterHandler{
 
 	private final Converters converters;
 
-	/** @deprecated CDI eyes only */
+	/** 
+	 * @deprecated CDI eyes only
+	 */
 	protected ConverterHandler() {
 		this(null);
 	}

@@ -46,7 +46,9 @@ public class HttpSessionMock implements HttpSession,Serializable {
 		this.id = id;
 	}
 
-	/** @deprecated CDI eyes only */
+	/** 
+	 * @deprecated CDI eyes only
+	 */
 	protected HttpSessionMock() {
 	}
 

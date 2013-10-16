@@ -38,7 +38,9 @@ public class DefaultRoutes implements Routes{
 	private final Proxifier proxifier;
 	private final Router router;
 
-	/** @deprecated CDI eyes only */
+	/** 
+	 * @deprecated CDI eyes only
+	 */
 	protected DefaultRoutes() {
 		this(null, null);
 	}

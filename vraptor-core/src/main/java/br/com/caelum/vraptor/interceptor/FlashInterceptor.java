@@ -49,7 +49,9 @@ public class FlashInterceptor implements Interceptor {
 	private final Result result;
 	private final MutableResponse response;
 
-	/** @deprecated CDI eyes only */
+	/** 
+	 * @deprecated CDI eyes only
+	 */
 	protected FlashInterceptor() {
 		this(null, null, null);
 	}

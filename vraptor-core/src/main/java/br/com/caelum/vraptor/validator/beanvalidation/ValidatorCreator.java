@@ -35,7 +35,9 @@ public class ValidatorCreator {
 
 	private final ValidatorFactory factory;
 
-	/** @deprecated CDI eyes only */
+	/** 
+	 * @deprecated CDI eyes only
+	 */
 	protected ValidatorCreator() {
 		this(null);
 	}

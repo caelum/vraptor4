@@ -43,7 +43,9 @@ public class DateTimeConverter implements Converter<DateTime> {
 
 	private final Locale locale;
 
-	/** @deprecated CDI eyes only */
+	/** 
+	 * @deprecated CDI eyes only
+	 */
 	protected DateTimeConverter() {
 		this(null);
 	}

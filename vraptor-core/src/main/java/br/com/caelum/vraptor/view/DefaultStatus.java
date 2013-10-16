@@ -51,7 +51,9 @@ public class DefaultStatus implements Status {
 	private final Router router;
 	private final Proxifier proxifier;
 
-	/** @deprecated CDI eyes only */
+	/** 
+	 * @deprecated CDI eyes only
+	 */
 	protected DefaultStatus() {
 		this(null, null, null, null, null);
 	}

@@ -54,7 +54,9 @@ public class DefaultResult extends AbstractResult {
 	private Map<String, Object> includedAttributes;
 	private boolean responseCommitted = false;
 
-	/** @deprecated CDI eyes only */
+	/** 
+	 * @deprecated CDI eyes only
+	 */
 	protected DefaultResult() {
 		this(null, null, null, null);
 	}

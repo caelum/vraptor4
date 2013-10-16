@@ -52,7 +52,9 @@ public class DownloadInterceptor implements Interceptor {
 	private final MethodInfo info;
 	private final Result result;
 
-	/** @deprecated CDI eyes only */
+	/** 
+	 * @deprecated CDI eyes only
+	 */
 	protected DownloadInterceptor() {
 		this(null, null, null);
 	}

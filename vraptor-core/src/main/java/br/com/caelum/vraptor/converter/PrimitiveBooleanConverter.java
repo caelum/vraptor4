@@ -36,7 +36,9 @@ public class PrimitiveBooleanConverter implements Converter<Boolean> {
 	
 	private final BooleanConverter booleanConverter;
 
-	/** @deprecated CDI eyes only */
+	/** 
+	 * @deprecated CDI eyes only
+	 */
 	protected PrimitiveBooleanConverter() {
 		this(null);
 	}

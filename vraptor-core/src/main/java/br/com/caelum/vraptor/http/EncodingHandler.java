@@ -39,8 +39,10 @@ import br.com.caelum.vraptor.config.BasicConfiguration;
 public class EncodingHandler {
 
 	private final String encoding;
-
-	/** @deprecated CDI eyes only */
+	
+	/** 
+	 * @deprecated CDI eyes only
+	 */
 	protected EncodingHandler() {
 		this(null);
 	}

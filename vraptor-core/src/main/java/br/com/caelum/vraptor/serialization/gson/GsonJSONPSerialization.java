@@ -40,7 +40,9 @@ public class GsonJSONPSerialization implements JSONPSerialization {
 	private final TypeNameExtractor extractor;
 	private final VRaptorGsonBuilder builder;
 	
-	/** @deprecated CDI eyes only */
+	/** 
+	 * @deprecated CDI eyes only
+	 */
 	protected GsonJSONPSerialization() {
 		this(null, null, null);
 	}

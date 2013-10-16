@@ -42,7 +42,9 @@ public class LocaleBasedFloatConverter implements Converter<Float> {
 
 	private final Locale locale;
 
-	/** @deprecated CDI eyes only */
+	/** 
+	 * @deprecated CDI eyes only
+	 */
 	protected LocaleBasedFloatConverter() {
 		this(null);
 	}

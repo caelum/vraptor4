@@ -41,7 +41,9 @@ public class GsonJSONSerialization implements JSONSerialization {
 	private final TypeNameExtractor extractor;
 	private final VRaptorGsonBuilder builder;
 
-	/** @deprecated CDI eyes only */
+	/** 
+	 * @deprecated CDI eyes only
+	 */
 	protected GsonJSONSerialization() {
 		this(null, null, null);
 	}

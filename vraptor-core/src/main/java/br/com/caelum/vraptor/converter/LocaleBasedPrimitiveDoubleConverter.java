@@ -43,7 +43,10 @@ public class LocaleBasedPrimitiveDoubleConverter implements Converter<Double> {
 
 	private final Locale locale;
 
-	/** @deprecated CDI eyes only */
+	/** 
+	 * @deprecated CDI eyes only
+	 */
+
 	public LocaleBasedPrimitiveDoubleConverter() {
 		this(null);
 	}

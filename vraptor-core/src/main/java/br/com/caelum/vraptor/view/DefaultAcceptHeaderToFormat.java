@@ -50,7 +50,9 @@ public class DefaultAcceptHeaderToFormat implements AcceptHeaderToFormat {
 	private static final double DEFAULT_QUALIFIER_VALUE = 0.01;
 	protected final Map<String, String> mimeToFormat;
 
-	/** @deprecated CDI eyes only */
+	/** 
+	 * @deprecated CDI eyes only
+	 */
 	protected DefaultAcceptHeaderToFormat() {
 		this(null);
 	}

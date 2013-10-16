@@ -29,7 +29,9 @@ public class ParameterIncluderInterceptor {
 	private final ParameterNameProvider nameProvider;
 	private final ControllerMethod controllerMethod;
 
-	/** @deprecated CDI eyes only */
+	/** 
+	 * @deprecated CDI eyes only
+	 */
 	protected ParameterIncluderInterceptor() {
 		this(null, null, null, null);
 	}

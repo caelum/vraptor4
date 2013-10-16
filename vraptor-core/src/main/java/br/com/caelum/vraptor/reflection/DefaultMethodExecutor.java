@@ -24,7 +24,9 @@ public class DefaultMethodExecutor implements MethodExecutor {
 	private final CacheStore<Method,MethodHandle> cache;
 	private final MethodHandleFactory methodHandleFactory;
 
-	/** @deprecated CDI eyes only */
+	/** 
+	 * @deprecated CDI eyes only
+	 */
 	protected DefaultMethodExecutor() {
 		this(null, null);
 	}

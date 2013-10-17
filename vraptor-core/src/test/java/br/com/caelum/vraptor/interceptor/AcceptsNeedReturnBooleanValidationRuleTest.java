@@ -2,6 +2,8 @@ package br.com.caelum.vraptor.interceptor;
 
 import java.lang.reflect.Method;
 
+import javax.enterprise.inject.Vetoed;
+
 import net.vidageek.mirror.list.dsl.MirrorList;
 
 import org.junit.Before;
@@ -36,12 +38,12 @@ public class AcceptsNeedReturnBooleanValidationRuleTest {
 		validationRule.validate(type, allMethods);
 	}
 
-	@Intercepts
+	@Intercepts @Vetoed
 	static class VoidAcceptsInterceptor {
 		@Accepts public void accepts(){}
 	}
 
-	@Intercepts
+	@Intercepts @Vetoed
 	static class NonBooleanAcceptsInterceptor{
 		@Accepts public String accepts() { return ""; }
 	}

@@ -37,7 +37,7 @@ public class NoStackParamValidationRule implements ValidationRule {
 		Method beforeCall = invoker.findMethod(methods, BeforeCall.class, originalType);
 		Method accepts = invoker.findMethod(methods, Accepts.class, originalType);
 
-		if (!containsStack(aroundCall)) {
+		if (aroundCall != null && !containsStack(aroundCall)) {
 			invalidUseOfStack("@%s method must receive %s or %s");
 		}
 		if (containsStack(beforeCall) || containsStack(afterCall)
@@ -54,6 +54,9 @@ public class NoStackParamValidationRule implements ValidationRule {
 	}
 
 	private boolean containsStack(Method method) {
+
+		if (method == null) return false;
+
 		List<Class<?>> parameterTypes = asList(method.getParameterTypes());
 		Predicate<Class<?>> hasStack = new Predicate<Class<?>>() {
 			@Override

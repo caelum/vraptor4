@@ -26,7 +26,7 @@ public class AcceptsNeedReturnBooleanValidationRule implements ValidationRule {
 
 		Method accepts = invoker.findMethod(methods, Accepts.class, originalType);
 
-		if (!accepts.getReturnType().equals(Boolean.class)
+		if (accepts != null && !accepts.getReturnType().equals(Boolean.class)
 				&& !accepts.getReturnType().equals(boolean.class)) {
 			throw new InterceptionException(format("@%s method must return "
 				+ "	boolean", Accepts.class.getSimpleName()));

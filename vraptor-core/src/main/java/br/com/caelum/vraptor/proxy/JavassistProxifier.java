@@ -95,8 +95,9 @@ public class JavassistProxifier implements Proxifier {
 		try{
 			Class<?> weldProxyClass = Class.forName("org.jboss.weld.bean.proxy.ProxyObject");
 			return weldProxyClass.isAssignableFrom(type);
-		}catch(Exception e){ 
+		}catch(ClassNotFoundException e){ 
 				//nothing
+			logger.debug("Weld not found, cannot determine if class {} is a proxy or not.", type);
 		}
 		return false;
 	}

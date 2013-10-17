@@ -16,24 +16,25 @@ public class InterceptorValidator {
 
 	public void validate(Class<?> originalType) {
 
-		boolean notOldInterceptor = !Interceptor.class.isAssignableFrom(originalType);
-		validateIfItsAnValidInterceptor(originalType, notOldInterceptor);
+		boolean implementsInterceptor = Interceptor.class.isAssignableFrom(originalType);
+		boolean containsIntercepts = originalType.isAnnotationPresent(Intercepts.class);
 
-		if (notOldInterceptor) {
-			for (ValidationRule validationRule : this.validationRules) {
-				validationRule.validate(originalType);
-			}
-		}
-	}
-
-	private void validateIfItsAnValidInterceptor(
-			Class<?> originalType, boolean isntInterceptor) {
-
-		if (isntInterceptor || !originalType.isAnnotationPresent(Intercepts.class)) {
-
+		if (implementsInterceptor || containsIntercepts) {
+			applyNewInterceptorValidationRules(originalType, implementsInterceptor);
+		} else {
 			throw new VRaptorException(format("Annotation @%s found in %s, "
 				+ "but it is neither an Interceptor nor an InterceptorSequence.",
 				Intercepts.class.getSimpleName(), originalType));
+		}
+	}
+
+	private void applyNewInterceptorValidationRules(Class<?> originalType,
+			boolean implementsInterceptor) {
+
+		if (!implementsInterceptor) {
+			for (ValidationRule validationRule : this.validationRules) {
+				validationRule.validate(originalType);
+			}
 		}
 	}
 }

@@ -8,8 +8,13 @@ import java.lang.reflect.Method;
 import java.util.List;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 
+import net.vidageek.mirror.list.dsl.MirrorList;
+import br.com.caelum.vraptor.Accepts;
+import br.com.caelum.vraptor.AfterCall;
 import br.com.caelum.vraptor.AroundCall;
+import br.com.caelum.vraptor.BeforeCall;
 import br.com.caelum.vraptor.core.InterceptorStack;
 
 import com.google.common.base.Predicate;
@@ -17,13 +22,20 @@ import com.google.common.base.Predicate;
 @ApplicationScoped
 public class NoStackParamValidationRule implements ValidationRule {
 
-	@Override
-	public void validate(Class<?> originalType) {
+	private final StepInvoker invoker;
 
-		Method aroundCall = null;  // TODO handle method efficiently
-		Method afterCall = null;   // TODO handle method efficiently
-		Method beforeCall = null;  // TODO handle method efficiently
-		Method accepts = null;     // TODO handle method efficiently
+	@Inject
+	public NoStackParamValidationRule(StepInvoker invoker) {
+		this.invoker = invoker;
+	}
+
+	@Override
+	public void validate(Class<?> originalType, MirrorList<Method> methods) {
+
+		Method aroundCall = invoker.findMethod(methods, AroundCall.class, originalType);
+		Method afterCall = invoker.findMethod(methods, AfterCall.class, originalType);
+		Method beforeCall = invoker.findMethod(methods, BeforeCall.class, originalType);
+		Method accepts = invoker.findMethod(methods, Accepts.class, originalType);
 
 		if (!containsStack(aroundCall)) {
 			invalidUseOfStack("@%s method must receive %s or %s");

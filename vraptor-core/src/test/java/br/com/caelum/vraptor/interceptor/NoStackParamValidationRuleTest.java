@@ -13,26 +13,31 @@ import br.com.caelum.vraptor.core.InterceptorStack;
 public class NoStackParamValidationRuleTest {
 
 	private NoStackParamValidationRule validationRule;
+	private StepInvoker invoker;
 
 	@Before
 	public void setUp() {
-		validationRule = new NoStackParamValidationRule();
+		invoker = new StepInvoker(null);
+		validationRule = new NoStackParamValidationRule(invoker);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void mustReceiveStackAsParameterForAroundCall() {
-		validationRule.validate(AroundInterceptorWithoutSimpleStackParameter.class);
+		Class<?> type = AroundInterceptorWithoutSimpleStackParameter.class;
+		validationRule.validate(type, invoker.findAllMethods(type));
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void mustNotReceiveStackAsParameterForAcceptsCall() {
-		validationRule.validate(AcceptsInterceptorWithStackAsParameter.class);
+		Class<?> type = AcceptsInterceptorWithStackAsParameter.class;
+		validationRule.validate(type, invoker.findAllMethods(type));
 
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void mustNotReceiveStackAsParameterForBeforeAfterCall() {
-		validationRule.validate(BeforeAfterInterceptorWithStackAsParameter.class);
+		Class<?> type = BeforeAfterInterceptorWithStackAsParameter.class;
+		validationRule.validate(type, invoker.findAllMethods(type));
 	}
 
 	@Intercepts

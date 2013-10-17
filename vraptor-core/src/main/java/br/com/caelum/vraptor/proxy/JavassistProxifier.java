@@ -15,8 +15,6 @@
  */
 package br.com.caelum.vraptor.proxy;
 
-import static javassist.util.proxy.ProxyFactory.isProxyClass;
-
 import java.lang.reflect.Method;
 
 import javassist.util.proxy.MethodFilter;
@@ -27,6 +25,8 @@ import javax.enterprise.context.ApplicationScoped;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import static javassist.util.proxy.ProxyFactory.isProxyClass;
 
 /**
  * Javassist implementation for {@link Proxifier}.
@@ -90,9 +90,15 @@ public class JavassistProxifier implements Proxifier {
 		return proxy;
 	}
 
-	// FIXME only works with weld, and can throws ClassNotFoundException in another CDI implementations
 	private boolean isWeldProxy(Class<?> type) {
-		return org.jboss.weld.bean.proxy.ProxyFactory.isProxy(type);
+		
+		try{
+			Class<?> weldProxyClass = Class.forName("org.jboss.weld.bean.proxy.ProxyObject");
+			return weldProxyClass.isAssignableFrom(type);
+		}catch(Exception e){ 
+				//nothing
+		}
+		return false;
 	}
 
 	private static class MethodInvocationAdapter<T> implements MethodHandler {

@@ -107,12 +107,11 @@ public class JavaEvaluatorTest {
 		assertThat((String) evaluator.get(c, "client.emails[1]"), is(equalTo("red")));
 	}
 
-	@SuppressWarnings("unchecked")
 	@Test
 	public void shouldAccessCollection() {
 		Client c = client(1L);
-		c.favoriteNumbers = new TreeSet(Arrays.asList("blue", "red"));
-		assertThat((String) evaluator.get(c, "client.favoriteNumbers[1]"), is(equalTo("red")));
+		c.favoriteNumbers = new TreeSet<>(Arrays.asList(10, 5));
+		assertThat((Integer) evaluator.get(c, "client.favoriteNumbers[1]"), is(equalTo(10)));
 	}
 
 	@Test

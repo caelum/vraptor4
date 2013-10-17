@@ -1,5 +1,7 @@
 #VRaptor 4 Beta
 
+![Build status](https://secure.travis-ci.org/caelum/vraptor4.png)
+
 A web MVC action-based framework, on top of CDI, for fast and maintainable Java development. 
 
 ##Building in your machine

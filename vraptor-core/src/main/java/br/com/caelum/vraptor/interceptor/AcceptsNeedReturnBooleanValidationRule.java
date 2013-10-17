@@ -14,7 +14,7 @@ import br.com.caelum.vraptor.InterceptionException;
 @ApplicationScoped
 public class AcceptsNeedReturnBooleanValidationRule implements ValidationRule {
 
-	private StepInvoker invoker;
+	private final StepInvoker invoker;
 
 	@Inject
 	public AcceptsNeedReturnBooleanValidationRule(StepInvoker invoker) {

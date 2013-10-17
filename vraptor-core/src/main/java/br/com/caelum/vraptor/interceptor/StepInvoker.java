@@ -39,7 +39,7 @@ public class StepInvoker {
 
 		@Override
 		public boolean accepts(Method element) {
-			if(element.getDeclaringClass().getName().contains("$")) {
+			if(element.getDeclaringClass().getSimpleName().contains("$")) {
 				return false;
 			}
 			return element.isAnnotationPresent(this.step);

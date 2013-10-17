@@ -18,14 +18,7 @@ public class NoStackParameterStepExecutor implements StepExecutor<Void> {
 
 	@Override
 	public boolean accept(Class<?> interceptorClass) {
-		NoStackParameterSignatureAcceptor noStackAcceptor = new NoStackParameterSignatureAcceptor();
-		if (method != null) {
-			if (!noStackAcceptor.accepts(method)) {
-				throw new IllegalArgumentException(method.getDeclaringClass().getCanonicalName() + " - " + noStackAcceptor.errorMessage());
-			}
-			return true;
-		}
-		return false;
+		return true;
 	}
 
 	@Override

@@ -1,11 +1,15 @@
 package br.com.caelum.vraptor.interceptor;
 
 import static java.lang.String.format;
+
+import javax.enterprise.context.ApplicationScoped;
+
 import br.com.caelum.vraptor.AfterCall;
 import br.com.caelum.vraptor.AroundCall;
 import br.com.caelum.vraptor.BeforeCall;
 import br.com.caelum.vraptor.InterceptionException;
 
+@ApplicationScoped
 public class NoInterceptMethodsValidationRule implements ValidationRule {
 
 	@Override

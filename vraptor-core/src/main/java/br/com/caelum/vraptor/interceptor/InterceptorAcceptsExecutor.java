@@ -4,8 +4,6 @@ import java.lang.reflect.Method;
 
 import javax.enterprise.inject.Vetoed;
 
-import br.com.caelum.vraptor.VRaptorException;
-
 import com.google.common.base.Objects;
 
 @Vetoed
@@ -27,12 +25,6 @@ public class InterceptorAcceptsExecutor implements StepExecutor<Boolean>{
 		if (method == null) {
 			return false;
 		}
-
-		SignatureAcceptor acceptor = new NoStackParameterSignatureAcceptor();
-		if (!acceptor.accepts(method)) {
-			throw new VRaptorException(method.getDeclaringClass().getCanonicalName() + " - " + acceptor.errorMessage());
-		}
-
 		return true;
 	}
 

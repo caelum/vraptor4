@@ -25,11 +25,8 @@ import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.factory.Factories;
 import br.com.caelum.vraptor.interceptor.example.AcceptsInterceptor;
-import br.com.caelum.vraptor.interceptor.example.AcceptsInterceptorWithStackAsParameter;
 import br.com.caelum.vraptor.interceptor.example.AcceptsWithoutArgsInterceptor;
 import br.com.caelum.vraptor.interceptor.example.AlwaysAcceptsAspectInterceptor;
-import br.com.caelum.vraptor.interceptor.example.AroundInterceptorWithoutSimpleStackParameter;
-import br.com.caelum.vraptor.interceptor.example.BeforeAfterInterceptorWithStackAsParameter;
 import br.com.caelum.vraptor.interceptor.example.ExampleOfSimpleStackInterceptor;
 import br.com.caelum.vraptor.interceptor.example.InterceptorWithCustomizedAccepts;
 import br.com.caelum.vraptor.interceptor.example.InternalAndCustomAcceptsInterceptor;
@@ -181,28 +178,6 @@ public class AspectStyleInterceptorHandlerTest {
 
 		verify(stack).next(Mockito.same(controllerMethod),
 				Mockito.any(ControllerInstance.class));
-	}
-
-	@Test(expected = IllegalArgumentException.class)
-	public void mustReceiveStackAsParameterForAroundCall() {
-		AroundInterceptorWithoutSimpleStackParameter interceptor = new AroundInterceptorWithoutSimpleStackParameter();
-		newAspectStyleInterceptorHandler(
-				AroundInterceptorWithoutSimpleStackParameter.class, interceptor);
-	}
-
-	@Test(expected = IllegalArgumentException.class)
-	public void mustNotReceiveStackAsParameterForBeforeAfterCall() {
-		BeforeAfterInterceptorWithStackAsParameter interceptor = new BeforeAfterInterceptorWithStackAsParameter();
-		newAspectStyleInterceptorHandler(
-				BeforeAfterInterceptorWithStackAsParameter.class, interceptor);
-
-	}
-
-	@Test(expected = VRaptorException.class)
-	public void mustNotReceiveStackAsParameterForAcceptsCall() {
-		AcceptsInterceptorWithStackAsParameter interceptor = new AcceptsInterceptorWithStackAsParameter();
-		newAspectStyleInterceptorHandler(AcceptsInterceptorWithStackAsParameter.class, interceptor);
-
 	}
 
 	@Test(expected = VRaptorException.class)

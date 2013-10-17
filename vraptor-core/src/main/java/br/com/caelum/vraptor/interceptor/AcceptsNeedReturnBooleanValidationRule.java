@@ -5,20 +5,29 @@ import static java.lang.String.format;
 import java.lang.reflect.Method;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 
+import net.vidageek.mirror.list.dsl.MirrorList;
 import br.com.caelum.vraptor.Accepts;
 import br.com.caelum.vraptor.InterceptionException;
 
 @ApplicationScoped
 public class AcceptsNeedReturnBooleanValidationRule implements ValidationRule {
 
+	private StepInvoker invoker;
+
+	@Inject
+	public AcceptsNeedReturnBooleanValidationRule(StepInvoker invoker) {
+		this.invoker = invoker;
+	}
+
 	@Override
-	public void validate(Class<?> originalType) {
+	public void validate(Class<?> originalType, MirrorList<Method> methods) {
 
-		Method acceptsMethod = null; // TODO handle method efficiently
+		Method accepts = invoker.findMethod(methods, Accepts.class, originalType);
 
-		if (!acceptsMethod.getReturnType().equals(Boolean.class)
-				&& !acceptsMethod.getReturnType().equals(boolean.class)) {
+		if (!accepts.getReturnType().equals(Boolean.class)
+				&& !accepts.getReturnType().equals(boolean.class)) {
 			throw new InterceptionException(format("@%s method must return "
 				+ "	boolean", Accepts.class.getSimpleName()));
 		}

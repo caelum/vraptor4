@@ -1,5 +1,11 @@
 package br.com.caelum.vraptor.http;
 
+/**
+ * Constains method parameter information like name, index and type. This class is
+ * based on Java 8 Parameter, allowing vraptor to be closer to Java 8.
+ * @author Otávio Scherer Garcia
+ * @since 4.0.0
+ */
 public class Parameter {
 	
 	private final String name;

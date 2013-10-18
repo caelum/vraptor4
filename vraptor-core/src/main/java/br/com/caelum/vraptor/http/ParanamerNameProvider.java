@@ -60,7 +60,6 @@ public class ParanamerNameProvider implements ParameterNameProvider {
 		this.cache = cache;
 	}
 	
-	//TODO logging
 	@Override
 	public Parameter[] parametersFor(final AccessibleObject accessibleObject) {
 		logger.debug("looking for parameters on method {}", accessibleObject);

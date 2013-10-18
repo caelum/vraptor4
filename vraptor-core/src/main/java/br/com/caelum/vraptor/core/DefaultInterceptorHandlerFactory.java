@@ -26,6 +26,7 @@ import br.com.caelum.vraptor.cache.CacheStore;
 import br.com.caelum.vraptor.interceptor.AspectStyleInterceptorHandler;
 import br.com.caelum.vraptor.interceptor.Interceptor;
 import br.com.caelum.vraptor.interceptor.InterceptorMethodParametersResolver;
+import br.com.caelum.vraptor.interceptor.SimpleInterceptorStack;
 import br.com.caelum.vraptor.interceptor.StepInvoker;
 import br.com.caelum.vraptor.ioc.Container;
 
@@ -42,22 +43,24 @@ public class DefaultInterceptorHandlerFactory implements InterceptorHandlerFacto
 	private final CacheStore<Class<?>, InterceptorHandler> cachedHandlers;
 	private final StepInvoker stepInvoker;
 	private final InterceptorMethodParametersResolver parametersResolver;
+	private SimpleInterceptorStack simpleInterceptorStack;
 
-	/** 
+	/**
 	 * @deprecated CDI eyes only
 	 */
 	protected DefaultInterceptorHandlerFactory() {
-		this(null, null, null, null);
+		this(null, null, null, null, null);
 	}
 
 	@Inject
-	public DefaultInterceptorHandlerFactory(Container container, StepInvoker stepInvoker, 
-			InterceptorMethodParametersResolver parametersResolver, CacheStore<Class<?>, 
-			InterceptorHandler> cachedHandlers) {
+	public DefaultInterceptorHandlerFactory(Container container, StepInvoker stepInvoker,
+			InterceptorMethodParametersResolver parametersResolver, CacheStore<Class<?>,
+			InterceptorHandler> cachedHandlers, SimpleInterceptorStack simpleInterceptorStack) {
 		this.container = container;
 		this.stepInvoker = stepInvoker;
 		this.parametersResolver = parametersResolver;
 		this.cachedHandlers = cachedHandlers;
+		this.simpleInterceptorStack = simpleInterceptorStack;
 	}
 
 	@Override
@@ -66,7 +69,8 @@ public class DefaultInterceptorHandlerFactory implements InterceptorHandlerFacto
 			@Override
 			public InterceptorHandler call() throws Exception {
 				if(type.isAnnotationPresent(Intercepts.class) && !Interceptor.class.isAssignableFrom(type)){
-					return new AspectStyleInterceptorHandler(type, stepInvoker, container, parametersResolver);
+					return new AspectStyleInterceptorHandler(type, stepInvoker, container,
+							parametersResolver, simpleInterceptorStack);
 				}
 				return new ToInstantiateInterceptorHandler(container, type);
 			}

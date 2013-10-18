@@ -39,6 +39,7 @@ import br.com.caelum.vraptor.TwoWayConverter;
 import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.http.EncodingHandler;
 import br.com.caelum.vraptor.http.MutableRequest;
+import br.com.caelum.vraptor.http.Parameter;
 import br.com.caelum.vraptor.util.StringUtils;
 
 /**
@@ -93,9 +94,9 @@ public class DefaultParametersControl implements ParametersControl {
 	}
 
 	@Override
-	public String fillUri(String[] paramNames, Object... paramValues) {
-		if (paramNames.length != paramValues.length) {
-			throw new IllegalArgumentException("paramNames must have the same length as paramValues. Names: " + Arrays.toString(paramNames) + " Values: " + Arrays.toString(paramValues));
+	public String fillUri(Parameter[] methodParameters, Object... paramValues) {
+		if (methodParameters.length != paramValues.length) {
+			throw new IllegalArgumentException("paramNames must have the same length as paramValues. Names: " + Arrays.toString(methodParameters) + " Values: " + Arrays.toString(paramValues));
 		}
 
 		String[] splittedPatterns = StringUtils.extractParameters(originalPattern);
@@ -103,7 +104,7 @@ public class DefaultParametersControl implements ParametersControl {
 		String base = originalPattern;
 		for (int i=0; i<parameters.size(); i++) {
 			String key = parameters.get(i);
-			Object param = selectParam(key, paramNames, paramValues);
+			Object param = selectParam(key, methodParameters, paramValues);
 			Object result = evaluator.get(param, key);
 			if (result != null) {
 				Class<?> type = result.getClass();
@@ -130,9 +131,9 @@ public class DefaultParametersControl implements ParametersControl {
 		}
 	}
 
-	private Object selectParam(String key, String[] paramNames, Object[] paramValues) {
-		for (int i = 0; i < paramNames.length; i++) {
-			if (key.matches("^" + paramNames[i] + "(\\..*|$)")) {
+	private Object selectParam(String key, Parameter[] methodParameters, Object[] paramValues) {
+		for (int i = 0; i < methodParameters.length; i++) {
+			if (key.matches("^" + methodParameters[i].getName() + "(\\..*|$)")) {
 				return paramValues[i];
 			}
 		}

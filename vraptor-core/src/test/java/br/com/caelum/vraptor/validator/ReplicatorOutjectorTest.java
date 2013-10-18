@@ -14,6 +14,7 @@ import org.mockito.MockitoAnnotations;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.core.MethodInfo;
+import br.com.caelum.vraptor.http.Parameter;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 
 public class ReplicatorOutjectorTest {
@@ -35,7 +36,9 @@ public class ReplicatorOutjectorTest {
 
 	@Test
 	public void shouldReplicateMethodParametersToNextRequest() throws Exception {
-		when(provider.parameterNamesFor(any(Method.class))).thenReturn(new String[] {"first", "second", "third"});
+		Parameter[] parameters = new Parameter[] { new Parameter("first", 0, null), 
+				new Parameter("second", 1, null), new Parameter("third", 2, null)};
+		when(provider.parametersFor(any(Method.class))).thenReturn(parameters);
 		when(method.getParameters()).thenReturn(new Object[] {1, 2.0, 3l});
 
 		outjector.outjectRequestMap();

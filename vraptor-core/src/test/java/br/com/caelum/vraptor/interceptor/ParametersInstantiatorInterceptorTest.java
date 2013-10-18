@@ -47,6 +47,7 @@ import br.com.caelum.vraptor.controller.DefaultControllerMethod;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.http.MutableRequest;
+import br.com.caelum.vraptor.http.Parameter;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.http.ParametersProvider;
 import br.com.caelum.vraptor.validator.Message;
@@ -189,7 +190,9 @@ public class ParametersInstantiatorInterceptorTest {
 		
 		when(request.getHeader("X-MyApp-Password")).thenReturn("123");
 		when(parametersProvider.getParametersFor(controllerMethod, errors)).thenReturn(values);
-		when(parameterNameProvider.parameterNamesFor(method)).thenReturn(new String[]{"password"});
+		
+		Parameter[] parameters = new Parameter[] { new Parameter("password", 0, null) };
+		when(parameterNameProvider.parametersFor(method)).thenReturn(parameters);
 
 		instantiator.intercept(stack, controllerMethod, null);
 		
@@ -206,7 +209,9 @@ public class ParametersInstantiatorInterceptorTest {
 		ControllerMethod controllerMethod = DefaultControllerMethod.instanceFor(Component.class, method);
 		
 		when(parametersProvider.getParametersFor(controllerMethod, errors)).thenReturn(values);
-		when(parameterNameProvider.parameterNamesFor(method)).thenReturn(new String[]{"password"});
+
+		Parameter[] parameters = new Parameter[] { new Parameter("password", 0, null) };
+		when(parameterNameProvider.parametersFor(method)).thenReturn(parameters);
 
 		instantiator.intercept(stack, controllerMethod, null);
 		
@@ -226,7 +231,10 @@ public class ParametersInstantiatorInterceptorTest {
 		when(request.getHeader("X-MyApp-Password")).thenReturn("123");
 		when(request.getHeader("X-MyApp-Token")).thenReturn("daek2321");
 		when(parametersProvider.getParametersFor(resouceMethod, errors)).thenReturn(values);
-		when(parameterNameProvider.parameterNamesFor(method)).thenReturn(new String[]{"user", "password", "token"});
+
+		Parameter[] parameters = new Parameter[] { new Parameter("user", 0, null), 
+				new Parameter("password", 1, null), new Parameter("token", 1, null) };
+		when(parameterNameProvider.parametersFor(method)).thenReturn(parameters);
 
 		instantiator.intercept(stack, resouceMethod, null);
 		

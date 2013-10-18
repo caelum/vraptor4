@@ -20,6 +20,7 @@ import javax.inject.Inject;
 
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.core.MethodInfo;
+import br.com.caelum.vraptor.http.Parameter;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 
 /**
@@ -50,9 +51,9 @@ public class ReplicatorOutjector implements Outjector {
 
 	@Override
 	public void outjectRequestMap() {
-		String[] names = provider.parameterNamesFor(method.getControllerMethod().getMethod());
+		Parameter[] names = provider.parametersFor(method.getControllerMethod().getMethod());
 		for (int i = 0; i < names.length; i++) {
-				result.include(names[i], method.getParameters()[i]);
+			result.include(names[i].getName(), method.getParameters()[i]);
 		}
 	}
 }

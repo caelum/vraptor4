@@ -9,6 +9,7 @@ import br.com.caelum.vraptor.Intercepts;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.core.MethodInfo;
+import br.com.caelum.vraptor.http.Parameter;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 
 /**
@@ -47,12 +48,12 @@ public class ParameterIncluderInterceptor {
 
 	@BeforeCall
 	public void intercept() {
-		Object[] parameters = info.getParameters();
+		Object[] parameterValues = info.getParameters();
 		Method method = controllerMethod.getMethod();
-		String[] names = nameProvider.parameterNamesFor(method);
+		Parameter[] parameterNames = nameProvider.parametersFor(method);
 
-		for(int i=0; i< names.length; i++) {
-			result.include(names[i], parameters[i]);
+		for(int i=0; i< parameterNames.length; i++) {
+			result.include(parameterNames[i].getName(), parameterValues[i]);
 		}
 	}
 }

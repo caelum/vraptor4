@@ -18,6 +18,7 @@
 package br.com.caelum.vraptor.http.route;
 
 import br.com.caelum.vraptor.http.MutableRequest;
+import br.com.caelum.vraptor.http.Parameter;
 
 public interface ParametersControl {
 
@@ -29,7 +30,7 @@ public interface ParametersControl {
 	/**
 	 * creates a uri based on those parameter values
 	 */
-	String fillUri(String[] paramNames, Object... paramValues);
+	String fillUri(Parameter[] paramNames, Object... paramValues);
 
 	/**
 	 * Inserts parameters extracted from the uri into the request parameters.

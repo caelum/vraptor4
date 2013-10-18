@@ -27,6 +27,7 @@ import java.util.Set;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.controller.HttpMethod;
 import br.com.caelum.vraptor.http.MutableRequest;
+import br.com.caelum.vraptor.http.Parameter;
 import br.com.caelum.vraptor.util.Stringnifier;
 
 /**
@@ -40,20 +41,20 @@ public class FixedMethodStrategy implements Route {
 
 	private final EnumSet<HttpMethod> methods;
 
-	private final ParametersControl parameters;
+	private final ParametersControl parametersControl;
 
 	private final int priority;
 
 	private final String originalUri;
 
-	private final String[] parameterNames;
+	private final Parameter[] parameters;
 
 	public FixedMethodStrategy(String originalUri, ControllerMethod method, Set<HttpMethod> methods,
-			ParametersControl control, int priority, String[] parameterNames) {
+			ParametersControl parametersControl, int priority, Parameter[] parameters) {
 		this.originalUri = originalUri;
-		this.parameterNames = parameterNames;
+		this.parameters = parameters;
 		this.methods = methods.isEmpty() ? EnumSet.allOf(HttpMethod.class) : EnumSet.copyOf(methods);
-		this.parameters = control;
+		this.parametersControl = parametersControl;
 		this.controllerMethod = method;
 		this.priority = priority;
 	}
@@ -68,7 +69,7 @@ public class FixedMethodStrategy implements Route {
 
 	@Override
 	public ControllerMethod controllerMethod(MutableRequest request, String uri) {
-		parameters.fillIntoRequest(uri, request);
+		parametersControl.fillIntoRequest(uri, request);
 		return this.controllerMethod;
 	}
 
@@ -79,12 +80,12 @@ public class FixedMethodStrategy implements Route {
 
 	@Override
 	public boolean canHandle(String uri) {
-		return parameters.matches(uri);
+		return parametersControl.matches(uri);
 	}
 
 	@Override
 	public String urlFor(Class<?> type, Method m, Object... params) {
-		return parameters.fillUri(parameterNames, params);
+		return parametersControl.fillUri(parameters, params);
 	}
 
 	@Override

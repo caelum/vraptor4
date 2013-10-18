@@ -1,7 +1,7 @@
 package br.com.caelum.vraptor.interceptor;
 
+import static com.google.common.base.Preconditions.checkState;
 import static com.google.common.collect.Collections2.filter;
-import static java.lang.String.format;
 import static java.util.Arrays.asList;
 
 import java.lang.reflect.Method;
@@ -37,25 +37,20 @@ public class NoStackParamValidationRule implements ValidationRule {
 		Method beforeCall = invoker.findMethod(methods, BeforeCall.class, originalType);
 		Method accepts = invoker.findMethod(methods, Accepts.class, originalType);
 
-		if (aroundCall != null && !containsStack(aroundCall)) {
-			invalidUseOfStack("@%s method must receive %s or %s");
-		}
-		if (containsStack(beforeCall) || containsStack(afterCall)
-				|| containsStack(accepts)) {
-			invalidUseOfStack("Non @%s method must not receive %s or %s");
-		}
-	}
+		String interceptorStack = InterceptorStack.class.getName();
+		String simpleInterceptorStack = SimpleInterceptorStack.class.getName();
 
-	private void invalidUseOfStack(String message) {
-		throw new IllegalArgumentException(format(message,
-				AroundCall.class.getSimpleName(),
-				InterceptorStack.class.getName(),
-				SimpleInterceptorStack.class.getName()));
+		checkState(containsStack(aroundCall), "@AroundCall method must receive "
+				+ "%s or %s", interceptorStack, simpleInterceptorStack);
+
+		checkState(!containsStack(beforeCall) || !containsStack(afterCall)
+			|| !containsStack(accepts), "Non @AroundCall method must not receive "
+				+ "%s or %s", interceptorStack, simpleInterceptorStack);
 	}
 
 	private boolean containsStack(Method method) {
 
-		if (method == null) return false;
+		if (method == null) return true;
 
 		List<Class<?>> parameterTypes = asList(method.getParameterTypes());
 		Predicate<Class<?>> hasStack = new Predicate<Class<?>>() {

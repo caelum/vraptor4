@@ -21,20 +21,20 @@ public class NoStackParamValidationRuleTest {
 		validationRule = new NoStackParamValidationRule(invoker);
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test(expected = IllegalStateException.class)
 	public void mustReceiveStackAsParameterForAroundCall() {
 		Class<?> type = AroundInterceptorWithoutSimpleStackParameter.class;
 		validationRule.validate(type, invoker.findAllMethods(type));
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test(expected = IllegalStateException.class)
 	public void mustNotReceiveStackAsParameterForAcceptsCall() {
 		Class<?> type = AcceptsInterceptorWithStackAsParameter.class;
 		validationRule.validate(type, invoker.findAllMethods(type));
 
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test(expected = IllegalStateException.class)
 	public void mustNotReceiveStackAsParameterForBeforeAfterCall() {
 		Class<?> type = BeforeAfterInterceptorWithStackAsParameter.class;
 		validationRule.validate(type, invoker.findAllMethods(type));

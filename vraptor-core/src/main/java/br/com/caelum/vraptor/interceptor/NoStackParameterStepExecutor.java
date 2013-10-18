@@ -18,7 +18,7 @@ public class NoStackParameterStepExecutor implements StepExecutor<Void> {
 
 	@Override
 	public boolean accept() {
-		return true;
+		return method != null;
 	}
 
 	@Override

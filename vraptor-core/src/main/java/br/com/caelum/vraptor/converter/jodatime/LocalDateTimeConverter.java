@@ -28,9 +28,9 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 import br.com.caelum.vraptor.Convert;
-import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.converter.ConversionException;
 import br.com.caelum.vraptor.converter.ConversionMessage;
+import br.com.caelum.vraptor.converter.Converter;
 
 /**
  * VRaptor converter for {@link LocalDateTime}. {@link LocalDateTime} is part of Joda Time library.
@@ -40,10 +40,13 @@ import br.com.caelum.vraptor.converter.ConversionMessage;
 @Convert(LocalDateTime.class)
 public class LocalDateTimeConverter implements Converter<LocalDateTime> {
 
-	private Locale locale;
+	private final Locale locale;
 
-	@Deprecated // CDI eyes only
-	public LocalDateTimeConverter() {
+	/** 
+	 * @deprecated CDI eyes only
+	 */
+	protected LocalDateTimeConverter() {
+		this(null);
 	}
 
 	@Inject

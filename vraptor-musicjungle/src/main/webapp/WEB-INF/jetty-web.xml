@@ -1,0 +1,23 @@
+<!DOCTYPE Configure PUBLIC "-//Jetty//Configure//EN" "http://www.eclipse.org/jetty/configure.dtd">
+
+<Configure id="webAppCtx" class="org.eclipse.jetty.webapp.WebAppContext">
+	<Set name="serverClasses">
+		<Array type="java.lang.String">
+			<Item>org.eclipse.jetty.servlet.ServletContextHandler.Decorator
+			</Item>
+		</Array>
+	</Set>
+	<New id="BeanManager" class="org.eclipse.jetty.plus.jndi.Resource">
+        <Arg>
+            <Ref id="webAppCtx" />
+        </Arg>
+        <Arg>BeanManager</Arg>
+        <Arg>
+            <New class="javax.naming.Reference">
+                <Arg>javax.enterprise.inject.spi.BeanManager</Arg>
+                <Arg>org.jboss.weld.resources.ManagerObjectFactory</Arg>
+                <Arg />
+            </New>
+        </Arg>
+    </New>
+</Configure> 

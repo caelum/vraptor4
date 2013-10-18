@@ -28,7 +28,6 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 
 import br.com.caelum.vraptor.Convert;
-import br.com.caelum.vraptor.Converter;
 
 /**
  * Localized version of VRaptor's BigDecimal converter. If the input value if empty or a null string, null value is 
@@ -41,10 +40,13 @@ import br.com.caelum.vraptor.Converter;
 @RequestScoped
 public class LocaleBasedBigDecimalConverter implements Converter<BigDecimal> {
 
-	private Locale locale;
+	private final Locale locale;
 
-	@Deprecated // CDI eyes only
-	public LocaleBasedBigDecimalConverter() {
+	/** 
+	 * @deprecated CDI eyes only
+	 */
+	protected LocaleBasedBigDecimalConverter() {
+		this(null);
 	}
 
 	@Inject

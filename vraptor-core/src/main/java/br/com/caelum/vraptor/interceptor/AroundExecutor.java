@@ -9,17 +9,16 @@ public class AroundExecutor implements StepExecutor<Object> {
 
 	private final StepInvoker stepInvoker;
 	private final InterceptorMethodParametersResolver parametersResolver;
-	private Method method;
+	private final Method method;
 
-	public AroundExecutor(StepInvoker stepInvoker, InterceptorMethodParametersResolver parametersResolver,
-			Method method, Class<?> interceptorClass) {
+	public AroundExecutor(StepInvoker stepInvoker, InterceptorMethodParametersResolver parametersResolver, Method method) {
 		this.stepInvoker = stepInvoker;
 		this.parametersResolver = parametersResolver;
 		this.method = method;
 	}
 
 	@Override
-	public boolean accept(Class<?> interceptorClass) {
+	public boolean accept() {
 		return method != null;
 	}
 

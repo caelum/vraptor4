@@ -28,7 +28,6 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 
 import br.com.caelum.vraptor.Convert;
-import br.com.caelum.vraptor.Converter;
 
 /**
  * Localized version of VRaptor's Float converter. If the input value if empty or a null string, null value is returned. 
@@ -42,10 +41,13 @@ import br.com.caelum.vraptor.Converter;
 @RequestScoped
 public class LocaleBasedPrimitiveFloatConverter implements Converter<Float> {
 
-	private Locale locale;
+	private final Locale locale;
 
-	@Deprecated // CDI eyes only
-	public LocaleBasedPrimitiveFloatConverter() {
+	/** 
+	 * @deprecated CDI eyes only
+	 */
+	protected LocaleBasedPrimitiveFloatConverter() {
+		this(null);
 	}
 
 	@Inject

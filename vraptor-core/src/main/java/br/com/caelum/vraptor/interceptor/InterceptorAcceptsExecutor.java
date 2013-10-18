@@ -9,19 +9,19 @@ import com.google.common.base.Objects;
 @Vetoed
 public class InterceptorAcceptsExecutor implements StepExecutor<Boolean>{
 
-	private StepInvoker stepInvoker;
-	private InterceptorMethodParametersResolver parameterResolver;
-	private Method method;
+	private final StepInvoker stepInvoker;
+	private final InterceptorMethodParametersResolver parameterResolver;
+	private final Method method;
 
 	public InterceptorAcceptsExecutor(StepInvoker stepInvoker, InterceptorMethodParametersResolver parameterResolver,
-			Method method, Class<?> interceptorClass) {
+			Method method) {
 		this.stepInvoker = stepInvoker;
 		this.parameterResolver = parameterResolver;
 		this.method = method;
 	}
 
 	@Override
-	public boolean accept(Class<?> interceptorClass) {
+	public boolean accept() {
 		return method != null;
 	}
 

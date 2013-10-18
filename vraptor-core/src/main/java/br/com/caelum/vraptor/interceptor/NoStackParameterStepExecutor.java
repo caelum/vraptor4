@@ -11,13 +11,13 @@ public class NoStackParameterStepExecutor implements StepExecutor<Void> {
 	private Method method;
 
 	public NoStackParameterStepExecutor(StepInvoker stepInvoker,
-			Method method, Class<?> interceptorClass) {
+			Method method) {
 		this.stepInvoker = stepInvoker;
 		this.method = method;
 	}
 
 	@Override
-	public boolean accept(Class<?> interceptorClass) {
+	public boolean accept() {
 		return true;
 	}
 

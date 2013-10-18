@@ -37,20 +37,20 @@ import com.thoughtworks.xstream.converters.SingleValueConverter;
 @RequestScoped
 public class XStreamConverters {
 
-	private Iterable<Converter> converters;
-	private Iterable<SingleValueConverter> singleValueConverters;
+	private final Iterable<Converter> converters;
+	private final Iterable<SingleValueConverter> singleValueConverters;
 
 	private static final Logger logger = getLogger(XStreamConverters.class);
 
-	//CDI eyes only
-	@Deprecated
-	public XStreamConverters() {
+	/** 
+	 * @deprecated CDI eyes only
+	 */
+	protected XStreamConverters() {
+		this(null, null);
 	}
 
 	@Inject
-	public XStreamConverters(@Any Instance<Converter> converters,
-			@Any Instance<SingleValueConverter> singleValueConverters) {
-
+	public XStreamConverters(@Any Instance<Converter> converters, @Any Instance<SingleValueConverter> singleValueConverters) {
 		this.converters = converters;
 		this.singleValueConverters = singleValueConverters;
 	}

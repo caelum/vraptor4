@@ -19,6 +19,7 @@ package br.com.caelum.vraptor.http.iogi;
 
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
@@ -36,8 +37,8 @@ import br.com.caelum.iogi.reflection.NewObject;
 import br.com.caelum.iogi.reflection.Target;
 import br.com.caelum.iogi.spi.DependencyProvider;
 import br.com.caelum.iogi.spi.ParameterNamesProvider;
-import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.converter.ConversionException;
+import br.com.caelum.vraptor.converter.Converter;
 import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.http.InvalidParameterException;
 import br.com.caelum.vraptor.validator.Message;
@@ -50,27 +51,39 @@ import com.google.common.collect.ImmutableList;
 public class VRaptorInstantiator implements InstantiatorWithErrors, Instantiator<Object> {
 	private MultiInstantiator multiInstantiator;
 	private List<Message> errors;
-	private DependencyProvider provider;
+	
+	private final Converters converters;
+	private final DependencyProvider provider;
+	private final ParameterNamesProvider parameterNameProvider;
+	private final HttpServletRequest request;
 
-	//CDI eyes only
-	@Deprecated
-	public VRaptorInstantiator() {
+	/** 
+	 * @deprecated CDI eyes only
+	 */
+	protected VRaptorInstantiator() {
+		this(null, null, null, null);
 	}
 
 	@Inject
-	public VRaptorInstantiator(Converters converters, DependencyProvider provider, ParameterNamesProvider parameterNameProvider, HttpServletRequest request) {
+	public VRaptorInstantiator(Converters converters, DependencyProvider provider, 
+			ParameterNamesProvider parameterNameProvider, HttpServletRequest request) {
+		this.converters = converters;
 		this.provider = provider;
+		this.parameterNameProvider = parameterNameProvider;
+		this.request = request;
+	}
 
-		ObjectInstantiator objectInstantiator = new ObjectInstantiator(this, provider, parameterNameProvider);
+	@PostConstruct
+	public void createInstantiator() {
 		List<Instantiator<?>> instantiatorList = ImmutableList.of(
-			new RequestAttributeInstantiator(request),
-			new VRaptorTypeConverter(converters),
-			FallbackConverter.fallbackToNull(new StringConverter()),
-			new ArrayAdapter(new ArrayInstantiator(this)),
-			new NullDecorator(new ListInstantiator(this)), //NOTE: NullDecorator is here to preserve existing behaviour. Don't know if it is the ideal one, though.
-			new NullDecorator(new SetInstantiator(this)),
-			new DependencyInstantiator(),
-			objectInstantiator);
+				new RequestAttributeInstantiator(request),
+				new VRaptorTypeConverter(converters),
+				FallbackConverter.fallbackToNull(new StringConverter()),
+				new ArrayAdapter(new ArrayInstantiator(this)),
+				new NullDecorator(new ListInstantiator(this)),
+				new NullDecorator(new SetInstantiator(this)),
+				new DependencyInstantiator(),
+				new ObjectInstantiator(this, provider, parameterNameProvider));
 		multiInstantiator = new MultiInstantiator(instantiatorList);
 	}
 

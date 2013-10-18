@@ -24,7 +24,6 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
 import br.com.caelum.vraptor.Convert;
-import br.com.caelum.vraptor.Converter;
 
 /**
  * VRaptor's primitive boolean converter.
@@ -34,10 +33,14 @@ import br.com.caelum.vraptor.Converter;
 @Convert(boolean.class)
 @ApplicationScoped
 public class PrimitiveBooleanConverter implements Converter<Boolean> {
-	private BooleanConverter booleanConverter;
+	
+	private final BooleanConverter booleanConverter;
 
-	@Deprecated
-	public PrimitiveBooleanConverter() {
+	/** 
+	 * @deprecated CDI eyes only
+	 */
+	protected PrimitiveBooleanConverter() {
+		this(null);
 	}
 
 	@Inject

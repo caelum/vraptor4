@@ -33,13 +33,15 @@ import br.com.caelum.vraptor.validator.I18nMessage;
 @RequestScoped
 public class I18nMessageSerialization implements View {
 
-	private Container container;
+	private final Container container;
+	private final ResourceBundle bundle;
 	private I18nMessage i18nMessage;
-	private ResourceBundle bundle;
 
-	//CDI eyes only
-	@Deprecated
-	public I18nMessageSerialization() {
+	/** 
+	 * @deprecated CDI eyes only
+	 */
+	protected I18nMessageSerialization() {
+		this(null, null);
 	}
 
 	public I18nMessageSerialization(Container container, ResourceBundle bundle) {

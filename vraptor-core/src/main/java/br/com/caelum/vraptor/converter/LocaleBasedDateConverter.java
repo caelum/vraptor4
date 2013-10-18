@@ -27,7 +27,6 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 
 import br.com.caelum.vraptor.Convert;
-import br.com.caelum.vraptor.Converter;
 
 /**
  * Locale based date converter.
@@ -38,11 +37,13 @@ import br.com.caelum.vraptor.Converter;
 @RequestScoped
 public class LocaleBasedDateConverter implements Converter<Date> {
 
-	private Locale locale;
+	private final Locale locale;
 
-	//CDI eyes only
-	@Deprecated
-	public LocaleBasedDateConverter() {
+	/** 
+	 * @deprecated CDI eyes only
+	 */
+	protected LocaleBasedDateConverter() {
+		this(null);
 	}
 
 	@Inject

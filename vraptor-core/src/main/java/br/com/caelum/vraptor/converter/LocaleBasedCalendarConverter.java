@@ -29,7 +29,6 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 
 import br.com.caelum.vraptor.Convert;
-import br.com.caelum.vraptor.Converter;
 
 /**
  * Locale based calendar converter.
@@ -40,11 +39,13 @@ import br.com.caelum.vraptor.Converter;
 @RequestScoped
 public class LocaleBasedCalendarConverter implements Converter<Calendar> {
 
-	private Locale locale;
+	private final Locale locale;
 
-	//CDI eyes only
-	@Deprecated
-	public LocaleBasedCalendarConverter() {
+	/** 
+	 * @deprecated CDI eyes only
+	 */
+	protected LocaleBasedCalendarConverter() {
+		this(null);
 	}
 
 	@Inject

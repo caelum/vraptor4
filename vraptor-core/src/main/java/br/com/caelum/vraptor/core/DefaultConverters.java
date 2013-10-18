@@ -29,10 +29,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.Convert;
-import br.com.caelum.vraptor.Converter;
 import br.com.caelum.vraptor.TwoWayConverter;
 import br.com.caelum.vraptor.cache.CacheStore;
 import br.com.caelum.vraptor.cache.LRU;
+import br.com.caelum.vraptor.converter.Converter;
 import br.com.caelum.vraptor.ioc.Container;
 
 @ApplicationScoped
@@ -42,11 +42,15 @@ public class DefaultConverters implements Converters {
 	private final LinkedList<Class<? extends Converter<?>>> classes = new LinkedList<>();
 
 	@LRU
-	private CacheStore<Class<?>, Class<? extends Converter<?>>> cache;
-	private Container container;
+	private final CacheStore<Class<?>, Class<? extends Converter<?>>> cache;
+	private final Container container;
 
-	@Deprecated //CDI eyes only
-	public DefaultConverters() {}
+	/** 
+	 * @deprecated CDI eyes only
+	 */
+	protected DefaultConverters() {
+		this(null, null);
+	}
 
 	@Inject
 	public DefaultConverters(Container container, CacheStore<Class<?>, Class<? extends Converter<?>>> cache) {

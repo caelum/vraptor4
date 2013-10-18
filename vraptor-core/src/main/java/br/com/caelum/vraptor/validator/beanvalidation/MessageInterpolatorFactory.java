@@ -24,11 +24,13 @@ public class MessageInterpolatorFactory{
 
 	private static final Logger logger = LoggerFactory.getLogger(MessageInterpolatorFactory.class);
 
-	private ValidatorFactory factory;
+	private final ValidatorFactory factory;
 	
-	//CDI eyes only
-	@Deprecated
-	public MessageInterpolatorFactory() {
+	/** 
+	 * @deprecated CDI eyes only
+	 */
+	protected MessageInterpolatorFactory() {
+		this(null);
 	}
 
 	@Inject

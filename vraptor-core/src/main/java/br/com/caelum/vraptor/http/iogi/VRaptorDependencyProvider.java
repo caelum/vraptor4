@@ -34,11 +34,13 @@ import br.com.caelum.vraptor.ioc.Container;
 @ApplicationScoped
 public class VRaptorDependencyProvider implements DependencyProvider {
 
-	private Container container;
+	private final Container container;
 	
-	//CDI eyes only
-	@Deprecated
-	public VRaptorDependencyProvider() {
+	/** 
+	 * @deprecated CDI eyes only
+	 */
+	protected VRaptorDependencyProvider() {
+		this(null);
 	}
 
 	@Inject

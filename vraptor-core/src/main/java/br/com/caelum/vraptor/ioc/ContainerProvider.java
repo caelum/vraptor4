@@ -29,6 +29,4 @@ public interface ContainerProvider {
 	void stop();
 
 	void start();
-
-	Container getContainer();
 }

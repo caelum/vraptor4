@@ -15,14 +15,19 @@
  * limitations under the License. 
  */
 
-package br.com.caelum.vraptor.http.route;
+package br.com.caelum.vraptor.converter;
+
+import br.com.caelum.vraptor.TwoWayConverter;
+
 
 /**
- * Configs your routes for your application.
- * @author guilherme silveira
+ * Converts a string value to an object.
+ * 
+ * @author Guilherme Silveira
+ * @see TwoWayConverter
  */
-public interface RoutesConfiguration {
+public interface Converter<T> {
 
-	void config(Router router);
+	T convert(String value, Class<? extends T> type);
 
 }

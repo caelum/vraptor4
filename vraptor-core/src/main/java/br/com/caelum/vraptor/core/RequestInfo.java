@@ -40,6 +40,13 @@ public class RequestInfo {
 	private final MutableRequest request;
 	private final MutableResponse response;
 	private final FilterChain chain;
+	
+	/** 
+	 * @deprecated CDI eyes only
+	 */
+	protected RequestInfo() {
+		this(null, null, null, null);
+	}
 
 	@Inject
 	public RequestInfo(ServletContext servletContext, FilterChain chain, MutableRequest request, MutableResponse response) {

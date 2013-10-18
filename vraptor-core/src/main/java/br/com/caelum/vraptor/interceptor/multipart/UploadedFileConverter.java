@@ -21,7 +21,7 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
 import br.com.caelum.vraptor.Convert;
-import br.com.caelum.vraptor.Converter;
+import br.com.caelum.vraptor.converter.Converter;
 
 /**
  * A converter capable of setting UploadedFiles based on files parsed by the
@@ -32,10 +32,14 @@ import br.com.caelum.vraptor.Converter;
 @Convert(UploadedFile.class)
 public class UploadedFileConverter implements Converter<UploadedFile> {
 
-	private HttpServletRequest request;
+	private final HttpServletRequest request;
 
-	@Deprecated	//CDI eyes only
-	public UploadedFileConverter() {}
+	/** 
+	 * @deprecated CDI eyes only
+	 */
+	protected UploadedFileConverter() {
+		this(null);
+	}
 	
 	@Inject
 	public UploadedFileConverter(HttpServletRequest request) {

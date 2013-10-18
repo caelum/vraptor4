@@ -34,17 +34,20 @@ import br.com.caelum.vraptor.interceptor.InterceptorRegistry;
 public class InterceptorStackHandlersCache {
 
 	private final LinkedList<InterceptorHandler> interceptorHandlers = new LinkedList<>();
-	private InterceptorRegistry registry;
-	private InterceptorHandlerFactory handlerFactory;
+	private final InterceptorRegistry registry;
+	private final InterceptorHandlerFactory handlerFactory;
 
 	private Logger logger = LoggerFactory.getLogger(InterceptorStackHandlersCache.class);
 
-	@Deprecated //CDI eyes only
-	public InterceptorStackHandlersCache() {}
+	/** 
+	 * @deprecated CDI eyes only
+	 */
+	protected InterceptorStackHandlersCache() {
+		this(null, null);
+	}
 
 	@Inject
-	public InterceptorStackHandlersCache(InterceptorRegistry registry,
-			InterceptorHandlerFactory handlerFactory){
+	public InterceptorStackHandlersCache(InterceptorRegistry registry, InterceptorHandlerFactory handlerFactory){
 		this.registry = registry;
 		this.handlerFactory = handlerFactory;
 	}

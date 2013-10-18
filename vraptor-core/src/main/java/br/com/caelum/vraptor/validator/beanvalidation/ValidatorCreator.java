@@ -33,11 +33,13 @@ import javax.validation.ValidatorFactory;
 @Alternative
 public class ValidatorCreator {
 
-	private ValidatorFactory factory;
+	private final ValidatorFactory factory;
 
-	//CDI eyes only
-	@Deprecated
-	public ValidatorCreator() {
+	/** 
+	 * @deprecated CDI eyes only
+	 */
+	protected ValidatorCreator() {
+		this(null);
 	}
 
 	@Inject

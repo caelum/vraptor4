@@ -17,7 +17,7 @@ public class StackNextExecutor implements StepExecutor<Void> {
 	}
 
 	@Override
-	public boolean accept(Class<?> interceptorClass) {
+	public boolean accept() {
 		return true;
 	}
 

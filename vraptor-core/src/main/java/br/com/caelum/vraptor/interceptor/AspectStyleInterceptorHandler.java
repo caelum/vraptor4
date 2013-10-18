@@ -44,22 +44,22 @@ public class AspectStyleInterceptorHandler implements InterceptorHandler {
 
 	private void configure() {
 
-		after = new NoStackParameterStepExecutor(stepInvoker, find(AfterCall.class), interceptorClass);
-		around = new AroundExecutor(stepInvoker,parametersResolver, find(AroundCall.class), interceptorClass);
-		before = new NoStackParameterStepExecutor(stepInvoker, find(BeforeCall.class), interceptorClass);
+		after = new NoStackParameterStepExecutor(stepInvoker, find(AfterCall.class));
+		around = new AroundExecutor(stepInvoker,parametersResolver, find(AroundCall.class));
+		before = new NoStackParameterStepExecutor(stepInvoker, find(BeforeCall.class));
 
-		if(!after.accept(interceptorClass)) after = new DoNothingStepExecutor();
-		if(!around.accept(interceptorClass)) around = new StackNextExecutor(container);
-		if(!before.accept(interceptorClass)) before = new DoNothingStepExecutor();
+		if(!after.accept()) after = new DoNothingStepExecutor();
+		if(!around.accept()) around = new StackNextExecutor(container);
+		if(!before.accept()) before = new DoNothingStepExecutor();
 
 		CustomAcceptsExecutor customAcceptsExecutor = new CustomAcceptsExecutor(stepInvoker, container, find(CustomAcceptsFailCallback.class), interceptorClass);
-		InterceptorAcceptsExecutor interceptorAcceptsExecutor = new InterceptorAcceptsExecutor(stepInvoker, parametersResolver, find(Accepts.class), interceptorClass);
-		boolean customAccepts = customAcceptsExecutor.accept(interceptorClass);
-		boolean internalAccepts = interceptorAcceptsExecutor.accept(interceptorClass);
+		InterceptorAcceptsExecutor interceptorAcceptsExecutor = new InterceptorAcceptsExecutor(stepInvoker, parametersResolver, find(Accepts.class));
+		boolean customAccepts = customAcceptsExecutor.accept();
+		boolean internalAccepts = interceptorAcceptsExecutor.accept();
 		if(customAccepts && internalAccepts){
 			throw new VRaptorException("Interceptor "+interceptorClass+" must declare internal accepts or custom, not both.");
 		}
-		this.acceptsExecutor = customAccepts?customAcceptsExecutor:interceptorAcceptsExecutor;
+		this.acceptsExecutor = customAccepts ? customAcceptsExecutor : interceptorAcceptsExecutor;
 	}
 
 	private Method find(Class<? extends Annotation> step) {

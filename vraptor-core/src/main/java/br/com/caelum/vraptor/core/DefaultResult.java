@@ -46,16 +46,19 @@ public class DefaultResult extends AbstractResult {
 	
 	private static final Logger logger = LoggerFactory.getLogger(DefaultResult.class);
 
-	private HttpServletRequest request;
-	private Container container;
+	private final HttpServletRequest request;
+	private final Container container;
+	private final ExceptionMapper exceptions;
+	private final TypeNameExtractor extractor;
+	
 	private Map<String, Object> includedAttributes;
 	private boolean responseCommitted = false;
-	private ExceptionMapper exceptions;
-	private TypeNameExtractor extractor;
 
-	//CDI eyes only
-	@Deprecated
-	public DefaultResult() {
+	/** 
+	 * @deprecated CDI eyes only
+	 */
+	protected DefaultResult() {
+		this(null, null, null, null);
 	}
 
 	@Inject

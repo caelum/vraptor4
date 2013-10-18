@@ -42,11 +42,13 @@ public class DefaultStaticContentHandler implements StaticContentHandler {
 
 	private static final Logger logger = LoggerFactory.getLogger(DefaultStaticContentHandler.class);
 
-	private ServletContext context;
+	private final ServletContext context;
 
-	//CDI eyes only
-	@Deprecated
-	public DefaultStaticContentHandler() {
+	/** 
+	 * @deprecated CDI eyes only
+	 */
+	protected DefaultStaticContentHandler() {
+		this(null);
 	}
 	
 	@Inject

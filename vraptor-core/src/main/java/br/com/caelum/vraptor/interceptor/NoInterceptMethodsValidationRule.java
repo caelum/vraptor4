@@ -34,9 +34,8 @@ public class NoInterceptMethodsValidationRule implements ValidationRule {
 		if (!hasAfterMethod && !hasAroundMethod && !hasBeforeMethod) {
 
 			throw new InterceptionException(format("Interceptor %s must "
-				+ "declare at least one method whith @%s, @%s or @%s annotation",
-				originalType.getCanonicalName(), AfterCall.class.getSimpleName(),
-				AroundCall.class.getSimpleName(), BeforeCall.class.getSimpleName()));
+				+ "declare at least one method whith @AfterCall, @AroundCall "
+				+ "or @BeforeCall annotation", originalType.getCanonicalName()));
 		}
 	}
 

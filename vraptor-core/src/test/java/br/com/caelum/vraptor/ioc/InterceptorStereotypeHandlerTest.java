@@ -16,6 +16,9 @@
  */
 package br.com.caelum.vraptor.ioc;
 
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -27,18 +30,18 @@ import br.com.caelum.vraptor.controller.DefaultBeanClass;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.interceptor.Interceptor;
 import br.com.caelum.vraptor.interceptor.InterceptorRegistry;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import br.com.caelum.vraptor.interceptor.InterceptorValidator;
 
 public class InterceptorStereotypeHandlerTest {
 
 	private @Mock InterceptorRegistry interceptorRegistry;
+	private @Mock InterceptorValidator interceptorValidator;
 	private InterceptorStereotypeHandler handler;
 
 	@Before
 	public void setUp() throws Exception {
 		MockitoAnnotations.initMocks(this);
-		handler = new InterceptorStereotypeHandler(interceptorRegistry);
+		handler = new InterceptorStereotypeHandler(interceptorRegistry, interceptorValidator);
 	}
 
 	@Test
@@ -46,7 +49,7 @@ public class InterceptorStereotypeHandlerTest {
 		handler.handle(new DefaultBeanClass(InterceptorA.class));
 		verify(interceptorRegistry, times(1)).register(InterceptorA.class);
 	}
-	
+
 
 	static class InterceptorA implements Interceptor {
 

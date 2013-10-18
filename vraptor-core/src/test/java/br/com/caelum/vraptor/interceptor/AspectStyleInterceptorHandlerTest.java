@@ -19,25 +19,18 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
-import br.com.caelum.vraptor.InterceptionException;
-import br.com.caelum.vraptor.Intercepts;
 import br.com.caelum.vraptor.VRaptorException;
 import br.com.caelum.vraptor.controller.ControllerInstance;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.factory.Factories;
 import br.com.caelum.vraptor.interceptor.example.AcceptsInterceptor;
-import br.com.caelum.vraptor.interceptor.example.AcceptsInterceptorWithStackAsParameter;
 import br.com.caelum.vraptor.interceptor.example.AcceptsWithoutArgsInterceptor;
 import br.com.caelum.vraptor.interceptor.example.AlwaysAcceptsAspectInterceptor;
-import br.com.caelum.vraptor.interceptor.example.AroundInterceptorWithoutSimpleStackParameter;
-import br.com.caelum.vraptor.interceptor.example.BeforeAfterInterceptorWithStackAsParameter;
 import br.com.caelum.vraptor.interceptor.example.ExampleOfSimpleStackInterceptor;
 import br.com.caelum.vraptor.interceptor.example.InterceptorWithCustomizedAccepts;
 import br.com.caelum.vraptor.interceptor.example.InternalAndCustomAcceptsInterceptor;
 import br.com.caelum.vraptor.interceptor.example.MethodLevelAcceptsController;
-import br.com.caelum.vraptor.interceptor.example.NonBooleanAcceptsInterceptor;
-import br.com.caelum.vraptor.interceptor.example.VoidAcceptsInterceptor;
 import br.com.caelum.vraptor.interceptor.example.WithoutAroundInterceptor;
 import br.com.caelum.vraptor.ioc.Container;
 
@@ -128,22 +121,6 @@ public class AspectStyleInterceptorHandlerTest {
 		verify(acceptsInterceptor, never()).after();
 	}
 
-	@Test(expected = VRaptorException.class)
-	public void shouldVerifyIfAcceptsMethodReturnsVoid() {
-		newInterceptorHandlerFor(new VoidAcceptsInterceptor());
-	}
-
-	@Test(expected = VRaptorException.class)
-	public void shouldVerifyIfAcceptsMethodReturnsNonBooleanType() {
-		newInterceptorHandlerFor(new NonBooleanAcceptsInterceptor());
-	}
-
-	private void newInterceptorHandlerFor(Object interceptor) {
-		Container container = new InstanceContainer(interceptor,controllerMethod);
-		InterceptorMethodParametersResolver parametersResolver = new InterceptorMethodParametersResolver(container);
-		new AspectStyleInterceptorHandler(VoidAcceptsInterceptor.class, stepInvoker, container, parametersResolver);
-	}
-
 	@Test
 	public void shouldInvokeAcceptsWithoutArgs() {
 		AcceptsWithoutArgsInterceptor acceptsWithoutArgsInterceptor = spy(new AcceptsWithoutArgsInterceptor());
@@ -201,28 +178,6 @@ public class AspectStyleInterceptorHandlerTest {
 
 		verify(stack).next(Mockito.same(controllerMethod),
 				Mockito.any(ControllerInstance.class));
-	}
-
-	@Test(expected = IllegalArgumentException.class)
-	public void mustReceiveStackAsParameterForAroundCall() {
-		AroundInterceptorWithoutSimpleStackParameter interceptor = new AroundInterceptorWithoutSimpleStackParameter();
-		newAspectStyleInterceptorHandler(
-				AroundInterceptorWithoutSimpleStackParameter.class, interceptor);
-	}
-
-	@Test(expected = IllegalArgumentException.class)
-	public void mustNotReceiveStackAsParameterForBeforeAfterCall() {
-		BeforeAfterInterceptorWithStackAsParameter interceptor = new BeforeAfterInterceptorWithStackAsParameter();
-		newAspectStyleInterceptorHandler(
-				BeforeAfterInterceptorWithStackAsParameter.class, interceptor);
-
-	}
-
-	@Test(expected = VRaptorException.class)
-	public void mustNotReceiveStackAsParameterForAcceptsCall() {
-		AcceptsInterceptorWithStackAsParameter interceptor = new AcceptsInterceptorWithStackAsParameter();
-		newAspectStyleInterceptorHandler(AcceptsInterceptorWithStackAsParameter.class, interceptor);
-
 	}
 
 	@Test(expected = VRaptorException.class)
@@ -285,19 +240,6 @@ public class AspectStyleInterceptorHandlerTest {
 		aspectHandler.execute(stack, controllerMethod, aspectHandler);
 
 		verify(interceptor).customAcceptsFailCallback();
-
-
-	}
-
-	@Intercepts
-	class SimpleInterceptor {
-		public void dummyMethodWithoutInterceptorAnnotations() {}
-	}
-
-	@Test(expected=InterceptionException.class)
-	public void shoulThrowExceptionIfInterceptorDontHaveAnyCallableMethod() {
-		SimpleInterceptor interceptor = new SimpleInterceptor();
-		newAspectStyleInterceptorHandler(SimpleInterceptor.class, interceptor);
 	}
 
 	@SuppressWarnings("unchecked")

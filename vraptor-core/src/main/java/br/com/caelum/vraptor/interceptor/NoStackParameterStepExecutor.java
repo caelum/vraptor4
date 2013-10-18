@@ -7,24 +7,18 @@ import javax.enterprise.inject.Vetoed;
 @Vetoed
 public class NoStackParameterStepExecutor implements StepExecutor<Void> {
 
-	private final StepInvoker stepInvoker;
-	private final Method method;
+	private StepInvoker stepInvoker;
+	private Method method;
 
-	public NoStackParameterStepExecutor(StepInvoker stepInvoker, Method method) {
+	public NoStackParameterStepExecutor(StepInvoker stepInvoker,
+			Method method) {
 		this.stepInvoker = stepInvoker;
 		this.method = method;
 	}
 
 	@Override
 	public boolean accept() {
-		NoStackParameterSignatureAcceptor noStackAcceptor = new NoStackParameterSignatureAcceptor();
-		if (method != null) {
-			if (!noStackAcceptor.accepts(method)) {
-				throw new IllegalArgumentException(method.getDeclaringClass().getCanonicalName() + " - " + noStackAcceptor.errorMessage());
-			}
-			return true;
-		}
-		return false;
+		return true;
 	}
 
 	@Override

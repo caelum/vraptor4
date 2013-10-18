@@ -13,7 +13,6 @@ import br.com.caelum.vraptor.Accepts;
 import br.com.caelum.vraptor.AfterCall;
 import br.com.caelum.vraptor.AroundCall;
 import br.com.caelum.vraptor.BeforeCall;
-import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.VRaptorException;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.core.InterceptorHandler;
@@ -49,18 +48,9 @@ public class AspectStyleInterceptorHandler implements InterceptorHandler {
 		around = new AroundExecutor(stepInvoker,parametersResolver, find(AroundCall.class));
 		before = new NoStackParameterStepExecutor(stepInvoker, find(BeforeCall.class));
 
-		boolean doNotAcceptAfter = !after.accept();
-		boolean doNotAcceptAround = !around.accept();
-		boolean doNotAcceptBefore = !before.accept();
-
-		if(doNotAcceptAfter) after = new DoNothingStepExecutor();
-		if(doNotAcceptAround) around = new StackNextExecutor(container);
-		if(doNotAcceptBefore) before = new DoNothingStepExecutor();
-
-		if (doNotAcceptAfter && doNotAcceptAround && doNotAcceptBefore) {
-			throw new InterceptionException("Interceptor " + interceptorClass.getCanonicalName() + " must declare " +
-				"at least one method whith @AfterCall, @AroundCall or @BeforeCall annotation");
-		}
+		if(!after.accept()) after = new DoNothingStepExecutor();
+		if(!around.accept()) around = new StackNextExecutor(container);
+		if(!before.accept()) before = new DoNothingStepExecutor();
 
 		CustomAcceptsExecutor customAcceptsExecutor = new CustomAcceptsExecutor(stepInvoker, container, find(CustomAcceptsFailCallback.class), interceptorClass);
 		InterceptorAcceptsExecutor interceptorAcceptsExecutor = new InterceptorAcceptsExecutor(stepInvoker, parametersResolver, find(Accepts.class));

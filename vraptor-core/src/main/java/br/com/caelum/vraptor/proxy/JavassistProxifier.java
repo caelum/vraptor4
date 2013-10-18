@@ -61,16 +61,19 @@ public class JavassistProxifier implements Proxifier {
 			factory.setSuperclass(rawType);
 		}
 
-		Object instance;
+		Object instance = createInstance(type, handler, factory);
+		logger.debug("a proxy for {} was created as {}", type, instance.getClass());
+		
+		return type.cast(instance);
+	}
+
+	private <T> Object createInstance(Class<T> type, MethodInvocation<? super T> handler, ProxyFactory factory) {
 		try {
-			instance = factory.create(null, null, new MethodInvocationAdapter<T>(handler));
+			return factory.create(null, null, new MethodInvocationAdapter<T>(handler));
 		} catch (ReflectiveOperationException | IllegalArgumentException e) {
 			logger.error("An error occurs when create a proxy for type " + type, e);
 			throw new ProxyCreationException(e);
 		}
-
-		logger.debug("a proxy for {} was created as {}", type, instance.getClass());
-		return type.cast(instance);
 	}
 
 	private <T> Class<?> extractRawType(Class<T> type) {

@@ -41,7 +41,7 @@ public class InterceptorStereotypeHandler{
 	/**
 	 * @deprecated CDI eyes only
 	 */
-	public InterceptorStereotypeHandler() {
+	protected InterceptorStereotypeHandler() {
 		this(null, null);
 	}
 

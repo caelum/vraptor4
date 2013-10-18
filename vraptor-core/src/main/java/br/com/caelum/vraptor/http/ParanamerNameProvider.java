@@ -65,7 +65,7 @@ public class ParanamerNameProvider implements ParameterNameProvider {
 	public Parameter[] parametersFor(final AccessibleObject accessibleObject) {
 		logger.debug("looking for parameters on method {}", accessibleObject);
 		
-		return cache.fetch((Method) accessibleObject, new Callable<Parameter[]>() {
+		Parameter[] parameters = cache.fetch((Method) accessibleObject, new Callable<Parameter[]>() {
 			
 			@Override
 			public Parameter[] call()
@@ -92,5 +92,13 @@ public class ParanamerNameProvider implements ParameterNameProvider {
 					}
 				}
 			});
+		
+		return createDefensiveCopy(parameters);
+	}
+
+	private Parameter[] createDefensiveCopy(Parameter[] parameterNames) {
+		Parameter[] defensiveCopy = new Parameter[parameterNames.length];
+		System.arraycopy(parameterNames, 0, defensiveCopy, 0, parameterNames.length);
+		return defensiveCopy;
 	}
 }

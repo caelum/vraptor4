@@ -40,17 +40,17 @@ public class NoStackParamValidationRule implements ValidationRule {
 		String interceptorStack = InterceptorStack.class.getName();
 		String simpleInterceptorStack = SimpleInterceptorStack.class.getName();
 
-		checkState(containsStack(aroundCall), "@AroundCall method must receive "
+		checkState(aroundCall == null || containsStack(aroundCall), "@AroundCall method must receive "
 				+ "%s or %s", interceptorStack, simpleInterceptorStack);
 
-		checkState(!containsStack(beforeCall) || !containsStack(afterCall)
-			|| !containsStack(accepts), "Non @AroundCall method must not receive "
+		checkState(!containsStack(beforeCall) && !containsStack(afterCall)
+			&& !containsStack(accepts), "Non @AroundCall method must not receive "
 				+ "%s or %s", interceptorStack, simpleInterceptorStack);
 	}
 
 	private boolean containsStack(Method method) {
 
-		if (method == null) return true;
+		if (method == null) return false;
 
 		List<Class<?>> parameterTypes = asList(method.getParameterTypes());
 		Predicate<Class<?>> hasStack = new Predicate<Class<?>>() {

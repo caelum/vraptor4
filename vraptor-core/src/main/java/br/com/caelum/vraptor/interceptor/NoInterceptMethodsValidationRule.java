@@ -27,9 +27,9 @@ public class NoInterceptMethodsValidationRule implements ValidationRule {
 	@Override
 	public void validate(Class<?> originalType, MirrorList<Method> methods) {
 
-		boolean hasAfterMethod = notNull(AfterCall.class, originalType, methods);
-		boolean hasAroundMethod = notNull(AroundCall.class, originalType, methods);
-		boolean hasBeforeMethod = notNull(BeforeCall.class, originalType, methods);
+		boolean hasAfterMethod = hasAnnotatedMethod(AfterCall.class, originalType, methods);
+		boolean hasAroundMethod = hasAnnotatedMethod(AroundCall.class, originalType, methods);
+		boolean hasBeforeMethod = hasAnnotatedMethod(BeforeCall.class, originalType, methods);
 
 		if (!hasAfterMethod && !hasAroundMethod && !hasBeforeMethod) {
 
@@ -39,7 +39,7 @@ public class NoInterceptMethodsValidationRule implements ValidationRule {
 		}
 	}
 
-	private boolean notNull(Class<? extends Annotation> step,
+	private boolean hasAnnotatedMethod(Class<? extends Annotation> step,
 			Class<?> originalType, MirrorList<Method> methods) {
 
 		return stepInvoker.findMethod(methods, step, originalType) != null;

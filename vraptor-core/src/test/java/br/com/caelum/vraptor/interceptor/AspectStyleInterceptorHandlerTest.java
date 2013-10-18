@@ -176,8 +176,7 @@ public class AspectStyleInterceptorHandlerTest {
 
 		aspectHandler.execute(stack, controllerMethod, null);
 
-		verify(stack).next(Mockito.same(controllerMethod),
-				Mockito.any(ControllerInstance.class));
+		verify(simpleInterceptorStack).next();
 	}
 
 	@Test(expected = VRaptorException.class)
@@ -263,7 +262,7 @@ public class AspectStyleInterceptorHandlerTest {
 		Container container = new InstanceContainer(deps.toArray());
 		InterceptorMethodParametersResolver parametersResolver = new InterceptorMethodParametersResolver(container);
 		AspectStyleInterceptorHandler aspectHandler = new AspectStyleInterceptorHandler(
-				interceptorClass, stepInvoker, container, parametersResolver);
+				interceptorClass, stepInvoker, container, parametersResolver, simpleInterceptorStack);
 		return aspectHandler;
 	}
 }

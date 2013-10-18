@@ -11,7 +11,6 @@ import javax.inject.Inject;
 
 import net.vidageek.mirror.list.dsl.MirrorList;
 import br.com.caelum.vraptor.Intercepts;
-import br.com.caelum.vraptor.VRaptorException;
 
 @ApplicationScoped
 public class InterceptorValidator {
@@ -27,9 +26,8 @@ public class InterceptorValidator {
 		if (implementsInterceptor || containsIntercepts) {
 			applyNewInterceptorValidationRules(originalType, implementsInterceptor);
 		} else {
-			throw new VRaptorException(format("Annotation @%s found in %s, "
-				+ "but it is neither an Interceptor nor an InterceptorSequence.",
-				Intercepts.class.getSimpleName(), originalType));
+			throw new IllegalStateException(format("Annotation @Intercepts found in %s, "
+				+ "but it is not an Interceptor.", originalType));
 		}
 	}
 

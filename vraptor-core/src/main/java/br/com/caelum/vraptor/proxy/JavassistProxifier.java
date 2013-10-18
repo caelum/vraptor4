@@ -39,6 +39,18 @@ public class JavassistProxifier implements Proxifier {
 
 	private static final Logger logger = LoggerFactory.getLogger(JavassistProxifier.class);
 
+	private static final Class<?> weldProxyClass;
+	
+	static {
+		Class<?> temp;
+		try {
+			temp = Class.forName("org.jboss.weld.bean.proxy.ProxyObject");
+		} catch (ClassNotFoundException e) {
+			temp = null;
+		}
+		weldProxyClass = temp;
+	}
+	
 	/**
 	 * Do not proxy these methods.
 	 */
@@ -91,14 +103,12 @@ public class JavassistProxifier implements Proxifier {
 	}
 
 	private boolean isWeldProxy(Class<?> type) {
-		
-		try{
-			Class<?> weldProxyClass = Class.forName("org.jboss.weld.bean.proxy.ProxyObject");
+		if(weldProxyClass != null){
 			return weldProxyClass.isAssignableFrom(type);
-		}catch(ClassNotFoundException e){ 
+		}else{ 
 			logger.debug("Weld not found, cannot determine if class {} is a proxy or not.", type);
+			return false;
 		}
-		return false;
 	}
 
 	private static class MethodInvocationAdapter<T> implements MethodHandler {

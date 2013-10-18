@@ -25,6 +25,6 @@ import java.lang.reflect.AccessibleObject;
  */
 public interface ParameterNameProvider {
 
-	String[] parameterNamesFor(AccessibleObject methodOrConstructor);
+	Parameter[] parametersFor(AccessibleObject methodOrConstructor);
 
 }

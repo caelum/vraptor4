@@ -37,6 +37,7 @@ import br.com.caelum.vraptor.TwoWayConverter;
 import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.http.EncodingHandler;
 import br.com.caelum.vraptor.http.MutableRequest;
+import br.com.caelum.vraptor.http.Parameter;
 
 import com.google.common.collect.ImmutableMap;
 
@@ -122,31 +123,36 @@ public class DefaultParametersControlTest {
 
 	@Test
 	public void shouldTranslateAsteriskAsEmpty() {
-		String uri = getDefaultParameterControlForUrl("/clients/.*").fillUri(new String[] {"client"}, client(3L));
+		Parameter[] parameters = new Parameter[] { new Parameter("client", 0, Long.class) };
+		String uri = getDefaultParameterControlForUrl("/clients/.*").fillUri(parameters, client(3L));
 		assertThat(uri, is(equalTo("/clients/")));
 	}
 
 	@Test
 	public void shouldTranslatePatternArgs() {
-		String uri = getDefaultParameterControlForUrl("/clients/{client.id}").fillUri(new String[] {"client"}, client(3L));
+		Parameter[] parameters = new Parameter[] { new Parameter("client", 0, Long.class) };
+		String uri = getDefaultParameterControlForUrl("/clients/{client.id}").fillUri(parameters, client(3L));
 		assertThat(uri, is(equalTo("/clients/3")));
 	}
 
 	@Test
 	public void shouldTranslatePatternArgsWithRegex() {
-		String uri = getDefaultParameterControlForUrl("/clients/{id:[0-9]{1,}}").fillUri(new String[] {"id"}, 30L);
+		Parameter[] parameters = new Parameter[] { new Parameter("id", 0, Long.class) };
+		String uri = getDefaultParameterControlForUrl("/clients/{id:[0-9]{1,}}").fillUri(parameters, 30L);
 		assertThat(uri, is(equalTo("/clients/30")));
 	}
 
 	@Test
 	public void shouldTranslatePatternArgsWithMultipleRegexes() {
-		String uri = getDefaultParameterControlForUrl("/test/{hash1:[a-z0-9]{16}}{id}{hash2:[a-z0-9]{16}}/").fillUri(new String[] {"hash1", "id", "hash2"}, "0123456789abcdef", "1234", "fedcba9876543210");
+		Parameter[] parameters = new Parameter[] { new Parameter("hash1", 0, String.class), new Parameter("id", 1, Long.class), new Parameter("hash2", 2, String.class) };
+		String uri = getDefaultParameterControlForUrl("/test/{hash1:[a-z0-9]{16}}{id}{hash2:[a-z0-9]{16}}/").fillUri(parameters, "0123456789abcdef", "1234", "fedcba9876543210");
 		assertThat(uri, is(equalTo("/test/0123456789abcdef1234fedcba9876543210/")));
 	}
 
 	@Test
 	public void shouldTranslatePatternArgNullAsEmpty() {
-		String uri = getDefaultParameterControlForUrl("/clients/{client.id}").fillUri(new String[] {"client"}, client(null));
+		Parameter[] parameters = new Parameter[] { new Parameter("client", 0, Long.class) };
+		String uri = getDefaultParameterControlForUrl("/clients/{client.id}").fillUri(parameters, client(null));
 		assertThat(uri, is(equalTo("/clients/")));
 	}
 
@@ -156,14 +162,15 @@ public class DefaultParametersControlTest {
 		when(converters.twoWayConverterFor(Client.class)).thenReturn(converter);
 		when(converter.convert(any(Client.class))).thenReturn("john");
 
-		String uri = getDefaultParameterControlForUrl("/clients/{client}").fillUri(new String[] {"client"}, client(null));
+		Parameter[] parameters = new Parameter[] { new Parameter("client", 0, Long.class) };
+		String uri = getDefaultParameterControlForUrl("/clients/{client}").fillUri(parameters, client(null));
 		assertThat(uri, is(equalTo("/clients/john")));
-
 	}
 
 	@Test
 	public void shouldTranslatePatternArgInternalNullAsEmpty() {
-		String uri = getDefaultParameterControlForUrl("/clients/{client.child.id}") .fillUri(new String[] {"client"}, client(null));
+		Parameter[] parameters = new Parameter[] { new Parameter("client", 0, Long.class) };
+		String uri = getDefaultParameterControlForUrl("/clients/{client.child.id}").fillUri(parameters, client(null));
 		assertThat(uri, is(equalTo("/clients/")));
 	}
 
@@ -234,19 +241,23 @@ public class DefaultParametersControlTest {
 
 		}
 	}
+
 	@Test
 	public void fillURLWithGreedyParameters() throws SecurityException, NoSuchMethodException {
 		DefaultParametersControl control = getDefaultParameterControlForUrl("/clients/{pathToFile*}");
 
-		String filled = control.fillUri(new String[] {"pathToFile"}, "my/path/to/file");
+		Parameter[] parameters = new Parameter[] { new Parameter("pathToFile", 0, String.class) };
+		String filled = control.fillUri(parameters, "my/path/to/file");
 
 		assertThat(filled, is("/clients/my/path/to/file"));
 	}
+
 	@Test
 	public void fillURLWithoutGreedyParameters() throws SecurityException, NoSuchMethodException {
 		DefaultParametersControl control = getDefaultParameterControlForUrl("/clients/{pathToFile}");
 
-		String filled = control.fillUri(new String[] {"pathToFile"}, "my/path/to/file");
+		Parameter[] parameters = new Parameter[] { new Parameter("pathToFile", 0, String.class) };
+		String filled = control.fillUri(parameters, "my/path/to/file");
 
 		assertThat(filled, is("/clients/my/path/to/file"));
 	}
@@ -296,10 +307,8 @@ public class DefaultParametersControlTest {
 	@Test
 	public void shouldEncodeUriParameters() throws Exception {
 		when(encodingHandler.getEncoding()).thenReturn("UTF-8");
-		String uri = getDefaultParameterControlForUrl("/language/{lang}/about").fillUri(new String[] {"lang"}, "c#");
+		Parameter[] parameters = new Parameter[] { new Parameter("lang", 0, String.class) };
+		String uri = getDefaultParameterControlForUrl("/language/{lang}/about").fillUri(parameters, "c#");
 		assertThat(uri, is(equalTo("/language/c%23/about")));
 	}
-
-
-
 }

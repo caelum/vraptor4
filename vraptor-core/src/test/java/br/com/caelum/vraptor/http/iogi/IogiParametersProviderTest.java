@@ -145,7 +145,10 @@ public class IogiParametersProviderTest extends ParametersProviderTest {
 
 	@Test
 	public void isCapableOfDealingWithSets() throws Exception {
-		when(nameProvider.parameterNamesFor(any(Method.class))).thenReturn(new String[]{"abc"});
+		br.com.caelum.vraptor.http.Parameter[] parameters = new br.com.caelum.vraptor.http.Parameter[] {
+			new br.com.caelum.vraptor.http.Parameter("abc", 0, null)
+		};
+		when(nameProvider.parametersFor(any(Method.class))).thenReturn(parameters);
 
 		ControllerMethod set = method("set", Set.class);
 
@@ -159,7 +162,10 @@ public class IogiParametersProviderTest extends ParametersProviderTest {
 
 	@Test
 	public void isCapableOfDealingWithSetsOfObjects() throws Exception {
-		when(nameProvider.parameterNamesFor(any(Method.class))).thenReturn(new String[]{"abc"});
+		br.com.caelum.vraptor.http.Parameter[] parameters = new br.com.caelum.vraptor.http.Parameter[] {
+				new br.com.caelum.vraptor.http.Parameter("abc", 0, null)
+			};
+		when(nameProvider.parametersFor(any(Method.class))).thenReturn(parameters);
 
 		ControllerMethod set = method("setOfObject", Set.class);
 

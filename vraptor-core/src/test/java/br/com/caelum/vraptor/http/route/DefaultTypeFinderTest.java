@@ -29,6 +29,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import br.com.caelum.vraptor.http.Parameter;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 
 public class DefaultTypeFinderTest {
@@ -64,11 +65,13 @@ public class DefaultTypeFinderTest {
 			return 1;
 		}
 	}
+
 	@Test
 	public void shouldGetTypesCorrectly() throws Exception {
 
 		final Method method = new Mirror().on(AController.class).reflect().method("aMethod").withArgs(Bean.class, String.class);
-		when(provider.parameterNamesFor(method)).thenReturn(new String[] {"bean", "path"});
+		Parameter[] parameters = new Parameter[] { new Parameter("bean", 0, Bean.class), new Parameter("path", 1, String.class) };
+		when(provider.parametersFor(method)).thenReturn(parameters);
 		
 		DefaultTypeFinder finder = new DefaultTypeFinder(provider);
 		Map<String, Class<?>> types = finder.getParameterTypes(method, new String[] {"bean.bean2.id", "path"});
@@ -79,8 +82,9 @@ public class DefaultTypeFinderTest {
 	@Test
 	public void shouldGetTypesCorrectlyOnInheritance() throws Exception {
 		final Method method = new Mirror().on(AController.class).reflect().method("otherMethod").withArgs(BeanExtended.class);
+		Parameter[] parameters = new Parameter[] { new Parameter("extended", 0, Integer.class) };
 		
-		when(provider.parameterNamesFor(method)).thenReturn(new String[] {"extended"});
+		when(provider.parametersFor(method)).thenReturn(parameters);
 		
 		DefaultTypeFinder finder = new DefaultTypeFinder(provider);
 		Map<String, Class<?>> types = finder.getParameterTypes(method, new String[] {"extended.id"});

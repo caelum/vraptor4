@@ -20,6 +20,7 @@ import org.slf4j.LoggerFactory;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.deserialization.Deserializer;
 import br.com.caelum.vraptor.deserialization.Deserializes;
+import br.com.caelum.vraptor.http.Parameter;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.view.ResultException;
 
@@ -74,7 +75,7 @@ public class GsonDeserialization implements Deserializer {
 		Gson gson = getGson();
 		
 		Object[] params = new Object[types.length];
-		String[] parameterNames = paramNameProvider.parameterNamesFor(method.getMethod());
+		Parameter[] parameters = paramNameProvider.parametersFor(method.getMethod());
 
 		try {
 			String content = getContentOfStream(inputStream);
@@ -87,10 +88,10 @@ public class GsonDeserialization implements Deserializer {
 					JsonObject root = jsonElement.getAsJsonObject();
 		
 					for (int i = 0; i < types.length; i++) {
-						String name = parameterNames[i];
+						String name = parameters[i].getName();
 						JsonElement node = root.get(name);
 						
-						if (isWithoutRoot(parameterNames, root)) { 
+						if (isWithoutRoot(parameters, root)) { 
 							params[i] = gson.fromJson(root, types[i]);
 							logger.info("json without root deserialized");
 							break;
@@ -162,9 +163,9 @@ public class GsonDeserialization implements Deserializer {
 		return charset.split(",")[0];
 	}
 
-	private boolean isWithoutRoot(String[] parameterNames, JsonObject root) {
-		for (String parameterName : parameterNames) {
-			if (root.get(parameterName) != null)
+	private boolean isWithoutRoot(Parameter[] parameters, JsonObject root) {
+		for (Parameter parameter : parameters) {
+			if (root.get(parameter.getName()) != null)
 				return false;
 		}
 		return true;

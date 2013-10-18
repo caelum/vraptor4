@@ -15,6 +15,7 @@ import org.mockito.MockitoAnnotations;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.core.MethodInfo;
+import br.com.caelum.vraptor.http.Parameter;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.util.test.MockResult;
 
@@ -41,7 +42,9 @@ public class ParameterIncluderInterceptorTest {
 
 		when(info.getParameters()).thenReturn(new Object[]{"value"});
 		when(controllerMethod.getMethod()).thenReturn(anyControllerMethod);
-		when(nameProvider.parameterNamesFor(anyControllerMethod)).thenReturn(new String[]{"key"});
+		
+		Parameter[] parameters = new Parameter[] {new Parameter("key", 0, null)};
+		when(nameProvider.parametersFor(anyControllerMethod)).thenReturn(parameters);
 
 		returnParamInterceptor.intercept();
 

@@ -36,6 +36,7 @@ import br.com.caelum.vraptor.Intercepts;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.core.MethodInfo;
+import br.com.caelum.vraptor.http.Parameter;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.interceptor.ExecuteMethodInterceptor;
 import br.com.caelum.vraptor.interceptor.Interceptor;
@@ -108,13 +109,13 @@ public class MethodValidatorInterceptor implements Interceptor {
 				.validateParameters(controllerInstance, method.getMethod(), methodInfo.getParameters());
 		logger.debug("there are {} violations at method {}.", violations.size(), method);
 
-		String[] names = violations.isEmpty() ? null
-				: parameterNameProvider.parameterNamesFor(method.getMethod());
+		Parameter[] parameters = violations.isEmpty() ? null
+				: parameterNameProvider.parametersFor(method.getMethod());
 
 		for (ConstraintViolation<Object> v : violations) {
 			BeanValidatorContext ctx = new BeanValidatorContext(v);
 			String msg = interpolator.interpolate(v.getMessageTemplate(), ctx, locale);
-			String category = extractCategory(names, v);
+			String category = extractCategory(parameters, v);
 			validator.add(new SimpleMessage(category, msg));
 			
 			logger.debug("added message {}={} for contraint violation", category, msg);
@@ -128,13 +129,13 @@ public class MethodValidatorInterceptor implements Interceptor {
 	 * is the name of method with full path for property. You can override this method to
 	 * change this behaviour.
 	 */
-	protected String extractCategory(String[] names, ConstraintViolation<Object> v) {
+	protected String extractCategory(Parameter[] parameters, ConstraintViolation<Object> v) {
 		Iterator<Node> property = v.getPropertyPath().iterator();
 		property.next();
 		ParameterNode parameterNode = property.next().as(ParameterNode.class);
 
 		int index = parameterNode.getParameterIndex();
 		return Joiner.on(".").join(v.getPropertyPath())
-				.replace("arg" + parameterNode.getParameterIndex(), names[index]);
+				.replace("arg" + parameterNode.getParameterIndex(), parameters[index].getName());
 	}
 }

@@ -17,14 +17,10 @@
 package br.com.caelum.vraptor.http;
 
 import java.lang.reflect.AccessibleObject;
-import java.util.Arrays;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
 
 import javax.enterprise.context.ApplicationScoped;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import br.com.caelum.vraptor.util.Stringnifier;
 
 import com.thoughtworks.paranamer.AnnotationParanamer;
 import com.thoughtworks.paranamer.BytecodeReadingParanamer;
@@ -41,29 +37,37 @@ import com.thoughtworks.paranamer.Paranamer;
 @ApplicationScoped
 public class ParanamerNameProvider implements ParameterNameProvider {
 	private final Paranamer info = new CachingParanamer(new AnnotationParanamer(new BytecodeReadingParanamer()));
-
-	private static final Logger logger = LoggerFactory.getLogger(ParanamerNameProvider.class);
-
+	
+	//TODO generate docs
+	//TODO logging
+	//TODO merge with TypeFinder
+	//TODO cache
 	@Override
-	public String[] parameterNamesFor(AccessibleObject method) {
+	public Parameter[] parametersFor(AccessibleObject accessibleObject) {
 		try {
-			String[] parameterNames = info.lookupParameterNames(method);
-			if (logger.isDebugEnabled()) {
-				logger.debug("Found parameter names with paranamer for {} as {}",
-					Stringnifier.simpleNameFor(method), Arrays.toString(parameterNames));
+			String[] names = info.lookupParameterNames(accessibleObject);
+			Class<?>[] types = getTypes(accessibleObject);
+			Parameter[] out = new Parameter[names.length];
+			
+			for (int i = 0; i < names.length; i++) {
+				out[i] = new Parameter(names[i], i, types[i]);
 			}
 
-			return createDefensiveCopy(parameterNames);
+			return out;
 		} catch (ParameterNamesNotFoundException e) {
-			throw new IllegalStateException("Paranamer were not able to find your parameter names for " + method
+			throw new IllegalStateException("Paranamer were not able to find your parameter names for " + accessibleObject
 					+ "You must compile your code with debug information (javac -g), or using @Named on "
 					+ "each method parameter.", e);
 		}
 	}
 
-	private String[] createDefensiveCopy(String[] parameterNames) {
-		String[] defensiveCopy = new String[parameterNames.length];
-		System.arraycopy(parameterNames, 0, defensiveCopy, 0, parameterNames.length);
-		return defensiveCopy;
+	private Class<?>[] getTypes(AccessibleObject accessibleObject) {
+		if (accessibleObject instanceof Method) {
+			return ((Method) accessibleObject).getParameterTypes();
+		} else if (accessibleObject instanceof Constructor) {
+			return ((Constructor<?>) accessibleObject).getParameterTypes();
+		}
+
+		throw new IllegalArgumentException("Only method or constructors are accepted.");
 	}
 }

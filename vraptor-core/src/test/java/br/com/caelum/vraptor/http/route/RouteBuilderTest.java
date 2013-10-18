@@ -37,6 +37,7 @@ import br.com.caelum.vraptor.controller.DefaultBeanClass;
 import br.com.caelum.vraptor.controller.DefaultControllerMethod;
 import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.http.EncodingHandler;
+import br.com.caelum.vraptor.http.Parameter;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.proxy.JavassistProxifier;
 import br.com.caelum.vraptor.proxy.Proxifier;
@@ -62,7 +63,9 @@ public class RouteBuilderTest {
 	public void setUp() throws Exception {
 		MockitoAnnotations.initMocks(this);
 
-		when(provider.parameterNamesFor(any(Method.class))).thenReturn(new String[] { "abc", "def", "ghi" });
+		Parameter[] parameters = new Parameter[] {new Parameter("abc", 0, null), new Parameter("def", 0, null), 
+				new Parameter("ghi", 0, null)};
+		when(provider.parametersFor(any(Method.class))).thenReturn(parameters);
 
 		method = new DefaultControllerMethod(new DefaultBeanClass(MyResource.class), MyResource.class.getMethod(
 				"method", String.class, Integer.class, BigDecimal.class));

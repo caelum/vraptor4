@@ -20,10 +20,7 @@ public class AroundExecutor implements StepExecutor<Object> {
 
 	@Override
 	public boolean accept(Class<?> interceptorClass) {
-		if (method != null) {
-			return true;
-		}
-		return false;
+		return method != null;
 	}
 
 	@Override

@@ -23,4 +23,9 @@ public class Parameter {
 	public Class<?> getType() {
 		return type;
 	}
+	
+	@Override
+	public String toString() {
+		return String.format("Parameter={}, index={}, type={}", name, index, type.getName());
+	}
 }

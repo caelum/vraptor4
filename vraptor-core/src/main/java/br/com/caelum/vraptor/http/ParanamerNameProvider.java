@@ -17,14 +17,20 @@
 package br.com.caelum.vraptor.http;
 
 import java.lang.reflect.AccessibleObject;
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.concurrent.Callable;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import br.com.caelum.vraptor.cache.CacheStore;
 
 import com.thoughtworks.paranamer.AnnotationParanamer;
 import com.thoughtworks.paranamer.BytecodeReadingParanamer;
-import com.thoughtworks.paranamer.CachingParanamer;
 import com.thoughtworks.paranamer.ParameterNamesNotFoundException;
 import com.thoughtworks.paranamer.Paranamer;
 
@@ -33,41 +39,58 @@ import com.thoughtworks.paranamer.Paranamer;
  * parameter, or read bytecode to find parameter information, in this order.
  *
  * @author Guilherme Silveira
+ * @author Otávio Scherer Garcia
  */
 @ApplicationScoped
 public class ParanamerNameProvider implements ParameterNameProvider {
-	private final Paranamer info = new CachingParanamer(new AnnotationParanamer(new BytecodeReadingParanamer()));
+	private static final Logger logger = LoggerFactory.getLogger(ParanamerNameProvider.class);
 	
-	//TODO generate docs
-	//TODO logging
-	//TODO merge with TypeFinder
-	//TODO cache
-	@Override
-	public Parameter[] parametersFor(AccessibleObject accessibleObject) {
-		try {
-			String[] names = info.lookupParameterNames(accessibleObject);
-			Class<?>[] types = getTypes(accessibleObject);
-			Parameter[] out = new Parameter[names.length];
-			
-			for (int i = 0; i < names.length; i++) {
-				out[i] = new Parameter(names[i], i, types[i]);
-			}
-
-			return out;
-		} catch (ParameterNamesNotFoundException e) {
-			throw new IllegalStateException("Paranamer were not able to find your parameter names for " + accessibleObject
-					+ "You must compile your code with debug information (javac -g), or using @Named on "
-					+ "each method parameter.", e);
-		}
+	private final Paranamer info = new AnnotationParanamer(new BytecodeReadingParanamer());
+	private final CacheStore<Method, Parameter[]> cache;
+	
+	/** 
+	 * @deprecated CDI eyes only
+	 */
+	public ParanamerNameProvider() {
+		this(null);
 	}
-
-	private Class<?>[] getTypes(AccessibleObject accessibleObject) {
-		if (accessibleObject instanceof Method) {
-			return ((Method) accessibleObject).getParameterTypes();
-		} else if (accessibleObject instanceof Constructor) {
-			return ((Constructor<?>) accessibleObject).getParameterTypes();
-		}
-
-		throw new IllegalArgumentException("Only method or constructors are accepted.");
+	
+	@Inject
+	public ParanamerNameProvider(CacheStore<Method, Parameter[]> cache) {
+		this.cache = cache;
+	}
+	
+	//TODO logging
+	@Override
+	public Parameter[] parametersFor(final AccessibleObject accessibleObject) {
+		logger.debug("looking for parameters on method {}", accessibleObject);
+		
+		return cache.fetch((Method) accessibleObject, new Callable<Parameter[]>() {
+			
+			@Override
+			public Parameter[] call()
+				throws Exception {
+					logger.debug("putting parameters into cache for {}", accessibleObject);
+					try {
+						String[] names = info.lookupParameterNames(accessibleObject);
+						Class<?>[] types = ((Method) accessibleObject).getParameterTypes();
+						Parameter[] out = new Parameter[names.length];
+						
+						for (int i = 0; i < names.length; i++) {
+							out[i] = new Parameter(names[i], i, types[i]);
+						}
+			
+						if (logger.isDebugEnabled()) {
+							logger.debug("found parameters {} for method {}", Arrays.toString(out), accessibleObject);
+						}
+						
+						return out;
+					} catch (ParameterNamesNotFoundException e) {
+						throw new IllegalStateException("Paranamer were not able to find your parameter names for " + accessibleObject
+								+ "You must compile your code with debug information (javac -g), or using @Named on "
+								+ "each method parameter.", e);
+					}
+				}
+			});
 	}
 }

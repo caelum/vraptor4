@@ -54,7 +54,7 @@ public class DefaultPathResolver implements PathResolver {
 	
 	@Override
 	public String pathFor(ControllerMethod method) {
-		logger.info("Resolving path for {}", method);
+		logger.debug("Resolving path for {}", method);
 		String format = resolver.getAcceptFormat();
 
 		String suffix = "";
@@ -66,7 +66,7 @@ public class DefaultPathResolver implements PathResolver {
 		String folderName = extractControllerFromName(name);
 		String path = getPrefix() + folderName + "/" + method.getMethod().getName() + suffix + "." + getExtension();
 
-		logger.info("Returning path {} for {}", path, method);
+		logger.debug("Returning path {} for {}", path, method);
 		return path;
 	}
 

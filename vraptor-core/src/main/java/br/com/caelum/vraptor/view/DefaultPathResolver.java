@@ -20,6 +20,9 @@ package br.com.caelum.vraptor.view;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.http.FormatResolver;
 
@@ -34,6 +37,7 @@ import br.com.caelum.vraptor.http.FormatResolver;
 @RequestScoped
 public class DefaultPathResolver implements PathResolver {
 
+	private static final Logger logger = LoggerFactory.getLogger(DefaultPathResolver.class);
 	private final FormatResolver resolver;
 	
 	/** 
@@ -50,16 +54,20 @@ public class DefaultPathResolver implements PathResolver {
 	
 	@Override
 	public String pathFor(ControllerMethod method) {
+		logger.info("Resolving path for {}", method);
 		String format = resolver.getAcceptFormat();
 
 		String suffix = "";
 		if (format != null && !format.equals("html")) {
 			suffix = "." + format;
 		}
+		
 		String name = method.getController().getType().getSimpleName();
 		String folderName = extractControllerFromName(name);
-		return getPrefix() + folderName + "/" + method.getMethod().getName() + suffix
-				+ "."+getExtension();
+		String path = getPrefix() + folderName + "/" + method.getMethod().getName() + suffix + "." + getExtension();
+
+		logger.info("Returning path {} for {}", path, method);
+		return path;
 	}
 
 	protected String getPrefix() {

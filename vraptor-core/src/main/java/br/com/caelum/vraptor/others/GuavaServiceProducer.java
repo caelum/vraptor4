@@ -1,4 +1,4 @@
-package br.com.caelum.vraptor.ioc.cdi;
+package br.com.caelum.vraptor.others;
 
 import static java.util.Collections.emptySet;
 

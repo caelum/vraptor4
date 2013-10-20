@@ -52,4 +52,9 @@ public class VRaptorResponse extends HttpServletResponseWrapper implements Mutab
 	public void addRedirectListener(RedirectListener listener) {
 		listeners.add(listener);
 	}
+	
+	@Override
+	public HttpServletResponse getOriginalResponse() {
+		return (HttpServletResponse) getResponse();
+	}
 }

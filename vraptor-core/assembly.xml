@@ -25,6 +25,19 @@
 
 		<dependencySet>
 			<unpack>false</unpack>
+			<outputDirectory>lib/javaee</outputDirectory>
+			<scope>test</scope>
+			<includes>
+				<include>javax.inject:javax.inject</include>
+				<include>javax.annotation:javax.annotation-api</include>
+				<include>javax.interceptor:javax.interceptor-api</include>
+				<include>javax.enterprise:cdi-api</include>
+				<include>javax.ejb:ejb-api</include>
+			</includes>
+		</dependencySet>
+
+		<dependencySet>
+			<unpack>false</unpack>
 			<outputDirectory>lib/serialization</outputDirectory>
 			<includes>
 				<include>com.thoughtworks.xstream:xstream</include>

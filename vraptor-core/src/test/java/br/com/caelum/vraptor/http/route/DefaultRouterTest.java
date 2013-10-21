@@ -28,6 +28,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Method;
 import java.util.EnumSet;
 import java.util.List;
@@ -78,7 +79,7 @@ public class DefaultRouterTest {
 		this.method = mock(ControllerMethod.class);
 		this.converters = mock(Converters.class);
 		this.encodingHandler = mock(EncodingHandler.class);
-		this.nameProvider = new ParanamerNameProvider();
+		this.nameProvider = new ParanamerNameProvider(new DefaultCacheStore<AccessibleObject, List<String>>());
 		this.cache = new DefaultCacheStore<>();
 
 		router = new DefaultRouter(proxifier, new NoTypeFinder(), converters, nameProvider, new JavaEvaluator(), encodingHandler,cache);

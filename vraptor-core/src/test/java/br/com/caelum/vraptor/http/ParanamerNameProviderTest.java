@@ -20,6 +20,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.not;
 
+import java.lang.reflect.AccessibleObject;
 import java.util.List;
 
 import javax.inject.Named;
@@ -27,13 +28,15 @@ import javax.inject.Named;
 import org.junit.Before;
 import org.junit.Test;
 
+import br.com.caelum.vraptor.cache.DefaultCacheStore;
+
 public class ParanamerNameProviderTest {
 
 	private ParanamerNameProvider provider;
 
 	@Before
 	public void setup() {
-		this.provider = new ParanamerNameProvider();
+		this.provider = new ParanamerNameProvider(new DefaultCacheStore<AccessibleObject, List<String>>());
 	}
 
 	@Test

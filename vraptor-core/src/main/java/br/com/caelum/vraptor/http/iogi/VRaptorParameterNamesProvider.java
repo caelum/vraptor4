@@ -18,7 +18,6 @@
 package br.com.caelum.vraptor.http.iogi;
 
 import java.lang.reflect.AccessibleObject;
-import java.util.Arrays;
 import java.util.List;
 
 import javax.enterprise.context.RequestScoped;
@@ -52,6 +51,6 @@ public class VRaptorParameterNamesProvider implements br.com.caelum.iogi.spi.Par
 
 	@Override
 	public List<String> lookupParameterNames(AccessibleObject methodOrConstructor) {
-		return Arrays.asList(parameterNameProvider.parameterNamesFor(methodOrConstructor));
+		return parameterNameProvider.parameterNamesFor(methodOrConstructor);
 	}
 }

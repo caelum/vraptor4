@@ -9,6 +9,7 @@ import static org.mockito.Mockito.when;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.TimeZone;
@@ -90,7 +91,7 @@ public class XStreamXmlDeserializerTest {
 		InputStream stream = new ByteArrayInputStream("<dog><name>Brutus</name><age>7</age></dog>".getBytes());
 
 
-		when(provider.parameterNamesFor(bark.getMethod())).thenReturn(new String[] {"dog"});
+		when(provider.parameterNamesFor(bark.getMethod())).thenReturn(Arrays.asList("dog"));
 
 		Object[] deserialized = deserializer.deserialize(stream, bark);
 
@@ -107,7 +108,7 @@ public class XStreamXmlDeserializerTest {
 				.getBytes());
 
 
-		when(provider.parameterNamesFor(bark.getMethod())).thenReturn(new String[] {"dog"});
+		when(provider.parameterNamesFor(bark.getMethod())).thenReturn(Arrays.asList("dog"));
 
 		Object[] deserialized = deserializer.deserialize(stream, bark);
 
@@ -129,7 +130,7 @@ public class XStreamXmlDeserializerTest {
 	public void shouldBeAbleToDeserializeADogWhenMethodHasMoreThanOneArgument() throws Exception {
 		InputStream stream = new ByteArrayInputStream("<dog><name>Brutus</name><age>7</age></dog>".getBytes());
 
-		when(provider.parameterNamesFor(jump.getMethod())).thenReturn(new String[] {"dog", "times"});
+		when(provider.parameterNamesFor(jump.getMethod())).thenReturn(Arrays.asList("dog", "times"));
 
 		Object[] deserialized = deserializer.deserialize(stream, jump);
 
@@ -143,7 +144,7 @@ public class XStreamXmlDeserializerTest {
 	public void shouldBeAbleToDeserializeADogWhenMethodHasMoreThanOneArgumentAndTheXmlIsTheLastOne() throws Exception {
 		InputStream stream = new ByteArrayInputStream("<dog><name>Brutus</name><age>7</age></dog>".getBytes());
 
-		when(provider.parameterNamesFor(dropDead.getMethod())).thenReturn(new String[] {"times", "dog"});
+		when(provider.parameterNamesFor(dropDead.getMethod())).thenReturn(Arrays.asList("times", "dog"));
 
 		Object[] deserialized = deserializer.deserialize(stream, dropDead);
 
@@ -158,7 +159,7 @@ public class XStreamXmlDeserializerTest {
 	public void shouldBeAbleToDeserializeADogNamedDifferently() throws Exception {
 		InputStream stream = new ByteArrayInputStream("<pet><name>Brutus</name><age>7</age></pet>".getBytes());
 
-		when(provider.parameterNamesFor(bark.getMethod())).thenReturn(new String[] {"pet"});
+		when(provider.parameterNamesFor(bark.getMethod())).thenReturn(Arrays.asList("pet"));
 
 		Object[] deserialized = deserializer.deserialize(stream, bark);
 
@@ -174,7 +175,7 @@ public class XStreamXmlDeserializerTest {
 
 		InputStream stream = new ByteArrayInputStream("<dogAnnotated><nameAnnotated>Lubi</nameAnnotated><ageAnnotated>8</ageAnnotated></dogAnnotated>".getBytes());
 
-		when(provider.parameterNamesFor(annotated.getMethod())).thenReturn(new String[] {"dog"});
+		when(provider.parameterNamesFor(annotated.getMethod())).thenReturn(Arrays.asList("dog"));
 
 		Object[] deserialized = deserializer.deserialize(stream, annotated);
 

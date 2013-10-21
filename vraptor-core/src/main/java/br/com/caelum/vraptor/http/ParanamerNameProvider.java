@@ -17,15 +17,14 @@
 package br.com.caelum.vraptor.http;
 
 import java.lang.reflect.AccessibleObject;
-import java.util.Arrays;
+import java.util.List;
 
 import javax.enterprise.context.ApplicationScoped;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import br.com.caelum.vraptor.util.Stringnifier;
-
+import com.google.common.collect.ImmutableList;
 import com.thoughtworks.paranamer.AnnotationParanamer;
 import com.thoughtworks.paranamer.BytecodeReadingParanamer;
 import com.thoughtworks.paranamer.CachingParanamer;
@@ -45,25 +44,16 @@ public class ParanamerNameProvider implements ParameterNameProvider {
 	private static final Logger logger = LoggerFactory.getLogger(ParanamerNameProvider.class);
 
 	@Override
-	public String[] parameterNamesFor(AccessibleObject method) {
+	public List<String> parameterNamesFor(AccessibleObject method) {
 		try {
 			String[] parameterNames = info.lookupParameterNames(method);
-			if (logger.isDebugEnabled()) {
-				logger.debug("Found parameter names with paranamer for {} as {}",
-					Stringnifier.simpleNameFor(method), Arrays.toString(parameterNames));
-			}
+			logger.debug("Found parameter names with paranamer for {} as {}", method, (Object) parameterNames);
 
-			return createDefensiveCopy(parameterNames);
+			return ImmutableList.copyOf(parameterNames);
 		} catch (ParameterNamesNotFoundException e) {
 			throw new IllegalStateException("Paranamer were not able to find your parameter names for " + method
 					+ "You must compile your code with debug information (javac -g), or using @Named on "
 					+ "each method parameter.", e);
 		}
-	}
-
-	private String[] createDefensiveCopy(String[] parameterNames) {
-		String[] defensiveCopy = new String[parameterNames.length];
-		System.arraycopy(parameterNames, 0, defensiveCopy, 0, parameterNames.length);
-		return defensiveCopy;
 	}
 }

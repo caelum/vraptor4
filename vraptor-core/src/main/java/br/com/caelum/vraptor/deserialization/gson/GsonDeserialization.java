@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.List;
 
 import javax.enterprise.inject.Any;
 import javax.enterprise.inject.Instance;
@@ -74,7 +75,7 @@ public class GsonDeserialization implements Deserializer {
 		Gson gson = getGson();
 		
 		Object[] params = new Object[types.length];
-		String[] parameterNames = paramNameProvider.parameterNamesFor(method.getMethod());
+		List<String> parameterNames = paramNameProvider.parameterNamesFor(method.getMethod());
 
 		try {
 			String content = getContentOfStream(inputStream);
@@ -87,7 +88,7 @@ public class GsonDeserialization implements Deserializer {
 					JsonObject root = jsonElement.getAsJsonObject();
 		
 					for (int i = 0; i < types.length; i++) {
-						String name = parameterNames[i];
+						String name = parameterNames.get(i);
 						JsonElement node = root.get(name);
 						
 						if (isWithoutRoot(parameterNames, root)) { 
@@ -162,7 +163,7 @@ public class GsonDeserialization implements Deserializer {
 		return charset.split(",")[0];
 	}
 
-	private boolean isWithoutRoot(String[] parameterNames, JsonObject root) {
+	private boolean isWithoutRoot(List<String> parameterNames, JsonObject root) {
 		for (String parameterName : parameterNames) {
 			if (root.get(parameterName) != null)
 				return false;

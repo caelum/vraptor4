@@ -5,6 +5,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.lang.reflect.Method;
+import java.util.Arrays;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -35,7 +36,7 @@ public class ReplicatorOutjectorTest {
 
 	@Test
 	public void shouldReplicateMethodParametersToNextRequest() throws Exception {
-		when(provider.parameterNamesFor(any(Method.class))).thenReturn(new String[] {"first", "second", "third"});
+		when(provider.parameterNamesFor(any(Method.class))).thenReturn(Arrays.asList("first", "second", "third"));
 		when(method.getParameters()).thenReturn(new Object[] {1, 2.0, 3l});
 
 		outjector.outjectRequestMap();

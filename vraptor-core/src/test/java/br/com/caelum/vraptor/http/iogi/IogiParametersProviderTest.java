@@ -145,7 +145,7 @@ public class IogiParametersProviderTest extends ParametersProviderTest {
 
 	@Test
 	public void isCapableOfDealingWithSets() throws Exception {
-		when(nameProvider.parameterNamesFor(any(Method.class))).thenReturn(new String[]{"abc"});
+		when(nameProvider.parameterNamesFor(any(Method.class))).thenReturn(Arrays.asList("abc"));
 
 		ControllerMethod set = method("set", Set.class);
 
@@ -159,7 +159,7 @@ public class IogiParametersProviderTest extends ParametersProviderTest {
 
 	@Test
 	public void isCapableOfDealingWithSetsOfObjects() throws Exception {
-		when(nameProvider.parameterNamesFor(any(Method.class))).thenReturn(new String[]{"abc"});
+		when(nameProvider.parameterNamesFor(any(Method.class))).thenReturn(Arrays.asList("abc"));
 
 		ControllerMethod set = method("setOfObject", Set.class);
 

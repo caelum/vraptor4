@@ -83,7 +83,7 @@ public abstract class ParametersProviderTest {
 		when(converters.to(long.class)).thenReturn(new PrimitiveLongConverter());
 		when(converters.to(String.class)).thenReturn(new StringConverter());
 
-		when(nameProvider.parameterNamesFor(any(AccessibleObject.class))).thenReturn(new String[0]);
+		when(nameProvider.parameterNamesFor(any(AccessibleObject.class))).thenReturn(Collections.<String> emptyList());
 
 		buyA 		= method("buyA", House.class);
 		kick 		= method("kick", AngryCat.class);
@@ -297,7 +297,7 @@ public abstract class ParametersProviderTest {
 	@Test
 	public void returnsDependenciesIfRequestCanProvide() throws Exception {
 		thereAreNoParameters();
-		when(nameProvider.parameterNamesFor(dependency.getMethod())).thenReturn(new String[] {"result"});
+		when(nameProvider.parameterNamesFor(dependency.getMethod())).thenReturn(Arrays.asList("result"));
 		Result result = mock(Result.class);
 
 		when(request.getAttribute("result")).thenReturn(result);
@@ -344,7 +344,7 @@ public abstract class ParametersProviderTest {
 		when(request.getParameterMap()).thenReturn(params);
 		when(request.getParameterValues("abc")).thenReturn(params.get("abc"));
 		when(request.getParameterValues("abc.x")).thenReturn(params.get("abc.x"));
-		when(nameProvider.parameterNamesFor(any(Method.class))).thenReturn(new String[]{"abc"});
+		when(nameProvider.parameterNamesFor(any(Method.class))).thenReturn(Arrays.asList("abc"));
 
 		when(converters.existsFor(ABC.class)).thenReturn(true);
 		when(converters.to(ABC.class)).thenReturn(new Converter<ABC>() {
@@ -378,7 +378,7 @@ public abstract class ParametersProviderTest {
 	protected void thereAreNoParameters() {
 		when(request.getParameterNames()).thenReturn(Collections.enumeration(Collections.<String>emptySet()));
 		when(request.getParameterMap()).thenReturn(Collections.<String, String[]>emptyMap());
-		when(nameProvider.parameterNamesFor(any(Method.class))).thenReturn(new String[]{"any"});
+		when(nameProvider.parameterNamesFor(any(Method.class))).thenReturn(Arrays.asList("any"));
 	}
 
 	protected void requestParameterIs(ControllerMethod method, String paramName, String... values) {
@@ -387,7 +387,7 @@ public abstract class ParametersProviderTest {
 		when(request.getParameterValues(paramName)).thenReturn(values);
 		String[] values1 = { paramName };
 		when(request.getParameterNames()).thenReturn(Collections.enumeration(Arrays.asList(values1)));
-		when(nameProvider.parameterNamesFor(method.getMethod())).thenReturn(new String[]{methodName});
+		when(nameProvider.parameterNamesFor(method.getMethod())).thenReturn(Arrays.asList(methodName));
 		when(request.getParameterMap()).thenReturn(Collections.singletonMap(paramName, values));
 
 	}

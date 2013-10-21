@@ -189,7 +189,7 @@ public class ParametersInstantiatorInterceptorTest {
 		
 		when(request.getHeader("X-MyApp-Password")).thenReturn("123");
 		when(parametersProvider.getParametersFor(controllerMethod, errors)).thenReturn(values);
-		when(parameterNameProvider.parameterNamesFor(method)).thenReturn(new String[]{"password"});
+		when(parameterNameProvider.parameterNamesFor(method)).thenReturn(Arrays.asList("password"));
 
 		instantiator.intercept(stack, controllerMethod, null);
 		
@@ -206,7 +206,7 @@ public class ParametersInstantiatorInterceptorTest {
 		ControllerMethod controllerMethod = DefaultControllerMethod.instanceFor(Component.class, method);
 		
 		when(parametersProvider.getParametersFor(controllerMethod, errors)).thenReturn(values);
-		when(parameterNameProvider.parameterNamesFor(method)).thenReturn(new String[]{"password"});
+		when(parameterNameProvider.parameterNamesFor(method)).thenReturn(Arrays.asList("password"));
 
 		instantiator.intercept(stack, controllerMethod, null);
 		
@@ -226,7 +226,7 @@ public class ParametersInstantiatorInterceptorTest {
 		when(request.getHeader("X-MyApp-Password")).thenReturn("123");
 		when(request.getHeader("X-MyApp-Token")).thenReturn("daek2321");
 		when(parametersProvider.getParametersFor(resouceMethod, errors)).thenReturn(values);
-		when(parameterNameProvider.parameterNamesFor(method)).thenReturn(new String[]{"user", "password", "token"});
+		when(parameterNameProvider.parameterNamesFor(method)).thenReturn(Arrays.asList("user", "password", "token"));
 
 		instantiator.intercept(stack, resouceMethod, null);
 		

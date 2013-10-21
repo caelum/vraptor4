@@ -25,6 +25,7 @@ import static org.mockito.Mockito.when;
 
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
+import java.util.Arrays;
 
 import org.junit.Before;
 import org.junit.Ignore;
@@ -62,7 +63,7 @@ public class RouteBuilderTest {
 	public void setUp() throws Exception {
 		MockitoAnnotations.initMocks(this);
 
-		when(provider.parameterNamesFor(any(Method.class))).thenReturn(new String[] { "abc", "def", "ghi" });
+		when(provider.parameterNamesFor(any(Method.class))).thenReturn(Arrays.asList("abc", "def", "ghi"));
 
 		method = new DefaultControllerMethod(new DefaultBeanClass(MyResource.class), MyResource.class.getMethod(
 				"method", String.class, Integer.class, BigDecimal.class));

@@ -20,6 +20,7 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.Map;
 
 import net.vidageek.mirror.dsl.Mirror;
@@ -68,7 +69,7 @@ public class DefaultTypeFinderTest {
 	public void shouldGetTypesCorrectly() throws Exception {
 
 		final Method method = new Mirror().on(AController.class).reflect().method("aMethod").withArgs(Bean.class, String.class);
-		when(provider.parameterNamesFor(method)).thenReturn(new String[] {"bean", "path"});
+		when(provider.parameterNamesFor(method)).thenReturn(Arrays.asList("bean", "path"));
 		
 		DefaultTypeFinder finder = new DefaultTypeFinder(provider);
 		Map<String, Class<?>> types = finder.getParameterTypes(method, new String[] {"bean.bean2.id", "path"});
@@ -80,7 +81,7 @@ public class DefaultTypeFinderTest {
 	public void shouldGetTypesCorrectlyOnInheritance() throws Exception {
 		final Method method = new Mirror().on(AController.class).reflect().method("otherMethod").withArgs(BeanExtended.class);
 		
-		when(provider.parameterNamesFor(method)).thenReturn(new String[] {"extended"});
+		when(provider.parameterNamesFor(method)).thenReturn(Arrays.asList("extended"));
 		
 		DefaultTypeFinder finder = new DefaultTypeFinder(provider);
 		Map<String, Class<?>> types = finder.getParameterTypes(method, new String[] {"extended.id"});

@@ -93,9 +93,9 @@ public class DefaultParametersControl implements ParametersControl {
 	}
 
 	@Override
-	public String fillUri(String[] paramNames, Object... paramValues) {
-		if (paramNames.length != paramValues.length) {
-			throw new IllegalArgumentException("paramNames must have the same length as paramValues. Names: " + Arrays.toString(paramNames) + " Values: " + Arrays.toString(paramValues));
+	public String fillUri(List<String> paramNames, Object... paramValues) {
+		if (paramNames.size() != paramValues.length) {
+			throw new IllegalArgumentException("paramNames must have the same length as paramValues. Names: " + paramNames + " Values: " + Arrays.toString(paramValues));
 		}
 
 		String[] splittedPatterns = StringUtils.extractParameters(originalPattern);
@@ -130,9 +130,9 @@ public class DefaultParametersControl implements ParametersControl {
 		}
 	}
 
-	private Object selectParam(String key, String[] paramNames, Object[] paramValues) {
-		for (int i = 0; i < paramNames.length; i++) {
-			if (key.matches("^" + paramNames[i] + "(\\..*|$)")) {
+	private Object selectParam(String key, List<String> paramNames, Object[] paramValues) {
+		for (int i = 0; i < paramNames.size(); i++) {
+			if (key.matches("^" + paramNames.get(i) + "(\\..*|$)")) {
 				return paramValues[i];
 			}
 		}

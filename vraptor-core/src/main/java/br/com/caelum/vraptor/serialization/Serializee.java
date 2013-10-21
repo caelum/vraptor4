@@ -17,7 +17,6 @@ import net.vidageek.mirror.dsl.Mirror;
 
 import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.Multimap;
-import com.google.common.collect.Sets;
 
 @Dependent
 public class Serializee {
@@ -120,7 +119,7 @@ public class Serializee {
 			throw new IllegalArgumentException("Field path '" + name + "' doesn't exists in " + type, e);
 		}
 		
-		Set<Class<?>> types = Sets.newHashSet();
+		Set<Class<?>> types = new HashSet<>();
 		while (type != Object.class) {
 			types.add(type);
 			type = type.getSuperclass();

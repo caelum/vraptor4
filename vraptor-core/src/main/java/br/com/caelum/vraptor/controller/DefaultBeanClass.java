@@ -18,6 +18,7 @@
 package br.com.caelum.vraptor.controller;
 
 import java.lang.annotation.Annotation;
+import java.util.Objects;
 
 public class DefaultBeanClass implements BeanClass {
 
@@ -35,16 +36,13 @@ public class DefaultBeanClass implements BeanClass {
 		if (!(obj instanceof DefaultBeanClass)) {
 			return false;
 		}
-		DefaultBeanClass controller = (DefaultBeanClass) obj;
-		if (this.type == null && controller.type != null) {
-			return false;
-		}
-		return this.type.equals(controller.type);
+		DefaultBeanClass other = (DefaultBeanClass) obj;
+		return Objects.equals(type, other.type);
 	}
 
 	@Override
 	public int hashCode() {
-		return type == null ? 0 : type.hashCode();
+		return Objects.hash(type);
 	}
 
 	@Override

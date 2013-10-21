@@ -38,8 +38,6 @@ import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.http.EncodingHandler;
 import br.com.caelum.vraptor.http.MutableRequest;
 
-import com.google.common.collect.ImmutableMap;
-
 public class DefaultParametersControlTest {
 
 	private @Mock MutableRequest request;
@@ -259,7 +257,7 @@ public class DefaultParametersControlTest {
 	@Test
 	public void whenParameterPatternsAreGivenShouldMatchAccordingToGivenPatterns() throws Exception {
 		ParametersControl control = new DefaultParametersControl("/any/{aParameter}/what",
-				new ImmutableMap.Builder<String, String>().put("aParameter", "aaa\\d{3}bbb").build(), converters, evaluator,encodingHandler);
+				Collections.singletonMap("aParameter", "aaa\\d{3}bbb"), converters, evaluator,encodingHandler);
 		assertFalse(control.matches("/any/ICantPutAnythingInHere/what"));
 		assertFalse(control.matches("/any/aaa12bbb/what"));
 		assertTrue(control.matches("/any/aaa123bbb/what"));
@@ -268,7 +266,7 @@ public class DefaultParametersControlTest {
 	@Test
 	public void shouldFillRequestWhenAPatternIsSpecified() throws Exception {
 		DefaultParametersControl control = new DefaultParametersControl("/project/{project.id}/build/",
-				new ImmutableMap.Builder<String, String>().put("project.id", "\\d+").build(), converters, evaluator,encodingHandler);
+				Collections.singletonMap("project.id", "\\d+"), converters, evaluator,encodingHandler);
 
 		String uri = "/project/15/build/";
 		assertThat(control.matches(uri), is(true));

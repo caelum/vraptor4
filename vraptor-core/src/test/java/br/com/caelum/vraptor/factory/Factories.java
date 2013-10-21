@@ -17,7 +17,7 @@ public class Factories {
 	
 	public static MethodExecutor createMethodExecutor(){
 		MethodHandleFactory methodHandleFactory = new MethodHandleFactory();
-		LRUCacheStore<Method, MethodHandle> cache = new LRUCacheStore<Method,MethodHandle>(500);
+		LRUCacheStore<Method, MethodHandle> cache = new LRUCacheStore<>(500);
 		return new DefaultMethodExecutor(cache,methodHandleFactory); 		
 	}	
 }

@@ -43,5 +43,4 @@ public interface StaticContentHandler {
 	void deferProcessingToContainer(FilterChain filterChain, HttpServletRequest request,
 			HttpServletResponse response) throws IOException, ServletException;
 
-
 }

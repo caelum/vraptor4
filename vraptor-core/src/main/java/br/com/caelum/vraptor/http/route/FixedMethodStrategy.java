@@ -17,11 +17,10 @@
 
 package br.com.caelum.vraptor.http.route;
 
-import static com.google.common.base.Objects.equal;
-
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.EnumSet;
+import java.util.Objects;
 import java.util.Set;
 
 import br.com.caelum.vraptor.controller.ControllerMethod;
@@ -110,12 +109,7 @@ public class FixedMethodStrategy implements Route {
 
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((methods == null) ? 0 : methods.hashCode());
-		result = prime * result + ((originalUri == null) ? 0 : originalUri.hashCode());
-		result = prime * result + ((controllerMethod == null) ? 0 : controllerMethod.hashCode());
-		return result;
+		return Objects.hash(methods, originalUri, controllerMethod);
 	}
 
 	@Override
@@ -130,6 +124,8 @@ public class FixedMethodStrategy implements Route {
 			return false;
 		}
 		FixedMethodStrategy other = (FixedMethodStrategy) obj;
-		return equal(methods, other.methods) && equal(originalUri, other.originalUri) && equal(controllerMethod,other.controllerMethod);
+		return Objects.equals(methods, other.methods) 
+				&& Objects.equals(originalUri, other.originalUri) 
+				&& Objects.equals(controllerMethod,other.controllerMethod);
 	}
 }

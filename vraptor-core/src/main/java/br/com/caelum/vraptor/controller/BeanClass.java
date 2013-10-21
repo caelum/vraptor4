@@ -28,12 +28,12 @@ import java.lang.annotation.Annotation;
  */
 public interface BeanClass {
 
-	public Class<?> getType();
+	Class<?> getType();
 
-	public Annotation[] getAnnotations();
+	Annotation[] getAnnotations();
 
-	public Package getPackage();
+	Package getPackage();
 
-	public abstract String getPackageName();
+	String getPackageName();
 
 }

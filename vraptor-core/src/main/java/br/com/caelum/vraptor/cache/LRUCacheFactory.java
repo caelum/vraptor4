@@ -9,9 +9,9 @@ public class LRUCacheFactory {
 	
 	@SuppressWarnings("rawtypes")	
 	@Produces
-	@br.com.caelum.vraptor.cache.LRU
+	@LRU
 	public LRUCacheStore getCache(InjectionPoint ip){
-		int capacity = ip.getAnnotated().getAnnotation(br.com.caelum.vraptor.cache.LRU.class).capacity();
+		int capacity = ip.getAnnotated().getAnnotation(LRU.class).capacity();
 		return new LRUCacheStore<>(capacity);
 	}
 }

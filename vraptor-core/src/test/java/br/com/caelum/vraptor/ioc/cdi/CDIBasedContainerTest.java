@@ -102,12 +102,10 @@ public class CDIBasedContainerTest extends GenericContainerTest {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
-	protected <T> T instanceFor(final Class<T> component,
-			Container container) {
+	protected <T> T instanceFor(final Class<T> component, Container container) {
 		T maybeAWeldProxy = container.instanceFor(component);
-		return (T)actualInstance(maybeAWeldProxy);
+		return component.cast(actualInstance(maybeAWeldProxy));
 	}
 
 	@Override

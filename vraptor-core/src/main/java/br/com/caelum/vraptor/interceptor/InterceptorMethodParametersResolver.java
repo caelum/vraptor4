@@ -2,6 +2,7 @@ package br.com.caelum.vraptor.interceptor;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -25,13 +26,11 @@ public class InterceptorMethodParametersResolver {
 		this.container = container;
 	}
 
-	@SuppressWarnings("unchecked")
 	public Object[] parametersFor(Method methodToInvoke) {
 		if (methodToInvoke == null)
 			return new Object[] {};
 		Class<?>[] parameterTypes = methodToInvoke.getParameterTypes();
-		@SuppressWarnings("rawtypes")
-		ArrayList parameters = new ArrayList();
+		List<Object> parameters = new ArrayList<>();
 		for (Class<?> parameterType : parameterTypes) {
 			parameters.add(container.instanceFor(parameterType));
 		}

@@ -32,7 +32,7 @@ public class ReplicatorOutjector implements Outjector {
 
 	private final Result result;
 	private final MethodInfo method;
-	private final ParameterNameProvider provider;
+	private final ParameterNameProvider nameProvider;
 
 	/** 
 	 * @deprecated CDI eyes only
@@ -42,17 +42,19 @@ public class ReplicatorOutjector implements Outjector {
 	}
 
 	@Inject
-	public ReplicatorOutjector(Result result, MethodInfo method, ParameterNameProvider provider) {
+	public ReplicatorOutjector(Result result, MethodInfo method, ParameterNameProvider nameProvider) {
 		this.result = result;
 		this.method = method;
-		this.provider = provider;
+		this.nameProvider = nameProvider;
 	}
 
 	@Override
 	public void outjectRequestMap() {
-		String[] names = provider.parameterNamesFor(method.getControllerMethod().getMethod());
-		for (int i = 0; i < names.length; i++) {
-				result.include(names[i], method.getParameters()[i]);
+		String[] names = nameProvider.parameterNamesFor(method.getControllerMethod().getMethod());
+		Object[] parameters = method.getParameters();
+
+		for(int i=0; i< names.length; i++) {
+			result.include(names[i], parameters[i]);
 		}
 	}
 }

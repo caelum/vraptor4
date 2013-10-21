@@ -103,6 +103,9 @@ public class DefaultPageResultTest {
 
 	@Test
 	public void shouldForwardToGivenURI() throws Exception {
+		when(request.getOriginalRequest()).thenReturn(request);
+		when(response.getOriginalResponse()).thenReturn(response);
+		
 		when(request.getRequestDispatcher("/any/url")).thenReturn(dispatcher);
 
 		view.forwardTo("/any/url");
@@ -112,6 +115,9 @@ public class DefaultPageResultTest {
 
 	@Test(expected=ResultException.class)
 	public void shouldThrowResultExceptionIfServletExceptionOccursWhileForwarding() throws Exception {
+		when(request.getOriginalRequest()).thenReturn(request);
+		when(response.getOriginalResponse()).thenReturn(response);
+		
 		when(request.getRequestDispatcher(anyString())).thenReturn(dispatcher);
 		doThrow(new ServletException()).when(dispatcher).forward(request, response);
 
@@ -120,6 +126,9 @@ public class DefaultPageResultTest {
 
 	@Test(expected=ResultException.class)
 	public void shouldThrowResultExceptionIfIOExceptionOccursWhileForwarding() throws Exception {
+		when(request.getOriginalRequest()).thenReturn(request);
+		when(response.getOriginalResponse()).thenReturn(response);
+		
 		when(request.getRequestDispatcher(anyString())).thenReturn(dispatcher);
 		doThrow(new IOException()).when(dispatcher).forward(request, response);
 
@@ -128,6 +137,9 @@ public class DefaultPageResultTest {
 
 	@Test
 	public void shouldAllowCustomPathResolverWhileForwardingView() throws ServletException, IOException {
+		when(request.getOriginalRequest()).thenReturn(request);
+		when(response.getOriginalResponse()).thenReturn(response);
+		
 		when(request.getRequestDispatcher("fixed")).thenReturn(dispatcher);
 
 		view.defaultView();
@@ -137,6 +149,9 @@ public class DefaultPageResultTest {
 
 	@Test(expected=ApplicationLogicException.class)
 	public void shouldThrowResultExceptionIfServletExceptionOccursWhileForwardingView() throws Exception {
+		when(request.getOriginalRequest()).thenReturn(request);
+		when(response.getOriginalResponse()).thenReturn(response);
+		
 		when(request.getRequestDispatcher(anyString())).thenReturn(dispatcher);
 		doThrow(new ServletException()).when(dispatcher).forward(request, response);
 
@@ -145,6 +160,9 @@ public class DefaultPageResultTest {
 
 	@Test(expected=ResultException.class)
 	public void shouldThrowResultExceptionIfIOExceptionOccursWhileForwardingView() throws Exception {
+		when(request.getOriginalRequest()).thenReturn(request);
+		when(response.getOriginalResponse()).thenReturn(response);
+		
 		when(request.getRequestDispatcher(anyString())).thenReturn(dispatcher);
 		doThrow(new IOException()).when(dispatcher).forward(request, response);
 
@@ -153,6 +171,9 @@ public class DefaultPageResultTest {
 
 	@Test
 	public void shouldAllowCustomPathResolverWhileIncluding() throws ServletException, IOException {
+		when(request.getOriginalRequest()).thenReturn(request);
+		when(response.getOriginalResponse()).thenReturn(response);
+		
 		when(request.getRequestDispatcher("fixed")).thenReturn(dispatcher);
 
 		view.include();
@@ -162,6 +183,9 @@ public class DefaultPageResultTest {
 
 	@Test(expected=ResultException.class)
 	public void shouldThrowResultExceptionIfServletExceptionOccursWhileIncluding() throws Exception {
+		when(request.getOriginalRequest()).thenReturn(request);
+		when(response.getOriginalResponse()).thenReturn(response);
+		
 		when(request.getRequestDispatcher(anyString())).thenReturn(dispatcher);
 		doThrow(new ServletException()).when(dispatcher).include(request, response);
 
@@ -170,6 +194,9 @@ public class DefaultPageResultTest {
 
 	@Test(expected=ResultException.class)
 	public void shouldThrowResultExceptionIfIOExceptionOccursWhileIncluding() throws Exception {
+		when(request.getOriginalRequest()).thenReturn(request);
+		when(response.getOriginalResponse()).thenReturn(response);
+		
 		when(request.getRequestDispatcher(anyString())).thenReturn(dispatcher);
 		doThrow(new IOException()).when(dispatcher).include(request, response);
 

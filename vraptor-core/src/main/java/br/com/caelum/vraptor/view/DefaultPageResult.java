@@ -74,7 +74,7 @@ public class DefaultPageResult implements PageResult {
 		String to = resolver.pathFor(requestInfo.getControllerMethod());
 		logger.debug("forwarding to {}", to);
 		try {
-			request.getRequestDispatcher(to).forward(request, response);
+			request.getRequestDispatcher(to).forward(request.getOriginalRequest(), response.getOriginalResponse());
 		} catch (ServletException e) {
 			throw new ApplicationLogicException(to + " raised an exception", e);
 		} catch (IOException e) {
@@ -87,7 +87,7 @@ public class DefaultPageResult implements PageResult {
 		try {
 			String to = resolver.pathFor(requestInfo.getControllerMethod());
 			logger.debug("including {}", to);
-			request.getRequestDispatcher(to).include(request, response);
+			request.getRequestDispatcher(to).include(request.getOriginalRequest(), response.getOriginalResponse());
 		} catch (ServletException e) {
 			throw new ResultException(e);
 		} catch (IOException e) {
@@ -115,7 +115,7 @@ public class DefaultPageResult implements PageResult {
 		logger.debug("forwarding to {}", url);
 
 		try {
-			request.getRequestDispatcher(url).forward(request, response);
+			request.getRequestDispatcher(url).forward(request.getOriginalRequest(), response.getOriginalResponse());
 		} catch (ServletException | IOException e) {
 			throw new ResultException(e);
 		}

@@ -118,6 +118,9 @@ public class DefaultLogicResultTest {
 
 	@Test
 	public void shouldIncludeReturnValueOnForward() throws Exception {
+		when(request.getOriginalRequest()).thenReturn(request);
+		when(response.getOriginalResponse()).thenReturn(response);
+		
 		givenDispatcherWillBeReturnedWhenRequested();
 		when(extractor.nameFor(String.class)).thenReturn("string");
 
@@ -129,6 +132,9 @@ public class DefaultLogicResultTest {
 
 	@Test
 	public void shouldExecuteTheLogicAndRedirectToItsViewOnForward() throws Exception {
+		when(request.getOriginalRequest()).thenReturn(request);
+		when(response.getOriginalResponse()).thenReturn(response);
+		
 		final MyComponent component = givenDispatcherWillBeReturnedWhenRequested();
 
 		assertThat(component.calls, is(0));
@@ -148,6 +154,9 @@ public class DefaultLogicResultTest {
 
 	@Test
 	public void shouldForwardToMethodsDefaultViewWhenResponseIsNotCommited() throws Exception {
+		when(request.getOriginalRequest()).thenReturn(request);
+		when(response.getOriginalResponse()).thenReturn(response);
+		
 		givenDispatcherWillBeReturnedWhenRequested();
 		when(response.isCommitted()).thenReturn(false);
 

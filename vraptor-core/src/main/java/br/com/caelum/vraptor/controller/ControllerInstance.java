@@ -7,8 +7,8 @@ package br.com.caelum.vraptor.controller;
  */
 public interface ControllerInstance {
 
-	public abstract Object getController();
+	Object getController();
 
-	public abstract BeanClass getBeanClass();
+	BeanClass getBeanClass();
 
 }

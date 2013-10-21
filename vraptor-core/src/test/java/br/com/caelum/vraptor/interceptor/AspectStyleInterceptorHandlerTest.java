@@ -242,11 +242,8 @@ public class AspectStyleInterceptorHandlerTest {
 		verify(interceptor).customAcceptsFailCallback();
 	}
 
-	@SuppressWarnings("unchecked")
-	private AspectStyleInterceptorHandler newAspectStyleInterceptorHandler(
-			Class<?> interceptorClass, Object... dependencies) {
-		@SuppressWarnings("rawtypes")
-		List<Object> deps = new ArrayList(Arrays.asList(dependencies));
+	private AspectStyleInterceptorHandler newAspectStyleInterceptorHandler(Class<?> interceptorClass, Object... dependencies) {
+		List<Object> deps = new ArrayList<>(Arrays.asList(dependencies));
 		boolean hasControllerInstance = false;
 		for (Object object : deps) {
 			if(ControllerInstance.class.isAssignableFrom(object.getClass())){

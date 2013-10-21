@@ -75,7 +75,7 @@ public class ParametersInstantiatorInterceptorTest {
 	@SuppressWarnings("unchecked")
 	public void setup() throws Exception {
 		MockitoAnnotations.initMocks(this);
-		when(request.getParameterNames()).thenReturn(Collections.enumeration(Collections.EMPTY_LIST));
+		when(request.getParameterNames()).thenReturn(Collections.<String> emptyEnumeration());
 
 		this.instantiator = new ParametersInstantiatorInterceptor(parametersProvider, parameterNameProvider, params, validator, request, flash);
 

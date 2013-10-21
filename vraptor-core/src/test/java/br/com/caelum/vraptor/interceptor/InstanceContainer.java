@@ -12,13 +12,12 @@ import br.com.caelum.vraptor.ioc.Container;
  * 
  * @author guilherme silveira
  */
-@SuppressWarnings("unchecked")
 public class InstanceContainer implements Container {
 	
 	public final List<Object> instances;
 	
 	public InstanceContainer(Object  ...objects) {
-		instances = new LinkedList(Arrays.asList(objects));
+		instances = new LinkedList<>(Arrays.asList(objects));
 	}
 
 	@Override
@@ -36,7 +35,7 @@ public class InstanceContainer implements Container {
 		T choosen = null;
 		for(Object o : instances) {
 			if(type.isAssignableFrom(o.getClass())) {
-				choosen = (T) o;
+				choosen = type.cast(o);
 			}
 		}
 		if(choosen!=null){

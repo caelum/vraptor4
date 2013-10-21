@@ -37,12 +37,12 @@ public interface Routes {
 	 * @param type	the controller type
 	 * @return
 	 */
-	public <T> T uriFor(final Class<T> type);
+	<T> T uriFor(final Class<T> type);
 
 	/**
 	 * Returns the last analyzed uri.
 	 */
-	public String getUri();
+	String getUri();
 
 	/**
 	 * Returns an enumset of allowed methods for this specific uri. 

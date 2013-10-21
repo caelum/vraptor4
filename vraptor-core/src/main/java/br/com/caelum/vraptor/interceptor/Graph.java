@@ -17,11 +17,11 @@ package br.com.caelum.vraptor.interceptor;
 
 import static com.google.common.base.Preconditions.checkState;
 import static com.google.common.collect.Iterables.get;
-import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Sets.difference;
 import static com.google.common.collect.Sets.newHashSet;
 import static com.google.common.collect.Sets.union;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.locks.Lock;
@@ -30,7 +30,6 @@ import java.util.concurrent.locks.ReentrantLock;
 import javax.enterprise.inject.Vetoed;
 
 import com.google.common.collect.LinkedHashMultimap;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
 
 /**
@@ -77,7 +76,7 @@ public class Graph<E> {
 	}
 
 	private List<E> orderTopologically() {
-		List<E> list = newArrayList();
+		List<E> list = new ArrayList<>();
 		addDummies();
 
 		while(!graph.keySet().isEmpty()) {
@@ -118,7 +117,7 @@ public class Graph<E> {
 
 	private List<E> findCycle() {
 		E node = get(graph.keySet(), 0);
-		List<E> cycle = Lists.newArrayList();
+		List<E> cycle = new ArrayList<>();
 		do {
 			cycle.add(node);
 		} while(!cycle.contains(node = get(graph.get(node), 0)));

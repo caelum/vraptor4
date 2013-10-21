@@ -396,7 +396,7 @@ public abstract class GenericContainerTest {
 
 				Converters converters = currentContainer.instanceFor(Converters.class);
 
-				final HashMap<Class, Class<?>> EXPECTED_CONVERTERS = new HashMap<Class, Class<?>>() {
+				final HashMap<Class<?>, Class<?>> EXPECTED_CONVERTERS = new HashMap<Class<?>, Class<?>>() {
 					{
 						put(int.class, PrimitiveIntConverter.class);
 						put(long.class, PrimitiveLongConverter.class);
@@ -419,7 +419,7 @@ public abstract class GenericContainerTest {
 					private static final long serialVersionUID = 8559316558416038474L;
 				};
 
-				for (Entry<Class, Class<?>> entry : EXPECTED_CONVERTERS.entrySet()) {
+				for (Entry<Class<?>, Class<?>> entry : EXPECTED_CONVERTERS.entrySet()) {
 					Converter<?> converter = converters.to((Class<?>) entry.getKey());
 					assertThat(converter, is(instanceOf(entry.getValue())));
 				}

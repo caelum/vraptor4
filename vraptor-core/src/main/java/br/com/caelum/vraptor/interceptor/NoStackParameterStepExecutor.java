@@ -10,8 +10,7 @@ public class NoStackParameterStepExecutor implements StepExecutor<Void> {
 	private StepInvoker stepInvoker;
 	private Method method;
 
-	public NoStackParameterStepExecutor(StepInvoker stepInvoker,
-			Method method) {
+	public NoStackParameterStepExecutor(StepInvoker stepInvoker, Method method) {
 		this.stepInvoker = stepInvoker;
 		this.method = method;
 	}

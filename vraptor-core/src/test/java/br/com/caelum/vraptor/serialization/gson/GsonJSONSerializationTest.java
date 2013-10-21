@@ -30,7 +30,6 @@ import br.com.caelum.vraptor.serialization.JSONSerialization;
 import br.com.caelum.vraptor.util.test.MockInstanceImpl;
 
 import com.google.common.collect.ForwardingCollection;
-import com.google.common.collect.Lists;
 import com.google.gson.ExclusionStrategy;
 import com.google.gson.FieldAttributes;
 import com.google.gson.JsonElement;
@@ -114,7 +113,7 @@ public class GsonJSONSerializationTest {
 			this.client = client;
 			this.price = price;
 			this.comments = comments;
-			this.items = Lists.newArrayList(items);
+			this.items = Arrays.asList(items);
 		}
 
 		public String nice() {

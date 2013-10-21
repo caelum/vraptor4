@@ -17,10 +17,10 @@
 package br.com.caelum.vraptor.view;
 
 import static com.google.common.collect.Collections2.transform;
-import static com.google.common.collect.Sets.newTreeSet;
 
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
@@ -131,7 +131,7 @@ public class DefaultAcceptHeaderToFormat implements AcceptHeaderToFormat {
 			return new String[] { types[0].split(";")[0] };
 		}
 
-		Set<MimeType> mimes = newTreeSet();
+		Set<MimeType> mimes = new TreeSet<>();
 		for (String string : types) {
 			mimes.add(convertToMimeType(string));
 		}

@@ -7,6 +7,6 @@ package br.com.caelum.vraptor.interceptor;
  */
 public interface SimpleInterceptorStack {
 
-	public abstract void next();
+	void next();
 
 }

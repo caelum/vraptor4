@@ -37,7 +37,7 @@ public class TopologicalSortedInterceptorRegistryTest {
 		set.register(A.class, B.class, C.class);
 		List<Class<?>> list = set.all();
 
-		assertThat(list, hasItems(A.class, B.class, C.class));
+		assertThat(list, hasItems(new Class<?>[] { A.class, B.class, C.class }));
 	}
 
 	@Test
@@ -117,14 +117,14 @@ public class TopologicalSortedInterceptorRegistryTest {
 
 	}
 
-	private <T> Matcher<List<T>> hasRelativeOrder(final T... elements) {
-		return new TypeSafeMatcher<List<T>>() {
+	private Matcher<List<Class<?>>> hasRelativeOrder(final Class<?>... elements) {
+		return new TypeSafeMatcher<List<Class<?>>>() {
 			@Override
-			protected void describeMismatchSafely(List<T> item, Description mismatchDescription) {
+			protected void describeMismatchSafely(List<Class<?>> item, Description mismatchDescription) {
 			}
 
 			@Override
-			protected boolean matchesSafely(List<T> item) {
+			protected boolean matchesSafely(List<Class<?>> item) {
 				for (int i = 0; i < elements.length - 1; i++) {
 					if (item.indexOf(elements[i]) > item.indexOf(elements[i+1])) {
 						return false;

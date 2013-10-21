@@ -89,7 +89,7 @@ public class XStreamXMLSerializationTest {
 			this.client = client;
 			this.price = price;
 			this.comments = comments;
-			this.items = Lists.newArrayList(items);;
+			this.items = Lists.newArrayList(items);
 		}
 		public String nice() {
 			return "nice output";

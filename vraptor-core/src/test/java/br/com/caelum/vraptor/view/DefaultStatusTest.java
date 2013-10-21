@@ -10,6 +10,7 @@ import static org.mockito.Mockito.when;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
 
@@ -39,10 +40,9 @@ import br.com.caelum.vraptor.util.test.MockInstanceImpl;
 import br.com.caelum.vraptor.util.test.MockSerializationResult;
 import br.com.caelum.vraptor.validator.I18nMessage;
 import br.com.caelum.vraptor.validator.Message;
-import br.com.caelum.vraptor.validator.SingletonResourceBundle;
 import br.com.caelum.vraptor.validator.SimpleMessage;
+import br.com.caelum.vraptor.validator.SingletonResourceBundle;
 
-import com.google.common.collect.Lists;
 import com.google.gson.JsonSerializer;
 
 public class DefaultStatusTest {
@@ -163,7 +163,7 @@ public class DefaultStatusTest {
 		MockSerializationResult result = new MockSerializationResult(null, xstreamBuilder, null);
 		DefaultStatus status = new DefaultStatus(response, result, config, new JavassistProxifier(), router);
 
-		status.badRequest(Lists.newArrayList(normal, i18ned));
+		status.badRequest(Arrays.asList(normal, i18ned));
 
 		String serialized = result.serializedResult();
 		assertThat(serialized, containsString("<message>The message</message>"));
@@ -197,7 +197,7 @@ public class DefaultStatusTest {
 		};
 		DefaultStatus status = new DefaultStatus(response, result, config, new JavassistProxifier(), router);
 
-		status.badRequest(Lists.newArrayList(normal, i18ned));
+		status.badRequest(Arrays.asList(normal, i18ned));
 
 		String serialized = result.serializedResult();
 		assertThat(serialized, containsString("\"message\":\"The message\""));

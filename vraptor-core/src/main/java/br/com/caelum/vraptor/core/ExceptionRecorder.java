@@ -38,12 +38,11 @@ import br.com.caelum.vraptor.proxy.SuperMethod;
  */
 public class ExceptionRecorder<T> implements MethodInvocation<T> {
 
+	private final List<ExceptionRecorderParameter> parameters = new ArrayList<>();
 	private final Proxifier proxifier;
-	private final List<ExceptionRecorderParameter> parameters;
 
 	public ExceptionRecorder(Proxifier proxifier) {
 		this.proxifier = proxifier;
-		parameters = new ArrayList<>();
 	}
 
 	@Override

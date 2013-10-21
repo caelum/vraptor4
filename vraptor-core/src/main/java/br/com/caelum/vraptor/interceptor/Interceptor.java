@@ -29,16 +29,6 @@ import br.com.caelum.vraptor.core.InterceptorStack;
  * constraint checks, database session (open session in view) opening and much
  * more.
  *
- * If you have an interceptor A which depends on an interceptor B, i.e, interceptor
- * B must be executed before interceptor A, use {@link InterceptorSequence}.
- *
- * If the {@link Interceptor#accepts(ControllerMethod)} method only depends on received
- * {@link ControllerMethod}, you can annotate the interceptor with @{@link Lazy}, so the
- * Interceptor will only be instantiated if the accepts returns true.
- * You should not use @Lazy if accepts is constant, or depends on any constructor parameter.
- *
- * @see InterceptorSequence
- * @see Lazy
  * @author Guilherme Silveira
  */
 public interface Interceptor {

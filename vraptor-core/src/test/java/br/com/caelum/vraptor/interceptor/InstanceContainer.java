@@ -18,7 +18,7 @@ public class InstanceContainer implements Container {
 	public final List<Object> instances;
 	
 	public InstanceContainer(Object  ...objects) {
-		instances = new LinkedList(Arrays.asList(objects));
+		instances = new LinkedList<>(Arrays.asList(objects));
 	}
 
 	@Override

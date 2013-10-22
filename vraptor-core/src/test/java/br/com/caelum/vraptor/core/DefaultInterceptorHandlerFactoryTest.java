@@ -7,6 +7,7 @@ import static org.junit.Assert.assertThat;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor.cache.CacheStore;
@@ -15,6 +16,7 @@ import br.com.caelum.vraptor.factory.Factories;
 import br.com.caelum.vraptor.interceptor.AspectStyleInterceptorHandler;
 import br.com.caelum.vraptor.interceptor.Interceptor;
 import br.com.caelum.vraptor.interceptor.InterceptorMethodParametersResolver;
+import br.com.caelum.vraptor.interceptor.SimpleInterceptorStack;
 import br.com.caelum.vraptor.interceptor.StepInvoker;
 import br.com.caelum.vraptor.ioc.Container;
 
@@ -26,6 +28,8 @@ public class DefaultInterceptorHandlerFactoryTest {
 
 	private StepInvoker stepInvoker = Factories.createStepInvoker();
 
+	private @Mock SimpleInterceptorStack simpleStack;
+
 	@Before
 	public void setUp() throws Exception {
 		MockitoAnnotations.initMocks(this);
@@ -33,7 +37,7 @@ public class DefaultInterceptorHandlerFactoryTest {
 		InterceptorMethodParametersResolver parametersResolver = new InterceptorMethodParametersResolver(container);
 
 		CacheStore<Class<?>, InterceptorHandler> cachedHandlers = new DefaultCacheStore<>();
-		factory = new DefaultInterceptorHandlerFactory(container, stepInvoker, parametersResolver, cachedHandlers, null);
+		factory = new DefaultInterceptorHandlerFactory(container, stepInvoker, parametersResolver, cachedHandlers, simpleStack);
 	}
 
 	static interface RegularInterceptor extends Interceptor {}

@@ -17,7 +17,6 @@ package br.com.caelum.vraptor.deserialization.xstream;
 
 import java.io.InputStream;
 import java.lang.reflect.Method;
-import java.util.List;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -83,7 +82,7 @@ public class XStreamXMLDeserializer implements Deserializer {
 
 		xStream.processAnnotations(types);
 
-		aliasParams(javaMethod, types, xStream);
+		aliasParams(javaMethod, xStream);
 		return xStream;
 	}
 
@@ -95,10 +94,9 @@ public class XStreamXMLDeserializer implements Deserializer {
 		}
 	}
 
-	private void aliasParams(Method method, Class<?>[] types, XStream deserializer) {
-		List<Parameter> names = provider.parametersFor(method);
-		for (int i = 0; i < names.size(); i++) {
-			deserializer.alias(names.get(i).getName(), types[i]);
+	private void aliasParams(Method method, XStream deserializer) {
+		for (Parameter param : provider.parametersFor(method)) {
+			deserializer.alias(param.getName(), param.getType());
 		}
 	}
 }

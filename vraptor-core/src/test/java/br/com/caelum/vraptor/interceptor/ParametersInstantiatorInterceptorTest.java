@@ -195,7 +195,7 @@ public class ParametersInstantiatorInterceptorTest {
 
 		instantiator.intercept(stack, controllerMethod, null);
 		
-		verify(request).setAttribute("password", "123");
+		verify(request).setParameter("password", "123");
 		verify(params).setParameters(values);
 		verify(stack).next(controllerMethod, null);
 		verify(validator).addAll(Collections.<Message>emptyList());
@@ -212,7 +212,7 @@ public class ParametersInstantiatorInterceptorTest {
 
 		instantiator.intercept(stack, controllerMethod, null);
 		
-		verify(request, never()).setAttribute(anyString(), anyString());
+		verify(request, never()).setParameter(anyString(), anyString());
 		verify(params).setParameters(values);
 		verify(stack).next(controllerMethod, null);
 		verify(validator).addAll(Collections.<Message>emptyList());
@@ -233,9 +233,9 @@ public class ParametersInstantiatorInterceptorTest {
 
 		instantiator.intercept(stack, resouceMethod, null);
 		
-		verify(request).setAttribute("user", "user");
-		verify(request).setAttribute("password", "123");
-		verify(request).setAttribute("token", "daek2321");
+		verify(request).setParameter("user", "user");
+		verify(request).setParameter("password", "123");
+		verify(request).setParameter("token", "daek2321");
 		verify(params).setParameters(values);
 		verify(stack).next(resouceMethod, null);
 		verify(validator).addAll(Collections.<Message>emptyList());

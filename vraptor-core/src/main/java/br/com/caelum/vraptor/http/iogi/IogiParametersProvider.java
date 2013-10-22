@@ -91,8 +91,7 @@ public class IogiParametersProvider implements ParametersProvider {
 		Method javaMethod = method.getMethod();
 		List<Target<Object>> targets = new ArrayList<>();
 
-		List<br.com.caelum.vraptor.http.Parameter> parameterNames = nameProvider.parametersFor(javaMethod);
-		for (br.com.caelum.vraptor.http.Parameter p : parameterNames) {
+		for (br.com.caelum.vraptor.http.Parameter p : nameProvider.parametersFor(javaMethod)) {
 			Type type = p.getParameterizedType();
 			if (type instanceof TypeVariable) {
 				type = extractType(method);

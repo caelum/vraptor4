@@ -30,6 +30,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.cache.CacheStore;
+import br.com.caelum.vraptor.cache.LRU;
 
 import com.thoughtworks.paranamer.AnnotationParanamer;
 import com.thoughtworks.paranamer.BytecodeReadingParanamer;
@@ -46,8 +47,9 @@ import com.thoughtworks.paranamer.Paranamer;
 public class ParanamerNameProvider implements ParameterNameProvider {
 	private static final Logger logger = LoggerFactory.getLogger(ParanamerNameProvider.class);
 
-	private final Paranamer info = new AnnotationParanamer(new BytecodeReadingParanamer());
+	@LRU(capacity = 50)
 	private final CacheStore<AccessibleObject, List<Parameter>> cache;
+	private final Paranamer info = new AnnotationParanamer(new BytecodeReadingParanamer());
 
 	protected ParanamerNameProvider() {
 		this(null);

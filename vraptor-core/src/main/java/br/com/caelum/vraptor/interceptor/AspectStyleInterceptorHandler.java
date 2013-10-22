@@ -5,6 +5,8 @@ import static org.slf4j.LoggerFactory.getLogger;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
+import javax.enterprise.inject.Vetoed;
+
 import net.vidageek.mirror.list.dsl.MirrorList;
 
 import org.slf4j.Logger;
@@ -19,6 +21,7 @@ import br.com.caelum.vraptor.core.InterceptorHandler;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.ioc.Container;
 
+@Vetoed
 public class AspectStyleInterceptorHandler implements InterceptorHandler {
 
 	private final StepInvoker stepInvoker;
@@ -31,13 +34,17 @@ public class AspectStyleInterceptorHandler implements InterceptorHandler {
 	private StepExecutor<?> around;
 	private StepExecutor<?> before;
 	private MirrorList<Method> interceptorMethods;
+	private SimpleInterceptorStack simpleInterceptorStack;
 
 	public AspectStyleInterceptorHandler(Class<?> interceptorClass, StepInvoker stepInvoker,
-			Container container, InterceptorMethodParametersResolver parametersResolver) {
+			Container container, InterceptorMethodParametersResolver parametersResolver,
+			SimpleInterceptorStack simpleInterceptorStack) {
+
 		this.interceptorClass = interceptorClass;
 		this.stepInvoker = stepInvoker;
 		this.container = container;
 		this.parametersResolver = parametersResolver;
+		this.simpleInterceptorStack = simpleInterceptorStack;
 		this.interceptorMethods = stepInvoker.findAllMethods(interceptorClass);
 		configure();
 	}
@@ -49,7 +56,7 @@ public class AspectStyleInterceptorHandler implements InterceptorHandler {
 		before = new NoStackParameterStepExecutor(stepInvoker, find(BeforeCall.class));
 
 		if(!after.accept()) after = new DoNothingStepExecutor();
-		if(!around.accept()) around = new StackNextExecutor(container);
+		if(!around.accept()) around = new StackNextExecutor(simpleInterceptorStack);
 		if(!before.accept()) before = new DoNothingStepExecutor();
 
 		CustomAcceptsExecutor customAcceptsExecutor = new CustomAcceptsExecutor(stepInvoker, container, find(CustomAcceptsFailCallback.class), interceptorClass);

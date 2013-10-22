@@ -17,28 +17,28 @@ public final class Parameter implements AnnotatedElement {
 
 	private final int index;
 	private final String name;
-	private final AccessibleObject delegate;
+	private final AccessibleObject holder;
 	private final Type parameterizedType;
 	private final Class<?> parameterType;
 	private final Annotation[] annotations;
 
-	public Parameter(int index, String name, AccessibleObject delegate) {
+	public Parameter(int index, String name, AccessibleObject holder) {
 		this.index = index;
 		this.name = name;
-		this.delegate = delegate;
+		this.holder = holder;
 
-		if (delegate instanceof Method) {
-			Method method = (Method) delegate;
+		if (holder instanceof Method) {
+			Method method = (Method) holder;
 			parameterizedType = method.getGenericParameterTypes()[index];
 			parameterType = method.getParameterTypes()[index];
 			annotations = method.getParameterAnnotations()[index];
-		} else if (delegate instanceof Constructor) {
-			Constructor<?> constr = (Constructor<?>) delegate;
+		} else if (holder instanceof Constructor) {
+			Constructor<?> constr = (Constructor<?>) holder;
 			parameterizedType = constr.getGenericParameterTypes()[index];
 			parameterType = constr.getParameterTypes()[index];
 			annotations = constr.getParameterAnnotations()[index];
 		} else {
-			throw new UnsupportedOperationException("We can only evaluate methods or constructors " + delegate.getClass());
+			throw new UnsupportedOperationException("We can only evaluate methods or constructors " + holder.getClass());
 		}
 	}
 
@@ -83,13 +83,13 @@ public final class Parameter implements AnnotatedElement {
 	public boolean equals(Object obj) {
 		if (obj instanceof Parameter) {
 			Parameter other = (Parameter) obj;
-			return other.index == index && other.delegate.equals(delegate);
+			return other.index == index && other.holder.equals(holder);
 		}
 		return false;
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(index, delegate);
+		return Objects.hash(index, holder);
 	}
 }

@@ -26,6 +26,6 @@ import java.util.List;
  */
 public interface ParameterNameProvider {
 
-	List<String> parameterNamesFor(AccessibleObject methodOrConstructor);
+	List<Parameter> parametersFor(AccessibleObject executable);
 
 }

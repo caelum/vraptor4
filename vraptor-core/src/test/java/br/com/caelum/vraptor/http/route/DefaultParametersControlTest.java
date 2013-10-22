@@ -17,6 +17,7 @@
 
 package br.com.caelum.vraptor.http.route;
 
+import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
@@ -26,7 +27,7 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.util.Arrays;
+import java.lang.reflect.Method;
 import java.util.Collections;
 
 import org.junit.Before;
@@ -38,6 +39,7 @@ import br.com.caelum.vraptor.TwoWayConverter;
 import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.http.EncodingHandler;
 import br.com.caelum.vraptor.http.MutableRequest;
+import br.com.caelum.vraptor.http.Parameter;
 
 public class DefaultParametersControlTest {
 
@@ -120,49 +122,65 @@ public class DefaultParametersControlTest {
 	}
 
 	@Test
-	public void shouldTranslateAsteriskAsEmpty() {
-		String uri = getDefaultParameterControlForUrl("/clients/.*").fillUri(Arrays.asList("client"), client(3L));
+	public void shouldTranslateAsteriskAsEmpty() throws Exception {
+		Method method = Controller.class.getDeclaredMethod("store", Client.class);
+		
+		String uri = getDefaultParameterControlForUrl("/clients/.*").fillUri(asList(new Parameter(0, "client", method)), client(3L));
 		assertThat(uri, is(equalTo("/clients/")));
 	}
 
 	@Test
-	public void shouldTranslatePatternArgs() {
-		String uri = getDefaultParameterControlForUrl("/clients/{client.id}").fillUri(Arrays.asList("client"), client(3L));
+	public void shouldTranslatePatternArgs() throws Exception {
+		Method method = Controller.class.getDeclaredMethod("store", Client.class);
+		
+		String uri = getDefaultParameterControlForUrl("/clients/{client.id}").fillUri(asList(new Parameter(0, "client", method)), client(3L));
 		assertThat(uri, is(equalTo("/clients/3")));
 	}
 
 	@Test
-	public void shouldTranslatePatternArgsWithRegex() {
-		String uri = getDefaultParameterControlForUrl("/clients/{id:[0-9]{1,}}").fillUri(Arrays.asList("id"), 30L);
+	public void shouldTranslatePatternArgsWithRegex() throws Exception {
+		Method method = Controller.class.getDeclaredMethod("show", Long.class);
+		String uri = getDefaultParameterControlForUrl("/clients/{id:[0-9]{1,}}").fillUri(asList(new Parameter(0, "id", method)), 30L);
 		assertThat(uri, is(equalTo("/clients/30")));
 	}
 
 	@Test
-	public void shouldTranslatePatternArgsWithMultipleRegexes() {
-		String uri = getDefaultParameterControlForUrl("/test/{hash1:[a-z0-9]{16}}{id}{hash2:[a-z0-9]{16}}/").fillUri(Arrays.asList("hash1", "id", "hash2"), "0123456789abcdef", "1234", "fedcba9876543210");
+	public void shouldTranslatePatternArgsWithMultipleRegexes() throws Exception {
+		Method method = Controller.class.getDeclaredMethod("mregex", String.class, String.class, String.class);
+		
+		String uri = getDefaultParameterControlForUrl("/test/{hash1:[a-z0-9]{16}}{id}{hash2:[a-z0-9]{16}}/")
+				.fillUri(asList(new Parameter(0, "hash1", method), new Parameter(1, "id", method), new Parameter(2, "hash2", method)), "0123456789abcdef", "1234", "fedcba9876543210");
 		assertThat(uri, is(equalTo("/test/0123456789abcdef1234fedcba9876543210/")));
 	}
 
 	@Test
-	public void shouldTranslatePatternArgNullAsEmpty() {
-		String uri = getDefaultParameterControlForUrl("/clients/{client.id}").fillUri(Arrays.asList("client"), client(null));
+	public void shouldTranslatePatternArgNullAsEmpty() throws Exception {
+		Method method = Controller.class.getDeclaredMethod("store", Client.class);
+		
+		String uri = getDefaultParameterControlForUrl("/clients/{client.id}")
+				.fillUri(asList(new Parameter(0, "client", method)), client(null));
 		assertThat(uri, is(equalTo("/clients/")));
 	}
 
 	@Test
-	public void shouldUseConverterIfItExists() {
+	public void shouldUseConverterIfItExists() throws Exception {
+		Method method = Controller.class.getDeclaredMethod("store", Client.class);
+		
 		when(converters.existsTwoWayFor(Client.class)).thenReturn(true);
 		when(converters.twoWayConverterFor(Client.class)).thenReturn(converter);
 		when(converter.convert(any(Client.class))).thenReturn("john");
 
-		String uri = getDefaultParameterControlForUrl("/clients/{client}").fillUri(Arrays.asList("client"), client(null));
+		String uri = getDefaultParameterControlForUrl("/clients/{client}")
+				.fillUri(asList(new Parameter(0, "client", method)), client(null));
 		assertThat(uri, is(equalTo("/clients/john")));
 
 	}
 
 	@Test
-	public void shouldTranslatePatternArgInternalNullAsEmpty() {
-		String uri = getDefaultParameterControlForUrl("/clients/{client.child.id}") .fillUri(Arrays.asList("client"), client(null));
+	public void shouldTranslatePatternArgInternalNullAsEmpty() throws Exception {
+		Method method = Controller.class.getDeclaredMethod("store", Client.class);
+		String uri = getDefaultParameterControlForUrl("/clients/{client.child.id}")
+				.fillUri(asList(new Parameter(0, "client", method)), client(null));
 		assertThat(uri, is(equalTo("/clients/")));
 	}
 
@@ -237,15 +255,17 @@ public class DefaultParametersControlTest {
 	public void fillURLWithGreedyParameters() throws SecurityException, NoSuchMethodException {
 		DefaultParametersControl control = getDefaultParameterControlForUrl("/clients/{pathToFile*}");
 
-		String filled = control.fillUri(Arrays.asList("pathToFile"), "my/path/to/file");
+		Method method = Controller.class.getDeclaredMethod("pathToFile", String.class);
+		String filled = control.fillUri(asList(new Parameter(0, "pathToFile", method)), "my/path/to/file");
 
 		assertThat(filled, is("/clients/my/path/to/file"));
 	}
 	@Test
 	public void fillURLWithoutGreedyParameters() throws SecurityException, NoSuchMethodException {
 		DefaultParametersControl control = getDefaultParameterControlForUrl("/clients/{pathToFile}");
+		Method method = Controller.class.getDeclaredMethod("pathToFile", String.class);
 
-		String filled = control.fillUri(Arrays.asList("pathToFile"), "my/path/to/file");
+		String filled = control.fillUri(asList(new Parameter(0, "pathToFile", method)), "my/path/to/file");
 
 		assertThat(filled, is("/clients/my/path/to/file"));
 	}
@@ -294,11 +314,19 @@ public class DefaultParametersControlTest {
 
 	@Test
 	public void shouldEncodeUriParameters() throws Exception {
+		Method method = Controller.class.getDeclaredMethod("lang", String.class);
 		when(encodingHandler.getEncoding()).thenReturn("UTF-8");
-		String uri = getDefaultParameterControlForUrl("/language/{lang}/about").fillUri(Arrays.asList("lang"), "c#");
+		String uri = getDefaultParameterControlForUrl("/language/{lang}/about")
+				.fillUri(asList(new Parameter(0, "lang", method)), "c#");
 		assertThat(uri, is(equalTo("/language/c%23/about")));
 	}
 
-
+	interface Controller {
+		void lang(String lang);
+		void show(Long id);
+		void store(Client client);
+		void pathToFile(String pathToFile);
+		void mregex(String hash1, String id, String hash2);
+	}
 
 }

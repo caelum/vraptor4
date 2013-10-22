@@ -22,6 +22,7 @@ import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.controller.DefaultControllerMethod;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.core.MethodInfo;
+import br.com.caelum.vraptor.http.Parameter;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.http.ParanamerNameProvider;
 import br.com.caelum.vraptor.util.test.MockValidator;
@@ -53,7 +54,7 @@ public class MethodValidatorTest {
 
 		Locale.setDefault(Locale.ENGLISH);
 
-		provider = new ParanamerNameProvider(new DefaultCacheStore<AccessibleObject, List<String>>());
+		provider = new ParanamerNameProvider(new DefaultCacheStore<AccessibleObject, List<Parameter>>());
 		
 		validatorFactory = javax.validation.Validation.buildDefaultValidatorFactory();
 

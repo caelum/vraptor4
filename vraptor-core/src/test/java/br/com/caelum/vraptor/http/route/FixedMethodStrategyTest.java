@@ -41,6 +41,7 @@ import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.controller.DefaultControllerMethod;
 import br.com.caelum.vraptor.controller.HttpMethod;
 import br.com.caelum.vraptor.http.MutableRequest;
+import br.com.caelum.vraptor.http.Parameter;
 import br.com.caelum.vraptor.interceptor.VRaptorMatchers;
 
 import com.google.common.collect.Sets;
@@ -64,7 +65,7 @@ public class FixedMethodStrategyTest {
 	@Test
 	public void canTranslate() {
 		FixedMethodStrategy strategy = new FixedMethodStrategy("abc", list,
-				methods(HttpMethod.POST), control, 0, Collections.<String> emptyList());
+				methods(HttpMethod.POST), control, 0, Collections.<Parameter> emptyList());
 		when(control.matches("/clients/add")).thenReturn(true);
 		ControllerMethod match = strategy.controllerMethod(request, "/clients/add");
 		assertThat(match, is(VRaptorMatchers.controllerMethod(method("list"))));
@@ -73,7 +74,7 @@ public class FixedMethodStrategyTest {
 
 	@Test
 	public void areEquals() throws Exception {
-		List<String> emptyParams = Collections.emptyList();
+		List<Parameter> emptyParams = Collections.emptyList();
 		FixedMethodStrategy first = new FixedMethodStrategy("/uri", list, get, control, 0, emptyParams);
 		FixedMethodStrategy second = new FixedMethodStrategy("/uri", list, get, control, 2, emptyParams);
 		FixedMethodStrategy third = new FixedMethodStrategy("/different", list, get, control, 2, emptyParams);

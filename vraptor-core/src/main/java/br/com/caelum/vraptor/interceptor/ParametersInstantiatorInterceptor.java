@@ -37,6 +37,7 @@ import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.http.MutableRequest;
+import br.com.caelum.vraptor.http.Parameter;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.http.ParametersProvider;
 import br.com.caelum.vraptor.validator.Message;
@@ -104,22 +105,18 @@ public class ParametersInstantiatorInterceptor implements Interceptor {
 		stack.next(method, controllerInstance);
 	}
 
-	private void addHeaderParametersToAttribute(ControllerMethod method) {
-		Method trueMethod = method.getMethod();
+	private void addHeaderParametersToAttribute(ControllerMethod controllerMethod) {
+		Method method = controllerMethod.getMethod();
 
-		List<String> parameters = parameterNameProvider.parameterNamesFor(trueMethod);
-
-		Annotation[][] annotations = trueMethod.getParameterAnnotations();
-		for (int i = 0; i < annotations.length; i++) {
-			for (Annotation annotation : annotations[i]) {
+		for (Parameter param : parameterNameProvider.parametersFor(method)) {
+			for (Annotation annotation : param.getAnnotations()) {
 				if (annotation instanceof HeaderParam) {
 					HeaderParam headerParam = (HeaderParam) annotation;
 					String value = request.getHeader(headerParam.value());
-					request.setAttribute(parameters.get(i), value);
+					request.setAttribute(param.getName(), value);
 				}
 			}
 		}
-
 	}
 
 	private void fixParameter(String name) {

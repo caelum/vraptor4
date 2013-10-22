@@ -16,7 +16,10 @@
  */
 package br.com.caelum.vraptor.http;
 
+import static java.util.Collections.unmodifiableList;
+
 import java.lang.reflect.AccessibleObject;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
 
@@ -28,7 +31,6 @@ import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.cache.CacheStore;
 
-import com.google.common.collect.ImmutableList;
 import com.thoughtworks.paranamer.AnnotationParanamer;
 import com.thoughtworks.paranamer.BytecodeReadingParanamer;
 import com.thoughtworks.paranamer.ParameterNamesNotFoundException;
@@ -45,27 +47,32 @@ public class ParanamerNameProvider implements ParameterNameProvider {
 	private static final Logger logger = LoggerFactory.getLogger(ParanamerNameProvider.class);
 
 	private final Paranamer info = new AnnotationParanamer(new BytecodeReadingParanamer());
-	private final CacheStore<AccessibleObject, List<String>> cache;
+	private final CacheStore<AccessibleObject, List<Parameter>> cache;
 
 	protected ParanamerNameProvider() {
 		this(null);
 	}
 
 	@Inject
-	public ParanamerNameProvider(CacheStore<AccessibleObject, List<String>> cache) {
+	public ParanamerNameProvider(CacheStore<AccessibleObject, List<Parameter>> cache) {
 		this.cache = cache;
 	}
 
 	@Override
-	public List<String> parameterNamesFor(final AccessibleObject executable) {
-		return cache.fetch(executable, new Callable<List<String>>() {
+	public List<Parameter> parametersFor(final AccessibleObject executable) {
+		return cache.fetch(executable, new Callable<List<Parameter>>() {
 			@Override
-			public List<String> call() throws Exception {
+			public List<Parameter> call() throws Exception {
 				try {
+					List<Parameter> params = new ArrayList<>();
 					String[] names = info.lookupParameterNames(executable);
 					logger.debug("Found parameter names with paranamer for {} as {}", executable, (Object) names);
+					
+					for (int i = 0; i < names.length; i++) {
+						params.add(new Parameter(i, names[i], executable));
+					}
 
-					return ImmutableList.copyOf(names);
+					return unmodifiableList(params);
 				} catch (ParameterNamesNotFoundException e) {
 					throw new IllegalStateException("Paranamer were not able to find your parameter names for " + executable
 							+ "You must compile your code with debug information (javac -g), or using @Named on "

@@ -25,6 +25,7 @@ import javax.inject.Inject;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.deserialization.Deserializer;
 import br.com.caelum.vraptor.deserialization.Deserializes;
+import br.com.caelum.vraptor.http.Parameter;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.serialization.xstream.XStreamBuilder;
 
@@ -95,10 +96,9 @@ public class XStreamXMLDeserializer implements Deserializer {
 	}
 
 	private void aliasParams(Method method, Class<?>[] types, XStream deserializer) {
-		List<String> names = provider.parameterNamesFor(method);
+		List<Parameter> names = provider.parametersFor(method);
 		for (int i = 0; i < names.size(); i++) {
-			deserializer.alias(names.get(i), types[i]);
+			deserializer.alias(names.get(i).getName(), types[i]);
 		}
 	}
-
 }

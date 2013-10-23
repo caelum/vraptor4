@@ -17,7 +17,9 @@ public class DefaultCacheStore<K,V> implements CacheStore<K,V> {
 	public V fetch(K key, Callable<V> valueProvider) {
 		if (!cache.containsKey(key)){
 			try {
-				cache.put(key, valueProvider.call());
+				V value = valueProvider.call();
+				cache.put(key, value);
+				return value;
 			} catch (Exception e) {
 				Throwables.propagateIfPossible(e);
 				throw new CacheException("Error computing the value", e);

@@ -19,8 +19,6 @@ package br.com.caelum.vraptor.interceptor;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
@@ -106,15 +104,11 @@ public class ParametersInstantiatorInterceptor implements Interceptor {
 	}
 
 	private void addHeaderParametersToAttribute(ControllerMethod controllerMethod) {
-		Method method = controllerMethod.getMethod();
-
-		for (Parameter param : parameterNameProvider.parametersFor(method)) {
-			for (Annotation annotation : param.getAnnotations()) {
-				if (annotation instanceof HeaderParam) {
-					HeaderParam headerParam = (HeaderParam) annotation;
-					String value = request.getHeader(headerParam.value());
-					request.setAttribute(param.getName(), value);
-				}
+		for (Parameter param : parameterNameProvider.parametersFor(controllerMethod.getMethod())) {
+			HeaderParam headerParam = param.getAnnotation(HeaderParam.class);
+			if (headerParam != null) {
+				String value = request.getHeader(headerParam.value());
+				request.setParameter(param.getName(), value);
 			}
 		}
 	}

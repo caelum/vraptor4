@@ -45,7 +45,8 @@ public class DefaultExceptionMapper implements ExceptionMapper {
 
 	private static final Logger logger = LoggerFactory.getLogger(DefaultExceptionMapper.class);
 
-	private final Map<Class<? extends Exception>, ExceptionRecorder<Result>> exceptions = new LinkedHashMap<>();
+	private Map<Class<? extends Exception>, ExceptionRecorder<Result>> exceptions;
+
 	private final Proxifier proxifier;
 	private final MethodExecutor executor;
 
@@ -64,6 +65,10 @@ public class DefaultExceptionMapper implements ExceptionMapper {
 	@Override
 	public Result record(Class<? extends Exception> exception) {
 		checkNotNull(exception, "Exception cannot be null.");
+
+		if (exceptions == null) {
+			exceptions = new LinkedHashMap<>();
+		}
 
 		ExceptionRecorder<Result> instance = new ExceptionRecorder<>(proxifier, executor);
 		exceptions.put(exception, instance);

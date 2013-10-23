@@ -16,6 +16,7 @@
  */
 package br.com.caelum.vraptor.http.route;
 
+import static java.util.Arrays.asList;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
@@ -37,6 +38,7 @@ import br.com.caelum.vraptor.controller.DefaultBeanClass;
 import br.com.caelum.vraptor.controller.DefaultControllerMethod;
 import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.http.EncodingHandler;
+import br.com.caelum.vraptor.http.Parameter;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.proxy.JavassistProxifier;
 import br.com.caelum.vraptor.proxy.Proxifier;
@@ -62,13 +64,12 @@ public class RouteBuilderTest {
 	public void setUp() throws Exception {
 		MockitoAnnotations.initMocks(this);
 
-		when(provider.parameterNamesFor(any(Method.class))).thenReturn(new String[] { "abc", "def", "ghi" });
-
 		method = new DefaultControllerMethod(new DefaultBeanClass(MyResource.class), MyResource.class.getMethod(
 				"method", String.class, Integer.class, BigDecimal.class));
+		when(provider.parametersFor(any(Method.class)))
+			.thenReturn(asList(new Parameter(0, "abc", method.getMethod()), new Parameter(1, "def", method.getMethod()), new Parameter(2, "ghi", method.getMethod())));
 
 		proxifier = new JavassistProxifier();
-
 		typeFinder = new DefaultTypeFinder(provider);
 	}
 
@@ -199,8 +200,9 @@ public class RouteBuilderTest {
 		builder = newBuilder("/my/{abc.def*}");
 
 		Method method = AbcResource.class.getDeclaredMethods()[0];
+		when(provider.parametersFor(method)).thenReturn(asList(new Parameter(0, "abc", method)));
 		builder.is(AbcResource.class, method);
-
+		
 		Route route = builder.build();
 
 		assertTrue(route.canHandle("/my/troublesome/uri"));

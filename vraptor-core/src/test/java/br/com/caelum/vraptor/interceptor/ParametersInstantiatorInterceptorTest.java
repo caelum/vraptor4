@@ -17,6 +17,7 @@
 
 package br.com.caelum.vraptor.interceptor;
 
+import static java.util.Arrays.asList;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.anyString;
@@ -47,6 +48,7 @@ import br.com.caelum.vraptor.controller.DefaultControllerMethod;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.http.MutableRequest;
+import br.com.caelum.vraptor.http.Parameter;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.http.ParametersProvider;
 import br.com.caelum.vraptor.validator.Message;
@@ -189,7 +191,7 @@ public class ParametersInstantiatorInterceptorTest {
 		
 		when(request.getHeader("X-MyApp-Password")).thenReturn("123");
 		when(parametersProvider.getParametersFor(controllerMethod, errors)).thenReturn(values);
-		when(parameterNameProvider.parameterNamesFor(method)).thenReturn(new String[]{"password"});
+		when(parameterNameProvider.parametersFor(method)).thenReturn(asList(new Parameter(0, "password", method)));
 
 		instantiator.intercept(stack, controllerMethod, null);
 		
@@ -206,7 +208,7 @@ public class ParametersInstantiatorInterceptorTest {
 		ControllerMethod controllerMethod = DefaultControllerMethod.instanceFor(Component.class, method);
 		
 		when(parametersProvider.getParametersFor(controllerMethod, errors)).thenReturn(values);
-		when(parameterNameProvider.parameterNamesFor(method)).thenReturn(new String[]{"password"});
+		when(parameterNameProvider.parametersFor(method)).thenReturn(Collections.<Parameter> emptyList());
 
 		instantiator.intercept(stack, controllerMethod, null);
 		
@@ -226,7 +228,8 @@ public class ParametersInstantiatorInterceptorTest {
 		when(request.getHeader("X-MyApp-Password")).thenReturn("123");
 		when(request.getHeader("X-MyApp-Token")).thenReturn("daek2321");
 		when(parametersProvider.getParametersFor(resouceMethod, errors)).thenReturn(values);
-		when(parameterNameProvider.parameterNamesFor(method)).thenReturn(new String[]{"user", "password", "token"});
+		when(parameterNameProvider.parametersFor(method)).thenReturn(asList(
+			new Parameter(0, "user", method), new Parameter(1, "password", method), new Parameter(2, "token", method)));
 
 		instantiator.intercept(stack, resouceMethod, null);
 		

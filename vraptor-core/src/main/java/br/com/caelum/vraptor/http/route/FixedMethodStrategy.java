@@ -20,12 +20,14 @@ package br.com.caelum.vraptor.http.route;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.EnumSet;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.controller.HttpMethod;
 import br.com.caelum.vraptor.http.MutableRequest;
+import br.com.caelum.vraptor.http.Parameter;
 import br.com.caelum.vraptor.util.Stringnifier;
 
 /**
@@ -36,19 +38,14 @@ import br.com.caelum.vraptor.util.Stringnifier;
 public class FixedMethodStrategy implements Route {
 
 	private final ControllerMethod controllerMethod;
-
 	private final EnumSet<HttpMethod> methods;
-
 	private final ParametersControl parameters;
-
 	private final int priority;
-
 	private final String originalUri;
-
-	private final String[] parameterNames;
+	private final List<Parameter> parameterNames;
 
 	public FixedMethodStrategy(String originalUri, ControllerMethod method, Set<HttpMethod> methods,
-			ParametersControl control, int priority, String[] parameterNames) {
+			ParametersControl control, int priority, List<Parameter> parameterNames) {
 		this.originalUri = originalUri;
 		this.parameterNames = parameterNames;
 		this.methods = methods.isEmpty() ? EnumSet.allOf(HttpMethod.class) : EnumSet.copyOf(methods);

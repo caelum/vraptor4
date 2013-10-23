@@ -16,6 +16,7 @@
  */
 package br.com.caelum.vraptor.http.route;
 
+import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 
@@ -29,6 +30,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import br.com.caelum.vraptor.http.Parameter;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 
 public class DefaultTypeFinderTest {
@@ -68,7 +70,8 @@ public class DefaultTypeFinderTest {
 	public void shouldGetTypesCorrectly() throws Exception {
 
 		final Method method = new Mirror().on(AController.class).reflect().method("aMethod").withArgs(Bean.class, String.class);
-		when(provider.parameterNamesFor(method)).thenReturn(new String[] {"bean", "path"});
+		when(provider.parametersFor(method))
+			.thenReturn(asList(new Parameter(0, "bean", method), new Parameter(1, "path", method)));
 		
 		DefaultTypeFinder finder = new DefaultTypeFinder(provider);
 		Map<String, Class<?>> types = finder.getParameterTypes(method, new String[] {"bean.bean2.id", "path"});
@@ -80,7 +83,7 @@ public class DefaultTypeFinderTest {
 	public void shouldGetTypesCorrectlyOnInheritance() throws Exception {
 		final Method method = new Mirror().on(AController.class).reflect().method("otherMethod").withArgs(BeanExtended.class);
 		
-		when(provider.parameterNamesFor(method)).thenReturn(new String[] {"extended"});
+		when(provider.parametersFor(method)).thenReturn(asList(new Parameter(0, "extended", method)));
 		
 		DefaultTypeFinder finder = new DefaultTypeFinder(provider);
 		Map<String, Class<?>> types = finder.getParameterTypes(method, new String[] {"extended.id"});

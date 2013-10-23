@@ -15,11 +15,14 @@
  */
 package br.com.caelum.vraptor.validator;
 
+import java.util.List;
+
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.core.MethodInfo;
+import br.com.caelum.vraptor.http.Parameter;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 
 /**
@@ -50,11 +53,11 @@ public class ReplicatorOutjector implements Outjector {
 
 	@Override
 	public void outjectRequestMap() {
-		String[] names = nameProvider.parameterNamesFor(method.getControllerMethod().getMethod());
-		Object[] parameters = method.getParameters();
+		List<Parameter> params = nameProvider.parametersFor(method.getControllerMethod().getMethod());
+		Object[] values = method.getParameters();
 
-		for(int i=0; i< names.length; i++) {
-			result.include(names[i], parameters[i]);
+		for (int i = 0; i < params.size(); i++) {
+			result.include(params.get(i).getName(), values[i]);
 		}
 	}
 }

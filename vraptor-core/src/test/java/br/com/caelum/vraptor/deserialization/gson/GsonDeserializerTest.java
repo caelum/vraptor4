@@ -1,5 +1,6 @@
 package br.com.caelum.vraptor.deserialization.gson;
 
+import static java.util.Arrays.asList;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
@@ -29,6 +30,7 @@ import br.com.caelum.vraptor.controller.BeanClass;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.controller.DefaultBeanClass;
 import br.com.caelum.vraptor.controller.DefaultControllerMethod;
+import br.com.caelum.vraptor.http.Parameter;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.util.test.MockInstanceImpl;
 import br.com.caelum.vraptor.view.GenericController;
@@ -110,7 +112,8 @@ public class GsonDeserializerTest {
 				"{'name':'name3','age':3}" + 
 			"]").getBytes());
  
-		when(provider.parameterNamesFor(listDog.getMethod())).thenReturn(new String[] { "dogs" });
+		when(provider.parametersFor(listDog.getMethod()))
+			.thenReturn(asList(new Parameter(0, "dogs", listDog.getMethod())));
 
 		Object[] deserialized = deserializer.deserialize(stream, listDog);
 		List<Dog>  dogs = (List<Dog>) deserialized[0]; 
@@ -130,7 +133,8 @@ public class GsonDeserializerTest {
 				"{'name':'name3','age':3}" + 
 			"]}").getBytes());
  
-		when(provider.parameterNamesFor(listDog.getMethod())).thenReturn(new String[] { "dogs" });
+		when(provider.parametersFor(listDog.getMethod())).thenReturn(
+			asList(new Parameter(0, "dogs", listDog.getMethod())));
 
 		Object[] deserialized = deserializer.deserialize(stream, listDog);
 		List<Dog>  dogs = (List<Dog>) deserialized[0]; 
@@ -150,7 +154,8 @@ public class GsonDeserializerTest {
 	public void shouldBeAbleToDeserializeADog() throws Exception {
 		InputStream stream = new ByteArrayInputStream("{'dog':{'name':'Brutus','age':7}}".getBytes());
 
-		when(provider.parameterNamesFor(bark.getMethod())).thenReturn(new String[] { "dog" });
+		when(provider.parametersFor(bark.getMethod()))
+			.thenReturn(asList(new Parameter(0, "dog", bark.getMethod())));
 
 		Object[] deserialized = deserializer.deserialize(stream, bark);
 
@@ -165,7 +170,8 @@ public class GsonDeserializerTest {
 	public void shouldBeAbleToDeserializeADogWithoutRoot() throws Exception {
 		InputStream stream = new ByteArrayInputStream("{'name':'Brutus','age':7}".getBytes());
 
-		when(provider.parameterNamesFor(bark.getMethod())).thenReturn(new String[] { "dog" });
+		when(provider.parametersFor(bark.getMethod()))
+			.thenReturn(asList(new Parameter(0, "dog", bark.getMethod())));
 
 		Object[] deserialized = deserializer.deserialize(stream, bark);
 
@@ -185,8 +191,8 @@ public class GsonDeserializerTest {
 
 		InputStream stream = new ByteArrayInputStream("{'dog':{'name':'Renan Reis','age':'0'}}".getBytes());
 
-		when(provider.parameterNamesFor(bark.getMethod())).thenReturn(new String[] { "dog" });
-		when(provider.parameterNamesFor(bark.getMethod())).thenReturn(new String[] { "dog" });
+		when(provider.parametersFor(bark.getMethod()))
+			.thenReturn(asList(new Parameter(0, "dog", bark.getMethod())));
 
 		Object[] deserialized = deserializer.deserialize(stream, bark);
 
@@ -201,7 +207,8 @@ public class GsonDeserializerTest {
 	public void shouldBeAbleToDeserializeADogWhenMethodHasMoreThanOneArgument() throws Exception {
 		InputStream stream = new ByteArrayInputStream("{'dog':{'name':'Brutus','age':7}}".getBytes());
 
-		when(provider.parameterNamesFor(jump.getMethod())).thenReturn(new String[] { "dog", "times" });
+		when(provider.parametersFor(jump.getMethod()))
+			.thenReturn(asList(new Parameter(0, "dog", jump.getMethod()), new Parameter(1, "times", jump.getMethod())));
 
 		Object[] deserialized = deserializer.deserialize(stream, jump);
 
@@ -216,7 +223,8 @@ public class GsonDeserializerTest {
 	public void shouldBeAbleToDeserializeADogWhenMethodHasMoreThanOneArgumentAndTheXmlIsTheLastOne() throws Exception {
 		InputStream stream = new ByteArrayInputStream("{'dog':{'name':'Brutus','age':7}}".getBytes());
 
-		when(provider.parameterNamesFor(dropDead.getMethod())).thenReturn(new String[] { "times", "dog" });
+		when(provider.parametersFor(dropDead.getMethod()))
+			.thenReturn(asList(new Parameter(0, "times", jump.getMethod()), new Parameter(1, "dog", jump.getMethod())));
 
 		Object[] deserialized = deserializer.deserialize(stream, dropDead);
 
@@ -231,7 +239,8 @@ public class GsonDeserializerTest {
 	public void shouldBeAbleToDeserializeADogNamedDifferently() throws Exception {
 		InputStream stream = new ByteArrayInputStream("{'pet':{'name':'Brutus','age':7}}".getBytes());
 
-		when(provider.parameterNamesFor(bark.getMethod())).thenReturn(new String[] { "pet" });
+		when(provider.parametersFor(bark.getMethod()))
+			.thenReturn(asList(new Parameter(0, "pet", bark.getMethod())));
 
 		Object[] deserialized = deserializer.deserialize(stream, bark);
 
@@ -245,7 +254,9 @@ public class GsonDeserializerTest {
 	@Test
 	public void shouldHonorRequestHeaderAcceptCharset() throws Exception {
 		InputStream stream = new ByteArrayInputStream("{'pet':{'name':'Ã§'}}".getBytes("ISO-8859-1"));
-		when(provider.parameterNamesFor(bark.getMethod())).thenReturn(new String[] { "pet" });
+		
+		when(provider.parametersFor(bark.getMethod()))
+			.thenReturn(asList(new Parameter(0, "pet", bark.getMethod())));
 
 		when(request.getHeader("Accept-Charset")).thenReturn("UTF-8,*;q=0.5");
 		Object[] deserialized = deserializer.deserialize(stream, bark);
@@ -261,7 +272,8 @@ public class GsonDeserializerTest {
 	@Test
 	public void whenNoCharsetHeaderIsFoundThanAssumeItIsUTF8() throws Exception {
 		InputStream stream = new ByteArrayInputStream("{'pet':{'name':'Ã§'}}".getBytes("ISO-8859-1"));
-		when(provider.parameterNamesFor(bark.getMethod())).thenReturn(new String[] { "pet" });
+		when(provider.parametersFor(bark.getMethod()))
+			.thenReturn(asList(new Parameter(0, "pet", bark.getMethod())));
 
 		when(request.getHeader("Accept-Charset")).thenReturn(null);
 		Object[] deserialized = deserializer.deserialize(stream, bark);
@@ -277,7 +289,9 @@ public class GsonDeserializerTest {
 	@Test
 	public void shouldByPassDeserializationWhenHasNoContent() {
 		InputStream stream = new ByteArrayInputStream("".getBytes());
-		when(provider.parameterNamesFor(bark.getMethod())).thenReturn(new String[] { "pet" });
+
+		when(provider.parametersFor(bark.getMethod()))
+			.thenReturn(asList(new Parameter(0, "pet", bark.getMethod())));
 
 		Object[] deserialized = deserializer.deserialize(stream, bark);
 
@@ -290,11 +304,11 @@ public class GsonDeserializerTest {
 			throws Exception {
 		InputStream stream = new ByteArrayInputStream("{'name':'Brutus','age':7}".getBytes());
 
-		when(provider.parameterNamesFor(jump.getMethod())).thenReturn(new String[] { "dog", "times" });
+		when(provider.parametersFor(jump.getMethod()))
+			.thenReturn(asList(new Parameter(0, "dog", jump.getMethod()), new Parameter(1, "times", jump.getMethod())));
 
 		Object[] deserialized = deserializer.deserialize(stream, jump);
 
-		assertThat(deserialized.length, is(2));
 		assertThat(deserialized[0], is(instanceOf(Dog.class)));
 		Dog dog = (Dog) deserialized[0];
 		assertThat(dog.name, is("Brutus"));
@@ -314,7 +328,9 @@ public class GsonDeserializerTest {
 		Method method = new Mirror().on(GenericController.class).reflect()
 				.method("method").withAnyArgs();
 		ControllerMethod resource = new DefaultControllerMethod(resourceClass, method);
-		when(provider.parameterNamesFor(resource.getMethod())).thenReturn(new String[] { "entity" });
+		
+		when(provider.parametersFor(resource.getMethod()))
+			.thenReturn(asList(new Parameter(0, "entity", resource.getMethod())));
 
 		Object[] deserialized = deserializer.deserialize(stream, resource);
 
@@ -331,7 +347,9 @@ public class GsonDeserializerTest {
 		Method method = new Mirror().on(GenericController.class).reflect()
 				.method("anotherMethod").withAnyArgs();
 		ControllerMethod resource = new DefaultControllerMethod(resourceClass, method);
-		when(provider.parameterNamesFor(resource.getMethod())).thenReturn(new String[] { "entity", "param", "over" });
+		
+		when(provider.parametersFor(resource.getMethod()))
+			.thenReturn(asList(new Parameter(0, "entity", resource.getMethod()), new Parameter(1, "param", resource.getMethod())));
 
 		Object[] deserialized = deserializer.deserialize(stream, resource);
 
@@ -350,9 +368,10 @@ public class GsonDeserializerTest {
 		Method method = new Mirror().on(GenericController.class).reflect()
 				.method("methodWithoutGenericType").withArgs(String.class);
 		ControllerMethod resource = new DefaultControllerMethod(resourceClass, method);
-		when(provider.parameterNamesFor(resource.getMethod())).thenReturn(
-				new String[] { "param" });
 
+		when(provider.parametersFor(resource.getMethod()))
+			.thenReturn(asList(new Parameter(0, "param", resource.getMethod())));
+		
 		Object[] deserialized = deserializer.deserialize(stream, resource);
 
 		String param = (String) deserialized[0];
@@ -365,7 +384,8 @@ public class GsonDeserializerTest {
 		InputStream stream = new ByteArrayInputStream("{'dog':{'name':'Otto','age':2,'birthday':'2013-07-23T17:14:14-03:00'}}"
 				.getBytes());
 
-		when(provider.parameterNamesFor(bark.getMethod())).thenReturn(new String[] { "dog" });
+		when(provider.parametersFor(bark.getMethod()))
+			.thenReturn(asList(new Parameter(0, "dog", bark.getMethod())));
 
 		Object[] deserialized = deserializer.deserialize(stream, bark);
 

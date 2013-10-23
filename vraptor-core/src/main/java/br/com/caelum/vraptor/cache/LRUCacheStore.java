@@ -43,14 +43,16 @@ public class LRUCacheStore<K, V> extends LinkedHashMap<K, V> implements CacheSto
 
 	@Override
 	protected boolean removeEldestEntry(Map.Entry<K, V> eldest) {
-		return this.size() > capacity;
+		return size() > capacity;
 	}
 
 	@Override
 	public V fetch(K key, Callable<V> valueProvider) {
 		if (!this.containsKey(key)){
 			try {
-				this.put(key, valueProvider.call());
+				V value = valueProvider.call();
+				put(key, value);
+				return value;
 			} catch (Exception e) {
 				Throwables.propagateIfPossible(e);
 				throw new CacheException("Error computing the value", e);

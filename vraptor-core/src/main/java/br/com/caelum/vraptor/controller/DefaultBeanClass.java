@@ -30,12 +30,11 @@ public class DefaultBeanClass implements BeanClass {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj == null) {
+		if (this == obj)
+			return true;
+		if (obj == null || getClass() != obj.getClass())
 			return false;
-		}
-		if (!(obj instanceof DefaultBeanClass)) {
-			return false;
-		}
+		
 		DefaultBeanClass other = (DefaultBeanClass) obj;
 		return Objects.equals(type, other.type);
 	}

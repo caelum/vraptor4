@@ -114,15 +114,11 @@ public class FixedMethodStrategy implements Route {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj) {
+		if (this == obj)
 			return true;
-		}
-		if (obj == null) {
+		if (obj == null || getClass() != obj.getClass())
 			return false;
-		}
-		if (getClass() != obj.getClass()) {
-			return false;
-		}
+		
 		FixedMethodStrategy other = (FixedMethodStrategy) obj;
 		return Objects.equals(methods, other.methods) 
 				&& Objects.equals(originalUri, other.originalUri) 

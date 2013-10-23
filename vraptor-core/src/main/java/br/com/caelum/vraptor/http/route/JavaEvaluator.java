@@ -19,13 +19,13 @@ package br.com.caelum.vraptor.http.route;
 
 import java.lang.reflect.Array;
 import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
 
 import javax.enterprise.context.ApplicationScoped;
 
 import net.vidageek.mirror.dsl.Mirror;
 import br.com.caelum.vraptor.VRaptorException;
+
+import com.google.common.collect.Iterables;
 
 /**
  * Evaluates expressions in order to access values.
@@ -73,16 +73,9 @@ public class JavaEvaluator implements Evaluator {
 	private Object access(Object current, int position) {
 		if (current.getClass().isArray()) {
 			return Array.get(current, position);
-		} else if (List.class.isAssignableFrom(current.getClass())) {
-			return ((List<?>) current).get(position);
 		} else if (Collection.class.isAssignableFrom(current.getClass())) {
-			Iterator<?> it = ((Collection<?>) current).iterator();
-			for (int i = 0; i < position; i++) {
-				it.next();
-			}
-			return it.next();
+			return Iterables.get((Collection<?>) current, position);
 		}
 		throw new VRaptorException("Unable to access position of a" + current.getClass().getName() + ".");
 	}
-
 }

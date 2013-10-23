@@ -21,11 +21,11 @@ import java.lang.reflect.TypeVariable;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.vidageek.mirror.dsl.Mirror;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.proxy.MethodInvocation;
 import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.proxy.SuperMethod;
+import br.com.caelum.vraptor.reflection.MethodExecutor;
 
 /**
  * Create proxies to store state of exception mapping.
@@ -40,9 +40,11 @@ public class ExceptionRecorder<T> implements MethodInvocation<T> {
 
 	private final List<ExceptionRecorderParameter> parameters = new ArrayList<>();
 	private final Proxifier proxifier;
+	private final MethodExecutor executor;
 
-	public ExceptionRecorder(Proxifier proxifier) {
+	public ExceptionRecorder(Proxifier proxifier, MethodExecutor executor) {
 		this.proxifier = proxifier;
+		this.executor = executor;
 	}
 
 	@Override
@@ -71,7 +73,7 @@ public class ExceptionRecorder<T> implements MethodInvocation<T> {
 	public void replay(Result result) {
 		Object current = result;
 		for (ExceptionRecorderParameter p : parameters) {
-			current = new Mirror().on(current).invoke().method(p.getMethod()).withArgs(p.getArgs());
+			current = executor.invoke(p.getMethod(), current, p.getArgs());
 		}
 	}
 }

@@ -30,6 +30,7 @@ import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.proxy.Proxifier;
+import br.com.caelum.vraptor.reflection.MethodExecutor;
 
 /**
  * Default implementation of {@link ExceptionMapper}.
@@ -44,26 +45,27 @@ public class DefaultExceptionMapper implements ExceptionMapper {
 
 	private static final Logger logger = LoggerFactory.getLogger(DefaultExceptionMapper.class);
 
-	private final Map<Class<? extends Exception>, ExceptionRecorder<Result>> exceptions;
+	private final Map<Class<? extends Exception>, ExceptionRecorder<Result>> exceptions = new LinkedHashMap<>();
 	private final Proxifier proxifier;
+	private final MethodExecutor executor;
 
 	/** 
 	 * @deprecated CDI eyes only
 	 */
 	protected DefaultExceptionMapper() {
-		this(null);
+		this(null, null);
 	}
 	@Inject
-	public DefaultExceptionMapper(Proxifier proxifier) {
+	public DefaultExceptionMapper(Proxifier proxifier, MethodExecutor executor) {
 		this.proxifier = proxifier;
-		this.exceptions = new LinkedHashMap<>();
+		this.executor = executor;
 	}
 
 	@Override
 	public Result record(Class<? extends Exception> exception) {
 		checkNotNull(exception, "Exception cannot be null.");
 
-		ExceptionRecorder<Result> instance = new ExceptionRecorder<>(proxifier);
+		ExceptionRecorder<Result> instance = new ExceptionRecorder<>(proxifier, executor);
 		exceptions.put(exception, instance);
 
 		return proxifier.proxify(Result.class, instance);

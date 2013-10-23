@@ -309,7 +309,6 @@ public class GsonDeserializerTest {
 
 		Object[] deserialized = deserializer.deserialize(stream, jump);
 
-		//assertThat(deserialized.length, is(2)); will be null parameter
 		assertThat(deserialized[0], is(instanceOf(Dog.class)));
 		Dog dog = (Dog) deserialized[0];
 		assertThat(dog.name, is("Brutus"));

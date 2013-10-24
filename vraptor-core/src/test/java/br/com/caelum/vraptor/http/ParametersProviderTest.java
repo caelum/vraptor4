@@ -99,7 +99,7 @@ public abstract class ParametersProviderTest {
 		dependency 	= method("dependency", Result.class);
 		primitive 	= method("primitive", long.class);
 		doNothing 	= method("doNothing");
-		generic 	= DefaultControllerMethod.instanceFor(Specific.class, new Mirror().on(Specific.class).reflect().method("generic").withAnyArgs());
+		generic 	= DefaultControllerMethod.instanceFor(Specific.class, Generic.class.getDeclaredMethod("generic", Object.class));
 	}
 
 	protected ControllerMethod method(String methodName, Class<?>... argTypes) throws NoSuchMethodException {

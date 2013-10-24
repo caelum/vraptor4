@@ -75,7 +75,7 @@ public class JavassistProxifier implements Proxifier {
 
 		Object instance = createInstance(type, handler, factory);
 		logger.debug("a proxy for {} was created as {}", type, instance.getClass());
-		
+
 		return type.cast(instance);
 	}
 
@@ -106,12 +106,7 @@ public class JavassistProxifier implements Proxifier {
 	}
 
 	private boolean isWeldProxy(Class<?> type) {
-		if(weldProxyClass != null){
-			return weldProxyClass.isAssignableFrom(type);
-		}else{ 
-			logger.debug("Weld not found, cannot determine if class {} is a proxy or not.", type);
-			return false;
-		}
+		return weldProxyClass != null && weldProxyClass.isAssignableFrom(type);
 	}
 
 	private static class MethodInvocationAdapter<T> implements MethodHandler {

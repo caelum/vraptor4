@@ -15,6 +15,8 @@
  */
 package br.com.caelum.vraptor.proxy;
 
+import static javassist.util.proxy.ProxyFactory.isProxyClass;
+
 import java.lang.reflect.Method;
 
 import javassist.util.proxy.MethodFilter;
@@ -25,8 +27,6 @@ import javax.enterprise.context.ApplicationScoped;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import static javassist.util.proxy.ProxyFactory.isProxyClass;
 
 /**
  * Javassist implementation for {@link Proxifier}.
@@ -39,18 +39,18 @@ public class JavassistProxifier implements Proxifier {
 
 	private static final Logger logger = LoggerFactory.getLogger(JavassistProxifier.class);
 
-	private static final Class<?> weldProxyClass;
-	
-	static {
-		Class<?> temp;
+	private static final Class<?> weldProxyClass = getWeldProxyClass();
+
+	private interface NoProxy {}
+
+	private static Class<?> getWeldProxyClass() {
 		try {
-			temp = Class.forName("org.jboss.weld.bean.proxy.ProxyObject");
+			return Class.forName("org.jboss.weld.bean.proxy.ProxyObject");
 		} catch (ClassNotFoundException e) {
-			temp = null;
+			return NoProxy.class;
 		}
-		weldProxyClass = temp;
 	}
-	
+
 	/**
 	 * Do not proxy these methods.
 	 */
@@ -106,12 +106,7 @@ public class JavassistProxifier implements Proxifier {
 	}
 
 	private boolean isWeldProxy(Class<?> type) {
-		if(weldProxyClass != null){
-			return weldProxyClass.isAssignableFrom(type);
-		}else{ 
-			logger.debug("Weld not found, cannot determine if class {} is a proxy or not.", type);
-			return false;
-		}
+		return weldProxyClass.isAssignableFrom(type);
 	}
 
 	private static class MethodInvocationAdapter<T> implements MethodHandler {

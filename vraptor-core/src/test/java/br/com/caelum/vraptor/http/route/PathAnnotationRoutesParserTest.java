@@ -26,6 +26,7 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.when;
 
+import java.lang.reflect.AccessibleObject;
 import java.util.EnumSet;
 import java.util.List;
 
@@ -47,11 +48,14 @@ import br.com.caelum.vraptor.Options;
 import br.com.caelum.vraptor.Patch;
 import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.Post;
+import br.com.caelum.vraptor.cache.DefaultCacheStore;
 import br.com.caelum.vraptor.controller.DefaultBeanClass;
 import br.com.caelum.vraptor.controller.HttpMethod;
 import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.http.EncodingHandler;
+import br.com.caelum.vraptor.http.Parameter;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
+import br.com.caelum.vraptor.http.ParanamerNameProvider;
 import br.com.caelum.vraptor.proxy.JavassistProxifier;
 import br.com.caelum.vraptor.proxy.Proxifier;
 
@@ -61,7 +65,7 @@ public class PathAnnotationRoutesParserTest {
 	private @Mock Converters converters;
 	private NoTypeFinder typeFinder;
 	private @Mock Router router;
-	private @Mock ParameterNameProvider nameProvider;
+	private ParameterNameProvider nameProvider;
 	private @Mock EncodingHandler encodingHandler;
 
 	private PathAnnotationRoutesParser parser;
@@ -72,6 +76,7 @@ public class PathAnnotationRoutesParserTest {
 
 		this.proxifier = new JavassistProxifier();
 		this.typeFinder = new NoTypeFinder();
+		nameProvider = new ParanamerNameProvider(new DefaultCacheStore<AccessibleObject, List<Parameter>>());
 
 		when(router.builderFor(anyString())).thenAnswer(new Answer<DefaultRouteBuilder>() {
 

@@ -28,7 +28,6 @@
 package br.com.caelum.vraptor.http.iogi;
 
 import static br.com.caelum.vraptor.VRaptorMatchers.hasMessage;
-import static java.util.Collections.singletonList;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasSize;
@@ -44,11 +43,10 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.lang.reflect.Method;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Set;
 
+import org.hamcrest.Matchers;
 import org.junit.Test;
 
 import br.com.caelum.iogi.parameters.Parameter;
@@ -89,9 +87,6 @@ public class IogiParametersProviderTest extends ParametersProviderTest {
 		when(container.canProvide(MyResource.class)).thenReturn(true);
 		when(container.instanceFor(MyResource.class)).thenReturn(providedInstance);
 		
-		when(nameProvider.parametersFor(controllerMethod.getMethod()))
-			.thenReturn(Arrays.asList(new br.com.caelum.vraptor.http.Parameter(0, "param", controllerMethod.getMethod())));
-
 		Object[] params = provider.getParametersFor(controllerMethod, errors);
 		assertThat(((NeedsMyResource)params[0]).getMyResource(), is(sameInstance(providedInstance)));
 	}
@@ -129,13 +124,13 @@ public class IogiParametersProviderTest extends ParametersProviderTest {
 	@Test
 	public void willAddValidationMessagesForConversionErrors() throws Exception {
 		ControllerMethod setId = simple;
-		requestParameterIs(setId, "id", "asdf");
-
+		requestParameterIs(setId, "xyz", "asdf");
+		
 		getParameters(setId);
 
-		assertThat(errors.size(), is(1));
+		assertThat(errors, hasSize(1));
 		assertThat(errors.get(0), hasMessage("asdf is not a valid integer."));
-		assertThat(errors.get(0).getCategory(), is("id"));
+		assertThat(errors.get(0).getCategory(), is("xyz"));
 	}
 
 	@Test
@@ -152,9 +147,6 @@ public class IogiParametersProviderTest extends ParametersProviderTest {
 	public void isCapableOfDealingWithSets() throws Exception {
 		ControllerMethod set = method("set", Set.class);
 
-		List<br.com.caelum.vraptor.http.Parameter> params = singletonList(new br.com.caelum.vraptor.http.Parameter(0, "set", set.getMethod()));
-		when(nameProvider.parametersFor(any(Method.class))).thenReturn(params);
-
 		requestParameterIs(set, "abc", "1", "2");
 
 		Set<Long> abc = getParameters(set);
@@ -166,9 +158,6 @@ public class IogiParametersProviderTest extends ParametersProviderTest {
 	@Test
 	public void isCapableOfDealingWithSetsOfObjects() throws Exception {
 		ControllerMethod set = method("setOfObject", Set.class);
-
-		List<br.com.caelum.vraptor.http.Parameter> params = singletonList(new br.com.caelum.vraptor.http.Parameter(0, "set", set.getMethod()));
-		when(nameProvider.parametersFor(any(Method.class))).thenReturn(params);
 
 		requestParameterIs(set, "abc.x", "1");
 

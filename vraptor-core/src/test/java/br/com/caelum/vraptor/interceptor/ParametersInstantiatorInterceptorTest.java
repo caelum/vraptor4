@@ -17,7 +17,6 @@
 
 package br.com.caelum.vraptor.interceptor;
 
-import static java.util.Arrays.asList;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.anyString;
@@ -26,6 +25,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.io.IOException;
+import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Collections;
@@ -43,6 +43,7 @@ import org.mockito.stubbing.Answer;
 
 import br.com.caelum.vraptor.HeaderParam;
 import br.com.caelum.vraptor.InterceptionException;
+import br.com.caelum.vraptor.cache.DefaultCacheStore;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.controller.DefaultControllerMethod;
 import br.com.caelum.vraptor.core.InterceptorStack;
@@ -51,6 +52,7 @@ import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.http.Parameter;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.http.ParametersProvider;
+import br.com.caelum.vraptor.http.ParanamerNameProvider;
 import br.com.caelum.vraptor.validator.Message;
 import br.com.caelum.vraptor.validator.SimpleMessage;
 import br.com.caelum.vraptor.validator.Validator;
@@ -60,7 +62,7 @@ public class ParametersInstantiatorInterceptorTest {
 
 	private @Mock MethodInfo params;
 	private @Mock ParametersProvider parametersProvider;
-	private @Mock ParameterNameProvider parameterNameProvider;
+	private ParameterNameProvider parameterNameProvider;
 	private @Mock Validator validator;
 	private @Mock InterceptorStack stack;
 	private @Mock ResourceBundle bundle;
@@ -76,6 +78,8 @@ public class ParametersInstantiatorInterceptorTest {
 	@Before
 	@SuppressWarnings("unchecked")
 	public void setup() throws Exception {
+		parameterNameProvider = new ParanamerNameProvider(new DefaultCacheStore<AccessibleObject, List<Parameter>>());
+
 		MockitoAnnotations.initMocks(this);
 		when(request.getParameterNames()).thenReturn(Collections.<String> emptyEnumeration());
 
@@ -165,7 +169,6 @@ public class ParametersInstantiatorInterceptorTest {
 	@Test
 	public void shouldValidateParameters() throws Exception {
 		Object[] values = new Object[]{0};
-
 		when(parametersProvider.getParametersFor(otherMethod, errors)).thenAnswer(addErrorsToListAndReturn(values, "error1"));
 
 		instantiator.intercept(stack, otherMethod, null);
@@ -175,14 +178,6 @@ public class ParametersInstantiatorInterceptorTest {
 		verify(params).setParameters(values);
 	}
 
-	@Test(expected=RuntimeException.class)
-	public void shouldThrowException() throws Exception {
-
-		when(parametersProvider.getParametersFor(method, errors)).thenThrow(new RuntimeException());
-
-		instantiator.intercept(stack, method, null);
-	}
-	
 	@Test
 	public void shouldAddHeaderInformationToRequestWhenHeaderParamAnnotationIsPresent() throws Exception {
 		Object[] values = new Object[] { new Object() };
@@ -191,7 +186,6 @@ public class ParametersInstantiatorInterceptorTest {
 		
 		when(request.getHeader("X-MyApp-Password")).thenReturn("123");
 		when(parametersProvider.getParametersFor(controllerMethod, errors)).thenReturn(values);
-		when(parameterNameProvider.parametersFor(method)).thenReturn(asList(new Parameter(0, "password", method)));
 
 		instantiator.intercept(stack, controllerMethod, null);
 		
@@ -208,7 +202,6 @@ public class ParametersInstantiatorInterceptorTest {
 		ControllerMethod controllerMethod = DefaultControllerMethod.instanceFor(Component.class, method);
 		
 		when(parametersProvider.getParametersFor(controllerMethod, errors)).thenReturn(values);
-		when(parameterNameProvider.parametersFor(method)).thenReturn(Collections.<Parameter> emptyList());
 
 		instantiator.intercept(stack, controllerMethod, null);
 		
@@ -228,8 +221,6 @@ public class ParametersInstantiatorInterceptorTest {
 		when(request.getHeader("X-MyApp-Password")).thenReturn("123");
 		when(request.getHeader("X-MyApp-Token")).thenReturn("daek2321");
 		when(parametersProvider.getParametersFor(resouceMethod, errors)).thenReturn(values);
-		when(parameterNameProvider.parametersFor(method)).thenReturn(asList(
-			new Parameter(0, "user", method), new Parameter(1, "password", method), new Parameter(2, "token", method)));
 
 		instantiator.intercept(stack, resouceMethod, null);
 		
@@ -251,8 +242,6 @@ public class ParametersInstantiatorInterceptorTest {
 				}
 				return value;
 			}
-
 		};
-
 	}
 }

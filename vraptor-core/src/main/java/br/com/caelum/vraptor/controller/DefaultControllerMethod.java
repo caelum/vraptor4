@@ -69,15 +69,11 @@ public class DefaultControllerMethod implements ControllerMethod {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj) {
+		if (this == obj)
 			return true;
-		}
-		if (obj == null) {
+		if (obj == null || getClass() != obj.getClass())
 			return false;
-		}
-		if (getClass() != obj.getClass()) {
-			return false;
-		}
+		
 		DefaultControllerMethod other = (DefaultControllerMethod) obj;
 		return Objects.equals(method, other.method) && Objects.equals(controller, other.controller);
 	}

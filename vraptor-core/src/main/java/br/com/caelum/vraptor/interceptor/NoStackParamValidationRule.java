@@ -23,6 +23,11 @@ import com.google.common.base.Predicate;
 public class NoStackParamValidationRule implements ValidationRule {
 
 	private final StepInvoker invoker;
+	
+	/** @deprecated CDI eyes only */
+	protected NoStackParamValidationRule() {
+		this(null);
+	}
 
 	@Inject
 	public NoStackParamValidationRule(StepInvoker invoker) {

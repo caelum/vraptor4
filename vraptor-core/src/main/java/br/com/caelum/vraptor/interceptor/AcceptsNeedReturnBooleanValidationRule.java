@@ -15,6 +15,11 @@ import br.com.caelum.vraptor.InterceptionException;
 public class AcceptsNeedReturnBooleanValidationRule implements ValidationRule {
 
 	private final StepInvoker invoker;
+	
+	/** @deprecated CDI eyes only */
+	protected AcceptsNeedReturnBooleanValidationRule() {
+		this(null);
+	}
 
 	@Inject
 	public AcceptsNeedReturnBooleanValidationRule(StepInvoker invoker) {

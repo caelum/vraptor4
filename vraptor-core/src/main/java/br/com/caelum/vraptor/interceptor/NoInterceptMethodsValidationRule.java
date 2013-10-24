@@ -18,6 +18,12 @@ import br.com.caelum.vraptor.InterceptionException;
 public class NoInterceptMethodsValidationRule implements ValidationRule {
 
 	private StepInvoker stepInvoker;
+	
+	/** 
+	 * @deprecated CDI eyes only
+	 */
+	protected NoInterceptMethodsValidationRule() {
+	}
 
 	@Inject
 	public NoInterceptMethodsValidationRule(StepInvoker stepInvoker) {

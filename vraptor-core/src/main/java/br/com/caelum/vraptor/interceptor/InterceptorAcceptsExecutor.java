@@ -1,36 +1,39 @@
 package br.com.caelum.vraptor.interceptor;
 
+import static com.google.common.base.Objects.firstNonNull;
+
 import java.lang.reflect.Method;
 
-import javax.enterprise.inject.Vetoed;
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 
-import com.google.common.base.Objects;
+@ApplicationScoped
+public class InterceptorAcceptsExecutor {
 
-@Vetoed
-public class InterceptorAcceptsExecutor implements StepExecutor<Boolean>{
-
-	private final StepInvoker stepInvoker;
 	private final InterceptorMethodParametersResolver parameterResolver;
-	private final Method method;
+	private final StepInvoker invoker;
 
-	public InterceptorAcceptsExecutor(StepInvoker stepInvoker, InterceptorMethodParametersResolver parameterResolver,
-			Method method) {
-		this.stepInvoker = stepInvoker;
+	/**
+	 * @deprecated CDI eyes only
+	 */
+	public InterceptorAcceptsExecutor() {
+		this(null, null);
+	}
+
+	@Inject
+	public InterceptorAcceptsExecutor(
+			InterceptorMethodParametersResolver parameterResolver,
+			StepInvoker invoker) {
+
 		this.parameterResolver = parameterResolver;
-		this.method = method;
+		this.invoker = invoker;
 	}
 
-	@Override
-	public boolean accept() {
-		return method != null;
-	}
-
-	@Override
-	public Boolean execute(Object interceptor) {
+	public Boolean accepts(Object interceptor, Method method) {
 		if(method != null) {
 			Object[] params = parameterResolver.parametersFor(method);
-			Object returnObject = stepInvoker.tryToInvoke(interceptor, method, params);
-			return Objects.firstNonNull((Boolean) returnObject, false);
+			Object returnObject = invoker.tryToInvoke(interceptor, method, params);
+			return firstNonNull((Boolean) returnObject, false);
 		}
 		return true;
 	}

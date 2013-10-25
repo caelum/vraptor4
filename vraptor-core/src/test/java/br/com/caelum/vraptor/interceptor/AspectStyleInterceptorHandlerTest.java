@@ -37,18 +37,12 @@ import br.com.caelum.vraptor.ioc.Container;
 public class AspectStyleInterceptorHandlerTest {
 
 	private StepInvoker stepInvoker;
-	private @Mock
-	InterceptorStack stack;
-	private @Mock
-	ControllerMethod controllerMethod;
-	private @Mock
-	Object currentController;
-	private @Mock
-	WithAnnotationAcceptor withAnnotationAcceptor;
-	private @Mock
-	ControllerInstance controllerInstance;
-	private @Mock
-	SimpleInterceptorStack simpleInterceptorStack;
+	private @Mock InterceptorStack stack;
+	private @Mock ControllerMethod controllerMethod;
+	private @Mock Object currentController;
+	private @Mock WithAnnotationAcceptor withAnnotationAcceptor;
+	private @Mock ControllerInstance controllerInstance;
+	private @Mock SimpleInterceptorStack simpleInterceptorStack;
 
 	@Before
 	public void setup() {

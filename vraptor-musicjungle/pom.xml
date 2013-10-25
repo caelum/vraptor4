@@ -95,6 +95,7 @@
 			<groupId>org.seleniumhq.selenium</groupId>
 			<artifactId>selenium-firefox-driver</artifactId>
 			<version>2.35.0</version>
+			<scope>test</scope>
 		</dependency>
 
 		<dependency>

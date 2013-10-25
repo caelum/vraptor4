@@ -20,26 +20,28 @@ import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 
+import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Method;
+import java.util.List;
 import java.util.Map;
 
 import net.vidageek.mirror.dsl.Mirror;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 
+import br.com.caelum.vraptor.cache.DefaultCacheStore;
 import br.com.caelum.vraptor.http.Parameter;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
+import br.com.caelum.vraptor.http.ParanamerNameProvider;
 
 public class DefaultTypeFinderTest {
 
-	private @Mock ParameterNameProvider provider;
+	private ParameterNameProvider provider;
 	
 	@Before
 	public void setup() {
-		MockitoAnnotations.initMocks(this);
+		provider = new ParanamerNameProvider(new DefaultCacheStore<AccessibleObject, List<Parameter>>());
 	}
 
 	public static class AController {
@@ -70,8 +72,6 @@ public class DefaultTypeFinderTest {
 	public void shouldGetTypesCorrectly() throws Exception {
 
 		final Method method = new Mirror().on(AController.class).reflect().method("aMethod").withArgs(Bean.class, String.class);
-		when(provider.parametersFor(method))
-			.thenReturn(asList(new Parameter(0, "bean", method), new Parameter(1, "path", method)));
 		
 		DefaultTypeFinder finder = new DefaultTypeFinder(provider);
 		Map<String, Class<?>> types = finder.getParameterTypes(method, new String[] {"bean.bean2.id", "path"});
@@ -82,8 +82,6 @@ public class DefaultTypeFinderTest {
 	@Test
 	public void shouldGetTypesCorrectlyOnInheritance() throws Exception {
 		final Method method = new Mirror().on(AController.class).reflect().method("otherMethod").withArgs(BeanExtended.class);
-		
-		when(provider.parametersFor(method)).thenReturn(asList(new Parameter(0, "extended", method)));
 		
 		DefaultTypeFinder finder = new DefaultTypeFinder(provider);
 		Map<String, Class<?>> types = finder.getParameterTypes(method, new String[] {"extended.id"});

@@ -5,24 +5,27 @@ import static java.util.Arrays.asList;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.lang.reflect.AccessibleObject;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.TimeZone;
 
 import org.junit.Before;
 import org.junit.Test;
 
+import br.com.caelum.vraptor.cache.DefaultCacheStore;
 import br.com.caelum.vraptor.controller.BeanClass;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.controller.DefaultBeanClass;
 import br.com.caelum.vraptor.controller.DefaultControllerMethod;
 import br.com.caelum.vraptor.http.Parameter;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
+import br.com.caelum.vraptor.http.ParanamerNameProvider;
 import br.com.caelum.vraptor.serialization.xstream.CalendarConverter;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
@@ -39,7 +42,7 @@ public class XStreamXmlDeserializerTest {
 
 	@Before
 	public void setUp() throws Exception {
-		provider = mock(ParameterNameProvider.class);
+		provider = new ParanamerNameProvider(new DefaultCacheStore<AccessibleObject, List<Parameter>>());
 
 		deserializer = new XStreamXMLDeserializer(provider, cleanInstance(new CalendarConverter()));
 		BeanClass controllerClass = new DefaultBeanClass(DogController.class);
@@ -92,9 +95,6 @@ public class XStreamXmlDeserializerTest {
 		InputStream stream = new ByteArrayInputStream("<dog><name>Brutus</name><age>7</age></dog>".getBytes());
 
 
-		when(provider.parametersFor(bark.getMethod()))
-			.thenReturn(asList(new Parameter(0, "dog", bark.getMethod())));
-
 		Object[] deserialized = deserializer.deserialize(stream, bark);
 
 		assertThat(deserialized.length, is(1));
@@ -108,9 +108,6 @@ public class XStreamXmlDeserializerTest {
 	public void shouldBeAbleToDeserializeADogAsISO8601() throws Exception {
 		InputStream stream = new ByteArrayInputStream("<dog><name>Otto</name><age>2</age><birthday>2013-07-23T17:14:14-03:00</birthday></dog>"
 				.getBytes());
-
-		when(provider.parametersFor(bark.getMethod()))
-			.thenReturn(asList(new Parameter(0, "dog", bark.getMethod())));
 
 		Object[] deserialized = deserializer.deserialize(stream, bark);
 
@@ -132,9 +129,6 @@ public class XStreamXmlDeserializerTest {
 	public void shouldBeAbleToDeserializeADogWhenMethodHasMoreThanOneArgument() throws Exception {
 		InputStream stream = new ByteArrayInputStream("<dog><name>Brutus</name><age>7</age></dog>".getBytes());
 
-		when(provider.parametersFor(jump.getMethod()))
-			.thenReturn(asList(new Parameter(0, "dog", jump.getMethod()), new Parameter(1, "times", jump.getMethod())));
-
 		Object[] deserialized = deserializer.deserialize(stream, jump);
 
 		assertThat(deserialized.length, is(2));
@@ -147,9 +141,6 @@ public class XStreamXmlDeserializerTest {
 	public void shouldBeAbleToDeserializeADogWhenMethodHasMoreThanOneArgumentAndTheXmlIsTheLastOne() throws Exception {
 		InputStream stream = new ByteArrayInputStream("<dog><name>Brutus</name><age>7</age></dog>".getBytes());
 
-		when(provider.parametersFor(dropDead.getMethod()))
-			.thenReturn(asList(new Parameter(0, "times", dropDead.getMethod()), new Parameter(1, "dog", dropDead.getMethod())));
-
 		Object[] deserialized = deserializer.deserialize(stream, dropDead);
 
 		assertThat(deserialized.length, is(2));
@@ -161,10 +152,7 @@ public class XStreamXmlDeserializerTest {
 
 	@Test
 	public void shouldBeAbleToDeserializeADogNamedDifferently() throws Exception {
-		InputStream stream = new ByteArrayInputStream("<pet><name>Brutus</name><age>7</age></pet>".getBytes());
-
-		when(provider.parametersFor(bark.getMethod()))
-			.thenReturn(asList(new Parameter(0, "pet", bark.getMethod())));
+		InputStream stream = new ByteArrayInputStream("<dog><name>Brutus</name><age>7</age></dog>".getBytes());
 
 		Object[] deserialized = deserializer.deserialize(stream, bark);
 
@@ -179,9 +167,6 @@ public class XStreamXmlDeserializerTest {
 	public void shouldBeAbleToDeserializeADogWhenAliasConfiguredByAnnotations() {
 
 		InputStream stream = new ByteArrayInputStream("<dogAnnotated><nameAnnotated>Lubi</nameAnnotated><ageAnnotated>8</ageAnnotated></dogAnnotated>".getBytes());
-
-		when(provider.parametersFor(annotated.getMethod()))
-			.thenReturn(asList(new Parameter(0, "dog", annotated.getMethod())));
 
 		Object[] deserialized = deserializer.deserialize(stream, annotated);
 

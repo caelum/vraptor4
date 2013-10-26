@@ -17,7 +17,6 @@
 
 package br.com.caelum.vraptor.http.route;
 
-import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
@@ -27,8 +26,10 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Method;
 import java.util.Collections;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -36,22 +37,28 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor.TwoWayConverter;
+import br.com.caelum.vraptor.cache.DefaultCacheStore;
 import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.http.EncodingHandler;
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.http.Parameter;
+import br.com.caelum.vraptor.http.ParameterNameProvider;
+import br.com.caelum.vraptor.http.ParanamerNameProvider;
 
 public class DefaultParametersControlTest {
 
 	private @Mock MutableRequest request;
 	private @Mock Converters converters;
 	private @Mock TwoWayConverter converter;
-	private Evaluator evaluator = new JavaEvaluator();
 	private @Mock EncodingHandler encodingHandler;
+	private Evaluator evaluator;
+	private ParameterNameProvider nameProvider;
 
 	@Before
 	public void setup() {
 		MockitoAnnotations.initMocks(this);
+		evaluator = new JavaEvaluator();
+		nameProvider = new ParanamerNameProvider(new DefaultCacheStore<AccessibleObject, List<Parameter>>());
 	}
 
 	@Test
@@ -125,7 +132,7 @@ public class DefaultParametersControlTest {
 	public void shouldTranslateAsteriskAsEmpty() throws Exception {
 		Method method = Controller.class.getDeclaredMethod("store", Client.class);
 		
-		String uri = getDefaultParameterControlForUrl("/clients/.*").fillUri(asList(new Parameter(0, "client", method)), client(3L));
+		String uri = getDefaultParameterControlForUrl("/clients/.*").fillUri(nameProvider.parametersFor(method), client(3L));
 		assertThat(uri, is(equalTo("/clients/")));
 	}
 
@@ -133,14 +140,14 @@ public class DefaultParametersControlTest {
 	public void shouldTranslatePatternArgs() throws Exception {
 		Method method = Controller.class.getDeclaredMethod("store", Client.class);
 		
-		String uri = getDefaultParameterControlForUrl("/clients/{client.id}").fillUri(asList(new Parameter(0, "client", method)), client(3L));
+		String uri = getDefaultParameterControlForUrl("/clients/{client.id}").fillUri(nameProvider.parametersFor(method), client(3L));
 		assertThat(uri, is(equalTo("/clients/3")));
 	}
 
 	@Test
 	public void shouldTranslatePatternArgsWithRegex() throws Exception {
 		Method method = Controller.class.getDeclaredMethod("show", Long.class);
-		String uri = getDefaultParameterControlForUrl("/clients/{id:[0-9]{1,}}").fillUri(asList(new Parameter(0, "id", method)), 30L);
+		String uri = getDefaultParameterControlForUrl("/clients/{id:[0-9]{1,}}").fillUri(nameProvider.parametersFor(method), 30L);
 		assertThat(uri, is(equalTo("/clients/30")));
 	}
 
@@ -149,7 +156,7 @@ public class DefaultParametersControlTest {
 		Method method = Controller.class.getDeclaredMethod("mregex", String.class, String.class, String.class);
 		
 		String uri = getDefaultParameterControlForUrl("/test/{hash1:[a-z0-9]{16}}{id}{hash2:[a-z0-9]{16}}/")
-				.fillUri(asList(new Parameter(0, "hash1", method), new Parameter(1, "id", method), new Parameter(2, "hash2", method)), "0123456789abcdef", "1234", "fedcba9876543210");
+				.fillUri(nameProvider.parametersFor(method), "0123456789abcdef", "1234", "fedcba9876543210");
 		assertThat(uri, is(equalTo("/test/0123456789abcdef1234fedcba9876543210/")));
 	}
 
@@ -158,7 +165,7 @@ public class DefaultParametersControlTest {
 		Method method = Controller.class.getDeclaredMethod("store", Client.class);
 		
 		String uri = getDefaultParameterControlForUrl("/clients/{client.id}")
-				.fillUri(asList(new Parameter(0, "client", method)), client(null));
+				.fillUri(nameProvider.parametersFor(method), client(null));
 		assertThat(uri, is(equalTo("/clients/")));
 	}
 
@@ -171,7 +178,7 @@ public class DefaultParametersControlTest {
 		when(converter.convert(any(Client.class))).thenReturn("john");
 
 		String uri = getDefaultParameterControlForUrl("/clients/{client}")
-				.fillUri(asList(new Parameter(0, "client", method)), client(null));
+				.fillUri(nameProvider.parametersFor(method), client(null));
 		assertThat(uri, is(equalTo("/clients/john")));
 
 	}
@@ -180,7 +187,7 @@ public class DefaultParametersControlTest {
 	public void shouldTranslatePatternArgInternalNullAsEmpty() throws Exception {
 		Method method = Controller.class.getDeclaredMethod("store", Client.class);
 		String uri = getDefaultParameterControlForUrl("/clients/{client.child.id}")
-				.fillUri(asList(new Parameter(0, "client", method)), client(null));
+				.fillUri(nameProvider.parametersFor(method), client(null));
 		assertThat(uri, is(equalTo("/clients/")));
 	}
 
@@ -256,7 +263,7 @@ public class DefaultParametersControlTest {
 		DefaultParametersControl control = getDefaultParameterControlForUrl("/clients/{pathToFile*}");
 
 		Method method = Controller.class.getDeclaredMethod("pathToFile", String.class);
-		String filled = control.fillUri(asList(new Parameter(0, "pathToFile", method)), "my/path/to/file");
+		String filled = control.fillUri(nameProvider.parametersFor(method), "my/path/to/file");
 
 		assertThat(filled, is("/clients/my/path/to/file"));
 	}
@@ -265,7 +272,7 @@ public class DefaultParametersControlTest {
 		DefaultParametersControl control = getDefaultParameterControlForUrl("/clients/{pathToFile}");
 		Method method = Controller.class.getDeclaredMethod("pathToFile", String.class);
 
-		String filled = control.fillUri(asList(new Parameter(0, "pathToFile", method)), "my/path/to/file");
+		String filled = control.fillUri(nameProvider.parametersFor(method), "my/path/to/file");
 
 		assertThat(filled, is("/clients/my/path/to/file"));
 	}
@@ -317,16 +324,16 @@ public class DefaultParametersControlTest {
 		Method method = Controller.class.getDeclaredMethod("lang", String.class);
 		when(encodingHandler.getEncoding()).thenReturn("UTF-8");
 		String uri = getDefaultParameterControlForUrl("/language/{lang}/about")
-				.fillUri(asList(new Parameter(0, "lang", method)), "c#");
+				.fillUri(nameProvider.parametersFor(method), "c#");
 		assertThat(uri, is(equalTo("/language/c%23/about")));
 	}
 
-	interface Controller {
-		void lang(String lang);
-		void show(Long id);
-		void store(Client client);
-		void pathToFile(String pathToFile);
-		void mregex(String hash1, String id, String hash2);
+	public static class Controller {
+		void lang(String lang) {}
+		void show(Long id) {}
+		void store(Client client) {}
+		void pathToFile(String pathToFile) {}
+		void mregex(String hash1, String id, String hash2) {}
 	}
 
 }

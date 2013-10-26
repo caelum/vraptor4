@@ -4,6 +4,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.verify;
 
 import java.io.IOException;
+import java.lang.invoke.MethodHandle;
+import java.lang.reflect.Method;
 
 import org.hamcrest.Matchers;
 import org.junit.Before;
@@ -12,8 +14,13 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor.Result;
+import br.com.caelum.vraptor.cache.CacheStore;
+import br.com.caelum.vraptor.cache.DefaultCacheStore;
 import br.com.caelum.vraptor.proxy.JavassistProxifier;
 import br.com.caelum.vraptor.proxy.Proxifier;
+import br.com.caelum.vraptor.reflection.DefaultMethodExecutor;
+import br.com.caelum.vraptor.reflection.MethodExecutor;
+import br.com.caelum.vraptor.reflection.MethodHandleFactory;
 
 public class ExceptionRecorderTest {
 	
@@ -25,8 +32,12 @@ public class ExceptionRecorderTest {
 	@Before
 	public void setUp() {
 		MockitoAnnotations.initMocks(this);
+
+		CacheStore<Method, MethodHandle> cache = new DefaultCacheStore<>();
+		MethodExecutor executor = new DefaultMethodExecutor(cache, new MethodHandleFactory());
+
 		Proxifier proxifier = new JavassistProxifier();
-		mapper = new DefaultExceptionMapper(proxifier);
+		mapper = new DefaultExceptionMapper(proxifier, executor);
 	}
 
 	@Test

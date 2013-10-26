@@ -26,8 +26,6 @@ import br.com.caelum.vraptor.serialization.SerializerBuilder;
 import br.com.caelum.vraptor.serialization.XMLSerialization;
 import br.com.caelum.vraptor.view.ResultException;
 
-import com.thoughtworks.xstream.XStream;
-
 /**
  * XStream implementation for XmlSerialization
  *

@@ -22,8 +22,6 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
-import net.vidageek.mirror.dsl.Mirror;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;

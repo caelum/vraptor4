@@ -16,12 +16,10 @@
  */
 package br.com.caelum.vraptor.http.route;
 
-import static java.util.Arrays.asList;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.when;
 
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Method;

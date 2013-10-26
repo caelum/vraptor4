@@ -16,9 +16,7 @@
  */
 package br.com.caelum.vraptor.http.route;
 
-import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.when;
 
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Method;

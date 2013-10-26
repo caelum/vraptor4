@@ -46,7 +46,6 @@ import static org.mockito.Mockito.when;
 import java.util.Arrays;
 import java.util.Set;
 
-import org.hamcrest.Matchers;
 import org.junit.Test;
 
 import br.com.caelum.iogi.parameters.Parameter;

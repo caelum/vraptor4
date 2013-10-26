@@ -1,11 +1,9 @@
 package br.com.caelum.vraptor.deserialization.xstream;
 
 import static br.com.caelum.vraptor.serialization.xstream.XStreamBuilderFactory.cleanInstance;
-import static java.util.Arrays.asList;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.when;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;

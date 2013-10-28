@@ -19,7 +19,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
-import br.com.caelum.vraptor.VRaptorException;
 import br.com.caelum.vraptor.controller.ControllerInstance;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.core.InterceptorStack;
@@ -29,7 +28,6 @@ import br.com.caelum.vraptor.interceptor.example.AcceptsWithoutArgsInterceptor;
 import br.com.caelum.vraptor.interceptor.example.AlwaysAcceptsAspectInterceptor;
 import br.com.caelum.vraptor.interceptor.example.ExampleOfSimpleStackInterceptor;
 import br.com.caelum.vraptor.interceptor.example.InterceptorWithCustomizedAccepts;
-import br.com.caelum.vraptor.interceptor.example.InternalAndCustomAcceptsInterceptor;
 import br.com.caelum.vraptor.interceptor.example.MethodLevelAcceptsController;
 import br.com.caelum.vraptor.interceptor.example.WithoutAroundInterceptor;
 import br.com.caelum.vraptor.ioc.Container;
@@ -176,12 +174,6 @@ public class AspectStyleInterceptorHandlerTest {
 		aspectHandler.execute(stack, controllerMethod, null);
 
 		verify(simpleInterceptorStack).next();
-	}
-
-	@Test(expected = VRaptorException.class)
-	public void mustNotUseInternalAcceptsAndCustomAccepts(){
-		InternalAndCustomAcceptsInterceptor interceptor = new InternalAndCustomAcceptsInterceptor();
-		newAspectStyleInterceptorHandler(InternalAndCustomAcceptsInterceptor.class, interceptor);
 	}
 
 	@Test

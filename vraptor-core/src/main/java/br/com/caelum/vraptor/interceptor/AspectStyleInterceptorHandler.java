@@ -4,6 +4,7 @@ import static org.slf4j.LoggerFactory.getLogger;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.util.List;
 
 import javax.enterprise.inject.Vetoed;
 
@@ -72,7 +73,10 @@ public class AspectStyleInterceptorHandler implements InterceptorHandler {
 
 		logger.debug("Invoking interceptor {}", interceptor.getClass().getSimpleName());
 
-		if (customAccepts(interceptor) || internalAccepts(interceptor)) {
+		List<Annotation> customAccepts = customAcceptsExecutor.getCustomAccepts(interceptor);
+
+		if (customAccepts(interceptor, customAccepts)
+				|| internalAccepts(interceptor, customAccepts)) {
 			before.execute(interceptor);
 			around.execute(interceptor);
 			after.execute(interceptor);
@@ -85,12 +89,14 @@ public class AspectStyleInterceptorHandler implements InterceptorHandler {
 		return stepInvoker.findMethod(interceptorMethods, step, interceptorClass);
 	}
 
-	private boolean internalAccepts(Object interceptor) {
+	private boolean internalAccepts(Object interceptor, List<Annotation> customAccepts) {
+		if (!customAccepts.isEmpty()) return false;
 		return acceptsExecutor.accepts(interceptor, find(Accepts.class));
 	}
 
-	private boolean customAccepts(Object interceptor) {
-		return customAcceptsExecutor.accepts(interceptor, find(CustomAcceptsFailCallback.class));
+	private boolean customAccepts(Object interceptor, List<Annotation> customAccepts) {
+		return customAcceptsExecutor.accepts(interceptor,
+				find(CustomAcceptsFailCallback.class), customAccepts);
 	}
 
 	@Override

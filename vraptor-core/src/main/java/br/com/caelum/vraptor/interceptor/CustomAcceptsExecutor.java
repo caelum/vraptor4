@@ -39,12 +39,15 @@ public class CustomAcceptsExecutor {
 		this.acceptsVerifier = acceptsVerifier;
 	}
 
-	public boolean accepts(Object interceptor, Method method) {
-		List<Annotation> constraints = getCustomAcceptsAnnotations(interceptor.getClass());
+	public boolean accepts(Object interceptor, Method method, List<Annotation> constraints) {
 		if (constraints.isEmpty()) return false;
 		boolean customAccepts = acceptsVerifier.isValid(interceptor,
 				controllerMethod.get(), controllerInstance.get(), constraints);
 		if (!customAccepts) invoker.tryToInvoke(interceptor, method);
 		return customAccepts;
+	}
+
+	public List<Annotation> getCustomAccepts(Object interceptor) {
+		return getCustomAcceptsAnnotations(interceptor.getClass());
 	}
 }

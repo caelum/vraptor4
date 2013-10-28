@@ -21,7 +21,7 @@ public class CustomAcceptsVerifier {
 	/**
 	 * @deprecated CDI eyes only
 	 */
-	public CustomAcceptsVerifier() {
+	protected CustomAcceptsVerifier() {
 		this(null);
 	}
 

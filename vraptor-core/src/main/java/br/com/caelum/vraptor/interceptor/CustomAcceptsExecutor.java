@@ -24,7 +24,7 @@ public class CustomAcceptsExecutor {
 	/**
 	 * @deprecated CDI eyes only
 	 */
-	public CustomAcceptsExecutor() {
+	protected CustomAcceptsExecutor() {
 		this(null, null, null, null);
 	}
 

@@ -253,7 +253,6 @@ public class AspectStyleInterceptorHandlerTest {
 		container = new InstanceContainer(deps.toArray());
 		InterceptorMethodParametersResolver parametersResolver = new InterceptorMethodParametersResolver(container);
 
-
 		acceptsExecutor = new InterceptorAcceptsExecutor(parametersResolver, stepInvoker);
 
 		customAcceptsExecutor = new CustomAcceptsExecutor(

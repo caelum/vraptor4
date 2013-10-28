@@ -33,7 +33,7 @@ public class MockInstanceImpl<T> implements Instance<T> {
 
 	@Override
 	public T get() {
-		return null;
+		return elements.isEmpty() ? null : elements.get(0);
 	}
 
 	@Override

@@ -6,14 +6,14 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.List;
 
-import javax.ejb.ApplicationException;
+import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 
 import br.com.caelum.vraptor.controller.ControllerInstance;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 
-@ApplicationException
+@ApplicationScoped
 public class CustomAcceptsExecutor {
 
 	private final Instance<ControllerMethod> controllerMethod;

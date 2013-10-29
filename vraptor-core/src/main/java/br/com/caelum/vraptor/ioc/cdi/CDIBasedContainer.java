@@ -1,52 +1,46 @@
 package br.com.caelum.vraptor.ioc.cdi;
 
-import java.util.concurrent.Callable;
+import java.util.Set;
 
 import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.Instance;
-import javax.enterprise.inject.spi.CDI;
+import javax.enterprise.context.spi.CreationalContext;
+import javax.enterprise.inject.spi.Bean;
+import javax.enterprise.inject.spi.BeanManager;
 import javax.inject.Inject;
 
-import br.com.caelum.vraptor.cache.CacheStore;
-import br.com.caelum.vraptor.cache.LRU;
 import br.com.caelum.vraptor.ioc.Container;
 
 @ApplicationScoped
-@SuppressWarnings("rawtypes")
+@SuppressWarnings("unchecked")
 public class CDIBasedContainer implements Container {
 
-	private final CacheStore<Class<?>,Instance> cache;
+	private BeanManager beanManager;
 
-	/** 
+	/**
 	 * @deprecated CDI eyes only
 	 */
-	protected CDIBasedContainer() {
-		this(null);
+	protected CDIBasedContainer(){
 	}
 
 	@Inject
-	public CDIBasedContainer(@LRU(capacity=1000) CacheStore<Class<?>, Instance> cache) {
-		super();
-		this.cache = cache;
+	public CDIBasedContainer(BeanManager beanManager) {
+		this.beanManager = beanManager;
 	}
 
 	@Override
 	public <T> T instanceFor(Class<T> type) {
-		return selectFromContainer(type).get();
+		return selectFromContainer(type);
 	}
 
 	@Override
 	public <T> boolean canProvide(Class<T> type) {
-		return !selectFromContainer(type).isUnsatisfied();
+		return selectFromContainer(type) != null;
 	}
 
-	@SuppressWarnings("unchecked")
-	private <T> Instance<T> selectFromContainer(final Class<T> type) {
-		return cache.fetch(type, new Callable<Instance>() {
-			@Override
-			public Instance call() throws Exception {
-				return CDI.current().select(type);
-			}
-		});
+	private <T> T selectFromContainer(final Class<T> type) {
+		Set<Bean<?>> beans = beanManager.getBeans(type);
+		Bean<? extends Object> bean = beanManager.resolve(beans);
+		CreationalContext<?> ctx = beanManager.createCreationalContext(bean);
+		return (T) beanManager.getReference(bean, type, ctx);
 	}
 }

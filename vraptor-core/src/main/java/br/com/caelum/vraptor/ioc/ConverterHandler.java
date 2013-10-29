@@ -16,7 +16,7 @@
  */
 package br.com.caelum.vraptor.ioc;
 
-import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.Dependent;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 
@@ -26,12 +26,12 @@ import br.com.caelum.vraptor.converter.Converter;
 import br.com.caelum.vraptor.core.ConvertQualifier;
 import br.com.caelum.vraptor.core.Converters;
 
-@ApplicationScoped
+@Dependent
 public class ConverterHandler{
 
 	private final Converters converters;
 
-	/** 
+	/**
 	 * @deprecated CDI eyes only
 	 */
 	protected ConverterHandler() {

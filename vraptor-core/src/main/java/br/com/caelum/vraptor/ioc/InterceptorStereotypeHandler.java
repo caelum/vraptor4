@@ -18,7 +18,7 @@ package br.com.caelum.vraptor.ioc;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
-import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.Dependent;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 
@@ -29,7 +29,7 @@ import br.com.caelum.vraptor.core.InterceptsQualifier;
 import br.com.caelum.vraptor.interceptor.InterceptorRegistry;
 import br.com.caelum.vraptor.interceptor.InterceptorValidator;
 
-@ApplicationScoped
+@Dependent
 public class InterceptorStereotypeHandler{
 
 	private static final Logger logger = getLogger(InterceptorStereotypeHandler.class);

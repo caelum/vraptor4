@@ -66,17 +66,13 @@ public class AspectStyleInterceptorHandler implements InterceptorHandler {
 	}
 
 	@Override
-	public void execute(InterceptorStack stack,
-			ControllerMethod controllerMethod, Object currentController) {
+	public void execute(InterceptorStack stack, ControllerMethod controllerMethod, Object currentController) {
 
 		Object interceptor = container.instanceFor(interceptorClass);
-
 		logger.debug("Invoking interceptor {}", interceptor.getClass().getSimpleName());
-
 		List<Annotation> customAccepts = customAcceptsExecutor.getCustomAccepts(interceptor);
 
-		if (customAccepts(interceptor, customAccepts)
-				|| internalAccepts(interceptor, customAccepts)) {
+		if (customAccepts(interceptor, customAccepts) || internalAccepts(interceptor, customAccepts)) {
 			before.execute(interceptor);
 			around.execute(interceptor);
 			after.execute(interceptor);

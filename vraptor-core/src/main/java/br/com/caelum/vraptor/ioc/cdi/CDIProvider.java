@@ -1,11 +1,13 @@
 package br.com.caelum.vraptor.ioc.cdi;
 
+import javax.enterprise.context.Dependent;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.inject.Inject;
 
 import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.ioc.ContainerProvider;
 
+@Dependent
 public class CDIProvider implements ContainerProvider {
 
 	@Inject

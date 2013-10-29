@@ -4,14 +4,14 @@ import static java.lang.String.format;
 
 import java.lang.reflect.Method;
 
-import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 
 import net.vidageek.mirror.list.dsl.MirrorList;
 import br.com.caelum.vraptor.Accepts;
 import br.com.caelum.vraptor.InterceptionException;
 
-@ApplicationScoped
+@Dependent
 public class AcceptsNeedReturnBooleanValidationRule implements ValidationRule {
 
 	private final StepInvoker invoker;

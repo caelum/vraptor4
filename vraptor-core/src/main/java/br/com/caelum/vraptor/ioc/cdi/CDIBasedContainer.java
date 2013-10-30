@@ -14,12 +14,13 @@ import br.com.caelum.vraptor.ioc.Container;
 @SuppressWarnings("unchecked")
 public class CDIBasedContainer implements Container {
 
-	private BeanManager beanManager;
+	private final BeanManager beanManager;
 
 	/**
 	 * @deprecated CDI eyes only
 	 */
 	protected CDIBasedContainer(){
+		this(null);
 	}
 
 	@Inject

@@ -5,7 +5,7 @@ import java.lang.reflect.Method;
 import javax.enterprise.inject.Vetoed;
 
 @Vetoed
-public class AroundExecutor implements StepExecutor<Object> {
+public class AroundExecutor implements StepExecutor {
 
 	private final StepInvoker stepInvoker;
 	private final InterceptorMethodParametersResolver parametersResolver;
@@ -23,8 +23,8 @@ public class AroundExecutor implements StepExecutor<Object> {
 	}
 
 	@Override
-	public Object execute(Object interceptor) {
+	public void execute(Object interceptor) {
 		Object[] params = parametersResolver.parametersFor(this.method);
-		return stepInvoker.tryToInvoke(interceptor, method, params);
+		stepInvoker.tryToInvoke(interceptor, method, params);
 	}
 }

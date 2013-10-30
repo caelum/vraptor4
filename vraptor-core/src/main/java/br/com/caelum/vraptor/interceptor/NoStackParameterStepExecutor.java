@@ -5,7 +5,7 @@ import java.lang.reflect.Method;
 import javax.enterprise.inject.Vetoed;
 
 @Vetoed
-public class NoStackParameterStepExecutor implements StepExecutor<Void> {
+public class NoStackParameterStepExecutor implements StepExecutor {
 
 	private StepInvoker stepInvoker;
 	private Method method;
@@ -21,8 +21,7 @@ public class NoStackParameterStepExecutor implements StepExecutor<Void> {
 	}
 
 	@Override
-	public Void execute(Object interceptor) {
+	public void execute(Object interceptor) {
 		stepInvoker.tryToInvoke(interceptor, method);
-		return null;
 	}
 }

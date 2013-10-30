@@ -30,9 +30,9 @@ public class AspectStyleInterceptorHandler implements InterceptorHandler {
 	private final Container container;
 	private final Class<?> interceptorClass;
 	private final InterceptorMethodParametersResolver parametersResolver;
-	private StepExecutor<?> after;
-	private StepExecutor<?> around;
-	private StepExecutor<?> before;
+	private StepExecutor after;
+	private StepExecutor around;
+	private StepExecutor before;
 	private MirrorList<Method> interceptorMethods;
 	private SimpleInterceptorStack simpleInterceptorStack;
 	private CustomAcceptsExecutor customAcceptsExecutor;
@@ -55,7 +55,6 @@ public class AspectStyleInterceptorHandler implements InterceptorHandler {
 	}
 
 	private void configure() {
-
 		after = new NoStackParameterStepExecutor(stepInvoker, find(AfterCall.class));
 		around = new AroundExecutor(stepInvoker,parametersResolver, find(AroundCall.class));
 		before = new NoStackParameterStepExecutor(stepInvoker, find(BeforeCall.class));

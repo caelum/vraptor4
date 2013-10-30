@@ -17,7 +17,7 @@ package br.com.caelum.vraptor.deserialization;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
-import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.Dependent;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 
@@ -30,12 +30,12 @@ import br.com.caelum.vraptor.core.DeserializesQualifier;
  * @author Lucas Cavalcanti, Cecilia Fernandes
  * @since 3.0.2
  */
-@ApplicationScoped
+@Dependent
 public class DeserializesHandler{
 
 	private final Deserializers deserializers;
 
-	/** 
+	/**
 	 * @deprecated CDI eyes only
 	 */
 	protected DeserializesHandler() {

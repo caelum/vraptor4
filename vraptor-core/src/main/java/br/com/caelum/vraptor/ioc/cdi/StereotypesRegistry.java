@@ -4,7 +4,7 @@ import java.lang.annotation.Annotation;
 import java.util.Map;
 import java.util.Set;
 
-import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.Dependent;
 import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.enterprise.util.AnnotationLiteral;
@@ -28,7 +28,7 @@ import br.com.caelum.vraptor.ioc.InterceptorStereotypeHandler;
 
 import com.google.common.collect.ImmutableMap;
 
-@ApplicationScoped
+@Dependent
 public class StereotypesRegistry {
 
 	private static final Map<Class<?>, StereotypeInfo> STEREOTYPES_INFO;

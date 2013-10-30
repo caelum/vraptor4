@@ -5,7 +5,7 @@ import static java.lang.String.format;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
-import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 
 import net.vidageek.mirror.list.dsl.MirrorList;
@@ -14,7 +14,7 @@ import br.com.caelum.vraptor.AroundCall;
 import br.com.caelum.vraptor.BeforeCall;
 import br.com.caelum.vraptor.InterceptionException;
 
-@ApplicationScoped
+@Dependent
 public class NoInterceptMethodsValidationRule implements ValidationRule {
 
 	private StepInvoker stepInvoker;

@@ -19,15 +19,16 @@
  */
 package br.com.caelum.vraptor.ioc;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 import java.util.List;
 
-import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.Dependent;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 import javax.servlet.ServletContext;
 
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.controller.BeanClass;
 import br.com.caelum.vraptor.core.ControllerQualifier;
@@ -35,15 +36,16 @@ import br.com.caelum.vraptor.http.route.Route;
 import br.com.caelum.vraptor.http.route.Router;
 import br.com.caelum.vraptor.http.route.RoutesParser;
 
-@ApplicationScoped
+@Dependent
 public class ControllerHandler{
-	private final Logger logger = LoggerFactory.getLogger(ControllerHandler.class);
-	
+
+	private final Logger logger = getLogger(ControllerHandler.class);
+
 	private final Router router;
 	private final RoutesParser parser;
 	private final ServletContext context;
 
-	/** 
+	/**
 	 * @deprecated CDI eyes only
 	 */
 	protected ControllerHandler() {

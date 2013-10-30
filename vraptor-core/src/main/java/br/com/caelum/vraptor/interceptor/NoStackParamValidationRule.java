@@ -7,7 +7,7 @@ import static java.util.Arrays.asList;
 import java.lang.reflect.Method;
 import java.util.List;
 
-import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 
 import net.vidageek.mirror.list.dsl.MirrorList;
@@ -19,7 +19,7 @@ import br.com.caelum.vraptor.core.InterceptorStack;
 
 import com.google.common.base.Predicate;
 
-@ApplicationScoped
+@Dependent
 public class NoStackParamValidationRule implements ValidationRule {
 
 	private final StepInvoker invoker;
@@ -45,10 +45,10 @@ public class NoStackParamValidationRule implements ValidationRule {
 		String interceptorStack = InterceptorStack.class.getName();
 		String simpleInterceptorStack = SimpleInterceptorStack.class.getName();
 
-		checkState(aroundCall == null || containsStack(aroundCall), "@AroundCall method must receive %s or %s", 
+		checkState(aroundCall == null || containsStack(aroundCall), "@AroundCall method must receive %s or %s",
 				interceptorStack, simpleInterceptorStack);
 
-		checkState(!containsStack(beforeCall) && !containsStack(afterCall) && !containsStack(accepts), 
+		checkState(!containsStack(beforeCall) && !containsStack(afterCall) && !containsStack(accepts),
 				"Non @AroundCall method must not receive %s or %s", interceptorStack, simpleInterceptorStack);
 	}
 

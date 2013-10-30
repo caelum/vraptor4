@@ -24,7 +24,9 @@ public class AroundExecutor implements StepExecutor {
 
 	@Override
 	public void execute(Object interceptor) {
-		Object[] params = parametersResolver.parametersFor(this.method);
-		stepInvoker.tryToInvoke(interceptor, method, params);
+		if (method != null) {
+			Object[] params = parametersResolver.parametersFor(this.method);
+			stepInvoker.tryToInvoke(interceptor, method, params);
+		}
 	}
 }

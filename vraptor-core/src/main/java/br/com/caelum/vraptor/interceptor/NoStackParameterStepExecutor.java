@@ -22,6 +22,8 @@ public class NoStackParameterStepExecutor implements StepExecutor {
 
 	@Override
 	public void execute(Object interceptor) {
-		stepInvoker.tryToInvoke(interceptor, method);
+		if (method != null) {
+			stepInvoker.tryToInvoke(interceptor, method);
+		}
 	}
 }

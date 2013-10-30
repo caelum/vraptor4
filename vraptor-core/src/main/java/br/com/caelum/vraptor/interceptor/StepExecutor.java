@@ -5,10 +5,10 @@ package br.com.caelum.vraptor.interceptor;
  * @author Alberto
  *
  */
-public interface StepExecutor<R> {
+public interface StepExecutor {
 
 	boolean accept();
 
-	R execute(Object interceptor);
+	void execute(Object interceptor);
 
 }

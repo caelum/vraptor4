@@ -3,7 +3,7 @@ package br.com.caelum.vraptor.interceptor;
 import javax.enterprise.inject.Vetoed;
 
 @Vetoed
-public class StackNextExecutor implements StepExecutor<Void> {
+public class StackNextExecutor implements StepExecutor {
 
 	private SimpleInterceptorStack simpleInterceptorStack;
 
@@ -17,8 +17,7 @@ public class StackNextExecutor implements StepExecutor<Void> {
 	}
 
 	@Override
-	public Void execute(Object interceptor) {
+	public void execute(Object interceptor) {
 		simpleInterceptorStack.next();
-		return null;
 	}
 }

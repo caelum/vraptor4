@@ -12,11 +12,6 @@ public class StackNextExecutor implements StepExecutor {
 	}
 
 	@Override
-	public boolean accept() {
-		return true;
-	}
-
-	@Override
 	public void execute(Object interceptor) {
 		simpleInterceptorStack.next();
 	}

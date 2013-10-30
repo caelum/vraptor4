@@ -16,11 +16,6 @@ public class NoStackParameterStepExecutor implements StepExecutor {
 	}
 
 	@Override
-	public boolean accept() {
-		return method != null;
-	}
-
-	@Override
 	public void execute(Object interceptor) {
 		if (method != null) {
 			stepInvoker.tryToInvoke(interceptor, method);

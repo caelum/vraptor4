@@ -55,13 +55,11 @@ public class AspectStyleInterceptorHandler implements InterceptorHandler {
 	}
 
 	private void configure() {
+		Method aroundMethod = find(AroundCall.class);
 		after = new NoStackParameterStepExecutor(stepInvoker, find(AfterCall.class));
-		around = new AroundExecutor(stepInvoker,parametersResolver, find(AroundCall.class));
+		around = new AroundExecutor(stepInvoker,parametersResolver, aroundMethod);
 		before = new NoStackParameterStepExecutor(stepInvoker, find(BeforeCall.class));
-
-		if(!after.accept()) after = new DoNothingStepExecutor();
-		if(!around.accept()) around = new StackNextExecutor(simpleInterceptorStack);
-		if(!before.accept()) before = new DoNothingStepExecutor();
+		if(aroundMethod == null) around = new StackNextExecutor(simpleInterceptorStack);
 	}
 
 	@Override

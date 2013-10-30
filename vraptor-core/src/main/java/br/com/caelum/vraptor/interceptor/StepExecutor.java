@@ -7,8 +7,6 @@ package br.com.caelum.vraptor.interceptor;
  */
 public interface StepExecutor {
 
-	boolean accept();
-
 	void execute(Object interceptor);
 
 }

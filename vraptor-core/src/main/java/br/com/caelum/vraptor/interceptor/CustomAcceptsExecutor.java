@@ -1,45 +1,53 @@
 package br.com.caelum.vraptor.interceptor;
 
+import static br.com.caelum.vraptor.interceptor.CustomAcceptsVerifier.getCustomAcceptsAnnotations;
+
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.List;
 
-import javax.enterprise.inject.Vetoed;
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.Instance;
+import javax.inject.Inject;
 
 import br.com.caelum.vraptor.controller.ControllerInstance;
 import br.com.caelum.vraptor.controller.ControllerMethod;
-import br.com.caelum.vraptor.ioc.Container;
 
-@Vetoed
-public class CustomAcceptsExecutor implements StepExecutor<Boolean> {
+@ApplicationScoped
+public class CustomAcceptsExecutor {
 
-	private StepInvoker stepInvoker;
-	private Container container;
-	private Method method;
-	private Class<?> interceptorClass;
+	private final Instance<ControllerMethod> controllerMethod;
+	private final Instance<ControllerInstance> controllerInstance;
+	private final StepInvoker invoker;
+	private final CustomAcceptsVerifier acceptsVerifier;
 
-	public CustomAcceptsExecutor(StepInvoker stepInvoker,
-			Container container, Method method, Class<?> interceptorClass) {
-
-		this.stepInvoker = stepInvoker;
-		this.container = container;
-		this.method = method;
-		this.interceptorClass = interceptorClass;
+	/**
+	 * @deprecated CDI eyes only
+	 */
+	protected CustomAcceptsExecutor() {
+		this(null, null, null, null);
 	}
 
-	@Override
-	public boolean accept(){
-		List<Annotation> constraints = CustomAcceptsVerifier.getCustomAcceptsAnnotations(interceptorClass);
-		return !constraints.isEmpty();
+	@Inject
+	public CustomAcceptsExecutor(Instance<ControllerMethod> controllerMethod,
+			Instance<ControllerInstance> controllerInstance,
+			StepInvoker invoker, CustomAcceptsVerifier acceptsVerifier) {
+
+		this.controllerMethod = controllerMethod;
+		this.controllerInstance = controllerInstance;
+		this.invoker = invoker;
+		this.acceptsVerifier = acceptsVerifier;
 	}
 
-	@Override
-	public Boolean execute(Object interceptor) {
-		boolean customAccepts = new CustomAcceptsVerifier(container.instanceFor(ControllerMethod.class),
-				container.instanceFor(ControllerInstance.class), container, interceptor).isValid();
-		if (!customAccepts) {
-			stepInvoker.tryToInvoke(interceptor, method);
-		}
+	public boolean accepts(Object interceptor, Method method, List<Annotation> constraints) {
+		if (constraints.isEmpty()) return false;
+		boolean customAccepts = acceptsVerifier.isValid(interceptor,
+				controllerMethod.get(), controllerInstance.get(), constraints);
+		if (!customAccepts) invoker.tryToInvoke(interceptor, method);
 		return customAccepts;
+	}
+
+	public List<Annotation> getCustomAccepts(Object interceptor) {
+		return getCustomAcceptsAnnotations(interceptor.getClass());
 	}
 }

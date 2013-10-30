@@ -24,7 +24,9 @@ import javax.inject.Inject;
 import br.com.caelum.vraptor.Intercepts;
 import br.com.caelum.vraptor.cache.CacheStore;
 import br.com.caelum.vraptor.interceptor.AspectStyleInterceptorHandler;
+import br.com.caelum.vraptor.interceptor.CustomAcceptsExecutor;
 import br.com.caelum.vraptor.interceptor.Interceptor;
+import br.com.caelum.vraptor.interceptor.InterceptorAcceptsExecutor;
 import br.com.caelum.vraptor.interceptor.InterceptorMethodParametersResolver;
 import br.com.caelum.vraptor.interceptor.SimpleInterceptorStack;
 import br.com.caelum.vraptor.interceptor.StepInvoker;
@@ -44,23 +46,29 @@ public class DefaultInterceptorHandlerFactory implements InterceptorHandlerFacto
 	private final StepInvoker stepInvoker;
 	private final InterceptorMethodParametersResolver parametersResolver;
 	private SimpleInterceptorStack simpleInterceptorStack;
+	private InterceptorAcceptsExecutor acceptsExecutor;
+	private CustomAcceptsExecutor customAcceptsExecutor;
 
 	/**
 	 * @deprecated CDI eyes only
 	 */
 	protected DefaultInterceptorHandlerFactory() {
-		this(null, null, null, null, null);
+		this(null, null, null, null, null, null, null);
 	}
 
 	@Inject
 	public DefaultInterceptorHandlerFactory(Container container, StepInvoker stepInvoker,
 			InterceptorMethodParametersResolver parametersResolver, CacheStore<Class<?>,
-			InterceptorHandler> cachedHandlers, SimpleInterceptorStack simpleInterceptorStack) {
+			InterceptorHandler> cachedHandlers, SimpleInterceptorStack simpleInterceptorStack,
+			InterceptorAcceptsExecutor acceptsExecutor, CustomAcceptsExecutor customAcceptsExecutor) {
+
 		this.container = container;
 		this.stepInvoker = stepInvoker;
 		this.parametersResolver = parametersResolver;
 		this.cachedHandlers = cachedHandlers;
 		this.simpleInterceptorStack = simpleInterceptorStack;
+		this.acceptsExecutor = acceptsExecutor;
+		this.customAcceptsExecutor = customAcceptsExecutor;
 	}
 
 	@Override
@@ -70,7 +78,7 @@ public class DefaultInterceptorHandlerFactory implements InterceptorHandlerFacto
 			public InterceptorHandler call() throws Exception {
 				if(type.isAnnotationPresent(Intercepts.class) && !Interceptor.class.isAssignableFrom(type)){
 					return new AspectStyleInterceptorHandler(type, stepInvoker, container,
-							parametersResolver, simpleInterceptorStack);
+						parametersResolver, simpleInterceptorStack, customAcceptsExecutor, acceptsExecutor);
 				}
 				return new ToInstantiateInterceptorHandler(container, type);
 			}

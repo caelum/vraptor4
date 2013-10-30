@@ -1,10 +1,14 @@
 package br.com.caelum.vraptor.interceptor;
 
+import static br.com.caelum.vraptor.interceptor.CustomAcceptsVerifier.getCustomAcceptsAnnotations;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+
+import java.lang.annotation.Annotation;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -18,48 +22,43 @@ import br.com.caelum.vraptor.interceptor.example.InterceptorWithCustomizedAccept
 import br.com.caelum.vraptor.interceptor.example.MethodLevelAcceptsController;
 
 public class CustomAcceptsVerifierTest {
-	
+
 	private @Mock WithAnnotationAcceptor withAnnotationAcceptor;
 	private @Mock ControllerMethod controllerMethod;
 	private @Mock PackagesAcceptor packagesAcceptor;
 	private InterceptorWithCustomizedAccepts interceptor;
 	private ControllerInstance controllerInstance;
-	
+	private List<Annotation> constraints;
+
 	@Before
 	public void setup() {
 		MockitoAnnotations.initMocks(this);
 		interceptor = new InterceptorWithCustomizedAccepts();
-		controllerInstance = new DefaultControllerInstance(
-				new MethodLevelAcceptsController());		
-	}	
+		controllerInstance = new DefaultControllerInstance(new MethodLevelAcceptsController());
+		constraints = getCustomAcceptsAnnotations(interceptor.getClass());
+		when(withAnnotationAcceptor.validate(controllerMethod, controllerInstance)).thenReturn(true);
+	}
 
 	@Test
 	public void shouldValidateWithOne() throws Exception {
-		CustomAcceptsVerifier verifier = new CustomAcceptsVerifier(controllerMethod,
-				controllerInstance, new InstanceContainer(withAnnotationAcceptor), interceptor);		
-		when(withAnnotationAcceptor.validate(controllerMethod, controllerInstance)).thenReturn(true);
-		
-		assertTrue(verifier.isValid());
+		InstanceContainer container = new InstanceContainer(withAnnotationAcceptor);
+		CustomAcceptsVerifier verifier = new CustomAcceptsVerifier(container);
+		assertTrue(verifier.isValid(interceptor, controllerMethod, controllerInstance, constraints));
 	}
-	
+
 	@Test
 	public void shouldValidateWithTwoOrMore() throws Exception {
-		CustomAcceptsVerifier verifier = new CustomAcceptsVerifier(controllerMethod,
-				controllerInstance, new InstanceContainer(withAnnotationAcceptor,packagesAcceptor), interceptor);
-		when(withAnnotationAcceptor.validate(controllerMethod, controllerInstance)).thenReturn(true);
-		when(packagesAcceptor.validate(controllerMethod, controllerInstance)).thenReturn(true);
-		
-		assertTrue(verifier.isValid());
+		InstanceContainer container = new InstanceContainer(withAnnotationAcceptor,packagesAcceptor);
+		CustomAcceptsVerifier verifier = new CustomAcceptsVerifier(container);
+		assertTrue(verifier.isValid(interceptor, controllerMethod, controllerInstance, constraints));
 	}
-	
+
 	@Test
 	public void shouldEndProcessIfOneIsInvalid() throws Exception {
-		CustomAcceptsVerifier verifier = new CustomAcceptsVerifier(controllerMethod,
-				controllerInstance, new InstanceContainer(withAnnotationAcceptor,packagesAcceptor), interceptor);
+		InstanceContainer container = new InstanceContainer(withAnnotationAcceptor,packagesAcceptor);
+		CustomAcceptsVerifier verifier = new CustomAcceptsVerifier(container);
 		when(withAnnotationAcceptor.validate(controllerMethod, controllerInstance)).thenReturn(false);
-		when(packagesAcceptor.validate(controllerMethod, controllerInstance)).thenReturn(true);
-		
-		verify(packagesAcceptor,never()).validate(controllerMethod, controllerInstance);
-		assertFalse(verifier.isValid());
-	}	
+		verify(packagesAcceptor, never()).validate(controllerMethod, controllerInstance);
+		assertFalse(verifier.isValid(interceptor, controllerMethod, controllerInstance, constraints));
+	}
 }

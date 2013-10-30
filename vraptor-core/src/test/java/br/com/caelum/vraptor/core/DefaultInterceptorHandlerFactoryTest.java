@@ -14,7 +14,9 @@ import br.com.caelum.vraptor.cache.CacheStore;
 import br.com.caelum.vraptor.cache.DefaultCacheStore;
 import br.com.caelum.vraptor.factory.Factories;
 import br.com.caelum.vraptor.interceptor.AspectStyleInterceptorHandler;
+import br.com.caelum.vraptor.interceptor.CustomAcceptsExecutor;
 import br.com.caelum.vraptor.interceptor.Interceptor;
+import br.com.caelum.vraptor.interceptor.InterceptorAcceptsExecutor;
 import br.com.caelum.vraptor.interceptor.InterceptorMethodParametersResolver;
 import br.com.caelum.vraptor.interceptor.SimpleInterceptorStack;
 import br.com.caelum.vraptor.interceptor.StepInvoker;
@@ -29,6 +31,8 @@ public class DefaultInterceptorHandlerFactoryTest {
 	private StepInvoker stepInvoker = Factories.createStepInvoker();
 
 	private @Mock SimpleInterceptorStack simpleStack;
+	private @Mock InterceptorAcceptsExecutor acceptsExecutor;
+	private @Mock CustomAcceptsExecutor customAcceptsExecutor;
 
 	@Before
 	public void setUp() throws Exception {
@@ -37,7 +41,8 @@ public class DefaultInterceptorHandlerFactoryTest {
 		InterceptorMethodParametersResolver parametersResolver = new InterceptorMethodParametersResolver(container);
 
 		CacheStore<Class<?>, InterceptorHandler> cachedHandlers = new DefaultCacheStore<>();
-		factory = new DefaultInterceptorHandlerFactory(container, stepInvoker, parametersResolver, cachedHandlers, simpleStack);
+		factory = new DefaultInterceptorHandlerFactory(container, stepInvoker,
+				parametersResolver, cachedHandlers, simpleStack, acceptsExecutor, customAcceptsExecutor);
 	}
 
 	static interface RegularInterceptor extends Interceptor {}

@@ -33,7 +33,7 @@ public class AspectStyleInterceptorHandler implements InterceptorHandler {
 	private CustomAcceptsExecutor customAcceptsExecutor;
 	private InterceptorAcceptsExecutor acceptsExecutor;
 
-	private AroundExecutor aroundExecutor;
+	private InterceptorExecutor interceptorExecutor;
 
 	private Method afterMethod;
 	private Method aroundMethod;
@@ -41,14 +41,14 @@ public class AspectStyleInterceptorHandler implements InterceptorHandler {
 
 	public AspectStyleInterceptorHandler(Class<?> interceptorClass, StepInvoker stepInvoker,
 			Container container, CustomAcceptsExecutor customAcceptsExecutor,
-			InterceptorAcceptsExecutor acceptsExecutor, AroundExecutor aroundExecutor) {
+			InterceptorAcceptsExecutor acceptsExecutor, InterceptorExecutor interceptorExecutor) {
 
 		this.interceptorClass = interceptorClass;
 		this.stepInvoker = stepInvoker;
 		this.container = container;
 		this.customAcceptsExecutor = customAcceptsExecutor;
 		this.acceptsExecutor = acceptsExecutor;
-		this.aroundExecutor = aroundExecutor;
+		this.interceptorExecutor = interceptorExecutor;
 		this.interceptorMethods = stepInvoker.findAllMethods(interceptorClass);
 		configure();
 	}
@@ -67,9 +67,9 @@ public class AspectStyleInterceptorHandler implements InterceptorHandler {
 		List<Annotation> customAccepts = customAcceptsExecutor.getCustomAccepts(interceptor);
 
 		if (customAccepts(interceptor, customAccepts) || internalAccepts(interceptor, customAccepts)) {
-			aroundExecutor.execute(interceptor, afterMethod);
-			aroundExecutor.executeAround(interceptor, aroundMethod);
-			aroundExecutor.execute(interceptor, beforeMethod);
+			interceptorExecutor.execute(interceptor, afterMethod);
+			interceptorExecutor.executeAround(interceptor, aroundMethod);
+			interceptorExecutor.execute(interceptor, beforeMethod);
 		} else {
 			stack.next(controllerMethod, currentController);
 		}

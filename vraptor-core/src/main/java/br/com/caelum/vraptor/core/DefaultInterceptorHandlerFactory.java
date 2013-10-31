@@ -22,11 +22,11 @@ import javax.inject.Inject;
 
 import br.com.caelum.vraptor.Intercepts;
 import br.com.caelum.vraptor.cache.CacheStore;
-import br.com.caelum.vraptor.interceptor.AroundExecutor;
 import br.com.caelum.vraptor.interceptor.AspectStyleInterceptorHandler;
 import br.com.caelum.vraptor.interceptor.CustomAcceptsExecutor;
 import br.com.caelum.vraptor.interceptor.Interceptor;
 import br.com.caelum.vraptor.interceptor.InterceptorAcceptsExecutor;
+import br.com.caelum.vraptor.interceptor.InterceptorExecutor;
 import br.com.caelum.vraptor.interceptor.StepInvoker;
 import br.com.caelum.vraptor.ioc.Container;
 
@@ -43,7 +43,7 @@ public class DefaultInterceptorHandlerFactory implements InterceptorHandlerFacto
 	private final StepInvoker stepInvoker;
 	private InterceptorAcceptsExecutor acceptsExecutor;
 	private CustomAcceptsExecutor customAcceptsExecutor;
-	private AroundExecutor aroundExecutor;
+	private InterceptorExecutor interceptorExecutor;
 
 	/**
 	 * @deprecated CDI eyes only
@@ -55,14 +55,14 @@ public class DefaultInterceptorHandlerFactory implements InterceptorHandlerFacto
 	@Inject
 	public DefaultInterceptorHandlerFactory(Container container, StepInvoker stepInvoker,
 			CacheStore<Class<?>, InterceptorHandler> cachedHandlers, InterceptorAcceptsExecutor acceptsExecutor,
-			CustomAcceptsExecutor customAcceptsExecutor, AroundExecutor aroundExecutor) {
+			CustomAcceptsExecutor customAcceptsExecutor, InterceptorExecutor interceptorExecutor) {
 
 		this.container = container;
 		this.stepInvoker = stepInvoker;
 		this.cachedHandlers = cachedHandlers;
 		this.acceptsExecutor = acceptsExecutor;
 		this.customAcceptsExecutor = customAcceptsExecutor;
-		this.aroundExecutor = aroundExecutor;
+		this.interceptorExecutor = interceptorExecutor;
 	}
 
 	@Override
@@ -72,7 +72,7 @@ public class DefaultInterceptorHandlerFactory implements InterceptorHandlerFacto
 			public InterceptorHandler call() throws Exception {
 				if(type.isAnnotationPresent(Intercepts.class) && !Interceptor.class.isAssignableFrom(type)){
 					return new AspectStyleInterceptorHandler(type, stepInvoker, container, customAcceptsExecutor,
-							acceptsExecutor, aroundExecutor);
+							acceptsExecutor, interceptorExecutor);
 				}
 				return new ToInstantiateInterceptorHandler(container, type);
 			}

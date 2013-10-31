@@ -29,37 +29,34 @@ public class AspectStyleInterceptorHandler implements InterceptorHandler {
 	private final StepInvoker stepInvoker;
 	private final Container container;
 	private final Class<?> interceptorClass;
-	private final InterceptorMethodParametersResolver parametersResolver;
-	private StepExecutor after;
-	private StepExecutor around;
-	private StepExecutor before;
 	private MirrorList<Method> interceptorMethods;
-	private SimpleInterceptorStack simpleInterceptorStack;
 	private CustomAcceptsExecutor customAcceptsExecutor;
 	private InterceptorAcceptsExecutor acceptsExecutor;
 
+	private AroundExecutor aroundExecutor;
+
+	private Method afterMethod;
+	private Method aroundMethod;
+	private Method beforeMethod;
+
 	public AspectStyleInterceptorHandler(Class<?> interceptorClass, StepInvoker stepInvoker,
-			Container container, InterceptorMethodParametersResolver parametersResolver,
-			SimpleInterceptorStack simpleInterceptorStack,
-			CustomAcceptsExecutor customAcceptsExecutor, InterceptorAcceptsExecutor acceptsExecutor) {
+			Container container, CustomAcceptsExecutor customAcceptsExecutor,
+			InterceptorAcceptsExecutor acceptsExecutor, AroundExecutor aroundExecutor) {
 
 		this.interceptorClass = interceptorClass;
 		this.stepInvoker = stepInvoker;
 		this.container = container;
-		this.parametersResolver = parametersResolver;
-		this.simpleInterceptorStack = simpleInterceptorStack;
 		this.customAcceptsExecutor = customAcceptsExecutor;
 		this.acceptsExecutor = acceptsExecutor;
+		this.aroundExecutor = aroundExecutor;
 		this.interceptorMethods = stepInvoker.findAllMethods(interceptorClass);
 		configure();
 	}
 
 	private void configure() {
-		Method aroundMethod = find(AroundCall.class);
-		after = new AroundExecutor(stepInvoker, parametersResolver, find(AfterCall.class));
-		around = new AroundExecutor(stepInvoker,parametersResolver, aroundMethod);
-		before = new AroundExecutor(stepInvoker, parametersResolver, find(BeforeCall.class));
-		if(aroundMethod == null) around = new StackNextExecutor(simpleInterceptorStack);
+		afterMethod = find(AfterCall.class);
+		aroundMethod = find(AroundCall.class);
+		beforeMethod = find(BeforeCall.class);
 	}
 
 	@Override
@@ -70,9 +67,9 @@ public class AspectStyleInterceptorHandler implements InterceptorHandler {
 		List<Annotation> customAccepts = customAcceptsExecutor.getCustomAccepts(interceptor);
 
 		if (customAccepts(interceptor, customAccepts) || internalAccepts(interceptor, customAccepts)) {
-			before.execute(interceptor);
-			around.execute(interceptor);
-			after.execute(interceptor);
+			aroundExecutor.execute(interceptor, afterMethod);
+			aroundExecutor.executeAround(interceptor, aroundMethod);
+			aroundExecutor.execute(interceptor, beforeMethod);
 		} else {
 			stack.next(controllerMethod, currentController);
 		}

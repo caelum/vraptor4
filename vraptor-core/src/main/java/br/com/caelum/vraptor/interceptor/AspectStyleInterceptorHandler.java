@@ -29,15 +29,14 @@ public class AspectStyleInterceptorHandler implements InterceptorHandler {
 	private final StepInvoker stepInvoker;
 	private final Container container;
 	private final Class<?> interceptorClass;
-	private MirrorList<Method> interceptorMethods;
 	private CustomAcceptsExecutor customAcceptsExecutor;
 	private InterceptorAcceptsExecutor acceptsExecutor;
-
 	private InterceptorExecutor interceptorExecutor;
-
 	private Method afterMethod;
 	private Method aroundMethod;
 	private Method beforeMethod;
+	private Method acceptsMethod;
+	private Method customAcceptsMethod;
 
 	public AspectStyleInterceptorHandler(Class<?> interceptorClass, StepInvoker stepInvoker,
 			Container container, CustomAcceptsExecutor customAcceptsExecutor,
@@ -49,14 +48,16 @@ public class AspectStyleInterceptorHandler implements InterceptorHandler {
 		this.customAcceptsExecutor = customAcceptsExecutor;
 		this.acceptsExecutor = acceptsExecutor;
 		this.interceptorExecutor = interceptorExecutor;
-		this.interceptorMethods = stepInvoker.findAllMethods(interceptorClass);
-		configure();
+		extractAllInterceptorMethods();
 	}
 
-	private void configure() {
-		afterMethod = find(AfterCall.class);
-		aroundMethod = find(AroundCall.class);
-		beforeMethod = find(BeforeCall.class);
+	private void extractAllInterceptorMethods() {
+		MirrorList<Method> methods = stepInvoker.findAllMethods(interceptorClass);
+		this.afterMethod = find(AfterCall.class, methods);
+		this.aroundMethod = find(AroundCall.class, methods);
+		this.beforeMethod = find(BeforeCall.class, methods);
+		this.acceptsMethod = find(Accepts.class, methods);
+		this.customAcceptsMethod = find(CustomAcceptsFailCallback.class, methods);
 	}
 
 	@Override
@@ -75,18 +76,17 @@ public class AspectStyleInterceptorHandler implements InterceptorHandler {
 		}
 	}
 
-	private Method find(Class<? extends Annotation> step) {
-		return stepInvoker.findMethod(interceptorMethods, step, interceptorClass);
+	private Method find(Class<? extends Annotation> step, MirrorList<Method> methods) {
+		return stepInvoker.findMethod(methods, step, interceptorClass);
 	}
 
 	private boolean internalAccepts(Object interceptor, List<Annotation> customAccepts) {
 		if (!customAccepts.isEmpty()) return false;
-		return acceptsExecutor.accepts(interceptor, find(Accepts.class));
+		return acceptsExecutor.accepts(interceptor, acceptsMethod);
 	}
 
 	private boolean customAccepts(Object interceptor, List<Annotation> customAccepts) {
-		return customAcceptsExecutor.accepts(interceptor,
-				find(CustomAcceptsFailCallback.class), customAccepts);
+		return customAcceptsExecutor.accepts(interceptor, customAcceptsMethod, customAccepts);
 	}
 
 	@Override

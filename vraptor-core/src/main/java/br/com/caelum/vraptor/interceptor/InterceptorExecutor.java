@@ -30,20 +30,16 @@ public class InterceptorExecutor {
 
 	public void execute(Object interceptor, Method method) {
 		if (method != null) {
-			executeMethod(interceptor, method);
+			stepInvoker.tryToInvoke(interceptor, method);
 		}
 	}
 
 	public void executeAround(Object interceptor, Method method) {
 		if (method != null) {
-			executeMethod(interceptor, method);
+			Object[] params = parametersResolver.parametersFor(method);
+			stepInvoker.tryToInvoke(interceptor, method, params);
 		} else {
 			simpleInterceptorStack.get().next();
 		}
-	}
-
-	private void executeMethod(Object interceptor, Method method) {
-		Object[] params = parametersResolver.parametersFor(method);
-		stepInvoker.tryToInvoke(interceptor, method, params);
 	}
 }

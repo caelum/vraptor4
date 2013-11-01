@@ -3,6 +3,7 @@ package br.com.caelum.vraptor.interceptor;
 import java.lang.reflect.Method;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 
 @ApplicationScoped
@@ -10,7 +11,7 @@ public class InterceptorExecutor {
 
 	private final StepInvoker stepInvoker;
 	private final InterceptorMethodParametersResolver parametersResolver;
-	private SimpleInterceptorStack simpleInterceptorStack;
+	private final Instance<SimpleInterceptorStack> simpleInterceptorStack;
 
 	/**
 	 * @deprecated CDI eyes only
@@ -21,7 +22,7 @@ public class InterceptorExecutor {
 
 	@Inject
 	public InterceptorExecutor(StepInvoker stepInvoker, InterceptorMethodParametersResolver parametersResolver,
-			SimpleInterceptorStack simpleInterceptorStack) {
+			Instance<SimpleInterceptorStack> simpleInterceptorStack) {
 		this.stepInvoker = stepInvoker;
 		this.parametersResolver = parametersResolver;
 		this.simpleInterceptorStack = simpleInterceptorStack;
@@ -37,7 +38,7 @@ public class InterceptorExecutor {
 		if (method != null) {
 			executeMethod(interceptor, method);
 		} else {
-			simpleInterceptorStack.next();
+			simpleInterceptorStack.get().next();
 		}
 	}
 

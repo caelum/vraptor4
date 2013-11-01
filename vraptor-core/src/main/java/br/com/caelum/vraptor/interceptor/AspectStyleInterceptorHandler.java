@@ -68,9 +68,9 @@ public class AspectStyleInterceptorHandler implements InterceptorHandler {
 		List<Annotation> customAccepts = customAcceptsExecutor.getCustomAccepts(interceptor);
 
 		if (customAccepts(interceptor, customAccepts) || internalAccepts(interceptor, customAccepts)) {
-			interceptorExecutor.execute(interceptor, afterMethod);
-			interceptorExecutor.executeAround(interceptor, aroundMethod);
 			interceptorExecutor.execute(interceptor, beforeMethod);
+			interceptorExecutor.executeAround(interceptor, aroundMethod);
+			interceptorExecutor.execute(interceptor, afterMethod);
 		} else {
 			stack.next(controllerMethod, currentController);
 		}

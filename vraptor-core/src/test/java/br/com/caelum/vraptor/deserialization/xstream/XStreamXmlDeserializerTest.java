@@ -10,7 +10,6 @@ import java.io.InputStream;
 import java.lang.reflect.AccessibleObject;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import java.util.List;
 import java.util.TimeZone;
 
 import org.junit.Before;
@@ -40,7 +39,7 @@ public class XStreamXmlDeserializerTest {
 
 	@Before
 	public void setUp() throws Exception {
-		provider = new ParanamerNameProvider(new DefaultCacheStore<AccessibleObject, List<Parameter>>());
+		provider = new ParanamerNameProvider(new DefaultCacheStore<AccessibleObject, Parameter[]>());
 
 		deserializer = new XStreamXMLDeserializer(provider, cleanInstance(new CalendarConverter()));
 		BeanClass controllerClass = new DefaultBeanClass(DogController.class);

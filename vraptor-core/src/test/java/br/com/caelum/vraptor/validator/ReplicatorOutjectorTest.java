@@ -4,7 +4,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.lang.reflect.AccessibleObject;
-import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -34,7 +33,7 @@ public class ReplicatorOutjectorTest {
 		when(controllerMethod.getMethod()).thenReturn(getClass().getDeclaredMethod("foo", int.class, float.class, long.class));
 		when(method.getControllerMethod()).thenReturn(controllerMethod);
 
-		provider = new ParanamerNameProvider(new DefaultCacheStore<AccessibleObject, List<Parameter>>());
+		provider = new ParanamerNameProvider(new DefaultCacheStore<AccessibleObject, Parameter[]>());
 		outjector = new ReplicatorOutjector(result, method, provider);
 	}
 

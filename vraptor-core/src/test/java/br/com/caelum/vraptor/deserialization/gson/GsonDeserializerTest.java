@@ -55,7 +55,7 @@ public class GsonDeserializerTest {
 
 	@Before
 	public void setUp() throws Exception {
-		provider = new ParanamerNameProvider(new DefaultCacheStore<AccessibleObject, List<Parameter>>());
+		provider = new ParanamerNameProvider(new DefaultCacheStore<AccessibleObject, Parameter[]>());
 		request = mock(HttpServletRequest.class);
 
 		List<JsonDeserializer<?>> adapters = new ArrayList<>();

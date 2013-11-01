@@ -24,7 +24,6 @@ import static org.junit.Assert.assertTrue;
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
-import java.util.List;
 
 import org.junit.Before;
 import org.junit.Ignore;
@@ -65,7 +64,7 @@ public class RouteBuilderTest {
 	public void setUp() throws Exception {
 		MockitoAnnotations.initMocks(this);
 
-		provider = new ParanamerNameProvider(new DefaultCacheStore<AccessibleObject, List<Parameter>>());
+		provider = new ParanamerNameProvider(new DefaultCacheStore<AccessibleObject, Parameter[]>());
 		
 		method = new DefaultControllerMethod(new DefaultBeanClass(MyResource.class), MyResource.class.getMethod(
 				"method", String.class, Integer.class, BigDecimal.class));

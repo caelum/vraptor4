@@ -19,7 +19,6 @@ package br.com.caelum.vraptor.http.route;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -53,7 +52,7 @@ public class DefaultTypeFinder implements TypeFinder {
 	@Override
 	public Map<String, Class<?>> getParameterTypes(Method method, String[] parameterPaths) {
 		Map<String,Class<?>> result = new HashMap<>();
-		List<Parameter> parametersFor = provider.parametersFor(method);
+		Parameter[] parametersFor = provider.parametersFor(method);
 		for (String path : parameterPaths) {
 			for (Parameter parameter: parametersFor) {
 				if (path.startsWith(parameter.getName() + ".") || path.equals(parameter.getName())) {

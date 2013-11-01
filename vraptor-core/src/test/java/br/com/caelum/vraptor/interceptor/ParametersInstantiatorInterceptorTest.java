@@ -78,7 +78,7 @@ public class ParametersInstantiatorInterceptorTest {
 	@Before
 	@SuppressWarnings("unchecked")
 	public void setup() throws Exception {
-		parameterNameProvider = new ParanamerNameProvider(new DefaultCacheStore<AccessibleObject, List<Parameter>>());
+		parameterNameProvider = new ParanamerNameProvider(new DefaultCacheStore<AccessibleObject, Parameter[]>());
 
 		MockitoAnnotations.initMocks(this);
 		when(request.getParameterNames()).thenReturn(Collections.<String> emptyEnumeration());

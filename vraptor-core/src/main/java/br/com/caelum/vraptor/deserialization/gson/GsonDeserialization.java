@@ -8,8 +8,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.util.LinkedList;
-import java.util.List;
 
 import javax.enterprise.inject.Any;
 import javax.enterprise.inject.Instance;
@@ -75,8 +73,8 @@ public class GsonDeserialization implements Deserializer {
 
 		Gson gson = getGson();
 		
-		final List<Object> values = new LinkedList<>();
-		final List<Parameter> parameterNames = paramNameProvider.parametersFor(method.getMethod());
+		final Parameter[] parameterNames = paramNameProvider.parametersFor(method.getMethod());
+		final Object[] values = new Object[parameterNames.length];
 
 		try {
 			String content = getContentOfStream(inputStream);
@@ -89,11 +87,11 @@ public class GsonDeserialization implements Deserializer {
 					JsonObject root = jsonElement.getAsJsonObject();
 		
 					for (int i = 0; i < types.length; i++) {
-						Parameter parameter = parameterNames.get(i);
+						Parameter parameter = parameterNames[i];
 						JsonElement node = root.get(parameter.getName());
 						
 						if (isWithoutRoot(parameterNames, root)) { 
-							values.add(gson.fromJson(root, parameter.getParameterizedType()));
+							values[i] = gson.fromJson(root, parameter.getParameterizedType());
 							logger.info("json without root deserialized");
 							break;
 
@@ -102,35 +100,31 @@ public class GsonDeserialization implements Deserializer {
 								JsonArray jsonArray= node.getAsJsonArray();
 								Type type = parameter.getParameterizedType();
 								if (type instanceof ParameterizedType) {
-									values.add(gson.fromJson(jsonArray, type));
+									values[i] = gson.fromJson(jsonArray, type);
 								} else {
-									values.add(gson.fromJson(jsonArray, types[i]));
+									values[i] = gson.fromJson(jsonArray, types[i]);
 								}
 							} else {
-								values.add(gson.fromJson(node, types[i]));
+								values[i] = gson.fromJson(node, types[i]);
 							}
-						} else {
-							values.add(null);
 						}
 					}
 				} else if (jsonElement.isJsonArray()) {
-					if ((parameterNames.size() != 1) || (!(parameterNames.get(0).getParameterizedType() instanceof ParameterizedType)))
+					if ((parameterNames.length != 1) || (!(parameterNames[0].getParameterizedType() instanceof ParameterizedType)))
 						throw new IllegalArgumentException("Methods that consumes an array representation must receive only just one collection generic typed argument");
 
 					JsonArray jsonArray= jsonElement.getAsJsonArray();
-					values.add(gson.fromJson(jsonArray, parameterNames.get(0).getParameterizedType()));
+					values[0] = gson.fromJson(jsonArray, parameterNames[0].getParameterizedType());
 				} else {
 					throw new IllegalArgumentException("This is an invalid or not supported json content");
 				}
-			} else {
-				values.add(null);
 			}
 		} catch (Exception e) {
 			throw new ResultException("Unable to deserialize data", e);
 		}
 
-		logger.debug("json deserialized: {}", values);
-		return values.toArray();
+		logger.debug("json deserialized: {}", (Object) values);
+		return values;
 	}
 
 	protected Gson getGson() {
@@ -166,7 +160,7 @@ public class GsonDeserialization implements Deserializer {
 		return charset.split(",")[0];
 	}
 
-	private boolean isWithoutRoot(List<Parameter> parameters, JsonObject root) {
+	private boolean isWithoutRoot(Parameter[] parameters, JsonObject root) {
 		for (Parameter parameter : parameters) {
 			if (root.get(parameter.getName()) != null)
 				return false;

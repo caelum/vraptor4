@@ -29,7 +29,6 @@ import static org.mockito.Mockito.when;
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Method;
 import java.util.Collections;
-import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -58,7 +57,7 @@ public class DefaultParametersControlTest {
 	public void setup() {
 		MockitoAnnotations.initMocks(this);
 		evaluator = new JavaEvaluator();
-		nameProvider = new ParanamerNameProvider(new DefaultCacheStore<AccessibleObject, List<Parameter>>());
+		nameProvider = new ParanamerNameProvider(new DefaultCacheStore<AccessibleObject, Parameter[]>());
 	}
 
 	@Test

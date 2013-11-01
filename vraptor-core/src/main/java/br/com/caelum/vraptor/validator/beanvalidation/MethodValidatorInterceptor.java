@@ -15,9 +15,7 @@
  */
 package br.com.caelum.vraptor.validator.beanvalidation;
 
-import java.util.Collections;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
@@ -111,8 +109,7 @@ public class MethodValidatorInterceptor implements Interceptor {
 				.validateParameters(controllerInstance, method.getMethod(), methodInfo.getParameters());
 		logger.debug("there are {} violations at method {}.", violations.size(), method);
 
-		List<Parameter> params = violations.isEmpty() ? Collections.<Parameter> emptyList()
-				: parameterNameProvider.parametersFor(method.getMethod());
+		Parameter[] params = violations.isEmpty() ? new Parameter[0] : parameterNameProvider.parametersFor(method.getMethod());
 
 		for (ConstraintViolation<Object> v : violations) {
 			BeanValidatorContext ctx = new BeanValidatorContext(v);
@@ -131,13 +128,13 @@ public class MethodValidatorInterceptor implements Interceptor {
 	 * is the name of method with full path for property. You can override this method to
 	 * change this behaviour.
 	 */
-	protected String extractCategory(List<Parameter> params, ConstraintViolation<Object> v) {
+	protected String extractCategory(Parameter[] params, ConstraintViolation<Object> v) {
 		Iterator<Node> property = v.getPropertyPath().iterator();
 		property.next();
 		ParameterNode parameterNode = property.next().as(ParameterNode.class);
 
 		int index = parameterNode.getParameterIndex();
 		return Joiner.on(".").join(v.getPropertyPath())
-				.replace("arg" + parameterNode.getParameterIndex(), params.get(index).getName());
+				.replace("arg" + parameterNode.getParameterIndex(), params[index].getName());
 	}
 }

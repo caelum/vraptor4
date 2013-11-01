@@ -73,7 +73,7 @@ public abstract class ParametersProviderTest {
 	@Before
 	public void setup() throws Exception {
 		MockitoAnnotations.initMocks(this);
-		nameProvider = new ParanamerNameProvider(new DefaultCacheStore<AccessibleObject, List<Parameter>>());
+		nameProvider = new ParanamerNameProvider(new DefaultCacheStore<AccessibleObject, Parameter[]>());
 		this.provider = getProvider();
 		this.errors = new ArrayList<>();
 		

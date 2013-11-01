@@ -5,7 +5,6 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
 import java.lang.reflect.AccessibleObject;
-import java.util.List;
 import java.util.Locale;
 
 import javax.validation.MessageInterpolator;
@@ -54,7 +53,7 @@ public class MethodValidatorTest {
 
 		Locale.setDefault(Locale.ENGLISH);
 
-		provider = new ParanamerNameProvider(new DefaultCacheStore<AccessibleObject, List<Parameter>>());
+		provider = new ParanamerNameProvider(new DefaultCacheStore<AccessibleObject, Parameter[]>());
 		
 		validatorFactory = javax.validation.Validation.buildDefaultValidatorFactory();
 

@@ -76,7 +76,7 @@ public class PathAnnotationRoutesParserTest {
 
 		this.proxifier = new JavassistProxifier();
 		this.typeFinder = new NoTypeFinder();
-		nameProvider = new ParanamerNameProvider(new DefaultCacheStore<AccessibleObject, List<Parameter>>());
+		nameProvider = new ParanamerNameProvider(new DefaultCacheStore<AccessibleObject, Parameter[]>());
 
 		when(router.builderFor(anyString())).thenAnswer(new Answer<DefaultRouteBuilder>() {
 

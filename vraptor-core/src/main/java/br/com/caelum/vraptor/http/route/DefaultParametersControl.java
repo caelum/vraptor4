@@ -94,8 +94,8 @@ public class DefaultParametersControl implements ParametersControl {
 	}
 
 	@Override
-	public String fillUri(List<Parameter> paramNames, Object... paramValues) {
-		if (paramNames.size() != paramValues.length) {
+	public String fillUri(Parameter[] paramNames, Object... paramValues) {
+		if (paramNames.length != paramValues.length) {
 			throw new IllegalArgumentException("paramNames must have the same length as paramValues. Names: " + paramNames + " Values: " + Arrays.toString(paramValues));
 		}
 
@@ -131,9 +131,9 @@ public class DefaultParametersControl implements ParametersControl {
 		}
 	}
 
-	private Object selectParam(String key, List<Parameter> paramNames, Object[] paramValues) {
-		for (int i = 0; i < paramNames.size(); i++) {
-			if (key.matches("^" + paramNames.get(i).getName() + "(\\..*|$)")) {
+	private Object selectParam(String key, Parameter[] paramNames, Object[] paramValues) {
+		for (int i = 0; i < paramNames.length; i++) {
+			if (key.matches("^" + paramNames[i].getName() + "(\\..*|$)")) {
 				return paramValues[i];
 			}
 		}

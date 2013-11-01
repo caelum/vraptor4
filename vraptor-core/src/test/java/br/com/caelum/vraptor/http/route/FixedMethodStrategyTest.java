@@ -26,9 +26,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.lang.reflect.Method;
-import java.util.Collections;
 import java.util.EnumSet;
-import java.util.List;
 import java.util.Set;
 
 import org.junit.Before;
@@ -64,8 +62,7 @@ public class FixedMethodStrategyTest {
 
 	@Test
 	public void canTranslate() {
-		FixedMethodStrategy strategy = new FixedMethodStrategy("abc", list,
-				methods(HttpMethod.POST), control, 0, Collections.<Parameter> emptyList());
+		FixedMethodStrategy strategy = new FixedMethodStrategy("abc", list, methods(HttpMethod.POST), control, 0, new Parameter[0]);
 		when(control.matches("/clients/add")).thenReturn(true);
 		ControllerMethod match = strategy.controllerMethod(request, "/clients/add");
 		assertThat(match, is(VRaptorMatchers.controllerMethod(method("list"))));
@@ -74,11 +71,10 @@ public class FixedMethodStrategyTest {
 
 	@Test
 	public void areEquals() throws Exception {
-		List<Parameter> emptyParams = Collections.emptyList();
-		FixedMethodStrategy first = new FixedMethodStrategy("/uri", list, get, control, 0, emptyParams);
-		FixedMethodStrategy second = new FixedMethodStrategy("/uri", list, get, control, 2, emptyParams);
-		FixedMethodStrategy third = new FixedMethodStrategy("/different", list, get, control, 2, emptyParams);
-		FixedMethodStrategy forth = new FixedMethodStrategy("/uri", list, post, control, 2, emptyParams);
+		FixedMethodStrategy first = new FixedMethodStrategy("/uri", list, get, control, 0, new Parameter[0]);
+		FixedMethodStrategy second = new FixedMethodStrategy("/uri", list, get, control, 2, new Parameter[0]);
+		FixedMethodStrategy third = new FixedMethodStrategy("/different", list, get, control, 2, new Parameter[0]);
+		FixedMethodStrategy forth = new FixedMethodStrategy("/uri", list, post, control, 2, new Parameter[0]);
 
 		assertThat(first, equalTo(second));
 		assertThat(first, not(equalTo(third)));

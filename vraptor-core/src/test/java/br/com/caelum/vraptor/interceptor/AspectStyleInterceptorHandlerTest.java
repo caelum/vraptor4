@@ -45,6 +45,7 @@ public class AspectStyleInterceptorHandlerTest {
 	private InterceptorAcceptsExecutor acceptsExecutor;
 	private CustomAcceptsExecutor customAcceptsExecutor;
 	private Container container;
+	private InterceptorExecutor interceptorExecutor;
 
 	@Before
 	public void setup() {
@@ -252,7 +253,10 @@ public class AspectStyleInterceptorHandlerTest {
 			new MockInstanceImpl<ControllerInstance>(controllerInstance),
 			stepInvoker, new CustomAcceptsVerifier(container));
 
-		return new AspectStyleInterceptorHandler(interceptorClass, stepInvoker, container,
-				parametersResolver, simpleInterceptorStack, customAcceptsExecutor, acceptsExecutor);
+		interceptorExecutor = new InterceptorExecutor(stepInvoker, parametersResolver,
+				new MockInstanceImpl<SimpleInterceptorStack>(simpleInterceptorStack));
+
+		return new AspectStyleInterceptorHandler(interceptorClass, stepInvoker, container, customAcceptsExecutor,
+				acceptsExecutor, interceptorExecutor);
 	}
 }

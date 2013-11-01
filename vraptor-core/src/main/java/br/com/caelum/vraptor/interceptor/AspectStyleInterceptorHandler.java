@@ -53,11 +53,11 @@ public class AspectStyleInterceptorHandler implements InterceptorHandler {
 
 	private void extractAllInterceptorMethods() {
 		MirrorList<Method> methods = stepInvoker.findAllMethods(interceptorClass);
-		this.afterMethod = find(AfterCall.class, methods);
-		this.aroundMethod = find(AroundCall.class, methods);
-		this.beforeMethod = find(BeforeCall.class, methods);
-		this.acceptsMethod = find(Accepts.class, methods);
-		this.customAcceptsMethod = find(CustomAcceptsFailCallback.class, methods);
+		this.afterMethod = findMethodWith(AfterCall.class, methods);
+		this.aroundMethod = findMethodWith(AroundCall.class, methods);
+		this.beforeMethod = findMethodWith(BeforeCall.class, methods);
+		this.acceptsMethod = findMethodWith(Accepts.class, methods);
+		this.customAcceptsMethod = findMethodWith(CustomAcceptsFailCallback.class, methods);
 	}
 
 	@Override
@@ -76,7 +76,7 @@ public class AspectStyleInterceptorHandler implements InterceptorHandler {
 		}
 	}
 
-	private Method find(Class<? extends Annotation> step, MirrorList<Method> methods) {
+	private Method findMethodWith(Class<? extends Annotation> step, MirrorList<Method> methods) {
 		return stepInvoker.findMethod(methods, step, interceptorClass);
 	}
 

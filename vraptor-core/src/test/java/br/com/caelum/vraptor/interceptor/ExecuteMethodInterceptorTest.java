@@ -31,6 +31,8 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.Collections;
 
+import javax.enterprise.event.Event;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -42,6 +44,7 @@ import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.controller.DefaultControllerMethod;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.core.MethodInfo;
+import br.com.caelum.vraptor.events.OutjectResultEvent;
 import br.com.caelum.vraptor.factory.Factories;
 import br.com.caelum.vraptor.reflection.MethodExecutor;
 import br.com.caelum.vraptor.validator.Message;
@@ -50,32 +53,33 @@ import br.com.caelum.vraptor.validator.Validator;
 
 public class ExecuteMethodInterceptorTest {
 
-	private @Mock MethodInfo info;
-	private @Mock InterceptorStack stack;
-	private @Mock Validator validator;
+	@Mock private MethodInfo info;
+	@Mock private InterceptorStack stack;
+	@Mock private Validator validator;
+	@Mock private Event<OutjectResultEvent> event;
 	private MethodExecutor methodExecutor = Factories.createMethodExecutor();
 	private ExecuteMethodInterceptor interceptor;
 
 	@Before
 	public void setup() throws NoSuchMethodException {
 		MockitoAnnotations.initMocks(this);
-		interceptor = new ExecuteMethodInterceptor(info, validator,methodExecutor);
+		interceptor = new ExecuteMethodInterceptor(info, validator,methodExecutor, event);
 	}
 
 	@Test
 	public void shouldAcceptAlways() {
 		assertTrue(interceptor.accepts(null));
 	}
-	
+
 	@Test
 	public void shouldInvokeTheMethodAndNotProceedWithInterceptorStack() throws SecurityException,
 			NoSuchMethodException, IOException, InterceptionException {
 		ControllerMethod method = new DefaultControllerMethod(null, DogAlike.class.getMethod("bark"));
 		DogAlike auau = mock(DogAlike.class);
 		when(info.getParameters()).thenReturn(new Object[0]);
-		
+
 		interceptor.intercept(stack, method, auau);
-		
+
 		verify(auau).bark();
 		verify(stack).next(method, auau);
 		verify(info).setResult("ok");
@@ -87,10 +91,10 @@ public class ExecuteMethodInterceptorTest {
 		ControllerMethod method = new DefaultControllerMethod(null, DogAlike.class.getMethod("bark"));
 		final DogAlike auau = mock(DogAlike.class);
 		final RuntimeException exception = new RuntimeException();
-		
+
 		doThrow(exception).when(auau).bark();
 		when(info.getParameters()).thenReturn(new Object[0]);
-		
+
 		try {
 			interceptor.intercept(stack, method, auau);
 			Assert.fail();
@@ -129,7 +133,7 @@ public class ExecuteMethodInterceptorTest {
 			InterceptionException, IOException {
 		ControllerMethod method = new DefaultControllerMethod(null, XController.class.getMethod("method", Object.class));
 		final XController x = new XController();
-		
+
 		when(info.getParameters()).thenReturn(new Object[] { "string" });
 
 		interceptor.intercept(stack, method, x);
@@ -143,7 +147,7 @@ public class ExecuteMethodInterceptorTest {
 			InterceptionException, IOException {
 		ControllerMethod method = new DefaultControllerMethod(null, XController.class.getMethod("method", Object.class));
 		final XController x = new XController();
-		
+
 		when(info.getParameters()).thenReturn(new Object[] { null });
 
 		interceptor.intercept(stack, method, x);
@@ -157,11 +161,11 @@ public class ExecuteMethodInterceptorTest {
 			InterceptionException, IOException {
 		ControllerMethod method = new DefaultControllerMethod(null, XController.class.getMethod("method"));
 		XController x = new XController();
-		
+
 		when(info.getParameters()).thenReturn(new Object[] {});
-		
+
 		interceptor.intercept(stack, method, x);
-		
+
 		verify(stack).next(method, x);
 		verify(info).setResult("ok");
 	}
@@ -172,11 +176,11 @@ public class ExecuteMethodInterceptorTest {
 		Method specifiedWhereToGo = AnyController.class.getMethod("specifiedWhereToGo");
 		ControllerMethod method = DefaultControllerMethod.instanceFor(AnyController.class, specifiedWhereToGo);
 		AnyController controller = new AnyController(validator);
-		
+
 		when(info.getParameters()).thenReturn(new Object[0]);
 		doThrow(new ValidationException(Collections.<Message> emptyList())).when(validator).onErrorUse(nothing());
 		when(validator.hasErrors()).thenReturn(true);
-				
+
 		interceptor.intercept(stack, method, controller);
 	}
 
@@ -186,15 +190,15 @@ public class ExecuteMethodInterceptorTest {
 		Method didntSpecifyWhereToGo = AnyController.class.getMethod("didntSpecifyWhereToGo");
 		final ControllerMethod method = DefaultControllerMethod.instanceFor(AnyController.class, didntSpecifyWhereToGo);
 		final AnyController controller = new AnyController(validator);
-		
+
 		when(info.getParameters()).thenReturn(new Object[0]);
 		when(validator.hasErrors()).thenReturn(true);
-				
+
 		try {
 			interceptor.intercept(stack, method, controller);
 			Assert.fail();
 		} catch (InterceptionException e) {
-			
+
 		}
 	}
 

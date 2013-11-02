@@ -16,11 +16,7 @@
  */
 package br.com.caelum.vraptor.http;
 
-import static java.util.Collections.unmodifiableList;
-
 import java.lang.reflect.AccessibleObject;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.Callable;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -48,7 +44,7 @@ public class ParanamerNameProvider implements ParameterNameProvider {
 	private static final Logger logger = LoggerFactory.getLogger(ParanamerNameProvider.class);
 
 	@LRU(capacity = 50)
-	private final CacheStore<AccessibleObject, List<Parameter>> cache;
+	private final CacheStore<AccessibleObject, Parameter[]> cache;
 	private final Paranamer info = new AnnotationParanamer(new BytecodeReadingParanamer());
 
 	protected ParanamerNameProvider() {
@@ -56,25 +52,25 @@ public class ParanamerNameProvider implements ParameterNameProvider {
 	}
 
 	@Inject
-	public ParanamerNameProvider(CacheStore<AccessibleObject, List<Parameter>> cache) {
+	public ParanamerNameProvider(CacheStore<AccessibleObject, Parameter[]> cache) {
 		this.cache = cache;
 	}
 
 	@Override
-	public List<Parameter> parametersFor(final AccessibleObject executable) {
-		return cache.fetch(executable, new Callable<List<Parameter>>() {
+	public Parameter[] parametersFor(final AccessibleObject executable) {
+		Parameter[] params = cache.fetch(executable, new Callable<Parameter[]>() {
 			@Override
-			public List<Parameter> call() throws Exception {
+			public Parameter[] call() throws Exception {
 				try {
-					List<Parameter> params = new ArrayList<>();
 					String[] names = info.lookupParameterNames(executable);
+					Parameter[] params = new Parameter[names.length];
 					logger.debug("Found parameter names with paranamer for {} as {}", executable, (Object) names);
 					
 					for (int i = 0; i < names.length; i++) {
-						params.add(new Parameter(i, names[i], executable));
+						params[i] = new Parameter(i, names[i], executable);
 					}
-
-					return unmodifiableList(params);
+					
+					return params;
 				} catch (ParameterNamesNotFoundException e) {
 					throw new IllegalStateException("Paranamer were not able to find your parameter names for " + executable
 							+ "You must compile your code with debug information (javac -g), or using @Named on "
@@ -82,5 +78,12 @@ public class ParanamerNameProvider implements ParameterNameProvider {
 				}
 			}
 		});
+		return defensiveCopy(params);
+	}
+
+	private Parameter[] defensiveCopy(Parameter[] src) {
+		Parameter[] copy = new Parameter[src.length];
+		System.arraycopy(src, 0, copy, 0, src.length);
+		return copy;
 	}
 }

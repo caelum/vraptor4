@@ -80,7 +80,7 @@ public class DefaultRouterTest {
 		this.method = mock(ControllerMethod.class);
 		this.converters = mock(Converters.class);
 		this.encodingHandler = mock(EncodingHandler.class);
-		this.nameProvider = new ParanamerNameProvider(new DefaultCacheStore<AccessibleObject, List<Parameter>>());
+		this.nameProvider = new ParanamerNameProvider(new DefaultCacheStore<AccessibleObject, Parameter[]>());
 		this.cache = new DefaultCacheStore<>();
 
 		router = new DefaultRouter(proxifier, new NoTypeFinder(), converters, nameProvider, new JavaEvaluator(), encodingHandler,cache);

@@ -15,8 +15,6 @@
  */
 package br.com.caelum.vraptor.validator;
 
-import java.util.List;
-
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 
@@ -53,11 +51,11 @@ public class ReplicatorOutjector implements Outjector {
 
 	@Override
 	public void outjectRequestMap() {
-		List<Parameter> params = nameProvider.parametersFor(method.getControllerMethod().getMethod());
+		Parameter[] params = nameProvider.parametersFor(method.getControllerMethod().getMethod());
 		Object[] values = method.getParameters();
 
-		for (int i = 0; i < params.size(); i++) {
-			result.include(params.get(i).getName(), values[i]);
+		for (int i = 0; i < params.length; i++) {
+			result.include(params[i].getName(), values[i]);
 		}
 	}
 }

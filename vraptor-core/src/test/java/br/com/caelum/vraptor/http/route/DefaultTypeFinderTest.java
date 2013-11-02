@@ -20,7 +20,6 @@ import static org.junit.Assert.assertEquals;
 
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Method;
-import java.util.List;
 import java.util.Map;
 
 import net.vidageek.mirror.dsl.Mirror;
@@ -39,7 +38,7 @@ public class DefaultTypeFinderTest {
 	
 	@Before
 	public void setup() {
-		provider = new ParanamerNameProvider(new DefaultCacheStore<AccessibleObject, List<Parameter>>());
+		provider = new ParanamerNameProvider(new DefaultCacheStore<AccessibleObject, Parameter[]>());
 	}
 
 	public static class AController {

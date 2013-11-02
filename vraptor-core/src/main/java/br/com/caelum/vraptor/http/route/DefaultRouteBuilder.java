@@ -185,7 +185,7 @@ public class DefaultRouteBuilder implements RouteBuilder {
 	public void is(Class<?> type, Method method) {
 		addParametersInfo(method);
 		ControllerMethod controllerMethod = DefaultControllerMethod.instanceFor(type, method);
-		List<Parameter> parameterNames = nameProvider.parametersFor(method);
+		Parameter[] parameterNames = nameProvider.parametersFor(method);
 		this.strategy = new FixedMethodStrategy(originalUri, controllerMethod, this.supportedMethods, builder.build(), priority, parameterNames);
 
 		logger.info(String.format("%-50s%s -> %10s", originalUri,

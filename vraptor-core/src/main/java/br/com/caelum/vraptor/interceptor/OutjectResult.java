@@ -17,35 +17,32 @@
 
 package br.com.caelum.vraptor.interceptor;
 
-import java.lang.reflect.Type;
+import static org.slf4j.LoggerFactory.getLogger;
 
+import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import br.com.caelum.vraptor.InterceptionException;
-import br.com.caelum.vraptor.Intercepts;
 import br.com.caelum.vraptor.Result;
-import br.com.caelum.vraptor.controller.ControllerMethod;
-import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.core.MethodInfo;
+import br.com.caelum.vraptor.events.OutjectResultEvent;
 
 /**
  * Outjects the result of the method invocation to the desired result
  *
  * @author guilherme silveira
+ * @author Rodrigo Turini
  */
-@Intercepts(after=ExecuteMethodInterceptor.class, before=ForwardToDefaultViewInterceptor.class)
-public class OutjectResult implements Interceptor {
+public class OutjectResult {
 
-	private static final Logger logger = LoggerFactory.getLogger(OutjectResult.class);
+	private static final Logger logger = getLogger(OutjectResult.class);
 
 	private final Result result;
 	private final MethodInfo info;
 	private final TypeNameExtractor extractor;
 
-	/** 
+	/**
 	 * @deprecated CDI eyes only
 	 */
 	protected OutjectResult() {
@@ -59,22 +56,10 @@ public class OutjectResult implements Interceptor {
 		this.extractor = extractor;
 	}
 
-	@Override
-	public boolean accepts(ControllerMethod method) {
-		Type returnType = method.getMethod().getGenericReturnType();
-		return !returnType.equals(void.class);
-	}
-
-	@Override
-	public void intercept(InterceptorStack stack, ControllerMethod method, Object controllerInstance)
-			throws InterceptionException {
-		Type returnType = method.getMethod().getGenericReturnType();
-		String name = extractor.nameFor(returnType);
+	public void outject(@Observes OutjectResultEvent outjectEvent) {
+		String name = extractor.nameFor(outjectEvent.getGenericReturnType());
 		Object value = this.info.getResult();
-
 		logger.debug("outjecting {}={}", name, value);
 		result.include(name, value);
-		stack.next(method, controllerInstance);
 	}
-
 }

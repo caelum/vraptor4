@@ -54,20 +54,22 @@ public class ExecuteMethodInterceptor implements Interceptor {
 	private final Validator validator;
 	private final MethodExecutor methodExecutor;
 
-	@Inject private Event<OutjectResultEvent> event;
+	private Event<OutjectResultEvent> outjectResultEvent;
 
 	/**
 	 * @deprecated CDI eyes only
 	 */
 	protected ExecuteMethodInterceptor() {
-		this(null, null, null);
+		this(null, null, null, null);
 	}
 
 	@Inject
-	public ExecuteMethodInterceptor(MethodInfo info, Validator validator, MethodExecutor methodExecutor) {
+	public ExecuteMethodInterceptor(MethodInfo info, Validator validator, MethodExecutor methodExecutor,
+			Event<OutjectResultEvent> outjectResultEvent) {
 		this.info = info;
 		this.validator = validator;
 		this.methodExecutor = methodExecutor;
+		this.outjectResultEvent = outjectResultEvent;
 	}
 
 	@Override
@@ -103,7 +105,7 @@ public class ExecuteMethodInterceptor implements Interceptor {
 			} else {
 				this.info.setResult(result);
 				Type returnType = reflectionMethod.getGenericReturnType();
-				event.fire(new OutjectResultEvent(returnType));
+				outjectResultEvent.fire(new OutjectResultEvent(returnType));
 			}
 			stack.next(method, controllerInstance);
 		} catch (IllegalArgumentException e) {

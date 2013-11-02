@@ -17,8 +17,12 @@
 
 package br.com.caelum.vraptor.interceptor;
 
-import java.lang.reflect.Method;
+import static br.com.caelum.vraptor.view.Results.nothing;
 
+import java.lang.reflect.Method;
+import java.lang.reflect.Type;
+
+import javax.enterprise.event.Event;
 import javax.inject.Inject;
 
 import org.slf4j.Logger;
@@ -29,28 +33,30 @@ import br.com.caelum.vraptor.Intercepts;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.core.MethodInfo;
+import br.com.caelum.vraptor.events.OutjectResultEvent;
 import br.com.caelum.vraptor.reflection.MethodExecutor;
 import br.com.caelum.vraptor.reflection.MethodExecutorException;
 import br.com.caelum.vraptor.util.Stringnifier;
 import br.com.caelum.vraptor.validator.ValidationException;
 import br.com.caelum.vraptor.validator.Validator;
-import static br.com.caelum.vraptor.view.Results.nothing;
 
 /**
  * Interceptor that executes the logic method.
- * 
+ *
  * @author Guilherme Silveira
  */
 @Intercepts(after = ParametersInstantiatorInterceptor.class, before = {})
 public class ExecuteMethodInterceptor implements Interceptor {
 
 	private final static Logger log = LoggerFactory.getLogger(ExecuteMethodInterceptor.class);
-	
+
 	private final MethodInfo info;
 	private final Validator validator;
 	private final MethodExecutor methodExecutor;
 
-	/** 
+	@Inject private Event<OutjectResultEvent> event;
+
+	/**
 	 * @deprecated CDI eyes only
 	 */
 	protected ExecuteMethodInterceptor() {
@@ -96,6 +102,8 @@ public class ExecuteMethodInterceptor implements Interceptor {
 				this.info.setResult("ok");
 			} else {
 				this.info.setResult(result);
+				Type returnType = reflectionMethod.getGenericReturnType();
+				event.fire(new OutjectResultEvent(returnType));
 			}
 			stack.next(method, controllerInstance);
 		} catch (IllegalArgumentException e) {

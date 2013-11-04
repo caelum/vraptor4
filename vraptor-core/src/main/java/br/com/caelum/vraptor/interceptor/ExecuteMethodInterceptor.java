@@ -99,10 +99,7 @@ public class ExecuteMethodInterceptor implements Interceptor {
 								+ "If you didn't add any validation error, it is possible that a conversion error had happened.");
 			}
 
-			if (reflectionMethod.getReturnType().equals(Void.TYPE)) {
-				// vraptor2 compatibility
-				this.info.setResult("ok");
-			} else {
+			if (!reflectionMethod.getReturnType().equals(Void.TYPE)) {
 				this.info.setResult(result);
 				Type returnType = reflectionMethod.getGenericReturnType();
 				outjectResultEvent.fire(new OutjectResultEvent(returnType));

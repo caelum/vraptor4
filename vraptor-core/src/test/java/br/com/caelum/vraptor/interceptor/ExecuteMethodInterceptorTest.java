@@ -82,7 +82,6 @@ public class ExecuteMethodInterceptorTest {
 
 		verify(auau).bark();
 		verify(stack).next(method, auau);
-		verify(info).setResult("ok");
 	}
 
 	@Test
@@ -115,7 +114,6 @@ public class ExecuteMethodInterceptorTest {
 
 		verify(auau).bark(3);
 		verify(stack).next(method, auau);
-		verify(info).setResult("ok");
 	}
 
 	public static class XController {
@@ -154,20 +152,6 @@ public class ExecuteMethodInterceptorTest {
 
 		verify(stack).next(method, x);
 		verify(info).setResult(null);
-	}
-
-	@Test
-	public void shouldSetOkWhenVoidReturnedFromInvokedMethod() throws SecurityException, NoSuchMethodException,
-			InterceptionException, IOException {
-		ControllerMethod method = new DefaultControllerMethod(null, XController.class.getMethod("method"));
-		XController x = new XController();
-
-		when(info.getParameters()).thenReturn(new Object[] {});
-
-		interceptor.intercept(stack, method, x);
-
-		verify(stack).next(method, x);
-		verify(info).setResult("ok");
 	}
 
 	@Test

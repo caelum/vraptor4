@@ -17,8 +17,6 @@
 
 package br.com.caelum.vraptor.interceptor;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -31,25 +29,24 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor.Result;
-import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.core.MethodInfo;
+import br.com.caelum.vraptor.events.OutjectResultEvent;
 
 public class OutjectResultTest {
 
 	private @Mock Result result;
 	private @Mock MethodInfo info;
-	private @Mock ControllerMethod method;
 	private @Mock Object instance;
 	private @Mock InterceptorStack stack;
 	private @Mock TypeNameExtractor extractor;
 
-	private OutjectResult interceptor;
+	private OutjectResult outjectResult;
 
 	@Before
 	public void setup() {
 		MockitoAnnotations.initMocks(this);
-		this.interceptor = new OutjectResult(result, info, extractor);
+		this.outjectResult = new OutjectResult(result, info, extractor);
 	}
 
 	interface MyComponent {
@@ -60,43 +57,19 @@ public class OutjectResultTest {
 
 	@Test
 	public void shouldOutjectWithASimpleTypeName() throws NoSuchMethodException {
-		when(method.getMethod()).thenReturn(MyComponent.class.getMethod("returnsAString"));
+		Method method = MyComponent.class.getMethod("returnsAString");
 		when(info.getResult()).thenReturn("myString");
 		when(extractor.nameFor(String.class)).thenReturn("string");
-
-		interceptor.intercept(stack, method, instance);
-
+		outjectResult.outject(new OutjectResultEvent(method.getGenericReturnType()));
 		verify(result).include("string", "myString");
-		verify(stack).next(method, instance);
 	}
-
 
 	@Test
 	public void shouldOutjectACollectionAsAList() throws NoSuchMethodException {
-		Method myComponentMethod = MyComponent.class.getMethod("returnsStrings");
-		when(method.getMethod()).thenReturn(myComponentMethod);
+		Method method = MyComponent.class.getMethod("returnsStrings");
 		when(info.getResult()).thenReturn("myString");
-		when(extractor.nameFor(myComponentMethod.getGenericReturnType())).thenReturn("stringList");
-
-		interceptor.intercept(stack, method, instance);
-
+		when(extractor.nameFor(method.getGenericReturnType())).thenReturn("stringList");
+		outjectResult.outject(new OutjectResultEvent(method.getGenericReturnType()));
 		verify(result).include("stringList", "myString");
-		verify(stack).next(method, instance);
 	}
-
-
-	@Test
-	public void shouldNotOutjectIfThereIsNoReturnType() throws NoSuchMethodException {
-		when(method.getMethod()).thenReturn(MyComponent.class.getMethod("noReturn"));
-
-		assertFalse(interceptor.accepts(method));
-	}
-
-	@Test
-	public void shouldNotOutjectIfReturnIsVoid() throws NoSuchMethodException {
-		when(method.getMethod()).thenReturn(MyComponent.class.getMethod("returnsAString"));
-
-		assertTrue(interceptor.accepts(method));
-	}
-
 }

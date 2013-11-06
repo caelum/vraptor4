@@ -13,7 +13,7 @@ import java.util.Objects;
  * 
  * @author Otávio Scherer Garcia
  */
-public final class Parameter implements AnnotatedElement {
+public class Parameter implements AnnotatedElement {
 
 	private final int index;
 	private final String name;

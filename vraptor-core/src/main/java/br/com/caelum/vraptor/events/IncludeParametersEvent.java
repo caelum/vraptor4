@@ -10,5 +10,5 @@ import br.com.caelum.vraptor.interceptor.ParametersInstantiatorInterceptor;
  * @author Rodrigo Turini
  * @since 4.0
  */
-public class IncludeParameterEvent {
+public class IncludeParametersEvent {
 }

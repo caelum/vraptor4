@@ -5,7 +5,7 @@ import javax.enterprise.event.Observes;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 
-import br.com.caelum.vraptor.events.IncludeParameterEvent;
+import br.com.caelum.vraptor.events.IncludeParametersEvent;
 import br.com.caelum.vraptor.validator.Outjector;
 
 /**
@@ -32,7 +32,7 @@ public class ParameterIncluder {
 		this.outjector = outjector;
 	}
 
-	public void include(@Observes IncludeParameterEvent event) {
+	public void include(@Observes IncludeParametersEvent event) {
 		outjector.get().outjectRequestMap();
 	}
 }

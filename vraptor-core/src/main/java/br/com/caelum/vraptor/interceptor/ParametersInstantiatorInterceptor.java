@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 
+import javax.enterprise.event.Event;
 import javax.inject.Inject;
 
 import org.slf4j.Logger;
@@ -34,6 +35,7 @@ import br.com.caelum.vraptor.Intercepts;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.core.MethodInfo;
+import br.com.caelum.vraptor.events.IncludeParametersEvent;
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.http.Parameter;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
@@ -50,32 +52,34 @@ import br.com.caelum.vraptor.view.FlashScope;
 @Intercepts(after=ControllerLookupInterceptor.class)
 public class ParametersInstantiatorInterceptor implements Interceptor {
 	private static final Logger logger = LoggerFactory.getLogger(ParametersInstantiatorInterceptor.class);
-	
+
 	private final ParametersProvider provider;
 	private final ParameterNameProvider parameterNameProvider;
 	private final MethodInfo parameters;
 	private final Validator validator;
 	private final MutableRequest request;
 	private final FlashScope flash;
+	private Event<IncludeParametersEvent> includeParametersEvent;
 
 	private final List<Message> errors = new ArrayList<>();
-	
-	/** 
+
+	/**
 	 * @deprecated CDI eyes only
 	 */
 	protected ParametersInstantiatorInterceptor() {
-		this(null, null, null, null, null, null);
+		this(null, null, null, null, null, null, null);
 	}
 
 	@Inject
 	public ParametersInstantiatorInterceptor(ParametersProvider provider, ParameterNameProvider parameterNameProvider, MethodInfo parameters,
-			Validator validator, MutableRequest request, FlashScope flash) {
+			Validator validator, MutableRequest request, FlashScope flash, Event<IncludeParametersEvent> includeParametersEvent) {
 		this.provider = provider;
 		this.parameterNameProvider = parameterNameProvider;
 		this.parameters = parameters;
 		this.validator = validator;
 		this.request = request;
 		this.flash = flash;
+		this.includeParametersEvent = includeParametersEvent;
 	}
 
 	@Override
@@ -100,6 +104,11 @@ public class ParametersInstantiatorInterceptor implements Interceptor {
 		logger.debug("Parameter values for {} are {}", method, values);
 
 		parameters.setParameters(values);
+
+		if (method.getMethod().isAnnotationPresent(IncludeParameters.class)) {
+			includeParametersEvent.fire(new IncludeParametersEvent());
+		}
+
 		stack.next(method, controllerInstance);
 	}
 
@@ -115,7 +124,7 @@ public class ParametersInstantiatorInterceptor implements Interceptor {
 
 	private void fixParameter(String name) {
 		checkArgument(!name.contains(".class."), "Bug Exploit Attempt with parameter: %s", name);
-		
+
 		if (name.contains("[]")) {
 			String[] values = request.getParameterValues(name);
 			for (int i = 0; i < values.length; i++) {

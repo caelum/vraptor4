@@ -20,7 +20,6 @@ package br.com.caelum.vraptor.interceptor;
 import static br.com.caelum.vraptor.view.Results.nothing;
 
 import java.lang.reflect.Method;
-import java.lang.reflect.Type;
 
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
@@ -33,7 +32,7 @@ import br.com.caelum.vraptor.Intercepts;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.core.MethodInfo;
-import br.com.caelum.vraptor.events.OutjectResultEvent;
+import br.com.caelum.vraptor.events.MethodExecuted;
 import br.com.caelum.vraptor.reflection.MethodExecutor;
 import br.com.caelum.vraptor.reflection.MethodExecutorException;
 import br.com.caelum.vraptor.util.Stringnifier;
@@ -54,7 +53,7 @@ public class ExecuteMethodInterceptor implements Interceptor {
 	private final Validator validator;
 	private final MethodExecutor methodExecutor;
 
-	private Event<OutjectResultEvent> outjectResultEvent;
+	private Event<MethodExecuted> methodExecutedEvent;
 
 	/**
 	 * @deprecated CDI eyes only
@@ -65,11 +64,11 @@ public class ExecuteMethodInterceptor implements Interceptor {
 
 	@Inject
 	public ExecuteMethodInterceptor(MethodInfo info, Validator validator, MethodExecutor methodExecutor,
-			Event<OutjectResultEvent> outjectResultEvent) {
+			Event<MethodExecuted> methodExecutedEvent) {
 		this.info = info;
 		this.validator = validator;
 		this.methodExecutor = methodExecutor;
-		this.outjectResultEvent = outjectResultEvent;
+		this.methodExecutedEvent = methodExecutedEvent;
 	}
 
 	@Override
@@ -98,12 +97,8 @@ public class ExecuteMethodInterceptor implements Interceptor {
 								+ "or any view that you like.\n"
 								+ "If you didn't add any validation error, it is possible that a conversion error had happened.");
 			}
-
-			if (!reflectionMethod.getReturnType().equals(Void.TYPE)) {
-				this.info.setResult(result);
-				Type returnType = reflectionMethod.getGenericReturnType();
-				outjectResultEvent.fire(new OutjectResultEvent(returnType));
-			}
+			this.info.setResult(result);
+			methodExecutedEvent.fire(new MethodExecuted(method));
 			stack.next(method, controllerInstance);
 		} catch (IllegalArgumentException e) {
 			throw new InterceptionException(e);

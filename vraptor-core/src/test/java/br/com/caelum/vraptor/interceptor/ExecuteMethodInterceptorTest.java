@@ -44,7 +44,7 @@ import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.controller.DefaultControllerMethod;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.core.MethodInfo;
-import br.com.caelum.vraptor.events.OutjectResultEvent;
+import br.com.caelum.vraptor.events.MethodExecuted;
 import br.com.caelum.vraptor.factory.Factories;
 import br.com.caelum.vraptor.reflection.MethodExecutor;
 import br.com.caelum.vraptor.validator.Message;
@@ -56,7 +56,7 @@ public class ExecuteMethodInterceptorTest {
 	@Mock private MethodInfo info;
 	@Mock private InterceptorStack stack;
 	@Mock private Validator validator;
-	@Mock private Event<OutjectResultEvent> event;
+	@Mock private Event<MethodExecuted> event;
 	private MethodExecutor methodExecutor = Factories.createMethodExecutor();
 	private ExecuteMethodInterceptor interceptor;
 

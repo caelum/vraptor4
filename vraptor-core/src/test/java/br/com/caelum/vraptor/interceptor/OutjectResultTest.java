@@ -29,9 +29,10 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor.Result;
+import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.core.MethodInfo;
-import br.com.caelum.vraptor.events.OutjectResultEvent;
+import br.com.caelum.vraptor.events.MethodExecuted;
 
 public class OutjectResultTest {
 
@@ -40,6 +41,7 @@ public class OutjectResultTest {
 	private @Mock Object instance;
 	private @Mock InterceptorStack stack;
 	private @Mock TypeNameExtractor extractor;
+	private @Mock ControllerMethod controllerMethod;
 
 	private OutjectResult outjectResult;
 
@@ -58,18 +60,20 @@ public class OutjectResultTest {
 	@Test
 	public void shouldOutjectWithASimpleTypeName() throws NoSuchMethodException {
 		Method method = MyComponent.class.getMethod("returnsAString");
+		when(controllerMethod.getMethod()).thenReturn(method);
 		when(info.getResult()).thenReturn("myString");
 		when(extractor.nameFor(String.class)).thenReturn("string");
-		outjectResult.outject(new OutjectResultEvent(method.getGenericReturnType()));
+		outjectResult.outject(new MethodExecuted(controllerMethod));
 		verify(result).include("string", "myString");
 	}
 
 	@Test
 	public void shouldOutjectACollectionAsAList() throws NoSuchMethodException {
 		Method method = MyComponent.class.getMethod("returnsStrings");
+		when(controllerMethod.getMethod()).thenReturn(method);
 		when(info.getResult()).thenReturn("myString");
 		when(extractor.nameFor(method.getGenericReturnType())).thenReturn("stringList");
-		outjectResult.outject(new OutjectResultEvent(method.getGenericReturnType()));
+		outjectResult.outject(new MethodExecuted(controllerMethod));
 		verify(result).include("stringList", "myString");
 	}
 }

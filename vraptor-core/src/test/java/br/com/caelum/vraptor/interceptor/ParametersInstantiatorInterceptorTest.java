@@ -50,7 +50,7 @@ import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.controller.DefaultControllerMethod;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.core.MethodInfo;
-import br.com.caelum.vraptor.events.IncludeParametersEvent;
+import br.com.caelum.vraptor.events.ReadyToExecuteMethod;
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.http.Parameter;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
@@ -77,7 +77,7 @@ public class ParametersInstantiatorInterceptorTest {
 
 	private ControllerMethod method;
 	private ControllerMethod otherMethod;
-	@Mock private Event<IncludeParametersEvent> event;
+	@Mock private Event<ReadyToExecuteMethod> event;
 
 	@Before
 	@SuppressWarnings("unchecked")

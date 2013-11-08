@@ -35,7 +35,7 @@ import br.com.caelum.vraptor.Intercepts;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.core.MethodInfo;
-import br.com.caelum.vraptor.events.IncludeParametersEvent;
+import br.com.caelum.vraptor.events.ReadyToExecuteMethod;
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.http.Parameter;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
@@ -59,7 +59,7 @@ public class ParametersInstantiatorInterceptor implements Interceptor {
 	private final Validator validator;
 	private final MutableRequest request;
 	private final FlashScope flash;
-	private Event<IncludeParametersEvent> includeParametersEvent;
+	private Event<ReadyToExecuteMethod> readyToExecuteMethod;
 
 	private final List<Message> errors = new ArrayList<>();
 
@@ -72,14 +72,14 @@ public class ParametersInstantiatorInterceptor implements Interceptor {
 
 	@Inject
 	public ParametersInstantiatorInterceptor(ParametersProvider provider, ParameterNameProvider parameterNameProvider, MethodInfo parameters,
-			Validator validator, MutableRequest request, FlashScope flash, Event<IncludeParametersEvent> includeParametersEvent) {
+			Validator validator, MutableRequest request, FlashScope flash, Event<ReadyToExecuteMethod> readyToExecuteMethod) {
 		this.provider = provider;
 		this.parameterNameProvider = parameterNameProvider;
 		this.parameters = parameters;
 		this.validator = validator;
 		this.request = request;
 		this.flash = flash;
-		this.includeParametersEvent = includeParametersEvent;
+		this.readyToExecuteMethod = readyToExecuteMethod;
 	}
 
 	@Override
@@ -105,9 +105,7 @@ public class ParametersInstantiatorInterceptor implements Interceptor {
 
 		parameters.setParameters(values);
 
-		if (method.getMethod().isAnnotationPresent(IncludeParameters.class)) {
-			includeParametersEvent.fire(new IncludeParametersEvent());
-		}
+		readyToExecuteMethod.fire(new ReadyToExecuteMethod(method));
 
 		stack.next(method, controllerInstance);
 	}

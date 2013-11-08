@@ -1,11 +1,13 @@
 package br.com.caelum.vraptor.interceptor;
 
+import java.lang.reflect.Method;
+
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 
-import br.com.caelum.vraptor.events.IncludeParametersEvent;
+import br.com.caelum.vraptor.events.ReadyToExecuteMethod;
 import br.com.caelum.vraptor.validator.Outjector;
 
 /**
@@ -32,7 +34,10 @@ public class ParameterIncluder {
 		this.outjector = outjector;
 	}
 
-	public void include(@Observes IncludeParametersEvent event) {
-		outjector.get().outjectRequestMap();
+	public void include(@Observes ReadyToExecuteMethod event) {
+		Method method = event.getControllerMethod().getMethod();
+		if (method.isAnnotationPresent(IncludeParameters.class)) {
+			outjector.get().outjectRequestMap();
+		}
 	}
 }

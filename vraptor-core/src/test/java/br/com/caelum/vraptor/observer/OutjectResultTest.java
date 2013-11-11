@@ -65,7 +65,7 @@ public class OutjectResultTest {
 		when(controllerMethod.getMethod()).thenReturn(method);
 		when(info.getResult()).thenReturn("myString");
 		when(extractor.nameFor(String.class)).thenReturn("string");
-		outjectResult.outject(new MethodExecuted(controllerMethod));
+		outjectResult.outject(new MethodExecuted(controllerMethod, info));
 		verify(result).include("string", "myString");
 	}
 
@@ -75,7 +75,7 @@ public class OutjectResultTest {
 		when(controllerMethod.getMethod()).thenReturn(method);
 		when(info.getResult()).thenReturn("myString");
 		when(extractor.nameFor(method.getGenericReturnType())).thenReturn("stringList");
-		outjectResult.outject(new MethodExecuted(controllerMethod));
+		outjectResult.outject(new MethodExecuted(controllerMethod, info));
 		verify(result).include("stringList", "myString");
 	}
 }

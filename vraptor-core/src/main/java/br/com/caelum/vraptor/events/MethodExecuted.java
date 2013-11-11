@@ -1,5 +1,7 @@
 package br.com.caelum.vraptor.events;
 
+import java.lang.reflect.Type;
+
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.interceptor.ExecuteMethodInterceptor;
 
@@ -20,5 +22,9 @@ public class MethodExecuted {
 
 	public ControllerMethod getControllerMethod() {
 		return controllerMethod;
+	}
+
+	public Type getMethodReturnType() {
+		return getControllerMethod().getMethod().getGenericReturnType();
 	}
 }

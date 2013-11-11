@@ -19,6 +19,8 @@ package br.com.caelum.vraptor.interceptor;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
+import java.lang.reflect.Type;
+
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 
@@ -26,7 +28,7 @@ import org.slf4j.Logger;
 
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.core.MethodInfo;
-import br.com.caelum.vraptor.events.OutjectResultEvent;
+import br.com.caelum.vraptor.events.MethodExecuted;
 
 /**
  * Outjects the result of the method invocation to the desired result
@@ -56,10 +58,15 @@ public class OutjectResult {
 		this.extractor = extractor;
 	}
 
-	public void outject(@Observes OutjectResultEvent outjectEvent) {
-		String name = extractor.nameFor(outjectEvent.getGenericReturnType());
-		Object value = this.info.getResult();
-		logger.debug("outjecting {}={}", name, value);
-		result.include(name, value);
+	public void outject(@Observes MethodExecuted event) {
+
+		Type returnType = event.getMethodReturnType();
+
+		if (!returnType.equals(Void.TYPE)) {
+			String name = extractor.nameFor(returnType);
+			Object value = this.info.getResult();
+			logger.debug("outjecting {}={}", name, value);
+			result.include(name, value);
+		}
 	}
 }

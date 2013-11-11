@@ -60,7 +60,7 @@ public class OutjectResult {
 
 	public void outject(@Observes MethodExecuted event) {
 
-		Type returnType = event.getControllerMethod().getMethod().getGenericReturnType();
+		Type returnType = event.getMethodReturnType();
 
 		if (!returnType.equals(Void.TYPE)) {
 			String name = extractor.nameFor(returnType);

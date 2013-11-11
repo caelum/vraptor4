@@ -77,8 +77,7 @@ public class DownloadObserverTest {
 
 	@Test
 	public void whenResultIsADownloadShouldUseIt() throws Exception {
-		Method downloadMethod = FakeController.class.getMethod("download");
-		when(controllerMethod.getMethod()).thenReturn(downloadMethod);
+		when(controllerMethod.getMethod()).thenReturn(getMethod("download"));
 		Download download = mock(Download.class);
 		when(info.getResult()).thenReturn(download);
 		downloadObserver.download(new MethodExecuted(controllerMethod, info));
@@ -87,8 +86,7 @@ public class DownloadObserverTest {
 
 	@Test
 	public void whenResultIsAnInputStreamShouldCreateAInputStreamDownload() throws Exception {
-		Method byteMethod = FakeController.class.getMethod("asByte");
-		when(controllerMethod.getMethod()).thenReturn(byteMethod);
+		when(controllerMethod.getMethod()).thenReturn(getMethod("asByte"));
 		byte[] bytes = "abc".getBytes();
 		when(info.getResult()).thenReturn(new ByteArrayInputStream(bytes));
 		downloadObserver.download(new MethodExecuted(controllerMethod, info));
@@ -97,8 +95,7 @@ public class DownloadObserverTest {
 
 	@Test
 	public void whenResultIsAnInputStreamShouldCreateAByteArrayDownload() throws Exception {
-		Method byteMethod = FakeController.class.getMethod("asByte");
-		when(controllerMethod.getMethod()).thenReturn(byteMethod);
+		when(controllerMethod.getMethod()).thenReturn(getMethod("asByte"));
 		byte[] bytes = "abc".getBytes();
 		when(info.getResult()).thenReturn(bytes);
 		downloadObserver.download(new MethodExecuted(controllerMethod, info));
@@ -107,8 +104,7 @@ public class DownloadObserverTest {
 
 	@Test
 	public void whenResultIsAFileShouldCreateAFileDownload() throws Exception {
-		Method fileMethod = FakeController.class.getMethod("file");
-		when(controllerMethod.getMethod()).thenReturn(fileMethod);
+		when(controllerMethod.getMethod()).thenReturn(getMethod("file"));
 		File tmp = File.createTempFile("test", "test");
 		Files.write(tmp.toPath(), "abc".getBytes());
 		when(info.getResult()).thenReturn(tmp);
@@ -119,8 +115,7 @@ public class DownloadObserverTest {
 
 	@Test
 	public void whenResultIsNullAndResultWasUsedShouldDoNothing() throws Exception {
-		Method downloadMethod = FakeController.class.getMethod("download");
-		when(controllerMethod.getMethod()).thenReturn(downloadMethod);
+		when(controllerMethod.getMethod()).thenReturn(getMethod("download"));
 		when(info.getResult()).thenReturn(null);
 		when(result.used()).thenReturn(true);
 		downloadObserver.download(new MethodExecuted(controllerMethod, info));
@@ -141,8 +136,7 @@ public class DownloadObserverTest {
 
 	@Test
 	public void shouldThrowInterceptionExceptionIfIOExceptionOccurs() throws Exception {
-		Method downloadMethod = FakeController.class.getMethod("download");
-		when(controllerMethod.getMethod()).thenReturn(downloadMethod);
+		when(controllerMethod.getMethod()).thenReturn(getMethod("download"));
 		Download download = mock(Download.class);
 
 		when(info.getResult()).thenReturn(download);
@@ -158,32 +152,27 @@ public class DownloadObserverTest {
 
 	@Test
 	public void shouldNotAcceptStringReturn() throws Exception {
-		Method method = FakeController.class.getMethod("string");
-		assertThat(downloadObserver, not(isDownload(method)));
+		assertThat(downloadObserver, not(isDownload(getMethod("string"))));
 	}
 
 	@Test
 	public void shouldAcceptFile() throws Exception {
-		Method method = FakeController.class.getMethod("file");
-		assertThat(downloadObserver, isDownload(method));
+		assertThat(downloadObserver, isDownload(getMethod("file")));
 	}
 
 	@Test
 	public void shouldAcceptInput() throws Exception {
-		Method method = FakeController.class.getMethod("input");
-		assertThat(downloadObserver, isDownload(method));
+		assertThat(downloadObserver, isDownload(getMethod("input")));
 	}
 
 	@Test
 	public void shouldAcceptDownload() throws Exception {
-		Method method = FakeController.class.getMethod("download");
-		assertThat(downloadObserver, isDownload(method));
+		assertThat(downloadObserver, isDownload(getMethod("download")));
 	}
 
 	@Test
 	public void shouldAcceptByte() throws Exception {
-		Method method = FakeController.class.getMethod("asByte");
-		assertThat(downloadObserver, isDownload(method));
+		assertThat(downloadObserver, isDownload(getMethod("asByte")));
 	}
 
 	private Matcher<Object> isDownload(final Method method) {
@@ -244,5 +233,9 @@ public class DownloadObserverTest {
 		public byte[] asByte() {
 			return null;
 		}
+	}
+
+	private Method getMethod(String methodName) throws NoSuchMethodException {
+		return FakeController.class.getMethod(methodName);
 	}
 }

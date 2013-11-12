@@ -15,61 +15,59 @@
  * limitations under the License.
  */
 
-package br.com.caelum.vraptor.interceptor.download;
+package br.com.caelum.vraptor.observer.download;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 
 import javax.servlet.http.HttpServletResponse;
 
-import com.google.common.io.ByteStreams;
-
 /**
- * Handles download by reading from a input stream byte by byte.
+ * Reads bytes from a file into the result.
  *
  * @author filipesabella
  * @author Paulo Silveira
- *
+ * 
+ * @see InputStreamDownload
  * @see ByteArrayDownload
- * @see FileDownload
  */
-public class InputStreamDownload implements Download {
-	private final InputStream stream;
+public class FileDownload implements Download {
+	private final File file;
 	private final String contentType;
 	private final String fileName;
 	private final boolean doDownload;
-	private final long size;
 
-	public InputStreamDownload(InputStream input, String contentType, String fileName) {
-		this(input, contentType, fileName, false, 0);
+	public FileDownload(File file, String contentType, String fileName) throws FileNotFoundException {
+		this(file, contentType, fileName, false);
 	}
 
-	public InputStreamDownload(InputStream input, String contentType, String fileName, boolean doDownload, long size) {
-		this.stream = input;
-		this.size = size;
+	public FileDownload(File file, String contentType) throws FileNotFoundException {
+		this(file, contentType, file.getName(), false);
+	}
+
+	public FileDownload(File file, String contentType, String fileName, boolean doDownload) throws FileNotFoundException {
+		this.file = checkFile(file);
 		this.contentType = contentType;
 		this.fileName = fileName;
 		this.doDownload = doDownload;
 	}
-
+	
 	@Override
 	public void write(HttpServletResponse response) throws IOException {
-		writeDetails(response);
-
-		OutputStream out = response.getOutputStream();
-		ByteStreams.copy(stream, out);
+		try (InputStream stream = new FileInputStream(file)) {
+			Download download = new InputStreamDownload(stream, contentType, fileName, doDownload, file.length());
+			download.write(response);
+		}
 	}
-
-	void writeDetails(HttpServletResponse response) {
-		if (contentType != null) {
-			String contentDisposition = String.format("%s; filename=%s", doDownload ? "attachment" : "inline", fileName);
-			response.setHeader("Content-disposition", contentDisposition);
-			response.setHeader("Content-type", contentType);
+	
+	private File checkFile(File file) throws FileNotFoundException {
+		if (!file.exists()) {
+			throw new FileNotFoundException("File " + file.getName() + "doesn't exists");
 		}
 		
-		if (size > 0) {
-			response.setHeader("Content-Length", Long.toString(size));
-		}
+		return file;
 	}
 }

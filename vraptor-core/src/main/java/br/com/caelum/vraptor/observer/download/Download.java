@@ -15,7 +15,7 @@
  * limitations under the License. 
  */
 
-package br.com.caelum.vraptor.interceptor.download;
+package br.com.caelum.vraptor.observer.download;
 
 import java.io.IOException;
 

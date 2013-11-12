@@ -53,8 +53,8 @@ import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.events.MethodExecuted;
-import br.com.caelum.vraptor.interceptor.download.Download;
-import br.com.caelum.vraptor.interceptor.download.DownloadObserver;
+import br.com.caelum.vraptor.observer.download.Download;
+import br.com.caelum.vraptor.observer.download.DownloadObserver;
 
 public class DownloadObserverTest {
 

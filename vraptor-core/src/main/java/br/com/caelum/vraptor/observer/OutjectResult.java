@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package br.com.caelum.vraptor.interceptor;
+package br.com.caelum.vraptor.observer;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
@@ -29,6 +29,7 @@ import org.slf4j.Logger;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.events.MethodExecuted;
+import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
 
 /**
  * Outjects the result of the method invocation to the desired result

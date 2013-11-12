@@ -1,4 +1,4 @@
-package br.com.caelum.vraptor.interceptor;
+package br.com.caelum.vraptor.observer;
 
 import java.lang.reflect.Method;
 
@@ -8,6 +8,7 @@ import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 
 import br.com.caelum.vraptor.events.ReadyToExecuteMethod;
+import br.com.caelum.vraptor.interceptor.IncludeParameters;
 import br.com.caelum.vraptor.validator.Outjector;
 
 /**

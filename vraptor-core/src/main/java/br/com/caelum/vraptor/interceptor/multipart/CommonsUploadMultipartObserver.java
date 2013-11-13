@@ -36,7 +36,7 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 
-import br.com.caelum.vraptor.controller.ControllerMethod;
+import br.com.caelum.vraptor.events.ControllerMethodDiscovered;
 import br.com.caelum.vraptor.http.InvalidParameterException;
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.validator.I18nMessage;
@@ -82,7 +82,7 @@ public class CommonsUploadMultipartObserver {
 		this.config = cfg;
 	}
 
-	public void upload(@Observes ControllerMethod controllerMethod) {
+	public void upload(@Observes ControllerMethodDiscovered event) {
 
 		if (!ServletFileUpload.isMultipartContent(request)) return;
 

@@ -28,8 +28,8 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.core.InterceptorStack;
+import br.com.caelum.vraptor.events.ControllerMethodDiscovered;
 import br.com.caelum.vraptor.http.InvalidParameterException;
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.validator.I18nMessage;
@@ -43,7 +43,7 @@ import br.com.caelum.vraptor.validator.Validator;
 public class CommonsUploadMultipartObserverTest {
 
 	@Mock private InterceptorStack stack;
-	@Mock private ControllerMethod method;
+	@Mock private ControllerMethodDiscovered event;
 	@Mock private MutableRequest request;
 	@Mock private Validator validator;
 	@Mock private ServletFileUpload servletFileUpload;
@@ -65,7 +65,7 @@ public class CommonsUploadMultipartObserverTest {
 		when(request.getContentType()).thenReturn("application/x-www-form-urlencoded");
 		when(request.getMethod()).thenReturn("POST");
 
-		observer.upload(method);
+		observer.upload(event);
 
 		verifyZeroInteractions(config);
 	}
@@ -81,7 +81,7 @@ public class CommonsUploadMultipartObserverTest {
 		when(observer.createServletFileUpload(config)).thenReturn(servletFileUpload);
 		when(servletFileUpload.parseRequest(request)).thenReturn(elements);
 
-		observer.upload(method);
+		observer.upload(event);
 
 		verify(request).setParameter("foo", "blah");
 		verify(request).setParameter("bar", "blah blah");
@@ -97,7 +97,7 @@ public class CommonsUploadMultipartObserverTest {
 		when(observer.createServletFileUpload(config)).thenReturn(servletFileUpload);
 		when(servletFileUpload.parseRequest(request)).thenReturn(elements);
 
-		observer.upload(method);
+		observer.upload(event);
 
 		verify(request).setParameter("foo", "blah");
 		verify(request).setParameter("bar", "blah blah");
@@ -115,7 +115,7 @@ public class CommonsUploadMultipartObserverTest {
 		when(observer.createServletFileUpload(config)).thenReturn(servletFileUpload);
 		when(servletFileUpload.parseRequest(request)).thenReturn(elements);
 
-		observer.upload(method);
+		observer.upload(event);
 
 		verify(request).setParameter("foo", "blah");
 		verify(request).setParameter("bar", "blah blah");
@@ -136,7 +136,7 @@ public class CommonsUploadMultipartObserverTest {
 		when(observer.createServletFileUpload(config)).thenReturn(servletFileUpload);
 		when(servletFileUpload.parseRequest(request)).thenReturn(elements);
 
-		observer.upload(method);
+		observer.upload(event);
 	}
 
 	@Test(expected = InvalidParameterException.class)
@@ -150,7 +150,7 @@ public class CommonsUploadMultipartObserverTest {
 		when(observer.createServletFileUpload(config)).thenReturn(servletFileUpload);
 		when(servletFileUpload.parseRequest(request)).thenReturn(asList(item));
 
-		observer.upload(method);
+		observer.upload(event);
 	}
 
 	@Test
@@ -163,7 +163,7 @@ public class CommonsUploadMultipartObserverTest {
 		when(observer.createServletFileUpload(config)).thenReturn(servletFileUpload);
 		when(servletFileUpload.parseRequest(request)).thenReturn(elements);
 
-		observer.upload(method);
+		observer.upload(event);
 
 		verify(request).setParameter("myfile0", "myfile0");
 		verify(request).setParameter("myfile1", "myfile1");
@@ -182,7 +182,7 @@ public class CommonsUploadMultipartObserverTest {
 		when(observer.createServletFileUpload(config)).thenReturn(servletFileUpload);
 		when(servletFileUpload.parseRequest(request)).thenReturn(elements);
 
-		observer.upload(method);
+		observer.upload(event);
 
 		verify(request).setParameter("myfile0[0]", "myfile0[0]");
 		verify(request).setParameter("myfile0[1]", "myfile0[1]");
@@ -197,7 +197,7 @@ public class CommonsUploadMultipartObserverTest {
 		when(observer.createServletFileUpload(config)).thenReturn(servletFileUpload);
 		when(servletFileUpload.parseRequest(request)).thenThrow(new FileUploadException());
 
-		observer.upload(method);
+		observer.upload(event);
 	}
 
 	@Test
@@ -206,7 +206,7 @@ public class CommonsUploadMultipartObserverTest {
 		when(observer.createServletFileUpload(config)).thenReturn(servletFileUpload);
 		when(servletFileUpload.parseRequest(request)).thenThrow(new FileUploadBase.SizeLimitExceededException("", 0L, 0L));
 
-		observer.upload(method);
+		observer.upload(event);
 
 		verify(validator).add(any(I18nMessage.class));
 	}
@@ -223,7 +223,7 @@ public class CommonsUploadMultipartObserverTest {
 		when(observer.createServletFileUpload(config)).thenReturn(servletFileUpload);
 		when(servletFileUpload.parseRequest(request)).thenReturn(elements);
 
-		observer.upload(method);
+		observer.upload(event);
 
 		verify(configSpy).createDirInsideApplication();
 	}
@@ -238,7 +238,7 @@ public class CommonsUploadMultipartObserverTest {
 		when(observer.createServletFileUpload(config)).thenReturn(servletFileUpload);
 		when(servletFileUpload.parseRequest(request)).thenReturn(elements);
 
-		observer.upload(method);
+		observer.upload(event);
 
 		ArgumentCaptor<UploadedFile> argument = ArgumentCaptor.forClass(UploadedFile.class);
 		verify(request).setAttribute(anyString(), argument.capture());
@@ -257,7 +257,7 @@ public class CommonsUploadMultipartObserverTest {
 		when(observer.createServletFileUpload(config)).thenReturn(servletFileUpload);
 		when(servletFileUpload.parseRequest(request)).thenReturn(elements);
 
-		observer.upload(method);
+		observer.upload(event);
 
 		ArgumentCaptor<UploadedFile> argument = ArgumentCaptor.forClass(UploadedFile.class);
 		verify(request).setAttribute(anyString(), argument.capture());
@@ -273,7 +273,7 @@ public class CommonsUploadMultipartObserverTest {
 		when(observer.createServletFileUpload(config)).thenReturn(servletFileUpload);
 		when(servletFileUpload.parseRequest(request)).thenReturn(elements);
 
-		observer.upload(method);
+		observer.upload(event);
 
 		ArgumentCaptor<UploadedFile> argument = ArgumentCaptor.forClass(UploadedFile.class);
 		verify(request).setAttribute(anyString(), argument.capture());

@@ -32,6 +32,7 @@ import br.com.caelum.vraptor.controller.MethodNotAllowedHandler;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.core.RequestInfo;
+import br.com.caelum.vraptor.events.ControllerMethodDiscovered;
 import br.com.caelum.vraptor.http.UrlToControllerTranslator;
 import br.com.caelum.vraptor.http.route.ControllerNotFoundException;
 import br.com.caelum.vraptor.http.route.MethodNotAllowedException;
@@ -48,17 +49,17 @@ import br.com.caelum.vraptor.http.route.MethodNotAllowedException;
 public class ControllerLookupInterceptor implements Interceptor {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(ControllerLookupInterceptor.class);
-	
+
 	private final UrlToControllerTranslator translator;
 	private final MethodInfo methodInfo;
 	private final RequestInfo requestInfo;
 	private final ControllerNotFoundHandler controllerNotFoundHandler;
 	private final MethodNotAllowedHandler methodNotAllowedHandler;
-	private final Event<ControllerMethod> event;
-	
+	private final Event<ControllerMethodDiscovered> event;
+
 	private ControllerMethod method;
-	
-	/** 
+
+	/**
 	 * @deprecated CDI eyes only
 	 */
 	protected ControllerLookupInterceptor() {
@@ -68,7 +69,7 @@ public class ControllerLookupInterceptor implements Interceptor {
 	@Inject
 	public ControllerLookupInterceptor(UrlToControllerTranslator translator, MethodInfo methodInfo,
 			ControllerNotFoundHandler controllerNotFoundHandler, MethodNotAllowedHandler methodNotAllowedHandler,
-			RequestInfo requestInfo, Event<ControllerMethod> event) {
+			RequestInfo requestInfo, Event<ControllerMethodDiscovered> event) {
 		this.translator = translator;
 		this.methodInfo = methodInfo;
 		this.methodNotAllowedHandler = methodNotAllowedHandler;
@@ -83,7 +84,7 @@ public class ControllerLookupInterceptor implements Interceptor {
 
 		try {
 			method = translator.translate(requestInfo);
-			event.fire(method);
+			event.fire(new ControllerMethodDiscovered(method));
 
 			methodInfo.setControllerMethod(method);
 			stack.next(method, controllerInstance);

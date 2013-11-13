@@ -26,7 +26,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 
-import br.com.caelum.vraptor.controller.ControllerMethod;
+import br.com.caelum.vraptor.events.ControllerMethodDiscovered;
 
 /**
  * A null implementation of {@link MultipartInterceptor}. This interceptor will
@@ -56,7 +56,7 @@ public class NullMultipartObserver {
 		this.request = request;
 	}
 
-	public void nullUpload(@Observes ControllerMethod controllerMethod) {
+	public void nullUpload(@Observes ControllerMethodDiscovered event) {
 		if (request.getMethod().toUpperCase().equals("POST")
 				&& nullToEmpty(request.getContentType()).startsWith("multipart/form-data")) {
 			logger.warn("There is no file upload handlers registered. If you are willing to "

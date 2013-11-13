@@ -27,6 +27,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -45,6 +46,7 @@ import br.com.caelum.vraptor.view.Status;
 public class DefaultResultTest {
 
 	@Mock private HttpServletRequest request;
+	@Mock private HttpServletResponse response;
 	@Mock private Container container;
 
 	private Result result;
@@ -53,7 +55,7 @@ public class DefaultResultTest {
 	@Before
 	public void setup() {
 		MockitoAnnotations.initMocks(this);
-		result = new DefaultResult(request, container, null, extractor);
+		result = new DefaultResult(request, container, null, extractor, response);
 	}
 
 	public static class MyView implements View {
@@ -211,7 +213,7 @@ public class DefaultResultTest {
 
 
 	class Account {
-		
+
 	}
 
 	@Test
@@ -219,13 +221,13 @@ public class DefaultResultTest {
 
 		Account account = new Account();
 		when(extractor.nameFor(Account.class)).thenReturn("account");
-		
+
 		result.include(account);
 
 		verify(request).setAttribute("account", account);
 
 	}
-	
+
 	@Test
 	public void shouldNotIncludeTheAttributeWhenTheValueIsNull() throws Exception {
 		result.include(null);

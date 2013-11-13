@@ -21,13 +21,10 @@ import static org.slf4j.LoggerFactory.getLogger;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
-import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 
@@ -44,19 +41,17 @@ public class DownloadObserver {
 
 	private static final Logger logger = getLogger(DownloadObserver.class);
 
-	private final HttpServletResponse response;
 	private final Result result;
 
 	/**
 	 * @deprecated CDI eyes only
 	 */
 	protected DownloadObserver() {
-		this(null, null);
+		this(null);
 	}
 
 	@Inject
-	public DownloadObserver(HttpServletResponse response, Result result) {
-		this.response = response;
+	public DownloadObserver(Result result) {
 		this.result = result;
 	}
 
@@ -66,17 +61,9 @@ public class DownloadObserver {
 		Download download = resolveDownload(methodResult);
 
 		if (download != null) {
-
 			logger.debug("Sending a file to the client");
-
 			if (this.result.used()) return;
-
-			try (OutputStream output = response.getOutputStream()) {
-				download.write(response);
-				output.flush();
-			} catch (IOException e) {
-				throw new RuntimeException(e);
-			}
+			this.result.use(DownloadView.class).of(download);
 		}
 	}
 

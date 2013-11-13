@@ -58,6 +58,7 @@ import br.com.caelum.vraptor.events.MethodExecuted;
 import br.com.caelum.vraptor.observer.download.ByteArrayDownload;
 import br.com.caelum.vraptor.observer.download.Download;
 import br.com.caelum.vraptor.observer.download.DownloadObserver;
+import br.com.caelum.vraptor.observer.download.DownloadView;
 import br.com.caelum.vraptor.observer.download.FileDownload;
 import br.com.caelum.vraptor.observer.download.InputStreamDownload;
 
@@ -74,10 +75,9 @@ public class DownloadObserverTest {
 	@Before
 	public void setup() throws Exception {
 		MockitoAnnotations.initMocks(this);
-
 		when(response.getOutputStream()).thenReturn(outputStream);
-
-		downloadObserver = new DownloadObserver(response, result);
+		when(result.use(DownloadView.class)).thenReturn(new DownloadView(response));
+		downloadObserver = new DownloadObserver(result);
 	}
 
 	@Test

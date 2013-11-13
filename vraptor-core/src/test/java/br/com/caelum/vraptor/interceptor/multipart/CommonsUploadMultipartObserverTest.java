@@ -55,7 +55,7 @@ public class CommonsUploadMultipartObserverTest {
 		MockitoAnnotations.initMocks(this);
 		config = new DefaultMultipartConfig();
 		when(request.getContentType()).thenReturn("multipart/form-data");
-        when(request.getMethod()).thenReturn("POST");
+		when(request.getMethod()).thenReturn("POST");
 	}
 
 	@Test

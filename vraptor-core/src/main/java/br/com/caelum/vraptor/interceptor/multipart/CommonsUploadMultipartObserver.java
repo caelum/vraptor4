@@ -16,12 +16,15 @@
  */
 package br.com.caelum.vraptor.interceptor.multipart;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Collection;
 import java.util.List;
 
 import javax.enterprise.context.RequestScoped;
+import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
@@ -32,15 +35,10 @@ import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import br.com.caelum.vraptor.Intercepts;
 import br.com.caelum.vraptor.controller.ControllerMethod;
-import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.http.InvalidParameterException;
 import br.com.caelum.vraptor.http.MutableRequest;
-import br.com.caelum.vraptor.interceptor.Interceptor;
-import br.com.caelum.vraptor.interceptor.ParametersInstantiatorInterceptor;
 import br.com.caelum.vraptor.validator.I18nMessage;
 import br.com.caelum.vraptor.validator.Validator;
 
@@ -51,17 +49,17 @@ import com.google.common.collect.Multimap;
 import com.google.common.collect.Multiset;
 
 /**
- * A multipart interceptor based on Apache Commons Upload. Provided parameters are injected through
+ * A multipart observer based on Apache Commons Upload. Provided parameters are injected through
  * {@link HttpServletRequest#setAttribute(String, Object)} and uploaded files are made available through.
  *
  * @author Guilherme Silveira
  * @author Otávio Scherer Garcia
+ * @author Rodrigo Turini
  */
-@Intercepts(before=ParametersInstantiatorInterceptor.class)
 @RequestScoped
-public class CommonsUploadMultipartInterceptor implements Interceptor {
+public class CommonsUploadMultipartObserver {
 
-	private static final Logger logger = LoggerFactory.getLogger(CommonsUploadMultipartInterceptor.class);
+	private static final Logger logger = getLogger(CommonsUploadMultipartObserver.class);
 
 	private final MutableRequest request;
 	private final MultipartConfig config;
@@ -70,30 +68,24 @@ public class CommonsUploadMultipartInterceptor implements Interceptor {
 	private Multiset<String> indexes;
 	private Multimap<String, String> params;
 
-	/** 
+	/**
 	 * @deprecated CDI eyes only
 	 */
-	protected CommonsUploadMultipartInterceptor() {
+	protected CommonsUploadMultipartObserver() {
 		this(null, null, null);
 	}
 
 	@Inject
-	public CommonsUploadMultipartInterceptor(MutableRequest request, MultipartConfig cfg, Validator validator) {
+	public CommonsUploadMultipartObserver(MutableRequest request, MultipartConfig cfg, Validator validator) {
 		this.request = request;
 		this.validator = validator;
 		this.config = cfg;
 	}
 
-	/**
-	 * Will intercept the request if apache file upload says that this request is multipart
-	 */
-	@Override
-	public boolean accepts(ControllerMethod method) {
-		return ServletFileUpload.isMultipartContent(request);
-	}
-	
-	@Override
-	public void intercept(InterceptorStack stack, ControllerMethod method, Object controllerInstance) {
+	public void upload(@Observes ControllerMethod controllerMethod) {
+
+		if (!ServletFileUpload.isMultipartContent(request)) return;
+
 		logger.info("Request contains multipart data. Try to parse with commons-upload.");
 
 		indexes = HashMultiset.create();
@@ -136,8 +128,6 @@ public class CommonsUploadMultipartInterceptor implements Interceptor {
 			logger.warn("There was some problem parsing this multipart request, "
 					+ "or someone is not sending a RFC1867 compatible multipart request.", e);
 		}
-
-		stack.next(method, controllerInstance);
 	}
 
 	private boolean isNotEmpty(FileItem item) {
@@ -146,8 +136,6 @@ public class CommonsUploadMultipartInterceptor implements Interceptor {
 
 	/**
 	 * This method is called when the {@link SizeLimitExceededException} was thrown.
-	 *
-	 * @param e
 	 */
 	protected void reportSizeLimitExceeded(final SizeLimitExceededException e) {
 		validator.add(new I18nMessage("upload", "file.limit.exceeded", e.getActualSize(), e.getPermittedSize()));
@@ -172,7 +160,7 @@ public class CommonsUploadMultipartInterceptor implements Interceptor {
 		factory.setRepository(config.getDirectory());
 
 		logger.debug("Using repository {} for file upload", factory.getRepository());
-		
+
 		return new ServletFileUpload(factory);
 	}
 

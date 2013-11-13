@@ -17,10 +17,11 @@
 
 package br.com.caelum.vraptor.interceptor;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 import javax.inject.Inject;
 
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.Intercepts;
@@ -39,9 +40,9 @@ import br.com.caelum.vraptor.view.Results;
 public class ForwardToDefaultViewInterceptor implements Interceptor {
 	private final Result result;
 
-	private static final Logger logger = LoggerFactory.getLogger(ForwardToDefaultViewInterceptor.class);
+	private static final Logger logger = getLogger(ForwardToDefaultViewInterceptor.class);
 
-	/** 
+	/**
 	 * @deprecated CDI eyes only
 	 */
 	protected ForwardToDefaultViewInterceptor() {
@@ -65,9 +66,6 @@ public class ForwardToDefaultViewInterceptor implements Interceptor {
 			logger.debug("Request already dispatched and commited somewhere else, not forwarding.");
 			return;
 		}
-
-		// TODO: maybe the response.isCommited is true, we should warn before
-		// trying to forward
 		logger.debug("forwarding to the dafault page for this logic");
 		result.use(Results.page()).defaultView();
 	}

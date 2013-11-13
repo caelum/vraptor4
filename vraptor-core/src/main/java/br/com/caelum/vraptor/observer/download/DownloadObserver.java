@@ -20,7 +20,7 @@ package br.com.caelum.vraptor.observer.download;
 import static org.slf4j.LoggerFactory.getLogger;
 
 import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 
 import javax.enterprise.event.Observes;
@@ -55,7 +55,7 @@ public class DownloadObserver {
 		this.result = result;
 	}
 
-	public void download(@Observes MethodExecuted event)  {
+	public void download(@Observes MethodExecuted event) throws IOException  {
 
 		Object methodResult = event.getMethodInfo().getResult();
 		Download download = resolveDownload(methodResult);
@@ -67,7 +67,7 @@ public class DownloadObserver {
 		}
 	}
 
-	public Download resolveDownload(Object result) {
+	public Download resolveDownload(Object result) throws IOException {
 
 		if (result == null) return null;
 
@@ -78,11 +78,7 @@ public class DownloadObserver {
 			return new ByteArrayDownload((byte[]) result, null, null);
 		}
 		if (result instanceof File) {
-			try {
-				return new FileDownload((File) result, null, null);
-			} catch (FileNotFoundException e) {
-				throw new RuntimeException(e);
-			}
+			return new FileDownload((File) result, null, null);
 		}
 		if (result instanceof Download)  {
 			return (Download) result;

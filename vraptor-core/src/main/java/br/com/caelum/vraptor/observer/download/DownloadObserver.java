@@ -21,6 +21,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import static org.slf4j.LoggerFactory.getLogger;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -60,24 +61,19 @@ public class DownloadObserver {
 		this.result = result;
 	}
 
-	public boolean isDownloadType(Class<?> type) {
-		return InputStream.class.isAssignableFrom(type) || type == File.class
-				|| Download.class.isAssignableFrom(type) || type == byte[].class;
-	}
-
 	public void download(@Observes MethodExecuted event)  {
 
-		if (isDownloadType(event.getControllerMethod().getMethod().getReturnType())) {
+		Object result = event.getMethodInfo().getResult();
+		Download download = resolveDownload(result);
+
+		if (download != null) {
 
 			logger.debug("Sending a file to the client");
-
-			Object result = event.getMethodInfo().getResult();
 
 			if (result == null && this.result.used()) return;
 			checkNotNull(result, "You've just returned a Null Download. Consider redirecting to another page/logic");
 
 			try (OutputStream output = response.getOutputStream()) {
-				Download download = resolveDownload(result);
 				download.write(response);
 				output.flush();
 			} catch (IOException e) {
@@ -86,7 +82,7 @@ public class DownloadObserver {
 		}
 	}
 
-	private Download resolveDownload(Object result) throws IOException {
+	private Download resolveDownload(Object result) {
 		if (result instanceof InputStream) {
 			return new InputStreamDownload((InputStream) result, null, null);
 		}
@@ -94,7 +90,11 @@ public class DownloadObserver {
 			return new ByteArrayDownload((byte[]) result, null, null);
 		}
 		if (result instanceof File) {
-			return new FileDownload((File) result, null, null);
+			try {
+				return new FileDownload((File) result, null, null);
+			} catch (FileNotFoundException e) {
+				throw new RuntimeException(e);
+			}
 		}
 		if (result instanceof Download)  {
 			return (Download) result;

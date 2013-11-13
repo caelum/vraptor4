@@ -17,8 +17,10 @@
 
 package br.com.caelum.vraptor.interceptor;
 
+import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 import static org.mockito.Matchers.any;
@@ -53,8 +55,11 @@ import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.events.MethodExecuted;
+import br.com.caelum.vraptor.observer.download.ByteArrayDownload;
 import br.com.caelum.vraptor.observer.download.Download;
 import br.com.caelum.vraptor.observer.download.DownloadObserver;
+import br.com.caelum.vraptor.observer.download.FileDownload;
+import br.com.caelum.vraptor.observer.download.InputStreamDownload;
 
 public class DownloadObserverTest {
 
@@ -123,18 +128,6 @@ public class DownloadObserverTest {
 	}
 
 	@Test
-	public void whenResultIsNullAndResultWasNotUsedShouldThrowNPE() throws Exception {
-		when(info.getResult()).thenReturn(null);
-		when(result.used()).thenReturn(false);
-		try {
-			downloadObserver.download(new MethodExecuted(controllerMethod, info));
-			fail("expected NullPointerException");
-		} catch (NullPointerException e) {
-			verifyZeroInteractions(response);
-		}
-	}
-
-	@Test
 	public void shouldThrowInterceptionExceptionIfIOExceptionOccurs() throws Exception {
 		when(controllerMethod.getMethod()).thenReturn(getMethod("download"));
 		Download download = mock(Download.class);
@@ -152,43 +145,30 @@ public class DownloadObserverTest {
 
 	@Test
 	public void shouldNotAcceptStringReturn() throws Exception {
-		assertThat(downloadObserver, not(isDownload(getMethod("string"))));
+		assertNull("String is not a Download", downloadObserver.resolveDownload(""));
 	}
 
 	@Test
 	public void shouldAcceptFile() throws Exception {
-		assertThat(downloadObserver, isDownload(getMethod("file")));
+		File file = File.createTempFile("test", "test");
+		assertThat(downloadObserver.resolveDownload(file), instanceOf(FileDownload.class));
 	}
 
 	@Test
 	public void shouldAcceptInput() throws Exception {
-		assertThat(downloadObserver, isDownload(getMethod("input")));
+		InputStream inputStream = mock(InputStream.class);
+		assertThat(downloadObserver.resolveDownload(inputStream), instanceOf(InputStreamDownload.class));
 	}
 
 	@Test
 	public void shouldAcceptDownload() throws Exception {
-		assertThat(downloadObserver, isDownload(getMethod("download")));
+		Download download = mock(Download.class);
+		assertEquals(downloadObserver.resolveDownload(download), download);
 	}
 
 	@Test
 	public void shouldAcceptByte() throws Exception {
-		assertThat(downloadObserver, isDownload(getMethod("asByte")));
-	}
-
-	private Matcher<Object> isDownload(final Method method) {
-		return new TypeSafeMatcher<Object>() {
-			@Override
-			public void describeTo(Description description) {
-				description.appendText("the method ").appendValue(method);
-			}
-			@Override
-			protected boolean matchesSafely(Object item) {
-				return downloadObserver.isDownloadType(method.getReturnType());
-			}
-			@Override
-			protected void describeMismatchSafely(Object item, Description mismatchDescription) {
-			}
-		};
+		assertThat(downloadObserver.resolveDownload(new byte[]{}), instanceOf(ByteArrayDownload.class));
 	}
 
 	private Matcher<byte[]> arrayStartingWith(final byte[] array) {

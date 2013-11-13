@@ -17,7 +17,6 @@
 
 package br.com.caelum.vraptor.observer.download;
 
-import static com.google.common.base.Preconditions.checkNotNull;
 import static org.slf4j.LoggerFactory.getLogger;
 
 import java.io.File;
@@ -63,15 +62,14 @@ public class DownloadObserver {
 
 	public void download(@Observes MethodExecuted event)  {
 
-		Object result = event.getMethodInfo().getResult();
-		Download download = resolveDownload(result);
+		Object methodResult = event.getMethodInfo().getResult();
+		Download download = resolveDownload(methodResult);
 
 		if (download != null) {
 
 			logger.debug("Sending a file to the client");
 
-			if (result == null && this.result.used()) return;
-			checkNotNull(result, "You've just returned a Null Download. Consider redirecting to another page/logic");
+			if (this.result.used()) return;
 
 			try (OutputStream output = response.getOutputStream()) {
 				download.write(response);
@@ -82,7 +80,10 @@ public class DownloadObserver {
 		}
 	}
 
-	private Download resolveDownload(Object result) {
+	public Download resolveDownload(Object result) {
+
+		if (result == null) return null;
+
 		if (result instanceof InputStream) {
 			return new InputStreamDownload((InputStream) result, null, null);
 		}

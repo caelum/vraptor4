@@ -27,6 +27,7 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,39 +44,41 @@ import br.com.caelum.vraptor.ioc.Container;
 @RequestScoped
 @Named("result")
 public class DefaultResult extends AbstractResult {
-	
+
 	private static final Logger logger = LoggerFactory.getLogger(DefaultResult.class);
 
 	private final HttpServletRequest request;
 	private final Container container;
 	private final ExceptionMapper exceptions;
 	private final TypeNameExtractor extractor;
-	
-	private Map<String, Object> includedAttributes;
-	private boolean responseCommitted = false;
 
-	/** 
+	private Map<String, Object> includedAttributes;
+
+	private HttpServletResponse response;
+
+	/**
 	 * @deprecated CDI eyes only
 	 */
 	protected DefaultResult() {
-		this(null, null, null, null);
+		this(null, null, null, null, null);
 	}
 
 	@Inject
-	public DefaultResult(HttpServletRequest request, Container container, ExceptionMapper exceptions, TypeNameExtractor extractor) {
+	public DefaultResult(HttpServletRequest request, Container container, ExceptionMapper exceptions,
+			TypeNameExtractor extractor, HttpServletResponse response) {
 		this.request = request;
 		this.container = container;
 		this.extractor = extractor;
+		this.response = response;
 		this.includedAttributes = new HashMap<>();
 		this.exceptions = exceptions;
 	}
-	
+
 	@Override
 	public <T extends View> T use(Class<T> view) {
-		responseCommitted = true;
 		return container.instanceFor(view);
 	}
-	
+
 	@Override
 	public Result on(Class<? extends Exception> exception) {
 		return exceptions.record(exception);
@@ -84,7 +87,7 @@ public class DefaultResult extends AbstractResult {
 	@Override
 	public Result include(String key, Object value) {
 		logger.debug("including attribute {}: {}", key, value);
-		
+
 		includedAttributes.put(key, value);
 		request.setAttribute(key, value);
 		return this;
@@ -92,7 +95,7 @@ public class DefaultResult extends AbstractResult {
 
 	@Override
 	public boolean used() {
-		return responseCommitted;
+		return response.isCommitted();
 	}
 
 	@Override
@@ -105,7 +108,7 @@ public class DefaultResult extends AbstractResult {
 		if(value == null) {
 			return this;
 		}
-		
+
 		String key = extractor.nameFor(value.getClass());
 		return include(key, value);
 	}

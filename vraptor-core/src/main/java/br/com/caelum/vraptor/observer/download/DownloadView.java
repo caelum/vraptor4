@@ -27,12 +27,9 @@ public class DownloadView implements View {
 		this.response = response;
 	}
 
-	public void of(Download download) {
-		try (OutputStream output = response.getOutputStream()) {
-			download.write(response);
-			output.flush();
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
+	public void of(Download download) throws IOException {
+		OutputStream output = response.getOutputStream();
+		download.write(response);
+		output.flush();
 	}
 }

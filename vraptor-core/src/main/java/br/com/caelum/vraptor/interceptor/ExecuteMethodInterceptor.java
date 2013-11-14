@@ -98,7 +98,7 @@ public class ExecuteMethodInterceptor implements Interceptor {
 								+ "If you didn't add any validation error, it is possible that a conversion error had happened.");
 			}
 			this.info.setResult(result);
-			methodExecutedEvent.fire(new MethodExecuted(method));
+			methodExecutedEvent.fire(new MethodExecuted(method, info));
 			stack.next(method, controllerInstance);
 		} catch (IllegalArgumentException e) {
 			throw new InterceptionException(e);

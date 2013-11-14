@@ -1,9 +1,8 @@
-package br.com.caelum.vraptor.interceptor.multipart;
+package br.com.caelum.vraptor.observer.upload;
 
 import static com.google.common.io.ByteStreams.toByteArray;
 import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
@@ -12,6 +11,7 @@ import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 
 import java.io.IOException;
@@ -28,10 +28,14 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.core.InterceptorStack;
+import br.com.caelum.vraptor.events.ControllerMethodDiscovered;
 import br.com.caelum.vraptor.http.InvalidParameterException;
 import br.com.caelum.vraptor.http.MutableRequest;
+import br.com.caelum.vraptor.observer.upload.CommonsUploadMultipartObserver;
+import br.com.caelum.vraptor.observer.upload.DefaultMultipartConfig;
+import br.com.caelum.vraptor.observer.upload.MultipartConfig;
+import br.com.caelum.vraptor.observer.upload.UploadedFile;
 import br.com.caelum.vraptor.validator.I18nMessage;
 import br.com.caelum.vraptor.validator.Validator;
 
@@ -40,41 +44,34 @@ import br.com.caelum.vraptor.validator.Validator;
  *
  * @author Otávio Scherer Garcia
  */
-public class CommonsUploadMultipartInterceptorTest {
+public class CommonsUploadMultipartObserverTest {
 
 	@Mock private InterceptorStack stack;
-	@Mock private ControllerMethod method;
+	@Mock private ControllerMethodDiscovered event;
 	@Mock private MutableRequest request;
 	@Mock private Validator validator;
 	@Mock private ServletFileUpload servletFileUpload;
 	private MultipartConfig config;
-	private CommonsUploadMultipartInterceptor interceptor;
+	private CommonsUploadMultipartObserver observer;
 
 	@Before
 	public void setup() {
 		MockitoAnnotations.initMocks(this);
-		
 		config = new DefaultMultipartConfig();
+		when(request.getContentType()).thenReturn("multipart/form-data");
+		when(request.getMethod()).thenReturn("POST");
 	}
 
 	@Test
 	public void shouldNotAcceptFormURLEncoded() {
-		interceptor = new CommonsUploadMultipartInterceptor(request, config, validator);
-
+		MultipartConfig config = spy(new DefaultMultipartConfig());
+		observer = new CommonsUploadMultipartObserver(request, config, validator);
 		when(request.getContentType()).thenReturn("application/x-www-form-urlencoded");
 		when(request.getMethod()).thenReturn("POST");
 
-		assertThat(interceptor.accepts(method), equalTo(false));
-	}
+		observer.upload(event);
 
-	@Test
-	public void shouldAcceptMultipart() {
-		interceptor = new CommonsUploadMultipartInterceptor(request, config, validator);
-
-		when(request.getContentType()).thenReturn("multipart/form-data");
-		when(request.getMethod()).thenReturn("POST");
-
-		assertThat(interceptor.accepts(method), equalTo(true));
+		verifyZeroInteractions(config);
 	}
 
 	@Test
@@ -84,11 +81,11 @@ public class CommonsUploadMultipartInterceptorTest {
 		elements.add(new MockFileItem("bar", "blah blah"));
 
 
-		interceptor = spy(new CommonsUploadMultipartInterceptor(request, config, validator));
-		when(interceptor.createServletFileUpload(config)).thenReturn(servletFileUpload);
+		observer = spy(new CommonsUploadMultipartObserver(request, config, validator));
+		when(observer.createServletFileUpload(config)).thenReturn(servletFileUpload);
 		when(servletFileUpload.parseRequest(request)).thenReturn(elements);
-		
-		interceptor.intercept(stack, null, null);
+
+		observer.upload(event);
 
 		verify(request).setParameter("foo", "blah");
 		verify(request).setParameter("bar", "blah blah");
@@ -100,11 +97,11 @@ public class CommonsUploadMultipartInterceptorTest {
 		elements.add(new MockFileItem("foo", "blah"));
 		elements.add(new MockFileItem("bar", "blah blah"));
 
-		interceptor = spy(new CommonsUploadMultipartInterceptor(request, config, validator));
-		when(interceptor.createServletFileUpload(config)).thenReturn(servletFileUpload);
+		observer = spy(new CommonsUploadMultipartObserver(request, config, validator));
+		when(observer.createServletFileUpload(config)).thenReturn(servletFileUpload);
 		when(servletFileUpload.parseRequest(request)).thenReturn(elements);
 
-		interceptor.intercept(stack, null, null);
+		observer.upload(event);
 
 		verify(request).setParameter("foo", "blah");
 		verify(request).setParameter("bar", "blah blah");
@@ -118,11 +115,11 @@ public class CommonsUploadMultipartInterceptorTest {
 		elements.add(new MockFileItem("thefile0", "foo.txt", "foo".getBytes()));
 		elements.add(new MockFileItem("thefile1", "bar.txt", "bar".getBytes()));
 
-		interceptor = spy(new CommonsUploadMultipartInterceptor(request, config, validator));
-		when(interceptor.createServletFileUpload(config)).thenReturn(servletFileUpload);
+		observer = spy(new CommonsUploadMultipartObserver(request, config, validator));
+		when(observer.createServletFileUpload(config)).thenReturn(servletFileUpload);
 		when(servletFileUpload.parseRequest(request)).thenReturn(elements);
 
-		interceptor.intercept(stack, null, null);
+		observer.upload(event);
 
 		verify(request).setParameter("foo", "blah");
 		verify(request).setParameter("bar", "blah blah");
@@ -139,11 +136,11 @@ public class CommonsUploadMultipartInterceptorTest {
 		final List<FileItem> elements = new ArrayList<>();
 		elements.add(new MockFileItem("thefile0", "", new byte[0]));
 
-		interceptor = spy(new CommonsUploadMultipartInterceptor(request, config, validator));
-		when(interceptor.createServletFileUpload(config)).thenReturn(servletFileUpload);
+		observer = spy(new CommonsUploadMultipartObserver(request, config, validator));
+		when(observer.createServletFileUpload(config)).thenReturn(servletFileUpload);
 		when(servletFileUpload.parseRequest(request)).thenReturn(elements);
 
-		interceptor.intercept(stack, null, null);
+		observer.upload(event);
 	}
 
 	@Test(expected = InvalidParameterException.class)
@@ -153,11 +150,11 @@ public class CommonsUploadMultipartInterceptorTest {
 
 		doThrow(new IOException()).when(item).getInputStream();
 
-		interceptor = spy(new CommonsUploadMultipartInterceptor(request, config, validator));
-		when(interceptor.createServletFileUpload(config)).thenReturn(servletFileUpload);
+		observer = spy(new CommonsUploadMultipartObserver(request, config, validator));
+		when(observer.createServletFileUpload(config)).thenReturn(servletFileUpload);
 		when(servletFileUpload.parseRequest(request)).thenReturn(asList(item));
 
-		interceptor.intercept(stack, null, null);
+		observer.upload(event);
 	}
 
 	@Test
@@ -166,11 +163,11 @@ public class CommonsUploadMultipartInterceptorTest {
 		elements.add(new MockFileItem("myfile0", "foo.txt", "foo".getBytes()));
 		elements.add(new MockFileItem("myfile1", "foo.txt", "bar".getBytes()));
 
-		interceptor = spy(new CommonsUploadMultipartInterceptor(request, config, validator));
-		when(interceptor.createServletFileUpload(config)).thenReturn(servletFileUpload);
+		observer = spy(new CommonsUploadMultipartObserver(request, config, validator));
+		when(observer.createServletFileUpload(config)).thenReturn(servletFileUpload);
 		when(servletFileUpload.parseRequest(request)).thenReturn(elements);
 
-		interceptor.intercept(stack, null, null);
+		observer.upload(event);
 
 		verify(request).setParameter("myfile0", "myfile0");
 		verify(request).setParameter("myfile1", "myfile1");
@@ -185,11 +182,11 @@ public class CommonsUploadMultipartInterceptorTest {
 		elements.add(new MockFileItem("myfile0[]", "foo.txt", "foo".getBytes()));
 		elements.add(new MockFileItem("myfile0[]", "foo.txt", "bar".getBytes()));
 
-		interceptor = spy(new CommonsUploadMultipartInterceptor(request, config, validator));
-		when(interceptor.createServletFileUpload(config)).thenReturn(servletFileUpload);
+		observer = spy(new CommonsUploadMultipartObserver(request, config, validator));
+		when(observer.createServletFileUpload(config)).thenReturn(servletFileUpload);
 		when(servletFileUpload.parseRequest(request)).thenReturn(elements);
 
-		interceptor.intercept(stack, null, null);
+		observer.upload(event);
 
 		verify(request).setParameter("myfile0[0]", "myfile0[0]");
 		verify(request).setParameter("myfile0[1]", "myfile0[1]");
@@ -200,20 +197,20 @@ public class CommonsUploadMultipartInterceptorTest {
 
 	@Test
 	public void doNothingWhenFileUploadExceptionOccurs() throws Exception {
-		interceptor = spy(new CommonsUploadMultipartInterceptor(request, config, validator));
-		when(interceptor.createServletFileUpload(config)).thenReturn(servletFileUpload);
+		observer = spy(new CommonsUploadMultipartObserver(request, config, validator));
+		when(observer.createServletFileUpload(config)).thenReturn(servletFileUpload);
 		when(servletFileUpload.parseRequest(request)).thenThrow(new FileUploadException());
 
-		interceptor.intercept(stack, null, null);
+		observer.upload(event);
 	}
 
 	@Test
 	public void shouldValidateWhenSizeLimitExceededExceptionOccurs() throws Exception {
-		interceptor = spy(new CommonsUploadMultipartInterceptor(request, config, validator));
-		when(interceptor.createServletFileUpload(config)).thenReturn(servletFileUpload);
+		observer = spy(new CommonsUploadMultipartObserver(request, config, validator));
+		when(observer.createServletFileUpload(config)).thenReturn(servletFileUpload);
 		when(servletFileUpload.parseRequest(request)).thenThrow(new FileUploadBase.SizeLimitExceededException("", 0L, 0L));
 
-		interceptor.intercept(stack, null, null);
+		observer.upload(event);
 
 		verify(validator).add(any(I18nMessage.class));
 	}
@@ -226,11 +223,11 @@ public class CommonsUploadMultipartInterceptorTest {
 		final List<FileItem> elements = new ArrayList<>();
 		elements.add(new MockFileItem("myfile", "foo.txt", "bar".getBytes()));
 
-		interceptor = spy(new CommonsUploadMultipartInterceptor(request, configSpy, validator));
-		when(interceptor.createServletFileUpload(config)).thenReturn(servletFileUpload);
+		observer = spy(new CommonsUploadMultipartObserver(request, configSpy, validator));
+		when(observer.createServletFileUpload(config)).thenReturn(servletFileUpload);
 		when(servletFileUpload.parseRequest(request)).thenReturn(elements);
 
-		interceptor.intercept(stack, null, null);
+		observer.upload(event);
 
 		verify(configSpy).createDirInsideApplication();
 	}
@@ -241,11 +238,11 @@ public class CommonsUploadMultipartInterceptorTest {
 		byte[] content = "foo".getBytes();
 		elements.add(new MockFileItem("thefile0", "text/plain", "file.txt", content));
 
-		interceptor = spy(new CommonsUploadMultipartInterceptor(request, config, validator));
-		when(interceptor.createServletFileUpload(config)).thenReturn(servletFileUpload);
+		observer = spy(new CommonsUploadMultipartObserver(request, config, validator));
+		when(observer.createServletFileUpload(config)).thenReturn(servletFileUpload);
 		when(servletFileUpload.parseRequest(request)).thenReturn(elements);
 
-		interceptor.intercept(stack, null, null);
+		observer.upload(event);
 
 		ArgumentCaptor<UploadedFile> argument = ArgumentCaptor.forClass(UploadedFile.class);
 		verify(request).setAttribute(anyString(), argument.capture());
@@ -260,11 +257,11 @@ public class CommonsUploadMultipartInterceptorTest {
 	public void mustConvertUnixPathToFileName() throws Exception {
 		List<FileItem> elements = new ArrayList<>();
 		elements.add(new MockFileItem("thefile0", "text/plain", "/unix/path/file0.txt", new byte[0]));
-		interceptor = spy(new CommonsUploadMultipartInterceptor(request, config, validator));
-		when(interceptor.createServletFileUpload(config)).thenReturn(servletFileUpload);
+		observer = spy(new CommonsUploadMultipartObserver(request, config, validator));
+		when(observer.createServletFileUpload(config)).thenReturn(servletFileUpload);
 		when(servletFileUpload.parseRequest(request)).thenReturn(elements);
 
-		interceptor.intercept(stack, null, null);
+		observer.upload(event);
 
 		ArgumentCaptor<UploadedFile> argument = ArgumentCaptor.forClass(UploadedFile.class);
 		verify(request).setAttribute(anyString(), argument.capture());
@@ -276,11 +273,11 @@ public class CommonsUploadMultipartInterceptorTest {
 	public void mustConvertWindowsPathToFileName() throws Exception {
 		List<FileItem> elements = new ArrayList<>();
 		elements.add(new MockFileItem("thefile0", "text/plain", "c:/windows/path/file0.txt", new byte[0]));
-		interceptor = spy(new CommonsUploadMultipartInterceptor(request, config, validator));
-		when(interceptor.createServletFileUpload(config)).thenReturn(servletFileUpload);
+		observer = spy(new CommonsUploadMultipartObserver(request, config, validator));
+		when(observer.createServletFileUpload(config)).thenReturn(servletFileUpload);
 		when(servletFileUpload.parseRequest(request)).thenReturn(elements);
 
-		interceptor.intercept(stack, null, null);
+		observer.upload(event);
 
 		ArgumentCaptor<UploadedFile> argument = ArgumentCaptor.forClass(UploadedFile.class);
 		verify(request).setAttribute(anyString(), argument.capture());

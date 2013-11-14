@@ -1,4 +1,4 @@
-package br.com.caelum.vraptor.interceptor.download;
+package br.com.caelum.vraptor.observer.download;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.mockito.Mockito.verify;

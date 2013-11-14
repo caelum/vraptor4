@@ -1,4 +1,4 @@
-package br.com.caelum.vraptor.interceptor.multipart;
+package br.com.caelum.vraptor.observer.upload;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;

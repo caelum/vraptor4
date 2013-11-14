@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package br.com.caelum.vraptor.interceptor.multipart;
+package br.com.caelum.vraptor.observer.upload;
 
 import static com.google.common.base.Objects.toStringHelper;
 

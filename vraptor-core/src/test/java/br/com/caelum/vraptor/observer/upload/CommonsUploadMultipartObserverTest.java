@@ -1,4 +1,4 @@
-package br.com.caelum.vraptor.interceptor.multipart;
+package br.com.caelum.vraptor.observer.upload;
 
 import static com.google.common.io.ByteStreams.toByteArray;
 import static java.util.Arrays.asList;
@@ -32,6 +32,10 @@ import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.events.ControllerMethodDiscovered;
 import br.com.caelum.vraptor.http.InvalidParameterException;
 import br.com.caelum.vraptor.http.MutableRequest;
+import br.com.caelum.vraptor.observer.upload.CommonsUploadMultipartObserver;
+import br.com.caelum.vraptor.observer.upload.DefaultMultipartConfig;
+import br.com.caelum.vraptor.observer.upload.MultipartConfig;
+import br.com.caelum.vraptor.observer.upload.UploadedFile;
 import br.com.caelum.vraptor.validator.I18nMessage;
 import br.com.caelum.vraptor.validator.Validator;
 

@@ -15,7 +15,7 @@
  * limitations under the License. 
  */
 
-package br.com.caelum.vraptor.interceptor.multipart;
+package br.com.caelum.vraptor.observer.upload;
 
 import java.io.File;
 

@@ -22,11 +22,8 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
-import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.argThat;
 import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
@@ -34,7 +31,6 @@ import static org.mockito.Mockito.when;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.nio.file.Files;
@@ -125,22 +121,6 @@ public class DownloadObserverTest {
 		when(result.used()).thenReturn(true);
 		downloadObserver.download(new MethodExecuted(controllerMethod, info));
 		verifyZeroInteractions(response);
-	}
-
-	@Test
-	public void shouldThrowInterceptionExceptionIfIOExceptionOccurs() throws Exception {
-		when(controllerMethod.getMethod()).thenReturn(getMethod("download"));
-		Download download = mock(Download.class);
-
-		when(info.getResult()).thenReturn(download);
-		when(result.used()).thenReturn(false);
-		doThrow(new IOException()).when(download).write(any(HttpServletResponse.class));
-
-		try {
-			downloadObserver.download(new MethodExecuted(controllerMethod, info));
-			fail("expected RuntimeException");
-		} catch (RuntimeException e) {
-		}
 	}
 
 	@Test

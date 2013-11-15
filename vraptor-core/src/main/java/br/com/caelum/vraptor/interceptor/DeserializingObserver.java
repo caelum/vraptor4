@@ -15,53 +15,56 @@
  */
 package br.com.caelum.vraptor.interceptor;
 
+import static java.util.Arrays.asList;
+import static org.slf4j.LoggerFactory.getLogger;
+
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
 
+import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.Consumes;
-import br.com.caelum.vraptor.InterceptionException;
-import br.com.caelum.vraptor.Intercepts;
 import br.com.caelum.vraptor.controller.ControllerMethod;
-import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.deserialization.Deserializer;
 import br.com.caelum.vraptor.deserialization.Deserializers;
+import br.com.caelum.vraptor.events.ReadyToExecuteMethod;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.view.Status;
 
 /**
- * Important: this interceptor must be after the {@link ParametersInstantiatorInterceptor}
+ * <strong>Important</strong>: this class must observes {@link ReadyToExecuteMethod}
+ * because it is fired just after {@link ParametersInstantiatorInterceptor} execution
  *
  * @author Lucas Cavalcanti
  * @author Rafael Ferreira
+ * @author Rodrigo Turini
  */
-@Intercepts(after=ParametersInstantiatorInterceptor.class, before=ExecuteMethodInterceptor.class)
-public class DeserializingInterceptor implements Interceptor {
+public class DeserializingObserver {
+
 	private final HttpServletRequest request;
 	private final Deserializers deserializers;
 	private final MethodInfo methodInfo;
 	private final Container container;
 	private final Status status;
 
-	private static final Logger logger = LoggerFactory.getLogger(DeserializingInterceptor.class);
+	private static final Logger logger = getLogger(DeserializingObserver.class);
 
-	/** 
+	/**
 	 * @deprecated CDI eyes only
 	 */
-	protected DeserializingInterceptor() {
+	protected DeserializingObserver() {
 		this(null, null, null, null, null);
 	}
 
 	@Inject
-	public DeserializingInterceptor(HttpServletRequest servletRequest, Deserializers deserializers,
-			MethodInfo methodInfo, Container container, Status status) {
+	public DeserializingObserver(HttpServletRequest servletRequest, Deserializers
+			deserializers, MethodInfo methodInfo, Container container, Status status) {
+
 		this.request = servletRequest;
 		this.deserializers = deserializers;
 		this.methodInfo = methodInfo;
@@ -69,15 +72,13 @@ public class DeserializingInterceptor implements Interceptor {
 		this.status = status;
 	}
 
-	@Override
-	public boolean accepts(ControllerMethod method) {
-		return method.containsAnnotation(Consumes.class);
-	}
+	public void deserializes(@Observes ReadyToExecuteMethod event) throws IOException {
 
-	@Override
-	public void intercept(InterceptorStack stack, ControllerMethod method, Object controllerInstance) throws InterceptionException {
-		Consumes consumesAnnotation = method.getMethod().getAnnotation(Consumes.class);
-		List<String> supported =  Arrays.asList(consumesAnnotation.value());
+		ControllerMethod method = event.getControllerMethod();
+
+		if (!method.containsAnnotation(Consumes.class)) return;
+
+		List<String> supported =  asList(method.getMethod().getAnnotation(Consumes.class).value());
 
 		String contentType = mime(request.getContentType());
 		if (!supported.isEmpty() && !supported.contains(contentType)) {
@@ -85,32 +86,25 @@ public class DeserializingInterceptor implements Interceptor {
 			return;
 		}
 
-		try {
-			Deserializer deserializer = deserializers.deserializerFor(contentType, container);
-			if (deserializer == null) {
-				unsupported("Unable to handle media type [%s]: no deserializer found.", contentType);
-				return;
-			}
-
-			Object[] deserialized = deserializer.deserialize(request.getInputStream(), method);
-			Object[] parameters = methodInfo.getParameters();
-
-			logger.debug("Deserialized parameters for {} are {} ", method, deserialized);
-
-			// TODO: a new array should be created and then a call to setParameters
-			// setting methodInfo.getParameters() works only because we dont (yet)
-			// return a defensive copy
-			for (int i = 0; i < deserialized.length; i++) {
-				if (deserialized[i] != null) {
-					parameters[i] = deserialized[i];
-				}
-			}
-
-			stack.next(method, controllerInstance);
-		} catch (IOException e) {
-			throw new InterceptionException(e);
+		Deserializer deserializer = deserializers.deserializerFor(contentType, container);
+		if (deserializer == null) {
+			unsupported("Unable to handle media type [%s]: no deserializer found.", contentType);
+			return;
 		}
 
+		Object[] deserialized = deserializer.deserialize(request.getInputStream(), method);
+		Object[] parameters = methodInfo.getParameters();
+
+		logger.debug("Deserialized parameters for {} are {} ", method, deserialized);
+
+		// TODO: a new array should be created and then a call to setParameters
+		// setting methodInfo.getParameters() works only because we dont (yet)
+		// return a defensive copy
+		for (int i = 0; i < deserialized.length; i++) {
+			if (deserialized[i] != null) {
+				parameters[i] = deserialized[i];
+			}
+		}
 	}
 
 	private String mime(String contentType) {
@@ -123,5 +117,4 @@ public class DeserializingInterceptor implements Interceptor {
 	private void unsupported(String message, Object... params) {
 		this.status.unsupportedMediaType(String.format(message, params));
 	}
-
 }

@@ -10,7 +10,7 @@ import br.com.caelum.vraptor.interceptor.ControllerLookupInterceptor;
  */
 public class ControllerMethodDiscovered {
 
-	private ControllerMethod controllerMethod;
+	private final ControllerMethod controllerMethod;
 
 	public ControllerMethodDiscovered(ControllerMethod method) {
 		this.controllerMethod = method;

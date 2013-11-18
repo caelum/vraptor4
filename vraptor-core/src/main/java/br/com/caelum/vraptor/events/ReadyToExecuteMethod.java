@@ -11,7 +11,7 @@ import br.com.caelum.vraptor.interceptor.ParametersInstantiatorInterceptor;
  */
 public class ReadyToExecuteMethod {
 
-	private ControllerMethod controllermethod;
+	private final ControllerMethod controllermethod;
 
 	public ReadyToExecuteMethod(ControllerMethod method) {
 		this.controllermethod = method;

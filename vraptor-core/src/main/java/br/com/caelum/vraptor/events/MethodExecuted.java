@@ -15,8 +15,8 @@ import br.com.caelum.vraptor.interceptor.ExecuteMethodInterceptor;
  */
 public class MethodExecuted {
 
-	private ControllerMethod controllerMethod;
-	private MethodInfo methodInfo;
+	private final ControllerMethod controllerMethod;
+	private final MethodInfo methodInfo;
 
 	public MethodExecuted(ControllerMethod method, MethodInfo info) {
 		this.controllerMethod = method;

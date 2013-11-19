@@ -8,6 +8,7 @@ import static org.mockito.Mockito.when;
 
 import java.io.IOException;
 
+import javax.enterprise.inject.Instance;
 import javax.servlet.http.HttpServletRequest;
 
 import org.junit.Before;
@@ -23,7 +24,7 @@ import br.com.caelum.vraptor.deserialization.Deserializer;
 import br.com.caelum.vraptor.deserialization.Deserializers;
 import br.com.caelum.vraptor.events.ReadyToExecuteMethod;
 import br.com.caelum.vraptor.ioc.Container;
-import br.com.caelum.vraptor.observer.DeserializingObserver;
+import br.com.caelum.vraptor.util.test.MockInstanceImpl;
 import br.com.caelum.vraptor.view.Status;
 
 
@@ -44,7 +45,12 @@ public class DeserializingObserverTest {
 		MockitoAnnotations.initMocks(this);
 
 		methodInfo = new MethodInfo();
-		observer = new DeserializingObserver(request, deserializers, methodInfo, container, status);
+
+		Instance<HttpServletRequest> requestInstance = new MockInstanceImpl<>(request);
+		Instance<MethodInfo> methodInfoInstance = new MockInstanceImpl<>(methodInfo);
+		Instance<Status> statusInstance = new MockInstanceImpl<>(status);
+
+		observer = new DeserializingObserver(requestInstance, deserializers, methodInfoInstance, container, statusInstance);
 		consumeXml = new DefaultControllerMethod(null, DummyResource.class.getDeclaredMethod("consumeXml"));
 		doesntConsume = new DefaultControllerMethod(null, DummyResource.class.getDeclaredMethod("doesntConsume"));
 	}

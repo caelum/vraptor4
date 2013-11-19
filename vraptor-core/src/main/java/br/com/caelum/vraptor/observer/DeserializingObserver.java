@@ -40,7 +40,7 @@ import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.view.Status;
 
 /**
- * <strong>Important</strong>: this class must observes {@link ReadyToExecuteMethod}
+ * <strong>Important</strong>: this class must observe {@link ReadyToExecuteMethod}
  * because it is fired just after {@link ParametersInstantiatorInterceptor} execution
  *
  * @author Lucas Cavalcanti

@@ -23,8 +23,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
-import javax.inject.Inject;
 
 import org.slf4j.Logger;
 
@@ -37,33 +37,20 @@ import br.com.caelum.vraptor.events.MethodExecuted;
  * @author filipesabella
  * @author Rodrigo Turini
  */
+@ApplicationScoped
 public class DownloadObserver {
 
 	private static final Logger logger = getLogger(DownloadObserver.class);
 
-	private final Result result;
-
-	/**
-	 * @deprecated CDI eyes only
-	 */
-	protected DownloadObserver() {
-		this(null);
-	}
-
-	@Inject
-	public DownloadObserver(Result result) {
-		this.result = result;
-	}
-
-	public void download(@Observes MethodExecuted event) throws IOException  {
+	public void download(@Observes MethodExecuted event, Result result) throws IOException  {
 
 		Object methodResult = event.getMethodInfo().getResult();
 		Download download = resolveDownload(methodResult);
 
 		if (download != null) {
 			logger.debug("Sending a file to the client");
-			if (this.result.used()) return;
-			this.result.use(DownloadView.class).of(download);
+			if (result.used()) return;
+			result.use(DownloadView.class).of(download);
 		}
 	}
 

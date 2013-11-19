@@ -21,7 +21,9 @@ import static org.slf4j.LoggerFactory.getLogger;
 import java.io.IOException;
 import java.util.List;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
+import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
@@ -45,13 +47,14 @@ import br.com.caelum.vraptor.view.Status;
  * @author Rafael Ferreira
  * @author Rodrigo Turini
  */
+@ApplicationScoped
 public class DeserializingObserver {
 
-	private final HttpServletRequest request;
+	private final Instance<HttpServletRequest> request;
 	private final Deserializers deserializers;
-	private final MethodInfo methodInfo;
+	private final Instance<MethodInfo> methodInfo;
 	private final Container container;
-	private final Status status;
+	private final Instance<Status> status;
 
 	private static final Logger logger = getLogger(DeserializingObserver.class);
 
@@ -63,8 +66,8 @@ public class DeserializingObserver {
 	}
 
 	@Inject
-	public DeserializingObserver(HttpServletRequest servletRequest, Deserializers
-			deserializers, MethodInfo methodInfo, Container container, Status status) {
+	public DeserializingObserver(Instance<HttpServletRequest> servletRequest, Deserializers deserializers,
+			Instance<MethodInfo> methodInfo, Container container, Instance<Status> status) {
 
 		this.request = servletRequest;
 		this.deserializers = deserializers;
@@ -81,7 +84,9 @@ public class DeserializingObserver {
 
 		List<String> supported =  asList(method.getMethod().getAnnotation(Consumes.class).value());
 
-		String contentType = mime(request.getContentType());
+		HttpServletRequest httpServletRequest = request.get();
+
+		String contentType = mime(httpServletRequest.getContentType());
 		if (!supported.isEmpty() && !supported.contains(contentType)) {
 			unsupported("Request with media type [%s]. Expecting one of %s.", contentType, supported);
 			return;
@@ -93,8 +98,8 @@ public class DeserializingObserver {
 			return;
 		}
 
-		Object[] deserialized = deserializer.deserialize(request.getInputStream(), method);
-		Object[] parameters = methodInfo.getParameters();
+		Object[] deserialized = deserializer.deserialize(request.get().getInputStream(), method);
+		Object[] parameters = methodInfo.get().getParameters();
 
 		logger.debug("Deserialized parameters for {} are {} ", method, deserialized);
 
@@ -116,6 +121,6 @@ public class DeserializingObserver {
 	}
 
 	private void unsupported(String message, Object... params) {
-		this.status.unsupportedMediaType(String.format(message, params));
+		this.status.get().unsupportedMediaType(String.format(message, params));
 	}
 }

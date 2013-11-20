@@ -51,12 +51,6 @@ import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.events.MethodExecuted;
-import br.com.caelum.vraptor.observer.download.ByteArrayDownload;
-import br.com.caelum.vraptor.observer.download.Download;
-import br.com.caelum.vraptor.observer.download.DownloadObserver;
-import br.com.caelum.vraptor.observer.download.DownloadView;
-import br.com.caelum.vraptor.observer.download.FileDownload;
-import br.com.caelum.vraptor.observer.download.InputStreamDownload;
 
 public class DownloadObserverTest {
 
@@ -73,7 +67,7 @@ public class DownloadObserverTest {
 		MockitoAnnotations.initMocks(this);
 		when(response.getOutputStream()).thenReturn(outputStream);
 		when(result.use(DownloadView.class)).thenReturn(new DownloadView(response));
-		downloadObserver = new DownloadObserver(result);
+		downloadObserver = new DownloadObserver();
 	}
 
 	@Test
@@ -81,7 +75,7 @@ public class DownloadObserverTest {
 		when(controllerMethod.getMethod()).thenReturn(getMethod("download"));
 		Download download = mock(Download.class);
 		when(info.getResult()).thenReturn(download);
-		downloadObserver.download(new MethodExecuted(controllerMethod, info));
+		downloadObserver.download(new MethodExecuted(controllerMethod, info), result);
 		verify(download).write(response);
 	}
 
@@ -90,7 +84,7 @@ public class DownloadObserverTest {
 		when(controllerMethod.getMethod()).thenReturn(getMethod("asByte"));
 		byte[] bytes = "abc".getBytes();
 		when(info.getResult()).thenReturn(new ByteArrayInputStream(bytes));
-		downloadObserver.download(new MethodExecuted(controllerMethod, info));
+		downloadObserver.download(new MethodExecuted(controllerMethod, info), result);
 		verify(outputStream).write(argThat(is(arrayStartingWith(bytes))), eq(0), eq(3));
 	}
 
@@ -99,7 +93,7 @@ public class DownloadObserverTest {
 		when(controllerMethod.getMethod()).thenReturn(getMethod("asByte"));
 		byte[] bytes = "abc".getBytes();
 		when(info.getResult()).thenReturn(bytes);
-		downloadObserver.download(new MethodExecuted(controllerMethod, info));
+		downloadObserver.download(new MethodExecuted(controllerMethod, info), result);
 		verify(outputStream).write(argThat(is(arrayStartingWith(bytes))), eq(0), eq(3));
 	}
 
@@ -109,7 +103,7 @@ public class DownloadObserverTest {
 		File tmp = File.createTempFile("test", "test");
 		Files.write(tmp.toPath(), "abc".getBytes());
 		when(info.getResult()).thenReturn(tmp);
-		downloadObserver.download(new MethodExecuted(controllerMethod, info));
+		downloadObserver.download(new MethodExecuted(controllerMethod, info), result);
 		verify(outputStream).write(argThat(is(arrayStartingWith("abc".getBytes()))), eq(0), eq(3));
 		tmp.delete();
 	}
@@ -119,7 +113,7 @@ public class DownloadObserverTest {
 		when(controllerMethod.getMethod()).thenReturn(getMethod("download"));
 		when(info.getResult()).thenReturn(null);
 		when(result.used()).thenReturn(true);
-		downloadObserver.download(new MethodExecuted(controllerMethod, info));
+		downloadObserver.download(new MethodExecuted(controllerMethod, info), result);
 		verifyZeroInteractions(response);
 	}
 

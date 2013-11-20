@@ -82,9 +82,16 @@ public class Serializee {
 	}
 	
 	public void excludeAll() {
-		for(Field field : new Mirror().on(getRootClass()).reflectAll().fields()) {
-			getExcludes().putAll(field.getName(), getParentTypes(field.getName(), getRootClass()));
-		}
+		Set<Class<?>> types = new HashSet<Class<?>>();
+
+		if (isCollection(getRootClass()))
+			types.addAll(getElementTypes());
+		else
+			types.add(getRootClass());
+
+		for (Class<?> type : types)
+			for (Field field : new Mirror().on(type).reflectAll().fields())
+				getExcludes().putAll(field.getName(), getParentTypes(field.getName(), type));
 	}
 
 	public void includeAll(String... names) {

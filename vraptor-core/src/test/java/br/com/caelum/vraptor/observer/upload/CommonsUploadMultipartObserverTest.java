@@ -56,7 +56,7 @@ public class CommonsUploadMultipartObserverTest {
 		config = new DefaultMultipartConfig();
 		when(request.getContentType()).thenReturn("multipart/form-data");
 		when(request.getMethod()).thenReturn("POST");
-		observer = new CommonsUploadMultipartObserver();
+		observer = spy(new CommonsUploadMultipartObserver());
 	}
 
 	@Test
@@ -76,7 +76,6 @@ public class CommonsUploadMultipartObserverTest {
 		elements.add(new MockFileItem("foo", "blah"));
 		elements.add(new MockFileItem("bar", "blah blah"));
 
-		observer = spy(new CommonsUploadMultipartObserver());
 		when(observer.createServletFileUpload(config)).thenReturn(servletFileUpload);
 		when(servletFileUpload.parseRequest(request)).thenReturn(elements);
 
@@ -92,7 +91,6 @@ public class CommonsUploadMultipartObserverTest {
 		elements.add(new MockFileItem("foo", "blah"));
 		elements.add(new MockFileItem("bar", "blah blah"));
 
-		observer = spy(new CommonsUploadMultipartObserver());
 		when(observer.createServletFileUpload(config)).thenReturn(servletFileUpload);
 		when(servletFileUpload.parseRequest(request)).thenReturn(elements);
 
@@ -110,7 +108,6 @@ public class CommonsUploadMultipartObserverTest {
 		elements.add(new MockFileItem("thefile0", "foo.txt", "foo".getBytes()));
 		elements.add(new MockFileItem("thefile1", "bar.txt", "bar".getBytes()));
 
-		observer = spy(new CommonsUploadMultipartObserver());
 		when(observer.createServletFileUpload(config)).thenReturn(servletFileUpload);
 		when(servletFileUpload.parseRequest(request)).thenReturn(elements);
 
@@ -131,7 +128,6 @@ public class CommonsUploadMultipartObserverTest {
 		final List<FileItem> elements = new ArrayList<>();
 		elements.add(new MockFileItem("thefile0", "", new byte[0]));
 
-		observer = spy(new CommonsUploadMultipartObserver());
 		when(observer.createServletFileUpload(config)).thenReturn(servletFileUpload);
 		when(servletFileUpload.parseRequest(request)).thenReturn(elements);
 
@@ -145,7 +141,6 @@ public class CommonsUploadMultipartObserverTest {
 
 		doThrow(new IOException()).when(item).getInputStream();
 
-		observer = spy(new CommonsUploadMultipartObserver());
 		when(observer.createServletFileUpload(config)).thenReturn(servletFileUpload);
 		when(servletFileUpload.parseRequest(request)).thenReturn(asList(item));
 
@@ -158,7 +153,6 @@ public class CommonsUploadMultipartObserverTest {
 		elements.add(new MockFileItem("myfile0", "foo.txt", "foo".getBytes()));
 		elements.add(new MockFileItem("myfile1", "foo.txt", "bar".getBytes()));
 
-		observer = spy(new CommonsUploadMultipartObserver());
 		when(observer.createServletFileUpload(config)).thenReturn(servletFileUpload);
 		when(servletFileUpload.parseRequest(request)).thenReturn(elements);
 
@@ -177,7 +171,6 @@ public class CommonsUploadMultipartObserverTest {
 		elements.add(new MockFileItem("myfile0[]", "foo.txt", "foo".getBytes()));
 		elements.add(new MockFileItem("myfile0[]", "foo.txt", "bar".getBytes()));
 
-		observer = spy(new CommonsUploadMultipartObserver());
 		when(observer.createServletFileUpload(config)).thenReturn(servletFileUpload);
 		when(servletFileUpload.parseRequest(request)).thenReturn(elements);
 
@@ -192,7 +185,7 @@ public class CommonsUploadMultipartObserverTest {
 
 	@Test
 	public void doNothingWhenFileUploadExceptionOccurs() throws Exception {
-		observer = spy(new CommonsUploadMultipartObserver());
+
 		when(observer.createServletFileUpload(config)).thenReturn(servletFileUpload);
 		when(servletFileUpload.parseRequest(request)).thenThrow(new FileUploadException());
 
@@ -201,7 +194,7 @@ public class CommonsUploadMultipartObserverTest {
 
 	@Test
 	public void shouldValidateWhenSizeLimitExceededExceptionOccurs() throws Exception {
-		observer = spy(new CommonsUploadMultipartObserver());
+
 		when(observer.createServletFileUpload(config)).thenReturn(servletFileUpload);
 		when(servletFileUpload.parseRequest(request)).thenThrow(new FileUploadBase.SizeLimitExceededException("", 0L, 0L));
 
@@ -218,7 +211,6 @@ public class CommonsUploadMultipartObserverTest {
 		final List<FileItem> elements = new ArrayList<>();
 		elements.add(new MockFileItem("myfile", "foo.txt", "bar".getBytes()));
 
-		observer = spy(new CommonsUploadMultipartObserver());
 		when(observer.createServletFileUpload(config)).thenReturn(servletFileUpload);
 		when(servletFileUpload.parseRequest(request)).thenReturn(elements);
 
@@ -233,7 +225,6 @@ public class CommonsUploadMultipartObserverTest {
 		byte[] content = "foo".getBytes();
 		elements.add(new MockFileItem("thefile0", "text/plain", "file.txt", content));
 
-		observer = spy(new CommonsUploadMultipartObserver());
 		when(observer.createServletFileUpload(config)).thenReturn(servletFileUpload);
 		when(servletFileUpload.parseRequest(request)).thenReturn(elements);
 
@@ -252,7 +243,7 @@ public class CommonsUploadMultipartObserverTest {
 	public void mustConvertUnixPathToFileName() throws Exception {
 		List<FileItem> elements = new ArrayList<>();
 		elements.add(new MockFileItem("thefile0", "text/plain", "/unix/path/file0.txt", new byte[0]));
-		observer = spy(new CommonsUploadMultipartObserver());
+
 		when(observer.createServletFileUpload(config)).thenReturn(servletFileUpload);
 		when(servletFileUpload.parseRequest(request)).thenReturn(elements);
 
@@ -268,7 +259,7 @@ public class CommonsUploadMultipartObserverTest {
 	public void mustConvertWindowsPathToFileName() throws Exception {
 		List<FileItem> elements = new ArrayList<>();
 		elements.add(new MockFileItem("thefile0", "text/plain", "c:/windows/path/file0.txt", new byte[0]));
-		observer = spy(new CommonsUploadMultipartObserver());
+
 		when(observer.createServletFileUpload(config)).thenReturn(servletFileUpload);
 		when(servletFileUpload.parseRequest(request)).thenReturn(elements);
 

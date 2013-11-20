@@ -23,9 +23,9 @@ import java.io.UnsupportedEncodingException;
 import java.util.Collection;
 import java.util.List;
 
-import javax.enterprise.context.RequestScoped;
+import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
-import javax.inject.Inject;
+import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.fileupload.FileItem;
@@ -56,33 +56,16 @@ import com.google.common.collect.Multiset;
  * @author Otávio Scherer Garcia
  * @author Rodrigo Turini
  */
-@RequestScoped
+@ApplicationScoped
 public class CommonsUploadMultipartObserver {
 
 	private static final Logger logger = getLogger(CommonsUploadMultipartObserver.class);
 
-	private final MutableRequest request;
-	private final MultipartConfig config;
-	private final Validator validator;
-
 	private Multiset<String> indexes;
 	private Multimap<String, String> params;
 
-	/**
-	 * @deprecated CDI eyes only
-	 */
-	protected CommonsUploadMultipartObserver() {
-		this(null, null, null);
-	}
-
-	@Inject
-	public CommonsUploadMultipartObserver(MutableRequest request, MultipartConfig cfg, Validator validator) {
-		this.request = request;
-		this.validator = validator;
-		this.config = cfg;
-	}
-
-	public void upload(@Observes ControllerMethodDiscovered event) {
+	public void upload(@Observes ControllerMethodDiscovered event, MutableRequest request,
+			MultipartConfig config, Validator validator) {
 
 		if (!ServletFileUpload.isMultipartContent(request)) return;
 
@@ -105,11 +88,11 @@ public class CommonsUploadMultipartObserver {
 
 				if (item.isFormField()) {
 					logger.debug("{} is a field", name);
-					params.put(name, getValue(item));
+					params.put(name, getValue(item, request));
 
 				} else if (isNotEmpty(item)) {
 					logger.debug("{} is a file", name);
-					processFile(item, name);
+					processFile(item, name, request);
 
 				} else {
 					logger.debug("A file field is empty: {}", item.getFieldName());
@@ -122,7 +105,7 @@ public class CommonsUploadMultipartObserver {
 			}
 
 		} catch (final SizeLimitExceededException e) {
-			reportSizeLimitExceeded(e);
+			reportSizeLimitExceeded(e, validator);
 
 		} catch (FileUploadException e) {
 			logger.warn("There was some problem parsing this multipart request, "
@@ -137,12 +120,12 @@ public class CommonsUploadMultipartObserver {
 	/**
 	 * This method is called when the {@link SizeLimitExceededException} was thrown.
 	 */
-	protected void reportSizeLimitExceeded(final SizeLimitExceededException e) {
+	protected void reportSizeLimitExceeded(final SizeLimitExceededException e, Validator validator) {
 		validator.add(new I18nMessage("upload", "file.limit.exceeded", e.getActualSize(), e.getPermittedSize()));
 		logger.warn("The file size limit was exceeded.", e);
 	}
 
-	protected void processFile(FileItem item, String name) {
+	protected void processFile(FileItem item, String name, MutableRequest request) {
 		try {
 			String fileName = FilenameUtils.getName(item.getName());
 			UploadedFile upload = new DefaultUploadedFile(item.getInputStream(), fileName, item.getContentType(), item.getSize());
@@ -164,7 +147,7 @@ public class CommonsUploadMultipartObserver {
 		return new ServletFileUpload(factory);
 	}
 
-	protected String getValue(FileItem item) {
+	protected String getValue(FileItem item, ServletRequest request) {
 		String encoding = request.getCharacterEncoding();
 		if (!Strings.isNullOrEmpty(encoding)) {
 			try {

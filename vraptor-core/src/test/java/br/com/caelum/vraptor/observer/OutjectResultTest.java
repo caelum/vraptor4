@@ -34,7 +34,6 @@ import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.events.MethodExecuted;
 import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
-import br.com.caelum.vraptor.observer.OutjectResult;
 
 public class OutjectResultTest {
 
@@ -50,7 +49,7 @@ public class OutjectResultTest {
 	@Before
 	public void setup() {
 		MockitoAnnotations.initMocks(this);
-		this.outjectResult = new OutjectResult(result, info, extractor);
+		this.outjectResult = new OutjectResult(extractor);
 	}
 
 	interface MyComponent {
@@ -65,7 +64,7 @@ public class OutjectResultTest {
 		when(controllerMethod.getMethod()).thenReturn(method);
 		when(info.getResult()).thenReturn("myString");
 		when(extractor.nameFor(String.class)).thenReturn("string");
-		outjectResult.outject(new MethodExecuted(controllerMethod, info));
+		outjectResult.outject(new MethodExecuted(controllerMethod, info), result, info);
 		verify(result).include("string", "myString");
 	}
 
@@ -75,7 +74,7 @@ public class OutjectResultTest {
 		when(controllerMethod.getMethod()).thenReturn(method);
 		when(info.getResult()).thenReturn("myString");
 		when(extractor.nameFor(method.getGenericReturnType())).thenReturn("stringList");
-		outjectResult.outject(new MethodExecuted(controllerMethod, info));
+		outjectResult.outject(new MethodExecuted(controllerMethod, info), result, info);
 		verify(result).include("stringList", "myString");
 	}
 }

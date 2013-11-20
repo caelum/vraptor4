@@ -41,31 +41,27 @@ public class OutjectResult {
 
 	private static final Logger logger = getLogger(OutjectResult.class);
 
-	private final Result result;
-	private final MethodInfo info;
 	private final TypeNameExtractor extractor;
 
 	/**
 	 * @deprecated CDI eyes only
 	 */
 	protected OutjectResult() {
-		this(null, null, null);
+		this(null);
 	}
 
 	@Inject
-	public OutjectResult(Result result, MethodInfo info, TypeNameExtractor extractor) {
-		this.result = result;
-		this.info = info;
+	public OutjectResult(TypeNameExtractor extractor) {
 		this.extractor = extractor;
 	}
 
-	public void outject(@Observes MethodExecuted event) {
+	public void outject(@Observes MethodExecuted event, Result result, MethodInfo info) {
 
 		Type returnType = event.getMethodReturnType();
 
 		if (!returnType.equals(Void.TYPE)) {
 			String name = extractor.nameFor(returnType);
-			Object value = this.info.getResult();
+			Object value = info.getResult();
 			logger.debug("outjecting {}={}", name, value);
 			result.include(name, value);
 		}

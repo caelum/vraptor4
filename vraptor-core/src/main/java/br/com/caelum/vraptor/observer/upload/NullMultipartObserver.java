@@ -26,12 +26,10 @@ import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 
 import br.com.caelum.vraptor.events.ControllerMethodDiscovered;
-import br.com.caelum.vraptor.interceptor.multipart.MultipartInterceptor;
 
 /**
- * A null implementation of {@link MultipartInterceptor}. This interceptor will
- * be activated when no commons-fileupload was found in classpath. If application
- * try to upload any files, this interceptor will warn a message in console.
+ * This observer will warn a message in console when no commons-fileupload was
+ * found in classpath and application try to upload any files.
  *
  * @author Otávio Scherer Garcia
  * @author Rodrigo Turini

@@ -19,9 +19,8 @@ package br.com.caelum.vraptor.observer.upload;
 import static com.google.common.base.Strings.nullToEmpty;
 import static org.slf4j.LoggerFactory.getLogger;
 
-import javax.enterprise.context.RequestScoped;
+import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
-import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
@@ -29,34 +28,19 @@ import org.slf4j.Logger;
 import br.com.caelum.vraptor.events.ControllerMethodDiscovered;
 
 /**
- * A null implementation of {@link MultipartInterceptor}. This interceptor will
- * be activated when no commons-fileupload was found in classpath. If application
- * try to upload any files, this interceptor will warn a message in console.
+ * This observer will warn a message in console when no commons-fileupload was
+ * found in classpath and application try to upload any files.
  *
  * @author Otávio Scherer Garcia
  * @author Rodrigo Turini
  * @since 3.1.3
  */
-@RequestScoped
+@ApplicationScoped
 public class NullMultipartObserver {
 
 	private static final Logger logger = getLogger(NullMultipartObserver.class);
 
-	private final HttpServletRequest request;
-
-	/**
-	 * @deprecated CDI eyes only
-	 */
-	protected NullMultipartObserver() {
-		this(null);
-	}
-
-	@Inject
-	public NullMultipartObserver(HttpServletRequest request) {
-		this.request = request;
-	}
-
-	public void nullUpload(@Observes ControllerMethodDiscovered event) {
+	public void nullUpload(@Observes ControllerMethodDiscovered event, HttpServletRequest request) {
 		if (request.getMethod().toUpperCase().equals("POST")
 				&& nullToEmpty(request.getContentType()).startsWith("multipart/form-data")) {
 			logger.warn("There is no file upload handlers registered. If you are willing to "

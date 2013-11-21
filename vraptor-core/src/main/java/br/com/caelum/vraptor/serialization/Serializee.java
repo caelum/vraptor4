@@ -26,7 +26,7 @@ public class Serializee {
 	private Multimap<String, Class<?>> excludes;
 	private Set<Class<?>> elementTypes;
 	private boolean recursive;
-	private boolean ignoreFieldNotFound;
+	private boolean ignoreFieldNotFound = false;
 
 	public Object getRoot() {
 		return root;
@@ -76,8 +76,14 @@ public class Serializee {
 		this.recursive = recursive;
 	}
 
-	public void excludeAll(boolean ignoreFieldNotFound, String... names) {
-		this.ignoreFieldNotFound = ignoreFieldNotFound;
+	public void excludeAll(String... names) {
+		for (String name : names) {
+			getExcludes().putAll(name, getParentTypesFor(name));
+		}
+	}
+
+	public void excludeIfExist(String... names) {
+		ignoreFieldNotFound = true;
 		for (String name : names) {
 			getExcludes().putAll(name, getParentTypesFor(name));
 		}
@@ -96,8 +102,14 @@ public class Serializee {
 				getExcludes().putAll(field.getName(), getParentTypes(field.getName(), type));
 	}
 
-	public void includeAll(boolean ignoreFieldNotFound, String... names) {
-		this.ignoreFieldNotFound = ignoreFieldNotFound;
+	public void includeAll(String... names) {
+		for (String name : names) {
+			getIncludes().putAll(name, getParentTypesFor(name));
+		}
+	}
+
+	public void includeIfExist(String... names) {
+		this.ignoreFieldNotFound = true;
 		for (String name : names) {
 			getIncludes().putAll(name, getParentTypesFor(name));
 		}

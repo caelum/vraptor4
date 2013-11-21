@@ -120,7 +120,13 @@ public class GsonSerializer implements SerializerBuilder {
 
 	@Override
 	public Serializer include(String... fields) {
-		builder.getSerializee().includeAll(fields);
+		builder.getSerializee().includeAll(false, fields);
+		return this;
+	}
+
+	@Override
+	public Serializer includeIfExist(String... names) {
+		builder.getSerializee().includeAll(true, names);
 		return this;
 	}
 

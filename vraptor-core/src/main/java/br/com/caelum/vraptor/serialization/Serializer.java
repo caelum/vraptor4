@@ -41,8 +41,16 @@ public interface Serializer {
 	 * Include these properties in serialization.
 	 * @param names
 	 * @return
+	 * @throws IllegalArgumentException if {@code names} doesn't exists in object
 	 */
 	Serializer include(String... names);
+
+	/**
+	 * Include these properties in serialization, ignoring if names doesn´t exists in object
+	 * @param names
+	 * @return
+	 */
+	Serializer includeIfExist(String... names);
 
 	/**
 	 * Include all fields, recursively.

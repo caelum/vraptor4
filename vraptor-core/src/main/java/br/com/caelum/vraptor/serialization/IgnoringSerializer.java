@@ -37,6 +37,12 @@ public class IgnoringSerializer implements SerializerBuilder {
 	public Serializer include(String... names) {
 		return this;
 	}
+
+	@Override
+	public Serializer includeIfExist(String... names) {
+		return this;
+	}
+
 	@Override
 	public Serializer recursive() {
 		return this;
@@ -55,5 +61,4 @@ public class IgnoringSerializer implements SerializerBuilder {
 	public Serializer excludeAll() {
 		return this;
 	}
-
 }

@@ -26,6 +26,7 @@ public class Serializee {
 	private Multimap<String, Class<?>> excludes;
 	private Set<Class<?>> elementTypes;
 	private boolean recursive;
+	private boolean ignoreFieldNotFound;
 
 	public Object getRoot() {
 		return root;
@@ -94,7 +95,8 @@ public class Serializee {
 				getExcludes().putAll(field.getName(), getParentTypes(field.getName(), type));
 	}
 
-	public void includeAll(String... names) {
+	public void includeAll(boolean ignoreFieldNotFound, String... names) {
+		this.ignoreFieldNotFound = ignoreFieldNotFound;
 		for (String name : names) {
 			getIncludes().putAll(name, getParentTypesFor(name));
 		}
@@ -121,7 +123,8 @@ public class Serializee {
 				Field field = checkNotNull(new Mirror().on(type).reflect().field(path[i]));
 				type = getActualType(field.getGenericType());
 			}
-			checkNotNull(new Mirror().on(type).reflect().field(path[path.length -1]));
+			if (!ignoreFieldNotFound)
+				checkNotNull(new Mirror().on(type).reflect().field(path[path.length -1]));
 		} catch (NullPointerException e) {
 			throw new IllegalArgumentException("Field path '" + name + "' doesn't exists in " + type, e);
 		}

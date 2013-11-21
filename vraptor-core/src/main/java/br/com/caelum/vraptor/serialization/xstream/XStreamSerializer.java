@@ -128,7 +128,13 @@ public class XStreamSerializer implements SerializerBuilder {
 
 	@Override
 	public Serializer include(String... fields) {
-		serializee.includeAll(fields);
+		serializee.includeAll(false, fields);
+		return this;
+	}
+
+	@Override
+	public Serializer includeIfExist(String... names) {
+		serializee.includeAll(true, names);
 		return this;
 	}
 

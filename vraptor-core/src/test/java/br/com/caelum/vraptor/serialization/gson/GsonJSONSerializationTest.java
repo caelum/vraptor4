@@ -358,7 +358,7 @@ public class GsonJSONSerializationTest {
 	
 	@Test
 	public void shouldExcludeAllPrimitiveFieldsInACollection() {
-		String expectedResult = "{\"list\": [{},{}]}";
+		String expectedResult = "{\"list\":[{},{}]}";
 		List<Order> orders = new ArrayList<Order>();
 		orders.add(new Order(new Client("nykolas lima"), 15.0, "gift bags, please"));
 		orders.add(new Order(new Client("Rafael Dipold"), 15.0, "gift bags, please"));

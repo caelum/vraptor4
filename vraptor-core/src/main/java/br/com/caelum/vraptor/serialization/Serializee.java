@@ -76,7 +76,8 @@ public class Serializee {
 		this.recursive = recursive;
 	}
 
-	public void excludeAll(String... names) {
+	public void excludeAll(boolean ignoreFieldNotFound, String... names) {
+		this.ignoreFieldNotFound = ignoreFieldNotFound;
 		for (String name : names) {
 			getExcludes().putAll(name, getParentTypesFor(name));
 		}

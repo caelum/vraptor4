@@ -28,8 +28,16 @@ public interface Serializer {
 	 * Exclude these properties in serialization.
 	 * @param names
 	 * @return
+	 * @throws IllegalArgumentException if {@code names} doesn't exists in object
 	 */
 	Serializer exclude(String... names);
+
+	/**
+	 * Exclude these properties in serialization, ignoring if names doesn´t exists in object
+	 * @param names
+	 * @return
+	 */
+	Serializer excludeIfExist(String... names);
 
 	/**
 	 * Include all properties in serialization.

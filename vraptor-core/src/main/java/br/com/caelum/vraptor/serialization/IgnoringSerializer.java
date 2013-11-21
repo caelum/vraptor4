@@ -29,6 +29,11 @@ public class IgnoringSerializer implements SerializerBuilder {
 	}
 
 	@Override
+	public Serializer excludeIfExist(String... names) {
+		return this;
+	}
+
+	@Override
 	public <T> Serializer from(T object) {
 		return this;
 	}

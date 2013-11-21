@@ -50,7 +50,13 @@ public class XStreamSerializer implements SerializerBuilder {
 
 	@Override
 	public Serializer exclude(String... names) {
-		serializee.excludeAll(names);
+		serializee.excludeAll(false, names);
+		return this;
+	}
+
+	@Override
+	public Serializer excludeIfExist(String... names) {
+		serializee.excludeAll(true, names);
 		return this;
 	}
 

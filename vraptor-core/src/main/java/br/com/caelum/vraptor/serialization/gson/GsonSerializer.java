@@ -53,7 +53,13 @@ public class GsonSerializer implements SerializerBuilder {
 
 	@Override
 	public Serializer exclude(String... names) {
-		builder.getSerializee().excludeAll(names);
+		builder.getSerializee().excludeAll(false, names);
+		return this;
+	}
+
+	@Override
+	public Serializer excludeIfExist(String... names) {
+		builder.getSerializee().excludeAll(true, names);
 		return this;
 	}
 

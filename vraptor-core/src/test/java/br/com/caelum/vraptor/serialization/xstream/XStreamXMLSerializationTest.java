@@ -254,6 +254,19 @@ public class XStreamXMLSerializationTest {
 	}
 
 	@Test(expected=IllegalArgumentException.class)
+	public void shouldThrowAnExceptionWhenYouExcludeANonExistantField() {
+		Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please");
+		serialization.from(order).exclude("wrongFieldName").serialize();
+	}
+
+	@Test
+	public void shouldIgnoreExceptionWhenYouExcludeANonExistantField() {
+		Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please");
+		serialization.from(order).excludeIfExist("wrongFieldName").serialize();
+		assertThat(result(), containsString("<order>\n  <price>15.0</price>\n  <comments>pack it nicely, please</comments>\n</order>"));
+	}
+
+	@Test(expected=IllegalArgumentException.class)
 	public void shouldThrowAnExceptionWhenYouIncludeANonExistantField() {
 		Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please",
 				new Item("name", 12.99));

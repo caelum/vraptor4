@@ -299,6 +299,11 @@ public class DefaultValidationViewsFactoryTest {
 		}
 
 		@Override
+		public Serializer excludeIfExist(String... names) {
+			return this;
+		}
+
+		@Override
 		public RandomSerializer excludeAll() {
 			return this;
 		}

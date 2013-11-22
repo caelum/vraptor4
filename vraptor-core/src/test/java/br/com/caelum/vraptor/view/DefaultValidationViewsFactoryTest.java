@@ -35,7 +35,6 @@ import br.com.caelum.vraptor.controller.HttpMethod;
 import br.com.caelum.vraptor.proxy.JavassistProxifier;
 import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.serialization.JSONSerialization;
-import br.com.caelum.vraptor.serialization.Serializer;
 import br.com.caelum.vraptor.serialization.SerializerBuilder;
 import br.com.caelum.vraptor.util.test.MockedLogic;
 import br.com.caelum.vraptor.validator.Message;
@@ -299,11 +298,6 @@ public class DefaultValidationViewsFactoryTest {
 		}
 
 		@Override
-		public Serializer excludeIfExist(String... names) {
-			return this;
-		}
-
-		@Override
 		public RandomSerializer excludeAll() {
 			return this;
 		}
@@ -324,11 +318,6 @@ public class DefaultValidationViewsFactoryTest {
 		}
 
 		@Override
-		public Serializer includeIfExist(String... names) {
-			return this;
-		}
-
-		@Override
 		public RandomSerializer recursive() {
 			return this;
 		}
@@ -336,7 +325,9 @@ public class DefaultValidationViewsFactoryTest {
 		@Override
 		public void serialize() {
 		}
+
 	}
+
 	@Test(expected=ValidationException.class)
 	public void onSerializerResultsShouldBeAbleToCreateValidationInstancesEvenIfChildClassesUsesCovariantType() throws Exception {
 		JSONSerialization serialization = mock(JSONSerialization.class);
@@ -355,5 +346,4 @@ public class DefaultValidationViewsFactoryTest {
 		}
 		factory.instanceFor(JSONSerialization.class, errors).from(new Object()).serialize();
 	}
-
 }

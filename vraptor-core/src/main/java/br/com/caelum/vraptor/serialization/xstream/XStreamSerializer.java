@@ -55,13 +55,6 @@ public class XStreamSerializer implements SerializerBuilder {
 	}
 
 	@Override
-	public Serializer excludeIfExist(String... names) {
-		serializee.setIgnoreFieldNotFound(true);
-		serializee.excludeAll(names);
-		return this;
-	}
-
-	@Override
 	public Serializer excludeAll() {
 		serializee.excludeAll();
 		return this;
@@ -136,13 +129,6 @@ public class XStreamSerializer implements SerializerBuilder {
 	@Override
 	public Serializer include(String... fields) {
 		serializee.includeAll(fields);
-		return this;
-	}
-
-	@Override
-	public Serializer includeIfExist(String... names) {
-		serializee.setIgnoreFieldNotFound(true);
-		serializee.includeAll(names);
 		return this;
 	}
 

@@ -58,13 +58,6 @@ public class GsonSerializer implements SerializerBuilder {
 	}
 
 	@Override
-	public Serializer excludeIfExist(String... names) {
-		builder.getSerializee().setIgnoreFieldNotFound(true);
-		builder.getSerializee().excludeAll(names);
-		return this;
-	}
-
-	@Override
 	public Serializer excludeAll() {
 		builder.getSerializee().excludeAll();
 		return this;
@@ -128,13 +121,6 @@ public class GsonSerializer implements SerializerBuilder {
 	@Override
 	public Serializer include(String... fields) {
 		builder.getSerializee().includeAll(fields);
-		return this;
-	}
-
-	@Override
-	public Serializer includeIfExist(String... names) {
-		builder.getSerializee().setIgnoreFieldNotFound(true);
-		builder.getSerializee().includeAll(names);
 		return this;
 	}
 

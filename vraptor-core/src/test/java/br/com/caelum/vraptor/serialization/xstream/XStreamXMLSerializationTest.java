@@ -254,19 +254,6 @@ public class XStreamXMLSerializationTest {
 	}
 
 	@Test(expected=IllegalArgumentException.class)
-	public void shouldThrowAnExceptionWhenYouExcludeANonExistantField() {
-		Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please");
-		serialization.from(order).exclude("wrongFieldName").serialize();
-	}
-
-	@Test
-	public void shouldIgnoreExceptionWhenYouExcludeANonExistantField() {
-		Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please");
-		serialization.from(order).excludeIfExist("wrongFieldName").serialize();
-		assertThat(result(), containsString("<order>\n  <price>15.0</price>\n  <comments>pack it nicely, please</comments>\n</order>"));
-	}
-
-	@Test(expected=IllegalArgumentException.class)
 	public void shouldThrowAnExceptionWhenYouIncludeANonExistantField() {
 		Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please",
 				new Item("name", 12.99));
@@ -277,22 +264,54 @@ public class XStreamXMLSerializationTest {
 	public void shouldThrowAnExceptionWhenYouIncludeANonExistantFieldInsideOther() {
 		Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please",
 				new Item("name", 12.99));
-		serialization.from(order).include("wrongFieldName.another").serialize();
-	}
-
-	@Test
-	public void shouldIgnoreExceptionWhenYouIncludeANonExistantField() {
-		Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please",
-				new Item("name", 12.99));
-		serialization.from(order).includeIfExist("wrongFieldName").serialize();
-		assertThat(result(), not(containsString("<wrongFieldName>")));
+		serialization.from(order).include("wrongFieldName.client").serialize();
 	}
 
 	@Test(expected=IllegalArgumentException.class)
-	public void shouldThrowAnExceptionWhenYouIncludeIfExistsANonExistantFieldInsideOther() {
+	public void shouldThrowAnExceptionWhenYouIncludeANonExistantFieldInsideOtherNonExistantField() {
 		Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please",
 				new Item("name", 12.99));
-		serialization.from(order).includeIfExist("wrongFieldName.another").serialize();
+		serialization.from(order).include("wrongFieldName.another").serialize();
+		assertThat(result(), not(containsString("<order>\n  <price>15.0</price>\n  <comments>pack it nicely, please</comments>\n</order>")));
+	}
+
+	@Test
+	public void shouldIgnoreWhenIncludeANonExistantField() {
+		Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please",
+				new Item("name", 12.99));
+		serialization.from(order).include("?wrongFieldName").serialize();
+		assertThat(result(), containsString("<order>\n  <price>15.0</price>\n  <comments>pack it nicely, please</comments>\n</order>"));
+	}
+
+	@Test(expected=IllegalArgumentException.class)
+	public void shouldRaiseExceptionWhenYouIncludeANonExistantFieldInsideOther() {
+		Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please",
+				new Item("name", 12.99));
+		serialization.from(order).include("?wrongFieldName.another").serialize();
+	}
+
+	@Test
+	public void shouldIgnoreWhenYouIncludeANonExistantFieldInsideOther() {
+		Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please",
+				new Item("name", 12.99));
+		serialization.from(order).include("?wrongFieldName.?another").serialize();
+		assertThat(result(), containsString("<order>\n  <price>15.0</price>\n  <comments>pack it nicely, please</comments>\n</order>"));
+	}
+
+	@Test
+	public void shouldIncludeWhenYouIncludeAOptionsExistantFieldInsideOther() {
+		Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please",
+				new Item("name", 12.99));
+		serialization.from(order).include("?client").serialize();
+		assertThat(result(), containsString("<client>"));
+	}
+
+	@Test
+	public void shouldIgnoreWhenYouIncludeANonExistantFieldInsideOtherNonExistantField() {
+		Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please",
+				new Item("name", 12.99));
+		serialization.from(order).include("?wrongFieldName.?another").serialize();
+		assertThat(result(), containsString("<order>\n  <price>15.0</price>\n  <comments>pack it nicely, please</comments>\n</order>"));
 	}
 
 	@Test
@@ -448,6 +467,5 @@ public class XStreamXMLSerializationTest {
 		serialization.from(new B()).include("field2").serialize();
 		assertThat(result(), is("<b>\n  <field2/>\n</b>"));
 	}
-
 }
 

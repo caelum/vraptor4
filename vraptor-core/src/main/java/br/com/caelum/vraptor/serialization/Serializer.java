@@ -25,19 +25,14 @@ package br.com.caelum.vraptor.serialization;
 public interface Serializer {
 	
 	/**
-	 * Exclude these properties in serialization.
+	 * Exclude these properties in serialization. 
+	 * You can add a question mark (?) at the beginning of {@code names} to avoid IllegalArgumentException, 
+	 * making it an optional field 
 	 * @param names
 	 * @return
 	 * @throws IllegalArgumentException if {@code names} doesn't exists in object
 	 */
 	Serializer exclude(String... names);
-
-	/**
-	 * Exclude these properties in serialization, ignoring if names doesn´t exists in object
-	 * @param names
-	 * @return
-	 */
-	Serializer excludeIfExist(String... names);
 
 	/**
 	 * Include all properties in serialization.
@@ -47,18 +42,13 @@ public interface Serializer {
 
 	/**
 	 * Include these properties in serialization.
+	 * You can add a question mark (?) at the beginning of {@code names} to avoid IllegalArgumentException 
+	 * making it an optional field 
 	 * @param names
 	 * @return
 	 * @throws IllegalArgumentException if {@code names} doesn't exists in object
 	 */
 	Serializer include(String... names);
-
-	/**
-	 * Include these properties in serialization, ignoring if names doesn´t exists in object
-	 * @param names
-	 * @return
-	 */
-	Serializer includeIfExist(String... names);
 
 	/**
 	 * Include all fields, recursively.

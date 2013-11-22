@@ -26,7 +26,6 @@ public class Serializee {
 	private Multimap<String, Class<?>> excludes;
 	private Set<Class<?>> elementTypes;
 	private boolean recursive;
-	private boolean ignoreFieldNotFound;
 
 	public Object getRoot() {
 		return root;
@@ -48,6 +47,7 @@ public class Serializee {
 		if (includes == null) {
 			includes = LinkedListMultimap.create();
 		}
+		
 		return includes;
 	}
 
@@ -75,39 +75,34 @@ public class Serializee {
 		this.recursive = recursive;
 	}
 
-	public boolean isIgnoreFieldNotFound() {
-		return ignoreFieldNotFound;
-	}
-
-	public void setIgnoreFieldNotFound(boolean ignoreFieldNotFound) {
-		this.ignoreFieldNotFound = ignoreFieldNotFound;
-	}
-
 	public void excludeAll(String... names) {
 		for (String name : names) {
-			getExcludes().putAll(name, getParentTypesFor(name));
+			getExcludes().putAll(name.replaceAll("\\?", ""), getParentTypesFor(name));
 		}
 	}
-
+	
 	public void excludeAll() {
-		Set<Class<?>> types = new HashSet<Class<?>>();
+		Set<Class<?>> types = new HashSet<>();
 
-		if (isCollection(getRootClass()))
+		if (isCollection(getRootClass())) {
 			types.addAll(getElementTypes());
-		else
+		} else {
 			types.add(getRootClass());
-
-		for (Class<?> type : types)
-			for (Field field : new Mirror().on(type).reflectAll().fields())
-				getExcludes().putAll(field.getName(), getParentTypes(field.getName(), type));
+		}
+		
+		for (Class<?> type : types) {
+			for (Field field : new Mirror().on(type).reflectAll().fields()) {
+				getExcludes().putAll(field.getName(), getParentTypes(field.getName(), type)); 
+			}
+		}	
 	}
 
 	public void includeAll(String... names) {
 		for (String name : names) {
-			getIncludes().putAll(name, getParentTypesFor(name));
+			getIncludes().putAll(name.replaceAll("\\?", ""), getParentTypesFor(name));
 		}
 	}
-
+	
 	private Set<Class<?>> getParentTypesFor(String name) {
 		if (getElementTypes() == null) {
 			Class<?> type = getRootClass();
@@ -126,10 +121,17 @@ public class Serializee {
 		
 		try {
 			for (int i = 0; i < path.length - 1; i++) {
-				Field field = checkNotNull(new Mirror().on(type).reflect().field(path[i]));
-				type = getActualType(field.getGenericType());
+				if (path[i].startsWith("?")) {
+					Field field = new Mirror().on(type).reflect().field(path[i].replaceAll("\\?", ""));
+					if (field == null)
+						break;
+					type = getActualType(field.getGenericType());
+				} else {
+					Field field = checkNotNull(new Mirror().on(type).reflect().field(path[i]));
+					type = getActualType(field.getGenericType());
+				}
 			}
-			if (!isIgnoreFieldNotFound())
+			if (!path[path.length -1].startsWith("?"))
 				checkNotNull(new Mirror().on(type).reflect().field(path[path.length -1]));
 		} catch (NullPointerException e) {
 			throw new IllegalArgumentException("Field path '" + name + "' doesn't exists in " + type, e);

@@ -283,11 +283,12 @@ public class XStreamXMLSerializationTest {
 		assertThat(result(), containsString("<order>\n  <price>15.0</price>\n  <comments>pack it nicely, please</comments>\n</order>"));
 	}
 
-	@Test(expected=IllegalArgumentException.class)
-	public void shouldRaiseExceptionWhenYouIncludeANonExistantFieldInsideOther() {
+	@Test
+	public void shouldIgnoreWhenYouIncludeAOptionalNonExistantFieldInsideOther() {
 		Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please",
 				new Item("name", 12.99));
 		serialization.from(order).include("?wrongFieldName.another").serialize();
+		assertThat(result(), containsString("<order>\n  <price>15.0</price>\n  <comments>pack it nicely, please</comments>\n</order>"));
 	}
 
 	@Test

@@ -121,18 +121,11 @@ public class Serializee {
 		
 		try {
 			for (int i = 0; i < path.length - 1; i++) {
-				if (path[i].startsWith("?")) {
-					Field field = new Mirror().on(type).reflect().field(path[i].replaceAll("\\?", ""));
-					if (field == null)
-						break;
-					type = getActualType(field.getGenericType());
-				} else {
-					Field field = checkNotNull(new Mirror().on(type).reflect().field(path[i]));
-					type = getActualType(field.getGenericType());
-				}
+				Field field = reflectField(path[i], type);
+				if (field == null) break;
+				type = getActualType(field.getGenericType());
 			}
-			if (!path[path.length -1].startsWith("?"))
-				checkNotNull(new Mirror().on(type).reflect().field(path[path.length -1]));
+			reflectField(path[path.length - 1], type);
 		} catch (NullPointerException e) {
 			throw new IllegalArgumentException("Field path '" + name + "' doesn't exists in " + type, e);
 		}
@@ -143,6 +136,13 @@ public class Serializee {
 			type = type.getSuperclass();
 		}
 		return types;
+	}
+	
+	private Field reflectField(String path, Class<?> type) {
+		Field field = new Mirror().on(type).reflect().field(path.replaceAll("\\?", ""));
+		if (!path.startsWith("?"))
+			checkNotNull(field);
+		return field;
 	}
 
 	private static Class<?> getActualType(Type genericType) {

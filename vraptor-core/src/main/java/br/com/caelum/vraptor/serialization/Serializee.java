@@ -125,8 +125,7 @@ public class Serializee {
 				if (field == null) break;
 				type = getActualType(field.getGenericType());
 			}
-			if (!name.contains("?"))
-				reflectField(path[path.length - 1], type);
+			reflectField(path[path.length - 1], type);
 		} catch (NullPointerException e) {
 			throw new IllegalArgumentException("Field path '" + name + "' doesn't exists in " + type, e);
 		}

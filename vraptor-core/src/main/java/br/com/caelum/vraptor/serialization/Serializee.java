@@ -120,13 +120,11 @@ public class Serializee {
 		String[] path = name.split("\\.");
 		
 		try {
-			for (int i = 0; i < path.length - 1; i++) {
-				Field field = reflectField(path[i], type);
-				if (field == null) break;
-				type = getActualType(field.getGenericType());
+			for (int i = 0; i < path.length; i++) {
+			    Field field = reflectField(path[i], type);
+			    if (field == null) break;
+			    if (i < path.length - 1) type = getActualType(field.getGenericType());
 			}
-			if (!name.contains("?"))
-				reflectField(path[path.length - 1], type);
 		} catch (NullPointerException e) {
 			throw new IllegalArgumentException("Field path '" + name + "' doesn't exists in " + type, e);
 		}

@@ -1,5 +1,6 @@
 package br.com.caelum.vraptor.events;
 
+import br.com.caelum.vraptor.controller.BeanClass;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.interceptor.ControllerLookupInterceptor;
 
@@ -18,5 +19,9 @@ public class ControllerMethodDiscovered {
 
 	public ControllerMethod getControllerMethod() {
 		return controllerMethod;
+	}
+
+	public BeanClass getController() {
+		return controllerMethod.getController();
 	}
 }

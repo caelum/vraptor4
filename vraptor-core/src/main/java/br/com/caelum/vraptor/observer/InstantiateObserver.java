@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package br.com.caelum.vraptor.interceptor;
+package br.com.caelum.vraptor.observer;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.RequestScoped;

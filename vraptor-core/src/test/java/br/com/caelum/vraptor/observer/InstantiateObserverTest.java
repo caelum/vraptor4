@@ -14,11 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package br.com.caelum.vraptor.interceptor;
+package br.com.caelum.vraptor.observer;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.io.IOException;
@@ -32,9 +30,11 @@ import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.controller.DefaultBeanClass;
 import br.com.caelum.vraptor.core.InterceptorStack;
+import br.com.caelum.vraptor.events.ControllerMethodDiscovered;
+import br.com.caelum.vraptor.interceptor.InstanceContainer;
 import br.com.caelum.vraptor.view.DogController;
 
-public class InstantiateInterceptorTest {
+public class InstantiateObserverTest {
 
 	private @Mock InterceptorStack stack;
 	private @Mock ControllerMethod method;
@@ -45,31 +45,12 @@ public class InstantiateInterceptorTest {
 	}
 
 	@Test
-	public void shouldAcceptAlways() {
-		assertTrue(new InstantiateInterceptor(null).accepts(null));
-	}
-
-	@Test
 	public void shouldUseContainerForNewComponent() throws InterceptionException, IOException {
 		final DogController myDog = new DogController();
 		InstanceContainer container = new InstanceContainer(myDog);
-		InstantiateInterceptor interceptor = new InstantiateInterceptor(container);
-
+		InstantiateObserver observer = new InstantiateObserver(container);
 		when(method.getController()).thenReturn(new DefaultBeanClass(DogController.class));
-
-		interceptor.intercept(stack, method, null);
-
-		verify(stack).next(method, myDog);
-		assertEquals(myDog,interceptor.createControllerInstance().getController());
-	}
-
-	@Test
-	public void shouldNotInstantiateIfThereIsAlreadyAController() throws InterceptionException, IOException {
-		final DogController myDog = new DogController();
-		InstantiateInterceptor interceptor = new InstantiateInterceptor(null);
-
-		interceptor.intercept(stack, method, myDog);
-		verify(stack).next(method, myDog);
-		assertEquals(myDog,interceptor.createControllerInstance().getController());
+		observer.instantiate(new ControllerMethodDiscovered(method));
+		assertEquals(myDog,observer.createControllerInstance().getController());
 	}
 }

@@ -21,7 +21,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 import javax.enterprise.context.RequestScoped;
-import javax.enterprise.event.Event;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 
@@ -31,7 +30,6 @@ import org.slf4j.LoggerFactory;
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.controller.ControllerInstance;
 import br.com.caelum.vraptor.controller.ControllerMethod;
-import br.com.caelum.vraptor.events.NewRequest;
 
 /**
  * Default implementation of a interceptor stack.
@@ -45,7 +43,6 @@ public class DefaultInterceptorStack implements InterceptorStack {
 	private static final Logger logger = LoggerFactory.getLogger(DefaultInterceptorStack.class);
 	private final InterceptorStackHandlersCache cache;
 	private LinkedList<Iterator<InterceptorHandler>> internalStack = new LinkedList<>();
-	private Event<NewRequest> event;
 	private Instance<ControllerMethod> controllerMethod;
 	private Instance<ControllerInstance> controllerInstance;
 
@@ -53,16 +50,15 @@ public class DefaultInterceptorStack implements InterceptorStack {
 	 * @deprecated CDI eyes only
 	 */
 	protected DefaultInterceptorStack() {
-		this(null, null, null, null);
+		this(null, null, null);
 	}
 
 	@Inject
-	public DefaultInterceptorStack(InterceptorStackHandlersCache cache, Instance<ControllerMethod> controllerMethod,
-			Instance<ControllerInstance> controllerInstance, Event<NewRequest> event) {
+	public DefaultInterceptorStack(InterceptorStackHandlersCache cache, Instance<ControllerMethod>
+			controllerMethod, Instance<ControllerInstance> controllerInstance) {
 		this.cache = cache;
 		this.controllerMethod = controllerMethod;
 		this.controllerInstance = controllerInstance;
-		this.event = event;
 	}
 
 	@Override
@@ -80,7 +76,6 @@ public class DefaultInterceptorStack implements InterceptorStack {
 
 	@Override
 	public void start() {
-		event.fire(new NewRequest());
 		LinkedList<InterceptorHandler> handlers = cache.getInterceptorHandlers();
 		internalStack.addFirst(handlers.iterator());
 		this.next(controllerMethod.get(), controllerInstance.get().getController());

@@ -17,6 +17,8 @@
 
 package br.com.caelum.vraptor;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 import java.io.IOException;
 
 import javax.enterprise.event.Event;
@@ -38,6 +40,7 @@ import org.slf4j.Logger;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.core.StaticContentHandler;
+import br.com.caelum.vraptor.events.NewRequest;
 import br.com.caelum.vraptor.events.VRaptorInitialized;
 import br.com.caelum.vraptor.http.EncodingHandler;
 import br.com.caelum.vraptor.http.VRaptorRequest;
@@ -54,8 +57,10 @@ import br.com.caelum.vraptor.ioc.ContainerProvider;
  */
 @WebFilter(filterName="vraptor", urlPatterns="/*", dispatcherTypes={DispatcherType.FORWARD, DispatcherType.REQUEST})
 public class VRaptor implements Filter {
-	
+
 	private static final String VERSION = "4.0.0-beta-3";
+
+	private final Logger logger = getLogger(VRaptor.class);
 
 	@Inject
 	private ContainerProvider provider;
@@ -73,12 +78,12 @@ public class VRaptor implements Filter {
 
 	@Inject
 	private EncodingHandler encodingHandler;
-	
+
 	@Inject
 	private InterceptorStack stack;
 
 	@Inject
-	private Logger logger;
+	private Event<NewRequest> newRequestEvent;
 
 	@Override
 	public void destroy() {
@@ -111,8 +116,9 @@ public class VRaptor implements Filter {
 			try {
 				encodingHandler.setEncoding(baseRequest, baseResponse);
 				provider.provideForRequest(request);
+				newRequestEvent.fire(new NewRequest());
 				stack.start();
-				
+
 			} catch (ApplicationLogicException e) {
 				// it is a business logic exception, we dont need to show
 				// all interceptors stack trace

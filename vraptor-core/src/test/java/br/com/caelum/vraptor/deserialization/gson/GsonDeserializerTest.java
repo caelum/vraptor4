@@ -44,6 +44,7 @@ import com.google.gson.JsonParseException;
 
 public class GsonDeserializerTest {
 
+	private GsonDeserializerBuilder builder;
 	private GsonDeserialization deserializer;
 	private ControllerMethod bark;
 	private ParameterNameProvider provider;
@@ -61,7 +62,8 @@ public class GsonDeserializerTest {
 		List<JsonDeserializer<?>> adapters = new ArrayList<>();
 		adapters.add(new CalendarDeserializer());
 
-		deserializer = new GsonDeserialization(provider, new MockInstanceImpl<>(adapters), request);
+		builder = new GsonDeserializerBuilder(new MockInstanceImpl<>(adapters));
+		deserializer = new GsonDeserialization(builder, provider, request);
 		BeanClass controllerClass = new DefaultBeanClass(DogController.class);
 
 		woof = new DefaultControllerMethod(controllerClass, DogController.class.getDeclaredMethod("woof"));
@@ -177,7 +179,8 @@ public class GsonDeserializerTest {
 		List<JsonDeserializer<?>> deserializers = new ArrayList<>();
 		deserializers.add(new DogDeserializer());
 
-		deserializer = new GsonDeserialization(provider, new MockInstanceImpl<>(deserializers), request);
+		builder = new GsonDeserializerBuilder(new MockInstanceImpl<>(deserializers));
+		deserializer = new GsonDeserialization(builder, provider, request);
 
 		InputStream stream = new ByteArrayInputStream("{'dog':{'name':'Renan Reis','age':'0'}}".getBytes());
 

@@ -8,6 +8,9 @@ import javax.enterprise.inject.Any;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 
+import br.com.caelum.vraptor.serialization.gson.RegisterStrategy;
+import br.com.caelum.vraptor.serialization.gson.RegisterType;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializer;
@@ -37,7 +40,11 @@ public class GsonDeserializerBuilder {
 
 	public Gson create() {
 		for (JsonDeserializer<?> adapter : adapters) {
-			builder.registerTypeHierarchyAdapter(getAdapterType(adapter), adapter);
+			RegisterStrategy registerStrategy = adapter.getClass().getAnnotation(RegisterStrategy.class);
+			if ((registerStrategy != null) && (registerStrategy.value() == RegisterType.SINGLE))
+				builder.registerTypeAdapter(getAdapterType(adapter), adapter);
+			else
+				builder.registerTypeHierarchyAdapter(getAdapterType(adapter), adapter);
 		}
 
 		return builder.create();

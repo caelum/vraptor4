@@ -49,7 +49,7 @@ import br.com.caelum.vraptor.view.FlashScope;
  *
  * @author Guilherme Silveira
  */
-@Intercepts(after=ControllerLookupInterceptor.class)
+@Intercepts
 public class ParametersInstantiatorInterceptor implements Interceptor {
 	private static final Logger logger = LoggerFactory.getLogger(ParametersInstantiatorInterceptor.class);
 

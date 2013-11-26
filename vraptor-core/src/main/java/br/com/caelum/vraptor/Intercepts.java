@@ -26,7 +26,6 @@ import java.lang.annotation.Target;
 import javax.enterprise.context.RequestScoped;
 
 import br.com.caelum.vraptor.interceptor.ExecuteMethodInterceptor;
-import br.com.caelum.vraptor.interceptor.InstantiateInterceptor;
 
 /**
  * Notifies vraptor to use this interceptor in the interceptor stack.<br>
@@ -42,5 +41,5 @@ import br.com.caelum.vraptor.interceptor.InstantiateInterceptor;
 @RequestScoped
 public @interface Intercepts {
 	Class<?>[] before() default ExecuteMethodInterceptor.class;
-	Class<?>[] after() default InstantiateInterceptor.class;
+	Class<?>[] after() default {};
 }

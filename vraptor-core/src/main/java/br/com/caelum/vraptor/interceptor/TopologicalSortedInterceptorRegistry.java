@@ -53,9 +53,6 @@ public class TopologicalSortedInterceptorRegistry implements InterceptorRegistry
 
 	private void addDefaultEdges(Class<?> interceptor) {
 		set.addEdge(interceptor, ExecuteMethodInterceptor.class);
-		if (!interceptor.equals(ControllerLookupInterceptor.class)) {
-			set.addEdge(ControllerLookupInterceptor.class, interceptor);
-		}
 	}
 
 	private void addEdges(Class<?> interceptor, Class<?>[] before, Class<?>[] after) {

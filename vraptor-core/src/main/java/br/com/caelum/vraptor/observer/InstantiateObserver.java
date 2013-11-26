@@ -15,66 +15,53 @@
  * limitations under the License.
  */
 
-package br.com.caelum.vraptor.interceptor;
+package br.com.caelum.vraptor.observer;
 
+import static com.google.common.base.Preconditions.checkState;
+
+import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.RequestScoped;
+import javax.enterprise.event.Observes;
 import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 
-import br.com.caelum.vraptor.InterceptionException;
-import br.com.caelum.vraptor.Intercepts;
 import br.com.caelum.vraptor.controller.ControllerInstance;
-import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.controller.DefaultControllerInstance;
-import br.com.caelum.vraptor.core.InterceptorStack;
+import br.com.caelum.vraptor.events.ControllerMethodDiscovered;
 import br.com.caelum.vraptor.ioc.Container;
 
 /**
- * Using a request scoped container, instantiates a controller.<br/>
- * Only instantiates the controller if it has not been instantiated so far, thus
- * allowing composition of another component instantiator and this one.
+ * Instantiates the current instance of controller class.
  *
  * @author Guilherme Silveira
+ * @author Rodrigo Turini
  */
-@Intercepts(after=ControllerLookupInterceptor.class)
-public class InstantiateInterceptor implements Interceptor {
+@ApplicationScoped
+public class InstantiateObserver {
 
 	private final Container container;
 	private ControllerInstance controllerInstance;
 
-	/** 
+	/**
 	 * @deprecated CDI eyes only
 	 */
-	protected InstantiateInterceptor() {
+	protected InstantiateObserver() {
 		this(null);
 	}
 
 	@Inject
-	public InstantiateInterceptor(Container container) {
+	public InstantiateObserver(Container container) {
 		this.container = container;
 	}
 
-	@Override
-	public void intercept(InterceptorStack invocation, ControllerMethod method, Object instance) 
-			throws InterceptionException {
-		if (instance == null) {
-			Class<?> type = method.getController().getType();
-			instance = container.instanceFor(type);
-		}
-		
+	public void instantiate(@Observes ControllerMethodDiscovered event) {
+		Object instance = container.instanceFor(event.getController().getType());
 		this.controllerInstance = new DefaultControllerInstance(instance);
-		invocation.next(method, instance);
 	}
 
-	@Override
-	public boolean accepts(ControllerMethod method) {
-		return true;
-	}
-
-	@Produces
-	@RequestScoped
-	public ControllerInstance createControllerInstance() {
+	@Produces @RequestScoped
+	public ControllerInstance getControllerInstance() {
+		checkState(controllerInstance != null, "ControllerInstance is not initialised yet");
 		return this.controllerInstance;
 	}
-
 }

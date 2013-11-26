@@ -21,12 +21,14 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 import javax.enterprise.context.RequestScoped;
+import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.InterceptionException;
+import br.com.caelum.vraptor.controller.ControllerInstance;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 
 /**
@@ -41,37 +43,42 @@ public class DefaultInterceptorStack implements InterceptorStack {
 	private static final Logger logger = LoggerFactory.getLogger(DefaultInterceptorStack.class);
 	private final InterceptorStackHandlersCache cache;
 	private LinkedList<Iterator<InterceptorHandler>> internalStack = new LinkedList<>();
+	private Instance<ControllerMethod> controllerMethod;
+	private Instance<ControllerInstance> controllerInstance;
 
-	/** 
+	/**
 	 * @deprecated CDI eyes only
 	 */
 	protected DefaultInterceptorStack() {
-		this(null);
+		this(null, null, null);
 	}
 
 	@Inject
-	public DefaultInterceptorStack(InterceptorStackHandlersCache cache) {
+	public DefaultInterceptorStack(InterceptorStackHandlersCache cache, Instance<ControllerMethod>
+			controllerMethod, Instance<ControllerInstance> controllerInstance) {
 		this.cache = cache;
+		this.controllerMethod = controllerMethod;
+		this.controllerInstance = controllerInstance;
 	}
 
 	@Override
 	public void next(ControllerMethod method, Object controllerInstance) throws InterceptionException {
 		Iterator<InterceptorHandler> iterator = internalStack.peek();
-		
+
 		if (!iterator.hasNext()) {
 			logger.debug("All registered interceptors have been called. End of VRaptor Request Execution.");
 			return;
 		}
 		InterceptorHandler handler = iterator.next();
 		handler.execute(this, method, controllerInstance);
-		
+
 	}
 
 	@Override
 	public void start() {
 		LinkedList<InterceptorHandler> handlers = cache.getInterceptorHandlers();
 		internalStack.addFirst(handlers.iterator());
-		this.next(null,null);
+		this.next(controllerMethod.get(), controllerInstance.get().getController());
 		internalStack.poll();
 	}
 }

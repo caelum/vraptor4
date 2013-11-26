@@ -17,22 +17,22 @@
 
 package br.com.caelum.vraptor.interceptor;
 
-import javax.enterprise.context.Dependent;
+import static org.slf4j.LoggerFactory.getLogger;
+
+import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Event;
+import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import br.com.caelum.vraptor.InterceptionException;
-import br.com.caelum.vraptor.Intercepts;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.controller.ControllerNotFoundHandler;
 import br.com.caelum.vraptor.controller.MethodNotAllowedHandler;
-import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.events.ControllerMethodDiscovered;
+import br.com.caelum.vraptor.events.ReadyToStartInterceptorStack;
 import br.com.caelum.vraptor.http.UrlToControllerTranslator;
 import br.com.caelum.vraptor.http.route.ControllerNotFoundException;
 import br.com.caelum.vraptor.http.route.MethodNotAllowedException;
@@ -43,61 +43,47 @@ import br.com.caelum.vraptor.http.route.MethodNotAllowedException;
  *
  * @author Guilherme Silveira
  * @author Cecilia Fernandes
+ * @author Rodrigo Turini
  */
-@Intercepts(after={})
-@Dependent
-public class ControllerLookupInterceptor implements Interceptor {
+@ApplicationScoped
+public class ControllerLookupObserver {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(ControllerLookupInterceptor.class);
+	private static final Logger LOGGER = getLogger(ControllerLookupObserver.class);
 
 	private final UrlToControllerTranslator translator;
-	private final MethodInfo methodInfo;
-	private final RequestInfo requestInfo;
 	private final ControllerNotFoundHandler controllerNotFoundHandler;
 	private final MethodNotAllowedHandler methodNotAllowedHandler;
-	private final Event<ControllerMethodDiscovered> event;
+	private final Event<ControllerMethodDiscovered> controllerMethodEvent;
 
 	private ControllerMethod method;
 
 	/**
 	 * @deprecated CDI eyes only
 	 */
-	protected ControllerLookupInterceptor() {
-		this(null, null, null, null, null, null);
+	protected ControllerLookupObserver() {
+		this(null, null, null, null);
 	}
 
 	@Inject
-	public ControllerLookupInterceptor(UrlToControllerTranslator translator, MethodInfo methodInfo,
+	public ControllerLookupObserver(UrlToControllerTranslator translator,
 			ControllerNotFoundHandler controllerNotFoundHandler, MethodNotAllowedHandler methodNotAllowedHandler,
-			RequestInfo requestInfo, Event<ControllerMethodDiscovered> event) {
+			Event<ControllerMethodDiscovered> event) {
 		this.translator = translator;
-		this.methodInfo = methodInfo;
 		this.methodNotAllowedHandler = methodNotAllowedHandler;
 		this.controllerNotFoundHandler = controllerNotFoundHandler;
-		this.requestInfo = requestInfo;
-		this.event = event;
+		this.controllerMethodEvent = event;
 	}
 
-	@Override
-	public void intercept(InterceptorStack stack, ControllerMethod ignorableMethod, Object controllerInstance)
-			throws InterceptionException {
-
+	public void lookup(@Observes ReadyToStartInterceptorStack event, MethodInfo methodInfo, RequestInfo requestInfo) {
 		try {
 			method = translator.translate(requestInfo);
-			event.fire(new ControllerMethodDiscovered(method));
-
+			controllerMethodEvent.fire(new ControllerMethodDiscovered(method));
 			methodInfo.setControllerMethod(method);
-			stack.next(method, controllerInstance);
 		} catch (ControllerNotFoundException e) {
 			controllerNotFoundHandler.couldntFind(requestInfo);
 		} catch (MethodNotAllowedException e) {
 			LOGGER.debug(e.getMessage(), e);
 			methodNotAllowedHandler.deny(requestInfo, e.getAllowedMethods());
 		}
-	}
-
-	@Override
-	public boolean accepts(ControllerMethod method) {
-		return true;
 	}
 }

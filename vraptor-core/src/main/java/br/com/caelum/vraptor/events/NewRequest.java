@@ -8,6 +8,6 @@ import br.com.caelum.vraptor.core.DefaultInterceptorStack;
  * @author Rodrigo Turini
  * @since 4.0
  */
-public class ReadyToStartInterceptorStack {
+public class NewRequest {
 
 }

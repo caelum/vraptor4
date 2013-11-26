@@ -39,7 +39,7 @@ import br.com.caelum.vraptor.controller.MethodNotAllowedHandler;
 import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.events.ControllerMethodDiscovered;
-import br.com.caelum.vraptor.events.ReadyToStartInterceptorStack;
+import br.com.caelum.vraptor.events.NewRequest;
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.http.MutableResponse;
 import br.com.caelum.vraptor.http.UrlToControllerTranslator;
@@ -69,7 +69,7 @@ public class ControllerLookupObserverTest {
 	@Test
 	public void shouldHandle404() throws IOException, InterceptionException {
 		when(translator.translate(info)).thenThrow(new ControllerNotFoundException());
-		observer.lookup(new ReadyToStartInterceptorStack(), methodInfo, info);
+		observer.lookup(new NewRequest(), methodInfo, info);
 		verify(notFoundHandler).couldntFind(info);
 	}
 
@@ -77,7 +77,7 @@ public class ControllerLookupObserverTest {
 	public void shouldHandle405() throws IOException, InterceptionException {
 		EnumSet<HttpMethod> allowedMethods = EnumSet.of(HttpMethod.GET);
 		when(translator.translate(info)).thenThrow(new MethodNotAllowedException(allowedMethods, POST.toString()));
-		observer.lookup(new ReadyToStartInterceptorStack(), methodInfo, info);
+		observer.lookup(new NewRequest(), methodInfo, info);
 		verify(methodNotAllowedHandler).deny(info, allowedMethods);
 	}
 
@@ -85,7 +85,7 @@ public class ControllerLookupObserverTest {
 	public void shouldUseControllerMethodFoundWithNextInterceptor() throws IOException, InterceptionException {
 		final ControllerMethod method = mock(ControllerMethod.class);
 		when(translator.translate(info)).thenReturn(method);
-		observer.lookup(new ReadyToStartInterceptorStack(), methodInfo, info);
+		observer.lookup(new NewRequest(), methodInfo, info);
 		verify(methodInfo).setControllerMethod(method);
 	}
 }

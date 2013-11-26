@@ -2,7 +2,7 @@ package br.com.caelum.vraptor.events;
 
 import br.com.caelum.vraptor.controller.BeanClass;
 import br.com.caelum.vraptor.controller.ControllerMethod;
-import br.com.caelum.vraptor.interceptor.ControllerLookupObserver;
+import br.com.caelum.vraptor.observer.ControllerLookupObserver;
 
 /**
  * fired by {@link ControllerLookupObserver}

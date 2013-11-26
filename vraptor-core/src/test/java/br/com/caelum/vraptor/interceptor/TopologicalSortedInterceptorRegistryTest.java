@@ -11,6 +11,7 @@ import org.hamcrest.TypeSafeMatcher;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.Intercepts;
+import br.com.caelum.vraptor.observer.ControllerLookupObserver;
 
 public class TopologicalSortedInterceptorRegistryTest {
 

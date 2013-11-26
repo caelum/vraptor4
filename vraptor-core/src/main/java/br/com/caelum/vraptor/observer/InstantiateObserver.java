@@ -17,6 +17,8 @@
 
 package br.com.caelum.vraptor.observer;
 
+import static com.google.common.base.Preconditions.checkState;
+
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.event.Observes;
@@ -58,7 +60,8 @@ public class InstantiateObserver {
 	}
 
 	@Produces @RequestScoped
-	public ControllerInstance createControllerInstance() {
+	public ControllerInstance getControllerInstance() {
+		checkState(controllerInstance != null, "ControllerInstance may not be null");
 		return this.controllerInstance;
 	}
 }

@@ -51,6 +51,6 @@ public class InstantiateObserverTest {
 		InstantiateObserver observer = new InstantiateObserver(container);
 		when(method.getController()).thenReturn(new DefaultBeanClass(DogController.class));
 		observer.instantiate(new ControllerMethodDiscovered(method));
-		assertEquals(myDog,observer.createControllerInstance().getController());
+		assertEquals(myDog,observer.getControllerInstance().getController());
 	}
 }

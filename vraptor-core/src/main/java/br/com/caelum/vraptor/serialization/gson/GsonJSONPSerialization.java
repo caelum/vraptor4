@@ -38,7 +38,7 @@ public class GsonJSONPSerialization implements JSONPSerialization {
 	
 	private final HttpServletResponse response;
 	private final TypeNameExtractor extractor;
-	private final VRaptorGsonBuilder builder;
+	private final GsonSerializerBuilder builder;
 	
 	/** 
 	 * @deprecated CDI eyes only
@@ -49,7 +49,7 @@ public class GsonJSONPSerialization implements JSONPSerialization {
 
 	@Inject
 	public GsonJSONPSerialization(HttpServletResponse response, TypeNameExtractor extractor,
-			VRaptorGsonBuilder builder) {
+			GsonSerializerBuilder builder) {
 		this.response = response;
 		this.extractor = extractor;
 		this.builder = builder;

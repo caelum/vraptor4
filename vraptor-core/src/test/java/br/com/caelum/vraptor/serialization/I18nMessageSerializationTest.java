@@ -24,7 +24,7 @@ import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.serialization.gson.CalendarSerializer;
 import br.com.caelum.vraptor.serialization.gson.GsonJSONSerialization;
 import br.com.caelum.vraptor.serialization.gson.MessageSerializer;
-import br.com.caelum.vraptor.serialization.gson.VRaptorGsonBuilder;
+import br.com.caelum.vraptor.serialization.gson.GsonSerializerBuilder;
 import br.com.caelum.vraptor.serialization.xstream.MessageConverter;
 import br.com.caelum.vraptor.serialization.xstream.XStreamBuilder;
 import br.com.caelum.vraptor.serialization.xstream.XStreamBuilderFactory;
@@ -52,7 +52,7 @@ public class I18nMessageSerializationTest {
 		adapters.add(new CalendarSerializer());
 		adapters.add(new MessageSerializer());
 
-		VRaptorGsonBuilder gsonBuilder =  new VRaptorGsonBuilder(new MockInstanceImpl<>(adapters));
+		GsonSerializerBuilder gsonBuilder =  new GsonSerializerBuilder(new MockInstanceImpl<>(adapters));
 		GsonJSONSerialization jsonSerialization = new GsonJSONSerialization(response, extractor, gsonBuilder);
 
 		Container container = mock(Container.class);

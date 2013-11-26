@@ -41,11 +41,11 @@ import com.google.gson.Gson;
  */
 public class GsonSerializer implements SerializerBuilder {
 
-	private VRaptorGsonBuilder builder;
+	private GsonSerializerBuilder builder;
 	private Writer writer;
 	private TypeNameExtractor extractor;
 
-	public GsonSerializer(VRaptorGsonBuilder builder, Writer writer, TypeNameExtractor extractor) {
+	public GsonSerializer(GsonSerializerBuilder builder, Writer writer, TypeNameExtractor extractor) {
 		this.writer = writer;
 		this.extractor = extractor;
 		this.builder = builder;

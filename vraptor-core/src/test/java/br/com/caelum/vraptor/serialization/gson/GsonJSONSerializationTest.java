@@ -45,7 +45,7 @@ public class GsonJSONSerializationTest {
 	private HttpServletResponse response;
 	private DefaultTypeNameExtractor extractor;
 
-	private VRaptorGsonBuilder builder;
+	private GsonSerializerBuilder builder;
 
 	@Before
 	public void setup() throws Exception {
@@ -60,7 +60,7 @@ public class GsonJSONSerializationTest {
 		adapters.add(new CollectionSerializer());
 		adapters.add(new EnumSerializer());
 
-		builder = new VRaptorGsonBuilder(new MockInstanceImpl<>(adapters));
+		builder = new GsonSerializerBuilder(new MockInstanceImpl<>(adapters));
 		this.serialization = new GsonJSONSerialization(response, extractor, builder);
 	}
 

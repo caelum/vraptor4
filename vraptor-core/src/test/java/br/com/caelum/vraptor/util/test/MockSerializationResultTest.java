@@ -13,7 +13,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.proxy.JavassistProxifier;
-import br.com.caelum.vraptor.serialization.gson.VRaptorGsonBuilder;
+import br.com.caelum.vraptor.serialization.gson.GsonSerializerBuilder;
 
 import com.google.gson.JsonSerializer;
 
@@ -26,7 +26,7 @@ public class MockSerializationResultTest {
 		List<JsonSerializer<?>> adapters = new ArrayList<>();
 
 		result = new MockSerializationResult(new JavassistProxifier(), cleanInstance(),
-				new VRaptorGsonBuilder(new MockInstanceImpl<>(adapters)));
+				new GsonSerializerBuilder(new MockInstanceImpl<>(adapters)));
 	}
 
 	public static class Car {

@@ -61,7 +61,7 @@ public class InstantiateObserver {
 
 	@Produces @RequestScoped
 	public ControllerInstance getControllerInstance() {
-		checkState(controllerInstance != null, "ControllerInstance may not be null");
+		checkState(controllerInstance != null, "ControllerInstance is not initialised yet");
 		return this.controllerInstance;
 	}
 }

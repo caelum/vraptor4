@@ -35,6 +35,7 @@ import com.google.gson.JsonSerializer;
  * @since 4.0.0
  */
 @Dependent
+@RegisterStrategy(RegisterType.SINGLE)
 public class CalendarSerializer implements JsonSerializer<Calendar> {
 
 	@Override

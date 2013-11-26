@@ -75,7 +75,7 @@ public class GsonSerializerBuilder {
 	public Gson create() {
 		for (JsonSerializer<?> adapter : serializers) {
 			RegisterStrategy registerStrategy = adapter.getClass().getAnnotation(RegisterStrategy.class);
-			if ((registerStrategy != null) && (registerStrategy.value() == RegisterType.SINGLE))
+			if ((registerStrategy != null) && (registerStrategy.value().equals(RegisterType.SINGLE)))
 				builder.registerTypeAdapter(getAdapterType(adapter), adapter);
 			else
 				builder.registerTypeHierarchyAdapter(getAdapterType(adapter), adapter);

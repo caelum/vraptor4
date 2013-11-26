@@ -16,7 +16,7 @@
  */
 package br.com.caelum.vraptor.interceptor;
 
-import static org.junit.Assert.assertTrue;
+import static br.com.caelum.vraptor.controller.HttpMethod.POST;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -36,23 +36,23 @@ import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.controller.ControllerNotFoundHandler;
 import br.com.caelum.vraptor.controller.HttpMethod;
 import br.com.caelum.vraptor.controller.MethodNotAllowedHandler;
-import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.events.ControllerMethodDiscovered;
+import br.com.caelum.vraptor.events.ReadyToStartInterceptorStack;
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.http.MutableResponse;
 import br.com.caelum.vraptor.http.UrlToControllerTranslator;
 import br.com.caelum.vraptor.http.route.ControllerNotFoundException;
 import br.com.caelum.vraptor.http.route.MethodNotAllowedException;
 
-public class ControllerLookupInterceptorTest {
+public class ControllerLookupObserverTest {
 
 	private @Mock UrlToControllerTranslator translator;
 	private @Mock MutableRequest webRequest;
 	private @Mock MutableResponse webResponse;
 	private @Mock RequestInfo info;
-	private ControllerLookupInterceptor lookup;
+	private ControllerLookupObserver observer;
 	private @Mock MethodInfo methodInfo;
 	private @Mock ControllerNotFoundHandler notFoundHandler;
 	private @Mock MethodNotAllowedHandler methodNotAllowedHandler;
@@ -62,41 +62,29 @@ public class ControllerLookupInterceptorTest {
 	public void config() {
 		MockitoAnnotations.initMocks(this);
 		info = new RequestInfo(null, null, webRequest, webResponse);
-		lookup = new ControllerLookupInterceptor(translator, methodInfo, notFoundHandler, methodNotAllowedHandler, info, event);
-	}
-
-	@Test
-	public void shouldAcceptAlways() {
-		assertTrue(lookup.accepts(null));
+		observer = new ControllerLookupObserver(translator, notFoundHandler, methodNotAllowedHandler, event);
 	}
 
 	@Test
 	public void shouldHandle404() throws IOException, InterceptionException {
 		when(translator.translate(info)).thenThrow(new ControllerNotFoundException());
-
-		lookup.intercept(null, null, null);
+		observer.lookup(new ReadyToStartInterceptorStack(), methodInfo, info);
 		verify(notFoundHandler).couldntFind(info);
 	}
 
 	@Test
 	public void shouldHandle405() throws IOException, InterceptionException {
 		EnumSet<HttpMethod> allowedMethods = EnumSet.of(HttpMethod.GET);
-
-		when(translator.translate(info)).thenThrow(new MethodNotAllowedException(allowedMethods, HttpMethod.POST.toString()));
-
-		lookup.intercept(null, null, null);
+		when(translator.translate(info)).thenThrow(new MethodNotAllowedException(allowedMethods, POST.toString()));
+		observer.lookup(new ReadyToStartInterceptorStack(), methodInfo, info);
 		verify(methodNotAllowedHandler).deny(info, allowedMethods);
 	}
 
 	@Test
 	public void shouldUseControllerMethodFoundWithNextInterceptor() throws IOException, InterceptionException {
 		final ControllerMethod method = mock(ControllerMethod.class);
-		final InterceptorStack stack = mock(InterceptorStack.class);
-
 		when(translator.translate(info)).thenReturn(method);
-
-		lookup.intercept(stack, null, null);
-		verify(stack).next(method, null);
+		observer.lookup(new ReadyToStartInterceptorStack(), methodInfo, info);
 		verify(methodInfo).setControllerMethod(method);
 	}
 }

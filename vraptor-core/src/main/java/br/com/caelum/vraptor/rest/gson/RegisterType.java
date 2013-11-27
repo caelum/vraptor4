@@ -1,4 +1,4 @@
-package br.com.caelum.vraptor.serialization.gson;
+package br.com.caelum.vraptor.rest.gson;
 
 /**
  * Defines strategies for registering custom serialization or deserialization in

@@ -34,6 +34,8 @@ import br.com.caelum.vraptor.controller.DefaultControllerMethod;
 import br.com.caelum.vraptor.http.Parameter;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.http.ParanamerNameProvider;
+import br.com.caelum.vraptor.rest.gson.GsonBuilderWrapper;
+import br.com.caelum.vraptor.rest.gson.GsonDeserializerBuilder;
 import br.com.caelum.vraptor.util.test.MockInstanceImpl;
 import br.com.caelum.vraptor.view.GenericController;
 
@@ -41,6 +43,7 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
+import com.google.gson.JsonSerializer;
 
 public class GsonDeserializerTest {
 
@@ -59,10 +62,11 @@ public class GsonDeserializerTest {
 		provider = new ParanamerNameProvider(new DefaultCacheStore<AccessibleObject, Parameter[]>());
 		request = mock(HttpServletRequest.class);
 
-		List<JsonDeserializer<?>> adapters = new ArrayList<>();
-		adapters.add(new CalendarDeserializer());
+		List<JsonDeserializer<?>> jsonDeserializers = new ArrayList<>();
+		List<JsonSerializer<?>> jsonSerializers = new ArrayList<>();
+		jsonDeserializers.add(new CalendarDeserializer());
 
-		builder = new GsonDeserializerBuilder(new MockInstanceImpl<>(adapters));
+		builder = new GsonBuilderWrapper(new MockInstanceImpl<>(jsonSerializers), new MockInstanceImpl<>(jsonDeserializers));
 		deserializer = new GsonDeserialization(builder, provider, request);
 		BeanClass controllerClass = new DefaultBeanClass(DogController.class);
 
@@ -177,9 +181,10 @@ public class GsonDeserializerTest {
 	@Test
 	public void shouldBeAbleToDeserializeADogWithDeserializerAdapter() throws Exception {
 		List<JsonDeserializer<?>> deserializers = new ArrayList<>();
+		List<JsonSerializer<?>> serializers = new ArrayList<>();
 		deserializers.add(new DogDeserializer());
 
-		builder = new GsonDeserializerBuilder(new MockInstanceImpl<>(deserializers));
+		builder = new GsonBuilderWrapper(new MockInstanceImpl<>(serializers), new MockInstanceImpl<>(deserializers));
 		deserializer = new GsonDeserialization(builder, provider, request);
 
 		InputStream stream = new ByteArrayInputStream("{'dog':{'name':'Renan Reis','age':'0'}}".getBytes());

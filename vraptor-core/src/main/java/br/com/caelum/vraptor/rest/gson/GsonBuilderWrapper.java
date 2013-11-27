@@ -6,7 +6,7 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.List;
 
-import javax.enterprise.context.RequestScoped;
+import javax.enterprise.context.Dependent;
 import javax.enterprise.inject.Any;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
@@ -25,7 +25,7 @@ import com.google.gson.JsonSerializer;
  * 
  * @author Rafael Dipold
  */
-@RequestScoped
+@Dependent
 public class GsonBuilderWrapper implements GsonSerializerBuilder, GsonDeserializerBuilder {
 	
 	private GsonBuilder builder = new GsonBuilder();
@@ -34,8 +34,8 @@ public class GsonBuilderWrapper implements GsonSerializerBuilder, GsonDeserializ
 	private String alias;
 	private List<ExclusionStrategy> exclusions;
 	
-	private final Instance<JsonSerializer<?>> jsonSerializers;
-	private final Instance<JsonDeserializer<?>> jsonDeserializers;
+	private final Iterable<JsonSerializer<?>> jsonSerializers;
+	private final Iterable<JsonDeserializer<?>> jsonDeserializers;
 	
 	@Inject
 	public GsonBuilderWrapper(@Any Instance<JsonSerializer<?>> jsonSerializers, @Any Instance<JsonDeserializer<?>> jsonDeserializers) {

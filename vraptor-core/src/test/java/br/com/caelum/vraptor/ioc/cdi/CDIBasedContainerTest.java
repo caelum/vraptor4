@@ -27,8 +27,6 @@ import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.ioc.ContainerProvider;
 import br.com.caelum.vraptor.ioc.GenericContainerTest;
 import br.com.caelum.vraptor.ioc.WhatToDo;
-import br.com.caelum.vraptor.ioc.fixture.ComponentFactoryInTheClasspath;
-import br.com.caelum.vraptor.ioc.fixture.CustomComponentWithLifecycleInTheClasspath;
 
 @RunWith(WeldJunitRunner.class)
 public class CDIBasedContainerTest extends GenericContainerTest {
@@ -118,36 +116,6 @@ public class CDIBasedContainerTest extends GenericContainerTest {
 	@Test
 	public void instantiateCustomAcceptor(){
 		actualInstance(cdiBasedContainer.instanceFor(PackagesAcceptor.class));
-	}
-
-	@Override
-	@Test
-	public void callsPredestroyExactlyOneTime() throws Exception {
-		MyAppComponentWithLifecycle component = getFromContainer(MyAppComponentWithLifecycle.class);
-		assertThat(component.getCalls(), is(0));
-		shutdownCDIContainer();
-		assertThat(component.getCalls(), is(1));
-		startCDIContainer();
-	}
-
-	@Override
-	@Test
-	public void shoudCallPredestroyExactlyOneTimeForComponentsScannedFromTheClasspath() {
-		CustomComponentWithLifecycleInTheClasspath component = getFromContainer(CustomComponentWithLifecycleInTheClasspath.class);
-		assertThat(component.getCallsToPreDestroy(), is(equalTo(0)));
-		shutdownCDIContainer();
-		assertThat(component.getCallsToPreDestroy(), is(equalTo(1)));
-		startCDIContainer();
-	}
-
-	@Override
-	@Test
-	public void shoudCallPredestroyExactlyOneTimeForComponentFactoriesScannedFromTheClasspath() {
-		ComponentFactoryInTheClasspath componentFactory = getFromContainer(ComponentFactoryInTheClasspath.class);
-		assertThat(componentFactory.getCallsToPreDestroy(), is(equalTo(0)));
-		shutdownCDIContainer();
-		assertThat(componentFactory.getCallsToPreDestroy(), is(equalTo(1)));
-		startCDIContainer();
 	}
 
 	private void initializeProxy(Object component) {

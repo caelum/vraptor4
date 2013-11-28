@@ -4,7 +4,6 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 
 import java.lang.reflect.Field;
 import java.util.concurrent.Callable;
@@ -151,13 +150,6 @@ public class CDIBasedContainerTest extends GenericContainerTest {
 		shutdownCDIContainer();
 		assertThat(componentFactory.getCallsToPreDestroy(), is(equalTo(1)));
 		startCDIContainer();
-	}
-
-	@Test
-	public void shouldUseComponentFactoryAsProducer() {
-		ComponentToBeProduced component = getFromContainer(ComponentToBeProduced.class);
-		initializeProxy(component);
-		assertNotNull(component);
 	}
 
 	private void initializeProxy(Object component) {

@@ -12,34 +12,32 @@ import org.mockito.MockitoAnnotations;
 
 public class ApplicationConfigurationTest {
 
-	@Mock
-	HttpServletRequest request;
+	@Mock private HttpServletRequest request;
 	private ApplicationConfiguration configuration;
 
 	@Before
 	public void setUp() throws Exception {
 		MockitoAnnotations.initMocks(this);
 		this.configuration = new ApplicationConfiguration(request);
+		when(request.getScheme()).thenReturn("http");
+		when(request.getServerName()).thenReturn("caelum.com.br");
+		when(request.getContextPath()).thenReturn("/context/");
 	}
 
 	@Test
 	public void shouldNotUsePortWhenPortIs80() {
-		when(request.getScheme()).thenReturn("http");
-		when(request.getServerName()).thenReturn("caelum.com.br");
 		when(request.getServerPort()).thenReturn(80);
-		when(request.getContextPath()).thenReturn("/context/");
-
-		assertEquals("http://caelum.com.br/context/", configuration.getApplicationPath());
+		assertEquals("http://caelum.com.br/context/", applicationPath());
 	}
 
 	@Test
 	public void shouldGiveFullUrlWithPortWhenPortIsNot80() {
-		when(request.getScheme()).thenReturn("http");
-		when(request.getServerName()).thenReturn("caelum.com.br");
 		when(request.getServerPort()).thenReturn(8080);
-		when(request.getContextPath()).thenReturn("/context/");
+		assertEquals("http://caelum.com.br:8080/context/", applicationPath());
+	}
 
-		assertEquals("http://caelum.com.br:8080/context/", configuration.getApplicationPath());
+	private String applicationPath() {
+		return configuration.getApplicationPath();
 	}
 
 }

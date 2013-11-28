@@ -9,7 +9,6 @@ import java.lang.reflect.Field;
 import java.util.concurrent.Callable;
 
 import javax.enterprise.context.RequestScoped;
-import javax.enterprise.context.SessionScoped;
 import javax.enterprise.inject.spi.Bean;
 import javax.inject.Inject;
 
@@ -18,7 +17,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import br.com.caelum.cdi.component.CDIControllerComponent;
-import br.com.caelum.cdi.component.CDISessionComponent;
 import br.com.caelum.cdi.component.UsingCacheComponent;
 import br.com.caelum.vraptor.WeldJunitRunner;
 import br.com.caelum.vraptor.core.RequestInfo;
@@ -154,12 +152,6 @@ public class CDIBasedContainerTest extends GenericContainerTest {
 
 	private void initializeProxy(Object component) {
 		component.toString();
-	}
-
-	@Test
-	public void shouldNotAddRequestScopeForComponentWithScope(){
-		Bean<?> bean = beanManager.getBeans(CDISessionComponent.class).iterator().next();
-		assertTrue(bean.getScope().equals(SessionScoped.class));
 	}
 
 	@Test

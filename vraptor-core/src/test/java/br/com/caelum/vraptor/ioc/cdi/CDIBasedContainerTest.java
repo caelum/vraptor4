@@ -5,25 +5,26 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
 
+import java.lang.reflect.Field;
 import java.util.concurrent.Callable;
 
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.context.SessionScoped;
 import javax.enterprise.inject.spi.Bean;
-import javax.enterprise.inject.spi.CDI;
+import javax.inject.Inject;
 
 import org.hamcrest.MatcherAssert;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import br.com.caelum.cdi.component.CDIControllerComponent;
 import br.com.caelum.cdi.component.CDISessionComponent;
 import br.com.caelum.cdi.component.UsingCacheComponent;
+import br.com.caelum.vraptor.WeldJunitRunner;
 import br.com.caelum.vraptor.core.RequestInfo;
+import br.com.caelum.vraptor.http.MutableRequest;
+import br.com.caelum.vraptor.http.MutableResponse;
 import br.com.caelum.vraptor.interceptor.PackagesAcceptor;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.ioc.ContainerProvider;
@@ -32,50 +33,46 @@ import br.com.caelum.vraptor.ioc.WhatToDo;
 import br.com.caelum.vraptor.ioc.fixture.ComponentFactoryInTheClasspath;
 import br.com.caelum.vraptor.ioc.fixture.CustomComponentWithLifecycleInTheClasspath;
 
+@RunWith(WeldJunitRunner.class)
 public class CDIBasedContainerTest extends GenericContainerTest {
 
-	private static CdiContainer cdiContainer;
-	private final ServletContainerFactory servletContainerFactory = new ServletContainerFactory();
+	@Inject private CDIBasedContainer cdiBasedContainer;
+	@Inject private CDIProvider cdiProvider;
+	@Inject private Contexts contexts;
+
 	private int counter;
-
-	@BeforeClass
-	public static void startCDIContainer(){
-		cdiContainer = new br.com.caelum.vraptor.ioc.cdi.CdiContainer();
-		cdiContainer.start();
-	}
-
-	@AfterClass
-	public static void shutdownCDIContainer() {
-		cdiContainer.shutdown();
-	}
 
 	@Override
 	protected ContainerProvider getProvider() {
-		return CDI.current().select(CDIProvider.class).get();
+		return cdiProvider;
 	}
 
 	@Override
 	public void tearDown() {
 		super.tearDown();
-		cdiContainer.stopAllContexts();
+		contexts.stopRequestScope();
+		contexts.stopConversationScope();
+		contexts.stopSessionScope();
+		contexts.stopApplicationScope();
 	}
-
 
 	@Override
 	protected <T> T executeInsideRequest(final WhatToDo<T> execution) {
 		Callable<T> task = new Callable<T>() {
 			@Override
 			public T call() throws Exception {
-				cdiContainer.startRequest();
-				cdiContainer.startSession();
+				contexts.startRequestScope();
+				contexts.startSessionScope();
+
 				RequestInfo request = new RequestInfo(null, null,
-						servletContainerFactory.getRequest(),
-						servletContainerFactory.getResponse());
+						cdiBasedContainer.instanceFor(MutableRequest.class),
+						cdiBasedContainer.instanceFor(MutableResponse.class));
 
 				T result = execution.execute(request, counter);
 
-				cdiContainer.stopSession();
-				cdiContainer.stopRequest();
+				contexts.stopRequestScope();
+				contexts.stopSessionScope();
+
 				return result;
 			}
 		};
@@ -92,8 +89,7 @@ public class CDIBasedContainerTest extends GenericContainerTest {
 		try {
 			//sorry, but i have to initialize the weld proxy
 			initializeProxy(instance);
-			java.lang.reflect.Field field = instance.getClass()
-					.getDeclaredField("BEAN_INSTANCE_CACHE");
+			Field field = instance.getClass().getDeclaredField("BEAN_INSTANCE_CACHE");
 			field.setAccessible(true);
 			ThreadLocal mapa = (ThreadLocal) field.get(instance);
 			return mapa.get();
@@ -124,8 +120,7 @@ public class CDIBasedContainerTest extends GenericContainerTest {
 
 	@Test
 	public void instantiateCustomAcceptor(){
-		PackagesAcceptor acceptor = getFromContainer(PackagesAcceptor.class);
-		actualInstance(acceptor);
+		actualInstance(cdiBasedContainer.instanceFor(PackagesAcceptor.class));
 	}
 
 	@Override
@@ -155,7 +150,6 @@ public class CDIBasedContainerTest extends GenericContainerTest {
 		assertThat(componentFactory.getCallsToPreDestroy(), is(equalTo(0)));
 		shutdownCDIContainer();
 		assertThat(componentFactory.getCallsToPreDestroy(), is(equalTo(1)));
-
 		startCDIContainer();
 	}
 
@@ -172,7 +166,7 @@ public class CDIBasedContainerTest extends GenericContainerTest {
 
 	@Test
 	public void shouldNotAddRequestScopeForComponentWithScope(){
-		Bean<?> bean = cdiContainer.getBeanManager().getBeans(CDISessionComponent.class).iterator().next();
+		Bean<?> bean = beanManager.getBeans(CDISessionComponent.class).iterator().next();
 		assertTrue(bean.getScope().equals(SessionScoped.class));
 	}
 
@@ -184,10 +178,11 @@ public class CDIBasedContainerTest extends GenericContainerTest {
 
 	@Test
 	public void shouldCreateComponentsWithCache(){
-		UsingCacheComponent component = getFromContainer(UsingCacheComponent.class);
+		UsingCacheComponent component = cdiBasedContainer.instanceFor(UsingCacheComponent.class);
 		component.putWithLRU("test","test");
 		component.putWithDefault("test2","test2");
 		assertEquals(component.putWithLRU("test","test"),"test");
 		assertEquals(component.putWithDefault("test2","test2"),"test2");
 	}
+
 }

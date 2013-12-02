@@ -92,7 +92,6 @@ import br.com.caelum.vraptor.ioc.fixture.ComponentFactoryInTheClasspath.Provided
 import br.com.caelum.vraptor.ioc.fixture.ControllerInTheClasspath;
 import br.com.caelum.vraptor.ioc.fixture.ConverterInTheClasspath;
 import br.com.caelum.vraptor.ioc.fixture.CustomComponentInTheClasspath;
-import br.com.caelum.vraptor.ioc.fixture.CustomComponentWithLifecycleInTheClasspath;
 import br.com.caelum.vraptor.ioc.fixture.DependentOnSomethingFromComponentFactory;
 import br.com.caelum.vraptor.ioc.fixture.InterceptorInTheClasspath;
 
@@ -150,29 +149,6 @@ public abstract class GenericContainerTest {
 				return null;
 			}
 		});
-	}
-
-	@ApplicationScoped
-	public static class MyAppComponentWithLifecycle {
-		private int calls = 0;
-
-		public int getCalls() {
-			return calls;
-		}
-
-		@PreDestroy
-		public void z() {
-			calls++;
-		}
-	}
-
-	@Test
-	public void callsPredestroyExactlyOneTime() throws Exception {
-		MyAppComponentWithLifecycle component = getFromContainer(MyAppComponentWithLifecycle.class);
-		assertThat(component.calls, is(0));
-		provider.stop();
-		assertThat(component.calls, is(1));
-		getStartedProvider();
 	}
 
 	@RequestScoped
@@ -432,24 +408,6 @@ public abstract class GenericContainerTest {
 	public void shoudRegisterInterceptorsInInterceptorRegistry() {
 		InterceptorRegistry registry = getFromContainer(InterceptorRegistry.class);
 		assertThat(registry.all(), hasOneCopyOf(InterceptorInTheClasspath.class));
-	}
-
-	@Test
-	public void shoudCallPredestroyExactlyOneTimeForComponentsScannedFromTheClasspath() {
-		CustomComponentWithLifecycleInTheClasspath component = getFromContainer(CustomComponentWithLifecycleInTheClasspath.class);
-		assertThat(component.getCallsToPreDestroy(), is(equalTo(0)));
-		provider.stop();
-		assertThat(component.getCallsToPreDestroy(), is(equalTo(1)));
-		getStartedProvider();
-	}
-
-	@Test
-	public void shoudCallPredestroyExactlyOneTimeForComponentFactoriesScannedFromTheClasspath() {
-		ComponentFactoryInTheClasspath componentFactory = getFromContainer(ComponentFactoryInTheClasspath.class);
-		assertThat(componentFactory.getCallsToPreDestroy(), is(equalTo(0)));
-		provider.stop();
-		assertThat(componentFactory.getCallsToPreDestroy(), is(equalTo(1)));
-		getStartedProvider();
 	}
 
 	protected <T> T instanceFor(final Class<T> component, Container container) {

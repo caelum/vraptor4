@@ -1,10 +1,17 @@
 package br.com.caelum.vraptor.validator;
 
+import static br.com.caelum.vraptor.controller.DefaultControllerMethod.instanceFor;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.lang.reflect.AccessibleObject;
+import java.lang.reflect.Method;
 import java.util.Locale;
 
 import javax.validation.MessageInterpolator;
@@ -13,87 +20,82 @@ import javax.validation.constraints.NotNull;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor.cache.DefaultCacheStore;
 import br.com.caelum.vraptor.controller.ControllerMethod;
-import br.com.caelum.vraptor.controller.DefaultControllerMethod;
-import br.com.caelum.vraptor.core.InterceptorStack;
+import br.com.caelum.vraptor.controller.DefaultControllerInstance;
 import br.com.caelum.vraptor.core.MethodInfo;
+import br.com.caelum.vraptor.events.ReadyToExecuteMethod;
 import br.com.caelum.vraptor.http.Parameter;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.http.ParanamerNameProvider;
 import br.com.caelum.vraptor.util.test.MockValidator;
 import br.com.caelum.vraptor.validator.beanvalidation.MessageInterpolatorFactory;
-import br.com.caelum.vraptor.validator.beanvalidation.MethodValidatorInterceptor;
+import br.com.caelum.vraptor.validator.beanvalidation.MethodValidator;
 
 /**
  * Test method validator feature.
- * 
+ *
  * @author Otávio Scherer Garcia
+ * @author Rodrigo Turini
  * @since 3.5
  */
 public class MethodValidatorTest {
 
-	@Mock private InterceptorStack stack;
-
-	private MethodValidatorInterceptor interceptor;
 	private ParameterNameProvider provider;
 	private Validator validator;
 	private ValidatorFactory validatorFactory;
 	private MessageInterpolator interpolator;
-	
+
 	private ControllerMethod withConstraint;
 	private ControllerMethod withoutConstraint;
+	private DefaultControllerInstance instance;
+	private MethodInfo methodInfo;
 
 	@Before
 	public void setup() throws Exception {
 		MockitoAnnotations.initMocks(this);
-
 		Locale.setDefault(Locale.ENGLISH);
-
 		provider = new ParanamerNameProvider(new DefaultCacheStore<AccessibleObject, Parameter[]>());
-		
 		validatorFactory = javax.validation.Validation.buildDefaultValidatorFactory();
-
-		MessageInterpolatorFactory interpolatorFactory = new MessageInterpolatorFactory(validatorFactory);
-		interpolator = interpolatorFactory.getInstance();
-
+		interpolator = new MessageInterpolatorFactory(validatorFactory).getInstance();
 		validator = new MockValidator();
-		
-		withConstraint = DefaultControllerMethod.instanceFor(MyController.class, MyController.class.getMethod("withConstraint", String.class));
-		withoutConstraint = DefaultControllerMethod.instanceFor(MyController.class, MyController.class.getMethod("withoutConstraint", String.class));
+		withConstraint = instanceFor(MyController.class, getMethod("withConstraint"));
+		withoutConstraint = instanceFor(MyController.class, getMethod("withoutConstraint"));
+		instance = new DefaultControllerInstance(new MyController());
+		methodInfo = mock(MethodInfo.class);
+		when(methodInfo.getParameters()).thenReturn(new Object[]{null});
 	}
-	
+
+	private Method getMethod(String methodName) throws NoSuchMethodException {
+		return MyController.class.getMethod(methodName, String.class);
+	}
+
 	@Test
 	public void shouldAcceptIfMethodHasConstraint() {
-		interceptor = new MethodValidatorInterceptor(null, null, null, null, validatorFactory.getValidator(), null);
-		
-		assertThat(interceptor.accepts(withConstraint), is(true));
+		DefaultControllerInstance controller = spy(instance);
+		getMethodValidator().validate(new ReadyToExecuteMethod(withConstraint), controller, methodInfo);
+		verify(controller).getController();
 	}
 
 	@Test
 	public void shouldNotAcceptIfMethodHasConstraint() {
-		interceptor = new MethodValidatorInterceptor(null, null, null, null, validatorFactory.getValidator(), null);
-		assertThat(interceptor.accepts(withoutConstraint), is(false));
+		DefaultControllerInstance controller = spy(instance);
+		getMethodValidator().validate(new ReadyToExecuteMethod(withoutConstraint), controller, methodInfo);
+		verify(controller, never()).getController();
 	}
 
 	@Test
-	public void shouldValidateMethodWithConstraint()
-		throws Exception {
-		MethodInfo info = new MethodInfo();
-		info.setParameters(new Object[] { null });
-		info.setControllerMethod(withConstraint);
-
-		interceptor = new MethodValidatorInterceptor(new Locale("pt", "br"), interpolator, validator, info, 
-				validatorFactory.getValidator(), provider);
-
-		MyController controller = new MyController();
-		interceptor.intercept(stack, info.getControllerMethod(), controller);
-		
+	public void shouldValidateMethodWithConstraint() throws Exception {
+		getMethodValidator().validate(new ReadyToExecuteMethod(withConstraint), instance, methodInfo);
 		assertThat(validator.getErrors(), hasSize(1));
 		assertThat(validator.getErrors().get(0).getCategory(), is("withConstraint.email"));
+	}
+
+	private MethodValidator getMethodValidator() {
+		return new MethodValidator(new Locale("pt", "br"), interpolator, validator,
+				validatorFactory.getValidator(), provider);
 	}
 
 	/**
@@ -111,9 +113,7 @@ public class MethodValidatorTest {
 	}
 
 	public class MyController {
-
 		public void withConstraint(@NotNull String email) { }
-
 		public void withoutConstraint(String foo) { }
 	}
 }

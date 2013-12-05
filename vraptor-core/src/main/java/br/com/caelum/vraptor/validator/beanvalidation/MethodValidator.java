@@ -15,11 +15,15 @@
  */
 package br.com.caelum.vraptor.validator.beanvalidation;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
+import java.lang.reflect.Method;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.Set;
 
-import javax.enterprise.context.RequestScoped;
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 import javax.validation.ConstraintViolation;
 import javax.validation.MessageInterpolator;
@@ -29,57 +33,50 @@ import javax.validation.metadata.BeanDescriptor;
 import javax.validation.metadata.MethodDescriptor;
 
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import br.com.caelum.vraptor.InterceptionException;
-import br.com.caelum.vraptor.Intercepts;
+import br.com.caelum.vraptor.controller.ControllerInstance;
 import br.com.caelum.vraptor.controller.ControllerMethod;
-import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.core.MethodInfo;
+import br.com.caelum.vraptor.events.ReadyToExecuteMethod;
 import br.com.caelum.vraptor.http.Parameter;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
-import br.com.caelum.vraptor.interceptor.ExecuteMethodInterceptor;
-import br.com.caelum.vraptor.interceptor.Interceptor;
-import br.com.caelum.vraptor.interceptor.ParametersInstantiatorInterceptor;
 import br.com.caelum.vraptor.validator.SimpleMessage;
 import br.com.caelum.vraptor.validator.Validator;
 
 import com.google.common.base.Joiner;
 
 /**
- * Validate method parameters using Bean Validation. The method will be
- * intercepted if any parameter contains a Bean Validation annotation.
+ * Validate method parameters using Bean Validation. The method will
+ * be validated if any parameter contains a Bean Validation annotation.
  *
  * @author Otávio Scherer Garcia
+ * @author Rodrigo Turini
  * @since 3.5.1
  */
-@RequestScoped
-@Intercepts(before = ExecuteMethodInterceptor.class, after = ParametersInstantiatorInterceptor.class)
-public class MethodValidatorInterceptor implements Interceptor {
+@ApplicationScoped
+public class MethodValidator {
 
-	private static final Logger logger = LoggerFactory.getLogger(MethodValidatorInterceptor.class);
-	
+	private static final Logger logger = getLogger(MethodValidator.class);
+
 	private final Locale locale;
 	private final MessageInterpolator interpolator;
-	private final MethodInfo methodInfo;
 	private final Validator validator;
 	private final ParameterNameProvider parameterNameProvider;
 	private final javax.validation.Validator bvalidator;
 
-	/** 
+	/**
 	 * @deprecated CDI eyes only
 	 */
-	protected MethodValidatorInterceptor() {
-		this(null, null, null, null, null, null);
+	protected MethodValidator() {
+		this(null, null, null, null, null);
 	}
 
 	@Inject
-	public MethodValidatorInterceptor(Locale locale, MessageInterpolator interpolator, Validator validator,
-			MethodInfo methodInfo, javax.validation.Validator bvalidator, ParameterNameProvider parameterNameProvider) {
+	public MethodValidator(Locale locale, MessageInterpolator interpolator, Validator validator,
+			javax.validation.Validator bvalidator, ParameterNameProvider parameterNameProvider) {
 		this.locale = locale;
 		this.interpolator = interpolator;
 		this.validator = validator;
-		this.methodInfo = methodInfo;
 		this.bvalidator = bvalidator;
 		this.parameterNameProvider = parameterNameProvider;
 	}
@@ -87,40 +84,37 @@ public class MethodValidatorInterceptor implements Interceptor {
 	/**
 	 * Only accepts if method isn't parameterless and have at least one constraint.
 	 */
-	@Override
-	public boolean accepts(ControllerMethod method) {
-		if (method.getMethod().getParameterTypes().length == 0) {
-			logger.debug("method {} has no parameters, skipping", method);
+	private boolean hasNoParamsOrConstraints(ControllerMethod controllerMethod) {
+		Method method = controllerMethod.getMethod();
+		if (method.getParameterTypes().length == 0) {
+			logger.debug("method {} has no parameters, skipping", controllerMethod);
 			return false;
 		}
-		
-		BeanDescriptor bean = bvalidator.getConstraintsForClass(method.getController().getType());
-		MethodDescriptor descriptor = bean.getConstraintsForMethod(method.getMethod().getName(), method.getMethod()
-				.getParameterTypes());
-		
+		BeanDescriptor bean = bvalidator.getConstraintsForClass(controllerMethod.getController().getType());
+		MethodDescriptor descriptor = bean.getConstraintsForMethod(method.getName(), method.getParameterTypes());
 		return descriptor != null && descriptor.hasConstrainedParameters();
 	}
 
-	@Override
-	public void intercept(InterceptorStack stack, ControllerMethod method, Object controllerInstance)
-			throws InterceptionException {
+	public void validate(@Observes ReadyToExecuteMethod event, ControllerInstance controllerInstance, MethodInfo methodInfo) {
 
+		ControllerMethod controllerMethod = event.getControllerMethod();
+		if (!hasNoParamsOrConstraints(controllerMethod)) return;
+
+		Method method = controllerMethod.getMethod();
 		Set<ConstraintViolation<Object>> violations = bvalidator.forExecutables()
-				.validateParameters(controllerInstance, method.getMethod(), methodInfo.getParameters());
-		logger.debug("there are {} violations at method {}.", violations.size(), method);
+				.validateParameters(controllerInstance.getController(), method, methodInfo.getParameters());
 
-		Parameter[] params = violations.isEmpty() ? new Parameter[0] : parameterNameProvider.parametersFor(method.getMethod());
+		logger.debug("there are {} violations at method {}.", violations.size(), controllerMethod);
+
+		Parameter[] params = violations.isEmpty() ? new Parameter[0] : parameterNameProvider.parametersFor(method);
 
 		for (ConstraintViolation<Object> v : violations) {
 			BeanValidatorContext ctx = new BeanValidatorContext(v);
 			String msg = interpolator.interpolate(v.getMessageTemplate(), ctx, locale);
 			String category = extractCategory(params, v);
 			validator.add(new SimpleMessage(category, msg));
-			
 			logger.debug("added message {}={} for contraint violation", category, msg);
 		}
-
-		stack.next(method, controllerInstance);
 	}
 
 	/**
@@ -132,9 +126,8 @@ public class MethodValidatorInterceptor implements Interceptor {
 		Iterator<Node> property = v.getPropertyPath().iterator();
 		property.next();
 		ParameterNode parameterNode = property.next().as(ParameterNode.class);
-
 		int index = parameterNode.getParameterIndex();
-		return Joiner.on(".").join(v.getPropertyPath())
-				.replace("arg" + parameterNode.getParameterIndex(), params[index].getName());
+		int parameterIndex = parameterNode.getParameterIndex();
+		return Joiner.on(".").join(v.getPropertyPath()).replace("arg" + parameterIndex, params[index].getName());
 	}
 }

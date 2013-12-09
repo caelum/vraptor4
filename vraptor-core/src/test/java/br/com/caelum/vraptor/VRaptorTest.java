@@ -16,65 +16,40 @@
  */
 package br.com.caelum.vraptor;
 
- import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+ import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.mock;
 
-import java.io.IOException;
-
+import javax.inject.Inject;
 import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.junit.runner.RunWith;
 
-import br.com.caelum.vraptor.core.InterceptorStack;
-import br.com.caelum.vraptor.core.StaticContentHandler;
-import br.com.caelum.vraptor.ioc.Container;
-
+@RunWith(WeldJunitRunner.class)
 public class VRaptorTest {
 
-	private @Mock FilterConfig config;
-	private @Mock ServletContext context;
-	private @Mock static Container container;
-	private @Mock InterceptorStack stack;
-
-	@Before
-	public void setup() {
-		MockitoAnnotations.initMocks(this);
-	}
+	@Inject private VRaptor vRaptor;
+	@Inject private MockStaticContentHandler handler;
 
 	@Test(expected = ServletException.class)
-	public void shoudlComplainIfNotInAServletEnviroment() throws IOException, ServletException {
+	public void shoudlComplainIfNotInAServletEnviroment() throws Exception {
 		ServletRequest request = mock(ServletRequest.class);
 		ServletResponse response = mock(ServletResponse.class);
-		
-		new VRaptor().doFilter(request, response, null);
+		vRaptor.doFilter(request, response, null);
 	}
 
 	@Test
-	@Ignore
-	public void shouldDeferToContainerIfStaticFile() throws IOException, ServletException {
-		VRaptor vraptor = new VRaptor();
+	public void shouldDeferToContainerIfStaticFile() throws Exception{
 		HttpServletRequest request = mock(HttpServletRequest.class);
 		HttpServletResponse response = mock(HttpServletResponse.class);
-		StaticContentHandler handler = mock(StaticContentHandler.class);
 		FilterChain chain = mock(FilterChain.class);
-		
-		when(handler.requestingStaticFile(request)).thenReturn(true);
-		
-		vraptor.doFilter(request, response, chain);
-		
-		verify(handler, times(1)).deferProcessingToContainer(chain, request, response);
+		vRaptor.doFilter(request, response, chain);
+		assertThat(handler.isDeferProcessingToContainerCalled(), is(true));
 	}
 }

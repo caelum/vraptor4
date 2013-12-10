@@ -152,7 +152,7 @@ public class DefaultParametersControl implements ParametersControl {
 		for (int i = 1; i <= m.groupCount(); i++) {
 			String name = parameters.get(i - 1);
 			try {
-				request.setParameter(name, URLDecoder.decode(m.group(i), "UTF-8"));
+				request.setParameter(name, URLDecoder.decode(m.group(i), encodingHandler.getEncoding()));
 			} catch (UnsupportedEncodingException e) {
 				logger.error("Error when decoding url parameters");
 			}

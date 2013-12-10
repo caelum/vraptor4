@@ -38,9 +38,11 @@ public class AspectStyleInterceptorHandler implements InterceptorHandler {
 	private Method acceptsMethod;
 	private Method customAcceptsMethod;
 
-	public AspectStyleInterceptorHandler(Class<?> interceptorClass, StepInvoker stepInvoker,
-			Container container, CustomAcceptsExecutor customAcceptsExecutor,
-			InterceptorAcceptsExecutor acceptsExecutor, InterceptorExecutor interceptorExecutor) {
+	private boolean shouldUseThisInterceptor = true;
+
+	public AspectStyleInterceptorHandler(Class<?> interceptorClass, StepInvoker stepInvoker, Container container,
+			CustomAcceptsExecutor customAcceptsExecutor, InterceptorAcceptsExecutor acceptsExecutor,
+			InterceptorExecutor interceptorExecutor) {
 
 		this.interceptorClass = interceptorClass;
 		this.stepInvoker = stepInvoker;
@@ -63,16 +65,25 @@ public class AspectStyleInterceptorHandler implements InterceptorHandler {
 	@Override
 	public void execute(InterceptorStack stack, ControllerMethod controllerMethod, Object currentController) {
 
-		Object interceptor = container.instanceFor(interceptorClass);
-		logger.debug("Invoking interceptor {}", interceptor.getClass().getSimpleName());
-		List<Annotation> customAccepts = customAcceptsExecutor.getCustomAccepts(interceptor);
+		if (shouldUseThisInterceptor) {
+			Object interceptor = container.instanceFor(interceptorClass);
+			logger.debug("Invoking interceptor {}", interceptor.getClass().getSimpleName());
+			List<Annotation> customAccepts = customAcceptsExecutor.getCustomAccepts(interceptor);
 
-		if (customAccepts(interceptor, customAccepts) || internalAccepts(interceptor, customAccepts)) {
-			interceptorExecutor.execute(interceptor, beforeMethod);
-			interceptorExecutor.executeAround(interceptor, aroundMethod);
-			interceptorExecutor.execute(interceptor, afterMethod);
-		} else {
-			stack.next(controllerMethod, currentController);
+			boolean accepts = customAccepts(interceptor, customAccepts) || internalAccepts(interceptor, customAccepts);
+			if (accepts) {
+				interceptorExecutor.execute(interceptor, beforeMethod);
+				interceptorExecutor.executeAround(interceptor, aroundMethod);
+				interceptorExecutor.execute(interceptor, afterMethod);
+			} else {
+				if(interceptorClass.getAnnotation(StaticAccepts.class)!=null){
+					shouldUseThisInterceptor = false;
+				}
+				stack.next(controllerMethod, currentController);
+			}
+		}
+		else{			
+			stack.next(controllerMethod, currentController);			
 		}
 	}
 
@@ -81,7 +92,8 @@ public class AspectStyleInterceptorHandler implements InterceptorHandler {
 	}
 
 	private boolean internalAccepts(Object interceptor, List<Annotation> customAccepts) {
-		if (!customAccepts.isEmpty()) return false;
+		if (!customAccepts.isEmpty())
+			return false;
 		return acceptsExecutor.accepts(interceptor, acceptsMethod);
 	}
 

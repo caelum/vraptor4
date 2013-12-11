@@ -56,6 +56,7 @@ public class DefaultParametersControlTest {
 	@Before
 	public void setup() {
 		MockitoAnnotations.initMocks(this);
+		when(encodingHandler.getEncoding()).thenReturn("UTF-8");
 		evaluator = new JavaEvaluator();
 		nameProvider = new ParanamerNameProvider(new DefaultCacheStore<AccessibleObject, Parameter[]>());
 	}
@@ -259,6 +260,7 @@ public class DefaultParametersControlTest {
 	}
 	@Test
 	public void fillURLWithGreedyParameters() throws SecurityException, NoSuchMethodException {
+		when(encodingHandler.getEncoding()).thenReturn(null);
 		DefaultParametersControl control = getDefaultParameterControlForUrl("/clients/{pathToFile*}");
 
 		Method method = Controller.class.getDeclaredMethod("pathToFile", String.class);
@@ -268,6 +270,7 @@ public class DefaultParametersControlTest {
 	}
 	@Test
 	public void fillURLWithoutGreedyParameters() throws SecurityException, NoSuchMethodException {
+		when(encodingHandler.getEncoding()).thenReturn(null);
 		DefaultParametersControl control = getDefaultParameterControlForUrl("/clients/{pathToFile}");
 		Method method = Controller.class.getDeclaredMethod("pathToFile", String.class);
 

@@ -19,6 +19,7 @@ package br.com.caelum.vraptor.cache;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.Callable;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import javax.enterprise.inject.Vetoed;
 
@@ -35,6 +36,7 @@ import com.google.common.base.Throwables;
 public class LRUCacheStore<K, V> extends LinkedHashMap<K, V> implements CacheStore<K,V> {
 	private static final long serialVersionUID = 1L;
 	private int capacity;
+	private ReentrantReadWriteLock rwl = new ReentrantReadWriteLock();
 
 	public LRUCacheStore(int capacity) {
 		super(capacity, 0.75f, true);
@@ -48,26 +50,45 @@ public class LRUCacheStore<K, V> extends LinkedHashMap<K, V> implements CacheSto
 
 	@Override
 	public V fetch(K key, Callable<V> valueProvider) {
-		if (!this.containsKey(key)){
+		rwl.readLock().lock();
+		V value = this.get(key);
+		rwl.readLock().unlock();
+		
+		if (value == null){
 			try {
-				V value = valueProvider.call();
-				put(key, value);
-				return value;
+				rwl.writeLock().lock();
+				if(this.get(key) == null){ // double check...
+					value = valueProvider.call();
+					put(key, value);
+				}
 			} catch (Exception e) {
 				Throwables.propagateIfPossible(e);
 				throw new CacheException("Error computing the value", e);
+			}finally{
+				rwl.writeLock().unlock();
 			}
 		}
-		return get(key);
+		return value;
 	}
 
 	@Override
 	public V write(K key, V value) {
-		return put(key, value);
+		try{
+			rwl.writeLock().lock();
+			return put(key, value);
+		}finally{
+			rwl.writeLock().unlock();
+		}
+		
 	}
 
 	@Override
 	public V fetch(K key) {
-		return get(key);
+		try{
+			rwl.readLock().lock();
+			return get(key);
+		}finally{
+			rwl.readLock().unlock();
+		}
 	}
 }

@@ -32,12 +32,18 @@ public class SimpleMessage implements Message {
 	private static final long serialVersionUID = 1L;
 
 	private final String message, category;
+	private final Severity severity;
 	private final Object[] messageParameters;
 
 	public SimpleMessage(String category, String message, Object... messageParameters) {
+		this(category,message,Severity.ERROR,messageParameters);
+	}
+	
+	public SimpleMessage(String category, String message, Severity severity, Object... messageParameters) {
 		this.category = category;
 		this.message = message;
 		this.messageParameters = messageParameters;
+		this.severity = severity;
 	}
 
 	@Override
@@ -46,6 +52,11 @@ public class SimpleMessage implements Message {
 			return MessageFormat.format(message, messageParameters);
 		}
 		return message;
+	}
+	
+	@Override
+	public Severity getSeverity() {
+		return severity;
 	}
 
 	@Override
@@ -58,7 +69,7 @@ public class SimpleMessage implements Message {
 
 	@Override
 	public String toString() {
-		return toStringHelper(this).add("category", category).add("message", message).add("parameters", messageParameters).toString();
+		return toStringHelper(this).add("category", category).add("message", message).add("severity",severity).add("parameters", messageParameters).toString();
 	}
 
 }

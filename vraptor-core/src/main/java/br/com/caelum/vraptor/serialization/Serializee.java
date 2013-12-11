@@ -77,19 +77,29 @@ public class Serializee {
 
 	public void excludeAll(String... names) {
 		for (String name : names) {
-			getExcludes().putAll(name, getParentTypesFor(name));
+			getExcludes().putAll(name.replaceAll("\\?", ""), getParentTypesFor(name));
 		}
 	}
 	
 	public void excludeAll() {
-		for(Field field : new Mirror().on(getRootClass()).reflectAll().fields()) {
-			getExcludes().putAll(field.getName(), getParentTypes(field.getName(), getRootClass()));
+		Set<Class<?>> types = new HashSet<>();
+
+		if (isCollection(getRootClass())) {
+			types.addAll(getElementTypes());
+		} else {
+			types.add(getRootClass());
 		}
+		
+		for (Class<?> type : types) {
+			for (Field field : new Mirror().on(type).reflectAll().fields()) {
+				getExcludes().putAll(field.getName(), getParentTypes(field.getName(), type)); 
+			}
+		}	
 	}
 
 	public void includeAll(String... names) {
 		for (String name : names) {
-			getIncludes().putAll(name, getParentTypesFor(name));
+			getIncludes().putAll(name.replaceAll("\\?", ""), getParentTypesFor(name));
 		}
 	}
 	
@@ -110,11 +120,11 @@ public class Serializee {
 		String[] path = name.split("\\.");
 		
 		try {
-			for (int i = 0; i < path.length - 1; i++) {
-				Field field = checkNotNull(new Mirror().on(type).reflect().field(path[i]));
-				type = getActualType(field.getGenericType());
+			for (int i = 0; i < path.length; i++) {
+			    Field field = reflectField(path[i], type);
+			    if (field == null) break;
+			    if (i < path.length - 1) type = getActualType(field.getGenericType());
 			}
-			checkNotNull(new Mirror().on(type).reflect().field(path[path.length -1]));
 		} catch (NullPointerException e) {
 			throw new IllegalArgumentException("Field path '" + name + "' doesn't exists in " + type, e);
 		}
@@ -125,6 +135,13 @@ public class Serializee {
 			type = type.getSuperclass();
 		}
 		return types;
+	}
+	
+	private Field reflectField(String path, Class<?> type) {
+		Field field = new Mirror().on(type).reflect().field(path.replaceAll("\\?", ""));
+		if (!path.startsWith("?"))
+			checkNotNull(field);
+		return field;
 	}
 
 	private static Class<?> getActualType(Type genericType) {
@@ -153,5 +170,4 @@ public class Serializee {
 		}
 		return Collection.class.isAssignableFrom((Class<?>) type);
 	}
-
 }

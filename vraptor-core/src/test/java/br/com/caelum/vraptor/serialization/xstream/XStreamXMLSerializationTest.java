@@ -252,6 +252,7 @@ public class XStreamXMLSerializationTest {
 
 		assertThat(result(), not(containsString("<price>")));
 	}
+
 	@Test(expected=IllegalArgumentException.class)
 	public void shouldThrowAnExceptionWhenYouIncludeANonExistantField() {
 		Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please",
@@ -263,7 +264,55 @@ public class XStreamXMLSerializationTest {
 	public void shouldThrowAnExceptionWhenYouIncludeANonExistantFieldInsideOther() {
 		Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please",
 				new Item("name", 12.99));
+		serialization.from(order).include("wrongFieldName.client").serialize();
+	}
+
+	@Test(expected=IllegalArgumentException.class)
+	public void shouldThrowAnExceptionWhenYouIncludeANonExistantFieldInsideOtherNonExistantField() {
+		Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please",
+				new Item("name", 12.99));
 		serialization.from(order).include("wrongFieldName.another").serialize();
+		assertThat(result(), not(containsString("<order>\n  <price>15.0</price>\n  <comments>pack it nicely, please</comments>\n</order>")));
+	}
+
+	@Test
+	public void shouldIgnoreWhenIncludeANonExistantField() {
+		Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please",
+				new Item("name", 12.99));
+		serialization.from(order).include("?wrongFieldName").serialize();
+		assertThat(result(), containsString("<order>\n  <price>15.0</price>\n  <comments>pack it nicely, please</comments>\n</order>"));
+	}
+
+	@Test
+	public void shouldIgnoreWhenYouIncludeAOptionalNonExistantFieldInsideOther() {
+		Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please",
+				new Item("name", 12.99));
+		serialization.from(order).include("?wrongFieldName.another").serialize();
+		assertThat(result(), containsString("<order>\n  <price>15.0</price>\n  <comments>pack it nicely, please</comments>\n</order>"));
+	}
+
+	@Test
+	public void shouldIgnoreWhenYouIncludeANonExistantFieldInsideOther() {
+		Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please",
+				new Item("name", 12.99));
+		serialization.from(order).include("?wrongFieldName.?another").serialize();
+		assertThat(result(), containsString("<order>\n  <price>15.0</price>\n  <comments>pack it nicely, please</comments>\n</order>"));
+	}
+
+	@Test
+	public void shouldIncludeWhenYouIncludeAOptionsExistantFieldInsideOther() {
+		Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please",
+				new Item("name", 12.99));
+		serialization.from(order).include("?client").serialize();
+		assertThat(result(), containsString("<client>"));
+	}
+
+	@Test
+	public void shouldIgnoreWhenYouIncludeANonExistantFieldInsideOtherNonExistantField() {
+		Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please",
+				new Item("name", 12.99));
+		serialization.from(order).include("?wrongFieldName.?another").serialize();
+		assertThat(result(), containsString("<order>\n  <price>15.0</price>\n  <comments>pack it nicely, please</comments>\n</order>"));
 	}
 
 	@Test
@@ -419,6 +468,5 @@ public class XStreamXMLSerializationTest {
 		serialization.from(new B()).include("field2").serialize();
 		assertThat(result(), is("<b>\n  <field2/>\n</b>"));
 	}
-
 }
 

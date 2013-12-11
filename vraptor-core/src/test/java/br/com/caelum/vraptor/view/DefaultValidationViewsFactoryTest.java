@@ -327,6 +327,7 @@ public class DefaultValidationViewsFactoryTest {
 		}
 
 	}
+
 	@Test(expected=ValidationException.class)
 	public void onSerializerResultsShouldBeAbleToCreateValidationInstancesEvenIfChildClassesUsesCovariantType() throws Exception {
 		JSONSerialization serialization = mock(JSONSerialization.class);
@@ -345,5 +346,4 @@ public class DefaultValidationViewsFactoryTest {
 		}
 		factory.instanceFor(JSONSerialization.class, errors).from(new Object()).serialize();
 	}
-
 }

@@ -25,9 +25,12 @@ package br.com.caelum.vraptor.serialization;
 public interface Serializer {
 	
 	/**
-	 * Exclude these properties in serialization.
+	 * Exclude these properties in serialization. 
+	 * You can add a question mark (?) at the beginning of {@code names} to avoid IllegalArgumentException, 
+	 * making it an optional field 
 	 * @param names
 	 * @return
+	 * @throws IllegalArgumentException if {@code names} doesn't exists in object
 	 */
 	Serializer exclude(String... names);
 
@@ -39,8 +42,11 @@ public interface Serializer {
 
 	/**
 	 * Include these properties in serialization.
+	 * You can add a question mark (?) at the beginning of {@code names} to avoid IllegalArgumentException 
+	 * making it an optional field 
 	 * @param names
 	 * @return
+	 * @throws IllegalArgumentException if {@code names} doesn't exists in object
 	 */
 	Serializer include(String... names);
 

@@ -36,7 +36,7 @@ import br.com.caelum.vraptor.ioc.Container;
  * @author Guilherme Silveira
  * @author Rodrigo Turini
  */
-@ApplicationScoped
+@RequestScoped
 public class InstantiateObserver {
 
 	private final Container container;

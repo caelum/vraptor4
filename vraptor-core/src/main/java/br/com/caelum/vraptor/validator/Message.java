@@ -24,6 +24,8 @@ public interface Message extends Serializable {
 	String getMessage();
 
 	String getCategory();
+	
+	Severity getSeverity();
 
 	void setBundle(ResourceBundle bundle);
 

@@ -37,17 +37,24 @@ public class I18nMessage implements Message {
 	private final String message;
 	private final Object[] parameters;
 	private transient ResourceBundle bundle;
+	private final Severity severity;
 
 	public I18nMessage(I18nParam category, String message, Object... parameters) {
 		this.category = category;
 		this.message = message;
 		this.parameters = parameters;
+		this.severity = Severity.ERROR;
 	}
 
 	public I18nMessage(String category, String message, Object... parameters) {
+		this(category,message,Severity.ERROR, parameters);
+	}
+	
+	public I18nMessage(String category, String message, Severity severity, Object... parameters) {
 		this.category = category;
 		this.message = message;
 		this.parameters = parameters;
+		this.severity = severity;
 	}
 
 	@Override
@@ -60,6 +67,11 @@ public class I18nMessage implements Message {
 		checkBundle();
 
 		return MessageFormat.format(bundle.getString(message), i18n(parameters));
+	}
+	
+	@Override
+	public Severity getSeverity() {
+		return severity;
 	}
 
 	private void checkBundle() {
@@ -90,7 +102,7 @@ public class I18nMessage implements Message {
 
 	@Override
 	public String toString() {
-		return toStringHelper(this).add("category", category).add("message", message).add("parameters", parameters).toString();
+		return toStringHelper(this).add("category", category).add("message", message).add("severity",severity).add("parameters", parameters).toString();
 	}
 
 }

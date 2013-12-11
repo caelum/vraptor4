@@ -7,8 +7,12 @@ import java.util.concurrent.Callable;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import br.com.caelum.vraptor.cache.CacheStore;
 import br.com.caelum.vraptor.cache.LRU;
+import br.com.caelum.vraptor.interceptor.ExecuteMethodInterceptor;
 
 import com.google.common.base.Throwables;
 
@@ -23,6 +27,7 @@ public class DefaultMethodExecutor implements MethodExecutor {
 
 	private final CacheStore<Method,MethodHandle> cache;
 	private final MethodHandleFactory methodHandleFactory;
+	private final static Logger log = LoggerFactory.getLogger(DefaultMethodExecutor.class);
 
 	/** 
 	 * @deprecated CDI eyes only
@@ -47,6 +52,9 @@ public class DefaultMethodExecutor implements MethodExecutor {
 				return methodHandleFactory.create(instance.getClass(), method);
 			}
 		};
+		
+		log.debug("attempt to invoke method {} on instance {}", method, instance);
+		
 		MethodHandle methodHandle = cache.fetch(method,newMethodHandleIfNotExists);
 		try {
 			return (T) methodHandle.invokeExact(instance, args);

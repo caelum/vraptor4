@@ -30,7 +30,7 @@ public class ConversionException extends IllegalArgumentException {
 	private ConversionMessage message;
 
 	public ConversionException(Message message) {
-		this.message = new ConversionMessage(message, "");
+		this.message = new ConversionMessage("", message);
 	}
 
 	@Override

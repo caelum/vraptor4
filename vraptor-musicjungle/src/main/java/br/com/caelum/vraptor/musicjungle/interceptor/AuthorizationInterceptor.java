@@ -26,6 +26,7 @@ import br.com.caelum.vraptor.Intercepts;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.interceptor.SimpleInterceptorStack;
+import br.com.caelum.vraptor.interceptor.StaticAccepts;
 import br.com.caelum.vraptor.musicjungle.controller.HomeController;
 import br.com.caelum.vraptor.musicjungle.dao.UserDao;
 import br.com.caelum.vraptor.musicjungle.model.User;
@@ -35,6 +36,7 @@ import br.com.caelum.vraptor.validator.SimpleMessage;
  * Interceptor to check if the user is in the session.
  */
 @Intercepts
+@StaticAccepts
 public class AuthorizationInterceptor {
 
 	@Inject

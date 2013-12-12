@@ -38,7 +38,7 @@ public class AspectStyleInterceptorHandler implements InterceptorHandler {
 	private Method acceptsMethod;
 	private Method customAcceptsMethod;
 
-	private boolean shouldUseThisInterceptor = true;
+	private final StaticIntercerceptors staticInterceptors = new StaticIntercerceptors();
 
 	public AspectStyleInterceptorHandler(Class<?> interceptorClass, StepInvoker stepInvoker, Container container,
 			CustomAcceptsExecutor customAcceptsExecutor, InterceptorAcceptsExecutor acceptsExecutor,
@@ -64,27 +64,28 @@ public class AspectStyleInterceptorHandler implements InterceptorHandler {
 
 	@Override
 	public void execute(InterceptorStack stack, ControllerMethod controllerMethod, Object currentController) {
+		
+		if(staticInterceptors.contains(controllerMethod)){
+			stack.next(controllerMethod, currentController);
+			return;
+		}
 
-		if (shouldUseThisInterceptor) {
-			Object interceptor = container.instanceFor(interceptorClass);
-			logger.debug("Invoking interceptor {}", interceptor.getClass().getSimpleName());
-			List<Annotation> customAccepts = customAcceptsExecutor.getCustomAccepts(interceptor);
+		Object interceptor = container.instanceFor(interceptorClass);
+		logger.debug("Invoking interceptor {}", interceptor.getClass().getSimpleName());
+		List<Annotation> customAccepts = customAcceptsExecutor.getCustomAccepts(interceptor);
 
-			boolean accepts = customAccepts(interceptor, customAccepts) || internalAccepts(interceptor, customAccepts);
-			if (accepts) {
-				interceptorExecutor.execute(interceptor, beforeMethod);
-				interceptorExecutor.executeAround(interceptor, aroundMethod);
-				interceptorExecutor.execute(interceptor, afterMethod);
-			} else {
-				if(interceptorClass.getAnnotation(StaticAccepts.class)!=null){
-					shouldUseThisInterceptor = false;
-				}
-				stack.next(controllerMethod, currentController);
+		boolean accepts = customAccepts(interceptor, customAccepts) || internalAccepts(interceptor, customAccepts);
+		if (accepts) {
+			interceptorExecutor.execute(interceptor, beforeMethod);
+			interceptorExecutor.executeAround(interceptor, aroundMethod);
+			interceptorExecutor.execute(interceptor, afterMethod);
+		} else {
+			if (staticInterceptors.accepts(interceptorClass)) {
+				staticInterceptors .add(controllerMethod);
 			}
+			stack.next(controllerMethod, currentController);
 		}
-		else{			
-			stack.next(controllerMethod, currentController);			
-		}
+
 	}
 
 	private Method findMethodWith(Class<? extends Annotation> step, MirrorList<Method> methods) {

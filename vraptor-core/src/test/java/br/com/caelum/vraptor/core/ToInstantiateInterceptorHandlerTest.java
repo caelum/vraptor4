@@ -17,19 +17,28 @@
 package br.com.caelum.vraptor.core;
 
 import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.io.IOException;
+
+import javax.enterprise.inject.Vetoed;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import com.google.common.base.Objects;
+
+import static org.junit.Assert.assertEquals;
+
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.interceptor.Interceptor;
+import br.com.caelum.vraptor.interceptor.StaticAccepts;
 import br.com.caelum.vraptor.ioc.Container;
 
 public class ToInstantiateInterceptorHandlerTest {
@@ -58,6 +67,29 @@ public class ToInstantiateInterceptorHandlerTest {
 			return true;
 		}
 	}
+	
+	@StaticAccepts
+	@Vetoed
+	public static class MyStaticWeirdInterceptor implements Interceptor {
+		
+		private boolean accepts;
+		int calls;
+
+		public MyStaticWeirdInterceptor(boolean accepts) {
+			this.accepts = accepts;
+		}
+		
+		@Override
+		public void intercept(InterceptorStack stack, ControllerMethod method, Object resourceInstance)
+				throws InterceptionException {
+		}
+
+		@Override
+		public boolean accepts(ControllerMethod method) {
+			calls++;
+			return accepts;
+		}
+	}	
 
 	public static class Dependency {
 
@@ -69,7 +101,7 @@ public class ToInstantiateInterceptorHandlerTest {
 		
 		ToInstantiateInterceptorHandler handler = new ToInstantiateInterceptorHandler(container,
 				MyWeirdInterceptor.class);
-		handler.execute(null, null, null);
+		handler.execute(null, method, null);
 	}
 
 	@Test
@@ -96,4 +128,31 @@ public class ToInstantiateInterceptorHandlerTest {
 		verify(interceptor, never()).intercept(stack, method, instance);
 		verify(stack).next(method, instance);
 	}   
+	
+	@Test
+	public void shouldNotInvokeAcceptsTwiceOnStaticInterceptorIfDoesNotAccept() throws InterceptionException, IOException {
+		final Object instance = new Object();
+		
+		MyStaticWeirdInterceptor interceptor = new MyStaticWeirdInterceptor(false);
+		when(container.instanceFor(MyStaticWeirdInterceptor.class)).thenReturn(interceptor);
+
+		ToInstantiateInterceptorHandler handler = new ToInstantiateInterceptorHandler(container, MyStaticWeirdInterceptor.class);
+		handler.execute(stack, method, instance);
+		handler.execute(stack, method, instance);
+
+		assertEquals(1,interceptor.calls);
+	}
+	
+	@Test
+	public void shouldAlwaysInvokeAcceptsOnInterceptorIfDoesNotAccept() throws InterceptionException, IOException {
+		final Object instance = new Object();
+		MyStaticWeirdInterceptor interceptor = new MyStaticWeirdInterceptor(false);
+		when(container.instanceFor(Interceptor.class)).thenReturn(interceptor);
+
+			ToInstantiateInterceptorHandler handler = new ToInstantiateInterceptorHandler(container, Interceptor.class);
+			handler.execute(stack, method, instance);
+			handler.execute(stack, method, instance);
+		
+		assertEquals(2,interceptor.calls);
+	}	
 }

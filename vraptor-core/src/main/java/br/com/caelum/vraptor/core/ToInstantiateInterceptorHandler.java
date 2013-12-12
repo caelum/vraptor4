@@ -23,6 +23,7 @@ import org.slf4j.LoggerFactory;
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.interceptor.Interceptor;
+import br.com.caelum.vraptor.interceptor.StaticIntercerceptors;
 import br.com.caelum.vraptor.ioc.Container;
 
 /**
@@ -36,6 +37,7 @@ public class ToInstantiateInterceptorHandler implements InterceptorHandler {
 
 	private final Container container;
 	private final Class<?> type;
+	private final StaticIntercerceptors staticIntercerceptors = new StaticIntercerceptors();
 
 	public ToInstantiateInterceptorHandler(Container container, Class<?> type) {
 		this.container = container;
@@ -45,6 +47,11 @@ public class ToInstantiateInterceptorHandler implements InterceptorHandler {
 	@Override
 	public void execute(InterceptorStack stack, ControllerMethod method, Object controllerInstance)
 			throws InterceptionException {
+		if(staticIntercerceptors.contains(method)){
+			stack.next(method, controllerInstance);
+			return;
+		}
+		
 		Interceptor interceptor = (Interceptor) container.instanceFor(type);
 		if (interceptor == null) {
 			throw new InterceptionException("Unable to instantiate interceptor for " + type.getName()
@@ -54,6 +61,9 @@ public class ToInstantiateInterceptorHandler implements InterceptorHandler {
 			logger.debug("Invoking interceptor {}", interceptor.getClass().getSimpleName());
 			interceptor.intercept(stack, method, controllerInstance);
 		} else {
+			if(staticIntercerceptors.accepts(type)){
+				staticIntercerceptors.add(method);
+			}
 			stack.next(method, controllerInstance);
 		}
 	}

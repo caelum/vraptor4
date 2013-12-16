@@ -55,8 +55,6 @@ public class ControllerLookupObserver {
 	private final MethodNotAllowedHandler methodNotAllowedHandler;
 	private final Event<ControllerMethodDiscovered> controllerMethodEvent;
 
-	private ControllerMethod method;
-
 	/**
 	 * @deprecated CDI eyes only
 	 */
@@ -76,7 +74,7 @@ public class ControllerLookupObserver {
 
 	public void lookup(@Observes NewRequest event, MethodInfo methodInfo, RequestInfo requestInfo) {
 		try {
-			method = translator.translate(requestInfo);
+			ControllerMethod method = translator.translate(requestInfo);
 			controllerMethodEvent.fire(new ControllerMethodDiscovered(method));
 			methodInfo.setControllerMethod(method);
 		} catch (ControllerNotFoundException e) {

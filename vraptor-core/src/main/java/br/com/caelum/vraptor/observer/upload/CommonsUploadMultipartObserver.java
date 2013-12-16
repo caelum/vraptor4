@@ -23,7 +23,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.Collection;
 import java.util.List;
 
-import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.RequestScoped;
 import javax.enterprise.event.Observes;
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
@@ -56,7 +56,7 @@ import com.google.common.collect.Multiset;
  * @author Otávio Scherer Garcia
  * @author Rodrigo Turini
  */
-@ApplicationScoped
+@RequestScoped
 public class CommonsUploadMultipartObserver {
 
 	private static final Logger logger = getLogger(CommonsUploadMultipartObserver.class);

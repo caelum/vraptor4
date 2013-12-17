@@ -11,7 +11,7 @@ import org.hamcrest.TypeSafeMatcher;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.Intercepts;
-import br.com.caelum.vraptor.observer.ControllerLookupObserver;
+import br.com.caelum.vraptor.observer.RequestHandlerObserver;
 
 public class TopologicalSortedInterceptorRegistryTest {
 
@@ -97,11 +97,11 @@ public class TopologicalSortedInterceptorRegistryTest {
 	public void usesDefaultInterceptorsIfNoRelationIsSet() throws Exception {
 		TopologicalSortedInterceptorRegistry set = new TopologicalSortedInterceptorRegistry();
 		set.register(A.class);
-		assertThat(set.all(), hasRelativeOrder(ControllerLookupObserver.class, A.class, ExecuteMethodInterceptor.class));
+		assertThat(set.all(), hasRelativeOrder(RequestHandlerObserver.class, A.class, ExecuteMethodInterceptor.class));
 
 		set = new TopologicalSortedInterceptorRegistry();
 		set.register(F.class);
-		assertThat(set.all(), hasRelativeOrder(ControllerLookupObserver.class, F.class, ExecuteMethodInterceptor.class));
+		assertThat(set.all(), hasRelativeOrder(RequestHandlerObserver.class, F.class, ExecuteMethodInterceptor.class));
 	}
 
 	@Test

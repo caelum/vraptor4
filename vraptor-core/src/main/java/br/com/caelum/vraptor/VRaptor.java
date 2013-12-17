@@ -37,7 +37,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 
-import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.core.StaticContentHandler;
 import br.com.caelum.vraptor.events.NewRequest;
@@ -80,9 +79,6 @@ public class VRaptor implements Filter {
 	private EncodingHandler encodingHandler;
 
 	@Inject
-	private InterceptorStack stack;
-
-	@Inject
 	private Event<NewRequest> newRequestEvent;
 
 	@Override
@@ -117,7 +113,6 @@ public class VRaptor implements Filter {
 				encodingHandler.setEncoding(baseRequest, baseResponse);
 				provider.provideForRequest(request);
 				newRequestEvent.fire(new NewRequest());
-				stack.start();
 
 			} catch (ApplicationLogicException e) {
 				// it is a business logic exception, we dont need to show

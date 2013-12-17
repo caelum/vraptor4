@@ -11,12 +11,15 @@ import org.junit.runners.model.InitializationError;
 public class WeldJunitRunner extends BlockJUnit4ClassRunner {
 
 	private Class<?> clazz;
-	private WeldContainer weldContainer;
+	private static WeldContainer weldContainer;
+	
+	static {
+		weldContainer = new Weld().initialize();
+	}
 
 	public WeldJunitRunner(Class<?> testClass) throws InitializationError {
 		super(testClass);
 		this.clazz = testClass;
-        this.weldContainer = new Weld().initialize();
 	}
 
 	/**
@@ -26,5 +29,4 @@ public class WeldJunitRunner extends BlockJUnit4ClassRunner {
 	protected Object createTest() throws Exception {
 		return weldContainer.instance().select(clazz).get();
 	}
-
 }

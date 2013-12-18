@@ -29,6 +29,7 @@ import org.slf4j.Logger;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.controller.ControllerNotFoundHandler;
 import br.com.caelum.vraptor.controller.MethodNotAllowedHandler;
+import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.events.ControllerMethodDiscovered;
@@ -38,45 +39,49 @@ import br.com.caelum.vraptor.http.route.ControllerNotFoundException;
 import br.com.caelum.vraptor.http.route.MethodNotAllowedException;
 
 /**
- * Looks up the controller for a specific request and delegates for the 404
- * component if unable to find it.
+ * Looks up the {@link ControllerMethod} for a specific request and start {@link 
+ * InterceptorStack} if it was found, otherwise delegates for the 404 component.
  *
  * @author Guilherme Silveira
  * @author Cecilia Fernandes
  * @author Rodrigo Turini
  */
 @ApplicationScoped
-public class ControllerLookupObserver {
+public class RequestHandlerObserver {
 
-	private static final Logger LOGGER = getLogger(ControllerLookupObserver.class);
+	private static final Logger LOGGER = getLogger(RequestHandlerObserver.class);
 
 	private final UrlToControllerTranslator translator;
 	private final ControllerNotFoundHandler controllerNotFoundHandler;
 	private final MethodNotAllowedHandler methodNotAllowedHandler;
 	private final Event<ControllerMethodDiscovered> controllerMethodEvent;
 
+	private InterceptorStack interceptorStack;
+
 	/**
 	 * @deprecated CDI eyes only
 	 */
-	protected ControllerLookupObserver() {
-		this(null, null, null, null);
+	protected RequestHandlerObserver() {
+		this(null, null, null, null, null);
 	}
 
 	@Inject
-	public ControllerLookupObserver(UrlToControllerTranslator translator,
+	public RequestHandlerObserver(UrlToControllerTranslator translator,
 			ControllerNotFoundHandler controllerNotFoundHandler, MethodNotAllowedHandler methodNotAllowedHandler,
-			Event<ControllerMethodDiscovered> event) {
+			Event<ControllerMethodDiscovered> event, InterceptorStack interceptorStack) {
 		this.translator = translator;
 		this.methodNotAllowedHandler = methodNotAllowedHandler;
 		this.controllerNotFoundHandler = controllerNotFoundHandler;
 		this.controllerMethodEvent = event;
+		this.interceptorStack = interceptorStack;
 	}
 
-	public void lookup(@Observes NewRequest event, MethodInfo methodInfo, RequestInfo requestInfo) {
+	public void handle(@Observes NewRequest event, MethodInfo methodInfo, RequestInfo requestInfo) {
 		try {
 			ControllerMethod method = translator.translate(requestInfo);
 			controllerMethodEvent.fire(new ControllerMethodDiscovered(method));
 			methodInfo.setControllerMethod(method);
+			interceptorStack.start();
 		} catch (ControllerNotFoundException e) {
 			controllerNotFoundHandler.couldntFind(requestInfo);
 		} catch (MethodNotAllowedException e) {

@@ -2,10 +2,10 @@ package br.com.caelum.vraptor.events;
 
 import br.com.caelum.vraptor.controller.BeanClass;
 import br.com.caelum.vraptor.controller.ControllerMethod;
-import br.com.caelum.vraptor.observer.ControllerLookupObserver;
+import br.com.caelum.vraptor.observer.RequestHandlerObserver;
 
 /**
- * fired by {@link ControllerLookupObserver}
+ * fired by {@link RequestHandlerObserver}
  *
  * @author Rodrigo Turini
  */

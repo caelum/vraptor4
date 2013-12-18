@@ -18,6 +18,7 @@ package br.com.caelum.vraptor.observer;
 
 import static br.com.caelum.vraptor.controller.HttpMethod.POST;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -36,6 +37,7 @@ import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.controller.ControllerNotFoundHandler;
 import br.com.caelum.vraptor.controller.HttpMethod;
 import br.com.caelum.vraptor.controller.MethodNotAllowedHandler;
+import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.events.ControllerMethodDiscovered;
@@ -45,47 +47,50 @@ import br.com.caelum.vraptor.http.MutableResponse;
 import br.com.caelum.vraptor.http.UrlToControllerTranslator;
 import br.com.caelum.vraptor.http.route.ControllerNotFoundException;
 import br.com.caelum.vraptor.http.route.MethodNotAllowedException;
-import br.com.caelum.vraptor.observer.ControllerLookupObserver;
 
-public class ControllerLookupObserverTest {
+public class RequestHandlerObserverTest {
 
 	private @Mock UrlToControllerTranslator translator;
 	private @Mock MutableRequest webRequest;
 	private @Mock MutableResponse webResponse;
 	private @Mock RequestInfo info;
-	private ControllerLookupObserver observer;
+	private RequestHandlerObserver observer;
 	private @Mock MethodInfo methodInfo;
 	private @Mock ControllerNotFoundHandler notFoundHandler;
 	private @Mock MethodNotAllowedHandler methodNotAllowedHandler;
 	private @Mock Event<ControllerMethodDiscovered> event;
+	private @Mock InterceptorStack interceptorStack;
 
 	@Before
 	public void config() {
 		MockitoAnnotations.initMocks(this);
 		info = new RequestInfo(null, null, webRequest, webResponse);
-		observer = new ControllerLookupObserver(translator, notFoundHandler, methodNotAllowedHandler, event);
+		observer = new RequestHandlerObserver(translator, notFoundHandler, methodNotAllowedHandler, event, interceptorStack);
 	}
 
 	@Test
 	public void shouldHandle404() throws IOException, InterceptionException {
 		when(translator.translate(info)).thenThrow(new ControllerNotFoundException());
-		observer.lookup(new NewRequest(), methodInfo, info);
+		observer.handle(new NewRequest(), methodInfo, info);
 		verify(notFoundHandler).couldntFind(info);
+		verify(interceptorStack, never()).start();
 	}
 
 	@Test
 	public void shouldHandle405() throws IOException, InterceptionException {
 		EnumSet<HttpMethod> allowedMethods = EnumSet.of(HttpMethod.GET);
 		when(translator.translate(info)).thenThrow(new MethodNotAllowedException(allowedMethods, POST.toString()));
-		observer.lookup(new NewRequest(), methodInfo, info);
+		observer.handle(new NewRequest(), methodInfo, info);
 		verify(methodNotAllowedHandler).deny(info, allowedMethods);
+		verify(interceptorStack, never()).start();
 	}
 
 	@Test
 	public void shouldUseControllerMethodFoundWithNextInterceptor() throws IOException, InterceptionException {
 		final ControllerMethod method = mock(ControllerMethod.class);
 		when(translator.translate(info)).thenReturn(method);
-		observer.lookup(new NewRequest(), methodInfo, info);
+		observer.handle(new NewRequest(), methodInfo, info);
 		verify(methodInfo).setControllerMethod(method);
+		verify(interceptorStack).start();
 	}
 }

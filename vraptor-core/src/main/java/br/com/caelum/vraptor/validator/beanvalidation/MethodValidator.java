@@ -60,7 +60,6 @@ public class MethodValidator {
 
 	private final Locale locale;
 	private final MessageInterpolator interpolator;
-	private final Validator validator;
 	private final ParameterNameProvider parameterNameProvider;
 	private final javax.validation.Validator bvalidator;
 
@@ -68,15 +67,14 @@ public class MethodValidator {
 	 * @deprecated CDI eyes only
 	 */
 	protected MethodValidator() {
-		this(null, null, null, null, null);
+		this(null, null, null, null);
 	}
 
 	@Inject
-	public MethodValidator(Locale locale, MessageInterpolator interpolator, Validator validator,
+	public MethodValidator(Locale locale, MessageInterpolator interpolator,
 			javax.validation.Validator bvalidator, ParameterNameProvider parameterNameProvider) {
 		this.locale = locale;
 		this.interpolator = interpolator;
-		this.validator = validator;
 		this.bvalidator = bvalidator;
 		this.parameterNameProvider = parameterNameProvider;
 	}
@@ -95,7 +93,8 @@ public class MethodValidator {
 		return descriptor != null && descriptor.hasConstrainedParameters();
 	}
 
-	public void validate(@Observes ReadyToExecuteMethod event, ControllerInstance controllerInstance, MethodInfo methodInfo) {
+	public void validate(@Observes ReadyToExecuteMethod event, ControllerInstance controllerInstance,
+			MethodInfo methodInfo, Validator validator) {
 
 		ControllerMethod controllerMethod = event.getControllerMethod();
 		if (!hasNoParamsOrConstraints(controllerMethod)) return;

@@ -25,13 +25,11 @@ import java.lang.annotation.Target;
 
 import javax.enterprise.context.RequestScoped;
 
-import br.com.caelum.vraptor.interceptor.ExecuteMethodInterceptor;
-
 /**
  * Notifies vraptor to use this interceptor in the interceptor stack.<br>
  * Interceptors annotated are run in any order, therefore if the sequence is
- * important to your project, use an annotated InterceptorSequence.
- *
+ * important to your project you can use before and after options.
+ * 
  * @author Guilherme Silveira
  */
 @Documented
@@ -40,6 +38,6 @@ import br.com.caelum.vraptor.interceptor.ExecuteMethodInterceptor;
 @javax.enterprise.inject.Stereotype
 @RequestScoped
 public @interface Intercepts {
-	Class<?>[] before() default ExecuteMethodInterceptor.class;
+	Class<?>[] before() default {};
 	Class<?>[] after() default {};
 }

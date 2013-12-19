@@ -15,24 +15,26 @@
  * limitations under the License.
  */
 
-package br.com.caelum.vraptor.interceptor;
+package br.com.caelum.vraptor.observer;
 
 import static br.com.caelum.vraptor.view.Results.nothing;
+import static org.slf4j.LoggerFactory.getLogger;
 
 import java.lang.reflect.Method;
 
 import javax.enterprise.event.Event;
+import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.InterceptionException;
-import br.com.caelum.vraptor.Intercepts;
 import br.com.caelum.vraptor.controller.ControllerMethod;
-import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.core.MethodInfo;
+import br.com.caelum.vraptor.events.EndOfInterceptorStack;
 import br.com.caelum.vraptor.events.MethodExecuted;
+import br.com.caelum.vraptor.events.ReadyToExecuteMethod;
+import br.com.caelum.vraptor.interceptor.ApplicationLogicException;
 import br.com.caelum.vraptor.reflection.MethodExecutor;
 import br.com.caelum.vraptor.reflection.MethodExecutorException;
 import br.com.caelum.vraptor.util.Stringnifier;
@@ -43,43 +45,48 @@ import br.com.caelum.vraptor.validator.Validator;
  * Interceptor that executes the logic method.
  *
  * @author Guilherme Silveira
+ * @author Rodrigo Turini
+ * @author Victor Harada
  */
-@Intercepts(after = ParametersInstantiatorInterceptor.class, before = {})
-public class ExecuteMethodInterceptor implements Interceptor {
+public class ExecuteMethod {
 
-	private final static Logger log = LoggerFactory.getLogger(ExecuteMethodInterceptor.class);
+	private final static Logger log = getLogger(ExecuteMethod.class);
 
 	private final MethodInfo info;
 	private final Validator validator;
 	private final MethodExecutor methodExecutor;
 
 	private Event<MethodExecuted> methodExecutedEvent;
+	private Event<ReadyToExecuteMethod> readyToExecuteMethod;
 
 	/**
 	 * @deprecated CDI eyes only
 	 */
-	protected ExecuteMethodInterceptor() {
-		this(null, null, null, null);
+	protected ExecuteMethod() {
+		this(null, null, null, null, null);
 	}
 
 	@Inject
-	public ExecuteMethodInterceptor(MethodInfo info, Validator validator, MethodExecutor methodExecutor,
-			Event<MethodExecuted> methodExecutedEvent) {
+	public ExecuteMethod(MethodInfo info, Validator validator, MethodExecutor methodExecutor,
+			Event<MethodExecuted> methodExecutedEvent, Event<ReadyToExecuteMethod> readyToExecuteMethod) {
 		this.info = info;
 		this.validator = validator;
 		this.methodExecutor = methodExecutor;
 		this.methodExecutedEvent = methodExecutedEvent;
+		this.readyToExecuteMethod = readyToExecuteMethod;
 	}
 
-	@Override
-	public void intercept(InterceptorStack stack, ControllerMethod method, Object controllerInstance)
-			throws InterceptionException {
+	public void execute(@Observes EndOfInterceptorStack event) {
+		
 		try {
-			Method reflectionMethod = method.getMethod();
+			ControllerMethod method = event.getControllerMethod();
+			readyToExecuteMethod.fire(new ReadyToExecuteMethod(method));
+			Method reflectionMethod = method .getMethod();
 			Object[] parameters = this.info.getParameters();
 
 			log.debug("Invoking {}", Stringnifier.simpleNameFor(reflectionMethod));
-			Object result = methodExecutor.invoke(reflectionMethod, controllerInstance, parameters);
+			Object instance = event.getControllerInstance();
+			Object result = methodExecutor.invoke(reflectionMethod, instance , parameters);
 
 			if (validator.hasErrors()) { // method should have thrown
 											// ValidationException
@@ -99,7 +106,6 @@ public class ExecuteMethodInterceptor implements Interceptor {
 			}
 			this.info.setResult(result);
 			methodExecutedEvent.fire(new MethodExecuted(method, info));
-			stack.next(method, controllerInstance);
 		} catch (IllegalArgumentException e) {
 			throw new InterceptionException(e);
 		} catch (MethodExecutorException e) {
@@ -120,10 +126,4 @@ public class ExecuteMethodInterceptor implements Interceptor {
 			throw alternative;
 		}
 	}
-
-	@Override
-	public boolean accepts(ControllerMethod method) {
-		return true;
-	}
-
 }

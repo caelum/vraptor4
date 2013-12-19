@@ -1,10 +1,10 @@
 package br.com.caelum.vraptor.events;
 
 import br.com.caelum.vraptor.controller.ControllerMethod;
-import br.com.caelum.vraptor.interceptor.ParametersInstantiatorInterceptor;
+import br.com.caelum.vraptor.observer.ExecuteMethod;
 
 /**
- * Event fired by {@link ParametersInstantiatorInterceptor}.
+ * Event fired by {@link ExecuteMethod} just before its execution.
  *
  * @author Rodrigo Turini
  * @since 4.0

@@ -4,10 +4,10 @@ import java.lang.reflect.Type;
 
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.core.MethodInfo;
-import br.com.caelum.vraptor.interceptor.ExecuteMethodInterceptor;
+import br.com.caelum.vraptor.observer.ExecuteMethod;
 
 /**
- * Event fired by {@link ExecuteMethodInterceptor}
+ * Event fired by {@link ExecuteMethod}
  * when it has fully completed it's execution.
  *
  * @author Rodrigo Turini

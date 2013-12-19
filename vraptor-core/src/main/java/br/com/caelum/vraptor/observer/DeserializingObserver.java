@@ -34,13 +34,12 @@ import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.deserialization.Deserializer;
 import br.com.caelum.vraptor.deserialization.Deserializers;
 import br.com.caelum.vraptor.events.ReadyToExecuteMethod;
-import br.com.caelum.vraptor.interceptor.ParametersInstantiatorInterceptor;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.view.Status;
 
 /**
  * <strong>Important</strong>: this class must observe {@link ReadyToExecuteMethod}
- * because it is fired just after {@link ParametersInstantiatorInterceptor} execution
+ * because it is fired just before {@link ExecuteMethod} execution
  *
  * @author Lucas Cavalcanti
  * @author Rafael Ferreira

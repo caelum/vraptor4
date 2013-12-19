@@ -15,44 +15,42 @@
  * limitations under the License.
  */
 
-package br.com.caelum.vraptor.extra;
+package br.com.caelum.vraptor.observer;
 
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import br.com.caelum.vraptor.Result;
-import br.com.caelum.vraptor.interceptor.ForwardToDefaultViewInterceptor;
+import br.com.caelum.vraptor.controller.ControllerMethod;
+import br.com.caelum.vraptor.core.MethodInfo;
+import br.com.caelum.vraptor.events.MethodExecuted;
 import br.com.caelum.vraptor.view.MockedPage;
 import br.com.caelum.vraptor.view.PageResult;
 
-public class ForwardToDefaultViewInterceptorTest {
+@RunWith(MockitoJUnitRunner.class)
+public class ForwardToDefaultViewTest {
 
-	private Result result;
-	private ForwardToDefaultViewInterceptor interceptor;
+	private ForwardToDefaultView interceptor;
+	@Mock private Result result;
+	@Mock private ControllerMethod method;
+	@Mock private MethodInfo info;
 
 	@Before
 	public void setup() {
-		this.result = mock(Result.class);
-		this.interceptor = new ForwardToDefaultViewInterceptor(result);
+		this.interceptor = new ForwardToDefaultView(result);
 	}
 
-	@Test
-	public void shouldAcceptAlways() {
-		assertTrue(interceptor.accepts(null));
-	}
-	
 	@Test
 	public void doesNothingIfResultWasAlreadyUsed() {
 		when(result.used()).thenReturn(true);
-
-		interceptor.intercept(null, null, null);
-
+		interceptor.forward(new MethodExecuted(method, info));
 		verify(result, never()).use(PageResult.class);
 	}
 
@@ -60,9 +58,7 @@ public class ForwardToDefaultViewInterceptorTest {
 	public void shouldForwardToViewWhenResultWasNotUsed() {
 		when(result.used()).thenReturn(false);
 		when(result.use(PageResult.class)).thenReturn(new MockedPage());
-
-		interceptor.intercept(null, null, null);
-
+		interceptor.forward(new MethodExecuted(null, null));
 		verify(result).use(PageResult.class);
 	}
 }

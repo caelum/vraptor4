@@ -22,7 +22,6 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.io.IOException;
 import java.util.EnumSet;
 
 import javax.enterprise.event.Event;
@@ -32,7 +31,6 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.controller.ControllerNotFoundHandler;
 import br.com.caelum.vraptor.controller.HttpMethod;
@@ -42,6 +40,7 @@ import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.events.ControllerMethodDiscovered;
 import br.com.caelum.vraptor.events.NewRequest;
+import br.com.caelum.vraptor.events.StackStarting;
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.http.MutableResponse;
 import br.com.caelum.vraptor.http.UrlToControllerTranslator;
@@ -60,16 +59,17 @@ public class RequestHandlerObserverTest {
 	private @Mock MethodNotAllowedHandler methodNotAllowedHandler;
 	private @Mock Event<ControllerMethodDiscovered> event;
 	private @Mock InterceptorStack interceptorStack;
+	private @Mock Event<StackStarting> stackStartingEvent;
 
 	@Before
 	public void config() {
 		MockitoAnnotations.initMocks(this);
 		info = new RequestInfo(null, null, webRequest, webResponse);
-		observer = new RequestHandlerObserver(translator, notFoundHandler, methodNotAllowedHandler, event, interceptorStack);
+		observer = new RequestHandlerObserver(translator, notFoundHandler, methodNotAllowedHandler, event, interceptorStack, stackStartingEvent);
 	}
 
 	@Test
-	public void shouldHandle404() throws IOException, InterceptionException {
+	public void shouldHandle404() throws Exception {
 		when(translator.translate(info)).thenThrow(new ControllerNotFoundException());
 		observer.handle(new NewRequest(), methodInfo, info);
 		verify(notFoundHandler).couldntFind(info);
@@ -77,7 +77,7 @@ public class RequestHandlerObserverTest {
 	}
 
 	@Test
-	public void shouldHandle405() throws IOException, InterceptionException {
+	public void shouldHandle405() throws Exception {
 		EnumSet<HttpMethod> allowedMethods = EnumSet.of(HttpMethod.GET);
 		when(translator.translate(info)).thenThrow(new MethodNotAllowedException(allowedMethods, POST.toString()));
 		observer.handle(new NewRequest(), methodInfo, info);
@@ -86,7 +86,7 @@ public class RequestHandlerObserverTest {
 	}
 
 	@Test
-	public void shouldUseControllerMethodFoundWithNextInterceptor() throws IOException, InterceptionException {
+	public void shouldUseControllerMethodFoundWithNextInterceptor() throws Exception {
 		final ControllerMethod method = mock(ControllerMethod.class);
 		when(translator.translate(info)).thenReturn(method);
 		observer.handle(new NewRequest(), methodInfo, info);

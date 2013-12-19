@@ -15,27 +15,24 @@
  * limitations under the License.
  */
 
-package br.com.caelum.vraptor.interceptor;
+package br.com.caelum.vraptor.observer;
 
 import static com.google.common.base.Preconditions.checkArgument;
+import static org.slf4j.LoggerFactory.getLogger;
 
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 
-import javax.enterprise.event.Event;
+import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.HeaderParam;
-import br.com.caelum.vraptor.InterceptionException;
-import br.com.caelum.vraptor.Intercepts;
 import br.com.caelum.vraptor.controller.ControllerMethod;
-import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.core.MethodInfo;
-import br.com.caelum.vraptor.events.ReadyToExecuteMethod;
+import br.com.caelum.vraptor.events.StackStarting;
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.http.Parameter;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
@@ -45,13 +42,15 @@ import br.com.caelum.vraptor.validator.Validator;
 import br.com.caelum.vraptor.view.FlashScope;
 
 /**
- * An interceptor which instantiates parameters and provide them to the stack.
+ * An observer which instantiates parameters and provide them to the request.
  *
  * @author Guilherme Silveira
+ * @author Rodrigo Turini
+ * @author Victor Harada
  */
-@Intercepts
-public class ParametersInstantiatorInterceptor implements Interceptor {
-	private static final Logger logger = LoggerFactory.getLogger(ParametersInstantiatorInterceptor.class);
+public class ParametersInstantiator {
+	
+	private static final Logger logger = getLogger(ParametersInstantiator.class);
 
 	private final ParametersProvider provider;
 	private final ParameterNameProvider parameterNameProvider;
@@ -59,55 +58,52 @@ public class ParametersInstantiatorInterceptor implements Interceptor {
 	private final Validator validator;
 	private final MutableRequest request;
 	private final FlashScope flash;
-	private Event<ReadyToExecuteMethod> readyToExecuteMethod;
 
 	private final List<Message> errors = new ArrayList<>();
 
 	/**
 	 * @deprecated CDI eyes only
 	 */
-	protected ParametersInstantiatorInterceptor() {
-		this(null, null, null, null, null, null, null);
+	protected ParametersInstantiator() {
+		this(null, null, null, null, null, null);
 	}
 
 	@Inject
-	public ParametersInstantiatorInterceptor(ParametersProvider provider, ParameterNameProvider parameterNameProvider, MethodInfo parameters,
-			Validator validator, MutableRequest request, FlashScope flash, Event<ReadyToExecuteMethod> readyToExecuteMethod) {
+	public ParametersInstantiator(ParametersProvider provider, ParameterNameProvider parameterNameProvider, 
+			MethodInfo parameters, Validator validator, MutableRequest request, FlashScope flash) {
 		this.provider = provider;
 		this.parameterNameProvider = parameterNameProvider;
 		this.parameters = parameters;
 		this.validator = validator;
 		this.request = request;
 		this.flash = flash;
-		this.readyToExecuteMethod = readyToExecuteMethod;
 	}
 
-	@Override
-	public boolean accepts(ControllerMethod method) {
+	public boolean containsParameters(ControllerMethod method) {
 		return method.getMethod().getParameterTypes().length > 0;
 	}
 
-	@Override
-	public void intercept(InterceptorStack stack, ControllerMethod method, Object controllerInstance) throws InterceptionException {
+	public void instantiate(@Observes StackStarting event) {
+		
+		ControllerMethod controllerMethod = event.getControllerMethod();
+		
+		if (!containsParameters(controllerMethod)) return;
+			
 		Enumeration<String> names = request.getParameterNames();
 		while (names.hasMoreElements()) {
 			fixParameter(names.nextElement());
 		}
 
-		addHeaderParametersToAttribute(method);
+		addHeaderParametersToAttribute(controllerMethod);
 
-		Object[] values = getParametersFor(method);
+		Object[] values = getParametersFor(controllerMethod);
 
 		validator.addAll(errors);
 
 		logger.debug("Conversion errors: {}", errors);
-		logger.debug("Parameter values for {} are {}", method, values);
+		logger.debug("Parameter values for {} are {}", controllerMethod, values);
 
 		parameters.setParameters(values);
-
-		readyToExecuteMethod.fire(new ReadyToExecuteMethod(method));
-
-		stack.next(method, controllerInstance);
 	}
 
 	private void addHeaderParametersToAttribute(ControllerMethod controllerMethod) {

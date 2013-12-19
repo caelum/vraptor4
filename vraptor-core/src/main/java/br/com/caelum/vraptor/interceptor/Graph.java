@@ -19,7 +19,6 @@ import static com.google.common.base.Preconditions.checkState;
 import static com.google.common.collect.Iterables.get;
 import static com.google.common.collect.Sets.difference;
 import static com.google.common.collect.Sets.newHashSet;
-import static com.google.common.collect.Sets.union;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,11 +28,13 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import javax.enterprise.inject.Vetoed;
 
+import br.com.caelum.vraptor.Intercepts;
+
 import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
 
 /**
- * A set that orders interceptors topologically based on before and after from \@Intercepts
+ * A set that orders interceptors topologically based on before and after from {@link Intercepts}
  *
  * @author Lucas Cavalcanti
  * @author David Paniz
@@ -44,7 +45,6 @@ import com.google.common.collect.Multimap;
 @Vetoed
 public class Graph<E> {
 
-	private final E DUMMY = null;
 	private Multimap<E, E> graph = LinkedHashMultimap.create();
 	private List<E> orderedList;
 
@@ -56,8 +56,13 @@ public class Graph<E> {
 	}
 
 	public void addEdges(E from, E... tos) {
-		for (E to : tos) {
-			addEdge(from, to);
+
+		if (tos.length == 0) {
+			addEdge(from, null);
+		} else {
+			for (E to : tos) {
+				addEdge(from, to);
+			}
 		}
 	}
 
@@ -77,7 +82,6 @@ public class Graph<E> {
 
 	private List<E> orderTopologically() {
 		List<E> list = new ArrayList<>();
-		addDummies();
 
 		while(!graph.keySet().isEmpty()) {
 			Set<E> roots = findRoots();
@@ -90,13 +94,6 @@ public class Graph<E> {
 			removeRoots(roots);
 		}
 		return list;
-	}
-
-	private void addDummies() {
-		Set<E> nodes = union(graph.keySet(), newHashSet(graph.values()));
-		for (E node : nodes) {
-			graph.put(node, DUMMY);
-		}
 	}
 
 	private void removeRoots(Set<E> roots) {
@@ -142,5 +139,4 @@ public class Graph<E> {
 	private Set<E> findLeaves() {
 		return difference(newHashSet(graph.values()), graph.keySet());
 	}
-
 }

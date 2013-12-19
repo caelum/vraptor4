@@ -34,6 +34,7 @@ import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.events.ControllerMethodDiscovered;
 import br.com.caelum.vraptor.events.NewRequest;
+import br.com.caelum.vraptor.events.StackStarting;
 import br.com.caelum.vraptor.http.UrlToControllerTranslator;
 import br.com.caelum.vraptor.http.route.ControllerNotFoundException;
 import br.com.caelum.vraptor.http.route.MethodNotAllowedException;
@@ -55,6 +56,7 @@ public class RequestHandlerObserver {
 	private final ControllerNotFoundHandler controllerNotFoundHandler;
 	private final MethodNotAllowedHandler methodNotAllowedHandler;
 	private final Event<ControllerMethodDiscovered> controllerMethodEvent;
+	private final Event<StackStarting> stackStartingEvent;
 
 	private InterceptorStack interceptorStack;
 
@@ -62,25 +64,28 @@ public class RequestHandlerObserver {
 	 * @deprecated CDI eyes only
 	 */
 	protected RequestHandlerObserver() {
-		this(null, null, null, null, null);
+		this(null, null, null, null, null, null);
 	}
 
 	@Inject
 	public RequestHandlerObserver(UrlToControllerTranslator translator,
 			ControllerNotFoundHandler controllerNotFoundHandler, MethodNotAllowedHandler methodNotAllowedHandler,
-			Event<ControllerMethodDiscovered> event, InterceptorStack interceptorStack) {
+			Event<ControllerMethodDiscovered> event, InterceptorStack interceptorStack,
+			Event<StackStarting> stackStartingEvent) {
 		this.translator = translator;
 		this.methodNotAllowedHandler = methodNotAllowedHandler;
 		this.controllerNotFoundHandler = controllerNotFoundHandler;
 		this.controllerMethodEvent = event;
 		this.interceptorStack = interceptorStack;
+		this.stackStartingEvent = stackStartingEvent;
 	}
 
 	public void handle(@Observes NewRequest event, MethodInfo methodInfo, RequestInfo requestInfo) {
 		try {
 			ControllerMethod method = translator.translate(requestInfo);
-			controllerMethodEvent.fire(new ControllerMethodDiscovered(method));
 			methodInfo.setControllerMethod(method);
+			controllerMethodEvent.fire(new ControllerMethodDiscovered(method));
+			stackStartingEvent.fire(new StackStarting(method));
 			interceptorStack.start();
 		} catch (ControllerNotFoundException e) {
 			controllerNotFoundHandler.couldntFind(requestInfo);

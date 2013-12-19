@@ -15,24 +15,21 @@
  * limitations under the License.
  */
 
-package br.com.caelum.vraptor.interceptor;
+package br.com.caelum.vraptor.observer;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static java.util.Arrays.asList;
+import static java.util.Collections.enumeration;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
-import java.io.IOException;
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Method;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.ResourceBundle;
-
-import javax.enterprise.event.Event;
 
 import net.vidageek.mirror.dsl.Mirror;
 
@@ -44,13 +41,11 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
 import br.com.caelum.vraptor.HeaderParam;
-import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.cache.DefaultCacheStore;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.controller.DefaultControllerMethod;
-import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.core.MethodInfo;
-import br.com.caelum.vraptor.events.ReadyToExecuteMethod;
+import br.com.caelum.vraptor.events.StackStarting;
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.http.Parameter;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
@@ -61,23 +56,21 @@ import br.com.caelum.vraptor.validator.SimpleMessage;
 import br.com.caelum.vraptor.validator.Validator;
 import br.com.caelum.vraptor.view.FlashScope;
 
-public class ParametersInstantiatorInterceptorTest {
+public class ParametersInstantiatorTest {
 
 	private @Mock MethodInfo params;
 	private @Mock ParametersProvider parametersProvider;
 	private ParameterNameProvider parameterNameProvider;
 	private @Mock Validator validator;
-	private @Mock InterceptorStack stack;
 	private @Mock ResourceBundle bundle;
 	private @Mock MutableRequest request;
 	private @Mock FlashScope flash;
 
 	private List<Message> errors ;
-	private ParametersInstantiatorInterceptor instantiator;
+	private ParametersInstantiator instantiator;
 
 	private ControllerMethod method;
 	private ControllerMethod otherMethod;
-	@Mock private Event<ReadyToExecuteMethod> event;
 
 	@Before
 	@SuppressWarnings("unchecked")
@@ -87,7 +80,7 @@ public class ParametersInstantiatorInterceptorTest {
 		MockitoAnnotations.initMocks(this);
 		when(request.getParameterNames()).thenReturn(Collections.<String> emptyEnumeration());
 
-		this.instantiator = new ParametersInstantiatorInterceptor(parametersProvider, parameterNameProvider, params, validator, request, flash, event);
+		this.instantiator = new ParametersInstantiator(parametersProvider, parameterNameProvider, params, validator, request, flash);
 
 		this.errors = (List<Message>) new Mirror().on(instantiator).get().field("errors");
 		this.method = DefaultControllerMethod.instanceFor(Component.class, Component.class.getDeclaredMethod("method"));
@@ -107,37 +100,25 @@ public class ParametersInstantiatorInterceptorTest {
 	}
 
 	@Test
-	public void shouldAcceptIfMethodHasParameters() {
-		assertTrue(instantiator.accepts(otherMethod));
-	}
-
-	@Test
 	public void shouldNotAcceptIfMethodHasNoParameters() {
-		assertFalse(instantiator.accepts(method));
+		verifyNoMoreInteractions(parametersProvider, params, validator, request, flash);
+		instantiator.instantiate(new StackStarting(method));
 	}
 
 	@Test
-	public void shouldUseTheProvidedParameters() throws InterceptionException, IOException, NoSuchMethodException {
-
+	public void shouldUseTheProvidedParameters() throws Exception {
 		Object[] values = new Object[] { new Object() };
-
-		when(parametersProvider.getParametersFor(method, errors)).thenReturn(values);
-
-		instantiator.intercept(stack, method, null);
-
+		when(parametersProvider.getParametersFor(otherMethod, errors)).thenReturn(values);
+		instantiator.instantiate(new StackStarting(otherMethod));
 		verify(params).setParameters(values);
-		verify(stack).next(method, null);
 		verify(validator).addAll(Collections.<Message>emptyList());
 	}
 
 	@Test
 	public void shouldConvertArrayParametersToIndexParameters() throws Exception {
-
-		when(request.getParameterNames()).thenReturn(Collections.enumeration(Arrays.asList("someParam[].id", "unrelatedParam")));
+		when(request.getParameterNames()).thenReturn(enumeration(asList("someParam[].id", "unrelatedParam")));
 		when(request.getParameterValues("someParam[].id")).thenReturn(new String[] {"one", "two", "three"});
-
-		instantiator.intercept(stack, method, null);
-
+		instantiator.instantiate(new StackStarting(otherMethod));
 		verify(request).setParameter("someParam[0].id", "one");
 		verify(request).setParameter("someParam[1].id", "two");
 		verify(request).setParameter("someParam[2].id", "three");
@@ -148,37 +129,28 @@ public class ParametersInstantiatorInterceptorTest {
 	 */
 	@Test(expected=IllegalArgumentException.class)
 	public void shouldThrowExceptionWhenThereIsAParameterContainingDotClass() throws Exception {
-
-		when(request.getParameterNames()).thenReturn(Collections.enumeration(Arrays.asList("someParam.class.id", "unrelatedParam")));
+		when(request.getParameterNames()).thenReturn(enumeration(asList("someParam.class.id", "unrelatedParam")));
 		when(request.getParameterValues("someParam.class.id")).thenReturn(new String[] {"whatever"});
-
-		instantiator.intercept(stack, method, null);
-
+		instantiator.instantiate(new StackStarting(otherMethod));
 	}
 
 	@Test
-	public void shouldUseAndDiscardFlashParameters() throws InterceptionException, IOException, NoSuchMethodException {
+	public void shouldUseAndDiscardFlashParameters() throws Exception {
 		Object[] values = new Object[] { new Object() };
-
-		when(flash.consumeParameters(method)).thenReturn(values);
-
-		instantiator.intercept(stack, method, null);
-
+		when(flash.consumeParameters(otherMethod)).thenReturn(values);
+		instantiator.instantiate(new StackStarting(otherMethod));
 		verify(params).setParameters(values);
-		verify(stack).next(method, null);
 		verify(validator).addAll(Collections.<Message>emptyList());
-		verify(parametersProvider, never()).getParametersFor(method, errors);
+		verify(parametersProvider, never()).getParametersFor(otherMethod, errors);
 	}
 
 	@Test
 	public void shouldValidateParameters() throws Exception {
 		Object[] values = new Object[]{0};
-		when(parametersProvider.getParametersFor(otherMethod, errors)).thenAnswer(addErrorsToListAndReturn(values, "error1"));
-
-		instantiator.intercept(stack, otherMethod, null);
-
+		when(parametersProvider.getParametersFor(otherMethod, errors)).thenAnswer(
+				addErrorsToListAndReturn(values, "error1"));
+		instantiator.instantiate(new StackStarting(otherMethod));
 		verify(validator).addAll(errors);
-		verify(stack).next(otherMethod, null);
 		verify(params).setParameters(values);
 	}
 
@@ -187,31 +159,21 @@ public class ParametersInstantiatorInterceptorTest {
 		Object[] values = new Object[] { new Object() };
 		Method method = HeaderParamComponent.class.getDeclaredMethod("method", String.class);
 		ControllerMethod controllerMethod = DefaultControllerMethod.instanceFor(HeaderParamComponent.class, method);
-
 		when(request.getHeader("X-MyApp-Password")).thenReturn("123");
 		when(parametersProvider.getParametersFor(controllerMethod, errors)).thenReturn(values);
-
-		instantiator.intercept(stack, controllerMethod, null);
-
+		instantiator.instantiate(new StackStarting(controllerMethod));
 		verify(request).setParameter("password", "123");
 		verify(params).setParameters(values);
-		verify(stack).next(controllerMethod, null);
 		verify(validator).addAll(Collections.<Message>emptyList());
 	}
 
 	@Test
 	public void shouldAddHeaderInformationToRequestWhenHeaderParamAnnotationIsNotPresent() throws Exception {
 		Object[] values = new Object[] { new Object() };
-		Method method = Component.class.getDeclaredMethod("method");
-		ControllerMethod controllerMethod = DefaultControllerMethod.instanceFor(Component.class, method);
-
-		when(parametersProvider.getParametersFor(controllerMethod, errors)).thenReturn(values);
-
-		instantiator.intercept(stack, controllerMethod, null);
-
+		when(parametersProvider.getParametersFor(otherMethod, errors)).thenReturn(values);
+		instantiator.instantiate(new StackStarting(otherMethod));
 		verify(request, never()).setParameter(anyString(), anyString());
 		verify(params).setParameters(values);
-		verify(stack).next(controllerMethod, null);
 		verify(validator).addAll(Collections.<Message>emptyList());
 	}
 
@@ -220,25 +182,20 @@ public class ParametersInstantiatorInterceptorTest {
 		Object[] values = new Object[] { new Object() };
 		Method method = HeaderParamComponent.class.getDeclaredMethod("otherMethod", String.class, String.class, String.class);
 		ControllerMethod resouceMethod = DefaultControllerMethod.instanceFor(HeaderParamComponent.class, method);
-
 		when(request.getHeader("X-MyApp-User")).thenReturn("user");
 		when(request.getHeader("X-MyApp-Password")).thenReturn("123");
 		when(request.getHeader("X-MyApp-Token")).thenReturn("daek2321");
 		when(parametersProvider.getParametersFor(resouceMethod, errors)).thenReturn(values);
-
-		instantiator.intercept(stack, resouceMethod, null);
-
+		instantiator.instantiate(new StackStarting(resouceMethod));
 		verify(request).setParameter("user", "user");
 		verify(request).setParameter("password", "123");
 		verify(request).setParameter("token", "daek2321");
 		verify(params).setParameters(values);
-		verify(stack).next(resouceMethod, null);
 		verify(validator).addAll(Collections.<Message>emptyList());
 	}
 
 	private <T> Answer<T> addErrorsToListAndReturn(final T value, final String... messages) {
 		return new Answer<T>() {
-
 			@Override
 			public T answer(InvocationOnMock invocation) throws Throwable {
 				for (String message : messages) {

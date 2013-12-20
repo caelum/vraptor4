@@ -15,61 +15,53 @@
  * limitations under the License.
  */
 
-package br.com.caelum.vraptor.interceptor;
+package br.com.caelum.vraptor.observer;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
+import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import br.com.caelum.vraptor.InterceptionException;
-import br.com.caelum.vraptor.Intercepts;
 import br.com.caelum.vraptor.Result;
-import br.com.caelum.vraptor.controller.ControllerMethod;
-import br.com.caelum.vraptor.core.InterceptorStack;
+import br.com.caelum.vraptor.events.MethodExecuted;
 import br.com.caelum.vraptor.view.Results;
 
 /**
- * Intercepts the request and forwards to the default view if no view was
- * rendered so far.
- *
+ * Observes {@link MethodExecuted} event, and forwards to the default view if no
+ * view was rendered so far.
+ * 
  * @author Guilherme Silveira
+ * @author Rodrigo Turini
+ * @author Victor Harada
  */
-@Intercepts(after=ExecuteMethodInterceptor.class, before={})
-public class ForwardToDefaultViewInterceptor implements Interceptor {
+public class ForwardToDefaultView {
+	
 	private final Result result;
 
-	private static final Logger logger = LoggerFactory.getLogger(ForwardToDefaultViewInterceptor.class);
+	private static final Logger logger = getLogger(ForwardToDefaultView.class);
 
 	/** 
 	 * @deprecated CDI eyes only
 	 */
-	protected ForwardToDefaultViewInterceptor() {
+	protected ForwardToDefaultView() {
 		this(null);
 	}
 
 	@Inject
-	public ForwardToDefaultViewInterceptor(Result result) {
+	public ForwardToDefaultView(Result result) {
 		this.result = result;
 	}
 
-	@Override
-	public boolean accepts(ControllerMethod method) {
-		return true;
-	}
-
-	@Override
-	public void intercept(InterceptorStack stack, ControllerMethod method, Object controllerInstance)
-			throws InterceptionException {
+	public void forward(@Observes MethodExecuted event) {
 		if (result.used()) {
 			logger.debug("Request already dispatched and commited somewhere else, not forwarding.");
 			return;
 		}
-
 		// TODO: maybe the response.isCommited is true, we should warn before
 		// trying to forward
 		logger.debug("forwarding to the dafault page for this logic");
 		result.use(Results.page()).defaultView();
 	}
-
 }

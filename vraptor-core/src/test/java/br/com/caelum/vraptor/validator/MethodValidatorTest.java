@@ -75,26 +75,26 @@ public class MethodValidatorTest {
 	@Test
 	public void shouldAcceptIfMethodHasConstraint() {
 		DefaultControllerInstance controller = spy(instance);
-		getMethodValidator().validate(new ReadyToExecuteMethod(withConstraint), controller, methodInfo);
+		getMethodValidator().validate(new ReadyToExecuteMethod(withConstraint), controller, methodInfo, validator);
 		verify(controller).getController();
 	}
 
 	@Test
 	public void shouldNotAcceptIfMethodHasConstraint() {
 		DefaultControllerInstance controller = spy(instance);
-		getMethodValidator().validate(new ReadyToExecuteMethod(withoutConstraint), controller, methodInfo);
+		getMethodValidator().validate(new ReadyToExecuteMethod(withoutConstraint), controller, methodInfo, validator);
 		verify(controller, never()).getController();
 	}
 
 	@Test
 	public void shouldValidateMethodWithConstraint() throws Exception {
-		getMethodValidator().validate(new ReadyToExecuteMethod(withConstraint), instance, methodInfo);
+		getMethodValidator().validate(new ReadyToExecuteMethod(withConstraint), instance, methodInfo, validator);
 		assertThat(validator.getErrors(), hasSize(1));
 		assertThat(validator.getErrors().get(0).getCategory(), is("withConstraint.email"));
 	}
 
 	private MethodValidator getMethodValidator() {
-		return new MethodValidator(new Locale("pt", "br"), interpolator, validator,
+		return new MethodValidator(new Locale("pt", "br"), interpolator,
 				validatorFactory.getValidator(), provider);
 	}
 

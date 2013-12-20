@@ -45,14 +45,8 @@ public class TopologicalSortedInterceptorRegistry implements InterceptorRegistry
 			Intercepts intercepts = interceptor.getAnnotation(Intercepts.class);
 			if (intercepts != null) {
 				addEdges(interceptor, intercepts.before(), intercepts.after());
-			} else {
-				addDefaultEdges(interceptor);
-			}
+			} 
 		}
-	}
-
-	private void addDefaultEdges(Class<?> interceptor) {
-		set.addEdge(interceptor, ExecuteMethodInterceptor.class);
 	}
 
 	private void addEdges(Class<?> interceptor, Class<?>[] before, Class<?>[] after) {

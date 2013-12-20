@@ -15,19 +15,17 @@
  * limitations under the License.
  */
 
-package br.com.caelum.vraptor.interceptor;
+package br.com.caelum.vraptor.observer;
 
 import static br.com.caelum.vraptor.view.Results.nothing;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.Collections;
 
@@ -42,60 +40,50 @@ import org.mockito.MockitoAnnotations;
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.controller.DefaultControllerMethod;
-import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.core.MethodInfo;
+import br.com.caelum.vraptor.events.EndOfInterceptorStack;
 import br.com.caelum.vraptor.events.MethodExecuted;
+import br.com.caelum.vraptor.events.ReadyToExecuteMethod;
 import br.com.caelum.vraptor.factory.Factories;
+import br.com.caelum.vraptor.interceptor.DogAlike;
 import br.com.caelum.vraptor.reflection.MethodExecutor;
 import br.com.caelum.vraptor.validator.Message;
 import br.com.caelum.vraptor.validator.ValidationException;
 import br.com.caelum.vraptor.validator.Validator;
 
-public class ExecuteMethodInterceptorTest {
+public class ExecuteMethodTest {
 
 	@Mock private MethodInfo info;
-	@Mock private InterceptorStack stack;
 	@Mock private Validator validator;
-	@Mock private Event<MethodExecuted> event;
+	@Mock private Event<MethodExecuted> methodEvecutedEvent;
+	@Mock private Event<ReadyToExecuteMethod> readyToExecuteMethodEvent;
 	private MethodExecutor methodExecutor = Factories.createMethodExecutor();
-	private ExecuteMethodInterceptor interceptor;
+	private ExecuteMethod observer;
 
 	@Before
 	public void setup() throws NoSuchMethodException {
 		MockitoAnnotations.initMocks(this);
-		interceptor = new ExecuteMethodInterceptor(info, validator,methodExecutor, event);
+		observer = new ExecuteMethod(info, validator, methodExecutor, methodEvecutedEvent, readyToExecuteMethodEvent);
 	}
 
 	@Test
-	public void shouldAcceptAlways() {
-		assertTrue(interceptor.accepts(null));
-	}
-
-	@Test
-	public void shouldInvokeTheMethodAndNotProceedWithInterceptorStack() throws SecurityException,
-			NoSuchMethodException, IOException, InterceptionException {
+	public void shouldInvokeTheMethodAndNotProceedWithInterceptorStack() throws Exception {
 		ControllerMethod method = new DefaultControllerMethod(null, DogAlike.class.getMethod("bark"));
 		DogAlike auau = mock(DogAlike.class);
 		when(info.getParameters()).thenReturn(new Object[0]);
-
-		interceptor.intercept(stack, method, auau);
-
+		observer.execute(new EndOfInterceptorStack(method, auau));
 		verify(auau).bark();
-		verify(stack).next(method, auau);
 	}
 
 	@Test
-	public void shouldThrowMethodExceptionIfThereIsAnInvocationException() throws IOException, SecurityException,
-			NoSuchMethodException {
+	public void shouldThrowMethodExceptionIfThereIsAnInvocationException() throws Exception {
 		ControllerMethod method = new DefaultControllerMethod(null, DogAlike.class.getMethod("bark"));
 		final DogAlike auau = mock(DogAlike.class);
 		final RuntimeException exception = new RuntimeException();
-
 		doThrow(exception).when(auau).bark();
 		when(info.getParameters()).thenReturn(new Object[0]);
-
 		try {
-			interceptor.intercept(stack, method, auau);
+			observer.execute(new EndOfInterceptorStack(method, auau));
 			Assert.fail();
 		} catch (InterceptionException e) {
 			assertThat((RuntimeException) e.getCause(), is(equalTo(exception)));
@@ -103,87 +91,58 @@ public class ExecuteMethodInterceptorTest {
 	}
 
 	@Test
-	public void shouldUseTheProvidedArguments() throws SecurityException, NoSuchMethodException, InterceptionException,
-			IOException {
+	public void shouldUseTheProvidedArguments() throws Exception {
 		ControllerMethod method = new DefaultControllerMethod(null, DogAlike.class.getMethod("bark", int.class));
 		DogAlike auau = mock(DogAlike.class);
-
 		when(info.getParameters()).thenReturn(new Object[] { 3 });
-
-		interceptor.intercept(stack, method, auau);
-
+		observer.execute(new EndOfInterceptorStack(method, auau));
 		verify(auau).bark(3);
-		verify(stack).next(method, auau);
 	}
 
 	public static class XController {
 		public Object method(Object o) {
 			return o;
 		}
-
 		public void method() {
-
 		}
 	}
 
 	@Test
-	public void shouldSetResultReturnedValueFromInvokedMethod() throws SecurityException, NoSuchMethodException,
-			InterceptionException, IOException {
+	public void shouldSetResultReturnedValueFromInvokedMethod() throws Exception {
 		ControllerMethod method = new DefaultControllerMethod(null, XController.class.getMethod("method", Object.class));
-		final XController x = new XController();
-
+		final XController controller = new XController();
 		when(info.getParameters()).thenReturn(new Object[] { "string" });
-
-		interceptor.intercept(stack, method, x);
-
-		verify(stack).next(method, x);
-		verify(info).setResult("string");
+		observer.execute(new EndOfInterceptorStack(method, controller));
 	}
 
 	@Test
-	public void shouldSetNullWhenNullReturnedFromInvokedMethod() throws SecurityException, NoSuchMethodException,
-			InterceptionException, IOException {
+	public void shouldSetNullWhenNullReturnedFromInvokedMethod() throws Exception {
 		ControllerMethod method = new DefaultControllerMethod(null, XController.class.getMethod("method", Object.class));
-		final XController x = new XController();
-
+		final XController controller = new XController();
 		when(info.getParameters()).thenReturn(new Object[] { null });
-
-		interceptor.intercept(stack, method, x);
-
-		verify(stack).next(method, x);
+		observer.execute(new EndOfInterceptorStack(method, controller));
 		verify(info).setResult(null);
 	}
 
 	@Test
-	public void shouldBeOkIfThereIsValidationErrorsAndYouSpecifiedWhereToGo() throws SecurityException,
-			NoSuchMethodException, InterceptionException, IOException {
+	public void shouldBeOkIfThereIsValidationErrorsAndYouSpecifiedWhereToGo() throws Exception {
 		Method specifiedWhereToGo = AnyController.class.getMethod("specifiedWhereToGo");
 		ControllerMethod method = DefaultControllerMethod.instanceFor(AnyController.class, specifiedWhereToGo);
 		AnyController controller = new AnyController(validator);
-
 		when(info.getParameters()).thenReturn(new Object[0]);
 		doThrow(new ValidationException(Collections.<Message> emptyList())).when(validator).onErrorUse(nothing());
 		when(validator.hasErrors()).thenReturn(true);
-
-		interceptor.intercept(stack, method, controller);
+		observer.execute(new EndOfInterceptorStack(method, controller));
 	}
 
-	@Test
-	public void shouldThrowExceptionIfYouHaventSpecifiedWhereToGoOnValidationError() throws SecurityException,
-			NoSuchMethodException, InterceptionException, IOException {
+	@Test(expected=InterceptionException.class)
+	public void shouldThrowExceptionIfYouHaventSpecifiedWhereToGoOnValidationError() throws Exception {
 		Method didntSpecifyWhereToGo = AnyController.class.getMethod("didntSpecifyWhereToGo");
 		final ControllerMethod method = DefaultControllerMethod.instanceFor(AnyController.class, didntSpecifyWhereToGo);
 		final AnyController controller = new AnyController(validator);
-
 		when(info.getParameters()).thenReturn(new Object[0]);
 		when(validator.hasErrors()).thenReturn(true);
-
-		try {
-			interceptor.intercept(stack, method, controller);
-			Assert.fail();
-		} catch (InterceptionException e) {
-
-		}
+		observer.execute(new EndOfInterceptorStack(method, controller));
 	}
 
 	public static class AnyController {
@@ -192,14 +151,11 @@ public class ExecuteMethodInterceptorTest {
 		public AnyController(Validator validator) {
 			this.validator = validator;
 		}
-
 		public void didntSpecifyWhereToGo() {
 
 		}
-
 		public void specifiedWhereToGo() {
 			this.validator.onErrorUse(nothing());
 		}
 	}
-
 }

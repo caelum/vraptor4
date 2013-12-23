@@ -11,7 +11,6 @@ import javax.inject.Inject;
 import br.com.caelum.vraptor.ioc.Container;
 
 @ApplicationScoped
-@SuppressWarnings("unchecked")
 public class CDIBasedContainer implements Container {
 
 	private final BeanManager beanManager;
@@ -28,26 +27,21 @@ public class CDIBasedContainer implements Container {
 		this.beanManager = beanManager;
 	}
 
-	@Override
+	@Override @SuppressWarnings("unchecked")
 	public <T> T instanceFor(Class<T> type) {
-		return selectFromContainer(type);
+		Bean<?> bean = getBeanFrom(type);
+		CreationalContext<?> ctx = beanManager.createCreationalContext(bean);
+		return (T) beanManager.getReference(bean, type, ctx);
 	}
 
 	@Override
 	public <T> boolean canProvide(Class<T> type) {
-		Set<Bean<?>> beans = beanManager.getBeans(type);
-		Bean<? extends Object> bean = beanManager.resolve(beans);
-		return bean != null;
+		return getBeanFrom(type) != null;
 	}
 
-	private <T> T selectFromContainer(final Class<T> type) {
+	private <T> Bean<?> getBeanFrom(Class<T> type) {
 		Set<Bean<?>> beans = beanManager.getBeans(type);
-		if (beans.isEmpty()) { // if no beans found
-			return null;
-		}
-		
-		Bean<? extends Object> bean = beanManager.resolve(beans);
-		CreationalContext<?> ctx = beanManager.createCreationalContext(bean);
-		return (T) beanManager.getReference(bean, type, ctx);
+		if (beans.isEmpty()) return null;
+		return beanManager.resolve(beans);
 	}
 }

@@ -22,6 +22,7 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
 
 import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
+import br.com.caelum.vraptor.rest.gson.GsonSerializerBuilder;
 import br.com.caelum.vraptor.serialization.JSONSerialization;
 import br.com.caelum.vraptor.serialization.NoRootSerialization;
 import br.com.caelum.vraptor.serialization.Serializer;
@@ -39,7 +40,7 @@ public class GsonJSONSerialization implements JSONSerialization {
 
 	private final HttpServletResponse response;
 	private final TypeNameExtractor extractor;
-	private final VRaptorGsonBuilder builder;
+	private final GsonSerializerBuilder builder;
 
 	/** 
 	 * @deprecated CDI eyes only
@@ -50,7 +51,7 @@ public class GsonJSONSerialization implements JSONSerialization {
 
 	@Inject
 	public GsonJSONSerialization(HttpServletResponse response, TypeNameExtractor extractor,
-			VRaptorGsonBuilder builder) {
+			GsonSerializerBuilder builder) {
 		this.response = response;
 		this.extractor = extractor;
 		this.builder = builder;

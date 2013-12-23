@@ -24,13 +24,13 @@ import br.com.caelum.vraptor.View;
 import br.com.caelum.vraptor.http.FormatResolver;
 import br.com.caelum.vraptor.interceptor.DefaultTypeNameExtractor;
 import br.com.caelum.vraptor.proxy.Proxifier;
+import br.com.caelum.vraptor.rest.gson.GsonSerializerBuilder;
 import br.com.caelum.vraptor.serialization.DefaultRepresentationResult;
 import br.com.caelum.vraptor.serialization.JSONSerialization;
 import br.com.caelum.vraptor.serialization.RepresentationResult;
 import br.com.caelum.vraptor.serialization.Serialization;
 import br.com.caelum.vraptor.serialization.XMLSerialization;
 import br.com.caelum.vraptor.serialization.gson.GsonJSONSerialization;
-import br.com.caelum.vraptor.serialization.gson.VRaptorGsonBuilder;
 import br.com.caelum.vraptor.serialization.xstream.XStreamBuilder;
 import br.com.caelum.vraptor.serialization.xstream.XStreamXMLSerialization;
 import br.com.caelum.vraptor.view.EmptyResult;
@@ -51,10 +51,10 @@ public class MockSerializationResult extends MockResult {
 	private MockHttpServletResponse response;
 	private DefaultTypeNameExtractor extractor;
 	private XStreamBuilder xstreambuilder;
-	private VRaptorGsonBuilder gsonBuilder;
+	private GsonSerializerBuilder gsonBuilder;
 
 
-	public MockSerializationResult(Proxifier proxifier, XStreamBuilder xstreambuilder, VRaptorGsonBuilder gsonBuilder) {
+	public MockSerializationResult(Proxifier proxifier, XStreamBuilder xstreambuilder, GsonSerializerBuilder gsonBuilder) {
 		super(proxifier);
 		this.response = new MockHttpServletResponse();
 		this.extractor = new DefaultTypeNameExtractor();

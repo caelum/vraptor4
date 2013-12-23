@@ -9,8 +9,6 @@ import java.io.InputStreamReader;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
-import javax.enterprise.inject.Any;
-import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
@@ -22,13 +20,12 @@ import br.com.caelum.vraptor.deserialization.Deserializer;
 import br.com.caelum.vraptor.deserialization.Deserializes;
 import br.com.caelum.vraptor.http.Parameter;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
+import br.com.caelum.vraptor.rest.gson.GsonDeserializerBuilder;
 import br.com.caelum.vraptor.view.ResultException;
 
 import com.google.common.io.CharStreams;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
-import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -44,8 +41,8 @@ public class GsonDeserialization implements Deserializer {
 
 	private static final Logger logger = LoggerFactory.getLogger(GsonDeserialization.class);
 
+	private final GsonDeserializerBuilder builder;
 	private final ParameterNameProvider paramNameProvider;
-	private final Instance<JsonDeserializer<?>> adapters; 
 	private final HttpServletRequest request;
 
 	/** 
@@ -56,10 +53,9 @@ public class GsonDeserialization implements Deserializer {
 	}
 	
 	@Inject
-	public GsonDeserialization(ParameterNameProvider paramNameProvider, @Any Instance<JsonDeserializer<?>> adapters, 
-			HttpServletRequest request) {
+	public GsonDeserialization(GsonDeserializerBuilder builder, ParameterNameProvider paramNameProvider, HttpServletRequest request) {
+		this.builder = builder;
 		this.paramNameProvider = paramNameProvider;
-		this.adapters = adapters;
 		this.request = request;
 	}
 
@@ -71,7 +67,7 @@ public class GsonDeserialization implements Deserializer {
 			throw new IllegalArgumentException("Methods that consumes representations must receive just one argument");
 		}
 
-		Gson gson = getGson();
+		Gson gson = builder.create();
 		
 		final Parameter[] parameterNames = paramNameProvider.parametersFor(method.getMethod());
 		final Object[] values = new Object[parameterNames.length];
@@ -125,27 +121,6 @@ public class GsonDeserialization implements Deserializer {
 
 		logger.debug("json deserialized: {}", (Object) values);
 		return values;
-	}
-
-	protected Gson getGson() {
-		GsonBuilder builder = new GsonBuilder();
-
-		for (JsonDeserializer<?> adapter : adapters) {
-			builder.registerTypeHierarchyAdapter(getAdapterType(adapter), adapter);
-		}
-
-		return builder.create();
-	}
-
-	private Class<?> getAdapterType(JsonDeserializer<?> adapter) {
-		Type[] genericInterfaces = adapter.getClass().getGenericInterfaces();
-		ParameterizedType type = (ParameterizedType) genericInterfaces[0];
-		Type actualType = type.getActualTypeArguments()[0];
-
-		if (actualType instanceof ParameterizedType)
-			return (Class<?>) ((ParameterizedType) actualType).getRawType();
-		else
-			return (Class<?>) actualType;
 	}
 
 	private String getContentOfStream(InputStream input) throws IOException {

@@ -25,6 +25,8 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.interceptor.DefaultTypeNameExtractor;
+import br.com.caelum.vraptor.rest.gson.GsonBuilderWrapper;
+import br.com.caelum.vraptor.rest.gson.GsonSerializerBuilder;
 import br.com.caelum.vraptor.serialization.JSONPSerialization;
 import br.com.caelum.vraptor.serialization.JSONSerialization;
 import br.com.caelum.vraptor.util.test.MockInstanceImpl;
@@ -32,6 +34,7 @@ import br.com.caelum.vraptor.util.test.MockInstanceImpl;
 import com.google.common.collect.ForwardingCollection;
 import com.google.gson.ExclusionStrategy;
 import com.google.gson.FieldAttributes;
+import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
@@ -45,7 +48,7 @@ public class GsonJSONSerializationTest {
 	private HttpServletResponse response;
 	private DefaultTypeNameExtractor extractor;
 
-	private VRaptorGsonBuilder builder;
+	private GsonSerializerBuilder builder;
 
 	@Before
 	public void setup() throws Exception {
@@ -55,12 +58,13 @@ public class GsonJSONSerializationTest {
 		when(response.getWriter()).thenReturn(new PrintWriter(stream));
 		extractor = new DefaultTypeNameExtractor();
 
-		List<JsonSerializer<?>> adapters = new ArrayList<>();
-		adapters.add(new CalendarSerializer());
-		adapters.add(new CollectionSerializer());
-		adapters.add(new EnumSerializer());
+		List<JsonSerializer<?>> jsonSerializers = new ArrayList<>();
+		List<JsonDeserializer<?>> jsonDeserializers = new ArrayList<>();
+		jsonSerializers.add(new CalendarSerializer());
+		jsonSerializers.add(new CollectionSerializer());
+		jsonSerializers.add(new EnumSerializer());
 
-		builder = new VRaptorGsonBuilder(new MockInstanceImpl<>(adapters));
+		builder = new GsonBuilderWrapper(new MockInstanceImpl<>(jsonSerializers), new MockInstanceImpl<>(jsonDeserializers));
 		this.serialization = new GsonJSONSerialization(response, extractor, builder);
 	}
 

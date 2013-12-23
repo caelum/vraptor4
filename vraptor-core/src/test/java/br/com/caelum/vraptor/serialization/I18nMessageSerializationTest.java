@@ -21,10 +21,11 @@ import org.junit.Test;
 
 import br.com.caelum.vraptor.interceptor.DefaultTypeNameExtractor;
 import br.com.caelum.vraptor.ioc.Container;
+import br.com.caelum.vraptor.rest.gson.GsonBuilderWrapper;
+import br.com.caelum.vraptor.rest.gson.GsonSerializerBuilder;
 import br.com.caelum.vraptor.serialization.gson.CalendarSerializer;
 import br.com.caelum.vraptor.serialization.gson.GsonJSONSerialization;
 import br.com.caelum.vraptor.serialization.gson.MessageSerializer;
-import br.com.caelum.vraptor.serialization.gson.VRaptorGsonBuilder;
 import br.com.caelum.vraptor.serialization.xstream.MessageConverter;
 import br.com.caelum.vraptor.serialization.xstream.XStreamBuilder;
 import br.com.caelum.vraptor.serialization.xstream.XStreamBuilderFactory;
@@ -32,6 +33,7 @@ import br.com.caelum.vraptor.serialization.xstream.XStreamXMLSerialization;
 import br.com.caelum.vraptor.util.test.MockInstanceImpl;
 import br.com.caelum.vraptor.validator.SingletonResourceBundle;
 
+import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonSerializer;
 
 public class I18nMessageSerializationTest {
@@ -48,11 +50,12 @@ public class I18nMessageSerializationTest {
 		XStreamBuilder builder = XStreamBuilderFactory.cleanInstance(new MessageConverter());
 		XStreamXMLSerialization xmlSerialization = new XStreamXMLSerialization(response, builder);
 
-		List<JsonSerializer<?>> adapters = new ArrayList<>();
-		adapters.add(new CalendarSerializer());
-		adapters.add(new MessageSerializer());
+		List<JsonSerializer<?>> jsonSerializers = new ArrayList<>();
+		List<JsonDeserializer<?>> jsonDeserializers = new ArrayList<>();
+		jsonSerializers.add(new CalendarSerializer());
+		jsonSerializers.add(new MessageSerializer());
 
-		VRaptorGsonBuilder gsonBuilder =  new VRaptorGsonBuilder(new MockInstanceImpl<>(adapters));
+		GsonSerializerBuilder gsonBuilder =  new GsonBuilderWrapper(new MockInstanceImpl<>(jsonSerializers), new MockInstanceImpl<>(jsonDeserializers));
 		GsonJSONSerialization jsonSerialization = new GsonJSONSerialization(response, extractor, gsonBuilder);
 
 		Container container = mock(Container.class);

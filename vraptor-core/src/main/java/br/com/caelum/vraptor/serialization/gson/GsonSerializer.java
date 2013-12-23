@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.Set;
 
 import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
+import br.com.caelum.vraptor.rest.gson.GsonSerializerBuilder;
 import br.com.caelum.vraptor.serialization.Serializer;
 import br.com.caelum.vraptor.serialization.SerializerBuilder;
 
@@ -41,11 +42,11 @@ import com.google.gson.Gson;
  */
 public class GsonSerializer implements SerializerBuilder {
 
-	private VRaptorGsonBuilder builder;
+	private GsonSerializerBuilder builder;
 	private Writer writer;
 	private TypeNameExtractor extractor;
 
-	public GsonSerializer(VRaptorGsonBuilder builder, Writer writer, TypeNameExtractor extractor) {
+	public GsonSerializer(GsonSerializerBuilder builder, Writer writer, TypeNameExtractor extractor) {
 		this.writer = writer;
 		this.extractor = extractor;
 		this.builder = builder;

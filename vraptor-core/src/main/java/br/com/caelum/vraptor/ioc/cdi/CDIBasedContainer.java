@@ -35,7 +35,9 @@ public class CDIBasedContainer implements Container {
 
 	@Override
 	public <T> boolean canProvide(Class<T> type) {
-		return selectFromContainer(type) != null;
+		Set<Bean<?>> beans = beanManager.getBeans(type);
+		Bean<? extends Object> bean = beanManager.resolve(beans);
+		return bean != null;
 	}
 
 	private <T> T selectFromContainer(final Class<T> type) {

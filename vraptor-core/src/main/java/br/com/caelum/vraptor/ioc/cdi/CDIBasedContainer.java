@@ -1,7 +1,5 @@
 package br.com.caelum.vraptor.ioc.cdi;
 
-import java.util.Set;
-
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.spi.CreationalContext;
 import javax.enterprise.inject.spi.Bean;
@@ -11,7 +9,6 @@ import javax.inject.Inject;
 import br.com.caelum.vraptor.ioc.Container;
 
 @ApplicationScoped
-@SuppressWarnings("unchecked")
 public class CDIBasedContainer implements Container {
 
 	private final BeanManager beanManager;
@@ -28,22 +25,19 @@ public class CDIBasedContainer implements Container {
 		this.beanManager = beanManager;
 	}
 
-	@Override
+	@Override @SuppressWarnings("unchecked")
 	public <T> T instanceFor(Class<T> type) {
-		return selectFromContainer(type);
+		Bean<?> bean = getBeanFrom(type);
+		CreationalContext<?> ctx = beanManager.createCreationalContext(bean);
+		return (T) beanManager.getReference(bean, type, ctx);
 	}
 
 	@Override
 	public <T> boolean canProvide(Class<T> type) {
-		Set<Bean<?>> beans = beanManager.getBeans(type);
-		Bean<? extends Object> bean = beanManager.resolve(beans);
-		return bean != null;
+		return getBeanFrom(type) != null;
 	}
 
-	private <T> T selectFromContainer(final Class<T> type) {
-		Set<Bean<?>> beans = beanManager.getBeans(type);
-		Bean<? extends Object> bean = beanManager.resolve(beans);
-		CreationalContext<?> ctx = beanManager.createCreationalContext(bean);
-		return (T) beanManager.getReference(bean, type, ctx);
+	private <T> Bean<?> getBeanFrom(Class<T> type) {
+		return beanManager.resolve(beanManager.getBeans(type));
 	}
 }

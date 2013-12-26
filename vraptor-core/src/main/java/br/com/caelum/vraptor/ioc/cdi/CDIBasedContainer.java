@@ -40,6 +40,10 @@ public class CDIBasedContainer implements Container {
 
 	private <T> T selectFromContainer(final Class<T> type) {
 		Set<Bean<?>> beans = beanManager.getBeans(type);
+		if (beans.isEmpty()) { // if no beans found
+			return null;
+		}
+		
 		Bean<? extends Object> bean = beanManager.resolve(beans);
 		CreationalContext<?> ctx = beanManager.createCreationalContext(bean);
 		return (T) beanManager.getReference(bean, type, ctx);

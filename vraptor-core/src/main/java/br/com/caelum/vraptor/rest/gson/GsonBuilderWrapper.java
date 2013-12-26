@@ -51,7 +51,7 @@ public class GsonBuilderWrapper implements GsonSerializerBuilder, GsonDeserializ
 	protected GsonBuilderWrapper() {
 		this(null, null);
 	}
-	
+	@Override
 	public Gson create() {
 		for (JsonSerializer<?> adapter : jsonSerializers) {
 			registerAdapter(getAdapterType(adapter), adapter);

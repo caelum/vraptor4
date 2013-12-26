@@ -77,7 +77,7 @@ public class JavassistProxifier implements Proxifier {
 		Object instance = createInstance(type, handler, factory);
 		logger.debug("a proxy for {} was created as {}", type, instance.getClass());
 
-		return type.cast(instance);
+		return (T) instance;
 	}
 
 	private <T> Object createInstance(Class<T> type, MethodInvocation<? super T> handler, ProxyFactory factory) {

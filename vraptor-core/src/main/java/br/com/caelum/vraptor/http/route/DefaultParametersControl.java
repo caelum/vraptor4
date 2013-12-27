@@ -114,7 +114,7 @@ public class DefaultParametersControl implements ParametersControl {
 				}
 			}
 
-			String parameter = encodeParameter(result.toString());
+			String parameter = encodeParameter(result == null ? "" : result.toString());
 			base = base.replace("{" + splittedPatterns[i] + "}", result == null ? "" : parameter);
 		}
 

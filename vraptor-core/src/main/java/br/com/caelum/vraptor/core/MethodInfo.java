@@ -56,8 +56,4 @@ public class MethodInfo {
 	public void setResult(Object result) {
 		this.result = result;
 	}
-
-	public boolean parametersWereSet() {
-		return parameters != null;
-	}
 }

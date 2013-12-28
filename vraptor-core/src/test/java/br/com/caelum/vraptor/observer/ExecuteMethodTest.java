@@ -70,7 +70,7 @@ public class ExecuteMethodTest {
 	public void shouldInvokeTheMethodAndNotProceedWithInterceptorStack() throws Exception {
 		ControllerMethod method = new DefaultControllerMethod(null, DogAlike.class.getMethod("bark"));
 		DogAlike auau = mock(DogAlike.class);
-		when(methodInfo.getParameters()).thenReturn(new Object[0]);
+		when(methodInfo.getParametersValues()).thenReturn(new Object[0]);
 		observer.execute(new EndOfInterceptorStack(method, auau));
 		verify(auau).bark();
 	}
@@ -81,7 +81,7 @@ public class ExecuteMethodTest {
 		final DogAlike auau = mock(DogAlike.class);
 		final RuntimeException exception = new RuntimeException();
 		doThrow(exception).when(auau).bark();
-		when(methodInfo.getParameters()).thenReturn(new Object[0]);
+		when(methodInfo.getParametersValues()).thenReturn(new Object[0]);
 		try {
 			observer.execute(new EndOfInterceptorStack(method, auau));
 			Assert.fail();
@@ -94,7 +94,7 @@ public class ExecuteMethodTest {
 	public void shouldUseTheProvidedArguments() throws Exception {
 		ControllerMethod method = new DefaultControllerMethod(null, DogAlike.class.getMethod("bark", int.class));
 		DogAlike auau = mock(DogAlike.class);
-		when(methodInfo.getParameters()).thenReturn(new Object[] { 3 });
+		when(methodInfo.getParametersValues()).thenReturn(new Object[] { 3 });
 		observer.execute(new EndOfInterceptorStack(method, auau));
 		verify(auau).bark(3);
 	}
@@ -111,7 +111,7 @@ public class ExecuteMethodTest {
 	public void shouldSetResultReturnedValueFromInvokedMethod() throws Exception {
 		ControllerMethod method = new DefaultControllerMethod(null, XController.class.getMethod("method", Object.class));
 		final XController controller = new XController();
-		when(methodInfo.getParameters()).thenReturn(new Object[] { "string" });
+		when(methodInfo.getParametersValues()).thenReturn(new Object[] { "string" });
 		observer.execute(new EndOfInterceptorStack(method, controller));
 	}
 
@@ -119,7 +119,7 @@ public class ExecuteMethodTest {
 	public void shouldSetNullWhenNullReturnedFromInvokedMethod() throws Exception {
 		ControllerMethod method = new DefaultControllerMethod(null, XController.class.getMethod("method", Object.class));
 		final XController controller = new XController();
-		when(methodInfo.getParameters()).thenReturn(new Object[] { null });
+		when(methodInfo.getParametersValues()).thenReturn(new Object[] { null });
 		observer.execute(new EndOfInterceptorStack(method, controller));
 		verify(methodInfo).setResult(null);
 	}
@@ -129,7 +129,7 @@ public class ExecuteMethodTest {
 		Method specifiedWhereToGo = AnyController.class.getMethod("specifiedWhereToGo");
 		ControllerMethod method = DefaultControllerMethod.instanceFor(AnyController.class, specifiedWhereToGo);
 		AnyController controller = new AnyController(validator);
-		when(methodInfo.getParameters()).thenReturn(new Object[0]);
+		when(methodInfo.getParametersValues()).thenReturn(new Object[0]);
 		doThrow(new ValidationException(Collections.<Message> emptyList())).when(validator).onErrorUse(nothing());
 		when(validator.hasErrors()).thenReturn(true);
 		observer.execute(new EndOfInterceptorStack(method, controller));
@@ -140,7 +140,7 @@ public class ExecuteMethodTest {
 		Method didntSpecifyWhereToGo = AnyController.class.getMethod("didntSpecifyWhereToGo");
 		final ControllerMethod method = DefaultControllerMethod.instanceFor(AnyController.class, didntSpecifyWhereToGo);
 		final AnyController controller = new AnyController(validator);
-		when(methodInfo.getParameters()).thenReturn(new Object[0]);
+		when(methodInfo.getParametersValues()).thenReturn(new Object[0]);
 		when(validator.hasErrors()).thenReturn(true);
 		observer.execute(new EndOfInterceptorStack(method, controller));
 	}

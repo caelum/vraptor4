@@ -65,7 +65,7 @@ public class MethodValidatorTest {
 		withoutConstraint = instanceFor(MyController.class, getMethod("withoutConstraint"));
 		instance = new DefaultControllerInstance(new MyController());
 		methodInfo = mock(MethodInfo.class);
-		when(methodInfo.getParameters()).thenReturn(new Object[]{null});
+		when(methodInfo.getParametersValues()).thenReturn(new Object[]{null});
 	}
 
 	private Method getMethod(String methodName) throws NoSuchMethodException {

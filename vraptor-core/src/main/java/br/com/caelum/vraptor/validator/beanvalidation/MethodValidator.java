@@ -101,7 +101,7 @@ public class MethodValidator {
 
 		Method method = controllerMethod.getMethod();
 		Set<ConstraintViolation<Object>> violations = bvalidator.forExecutables()
-				.validateParameters(controllerInstance.getController(), method, methodInfo.getParameters());
+				.validateParameters(controllerInstance.getController(), method, methodInfo.getParametersValues());
 
 		logger.debug("there are {} violations at method {}.", violations.size(), controllerMethod);
 

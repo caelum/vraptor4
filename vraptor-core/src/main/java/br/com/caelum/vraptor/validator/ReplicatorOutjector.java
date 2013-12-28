@@ -20,8 +20,7 @@ import javax.inject.Inject;
 
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.core.MethodInfo;
-import br.com.caelum.vraptor.http.Parameter;
-import br.com.caelum.vraptor.http.ParameterNameProvider;
+import br.com.caelum.vraptor.http.ValuedParameter;
 
 /**
  * Outjector implementation that replicates logic parameters to next logic
@@ -33,29 +32,24 @@ public class ReplicatorOutjector implements Outjector {
 
 	private final Result result;
 	private final MethodInfo methodInfo;
-	private final ParameterNameProvider nameProvider;
 
 	/** 
 	 * @deprecated CDI eyes only
 	 */
 	protected ReplicatorOutjector() {
-		this(null, null, null);
+		this(null, null);
 	}
 
 	@Inject
-	public ReplicatorOutjector(Result result, MethodInfo method, ParameterNameProvider nameProvider) {
+	public ReplicatorOutjector(Result result, MethodInfo method) {
 		this.result = result;
 		this.methodInfo = method;
-		this.nameProvider = nameProvider;
 	}
 
 	@Override
 	public void outjectRequestMap() {
-		Parameter[] params = nameProvider.parametersFor(methodInfo.getControllerMethod().getMethod());
-		Object[] values = methodInfo.getParameters();
-
-		for (int i = 0; i < params.length; i++) {
-			result.include(params[i].getName(), values[i]);
+		for (ValuedParameter vparameter : methodInfo.getValuedParameters()) {
+			result.include(vparameter.getParameter().getName(), vparameter.getValue());
 		}
 	}
 }

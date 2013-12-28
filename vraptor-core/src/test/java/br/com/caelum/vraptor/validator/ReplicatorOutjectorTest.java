@@ -3,24 +3,19 @@ package br.com.caelum.vraptor.validator;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.lang.reflect.AccessibleObject;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor.Result;
-import br.com.caelum.vraptor.cache.DefaultCacheStore;
+import br.com.caelum.vraptor.ValuedParameterProducer;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.core.MethodInfo;
-import br.com.caelum.vraptor.http.Parameter;
-import br.com.caelum.vraptor.http.ParameterNameProvider;
-import br.com.caelum.vraptor.http.ParanamerNameProvider;
+import br.com.caelum.vraptor.http.ValuedParameter;
 
 public class ReplicatorOutjectorTest {
 
-	private ParameterNameProvider provider;
 	private @Mock MethodInfo methodInfo;
 	private @Mock Result result;
 	private @Mock ControllerMethod controllerMethod;
@@ -33,13 +28,15 @@ public class ReplicatorOutjectorTest {
 		when(controllerMethod.getMethod()).thenReturn(getClass().getDeclaredMethod("foo", int.class, float.class, long.class));
 		when(methodInfo.getControllerMethod()).thenReturn(controllerMethod);
 
-		provider = new ParanamerNameProvider(new DefaultCacheStore<AccessibleObject, Parameter[]>());
-		outjector = new ReplicatorOutjector(result, methodInfo, provider);
+		outjector = new ReplicatorOutjector(result, methodInfo);
 	}
 
 	@Test
 	public void shouldReplicateMethodParametersToNextRequest() throws Exception {
-		when(methodInfo.getParameters()).thenReturn(new Object[] {1, 2.0, 3l});
+		Object[] values = { 1, 2.0, 3l };
+		ValuedParameter[] valuedParameters = ValuedParameterProducer.from(controllerMethod.getMethod(), values);
+		
+		when(methodInfo.getValuedParameters()).thenReturn(valuedParameters);
 
 		outjector.outjectRequestMap();
 

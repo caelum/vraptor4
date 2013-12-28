@@ -27,21 +27,21 @@ public class CDIBasedContainer implements Container {
 		this.beanManager = beanManager;
 	}
 
-	@Override @SuppressWarnings("unchecked")
+	@Override
 	public <T> T instanceFor(Class<T> type) {
 		Bean<?> bean = getBeanFrom(type);
 		CreationalContext<?> ctx = beanManager.createCreationalContext(bean);
-		return (T) beanManager.getReference(bean, type, ctx);
+		return type.cast(beanManager.getReference(bean, type, ctx));
 	}
 
 	@Override
 	public <T> boolean canProvide(Class<T> type) {
-		return getBeanFrom(type) != null;
+		Set<Bean<?>> beans = beanManager.getBeans(type);
+		return !beans.isEmpty() && beanManager.resolve(beans) != null;
 	}
 
 	private <T> Bean<?> getBeanFrom(Class<T> type) {
 		Set<Bean<?>> beans = beanManager.getBeans(type);
-		if (beans.isEmpty()) return null;
 		return beanManager.resolve(beans);
 	}
 }

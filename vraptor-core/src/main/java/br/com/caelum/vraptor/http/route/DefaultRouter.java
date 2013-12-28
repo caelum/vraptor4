@@ -56,8 +56,7 @@ import com.google.common.collect.Iterables;
  * @author Guilherme Silveira
  */
 @ApplicationScoped
-public class DefaultRouter
-	implements Router {
+public class DefaultRouter implements Router {
 	
 	private static final Logger logger = LoggerFactory.getLogger(DefaultRouter.class);
 
@@ -106,8 +105,7 @@ public class DefaultRouter
 	}
 
 	@Override
-	public ControllerMethod parse(String uri, HttpMethod method, MutableRequest request)
-		throws MethodNotAllowedException {
+	public ControllerMethod parse(String uri, HttpMethod method, MutableRequest request) throws MethodNotAllowedException {
 		Collection<Route> routesMatchingUriAndMethod = routesMatchingUriAndMethod(uri, method);
 
 		Iterator<Route> iterator = routesMatchingUriAndMethod.iterator();

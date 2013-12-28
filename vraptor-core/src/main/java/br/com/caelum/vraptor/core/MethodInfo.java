@@ -19,10 +19,11 @@ package br.com.caelum.vraptor.core;
 import javax.enterprise.context.RequestScoped;
 
 import br.com.caelum.vraptor.controller.ControllerMethod;
+import br.com.caelum.vraptor.http.ValuedParameter;
 
 /**
  * Holder for method being invoked and parameters being passed.
- *
+ * 
  * @author Guilherme Silveira
  * @author Fabio Kung
  */
@@ -30,7 +31,7 @@ import br.com.caelum.vraptor.controller.ControllerMethod;
 public class MethodInfo {
 
 	private ControllerMethod controllerMethod;
-	private Object[] parameters;
+	private ValuedParameter[] valuedParameters;
 	private Object result;
 
 	public ControllerMethod getControllerMethod() {
@@ -41,12 +42,22 @@ public class MethodInfo {
 		this.controllerMethod = controllerMethod;
 	}
 
-	public void setParameters(Object[] parameters) {
-		this.parameters = parameters;
+	public ValuedParameter[] getValuedParameters() {
+		return valuedParameters;
 	}
 
-	public Object[] getParameters() {
-		return parameters;
+	public void setValuedParameters(ValuedParameter[] valuedParameters) {
+		this.valuedParameters = valuedParameters;
+	}
+
+	public Object[] getParametersValues() {
+		Object[] out = new Object[valuedParameters.length];
+
+		for (int i = 0; i < valuedParameters.length; i++) {
+			out[i] = valuedParameters[i].getValue();
+		}
+
+		return out;
 	}
 
 	public Object getResult() {

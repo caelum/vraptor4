@@ -82,7 +82,7 @@ public class ExecuteMethod {
 			ControllerMethod method = event.getControllerMethod();
 			readyToExecuteMethod.fire(new ReadyToExecuteMethod(method));
 			Method reflectionMethod = method .getMethod();
-			Object[] parameters = methodInfo.getParameters();
+			Object[] parameters = methodInfo.getParametersValues();
 
 			log.debug("Invoking {}", Stringnifier.simpleNameFor(reflectionMethod));
 			Object instance = event.getControllerInstance();

@@ -41,6 +41,7 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
 import br.com.caelum.vraptor.HeaderParam;
+import br.com.caelum.vraptor.ValuedParameterProducer;
 import br.com.caelum.vraptor.cache.DefaultCacheStore;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.controller.DefaultControllerMethod;
@@ -51,6 +52,7 @@ import br.com.caelum.vraptor.http.Parameter;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.http.ParametersProvider;
 import br.com.caelum.vraptor.http.ParanamerNameProvider;
+import br.com.caelum.vraptor.http.ValuedParameter;
 import br.com.caelum.vraptor.validator.Message;
 import br.com.caelum.vraptor.validator.SimpleMessage;
 import br.com.caelum.vraptor.validator.Validator;
@@ -107,18 +109,25 @@ public class ParametersInstantiatorTest {
 
 	@Test
 	public void shouldUseTheProvidedParameters() throws Exception {
-		Object[] values = new Object[] { new Object() };
+		Object[] values = new Object[] { "bazinga" };
+		ValuedParameter[] valuedParameters = ValuedParameterProducer.from(otherMethod.getMethod(), values);
+
 		when(parametersProvider.getParametersFor(otherMethod, errors)).thenReturn(values);
+
 		instantiator.instantiate(new StackStarting(otherMethod));
-		verify(methodInfo).setParameters(values);
-		verify(validator).addAll(Collections.<Message>emptyList());
+
+		verify(methodInfo).setValuedParameters(valuedParameters);
+		verify(validator).addAll(Collections.<Message> emptyList());
 	}
 
 	@Test
 	public void shouldConvertArrayParametersToIndexParameters() throws Exception {
 		when(request.getParameterNames()).thenReturn(enumeration(asList("someParam[].id", "unrelatedParam")));
 		when(request.getParameterValues("someParam[].id")).thenReturn(new String[] {"one", "two", "three"});
+		when(parametersProvider.getParametersFor(otherMethod, errors)).thenReturn(new Object[0]);
+
 		instantiator.instantiate(new StackStarting(otherMethod));
+
 		verify(request).setParameter("someParam[0].id", "one");
 		verify(request).setParameter("someParam[1].id", "two");
 		verify(request).setParameter("someParam[2].id", "three");
@@ -136,10 +145,14 @@ public class ParametersInstantiatorTest {
 
 	@Test
 	public void shouldUseAndDiscardFlashParameters() throws Exception {
-		Object[] values = new Object[] { new Object() };
+		Object[] values = new Object[] { "bazinga" };
+		ValuedParameter[] valuedParameters = ValuedParameterProducer.from(otherMethod.getMethod(), values);
+
 		when(flash.consumeParameters(otherMethod)).thenReturn(values);
+
 		instantiator.instantiate(new StackStarting(otherMethod));
-		verify(methodInfo).setParameters(values);
+
+		verify(methodInfo).setValuedParameters(valuedParameters);
 		verify(validator).addAll(Collections.<Message>emptyList());
 		verify(parametersProvider, never()).getParametersFor(otherMethod, errors);
 	}
@@ -147,51 +160,38 @@ public class ParametersInstantiatorTest {
 	@Test
 	public void shouldValidateParameters() throws Exception {
 		Object[] values = new Object[]{0};
-		when(parametersProvider.getParametersFor(otherMethod, errors)).thenAnswer(
-				addErrorsToListAndReturn(values, "error1"));
+		ValuedParameter[] valuedParameters = ValuedParameterProducer.from(otherMethod.getMethod(), values);
+
+		when(parametersProvider.getParametersFor(otherMethod, errors)).thenAnswer(addErrorsToListAndReturn(values, "error1"));
+
 		instantiator.instantiate(new StackStarting(otherMethod));
+
 		verify(validator).addAll(errors);
-		verify(methodInfo).setParameters(values);
+		verify(methodInfo).setValuedParameters(valuedParameters);
 	}
 
 	@Test
 	public void shouldAddHeaderInformationToRequestWhenHeaderParamAnnotationIsPresent() throws Exception {
-		Object[] values = new Object[] { new Object() };
+		Object[] values = new Object[] { "bazinga" };
 		Method method = HeaderParamComponent.class.getDeclaredMethod("method", String.class);
 		ControllerMethod controllerMethod = DefaultControllerMethod.instanceFor(HeaderParamComponent.class, method);
+
 		when(request.getHeader("X-MyApp-Password")).thenReturn("123");
 		when(parametersProvider.getParametersFor(controllerMethod, errors)).thenReturn(values);
+
 		instantiator.instantiate(new StackStarting(controllerMethod));
+
 		verify(request).setParameter("password", "123");
-		verify(methodInfo).setParameters(values);
-		verify(validator).addAll(Collections.<Message>emptyList());
 	}
 
 	@Test
-	public void shouldAddHeaderInformationToRequestWhenHeaderParamAnnotationIsNotPresent() throws Exception {
-		Object[] values = new Object[] { new Object() };
+	public void shouldNotAddHeaderInformationToRequestWhenHeaderParamAnnotationIsNotPresent() throws Exception {
+		Object[] values = new Object[] { "bazinga" };
 		when(parametersProvider.getParametersFor(otherMethod, errors)).thenReturn(values);
-		instantiator.instantiate(new StackStarting(otherMethod));
-		verify(request, never()).setParameter(anyString(), anyString());
-		verify(methodInfo).setParameters(values);
-		verify(validator).addAll(Collections.<Message>emptyList());
-	}
 
-	@Test
-	public void shouldAddVariousHeaderInformationsToRequestWhenHeaderParamAnnotationIsPresent() throws Exception {
-		Object[] values = new Object[] { new Object() };
-		Method method = HeaderParamComponent.class.getDeclaredMethod("otherMethod", String.class, String.class, String.class);
-		ControllerMethod resouceMethod = DefaultControllerMethod.instanceFor(HeaderParamComponent.class, method);
-		when(request.getHeader("X-MyApp-User")).thenReturn("user");
-		when(request.getHeader("X-MyApp-Password")).thenReturn("123");
-		when(request.getHeader("X-MyApp-Token")).thenReturn("daek2321");
-		when(parametersProvider.getParametersFor(resouceMethod, errors)).thenReturn(values);
-		instantiator.instantiate(new StackStarting(resouceMethod));
-		verify(request).setParameter("user", "user");
-		verify(request).setParameter("password", "123");
-		verify(request).setParameter("token", "daek2321");
-		verify(methodInfo).setParameters(values);
-		verify(validator).addAll(Collections.<Message>emptyList());
+		instantiator.instantiate(new StackStarting(otherMethod));
+
+		verify(request, never()).setParameter(anyString(), anyString());
 	}
 
 	private <T> Answer<T> addErrorsToListAndReturn(final T value, final String... messages) {

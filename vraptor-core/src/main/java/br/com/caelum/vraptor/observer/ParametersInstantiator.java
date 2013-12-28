@@ -37,6 +37,7 @@ import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.http.Parameter;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.http.ParametersProvider;
+import br.com.caelum.vraptor.http.ValuedParameter;
 import br.com.caelum.vraptor.validator.Message;
 import br.com.caelum.vraptor.validator.Validator;
 import br.com.caelum.vraptor.view.FlashScope;
@@ -96,7 +97,14 @@ public class ParametersInstantiator {
 			logger.debug("Conversion errors: {}", errors);
 			logger.debug("Parameter values for {} are {}", controllerMethod, values);
 
-			methodInfo.setParameters(values);
+			// TODO use collections instead arrays
+			Parameter[] parameters = parameterNameProvider.parametersFor(controllerMethod.getMethod());
+			ValuedParameter[] valuedParameters = new ValuedParameter[values.length];
+			for (int i = 0; i < valuedParameters.length; i++) {
+				valuedParameters[i] = new ValuedParameter(parameters[i], values[i]);
+			}
+
+			methodInfo.setValuedParameters(valuedParameters);
 		}
 	}
 

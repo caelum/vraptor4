@@ -84,26 +84,20 @@ public class ParametersInstantiator {
 	}
 
 	public void instantiate(@Observes StackStarting event) {
-		
 		ControllerMethod controllerMethod = event.getControllerMethod();
-		
-		if (!containsParameters(controllerMethod)) return;
-			
-		Enumeration<String> names = request.getParameterNames();
-		while (names.hasMoreElements()) {
-			fixParameter(names.nextElement());
+		if (containsParameters(controllerMethod)) {
+			fixIndexedParameters(request);
+			addHeaderParametersToAttribute(controllerMethod);
+
+			Object[] values = getParametersFor(controllerMethod);
+
+			validator.addAll(errors);
+
+			logger.debug("Conversion errors: {}", errors);
+			logger.debug("Parameter values for {} are {}", controllerMethod, values);
+
+			methodInfo.setParameters(values);
 		}
-
-		addHeaderParametersToAttribute(controllerMethod);
-
-		Object[] values = getParametersFor(controllerMethod);
-
-		validator.addAll(errors);
-
-		logger.debug("Conversion errors: {}", errors);
-		logger.debug("Parameter values for {} are {}", controllerMethod, values);
-
-		methodInfo.setParameters(values);
 	}
 
 	private void addHeaderParametersToAttribute(ControllerMethod controllerMethod) {
@@ -116,15 +110,23 @@ public class ParametersInstantiator {
 		}
 	}
 
-	private void fixParameter(String name) {
-		checkArgument(!name.contains(".class."), "Bug Exploit Attempt with parameter: %s", name);
+	private void fixIndexedParameters(MutableRequest request) {
+		Enumeration<String> names = request.getParameterNames();
+		while (names.hasMoreElements()) {
+			String name = names.nextElement();
+			disallowUsingClassAttribute(name);
 
-		if (name.contains("[]")) {
-			String[] values = request.getParameterValues(name);
-			for (int i = 0; i < values.length; i++) {
-				request.setParameter(name.replace("[]", "[" + i + "]"), values[i]);
+			if (name.contains("[]")) {
+				String[] values = request.getParameterValues(name);
+				for (int i = 0; i < values.length; i++) {
+					request.setParameter(name.replace("[]", "[" + i + "]"), values[i]);
+				}
 			}
 		}
+	}
+
+	private void disallowUsingClassAttribute(String name) {
+		checkArgument(!name.contains(".class."), "Bug Exploit Attempt with parameter: %s", name);
 	}
 
 	private Object[] getParametersFor(ControllerMethod method) {

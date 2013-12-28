@@ -56,7 +56,7 @@ public class DownloadObserverTest {
 
 	private DownloadObserver downloadObserver;
 
-	@Mock private MethodInfo info;
+	@Mock private MethodInfo methodInfo;
 	@Mock private HttpServletResponse response;
 	@Mock private ControllerMethod controllerMethod;
 	@Mock private ServletOutputStream outputStream;
@@ -74,8 +74,8 @@ public class DownloadObserverTest {
 	public void whenResultIsADownloadShouldUseIt() throws Exception {
 		when(controllerMethod.getMethod()).thenReturn(getMethod("download"));
 		Download download = mock(Download.class);
-		when(info.getResult()).thenReturn(download);
-		downloadObserver.download(new MethodExecuted(controllerMethod, info), result);
+		when(methodInfo.getResult()).thenReturn(download);
+		downloadObserver.download(new MethodExecuted(controllerMethod, methodInfo), result);
 		verify(download).write(response);
 	}
 
@@ -83,8 +83,8 @@ public class DownloadObserverTest {
 	public void whenResultIsAnInputStreamShouldCreateAInputStreamDownload() throws Exception {
 		when(controllerMethod.getMethod()).thenReturn(getMethod("asByte"));
 		byte[] bytes = "abc".getBytes();
-		when(info.getResult()).thenReturn(new ByteArrayInputStream(bytes));
-		downloadObserver.download(new MethodExecuted(controllerMethod, info), result);
+		when(methodInfo.getResult()).thenReturn(new ByteArrayInputStream(bytes));
+		downloadObserver.download(new MethodExecuted(controllerMethod, methodInfo), result);
 		verify(outputStream).write(argThat(is(arrayStartingWith(bytes))), eq(0), eq(3));
 	}
 
@@ -92,8 +92,8 @@ public class DownloadObserverTest {
 	public void whenResultIsAnInputStreamShouldCreateAByteArrayDownload() throws Exception {
 		when(controllerMethod.getMethod()).thenReturn(getMethod("asByte"));
 		byte[] bytes = "abc".getBytes();
-		when(info.getResult()).thenReturn(bytes);
-		downloadObserver.download(new MethodExecuted(controllerMethod, info), result);
+		when(methodInfo.getResult()).thenReturn(bytes);
+		downloadObserver.download(new MethodExecuted(controllerMethod, methodInfo), result);
 		verify(outputStream).write(argThat(is(arrayStartingWith(bytes))), eq(0), eq(3));
 	}
 
@@ -102,8 +102,8 @@ public class DownloadObserverTest {
 		when(controllerMethod.getMethod()).thenReturn(getMethod("file"));
 		File tmp = File.createTempFile("test", "test");
 		Files.write(tmp.toPath(), "abc".getBytes());
-		when(info.getResult()).thenReturn(tmp);
-		downloadObserver.download(new MethodExecuted(controllerMethod, info), result);
+		when(methodInfo.getResult()).thenReturn(tmp);
+		downloadObserver.download(new MethodExecuted(controllerMethod, methodInfo), result);
 		verify(outputStream).write(argThat(is(arrayStartingWith("abc".getBytes()))), eq(0), eq(3));
 		tmp.delete();
 	}
@@ -111,9 +111,9 @@ public class DownloadObserverTest {
 	@Test
 	public void whenResultIsNullAndResultWasUsedShouldDoNothing() throws Exception {
 		when(controllerMethod.getMethod()).thenReturn(getMethod("download"));
-		when(info.getResult()).thenReturn(null);
+		when(methodInfo.getResult()).thenReturn(null);
 		when(result.used()).thenReturn(true);
-		downloadObserver.download(new MethodExecuted(controllerMethod, info), result);
+		downloadObserver.download(new MethodExecuted(controllerMethod, methodInfo), result);
 		verifyZeroInteractions(response);
 	}
 

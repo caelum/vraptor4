@@ -38,7 +38,7 @@ import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
 public class OutjectResultTest {
 
 	private @Mock Result result;
-	private @Mock MethodInfo info;
+	private @Mock MethodInfo methodInfo;
 	private @Mock Object instance;
 	private @Mock InterceptorStack stack;
 	private @Mock TypeNameExtractor extractor;
@@ -62,9 +62,9 @@ public class OutjectResultTest {
 	public void shouldOutjectWithASimpleTypeName() throws NoSuchMethodException {
 		Method method = MyComponent.class.getMethod("returnsAString");
 		when(controllerMethod.getMethod()).thenReturn(method);
-		when(info.getResult()).thenReturn("myString");
+		when(methodInfo.getResult()).thenReturn("myString");
 		when(extractor.nameFor(String.class)).thenReturn("string");
-		outjectResult.outject(new MethodExecuted(controllerMethod, info), result, info);
+		outjectResult.outject(new MethodExecuted(controllerMethod, methodInfo), result, methodInfo);
 		verify(result).include("string", "myString");
 	}
 
@@ -72,9 +72,9 @@ public class OutjectResultTest {
 	public void shouldOutjectACollectionAsAList() throws NoSuchMethodException {
 		Method method = MyComponent.class.getMethod("returnsStrings");
 		when(controllerMethod.getMethod()).thenReturn(method);
-		when(info.getResult()).thenReturn("myString");
+		when(methodInfo.getResult()).thenReturn("myString");
 		when(extractor.nameFor(method.getGenericReturnType())).thenReturn("stringList");
-		outjectResult.outject(new MethodExecuted(controllerMethod, info), result, info);
+		outjectResult.outject(new MethodExecuted(controllerMethod, methodInfo), result, methodInfo);
 		verify(result).include("stringList", "myString");
 	}
 }

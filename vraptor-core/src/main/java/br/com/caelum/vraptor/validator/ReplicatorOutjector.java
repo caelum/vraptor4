@@ -32,7 +32,7 @@ import br.com.caelum.vraptor.http.ParameterNameProvider;
 public class ReplicatorOutjector implements Outjector {
 
 	private final Result result;
-	private final MethodInfo method;
+	private final MethodInfo methodInfo;
 	private final ParameterNameProvider nameProvider;
 
 	/** 
@@ -45,14 +45,14 @@ public class ReplicatorOutjector implements Outjector {
 	@Inject
 	public ReplicatorOutjector(Result result, MethodInfo method, ParameterNameProvider nameProvider) {
 		this.result = result;
-		this.method = method;
+		this.methodInfo = method;
 		this.nameProvider = nameProvider;
 	}
 
 	@Override
 	public void outjectRequestMap() {
-		Parameter[] params = nameProvider.parametersFor(method.getControllerMethod().getMethod());
-		Object[] values = method.getParameters();
+		Parameter[] params = nameProvider.parametersFor(methodInfo.getControllerMethod().getMethod());
+		Object[] values = methodInfo.getParameters();
 
 		for (int i = 0; i < params.length; i++) {
 			result.include(params[i].getName(), values[i]);

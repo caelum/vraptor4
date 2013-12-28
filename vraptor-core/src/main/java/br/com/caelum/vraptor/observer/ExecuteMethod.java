@@ -52,7 +52,7 @@ public class ExecuteMethod {
 
 	private final static Logger log = getLogger(ExecuteMethod.class);
 
-	private final MethodInfo info;
+	private final MethodInfo methodInfo;
 	private final Validator validator;
 	private final MethodExecutor methodExecutor;
 
@@ -67,9 +67,9 @@ public class ExecuteMethod {
 	}
 
 	@Inject
-	public ExecuteMethod(MethodInfo info, Validator validator, MethodExecutor methodExecutor,
+	public ExecuteMethod(MethodInfo methodInfo, Validator validator, MethodExecutor methodExecutor,
 			Event<MethodExecuted> methodExecutedEvent, Event<ReadyToExecuteMethod> readyToExecuteMethod) {
-		this.info = info;
+		this.methodInfo = methodInfo;
 		this.validator = validator;
 		this.methodExecutor = methodExecutor;
 		this.methodExecutedEvent = methodExecutedEvent;
@@ -82,7 +82,7 @@ public class ExecuteMethod {
 			ControllerMethod method = event.getControllerMethod();
 			readyToExecuteMethod.fire(new ReadyToExecuteMethod(method));
 			Method reflectionMethod = method .getMethod();
-			Object[] parameters = this.info.getParameters();
+			Object[] parameters = methodInfo.getParameters();
 
 			log.debug("Invoking {}", Stringnifier.simpleNameFor(reflectionMethod));
 			Object instance = event.getControllerInstance();
@@ -104,8 +104,8 @@ public class ExecuteMethod {
 								+ "or any view that you like.\n"
 								+ "If you didn't add any validation error, it is possible that a conversion error had happened.");
 			}
-			this.info.setResult(result);
-			methodExecutedEvent.fire(new MethodExecuted(method, info));
+			this.methodInfo.setResult(result);
+			methodExecutedEvent.fire(new MethodExecuted(method, methodInfo));
 		} catch (IllegalArgumentException e) {
 			throw new InterceptionException(e);
 		} catch (MethodExecutorException e) {

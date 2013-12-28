@@ -21,7 +21,7 @@ import br.com.caelum.vraptor.http.ParanamerNameProvider;
 public class ReplicatorOutjectorTest {
 
 	private ParameterNameProvider provider;
-	private @Mock MethodInfo method;
+	private @Mock MethodInfo methodInfo;
 	private @Mock Result result;
 	private @Mock ControllerMethod controllerMethod;
 
@@ -31,15 +31,15 @@ public class ReplicatorOutjectorTest {
 	public void setUp() throws Exception {
 		MockitoAnnotations.initMocks(this);
 		when(controllerMethod.getMethod()).thenReturn(getClass().getDeclaredMethod("foo", int.class, float.class, long.class));
-		when(method.getControllerMethod()).thenReturn(controllerMethod);
+		when(methodInfo.getControllerMethod()).thenReturn(controllerMethod);
 
 		provider = new ParanamerNameProvider(new DefaultCacheStore<AccessibleObject, Parameter[]>());
-		outjector = new ReplicatorOutjector(result, method, provider);
+		outjector = new ReplicatorOutjector(result, methodInfo, provider);
 	}
 
 	@Test
 	public void shouldReplicateMethodParametersToNextRequest() throws Exception {
-		when(method.getParameters()).thenReturn(new Object[] {1, 2.0, 3l});
+		when(methodInfo.getParameters()).thenReturn(new Object[] {1, 2.0, 3l});
 
 		outjector.outjectRequestMap();
 

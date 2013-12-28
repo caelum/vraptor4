@@ -53,7 +53,7 @@ public class DefaultPageResultTest {
 	private Proxifier proxifier;
 	private ControllerMethod method;
 	private PathResolver fixedResolver;
-	private MethodInfo requestInfo;
+	private MethodInfo methodInfo;
 	private DefaultPageResult view;
 
 	@Before
@@ -61,15 +61,15 @@ public class DefaultPageResultTest {
 		MockitoAnnotations.initMocks(this);
 		method = DefaultControllerMethod.instanceFor(AnyResource.class, AnyResource.class.getDeclaredMethods()[0]);
 		proxifier = new JavassistProxifier();
-		requestInfo = new MethodInfo();
-		requestInfo.setControllerMethod(method);
+		methodInfo = new MethodInfo();
+		methodInfo.setControllerMethod(method);
 		fixedResolver = new PathResolver() {
 			@Override
 			public String pathFor(ControllerMethod method) {
 				return "fixed";
 			}
 		};
-		view = new DefaultPageResult(request, response, requestInfo, fixedResolver, proxifier);
+		view = new DefaultPageResult(request, response, methodInfo, fixedResolver, proxifier);
 	}
 
 	public static class AnyResource {

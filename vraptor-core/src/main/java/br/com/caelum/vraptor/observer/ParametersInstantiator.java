@@ -54,7 +54,7 @@ public class ParametersInstantiator {
 
 	private final ParametersProvider provider;
 	private final ParameterNameProvider parameterNameProvider;
-	private final MethodInfo parameters;
+	private final MethodInfo methodInfo;
 	private final Validator validator;
 	private final MutableRequest request;
 	private final FlashScope flash;
@@ -70,10 +70,10 @@ public class ParametersInstantiator {
 
 	@Inject
 	public ParametersInstantiator(ParametersProvider provider, ParameterNameProvider parameterNameProvider, 
-			MethodInfo parameters, Validator validator, MutableRequest request, FlashScope flash) {
+			MethodInfo methodInfo, Validator validator, MutableRequest request, FlashScope flash) {
 		this.provider = provider;
 		this.parameterNameProvider = parameterNameProvider;
-		this.parameters = parameters;
+		this.methodInfo = methodInfo;
 		this.validator = validator;
 		this.request = request;
 		this.flash = flash;
@@ -103,7 +103,7 @@ public class ParametersInstantiator {
 		logger.debug("Conversion errors: {}", errors);
 		logger.debug("Parameter values for {} are {}", controllerMethod, values);
 
-		parameters.setParameters(values);
+		methodInfo.setParameters(values);
 	}
 
 	private void addHeaderParametersToAttribute(ControllerMethod controllerMethod) {

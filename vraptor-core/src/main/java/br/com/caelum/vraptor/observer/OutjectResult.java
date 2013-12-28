@@ -55,13 +55,13 @@ public class OutjectResult {
 		this.extractor = extractor;
 	}
 
-	public void outject(@Observes MethodExecuted event, Result result, MethodInfo info) {
+	public void outject(@Observes MethodExecuted event, Result result, MethodInfo methodInfo) {
 
 		Type returnType = event.getMethodReturnType();
 
 		if (!returnType.equals(Void.TYPE)) {
 			String name = extractor.nameFor(returnType);
-			Object value = info.getResult();
+			Object value = methodInfo.getResult();
 			logger.debug("outjecting {}={}", name, value);
 			result.include(name, value);
 		}

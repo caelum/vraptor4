@@ -58,7 +58,7 @@ import br.com.caelum.vraptor.view.FlashScope;
 
 public class ParametersInstantiatorTest {
 
-	private @Mock MethodInfo params;
+	private @Mock MethodInfo methodInfo;
 	private @Mock ParametersProvider parametersProvider;
 	private ParameterNameProvider parameterNameProvider;
 	private @Mock Validator validator;
@@ -80,7 +80,7 @@ public class ParametersInstantiatorTest {
 		MockitoAnnotations.initMocks(this);
 		when(request.getParameterNames()).thenReturn(Collections.<String> emptyEnumeration());
 
-		this.instantiator = new ParametersInstantiator(parametersProvider, parameterNameProvider, params, validator, request, flash);
+		this.instantiator = new ParametersInstantiator(parametersProvider, parameterNameProvider, methodInfo, validator, request, flash);
 
 		this.errors = (List<Message>) new Mirror().on(instantiator).get().field("errors");
 		this.method = DefaultControllerMethod.instanceFor(Component.class, Component.class.getDeclaredMethod("method"));
@@ -101,7 +101,7 @@ public class ParametersInstantiatorTest {
 
 	@Test
 	public void shouldNotAcceptIfMethodHasNoParameters() {
-		verifyNoMoreInteractions(parametersProvider, params, validator, request, flash);
+		verifyNoMoreInteractions(parametersProvider, methodInfo, validator, request, flash);
 		instantiator.instantiate(new StackStarting(method));
 	}
 
@@ -110,7 +110,7 @@ public class ParametersInstantiatorTest {
 		Object[] values = new Object[] { new Object() };
 		when(parametersProvider.getParametersFor(otherMethod, errors)).thenReturn(values);
 		instantiator.instantiate(new StackStarting(otherMethod));
-		verify(params).setParameters(values);
+		verify(methodInfo).setParameters(values);
 		verify(validator).addAll(Collections.<Message>emptyList());
 	}
 
@@ -139,7 +139,7 @@ public class ParametersInstantiatorTest {
 		Object[] values = new Object[] { new Object() };
 		when(flash.consumeParameters(otherMethod)).thenReturn(values);
 		instantiator.instantiate(new StackStarting(otherMethod));
-		verify(params).setParameters(values);
+		verify(methodInfo).setParameters(values);
 		verify(validator).addAll(Collections.<Message>emptyList());
 		verify(parametersProvider, never()).getParametersFor(otherMethod, errors);
 	}
@@ -151,7 +151,7 @@ public class ParametersInstantiatorTest {
 				addErrorsToListAndReturn(values, "error1"));
 		instantiator.instantiate(new StackStarting(otherMethod));
 		verify(validator).addAll(errors);
-		verify(params).setParameters(values);
+		verify(methodInfo).setParameters(values);
 	}
 
 	@Test
@@ -163,7 +163,7 @@ public class ParametersInstantiatorTest {
 		when(parametersProvider.getParametersFor(controllerMethod, errors)).thenReturn(values);
 		instantiator.instantiate(new StackStarting(controllerMethod));
 		verify(request).setParameter("password", "123");
-		verify(params).setParameters(values);
+		verify(methodInfo).setParameters(values);
 		verify(validator).addAll(Collections.<Message>emptyList());
 	}
 
@@ -173,7 +173,7 @@ public class ParametersInstantiatorTest {
 		when(parametersProvider.getParametersFor(otherMethod, errors)).thenReturn(values);
 		instantiator.instantiate(new StackStarting(otherMethod));
 		verify(request, never()).setParameter(anyString(), anyString());
-		verify(params).setParameters(values);
+		verify(methodInfo).setParameters(values);
 		verify(validator).addAll(Collections.<Message>emptyList());
 	}
 
@@ -190,7 +190,7 @@ public class ParametersInstantiatorTest {
 		verify(request).setParameter("user", "user");
 		verify(request).setParameter("password", "123");
 		verify(request).setParameter("token", "daek2321");
-		verify(params).setParameters(values);
+		verify(methodInfo).setParameters(values);
 		verify(validator).addAll(Collections.<Message>emptyList());
 	}
 

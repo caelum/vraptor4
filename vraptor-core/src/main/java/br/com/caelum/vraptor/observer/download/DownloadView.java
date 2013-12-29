@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import br.com.caelum.vraptor.View;
 
 /**
+ * A view implementation that writes a download into response.
  * @author Rodrigo Turini
  * @author Victor Kendy Harada
  */

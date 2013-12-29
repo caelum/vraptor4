@@ -299,7 +299,7 @@ public class LinkToHandler extends ForwardingMap<Class<?>, Object> {
 			CtClass ctClass = pool.getOrNull(clazz.getName());
 			if (ctClass != null) {
 				ctClass.detach();
-				logger.debug("class {} is detached");
+				logger.debug("class {} is detached", clazz.getName());
 			}
 		}
 	}

@@ -7,6 +7,7 @@ import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 
 import java.io.IOException;
+import java.lang.reflect.AccessibleObject;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -16,14 +17,15 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor.Consumes;
-import br.com.caelum.vraptor.ValuedParameterProducer;
+import br.com.caelum.vraptor.cache.DefaultCacheStore;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.controller.DefaultControllerMethod;
 import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.deserialization.Deserializer;
 import br.com.caelum.vraptor.deserialization.Deserializers;
 import br.com.caelum.vraptor.events.ReadyToExecuteMethod;
-import br.com.caelum.vraptor.http.ValuedParameter;
+import br.com.caelum.vraptor.http.Parameter;
+import br.com.caelum.vraptor.http.ParanamerNameProvider;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.view.Status;
 
@@ -44,7 +46,7 @@ public class DeserializingObserverTest {
 	public void setUp() throws Exception {
 		MockitoAnnotations.initMocks(this);
 
-		methodInfo = new MethodInfo();
+		methodInfo = new MethodInfo(new ParanamerNameProvider(new DefaultCacheStore<AccessibleObject, Parameter[]>()));
 
 		observer = new DeserializingObserver(deserializers, container);
 		consumeXml = new DefaultControllerMethod(null, DummyResource.class.getDeclaredMethod("consumeXml", String.class, String.class));
@@ -91,8 +93,7 @@ public class DeserializingObserverTest {
 	public void willSetMethodParametersWithDeserializationAndContinueStackAfterDeserialization() throws Exception {
 		final Deserializer deserializer = mock(Deserializer.class);
 
-		ValuedParameter[] params = ValuedParameterProducer.from(consumeXml.getMethod(), new Object[2]);
-		methodInfo.setValuedParameters(params);
+		methodInfo.setControllerMethod(consumeXml);
 
 		when(request.getContentType()).thenReturn("application/xml");
 		when(deserializer.deserialize(null, consumeXml)).thenReturn(new Object[] {"abc", "def"});
@@ -108,8 +109,7 @@ public class DeserializingObserverTest {
 	public void willSetMethodParametersWithDeserializationEvenIfTheContentTypeHasCharsetDeclaration() throws Exception {
 		final Deserializer deserializer = mock(Deserializer.class);
 
-		ValuedParameter[] valuedParameters = ValuedParameterProducer.from(consumeXml.getMethod(), new Object[2]);
-		methodInfo.setValuedParameters(valuedParameters);
+		methodInfo.setControllerMethod(consumeXml);
 
 		when(request.getContentType()).thenReturn("application/xml; charset=UTF-8");
 		when(deserializer.deserialize(null, consumeXml)).thenReturn(new Object[] {"abc", "def"});
@@ -128,8 +128,7 @@ public class DeserializingObserverTest {
 
 		when(request.getContentType()).thenReturn("application/xml");
 
-		ValuedParameter[] valuedParameters = ValuedParameterProducer.from(consumesAnything.getMethod(), new Object[2]);
-		methodInfo.setValuedParameters(valuedParameters);
+		methodInfo.setControllerMethod(consumesAnything);
 
 		final Deserializer deserializer = mock(Deserializer.class);
 		when(deserializer.deserialize(null, consumesAnything)).thenReturn(new Object[] {"abc", "def"});
@@ -145,9 +144,9 @@ public class DeserializingObserverTest {
 	public void willSetOnlyNonNullParameters() throws Exception {
 		final Deserializer deserializer = mock(Deserializer.class);
 
-		String[] values = {"original1", "original2"};
-		ValuedParameter[] valuedParameters = ValuedParameterProducer.from(consumeXml.getMethod(), values);
-		methodInfo.setValuedParameters(valuedParameters);
+		methodInfo.setControllerMethod(consumeXml);
+		methodInfo.getValuedParameters()[0].setValue("original1");
+		methodInfo.getValuedParameters()[1].setValue("original2");
 
 		when(request.getContentType()).thenReturn("application/xml");
 		when(deserializer.deserialize(null, consumeXml)).thenReturn(new Object[] {null, "deserialized"});

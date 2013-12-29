@@ -17,8 +17,11 @@
 package br.com.caelum.vraptor.core;
 
 import javax.enterprise.context.RequestScoped;
+import javax.inject.Inject;
 
 import br.com.caelum.vraptor.controller.ControllerMethod;
+import br.com.caelum.vraptor.http.Parameter;
+import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.http.ValuedParameter;
 
 /**
@@ -30,15 +33,30 @@ import br.com.caelum.vraptor.http.ValuedParameter;
 @RequestScoped
 public class MethodInfo {
 
+	private final ParameterNameProvider parameterNameProvider;
+
 	private ControllerMethod controllerMethod;
 	private ValuedParameter[] valuedParameters;
 	private Object result;
+
+	/**
+	 * @deprecated CDI eyes only
+	 */
+	public MethodInfo() {
+		this(null);
+	}
+
+	@Inject
+	public MethodInfo(ParameterNameProvider parameterNameProvider) {
+		this.parameterNameProvider = parameterNameProvider;
+	}
 
 	public ControllerMethod getControllerMethod() {
 		return controllerMethod;
 	}
 
 	public void setControllerMethod(ControllerMethod controllerMethod) {
+		createValuedParameter(controllerMethod);
 		this.controllerMethod = controllerMethod;
 	}
 
@@ -69,5 +87,15 @@ public class MethodInfo {
 
 	public void setResult(Object result) {
 		this.result = result;
+	}
+
+	private void createValuedParameter(ControllerMethod controllerMethod) {
+		if (controllerMethod != null && controllerMethod.getMethod() != null) {
+			Parameter[] parameters = parameterNameProvider.parametersFor(controllerMethod.getMethod());
+			valuedParameters = new ValuedParameter[parameters.length];
+			for (int i = 0; i < valuedParameters.length; i++) {
+				valuedParameters[i] = new ValuedParameter(parameters[i], null);
+			}
+		}
 	}
 }

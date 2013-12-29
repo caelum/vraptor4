@@ -97,14 +97,10 @@ public class ParametersInstantiator {
 			logger.debug("Conversion errors: {}", errors);
 			logger.debug("Parameter values for {} are {}", controllerMethod, values);
 
-			// TODO use collections instead arrays
-			Parameter[] parameters = parameterNameProvider.parametersFor(controllerMethod.getMethod());
-			ValuedParameter[] valuedParameters = new ValuedParameter[values.length];
+			ValuedParameter[] valuedParameters = methodInfo.getValuedParameters();
 			for (int i = 0; i < valuedParameters.length; i++) {
-				valuedParameters[i] = new ValuedParameter(parameters[i], values[i]);
+				valuedParameters[i].setValue(values[i]);
 			}
-
-			methodInfo.setValuedParameters(valuedParameters);
 		}
 	}
 

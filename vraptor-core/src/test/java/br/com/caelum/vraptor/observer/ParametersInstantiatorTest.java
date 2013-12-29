@@ -19,6 +19,7 @@ package br.com.caelum.vraptor.observer;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.enumeration;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -36,12 +37,12 @@ import net.vidageek.mirror.dsl.Mirror;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
 import br.com.caelum.vraptor.HeaderParam;
-import br.com.caelum.vraptor.ValuedParameterProducer;
 import br.com.caelum.vraptor.cache.DefaultCacheStore;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.controller.DefaultControllerMethod;
@@ -52,7 +53,6 @@ import br.com.caelum.vraptor.http.Parameter;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.http.ParametersProvider;
 import br.com.caelum.vraptor.http.ParanamerNameProvider;
-import br.com.caelum.vraptor.http.ValuedParameter;
 import br.com.caelum.vraptor.validator.Message;
 import br.com.caelum.vraptor.validator.SimpleMessage;
 import br.com.caelum.vraptor.validator.Validator;
@@ -60,7 +60,7 @@ import br.com.caelum.vraptor.view.FlashScope;
 
 public class ParametersInstantiatorTest {
 
-	private @Mock MethodInfo methodInfo;
+	private MethodInfo methodInfo = new MethodInfo(new ParanamerNameProvider(new DefaultCacheStore<AccessibleObject, Parameter[]>()));
 	private @Mock ParametersProvider parametersProvider;
 	private ParameterNameProvider parameterNameProvider;
 	private @Mock Validator validator;
@@ -103,6 +103,7 @@ public class ParametersInstantiatorTest {
 
 	@Test
 	public void shouldNotAcceptIfMethodHasNoParameters() {
+		MethodInfo methodInfo = Mockito.mock(MethodInfo.class);
 		verifyNoMoreInteractions(parametersProvider, methodInfo, validator, request, flash);
 		instantiator.instantiate(new StackStarting(method));
 	}
@@ -110,14 +111,15 @@ public class ParametersInstantiatorTest {
 	@Test
 	public void shouldUseTheProvidedParameters() throws Exception {
 		Object[] values = new Object[] { "bazinga" };
-		ValuedParameter[] valuedParameters = ValuedParameterProducer.from(otherMethod.getMethod(), values);
+		methodInfo.setControllerMethod(otherMethod);
 
 		when(parametersProvider.getParametersFor(otherMethod, errors)).thenReturn(values);
 
 		instantiator.instantiate(new StackStarting(otherMethod));
 
-		verify(methodInfo).setValuedParameters(valuedParameters);
 		verify(validator).addAll(Collections.<Message> emptyList());
+
+		assertEquals("bazinga", methodInfo.getValuedParameters()[0].getValue());
 	}
 
 	@Test
@@ -146,28 +148,29 @@ public class ParametersInstantiatorTest {
 	@Test
 	public void shouldUseAndDiscardFlashParameters() throws Exception {
 		Object[] values = new Object[] { "bazinga" };
-		ValuedParameter[] valuedParameters = ValuedParameterProducer.from(otherMethod.getMethod(), values);
+		methodInfo.setControllerMethod(otherMethod);
 
 		when(flash.consumeParameters(otherMethod)).thenReturn(values);
 
 		instantiator.instantiate(new StackStarting(otherMethod));
 
-		verify(methodInfo).setValuedParameters(valuedParameters);
 		verify(validator).addAll(Collections.<Message>emptyList());
 		verify(parametersProvider, never()).getParametersFor(otherMethod, errors);
+
+		assertEquals("bazinga", methodInfo.getValuedParameters()[0].getValue());
 	}
 
 	@Test
 	public void shouldValidateParameters() throws Exception {
-		Object[] values = new Object[]{0};
-		ValuedParameter[] valuedParameters = ValuedParameterProducer.from(otherMethod.getMethod(), values);
+		methodInfo.setControllerMethod(otherMethod);
 
-		when(parametersProvider.getParametersFor(otherMethod, errors)).thenAnswer(addErrorsToListAndReturn(values, "error1"));
+		when(parametersProvider.getParametersFor(otherMethod, errors))
+			.thenAnswer(addErrorsToListAndReturn(new Object[] { 0 }, "error1"));
 
 		instantiator.instantiate(new StackStarting(otherMethod));
 
 		verify(validator).addAll(errors);
-		verify(methodInfo).setValuedParameters(valuedParameters);
+		assertEquals(methodInfo.getValuedParameters()[0].getValue(), 0);
 	}
 
 	@Test
@@ -175,6 +178,7 @@ public class ParametersInstantiatorTest {
 		Object[] values = new Object[] { "bazinga" };
 		Method method = HeaderParamComponent.class.getDeclaredMethod("method", String.class);
 		ControllerMethod controllerMethod = DefaultControllerMethod.instanceFor(HeaderParamComponent.class, method);
+		methodInfo.setControllerMethod(controllerMethod);
 
 		when(request.getHeader("X-MyApp-Password")).thenReturn("123");
 		when(parametersProvider.getParametersFor(controllerMethod, errors)).thenReturn(values);

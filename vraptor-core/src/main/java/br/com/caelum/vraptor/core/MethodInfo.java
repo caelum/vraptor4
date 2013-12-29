@@ -43,6 +43,9 @@ public class MethodInfo {
 	}
 
 	public ValuedParameter[] getValuedParameters() {
+		if (valuedParameters == null) {
+			valuedParameters = new ValuedParameter[0];
+		}
 		return valuedParameters;
 	}
 
@@ -51,10 +54,10 @@ public class MethodInfo {
 	}
 
 	public Object[] getParametersValues() {
-		Object[] out = new Object[valuedParameters.length];
+		Object[] out = new Object[getValuedParameters().length];
 
-		for (int i = 0; i < valuedParameters.length; i++) {
-			out[i] = valuedParameters[i].getValue();
+		for (int i = 0; i < getValuedParameters().length; i++) {
+			out[i] = getValuedParameters()[i].getValue();
 		}
 
 		return out;

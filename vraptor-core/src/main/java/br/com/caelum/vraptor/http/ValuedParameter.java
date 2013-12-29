@@ -21,6 +21,14 @@ public class ValuedParameter {
 	public Parameter getParameter() {
 		return parameter;
 	}
+	
+	/**
+	 * An alias to getParameter().getName().
+	 * @return
+	 */
+	public String getName() {
+		return parameter.getName();
+	}
 
 	public Object getValue() {
 		return value;

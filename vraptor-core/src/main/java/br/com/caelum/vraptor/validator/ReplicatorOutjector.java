@@ -49,7 +49,7 @@ public class ReplicatorOutjector implements Outjector {
 	@Override
 	public void outjectRequestMap() {
 		for (ValuedParameter vparameter : methodInfo.getValuedParameters()) {
-			result.include(vparameter.getParameter().getName(), vparameter.getValue());
+			result.include(vparameter.getName(), vparameter.getValue());
 		}
 	}
 }

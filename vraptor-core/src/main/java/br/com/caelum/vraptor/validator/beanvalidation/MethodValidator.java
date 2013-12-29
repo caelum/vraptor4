@@ -120,6 +120,6 @@ public class MethodValidator {
 		property.next();
 		ParameterNode parameterNode = property.next().as(ParameterNode.class);
 		int index = parameterNode.getParameterIndex();
-		return Joiner.on(".").join(v.getPropertyPath()).replace("arg" + index, params[index].getParameter().getName());
+		return Joiner.on(".").join(v.getPropertyPath()).replace("arg" + index, params[index].getName());
 	}
 }

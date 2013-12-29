@@ -100,8 +100,8 @@ public class DeserializingObserverTest {
 
 		observer.deserializes(new ReadyToExecuteMethod(consumeXml), request, methodInfo, status);
 
-		assertEquals(methodInfo.getParametersValues()[0], "abc");
-		assertEquals(methodInfo.getParametersValues()[1], "def");
+		assertEquals(methodInfo.getValuedParameters()[0].getValue(), "abc");
+		assertEquals(methodInfo.getValuedParameters()[1].getValue(), "def");
 	}
 
 	@Test
@@ -117,8 +117,8 @@ public class DeserializingObserverTest {
 
 		observer.deserializes(new ReadyToExecuteMethod(consumeXml), request, methodInfo, status);
 
-		assertEquals(methodInfo.getParametersValues()[0], "abc");
-		assertEquals(methodInfo.getParametersValues()[1], "def");
+		assertEquals(methodInfo.getValuedParameters()[0].getValue(), "abc");
+		assertEquals(methodInfo.getValuedParameters()[1].getValue(), "def");
 	}
 
 	@Test
@@ -137,8 +137,8 @@ public class DeserializingObserverTest {
 		when(deserializers.deserializerFor("application/xml", container)).thenReturn(deserializer);
 		observer.deserializes(new ReadyToExecuteMethod(consumesAnything), request, methodInfo, status);
 
-		assertEquals(methodInfo.getParametersValues()[0], "abc");
-		assertEquals(methodInfo.getParametersValues()[1], "def");
+		assertEquals(methodInfo.getValuedParameters()[0].getValue(), "abc");
+		assertEquals(methodInfo.getValuedParameters()[1].getValue(), "def");
 	}
 
 	@Test
@@ -155,8 +155,8 @@ public class DeserializingObserverTest {
 		when(deserializers.deserializerFor("application/xml", container)).thenReturn(deserializer);
 		observer.deserializes(new ReadyToExecuteMethod(consumeXml), request, methodInfo, status);
 
-		assertEquals(methodInfo.getParametersValues()[0], "original1");
-		assertEquals(methodInfo.getParametersValues()[1], "deserialized");
+		assertEquals(methodInfo.getValuedParameters()[0].getValue(), "original1");
+		assertEquals(methodInfo.getValuedParameters()[1].getValue(), "deserialized");
 	}
 
 	@Test(expected = IOException.class)

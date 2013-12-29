@@ -38,8 +38,7 @@ import br.com.caelum.vraptor.controller.ControllerInstance;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.events.ReadyToExecuteMethod;
-import br.com.caelum.vraptor.http.Parameter;
-import br.com.caelum.vraptor.http.ParameterNameProvider;
+import br.com.caelum.vraptor.http.ValuedParameter;
 import br.com.caelum.vraptor.validator.SimpleMessage;
 import br.com.caelum.vraptor.validator.Validator;
 
@@ -60,34 +59,32 @@ public class MethodValidator {
 
 	private final Locale locale;
 	private final MessageInterpolator interpolator;
-	private final ParameterNameProvider parameterNameProvider;
 	private final javax.validation.Validator bvalidator;
 
 	/**
 	 * @deprecated CDI eyes only
 	 */
 	protected MethodValidator() {
-		this(null, null, null, null);
+		this(null, null, null);
 	}
 
 	@Inject
-	public MethodValidator(Locale locale, MessageInterpolator interpolator,
-			javax.validation.Validator bvalidator, ParameterNameProvider parameterNameProvider) {
+	public MethodValidator(Locale locale, MessageInterpolator interpolator, javax.validation.Validator bvalidator) {
 		this.locale = locale;
 		this.interpolator = interpolator;
 		this.bvalidator = bvalidator;
-		this.parameterNameProvider = parameterNameProvider;
 	}
 
 	/**
 	 * Only accepts if method isn't parameterless and have at least one constraint.
 	 */
-	private boolean hasNoParamsOrConstraints(ControllerMethod controllerMethod) {
+	private boolean hasConstraints(ControllerMethod controllerMethod) {
 		Method method = controllerMethod.getMethod();
 		if (method.getParameterTypes().length == 0) {
 			logger.debug("method {} has no parameters, skipping", controllerMethod);
 			return false;
 		}
+
 		BeanDescriptor bean = bvalidator.getConstraintsForClass(controllerMethod.getController().getType());
 		MethodDescriptor descriptor = bean.getConstraintsForMethod(method.getName(), method.getParameterTypes());
 		return descriptor != null && descriptor.hasConstrainedParameters();
@@ -95,24 +92,21 @@ public class MethodValidator {
 
 	public void validate(@Observes ReadyToExecuteMethod event, ControllerInstance controllerInstance,
 			MethodInfo methodInfo, Validator validator) {
-
 		ControllerMethod controllerMethod = event.getControllerMethod();
-		if (!hasNoParamsOrConstraints(controllerMethod)) return;
 
-		Method method = controllerMethod.getMethod();
-		Set<ConstraintViolation<Object>> violations = bvalidator.forExecutables()
-				.validateParameters(controllerInstance.getController(), method, methodInfo.getParametersValues());
+		if (hasConstraints(controllerMethod)) {
+			Set<ConstraintViolation<Object>> violations = bvalidator.forExecutables().validateParameters(
+					controllerInstance.getController(), controllerMethod.getMethod(), methodInfo.getParametersValues());
 
-		logger.debug("there are {} violations at method {}.", violations.size(), controllerMethod);
+			logger.debug("there are {} violations at method {}.", violations.size(), controllerMethod);
 
-		Parameter[] params = violations.isEmpty() ? new Parameter[0] : parameterNameProvider.parametersFor(method);
-
-		for (ConstraintViolation<Object> v : violations) {
-			BeanValidatorContext ctx = new BeanValidatorContext(v);
-			String msg = interpolator.interpolate(v.getMessageTemplate(), ctx, locale);
-			String category = extractCategory(params, v);
-			validator.add(new SimpleMessage(category, msg));
-			logger.debug("added message {}={} for contraint violation", category, msg);
+			for (ConstraintViolation<Object> v : violations) {
+				BeanValidatorContext ctx = new BeanValidatorContext(v);
+				String msg = interpolator.interpolate(v.getMessageTemplate(), ctx, locale);
+				String category = extractCategory(methodInfo.getValuedParameters(), v);
+				validator.add(new SimpleMessage(category, msg));
+				logger.debug("added message {}={} for contraint violation", category, msg);
+			}
 		}
 	}
 
@@ -121,12 +115,11 @@ public class MethodValidator {
 	 * is the name of method with full path for property. You can override this method to
 	 * change this behaviour.
 	 */
-	protected String extractCategory(Parameter[] params, ConstraintViolation<Object> v) {
+	protected String extractCategory(ValuedParameter[] params, ConstraintViolation<Object> v) {
 		Iterator<Node> property = v.getPropertyPath().iterator();
 		property.next();
 		ParameterNode parameterNode = property.next().as(ParameterNode.class);
 		int index = parameterNode.getParameterIndex();
-		int parameterIndex = parameterNode.getParameterIndex();
-		return Joiner.on(".").join(v.getPropertyPath()).replace("arg" + parameterIndex, params[index].getName());
+		return Joiner.on(".").join(v.getPropertyPath()).replace("arg" + index, params[index].getParameter().getName());
 	}
 }

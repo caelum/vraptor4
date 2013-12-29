@@ -10,7 +10,6 @@ import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Method;
 import java.util.Locale;
 
@@ -22,14 +21,12 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.MockitoAnnotations;
 
-import br.com.caelum.vraptor.cache.DefaultCacheStore;
+import br.com.caelum.vraptor.ValuedParameterProducer;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.controller.DefaultControllerInstance;
 import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.events.ReadyToExecuteMethod;
-import br.com.caelum.vraptor.http.Parameter;
-import br.com.caelum.vraptor.http.ParameterNameProvider;
-import br.com.caelum.vraptor.http.ParanamerNameProvider;
+import br.com.caelum.vraptor.http.ValuedParameter;
 import br.com.caelum.vraptor.util.test.MockValidator;
 import br.com.caelum.vraptor.validator.beanvalidation.MessageInterpolatorFactory;
 import br.com.caelum.vraptor.validator.beanvalidation.MethodValidator;
@@ -43,7 +40,6 @@ import br.com.caelum.vraptor.validator.beanvalidation.MethodValidator;
  */
 public class MethodValidatorTest {
 
-	private ParameterNameProvider provider;
 	private Validator validator;
 	private ValidatorFactory validatorFactory;
 	private MessageInterpolator interpolator;
@@ -57,7 +53,6 @@ public class MethodValidatorTest {
 	public void setup() throws Exception {
 		MockitoAnnotations.initMocks(this);
 		Locale.setDefault(Locale.ENGLISH);
-		provider = new ParanamerNameProvider(new DefaultCacheStore<AccessibleObject, Parameter[]>());
 		validatorFactory = javax.validation.Validation.buildDefaultValidatorFactory();
 		interpolator = new MessageInterpolatorFactory(validatorFactory).getInstance();
 		validator = new MockValidator();
@@ -74,6 +69,10 @@ public class MethodValidatorTest {
 
 	@Test
 	public void shouldAcceptIfMethodHasConstraint() {
+		ValuedParameter[] values = ValuedParameterProducer.from(withConstraint.getMethod());
+		when(methodInfo.getValuedParameters()).thenReturn(values);
+		when(methodInfo.getParametersValues()).thenReturn(new Object[] { null });
+
 		DefaultControllerInstance controller = spy(instance);
 		getMethodValidator().validate(new ReadyToExecuteMethod(withConstraint), controller, methodInfo, validator);
 		verify(controller).getController();
@@ -88,14 +87,17 @@ public class MethodValidatorTest {
 
 	@Test
 	public void shouldValidateMethodWithConstraint() throws Exception {
+		ValuedParameter[] values = ValuedParameterProducer.from(withConstraint.getMethod());
+		when(methodInfo.getValuedParameters()).thenReturn(values);
+		when(methodInfo.getParametersValues()).thenReturn(new Object[] { null });
+
 		getMethodValidator().validate(new ReadyToExecuteMethod(withConstraint), instance, methodInfo, validator);
 		assertThat(validator.getErrors(), hasSize(1));
 		assertThat(validator.getErrors().get(0).getCategory(), is("withConstraint.email"));
 	}
 
 	private MethodValidator getMethodValidator() {
-		return new MethodValidator(new Locale("pt", "br"), interpolator,
-				validatorFactory.getValidator(), provider);
+		return new MethodValidator(new Locale("pt", "br"), interpolator, validatorFactory.getValidator());
 	}
 
 	/**

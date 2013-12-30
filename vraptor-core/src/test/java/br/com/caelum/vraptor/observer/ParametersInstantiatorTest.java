@@ -126,8 +126,9 @@ public class ParametersInstantiatorTest {
 	public void shouldConvertArrayParametersToIndexParameters() throws Exception {
 		when(request.getParameterNames()).thenReturn(enumeration(asList("someParam[].id", "unrelatedParam")));
 		when(request.getParameterValues("someParam[].id")).thenReturn(new String[] {"one", "two", "three"});
-		when(parametersProvider.getParametersFor(otherMethod, errors)).thenReturn(new Object[0]);
+		when(parametersProvider.getParametersFor(otherMethod, errors)).thenReturn(new Object[1]);
 
+		methodInfo.setControllerMethod(otherMethod);
 		instantiator.instantiate(new StackStarting(otherMethod));
 
 		verify(request).setParameter("someParam[0].id", "one");
@@ -193,6 +194,7 @@ public class ParametersInstantiatorTest {
 		Object[] values = new Object[] { "bazinga" };
 		when(parametersProvider.getParametersFor(otherMethod, errors)).thenReturn(values);
 
+		methodInfo.setControllerMethod(otherMethod);
 		instantiator.instantiate(new StackStarting(otherMethod));
 
 		verify(request, never()).setParameter(anyString(), anyString());

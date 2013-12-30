@@ -62,7 +62,7 @@ public class MethodInfo {
 
 	public ValuedParameter[] getValuedParameters() {
 		if (valuedParameters == null) {
-			valuedParameters = new ValuedParameter[0];
+			valuedParameters = new ValuedParameter[controllerMethod.getMethod().getTypeParameters().length];
 		}
 		return valuedParameters;
 	}

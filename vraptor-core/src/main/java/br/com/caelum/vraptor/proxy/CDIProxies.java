@@ -1,5 +1,11 @@
 package br.com.caelum.vraptor.proxy;
 
+/**
+ * Utility class to work with CDI proxies.
+ * 
+ * @author Otávio Scherer Garcia
+ * @author Mario Amaral
+ */
 public final class CDIProxies {
 
 	private static final Class<?> weldProxyClass;

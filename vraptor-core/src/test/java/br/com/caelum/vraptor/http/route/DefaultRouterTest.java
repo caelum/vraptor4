@@ -40,6 +40,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.Controller;
+import br.com.caelum.vraptor.Get;
 import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.cache.CacheStore;
 import br.com.caelum.vraptor.cache.DefaultCacheStore;
@@ -267,6 +268,14 @@ public class DefaultRouterTest {
 				"add", Dog.class))));
 	}
 
+	@Test
+	public void shouldReturnTheFirstRouteFound() throws Exception {
+		Method method = MyController.class.getDeclaredMethod("listDogs", Integer.class);
+		registerRulesFor(MyController.class);
+
+		assertEquals("/dogs/1", router.urlFor(MyController.class, method, new Object[] { "1" }));
+	}
+
 
 	class Dog {
 		private Long id;
@@ -306,6 +315,10 @@ public class DefaultRouterTest {
 
 		@Path("/*/customPath")
 		public void starPath() {
+		}
+
+		@Get({ "/dogs/{page}", "/dogs" })
+		public void listDogs(Integer page) {
 		}
 	}
 

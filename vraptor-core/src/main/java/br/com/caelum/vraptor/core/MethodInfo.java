@@ -71,6 +71,10 @@ public class MethodInfo {
 		this.valuedParameters = valuedParameters;
 	}
 
+	public void setParameter(int index, Object value) {
+		valuedParameters[index].setValue(value);
+	}
+
 	public Object[] getParametersValues() {
 		Object[] out = new Object[getValuedParameters().length];
 

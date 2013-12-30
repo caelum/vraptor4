@@ -38,7 +38,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
-import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.inject.spi.CDI;
@@ -220,25 +219,10 @@ public abstract class GenericContainerTest {
 		}
 	}
 
-	static public class StartableComponent {
-		private boolean started;
-
-		@PostConstruct
-		public void postConstruct() {
-			this.started = true;
-		}
-	}
-
 	@Test
 	public void shouldDisposeAfterRequest() {
 		DisposableComponent comp = getFromContainer(DisposableComponent.class);
 		assertTrue(comp.destroyed);
-	}
-
-	@Test
-	public void shouldStartBeforeRequestExecution() {
-		StartableComponent comp = getFromContainer(StartableComponent.class);
-		assertTrue(comp.started);
 	}
 
 	@Test

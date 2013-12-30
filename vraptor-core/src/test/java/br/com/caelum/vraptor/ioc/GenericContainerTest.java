@@ -42,11 +42,8 @@ import java.util.Map.Entry;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.context.Dependent;
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.inject.spi.CDI;
-import javax.inject.Named;
 
 import org.hamcrest.Matcher;
 import org.hamcrest.MatcherAssert;
@@ -87,8 +84,6 @@ import br.com.caelum.vraptor.http.route.Router;
 import br.com.caelum.vraptor.interceptor.InterceptorRegistry;
 import br.com.caelum.vraptor.ioc.cdi.CDIBasedContainer;
 import br.com.caelum.vraptor.ioc.cdi.Code;
-import br.com.caelum.vraptor.ioc.fixture.ComponentFactoryInTheClasspath;
-import br.com.caelum.vraptor.ioc.fixture.ComponentFactoryInTheClasspath.Provided;
 import br.com.caelum.vraptor.ioc.fixture.ControllerInTheClasspath;
 import br.com.caelum.vraptor.ioc.fixture.ConverterInTheClasspath;
 import br.com.caelum.vraptor.ioc.fixture.CustomComponentInTheClasspath;
@@ -126,16 +121,6 @@ public abstract class GenericContainerTest {
 		provider = null;
 	}
 
-	@ApplicationScoped
-	public static class MyAppComponent {
-
-	}
-
-	@Test
-	public void processesCorrectlyAppBasedComponents() {
-		checkAvailabilityFor(true, MyAppComponent.class);
-	}
-
 	@Test
 	public void canProvideJodaTimeConverters() {
 		executeInsideRequest(new WhatToDo<String>() {
@@ -146,36 +131,6 @@ public abstract class GenericContainerTest {
 				Converters converters = getFromContainerInCurrentThread(Converters.class, request);
 				assertTrue(converters.existsFor(LocalDate.class));
 				assertTrue(converters.existsFor(LocalTime.class));
-				return null;
-			}
-		});
-	}
-
-	@RequestScoped
-	@Named("teste")
-	public static class MyRequestComponent {
-
-	}
-
-	@Test
-	public void processesCorrectlyRequestBasedComponents() {
-		checkAvailabilityFor(false, MyRequestComponent.class);
-	}
-
-	@Dependent
-	public static class MyDependentComponent {
-
-	}
-
-	@Test
-	public void processesCorrectlyDependentComponents() {
-		executeInsideRequest(new WhatToDo<Object>() {
-			@Override
-			public Object execute(RequestInfo request, int counter) {
-				provider.provideForRequest(request);
-				MyDependentComponent instance1 = instanceFor(MyDependentComponent.class, currentContainer);
-				MyDependentComponent instance2 = instanceFor(MyDependentComponent.class, currentContainer);
-				assertThat(instance1, not(sameInstance(instance2)));
 				return null;
 			}
 		});

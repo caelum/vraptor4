@@ -41,6 +41,7 @@ import javassist.CtMethod;
 import javassist.NotFoundException;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -289,5 +290,17 @@ public class LinkToHandler extends ForwardingMap<Class<?>, Object> {
 			}
 			return classes;
 	   }
+	}
+	
+	@PreDestroy
+	public void removeGeneratedClasses() {
+		ClassPool pool = ClassPool.getDefault();
+		for (Class<?> clazz : interfaces.values()) {
+			CtClass ctClass = pool.getOrNull(clazz.getName());
+			if (ctClass != null) {
+				ctClass.detach();
+				logger.debug("class {} is detached", clazz.getName());
+			}
+		}
 	}
 }

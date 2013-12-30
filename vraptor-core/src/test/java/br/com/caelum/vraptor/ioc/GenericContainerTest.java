@@ -29,7 +29,6 @@ import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.mock;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -47,7 +46,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.converter.BooleanConverter;
 import br.com.caelum.vraptor.converter.ByteConverter;
 import br.com.caelum.vraptor.converter.Converter;
@@ -69,7 +67,6 @@ import br.com.caelum.vraptor.converter.ShortConverter;
 import br.com.caelum.vraptor.converter.jodatime.LocalDateConverter;
 import br.com.caelum.vraptor.converter.jodatime.LocalTimeConverter;
 import br.com.caelum.vraptor.core.Converters;
-import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.deserialization.Deserializer;
 import br.com.caelum.vraptor.deserialization.Deserializers;
@@ -114,47 +111,11 @@ public abstract class GenericContainerTest {
 
 	@Test
 	public void canProvideJodaTimeConverters() {
-		executeInsideRequest(new WhatToDo<String>() {
-			@Override
-			public String execute(RequestInfo request, int counter) {
-				assertNotNull(getFromContainerInCurrentThread(LocalDateConverter.class, request));
-				assertNotNull(getFromContainerInCurrentThread(LocalTimeConverter.class, request));
-				Converters converters = getFromContainerInCurrentThread(Converters.class, request);
-				assertTrue(converters.existsFor(LocalDate.class));
-				assertTrue(converters.existsFor(LocalTime.class));
-				return null;
-			}
-		});
-	}
-
-	protected <T> void checkAvailabilityFor(final boolean shouldBeTheSame, final Class<T> component) {
-		T firstInstance = getFromContainer(component);
-		T secondInstance = executeInsideRequest(new WhatToDo<T>() {
-			@Override
-			public T execute(RequestInfo request, final int counter) {
-				provider.provideForRequest(request);
-				ControllerMethod secondMethod = mock(ControllerMethod.class, "rm" + counter);
-				Container secondContainer = currentContainer;
-				secondContainer.instanceFor(MethodInfo.class).setControllerMethod(secondMethod);
-				return instanceFor(component, secondContainer);
-			}
-		});
-
-		checkSimilarity(component, shouldBeTheSame, firstInstance, secondInstance);
-	}
-
-	protected <T> T getFromContainer(final Class<T> componentToBeRetrieved) {
-		return executeInsideRequest(new WhatToDo<T>() {
-			@Override
-			public T execute(RequestInfo request, final int counter) {
-				return getFromContainerInCurrentThread(componentToBeRetrieved, request);
-			}
-		});
-	}
-
-	protected <T> T getFromContainerInCurrentThread(final Class<T> componentToBeRetrieved, RequestInfo request) {
-		provider.provideForRequest(request);
-		return instanceFor(componentToBeRetrieved, currentContainer);
+		assertNotNull(instanceFor(LocalDateConverter.class));
+		assertNotNull(instanceFor(LocalTimeConverter.class));
+		Converters converters = instanceFor(Converters.class);
+		assertTrue(converters.existsFor(LocalDate.class));
+		assertTrue(converters.existsFor(LocalTime.class));
 	}
 
 	private CDIBasedContainer getCurrentContainer() {
@@ -175,7 +136,7 @@ public abstract class GenericContainerTest {
 
 	@Test
 	public void shoudRegisterResourcesInRouter() {
-		Router router = getFromContainer(Router.class);
+		Router router = instanceFor(Router.class);
 		Matcher<Iterable<? super Route>> hasItem = hasItem(canHandle(ControllerInTheClasspath.class,
 				ControllerInTheClasspath.class.getDeclaredMethods()[0]));
 		assertThat(router.allRoutes(), hasItem);
@@ -263,11 +224,12 @@ public abstract class GenericContainerTest {
 
 	@Test
 	public void shoudRegisterInterceptorsInInterceptorRegistry() {
-		InterceptorRegistry registry = getFromContainer(InterceptorRegistry.class);
+		InterceptorRegistry registry = instanceFor(InterceptorRegistry.class);
 		assertThat(registry.all(), hasOneCopyOf(InterceptorInTheClasspath.class));
 	}
 
-	protected <T> T instanceFor(final Class<T> component, Container container) {
+	protected <T> T instanceFor(final Class<T> component) {
+		CDIBasedContainer container = getCurrentContainer();
 		return container.instanceFor(component);
 	}
 }

@@ -2,7 +2,6 @@ package br.com.caelum.vraptor.ioc.cdi;
 
 import static org.junit.Assert.assertEquals;
 
-import java.lang.reflect.Field;
 import java.util.concurrent.Callable;
 
 import javax.inject.Inject;
@@ -15,7 +14,6 @@ import br.com.caelum.vraptor.WeldJunitRunner;
 import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.http.MutableResponse;
-import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.ioc.ContainerProvider;
 import br.com.caelum.vraptor.ioc.GenericContainerTest;
 import br.com.caelum.vraptor.ioc.WhatToDo;
@@ -69,30 +67,6 @@ public class CDIBasedContainerTest extends GenericContainerTest {
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
-	}
-
-	@SuppressWarnings("rawtypes")
-	private Object actualInstance(Object instance) {
-		try {
-			//sorry, but i have to initialize the weld proxy
-			initializeProxy(instance);
-			Field field = instance.getClass().getDeclaredField("BEAN_INSTANCE_CACHE");
-			field.setAccessible(true);
-			ThreadLocal mapa = (ThreadLocal) field.get(instance);
-			return mapa.get();
-		} catch (Exception exception) {
-			return instance;
-		}
-	}
-
-	@Override
-	protected <T> T instanceFor(final Class<T> component, Container container) {
-		T maybeAWeldProxy = container.instanceFor(component);
-		return component.cast(actualInstance(maybeAWeldProxy));
-	}
-
-	private void initializeProxy(Object component) {
-		component.toString();
 	}
 
 	@Test

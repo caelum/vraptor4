@@ -1,8 +1,5 @@
 package br.com.caelum.vraptor.ioc.cdi;
 
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertEquals;
 
 import java.lang.reflect.Field;
@@ -10,7 +7,6 @@ import java.util.concurrent.Callable;
 
 import javax.inject.Inject;
 
-import org.hamcrest.MatcherAssert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -93,20 +89,6 @@ public class CDIBasedContainerTest extends GenericContainerTest {
 	protected <T> T instanceFor(final Class<T> component, Container container) {
 		T maybeAWeldProxy = container.instanceFor(component);
 		return component.cast(actualInstance(maybeAWeldProxy));
-	}
-
-	@Override
-	protected void checkSimilarity(Class<?> component, boolean shouldBeTheSame,
-			Object firstInstance, Object secondInstance) {
-		if (shouldBeTheSame) {
-			MatcherAssert.assertThat("Should be the same instance for "
-					+ component.getName(), actualInstance(firstInstance),
-					is(equalTo(actualInstance(secondInstance))));
-		} else {
-			MatcherAssert.assertThat("Should not be the same instance for "
-					+ component.getName(), actualInstance(firstInstance),
-					is(not(equalTo(actualInstance(secondInstance)))));
-		}
 	}
 
 	private void initializeProxy(Object component) {

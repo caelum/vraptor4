@@ -86,7 +86,6 @@ import br.com.caelum.vraptor.ioc.cdi.Code;
 import br.com.caelum.vraptor.ioc.fixture.ControllerInTheClasspath;
 import br.com.caelum.vraptor.ioc.fixture.ConverterInTheClasspath;
 import br.com.caelum.vraptor.ioc.fixture.CustomComponentInTheClasspath;
-import br.com.caelum.vraptor.ioc.fixture.DependentOnSomethingFromComponentFactory;
 import br.com.caelum.vraptor.ioc.fixture.InterceptorInTheClasspath;
 
 /**
@@ -133,21 +132,6 @@ public abstract class GenericContainerTest {
 				return null;
 			}
 		});
-	}
-
-	@Test
-	public void supportsComponentFactoriesForCustomInstantiation() {
-		TheComponentFactory factory = getFromContainer(TheComponentFactory.class);
-		assertThat(factory, is(notNullValue()));
-
-		NeedsCustomInstantiation component = getFromContainer(NeedsCustomInstantiation.class);
-		assertThat(component, is(notNullValue()));
-
-		DependentOnSomethingFromComponentFactory dependent =
-				getFromContainer(DependentOnSomethingFromComponentFactory.class);
-
-		assertThat(dependent, is(notNullValue()));
-		assertThat(dependent.getDependency(), is(notNullValue()));
 	}
 
 	protected <T> void checkAvailabilityFor(final boolean shouldBeTheSame, final Class<T> component) {

@@ -56,19 +56,16 @@ public class MethodInfo {
 	}
 
 	public void setControllerMethod(ControllerMethod controllerMethod) {
-		createValuedParameter(controllerMethod);
 		this.controllerMethod = controllerMethod;
 	}
 
 	public ValuedParameter[] getValuedParameters() {
-		if (valuedParameters == null) {
-			valuedParameters = new ValuedParameter[controllerMethod.getArity()];
-		}
+		createValuedParameter(controllerMethod);
 		return valuedParameters;
 	}
 
 	public void setParameter(int index, Object value) {
-		valuedParameters[index].setValue(value);
+		getValuedParameters()[index].setValue(value);
 	}
 
 	public Object[] getParametersValues() {
@@ -90,11 +87,13 @@ public class MethodInfo {
 	}
 
 	private void createValuedParameter(ControllerMethod controllerMethod) {
-		if (controllerMethod != null && controllerMethod.getMethod() != null) {
-			Parameter[] parameters = parameterNameProvider.parametersFor(controllerMethod.getMethod());
-			valuedParameters = new ValuedParameter[parameters.length];
-			for (int i = 0; i < valuedParameters.length; i++) {
-				valuedParameters[i] = new ValuedParameter(parameters[i], null);
+		if (valuedParameters == null) {
+			valuedParameters = new ValuedParameter[controllerMethod.getArity()];
+			if (controllerMethod != null && controllerMethod.getMethod() != null) {
+				Parameter[] parameters = parameterNameProvider.parametersFor(controllerMethod.getMethod());
+				for (int i = 0; i < valuedParameters.length; i++) {
+					valuedParameters[i] = new ValuedParameter(parameters[i], null);
+				}
 			}
 		}
 	}

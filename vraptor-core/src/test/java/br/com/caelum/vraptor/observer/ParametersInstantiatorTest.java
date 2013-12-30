@@ -187,6 +187,7 @@ public class ParametersInstantiatorTest {
 		instantiator.instantiate(new StackStarting(controllerMethod));
 
 		verify(request).setParameter("password", "123");
+		verify(validator).addAll(Collections.<Message> emptyList());
 	}
 
 	@Test
@@ -198,6 +199,7 @@ public class ParametersInstantiatorTest {
 		instantiator.instantiate(new StackStarting(otherMethod));
 
 		verify(request, never()).setParameter(anyString(), anyString());
+		verify(validator).addAll(Collections.<Message>emptyList());
 	}
 
 	private <T> Answer<T> addErrorsToListAndReturn(final T value, final String... messages) {

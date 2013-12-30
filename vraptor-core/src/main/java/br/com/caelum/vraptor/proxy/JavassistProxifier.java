@@ -87,7 +87,7 @@ public class JavassistProxifier implements Proxifier {
 
 	@Override
 	public boolean isProxyType(Class<?> type) {
-		boolean proxy = isProxyClass(type) || Proxies.isCDIProxy(type);
+		boolean proxy = isProxyClass(type) || CDIProxies.isCDIProxy(type);
 		logger.debug("Class {} is proxy: {}", type.getName(), proxy);
 
 		return proxy;

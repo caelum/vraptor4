@@ -12,7 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.ioc.Container;
-import br.com.caelum.vraptor.proxy.Proxies;
+import br.com.caelum.vraptor.proxy.CDIProxies;
 
 @ApplicationScoped
 public class CDIBasedContainer implements Container {
@@ -48,7 +48,7 @@ public class CDIBasedContainer implements Container {
 
 	@SuppressWarnings("unchecked")
 	private <T> Bean<?> getBeanFrom(Class<T> type) {
-		type = (Class<T>) Proxies.extractRawType(type);
+		type = (Class<T>) CDIProxies.extractRawType(type);
 		logger.debug("asking cdi to get instance for {}", type);
 		
 		Set<Bean<?>> beans = beanManager.getBeans(type);

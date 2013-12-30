@@ -1,6 +1,6 @@
 package br.com.caelum.vraptor.proxy;
 
-public final class Proxies {
+public final class CDIProxies {
 
 	private static final Class<?> weldProxyClass;
 

@@ -171,7 +171,7 @@ public class DefaultRouter implements Router {
 
 		logger.debug("Selected route for {} is {}", method, route);
 
-		if (route.equals(NULL)) {
+		if (route == NULL) {
 			throw new RouteNotFoundException("The selected route is invalid for redirection: " + rawtype.getName()
 					+ "." + method.getName());
 		}

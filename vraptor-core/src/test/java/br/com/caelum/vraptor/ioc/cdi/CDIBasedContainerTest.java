@@ -19,7 +19,6 @@ import br.com.caelum.vraptor.WeldJunitRunner;
 import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.http.MutableResponse;
-import br.com.caelum.vraptor.interceptor.PackagesAcceptor;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.ioc.ContainerProvider;
 import br.com.caelum.vraptor.ioc.GenericContainerTest;
@@ -108,11 +107,6 @@ public class CDIBasedContainerTest extends GenericContainerTest {
 					+ component.getName(), actualInstance(firstInstance),
 					is(not(equalTo(actualInstance(secondInstance)))));
 		}
-	}
-
-	@Test
-	public void instantiateCustomAcceptor(){
-		actualInstance(cdiBasedContainer.instanceFor(PackagesAcceptor.class));
 	}
 
 	private void initializeProxy(Object component) {

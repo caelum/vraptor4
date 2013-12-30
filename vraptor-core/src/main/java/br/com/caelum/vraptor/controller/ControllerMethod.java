@@ -28,6 +28,8 @@ import java.lang.reflect.Method;
 public interface ControllerMethod {
 
 	Method getMethod();
+	
+	int getArity();
 
 	BeanClass getController();
 

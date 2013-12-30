@@ -38,8 +38,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
-import javax.annotation.PreDestroy;
-import javax.enterprise.context.RequestScoped;
 import javax.enterprise.inject.spi.CDI;
 
 import org.hamcrest.Matcher;
@@ -198,31 +196,6 @@ public abstract class GenericContainerTest {
 		for (Class<?> component : components) {
 			checkAvailabilityFor(shouldBeTheSame, component);
 		}
-	}
-
-	@RequestScoped
-	static public class DisposableComponent {
-		private boolean destroyed;
-		private final Object dependency = new Object();
-
-		public Object getDependency() {
-			return dependency;
-		}
-
-		@PreDestroy
-		public void preDestroy() {
-			this.destroyed = true;
-		}
-
-		public boolean isDestroyed() {
-			return destroyed;
-		}
-	}
-
-	@Test
-	public void shouldDisposeAfterRequest() {
-		DisposableComponent comp = getFromContainer(DisposableComponent.class);
-		assertTrue(comp.destroyed);
 	}
 
 	@Test

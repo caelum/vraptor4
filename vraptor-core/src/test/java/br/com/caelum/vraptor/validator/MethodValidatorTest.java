@@ -4,12 +4,11 @@ import static br.com.caelum.vraptor.controller.DefaultControllerMethod.instanceF
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
+import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Method;
 import java.util.Locale;
 
@@ -21,12 +20,13 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.MockitoAnnotations;
 
-import br.com.caelum.vraptor.ValuedParameterProducer;
+import br.com.caelum.vraptor.cache.DefaultCacheStore;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.controller.DefaultControllerInstance;
 import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.events.ReadyToExecuteMethod;
-import br.com.caelum.vraptor.http.ValuedParameter;
+import br.com.caelum.vraptor.http.Parameter;
+import br.com.caelum.vraptor.http.ParanamerNameProvider;
 import br.com.caelum.vraptor.util.test.MockValidator;
 import br.com.caelum.vraptor.validator.beanvalidation.MessageInterpolatorFactory;
 import br.com.caelum.vraptor.validator.beanvalidation.MethodValidator;
@@ -47,7 +47,8 @@ public class MethodValidatorTest {
 	private ControllerMethod withConstraint;
 	private ControllerMethod withoutConstraint;
 	private DefaultControllerInstance instance;
-	private MethodInfo methodInfo;
+
+	private MethodInfo methodInfo = new MethodInfo(new ParanamerNameProvider(new DefaultCacheStore<AccessibleObject, Parameter[]>()));
 
 	@Before
 	public void setup() throws Exception {
@@ -59,8 +60,6 @@ public class MethodValidatorTest {
 		withConstraint = instanceFor(MyController.class, getMethod("withConstraint"));
 		withoutConstraint = instanceFor(MyController.class, getMethod("withoutConstraint"));
 		instance = new DefaultControllerInstance(new MyController());
-		methodInfo = mock(MethodInfo.class);
-		when(methodInfo.getParametersValues()).thenReturn(new Object[]{null});
 	}
 
 	private Method getMethod(String methodName) throws NoSuchMethodException {
@@ -69,9 +68,7 @@ public class MethodValidatorTest {
 
 	@Test
 	public void shouldAcceptIfMethodHasConstraint() {
-		ValuedParameter[] values = ValuedParameterProducer.from(withConstraint.getMethod());
-		when(methodInfo.getValuedParameters()).thenReturn(values);
-		when(methodInfo.getParametersValues()).thenReturn(new Object[] { null });
+		methodInfo.setControllerMethod(withConstraint);
 
 		DefaultControllerInstance controller = spy(instance);
 		getMethodValidator().validate(new ReadyToExecuteMethod(withConstraint), controller, methodInfo, validator);
@@ -87,9 +84,7 @@ public class MethodValidatorTest {
 
 	@Test
 	public void shouldValidateMethodWithConstraint() throws Exception {
-		ValuedParameter[] values = ValuedParameterProducer.from(withConstraint.getMethod());
-		when(methodInfo.getValuedParameters()).thenReturn(values);
-		when(methodInfo.getParametersValues()).thenReturn(new Object[] { null });
+		methodInfo.setControllerMethod(withConstraint);
 
 		getMethodValidator().validate(new ReadyToExecuteMethod(withConstraint), instance, methodInfo, validator);
 		assertThat(validator.getErrors(), hasSize(1));

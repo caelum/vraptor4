@@ -92,7 +92,7 @@ public class DeserializingObserver {
 
 		for (int i = 0; i < deserialized.length; i++) {
 			if (deserialized[i] != null) {
-				methodInfo.setParameter(i, deserialized);
+				methodInfo.setParameter(i, deserialized[i]);
 			}
 		}
 	}

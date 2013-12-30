@@ -33,7 +33,6 @@ import static org.mockito.Mockito.mock;
 
 import java.util.Calendar;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -85,7 +84,6 @@ import br.com.caelum.vraptor.ioc.cdi.CDIBasedContainer;
 import br.com.caelum.vraptor.ioc.cdi.Code;
 import br.com.caelum.vraptor.ioc.fixture.ControllerInTheClasspath;
 import br.com.caelum.vraptor.ioc.fixture.ConverterInTheClasspath;
-import br.com.caelum.vraptor.ioc.fixture.CustomComponentInTheClasspath;
 import br.com.caelum.vraptor.ioc.fixture.InterceptorInTheClasspath;
 
 /**
@@ -241,11 +239,6 @@ public abstract class GenericContainerTest {
 	public void shouldStartBeforeRequestExecution() {
 		StartableComponent comp = getFromContainer(StartableComponent.class);
 		assertTrue(comp.started);
-	}
-
-	@Test
-	public void canProvideComponentsInTheClasspath() throws Exception {
-		checkAvailabilityFor(false, Collections.<Class<?>> singleton(CustomComponentInTheClasspath.class));
 	}
 
 	@Test

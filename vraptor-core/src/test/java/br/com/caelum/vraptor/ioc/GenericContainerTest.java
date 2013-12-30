@@ -32,7 +32,6 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -78,7 +77,6 @@ import br.com.caelum.vraptor.http.route.Route;
 import br.com.caelum.vraptor.http.route.Router;
 import br.com.caelum.vraptor.interceptor.InterceptorRegistry;
 import br.com.caelum.vraptor.ioc.cdi.CDIBasedContainer;
-import br.com.caelum.vraptor.ioc.cdi.Code;
 import br.com.caelum.vraptor.ioc.fixture.ControllerInTheClasspath;
 import br.com.caelum.vraptor.ioc.fixture.ConverterInTheClasspath;
 import br.com.caelum.vraptor.ioc.fixture.InterceptorInTheClasspath;
@@ -154,16 +152,6 @@ public abstract class GenericContainerTest {
 		});
 	}
 
-	protected <T> T getFromContainerAndExecuteSomeCode(final Class<T> componentToBeRetrieved,final Code<T> code) {
-		return executeInsideRequest(new WhatToDo<T>() {
-			@Override
-			public T execute(RequestInfo request, final int counter) {
-				T bean = getFromContainerInCurrentThread(componentToBeRetrieved, request,code);
-				return bean;
-			}
-		});
-	}
-
 	protected <T> T getFromContainerInCurrentThread(final Class<T> componentToBeRetrieved, RequestInfo request) {
 		provider.provideForRequest(request);
 		return instanceFor(componentToBeRetrieved, currentContainer);
@@ -171,13 +159,6 @@ public abstract class GenericContainerTest {
 
 	private CDIBasedContainer getCurrentContainer() {
 		return CDI.current().select(CDIBasedContainer.class).get();
-	}
-
-	protected <T> T getFromContainerInCurrentThread(final Class<T> componentToBeRetrieved, RequestInfo request,final Code<T> code) {
-		provider.provideForRequest(request);
-		T bean = instanceFor(componentToBeRetrieved, currentContainer);
-		code.execute(bean);
-		return bean;
 	}
 
 	protected void checkSimilarity(Class<?> component, boolean shouldBeTheSame, Object firstInstance,
@@ -189,12 +170,6 @@ public abstract class GenericContainerTest {
 		} else {
 			MatcherAssert.assertThat("Should not be the same instance for " + component.getName(), firstInstance,
 					is(not(equalTo(secondInstance))));
-		}
-	}
-
-	protected void checkAvailabilityFor(boolean shouldBeTheSame, Collection<Class<?>> components) {
-		for (Class<?> component : components) {
-			checkAvailabilityFor(shouldBeTheSame, component);
 		}
 	}
 

@@ -27,26 +27,16 @@ import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
-import static org.hamcrest.Matchers.sameInstance;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.mock;
 
 import java.util.Calendar;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.context.Dependent;
-import javax.enterprise.context.RequestScoped;
 import javax.enterprise.inject.spi.CDI;
-import javax.inject.Named;
 
 import org.hamcrest.Matcher;
 import org.hamcrest.MatcherAssert;
@@ -56,7 +46,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.converter.BooleanConverter;
 import br.com.caelum.vraptor.converter.ByteConverter;
 import br.com.caelum.vraptor.converter.Converter;
@@ -78,7 +67,6 @@ import br.com.caelum.vraptor.converter.ShortConverter;
 import br.com.caelum.vraptor.converter.jodatime.LocalDateConverter;
 import br.com.caelum.vraptor.converter.jodatime.LocalTimeConverter;
 import br.com.caelum.vraptor.core.Converters;
-import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.deserialization.Deserializer;
 import br.com.caelum.vraptor.deserialization.Deserializers;
@@ -86,13 +74,8 @@ import br.com.caelum.vraptor.http.route.Route;
 import br.com.caelum.vraptor.http.route.Router;
 import br.com.caelum.vraptor.interceptor.InterceptorRegistry;
 import br.com.caelum.vraptor.ioc.cdi.CDIBasedContainer;
-import br.com.caelum.vraptor.ioc.cdi.Code;
-import br.com.caelum.vraptor.ioc.fixture.ComponentFactoryInTheClasspath;
-import br.com.caelum.vraptor.ioc.fixture.ComponentFactoryInTheClasspath.Provided;
 import br.com.caelum.vraptor.ioc.fixture.ControllerInTheClasspath;
 import br.com.caelum.vraptor.ioc.fixture.ConverterInTheClasspath;
-import br.com.caelum.vraptor.ioc.fixture.CustomComponentInTheClasspath;
-import br.com.caelum.vraptor.ioc.fixture.DependentOnSomethingFromComponentFactory;
 import br.com.caelum.vraptor.ioc.fixture.InterceptorInTheClasspath;
 
 /**
@@ -126,125 +109,17 @@ public abstract class GenericContainerTest {
 		provider = null;
 	}
 
-	@ApplicationScoped
-	public static class MyAppComponent {
-
-	}
-
-	@Test
-	public void processesCorrectlyAppBasedComponents() {
-		checkAvailabilityFor(true, MyAppComponent.class);
-	}
-
 	@Test
 	public void canProvideJodaTimeConverters() {
-		executeInsideRequest(new WhatToDo<String>() {
-			@Override
-			public String execute(RequestInfo request, int counter) {
-				assertNotNull(getFromContainerInCurrentThread(LocalDateConverter.class, request));
-				assertNotNull(getFromContainerInCurrentThread(LocalTimeConverter.class, request));
-				Converters converters = getFromContainerInCurrentThread(Converters.class, request);
-				assertTrue(converters.existsFor(LocalDate.class));
-				assertTrue(converters.existsFor(LocalTime.class));
-				return null;
-			}
-		});
-	}
-
-	@RequestScoped
-	@Named("teste")
-	public static class MyRequestComponent {
-
-	}
-
-	@Test
-	public void processesCorrectlyRequestBasedComponents() {
-		checkAvailabilityFor(false, MyRequestComponent.class);
-	}
-
-	@Dependent
-	public static class MyDependentComponent {
-
-	}
-
-	@Test
-	public void processesCorrectlyDependentComponents() {
-		executeInsideRequest(new WhatToDo<Object>() {
-			@Override
-			public Object execute(RequestInfo request, int counter) {
-				provider.provideForRequest(request);
-				MyDependentComponent instance1 = instanceFor(MyDependentComponent.class, currentContainer);
-				MyDependentComponent instance2 = instanceFor(MyDependentComponent.class, currentContainer);
-				assertThat(instance1, not(sameInstance(instance2)));
-				return null;
-			}
-		});
-	}
-
-	@Test
-	public void supportsComponentFactoriesForCustomInstantiation() {
-		TheComponentFactory factory = getFromContainer(TheComponentFactory.class);
-		assertThat(factory, is(notNullValue()));
-
-		NeedsCustomInstantiation component = getFromContainer(NeedsCustomInstantiation.class);
-		assertThat(component, is(notNullValue()));
-
-		DependentOnSomethingFromComponentFactory dependent =
-				getFromContainer(DependentOnSomethingFromComponentFactory.class);
-
-		assertThat(dependent, is(notNullValue()));
-		assertThat(dependent.getDependency(), is(notNullValue()));
-	}
-
-	protected <T> void checkAvailabilityFor(final boolean shouldBeTheSame, final Class<T> component) {
-		T firstInstance = getFromContainer(component);
-		T secondInstance = executeInsideRequest(new WhatToDo<T>() {
-			@Override
-			public T execute(RequestInfo request, final int counter) {
-				provider.provideForRequest(request);
-				ControllerMethod secondMethod = mock(ControllerMethod.class, "rm" + counter);
-				Container secondContainer = currentContainer;
-				secondContainer.instanceFor(MethodInfo.class).setControllerMethod(secondMethod);
-				return instanceFor(component, secondContainer);
-			}
-		});
-
-		checkSimilarity(component, shouldBeTheSame, firstInstance, secondInstance);
-	}
-
-	protected <T> T getFromContainer(final Class<T> componentToBeRetrieved) {
-		return executeInsideRequest(new WhatToDo<T>() {
-			@Override
-			public T execute(RequestInfo request, final int counter) {
-				return getFromContainerInCurrentThread(componentToBeRetrieved, request);
-			}
-		});
-	}
-
-	protected <T> T getFromContainerAndExecuteSomeCode(final Class<T> componentToBeRetrieved,final Code<T> code) {
-		return executeInsideRequest(new WhatToDo<T>() {
-			@Override
-			public T execute(RequestInfo request, final int counter) {
-				T bean = getFromContainerInCurrentThread(componentToBeRetrieved, request,code);
-				return bean;
-			}
-		});
-	}
-
-	protected <T> T getFromContainerInCurrentThread(final Class<T> componentToBeRetrieved, RequestInfo request) {
-		provider.provideForRequest(request);
-		return instanceFor(componentToBeRetrieved, currentContainer);
+		assertNotNull(instanceFor(LocalDateConverter.class));
+		assertNotNull(instanceFor(LocalTimeConverter.class));
+		Converters converters = instanceFor(Converters.class);
+		assertTrue(converters.existsFor(LocalDate.class));
+		assertTrue(converters.existsFor(LocalTime.class));
 	}
 
 	private CDIBasedContainer getCurrentContainer() {
 		return CDI.current().select(CDIBasedContainer.class).get();
-	}
-
-	protected <T> T getFromContainerInCurrentThread(final Class<T> componentToBeRetrieved, RequestInfo request,final Code<T> code) {
-		provider.provideForRequest(request);
-		T bean = instanceFor(componentToBeRetrieved, currentContainer);
-		code.execute(bean);
-		return bean;
 	}
 
 	protected void checkSimilarity(Class<?> component, boolean shouldBeTheSame, Object firstInstance,
@@ -259,69 +134,12 @@ public abstract class GenericContainerTest {
 		}
 	}
 
-	protected void checkAvailabilityFor(boolean shouldBeTheSame, Collection<Class<?>> components) {
-		for (Class<?> component : components) {
-			checkAvailabilityFor(shouldBeTheSame, component);
-		}
-	}
-
-	@RequestScoped
-	static public class DisposableComponent {
-		private boolean destroyed;
-		private final Object dependency = new Object();
-
-		public Object getDependency() {
-			return dependency;
-		}
-
-		@PreDestroy
-		public void preDestroy() {
-			this.destroyed = true;
-		}
-
-		public boolean isDestroyed() {
-			return destroyed;
-		}
-	}
-
-	static public class StartableComponent {
-		private boolean started;
-
-		@PostConstruct
-		public void postConstruct() {
-			this.started = true;
-		}
-	}
-
-	@Test
-	public void shouldDisposeAfterRequest() {
-		DisposableComponent comp = getFromContainer(DisposableComponent.class);
-		assertTrue(comp.destroyed);
-	}
-
-	@Test
-	public void shouldStartBeforeRequestExecution() {
-		StartableComponent comp = getFromContainer(StartableComponent.class);
-		assertTrue(comp.started);
-	}
-
-	@Test
-	public void canProvideComponentsInTheClasspath() throws Exception {
-		checkAvailabilityFor(false, Collections.<Class<?>> singleton(CustomComponentInTheClasspath.class));
-	}
-
 	@Test
 	public void shoudRegisterResourcesInRouter() {
-		Router router = getFromContainer(Router.class);
+		Router router = instanceFor(Router.class);
 		Matcher<Iterable<? super Route>> hasItem = hasItem(canHandle(ControllerInTheClasspath.class,
 				ControllerInTheClasspath.class.getDeclaredMethods()[0]));
 		assertThat(router.allRoutes(), hasItem);
-	}
-
-	@Test
-	public void shoudUseComponentFactoriesInTheClasspath() {
-		Provided object = getFromContainer(Provided.class);
-		assertThat(object, is(sameInstance(ComponentFactoryInTheClasspath.PROVIDED)));
 	}
 
 	@Test
@@ -406,11 +224,12 @@ public abstract class GenericContainerTest {
 
 	@Test
 	public void shoudRegisterInterceptorsInInterceptorRegistry() {
-		InterceptorRegistry registry = getFromContainer(InterceptorRegistry.class);
+		InterceptorRegistry registry = instanceFor(InterceptorRegistry.class);
 		assertThat(registry.all(), hasOneCopyOf(InterceptorInTheClasspath.class));
 	}
 
-	protected <T> T instanceFor(final Class<T> component, Container container) {
+	protected <T> T instanceFor(final Class<T> component) {
+		CDIBasedContainer container = getCurrentContainer();
 		return container.instanceFor(component);
 	}
 }

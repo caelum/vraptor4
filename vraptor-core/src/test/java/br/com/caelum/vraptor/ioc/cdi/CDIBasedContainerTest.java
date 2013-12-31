@@ -1,16 +1,11 @@
 package br.com.caelum.vraptor.ioc.cdi;
 
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertEquals;
 
-import java.lang.reflect.Field;
 import java.util.concurrent.Callable;
 
 import javax.inject.Inject;
 
-import org.hamcrest.MatcherAssert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -19,8 +14,6 @@ import br.com.caelum.vraptor.WeldJunitRunner;
 import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.http.MutableResponse;
-import br.com.caelum.vraptor.interceptor.PackagesAcceptor;
-import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.ioc.ContainerProvider;
 import br.com.caelum.vraptor.ioc.GenericContainerTest;
 import br.com.caelum.vraptor.ioc.WhatToDo;
@@ -74,49 +67,6 @@ public class CDIBasedContainerTest extends GenericContainerTest {
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
-	}
-
-	@SuppressWarnings("rawtypes")
-	private Object actualInstance(Object instance) {
-		try {
-			//sorry, but i have to initialize the weld proxy
-			initializeProxy(instance);
-			Field field = instance.getClass().getDeclaredField("BEAN_INSTANCE_CACHE");
-			field.setAccessible(true);
-			ThreadLocal mapa = (ThreadLocal) field.get(instance);
-			return mapa.get();
-		} catch (Exception exception) {
-			return instance;
-		}
-	}
-
-	@Override
-	protected <T> T instanceFor(final Class<T> component, Container container) {
-		T maybeAWeldProxy = container.instanceFor(component);
-		return component.cast(actualInstance(maybeAWeldProxy));
-	}
-
-	@Override
-	protected void checkSimilarity(Class<?> component, boolean shouldBeTheSame,
-			Object firstInstance, Object secondInstance) {
-		if (shouldBeTheSame) {
-			MatcherAssert.assertThat("Should be the same instance for "
-					+ component.getName(), actualInstance(firstInstance),
-					is(equalTo(actualInstance(secondInstance))));
-		} else {
-			MatcherAssert.assertThat("Should not be the same instance for "
-					+ component.getName(), actualInstance(firstInstance),
-					is(not(equalTo(actualInstance(secondInstance)))));
-		}
-	}
-
-	@Test
-	public void instantiateCustomAcceptor(){
-		actualInstance(cdiBasedContainer.instanceFor(PackagesAcceptor.class));
-	}
-
-	private void initializeProxy(Object component) {
-		component.toString();
 	}
 
 	@Test

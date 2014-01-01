@@ -8,10 +8,16 @@ import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.inject.Inject;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import br.com.caelum.vraptor.ioc.Container;
+import br.com.caelum.vraptor.proxy.CDIProxies;
 
 @ApplicationScoped
 public class CDIBasedContainer implements Container {
+
+	private static final Logger logger = LoggerFactory.getLogger(CDIBasedContainer.class);
 
 	private final BeanManager beanManager;
 
@@ -27,7 +33,8 @@ public class CDIBasedContainer implements Container {
 		this.beanManager = beanManager;
 	}
 
-	@Override @SuppressWarnings("unchecked")
+	@Override
+	@SuppressWarnings("unchecked")
 	public <T> T instanceFor(Class<T> type) {
 		Bean<?> bean = getBeanFrom(type);
 		CreationalContext<?> ctx = beanManager.createCreationalContext(bean);
@@ -39,9 +46,18 @@ public class CDIBasedContainer implements Container {
 		return getBeanFrom(type) != null;
 	}
 
+	@SuppressWarnings("unchecked")
 	private <T> Bean<?> getBeanFrom(Class<T> type) {
+		type = (Class<T>) CDIProxies.extractRawType(type);
+		logger.debug("asking cdi to get instance for {}", type);
+		
 		Set<Bean<?>> beans = beanManager.getBeans(type);
-		if (beans.isEmpty()) return null;
+		logger.debug("beans for {} is {}", type, beans);
+
+		if (beans.isEmpty()) {
+			return null;
+		}
+
 		return beanManager.resolve(beans);
 	}
 }

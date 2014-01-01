@@ -50,7 +50,7 @@ public class DefaultPageResult implements PageResult {
 	private final MutableResponse response;
 	private final PathResolver resolver;
 	private final Proxifier proxifier;
-	private final MethodInfo requestInfo;
+	private final MethodInfo methodInfo;
 	
 	/** 
 	 * @deprecated CDI eyes only
@@ -60,18 +60,18 @@ public class DefaultPageResult implements PageResult {
 	}
 
 	@Inject
-	public DefaultPageResult(MutableRequest req, MutableResponse res, MethodInfo requestInfo,
+	public DefaultPageResult(MutableRequest req, MutableResponse res, MethodInfo methodInfo,
 			PathResolver resolver, Proxifier proxifier) {
 		this.request = req;
 		this.response = res;
-		this.requestInfo = requestInfo;
+		this.methodInfo = methodInfo;
 		this.proxifier = proxifier;
 		this.resolver = resolver;
 	}
 
 	@Override
 	public void defaultView() {
-		String to = resolver.pathFor(requestInfo.getControllerMethod());
+		String to = resolver.pathFor(methodInfo.getControllerMethod());
 		logger.debug("forwarding to {}", to);
 		try {
 			request.getRequestDispatcher(to).forward(request, response);
@@ -85,7 +85,7 @@ public class DefaultPageResult implements PageResult {
 	@Override
 	public void include() {
 		try {
-			String to = resolver.pathFor(requestInfo.getControllerMethod());
+			String to = resolver.pathFor(methodInfo.getControllerMethod());
 			logger.debug("including {}", to);
 			request.getRequestDispatcher(to).include(request, response);
 		} catch (ServletException e) {

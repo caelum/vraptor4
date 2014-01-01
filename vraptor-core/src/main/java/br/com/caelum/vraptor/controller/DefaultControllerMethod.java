@@ -43,6 +43,11 @@ public class DefaultControllerMethod implements ControllerMethod {
 	}
 
 	@Override
+	public int getArity() {
+		return method.getParameterTypes().length;
+	}
+
+	@Override
 	public BeanClass getController() {
 		return controller;
 	}

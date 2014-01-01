@@ -17,21 +17,39 @@
 package br.com.caelum.vraptor.core;
 
 import javax.enterprise.context.RequestScoped;
+import javax.inject.Inject;
 
 import br.com.caelum.vraptor.controller.ControllerMethod;
+import br.com.caelum.vraptor.http.Parameter;
+import br.com.caelum.vraptor.http.ParameterNameProvider;
+import br.com.caelum.vraptor.http.ValuedParameter;
 
 /**
  * Holder for method being invoked and parameters being passed.
- *
+ * 
  * @author Guilherme Silveira
  * @author Fabio Kung
  */
 @RequestScoped
 public class MethodInfo {
 
+	private final ParameterNameProvider parameterNameProvider;
+
 	private ControllerMethod controllerMethod;
-	private Object[] parameters;
+	private ValuedParameter[] valuedParameters;
 	private Object result;
+
+	/**
+	 * @deprecated CDI eyes only
+	 */
+	public MethodInfo() {
+		this(null);
+	}
+
+	@Inject
+	public MethodInfo(ParameterNameProvider parameterNameProvider) {
+		this.parameterNameProvider = parameterNameProvider;
+	}
 
 	public ControllerMethod getControllerMethod() {
 		return controllerMethod;
@@ -41,12 +59,23 @@ public class MethodInfo {
 		this.controllerMethod = controllerMethod;
 	}
 
-	public void setParameters(Object[] parameters) {
-		this.parameters = parameters;
+	public ValuedParameter[] getValuedParameters() {
+		createValuedParameter(controllerMethod);
+		return valuedParameters;
 	}
 
-	public Object[] getParameters() {
-		return parameters;
+	public void setParameter(int index, Object value) {
+		getValuedParameters()[index].setValue(value);
+	}
+
+	public Object[] getParametersValues() {
+		Object[] out = new Object[getValuedParameters().length];
+
+		for (int i = 0; i < getValuedParameters().length; i++) {
+			out[i] = getValuedParameters()[i].getValue();
+		}
+
+		return out;
 	}
 
 	public Object getResult() {
@@ -57,7 +86,15 @@ public class MethodInfo {
 		this.result = result;
 	}
 
-	public boolean parametersWereSet() {
-		return parameters != null;
+	private void createValuedParameter(ControllerMethod controllerMethod) {
+		if (valuedParameters == null) {
+			valuedParameters = new ValuedParameter[controllerMethod.getArity()];
+			if (controllerMethod != null && controllerMethod.getMethod() != null) {
+				Parameter[] parameters = parameterNameProvider.parametersFor(controllerMethod.getMethod());
+				for (int i = 0; i < valuedParameters.length; i++) {
+					valuedParameters[i] = new ValuedParameter(parameters[i], null);
+				}
+			}
+		}
 	}
 }

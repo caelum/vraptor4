@@ -88,16 +88,11 @@ public class DeserializingObserver {
 		}
 
 		Object[] deserialized = deserializer.deserialize(request.getInputStream(), method);
-		Object[] parameters = methodInfo.getParameters();
-
 		logger.debug("Deserialized parameters for {} are {} ", method, deserialized);
 
-		// TODO: a new array should be created and then a call to setParameters
-		// setting methodInfo.getParameters() works only because we dont (yet)
-		// return a defensive copy
 		for (int i = 0; i < deserialized.length; i++) {
 			if (deserialized[i] != null) {
-				parameters[i] = deserialized[i];
+				methodInfo.setParameter(i, deserialized[i]);
 			}
 		}
 	}

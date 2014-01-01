@@ -40,7 +40,7 @@ public class ForwardToDefaultViewTest {
 	private ForwardToDefaultView interceptor;
 	@Mock private Result result;
 	@Mock private ControllerMethod method;
-	@Mock private MethodInfo info;
+	@Mock private MethodInfo methodInfo;
 
 	@Before
 	public void setup() {
@@ -50,7 +50,7 @@ public class ForwardToDefaultViewTest {
 	@Test
 	public void doesNothingIfResultWasAlreadyUsed() {
 		when(result.used()).thenReturn(true);
-		interceptor.forward(new MethodExecuted(method, info));
+		interceptor.forward(new MethodExecuted(method, methodInfo));
 		verify(result, never()).use(PageResult.class);
 	}
 

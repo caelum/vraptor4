@@ -18,9 +18,9 @@ public class MethodExecuted {
 	private final ControllerMethod controllerMethod;
 	private final MethodInfo methodInfo;
 
-	public MethodExecuted(ControllerMethod method, MethodInfo info) {
+	public MethodExecuted(ControllerMethod method, MethodInfo methodInfo) {
 		this.controllerMethod = method;
-		this.methodInfo = info;
+		this.methodInfo = methodInfo;
 	}
 
 	public ControllerMethod getControllerMethod() {

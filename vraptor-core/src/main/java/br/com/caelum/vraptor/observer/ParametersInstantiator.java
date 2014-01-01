@@ -37,6 +37,7 @@ import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.http.Parameter;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.http.ParametersProvider;
+import br.com.caelum.vraptor.http.ValuedParameter;
 import br.com.caelum.vraptor.validator.Message;
 import br.com.caelum.vraptor.validator.Validator;
 import br.com.caelum.vraptor.view.FlashScope;
@@ -54,7 +55,7 @@ public class ParametersInstantiator {
 
 	private final ParametersProvider provider;
 	private final ParameterNameProvider parameterNameProvider;
-	private final MethodInfo parameters;
+	private final MethodInfo methodInfo;
 	private final Validator validator;
 	private final MutableRequest request;
 	private final FlashScope flash;
@@ -70,10 +71,10 @@ public class ParametersInstantiator {
 
 	@Inject
 	public ParametersInstantiator(ParametersProvider provider, ParameterNameProvider parameterNameProvider, 
-			MethodInfo parameters, Validator validator, MutableRequest request, FlashScope flash) {
+			MethodInfo methodInfo, Validator validator, MutableRequest request, FlashScope flash) {
 		this.provider = provider;
 		this.parameterNameProvider = parameterNameProvider;
-		this.parameters = parameters;
+		this.methodInfo = methodInfo;
 		this.validator = validator;
 		this.request = request;
 		this.flash = flash;
@@ -84,26 +85,23 @@ public class ParametersInstantiator {
 	}
 
 	public void instantiate(@Observes StackStarting event) {
-		
 		ControllerMethod controllerMethod = event.getControllerMethod();
-		
-		if (!containsParameters(controllerMethod)) return;
-			
-		Enumeration<String> names = request.getParameterNames();
-		while (names.hasMoreElements()) {
-			fixParameter(names.nextElement());
+		if (containsParameters(controllerMethod)) {
+			fixIndexedParameters(request);
+			addHeaderParametersToAttribute(controllerMethod);
+
+			Object[] values = getParametersFor(controllerMethod);
+
+			validator.addAll(errors);
+
+			logger.debug("Conversion errors: {}", errors);
+			logger.debug("Parameter values for {} are {}", controllerMethod, values);
+
+			ValuedParameter[] valuedParameters = methodInfo.getValuedParameters();
+			for (int i = 0; i < valuedParameters.length; i++) {
+				valuedParameters[i].setValue(values[i]);
+			}
 		}
-
-		addHeaderParametersToAttribute(controllerMethod);
-
-		Object[] values = getParametersFor(controllerMethod);
-
-		validator.addAll(errors);
-
-		logger.debug("Conversion errors: {}", errors);
-		logger.debug("Parameter values for {} are {}", controllerMethod, values);
-
-		parameters.setParameters(values);
 	}
 
 	private void addHeaderParametersToAttribute(ControllerMethod controllerMethod) {
@@ -116,15 +114,23 @@ public class ParametersInstantiator {
 		}
 	}
 
-	private void fixParameter(String name) {
-		checkArgument(!name.contains(".class."), "Bug Exploit Attempt with parameter: %s", name);
+	private void fixIndexedParameters(MutableRequest request) {
+		Enumeration<String> names = request.getParameterNames();
+		while (names.hasMoreElements()) {
+			String name = names.nextElement();
+			disallowUsingClassAttribute(name);
 
-		if (name.contains("[]")) {
-			String[] values = request.getParameterValues(name);
-			for (int i = 0; i < values.length; i++) {
-				request.setParameter(name.replace("[]", "[" + i + "]"), values[i]);
+			if (name.contains("[]")) {
+				String[] values = request.getParameterValues(name);
+				for (int i = 0; i < values.length; i++) {
+					request.setParameter(name.replace("[]", "[" + i + "]"), values[i]);
+				}
 			}
 		}
+	}
+
+	private void disallowUsingClassAttribute(String name) {
+		checkArgument(!name.contains(".class."), "Bug Exploit Attempt with parameter: %s", name);
 	}
 
 	private Object[] getParametersFor(ControllerMethod method) {

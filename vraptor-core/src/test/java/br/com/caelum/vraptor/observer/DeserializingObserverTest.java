@@ -7,6 +7,7 @@ import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 
 import java.io.IOException;
+import java.lang.reflect.AccessibleObject;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -16,12 +17,15 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor.Consumes;
+import br.com.caelum.vraptor.cache.DefaultCacheStore;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.controller.DefaultControllerMethod;
 import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.deserialization.Deserializer;
 import br.com.caelum.vraptor.deserialization.Deserializers;
 import br.com.caelum.vraptor.events.ReadyToExecuteMethod;
+import br.com.caelum.vraptor.http.Parameter;
+import br.com.caelum.vraptor.http.ParanamerNameProvider;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.view.Status;
 
@@ -42,20 +46,20 @@ public class DeserializingObserverTest {
 	public void setUp() throws Exception {
 		MockitoAnnotations.initMocks(this);
 
-		methodInfo = new MethodInfo();
+		methodInfo = new MethodInfo(new ParanamerNameProvider(new DefaultCacheStore<AccessibleObject, Parameter[]>()));
 
 		observer = new DeserializingObserver(deserializers, container);
-		consumeXml = new DefaultControllerMethod(null, DummyResource.class.getDeclaredMethod("consumeXml"));
+		consumeXml = new DefaultControllerMethod(null, DummyResource.class.getDeclaredMethod("consumeXml", String.class, String.class));
 		doesntConsume = new DefaultControllerMethod(null, DummyResource.class.getDeclaredMethod("doesntConsume"));
 	}
 
 
 	static class DummyResource {
 		@Consumes("application/xml")
-		public void consumeXml() {}
+		public void consumeXml(String a, String b) {}
 
 		@Consumes()
-		public void consumesAnything() {}
+		public void consumesAnything(String a, String b) {}
 
 		public void doesntConsume() {}
 	}
@@ -87,42 +91,44 @@ public class DeserializingObserverTest {
 
 	@Test
 	public void willSetMethodParametersWithDeserializationAndContinueStackAfterDeserialization() throws Exception {
-		when(request.getContentType()).thenReturn("application/xml");
-
 		final Deserializer deserializer = mock(Deserializer.class);
-		methodInfo.setParameters(new Object[2]);
-		when(deserializer.deserialize(null, consumeXml)).thenReturn(new Object[] {"abc", "def"});
 
+		methodInfo.setControllerMethod(consumeXml);
+
+		when(request.getContentType()).thenReturn("application/xml");
+		when(deserializer.deserialize(null, consumeXml)).thenReturn(new Object[] {"abc", "def"});
 		when(deserializers.deserializerFor("application/xml", container)).thenReturn(deserializer);
 
 		observer.deserializes(new ReadyToExecuteMethod(consumeXml), request, methodInfo, status);
 
-		assertEquals(methodInfo.getParameters()[0], "abc");
-		assertEquals(methodInfo.getParameters()[1], "def");
+		assertEquals(methodInfo.getValuedParameters()[0].getValue(), "abc");
+		assertEquals(methodInfo.getValuedParameters()[1].getValue(), "def");
 	}
 
 	@Test
 	public void willSetMethodParametersWithDeserializationEvenIfTheContentTypeHasCharsetDeclaration() throws Exception {
-		when(request.getContentType()).thenReturn("application/xml; charset=UTF-8");
-
 		final Deserializer deserializer = mock(Deserializer.class);
-		methodInfo.setParameters(new Object[2]);
-		when(deserializer.deserialize(null, consumeXml)).thenReturn(new Object[] {"abc", "def"});
 
+		methodInfo.setControllerMethod(consumeXml);
+
+		when(request.getContentType()).thenReturn("application/xml; charset=UTF-8");
+		when(deserializer.deserialize(null, consumeXml)).thenReturn(new Object[] {"abc", "def"});
 		when(deserializers.deserializerFor("application/xml", container)).thenReturn(deserializer);
 
 		observer.deserializes(new ReadyToExecuteMethod(consumeXml), request, methodInfo, status);
 
-		assertEquals(methodInfo.getParameters()[0], "abc");
-		assertEquals(methodInfo.getParameters()[1], "def");
+		assertEquals(methodInfo.getValuedParameters()[0].getValue(), "abc");
+		assertEquals(methodInfo.getValuedParameters()[1].getValue(), "def");
 	}
 
 	@Test
 	public void willDeserializeForAnyContentTypeIfPossible() throws Exception {
+		final ControllerMethod consumesAnything = new DefaultControllerMethod(null, 
+				DummyResource.class.getDeclaredMethod("consumesAnything", String.class, String.class));
+
 		when(request.getContentType()).thenReturn("application/xml");
 
-		methodInfo.setParameters(new Object[2]);
-		final ControllerMethod consumesAnything = new DefaultControllerMethod(null, DummyResource.class.getDeclaredMethod("consumesAnything"));
+		methodInfo.setControllerMethod(consumesAnything);
 
 		final Deserializer deserializer = mock(Deserializer.class);
 		when(deserializer.deserialize(null, consumesAnything)).thenReturn(new Object[] {"abc", "def"});
@@ -130,23 +136,26 @@ public class DeserializingObserverTest {
 		when(deserializers.deserializerFor("application/xml", container)).thenReturn(deserializer);
 		observer.deserializes(new ReadyToExecuteMethod(consumesAnything), request, methodInfo, status);
 
-		assertEquals(methodInfo.getParameters()[0], "abc");
-		assertEquals(methodInfo.getParameters()[1], "def");
+		assertEquals(methodInfo.getValuedParameters()[0].getValue(), "abc");
+		assertEquals(methodInfo.getValuedParameters()[1].getValue(), "def");
 	}
 
 	@Test
 	public void willSetOnlyNonNullParameters() throws Exception {
-		when(request.getContentType()).thenReturn("application/xml");
-
 		final Deserializer deserializer = mock(Deserializer.class);
-		methodInfo.setParameters(new Object[] {"original1", "original2"});
+
+		methodInfo.setControllerMethod(consumeXml);
+		methodInfo.getValuedParameters()[0].setValue("original1");
+		methodInfo.getValuedParameters()[1].setValue("original2");
+
+		when(request.getContentType()).thenReturn("application/xml");
 		when(deserializer.deserialize(null, consumeXml)).thenReturn(new Object[] {null, "deserialized"});
 
 		when(deserializers.deserializerFor("application/xml", container)).thenReturn(deserializer);
 		observer.deserializes(new ReadyToExecuteMethod(consumeXml), request, methodInfo, status);
 
-		assertEquals(methodInfo.getParameters()[0], "original1");
-		assertEquals(methodInfo.getParameters()[1], "deserialized");
+		assertEquals(methodInfo.getValuedParameters()[0].getValue(), "original1");
+		assertEquals(methodInfo.getValuedParameters()[1].getValue(), "deserialized");
 	}
 
 	@Test(expected = IOException.class)

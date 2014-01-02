@@ -20,13 +20,13 @@
 		<dependency>
 			<groupId>org.jboss.weld.servlet</groupId>
 			<artifactId>weld-servlet-core</artifactId>
-			<version>2.1.0.Final</version>
+			<version>2.1.1.Final</version>
 		</dependency>
 		
 		<dependency>
 			<groupId>org.jboss.weld</groupId>
 			<artifactId>weld-core-impl</artifactId>
-			<version>2.1.0.Final</version>
+			<version>2.1.1.Final</version>
 		</dependency>
 
 		<dependency>
@@ -46,7 +46,7 @@
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-entitymanager</artifactId>
-			<version>4.2.5.Final</version>
+			<version>4.3.0.Final</version>
 		</dependency>
 
 		<dependency>
@@ -70,13 +70,13 @@
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-validator</artifactId>
-			<version>5.0.1.Final</version>
+			<version>5.0.2.Final</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-validator-cdi</artifactId>
-			<version>5.0.1.Final</version>
+			<version>5.0.2.Final</version>
 		</dependency>
 
 		<dependency>

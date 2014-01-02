@@ -14,15 +14,11 @@
 			<if-class-not-available name="javax.validation.executable.ExecutableValidator"/>
 		</exclude>
 		
-		<exclude name="br.com.caelum.vraptor.interceptor.multipart.CommonsUploadMultipartInterceptor">
+		<exclude name="br.com.caelum.vraptor.observer.upload.CommonsUploadMultipartInterceptor">
 			<if-class-not-available name="org.apache.commons.fileupload.FileItem"/>
 		</exclude>
 		
-		<exclude name="br.com.caelum.vraptor.interceptor.multipart.DefaultServletFileUploadCreator">
-			<if-class-not-available name="org.apache.commons.fileupload.FileItem"/>
-		</exclude>
-		
-		<exclude name="br.com.caelum.vraptor.interceptor.multipart.NullMultipartInterceptor">
+		<exclude name="br.com.caelum.vraptor.observer.upload.NullMultipartObserver">
 			<if-class-available name="org.apache.commons.fileupload.FileItem"/>
 		</exclude>
 		

@@ -36,21 +36,24 @@ public class CDIBasedContainer implements Container {
 	@Override
 	@SuppressWarnings("unchecked")
 	public <T> T instanceFor(Class<T> type) {
+		type = (Class<T>) CDIProxies.extractRawType(type);
+		logger.debug("asking cdi to get instance for {}", type);
+		
 		Bean<?> bean = getBeanFrom(type);
 		CreationalContext<?> ctx = beanManager.createCreationalContext(bean);
 		return (T) beanManager.getReference(bean, type, ctx);
 	}
 
 	@Override
-	public <T> boolean canProvide(Class<T> type) {
-		return getBeanFrom(type) != null;
-	}
-
 	@SuppressWarnings("unchecked")
-	private <T> Bean<?> getBeanFrom(Class<T> type) {
+	public <T> boolean canProvide(Class<T> type) {
 		type = (Class<T>) CDIProxies.extractRawType(type);
 		logger.debug("asking cdi to get instance for {}", type);
 		
+		return getBeanFrom(type) != null;
+	}
+
+	private <T> Bean<?> getBeanFrom(Class<T> type) {
 		Set<Bean<?>> beans = beanManager.getBeans(type);
 		logger.debug("beans for {} is {}", type, beans);
 

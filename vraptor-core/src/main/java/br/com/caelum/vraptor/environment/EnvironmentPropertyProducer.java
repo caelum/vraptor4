@@ -44,7 +44,9 @@ public class EnvironmentPropertyProducer {
 		Annotated annotated = ip.getAnnotated();
 		Property property = annotated.getAnnotation(Property.class);
 		String key = property.value();
-		if (isNullOrEmpty(key)) key = ip.getMember().getName();
+		if (isNullOrEmpty(key)) {
+			key = ip.getMember().getName();
+		}
 		return environment.get(key);
 	}
 }

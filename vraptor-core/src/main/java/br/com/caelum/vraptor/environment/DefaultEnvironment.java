@@ -54,7 +54,7 @@ public class DefaultEnvironment implements Environment {
             properties.load(stream);
             this.properties.putAll(properties);
         } else {
-            LOG.warn("Could not find the file '%s.properties' to load. If you ask for any property, null will be returned", environment);
+            LOG.warn("Could not find the file '{}.properties' to load. If you ask for any property, null will be returned", environment);
         }
     }
 

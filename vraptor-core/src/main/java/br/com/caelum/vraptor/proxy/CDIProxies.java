@@ -41,11 +41,11 @@ public final class CDIProxies {
 		BeanManager manager = CDI.current().getBeanManager();
 
 		Set<Bean<?>> beans = manager.getBeans(clazz);
-		if (beans.isEmpty()) {
-			return null; //maybe throw exception ?
+		Bean<T> bean = (Bean<T>) manager.resolve(beans);
+		if (bean == null) {
+			return null;
 		}
 
-		Bean<T> bean = (Bean<T>) beans.iterator().next();
 		Context context = manager.getContext(bean.getScope()); 
 		
 		T beanInstance = context.get(bean);

@@ -18,7 +18,7 @@ import org.slf4j.Logger;
 
 /**
  * A default {@link Environment} based on {@link EnvironmentType}.
- *
+ * 
  * @author Alexandre Atoji
  * @author Andrew Kurauchi
  * @author Guilherme Silveira
@@ -27,10 +27,10 @@ import org.slf4j.Logger;
 @Vetoed
 public class DefaultEnvironment implements Environment {
 
-    private static final Logger LOG = getLogger(DefaultEnvironment.class);
-    
-    private final Properties properties = new Properties();
-    private final EnvironmentType environmentType;
+	private static final Logger LOG = getLogger(DefaultEnvironment.class);
+
+	private final Properties properties = new Properties();
+	private final EnvironmentType environmentType;
 
 	/**
 	 * @deprecated CDI eyes only
@@ -39,26 +39,28 @@ public class DefaultEnvironment implements Environment {
 		this(null);
 	}
 
-    public DefaultEnvironment(EnvironmentType environmentType) throws IOException {
-        this.environmentType = firstNonNull(environmentType, DEVELOPMENT);
-        loadAndPut("environment");
-        loadAndPut(getName());
-    }
+	public DefaultEnvironment(EnvironmentType environmentType) throws IOException {
+		this.environmentType = firstNonNull(environmentType, DEVELOPMENT);
+		loadAndPut("environment");
+		loadAndPut(getName());
+	}
 
-    private void loadAndPut(String environment) throws IOException {
-        String name = "/" + environment + ".properties";
-        InputStream stream = DefaultEnvironment.class.getResourceAsStream(name);
-        Properties properties = new Properties();
+	private void loadAndPut(String environment) throws IOException {
+		String name = "/" + environment + ".properties";
+		InputStream stream = DefaultEnvironment.class.getResourceAsStream(name);
+		Properties properties = new Properties();
 
-        if (stream != null) {
-            properties.load(stream);
-            this.properties.putAll(properties);
-        } else {
-            LOG.warn("Could not find the file '{}.properties' to load. If you ask for any property, null will be returned", environment);
-        }
-    }
+		if (stream != null) {
+			properties.load(stream);
+			this.properties.putAll(properties);
+		} else {
+			LOG.warn(
+					"Could not find the file '{}.properties' to load. If you ask for any property, null will be returned",
+					environment);
+		}
+	}
 
-    @Override
+	@Override
 	public boolean supports(String feature) {
 		return Boolean.parseBoolean(get(feature));
 	}
@@ -70,7 +72,7 @@ public class DefaultEnvironment implements Environment {
 
 	@Override
 	public String get(String key) {
-		if(!has(key)) {
+		if (!has(key)) {
 			throw new NoSuchElementException("Key " + key + " not found in environment " + getName());
 		}
 		return properties.getProperty(key);
@@ -78,10 +80,10 @@ public class DefaultEnvironment implements Environment {
 
 	@Override
 	public String get(String key, String defaultValue) {
-	    if (has(key)) {
-	        return get(key);
-	    }
-	    return defaultValue;
+		if (has(key)) {
+			return get(key);
+		}
+		return defaultValue;
 	}
 
 	@Override
@@ -112,7 +114,9 @@ public class DefaultEnvironment implements Environment {
 	@Override
 	public URL getResource(String name) {
 		URL resource = DefaultEnvironment.class.getResource("/" + getName() + name);
-		if (resource != null) return resource;
+		if (resource != null) {
+			return resource;
+		}
 		return DefaultEnvironment.class.getResource(name);
 	}
 

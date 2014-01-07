@@ -39,7 +39,7 @@ public class EnvironmentPropertyProducer {
 		this.environment = environment;
 	}
 	
-	@Produces @Property 
+	@Produces @Property
 	public String get(InjectionPoint ip) {
 		Annotated annotated = ip.getAnnotated();
 		Property property = annotated.getAnnotation(Property.class);

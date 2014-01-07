@@ -10,7 +10,7 @@ import static com.google.common.base.Strings.isNullOrEmpty;
  */
 public enum EnvironmentType {
 
-	PRODUCTION, DEVELOPMENT, TEST;
+	PRODUCTION, DEVELOPMENT, ACCEPTANCE, TEST;
 
 	public String getName() {
 		return name().toLowerCase();

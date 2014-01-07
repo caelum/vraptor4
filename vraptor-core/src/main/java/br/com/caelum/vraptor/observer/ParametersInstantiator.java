@@ -30,12 +30,9 @@ import javax.inject.Inject;
 import org.slf4j.Logger;
 
 import br.com.caelum.vraptor.HeaderParam;
-import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.events.StackStarting;
 import br.com.caelum.vraptor.http.MutableRequest;
-import br.com.caelum.vraptor.http.Parameter;
-import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.http.ParametersProvider;
 import br.com.caelum.vraptor.http.ValuedParameter;
 import br.com.caelum.vraptor.validator.Message;
@@ -54,7 +51,6 @@ public class ParametersInstantiator {
 	private static final Logger logger = getLogger(ParametersInstantiator.class);
 
 	private final ParametersProvider provider;
-	private final ParameterNameProvider parameterNameProvider;
 	private final MethodInfo methodInfo;
 	private final Validator validator;
 	private final MutableRequest request;
@@ -66,36 +62,34 @@ public class ParametersInstantiator {
 	 * @deprecated CDI eyes only
 	 */
 	protected ParametersInstantiator() {
-		this(null, null, null, null, null, null);
+		this(null, null, null, null, null);
 	}
 
 	@Inject
-	public ParametersInstantiator(ParametersProvider provider, ParameterNameProvider parameterNameProvider, 
-			MethodInfo methodInfo, Validator validator, MutableRequest request, FlashScope flash) {
+	public ParametersInstantiator(ParametersProvider provider, MethodInfo methodInfo, Validator validator, 
+			MutableRequest request, FlashScope flash) {
 		this.provider = provider;
-		this.parameterNameProvider = parameterNameProvider;
 		this.methodInfo = methodInfo;
 		this.validator = validator;
 		this.request = request;
 		this.flash = flash;
 	}
 
-	public boolean containsParameters(ControllerMethod method) {
-		return method.getMethod().getParameterTypes().length > 0;
+	public boolean isNotParameterless() {
+		return methodInfo.getControllerMethod().getArity() > 0;
 	}
 
 	public void instantiate(@Observes StackStarting event) {
-		ControllerMethod controllerMethod = event.getControllerMethod();
-		if (containsParameters(controllerMethod)) {
+		if (isNotParameterless()) {
 			fixIndexedParameters(request);
-			addHeaderParametersToAttribute(controllerMethod);
+			addHeaderParametersToAttribute();
 
-			Object[] values = getParametersFor(controllerMethod);
+			Object[] values = getParametersForCurrentMethod();
 
 			validator.addAll(errors);
 
 			logger.debug("Conversion errors: {}", errors);
-			logger.debug("Parameter values for {} are {}", controllerMethod, values);
+			logger.debug("Parameter values for {} are {}", methodInfo.getControllerMethod(), values);
 
 			ValuedParameter[] valuedParameters = methodInfo.getValuedParameters();
 			for (int i = 0; i < valuedParameters.length; i++) {
@@ -104,16 +98,16 @@ public class ParametersInstantiator {
 		}
 	}
 
-	private void addHeaderParametersToAttribute(ControllerMethod controllerMethod) {
-		for (Parameter param : parameterNameProvider.parametersFor(controllerMethod.getMethod())) {
-			HeaderParam headerParam = param.getAnnotation(HeaderParam.class);
-			if (headerParam != null) {
+	private void addHeaderParametersToAttribute() {
+		for (ValuedParameter param : methodInfo.getValuedParameters()) {
+			if (param.getParameter().isAnnotationPresent(HeaderParam.class)) {
+				HeaderParam headerParam = param.getParameter().getAnnotation(HeaderParam.class);
 				String value = request.getHeader(headerParam.value());
 				request.setParameter(param.getName(), value);
 			}
 		}
 	}
-
+	
 	private void fixIndexedParameters(MutableRequest request) {
 		Enumeration<String> names = request.getParameterNames();
 		while (names.hasMoreElements()) {
@@ -133,10 +127,10 @@ public class ParametersInstantiator {
 		checkArgument(!name.contains(".class."), "Bug Exploit Attempt with parameter: %s", name);
 	}
 
-	private Object[] getParametersFor(ControllerMethod method) {
-		Object[] args = flash.consumeParameters(method);
+	private Object[] getParametersForCurrentMethod() {
+		Object[] args = flash.consumeParameters(methodInfo.getControllerMethod());
 		if (args == null) {
-			return provider.getParametersFor(method, errors);
+			return provider.getParametersFor(methodInfo.getControllerMethod(), errors);
 		}
 		return args;
 	}

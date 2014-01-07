@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package br.com.caelum.vraptor.converter;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
 
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
@@ -30,44 +30,46 @@ import javax.inject.Inject;
 import br.com.caelum.vraptor.Convert;
 
 /**
- * Localized version of VRaptor's Float converter. If the input value if empty or a null string, null value is 
+ * Localized version of VRaptor's BigDecimal converter. If the input value if empty or a null string, null value is 
  * returned. If the input string is not a number a {@link ConversionException} will be throw.
  *
  * @author Otávio Scherer Garcia
  * @since 3.1.2
  */
-@Convert(Float.class)
+@Convert(BigDecimal.class)
 @RequestScoped
-public class LocaleBasedFloatConverter implements Converter<Float> {
+public class BigDecimalConverter implements Converter<BigDecimal> {
 
 	private final Locale locale;
 
 	/** 
 	 * @deprecated CDI eyes only
 	 */
-	protected LocaleBasedFloatConverter() {
+	protected BigDecimalConverter() {
 		this(null);
 	}
 
 	@Inject
-	public LocaleBasedFloatConverter(Locale locale) {
+	public BigDecimalConverter(Locale locale) {
 		this.locale = locale;
 	}
 
 	@Override
-	public Float convert(String value, Class<? extends Float> type) {
+	public BigDecimal convert(String value, Class<? extends BigDecimal> type) {
 		if (isNullOrEmpty(value)) {
 			return null;
 		}
 
 		try {
-			return getNumberFormat().parse(value).floatValue();
+			return (BigDecimal) getNumberFormat().parse(value);
 		} catch (ParseException e) {
 			throw new ConversionException(new ConversionMessage("is_not_a_valid_number", value));
 		}
 	}
 	
 	protected NumberFormat getNumberFormat() {
-		return DecimalFormat.getInstance(locale);
+		DecimalFormat fmt = ((DecimalFormat) DecimalFormat.getInstance(locale));
+		fmt.setParseBigDecimal(true);
+		return fmt;
 	}
 }

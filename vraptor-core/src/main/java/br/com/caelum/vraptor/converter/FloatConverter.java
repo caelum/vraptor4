@@ -14,13 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package br.com.caelum.vraptor.converter;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
 
-import java.text.DateFormat;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.text.ParseException;
-import java.util.Date;
 import java.util.Locale;
 
 import javax.enterprise.context.RequestScoped;
@@ -29,43 +30,44 @@ import javax.inject.Inject;
 import br.com.caelum.vraptor.Convert;
 
 /**
- * Locale based date converter.
+ * Localized version of VRaptor's Float converter. If the input value if empty or a null string, null value is 
+ * returned. If the input string is not a number a {@link ConversionException} will be throw.
  *
- * @author Guilherme Silveira
+ * @author Otávio Scherer Garcia
+ * @since 3.1.2
  */
-@Convert(Date.class)
+@Convert(Float.class)
 @RequestScoped
-public class LocaleBasedDateConverter implements Converter<Date> {
+public class FloatConverter implements Converter<Float> {
 
 	private final Locale locale;
 
 	/** 
 	 * @deprecated CDI eyes only
 	 */
-	protected LocaleBasedDateConverter() {
+	protected FloatConverter() {
 		this(null);
 	}
 
 	@Inject
-	public LocaleBasedDateConverter(Locale locale) {
+	public FloatConverter(Locale locale) {
 		this.locale = locale;
 	}
 
 	@Override
-	public Date convert(String value, Class<? extends Date> type) {
+	public Float convert(String value, Class<? extends Float> type) {
 		if (isNullOrEmpty(value)) {
 			return null;
 		}
 
 		try {
-			return getDateFormat().parse(value);
-
-		} catch (ParseException pe) {
-			throw new ConversionException(new ConversionMessage("is_not_a_valid_date", value));
+			return getNumberFormat().parse(value).floatValue();
+		} catch (ParseException e) {
+			throw new ConversionException(new ConversionMessage("is_not_a_valid_number", value));
 		}
 	}
-
-	protected DateFormat getDateFormat() {
-		return DateFormat.getDateInstance(DateFormat.SHORT, locale);
+	
+	protected NumberFormat getNumberFormat() {
+		return DecimalFormat.getInstance(locale);
 	}
 }

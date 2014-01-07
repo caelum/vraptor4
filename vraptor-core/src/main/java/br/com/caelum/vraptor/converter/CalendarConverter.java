@@ -14,14 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package br.com.caelum.vraptor.converter;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
 
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
+import java.text.DateFormat;
 import java.text.ParseException;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Locale;
 
 import javax.enterprise.context.RequestScoped;
@@ -30,44 +31,45 @@ import javax.inject.Inject;
 import br.com.caelum.vraptor.Convert;
 
 /**
- * Localized version of VRaptor's Double converter. If the input value if empty or a null string, null value is 
- * returned. If the input string is not a number a {@link ConversionException} will be throw.
+ * Locale based calendar converter.
  *
- * @author Otávio Scherer Garcia
- * @since 3.1.2
+ * @author Guilherme Silveira
  */
-@Convert(Double.class)
+@Convert(Calendar.class)
 @RequestScoped
-public class LocaleBasedDoubleConverter implements Converter<Double> {
+public class CalendarConverter implements Converter<Calendar> {
 
 	private final Locale locale;
 
 	/** 
 	 * @deprecated CDI eyes only
 	 */
-	protected LocaleBasedDoubleConverter() {
+	protected CalendarConverter() {
 		this(null);
 	}
 
 	@Inject
-	public LocaleBasedDoubleConverter(Locale locale) {
+	public CalendarConverter(Locale locale) {
 		this.locale = locale;
 	}
 
 	@Override
-	public Double convert(String value, Class<? extends Double> type) {
+	public Calendar convert(String value, Class<? extends Calendar> type) {
 		if (isNullOrEmpty(value)) {
 			return null;
 		}
 
 		try {
-			return getNumberFormat().parse(value).doubleValue();
+			Date date = getDateFormat().parse(value);
+			Calendar calendar = new GregorianCalendar();
+			calendar.setTime(date);
+			return calendar;
 		} catch (ParseException e) {
-			throw new ConversionException(new ConversionMessage("is_not_a_valid_number", value));
+			throw new ConversionException(new ConversionMessage("is_not_a_valid_date", value));
 		}
 	}
 
-	protected NumberFormat getNumberFormat() {
-		return DecimalFormat.getInstance(locale);
+	protected DateFormat getDateFormat() {
+		return DateFormat.getDateInstance(DateFormat.SHORT, locale);
 	}
 }

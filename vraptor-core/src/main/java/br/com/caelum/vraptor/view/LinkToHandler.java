@@ -223,7 +223,7 @@ public class LinkToHandler extends ForwardingMap<Class<?>, Object> {
 		public String getLink() {
 			Method method = null;
 
-			if (countMethodsAmountWithSameName() > 1) {
+			if (countMethodsWithSameName() > 1) {
 				method = new Mirror().on(controller).reflect().method(methodName).withArgs(getClasses(args));
 				if (method == null && args.isEmpty()) {
 					throw new IllegalArgumentException("Ambiguous method '" + methodName + "' on " + controller + ". Try to add some parameters to resolve ambiguity, or use different method names.");
@@ -272,7 +272,7 @@ public class LinkToHandler extends ForwardingMap<Class<?>, Object> {
 			return findMethodWithName(type.getSuperclass(), name);
 		}
 
-		private int countMethodsAmountWithSameName() {
+		private int countMethodsWithSameName() {
 			int amount = 0;
 			for (Method method : controller.getDeclaredMethods()) {
 				if (!method.isBridge() && method.getName().equals(methodName)) {

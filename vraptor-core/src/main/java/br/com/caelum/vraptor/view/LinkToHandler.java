@@ -163,16 +163,14 @@ public class LinkToHandler extends ForwardingMap<Class<?>, Object> {
 
 				for (int length = params.length; length >= 0; length--) {
 					CtMethod method = abstractMethod(returnType, m.getName(), Arrays.copyOf(params, length), empty, inter);
-					if (!used.contains(method)) {
-						used.add(method);
+					if (used.add(method)) {
 						inter.addMethod(method);
 						logger.debug("added method {} to interface {}", method.getName(), controller);
 					}
 				}
 
 				CtMethod getter = abstractMethod(returnType, String.format("get%s", capitalize(name)), empty, empty, inter);
-				if (!used.contains(getter)) {
-					used.add(getter);
+				if (used.add(getter)) {
 					inter.addMethod(getter);
 					logger.debug("added getter {} to interface {}", getter.getName(), controller);
 				}

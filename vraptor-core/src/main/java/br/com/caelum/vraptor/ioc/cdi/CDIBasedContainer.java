@@ -57,10 +57,6 @@ public class CDIBasedContainer implements Container {
 		Set<Bean<?>> beans = beanManager.getBeans(type);
 		logger.debug("beans for {} is {}", type, beans);
 
-		if (beans.isEmpty()) {
-			return null;
-		}
-
 		return beanManager.resolve(beans);
 	}
 }

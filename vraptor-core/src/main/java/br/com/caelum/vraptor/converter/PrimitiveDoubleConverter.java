@@ -39,7 +39,7 @@ import br.com.caelum.vraptor.Convert;
  */
 @Convert(double.class)
 @RequestScoped
-public class LocaleBasedPrimitiveDoubleConverter implements Converter<Double> {
+public class PrimitiveDoubleConverter implements Converter<Double> {
 
 	private final Locale locale;
 
@@ -47,12 +47,12 @@ public class LocaleBasedPrimitiveDoubleConverter implements Converter<Double> {
 	 * @deprecated CDI eyes only
 	 */
 
-	public LocaleBasedPrimitiveDoubleConverter() {
+	public PrimitiveDoubleConverter() {
 		this(null);
 	}
 
 	@Inject
-	public LocaleBasedPrimitiveDoubleConverter(Locale locale) {
+	public PrimitiveDoubleConverter(Locale locale) {
 		this.locale = locale;
 	}
 

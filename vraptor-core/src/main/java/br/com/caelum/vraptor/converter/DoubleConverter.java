@@ -30,44 +30,43 @@ import javax.inject.Inject;
 import br.com.caelum.vraptor.Convert;
 
 /**
- * Localized version of VRaptor's Float converter. If the input value if empty or a null string, null value is returned. 
- * If the input string is not a number a {@link ConversionException} will be throw.
+ * Localized version of VRaptor's Double converter. If the input value if empty or a null string, null value is 
+ * returned. If the input string is not a number a {@link ConversionException} will be throw.
  *
- * @author Rafael Dipold
  * @author Otávio Scherer Garcia
- * @since 3.4
+ * @since 3.1.2
  */
-@Convert(float.class)
+@Convert(Double.class)
 @RequestScoped
-public class LocaleBasedPrimitiveFloatConverter implements Converter<Float> {
+public class DoubleConverter implements Converter<Double> {
 
 	private final Locale locale;
 
 	/** 
 	 * @deprecated CDI eyes only
 	 */
-	protected LocaleBasedPrimitiveFloatConverter() {
+	protected DoubleConverter() {
 		this(null);
 	}
 
 	@Inject
-	public LocaleBasedPrimitiveFloatConverter(Locale locale) {
+	public DoubleConverter(Locale locale) {
 		this.locale = locale;
 	}
 
 	@Override
-	public Float convert(String value, Class<? extends Float> type) {
+	public Double convert(String value, Class<? extends Double> type) {
 		if (isNullOrEmpty(value)) {
-			return 0f;
+			return null;
 		}
 
 		try {
-			return getNumberFormat().parse(value).floatValue();
+			return getNumberFormat().parse(value).doubleValue();
 		} catch (ParseException e) {
 			throw new ConversionException(new ConversionMessage("is_not_a_valid_number", value));
 		}
 	}
-	
+
 	protected NumberFormat getNumberFormat() {
 		return DecimalFormat.getInstance(locale);
 	}

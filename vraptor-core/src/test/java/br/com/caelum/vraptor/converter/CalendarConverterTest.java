@@ -16,13 +16,16 @@
  */
 
 package br.com.caelum.vraptor.converter;
+
 import static br.com.caelum.vraptor.VRaptorMatchers.hasMessage;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.fail;
+import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.Mockito.when;
 
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.Locale;
 
 import javax.servlet.ServletContext;
@@ -33,13 +36,13 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import br.com.caelum.vraptor.converter.ConversionException;
-import br.com.caelum.vraptor.converter.LocaleBasedPrimitiveFloatConverter;
 import br.com.caelum.vraptor.http.MutableRequest;
 
-public class LocaleBasedPrimitiveFloatConverterTest {
+public class CalendarConverterTest {
 
-	private LocaleBasedPrimitiveFloatConverter converter;
+	static final String LOCALE_KEY = "javax.servlet.jsp.jstl.fmt.locale";
+
+	private CalendarConverter converter;
 	private @Mock MutableRequest request;
 	private @Mock HttpSession session;
 	private @Mock ServletContext context;
@@ -50,39 +53,31 @@ public class LocaleBasedPrimitiveFloatConverterTest {
 
 		when(request.getServletContext()).thenReturn(context);
 
-		converter = new LocaleBasedPrimitiveFloatConverter(new Locale("pt", "BR"));
+		converter = new CalendarConverter(new Locale("pt", "BR"));
 	}
 
 	@Test
-	public void shouldBeAbleToConvertWithPTBR() {
-		assertThat(converter.convert("10,00", float.class), is(equalTo(Float.parseFloat("10.00"))));
-		assertThat(converter.convert("10,01", float.class), is(equalTo(Float.parseFloat("10.01"))));
+	public void shouldBeAbleToConvert() {
+		assertThat(converter.convert("10/06/2008", Calendar.class),
+				is(equalTo((Calendar) new GregorianCalendar(2008, 5, 10))));
 	}
 
 	@Test
-	public void shouldBeAbleToConvertWithENUS() {
-		converter = new LocaleBasedPrimitiveFloatConverter(new Locale("en", "US"));
-		assertThat(converter.convert("10.00", float.class), is(equalTo(Float.parseFloat("10.00"))));
-		assertThat(converter.convert("10.01", float.class), is(equalTo(Float.parseFloat("10.01"))));
+	public void shouldBeAbleToConvertEmpty() {
+		assertThat(converter.convert("", Calendar.class), is(nullValue()));
 	}
 
-	 @Test
-	 public void shouldBeAbleToConvertEmpty() {
-		 assertThat(converter.convert("", float.class), is(equalTo(0f)));
-	 }
-
-	 @Test
-	 public void shouldBeAbleToConvertNull() {
-		 assertThat(converter.convert(null, float.class), is(equalTo(0f)));
-	 }
+	@Test
+	public void shouldBeAbleToConvertNull() {
+		assertThat(converter.convert(null, Calendar.class), is(nullValue()));
+	}
 
 	@Test
 	public void shouldThrowExceptionWhenUnableToParse() {
 		try {
-			converter.convert("vr3.9", float.class);
-			fail("Should throw exception");
+			converter.convert("a,10/06/2008/a/b/c", Calendar.class);
 		} catch (ConversionException e) {
-			assertThat(e.getValidationMessage(), hasMessage("vr3.9 is not a valid number."));
+			assertThat(e.getValidationMessage(), hasMessage("a,10/06/2008/a/b/c is not a valid date."));
 		}
 	}
 }

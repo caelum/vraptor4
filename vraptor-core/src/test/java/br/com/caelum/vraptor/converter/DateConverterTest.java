@@ -24,8 +24,9 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.Mockito.when;
 
-import java.util.Calendar;
-import java.util.GregorianCalendar;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Locale;
 
 import javax.servlet.ServletContext;
@@ -38,11 +39,11 @@ import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor.http.MutableRequest;
 
-public class LocaleBasedCalendarConverterTest {
+public class DateConverterTest {
 
 	static final String LOCALE_KEY = "javax.servlet.jsp.jstl.fmt.locale";
 
-	private LocaleBasedCalendarConverter converter;
+	private DateConverter converter;
 	private @Mock MutableRequest request;
 	private @Mock HttpSession session;
 	private @Mock ServletContext context;
@@ -53,29 +54,29 @@ public class LocaleBasedCalendarConverterTest {
 
 		when(request.getServletContext()).thenReturn(context);
 
-		converter = new LocaleBasedCalendarConverter(new Locale("pt", "BR"));
+		converter = new DateConverter(new Locale("pt", "BR"));
 	}
 
 	@Test
-	public void shouldBeAbleToConvert() {
-		assertThat(converter.convert("10/06/2008", Calendar.class),
-				is(equalTo((Calendar) new GregorianCalendar(2008, 5, 10))));
+	public void shouldBeAbleToConvert() throws ParseException {
+		assertThat(converter.convert("10/06/2008", Date.class), is(equalTo(new SimpleDateFormat("dd/MM/yyyy")
+				.parse("10/06/2008"))));
 	}
 
 	@Test
 	public void shouldBeAbleToConvertEmpty() {
-		assertThat(converter.convert("", Calendar.class), is(nullValue()));
+		assertThat(converter.convert("", Date.class), is(nullValue()));
 	}
 
 	@Test
 	public void shouldBeAbleToConvertNull() {
-		assertThat(converter.convert(null, Calendar.class), is(nullValue()));
+		assertThat(converter.convert(null, Date.class), is(nullValue()));
 	}
 
 	@Test
 	public void shouldThrowExceptionWhenUnableToParse() {
 		try {
-			converter.convert("a,10/06/2008/a/b/c", Calendar.class);
+			converter.convert("a,10/06/2008/a/b/c", Date.class);
 		} catch (ConversionException e) {
 			assertThat(e.getValidationMessage(), hasMessage("a,10/06/2008/a/b/c is not a valid date."));
 		}

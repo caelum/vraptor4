@@ -20,9 +20,7 @@ import static com.google.common.base.Strings.isNullOrEmpty;
 
 import java.text.DateFormat;
 import java.text.ParseException;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.Locale;
 
 import javax.enterprise.context.RequestScoped;
@@ -31,40 +29,38 @@ import javax.inject.Inject;
 import br.com.caelum.vraptor.Convert;
 
 /**
- * Locale based calendar converter.
+ * Locale based date converter.
  *
  * @author Guilherme Silveira
  */
-@Convert(Calendar.class)
+@Convert(Date.class)
 @RequestScoped
-public class LocaleBasedCalendarConverter implements Converter<Calendar> {
+public class DateConverter implements Converter<Date> {
 
 	private final Locale locale;
 
 	/** 
 	 * @deprecated CDI eyes only
 	 */
-	protected LocaleBasedCalendarConverter() {
+	protected DateConverter() {
 		this(null);
 	}
 
 	@Inject
-	public LocaleBasedCalendarConverter(Locale locale) {
+	public DateConverter(Locale locale) {
 		this.locale = locale;
 	}
 
 	@Override
-	public Calendar convert(String value, Class<? extends Calendar> type) {
+	public Date convert(String value, Class<? extends Date> type) {
 		if (isNullOrEmpty(value)) {
 			return null;
 		}
 
 		try {
-			Date date = getDateFormat().parse(value);
-			Calendar calendar = new GregorianCalendar();
-			calendar.setTime(date);
-			return calendar;
-		} catch (ParseException e) {
+			return getDateFormat().parse(value);
+
+		} catch (ParseException pe) {
 			throw new ConversionException(new ConversionMessage("is_not_a_valid_date", value));
 		}
 	}

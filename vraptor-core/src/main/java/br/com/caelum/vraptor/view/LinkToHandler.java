@@ -163,16 +163,14 @@ public class LinkToHandler extends ForwardingMap<Class<?>, Object> {
 
 				for (int length = params.length; length >= 0; length--) {
 					CtMethod method = abstractMethod(returnType, m.getName(), Arrays.copyOf(params, length), empty, inter);
-					if (!used.contains(method)) {
-						used.add(method);
+					if (used.add(method)) {
 						inter.addMethod(method);
 						logger.debug("added method {} to interface {}", method.getName(), controller);
 					}
 				}
 
 				CtMethod getter = abstractMethod(returnType, String.format("get%s", capitalize(name)), empty, empty, inter);
-				if (!used.contains(getter)) {
-					used.add(getter);
+				if (used.add(getter)) {
 					inter.addMethod(getter);
 					logger.debug("added getter {} to interface {}", getter.getName(), controller);
 				}
@@ -225,7 +223,7 @@ public class LinkToHandler extends ForwardingMap<Class<?>, Object> {
 		public String getLink() {
 			Method method = null;
 
-			if (getMethodsAmountWithSameName() > 1) {
+			if (countMethodsWithSameName() > 1) {
 				method = new Mirror().on(controller).reflect().method(methodName).withArgs(getClasses(args));
 				if (method == null && args.isEmpty()) {
 					throw new IllegalArgumentException("Ambiguous method '" + methodName + "' on " + controller + ". Try to add some parameters to resolve ambiguity, or use different method names.");
@@ -244,15 +242,17 @@ public class LinkToHandler extends ForwardingMap<Class<?>, Object> {
 		}
 
 		private Object[] getArgs(Method method) {
-			int methodParamsQuantity = method.getParameterTypes().length;
+			int methodArity = method.getParameterTypes().length;
 
-			if (args.size() == methodParamsQuantity)
+			if (args.size() == methodArity) {
 				return args.toArray();
+			}
 
-			if (args.size() > methodParamsQuantity)
-				throw new IllegalArgumentException(String.format("linkTo param args must have the same or lower length as method param args. linkTo args: %d | method args: %d", args.size(), methodParamsQuantity));
+			if (args.size() > methodArity) {
+				throw new IllegalArgumentException(String.format("linkTo param args must have the same or lower length as method param args. linkTo args: %d | method args: %d", args.size(), methodArity));
+			}
 
-			Object[] noMissingParamsArgs = new Object[methodParamsQuantity];
+			Object[] noMissingParamsArgs = new Object[methodArity];
 			System.arraycopy(args.toArray(), 0, noMissingParamsArgs, 0, args.size());
 
 			return noMissingParamsArgs;
@@ -272,7 +272,7 @@ public class LinkToHandler extends ForwardingMap<Class<?>, Object> {
 			return findMethodWithName(type.getSuperclass(), name);
 		}
 
-		private int getMethodsAmountWithSameName() {
+		private int countMethodsWithSameName() {
 			int amount = 0;
 			for (Method method : controller.getDeclaredMethods()) {
 				if (!method.isBridge() && method.getName().equals(methodName)) {

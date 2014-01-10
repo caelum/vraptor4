@@ -37,7 +37,6 @@ import net.vidageek.mirror.dsl.Mirror;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
@@ -50,7 +49,6 @@ import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.events.StackStarting;
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.http.Parameter;
-import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.http.ParametersProvider;
 import br.com.caelum.vraptor.http.ParanamerNameProvider;
 import br.com.caelum.vraptor.validator.Message;
@@ -62,7 +60,6 @@ public class ParametersInstantiatorTest {
 
 	private MethodInfo methodInfo = new MethodInfo(new ParanamerNameProvider(new DefaultCacheStore<AccessibleObject, Parameter[]>()));
 	private @Mock ParametersProvider parametersProvider;
-	private ParameterNameProvider parameterNameProvider;
 	private @Mock Validator validator;
 	private @Mock ResourceBundle bundle;
 	private @Mock MutableRequest request;
@@ -77,12 +74,10 @@ public class ParametersInstantiatorTest {
 	@Before
 	@SuppressWarnings("unchecked")
 	public void setup() throws Exception {
-		parameterNameProvider = new ParanamerNameProvider(new DefaultCacheStore<AccessibleObject, Parameter[]>());
-
 		MockitoAnnotations.initMocks(this);
 		when(request.getParameterNames()).thenReturn(Collections.<String> emptyEnumeration());
 
-		this.instantiator = new ParametersInstantiator(parametersProvider, parameterNameProvider, methodInfo, validator, request, flash);
+		this.instantiator = new ParametersInstantiator(parametersProvider, methodInfo, validator, request, flash);
 
 		this.errors = (List<Message>) new Mirror().on(instantiator).get().field("errors");
 		this.method = DefaultControllerMethod.instanceFor(Component.class, Component.class.getDeclaredMethod("method"));
@@ -103,8 +98,9 @@ public class ParametersInstantiatorTest {
 
 	@Test
 	public void shouldNotAcceptIfMethodHasNoParameters() {
-		MethodInfo methodInfo = Mockito.mock(MethodInfo.class);
-		verifyNoMoreInteractions(parametersProvider, methodInfo, validator, request, flash);
+		methodInfo.setControllerMethod(method);
+
+		verifyNoMoreInteractions(parametersProvider, validator, request, flash);
 		instantiator.instantiate(new StackStarting(method));
 	}
 
@@ -141,8 +137,11 @@ public class ParametersInstantiatorTest {
 	 */
 	@Test(expected=IllegalArgumentException.class)
 	public void shouldThrowExceptionWhenThereIsAParameterContainingDotClass() throws Exception {
+		methodInfo.setControllerMethod(otherMethod);
+
 		when(request.getParameterNames()).thenReturn(enumeration(asList("someParam.class.id", "unrelatedParam")));
 		when(request.getParameterValues("someParam.class.id")).thenReturn(new String[] {"whatever"});
+
 		instantiator.instantiate(new StackStarting(otherMethod));
 	}
 

@@ -42,9 +42,6 @@ import br.com.caelum.vraptor.http.ValuedParameter;
 import br.com.caelum.vraptor.validator.SimpleMessage;
 import br.com.caelum.vraptor.validator.Validator;
 
-import com.google.common.base.Joiner;
-import com.google.common.collect.Iterators;
-
 /**
  * Validate method parameters using Bean Validation. The method will
  * be validated if any parameter contains a Bean Validation annotation.
@@ -119,10 +116,14 @@ public class MethodValidator {
 	protected String extractCategory(ValuedParameter[] params, ConstraintViolation<Object> violation) {
 		Iterator<Node> path = violation.getPropertyPath().iterator();
 
-		return Joiner.on(".").join(
-				path.next(), // method name
-				params[path.next().as(ParameterNode.class).getParameterIndex()].getName(), // parameter name
-				Iterators.toArray(path, Object.class) // property path
-		);
+		StringBuilder cat = new StringBuilder();
+		cat.append(path.next()).append("."); // method name
+		cat.append(params[path.next().as(ParameterNode.class).getParameterIndex()].getName());// parameter name
+
+		while (path.hasNext()) {
+			cat.append(".").append(path.next());
+		}
+
+		return cat.toString();
 	}
 }

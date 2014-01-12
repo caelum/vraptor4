@@ -20,6 +20,7 @@ package br.com.caelum.vraptor.view;
 import java.io.IOException;
 import java.lang.reflect.Method;
 
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.servlet.ServletException;
 
@@ -42,6 +43,7 @@ import br.com.caelum.vraptor.proxy.SuperMethod;
  * @author Guilherme Silveira
  * @author Lucas Cavalcanti
  */
+@RequestScoped
 public class DefaultPageResult implements PageResult {
 
 	private static final Logger logger = LoggerFactory.getLogger(DefaultPageResult.class);

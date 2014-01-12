@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://xmlns.jcp.org/xml/ns/javaee"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee
-         http://xmlns.jcp.org/xml/ns/javaee/beans_1_1.xsd"
-         version="1.1" bean-discovery-mode="all">
-         
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/beans_1_1.xsd"
+	version="1.1" bean-discovery-mode="annotated">
+
 	<scan>
 		<exclude name="br.com.caelum.vraptor.converter.jodatime.*">
 			<if-class-not-available name="org.joda.time.LocalDate"/>
@@ -13,15 +12,15 @@
 		<exclude name="br.com.caelum.vraptor.validator.beanvalidation.*">
 			<if-class-not-available name="javax.validation.executable.ExecutableValidator"/>
 		</exclude>
-		
+
 		<exclude name="br.com.caelum.vraptor.observer.upload.CommonsUploadMultipartInterceptor">
 			<if-class-not-available name="org.apache.commons.fileupload.FileItem"/>
 		</exclude>
-		
+
 		<exclude name="br.com.caelum.vraptor.observer.upload.NullMultipartObserver">
 			<if-class-available name="org.apache.commons.fileupload.FileItem"/>
 		</exclude>
-		
+
 		<exclude name="br.com.caelum.vraptor.serialization.xstream.*">
 			<if-class-not-available name="com.thoughtworks.xstream.XStream"/>
 		</exclude>
@@ -39,9 +38,7 @@
 		</exclude>
 
 		<exclude name="br.com.caelum.vraptor.util.**" />
-		
+
 		<exclude name="br.com.caelum.vraptor.events.*" />
-		
 	</scan>
-	
 </beans>

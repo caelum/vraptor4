@@ -19,6 +19,7 @@ package br.com.caelum.vraptor.observer;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
+import javax.enterprise.context.RequestScoped;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 
@@ -36,6 +37,7 @@ import br.com.caelum.vraptor.view.Results;
  * @author Rodrigo Turini
  * @author Victor Harada
  */
+@RequestScoped
 public class ForwardToDefaultView {
 	
 	private final Result result;

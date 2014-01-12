@@ -47,10 +47,10 @@ public class SessionFlashScope implements FlashScope {
 
 	@Override
 	public Object[] consumeParameters(ControllerMethod method) {
-		Object[] args = (Object[]) session.getAttribute(nameFor(method));
-		if (args != null) {
-			session.removeAttribute(nameFor(method));
-		}
+		String param = nameFor(method);
+		Object[] args = (Object[]) session.getAttribute(param);
+		session.removeAttribute(param);
+
 		return args;
 	}
 

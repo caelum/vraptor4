@@ -67,7 +67,9 @@ public class CommonsUploadMultipartObserver {
 	public void upload(@Observes ControllerMethodDiscovered event, MutableRequest request,
 			MultipartConfig config, Validator validator) {
 
-		if (!ServletFileUpload.isMultipartContent(request)) return;
+		if (!ServletFileUpload.isMultipartContent(request)) {
+			return;
+		}
 
 		logger.info("Request contains multipart data. Try to parse with commons-upload.");
 

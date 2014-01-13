@@ -13,7 +13,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.proxy.JavassistProxifier;
-import br.com.caelum.vraptor.rest.gson.GsonBuilderWrapper;
+import br.com.caelum.vraptor.serialization.gson.GsonBuilderWrapper;
 
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonSerializer;

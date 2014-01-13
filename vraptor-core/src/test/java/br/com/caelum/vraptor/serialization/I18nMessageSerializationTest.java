@@ -21,10 +21,10 @@ import org.junit.Test;
 
 import br.com.caelum.vraptor.interceptor.DefaultTypeNameExtractor;
 import br.com.caelum.vraptor.ioc.Container;
-import br.com.caelum.vraptor.rest.gson.GsonBuilderWrapper;
-import br.com.caelum.vraptor.rest.gson.GsonSerializerBuilder;
 import br.com.caelum.vraptor.serialization.gson.CalendarSerializer;
+import br.com.caelum.vraptor.serialization.gson.GsonBuilderWrapper;
 import br.com.caelum.vraptor.serialization.gson.GsonJSONSerialization;
+import br.com.caelum.vraptor.serialization.gson.GsonSerializerBuilder;
 import br.com.caelum.vraptor.serialization.gson.MessageSerializer;
 import br.com.caelum.vraptor.serialization.xstream.MessageConverter;
 import br.com.caelum.vraptor.serialization.xstream.XStreamBuilder;

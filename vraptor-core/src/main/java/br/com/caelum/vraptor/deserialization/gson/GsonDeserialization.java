@@ -20,7 +20,7 @@ import br.com.caelum.vraptor.deserialization.Deserializer;
 import br.com.caelum.vraptor.deserialization.Deserializes;
 import br.com.caelum.vraptor.http.Parameter;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
-import br.com.caelum.vraptor.rest.gson.GsonDeserializerBuilder;
+import br.com.caelum.vraptor.serialization.gson.GsonDeserializerBuilder;
 import br.com.caelum.vraptor.view.ResultException;
 
 import com.google.common.io.CharStreams;

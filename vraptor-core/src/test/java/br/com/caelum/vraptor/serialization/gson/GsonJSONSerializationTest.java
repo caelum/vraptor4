@@ -25,8 +25,6 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.interceptor.DefaultTypeNameExtractor;
-import br.com.caelum.vraptor.rest.gson.GsonBuilderWrapper;
-import br.com.caelum.vraptor.rest.gson.GsonSerializerBuilder;
 import br.com.caelum.vraptor.serialization.JSONPSerialization;
 import br.com.caelum.vraptor.serialization.JSONSerialization;
 import br.com.caelum.vraptor.util.test.MockInstanceImpl;

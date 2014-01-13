@@ -34,8 +34,8 @@ import br.com.caelum.vraptor.controller.DefaultControllerMethod;
 import br.com.caelum.vraptor.http.Parameter;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.http.ParanamerNameProvider;
-import br.com.caelum.vraptor.rest.gson.GsonBuilderWrapper;
-import br.com.caelum.vraptor.rest.gson.GsonDeserializerBuilder;
+import br.com.caelum.vraptor.serialization.gson.GsonBuilderWrapper;
+import br.com.caelum.vraptor.serialization.gson.GsonDeserializerBuilder;
 import br.com.caelum.vraptor.util.test.MockInstanceImpl;
 import br.com.caelum.vraptor.view.GenericController;
 

@@ -1,4 +1,4 @@
-package br.com.caelum.vraptor.deserialization;
+package br.com.caelum.vraptor.serialization;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -7,6 +7,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.controller.DefaultBeanClass;
+import br.com.caelum.vraptor.serialization.Deserializer;
+import br.com.caelum.vraptor.serialization.Deserializers;
+import br.com.caelum.vraptor.serialization.DeserializesHandler;
 
 public class DeserializesHandlerTest {
 

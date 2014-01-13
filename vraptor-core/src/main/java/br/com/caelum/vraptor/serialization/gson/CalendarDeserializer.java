@@ -1,4 +1,4 @@
-package br.com.caelum.vraptor.deserialization.gson;
+package br.com.caelum.vraptor.serialization.gson;
 
 import java.lang.reflect.Type;
 import java.util.Calendar;

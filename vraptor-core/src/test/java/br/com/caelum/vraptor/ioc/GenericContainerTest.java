@@ -68,8 +68,6 @@ import br.com.caelum.vraptor.converter.jodatime.LocalDateConverter;
 import br.com.caelum.vraptor.converter.jodatime.LocalTimeConverter;
 import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.core.RequestInfo;
-import br.com.caelum.vraptor.deserialization.Deserializer;
-import br.com.caelum.vraptor.deserialization.Deserializers;
 import br.com.caelum.vraptor.http.route.Route;
 import br.com.caelum.vraptor.http.route.Router;
 import br.com.caelum.vraptor.interceptor.InterceptorRegistry;
@@ -77,6 +75,8 @@ import br.com.caelum.vraptor.ioc.cdi.CDIBasedContainer;
 import br.com.caelum.vraptor.ioc.fixture.ControllerInTheClasspath;
 import br.com.caelum.vraptor.ioc.fixture.ConverterInTheClasspath;
 import br.com.caelum.vraptor.ioc.fixture.InterceptorInTheClasspath;
+import br.com.caelum.vraptor.serialization.Deserializer;
+import br.com.caelum.vraptor.serialization.Deserializers;
 
 /**
  * Acceptance test that checks if the container is capable of giving all

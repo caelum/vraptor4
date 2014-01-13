@@ -21,11 +21,11 @@ import org.junit.Test;
 
 import br.com.caelum.vraptor.interceptor.DefaultTypeNameExtractor;
 import br.com.caelum.vraptor.ioc.Container;
-import br.com.caelum.vraptor.serialization.gson.CalendarSerializer;
+import br.com.caelum.vraptor.serialization.gson.CalendarGsonConverter;
 import br.com.caelum.vraptor.serialization.gson.GsonBuilderWrapper;
 import br.com.caelum.vraptor.serialization.gson.GsonJSONSerialization;
 import br.com.caelum.vraptor.serialization.gson.GsonSerializerBuilder;
-import br.com.caelum.vraptor.serialization.gson.MessageSerializer;
+import br.com.caelum.vraptor.serialization.gson.MessageGsonConverter;
 import br.com.caelum.vraptor.serialization.xstream.MessageConverter;
 import br.com.caelum.vraptor.serialization.xstream.XStreamBuilder;
 import br.com.caelum.vraptor.serialization.xstream.XStreamBuilderFactory;
@@ -52,8 +52,8 @@ public class I18nMessageSerializationTest {
 
 		List<JsonSerializer<?>> jsonSerializers = new ArrayList<>();
 		List<JsonDeserializer<?>> jsonDeserializers = new ArrayList<>();
-		jsonSerializers.add(new CalendarSerializer());
-		jsonSerializers.add(new MessageSerializer());
+		jsonSerializers.add(new CalendarGsonConverter());
+		jsonSerializers.add(new MessageGsonConverter());
 
 		GsonSerializerBuilder gsonBuilder =  new GsonBuilderWrapper(new MockInstanceImpl<>(jsonSerializers), new MockInstanceImpl<>(jsonDeserializers));
 		GsonJSONSerialization jsonSerialization = new GsonJSONSerialization(response, extractor, gsonBuilder);

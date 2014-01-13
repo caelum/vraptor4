@@ -34,7 +34,7 @@ import br.com.caelum.vraptor.serialization.JSONSerialization;
 import br.com.caelum.vraptor.serialization.Serialization;
 import br.com.caelum.vraptor.serialization.gson.GsonBuilderWrapper;
 import br.com.caelum.vraptor.serialization.gson.GsonSerializerBuilder;
-import br.com.caelum.vraptor.serialization.gson.MessageSerializer;
+import br.com.caelum.vraptor.serialization.gson.MessageGsonConverter;
 import br.com.caelum.vraptor.serialization.xstream.MessageConverter;
 import br.com.caelum.vraptor.serialization.xstream.XStreamBuilder;
 import br.com.caelum.vraptor.util.test.MockInstanceImpl;
@@ -183,7 +183,7 @@ public class DefaultStatusTest {
 
 		List<JsonSerializer<?>> gsonSerializers = new ArrayList<>();
 		List<JsonDeserializer<?>> gsonDeserializers = new ArrayList<>();
-		gsonSerializers.add(new MessageSerializer());
+		gsonSerializers.add(new MessageGsonConverter());
 
 		GsonSerializerBuilder gsonBuilder = new GsonBuilderWrapper(new MockInstanceImpl<>(gsonSerializers), new MockInstanceImpl<>(gsonDeserializers));
 		MockSerializationResult result = new MockSerializationResult(null, null, gsonBuilder) {

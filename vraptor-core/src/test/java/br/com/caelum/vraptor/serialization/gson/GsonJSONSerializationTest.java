@@ -58,7 +58,7 @@ public class GsonJSONSerializationTest {
 
 		List<JsonSerializer<?>> jsonSerializers = new ArrayList<>();
 		List<JsonDeserializer<?>> jsonDeserializers = new ArrayList<>();
-		jsonSerializers.add(new CalendarSerializer());
+		jsonSerializers.add(new CalendarGsonConverter());
 		jsonSerializers.add(new CollectionSerializer());
 		jsonSerializers.add(new EnumSerializer());
 

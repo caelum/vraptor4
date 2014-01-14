@@ -1,4 +1,4 @@
-package br.com.caelum.vraptor.deserialization;
+package br.com.caelum.vraptor.serialization;
 
 import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.never;
@@ -10,6 +10,10 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor.ioc.Container;
+import br.com.caelum.vraptor.serialization.DefaultDeserializers;
+import br.com.caelum.vraptor.serialization.Deserializer;
+import br.com.caelum.vraptor.serialization.Deserializers;
+import br.com.caelum.vraptor.serialization.Deserializes;
 
 public class DefaultDeserializersTest {
 

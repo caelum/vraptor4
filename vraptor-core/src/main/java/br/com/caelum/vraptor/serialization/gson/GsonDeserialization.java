@@ -1,4 +1,4 @@
-package br.com.caelum.vraptor.deserialization.gson;
+package br.com.caelum.vraptor.serialization.gson;
 
 import static com.google.common.base.Objects.firstNonNull;
 import static com.google.common.base.Strings.isNullOrEmpty;
@@ -16,11 +16,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.controller.ControllerMethod;
-import br.com.caelum.vraptor.deserialization.Deserializer;
-import br.com.caelum.vraptor.deserialization.Deserializes;
 import br.com.caelum.vraptor.http.Parameter;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
-import br.com.caelum.vraptor.rest.gson.GsonDeserializerBuilder;
+import br.com.caelum.vraptor.serialization.Deserializer;
+import br.com.caelum.vraptor.serialization.Deserializes;
+import br.com.caelum.vraptor.serialization.gson.GsonDeserializerBuilder;
 import br.com.caelum.vraptor.view.ResultException;
 
 import com.google.common.io.CharStreams;

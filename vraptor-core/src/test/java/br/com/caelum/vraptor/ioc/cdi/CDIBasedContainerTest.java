@@ -5,15 +5,18 @@ import static org.junit.Assert.assertEquals;
 import java.util.concurrent.Callable;
 
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 
 import br.com.caelum.cdi.component.UsingCacheComponent;
 import br.com.caelum.vraptor.WeldJunitRunner;
 import br.com.caelum.vraptor.core.RequestInfo;
-import br.com.caelum.vraptor.http.MutableRequest;
-import br.com.caelum.vraptor.http.MutableResponse;
+import br.com.caelum.vraptor.http.VRaptorRequest;
+import br.com.caelum.vraptor.http.VRaptorResponse;
 import br.com.caelum.vraptor.ioc.ContainerProvider;
 import br.com.caelum.vraptor.ioc.GenericContainerTest;
 import br.com.caelum.vraptor.ioc.WhatToDo;
@@ -48,10 +51,10 @@ public class CDIBasedContainerTest extends GenericContainerTest {
 			public T call() throws Exception {
 				contexts.startRequestScope();
 				contexts.startSessionScope();
-
+				
 				RequestInfo request = new RequestInfo(null, null,
-						cdiBasedContainer.instanceFor(MutableRequest.class),
-						cdiBasedContainer.instanceFor(MutableResponse.class));
+						new VRaptorRequest(Mockito.mock(HttpServletRequest.class)),
+						new VRaptorResponse(Mockito.mock(HttpServletResponse.class)));
 
 				T result = execution.execute(request, counter);
 

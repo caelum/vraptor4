@@ -1,0 +1,126 @@
+* {
+  margin: 0;
+  padding: 0;
+  font-family: font: 13px Helvetica, arial, freesans, clean, sans-serif;
+}
+
+body {
+  background: #fff;
+}
+
+a {
+  text-decoration: none;
+}
+
+#main {
+  position: absolute;
+  top: 40px;
+  left: 280px;
+  width: 70%;
+}
+
+#main h1 {
+  font-size: 40px;
+  font-weight: normal;
+  line-height: 40px;
+  letter-spacing: -1px;
+}
+
+#main p {
+  margin: 20px 0;
+  font-size: 15px;
+  line-height: 20px;
+}
+
+#main ul, #main ol {
+  margin: 20px;
+}
+
+#main li {
+  font-size: 15px;
+  line-height: 20px;
+}
+
+#main ul li {
+  list-style-type: square;
+}
+
+#sidebar {
+  position: fixed;
+  top: 10px;
+  left: 20px;
+  width: 200px;
+  padding: 20px 20px 0 0;
+}
+
+#sidebar h2 {
+  text-transform: uppercase;
+  font-size: 13px;
+  color: #AAAAAA;
+  letter-spacing: 1px;
+  line-height: 20px;
+}
+
+#sidebar ul {
+  list-style-type: none;
+  margin: 20px 0;
+}
+
+#sidebar li {
+  font-size: 14px;
+  line-height: 40px;
+  text-align: center;
+  width: 100%;
+  position: relative;
+}
+
+div.highlight pre,
+div.highlight code {
+  background-color: #f8f8f8;
+  font-size: 13px;
+  line-height: 19px;
+  overflow: auto;
+  padding: 1px 5px;
+}
+
+div.highlight pre {
+  border: 1px solid #ddd;
+  padding: 6px 10px;
+  border-radius: 3px;
+}
+
+ul li:hover,
+ul li:focus,
+ul li a:hover, 
+ul li a:focus {
+  border-color: #eeeeee #eeeeee #dddddd;
+  background-color: #eeeeee;
+  text-decoration: none;
+}
+
+ul li a {
+  border: 1px solid #ddd;
+  border-bottom: 0;
+  line-height: 40px;
+  width: 100%;
+  display: inline-block;
+}
+
+ul li:last-child a {
+  border-bottom: 1px solid #ddd;
+}
+
+div#header a#logo {
+  display: inline-block;
+  vertical-align: middle;
+  padding: 0px 20px 5px;
+  border-right: 2px solid #EAEAEA;
+  margin-bottom: 40px;
+}
+
+div#header span {
+  font-size: 4em;
+  padding-left: 20px;
+  color: #AAAAAA;
+  vertical-align: top;
+}

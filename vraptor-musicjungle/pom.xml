@@ -220,5 +220,18 @@
 				</plugins>
 			</build>
 		</profile>
+
+		<profile>
+			<id>wildfly</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.wildfly.plugins</groupId>
+						<artifactId>wildfly-maven-plugin</artifactId>
+						<version>1.0.0.Beta1</version>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
 	</profiles>
 </project>

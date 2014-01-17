@@ -35,14 +35,14 @@ public class ServletBasedEnvironment extends DefaultEnvironment {
 	}
 
 	private static String env(ServletContext context) {
-		String contextEnv = context.getInitParameter(ENVIRONMENT_PROPERTY);
-		if (contextEnv != null) {
-			return contextEnv;
+		String systemEnv = System.getenv("VRAPTOR_ENVIRONMENT");
+		if (systemEnv != null) {
+			return systemEnv;
 		}
 		String systemProperty = System.getProperty(ENVIRONMENT_PROPERTY);
 		if (systemProperty != null) {
 			return systemProperty;
 		}
-		return System.getenv("VRAPTOR_ENVIRONMENT");
+		return context.getInitParameter(ENVIRONMENT_PROPERTY);
 	}
 }

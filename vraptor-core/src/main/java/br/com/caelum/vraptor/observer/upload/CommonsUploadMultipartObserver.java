@@ -23,7 +23,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.Collection;
 import java.util.List;
 
-import javax.enterprise.context.RequestScoped;
+import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
@@ -56,13 +56,10 @@ import com.google.common.collect.Multiset;
  * @author Otávio Scherer Garcia
  * @author Rodrigo Turini
  */
-@RequestScoped
+@ApplicationScoped
 public class CommonsUploadMultipartObserver {
 
 	private static final Logger logger = getLogger(CommonsUploadMultipartObserver.class);
-
-	private Multiset<String> indexes;
-	private Multimap<String, String> params;
 
 	public void upload(@Observes ControllerMethodDiscovered event, MutableRequest request,
 			MultipartConfig config, Validator validator) {
@@ -73,8 +70,8 @@ public class CommonsUploadMultipartObserver {
 
 		logger.info("Request contains multipart data. Try to parse with commons-upload.");
 
-		indexes = HashMultiset.create();
-		params = LinkedListMultimap.create();
+		final Multiset<String> indexes = HashMultiset.create();
+		final Multimap<String, String> params = LinkedListMultimap.create();
 
 		ServletFileUpload uploader = createServletFileUpload(config);
 		uploader.setSizeMax(config.getSizeLimit());
@@ -86,7 +83,7 @@ public class CommonsUploadMultipartObserver {
 
 			for (FileItem item : items) {
 				String name = item.getFieldName();
-				name = fixIndexedParameters(name);
+				name = fixIndexedParameters(name, indexes);
 
 				if (item.isFormField()) {
 					logger.debug("{} is a field", name);
@@ -161,12 +158,13 @@ public class CommonsUploadMultipartObserver {
 		return item.getString();
 	}
 
-	protected String fixIndexedParameters(String name) {
+	protected String fixIndexedParameters(String name, Multiset<String> indexes) {
 		if (name.contains("[]")) {
 			String newName = name.replace("[]", "[" + (indexes.count(name)) + "]");
 			indexes.add(name);
 			logger.debug("{} was renamed to {}", name, newName);
-			name = newName;
+
+			return newName;
 		}
 		return name;
 	}

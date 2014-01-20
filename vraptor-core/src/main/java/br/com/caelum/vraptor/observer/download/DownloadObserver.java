@@ -42,22 +42,17 @@ public class DownloadObserver {
 
 	private static final Logger logger = getLogger(DownloadObserver.class);
 
-	public void download(@Observes MethodExecuted event, Result result) throws IOException  {
-
+	public void download(@Observes MethodExecuted event, Result result) throws IOException {
 		Object methodResult = event.getMethodInfo().getResult();
 		Download download = resolveDownload(methodResult);
 
-		if (download != null) {
+		if (download != null && !result.used()) {
 			logger.debug("Sending a file to the client");
-			if (result.used()) return;
 			result.use(DownloadView.class).of(download);
 		}
 	}
 
 	public Download resolveDownload(Object result) throws IOException {
-
-		if (result == null) return null;
-
 		if (result instanceof InputStream) {
 			return new InputStreamDownload((InputStream) result, null, null);
 		}
@@ -67,9 +62,10 @@ public class DownloadObserver {
 		if (result instanceof File) {
 			return new FileDownload((File) result, null, null);
 		}
-		if (result instanceof Download)  {
+		if (result instanceof Download) {
 			return (Download) result;
 		}
+
 		return null;
 	}
 }

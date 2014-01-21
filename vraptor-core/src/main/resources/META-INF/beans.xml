@@ -13,7 +13,7 @@
 			<if-class-not-available name="javax.validation.executable.ExecutableValidator"/>
 		</exclude>
 
-		<exclude name="br.com.caelum.vraptor.observer.upload.CommonsUploadMultipartInterceptor">
+		<exclude name="br.com.caelum.vraptor.observer.upload.CommonsUploadMultipartObserver">
 			<if-class-not-available name="org.apache.commons.fileupload.FileItem"/>
 		</exclude>
 

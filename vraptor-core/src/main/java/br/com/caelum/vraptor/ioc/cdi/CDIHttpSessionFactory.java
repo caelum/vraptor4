@@ -8,16 +8,19 @@ import javax.inject.Inject;
 import javax.interceptor.Interceptor;
 import javax.servlet.http.HttpSession;
 
+import br.com.caelum.vraptor.core.RequestInfo;
+
 @RequestScoped
 @Alternative
 @Priority(Interceptor.Priority.LIBRARY_BEFORE)
 public class CDIHttpSessionFactory{
 
 	@Inject
-	private CDIRequestInfoFactory cdiRequestInfoFactory;
+	private RequestInfo requestInfo;
 
-	@Produces @javax.enterprise.context.RequestScoped
+	@Produces
+	@RequestScoped
 	public HttpSession getInstance(){
-		return cdiRequestInfoFactory.producesRequestInfo().getRequest().getSession();
+		return requestInfo.getRequest().getSession();
 	}
 }

@@ -1,12 +1,14 @@
 package br.com.caelum.vraptor.ioc.cdi;
 
 import javax.annotation.Priority;
+import javax.enterprise.context.Dependent;
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.inject.Alternative;
 import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 import javax.interceptor.Interceptor;
 
+import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.http.MutableResponse;
 
 @RequestScoped
@@ -15,10 +17,11 @@ import br.com.caelum.vraptor.http.MutableResponse;
 public class CDIHttpServletResponseFactory{
 
 	@Inject
-	private CDIRequestInfoFactory cdiRequestInfoFactory;
+	private RequestInfo requestInfo;
 
-	@Produces @javax.enterprise.context.RequestScoped
+	@Produces
+	@Dependent
 	public MutableResponse getInstance(){
-		return cdiRequestInfoFactory.producesRequestInfo().getResponse();
+		return requestInfo.getResponse();
 	}
 }

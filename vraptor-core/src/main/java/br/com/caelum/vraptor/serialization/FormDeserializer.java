@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package br.com.caelum.vraptor.deserialization;
+package br.com.caelum.vraptor.serialization;
 
 import java.io.InputStream;
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package br.com.caelum.vraptor.rest.gson;
+package br.com.caelum.vraptor.serialization.gson;
 
 import br.com.caelum.vraptor.serialization.Serializee;
 

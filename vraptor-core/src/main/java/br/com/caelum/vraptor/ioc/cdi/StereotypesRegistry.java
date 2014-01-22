@@ -20,11 +20,11 @@ import br.com.caelum.vraptor.core.DeserializesQualifier;
 import br.com.caelum.vraptor.core.InterceptorStackHandlersCache;
 import br.com.caelum.vraptor.core.InterceptsQualifier;
 import br.com.caelum.vraptor.core.StereotypeInfo;
-import br.com.caelum.vraptor.deserialization.Deserializes;
-import br.com.caelum.vraptor.deserialization.DeserializesHandler;
 import br.com.caelum.vraptor.ioc.ControllerHandler;
 import br.com.caelum.vraptor.ioc.ConverterHandler;
 import br.com.caelum.vraptor.ioc.InterceptorStereotypeHandler;
+import br.com.caelum.vraptor.serialization.Deserializes;
+import br.com.caelum.vraptor.serialization.DeserializesHandler;
 
 import com.google.common.collect.ImmutableMap;
 

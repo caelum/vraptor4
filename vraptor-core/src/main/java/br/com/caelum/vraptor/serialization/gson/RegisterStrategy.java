@@ -1,6 +1,6 @@
-package br.com.caelum.vraptor.rest.gson;
+package br.com.caelum.vraptor.serialization.gson;
 
-import static br.com.caelum.vraptor.rest.gson.RegisterType.INHERITANCE;
+import static br.com.caelum.vraptor.serialization.gson.RegisterType.INHERITANCE;
 import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 

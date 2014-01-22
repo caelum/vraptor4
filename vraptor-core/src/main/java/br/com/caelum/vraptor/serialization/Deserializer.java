@@ -13,17 +13,20 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package br.com.caelum.vraptor.deserialization;
+package br.com.caelum.vraptor.serialization;
 
-import br.com.caelum.vraptor.ioc.Container;
+import java.io.InputStream;
+
+import br.com.caelum.vraptor.controller.ControllerMethod;
 
 /**
- * @author Lucas Cavalcanti, Cecilia Fernandes
+ * Deserializes request body according to a given content type.
+ *
+ * @author Lucas Cavalcanti, Ricardo Nakamura
  * @since 3.0.2
  */
-public interface Deserializers {
+public interface Deserializer {
 
-	Deserializer deserializerFor(String contentType, Container container);
+	Object[] deserialize(InputStream inputStream, ControllerMethod method);
 
-	void register(Class<? extends Deserializer> type);
 }

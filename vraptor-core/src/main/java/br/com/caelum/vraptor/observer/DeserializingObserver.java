@@ -31,10 +31,10 @@ import org.slf4j.Logger;
 import br.com.caelum.vraptor.Consumes;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.core.MethodInfo;
-import br.com.caelum.vraptor.deserialization.Deserializer;
-import br.com.caelum.vraptor.deserialization.Deserializers;
 import br.com.caelum.vraptor.events.ReadyToExecuteMethod;
 import br.com.caelum.vraptor.ioc.Container;
+import br.com.caelum.vraptor.serialization.Deserializer;
+import br.com.caelum.vraptor.serialization.Deserializers;
 import br.com.caelum.vraptor.view.Status;
 
 /**

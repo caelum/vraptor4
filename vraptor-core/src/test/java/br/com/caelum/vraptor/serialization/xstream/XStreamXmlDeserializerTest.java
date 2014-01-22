@@ -1,4 +1,4 @@
-package br.com.caelum.vraptor.deserialization.xstream;
+package br.com.caelum.vraptor.serialization.xstream;
 
 import static br.com.caelum.vraptor.serialization.xstream.XStreamBuilderFactory.cleanInstance;
 import static org.hamcrest.Matchers.instanceOf;
@@ -24,6 +24,7 @@ import br.com.caelum.vraptor.http.Parameter;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.http.ParanamerNameProvider;
 import br.com.caelum.vraptor.serialization.xstream.CalendarConverter;
+import br.com.caelum.vraptor.serialization.xstream.XStreamXMLDeserializer;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 

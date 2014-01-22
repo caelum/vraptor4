@@ -109,10 +109,17 @@ public class DownloadObserverTest {
 	}
 
 	@Test
-	public void whenResultIsNullAndResultWasUsedShouldDoNothing() throws Exception {
+	public void whenResultIsNullShouldDoNothing() throws Exception {
+		when(controllerMethod.getMethod()).thenReturn(getMethod("download"));
+		when(result.used()).thenReturn(true);
+		downloadObserver.download(new MethodExecuted(controllerMethod, methodInfo), result);
+		verifyZeroInteractions(response);
+	}
+
+	@Test
+	public void whenResultWasUsedShouldDoNothing() throws Exception {
 		when(controllerMethod.getMethod()).thenReturn(getMethod("download"));
 		when(methodInfo.getResult()).thenReturn(null);
-		when(result.used()).thenReturn(true);
 		downloadObserver.download(new MethodExecuted(controllerMethod, methodInfo), result);
 		verifyZeroInteractions(response);
 	}

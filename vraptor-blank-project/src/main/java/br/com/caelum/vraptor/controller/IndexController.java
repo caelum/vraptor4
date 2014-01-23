@@ -12,7 +12,7 @@ public class IndexController {
 	private final Result result;
 
 	/**
-	 * CDI eyes only
+	 * @deprecated CDI eyes only
 	 */
 	public IndexController() {
 		this(null);

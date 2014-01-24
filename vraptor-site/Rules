@@ -13,59 +13,48 @@
 #   item, use the pattern “/about/*/”; “/about/*” will also select the parent,
 #   because “*” matches zero or more characters.
 
-compile '/logo/' do
-  # don’t filter or layout
-end
-
-compile '/stylesheet/' do
-  # don’t filter or layout
-end
-
-compile '/custom-highlight/' do
-  # don’t filter or layout
-end
-
-compile '/pt/docs/*' do
-  filter :kramdown 
-  filter :colorize_syntax, :default_colorizer => :pygmentsrb
-  layout 'documentacao'
-end
-
-compile '/*' do
-  filter :kramdown 
-  filter :colorize_syntax, :default_colorizer => :pygmentsrb
-  layout 'default'
-end
-
-compile '/pt/docs/*' do
-  if item.binary?
-    # don’t filter binary items
-  else
-    filter :erb
-    layout 'documentacao'
+def define_layout(archive, layout)
+  compile archive do  
+    if item.binary?
+      # don’t filter binary items
+    else
+      filter :erb
+      layout layout
+    end
   end
 end
 
-compile '*' do
-  if item.binary?
-    # don’t filter binary items
-  else
-    filter :erb
-    layout 'default'
+def stylized(*archive, layout)
+  archive.each do |a|
+    compile a do
+      if layout
+        filter :kramdown 
+        filter :colorize_syntax, :default_colorizer => :pygmentsrb
+        layout layout 
+      end
+    end
   end
 end
 
-route '/stylesheet/' do
-  '/style.css'
+def css_routes(*name)
+  name.each do |n| 
+    route n + '/' do
+        n + '.css'
+    end  
+  end
 end
 
-route '/custom-highlight/' do
-  '/custom-highlight.css'
-end
+stylized '/logo/', '/custom-highlight/', '/style/', false
 
-route '/logo/' do
-  '/logo.png'
-end
+stylized '/pt/docs/*', 'documentacao'
+
+stylized '/*', 'default'
+
+define_layout '/pt/docs/*', 'documentacao'
+
+define_layout '/*', 'default'
+
+css_routes '/style', '/custom-highlight'
 
 
 route '*' do

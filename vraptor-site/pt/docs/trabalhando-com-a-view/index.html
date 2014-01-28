@@ -1,0 +1,412 @@
+<!DOCTYPE HTML>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>VRaptor 4 - Trabalhando com a View</title>
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/custom-highlight.css" />    
+     
+    <!-- you don't need to keep this, but it's cool for stats! -->
+    <meta name="generator" content="nanoc 3.6.7">
+  </head>
+
+  <body>
+    <div id="main" class="highlight">
+      <div id="header">
+        <a id="logo" href="/pt"><img src="/logo.png"></a>
+        <span>Framework Java MVC</span>
+      </div>
+      <h3 id="compartilhando-objetos-com-a-view">Compartilhando objetos com a view</h3>
+
+<p>Para registrar objetos a serem acessados na view, usamos o método include:</p>
+
+<pre><code class="language-java"><span class="nd">@Controller</span>
+<span class="kd">class</span> <span class="nc">ClientController</span> <span class="o">{</span>
+    <span class="nd">@Inject</span> <span class="kd">private</span> <span class="kd">final</span> <span class="n">Result</span> <span class="n">result</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">busca</span><span class="o">(</span><span class="kt">int</span> <span class="n">id</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">result</span><span class="o">.</span><span class="na">include</span><span class="o">(</span><span class="s">"mensagem"</span><span class="o">,</span> <span class="s">"Alguma mensagem"</span><span class="o">);</span>
+        <span class="n">result</span><span class="o">.</span><span class="na">include</span><span class="o">(</span><span class="s">"cliente"</span><span class="o">,</span> <span class="k">new</span> <span class="n">Cliente</span><span class="o">(</span><span class="n">id</span><span class="o">));</span>
+    <span class="o">}</span>
+<span class="o">}</span></code></pre>
+
+<p>Agora as variáveis <code>mensagem</code> e <code>cliente</code> estão disponíveis para uso em seu template engine.
+É possível registrar o objeto por meio da invocação do método include com um único argumento:</p>
+
+<pre><code class="language-java"><span class="nd">@Controller</span>
+<span class="kd">class</span> <span class="nc">ClientController</span> <span class="o">{</span>
+    <span class="nd">@Inject</span> <span class="kd">private</span> <span class="kd">final</span> <span class="n">Result</span> <span class="n">result</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">busca</span><span class="o">(</span><span class="kt">int</span> <span class="n">id</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">result</span><span class="o">.</span><span class="na">include</span><span class="o">(</span><span class="s">"Alguma mensagem"</span><span class="o">).</span><span class="na">include</span><span class="o">(</span><span class="k">new</span> <span class="n">Cliente</span><span class="o">(</span><span class="n">id</span><span class="o">));</span>
+    <span class="o">}</span>
+<span class="o">}</span></code></pre>
+
+<p>Nesse caso, a primeira invocação registra a chave <code>string</code> e a segunda, a chave <code>cliente</code>. Você pode alterar o comportamento de convenção de chaves no seu próprio <code>TypeNameExtractor</code>.</p>
+
+<h3 id="custom-pathresolver">Custom PathResolver</h3>
+
+<p>Por padrão, para renderizar suas views, o VRaptor segue a convenção:</p>
+
+<pre><code class="language-java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">ClientsController</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">list</span><span class="o">()</span> <span class="o">{</span>
+        <span class="c1">//...</span>
+    <span class="o">}</span>
+<span class="o">}</span></code></pre>
+
+<p>Este método acima renderizará a view <code>/WEB-INF/jsp/clients/list.jsp</code>. No entanto, nem sempre queremos esse comportamento, e precisamos usar algum template engine, como por exemplo, Freemarker ou Velocity, e precisamos mudar essa convenção. Um jeito fácil de mudar essa convenção é estendendo a classe <code>DefaultPathResolver</code>:</p>
+
+<pre><code class="language-java"><span class="nd">@Specializes</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">FreemarkerPathResolver</span> <span class="kd">extends</span> <span class="n">DefaultPathResolver</span> <span class="o">{</span>
+    <span class="kd">protected</span> <span class="n">String</span> <span class="nf">getPrefix</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="s">"/WEB-INF/freemarker/"</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">protected</span> <span class="n">String</span> <span class="nf">getExtension</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="s">"ftl"</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span></code></pre>
+
+<p>Desse jeito, a lógica irá renderizar a view <code>/WEB-INF/freemarker/clients/list.ftl</code>. Se, ainda assim, isso não for o suficiente, você pode implementar a interface <code>PathResolver</code> e fazer qualquer convenção que você queira, não esquecendo de anotar a classe com <code>@Specializes</code>.</p>
+
+<h3 id="view">View</h3>
+
+<p>Se você quiser mudar a view de alguma lógica específica, você pode usar o objeto <code>Result</code>:</p>
+
+<pre><code class="language-java"><span class="nd">@Controller</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">ClientsController</span> <span class="o">{</span>
+
+    <span class="nd">@Inject</span> <span class="kd">private</span> <span class="kd">final</span> <span class="n">Result</span> <span class="n">result</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">list</span><span class="o">()</span> <span class="o">{}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">save</span><span class="o">(</span><span class="n">Client</span> <span class="n">client</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">//...</span>
+        <span class="n">result</span><span class="o">.</span><span class="na">use</span><span class="o">(</span><span class="n">Results</span><span class="o">.</span><span class="na">logic</span><span class="o">()).</span><span class="na">redirectTo</span><span class="o">(</span><span class="n">ClientsController</span><span class="o">.</span><span class="na">class</span><span class="o">).</span><span class="na">list</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">}</span></code></pre>
+
+<p>Por padrão, existem estes tipos de views implementadas:</p>
+
+<ul>
+<li>Results.logic(), que vai redirecionar para uma outra lógica qualquer do sistema</li>
+  <li>Results.page(), que vai redirecionar diretamente para uma página, podendo ser um JSP, um HTML, ou qualquer URI relativa ao web application dir, ou ao contexto da aplicação.</li>
+  <li>Results.http(), que manda informações do protocolo HTTP como status codes e headers.</li>
+  <li>Results.status(), manda status codes com mais informações.</li>
+  <li>Results.referer(), que usa o header Referer para fazer redirects ou forwards.</li>
+  <li>Results.nothing(), apenas retorna o código de sucesso (HTTP 200 OK).</li>
+  <li>Results.xml(), serializa objetos em XML.</li>
+  <li>Results.json(), serializa objetos em JSON.</li>
+  <li>Results.representation(), serializa objetos em um formato determinado pela requisição (parâmetro _format ou header Accept)</li>
+</ul><h3 id="atalhos-no-result">Atalhos no Result</h3>
+
+<p>Alguns redirecionamentos são bastante utilizados, então foram criados atalhos para eles. Os atalhos disponíveis são:</p>
+
+<ul>
+<li>result.forwardTo(“/some/uri”) ==&gt; result.use(page()).forward(“/some/uri”);</li>
+  <li>result.redirectTo(“/some/uri”) ==&gt; result.use(page()).redirect(“/some/uri)</li>
+  <li>result.permanentlyRedirectTo(“/some/uri”) ==&gt; result.use(status()).movedPermanentlyTo(“/some/uri”);</li>
+  <li>result.forwardTo(ClientController.class).list() ==&gt; result.use(logic()).forwardTo(ClientController.class).list();</li>
+  <li>result.redirectTo(ClientController.class).list() ==&gt; result.use(logic()).redirectTo(ClientController.class).list();</li>
+  <li>result.of(ClientController.class).list() ==&gt; result.use(page()).of(ClientController.class).list();</li>
+  <li>result.permanentlyRedirectTo(Controller.class) ==&gt; use(status()).movedPermanentlyTo(Controller.class);</li>
+  <li>result.notFound()  ==&gt; use(status()).notFound()</li>
+  <li>result.nothing()   ==&gt; use(nothing());</li>
+</ul><p>Além disso, se o redirecionamento é para um método do mesmo Controller, podemos usar:</p>
+
+<ul>
+<li>result.forwardTo(this).list() ==&gt; result.use(logic()).forwardTo(this.getClass()).list();</li>
+  <li>result.redirectTo(this).list() ==&gt; result.use(logic()).redirectTo(this.getClass()).list();</li>
+  <li>result.of(this).list() ==&gt; result.use(page()).of(this.getClass()).list();</li>
+  <li>result.permanentlyRedirectTo(this) ==&gt; use(status()).movedPermanentlyTo(this.getClass());</li>
+</ul><h3 id="redirecionamento-e-forward">Redirecionamento e forward</h3>
+
+<p>No VRaptor, podemos tanto realizar um redirect ou um forward do usuário para uma outra lógica ou um JSP. Apesar de serem conceitos da API de Servlets, vale a pena relembrar a diferença: o redirecionamento acontece no lado do cliente, através de códigos HTTP que farão o browser acessar uma nova URL; já o forward acontece no lado do servidor, totalmente transparente para o cliente/browser.</p>
+
+<p>Um bom exemplo de uso do redirect é no chamado ‘redirect-after-post’. Por exemplo: quando você adiciona um cliente e que, após o formulário submetido, o cliente seja retornado para a página de listagem de clientes. Fazendo isso com redirect, impedimos que o usuário atualize a página (F5) e reenvie toda a requisição, acarretando em dados duplicados.</p>
+
+<p>No caso do forward, um exemplo de uso é quando você possui uma validação e essa validação falhou, geralmente você quer que o usuário continue na mesma tela do formulário com os dados da requisição preenchidos, mas internamente você vai fazer o forward para outra lógica de negócios (a que prepara os dados necessários para o formulário).</p>
+
+<h3 id="escopo-flash-automtico">Escopo Flash automático</h3>
+
+<p>Se você adicionar objetos no <code>Result</code> e fizer um Redirect, esses objetos estarão disponíveis na próxima requisição.</p>
+
+<pre><code class="language-java"><span class="kd">public</span> <span class="kt">void</span> <span class="nf">adiciona</span><span class="o">(</span><span class="n">Cliente</span> <span class="n">cliente</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">dao</span><span class="o">.</span><span class="na">adiciona</span><span class="o">(</span><span class="n">cliente</span><span class="o">);</span>
+    <span class="n">result</span><span class="o">.</span><span class="na">include</span><span class="o">(</span><span class="s">"mensagem"</span><span class="o">,</span> <span class="s">"Cliente adicionado com sucesso"</span><span class="o">);</span>
+    <span class="n">result</span><span class="o">.</span><span class="na">redirectTo</span><span class="o">(</span><span class="n">ClientesController</span><span class="o">.</span><span class="na">class</span><span class="o">).</span><span class="na">lista</span><span class="o">();</span>
+<span class="o">}</span></code></pre>
+
+<p>lista.jsp:</p>
+
+<pre><code class="language-xml"><span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">"mensagem"</span><span class="nt">&gt;</span>
+   <span class="nt">&lt;h3&gt;</span>${mensagem}<span class="nt">&lt;/h3&gt;</span>
+<span class="nt">&lt;/div&gt;</span></code></pre>
+
+<h3 id="accepts-e-o-parmetro-format">Accepts e o parâmetro _format</h3>
+
+<p>Muitas vezes, precisamos renderizar formatos diferentes para uma mesma lógica. Por exemplo queremos retornar um JSON, em vez de um HTML. Para fazer isso, podemos definir o Header Accepts da requisição para que aceite o tipo desejado, ou colocar um parâmetro <code>_format</code> na requisição.</p>
+
+<p>Se o formato for JSON, a view renderizada por padrão será: <code>/WEB-INF/jsp/{controller}/{logic}.json.jsp</code>, ou seja, em geral será renderizada a view: <code>/WEB-INF/jsp/{controller}/{logic}.{formato}.jsp</code>. Se o formato for HTML você não precisa colocá-lo no nome do arquivo. O parâmetro <code>_format</code> tem prioridade sobre o header Accepts.</p>
+
+<h3 id="ajax-construindo-na-view">Ajax: construindo na view</h3>
+
+<p>Para devolver um JSON na sua view, basta que sua lógica disponibilize o objeto para a view, e dentro da view você forme o JSON como desejar. Como no exemplo, o seu <code>/WEB-INF/jsp/clients/load.json.jsp</code>:</p>
+
+<pre><code class="language-javascript"><span class="p">{</span> <span class="nx">nome</span><span class="o">:</span> <span class="s1">'${client.name}'</span><span class="p">,</span> <span class="nx">id</span><span class="o">:</span> <span class="s1">'${client.id}'</span> <span class="p">}</span></code></pre>
+
+<p>E na lógica:</p>
+
+<pre><code class="language-java"><span class="nd">@Controller</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">ClientsController</span> <span class="o">{</span>
+
+    <span class="nd">@Inject</span> <span class="kd">private</span> <span class="kd">final</span> <span class="n">Result</span> <span class="n">result</span><span class="o">;</span>
+    <span class="nd">@Inject</span> <span class="kd">private</span> <span class="kd">final</span> <span class="n">ClientDao</span> <span class="n">dao</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">load</span><span class="o">(</span><span class="n">Client</span> <span class="n">client</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">result</span><span class="o">.</span><span class="na">include</span><span class="o">(</span><span class="s">"client"</span><span class="o">,</span> <span class="n">dao</span><span class="o">.</span><span class="na">load</span><span class="o">(</span><span class="n">client</span><span class="o">));</span>
+    <span class="o">}</span>
+<span class="o">}</span></code></pre>
+
+<h3 id="ajax-verso-programtica">Ajax: Versão programática</h3>
+
+<p>Se você quiser que o VRaptor serialize automaticamente seus objetos para XML ou JSON, você pode escrever em sua lógica:</p>
+
+<pre><code class="language-java"><span class="kn">import</span> <span class="nn">static</span> <span class="n">br</span><span class="o">.</span><span class="na">com</span><span class="o">.</span><span class="na">caelum</span><span class="o">.</span><span class="na">vraptor</span><span class="o">.</span><span class="na">view</span><span class="o">.</span><span class="na">Results</span><span class="o">.*;</span>
+<span class="nd">@Controller</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">ClientsController</span> <span class="o">{</span>
+
+    <span class="nd">@Inject</span> <span class="kd">private</span> <span class="kd">final</span> <span class="n">Result</span> <span class="n">result</span><span class="o">;</span>
+    <span class="nd">@Inject</span> <span class="kd">private</span> <span class="kd">final</span> <span class="n">ClientDao</span> <span class="n">dao</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">loadJson</span><span class="o">(</span><span class="n">Cliente</span> <span class="n">cliente</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">result</span><span class="o">.</span><span class="na">use</span><span class="o">(</span><span class="n">json</span><span class="o">()).</span><span class="na">from</span><span class="o">(</span><span class="n">cliente</span><span class="o">).</span><span class="na">serialize</span><span class="o">();</span>
+    <span class="o">}</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">loadXml</span><span class="o">(</span><span class="n">Cliente</span> <span class="n">cliente</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">result</span><span class="o">.</span><span class="na">use</span><span class="o">(</span><span class="n">xml</span><span class="o">()).</span><span class="na">from</span><span class="o">(</span><span class="n">cliente</span><span class="o">).</span><span class="na">serialize</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">}</span></code></pre>
+
+<p>Os resultados vão ser parecidos com:</p>
+
+<pre><code class="language-javascript"><span class="p">{</span><span class="s2">"cliente"</span><span class="o">:</span> <span class="p">{</span>
+    <span class="s2">"nome"</span><span class="o">:</span> <span class="s2">"Joao"</span>
+<span class="p">}}</span></code></pre>
+
+<pre><code class="language-xml"><span class="nt">&lt;cliente&gt;</span>
+    <span class="nt">&lt;nome&gt;</span>Joao<span class="nt">&lt;/nome&gt;</span>
+<span class="nt">&lt;/cliente&gt;</span></code></pre>
+<p>#!</p>
+
+<p>Por padrão, apenas campos de tipos primitivos serão serializados (String, números, enums, datas), se você quiser incluir um campo de tipo não primitivo você precisa incluí-lo explicitamente:</p>
+
+<pre><code class="language-java"><span class="n">result</span><span class="o">.</span><span class="na">use</span><span class="o">(</span><span class="n">json</span><span class="o">()).</span><span class="na">from</span><span class="o">(</span><span class="n">cliente</span><span class="o">).</span><span class="na">include</span><span class="o">(</span><span class="s">"endereco"</span><span class="o">).</span><span class="na">serialize</span><span class="o">();</span></code></pre>
+
+<p>Vai resultar em algo parecido com:</p>
+
+<pre><code class="language-javascript"><span class="p">{</span><span class="s2">"cliente"</span><span class="o">:</span> <span class="p">{</span>
+    <span class="s2">"nome"</span><span class="o">:</span> <span class="s2">"Joao"</span><span class="p">,</span>
+    <span class="s2">"endereco"</span> <span class="p">{</span>
+        <span class="s2">"rua"</span><span class="o">:</span> <span class="s2">"Vergueiro"</span>
+    <span class="p">}</span>
+<span class="p">}}</span></code></pre>
+
+<p>Você pode também excluir alguns da serialização:</p>
+
+<pre><code class="language-java"><span class="n">result</span><span class="o">.</span><span class="na">use</span><span class="o">(</span><span class="n">json</span><span class="o">()).</span><span class="na">from</span><span class="o">(</span><span class="n">usuario</span><span class="o">).</span><span class="na">exclude</span><span class="o">(</span><span class="s">"senha"</span><span class="o">).</span><span class="na">serialize</span><span class="o">();</span></code></pre>
+
+<p>Vai resultar em algo parecido com:</p>
+
+<pre><code class="language-javascript"><span class="p">{</span><span class="s2">"usuario"</span><span class="o">:</span> <span class="p">{</span>
+    <span class="s2">"nome"</span><span class="o">:</span> <span class="s2">"Joao"</span><span class="p">,</span>
+    <span class="s2">"login"</span><span class="o">:</span> <span class="s2">"joao"</span>
+<span class="p">}}</span></code></pre>
+
+<p>Você também pode excluir ou incluir vários campos.</p>
+
+<pre><code class="language-java"><span class="n">result</span><span class="o">.</span><span class="na">use</span><span class="o">(</span><span class="n">json</span><span class="o">()).</span><span class="na">from</span><span class="o">(</span><span class="n">usuario</span><span class="o">).</span><span class="na">recursive</span><span class="o">().</span><span class="na">serialize</span><span class="o">();</span> <span class="c1">// inclui todos os campos recursivamente</span>
+<span class="n">result</span><span class="o">.</span><span class="na">use</span><span class="o">(</span><span class="n">xml</span><span class="o">()).</span><span class="na">from</span><span class="o">(</span><span class="n">usuario</span><span class="o">).</span><span class="na">exclude</span><span class="o">(</span><span class="s">"email"</span><span class="o">).</span><span class="na">serialize</span><span class="o">();</span> <span class="c1">// excluir o campo email</span>
+<span class="n">result</span><span class="o">.</span><span class="na">use</span><span class="o">(</span><span class="n">xml</span><span class="o">()).</span><span class="na">from</span><span class="o">(</span><span class="n">usuario</span><span class="o">).</span><span class="na">excludeAll</span><span class="o">().</span><span class="na">serialize</span><span class="o">();</span> <span class="c1">// exclui todos os campos</span></code></pre>
+
+<p>A implementação padrão é baseada no XStream, então é possível configurar a serialização por anotações ou configurações diretas ao XStream, bastando criar a classe:</p>
+
+<pre><code class="language-java"><span class="nd">@Specializes</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">CustomXMLSerialization</span> <span class="kd">extends</span> <span class="n">XStreamXMLSerialization</span> <span class="o">{</span>
+<span class="c1">//or public class CustomJSONSerialization extends XStreamJSONSerialization {</span>
+    <span class="c1">//delegate constructor</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">protected</span> <span class="n">XStream</span> <span class="nf">getXStream</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">XStream</span> <span class="n">xStream</span> <span class="o">=</span> <span class="kd">super</span><span class="o">.</span><span class="na">getXStream</span><span class="o">();</span>
+        <span class="c1">//suas configurações ao XStream aqui</span>
+        <span class="k">return</span> <span class="n">xStream</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span></code></pre>
+
+<h3 id="serializando-collections">Serializando Collections</h3>
+
+<p>Ao serializar coleções, o padrão é colocar a tag <code>list</code> em volta dos elementos:</p>
+
+<pre><code class="language-java"><span class="n">List</span><span class="o">&lt;</span><span class="n">Cliente</span><span class="o">&gt;</span> <span class="n">clientes</span> <span class="o">=</span> <span class="o">...;</span>
+<span class="n">result</span><span class="o">.</span><span class="na">use</span><span class="o">(</span><span class="n">json</span><span class="o">()).</span><span class="na">from</span><span class="o">(</span><span class="n">clientes</span><span class="o">).</span><span class="na">serialize</span><span class="o">();</span>
+<span class="c1">//ou</span>
+<span class="n">result</span><span class="o">.</span><span class="na">use</span><span class="o">(</span><span class="n">xml</span><span class="o">()).</span><span class="na">from</span><span class="o">(</span><span class="n">clientes</span><span class="o">).</span><span class="na">serialize</span><span class="o">();</span></code></pre>
+
+<p>Vai resultar em algo como:</p>
+
+<pre><code class="language-javascript"><span class="p">{</span><span class="s2">"list"</span><span class="o">:</span> <span class="p">[</span>
+    <span class="p">{</span> <span class="s2">"nome"</span><span class="o">:</span> <span class="s2">"Joao"</span> <span class="p">},</span>
+    <span class="p">{</span> <span class="s2">"nome"</span><span class="o">:</span> <span class="s2">"Maria"</span> <span class="p">}</span>
+<span class="p">]}</span></code></pre>
+
+<p>ou</p>
+
+<pre><code class="language-xml"><span class="nt">&lt;list&gt;</span>
+    <span class="nt">&lt;cliente&gt;</span>
+        <span class="nt">&lt;nome&gt;</span>Joao<span class="nt">&lt;/nome&gt;</span>
+    <span class="nt">&lt;/cliente&gt;</span>
+    <span class="nt">&lt;cliente&gt;</span>
+        <span class="nt">&lt;nome&gt;</span>Maria<span class="nt">&lt;/nome&gt;</span>
+    <span class="nt">&lt;/cliente&gt;</span>
+<span class="nt">&lt;/list&gt;</span></code></pre>
+
+<p>É possível personalizar o elemento de fora usando o método:</p>
+
+<pre><code class="language-java"><span class="n">List</span><span class="o">&lt;</span><span class="n">Cliente</span><span class="o">&gt;</span> <span class="n">clientes</span> <span class="o">=</span> <span class="o">...;</span>
+<span class="n">result</span><span class="o">.</span><span class="na">use</span><span class="o">(</span><span class="n">json</span><span class="o">()).</span><span class="na">from</span><span class="o">(</span><span class="n">clientes</span><span class="o">,</span> <span class="s">"clientes"</span><span class="o">).</span><span class="na">serialize</span><span class="o">();</span>
+<span class="c1">//ou</span>
+<span class="n">result</span><span class="o">.</span><span class="na">use</span><span class="o">(</span><span class="n">xml</span><span class="o">()).</span><span class="na">from</span><span class="o">(</span><span class="n">clientes</span><span class="o">,</span> <span class="s">"clientes"</span><span class="o">).</span><span class="na">serialize</span><span class="o">();</span></code></pre>
+
+<p>Vai resultar em algo como:</p>
+
+<pre><code class="language-javascript"><span class="p">{</span><span class="s2">"clientes"</span><span class="o">:</span> <span class="p">[</span>
+    <span class="p">{</span><span class="s2">"nome"</span><span class="o">:</span> <span class="s2">"Joao"</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">"nome"</span><span class="o">:</span> <span class="s2">"Maria"</span><span class="p">}</span>
+<span class="p">]}</span></code></pre>
+
+<p>ou</p>
+
+<pre><code class="language-xml"><span class="nt">&lt;clientes&gt;</span>
+    <span class="nt">&lt;cliente&gt;</span>
+        <span class="nt">&lt;nome&gt;</span>Joao<span class="nt">&lt;/nome&gt;</span>
+    <span class="nt">&lt;/cliente&gt;</span>
+    <span class="nt">&lt;cliente&gt;</span>
+        <span class="nt">&lt;nome&gt;</span>Maria<span class="nt">&lt;/nome&gt;</span>
+    <span class="nt">&lt;/cliente&gt;</span>
+<span class="nt">&lt;/clientes&gt;</span></code></pre>
+
+<p>Os includes e excludes funcionam como se você os estivesse aplicando num elemento de dentro da lista. Por exemplo se você quiser incluir o endereço no cliente:</p>
+
+<pre><code class="language-java"><span class="n">List</span><span class="o">&lt;</span><span class="n">Cliente</span><span class="o">&gt;</span> <span class="n">clientes</span> <span class="o">=</span> <span class="o">...;</span>
+<span class="n">result</span><span class="o">.</span><span class="na">use</span><span class="o">(</span><span class="n">json</span><span class="o">()).</span><span class="na">from</span><span class="o">(</span><span class="n">clientes</span><span class="o">).</span><span class="na">include</span><span class="o">(</span><span class="s">"endereco"</span><span class="o">).</span><span class="na">serialize</span><span class="o">();</span></code></pre>
+
+<p>Com resultado:</p>
+
+<pre><code class="language-javascript"><span class="p">{</span><span class="s2">"list"</span><span class="o">:</span> <span class="p">[</span>
+    <span class="p">{</span>
+        <span class="s2">"nome"</span><span class="o">:</span> <span class="s2">"Joao"</span><span class="p">,</span>
+        <span class="s2">"endereco"</span><span class="o">:</span> <span class="p">{</span> <span class="s2">"rua"</span><span class="o">:</span> <span class="s2">"Vergueiro, 3185"</span> <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s2">"nome"</span><span class="o">:</span> <span class="s2">"Maria"</span><span class="p">,</span>
+        <span class="s2">"endereco"</span><span class="o">:</span> <span class="p">{</span> <span class="s2">"rua"</span><span class="o">:</span> <span class="s2">"Vergueiro, 3185"</span> <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">]}</span></code></pre>
+
+<h3 id="serializando-json-sem-elemento-raiz">Serializando JSON sem elemento raiz</h3>
+
+<p>Se você quiser serializar um objeto em JSON sem dar nomes a eles, pode fazer isso com o método withoutRoot:</p>
+
+<pre><code class="language-java"><span class="n">result</span><span class="o">.</span><span class="na">use</span><span class="o">(</span><span class="n">json</span><span class="o">()).</span><span class="na">from</span><span class="o">(</span><span class="n">carro</span><span class="o">).</span><span class="na">serialize</span><span class="o">();</span> <span class="c1">//=&gt; {'carro': {'cor': 'azul'}}</span>
+<span class="n">result</span><span class="o">.</span><span class="na">use</span><span class="o">(</span><span class="n">json</span><span class="o">()).</span><span class="na">withoutRoot</span><span class="o">().</span><span class="na">from</span><span class="o">(</span><span class="n">carro</span><span class="o">).</span><span class="na">serialize</span><span class="o">();</span> <span class="c1">//=&gt; {'cor': 'azul'}</span></code></pre>
+
+<h3 id="criando-links-na-view-com-o-linkto">Criando links na view com o linkTo</h3>
+
+<p>LinkTo é uma funcionalidade que permite você criar links nas páginas JSP sem precisar escrever o link, mas sim indicando a classe do controller, e o método.</p>
+
+<p>Para o seguinte controller:</p>
+
+<pre><code class="language-java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">ClientController</span> <span class="o">{</span>
+    <span class="nd">@Path</span><span class="o">(</span><span class="s">"/client/list"</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">list</span><span class="o">()</span> <span class="o">{</span>
+        <span class="c1">// alguma lógica aqui</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Path</span><span class="o">(</span><span class="s">"/client/{id}"</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">show</span><span class="o">(</span><span class="n">Long</span> <span class="n">id</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// alguma lógica aqui</span>
+    <span class="o">}</span>
+<span class="o">}</span></code></pre>
+
+<p>Para chamar os métodos <code>list</code> e <code>show</code> respectivamente, teriamos que escrever no JSP:</p>
+
+<pre><code class="language-jsp"><span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">"/client/list"</span><span class="nt">&gt;</span>listar clientes<span class="nt">&lt;/a&gt;</span>
+<span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">"/client/1"</span><span class="nt">&gt;</span>ver cliente 1<span class="nt">&lt;/a&gt;</span></code></pre>
+
+<p>Usando a funcionalidade do linkTo, podemos simplicar a chamada para o método <code>list</code>:</p>
+
+<pre><code class="language-jsp"><span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">"${linkTo[ClientController].list()}"</span><span class="nt">&gt;</span>listar clientes<span class="nt">&lt;/a&gt;</span></code></pre>
+<p>#!</p>
+
+<p>Como o método não possui parâmetros, você também pode omitir os parênteses. 
+~~~ 
+#!jsp
+<a href="%24%7BlinkTo%5BClientController%5D.list%7D">listar clientes</a>
+~~~ </p>
+
+<p>Para chamar o método <code>show</code>, podemos fazer a chamada desta forma:</p>
+
+<pre><code class="language-jsp"><span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">"${linkTo[ClientController].show(1)}"</span><span class="nt">&gt;</span>ver cliente 1<span class="nt">&lt;/a&gt;</span></code></pre>
+
+<p>Ao invés do parâmetro fixo, você pode passar variáveis do JSTL, como por exemplo:</p>
+
+<pre><code class="language-jsp"><span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">"${linkTo[ClientController].show(client.id)}"</span><span class="nt">&gt;</span>ver cliente ${client.name}<span class="nt">&lt;/a&gt;</span></code></pre>
+
+<h3 id="incluso-automtica-de-parmetros">Inclusão automática de parâmetros</h3>
+
+<p>Você pode anotar seu método com <code>@IncludeParameters</code> para que todos os parâmetros de um método do seu controller sejam inclusos automaticamente na <code>view</code>. </p>
+
+<p>Então, no lugar de fazer algo como:</p>
+
+<pre><code class="language-java">    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">filtra</span><span class="o">(</span><span class="n">Intervalo</span> <span class="n">intervalo</span><span class="o">,</span> <span class="n">Representante</span> <span class="n">representante</span><span class="o">,</span>
+            <span class="n">Unidade</span> <span class="n">unidade</span><span class="o">,</span> <span class="n">BigDecimal</span> <span class="n">valorMaximo</span><span class="o">,</span> <span class="n">BigDecimal</span> <span class="n">valorMin</span><span class="o">)</span> <span class="o">{</span>
+
+        <span class="c1">// lógica de filtro</span>
+
+        <span class="n">resulte</span><span class="o">.</span><span class="na">include</span><span class="o">(</span><span class="s">"intervalo"</span><span class="o">,</span> <span class="n">intervalo</span><span class="o">);</span>
+        <span class="n">resulte</span><span class="o">.</span><span class="na">include</span><span class="o">(</span><span class="s">"representante"</span><span class="o">,</span> <span class="n">representante</span><span class="o">);</span>
+        <span class="n">resulte</span><span class="o">.</span><span class="na">include</span><span class="o">(</span><span class="s">"valorMaximo"</span><span class="o">,</span> <span class="n">valorMaximo</span><span class="o">);</span>
+        <span class="n">resulte</span><span class="o">.</span><span class="na">include</span><span class="o">(</span><span class="s">"valorMin"</span><span class="o">,</span> <span class="n">valorMin</span><span class="o">);</span>
+<span class="o">}</span></code></pre>
+
+<p>Agora você pode fazer:</p>
+
+<pre><code class="language-java">    <span class="nd">@IncludeParameters</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">filtra</span><span class="o">(</span><span class="n">Intervalo</span> <span class="n">intervalo</span><span class="o">,</span> <span class="n">Representante</span> <span class="n">representante</span><span class="o">,</span>
+            <span class="n">Unidade</span> <span class="n">unidade</span><span class="o">,</span> <span class="n">BigDecimal</span> <span class="n">valorMaximo</span><span class="o">,</span> <span class="n">BigDecimal</span> <span class="n">valorMin</span><span class="o">)</span> <span class="o">{</span>
+
+        <span class="c1">// lógica de filtro</span>
+<span class="o">}</span></code></pre>
+
+<p>Todos os parâmetros estarão disponiveis pela jsp com EL: <code>${intervalo.inicio}</code></p>
+    </div>
+    <div id="sidebar">
+      <ul>
+        <li><a href="/pt/docs/guia-de-1-minuto">Guia inicial de 1 minuto</a></li>
+        <li><a href="/pt/docs/guia-de-10-minutos">Guia inicial de 10 minutos</a></li>
+        <li><a href="/pt/docs/controllers-rest">Controllers Rest</a></li>
+        <li><a href="/pt/docs/components">Components</a></li>
+        <li><a href="/pt/docs/conversores">Conversores</a></li>
+        <li><a href="/pt/docs/validacao">Validação</a></li>
+        <li><a href="/pt/docs/interceptadores">Interceptadores</a></li>
+        <li><a href="/pt/docs/trabalhando-com-a-view">Trabalhando com a View</a></li>
+        <li><a href="/pt/docs/download-e-upload">Download e Upload</a></li>
+        <li><a href="/pt/docs/environment">Environment</a></li>
+        <li><a href="/pt/docs/plugins">Plugins</a></li>
+        <li><a href="/pt/docs/dependencias-e-pre-requisitos">Dependências e pré requisitos</a></li>
+        <li><a href="/pt/docs/migrando-um-projeto-com-vraptor3">Migrando um projeto com VRaptor 3</a></li>
+        <li><a href="/pt/docs/contribuindo-com-o-vraptor">Contribuindo com o VRaptor</a></li>
+      </ul>
+    </div>
+  </body>
+</html>

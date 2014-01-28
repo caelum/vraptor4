@@ -1,0 +1,129 @@
+<!DOCTYPE HTML>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>VRaptor 4 - Validação</title>
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/custom-highlight.css" />    
+     
+    <!-- you don't need to keep this, but it's cool for stats! -->
+    <meta name="generator" content="nanoc 3.6.7">
+  </head>
+
+  <body>
+    <div id="main" class="highlight">
+      <div id="header">
+        <a id="logo" href="/pt"><img src="/logo.png"></a>
+        <span>Framework Java MVC</span>
+      </div>
+      <p>O VRaptor possui validação com o Bean Validation. Basta você anotar seu modelo definindo as <em>constraints</em>.</p>
+
+<pre><code class="language-java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Cliente</span> <span class="o">{</span>
+	<span class="nd">@NotEmpty</span> <span class="nd">@Size</span><span class="o">(</span><span class="n">min</span><span class="o">=</span><span class="mi">10</span><span class="o">,</span> <span class="n">max</span><span class="o">=</span><span class="mi">50</span><span class="o">)</span> <span class="kd">private</span> <span class="n">String</span> <span class="n">nome</span><span class="o">;</span>
+	
+	<span class="nd">@Past</span> <span class="kd">private</span> <span class="n">Date</span> <span class="n">nascimento</span><span class="o">;</span>
+<span class="o">}</span></code></pre>
+
+<pre><code class="language-java"><span class="kd">public</span> <span class="kt">void</span> <span class="nf">cadastrar</span><span class="o">(</span><span class="nd">@NotNull</span> <span class="nd">@Valid</span> <span class="n">Cliente</span> <span class="n">cliente</span><span class="o">)</span> <span class="o">{</span>
+	<span class="c1">// em caso de erros irá redirecionar para a página de formulário</span>
+	<span class="n">validation</span><span class="o">.</span><span class="na">onErrorForwardTo</span><span class="o">(</span><span class="k">this</span><span class="o">).</span><span class="na">formulario</span><span class="o">();</span> 
+<span class="o">}</span></code></pre>
+
+<h3 id="dependncias">Dependências</h3>
+
+<p>Para ativar a validação é necessário ter no <em>classpath</em> alguma implementação para o Bean Validator.</p>
+
+<p>Se você estiver usando um <em>servidor de aplicações</em> como Wildfly ou Glassfish, você não precisa adicionar nenhuma dependência. Porém se você usar apenas um <em>servlet container</em>, é necessário adicionar o Hibernate validator em seu projeto maven, basta incluir no <em>classpath</em> o artefato:</p>
+
+<pre><code class="language-xml"><span class="nt">&lt;dependency&gt;</span>
+	<span class="nt">&lt;groupId&gt;</span>org.hibernate<span class="nt">&lt;/groupId&gt;</span>
+	<span class="nt">&lt;artifactId&gt;</span>hibernate-validator-cdi<span class="nt">&lt;/artifactId&gt;</span>
+	<span class="nt">&lt;version&gt;</span>5.0.1.Final<span class="nt">&lt;/version&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span></code></pre>
+
+<p>É necessário também indicar ao CDI para não validar os métodos automaticamente. Para isso adicione o arquivo <code>META-INF/validation.xml</code> com o segunte conteúdo:</p>
+
+<pre><code class="language-xml"><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+<span class="nt">&lt;validation-config</span> <span class="na">xmlns=</span><span class="s">"http://jboss.org/xml/ns/javax/validation/configuration"</span>
+        <span class="na">xmlns:xsi=</span><span class="s">"http://www.w3.org/2001/XMLSchema-instance"</span>
+        <span class="na">xsi:schemaLocation=</span><span class="s">"http://jboss.org/xml/ns/javax/validation/configuration validation-configuration-1.1.xsd"</span>
+        <span class="na">version=</span><span class="s">"1.1"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;executable-validation</span> <span class="na">enabled=</span><span class="s">"false"</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/validation-config&gt;</span></code></pre>
+
+<h3 id="criando-validaes-customizadas">Criando validações customizadas</h3>
+
+<p>Com o Bean Validator você pode criar anotações com suas validações customizadas. Se você quer, por exemplo, validar se o login de um usuário já está em uso, basta criar o código abaixo:</p>
+
+<pre><code class="language-java"><span class="nd">@Target</span><span class="o">({</span> <span class="n">ElementType</span><span class="o">.</span><span class="na">PARAMETER</span> <span class="o">})</span>
+<span class="nd">@Retention</span><span class="o">(</span><span class="n">RetentionPolicy</span><span class="o">.</span><span class="na">RUNTIME</span><span class="o">)</span>
+<span class="nd">@Constraint</span><span class="o">(</span><span class="n">validatedBy</span> <span class="o">=</span> <span class="o">{</span> <span class="n">LoginAvailableValidator</span><span class="o">.</span><span class="na">class</span> <span class="o">})</span>
+<span class="nd">@Documented</span>
+<span class="kd">public</span> <span class="nd">@interface</span> <span class="n">LoginAvailable</span> <span class="o">{</span>
+
+    <span class="n">String</span> <span class="nf">message</span><span class="o">()</span> <span class="k">default</span> <span class="s">"{login_already_exists}"</span><span class="o">;</span>
+
+    <span class="n">Class</span><span class="o">&lt;?&gt;[]</span> <span class="n">groups</span><span class="o">()</span> <span class="k">default</span> <span class="o">{};</span>
+
+    <span class="n">Class</span><span class="o">&lt;?</span> <span class="kd">extends</span> <span class="n">Payload</span><span class="o">&gt;[]</span> <span class="n">payload</span><span class="o">()</span> <span class="k">default</span> <span class="o">{};</span>
+<span class="o">}</span></code></pre>
+
+<pre><code class="language-java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">LoginAvailableValidator</span> <span class="kd">implements</span> <span class="n">ConstraintValidator</span><span class="o">&lt;</span><span class="n">LoginAvailable</span><span class="o">,</span> <span class="n">User</span><span class="o">&gt;</span> <span class="o">{</span>
+	
+	<span class="nd">@Inject</span> <span class="kd">private</span> <span class="n">UserDao</span> <span class="n">userDao</span><span class="o">;</span>
+
+	<span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">isValid</span><span class="o">(</span><span class="n">User</span> <span class="n">user</span><span class="o">,</span> <span class="n">ConstraintValidatorContext</span> <span class="n">context</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">return</span> <span class="o">!</span><span class="n">userDao</span><span class="o">.</span><span class="na">containsUserWithLogin</span><span class="o">(</span><span class="n">user</span><span class="o">.</span><span class="na">getLogin</span><span class="o">());</span>
+	<span class="o">}</span>
+<span class="o">}</span></code></pre>
+
+<p>Note no código que é possível injetar qualquer componente gerenciável pelo CDI, que pode ser uma DAO ou qualquer outro componente.</p>
+
+<h3 id="redirecionando-em-caso-de-erro">Redirecionando em caso de erro</h3>
+
+<p>Quando ocorre um erro de validação, você pode redirecionar o usuário para qualquer outra tela. Abaixo alguns exemplos:</p>
+
+<pre><code class="language-java"><span class="n">validator</span><span class="o">.</span><span class="na">onErrorForwardTo</span><span class="o">(</span><span class="n">MusicController</span><span class="o">.</span><span class="na">class</span><span class="o">).</span><span class="na">list</span><span class="o">()</span> <span class="o">==&gt;</span> <span class="n">validator</span><span class="o">.</span><span class="na">onErrorUse</span><span class="o">(</span><span class="n">logic</span><span class="o">()).</span><span class="na">forwardTo</span><span class="o">(</span><span class="n">MusicController</span><span class="o">.</span><span class="na">class</span><span class="o">).</span><span class="na">list</span><span class="o">();</span>
+<span class="n">validator</span><span class="o">.</span><span class="na">onErrorRedirectTo</span><span class="o">(</span><span class="n">MusicController</span><span class="o">.</span><span class="na">class</span><span class="o">).</span><span class="na">list</span><span class="o">()</span> <span class="o">==&gt;</span> <span class="n">validator</span><span class="o">.</span><span class="na">onErrorUse</span><span class="o">(</span><span class="n">logic</span><span class="o">()).</span><span class="na">redirectTo</span><span class="o">(</span><span class="n">MusicController</span><span class="o">.</span><span class="na">class</span><span class="o">).</span><span class="na">list</span><span class="o">();</span>
+<span class="n">validator</span><span class="o">.</span><span class="na">onErrorUsePageOf</span><span class="o">(</span><span class="n">MusicController</span><span class="o">.</span><span class="na">class</span><span class="o">).</span><span class="na">list</span><span class="o">()</span> <span class="o">==&gt;</span> <span class="n">validator</span><span class="o">.</span><span class="na">onErrorUse</span><span class="o">(</span><span class="n">page</span><span class="o">()).</span><span class="na">of</span><span class="o">(</span><span class="n">MusicController</span><span class="o">.</span><span class="na">class</span><span class="o">).</span><span class="na">list</span><span class="o">();</span>
+<span class="n">validator</span><span class="o">.</span><span class="na">onErrorSendBadRequest</span><span class="o">()</span> <span class="o">==&gt;</span> <span class="n">validator</span><span class="o">.</span><span class="na">onErrorUse</span><span class="o">(</span><span class="n">status</span><span class="o">()).</span><span class="na">badRequest</span><span class="o">(</span><span class="n">errors</span><span class="o">);</span></code></pre>
+
+<p>Além disso, se o redirecionamento é para um método do mesmo controller, podemos usar:</p>
+
+<pre><code class="language-java"><span class="n">validator</span><span class="o">.</span><span class="na">onErrorForwardTo</span><span class="o">(</span><span class="k">this</span><span class="o">).</span><span class="na">list</span><span class="o">()</span> <span class="o">==&gt;</span> <span class="n">validator</span><span class="o">.</span><span class="na">onErrorUse</span><span class="o">(</span><span class="n">logic</span><span class="o">()).</span><span class="na">forwardTo</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="na">getClass</span><span class="o">()).</span><span class="na">list</span><span class="o">();</span>
+<span class="n">validator</span><span class="o">.</span><span class="na">onErrorRedirectTo</span><span class="o">(</span><span class="k">this</span><span class="o">).</span><span class="na">list</span><span class="o">()</span> <span class="o">==&gt;</span> <span class="n">validator</span><span class="o">.</span><span class="na">onErrorUse</span><span class="o">(</span><span class="n">logic</span><span class="o">()).</span><span class="na">redirectTo</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="na">getClass</span><span class="o">()).</span><span class="na">list</span><span class="o">();</span>
+<span class="n">validator</span><span class="o">.</span><span class="na">onErrorUsePageOf</span><span class="o">(</span><span class="k">this</span><span class="o">).</span><span class="na">list</span><span class="o">()</span> <span class="o">==&gt;</span> <span class="n">validator</span><span class="o">.</span><span class="na">onErrorUse</span><span class="o">(</span><span class="n">page</span><span class="o">()).</span><span class="na">of</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="na">getClass</span><span class="o">()).</span><span class="na">list</span><span class="o">();</span></code></pre>
+
+<h3 id="mostrando-os-erros-de-validao-no-jsp">Mostrando os erros de validação no JSP</h3>
+
+<p>Quando existem erros de validação, o VRaptor coloca um atributo na requisição chamado errors contendo a lista de erros, então você pode mostrá-los na sua JSP de um jeito parecido com:</p>
+
+<pre><code class="language-xml">	<span class="nt">&lt;c:forEach</span> <span class="na">var=</span><span class="s">"error"</span> <span class="na">items=</span><span class="s">"${errors}"</span><span class="nt">&gt;</span>
+		${error.category} - ${error.message}<span class="nt">&lt;br</span> <span class="nt">/&gt;</span>
+	<span class="nt">&lt;/c:forEach&gt;</span></code></pre>
+
+<p>Você também pode buscar por um erro somente de uma determinada categoria:</p>
+
+<pre><code class="language-xml">	<span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"text"</span> <span class="na">name=</span><span class="s">"title"</span> <span class="nt">/&gt;</span>
+	<span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">"error"</span><span class="nt">&gt;</span>${errors.asMap().title} // retorna a mensagem para o campo title</code></pre>
+    </div>
+    <div id="sidebar">
+      <ul>
+        <li><a href="/pt/docs/guia-de-1-minuto">Guia inicial de 1 minuto</a></li>
+        <li><a href="/pt/docs/guia-de-10-minutos">Guia inicial de 10 minutos</a></li>
+        <li><a href="/pt/docs/controllers-rest">Controllers Rest</a></li>
+        <li><a href="/pt/docs/components">Components</a></li>
+        <li><a href="/pt/docs/conversores">Conversores</a></li>
+        <li><a href="/pt/docs/validacao">Validação</a></li>
+        <li><a href="/pt/docs/interceptadores">Interceptadores</a></li>
+        <li><a href="/pt/docs/trabalhando-com-a-view">Trabalhando com a View</a></li>
+        <li><a href="/pt/docs/download-e-upload">Download e Upload</a></li>
+        <li><a href="/pt/docs/environment">Environment</a></li>
+        <li><a href="/pt/docs/plugins">Plugins</a></li>
+        <li><a href="/pt/docs/dependencias-e-pre-requisitos">Dependências e pré requisitos</a></li>
+        <li><a href="/pt/docs/migrando-um-projeto-com-vraptor3">Migrando um projeto com VRaptor 3</a></li>
+        <li><a href="/pt/docs/contribuindo-com-o-vraptor">Contribuindo com o VRaptor</a></li>
+      </ul>
+    </div>
+  </body>
+</html>

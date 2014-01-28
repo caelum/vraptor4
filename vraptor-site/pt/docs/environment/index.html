@@ -1,0 +1,140 @@
+<!DOCTYPE HTML>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>VRaptor 4 - Environment</title>
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/custom-highlight.css" />    
+     
+    <!-- you don't need to keep this, but it's cool for stats! -->
+    <meta name="generator" content="nanoc 3.6.7">
+  </head>
+
+  <body>
+    <div id="main" class="highlight">
+      <div id="header">
+        <a id="logo" href="/pt"><img src="/logo.png"></a>
+        <span>Framework Java MVC</span>
+      </div>
+      <p>Environment é uma funcionalidade do VRaptor que permite que você pode definir componentes diferentes conforme o ambiente que você está: produção, testes, desenvolvimento, etc.</p>
+
+<h1 id="configurao">Configuração</h1>
+
+<p>Em seu <code>web.xml</code>, adicione:</p>
+
+<pre><code class="language-xml"><span class="nt">&lt;context-param&gt;</span>
+    <span class="nt">&lt;param-name&gt;</span>br.com.caelum.vraptor.environment<span class="nt">&lt;/param-name&gt;</span>
+    <span class="nt">&lt;param-value&gt;</span>nome_do_ambiente<span class="nt">&lt;/param-value&gt;</span>
+<span class="nt">&lt;/context-param&gt;</span></code></pre>
+
+<p>Onde <code>nome_do_ambiente</code> é o ambiente atual (<code>PRODUCTION</code> ou <code>DEVELOPMENT</code>, por exemplo).</p>
+
+<p>Ou se preferir, você também pode criar uma variável global do sistema chamada <code>VRAPTOR_ENVIRONMENT</code>.</p>
+
+<h1 id="nomedoambienteproperties">nome_do_ambiente.properties</h1>
+
+<p>Seu nome_do_ambiente.properties deve ser criado em <code>src/main/resources</code>. Exemplo (development.properties):</p>
+
+<pre><code>ambiente_de_teste = true
+email_de_teste = test.mail@mail.com
+environment.controller = true
+</code></pre>
+
+<h1 id="acessando-propriedades-de-ambiente-no-seu-cdigo">Acessando propriedades de ambiente no seu código</h1>
+
+<pre><code class="language-java"><span class="kn">import</span> <span class="nn">br.com.caelum.vraptor.environment.Environment</span><span class="o">;</span>
+
+<span class="nd">@Controller</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">myController</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="n">Environment</span> <span class="n">environment</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="n">MailSender</span> <span class="n">sender</span><span class="o">;</span>
+
+    <span class="nd">@Inject</span>
+    <span class="kd">public</span> <span class="nf">myController</span><span class="o">(</span><span class="n">Environment</span> <span class="n">environment</span><span class="o">,</span> <span class="n">MailSender</span> <span class="n">sender</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">environment</span> <span class="o">=</span> <span class="n">environment</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">sender</span> <span class="o">=</span> <span class="n">sender</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">sendMail</span><span class="o">(</span><span class="n">String</span> <span class="n">email</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span><span class="o">(</span><span class="n">environment</span><span class="o">.</span><span class="na">isDevelopment</span><span class="o">())</span> <span class="o">{</span>
+            <span class="n">sender</span><span class="o">.</span><span class="na">sendMailTo</span><span class="o">(</span><span class="n">environment</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">"dev_mail"</span><span class="o">));</span>
+            <span class="k">return</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="n">sender</span><span class="o">.</span><span class="na">sendMailTo</span><span class="o">(</span><span class="n">email</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span></code></pre>
+
+<h1 id="acessando-propriedades-de-ambiente-no-jsp">Acessando propriedades de ambiente no jsp</h1>
+
+<pre><code class="language-xml"><span class="nt">&lt;c:if</span> <span class="na">test=</span><span class="s">"${environment.isTest()}"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;p&gt;</span>Você está no ambiente de teste. Suas ações aqui não afetarão o sistema.<span class="nt">&lt;/p&gt;</span>
+<span class="nt">&lt;/c:if&gt;</span>
+
+Enviando e-mail para: ${environment.get('email_de_teste')}</code></pre>
+
+<h1 id="acessando-arquivos-de-configurao-de-acordo-com-o-environment">Acessando arquivos de configuração de acordo com o environment</h1>
+
+<p>Se você precisa acessar um arquivo de configuração diferente para suas bibliotecas,
+de acordo com seu ambiente, você também pode utilizar o Environemnt.
+Basta colocar, por exemplo, seu <code>hibernate.cfg.xml</code> em diretórios com o nome
+de seus ambientes: <em>development</em> e <em>production</em> (por exemplo).
+<code>Environment.getResource(...)</code> retornará o resource de acordo com seu ambiente atual:</p>
+
+<pre><code class="language-java"><span class="n">cfg</span> <span class="o">=</span> <span class="k">new</span> <span class="n">AnnotationConfiguration</span><span class="o">();</span>
+<span class="n">cfg</span><span class="o">.</span><span class="na">configure</span><span class="o">(</span><span class="n">environment</span><span class="o">.</span><span class="na">getResource</span><span class="o">(</span><span class="s">"/hibernate.cfg.xml"</span><span class="o">));</span></code></pre>
+
+<p>Para manter compatibilidade com quem não utilizava o environment, caso o arquivo não seja encontrado
+no diretório com o nome do ambiente, ele será carregado no diretório root (do classpath).</p>
+
+<h1 id="injetando-o-valor-de-suas-configurao-programaticamente">Injetando o valor de suas configuração programaticamente</h1>
+
+<p>Você também consegue injetar suas configurações programaticamente usando o <code>@Property</code>, por exemplo:</p>
+
+<pre><code class="language-java"><span class="kn">import</span> <span class="nn">br.com.caelum.vraptor.environment.Environment</span><span class="o">;</span>
+
+<span class="nd">@Controller</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">myController</span> <span class="o">{</span>
+
+    <span class="nd">@Inject</span> <span class="nd">@Property</span><span class="o">(</span><span class="s">"email"</span><span class="o">)</span> <span class="kd">private</span> <span class="n">String</span> <span class="n">email</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">sendMail</span><span class="o">(</span><span class="n">String</span> <span class="n">email</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">sender</span><span class="o">.</span><span class="na">sendMailTo</span><span class="o">(</span><span class="n">email</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span></code></pre>
+
+<p>Neste caso, se o seu environment estiver com valor <code>DEVELOPMENT</code>, vai injetar o valor que corresponde a chave <em>email</em> do arquivo <code>development.properties</code>, se estiver com <code>PRODUCTION</code> do <code>production.properties</code> e assim por diante. Dessa forma você não precisa dos ifs como: <code>if(environment.isDevelopment()) {...}</code> em seu código.</p>
+
+<p>Outra facilidade, é que se o nome da chave for o mesmo nome do field injetado, como em nosso caso com a chave <em>email</em>, você pode deixar apenas o <code>@Property</code> que o nome será inferido. Seu controller ficaria assim:</p>
+
+<pre><code class="language-java"><span class="kn">import</span> <span class="nn">br.com.caelum.vraptor.environment.Environment</span><span class="o">;</span>
+
+<span class="nd">@Controller</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">myController</span> <span class="o">{</span>
+
+    <span class="nd">@Inject</span> <span class="nd">@Property</span> <span class="kd">private</span> <span class="n">String</span> <span class="n">email</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">sendMail</span><span class="o">(</span><span class="n">String</span> <span class="n">email</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">sender</span><span class="o">.</span><span class="na">sendMailTo</span><span class="o">(</span><span class="n">email</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span></code></pre>
+    </div>
+    <div id="sidebar">
+      <ul>
+        <li><a href="/pt/docs/guia-de-1-minuto">Guia inicial de 1 minuto</a></li>
+        <li><a href="/pt/docs/guia-de-10-minutos">Guia inicial de 10 minutos</a></li>
+        <li><a href="/pt/docs/controllers-rest">Controllers Rest</a></li>
+        <li><a href="/pt/docs/components">Components</a></li>
+        <li><a href="/pt/docs/conversores">Conversores</a></li>
+        <li><a href="/pt/docs/validacao">Validação</a></li>
+        <li><a href="/pt/docs/interceptadores">Interceptadores</a></li>
+        <li><a href="/pt/docs/trabalhando-com-a-view">Trabalhando com a View</a></li>
+        <li><a href="/pt/docs/download-e-upload">Download e Upload</a></li>
+        <li><a href="/pt/docs/environment">Environment</a></li>
+        <li><a href="/pt/docs/plugins">Plugins</a></li>
+        <li><a href="/pt/docs/dependencias-e-pre-requisitos">Dependências e pré requisitos</a></li>
+        <li><a href="/pt/docs/migrando-um-projeto-com-vraptor3">Migrando um projeto com VRaptor 3</a></li>
+        <li><a href="/pt/docs/contribuindo-com-o-vraptor">Contribuindo com o VRaptor</a></li>
+      </ul>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,94 @@
+<!DOCTYPE HTML>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>VRaptor 4 - Plugins</title>
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/custom-highlight.css" />    
+     
+    <!-- you don't need to keep this, but it's cool for stats! -->
+    <meta name="generator" content="nanoc 3.6.7">
+  </head>
+
+  <body>
+    <div id="main" class="highlight">
+      <div id="header">
+        <a id="logo" href="/pt"><img src="/logo.png"></a>
+        <span>Framework Java MVC</span>
+      </div>
+      <p>Plugins são complementos ao VRaptor. Eles são úteis para situações como acessar um banco de dados usando JPA ou Hibernate, enviar emails, etc.</p>
+
+<h3 id="vraptor-jpa">VRaptor JPA</h3>
+
+<p>Para usá-lo basta você copiar o jar para a sua aplicação, ou declarar o plugin como dependência do Maven conforme o trecho abaixo.</p>
+
+<pre><code class="language-xml"><span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>br.com.caelum.vraptor<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>vraptor-jpa<span class="nt">&lt;artifactId&gt;</span>
+    <span class="nt">&lt;version&gt;</span>1.0.0<span class="nt">&lt;/version&gt;</span> <span class="c">&lt;!-- ou a última versão disponível --&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span></code></pre>
+
+<p>É importante que a <code>persistence unit</code> chame-se <code>default</code>, e que o persistence.xml esteja no diretório <code>WEB-INF</code>.</p>
+
+<p>Plugin no Gihub: https://github.com/caelum/vraptor-jpa</p>
+
+<h3 id="vraptor-hibernate">VRaptor Hibernate</h3>
+
+<p>Se você usa o Hibernate 4, você pode usar o plugin vraptor-hibernate. Você pode adicioná-lo em seu projeto Maven conforme o trecho abaixo, ou copiar manualmente o jar para seu projeto.</p>
+
+<pre><code class="language-xml"><span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>br.com.caelum.vraptor<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>vraptor-hibernate<span class="nt">&lt;/artifactId&gt;</span>
+    <span class="nt">&lt;version&gt;</span>4.0.0<span class="nt">&lt;/version&gt;</span> <span class="c">&lt;!-- ou a última versão disponível --&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span></code></pre>
+
+<p>Plugin no Gihub: https://github.com/caelum/vraptor-hibernate</p>
+
+<h3 id="simple-mail">Simple mail</h3>
+
+<p>https://github.com/caelum/vraptor-simplemail</p>
+
+<pre><code class="language-xml"><span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>br.com.caelum.vraptor<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>vraptor-simplemail<span class="nt">&lt;/artifactId&gt;</span>
+    <span class="nt">&lt;version&gt;</span>1.0.0<span class="nt">&lt;/version&gt;</span> <span class="c">&lt;!-- ou a última versão disponível --&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span></code></pre>
+
+<h3 id="vraptor-shiro">VRaptor Shiro</h3>
+
+<p>O VRaptor Apache Shiro Plugin provê suporte a autenticação, autorização, criptografia e gerenciamento de sessão, via Apache Shiro, que é um framework leve, porém, poderoso, sendo ideal tanto para pequenos projetos como para projetos corporativos.</p>
+
+<p>https://github.com/dipold/vraptor-shiro</p>
+
+<pre><code class="language-xml"><span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>br.com.caelum.vraptor<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>vraptor-shiro<span class="nt">&lt;/artifactId&gt;</span>
+    <span class="nt">&lt;version&gt;</span>4.0.0-beta-1<span class="nt">&lt;/version&gt;</span> <span class="c">&lt;!-- ou a última versão disponível --&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span></code></pre>
+
+<h3 id="vraptor-contrib">VRaptor contrib</h3>
+
+<p>https://github.com/caelum/vraptor-contrib</p>
+
+<p>Aqui você pode encontrar alguns plugins feitos por usuários do vraptor.</p>
+    </div>
+    <div id="sidebar">
+      <ul>
+        <li><a href="/pt/docs/guia-de-1-minuto">Guia inicial de 1 minuto</a></li>
+        <li><a href="/pt/docs/guia-de-10-minutos">Guia inicial de 10 minutos</a></li>
+        <li><a href="/pt/docs/controllers-rest">Controllers Rest</a></li>
+        <li><a href="/pt/docs/components">Components</a></li>
+        <li><a href="/pt/docs/conversores">Conversores</a></li>
+        <li><a href="/pt/docs/validacao">Validação</a></li>
+        <li><a href="/pt/docs/interceptadores">Interceptadores</a></li>
+        <li><a href="/pt/docs/trabalhando-com-a-view">Trabalhando com a View</a></li>
+        <li><a href="/pt/docs/download-e-upload">Download e Upload</a></li>
+        <li><a href="/pt/docs/environment">Environment</a></li>
+        <li><a href="/pt/docs/plugins">Plugins</a></li>
+        <li><a href="/pt/docs/dependencias-e-pre-requisitos">Dependências e pré requisitos</a></li>
+        <li><a href="/pt/docs/migrando-um-projeto-com-vraptor3">Migrando um projeto com VRaptor 3</a></li>
+        <li><a href="/pt/docs/contribuindo-com-o-vraptor">Contribuindo com o VRaptor</a></li>
+      </ul>
+    </div>
+  </body>
+</html>

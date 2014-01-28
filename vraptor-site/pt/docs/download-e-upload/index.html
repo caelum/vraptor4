@@ -1,0 +1,123 @@
+<!DOCTYPE HTML>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>VRaptor 4 - Download e Upload</title>
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/custom-highlight.css" />    
+     
+    <!-- you don't need to keep this, but it's cool for stats! -->
+    <meta name="generator" content="nanoc 3.6.7">
+  </head>
+
+  <body>
+    <div id="main" class="highlight">
+      <div id="header">
+        <a id="logo" href="/pt"><img src="/logo.png"></a>
+        <span>Framework Java MVC</span>
+      </div>
+      <h3 id="exemplo-de-1-minuto-download">Exemplo de 1 minuto: download</h3>
+
+<p>O exemplo a seguir mostra como disponibilizar o download para seu cliente.
+Note novamente a simplicidade na implementação:</p>
+
+<pre><code class="language-java"><span class="nd">@Controller</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">PerfilController</span> <span class="o">{</span>
+	
+	<span class="kd">public</span> <span class="n">File</span> <span class="nf">foto</span><span class="o">(</span><span class="n">Perfil</span> <span class="n">perfil</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">return</span> <span class="k">new</span> <span class="nf">File</span><span class="o">(</span><span class="s">"/path/para/a/foto."</span> <span class="o">+</span> <span class="n">perfil</span><span class="o">.</span><span class="na">getId</span><span class="o">()+</span> <span class="s">".jpg"</span><span class="o">);</span>
+	<span class="o">}</span>
+<span class="o">}</span></code></pre>
+
+<h3 id="adicionando-mais-informaes-no-download">Adicionando mais informações no download</h3>
+
+<p>Se você quiser adicionar mais informações ao download você pode retornar um <code>FileDownload</code>:</p>
+
+<pre><code class="language-java"><span class="nd">@Controller</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">PerfilController</span> <span class="o">{</span>
+	<span class="kd">public</span> <span class="n">Download</span> <span class="nf">foto</span><span class="o">(</span><span class="n">Perfil</span> <span class="n">perfil</span><span class="o">)</span> <span class="o">{</span>
+		<span class="n">File</span> <span class="n">file</span> <span class="o">=</span> <span class="k">new</span> <span class="n">File</span><span class="o">(</span><span class="s">"/path/para/a/foto."</span> <span class="o">+</span> <span class="n">perfil</span><span class="o">.</span><span class="na">getId</span><span class="o">()+</span> <span class="s">".jpg"</span><span class="o">);</span>
+		<span class="n">String</span> <span class="n">contentType</span> <span class="o">=</span> <span class="s">"image/jpg"</span><span class="o">;</span>
+		<span class="n">String</span> <span class="n">filename</span> <span class="o">=</span> <span class="n">perfil</span><span class="o">.</span><span class="na">getNome</span><span class="o">()</span> <span class="o">+</span> <span class="s">".jpg"</span><span class="o">;</span>
+
+		<span class="k">return</span> <span class="k">new</span> <span class="nf">FileDownload</span><span class="o">(</span><span class="n">file</span><span class="o">,</span> <span class="n">contentType</span><span class="o">,</span> <span class="n">filename</span><span class="o">);</span>
+	<span class="o">}</span>
+<span class="o">}</span></code></pre>
+
+<p>Você pode também usar a implementação <code>InputStreamDownload</code> para trabalhar diretamente com Streams ou <code>ByteArrayDownload</code> para array de bytes.</p>
+
+<h3 id="upload">Upload</h3>
+
+<p>Para ativar o suporte a upload é necessário adicionar as bibliotecas <code>commons-upload</code> e <code>commons-io</code> em seu classpath.</p>
+
+<h3 id="exemplo-de-1-minuto-upload">Exemplo de 1 minuto: upload</h3>
+
+<p>O primeiro exemplo será baseado na funcionalidade de upload multipart.</p>
+
+<pre><code class="language-java"><span class="nd">@Controller</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">PerfilController</span> <span class="o">{</span>
+
+	<span class="nd">@Inject</span> <span class="kd">private</span> <span class="kd">final</span> <span class="n">PerfilDao</span> <span class="n">dao</span><span class="o">;</span>
+		
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">atualizaFoto</span><span class="o">(</span><span class="n">Perfil</span> <span class="n">perfil</span><span class="o">,</span> <span class="n">UploadedFile</span> <span class="n">foto</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">try</span> <span class="o">(</span><span class="n">InputStream</span> <span class="n">input</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="na">getFile</span><span class="o">())</span> <span class="o">{</span>
+			<span class="n">dao</span><span class="o">.</span><span class="na">atribui</span><span class="o">(</span><span class="n">input</span><span class="o">,</span> <span class="n">perfil</span><span class="o">);</span>
+		<span class="o">}</span>
+	<span class="o">}</span>
+<span class="o">}</span></code></pre>
+
+<h3 id="mais-sobre-upload">Mais sobre Upload</h3>
+
+<p>O UploadedFile retorna o arquivo como um <code>InputStream</code>. Se você quiser copiar para um arquivo no disco facilmente, basta usar a classe <code>Files</code> do Java 7:</p>
+
+<pre><code class="language-java"><span class="kd">public</span> <span class="kt">void</span> <span class="nf">atualizaFoto</span><span class="o">(</span><span class="n">Perfil</span> <span class="n">perfil</span><span class="o">,</span> <span class="n">UploadedFile</span> <span class="n">foto</span><span class="o">)</span> <span class="o">{</span>
+	<span class="k">try</span> <span class="o">(</span><span class="n">InputStream</span> <span class="n">input</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="na">getFile</span><span class="o">())</span> <span class="o">{</span>
+		<span class="n">File</span> <span class="n">fotoSalva</span> <span class="o">=</span> <span class="k">new</span> <span class="n">File</span><span class="o">();</span>
+		<span class="n">Files</span><span class="o">.</span><span class="na">write</span><span class="o">(</span><span class="n">input</span><span class="o">,</span> <span class="n">fotoSalva</span><span class="o">);</span>
+		<span class="n">dao</span><span class="o">.</span><span class="na">atribui</span><span class="o">(</span><span class="n">fotoSalva</span><span class="o">,</span> <span class="n">perfil</span><span class="o">);</span>
+	<span class="o">}</span>
+<span class="o">}</span></code></pre>
+
+<h3 id="sobrescrevendo-as-configuraes-de-upload">Sobrescrevendo as configurações de upload</h3>
+
+<p>Você pode alterar as configurações de upload sobrescrevendo a classe <code>MultipartConfig</code>. No exemplo abaixo é alterado o tamanho máximo de upload.</p>
+
+<pre><code class="language-java"><span class="nd">@Specializes</span>
+<span class="nd">@ApplicationScoped</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">CustomMultipartConfig</span> <span class="kd">extends</span> <span class="n">DefaultMultipartConfig</span> <span class="o">{</span>
+	
+	<span class="kd">public</span> <span class="kt">long</span> <span class="nf">getSizeLimit</span><span class="o">()</span> <span class="o">{</span>
+		<span class="k">return</span> <span class="mi">50</span> <span class="o">*</span> <span class="mi">1024</span> <span class="o">*</span> <span class="mi">1024</span><span class="o">;</span> <span class="c1">// 50MB</span>
+	<span class="o">}</span>
+<span class="o">}</span></code></pre>
+
+<h3 id="alterando-o-formulrio-de-envio">Alterando o formulário de envio</h3>
+
+<p>Para que o browser possa fazer o upload corretamente, você precisa adicionar o atributo enctype para multipart/form-data:</p>
+
+<pre><code class="language-jsp"><span class="nt">&lt;form</span> <span class="na">action=</span><span class="s">"minha-action"</span> <span class="na">method=</span><span class="s">"post"</span> <span class="na">enctype=</span><span class="s">"multipart/form-data"</span><span class="nt">&gt;</span></code></pre>
+
+<h3 id="validando-o-upload">Validando o upload</h3>
+
+<p>Quando o tamanho máximo para upload de arquivo exceder o valor configurado, o VRaptor adiciona uma mensagem no objeto <code>Validator</code>.</p>
+    </div>
+    <div id="sidebar">
+      <ul>
+        <li><a href="/pt/docs/guia-de-1-minuto">Guia inicial de 1 minuto</a></li>
+        <li><a href="/pt/docs/guia-de-10-minutos">Guia inicial de 10 minutos</a></li>
+        <li><a href="/pt/docs/controllers-rest">Controllers Rest</a></li>
+        <li><a href="/pt/docs/components">Components</a></li>
+        <li><a href="/pt/docs/conversores">Conversores</a></li>
+        <li><a href="/pt/docs/validacao">Validação</a></li>
+        <li><a href="/pt/docs/interceptadores">Interceptadores</a></li>
+        <li><a href="/pt/docs/trabalhando-com-a-view">Trabalhando com a View</a></li>
+        <li><a href="/pt/docs/download-e-upload">Download e Upload</a></li>
+        <li><a href="/pt/docs/environment">Environment</a></li>
+        <li><a href="/pt/docs/plugins">Plugins</a></li>
+        <li><a href="/pt/docs/dependencias-e-pre-requisitos">Dependências e pré requisitos</a></li>
+        <li><a href="/pt/docs/migrando-um-projeto-com-vraptor3">Migrando um projeto com VRaptor 3</a></li>
+        <li><a href="/pt/docs/contribuindo-com-o-vraptor">Contribuindo com o VRaptor</a></li>
+      </ul>
+    </div>
+  </body>
+</html>

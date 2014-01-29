@@ -69,10 +69,10 @@ public class DefaultValidator extends AbstractValidator {
 
 	@Override
 	public Validator check(boolean condition, Message message) {
+		message.setBundle(bundle);
 		if (!condition) {
 			errors.add(message);
 		}
-
 		return this;
 	}
 

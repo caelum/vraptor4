@@ -21,5 +21,8 @@ bin
 classes
 vraptor-blank-project/WebContent/WEB-INF/lib/*.jar
 vraptor-blank-project-gae/war/WEB-INF/lib/*.jar
+vraptor-site/output/**
+vraptor-site/tmp/**
+vraptor-site/crash.log
 *~
 vraptor-plugin-gae/build.tmp/

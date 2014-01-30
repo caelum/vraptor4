@@ -1,0 +1,361 @@
+---
+title: Controllers REST
+---
+
+##O que são Controllers?
+
+Controller são o que poderíamos pensar como recursos a serem disponibilizados para acesso pelos nossos clientes. No caso de uma aplicação Web baseada no VRaptor, um recurso deve ser anotado com a anotação `@Controller`. Assim que o programador insere tal anotação em seu código, todos os métodos públicos desse recurso se tornam acessíveis através de chamadas do tipo GET ou POST a URIs específicas.
+
+O exemplo a seguir mostra um recurso chamado `ClienteController` que possui métodos para diversas funcionalidades ligadas a um cliente. Simplesmente criar essa classe e os métodos faz com que as URLs `/cliente/adiciona`, `/cliente/lista`, `/cliente/visualiza`, `/cliente/remove` e `/cliente/atualiza` sejam disponibilizadas, cada uma invocando o respectivo método em sua classe.
+
+~~~ 
+#!java
+@Controller
+public class ClienteController {
+
+  public void adiciona(Cliente cliente) {
+
+  }
+
+  public List<Cliente> lista() {
+    return ...
+  }
+
+  public Cliente visualiza(Cliente perfil) {
+    return ...
+  }
+
+  public void remove(Cliente cliente) {
+  ...
+  }
+
+  public void atualiza(Cliente cliente) {
+    ...
+  }
+}
+~~~ 
+
+###Parâmetros dos métodos
+
+Você pode receber parâmetros nos métodos dos seus controllers, e se o objeto usar a convenção de java beans (getters e setters para os atributos da classe), você pode usar pontos para navegar entre os atributos. Por exemplo, no método:
+
+~~~ 
+#!java
+public void atualiza(Cliente cliente) {
+   //...
+}
+~~~ 
+
+você pode passar como parâmetro na requisição:
+
+~~~ 
+#!jsp
+cliente.id=3
+cliente.nome=Fulano
+cliente.usuario.login=fulano
+~~~ 
+
+e os campos correspondentes, navegando por getters e setters a partir do cliente, serão setados.
+Se um atributo do objeto ou parâmetro do método for uma lista (List<>, array ou Set<>), você pode passar vários parâmetros usando colchetes e índices:
+
+~~~ 
+#!jsp
+cliente.telefones[0]=(11) 5571-2751 #no caso de ser uma lista de String
+cliente.dependentes[0].id=1 #no caso de ser qualquer objeto, você pode continuar a navegação
+cliente.dependentes[3].id=1 #os índices não precisam ser sequenciais
+cliente.dependentes[0].nome=Cicrano #se usar o mesmo índice, vai ser setado no mesmo objeto
+clientes[1].id=23 #funciona se você receber uma lista de clientes no método
+~~~ 
+
+###Reflection no nome dos parâmetros
+
+Infelizmente, o Java não realiza reflection em cima de parâmetros, pois esses dados não ficam disponíveis em bytecode (a não ser se compilado em debug mode, porém é algo opcional). Isso faz com que a maioria dos frameworks que precisem desse tipo de informção criem uma anotação própria para isso, o que polui muito o código (exemplo no JAX-WS, onde é comum encontrar um método como o acima com a assinatura `void add(@WebParam(name="cliente") Cliente cliente)`.
+
+O VRaptor tira proveito do framework <a href="http://paranamer.codehaus.org">Paranamer</a>, que consegue tirar essa informação por meio da pré compilação ou dos dados de debug, evitando criar mais uma anotação. Alguns dos desenvolvedores do VRaptor também participam no desenvolvimento do Paranamer.
+
+###Escopos
+
+Por vezes você deseja compartilhar um componente entre todos os usuários, entre todas as requisições de um mesmo usuário ou a cada requisição de um usuário. Para definir em que escopo o seu componente vive, basta utilizar as anotações `@ApplicationScoped`, `@SessionScoped`, `@RequestScoped`, `@Dependent` e `@Conversation`. Caso nenhuma anotação seja utilizada, o VRaptor assume que seu componente ficará no escopo de request, isto é, você terá um novo componente a cada nova requisição.
+
+###@Path
+
+A anotação `@Path` permite que você customize as URIs de acesso a seus métodos. O uso básico dessa anotação é feito por meio de uma URI fixa. O exemplo a seguir mostra a customização de uma URI para um método, que somente receberá requisições do tipo POST na URI `/cliente`:
+
+~~~ 
+#!java
+@Controller
+public class ClienteController {
+
+  @Path("/cliente")
+  @Post
+  public void adiciona(Cliente cliente) {
+  }
+}
+~~~ 
+
+Se você anotar o `ClienteController` com `@Path`, o valor especificado vai ser usado como prefixo para todas as URIs desse controller:
+
+~~~ 
+#!java
+@Controller
+@Path("/clientes")
+public class ClienteController {
+    //URI: /clientes/lista
+    public void lista() {...}
+
+    //URI: /clientes/salva
+    @Path("salva")
+    public void adiciona() {...}
+
+    //URI: /clientes/todosOsClientes
+    @Path("/todosOsClientes")
+    public void listaTudo() {...}
+}
+~~~
+
+###Http Methods
+
+O ideal é definir uma URI específica para diversos métodos HTTP diferentes, como GET, POST, PUT etc.
+Para atingir esse objetivo, utilizamos as anotações `@Get`, `@Post`, `@Delete`, etc que também permitem configurar uma URI diferente da URI padrão, da mesma forma que a anotação `@Path`. O exemplo a seguir altera os padrões de URI do `ClienteController` para utilizar duas URIs distintas, com diversos métodos HTTP:
+
+~~~
+#!java
+@Controller
+public class ClienteController {
+
+  @Post("/cliente")
+  public void adiciona(Cliente cliente) {
+  }
+
+  @Path("/")
+  public List<Cliente> lista() {
+    return ...
+  }
+
+  @Get("/cliente")
+  public Cliente visualiza(Cliente cliente) {
+    return ...
+  }
+
+  @Delete("/cliente")
+  public void remove(Cliente cliente) {
+    ...
+  }
+
+  @Put("/cliente")
+  public void atualiza(Cliente cliente) {
+    ...
+  }
+}
+~~~
+
+Como você pode notar, utilizamos os métodos HTTP + uma URI específica para identificar cada um dos métodos da nossa classe Java.
+
+No momento de criar os links e formulários HTML devemos tomar um cuidado <strong>muito importante</strong> pois os browsers só dão suporte aos métodos POST e GET por meio de formulários hoje em dia. Por isso, você deverá criar as requisições para métodos do tipo DELETE, PUT etc usando JavaScript ou passando um parâmetro extra, chamado `_method`. O último só funciona em requisições POST. Esse parâmetro sobrescreverá o método HTTP real sendo invocado.
+
+O exemplo a seguir mostra um link para o método visualiza de cliente:
+
+~~~ 
+#!jsp
+<a href="/cliente?cliente.id=5">ver cliente 5</a>
+~~~ 
+
+Agora um exemplo de como invocar o método de adicionar um cliente:
+
+~~~ 
+#!jsp
+<form action="/cliente" method="post">
+    <input name="cliente.nome" />
+    <input type="submit" />
+</form>
+~~~
+
+E, note que para permitir a remoção pelo método DELETE, temos que usar o parâmetro _method, uma vez que o browser ainda não suporta tais requisições:
+
+~~~ 
+#!jsp
+<form action="/cliente" method="post">
+    <input name="cliente.id" value="5" type="hidden" />
+    <button type="submit" name="_method" value="DELETE">remover cliente 5</button>
+</form>
+~~~
+
+###Paths com expressões regulares
+
+Você pode restringir o valor dos parâmetros da sua URI com expressões regulares, dessa maneira:
+
+~~~ 
+#!java
+@Path("/cor/{cor:[0-9A-Fa-f]{6}}")
+public void setCor(String cor) {
+    //...
+}
+~~~
+
+Tudo que estiver depois do `:` será tratado como uma regex, e a URI só vai casar se o parâmetro casar com a regex:
+
+~~~ 
+#!jsp
+/cor/a0b3c4 => casa
+/cor/AABBCC => casa
+/cor/branco => não casa
+~~~
+
+###Path com injeção de variáveis
+
+Em diversos casos, desejamos que a URI que identifica nosso recurso tenha como parte de seu valor, por exemplo, o identificador único do nosso recurso.
+
+Suponha o exemplo de um controle de clientes onde meu identificador único (chave primária) é um número, podemos então mapear as URIs `/cliente/{cliente.id}` para a visualização de cada cliente. Isto é, se acessarmos a URI `/cliente/2`, o método `visualiza` será invocado e o parâmetro `cliente.id` será setado para `2`. Caso a URI `/cliente/1717` seja acessada, o mesmo método será invocado com o valor `1717`.
+
+Dessa maneira, criamos URIs únicas para identificar recursos diferentes do nosso sistema. Veja o exemplo:
+
+~~~ 
+#!java
+@Controller
+public class ClienteController {
+
+  @Get
+  @Path("/cliente/{cliente.id}")
+  public Cliente visualiza(Cliente cliente) {
+    return ...
+  }
+}
+~~~
+
+Você pode ir além e setar diversos parâmetros pela URI:
+
+~~~ 
+#!java
+@Controller
+public class ClienteController {
+
+  @Get
+  @Path("/cliente/{cliente.id}/visualiza/{secao}")
+  public Cliente visualiza(Cliente cliente, String secao) {
+    return ...
+  }
+
+}
+~~~
+
+###Vários paths para a mesma lógica
+
+Você pode setar mais de um path para a mesma lógica fazendo:
+
+~~~ 
+#!java
+@Controller
+public class ClienteController {
+
+  @Path({"/cliente/{cliente.id}/visualiza/{secao}", "/cliente/{cliente.id}/visualiza/"})
+  public Cliente visualiza(Cliente cliente, String secao) {
+    return ...
+  }
+
+}
+~~~
+
+###Paths com *
+
+Você também pode utilizar o `*` como método de seleção para a sua URI. O exemplo a seguir ignora qualquer coisa após a palavra `foto/` :
+
+~~~ 
+#!java
+@Controller
+public class ClienteController {
+
+  @Get
+  @Path("/cliente/{cliente.id}/foto/*")
+  public File foto(Cliente cliente) {
+    return ...
+  }
+
+}
+~~~
+
+E agora o mesmo código, mas utilizado para baixar uma foto específica de um cliente:
+
+~~~ 
+#!java
+@Controller
+public class ClienteController {
+
+  @Get
+  @Path("/cliente/{cliente.id}/foto/{foto.id}")
+  public File foto(Cliente cliente, Foto foto) {
+    return ...
+  }
+
+}
+~~~
+
+Por vezes você deseja que o parâmetro a ser setado inclua também `/s`. Para isso você deve utilizar o padrão `{...*}`:
+
+~~~ 
+#!java
+@Controller
+public class ClienteController {
+
+  @Get
+  @Path("/cliente/{cliente.id}/download/{path*}")
+  public File download(Cliente cliente, String path) {
+    return ...
+  }
+
+}
+~~~
+
+###Definindo prioridades para seus paths
+
+É possível que algumas das nossas URIs possam ser tratada por mais de um método da classe:
+
+~~~ 
+#!java
+@Controller
+public class PostController {
+
+  @Get
+  @Path("/post/{post.autor}")
+  public void mostra(Post post) { ... }
+
+  @Get
+  @Path("/post/atual")
+  public void atual() { ... }
+}
+~~~
+
+A URI `/post/atual` pode ser tratada tanto pelo método mostra, quanto pelo atual. Mas eu quero que quando seja exatamente `/post/atual` o método executado seja o atual. O que eu quero é que o VRaptor teste primeiro o path do método atual, para não correr o risco de cair no método mostra.
+
+Para fazer isso, podemos definir prioridades para os `@Paths`, assim o VRaptor vai testar primeiro os paths com maior prioridade, ou seja, valor menor de prioridade:
+
+~~~ 
+#!java
+@Controller
+public class PostController {
+
+    @Get
+    @Path(value = "/post/{post.autor}", priority=Path.LOW)
+    public void mostra(Post post) {
+       ... 
+    }
+
+    @Get
+    @Path(value = "/post/atual", priority=Path.HIGH)
+    public void atual() {
+        ...
+    }
+}
+~~~
+
+Assim, o path `/post/atual` vai ser testado antes do `/post/{post.autor}`, e o VRaptor vai fazer o que a gente gostaria que ele fizesse. Você não precisa definir prioridades se tivermos as uris: `/post/{post.id}` e `/post/atual`, pois na `/post/{post.id}` o vraptor só vai aceitar números.
+
+###Paths com headers
+
+Você também pode injetar HTTP-Headers na sua lógica usando a anotação `HeaderParam`:
+
+~~~ 
+#!java
+public void profile(@HeaderParam('X-Auth-User') username) {
+    ...
+}
+~~~

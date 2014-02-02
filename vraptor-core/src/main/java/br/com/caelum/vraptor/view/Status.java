@@ -144,4 +144,9 @@ public interface Status extends View {
 	 */
 	void accepted();
 
+	/**
+	 * Return Not implemented (501) Status
+	 */
+	void notImplemented();
+
 }

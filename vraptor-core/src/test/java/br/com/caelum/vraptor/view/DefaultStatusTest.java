@@ -114,6 +114,13 @@ public class DefaultStatusTest {
 	}
 
 	@Test
+	public void shouldSetNotImplementedStatus() throws Exception {
+		status.notImplemented();
+
+		verify(response).setStatus(501);
+	}
+
+	@Test
 	public void shouldSetMethodNotAllowedStatus() throws Exception {
 		status.methodNotAllowed(EnumSet.of(HttpMethod.GET, HttpMethod.POST));
 

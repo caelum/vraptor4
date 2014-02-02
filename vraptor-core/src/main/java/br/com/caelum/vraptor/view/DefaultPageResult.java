@@ -17,6 +17,8 @@
 
 package br.com.caelum.vraptor.view;
 
+import static br.com.caelum.vraptor.proxy.CDIProxies.unproxifyIfPossible;
+
 import java.io.IOException;
 import java.lang.reflect.Method;
 
@@ -62,8 +64,8 @@ public class DefaultPageResult implements PageResult {
 	@Inject
 	public DefaultPageResult(MutableRequest req, MutableResponse res, MethodInfo methodInfo,
 			PathResolver resolver, Proxifier proxifier) {
-		this.request = req;
-		this.response = res;
+		this.request = unproxifyIfPossible(req);
+		this.response = unproxifyIfPossible(res);
 		this.methodInfo = methodInfo;
 		this.proxifier = proxifier;
 		this.resolver = resolver;

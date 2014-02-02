@@ -125,14 +125,19 @@ public class VRaptor implements Filter {
 
 	@Override
 	public void init(FilterConfig cfg) throws ServletException {
-		if (this.provider == null) {
-			throw new ServletException("Container Provider is null. " +
-					"Do you have a Weld/CDI listener setup in your web.xml?");
+		if (provider == null) {
+			throw new ServletException("Container Provider is null. Do you have a Weld/CDI listener setup in your web.xml?");
 		}
+
+		if (cfg.getServletContext().getRealPath("/WEB-INF/beans.xml") == null) {
+			logger.warn("Can't find beans.xml isn't found. Check if your beans.xml is properly located at /WEB-INF/beans.xml");
+		}
+
 		servletContext = cfg.getServletContext();
 		contextEvent.fire(servletContext);
-		this.provider.start();
-		logger.info("VRaptor {} successfuly initialized", VERSION);
+		provider.start();
+
 		initializedEvent.fire(new VRaptorInitialized());
+		logger.info("VRaptor {} successfuly initialized", VERSION);
 	}
 }

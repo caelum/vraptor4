@@ -130,7 +130,7 @@ public class VRaptor implements Filter {
 		}
 
 		if (cfg.getServletContext().getRealPath("/WEB-INF/beans.xml") == null) {
-			logger.warn("Can't find beans.xml isn't found. Check if your beans.xml is properly located at /WEB-INF/beans.xml");
+			logger.warn("A beans.xml isn't found. Check if your beans.xml is properly located at /WEB-INF/beans.xml");
 		}
 
 		servletContext = cfg.getServletContext();

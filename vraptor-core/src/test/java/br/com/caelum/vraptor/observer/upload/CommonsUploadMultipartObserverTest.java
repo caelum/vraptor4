@@ -194,10 +194,19 @@ public class CommonsUploadMultipartObserverTest {
 
 	@Test
 	public void shouldValidateWhenSizeLimitExceededExceptionOccurs() throws Exception {
-
 		when(observer.createServletFileUpload(config)).thenReturn(servletFileUpload);
 		when(servletFileUpload.parseRequest(request)).thenThrow(new FileUploadBase.SizeLimitExceededException("", 0L, 0L));
 
+		observer.upload(event, request, config, validator);
+
+		verify(validator).add(any(I18nMessage.class));
+	}
+
+	@Test
+	public void handleValidatorMessageWhenFileUploadExceptionOccurs() throws Exception {
+		when(observer.createServletFileUpload(config)).thenReturn(servletFileUpload);
+		when(servletFileUpload.parseRequest(request)).thenThrow(new FileUploadException());
+		
 		observer.upload(event, request, config, validator);
 
 		verify(validator).add(any(I18nMessage.class));

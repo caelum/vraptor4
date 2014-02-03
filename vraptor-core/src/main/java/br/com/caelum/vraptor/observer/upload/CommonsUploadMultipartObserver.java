@@ -107,8 +107,7 @@ public class CommonsUploadMultipartObserver {
 			reportSizeLimitExceeded(e, validator);
 
 		} catch (FileUploadException e) {
-			logger.warn("There was some problem parsing this multipart request, "
-					+ "or someone is not sending a RFC1867 compatible multipart request.", e);
+			reportFileUploadException(e, validator);
 		}
 	}
 
@@ -122,6 +121,12 @@ public class CommonsUploadMultipartObserver {
 	protected void reportSizeLimitExceeded(final SizeLimitExceededException e, Validator validator) {
 		validator.add(new I18nMessage("upload", "file.limit.exceeded", e.getActualSize(), e.getPermittedSize()));
 		logger.warn("The file size limit was exceeded.", e);
+	}
+
+	protected void reportFileUploadException(FileUploadException e, Validator validator) {
+		validator.add(new I18nMessage("upload", "file.upload.exception"));
+		logger.warn("There was some problem parsing this multipart request, "
+				+ "or someone is not sending a RFC1867 compatible multipart request.", e);
 	}
 
 	protected void processFile(FileItem item, String name, MutableRequest request) {

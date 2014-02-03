@@ -193,5 +193,9 @@ public class DefaultStatus implements Status {
 	public void notModified() {
 		response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
 	}
-
+	
+	@Override
+	public void notImplemented() {
+		response.setStatus(HttpServletResponse.SC_NOT_IMPLEMENTED);
+	}
 }

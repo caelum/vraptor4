@@ -36,7 +36,7 @@ public class CDIBasedContainer implements Container {
 	@Override
 	@SuppressWarnings("unchecked")
 	public <T> T instanceFor(Class<T> type) {
-		type = (Class<T>) CDIProxies.extractRawType(type);
+		type = (Class<T>) CDIProxies.extractRawTypeIfPossible(type);
 		logger.debug("asking cdi to get instance for {}", type);
 		
 		Bean<?> bean = getBeanFrom(type);
@@ -47,7 +47,7 @@ public class CDIBasedContainer implements Container {
 	@Override
 	@SuppressWarnings("unchecked")
 	public <T> boolean canProvide(Class<T> type) {
-		type = (Class<T>) CDIProxies.extractRawType(type);
+		type = (Class<T>) CDIProxies.extractRawTypeIfPossible(type);
 		logger.debug("asking cdi to get instance for {}", type);
 		
 		return getBeanFrom(type) != null;

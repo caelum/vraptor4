@@ -20,7 +20,8 @@ public final class CDIProxies {
 	public static <T> Class<?> extractRawTypeIfPossible(Class<T> type) {
 		return isCDIProxy(type) ? type.getSuperclass() : type;
 	}
-	
+
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public static <T> T unproxifyIfPossible(T source) {
 		if (source instanceof TargetInstanceProxy) {
 			TargetInstanceProxy<T> target = (TargetInstanceProxy) source;

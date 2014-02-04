@@ -28,6 +28,7 @@
 package br.com.caelum.vraptor.http.iogi;
 
 import static br.com.caelum.vraptor.VRaptorMatchers.hasMessage;
+import static java.util.Collections.singletonMap;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasSize;
@@ -173,9 +174,9 @@ public class IogiParametersProviderTest extends ParametersProviderTest {
 
 	@Test
 	public void shouldInjectOnlyAttributesWithSameType() throws Exception {
-		Object result = mock(Result.class);
+		Result result = mock(Result.class);
 		when(request.getAttribute("result")).thenReturn(result);
-		when(request.getParameter("result")).thenReturn("buggy");
+		when(request.getParameterMap()).thenReturn(singletonMap("result", new String[] { "buggy" }));
 
 		ControllerMethod method = DefaultControllerMethod.instanceFor(OtherResource.class, 
 				OtherResource.class.getDeclaredMethod("logic", String.class));
@@ -183,7 +184,8 @@ public class IogiParametersProviderTest extends ParametersProviderTest {
 		List<Message> errors = new ArrayList<Message>();
 		Object[] out = provider.getParametersFor(method, errors);
 
-		assertThat(out[0], is(not(result)));
+		assertThat(out[0], is(not((Object) result)));
+		assertThat(out[0], is((Object) "buggy"));
 	}
 
 	//----------

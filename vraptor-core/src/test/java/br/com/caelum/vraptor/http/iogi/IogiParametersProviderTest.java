@@ -183,7 +183,7 @@ public class IogiParametersProviderTest extends ParametersProviderTest {
 		List<Message> errors = new ArrayList<Message>();
 		Object[] out = provider.getParametersFor(method, errors);
 
-		assertThat(out[0], not(is(result)));
+		assertThat(out[0], is(not(result)));
 	}
 
 	//----------

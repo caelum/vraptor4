@@ -28,10 +28,12 @@
 package br.com.caelum.vraptor.http.iogi;
 
 import static br.com.caelum.vraptor.VRaptorMatchers.hasMessage;
+import static java.util.Collections.singletonMap;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.Matchers.sameInstance;
@@ -43,7 +45,9 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Set;
 
 import org.junit.Test;
@@ -51,10 +55,12 @@ import org.junit.Test;
 import br.com.caelum.iogi.parameters.Parameter;
 import br.com.caelum.iogi.parameters.Parameters;
 import br.com.caelum.iogi.reflection.Target;
+import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.controller.DefaultControllerMethod;
 import br.com.caelum.vraptor.http.ParametersProvider;
 import br.com.caelum.vraptor.http.ParametersProviderTest;
+import br.com.caelum.vraptor.validator.Message;
 
 public class IogiParametersProviderTest extends ParametersProviderTest {
 
@@ -166,10 +172,28 @@ public class IogiParametersProviderTest extends ParametersProviderTest {
 		assertThat(abc.iterator().next().getX(), is(1l));
 	}
 
+	@Test
+	public void shouldInjectOnlyAttributesWithSameType() throws Exception {
+		Result result = mock(Result.class);
+		when(request.getAttribute("result")).thenReturn(result);
+		when(request.getParameterMap()).thenReturn(singletonMap("result", new String[] { "buggy" }));
+
+		ControllerMethod method = DefaultControllerMethod.instanceFor(OtherResource.class, 
+				OtherResource.class.getDeclaredMethod("logic", String.class));
+
+		List<Message> errors = new ArrayList<Message>();
+		Object[] out = provider.getParametersFor(method, errors);
+
+		assertThat(out[0], is(not((Object) result)));
+		assertThat(out[0], is((Object) "buggy"));
+	}
+
 	//----------
 
 	class OtherResource {
 		void logic(NeedsMyResource param) {
+		}
+		void logic(String result) {
 		}
 	}
 

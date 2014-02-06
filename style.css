@@ -1,15 +1,44 @@
+body {
+  color: #333333;
+  font: 13px Helvetica, arial, freesans, clean, sans-serif;
+  background: #fff;
+}
+
+h1,h2,h3,h4,h5,h6 {
+  margin-top:15px;
+  margin-bottom:15px;
+  line-height:1.1;
+}
+
+h2 {
+  font-size:21px;
+}
+
+html {
+  font-family:sans-serif;
+  -ms-text-size-adjust:100%;
+  -webkit-text-size-adjust:100%;
+}
+
+tt,code,pre {
+  font-family:Consolas, "Liberation Mono", Courier, monospace;
+  font-size:12px;
+}
+
+a {
+  color: #4183c4;
+  text-decoration: none;
+}
+
+::selection {
+  text-shadow: none;
+  background: rgba(65,131,196,0.4);
+}
+
 * {
   margin: 0;
   padding: 0;
   font-family: font: 13px Helvetica, arial, freesans, clean, sans-serif;
-}
-
-body {
-  background: #fff;
-}
-
-a {
-  text-decoration: none;
 }
 
 #main {

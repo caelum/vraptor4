@@ -35,9 +35,13 @@ stylized '/logo/', '/custom-highlight/', '/style/', false
 
 stylized '/pt/docs/*', 'documentacao'
 
+stylized '/pt/cookbook/*', 'cookbook'
+
 stylized '/*', 'default'
 
 define_layout '/pt/docs/*', 'documentacao'
+
+define_layout '/pt/cookbook/*', 'cookbook'
 
 define_layout '/*', 'default'
 

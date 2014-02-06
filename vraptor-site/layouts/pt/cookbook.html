@@ -1,17 +1,9 @@
 <!DOCTYPE HTML>
-<html lang="en">
-
+<html lang="pt">
   <%= render 'head' %>
-
   <body>
-    <div id="main" class="highlight">
-      <div id="header">
-        <a id="logo" href="/pt"><img src="/logo.png"></a>
-        <span>Framework Java MVC</span>
-      </div>
-      <%= yield %>
-    </div>
-    <div id="sidebar">
+    <%= render 'header' %>
+    <nav class="main-nav">
       <ul>
         <li>
             <a href="/pt/cookbook/aceitando-urls-com-ou-sem-barra-no-final">
@@ -24,6 +16,9 @@
             </a>
         </li>
       </ul>
-    </div>
+    </nav>
+    <main>
+      <%= yield %>
+    </main>
   </body>
 </html>

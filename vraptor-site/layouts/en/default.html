@@ -1,0 +1,31 @@
+<!DOCTYPE HTML>
+<html lang="en">
+  
+  <%= render 'head' %>
+
+  <body>
+    <div id="main" class="highlight">
+      <div id="header">
+        <a id="logo" href="/en"><img src="/logo.png"></a>
+        <span>Framework Java MVC</span>
+      </div>
+      <%= yield %>
+    </div>
+    <div id="sidebar">
+      <ul>
+        <li><a href="/en/download">Download</a></li>
+        <li><a href="/en/docs/one-minute-guide/">Documentation</a></li>
+        <li><a href="/en/cookbook/">Cookbook</a></li>
+        <li><a href="https://github.com/caelum/vraptor4/releases" target="_blank">Changelog</a></li>
+        <li><a href="/en/roadmap">Roadmap</a></li>
+        <li><a href="/javadoc">Javadoc</a></li>
+      </ul>
+      <h2>Community</h2>
+      <ul>
+        <li><a href="https://groups.google.com/forum/#!forum/caelum-vraptor" target="_blank">Google Groups</a></li>
+        <li><a href="https://github.com/caelum/vraptor4/" target="_blank">GitHub</a></li>
+        <li><a href="http://www.guj.com.br/tag/vraptor" target="_blank">GUJ</a></li>
+      </ul>
+    </div>
+  </body>
+</html>

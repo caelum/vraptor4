@@ -1,0 +1,29 @@
+<!DOCTYPE HTML>
+<html lang="en">
+
+  <%= render 'head' %>
+
+  <body>
+    <div id="main" class="highlight">
+      <div id="header">
+        <a id="logo" href="/pt"><img src="/logo.png"></a>
+        <span>Framework Java MVC</span>
+      </div>
+      <%= yield %>
+    </div>
+    <div id="sidebar">
+      <ul>
+        <li>
+            <a href="/pt/cookbook/aceitando-urls-com-ou-sem-barra-no-final">
+              Aceitando URLs com ou sem barra no final
+            </a>
+        </li>
+        <li>
+            <a href="/pt/cookbook/colocando-objetos-na-sessao">
+              Colocando objetos na sessão
+            </a>
+        </li>
+      </ul>
+    </div>
+  </body>
+</html>

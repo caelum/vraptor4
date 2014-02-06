@@ -17,6 +17,7 @@
 
 package br.com.caelum.vraptor.view;
 
+import static br.com.caelum.vraptor.proxy.CDIProxies.unproxifyIfPossible;
 import static com.google.common.base.Preconditions.checkArgument;
 
 import java.io.IOException;
@@ -78,8 +79,8 @@ public class DefaultLogicResult implements LogicResult {
 	public DefaultLogicResult(Proxifier proxifier, Router router, MutableRequest request, HttpServletResponse response,
 			Container container, PathResolver resolver, TypeNameExtractor extractor, FlashScope flash, MethodInfo methodInfo) {
 		this.proxifier = proxifier;
-		this.response = response;
-		this.request = request;
+		this.response = unproxifyIfPossible(response);
+		this.request = unproxifyIfPossible(request);
 		this.router = router;
 		this.container = container;
 		this.resolver = resolver;

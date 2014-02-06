@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 def define_layout(archive, layout)
-  compile archive do  
+  compile archive do
     unless item.binary?
       filter :erb
       layout layout
@@ -13,25 +13,21 @@ def stylized(*archive, layout)
   archive.each do |a|
     compile a do
       if layout
-        filter :kramdown 
+        filter :kramdown
         filter :colorize_syntax, :default_colorizer => :pygmentsrb
-        layout layout 
+        layout layout
         filter :relativize_paths, :type => :html
-        filter :relativize_paths, :type => :css  
+        filter :relativize_paths, :type => :css
       end
     end
   end
 end
 
-def css_routes(*name)
-  name.each do |n| 
-    route n + '/' do
-        n + '.css'
-    end  
-  end
+compile '/css/*' do
+    filter :rainpress
 end
 
-stylized '/logo/', '/custom-highlight/', '/style/', false
+stylized '/img/*', '/css/*', false
 
 stylized '/pt/docs/*', 'documentacao'
 
@@ -45,8 +41,9 @@ define_layout '/pt/cookbook/*', 'cookbook'
 
 define_layout '/*', 'default'
 
-css_routes '/style', '/custom-highlight'
-
+route 'css/*' do
+    item.identifier.chop + '.' + item[:extension]
+end
 
 route '*' do
   if item.binary?
@@ -59,5 +56,3 @@ route '*' do
 end
 
 layout '*', :erb
-
-

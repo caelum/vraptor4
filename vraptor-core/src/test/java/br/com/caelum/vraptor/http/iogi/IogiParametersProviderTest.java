@@ -181,7 +181,7 @@ public class IogiParametersProviderTest extends ParametersProviderTest {
 		ControllerMethod method = DefaultControllerMethod.instanceFor(OtherResource.class, 
 				OtherResource.class.getDeclaredMethod("logic", String.class));
 
-		List<Message> errors = new ArrayList<Message>();
+		List<Message> errors = new ArrayList<>();
 		Object[] out = provider.getParametersFor(method, errors);
 
 		assertThat(out[0], is(not((Object) result)));

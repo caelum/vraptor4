@@ -1,14 +1,7 @@
 <!DOCTYPE HTML>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <title>VRaptor 4 - <%= @item[:title] %></title>
-    <link rel="stylesheet" href="/style.css">
-    <link rel="stylesheet" href="/custom-highlight.css" />    
-     
-    <!-- you don't need to keep this, but it's cool for stats! -->
-    <meta name="generator" content="nanoc <%= Nanoc::VERSION %>">
-  </head>
+  
+  <%= render 'head' %>
 
   <body>
     <div id="main" class="highlight">
@@ -22,7 +15,7 @@
       <ul>
         <li><a href="/pt/download">Download</a></li>
         <li><a href="/pt/docs/guia-de-1-minuto/">Documentação</a></li>
-        <li><a href="/pt/cookbook">Cookbook</a></li>
+        <li><a href="/pt/cookbook/aceitando-urls-com-ou-sem-barra-no-final">Cookbook</a></li>
         <li><a href="https://github.com/caelum/vraptor4/releases" target="_blank">Changelog</a></li>
         <li><a href="/pt/roadmap">Roadmap</a></li>
         <li><a href="/javadoc">Javadoc</a></li>

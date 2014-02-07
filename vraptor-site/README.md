@@ -16,10 +16,12 @@ To install dependencies, you can run `bundle install` inside `/vraptor-site` fol
 
 To highlight a block code, you can do something like:
 
+
+\~~~ <br/>
+\#!java <br/>
+	my sample code here <br/>
 \~~~
-#!java
-	my sample code here
-\~~~
+
 
 Another contents, like `inline code`, you can format just like github markdown.
 

@@ -33,17 +33,29 @@ end
 
 stylized '/logo/', '/custom-highlight/', '/style/', false
 
-stylized '/pt/docs/*', 'documentacao'
+stylized '/pt/docs/*', '/pt/documentacao'
 
-stylized '/pt/cookbook/*', 'cookbook'
+stylized '/pt/cookbook/*', '/pt/cookbook'
 
-stylized '/*', 'default'
+stylized '/en/docs/*', '/en/documentation'
 
-define_layout '/pt/docs/*', 'documentacao'
+stylized '/en/cookbook/*', '/en/cookbook'
 
-define_layout '/pt/cookbook/*', 'cookbook'
+stylized '/en/*', '/en/default'
 
-define_layout '/*', 'default'
+stylized '/*', '/pt/default'
+
+define_layout '/pt/docs/*', '/pt/documentacao'
+
+define_layout '/pt/cookbook/*', '/pt/cookbook'
+
+define_layout '/en/docs/*', '/en/documentation'
+
+define_layout '/en/cookbook/*', '/en/cookbook'
+
+define_layout '/en/*', '/en/default'
+
+define_layout '/*', '/pt/default'
 
 css_routes '/style', '/custom-highlight'
 

@@ -1,17 +1,9 @@
 <!DOCTYPE HTML>
 <html lang="en">
-
   <%= render 'head' %>
-
   <body>
-    <div id="main" class="highlight">
-      <div id="header">
-        <a id="logo" href="/en"><img src="/logo.png"></a>
-        <span>Framework Java MVC</span>
-      </div>
-      <%= yield %>
-    </div>
-    <div id="sidebar">
+    <%= render 'header' %>
+    <nav class="main-nav">
       <ul>
         <li><a href="/en/docs/one-minute-guide">One minute guide</a></li>
         <li><a href="/en/docs/ten-minute-guide">Ten minute guide</a></li>
@@ -27,6 +19,9 @@
         <li><a href="/en/docs/migrating-vraptor3-project">Migrating from VRaptor 3</a></li>
         <li><a href="/en/docs/how-to-contribute">How to contribute to VRaptor</a></li>
       </ul>
-    </div>
+    </nav>
+    <main>
+      <%= yield %>
+    </main>
   </body>
 </html>

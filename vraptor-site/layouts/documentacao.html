@@ -1,17 +1,9 @@
 <!DOCTYPE HTML>
-<html lang="en">
-
+<html lang="pt">
   <%= render 'head' %>
-
   <body>
-    <div id="main" class="highlight">
-      <div id="header">
-        <a id="logo" href="/pt"><img src="/logo.png"></a>
-        <span>Framework Java MVC</span>
-      </div>
-      <%= yield %>
-    </div>
-    <div id="sidebar">
+    <%= render 'header' %>
+    <nav class="main-nav">
       <ul>
         <li><a href="/pt/docs/guia-de-1-minuto">Guia inicial de 1 minuto</a></li>
         <li><a href="/pt/docs/guia-de-10-minutos">Guia inicial de 10 minutos</a></li>
@@ -28,6 +20,9 @@
         <li><a href="/pt/docs/migrando-um-projeto-com-vraptor3">Migrando um projeto com VRaptor 3</a></li>
         <li><a href="/pt/docs/contribuindo-com-o-vraptor">Contribuindo com o VRaptor</a></li>
       </ul>
-    </div>
+    </nav>
+    <main>
+      <%= yield %>
+    </main>
   </body>
 </html>

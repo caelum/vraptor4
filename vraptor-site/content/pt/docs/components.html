@@ -2,7 +2,7 @@
 title: Componentes
 ---
 
-###O que são componentes?
+#O que são componentes?
 
 Componentes são instâncias de classes que seu projeto precisa para executar tarefas ou armazenar estados em diferentes situações.
 
@@ -36,11 +36,11 @@ Todos os componentes do VRaptor são gerenciados pelo CDI (Context Dependency In
 
 Nos links abaixo você pode obter mais informações sobre o CDI:
 
-* <a href="http://blog.caelum.com.br/use-cdi-no-seu-proximo-projeto-java/">Use CDI no seu próximo projeto Java</a>
-* <a href="http://blog.caelum.com.br/customizando-a-producao-de-dependencias-no-cdi/">Customizando a produção de dependências no CDI</a>
-* <a href="http://blog.caelum.com.br/4-recursos-novos-do-cdi-1-1/">4 recursos novos do CDI 1.1</a>
+- <a href="http://blog.caelum.com.br/use-cdi-no-seu-proximo-projeto-java/">Use CDI no seu próximo projeto Java</a>
+- <a href="http://blog.caelum.com.br/customizando-a-producao-de-dependencias-no-cdi/">Customizando a produção de dependências no CDI</a>
+- <a href="http://blog.caelum.com.br/4-recursos-novos-do-cdi-1-1/">4 recursos novos do CDI 1.1</a>
 
-###Escopos
+##Escopos
 
 Assim como os recursos, os componentes vivem em um escopo específico e seguem as mesmas regras, por padrão pertencendo ao escopo de requisicão, isto é, a cada nova requisição seu componente será novamente instanciado.
 
@@ -64,15 +64,17 @@ public class HibernateControl {
 
 Os escopos implementados são:
 
+~~~
 * @ApplicationScoped - component é um singleton, apenas um por aplicação.
 * @SessionScoped - o componente é o mesmo durante uma http session.
 * @ConversationScoped - a instância do componente é mantida durante uma conversation.
 * @RequestScoped - o componente é o mesmo durante uma requisição.
 * @Dependent - component é instanciado sempre que requisitado.
+~~~
 
-Você pode pesquisar mais sobre os escopos do CDI aqui: http://docs.oracle.com/javaee/7/tutorial/doc/cdi-basic008.htm
+Você pode pesquisar mais sobre os [escopos do CDI aqui](http://docs.oracle.com/javaee/7/tutorial/doc/cdi-basic008.htm).
 
-###Fabricando componentes
+##Fabricando componentes
 
 Muitas vezes você quer receber como dependência da sua classe alguma classe que não é do seu projeto, como por exemplo uma Session do Hibernate ou um EntityManager da JPA.
 
@@ -100,7 +102,7 @@ public class SessionCreator {
 
 Você pode também adicionar os listeners `@PostConstruct`, `@PreDestroy` e `@Disposes` para controlar a criação e destruição dos recursos que você usa. Isso funciona para qualquer componente que você registrar no VRaptor.
 
-###Injeção de dependências
+##Injeção de dependências
 
 O VRaptor utiliza o CDI para controlar o que é necessário para instanciar cada um de seus componentes e recursos. Sendo assim, os dois exemplos anteriores permitem que quaisquer um dos seus recursos ou componentes recebam um `ClienteDao` em seu construtor, por exemplo:
 
@@ -122,7 +124,7 @@ public class ClienteController {
 }
 ~~~ 
 
-### Disparando eventos
+## Disparando eventos
 
 Para disparar eventos você pode usar a anotação `@Observes`, que é usada quando um evento inicia.
 
@@ -139,13 +141,18 @@ public class PrintLog {
 ~~~ 
 
 
-### Sobrescrevendo componentes
+## Sobrescrevendo componentes
 
 A maioria dos comportamentos e convenções do VRaptor são personalizáveis. E a forma de personalizar é bem fácil: criar um componente que estende uma das classes internas do VRaptor e anotá-las com `@Specializes`. Ao fazer isso, o VRaptor vai usar a implementação personalizada ao invés da padrão.
 
-Caso você quiser implementar alguma interface basta você usar a anotação `@Priority(Interceptor.Priority.LIBRARY_BEFORE + 10)`.
+Caso você quiser implementar alguma interface basta você usar a anotação: 
 
-###Mudando a view renderizada por padrão
+~~~
+#!java
+@Priority(Interceptor.Priority.LIBRARY_BEFORE + 10)
+~~~
+
+##Mudando a view renderizada por padrão
 
 Se você precisa mudar a view renderizada por padrão, ou mudar o local em que ela é procurada, basta criar a seguinte classe:
 
@@ -179,7 +186,7 @@ public class CustomPathResolver extends DefaultPathResolver {
 
 Se você precisa mudar mais ainda a convenção basta implementar a interface `PathResolver`.
 
-###Mudando a URI padrão
+##Mudando a URI padrão
 
 Por padrão, a URI para o método `ClientesController.lista()` é `/clientes/lista`, ou seja, `nome_do_controller/nome_do_metodo`. Para sobrescrever essa convenção, basta criar a classe:
 
@@ -200,7 +207,7 @@ public class MeuRoutesParser extends PathAnnotationRoutesParser {
 
 Se você precisa mudar mais ainda a convenção, basta implementar a interface `RoutesParser`.
 
-###Mudando o encoding da sua aplicação
+##Mudando o encoding da sua aplicação
 
 Se você quiser que todas as requisições da sua aplicação sejam de um encoding determinado, para evitar problemas de acentuação por exemplo, você pode colocar o seguinte parâmetro no seu web.xml:
 

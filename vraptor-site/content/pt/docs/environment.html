@@ -2,9 +2,11 @@
 title: Environment
 ---
 
+# Trabalhando com diferentes ambientes
+
 Environment é uma funcionalidade do VRaptor que permite que você pode definir componentes diferentes conforme o ambiente que você está: produção, testes, desenvolvimento, etc.
 
-# Configuração
+## Configuração
 
 Em seu `web.xml`, adicione:
 
@@ -20,7 +22,7 @@ Onde `nome_do_ambiente` é o ambiente atual (`PRODUCTION` ou `DEVELOPMENT`, por 
 
 Ou se preferir, você também pode criar uma variável global do sistema chamada `VRAPTOR_ENVIRONMENT`.
 
-# nome_do_ambiente.properties
+## nome_do_ambiente.properties
 
 Seu nome_do_ambiente.properties deve ser criado em `src/main/resources`. Exemplo (development.properties):
 
@@ -30,19 +32,19 @@ email_de_teste = test.mail@mail.com
 environment.controller = true
 ~~~ 
 
-# Acessando propriedades de ambiente no seu código
+## Acessando propriedades de ambiente no seu código
 
 ~~~ 
 #!java
 import br.com.caelum.vraptor.environment.Environment;
 
 @Controller
-public class myController {
+public class MeuController {
     private final Environment environment;
     private final MailSender sender;
 
     @Inject
-    public myController(Environment environment, MailSender sender) {
+    public MeuController(Environment environment, MailSender sender) {
         this.environment = environment;
         this.sender = sender;
     }
@@ -57,7 +59,7 @@ public class myController {
 }
 ~~~ 
 
-# Acessando propriedades de ambiente no jsp
+## Acessando propriedades de ambiente no jsp
 
 ~~~ 
 #!xml
@@ -68,7 +70,7 @@ public class myController {
 Enviando e-mail para: ${environment.get('email_de_teste')}
 ~~~ 
         
-# Acessando arquivos de configuração de acordo com o environment
+## Acessando arquivos de configuração de acordo com o environment
 
 Se você precisa acessar um arquivo de configuração diferente para suas bibliotecas,
 de acordo com seu ambiente, você também pode utilizar o Environemnt.
@@ -85,7 +87,7 @@ cfg.configure(environment.getResource("/hibernate.cfg.xml"));
 Para manter compatibilidade com quem não utilizava o environment, caso o arquivo não seja encontrado
 no diretório com o nome do ambiente, ele será carregado no diretório root (do classpath).
 
-# Injetando o valor de suas configuração programaticamente
+## Injetando o valor de suas configuração programaticamente
 
 Você também consegue injetar suas configurações programaticamente usando o `@Property`, por exemplo:
 
@@ -94,7 +96,7 @@ Você também consegue injetar suas configurações programaticamente usando o `
 import br.com.caelum.vraptor.environment.Environment;
 
 @Controller
-public class myController {
+public class MeuController {
 
     @Inject @Property("email") private String email;
 
@@ -113,7 +115,7 @@ Outra facilidade, é que se o nome da chave for o mesmo nome do field injetado, 
 import br.com.caelum.vraptor.environment.Environment;
 
 @Controller
-public class myController {
+public class MeuController {
 
     @Inject @Property private String email;
 

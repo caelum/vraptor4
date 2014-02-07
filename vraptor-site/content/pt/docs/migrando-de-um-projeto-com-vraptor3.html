@@ -2,7 +2,9 @@
 title: Migrando de um projeto com VRaptor 3
 ---
 
-###Java 7 e CDI 1.1
+# Migrando de um projeto com VRaptor 3
+
+##Java 7 e CDI 1.1
 
 Para utilizar o VRaptor é necessário possuir o JDK 7 e um Application Server ou Servlet Container que possua suporte ao Servlet 3.1.
 
@@ -17,17 +19,17 @@ Se você estiver usando um Servlet Container como o Jetty ou o Tomcat, você pre
 
 **Atenção**: ao escolher um Application Server, verifique se a versão é compatível com o Java EE 7 Full ou Web Profile. Atualmente o Glassfish 4 e Wildfly 8 possuem suporte ao Java EE 7.
 
-### Beans.xml
+## Beans.xml
 
 Como agora o VRaptor usa o CDI como container, para ele conseguir escanear suas classes você precisa adicionar o arquivo `beans.xml` dentro da pasta `META-INF/beans.xml` de seu projeto. Se você usa maven, adicione em `/src/main/resources/META-INF`. Você pode usar como exemplo o arquivo [beans.xml do nosso blank-project](https://github.com/caelum/vraptor4/blob/master/vraptor-blank-project/src/main/resources/META-INF/beans.xml).
 
-###Containers IoC
+##Containers IoC
 
 A maior alteração do VRaptor é de usar o CDI (Context Dependency Injection). Com isso não é necessário mais usar os providers anteriores (Guice, Pico e Spring).
 
 O CDI **exige** que cada classe possua o construtor padrão (sem argumentos). Sendo assim você deverá adicionar o construtor padrão em todos os componentes. E o construtor onde serão injetados os componentes deve possuir a anotação `@Inject`.
 
-###Eventos de inicialização
+##Eventos de inicialização
 
 No VRaptor 3, quando você anotava um componente com `@ApplicationScoped`, o código era executado na inicialização do sistema. Com o uso do CDI, agora é necessário usar a anotação `@Observes`:
 
@@ -42,17 +44,17 @@ public class PrintLog {
 }
 ~~~ 
 
-###Alterações em assinaturas de métodos e classes
+##Alterações em assinaturas de métodos e classes
 
 Muitas classes internas foram atualizadas ou removidas. Se você sobrescreveu algum comportamento interno do VRaptor, verifique em nossa _api docs_ as novas assinaturas.
 
 Todos os métodos anotados com `@Deprecated` do VRaptor 3 foram removidos.
 
-###OGNL
+##OGNL
 
 Se você usava o OGNL, ele não é mais suportado no VRaptor 4. Atualmente é suportado apenas o IOGI, que possui todas as funcionalidades do OGNL, além de suporte a `Set` e objetos imutáveis.
 
-###Validação
+##Validação
 
 A validação fluente foi removida, e agora você pode usar o Bean Validation. Para compatibilidade você pode usar os métodos `Validator.check(boolean, Message)` para efetuar validações mais simples.
 
@@ -60,7 +62,7 @@ A interface `Validator` foi alterada de pacote, e agora está localizada em `br.
 
 As classes filhas de `Message` foram alteradas. A classe `ValidationMessage` agora é `SimpleMessage` e o construtor foi alterado para `SimpleMessage(String param, String message, Object... params)`, mantendo assim compatibilidade com as demais implementações.
 
-###Converters
+##Converters
 
 Os converters localizados agora fazem parte do pacote padrão, e são registrados automaticamente. Portanto se você tiver a declaração do pacote `br.com.caelum.vraptor.converter.l10` no seu web.xml, remova-o.
 
@@ -68,7 +70,7 @@ Os converters sofreram alterações, e agora não recebem mais o objeto `Resourc
 
 A interface Converter foi alterada de pacote, e agora está localizada em br.com.caelum.vraptor.converter.Converter.
 
-###Remoção dos escopos
+##Remoção dos escopos
 
 Nós removemos todos os antigos scopos do core do vraptor. No lugar deles, você pode usar os seguintes escopos definidos no pacote `javax.enterprise.context`:
 
@@ -83,19 +85,19 @@ Nós removemos todos os antigos scopos do core do vraptor. No lugar deles, você
 
 Uma alternativa simples para migrar os escopos é fazer um replace de `br.com.caelum.vraptor.ioc` para `javax.enterprise.context` nos imports.
 
-###Fabricando de componentes
+##Fabricando de componentes
 
 A interface `ComponentFactory` não existe mais. Desta forma você deve usar o `@Produces` do CDI. Veja mais no capítulo de componentes.
 
-###Sobrescrevendo componentes
+##Sobrescrevendo componentes
 
 No VRaptor3 para sobrescrever os componentes era necessario apenas implementar ou estender a interface ou classe do componente. Por limitações no CDI é necessário agora anotar a sua classe com `@Specializes`.
 
-###@Resource substituído pelo @Controller
+##@Resource substituído pelo @Controller
 
 A anotação `@Resource` foi substituída pela anotação `@Controller` e possui o mesmo efeito.
 
-###Não existe mais a interface Localization
+##Não existe mais a interface Localization
 
 No lugar de receber a `Localization` e chamar os métodos `.getLocale()` ou `.getBundle()`, agora você pode injetar diretamente esses elementos, algo como:
 
@@ -122,16 +124,16 @@ Você vai chamar diretamente o `getString` do bundle:
 bundle.getString("key");
 ~~~ 
 
-###LinkTo
+##LinkTo
 
 A funcionalidade LinkTo foi atualizada e agora suporta o uso de métodos nas chamadas. Sendo assim você deve converter todas as chamadas de `${linkTo[Controller].metodo[0, 1]}` para `${linkTo[Controller].metodo(0, 1)}`. Veja mais informações no capítulo sobre Views.
 
 Pra facilitar a migração deixamos um `.sh` [aqui](https://gist.github.com/rponte/7546377), que você pode baixar e executar um sed de atualização da sintaxe (para linux e mac, em breve faremos algo pra windows).
 
-###Serialização e deserialização
+##Serialização e deserialização
 
 Para seguir com a especificação do HTML5, todas as datas usadas na serialização e deserialização usam o formato ISO8601.
 
-###Restfulie
+##Restfulie
 
 Não é suportado mais no core do VRaptor, mas sim como plugin.

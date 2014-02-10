@@ -2,7 +2,7 @@
 title: Download e Upload
 ---
 
-###Exemplo de 1 minuto: download
+#Exemplo de 1 minuto: download
 
 O exemplo a seguir mostra como disponibilizar o download para seu cliente.
 Note novamente a simplicidade na implementação:
@@ -18,7 +18,7 @@ public class PerfilController {
 }
 ~~~ 
 
-###Adicionando mais informações no download
+##Adicionando mais informações no download
 
 Se você quiser adicionar mais informações ao download você pode retornar um `FileDownload`:
 
@@ -38,11 +38,11 @@ public class PerfilController {
 
 Você pode também usar a implementação `InputStreamDownload` para trabalhar diretamente com Streams ou `ByteArrayDownload` para array de bytes.
 
-###Upload
+##Upload
 
 Para ativar o suporte a upload é necessário adicionar as bibliotecas `commons-upload` e `commons-io` em seu classpath.
 
-###Exemplo de 1 minuto: upload
+#Exemplo de 1 minuto: upload
 
 O primeiro exemplo será baseado na funcionalidade de upload multipart.
 
@@ -61,7 +61,7 @@ public class PerfilController {
 }
 ~~~ 
 
-###Mais sobre Upload
+##Mais sobre Upload
 
 O UploadedFile retorna o arquivo como um `InputStream`. Se você quiser copiar para um arquivo no disco facilmente, basta usar a classe `Files` do Java 7:
 
@@ -76,7 +76,7 @@ public void atualizaFoto(Perfil perfil, UploadedFile foto) {
 }
 ~~~ 
 
-###Sobrescrevendo as configurações de upload
+##Sobrescrevendo as configurações de upload
 
 Você pode alterar as configurações de upload sobrescrevendo a classe `MultipartConfig`. No exemplo abaixo é alterado o tamanho máximo de upload.
 
@@ -92,7 +92,7 @@ public class CustomMultipartConfig extends DefaultMultipartConfig {
 }
 ~~~ 
 
-###Alterando o formulário de envio
+##Alterando o formulário de envio
 
 Para que o browser possa fazer o upload corretamente, você precisa adicionar o atributo enctype para multipart/form-data:
 
@@ -101,6 +101,6 @@ Para que o browser possa fazer o upload corretamente, você precisa adicionar o 
 <form action="minha-action" method="post" enctype="multipart/form-data">
 ~~~ 
 
-###Validando o upload
+##Validando o upload
 
 Quando o tamanho máximo para upload de arquivo exceder o valor configurado, o VRaptor adiciona uma mensagem no objeto `Validator`.

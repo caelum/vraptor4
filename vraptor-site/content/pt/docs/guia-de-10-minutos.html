@@ -2,9 +2,9 @@
 title: O guia inicial de 10 minutos
 ---
 
-##Começando o projeto: uma loja virtual
+#Começando o projeto: uma loja virtual
 
-###Um cadastro de produtos
+##Um cadastro de produtos
 
 Para começar o sistema, vamos começar com cadastro de produtos. Precisamos de uma classe que vai representar o produto, e vamos usá-la para guardar produtos no banco, usando o JPA/Hibernate:
 
@@ -68,7 +68,7 @@ O método `lista` retorna uma lista de produtos, mas como acessá-la no JSP? No 
 
 A convenção para o nome dos atributos exportados é bastante intuitiva: se for uma collection, como o caso do método acima, o atributo será `List`, `produtoList` no caso; se for uma classe qualquer vai ser o nome da classe com a primeira letra minúscula. Se o método retorna `Produto`, o atributo exportado será `produto`. Veremos em outro capítulo que podemos expor mais de um objeto sem usar o retorno, por meio do `Result`, onde podemos dar nome à variável exposta.
 
-###Criando o ProdutoDao: Injeção de Dependências (DI)
+##Criando o ProdutoDao: Injeção de Dependências (DI)
 
 O VRaptor usa fortemente o conceito de Injeção de Dependências (DI) e Inversão de Controle (IoC). A ideia é que você não precise criar ou buscar as dependências da sua classe, você simplesmente as recebe e o VRaptor se encarrega de criá-las pra você. Estamos retornando uma lista vazia no nosso método `lista`. Seria muito mais interessante retornar uma lista de verdade, por exemplo todas os produtos cadastrados no sistema. Para isso vamos criar um DAO de produtos, para fazer a listagem:
 
@@ -121,7 +121,7 @@ public class ProdutosController {
 }
 ~~~
 
-###Formulário de adição: redirecionamento
+##Formulário de adição: redirecionamento
 
 Temos uma listagem de produtos, mas ainda não temos como cadastrá-los. Vamos então criar um formulário de adição de produtos. Para não ter que acessar o JSP diretamente, vamos criar uma lógica vazia que só redireciona para o JSP:
 
@@ -159,7 +159,7 @@ public class ProdutosController {
 }
 ~~~
 
-Repare nos nomes dos nossos inputs: `produto.nome`, `produto.descricao` e `produto.preco`. Se recebermos um `Produto` no método adiciona com o nome `produto`, o VRaptor vai popular os seus campos `nome`, `descricao` e `preco`, usando os seus setters no `Produto`, com os valores digitados nos inputs. Inclusive o campo `preco`, vai ser convertido para `Double` antes de ser setado no produto. Veja mais sobre isso no capítulo de [converters](https://github.com/caelum/vraptor4/wiki/05---Conversores).
+Repare nos nomes dos nossos inputs: `produto.nome`, `produto.descricao` e `produto.preco`. Se recebermos um `Produto` no método adiciona com o nome `produto`, o VRaptor vai popular os seus campos `nome`, `descricao` e `preco`, usando os seus setters no `Produto`, com os valores digitados nos inputs. Inclusive o campo `preco`, vai ser convertido para `Double` antes de ser setado no produto. Veja mais sobre isso no capítulo de [converters](/pt/docs/conversores).
 
 Então, usando os nomes corretamente nos inputs do form, basta criar seu método adiciona:
 
@@ -208,11 +208,11 @@ public void adiciona(Produto produto) {
 }
 ~~~
 
-Veja mais informações sobre o `Result` no capítulo [Views e Ajax](https://github.com/caelum/vraptor4/wiki/08-Trabalhando-com-a-View).
+Veja mais informações sobre o `Result` no capítulo [Views e Ajax](/pt/docs/trabalhando-com-a-view).
 
-###Validação
+##Validação
 
-Veja mais informações sobre o `Validator` no capítulo de [Validações](https://github.com/caelum/vraptor4/wiki/06---Valida%C3%A7%C3%A3o).
+Veja mais informações sobre o `Validator` no capítulo de [Validações](/pt/docs/validacao).
 
 Com o que foi visto até agora, você já consegue fazer 90% da sua aplicação! As próximas sessões desse tutorial mostram a solução para alguns problemas frequentes que estão nos outros 10% da sua aplicação.
 
@@ -237,13 +237,13 @@ public class ProdutoDao {
 
 O VRaptor precisa saber como criar esse `EntityManager`, e eu não posso simplesmente colocar um `@RequestScoped` na `EntityManager` pois é uma classe da JPA. Para isso existe precisamos criar um `@Produces`.
 
-Veja mais informações de como fazer isso no capítulo de [Componentes](https://github.com/caelum/vraptor4/wiki/04-Componentes). Você pode, ainda, usar o plugin para JPA que já existe para o VRaptor. Veja mais sobre isso no capítulo de [Plugins](https://github.com/caelum/vraptor4/wiki/10-Plugins).
+Veja mais informações de como fazer isso no capítulo de [Componentes](/pt/docs/componentes). Você pode, ainda, usar o plugin para JPA que já existe para o VRaptor. Veja mais sobre isso no capítulo de [Plugins](/pt/docs/plugins).
 
-###Controlando transações: Interceptors
+##Controlando transações: Interceptors
 
-Muitas vezes, queremos interceptar todas as requisições (ou uma parte delas) e executar alguma lógica, como acontece com o controle de transações. Para isso, existem os Interceptors no VRaptor. Saiba mais sobre eles no capítulo de [Interceptors](https://github.com/caelum/vraptor4/wiki/07--interceptadores-(todo)).
+Muitas vezes, queremos interceptar todas as requisições (ou uma parte delas) e executar alguma lógica, como acontece com o controle de transações. Para isso, existem os Interceptors no VRaptor. Saiba mais sobre eles no capítulo de [Interceptors](/pt/docs/interceptadores).
 
-###Carrinho de compras: Componentes na sessão
+##Carrinho de compras: Componentes na sessão
 
 Se quisermos criar um carrinho de compras no nosso sistema, precisamos de alguma forma manter os itens do carrinho na sessão do usuário. Para fazer isso, podemos criar um componente que está no escopo de sessão, ou seja, ele vai ser único na sessão do usuário. Para isso, basta criar um componente anotado com `@SessionScoped`:
 
@@ -287,7 +287,7 @@ public class CarrinhoController {
 
 Além do escopo de sessão existe o escopo de Aplicação com a anotação `@ApplicationScoped`. Os componentes anotados com `@ApplicationScoped` serão criados apenas uma vez em toda a aplicação.
 
-###Um pouco de REST
+##Um pouco de REST
 
 Seguindo a idéia REST de que URIs devem identificar recursos na rede para então podermos fazer valer as diversas vantagens estruturais que o protocolo HTTP nos proporciona, note o quão simples fica mapear os diversos métodos HTTP para a mesma URI, e com isso invocar diferentes métodos. Por exemplo, queremos usar as seguintes URIs para o cadastro de produtos:
 
@@ -326,9 +326,9 @@ public class ProdutosController {
 
 Note que podemos receber parâmetros nas URIs. Por exemplo, se chamarmos a URI `GET /produtos/5`, o método `visualiza` será invocado, e o parâmetro `produto` vai ter o `id` populado com `5`.
 
-Mais informações sobre isso no capítulo de [Resources-REST](https://github.com/caelum/vraptor4/wiki/03-Controllers-REST).
+Mais informações sobre isso no capítulo de [Resources-REST](/pt/docs/controllers-rest).
 
-###Arquivo de mensagens
+##Arquivo de mensagens
 
 Internacionalização (i18n) é um recurso poderoso, e que está presente em quase todos os frameworks Web hoje em dia. E não é diferente no VRaptor. Com i18n podemos fazer com que nossa aplicação suporte várias línguas (francês, português, espanhol, inglês etc) de uma maneira que não nos cause muito esforço, bastando apenas fazermos a tradução das mensagens da nossa aplicação.
 

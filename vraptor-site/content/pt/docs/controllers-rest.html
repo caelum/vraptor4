@@ -2,7 +2,7 @@
 title: Controllers REST
 ---
 
-##O que são Controllers?
+#O que são Controllers?
 
 Controller são o que poderíamos pensar como recursos a serem disponibilizados para acesso pelos nossos clientes. No caso de uma aplicação Web baseada no VRaptor, um recurso deve ser anotado com a anotação `@Controller`. Assim que o programador insere tal anotação em seu código, todos os métodos públicos desse recurso se tornam acessíveis através de chamadas do tipo GET ou POST a URIs específicas.
 
@@ -35,7 +35,7 @@ public class ClienteController {
 }
 ~~~ 
 
-###Parâmetros dos métodos
+##Parâmetros dos métodos
 
 Você pode receber parâmetros nos métodos dos seus controllers, e se o objeto usar a convenção de java beans (getters e setters para os atributos da classe), você pode usar pontos para navegar entre os atributos. Por exemplo, no método:
 
@@ -67,17 +67,17 @@ cliente.dependentes[0].nome=Cicrano #se usar o mesmo índice, vai ser setado no 
 clientes[1].id=23 #funciona se você receber uma lista de clientes no método
 ~~~ 
 
-###Reflection no nome dos parâmetros
+##Reflection no nome dos parâmetros
 
 Infelizmente, o Java não realiza reflection em cima de parâmetros, pois esses dados não ficam disponíveis em bytecode (a não ser se compilado em debug mode, porém é algo opcional). Isso faz com que a maioria dos frameworks que precisem desse tipo de informção criem uma anotação própria para isso, o que polui muito o código (exemplo no JAX-WS, onde é comum encontrar um método como o acima com a assinatura `void add(@WebParam(name="cliente") Cliente cliente)`.
 
 O VRaptor tira proveito do framework <a href="http://paranamer.codehaus.org">Paranamer</a>, que consegue tirar essa informação por meio da pré compilação ou dos dados de debug, evitando criar mais uma anotação. Alguns dos desenvolvedores do VRaptor também participam no desenvolvimento do Paranamer.
 
-###Escopos
+##Escopos
 
 Por vezes você deseja compartilhar um componente entre todos os usuários, entre todas as requisições de um mesmo usuário ou a cada requisição de um usuário. Para definir em que escopo o seu componente vive, basta utilizar as anotações `@ApplicationScoped`, `@SessionScoped`, `@RequestScoped`, `@Dependent` e `@Conversation`. Caso nenhuma anotação seja utilizada, o VRaptor assume que seu componente ficará no escopo de request, isto é, você terá um novo componente a cada nova requisição.
 
-###@Path
+##@Path
 
 A anotação `@Path` permite que você customize as URIs de acesso a seus métodos. O uso básico dessa anotação é feito por meio de uma URI fixa. O exemplo a seguir mostra a customização de uma URI para um método, que somente receberá requisições do tipo POST na URI `/cliente`:
 
@@ -113,7 +113,7 @@ public class ClienteController {
 }
 ~~~
 
-###Http Methods
+##Http Methods
 
 O ideal é definir uma URI específica para diversos métodos HTTP diferentes, como GET, POST, PUT etc.
 Para atingir esse objetivo, utilizamos as anotações `@Get`, `@Post`, `@Delete`, etc que também permitem configurar uma URI diferente da URI padrão, da mesma forma que a anotação `@Path`. O exemplo a seguir altera os padrões de URI do `ClienteController` para utilizar duas URIs distintas, com diversos métodos HTTP:
@@ -180,7 +180,7 @@ E, note que para permitir a remoção pelo método DELETE, temos que usar o par�
 </form>
 ~~~
 
-###Paths com expressões regulares
+##Paths com expressões regulares
 
 Você pode restringir o valor dos parâmetros da sua URI com expressões regulares, dessa maneira:
 
@@ -201,7 +201,7 @@ Tudo que estiver depois do `:` será tratado como uma regex, e a URI só vai cas
 /cor/branco => não casa
 ~~~
 
-###Path com injeção de variáveis
+##Path com injeção de variáveis
 
 Em diversos casos, desejamos que a URI que identifica nosso recurso tenha como parte de seu valor, por exemplo, o identificador único do nosso recurso.
 
@@ -238,7 +238,7 @@ public class ClienteController {
 }
 ~~~
 
-###Vários paths para a mesma lógica
+##Vários paths para a mesma lógica
 
 Você pode setar mais de um path para a mesma lógica fazendo:
 
@@ -255,7 +255,7 @@ public class ClienteController {
 }
 ~~~
 
-###Paths com *
+##Paths com *
 
 Você também pode utilizar o `*` como método de seleção para a sua URI. O exemplo a seguir ignora qualquer coisa após a palavra `foto/` :
 
@@ -305,7 +305,7 @@ public class ClienteController {
 }
 ~~~
 
-###Definindo prioridades para seus paths
+##Definindo prioridades para seus paths
 
 É possível que algumas das nossas URIs possam ser tratada por mais de um método da classe:
 
@@ -349,7 +349,7 @@ public class PostController {
 
 Assim, o path `/post/atual` vai ser testado antes do `/post/{post.autor}`, e o VRaptor vai fazer o que a gente gostaria que ele fizesse. Você não precisa definir prioridades se tivermos as uris: `/post/{post.id}` e `/post/atual`, pois na `/post/{post.id}` o vraptor só vai aceitar números.
 
-###Paths com headers
+##Paths com headers
 
 Você também pode injetar HTTP-Headers na sua lógica usando a anotação `HeaderParam`:
 

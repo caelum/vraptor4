@@ -42,7 +42,7 @@ a {
 }
 
 header {
-  margin-bottom: 40px;
+  margin-bottom: 20px;
 }
 
 main {
@@ -115,16 +115,16 @@ pre {
   border-radius: 3px;
 }
 
-ul li:hover,
-ul li:focus,
-ul li a:hover,
-ul li a:focus {
+.main-nav ul li:hover,
+.main-nav ul li:focus,
+.main-nav ul li a:hover,
+.main-nav ul li a:focus {
   border-color: #eeeeee #eeeeee #dddddd;
   background-color: #eeeeee;
   text-decoration: none;
 }
 
-ul li a {
+.main-nav ul li a {
   border: 1px solid #ddd;
   border-bottom: 0;
   line-height: 40px;
@@ -132,7 +132,7 @@ ul li a {
   display: inline-block;
 }
 
-ul li:last-child a {
+.main-nav ul li:last-child a {
   border-bottom: 1px solid #ddd;
 }
 

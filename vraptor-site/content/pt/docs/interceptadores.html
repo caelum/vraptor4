@@ -2,15 +2,17 @@
 title: Interceptadores
 ---
 
+#Quando interceptar?
+
 O uso de interceptadores é feito para executar alguma tarefa antes e/ou depois de uma lógica de negócios, sendo os usos mais comuns a validação de dados, controle de conexão e transação do banco, log e criptografia/compactação de dados.
 
-###Como interceptar?
+##Como interceptar?
 
 No VRaptor utilizamos uma abordagem onde o interceptador define quem será interceptado, muito mais próxima a abordagens de interceptação que aparecem em sistemas baseados em <strong>AOP</strong> (Programação Orientada a Aspectos).
 
 Portanto, para interceptar uma requisição, basta anotar a classe com a anotação `@Intercepts`. Assim como qualquer outro componente, com o uso das anotações de escopo você pode dizer em que escopo o interceptador será armazenado.
 
-###Exemplo simples
+##Exemplo simples
 
 A classe a seguir mostra um exemplo de como interceptar todas as requisições em um escopo de requisição e simplesmente mostrar na saída do console o que está sendo invocado. Lembre-se de que o interceptador é um componente como qualquer outro e pode receber quaisquer dependências por meio de Injeção de Dependências.
 
@@ -53,7 +55,7 @@ public class Log {
 
 Repare que não é mais obrigatório implementar a interface `Interceptor`, basta criar a classe e usar as anotações acima.
 
-###Definindo quando interceptar
+##Definindo quando interceptar
 
 No exemplo acima todas as requisições são interceptadas. Podemos então definir que iremos interceptar apenas os métodos que possuem uma anotação chamada `@Audit`. Para isso basta implementar um método que retorne um `boolean`com a condição necessária e anotá-lo com `@Accepts`.
 
@@ -79,7 +81,7 @@ public class AuditInterceptor {
 }
 ~~~ 
 
-###Criando o seu Accepts customizado
+##Criando o seu Accepts customizado
 
 Logo acima usamos o exemplo do Accepts customizado. Este é um que já vem pronto VRaptor. Mas nada impede de você criar o seu para as suas necessidades. O fluxo é bem parecido com o de criação de uma validação customizada para a BeanValidation. Primeiro você deve criar sua Annotation.
 
@@ -119,7 +121,7 @@ public class WithAnnotationAcceptor implements AcceptsValidator<AcceptsWithAnnot
 Esta classe só precisa implemetar a interface `AcceptsValidator<T>` onde T é o tipo da sua Annotation customizada. Dessa maneira você pode criar as suas condições customizadas e disponibilizá-las para todos os projetos que você precisa.
 
 
-###Como garantir ordem: after e before
+##Como garantir ordem: after e before
 
 Se é preciso garantir a ordem de execução de um conjunto de interceptors, você pode usar os atributos `after` e `before` da anotação `@Intercepts`. Suponha que o `PrimeiroInterceptor` tenha que rodar antes do `SegundoInterceptor`, então você pode configurar isso tanto com:
 
@@ -154,27 +156,24 @@ public class TerceiroInterceptor {
 
 O VRaptor lançará uma exception se existir um ciclo na ordem dos interceptors, então tenha cuidado.
 
-###Interagindo com os interceptors do VRaptor
+##Interagindo com os interceptors do VRaptor
 
 O VRaptor possui sua própria sequência de interceptor, e você pode definir a ordem dos seus interceptors baseados na do VRaptor.
 
 Aqui estão os principais interceptors do VRaptor e o que eles produzem:
 
-* `ControllerLookupInterceptor` - o primeiro interceptor. Procura o ControllerMethod correto, que será passado como argumento nos métodos `accepts()` e `intercept()`. É o after padrão.
+* `ExceptionHandlerInterceptor` - intercepta todas as requisições para tratar as exceções não capturadas
 
-* `ParametersInstantiatorInterceptor` - instancia os parâmetros do método baseado no request. Os parâmetros estarão disponíveis via `MethodInfo#getParameters()`.
-
-* `InstantiateInterceptor` - instancia o controller, que será passado como último parâmetro do método `intercept()`.
-
-* `ExecuteMethodInterceptor` - executa o `ControllerMethod`. O retorno do método estará disponível via `MethodInfo#getResult()`. É o before padrão.
-
-* `OutjectResult` - inclui o retorno do `ResourceMethod` na view.
+* `FlashInterceptor` - mantém por mais uma request os parâmetros da request
 
 * `ForwardToDefaultViewInterceptor` - redireciona (forward) para a jsp padrão se nenhuma outra view foi usada.
 
-Se você precisa executar um interceptor após o `ExecuteMethodInterceptor`, você <strong>deve</strong> setar o atributo `before`, para evitar ciclos. O `ForwardToDefaultViewInterceptor` é um bom valor, já que nenhum outro interceptor pode rodar depois dele:
+
+Se você precisa executar um interceptor antes ou depois de algum interceptor do VRaptor, basta utilizar os atributos `after` e `before` passando a classe do interceptor como valor. Algo como:
 
 ~~~ 
 #!java
-@Intercepts(after=ExecuteMethodInterceptor.class, before=ForwardToDefaultViewInterceptor.class)
+@Intercepts(
+    after=ExceptionHandlerInterceptor.class, 
+    before=ForwardToDefaultViewInterceptor.class)
 ~~~ 

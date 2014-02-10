@@ -2,6 +2,8 @@
 title: Dependências e pré requisitos
 ---
 
+#Dependências e pré requisitos
+
 O VRaptor 4 depende do JDK 1.7 e do CDI 1.1, portanto só funcionará nos servidores que suportem essa versão do CDI.
 Os servidores já testados e suportados são:
 - Glassfish 4
@@ -16,7 +18,7 @@ Os servidores já testados e suportados são:
 allow-non-standard-wrappers="true"
 ~~~ 
 
-### Maven
+## Maven
 
 O VRaptor 4 usa como padrão o Maven para gerenciar as dependências. Com isso basta você adicionar o artefato do vraptor como dependência, e o Maven irá se encarregar de fazer o download de todas as dependências.
 
@@ -42,7 +44,7 @@ src/test/resources    arquivos de config. para testes      - ignorado -
 
 Se você não quiser usar o Maven, basta criar um projeto em branco na sua IDE preferida e adicionar o jar do VRaptor com as dependências.
 
-### Logging
+## Logging
 
 Utilizamos o SLF4J (Simple Logging Facade for Java) para imprimir os logs dos eventos internos. SLF4J pode direcionar o logging para vários frameworks de logging como NOP, Simple, log4j e JDK Logging. Para configurar o logging você precisa adicionar no seu classpath o jar `slf4j-api.jar` juntamente com o jar de binding que você escolher. Veja mais sobre o assunto na <a href="http://www.slf4j.org/manual.html">documentação do SLF4J</a>.
 
@@ -77,7 +79,7 @@ Incluir um arquivo de configuração chamado `log4j.xml` na pasta de `src/main/r
 </log4j:configuration>
 ~~~ 
 
-### XStream e Gson
+## XStream e Gson
 
 São utililizadas para serialização e deserialização XML e JSON respectivamente. Ambas são opcionais. Ou seja, se você não usar os recursos de serialização e deserialização, você pode removê-los do classpath.
 
@@ -103,19 +105,19 @@ E para o Gson
 </dependency>
 ~~~ 
 
-### Bean Validation
+## Bean Validation
 
 Necessário para utilizar a funcionalidade de validação. Você precisará adicionar a API `validation-api` e alguma implementação, como por exemplo, o <a href="http://www.hibernate.org/subprojects/validator.html">Hibernate Validator</a> ou o <a href="https://bval.apache.org/">Apache BVal</a>.
 
 Se você usa um servidor de aplicações não é necessário adicionar a dependência do Bean Validation, pois já está incluído no Java EE 7.
 
-### Paranamer
+## Paranamer
 
 Infelizmente, o Java não realiza reflection de parâmetros em métodos e construtores, pois esses dados não ficam disponíveis em bytecode (a não ser se compilado em **debug mode**, porém é algo opcional). Isso faz com que a maioria dos frameworks que precisem desse tipo de informação criem uma anotação própria para isso, o que polui muito o código (exemplo no JAX-WS, onde é comum encontrar um método como o acima com a assinatura `void add(@WebParam(name="cliente") Cliente cliente)`. 
 
 O VRaptor tira proveito do framework <a href="http://paranamer.codehaus.org/">Paranamer</a>, que consegue tirar essa informação por meio da pré compilação ou dos dados de debug, evitando criar mais uma anotação. Alguns dos desenvolvedores do VRaptor também participam no desenvolvimento do **Paranamer**.
 
-### Commons-fileupload
+## Commons-fileupload
 
 Dependência opcional utilizada apenas se sua aplicação possui funcionalidade de upload de arquivos. Para adicionar o `commons-fileupload` é necessário adicionar também o `commons-io` no classpath.
 

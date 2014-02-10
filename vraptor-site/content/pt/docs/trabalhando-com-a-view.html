@@ -2,7 +2,7 @@
 title: Trabalhando com a View
 ---
 
-###Compartilhando objetos com a view
+#Compartilhando objetos com a view
 
 Para registrar objetos a serem acessados na view, usamos o método include:
 
@@ -36,7 +36,7 @@ class ClientController {
 
 Nesse caso, a primeira invocação registra a chave `string` e a segunda, a chave `cliente`. Você pode alterar o comportamento de convenção de chaves no seu próprio `TypeNameExtractor`.
 
-###Custom PathResolver
+##Custom PathResolver
 
 Por padrão, para renderizar suas views, o VRaptor segue a convenção:
 
@@ -67,7 +67,7 @@ public class FreemarkerPathResolver extends DefaultPathResolver {
 
 Desse jeito, a lógica irá renderizar a view `/WEB-INF/freemarker/clients/list.ftl`. Se, ainda assim, isso não for o suficiente, você pode implementar a interface `PathResolver` e fazer qualquer convenção que você queira, não esquecendo de anotar a classe com `@Specializes`.
 
-###View
+##View
 
 Se você quiser mudar a view de alguma lógica específica, você pode usar o objeto `Result`:
 
@@ -89,6 +89,7 @@ public class ClientsController {
 
 Por padrão, existem estes tipos de views implementadas:
 
+~~~
 * Results.logic(), que vai redirecionar para uma outra lógica qualquer do sistema
 * Results.page(), que vai redirecionar diretamente para uma página, podendo ser um JSP, um HTML, ou qualquer URI relativa ao web application dir, ou ao contexto da aplicação.
 * Results.http(), que manda informações do protocolo HTTP como status codes e headers.
@@ -98,11 +99,13 @@ Por padrão, existem estes tipos de views implementadas:
 * Results.xml(), serializa objetos em XML.
 * Results.json(), serializa objetos em JSON.
 * Results.representation(), serializa objetos em um formato determinado pela requisição (parâmetro _format ou header Accept)
+~~~
 
-###Atalhos no Result
+##Atalhos no Result
 
 Alguns redirecionamentos são bastante utilizados, então foram criados atalhos para eles. Os atalhos disponíveis são:
 
+~~~
 * result.forwardTo("/some/uri") ==> result.use(page()).forward("/some/uri");
 * result.redirectTo("/some/uri") ==> result.use(page()).redirect("/some/uri)
 * result.permanentlyRedirectTo("/some/uri") ==> result.use(status()).movedPermanentlyTo("/some/uri");
@@ -112,15 +115,18 @@ Alguns redirecionamentos são bastante utilizados, então foram criados atalhos 
 * result.permanentlyRedirectTo(Controller.class) ==> use(status()).movedPermanentlyTo(Controller.class);
 * result.notFound()  ==> use(status()).notFound()
 * result.nothing()   ==> use(nothing());
+~~~
 
 Além disso, se o redirecionamento é para um método do mesmo Controller, podemos usar:
 
+~~~
 * result.forwardTo(this).list() ==> result.use(logic()).forwardTo(this.getClass()).list();
 * result.redirectTo(this).list() ==> result.use(logic()).redirectTo(this.getClass()).list();
 * result.of(this).list() ==> result.use(page()).of(this.getClass()).list();
 * result.permanentlyRedirectTo(this) ==> use(status()).movedPermanentlyTo(this.getClass());
+~~~
 
-###Redirecionamento e forward
+##Redirecionamento e forward
 
 No VRaptor, podemos tanto realizar um redirect ou um forward do usuário para uma outra lógica ou um JSP. Apesar de serem conceitos da API de Servlets, vale a pena relembrar a diferença: o redirecionamento acontece no lado do cliente, através de códigos HTTP que farão o browser acessar uma nova URL; já o forward acontece no lado do servidor, totalmente transparente para o cliente/browser.
 
@@ -128,7 +134,7 @@ Um bom exemplo de uso do redirect é no chamado 'redirect-after-post'. Por exemp
 
 No caso do forward, um exemplo de uso é quando você possui uma validação e essa validação falhou, geralmente você quer que o usuário continue na mesma tela do formulário com os dados da requisição preenchidos, mas internamente você vai fazer o forward para outra lógica de negócios (a que prepara os dados necessários para o formulário).
 
-###Escopo Flash automático
+##Escopo Flash automático
 
 Se você adicionar objetos no `Result` e fizer um Redirect, esses objetos estarão disponíveis na próxima requisição.
 
@@ -150,13 +156,13 @@ lista.jsp:
 </div>
 ~~~ 
 
-###Accepts e o parâmetro _format
+##Accepts e o parâmetro _format
 
 Muitas vezes, precisamos renderizar formatos diferentes para uma mesma lógica. Por exemplo queremos retornar um JSON, em vez de um HTML. Para fazer isso, podemos definir o Header Accepts da requisição para que aceite o tipo desejado, ou colocar um parâmetro `_format` na requisição.
 
 Se o formato for JSON, a view renderizada por padrão será: `/WEB-INF/jsp/{controller}/{logic}.json.jsp`, ou seja, em geral será renderizada a view: `/WEB-INF/jsp/{controller}/{logic}.{formato}.jsp`. Se o formato for HTML você não precisa colocá-lo no nome do arquivo. O parâmetro `_format` tem prioridade sobre o header Accepts.
 
-###Ajax: construindo na view
+##Ajax: construindo na view
 
 Para devolver um JSON na sua view, basta que sua lógica disponibilize o objeto para a view, e dentro da view você forme o JSON como desejar. Como no exemplo, o seu `/WEB-INF/jsp/clients/load.json.jsp`:
 
@@ -181,7 +187,7 @@ public class ClientsController {
 }
 ~~~ 
 
-###Ajax: Versão programática
+##Ajax: Versão programática
 
 Se você quiser que o VRaptor serialize automaticamente seus objetos para XML ou JSON, você pode escrever em sua lógica:
 
@@ -212,13 +218,14 @@ Os resultados vão ser parecidos com:
 }}
 ~~~ 
 
+e em xml:
+
 ~~~ 
 #!xml
 <cliente>
     <nome>Joao</nome>
 </cliente>
 ~~~ 
-#!
 
 Por padrão, apenas campos de tipos primitivos serão serializados (String, números, enums, datas), se você quiser incluir um campo de tipo não primitivo você precisa incluí-lo explicitamente:
 
@@ -283,7 +290,7 @@ public class CustomXMLSerialization extends XStreamXMLSerialization {
 }
 ~~~ 
 
-###Serializando Collections###
+##Serializando Collections##
 
 Ao serializar coleções, o padrão é colocar a tag `list` em volta dos elementos:
 
@@ -377,7 +384,7 @@ Com resultado:
 ]}
 ~~~ 
 
-###Serializando JSON sem elemento raiz
+##Serializando JSON sem elemento raiz
 
 Se você quiser serializar um objeto em JSON sem dar nomes a eles, pode fazer isso com o método withoutRoot:
 
@@ -387,7 +394,7 @@ result.use(json()).from(carro).serialize(); //=> {'carro': {'cor': 'azul'}}
 result.use(json()).withoutRoot().from(carro).serialize(); //=> {'cor': 'azul'}
 ~~~ 
 
-### Criando links na view com o linkTo
+## Criando links na view com o linkTo
 
 LinkTo é uma funcionalidade que permite você criar links nas páginas JSP sem precisar escrever o link, mas sim indicando a classe do controller, e o método.
 
@@ -422,9 +429,10 @@ Usando a funcionalidade do linkTo, podemos simplicar a chamada para o método `l
 #!jsp
 <a href="${linkTo[ClientController].list()}">listar clientes</a>
 ~~~ 
-#!
+
 
 Como o método não possui parâmetros, você também pode omitir os parênteses. 
+
 ~~~ 
 #!jsp
 <a href="${linkTo[ClientController].list}">listar clientes</a>
@@ -444,7 +452,7 @@ Ao invés do parâmetro fixo, você pode passar variáveis do JSTL, como por exe
 <a href="${linkTo[ClientController].show(client.id)}">ver cliente ${client.name}</a>
 ~~~ 
 
-###Inclusão automática de parâmetros
+##Inclusão automática de parâmetros
 
 Você pode anotar seu método com `@IncludeParameters` para que todos os parâmetros de um método do seu controller sejam inclusos automaticamente na `view`. 
 

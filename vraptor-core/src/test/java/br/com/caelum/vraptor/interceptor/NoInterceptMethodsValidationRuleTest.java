@@ -27,7 +27,7 @@ public class NoInterceptMethodsValidationRuleTest {
 
 	@Before
 	public void setUp() {
-		this.stepInvoker = new StepInvoker(null);
+		this.stepInvoker = new StepInvoker();
 	}
 
 	@Test(expected=InterceptionException.class)

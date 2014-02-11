@@ -12,7 +12,6 @@ import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor.cache.CacheStore;
 import br.com.caelum.vraptor.cache.DefaultCacheStore;
-import br.com.caelum.vraptor.factory.Factories;
 import br.com.caelum.vraptor.interceptor.AspectStyleInterceptorHandler;
 import br.com.caelum.vraptor.interceptor.CustomAcceptsExecutor;
 import br.com.caelum.vraptor.interceptor.Interceptor;
@@ -28,7 +27,7 @@ public class DefaultInterceptorHandlerFactoryTest {
 
 	private DefaultInterceptorHandlerFactory factory;
 
-	private StepInvoker stepInvoker = Factories.createStepInvoker();
+	private StepInvoker stepInvoker = new StepInvoker();
 
 	private @Mock SimpleInterceptorStack simpleStack;
 	private @Mock InterceptorAcceptsExecutor acceptsExecutor;

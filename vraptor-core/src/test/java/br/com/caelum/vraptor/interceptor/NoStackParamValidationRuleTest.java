@@ -17,7 +17,7 @@ public class NoStackParamValidationRuleTest {
 
 	@Before
 	public void setUp() {
-		invoker = new StepInvoker(null);
+		invoker = new StepInvoker();
 		validationRule = new NoStackParamValidationRule(invoker);
 	}
 

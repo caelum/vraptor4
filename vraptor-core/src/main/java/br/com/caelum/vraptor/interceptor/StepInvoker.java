@@ -4,31 +4,16 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
 import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
 
 import net.vidageek.mirror.dsl.Mirror;
 import net.vidageek.mirror.list.dsl.Matcher;
 import net.vidageek.mirror.list.dsl.MirrorList;
 import br.com.caelum.vraptor.InterceptionException;
-import br.com.caelum.vraptor.reflection.MethodExecutor;
-import br.com.caelum.vraptor.reflection.MethodExecutorException;
 
 import com.google.common.base.Throwables;
 
 @ApplicationScoped
 public class StepInvoker {
-
-	private final MethodExecutor methodExecutor;
-
-	/** @deprecated CDI eyes only*/
-	protected StepInvoker() {
-		this(null);
-	}
-
-	@Inject
-	public StepInvoker(MethodExecutor methodExecutor) {
-		this.methodExecutor = methodExecutor;
-	}
 
 	private class InvokeMatcher implements Matcher<Method> {
 
@@ -60,8 +45,8 @@ public class StepInvoker {
 
 	private Object invokeMethod(Object interceptor, Method stepMethod, Object... params) {
 		try {
-			return methodExecutor.invoke(stepMethod, interceptor, params);
-		} catch (MethodExecutorException e) {
+			return new Mirror().on(interceptor).invoke().method(stepMethod).withArgs(params);
+		} catch (Exception e) {
 			// we dont wanna wrap it if it is a simple controller business logic
 			// exception
 			Throwables.propagateIfInstanceOf(e.getCause(), ApplicationLogicException.class);

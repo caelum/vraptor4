@@ -20,7 +20,7 @@ public class AcceptsNeedReturnBooleanValidationRuleTest {
 
 	@Before
 	public void setUp() {
-		stepInvoker = new StepInvoker(null);
+		stepInvoker = new StepInvoker();
 		validationRule = new AcceptsNeedReturnBooleanValidationRule(stepInvoker);
 	}
 

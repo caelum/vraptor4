@@ -26,6 +26,8 @@ import javax.enterprise.event.Event;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 
+import net.vidageek.mirror.dsl.Mirror;
+
 import org.slf4j.Logger;
 
 import br.com.caelum.vraptor.InterceptionException;
@@ -34,9 +36,6 @@ import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.events.EndOfInterceptorStack;
 import br.com.caelum.vraptor.events.MethodExecuted;
 import br.com.caelum.vraptor.events.ReadyToExecuteMethod;
-import br.com.caelum.vraptor.interceptor.ApplicationLogicException;
-import br.com.caelum.vraptor.reflection.MethodExecutor;
-import br.com.caelum.vraptor.reflection.MethodExecutorException;
 import br.com.caelum.vraptor.validator.ValidationException;
 import br.com.caelum.vraptor.validator.Validator;
 
@@ -53,7 +52,6 @@ public class ExecuteMethod {
 
 	private final MethodInfo methodInfo;
 	private final Validator validator;
-	private final MethodExecutor methodExecutor;
 
 	private Event<MethodExecuted> methodExecutedEvent;
 	private Event<ReadyToExecuteMethod> readyToExecuteMethod;
@@ -62,21 +60,19 @@ public class ExecuteMethod {
 	 * @deprecated CDI eyes only
 	 */
 	protected ExecuteMethod() {
-		this(null, null, null, null, null);
+		this(null, null, null, null);
 	}
 
 	@Inject
-	public ExecuteMethod(MethodInfo methodInfo, Validator validator, MethodExecutor methodExecutor,
+	public ExecuteMethod(MethodInfo methodInfo, Validator validator, 
 			Event<MethodExecuted> methodExecutedEvent, Event<ReadyToExecuteMethod> readyToExecuteMethod) {
 		this.methodInfo = methodInfo;
 		this.validator = validator;
-		this.methodExecutor = methodExecutor;
 		this.methodExecutedEvent = methodExecutedEvent;
 		this.readyToExecuteMethod = readyToExecuteMethod;
 	}
 
 	public void execute(@Observes EndOfInterceptorStack event) {
-		
 		try {
 			ControllerMethod method = event.getControllerMethod();
 			readyToExecuteMethod.fire(new ReadyToExecuteMethod(method));
@@ -85,7 +81,7 @@ public class ExecuteMethod {
 
 			log.debug("Invoking {}", reflectionMethod);
 			Object instance = event.getControllerInstance();
-			Object result = methodExecutor.invoke(reflectionMethod, instance , parameters);
+			Object result = new Mirror().on(instance).invoke().method(reflectionMethod).withArgs(parameters);
 
 			if (validator.hasErrors()) { // method should have thrown
 											// ValidationException
@@ -107,9 +103,6 @@ public class ExecuteMethod {
 			methodExecutedEvent.fire(new MethodExecuted(method, methodInfo));
 		} catch (IllegalArgumentException e) {
 			throw new InterceptionException(e);
-		} catch (MethodExecutorException e) {
-			throwIfNotValidationException(e,
-					new ApplicationLogicException("your controller raised an exception", e.getCause()));
 		} catch (Exception e) {
 			throwIfNotValidationException(e, new InterceptionException(e));
 		}

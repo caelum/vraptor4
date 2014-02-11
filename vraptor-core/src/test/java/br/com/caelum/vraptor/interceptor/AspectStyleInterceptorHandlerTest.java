@@ -22,7 +22,6 @@ import org.mockito.MockitoAnnotations;
 import br.com.caelum.vraptor.controller.ControllerInstance;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.core.InterceptorStack;
-import br.com.caelum.vraptor.factory.Factories;
 import br.com.caelum.vraptor.interceptor.example.AcceptsInterceptor;
 import br.com.caelum.vraptor.interceptor.example.AcceptsWithoutArgsInterceptor;
 import br.com.caelum.vraptor.interceptor.example.AlwaysAcceptsAspectInterceptor;
@@ -50,7 +49,7 @@ public class AspectStyleInterceptorHandlerTest {
 	@Before
 	public void setup() {
 		MockitoAnnotations.initMocks(this);
-		stepInvoker = Factories.createStepInvoker();
+		stepInvoker = new StepInvoker();
 	}
 
 	@Test

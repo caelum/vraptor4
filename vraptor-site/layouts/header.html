@@ -1,5 +1,13 @@
+<% 
+if @item[:filename].start_with?('content/en')
+	path = "/en"
+else 
+	path = "/pt"
+end
+%>
+
 <header>
-  <h1 class="logo"><a class="logo-link" href="/pt">
+  <h1 class="logo"><a class="logo-link" href="<%=path%>">
       <img src="/img/logo.png" alt="VRaptor">
   </a></h1>
   <span class="sublogo-message">Framework Java MVC</span>

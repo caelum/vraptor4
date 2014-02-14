@@ -129,3 +129,44 @@ Você também pode buscar por um erro somente de uma determinada categoria:
 	<input type="text" name="title" />
 	<span class="error">${errors.asMap().title} // retorna a mensagem para o campo title
 ~~~ 
+
+﻿##Customizando as Mensagens 
+
+Quando há erros de validação, o Bean Validation anexa um atributo, do tipo lista chave-valor, na resposta da requisição, chamada <code>errors</code>. Essa lista é representada por items chave-valor, onde temos:
+
+* <code>category</code>: representa o atributo que originou o erro, cujo valor é uma convenção para metodoController.objeto.atributo
+* <code>message</code>: representa a mensagem padrão da API do Bean Validation, normalmente um sufixo como: "deve estar no futuro", "não pode ser nulo", etc.
+
+
+Na maioria dos casos, queremos customizar essas mensagens com uma descrição mais amigável. 
+
+Para isso, basta adicionar o arquivo <code>ValidationMessages.properties</code> em <code>/src/main/resources</code>.
+
+Considerando o exemplo acima da classe <code>Cliente</code>, o arquivo poderia ter a seguinte estrutura para customizar as mensagens padrões:
+
+~~~
+cliente.nome.vazio = O nome do cliente não pode ser vazio
+cliente.nome.tamanho = O nome do cliente deve possuir entre {min} e {max} caracteres
+cliente.nascimento.data = A data de nascimento ${validatedValue} informada deve ser no passado
+~~~
+
+E a classe teria que ser alterada para incluir essas chaves
+
+~~~
+#!java
+public class Cliente {
+	@NotEmpty(message="{cliente.nome.vazio}")
+	@Size(min=10, max=50, message="{cliente.nome.tamanho}") 
+	private String nome;
+	
+	@Past(message="{cliente.nascimento.data}")
+	private Date nascimento;
+}
+~~~
+
+Veja que foi adicionado parâmetros afim de deixar nossas mensagens mais dinâmicas e reaproveitáveis. As possibilidades atualmente são:
+
+* os valores dos atributos da restrição mapeados com os nomes de atributo. Ex. <code>{min}</code> e <code>{max}</code> no caso de <code>@Size</code>
+* o atual valor a ser validado sob o nome de <code>${validatedValue}</code>
+* uso de if-else curto, como por exemplo: <code>${value > 1 ? 's' : ''}</code>
+* um bean mapeado com o nome de <code>formatter</code> expondo método var-arg <code>format(String format, Object... args)</code> o qual se comporta como <code>java.util.Formatter.format(String format, Object... args)</code>. Ex.: <code>${formatter.format('%1$.2f', validatedValue)}</code>

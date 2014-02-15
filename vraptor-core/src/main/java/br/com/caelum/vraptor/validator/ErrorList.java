@@ -4,9 +4,9 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import com.google.common.collect.ArrayListMultimap;
+import com.google.common.base.Function;
 import com.google.common.collect.ForwardingList;
-import com.google.common.collect.Multimap;
+import com.google.common.collect.Multimaps;
 
 /**
  * Class that represents an error list.
@@ -14,21 +14,24 @@ import com.google.common.collect.Multimap;
  * @author Otávio Scherer Garcia
  */
 public class ErrorList extends ForwardingList<Message> {
-	
+
+	private final class GroupByCategory implements Function<Message, String> {
+		@Override
+		public String apply(Message input) {
+			return input.getCategory();
+		}
+	}
+
 	private final List<Message> delegate;
-	private Map<String, Collection<String>> byCategory;
+	private Map<String, Collection<Message>> byCategory;
 
 	public ErrorList(List<Message> delegate) {
 		this.delegate = delegate;
 	}
 
-	public Map<String, Collection<String>> asMap() {
+	public Map<String, Collection<Message>> asMap() {
 		if (byCategory == null) {
-			Multimap<String, String> out = ArrayListMultimap.create();
-			for (Message message : delegate) {
-				out.put(message.getCategory(), message.getMessage());
-			}
-			byCategory = out.asMap();
+			byCategory = Multimaps.index(delegate, new GroupByCategory()).asMap();
 		}
 		return byCategory;
 	}

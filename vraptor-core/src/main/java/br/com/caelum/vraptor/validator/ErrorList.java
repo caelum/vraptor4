@@ -23,17 +23,21 @@ public class ErrorList extends ForwardingList<Message> {
 	}
 
 	private final List<Message> delegate;
-	private Map<String, Collection<Message>> byCategory;
+	private Map<String, Collection<Message>> grouped;
 
 	public ErrorList(List<Message> delegate) {
 		this.delegate = delegate;
 	}
 
-	public Map<String, Collection<Message>> asMap() {
-		if (byCategory == null) {
-			byCategory = Multimaps.index(delegate, new GroupByCategory()).asMap();
+	/**
+	 * Return messages grouped by category. This method can useful if you want to get messages for a specific
+	 * field.
+	 */
+	public Map<String, Collection<Message>> getGrouped() {
+		if (grouped == null) {
+			grouped = Multimaps.index(delegate, new GroupByCategory()).asMap();
 		}
-		return byCategory;
+		return grouped;
 	}
 
 	@Override

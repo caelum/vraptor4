@@ -33,10 +33,10 @@ import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import br.com.caelum.iogi.parameters.Parameter;
 import br.com.caelum.iogi.parameters.Parameters;
 import br.com.caelum.iogi.reflection.Target;
 import br.com.caelum.vraptor.controller.ControllerMethod;
+import br.com.caelum.vraptor.http.Parameter;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.http.ParametersProvider;
 import br.com.caelum.vraptor.validator.Message;
@@ -91,7 +91,7 @@ public class IogiParametersProvider implements ParametersProvider {
 		Method javaMethod = method.getMethod();
 		List<Target<Object>> targets = new ArrayList<>();
 
-		for (br.com.caelum.vraptor.http.Parameter p : nameProvider.parametersFor(javaMethod)) {
+		for (Parameter p : nameProvider.parametersFor(javaMethod)) {
 			Type type = p.getParameterizedType();
 			if (type instanceof TypeVariable) {
 				type = extractType(method);
@@ -110,11 +110,11 @@ public class IogiParametersProvider implements ParametersProvider {
 
 	private Parameters parseParameters(HttpServletRequest request) {
 		Map<String, String[]> parameters = request.getParameterMap();
-		List<Parameter> parameterList = new ArrayList<>(parameters.size() * 2);
+		List<br.com.caelum.iogi.parameters.Parameter> parameterList = new ArrayList<>(parameters.size() * 2);
 
 		for (Entry<String, String[]> param: parameters.entrySet()) {
 			for (String value : param.getValue()) {
-				parameterList.add(new Parameter(param.getKey(), value));
+				parameterList.add(new br.com.caelum.iogi.parameters.Parameter(param.getKey(), value));
 			}
 		}
 

@@ -16,7 +16,7 @@ import com.google.common.collect.ForwardingList;
  */
 public class ErrorList extends ForwardingList<Message> {
 
-	private static Function<Message, String> groupByCategory = new Function<Message, String>() {
+	private static Function<Message, String> byCategory = new Function<Message, String>() {
 		@Override
 		public String apply(Message input) {
 			return input.getCategory();
@@ -36,7 +36,7 @@ public class ErrorList extends ForwardingList<Message> {
 	 */
 	public Map<String, Collection<Message>> getGrouped() {
 		if (grouped == null) {
-			grouped = index(delegate, groupByCategory).asMap();
+			grouped = index(delegate, byCategory).asMap();
 		}
 		return grouped;
 	}

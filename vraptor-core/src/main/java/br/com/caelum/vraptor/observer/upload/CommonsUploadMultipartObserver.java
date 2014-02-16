@@ -120,7 +120,7 @@ public class CommonsUploadMultipartObserver {
 	 */
 	protected void reportSizeLimitExceeded(final SizeLimitExceededException e, Validator validator) {
 		validator.add(new I18nMessage("upload", "file.limit.exceeded", e.getActualSize(), e.getPermittedSize()));
-		logger.warn("The file size limit was exceeded.", e);
+		logger.warn("The file size limit was exceeded.");
 	}
 
 	protected void reportFileUploadException(FileUploadException e, Validator validator) {

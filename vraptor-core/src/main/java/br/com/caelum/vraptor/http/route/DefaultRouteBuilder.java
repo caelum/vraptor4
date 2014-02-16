@@ -72,7 +72,6 @@ import br.com.caelum.vraptor.proxy.MethodInvocation;
 import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.proxy.SuperMethod;
 import br.com.caelum.vraptor.util.StringUtils;
-import br.com.caelum.vraptor.util.Stringnifier;
 
 import com.google.common.base.Joiner;
 
@@ -189,8 +188,7 @@ public class DefaultRouteBuilder implements RouteBuilder {
 		this.strategy = new FixedMethodStrategy(originalUri, controllerMethod, this.supportedMethods, builder.build(), priority, parameterNames);
 
 		logger.info(String.format("%-50s%s -> %10s", originalUri,
-				this.supportedMethods.isEmpty() ? "[ALL]" : this.supportedMethods,
-				Stringnifier.simpleNameFor(method)));
+				this.supportedMethods.isEmpty() ? "[ALL]" : this.supportedMethods, method.getName()));
 	}
 
 	private void addParametersInfo(Method method) {

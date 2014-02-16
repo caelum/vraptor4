@@ -21,8 +21,6 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.Objects;
 
-import br.com.caelum.vraptor.util.Stringnifier;
-
 public class DefaultControllerMethod implements ControllerMethod {
 
 	private final BeanClass controller;
@@ -64,7 +62,7 @@ public class DefaultControllerMethod implements ControllerMethod {
 
 	@Override
 	public String toString() {
-		return "[DefaultControllerMethod: " + Stringnifier.simpleNameFor(method) + "]";
+		return "[DefaultControllerMethod: " + method.getName() + "]";
 	}
 
 	@Override

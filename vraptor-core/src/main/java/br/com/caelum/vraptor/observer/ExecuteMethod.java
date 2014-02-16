@@ -37,7 +37,6 @@ import br.com.caelum.vraptor.events.ReadyToExecuteMethod;
 import br.com.caelum.vraptor.interceptor.ApplicationLogicException;
 import br.com.caelum.vraptor.reflection.MethodExecutor;
 import br.com.caelum.vraptor.reflection.MethodExecutorException;
-import br.com.caelum.vraptor.util.Stringnifier;
 import br.com.caelum.vraptor.validator.ValidationException;
 import br.com.caelum.vraptor.validator.Validator;
 
@@ -84,7 +83,7 @@ public class ExecuteMethod {
 			Method reflectionMethod = method .getMethod();
 			Object[] parameters = methodInfo.getParametersValues();
 
-			log.debug("Invoking {}", Stringnifier.simpleNameFor(reflectionMethod));
+			log.debug("Invoking {}", reflectionMethod);
 			Object instance = event.getControllerInstance();
 			Object result = methodExecutor.invoke(reflectionMethod, instance , parameters);
 

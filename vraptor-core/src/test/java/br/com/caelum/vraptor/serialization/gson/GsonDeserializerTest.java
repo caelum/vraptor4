@@ -10,7 +10,6 @@ import static org.mockito.Mockito.when;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
-import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -26,18 +25,12 @@ import net.vidageek.mirror.dsl.Mirror;
 import org.junit.Before;
 import org.junit.Test;
 
-import br.com.caelum.vraptor.cache.DefaultCacheStore;
 import br.com.caelum.vraptor.controller.BeanClass;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.controller.DefaultBeanClass;
 import br.com.caelum.vraptor.controller.DefaultControllerMethod;
-import br.com.caelum.vraptor.http.Parameter;
+import br.com.caelum.vraptor.factory.Factories;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
-import br.com.caelum.vraptor.http.ParanamerNameProvider;
-import br.com.caelum.vraptor.serialization.gson.CalendarGsonConverter;
-import br.com.caelum.vraptor.serialization.gson.GsonBuilderWrapper;
-import br.com.caelum.vraptor.serialization.gson.GsonDeserialization;
-import br.com.caelum.vraptor.serialization.gson.GsonDeserializerBuilder;
 import br.com.caelum.vraptor.util.test.MockInstanceImpl;
 import br.com.caelum.vraptor.view.GenericController;
 
@@ -61,7 +54,7 @@ public class GsonDeserializerTest {
 
 	@Before
 	public void setUp() throws Exception {
-		provider = new ParanamerNameProvider(new DefaultCacheStore<AccessibleObject, Parameter[]>());
+		provider = Factories.createParameterNameProvider();
 		request = mock(HttpServletRequest.class);
 
 		List<JsonDeserializer<?>> jsonDeserializers = new ArrayList<>();

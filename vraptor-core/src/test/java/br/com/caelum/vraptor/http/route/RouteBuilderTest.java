@@ -21,7 +21,6 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
-import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
 
@@ -31,15 +30,13 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import br.com.caelum.vraptor.cache.DefaultCacheStore;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.controller.DefaultBeanClass;
 import br.com.caelum.vraptor.controller.DefaultControllerMethod;
 import br.com.caelum.vraptor.core.Converters;
+import br.com.caelum.vraptor.factory.Factories;
 import br.com.caelum.vraptor.http.EncodingHandler;
-import br.com.caelum.vraptor.http.Parameter;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
-import br.com.caelum.vraptor.http.ParanamerNameProvider;
 import br.com.caelum.vraptor.proxy.JavassistProxifier;
 import br.com.caelum.vraptor.proxy.Proxifier;
 
@@ -64,7 +61,7 @@ public class RouteBuilderTest {
 	public void setUp() throws Exception {
 		MockitoAnnotations.initMocks(this);
 
-		provider = new ParanamerNameProvider(new DefaultCacheStore<AccessibleObject, Parameter[]>());
+		provider = Factories.createParameterNameProvider();
 		
 		method = new DefaultControllerMethod(new DefaultBeanClass(MyResource.class), MyResource.class.getMethod(
 				"method", String.class, Integer.class, BigDecimal.class));

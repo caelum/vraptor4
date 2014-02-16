@@ -7,7 +7,6 @@ import static org.junit.Assert.assertThat;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
-import java.lang.reflect.AccessibleObject;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.TimeZone;
@@ -15,16 +14,12 @@ import java.util.TimeZone;
 import org.junit.Before;
 import org.junit.Test;
 
-import br.com.caelum.vraptor.cache.DefaultCacheStore;
 import br.com.caelum.vraptor.controller.BeanClass;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.controller.DefaultBeanClass;
 import br.com.caelum.vraptor.controller.DefaultControllerMethod;
-import br.com.caelum.vraptor.http.Parameter;
+import br.com.caelum.vraptor.factory.Factories;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
-import br.com.caelum.vraptor.http.ParanamerNameProvider;
-import br.com.caelum.vraptor.serialization.xstream.CalendarConverter;
-import br.com.caelum.vraptor.serialization.xstream.XStreamXMLDeserializer;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
@@ -40,7 +35,7 @@ public class XStreamXmlDeserializerTest {
 
 	@Before
 	public void setUp() throws Exception {
-		provider = new ParanamerNameProvider(new DefaultCacheStore<AccessibleObject, Parameter[]>());
+		provider = Factories.createParameterNameProvider();
 
 		deserializer = new XStreamXMLDeserializer(provider, cleanInstance(new CalendarConverter()));
 		BeanClass controllerClass = new DefaultBeanClass(DogController.class);

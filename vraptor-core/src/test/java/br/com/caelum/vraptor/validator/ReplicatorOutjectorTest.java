@@ -2,7 +2,6 @@ package br.com.caelum.vraptor.validator;
 
 import static org.mockito.Mockito.verify;
 
-import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Method;
 
 import org.junit.Before;
@@ -11,17 +10,15 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor.Result;
-import br.com.caelum.vraptor.cache.DefaultCacheStore;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.controller.DefaultControllerMethod;
 import br.com.caelum.vraptor.core.MethodInfo;
-import br.com.caelum.vraptor.http.Parameter;
-import br.com.caelum.vraptor.http.ParanamerNameProvider;
+import br.com.caelum.vraptor.factory.Factories;
 
 public class ReplicatorOutjectorTest {
 
 	private @Mock Result result;
-	private MethodInfo methodInfo = new MethodInfo(new ParanamerNameProvider(new DefaultCacheStore<AccessibleObject, Parameter[]>()));
+	private MethodInfo methodInfo = new MethodInfo(Factories.createParameterNameProvider());
 	private Outjector outjector;
 
 	@Before

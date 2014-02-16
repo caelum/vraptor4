@@ -21,7 +21,6 @@ import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
 
-import java.lang.reflect.AccessibleObject;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,8 +29,7 @@ import javax.inject.Named;
 import org.junit.Before;
 import org.junit.Test;
 
-import br.com.caelum.vraptor.cache.CacheStore;
-import br.com.caelum.vraptor.cache.DefaultCacheStore;
+import br.com.caelum.vraptor.factory.Factories;
 
 public class ParanamerNameProviderTest {
 
@@ -39,8 +37,7 @@ public class ParanamerNameProviderTest {
 
 	@Before
 	public void setup() {
-		CacheStore<AccessibleObject, Parameter[]> cache = new DefaultCacheStore<>();
-		provider = new ParanamerNameProvider(cache);
+		provider = (ParanamerNameProvider) Factories.createParameterNameProvider();
 	}
 	
 	private List<String> toNames(Parameter[] parameters) {
@@ -137,6 +134,4 @@ public class ParanamerNameProviderTest {
 		void fightWith(List<String> cats) {
 		}
 	}
-
-
 }

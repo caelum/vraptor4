@@ -7,7 +7,6 @@ import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 
 import java.io.IOException;
-import java.lang.reflect.AccessibleObject;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -17,13 +16,11 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor.Consumes;
-import br.com.caelum.vraptor.cache.DefaultCacheStore;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.controller.DefaultControllerMethod;
 import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.events.ReadyToExecuteMethod;
-import br.com.caelum.vraptor.http.Parameter;
-import br.com.caelum.vraptor.http.ParanamerNameProvider;
+import br.com.caelum.vraptor.factory.Factories;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.serialization.Deserializer;
 import br.com.caelum.vraptor.serialization.Deserializers;
@@ -46,7 +43,7 @@ public class DeserializingObserverTest {
 	public void setUp() throws Exception {
 		MockitoAnnotations.initMocks(this);
 
-		methodInfo = new MethodInfo(new ParanamerNameProvider(new DefaultCacheStore<AccessibleObject, Parameter[]>()));
+		methodInfo = new MethodInfo(Factories.createParameterNameProvider());
 
 		observer = new DeserializingObserver(deserializers, container);
 		consumeXml = new DefaultControllerMethod(null, DummyResource.class.getDeclaredMethod("consumeXml", String.class, String.class));

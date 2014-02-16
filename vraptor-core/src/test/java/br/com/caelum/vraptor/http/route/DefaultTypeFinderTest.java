@@ -18,7 +18,6 @@ package br.com.caelum.vraptor.http.route;
 
 import static org.junit.Assert.assertEquals;
 
-import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Method;
 import java.util.Map;
 
@@ -27,10 +26,8 @@ import net.vidageek.mirror.dsl.Mirror;
 import org.junit.Before;
 import org.junit.Test;
 
-import br.com.caelum.vraptor.cache.DefaultCacheStore;
-import br.com.caelum.vraptor.http.Parameter;
+import br.com.caelum.vraptor.factory.Factories;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
-import br.com.caelum.vraptor.http.ParanamerNameProvider;
 
 public class DefaultTypeFinderTest {
 
@@ -38,7 +35,7 @@ public class DefaultTypeFinderTest {
 	
 	@Before
 	public void setup() {
-		provider = new ParanamerNameProvider(new DefaultCacheStore<AccessibleObject, Parameter[]>());
+		provider = Factories.createParameterNameProvider();
 	}
 
 	public static class AController {

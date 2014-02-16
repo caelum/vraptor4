@@ -26,7 +26,6 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Method;
 import java.util.Collections;
 
@@ -36,13 +35,11 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor.TwoWayConverter;
-import br.com.caelum.vraptor.cache.DefaultCacheStore;
 import br.com.caelum.vraptor.core.Converters;
+import br.com.caelum.vraptor.factory.Factories;
 import br.com.caelum.vraptor.http.EncodingHandler;
 import br.com.caelum.vraptor.http.MutableRequest;
-import br.com.caelum.vraptor.http.Parameter;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
-import br.com.caelum.vraptor.http.ParanamerNameProvider;
 
 public class DefaultParametersControlTest {
 
@@ -58,7 +55,7 @@ public class DefaultParametersControlTest {
 		MockitoAnnotations.initMocks(this);
 		when(encodingHandler.getEncoding()).thenReturn("UTF-8");
 		evaluator = new JavaEvaluator();
-		nameProvider = new ParanamerNameProvider(new DefaultCacheStore<AccessibleObject, Parameter[]>());
+		nameProvider = Factories.createParameterNameProvider();
 	}
 
 	@Test

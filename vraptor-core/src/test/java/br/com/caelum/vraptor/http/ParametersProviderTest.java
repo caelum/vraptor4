@@ -13,7 +13,6 @@ import static org.junit.Assert.assertArrayEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import java.lang.reflect.AccessibleObject;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -28,7 +27,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor.Result;
-import br.com.caelum.vraptor.cache.DefaultCacheStore;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.controller.DefaultControllerMethod;
 import br.com.caelum.vraptor.converter.Converter;
@@ -36,6 +34,7 @@ import br.com.caelum.vraptor.converter.LongConverter;
 import br.com.caelum.vraptor.converter.PrimitiveLongConverter;
 import br.com.caelum.vraptor.converter.StringConverter;
 import br.com.caelum.vraptor.core.Converters;
+import br.com.caelum.vraptor.factory.Factories;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.validator.DefaultValidationException;
 import br.com.caelum.vraptor.validator.Message;
@@ -73,7 +72,7 @@ public abstract class ParametersProviderTest {
 	@Before
 	public void setup() throws Exception {
 		MockitoAnnotations.initMocks(this);
-		nameProvider = new ParanamerNameProvider(new DefaultCacheStore<AccessibleObject, Parameter[]>());
+		nameProvider = Factories.createParameterNameProvider();
 		this.provider = getProvider();
 		this.errors = new ArrayList<>();
 		

@@ -327,21 +327,6 @@ public class GsonDeserializerTest {
 	}
 
 	@Test
-	public void shouldDeserializeWithoutGenericType() {
-		InputStream stream = new ByteArrayInputStream( "{'param': 'test'}".getBytes());
-		BeanClass resourceClass = new DefaultBeanClass(ExtGenericController.class);
-		Method method = new Mirror().on(GenericController.class).reflect()
-				.method("methodWithoutGenericType").withArgs(String.class);
-		ControllerMethod resource = new DefaultControllerMethod(resourceClass, method);
-
-		Object[] deserialized = deserializer.deserialize(stream, resource);
-
-		String param = (String) deserialized[0];
-
-		assertThat(param, equalTo("test"));
-	}
-
-	@Test
 	public void shouldDeserializeADogWithCalendarWithISO8601() {
 		InputStream stream = new ByteArrayInputStream("{'dog':{'name':'Otto','age':2,'birthday':'2013-07-23T17:14:14-03:00'}}"
 				.getBytes());

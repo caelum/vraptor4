@@ -36,7 +36,7 @@ import org.slf4j.LoggerFactory;
 import br.com.caelum.iogi.parameters.Parameters;
 import br.com.caelum.iogi.reflection.Target;
 import br.com.caelum.vraptor.controller.ControllerMethod;
-import br.com.caelum.vraptor.http.Parameter;
+import java.lang.reflect.Parameter;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.http.ParametersProvider;
 import br.com.caelum.vraptor.validator.Message;

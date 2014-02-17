@@ -25,7 +25,7 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
 import net.vidageek.mirror.dsl.Mirror;
-import br.com.caelum.vraptor.http.Parameter;
+import java.lang.reflect.Parameter;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 /**
  * Discover parameter types

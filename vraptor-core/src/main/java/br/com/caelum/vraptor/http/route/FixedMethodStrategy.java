@@ -26,7 +26,7 @@ import java.util.Set;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.controller.HttpMethod;
 import br.com.caelum.vraptor.http.MutableRequest;
-import br.com.caelum.vraptor.http.Parameter;
+import java.lang.reflect.Parameter;
 
 /**
  * A route strategy which invokes a fixed type's method.

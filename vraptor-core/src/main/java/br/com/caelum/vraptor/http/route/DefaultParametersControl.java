@@ -39,7 +39,7 @@ import br.com.caelum.vraptor.TwoWayConverter;
 import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.http.EncodingHandler;
 import br.com.caelum.vraptor.http.MutableRequest;
-import br.com.caelum.vraptor.http.Parameter;
+import java.lang.reflect.Parameter;
 import br.com.caelum.vraptor.util.StringUtils;
 
 /**

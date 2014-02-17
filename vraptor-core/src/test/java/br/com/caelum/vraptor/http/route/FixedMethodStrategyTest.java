@@ -39,7 +39,7 @@ import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.controller.DefaultControllerMethod;
 import br.com.caelum.vraptor.controller.HttpMethod;
 import br.com.caelum.vraptor.http.MutableRequest;
-import br.com.caelum.vraptor.http.Parameter;
+import java.lang.reflect.Parameter;
 import br.com.caelum.vraptor.interceptor.VRaptorMatchers;
 
 import com.google.common.collect.Sets;

@@ -16,7 +16,7 @@ For a quick start, you can use this snippet it your maven POM:
 </dependency>
 ```
 
-Or you can download it directly [at our artifacts repository](https://bintray.com/caelum/VRaptor4/br.com.caelum.vraptor/vraptor-4.0.0-RC1/files).
+Or you can download it directly [at our artifacts repository](https://bintray.com/caelum/VRaptor4/br.com.caelum.vraptor).
 
 
 ##Building in your machine

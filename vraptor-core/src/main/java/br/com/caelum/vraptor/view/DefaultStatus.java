@@ -28,6 +28,8 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.common.base.Joiner;
+
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.config.Configuration;
 import br.com.caelum.vraptor.controller.HttpMethod;
@@ -119,8 +121,7 @@ public class DefaultStatus implements Status {
 
 	@Override
 	public void methodNotAllowed(EnumSet<HttpMethod> allowedMethods) {
-		header("Allow", allowedMethods.toString().replaceAll("\\[|\\]", ""));
-
+		header("Allow", Joiner.on(", ").join(allowedMethods));
 		sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
 	}
 

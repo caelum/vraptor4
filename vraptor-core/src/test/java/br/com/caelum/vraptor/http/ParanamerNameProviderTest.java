@@ -137,6 +137,4 @@ public class ParanamerNameProviderTest {
 		void fightWith(List<String> cats) {
 		}
 	}
-
-
 }

@@ -26,7 +26,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.io.IOException;
-import java.lang.reflect.AccessibleObject;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -36,14 +35,12 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import br.com.caelum.vraptor.cache.DefaultCacheStore;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.controller.DefaultControllerMethod;
 import br.com.caelum.vraptor.core.MethodInfo;
+import br.com.caelum.vraptor.factory.Factories;
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.http.MutableResponse;
-import br.com.caelum.vraptor.http.Parameter;
-import br.com.caelum.vraptor.http.ParanamerNameProvider;
 import br.com.caelum.vraptor.interceptor.ApplicationLogicException;
 import br.com.caelum.vraptor.proxy.JavassistProxifier;
 import br.com.caelum.vraptor.proxy.Proxifier;
@@ -65,7 +62,7 @@ public class DefaultPageResultTest {
 		MockitoAnnotations.initMocks(this);
 		method = DefaultControllerMethod.instanceFor(AnyResource.class, AnyResource.class.getDeclaredMethods()[0]);
 		proxifier = new JavassistProxifier();
-		methodInfo = new MethodInfo(new ParanamerNameProvider(new DefaultCacheStore<AccessibleObject, Parameter[]>()));
+		methodInfo = new MethodInfo(Factories.createParameterNameProvider());
 		methodInfo.setControllerMethod(method);
 		fixedResolver = new PathResolver() {
 			@Override

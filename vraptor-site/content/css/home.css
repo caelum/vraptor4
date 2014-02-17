@@ -1,0 +1,45 @@
+.sprite {
+  background: url(../img/whoUses.png) no-repeat top left;
+  display: inline-block;
+  vertical-align: middle;
+  margin-left: 20px;
+}
+
+#companies {
+  text-align: center;
+  background: rgb(228,228,228);
+  border-radius: 10px 0 0 10px;
+  position: absolute;
+  bottom: 60px;
+  right: 0;
+  left: 360px;
+}
+
+#agenciaclick{ 
+  background-position: 0 0; 
+  width: 179px; 
+  height: 27px; 
+} 
+
+#defferrari{ 
+  background-position: 0 -77px; 
+  width: 144px; height: 76px; 
+} 
+
+#guj{ 
+  background-position: 0 -203px; 
+  width: 200px; 
+  height: 100px; 
+} 
+
+#locaweb{ 
+  background-position: 0 -353px; 
+  width: 145px; 
+  height: 55px; 
+} 
+
+#wine{ 
+  background-position: 0 -458px; 
+  width: 143px; 
+  height: 63px; 
+} 

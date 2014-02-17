@@ -1,14 +1,18 @@
-<% 
-if @item[:filename].start_with?('content/en')
-	path = "/en"
-else 
-	path = "/pt"
-end
-%>
+<% path = @item[:filename].start_with?('content/en') ? '/en' : '/pt' %>
 
 <header>
   <h1 class="logo"><a class="logo-link" href="<%=path%>">
       <img src="/img/logo.png" alt="VRaptor">
   </a></h1>
   <span class="sublogo-message">Framework Java MVC</span>
+
+  <span id="language">
+    <a class="language" title="en" href="/en">
+      <span class="flag flag-en <%=path == '/en' ? '' : 'not-selected'%>"></span> EN
+    </a>
+    <a class="language" title="pt" href="/pt">
+      <span class="flag flag-pt <%=path == '/pt' ? '' : 'not-selected'%>"></span> PT
+    </a>
+  </span>
+
 </header>

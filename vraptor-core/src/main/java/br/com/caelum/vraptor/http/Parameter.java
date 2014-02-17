@@ -2,7 +2,6 @@ package br.com.caelum.vraptor.http;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.AccessibleObject;
-import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
@@ -13,7 +12,7 @@ import java.util.Objects;
  * 
  * @author Otávio Scherer Garcia
  */
-public class Parameter implements AnnotatedElement {
+public class Parameter {
 
 	private final int index;
 	private final String name;
@@ -54,12 +53,10 @@ public class Parameter implements AnnotatedElement {
 		return parameterType;
 	}
 
-	@Override
 	public boolean isAnnotationPresent(Class<? extends Annotation> clazz) {
 		return getAnnotation(clazz) != null;
 	}
 
-	@Override
 	public <T extends Annotation> T getAnnotation(Class<T> clazz) {
 		for (Annotation a : getDeclaredAnnotations()) {
 			if (a.annotationType().equals(clazz)) {
@@ -69,12 +66,10 @@ public class Parameter implements AnnotatedElement {
 		return null;
 	}
 
-	@Override
 	public Annotation[] getAnnotations() {
 		return getDeclaredAnnotations();
 	}
 
-	@Override
 	public Annotation[] getDeclaredAnnotations() {
 		return annotations;
 	}

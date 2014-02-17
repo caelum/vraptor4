@@ -12,11 +12,11 @@ For a quick start, you can use this snippet it your maven POM:
 <dependency>
     <groupId>br.com.caelum</groupId>
     <artifactId>vraptor</artifactId>
-    <version>4.0.0-beta-3</version> <!--or the latest version-->
+    <version>4.0.0-RC1</version> <!--or the latest version-->
 </dependency>
 ```
 
-Or you can download it directly <a href="https://bintray.com/caelum/VRaptor4/br.com.caelum.vraptor/vraptor-4.0.0-beta-3/files">at our artifacts repository</a>.
+Or you can download it directly [at our artifacts repository](https://bintray.com/caelum/VRaptor4/br.com.caelum.vraptor/vraptor-4.0.0-RC1/files).
 
 
 ##Building in your machine

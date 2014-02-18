@@ -153,3 +153,8 @@ pre {
   color: #AAAAAA;
   vertical-align: middle;
 }
+
+span#language {
+  float: right;
+  margin-right: 20px;
+}

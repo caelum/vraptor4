@@ -1,0 +1,26 @@
+.flag {
+  width: 16px;
+  height: 11px;
+  display: inline-block;
+  background: url(../img/flags.png) no-repeat;
+}
+
+.flag.not-selected {
+  background-position: 0 -11px
+}
+
+.flag.flag-pt {
+  background-position: -16px 0
+}
+
+.flag.flag-en {
+  background-position: -32px 0
+}
+
+.flag.flag-pt.not-selected {
+  background-position: -16px -11px
+}
+
+.flag.flag-en.not-selected {
+  background-position: -32px -11px
+}

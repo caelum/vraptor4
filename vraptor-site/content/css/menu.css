@@ -1,0 +1,67 @@
+.main-nav {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height .8s;
+}
+
+.main-nav h2 {
+  text-transform: uppercase;
+  color: #aaa;
+  margin: 1em .5em;
+}
+
+.main-nav li {
+  text-align: center;
+  width: 100%;
+}
+
+.main-nav li:hover,
+.main-nav a:hover,
+.main-nav li:focus,
+.main-nav a:focus {
+  border-color: #eee;
+  background-color: #eee;
+  text-decoration: none;
+}
+
+.main-nav a {
+  border: 1px solid #eee;
+  width: 100%;
+  display: inline-block;
+  padding: .5em;
+}
+
+.main-nav ul:first-child li:first-child a {
+  border-top: 0;
+}
+
+.main-nav ul li:not(:last-child) a {
+  border-bottom: 0;
+}
+
+.nav-toggle {
+  color: rgb(138, 153, 167);
+  text-align: center;
+  display: block;
+  cursor: pointer;
+  border: 1px solid #ccc;
+  padding: 1em;
+  text-transform: uppercase;
+}
+
+.nav-toggle:before {
+  content: '\25be';
+  margin-right: .5em;
+}
+
+#nav-visibility {
+  display: none;
+}
+
+#nav-visibility:checked + .nav-toggle:before {
+  content: '\25b4';
+}
+
+#nav-visibility:checked ~ .main-nav {
+  max-height: 500px;
+}

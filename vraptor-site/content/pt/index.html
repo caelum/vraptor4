@@ -1,13 +1,92 @@
---- 
+---
 title: Home
 ---
 
+O VRaptor 4 traz alta produtividade e desenvolvimento rápido e fácil de
+sistemas Web em Java. É um framework MVC brasileiro opensource com grande
+comunidade de desenvolvedores e usuários e com documentação em português.
+
+<a href="/pt/download" class="download-btn">Download</a>
+
+## Simples assim!
+
+Sua lógica no `PrimeiroController.java`:
+
+~~~
+#!java
+@Controller
+public class PrimeiroController {
+  @Get("/home")
+  public void home() {
+  }
+}
+~~~
+
+E o HTML em `WEB-INF/jsp/primeiro/home.jsp`:
+
+~~~
+#!jsp
+<html>
+  <body>
+    Página inicial
+  </body>
+</html>
+~~~
+
+Pronto! Agora é só acessar `localhost:8080/home`. Veja mais exemplos [em nossa
+documentação](/pt/docs/guia-de-1-minuto).
+
+<section class="advantages">
+<h2>Por que usar o VRaptor</h2>
+<ul>
+  <li class="productivity">
+    <strong>Alta Produtividade</strong>
+    <p>Usar o VRaptor 4 é simples e intuitivo. Você atingirá níveis altíssimos de produtividade com Java para Web.</p>
+  </li>
+
+  <li class="learning">
+    <strong>Curva de Aprendizado</strong>
+    <p>Em pouco tempo você conseguirá aprender tudo o que é necessário para desenvolver suas aplicações com o VRaptor.</p>
+  </li>
+
+  <li class="testability">
+    <strong>Testabilidade</strong>
+    <p>Escreva código modularizado e desacoplado do VRaptor. Sua aplicação fica altamente testável e de fácil manutenção.</p>
+  </li>
+
+  <li class="economy">
+    <strong>Economia</strong>
+    <p>Economize muitas horas de trabalho com a alta produtividade do VRaptor, a facilidade em treinar a sua equipe e a qualidade final do seu projeto.</p>
+  </li>
+
+  <li class="flexibility">
+    <strong>Flexibilidade</strong>
+    <p>Integre o seu projeto com qualquer framework de sua preferência. Você não estará preso a nenhuma tecnologia específica.</p>
+  </li>
+
+  <li class="soa">
+    <strong>SOA e Rest - Ready</strong>
+    <p>Faça aplicações RESTful ou orientadas a serviço sem complicações, como se estivesse fazendo aplicações Web normais.</p>
+  </li>
+
+  <li class="best-practices">
+    <strong>Melhores práticas de desenvolvimento</strong>
+    <p>Utilizando os conceitos de Injeção de Dependência, Inversão de Controle e POJOs, seu código fica simples e testável.</p>
+  </li>
+
+  <li class="pt-docs">
+    <strong>Documentação em Português</strong>
+    <p>Aprenda tudo sobre VRaptor 4 contando com uma ampla documentação, fóruns e listas de discussão em português.</p>
+  </li>
+</ul>
+</section>
+
 <div>
-	<ul id="companies">
-		<li class="sprite company" id="guj"></li>
-		<li class="sprite company" id="wine"></li>
-		<li class="sprite company" id="defferrari"></li>
-		<li class="sprite company" id="locaweb"></li>
-		<li class="sprite company" id="agenciaclick"></li>
-	</ul>
+  <ul id="companies">
+    <li class="sprite company" id="guj"></li>
+    <li class="sprite company" id="wine"></li>
+    <li class="sprite company" id="defferrari"></li>
+    <li class="sprite company" id="locaweb"></li>
+    <li class="sprite company" id="agenciaclick"></li>
+  </ul>
 </div>

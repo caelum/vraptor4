@@ -1,28 +1,12 @@
 body {
   color: #333333;
-  font: 13px Helvetica, arial, freesans, clean, sans-serif;
-  background: #fff;
-}
-
-h1,h2,h3,h4,h5,h6 {
-  margin-top:15px;
-  margin-bottom:15px;
-  line-height:1.1;
-}
-
-h2 {
-  font-size:21px;
-}
-
-html {
-  font-family:sans-serif;
-  -ms-text-size-adjust:100%;
-  -webkit-text-size-adjust:100%;
+  font-size: 100%;
+  font-family: Helvetica, arial, freesans, clean, sans-serif;
+  background-color: #fff;
 }
 
 tt,code,pre {
   font-family:Consolas, "Liberation Mono", Courier, monospace;
-  font-size:12px;
 }
 
 a {
@@ -35,27 +19,18 @@ a {
   background: rgba(65,131,196,0.4);
 }
 
-* {
-  margin: 0;
-  padding: 0;
-  font-family: font: 13px Helvetica, arial, freesans, clean, sans-serif;
-}
-
 header {
-  margin-bottom: 20px;
+  margin: .5em auto;
 }
 
-main {
-  float: left;
-  max-width: 700px;
-  width: 100%;
+.site-languages {
+  display: block;
+  text-align: center;
 }
 
-main h1 {
-  font-size: 40px;
-  font-weight: normal;
-  line-height: 40px;
-  letter-spacing: -1px;
+.site-language {
+  padding: 1em;
+  display: inline-block;
 }
 
 main p {
@@ -136,22 +111,15 @@ pre {
   border-bottom: 1px solid #ddd;
 }
 
-.logo {
-  display: inline-block;
-  vertical-align: middle;
-  border-right: 2px solid #EAEAEA;
-}
-
-.logo-link {
-  display: inline-block;
-  padding: 0px 28px 5px;
+.logo,
+.sublogo-message {
+  display: block;
+  text-align: center;
 }
 
 .sublogo-message {
-  font-size: 4em;
-  margin-left: 20px;
+  font-size: 1.5em;
   color: #AAAAAA;
-  vertical-align: middle;
 }
 
 span#language {

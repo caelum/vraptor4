@@ -89,7 +89,7 @@ public class FlashInterceptor implements Interceptor {
 					try {
 						session.setAttribute(FLASH_INCLUDED_PARAMETERS, new HashMap<>(included));
 					} catch (IllegalStateException e) {
-						LOGGER.info("HTTP Session was invalidated. It is not possible to include " +
+						LOGGER.warn("HTTP Session was invalidated. It is not possible to include " +
 								"Result parameters on Flash Scope");
 					}
 				}

@@ -1,3 +1,13 @@
+.site-languages {
+  display: block;
+  text-align: center;
+}
+
+.site-language {
+  padding: 1em;
+  display: inline-block;
+}
+
 .flag:before {
   content: '';
   width: 16px;
@@ -12,6 +22,10 @@
 
 .flag-en:before {
   background-position: -32px 0;
+}
+
+.flag.not-selected {
+  color: #8A99A7;
 }
 
 .flag-pt.not-selected:before {

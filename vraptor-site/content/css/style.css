@@ -62,13 +62,3 @@ header {
   font-size: 1.5em;
   color: #AAAAAA;
 }
-
-.site-languages {
-  display: block;
-  text-align: center;
-}
-
-.site-language {
-  padding: 1em;
-  display: inline-block;
-}

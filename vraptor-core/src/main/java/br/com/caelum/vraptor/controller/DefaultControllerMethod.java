@@ -62,7 +62,7 @@ public class DefaultControllerMethod implements ControllerMethod {
 
 	@Override
 	public String toString() {
-		return "[DefaultControllerMethod: " + method.getName() + "]";
+		return "[DefaultControllerMethod: " + method + "]";
 	}
 
 	@Override

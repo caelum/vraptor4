@@ -188,7 +188,7 @@ public class DefaultRouteBuilder implements RouteBuilder {
 		this.strategy = new FixedMethodStrategy(originalUri, controllerMethod, this.supportedMethods, builder.build(), priority, parameterNames);
 
 		logger.info(String.format("%-50s%s -> %10s", originalUri,
-				this.supportedMethods.isEmpty() ? "[ALL]" : this.supportedMethods, method.getName()));
+				this.supportedMethods.isEmpty() ? "[ALL]" : this.supportedMethods, method));
 	}
 
 	private void addParametersInfo(Method method) {

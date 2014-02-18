@@ -76,15 +76,16 @@
 			</plugin>
 			
 			<plugin>
-				<groupId>org.mortbay.jetty</groupId>
-				<artifactId>maven-jetty-plugin</artifactId>
-				<version>6.1.26</version>
+				<groupId>org.eclipse.jetty</groupId>
+				<artifactId>jetty-maven-plugin</artifactId>
+				<version>9.1.1.v20140108</version>				
 				<configuration>
 					<scanIntervalSeconds>3</scanIntervalSeconds>
 					<stopKey>foo</stopKey>
 					<stopPort>9999</stopPort>
 					<webAppConfig>
 						<contextPath>/</contextPath>
+						<jettyEnvXml>${basedir}/src/main/webapp/WEB-INF/jetty-env.xml</jettyEnvXml>
 					</webAppConfig>
 				</configuration>
 			</plugin>

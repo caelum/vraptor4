@@ -71,17 +71,45 @@ pre {
 
 header {
   margin: .5em auto 0;
-}
-
-.logo,
-.sublogo-message {
-  display: block;
   text-align: center;
 }
 
-.sublogo-message {
-  font-size: 1.5em;
-  color: #AAAAAA;
+.logo {
+  display: block;
+  margin: 0;
+}
+
+.community li {
+  display: inline-block;
+  margin: .5em;
+}
+
+.community a {
+  width: 32px;
+  height: 32px;
+  overflow: hidden;
+  padding: 0;
+  display: block;
+}
+
+.community a:before {
+  display: inline-block;
+  content: '';
+  background-size: contain;
+  width: 32px;
+  height: 32px;
+}
+
+.community a[href*="groups.google.com"]:before {
+  background-image: url(../img/logo-gplus.png);
+}
+
+.community a[href*="github.com"]:before {
+  background-image: url(../img/logo-github.png);
+}
+
+.community a[href*="guj.com.br"]:before {
+  background-image: url(../img/logo-guj.png);
 }
 
 .download-btn {
@@ -91,6 +119,8 @@ header {
   color: #eee;
   font-size: 2em;
   border-radius: 5px;
+  max-width: 400px;
+  margin: 0 auto;
 }
 
 .download-btn:before {
@@ -159,4 +189,30 @@ header {
 
 .advantages .pt-docs:before {
   background-position: 0 -322px;
+}
+
+@media (min-width: 480px) {
+  .community {
+    display: inline-block;
+    margin-right: 2em;
+  }
+}
+
+@media (min-width: 640px) {
+  main {
+    padding: 1em 2em;
+  }
+}
+
+@media (min-width: 760px) {
+  header {
+    display: flex;
+    align-items: center;
+    padding: 1em;
+  }
+    
+  .logo {
+    flex: 1;
+    text-align: left;
+  }
 }

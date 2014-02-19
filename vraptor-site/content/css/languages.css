@@ -1,6 +1,9 @@
 .site-languages {
   display: block;
-  text-align: center;
+}
+
+.site-languages li {
+  display: inline-block;
 }
 
 .site-language {
@@ -34,4 +37,10 @@
 
 .flag-en.not-selected:before {
   background-position: -32px -11px;
+}
+
+@media (min-width: 480px) {
+  .site-languages {
+    display: inline-block;
+  }
 }

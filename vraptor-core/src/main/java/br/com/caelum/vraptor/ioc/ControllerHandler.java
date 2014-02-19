@@ -66,7 +66,10 @@ public class ControllerHandler{
 		for (Route route : routes) {
 			router.add(route);
 		}
-		context.setAttribute(annotatedType.getType().getSimpleName(), annotatedType);
+		registerLinkToClass(annotatedType);
 	}
 
+	private void registerLinkToClass(BeanClass annotatedType) {
+		context.setAttribute(annotatedType.getType().getSimpleName(), annotatedType);
+	}
 }

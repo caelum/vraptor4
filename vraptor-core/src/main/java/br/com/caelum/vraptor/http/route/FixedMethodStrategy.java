@@ -27,7 +27,6 @@ import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.controller.HttpMethod;
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.http.Parameter;
-import br.com.caelum.vraptor.util.Stringnifier;
 
 /**
  * A route strategy which invokes a fixed type's method.
@@ -99,8 +98,8 @@ public class FixedMethodStrategy implements Route {
 
 	@Override
 	public String toString() {
-		return String.format("[FixedMethodStrategy: %-65s %-70s %s]", originalUri, Stringnifier
-				.simpleNameFor(controllerMethod.getMethod()), methods.size() == HttpMethod.values().length ? "ALL" : methods);
+		return String.format("[FixedMethodStrategy: %-65s %-70s %s]", originalUri, 
+			controllerMethod.getMethod().getName(), methods.size() == HttpMethod.values().length ? "ALL" : methods);
 	}
 
 	@Override

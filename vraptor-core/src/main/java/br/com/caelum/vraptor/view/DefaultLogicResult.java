@@ -45,7 +45,6 @@ import br.com.caelum.vraptor.proxy.MethodInvocation;
 import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.proxy.ProxyInvocationException;
 import br.com.caelum.vraptor.proxy.SuperMethod;
-import br.com.caelum.vraptor.util.Stringnifier;
 
 /**
  * The default implementation of LogicResult.<br>
@@ -100,7 +99,7 @@ public class DefaultLogicResult implements LogicResult {
 			@Override
 			public Object intercept(T proxy, Method method, Object[] args, SuperMethod superMethod) {
 				try {
-					logger.debug("Executing {}", Stringnifier.simpleNameFor(method));
+					logger.debug("Executing {}", method);
 					ControllerMethod old = methodInfo.getControllerMethod();
 					methodInfo.setControllerMethod(DefaultControllerMethod.instanceFor(type, method));
 					Object result = method.invoke(container.instanceFor(type), args);

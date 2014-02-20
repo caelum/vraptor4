@@ -224,8 +224,6 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.1</version>
 				<configuration>
-					<executable>/opt/jdk1.8.0/bin/javac</executable>
-					<compilerVersion>1.8</compilerVersion>
 					<fork>true</fork>
 					<source>1.8</source>
 					<target>1.8</target>

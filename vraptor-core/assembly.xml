@@ -62,14 +62,6 @@
 
 		<dependencySet>
 			<unpack>false</unpack>
-			<outputDirectory>lib/jodatime</outputDirectory>
-			<includes>
-				<include>joda-time:joda-time</include>
-			</includes>
-		</dependencySet>
-
-		<dependencySet>
-			<unpack>false</unpack>
 			<outputDirectory>lib/fileupload</outputDirectory>
 			<includes>
 				<include>commons-fileupload:commons-fileupload</include>

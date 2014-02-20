@@ -20,7 +20,7 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 
 import br.com.caelum.vraptor.controller.ControllerMethod;
-import br.com.caelum.vraptor.http.Parameter;
+import java.lang.reflect.Parameter;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.http.ValuedParameter;
 

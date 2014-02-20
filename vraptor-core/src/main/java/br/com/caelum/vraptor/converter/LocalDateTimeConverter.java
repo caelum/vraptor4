@@ -15,59 +15,57 @@
  * limitations under the License.
  */
 
-package br.com.caelum.vraptor.converter.jodatime;
+package br.com.caelum.vraptor.converter;
 
-import static com.google.common.base.Strings.isNullOrEmpty;
+ import static com.google.common.base.Strings.isNullOrEmpty;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.time.format.FormatStyle;
 import java.util.Locale;
 
 import javax.inject.Inject;
 
-import org.joda.time.LocalDate;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
-
 import br.com.caelum.vraptor.Convert;
-import br.com.caelum.vraptor.converter.ConversionException;
-import br.com.caelum.vraptor.converter.ConversionMessage;
-import br.com.caelum.vraptor.converter.Converter;
 
 /**
- * VRaptor converter for {@link LocalDate}. {@link LocalDate} is part of Joda Time library.
+ * A converter for {@link LocalDateTime}.
  *
  * @author Lucas Cavalcanti
+ * @author Otávio Scherer Garcia
  */
-@Convert(LocalDate.class)
-public class LocalDateConverter implements Converter<LocalDate> {
+@Convert(LocalDateTime.class)
+public class LocalDateTimeConverter implements Converter<LocalDateTime> {
 
 	private final Locale locale;
 
 	/** 
 	 * @deprecated CDI eyes only
 	 */
-	protected LocalDateConverter() {
+	protected LocalDateTimeConverter() {
 		this(null);
 	}
 
 	@Inject
-	public LocalDateConverter(Locale locale) {
+	public LocalDateTimeConverter(Locale locale) {
 		this.locale = locale;
 	}
 
 	@Override
-	public LocalDate convert(String value, Class<? extends LocalDate> type) {
+	public LocalDateTime convert(String value, Class<? extends LocalDateTime> type) {
 		if (isNullOrEmpty(value)) {
 			return null;
 		}
 		
 		try {
-			return getFormatter().parseLocalDate(value);
-		} catch (UnsupportedOperationException | IllegalArgumentException  e) {
-			throw new ConversionException(new ConversionMessage("is_not_a_valid_date", value));
+			return LocalDateTime.parse(value, getFormatter());
+		} catch (DateTimeParseException e) {
+			throw new ConversionException(new ConversionMessage("is_not_a_valid_datetime", value));
 		}
 	}
 
 	protected DateTimeFormatter getFormatter() {
-		return DateTimeFormat.shortDate().withLocale(locale); 
+		return DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT).withLocale(locale);
 	}
 }

@@ -1,5 +1,6 @@
 package br.com.caelum.vraptor.http;
 
+import java.lang.reflect.Parameter;
 import java.util.Objects;
 
 /**

@@ -18,7 +18,7 @@
 package br.com.caelum.vraptor.http.route;
 
 import br.com.caelum.vraptor.http.MutableRequest;
-import br.com.caelum.vraptor.http.Parameter;
+import java.lang.reflect.Parameter;
 
 public interface ParametersControl {
 

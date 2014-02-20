@@ -1,4 +1,4 @@
-package br.com.caelum.vraptor.converter.jodatime;
+package br.com.caelum.vraptor.converter;
 
 import static br.com.caelum.vraptor.VRaptorMatchers.hasMessage;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -11,21 +11,22 @@ import java.util.Locale;
 
 import javax.servlet.ServletContext;
 
-import org.joda.time.LocalDateTime;
+import java.time.LocalTime;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor.converter.ConversionException;
+import br.com.caelum.vraptor.converter.LocalTimeConverter;
 import br.com.caelum.vraptor.http.MutableRequest;
 
 /**
- * Tests to {@link LocalDateTimeConverter}.
+ * Tests to {@link LocalTimeConverter}.
  */
-public class LocalDateTimeConverterTest {
+public class LocalTimeConverterTest {
 
-	private LocalDateTimeConverter converter;
+	private LocalTimeConverter converter;
 	private @Mock MutableRequest request;
 	private @Mock ServletContext context;
 
@@ -35,31 +36,31 @@ public class LocalDateTimeConverterTest {
 
 		when(request.getServletContext()).thenReturn(context);
 
-		converter = new LocalDateTimeConverter(new Locale("pt", "BR"));
+		converter = new LocalTimeConverter(new Locale("pt", "BR"));
 	}
 
 	@Test
 	public void shouldBeAbleToConvert() {
-		assertThat(converter.convert("05/06/2010 3:38", LocalDateTime.class),
-				is(equalTo(new LocalDateTime(2010, 6, 5, 3, 38))));
+		assertThat(converter.convert("15:38", LocalTime.class),
+				is(equalTo(LocalTime.of(15, 38))));
 	}
 
 	@Test
 	public void shouldBeAbleToConvertEmpty() {
-		assertThat(converter.convert("", LocalDateTime.class), is(nullValue()));
+		assertThat(converter.convert("", LocalTime.class), is(nullValue()));
 	}
 
 	@Test
 	public void shouldBeAbleToConvertNull() {
-		assertThat(converter.convert(null, LocalDateTime.class), is(nullValue()));
+		assertThat(converter.convert(null, LocalTime.class), is(nullValue()));
 	}
 
 	@Test
 	public void shouldThrowExceptionWhenUnableToParse() {
 		try {
-			converter.convert("a,10/06/2008/a/b/c", LocalDateTime.class);
+			converter.convert("xx:yy:ff", LocalTime.class);
 		} catch (ConversionException e) {
-			assertThat(e.getValidationMessage(), hasMessage("a,10/06/2008/a/b/c is not a valid datetime."));
+			assertThat(e.getValidationMessage(), hasMessage("xx:yy:ff is not a valid time."));
 		}
 	}
 }

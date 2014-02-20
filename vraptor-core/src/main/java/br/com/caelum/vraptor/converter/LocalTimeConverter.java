@@ -15,28 +15,25 @@
  * limitations under the License.
  */
 
-package br.com.caelum.vraptor.converter.jodatime;
+package br.com.caelum.vraptor.converter;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
 
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.time.format.FormatStyle;
 import java.util.Locale;
 
 import javax.inject.Inject;
 
-import org.joda.time.LocalTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
-
 import br.com.caelum.vraptor.Convert;
-import br.com.caelum.vraptor.converter.ConversionException;
-import br.com.caelum.vraptor.converter.ConversionMessage;
-import br.com.caelum.vraptor.converter.Converter;
 
 /**
- * VRaptor converter for {@link LocalTime}. {@link LocalTime} is part of Joda
- * Time library.
+ * A converter for {@link LocalTime}.
  *
  * @author Lucas Cavalcanti
+ * @author Otávio Scherer Garcia
  */
 @Convert(LocalTime.class)
 public class LocalTimeConverter implements Converter<LocalTime> {
@@ -62,13 +59,13 @@ public class LocalTimeConverter implements Converter<LocalTime> {
 		}
 		
 		try {
-			return getFormatter().parseLocalTime(value);
-		} catch (UnsupportedOperationException | IllegalArgumentException  e) {
+			return LocalTime.parse(value, getFormatter());
+		} catch (DateTimeParseException e) {
 			throw new ConversionException(new ConversionMessage("is_not_a_valid_time", value));
 		}
 	}
 	
 	protected DateTimeFormatter getFormatter() {
-		return DateTimeFormat.shortTime().withLocale(locale); 
+		return DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT).withLocale(locale);
 	}
 }

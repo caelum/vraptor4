@@ -1,4 +1,4 @@
-package br.com.caelum.vraptor.converter.jodatime;
+package br.com.caelum.vraptor.converter;
 
 import static br.com.caelum.vraptor.VRaptorMatchers.hasMessage;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -7,17 +7,18 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.Mockito.when;
 
+import java.time.LocalDate;
 import java.util.Locale;
 
 import javax.servlet.ServletContext;
 
-import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor.converter.ConversionException;
+import br.com.caelum.vraptor.converter.LocalDateConverter;
 import br.com.caelum.vraptor.http.MutableRequest;
 
 /**
@@ -41,7 +42,7 @@ public class LocalDateConverterTest {
 	@Test
 	public void shouldBeAbleToConvert() {
 		assertThat(converter.convert("05/06/2010", LocalDate.class),
-				is(equalTo(new LocalDate(2010, 6, 5))));
+				is(equalTo(LocalDate.of(2010, 6, 5))));
 	}
 
 	@Test

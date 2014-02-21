@@ -67,6 +67,17 @@
 	max-height:500px
 }
 
+.doc-nav ul {
+	padding-left: 1em;
+	margin: 2em;
+}
+
+.doc-nav li {
+	list-style: disc outside;
+	margin: 1em 0;
+	line-height: 1.3;
+}
+
 @media (min-width: 760px) {
 	.main-nav ul {
 		display: flex;
@@ -86,5 +97,17 @@
 	}
 	.main-nav {
 		max-height: 100%;
+	}
+	.doc-nav ul {
+		column-count: 2;
+	}
+	.doc-nav li:first-child {
+		margin-top: 0;
+	}
+}
+
+@media (min-width: 1000px) {
+	.doc-nav ul {
+		column-count: 3;
 	}
 }

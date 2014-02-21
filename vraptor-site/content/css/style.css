@@ -39,10 +39,6 @@ h3 {
   background: rgba(65,131,196,0.4);
 }
 
-main {
-  padding: 1em .5em;
-}
-
 main p {
   margin: 2em 0;
 }
@@ -73,14 +69,15 @@ pre {
 }
 
 header {
-  margin: .5em auto 0;
+  margin-top: .5em;
   text-align: center;
 }
 
-header,
-main {
+.container {
   max-width: 1200px;
-  margin: 0 auto;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 1em .5em;
 }
 
 .logo {
@@ -208,7 +205,7 @@ main {
 }
 
 @media (min-width: 640px) {
-  main {
+  .container {
     padding: 1em 2em;
   }
 }

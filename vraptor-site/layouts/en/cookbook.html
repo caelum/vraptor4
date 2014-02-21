@@ -3,14 +3,15 @@
   <%= render 'head' %>
   <body>
     <%= render 'header' %>
-    <nav class="doc-nav">
+    <nav class="doc-nav container">
+      <h1>Cookbook</h1>
       <ul>
         <li>
             <a href="/en/cookbook/"></a>
         </li>
       </ul>
     </nav>
-    <main>
+    <main class="container">
       <%= yield %>
     </main>
   </body>

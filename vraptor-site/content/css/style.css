@@ -77,6 +77,12 @@ header {
   text-align: center;
 }
 
+header,
+main {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
 .logo {
   display: block;
   margin: 0;
@@ -217,5 +223,38 @@ header {
   .logo {
     flex: 1;
     text-align: left;
+  }
+
+  .home-advantages li {
+    display: inline-block;
+    width: 48%;
+    vertical-align: top;
+  }
+
+  .home-advantages li:nth-child(odd) {
+    margin-right: 2%;
+  }
+}
+
+@media (min-width: 60em) {
+  .home-call {
+    text-align: justify;
+  }
+  .home-call:after {
+    content: '';
+    display: inline-block;
+    width: 100%;
+  }
+  .home-call p {
+    width: 40em;
+    text-align: left;
+  }
+  .download-btn {
+    width: 8em;
+  }
+  .home-call p,
+  .download-btn {
+    display: inline-block;
+    vertical-align: middle;
   }
 }

@@ -85,7 +85,6 @@
 					<stopPort>9999</stopPort>
 					<webAppConfig>
 						<contextPath>/</contextPath>
-						<jettyEnvXml>${basedir}/src/main/webapp/WEB-INF/jetty-env.xml</jettyEnvXml>
 					</webAppConfig>
 				</configuration>
 			</plugin>

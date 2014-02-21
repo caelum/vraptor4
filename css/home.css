@@ -1,0 +1,47 @@
+footer {
+  text-align: center;
+  background: rgb(228,228,228);
+  padding: 2em 0;
+}
+
+footer h1 {
+  color: #999;
+  text-shadow: 1px 1px white;
+}
+
+.who-uses li {
+  background: url(../img/whoUses.png) no-repeat top left;
+  display: inline-block;
+  vertical-align: middle;
+  text-indent: -99999px;
+  margin: 1em 2em;
+}
+
+.who-uses .agenciaclick {
+  background-position: 0 0;
+  width: 179px;
+  height: 27px;
+}
+
+.who-uses .defferrari {
+  background-position: 0 -77px;
+  width: 144px; height: 76px;
+}
+
+.who-uses .guj {
+  background-position: 0 -203px;
+  width: 200px;
+  height: 100px;
+}
+
+.who-uses .locaweb {
+  background-position: 0 -353px;
+  width: 145px;
+  height: 55px;
+}
+
+.who-uses .wine {
+  background-position: 0 -458px;
+  width: 143px;
+  height: 63px;
+}

@@ -1,28 +1,4 @@
-<!DOCTYPE HTML>
-<html lang="en">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<meta charset="utf-8">
-<title>VRaptor 4 - Componentes</title>
-<link rel="stylesheet" href="../../../style.css">
-<link rel="stylesheet" href="../../../custom-highlight.css">
-<!-- you don't need to keep this, but it's cool for stats! --><meta name="generator" content="nanoc 3.6.7">
-</head>
-<body>
-    <div id="main" class="highlight">
-      <div id="header">
-        <a id="logo" href="../.."><img src="../../../logo.png"></a>
-        <span>Framework Java MVC</span>
-      </div>
-      <h3 id="o-que-so-componentes">O que são componentes?</h3>
-
-<p>Componentes são instâncias de classes que seu projeto precisa para executar tarefas ou armazenar estados em diferentes situações.</p>
-
-<p>Exemplos clássicos de uso de componentes seriam os DAOs, enviadores de email etc. A sugestão de boa prática indica sempre criar uma interface para seus componentes. Dessa maneira seu código também fica mais fácil de ser testado unitariamente.</p>
-
-<p>O exemplo a seguir mostra um componente a ser gerenciado pelo VRaptor:</p>
-
-<pre><code class="language-java"><span class="nd">@RequestScoped</span>
+<!DOCTYPE HTML> <html lang="pt"> <head> <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> <meta charset="utf-8"> <meta name="viewport" content="width=device-width"> <title>VRaptor 4 - Componentes</title> <link rel="stylesheet" href="/css/style.min.css"/> </head> <body> <header class="container"><h1 class="logo"><a class="logo-link" href="../.."> <img src="../../../img/logo.png" alt="VRaptor"></a></h1> <ul class="community"> <li><a href="https://groups.google.com/forum/#!forum/caelum-vraptor" target="_blank">Google Groups</a></li> <li><a href="https://github.com/caelum/vraptor4/" target="_blank">GitHub</a></li> <li><a href="http://www.guj.com.br/tag/vraptor" target="_blank">GUJ Respostas</a></li> </ul> <ul class="site-languages"> <li> <a class="site-language flag flag-en not-selected" title="en" href="../../../en"> EN </a> </li> <li> <a class="site-language flag flag-pt " title="pt" href="../.."> PT </a> </li> </ul></header><input type="checkbox" id="nav-visibility"><label for="nav-visibility" class="nav-toggle">Menu</label> <nav class="main-nav"><ul> <li><a href="../../download">Download</a></li> <li><a href="../guia-de-1-minuto/">Documentação</a></li> <li><a href="../../cookbook/aceitando-urls-com-ou-sem-barra-no-final">Cookbook</a></li> <li><a href="https://github.com/caelum/vraptor4/releases" target="_blank">Changelog</a></li> <li><a href="../../roadmap">Roadmap</a></li> <li><a href="../../../javadoc">Javadoc</a></li> </ul></nav><nav class="doc-nav container"><h1>Documentação</h1> <ul> <li><a href="../guia-de-1-minuto">Guia inicial de 1 minuto</a></li> <li><a href="../guia-de-10-minutos">Guia inicial de 10 minutos</a></li> <li><a href="../controllers-rest">Controllers Rest</a></li> <li><a href=".">Components</a></li> <li><a href="../conversores">Conversores</a></li> <li><a href="../validacao">Validação</a></li> <li><a href="../interceptadores">Interceptadores</a></li> <li><a href="../trabalhando-com-a-view">Trabalhando com a View</a></li> <li><a href="../download-e-upload">Download e Upload</a></li> <li><a href="../environment">Environment</a></li> <li><a href="../plugins">Plugins</a></li> <li><a href="../dependencias-e-pre-requisitos">Dependências e pré requisitos</a></li> <li><a href="../migrando-de-um-projeto-com-vraptor3">Migrando de um projeto com VRaptor 3</a></li> <li><a href="../contribuindo-com-o-vraptor">Contribuindo com o VRaptor</a></li> </ul></nav><main class="container"><h1 id="o-que-so-componentes">O que são componentes?</h1> <p>Componentes são instâncias de classes que seu projeto precisa para executar tarefas ou armazenar estados em diferentes situações.</p> <p>Exemplos clássicos de uso de componentes seriam os DAOs, enviadores de email etc. A sugestão de boa prática indica sempre criar uma interface para seus componentes. Dessa maneira seu código também fica mais fácil de ser testado unitariamente.</p> <p>O exemplo a seguir mostra um componente a ser gerenciado pelo VRaptor:</p> <pre><code class="language-java"><span class="nd">@RequestScoped</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">ClienteDao</span> <span class="o">{</span>
 
   <span class="kd">private</span> <span class="n">Session</span> <span class="n">session</span><span class="o">;</span>
@@ -39,24 +15,7 @@
   <span class="kd">public</span> <span class="kt">void</span> <span class="nf">adiciona</span><span class="o">(</span><span class="n">Cliente</span> <span class="n">cliente</span><span class="o">)</span> <span class="o">{</span>
         <span class="n">session</span><span class="o">.</span><span class="na">save</span><span class="o">(</span><span class="n">cliente</span><span class="o">);</span>
   <span class="o">}</span>
-<span class="o">}</span></code></pre>
-
-<p>Todos os componentes do VRaptor são gerenciados pelo CDI (Context Dependency Injection) do Java EE 7. Desta forma todas as funcionalidades presentes no CDI estão presentes no VRaptor. </p>
-
-<p>Nos links abaixo você pode obter mais informações sobre o CDI:</p>
-
-<ul>
-<li><a href="http://blog.caelum.com.br/use-cdi-no-seu-proximo-projeto-java/">Use CDI no seu próximo projeto Java</a></li>
-  <li><a href="http://blog.caelum.com.br/customizando-a-producao-de-dependencias-no-cdi/">Customizando a produção de dependências no CDI</a></li>
-  <li><a href="http://blog.caelum.com.br/4-recursos-novos-do-cdi-1-1/">4 recursos novos do CDI 1.1</a></li>
-</ul>
-<h3 id="escopos">Escopos</h3>
-
-<p>Assim como os recursos, os componentes vivem em um escopo específico e seguem as mesmas regras, por padrão pertencendo ao escopo de requisicão, isto é, a cada nova requisição seu componente será novamente instanciado.</p>
-
-<p>O exemplo a seguir mostra o fornecedor de conexões com o banco baseado no Hibernate. Esse fornecedor está no escopo de aplicacação, portanto será instanciado somente uma vez por contexto:</p>
-
-<pre><code class="language-java"><span class="nd">@ApplicationScoped</span>
+<span class="o">}</span></code></pre> <p>Todos os componentes do VRaptor são gerenciados pelo CDI (Context Dependency Injection) do Java EE 7. Desta forma todas as funcionalidades presentes no CDI estão presentes no VRaptor. </p> <p>Nos links abaixo você pode obter mais informações sobre o CDI:</p> <ul> <li><a href="http://blog.caelum.com.br/use-cdi-no-seu-proximo-projeto-java/">Use CDI no seu próximo projeto Java</a></li> <li><a href="http://blog.caelum.com.br/customizando-a-producao-de-dependencias-no-cdi/">Customizando a produção de dependências no CDI</a></li> <li><a href="http://blog.caelum.com.br/4-recursos-novos-do-cdi-1-1/">4 recursos novos do CDI 1.1</a></li> </ul> <h2 id="escopos">Escopos</h2> <p>Assim como os recursos, os componentes vivem em um escopo específico e seguem as mesmas regras, por padrão pertencendo ao escopo de requisicão, isto é, a cada nova requisição seu componente será novamente instanciado.</p> <p>O exemplo a seguir mostra o fornecedor de conexões com o banco baseado no Hibernate. Esse fornecedor está no escopo de aplicacação, portanto será instanciado somente uma vez por contexto:</p> <pre><code class="language-java"><span class="nd">@ApplicationScoped</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">HibernateControl</span> <span class="o">{</span>
 
   <span class="kd">private</span> <span class="kd">final</span> <span class="n">SessionFactory</span> <span class="n">factory</span><span class="o">;</span>
@@ -67,26 +26,12 @@
   <span class="kd">public</span> <span class="n">Session</span> <span class="nf">getSession</span><span class="o">()</span> <span class="o">{</span>
       <span class="k">return</span> <span class="n">factory</span><span class="o">.</span><span class="na">openSession</span><span class="o">();</span>
   <span class="o">}</span>
-<span class="o">}</span></code></pre>
-
-<p>Os escopos implementados são:</p>
-
-<ul>
-<li>@ApplicationScoped - component é um singleton, apenas um por aplicação.</li>
-  <li>@SessionScoped - o componente é o mesmo durante uma http session.</li>
-  <li>@ConversationScoped - a instância do componente é mantida durante uma conversation.</li>
-  <li>@RequestScoped - o componente é o mesmo durante uma requisição.</li>
-  <li>@Dependent - component é instanciado sempre que requisitado.</li>
-</ul>
-<p>Você pode pesquisar mais sobre os escopos do CDI aqui: http://docs.oracle.com/javaee/7/tutorial/doc/cdi-basic008.htm</p>
-
-<h3 id="fabricando-componentes">Fabricando componentes</h3>
-
-<p>Muitas vezes você quer receber como dependência da sua classe alguma classe que não é do seu projeto, como por exemplo uma Session do Hibernate ou um EntityManager da JPA.</p>
-
-<p>Para poder fazer isto, basta criar um <code>Produces</code>:</p>
-
-<pre><code class="language-java"><span class="nd">@RequestScoped</span>
+<span class="o">}</span></code></pre> <p>Os escopos implementados são:</p> <pre><code>* @ApplicationScoped - component é um singleton, apenas um por aplicação.
+* @SessionScoped - o componente é o mesmo durante uma http session.
+* @ConversationScoped - a instância do componente é mantida durante uma conversation.
+* @RequestScoped - o componente é o mesmo durante uma requisição.
+* @Dependent - component é instanciado sempre que requisitado.
+</code></pre> <p>Você pode pesquisar mais sobre os <a href="http://docs.oracle.com/javaee/7/tutorial/doc/cdi-basic008.htm">escopos do CDI aqui</a>.</p> <h2 id="fabricando-componentes">Fabricando componentes</h2> <p>Muitas vezes você quer receber como dependência da sua classe alguma classe que não é do seu projeto, como por exemplo uma Session do Hibernate ou um EntityManager da JPA.</p> <p>Para poder fazer isto, basta criar um <code>Produces</code>:</p> <pre><code class="language-java"><span class="nd">@RequestScoped</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">SessionCreator</span> <span class="o">{</span>
 
     <span class="nd">@Inject</span> <span class="kd">private</span> <span class="n">SessionFactory</span> <span class="n">sessionFactory</span><span class="o">;</span>
@@ -101,15 +46,7 @@
             <span class="n">session</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
         <span class="o">}</span>
     <span class="o">}</span>
-<span class="o">}</span></code></pre>
-
-<p>Você pode também adicionar os listeners <code>@PostConstruct</code>, <code>@PreDestroy</code> e <code>@Disposes</code> para controlar a criação e destruição dos recursos que você usa. Isso funciona para qualquer componente que você registrar no VRaptor.</p>
-
-<h3 id="injeo-de-dependncias">Injeção de dependências</h3>
-
-<p>O VRaptor utiliza o CDI para controlar o que é necessário para instanciar cada um de seus componentes e recursos. Sendo assim, os dois exemplos anteriores permitem que quaisquer um dos seus recursos ou componentes recebam um <code>ClienteDao</code> em seu construtor, por exemplo:</p>
-
-<pre><code class="language-java"><span class="nd">@Controller</span>
+<span class="o">}</span></code></pre> <p>Você pode também adicionar os listeners <code>@PostConstruct</code>, <code>@PreDestroy</code> e <code>@Disposes</code> para controlar a criação e destruição dos recursos que você usa. Isso funciona para qualquer componente que você registrar no VRaptor.</p> <h2 id="injeo-de-dependncias">Injeção de dependências</h2> <p>O VRaptor utiliza o CDI para controlar o que é necessário para instanciar cada um de seus componentes e recursos. Sendo assim, os dois exemplos anteriores permitem que quaisquer um dos seus recursos ou componentes recebam um <code>ClienteDao</code> em seu construtor, por exemplo:</p> <pre><code class="language-java"><span class="nd">@Controller</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">ClienteController</span> <span class="o">{</span>
     <span class="kd">private</span> <span class="n">ClienteDao</span> <span class="n">dao</span><span class="o">;</span>
 
@@ -122,32 +59,12 @@
     <span class="kd">public</span> <span class="kt">void</span> <span class="nf">adiciona</span><span class="o">(</span><span class="n">Cliente</span> <span class="n">cliente</span><span class="o">)</span> <span class="o">{</span>
         <span class="k">this</span><span class="o">.</span><span class="na">dao</span><span class="o">.</span><span class="na">adiciona</span><span class="o">(</span><span class="n">cliente</span><span class="o">);</span>
     <span class="o">}</span>
-<span class="o">}</span></code></pre>
-
-<h3 id="disparando-eventos">Disparando eventos</h3>
-
-<p>Para disparar eventos você pode usar a anotação <code>@Observes</code>, que é usada quando um evento inicia.</p>
-
-<p>Se você quiser, por exemplo, imprimir uma mensagem na inicialização da aplicação, você pode fazer o seguinte código:</p>
-
-<pre><code class="language-java"><span class="nd">@ApplicationScoped</span>
+<span class="o">}</span></code></pre> <h2 id="disparando-eventos">Disparando eventos</h2> <p>Para disparar eventos você pode usar a anotação <code>@Observes</code>, que é usada quando um evento inicia.</p> <p>Se você quiser, por exemplo, imprimir uma mensagem na inicialização da aplicação, você pode fazer o seguinte código:</p> <pre><code class="language-java"><span class="nd">@ApplicationScoped</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">PrintLog</span> <span class="o">{</span>
 
     <span class="kd">public</span> <span class="kt">void</span> <span class="nf">observesContext</span><span class="o">(</span><span class="nd">@Observes</span> <span class="n">ServletContext</span> <span class="n">context</span><span class="o">)</span> <span class="o">{</span>
         <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"My application is UP"</span><span class="o">);</span>
-    <span class="o">}</span></code></pre>
-
-<h3 id="sobrescrevendo-componentes">Sobrescrevendo componentes</h3>
-
-<p>A maioria dos comportamentos e convenções do VRaptor são personalizáveis. E a forma de personalizar é bem fácil: criar um componente que estende uma das classes internas do VRaptor e anotá-las com <code>@Specializes</code>. Ao fazer isso, o VRaptor vai usar a implementação personalizada ao invés da padrão.</p>
-
-<p>Caso você quiser implementar alguma interface basta você usar a anotação <code>@Priority(Interceptor.Priority.LIBRARY_BEFORE + 10)</code>.</p>
-
-<h3 id="mudando-a-view-renderizada-por-padro">Mudando a view renderizada por padrão</h3>
-
-<p>Se você precisa mudar a view renderizada por padrão, ou mudar o local em que ela é procurada, basta criar a seguinte classe:</p>
-
-<pre><code class="language-java"><span class="nd">@Specializes</span>
+    <span class="o">}</span></code></pre> <h2 id="sobrescrevendo-componentes">Sobrescrevendo componentes</h2> <p>A maioria dos comportamentos e convenções do VRaptor são personalizáveis. E a forma de personalizar é bem fácil: criar um componente que estende uma das classes internas do VRaptor e anotá-las com <code>@Specializes</code>. Ao fazer isso, o VRaptor vai usar a implementação personalizada ao invés da padrão.</p> <p>Caso você quiser implementar alguma interface basta você usar a anotação: </p> <pre><code class="language-java"><span class="nd">@Priority</span><span class="o">(</span><span class="n">Interceptor</span><span class="o">.</span><span class="na">Priority</span><span class="o">.</span><span class="na">LIBRARY_BEFORE</span> <span class="o">+</span> <span class="mi">10</span><span class="o">)</span></code></pre> <h2 id="mudando-a-view-renderizada-por-padro">Mudando a view renderizada por padrão</h2> <p>Se você precisa mudar a view renderizada por padrão, ou mudar o local em que ela é procurada, basta criar a seguinte classe:</p> <pre><code class="language-java"><span class="nd">@Specializes</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">CustomPathResolver</span> <span class="kd">extends</span> <span class="n">DefaultPathResolver</span> <span class="o">{</span>
 
     <span class="nd">@Override</span>
@@ -169,15 +86,7 @@
                <span class="c1">//e quer continuar redirecionando para 'user' e não para 'userResource'</span>
     <span class="o">}</span>
 
-<span class="o">}</span></code></pre>
-
-<p>Se você precisa mudar mais ainda a convenção basta implementar a interface <code>PathResolver</code>.</p>
-
-<h3 id="mudando-a-uri-padro">Mudando a URI padrão</h3>
-
-<p>Por padrão, a URI para o método <code>ClientesController.lista()</code> é <code>/clientes/lista</code>, ou seja, <code>nome_do_controller/nome_do_metodo</code>. Para sobrescrever essa convenção, basta criar a classe:</p>
-
-<pre><code class="language-java"><span class="nd">@Specializes</span> <span class="nd">@ApplicationScoped</span>
+<span class="o">}</span></code></pre> <p>Se você precisa mudar mais ainda a convenção basta implementar a interface <code>PathResolver</code>.</p> <h2 id="mudando-a-uri-padro">Mudando a URI padrão</h2> <p>Por padrão, a URI para o método <code>ClientesController.lista()</code> é <code>/clientes/lista</code>, ou seja, <code>nome_do_controller/nome_do_metodo</code>. Para sobrescrever essa convenção, basta criar a classe:</p> <pre><code class="language-java"><span class="nd">@Specializes</span> <span class="nd">@ApplicationScoped</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">MeuRoutesParser</span> <span class="kd">extends</span> <span class="n">PathAnnotationRoutesParser</span> <span class="o">{</span>
     <span class="c1">//delegate constructor</span>
     <span class="kd">protected</span> <span class="n">String</span> <span class="nf">extractControllerNameFrom</span><span class="o">(</span><span class="n">Class</span><span class="o">&lt;?&gt;</span> <span class="n">type</span><span class="o">)</span> <span class="o">{</span>
@@ -187,38 +96,7 @@
     <span class="kd">protected</span> <span class="n">String</span> <span class="nf">defaultUriFor</span><span class="o">(</span><span class="n">String</span> <span class="n">controllerName</span><span class="o">,</span> <span class="n">String</span> <span class="n">methodName</span><span class="o">)</span> <span class="o">{</span>
         <span class="k">return</span> <span class="c1">//sua convenção aqui</span>
     <span class="o">}</span>
-<span class="o">}</span></code></pre>
-
-<p>Se você precisa mudar mais ainda a convenção, basta implementar a interface <code>RoutesParser</code>.</p>
-
-<h3 id="mudando-o-encoding-da-sua-aplicao">Mudando o encoding da sua aplicação</h3>
-
-<p>Se você quiser que todas as requisições da sua aplicação sejam de um encoding determinado, para evitar problemas de acentuação por exemplo, você pode colocar o seguinte parâmetro no seu web.xml:</p>
-
-<pre><code class="language-xml"><span class="nt">&lt;context-param&gt;</span>
+<span class="o">}</span></code></pre> <p>Se você precisa mudar mais ainda a convenção, basta implementar a interface <code>RoutesParser</code>.</p> <h2 id="mudando-o-encoding-da-sua-aplicao">Mudando o encoding da sua aplicação</h2> <p>Se você quiser que todas as requisições da sua aplicação sejam de um encoding determinado, para evitar problemas de acentuação por exemplo, você pode colocar o seguinte parâmetro no seu web.xml:</p> <pre><code class="language-xml"><span class="nt">&lt;context-param&gt;</span>
     <span class="nt">&lt;param-name&gt;</span>br.com.caelum.vraptor.encoding<span class="nt">&lt;/param-name&gt;</span>
     <span class="nt">&lt;param-value&gt;</span>UTF-8<span class="nt">&lt;/param-value&gt;</span>
-<span class="nt">&lt;/context-param&gt;</span></code></pre>
-
-<p>Assim, todas as suas páginas e dados passados para formulário usarão o encoding UTF-8, evitando problemas de acentuação.</p>
-    </div>
-    <div id="sidebar">
-      <ul>
-<li><a href="../guia-de-1-minuto">Guia inicial de 1 minuto</a></li>
-        <li><a href="../guia-de-10-minutos">Guia inicial de 10 minutos</a></li>
-        <li><a href="../controllers-rest">Controllers Rest</a></li>
-        <li><a href=".">Components</a></li>
-        <li><a href="../conversores">Conversores</a></li>
-        <li><a href="../validacao">Validação</a></li>
-        <li><a href="../interceptadores">Interceptadores</a></li>
-        <li><a href="../trabalhando-com-a-view">Trabalhando com a View</a></li>
-        <li><a href="../download-e-upload">Download e Upload</a></li>
-        <li><a href="../environment">Environment</a></li>
-        <li><a href="../plugins">Plugins</a></li>
-        <li><a href="../dependencias-e-pre-requisitos">Dependências e pré requisitos</a></li>
-        <li><a href="../migrando-um-projeto-com-vraptor3">Migrando um projeto com VRaptor 3</a></li>
-        <li><a href="../contribuindo-com-o-vraptor">Contribuindo com o VRaptor</a></li>
-      </ul>
-</div>
-  </body>
-</html>
+<span class="nt">&lt;/context-param&gt;</span></code></pre> <p>Assim, todas as suas páginas e dados passados para formulário usarão o encoding UTF-8, evitando problemas de acentuação.</p> </main> </body> </html>

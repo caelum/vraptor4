@@ -1,26 +1,4 @@
-<!DOCTYPE HTML>
-<html lang="en">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<meta charset="utf-8">
-<title>VRaptor 4 - O guia inicial de 10 minutos</title>
-<link rel="stylesheet" href="../../../style.css">
-<link rel="stylesheet" href="../../../custom-highlight.css">
-<!-- you don't need to keep this, but it's cool for stats! --><meta name="generator" content="nanoc 3.6.7">
-</head>
-<body>
-    <div id="main" class="highlight">
-      <div id="header">
-        <a id="logo" href="../.."><img src="../../../logo.png"></a>
-        <span>Framework Java MVC</span>
-      </div>
-      <h2 id="comeando-o-projeto-uma-loja-virtual">Começando o projeto: uma loja virtual</h2>
-
-<h3 id="um-cadastro-de-produtos">Um cadastro de produtos</h3>
-
-<p>Para começar o sistema, vamos começar com cadastro de produtos. Precisamos de uma classe que vai representar o produto, e vamos usá-la para guardar produtos no banco, usando o JPA/Hibernate:</p>
-
-<pre><code class="language-java"><span class="nd">@Entity</span>
+<!DOCTYPE HTML> <html lang="pt"> <head> <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> <meta charset="utf-8"> <meta name="viewport" content="width=device-width"> <title>VRaptor 4 - O guia inicial de 10 minutos</title> <link rel="stylesheet" href="/css/style.min.css"/> </head> <body> <header class="container"><h1 class="logo"><a class="logo-link" href="../.."> <img src="../../../img/logo.png" alt="VRaptor"></a></h1> <ul class="community"> <li><a href="https://groups.google.com/forum/#!forum/caelum-vraptor" target="_blank">Google Groups</a></li> <li><a href="https://github.com/caelum/vraptor4/" target="_blank">GitHub</a></li> <li><a href="http://www.guj.com.br/tag/vraptor" target="_blank">GUJ Respostas</a></li> </ul> <ul class="site-languages"> <li> <a class="site-language flag flag-en not-selected" title="en" href="../../../en"> EN </a> </li> <li> <a class="site-language flag flag-pt " title="pt" href="../.."> PT </a> </li> </ul></header><input type="checkbox" id="nav-visibility"><label for="nav-visibility" class="nav-toggle">Menu</label> <nav class="main-nav"><ul> <li><a href="../../download">Download</a></li> <li><a href="../guia-de-1-minuto/">Documentação</a></li> <li><a href="../../cookbook/aceitando-urls-com-ou-sem-barra-no-final">Cookbook</a></li> <li><a href="https://github.com/caelum/vraptor4/releases" target="_blank">Changelog</a></li> <li><a href="../../roadmap">Roadmap</a></li> <li><a href="../../../javadoc">Javadoc</a></li> </ul></nav><nav class="doc-nav container"><h1>Documentação</h1> <ul> <li><a href="../guia-de-1-minuto">Guia inicial de 1 minuto</a></li> <li><a href=".">Guia inicial de 10 minutos</a></li> <li><a href="../controllers-rest">Controllers Rest</a></li> <li><a href="../components">Components</a></li> <li><a href="../conversores">Conversores</a></li> <li><a href="../validacao">Validação</a></li> <li><a href="../interceptadores">Interceptadores</a></li> <li><a href="../trabalhando-com-a-view">Trabalhando com a View</a></li> <li><a href="../download-e-upload">Download e Upload</a></li> <li><a href="../environment">Environment</a></li> <li><a href="../plugins">Plugins</a></li> <li><a href="../dependencias-e-pre-requisitos">Dependências e pré requisitos</a></li> <li><a href="../migrando-de-um-projeto-com-vraptor3">Migrando de um projeto com VRaptor 3</a></li> <li><a href="../contribuindo-com-o-vraptor">Contribuindo com o VRaptor</a></li> </ul></nav><main class="container"><h1 id="comeando-o-projeto-uma-loja-virtual">Começando o projeto: uma loja virtual</h1> <h2 id="um-cadastro-de-produtos">Um cadastro de produtos</h2> <p>Para começar o sistema, vamos começar com cadastro de produtos. Precisamos de uma classe que vai representar o produto, e vamos usá-la para guardar produtos no banco, usando o JPA/Hibernate:</p> <pre><code class="language-java"><span class="nd">@Entity</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">Produto</span> <span class="o">{</span>
     <span class="nd">@Id</span>
     <span class="nd">@GeneratedValue</span>
@@ -31,55 +9,25 @@
     <span class="kd">private</span> <span class="n">Double</span> <span class="n">preco</span><span class="o">;</span>
 
     <span class="c1">// getter e setters e métodos de negócio que julgar necessário</span>
-<span class="o">}</span></code></pre>
-
-<p>Precisamos também de uma classe que vai controlar o cadastro de produtos, tratando requisições web. Essa classe vai ser o Controller de produtos:</p>
-
-<pre><code class="language-java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">ProdutosController</span> <span class="o">{</span>
-<span class="o">}</span></code></pre>
-
-<p>A classe <code>ProdutosController</code> vai expor URIs para serem acessadas via web, ou seja, vai expor recursos da sua aplicação. E, para indicar isso, você precisa anotá-la com com <code>@Controller</code>:</p>
-
-<pre><code class="language-java"><span class="nd">@Controller</span>
+<span class="o">}</span></code></pre> <p>Precisamos também de uma classe que vai controlar o cadastro de produtos, tratando requisições web. Essa classe vai ser o Controller de produtos:</p> <pre><code class="language-java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">ProdutosController</span> <span class="o">{</span>
+<span class="o">}</span></code></pre> <p>A classe <code>ProdutosController</code> vai expor URIs para serem acessadas via web, ou seja, vai expor recursos da sua aplicação. E, para indicar isso, você precisa anotá-la com com <code>@Controller</code>:</p> <pre><code class="language-java"><span class="nd">@Controller</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">ProdutosController</span> <span class="o">{</span>
-<span class="o">}</span></code></pre>
-
-<p>Ao colocar essa anotação na classe, todos os métodos públicos dela serão acessíveis pela web. Por exemplo, se tivermos um método lista na classe:</p>
-
-<pre><code class="language-java"><span class="nd">@Controller</span>
+<span class="o">}</span></code></pre> <p>Ao colocar essa anotação na classe, todos os métodos públicos dela serão acessíveis pela web. Por exemplo, se tivermos um método lista na classe:</p> <pre><code class="language-java"><span class="nd">@Controller</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">ProdutosController</span> <span class="o">{</span>
     <span class="kd">public</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">Produto</span><span class="o">&gt;</span> <span class="nf">lista</span><span class="o">()</span> <span class="o">{</span>
         <span class="k">return</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">Produto</span><span class="o">&gt;();</span>
     <span class="o">}</span>
-<span class="o">}</span></code></pre>
-
-<p>O VRaptor automaticamente redirecionará todas as requisições à URI <code>/produtos/lista</code> para esse método. Ou seja, a convenção para a criação de URIs é <code>/&lt;nome_do_controller&gt;/&lt;nome_do_metodo&gt;</code>. Ao terminar a execução do método, o VRaptor fará o dispatch da requisição para o JSP <code>/WEB-INF/jsp/produtos/lista.jsp</code>. Ou seja, a convenção para a view padrão é <code>/WEB-INF/jsp/&lt;nome_do_controller&gt;/&lt;nome_do_metodo&gt;.jsp</code>. </p>
-
-<p>O método <code>lista</code> retorna uma lista de produtos, mas como acessá-la no JSP? No VRaptor, o retorno do método é exportado para a JSP por meio de atributos da requisição. No caso do método lista, vai existir um atributo chamado <code>produtoList</code> contendo a lista retornada:</p>
-
-<pre><code class="language-jsp"><span class="nt">&lt;ul&gt;</span>
+<span class="o">}</span></code></pre> <p>O VRaptor automaticamente redirecionará todas as requisições à URI <code>/produtos/lista</code> para esse método. Ou seja, a convenção para a criação de URIs é <code>/&lt;nome_do_controller&gt;/&lt;nome_do_metodo&gt;</code>. Ao terminar a execução do método, o VRaptor fará o dispatch da requisição para o JSP <code>/WEB-INF/jsp/produtos/lista.jsp</code>. Ou seja, a convenção para a view padrão é <code>/WEB-INF/jsp/&lt;nome_do_controller&gt;/&lt;nome_do_metodo&gt;.jsp</code>. </p> <p>O método <code>lista</code> retorna uma lista de produtos, mas como acessá-la no JSP? No VRaptor, o retorno do método é exportado para a JSP por meio de atributos da requisição. No caso do método lista, vai existir um atributo chamado <code>produtoList</code> contendo a lista retornada:</p> <pre><code class="language-jsp"><span class="nt">&lt;ul&gt;</span>
 <span class="nt">&lt;c:forEach</span> <span class="na">items=</span><span class="s">"${produtoList}"</span> <span class="na">var=</span><span class="s">"produto"</span><span class="nt">&gt;</span>
     <span class="nt">&lt;li&gt;</span> ${produto.nome} - ${produto.descricao} <span class="nt">&lt;/li&gt;</span>
 <span class="nt">&lt;/c:forEach&gt;</span>
-<span class="nt">&lt;/ul&gt;</span></code></pre>
-
-<p>A convenção para o nome dos atributos exportados é bastante intuitiva: se for uma collection, como o caso do método acima, o atributo será <code>List</code>, <code>produtoList</code> no caso; se for uma classe qualquer vai ser o nome da classe com a primeira letra minúscula. Se o método retorna <code>Produto</code>, o atributo exportado será <code>produto</code>. Veremos em outro capítulo que podemos expor mais de um objeto sem usar o retorno, por meio do <code>Result</code>, onde podemos dar nome à variável exposta.</p>
-
-<h3 id="criando-o-produtodao-injeo-de-dependncias-di">Criando o ProdutoDao: Injeção de Dependências (DI)</h3>
-
-<p>O VRaptor usa fortemente o conceito de Injeção de Dependências (DI) e Inversão de Controle (IoC). A ideia é que você não precise criar ou buscar as dependências da sua classe, você simplesmente as recebe e o VRaptor se encarrega de criá-las pra você. Estamos retornando uma lista vazia no nosso método <code>lista</code>. Seria muito mais interessante retornar uma lista de verdade, por exemplo todas os produtos cadastrados no sistema. Para isso vamos criar um DAO de produtos, para fazer a listagem:</p>
-
-<pre><code class="language-java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">ProdutoDao</span> <span class="o">{</span>
+<span class="nt">&lt;/ul&gt;</span></code></pre> <p>A convenção para o nome dos atributos exportados é bastante intuitiva: se for uma collection, como o caso do método acima, o atributo será <code>List</code>, <code>produtoList</code> no caso; se for uma classe qualquer vai ser o nome da classe com a primeira letra minúscula. Se o método retorna <code>Produto</code>, o atributo exportado será <code>produto</code>. Veremos em outro capítulo que podemos expor mais de um objeto sem usar o retorno, por meio do <code>Result</code>, onde podemos dar nome à variável exposta.</p> <h2 id="criando-o-produtodao-injeo-de-dependncias-di">Criando o ProdutoDao: Injeção de Dependências (DI)</h2> <p>O VRaptor usa fortemente o conceito de Injeção de Dependências (DI) e Inversão de Controle (IoC). A ideia é que você não precise criar ou buscar as dependências da sua classe, você simplesmente as recebe e o VRaptor se encarrega de criá-las pra você. Estamos retornando uma lista vazia no nosso método <code>lista</code>. Seria muito mais interessante retornar uma lista de verdade, por exemplo todas os produtos cadastrados no sistema. Para isso vamos criar um DAO de produtos, para fazer a listagem:</p> <pre><code class="language-java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">ProdutoDao</span> <span class="o">{</span>
 
     <span class="kd">public</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">Produto</span><span class="o">&gt;</span> <span class="nf">listaTodos</span><span class="o">()</span> <span class="o">{</span>
         <span class="k">return</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">Produto</span><span class="o">&gt;();</span>
     <span class="o">}</span>
 
-<span class="o">}</span></code></pre>
-
-<p>E no nosso <code>ProdutosController</code> podemos usar o dao pra fazer a listagem de produtos:</p>
-
-<pre><code class="language-java"><span class="nd">@Controller</span>
+<span class="o">}</span></code></pre> <p>E no nosso <code>ProdutosController</code> podemos usar o dao pra fazer a listagem de produtos:</p> <pre><code class="language-java"><span class="nd">@Controller</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">ProdutosController</span> <span class="o">{</span>
 
     <span class="kd">private</span> <span class="n">ProdutoDao</span> <span class="n">dao</span><span class="o">;</span>
@@ -88,11 +36,7 @@
         <span class="k">return</span> <span class="n">dao</span><span class="o">.</span><span class="na">listaTodos</span><span class="o">();</span>
     <span class="o">}</span>
 
-<span class="o">}</span></code></pre>
-
-<p>Podemos instanciar o <code>ProdutoDao</code> direto do controller, porém é muito mais interessante aproveitar o gerenciamento de dependências que o VRaptor faz e receber o DAO. E, para que isso seja possível, basta anotar o DAO com <code>@RequestScoped</code>, anotar o atributo <code>dao</code> do controller com <code>@Inject</code> e o VRaptor vai se encarregar de criá-lo e injetá-lo na sua classe:</p>
-
-<pre><code class="language-java"><span class="nd">@RequestScoped</span>
+<span class="o">}</span></code></pre> <p>Podemos instanciar o <code>ProdutoDao</code> direto do controller, porém é muito mais interessante aproveitar o gerenciamento de dependências que o VRaptor faz e receber o DAO. E, para que isso seja possível, basta anotar o DAO com <code>@RequestScoped</code>, anotar o atributo <code>dao</code> do controller com <code>@Inject</code> e o VRaptor vai se encarregar de criá-lo e injetá-lo na sua classe:</p> <pre><code class="language-java"><span class="nd">@RequestScoped</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">ProdutoDao</span> <span class="o">{</span>
     <span class="c1">//...</span>
 <span class="o">}</span>
@@ -107,52 +51,28 @@
         <span class="k">return</span> <span class="n">dao</span><span class="o">.</span><span class="na">listaTodos</span><span class="o">();</span>
     <span class="o">}</span>
 
-<span class="o">}</span></code></pre>
-
-<h3 id="formulrio-de-adio-redirecionamento">Formulário de adição: redirecionamento</h3>
-
-<p>Temos uma listagem de produtos, mas ainda não temos como cadastrá-los. Vamos então criar um formulário de adição de produtos. Para não ter que acessar o JSP diretamente, vamos criar uma lógica vazia que só redireciona para o JSP:</p>
-
-<pre><code class="language-java"><span class="nd">@Controller</span>
+<span class="o">}</span></code></pre> <h2 id="formulrio-de-adio-redirecionamento">Formulário de adição: redirecionamento</h2> <p>Temos uma listagem de produtos, mas ainda não temos como cadastrá-los. Vamos então criar um formulário de adição de produtos. Para não ter que acessar o JSP diretamente, vamos criar uma lógica vazia que só redireciona para o JSP:</p> <pre><code class="language-java"><span class="nd">@Controller</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">ProdutosController</span> <span class="o">{</span>
     <span class="c1">//...</span>
     <span class="kd">public</span> <span class="kt">void</span> <span class="nf">form</span><span class="o">()</span> <span class="o">{</span>
     <span class="o">}</span>
-<span class="o">}</span></code></pre>
-
-<p>Podemos acessar o formulário, que estará em <code>/WEB-INF/jsp/produtos/form.jsp</code>, pela URI <code>/produtos/form</code>:</p>
-
-<pre><code class="language-jsp"><span class="nt">&lt;form</span> <span class="na">action=</span><span class="s">"&lt;c:url value='/produtos/adiciona'/&gt;"</span><span class="nt">&gt;</span>
+<span class="o">}</span></code></pre> <p>Podemos acessar o formulário, que estará em <code>/WEB-INF/jsp/produtos/form.jsp</code>, pela URI <code>/produtos/form</code>:</p> <pre><code class="language-jsp"><span class="nt">&lt;form</span> <span class="na">action=</span><span class="s">"&lt;c:url value='/produtos/adiciona'/&gt;"</span><span class="nt">&gt;</span>
     Nome:             <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"text"</span> <span class="na">name=</span><span class="s">"produto.nome"</span> <span class="nt">/&gt;&lt;br/&gt;</span>
     Descrição:    <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"text"</span> <span class="na">name=</span><span class="s">"produto.descricao"</span> <span class="nt">/&gt;&lt;br/&gt;</span>
     Preço:            <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"text"</span> <span class="na">name=</span><span class="s">"produto.preco"</span> <span class="nt">/&gt;&lt;br/&gt;</span>
     <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"submit"</span> <span class="na">value=</span><span class="s">"Salvar"</span> <span class="nt">/&gt;</span>
-<span class="nt">&lt;/form&gt;</span></code></pre>
-
-<p>Como o formulário vai salvar o produto pela URI <code>/produtos/adiciona</code>, precisamos criar esse método no nosso controller:</p>
-
-<pre><code class="language-java"><span class="nd">@Controller</span>
+<span class="nt">&lt;/form&gt;</span></code></pre> <p>Como o formulário vai salvar o produto pela URI <code>/produtos/adiciona</code>, precisamos criar esse método no nosso controller:</p> <pre><code class="language-java"><span class="nd">@Controller</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">ProdutosController</span> <span class="o">{</span>
     <span class="c1">//...</span>
     <span class="kd">public</span> <span class="kt">void</span> <span class="nf">adiciona</span><span class="o">()</span> <span class="o">{</span>
     <span class="o">}</span>
-<span class="o">}</span></code></pre>
-
-<p>Repare nos nomes dos nossos inputs: <code>produto.nome</code>, <code>produto.descricao</code> e <code>produto.preco</code>. Se recebermos um <code>Produto</code> no método adiciona com o nome <code>produto</code>, o VRaptor vai popular os seus campos <code>nome</code>, <code>descricao</code> e <code>preco</code>, usando os seus setters no <code>Produto</code>, com os valores digitados nos inputs. Inclusive o campo <code>preco</code>, vai ser convertido para <code>Double</code> antes de ser setado no produto. Veja mais sobre isso no capítulo de <a href="https://github.com/caelum/vraptor4/wiki/05---Conversores">converters</a>.</p>
-
-<p>Então, usando os nomes corretamente nos inputs do form, basta criar seu método adiciona:</p>
-
-<pre><code class="language-java"><span class="nd">@Controller</span>
+<span class="o">}</span></code></pre> <p>Repare nos nomes dos nossos inputs: <code>produto.nome</code>, <code>produto.descricao</code> e <code>produto.preco</code>. Se recebermos um <code>Produto</code> no método adiciona com o nome <code>produto</code>, o VRaptor vai popular os seus campos <code>nome</code>, <code>descricao</code> e <code>preco</code>, usando os seus setters no <code>Produto</code>, com os valores digitados nos inputs. Inclusive o campo <code>preco</code>, vai ser convertido para <code>Double</code> antes de ser setado no produto. Veja mais sobre isso no capítulo de <a href="../conversores">converters</a>.</p> <p>Então, usando os nomes corretamente nos inputs do form, basta criar seu método adiciona:</p> <pre><code class="language-java"><span class="nd">@Controller</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">ProdutosController</span> <span class="o">{</span>
     <span class="c1">//...</span>
     <span class="kd">public</span> <span class="kt">void</span> <span class="nf">adiciona</span><span class="o">(</span><span class="n">Produto</span> <span class="n">produto</span><span class="o">)</span> <span class="o">{</span>
         <span class="n">dao</span><span class="o">.</span><span class="na">adiciona</span><span class="o">(</span><span class="n">produto</span><span class="o">);</span>
     <span class="o">}</span>
-<span class="o">}</span></code></pre>
-
-<p>Geralmente, depois de adicionar algo no sistema queremos voltar para a sua listagem, ou para o formulário novamente. No nosso caso, queremos voltar pra listagem de produtos ao adicionar um produto novo. Para isso existe um componente do VRaptor: o <code>Result</code>. Ele é responsável por adicionar atributos na requisição, e por mudar a view a ser carregada. Se eu quiser uma instância de <code>Result</code>, basta declarar o atributo no controller e anota-lo com <code>@Inject</code>:</p>
-
-<pre><code class="language-java"><span class="nd">@Controller</span>
+<span class="o">}</span></code></pre> <p>Geralmente, depois de adicionar algo no sistema queremos voltar para a sua listagem, ou para o formulário novamente. No nosso caso, queremos voltar pra listagem de produtos ao adicionar um produto novo. Para isso existe um componente do VRaptor: o <code>Result</code>. Ele é responsável por adicionar atributos na requisição, e por mudar a view a ser carregada. Se eu quiser uma instância de <code>Result</code>, basta declarar o atributo no controller e anota-lo com <code>@Inject</code>:</p> <pre><code class="language-java"><span class="nd">@Controller</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">ProdutosController</span> <span class="o">{</span>
 
     <span class="nd">@Inject</span>
@@ -160,34 +80,10 @@
     <span class="nd">@Inject</span>
     <span class="kd">private</span> <span class="n">Result</span> <span class="n">result</span><span class="o">;</span>
 
-<span class="o">}</span></code></pre>
-
-<p>E para redirecionar para a listagem basta usar o <code>result</code>:</p>
-
-<pre><code class="language-java"><span class="n">result</span><span class="o">.</span><span class="na">redirectTo</span><span class="o">(</span><span class="n">ProdutosController</span><span class="o">.</span><span class="na">class</span><span class="o">).</span><span class="na">lista</span><span class="o">();</span></code></pre>
-
-<p>Podemos ler esse código como: Como resultado, redirecione para o método <code>lista</code> do <code>ProdutosController</code>. A configuração de redirecionamento é 100% java, sem strings envolvidas! Fica explícito no seu código que o resultado da sua lógica não é o padrão e qual resultado você está usando! Você não precisa ficar se preocupando com arquivos de configuração. Mais ainda, se eu quiser mudar o nome do método <code>lista</code>, eu não preciso ficar rodando o sistema inteiro procurando onde estão redirecionando pra esse método, basta usar o refactor do eclipse, por exemplo, e tudo continua funcionando!</p>
-
-<p>Então nosso método adiciona ficaria:</p>
-
-<pre><code class="language-java"><span class="kd">public</span> <span class="kt">void</span> <span class="nf">adiciona</span><span class="o">(</span><span class="n">Produto</span> <span class="n">produto</span><span class="o">)</span> <span class="o">{</span>
+<span class="o">}</span></code></pre> <p>E para redirecionar para a listagem basta usar o <code>result</code>:</p> <pre><code class="language-java"><span class="n">result</span><span class="o">.</span><span class="na">redirectTo</span><span class="o">(</span><span class="n">ProdutosController</span><span class="o">.</span><span class="na">class</span><span class="o">).</span><span class="na">lista</span><span class="o">();</span></code></pre> <p>Podemos ler esse código como: Como resultado, redirecione para o método <code>lista</code> do <code>ProdutosController</code>. A configuração de redirecionamento é 100% java, sem strings envolvidas! Fica explícito no seu código que o resultado da sua lógica não é o padrão e qual resultado você está usando! Você não precisa ficar se preocupando com arquivos de configuração. Mais ainda, se eu quiser mudar o nome do método <code>lista</code>, eu não preciso ficar rodando o sistema inteiro procurando onde estão redirecionando pra esse método, basta usar o refactor do eclipse, por exemplo, e tudo continua funcionando!</p> <p>Então nosso método adiciona ficaria:</p> <pre><code class="language-java"><span class="kd">public</span> <span class="kt">void</span> <span class="nf">adiciona</span><span class="o">(</span><span class="n">Produto</span> <span class="n">produto</span><span class="o">)</span> <span class="o">{</span>
     <span class="n">dao</span><span class="o">.</span><span class="na">adiciona</span><span class="o">(</span><span class="n">produto</span><span class="o">);</span>
     <span class="n">result</span><span class="o">.</span><span class="na">redirectTo</span><span class="o">(</span><span class="n">ProdutosController</span><span class="o">.</span><span class="na">class</span><span class="o">).</span><span class="na">lista</span><span class="o">();</span>
-<span class="o">}</span></code></pre>
-
-<p>Veja mais informações sobre o <code>Result</code> no capítulo <a href="https://github.com/caelum/vraptor4/wiki/08-Trabalhando-com-a-View">Views e Ajax</a>.</p>
-
-<h3 id="validao">Validação</h3>
-
-<p>Veja mais informações sobre o <code>Validator</code> no capítulo de <a href="https://github.com/caelum/vraptor4/wiki/06---Valida%C3%A7%C3%A3o">Validações</a>.</p>
-
-<p>Com o que foi visto até agora, você já consegue fazer 90% da sua aplicação! As próximas sessões desse tutorial mostram a solução para alguns problemas frequentes que estão nos outros 10% da sua aplicação.</p>
-
-<h3 id="usando-o-jpahibernate-para-guardar-os-produtos">Usando o JPA/Hibernate para guardar os Produtos</h3>
-
-<p>Agora vamos fazer uma implementação de verdade do <code>ProdutoDao</code>, usando o JPA para persistir os produtos. Para isso, nosso <code>ProdutoDao</code> precisa de um <code>EntityManager</code>. Como o VRaptor usa injeção de dependências, basta declarar um atributo do tipo <code>EntityManager</code> e anota-lo com <code>@Inject</code>.</p>
-
-<pre><code class="language-java"><span class="nd">@Component</span>
+<span class="o">}</span></code></pre> <p>Veja mais informações sobre o <code>Result</code> no capítulo <a href="../trabalhando-com-a-view">Views e Ajax</a>.</p> <h2 id="validao">Validação</h2> <p>Veja mais informações sobre o <code>Validator</code> no capítulo de <a href="../validacao">Validações</a>.</p> <p>Com o que foi visto até agora, você já consegue fazer 90% da sua aplicação! As próximas sessões desse tutorial mostram a solução para alguns problemas frequentes que estão nos outros 10% da sua aplicação.</p> <h3 id="usando-o-jpahibernate-para-guardar-os-produtos">Usando o JPA/Hibernate para guardar os Produtos</h3> <p>Agora vamos fazer uma implementação de verdade do <code>ProdutoDao</code>, usando o JPA para persistir os produtos. Para isso, nosso <code>ProdutoDao</code> precisa de um <code>EntityManager</code>. Como o VRaptor usa injeção de dependências, basta declarar um atributo do tipo <code>EntityManager</code> e anota-lo com <code>@Inject</code>.</p> <pre><code class="language-java"><span class="nd">@Component</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">ProdutoDao</span> <span class="o">{</span>
 
     <span class="nd">@Inject</span>
@@ -197,21 +93,7 @@
         <span class="n">manager</span><span class="o">.</span><span class="na">persist</span><span class="o">(</span><span class="n">produto</span><span class="o">);</span>
     <span class="o">}</span>
     <span class="c1">//...</span>
-<span class="o">}</span></code></pre>
-
-<p>O VRaptor precisa saber como criar esse <code>EntityManager</code>, e eu não posso simplesmente colocar um <code>@RequestScoped</code> na <code>EntityManager</code> pois é uma classe da JPA. Para isso existe precisamos criar um <code>@Produces</code>.</p>
-
-<p>Veja mais informações de como fazer isso no capítulo de <a href="https://github.com/caelum/vraptor4/wiki/04-Componentes">Componentes</a>. Você pode, ainda, usar o plugin para JPA que já existe para o VRaptor. Veja mais sobre isso no capítulo de <a href="https://github.com/caelum/vraptor4/wiki/10-Plugins">Plugins</a>.</p>
-
-<h3 id="controlando-transaes-interceptors">Controlando transações: Interceptors</h3>
-
-<p>Muitas vezes, queremos interceptar todas as requisições (ou uma parte delas) e executar alguma lógica, como acontece com o controle de transações. Para isso, existem os Interceptors no VRaptor. Saiba mais sobre eles no capítulo de <a href="https://github.com/caelum/vraptor4/wiki/07--interceptadores-(todo)">Interceptors</a>.</p>
-
-<h3 id="carrinho-de-compras-componentes-na-sesso">Carrinho de compras: Componentes na sessão</h3>
-
-<p>Se quisermos criar um carrinho de compras no nosso sistema, precisamos de alguma forma manter os itens do carrinho na sessão do usuário. Para fazer isso, podemos criar um componente que está no escopo de sessão, ou seja, ele vai ser único na sessão do usuário. Para isso, basta criar um componente anotado com <code>@SessionScoped</code>:</p>
-
-<pre><code class="language-java"><span class="nd">@SessionScoped</span>
+<span class="o">}</span></code></pre> <p>O VRaptor precisa saber como criar esse <code>EntityManager</code>, e eu não posso simplesmente colocar um <code>@RequestScoped</code> na <code>EntityManager</code> pois é uma classe da JPA. Para isso existe precisamos criar um <code>@Produces</code>.</p> <p>Veja mais informações de como fazer isso no capítulo de <a href="../componentes">Componentes</a>. Você pode, ainda, usar o plugin para JPA que já existe para o VRaptor. Veja mais sobre isso no capítulo de <a href="../plugins">Plugins</a>.</p> <h2 id="controlando-transaes-interceptors">Controlando transações: Interceptors</h2> <p>Muitas vezes, queremos interceptar todas as requisições (ou uma parte delas) e executar alguma lógica, como acontece com o controle de transações. Para isso, existem os Interceptors no VRaptor. Saiba mais sobre eles no capítulo de <a href="../interceptadores">Interceptors</a>.</p> <h2 id="carrinho-de-compras-componentes-na-sesso">Carrinho de compras: Componentes na sessão</h2> <p>Se quisermos criar um carrinho de compras no nosso sistema, precisamos de alguma forma manter os itens do carrinho na sessão do usuário. Para fazer isso, podemos criar um componente que está no escopo de sessão, ou seja, ele vai ser único na sessão do usuário. Para isso, basta criar um componente anotado com <code>@SessionScoped</code>:</p> <pre><code class="language-java"><span class="nd">@SessionScoped</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">CarrinhoDeCompras</span> <span class="kd">implements</span> <span class="n">Serializable</span><span class="o">{</span>
     <span class="kd">private</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">Produto</span><span class="o">&gt;</span> <span class="n">itens</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">Produto</span><span class="o">&gt;();</span>
 
@@ -222,13 +104,7 @@
     <span class="kd">public</span> <span class="kt">void</span> <span class="nf">adicionaItem</span><span class="o">(</span><span class="n">Produto</span> <span class="n">item</span><span class="o">)</span> <span class="o">{</span>
         <span class="n">itens</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">item</span><span class="o">);</span>
     <span class="o">}</span>
-<span class="o">}</span></code></pre>
-
-<p>Essa classe precisa implementar Serializable já que o escopo dela é o <code>SessionScoped</code> e os objetos criados a partir dela podem ser serializados para manter o estado da sessão. Essa necessidade é descrita na especificação no CDI e deve ser respeitada. Caso contrário o container vai lançar uma exception no momento da inicialização.</p>
-
-<p>Como esse carrinho de compras é um componente, podemos recebê-lo no controller que vai cuidar do carrinho de compras:</p>
-
-<pre><code class="language-java"><span class="nd">@Controller</span>
+<span class="o">}</span></code></pre> <p>Essa classe precisa implementar Serializable já que o escopo dela é o <code>SessionScoped</code> e os objetos criados a partir dela podem ser serializados para manter o estado da sessão. Essa necessidade é descrita na especificação no CDI e deve ser respeitada. Caso contrário o container vai lançar uma exception no momento da inicialização.</p> <p>Como esse carrinho de compras é um componente, podemos recebê-lo no controller que vai cuidar do carrinho de compras:</p> <pre><code class="language-java"><span class="nd">@Controller</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">CarrinhoController</span> <span class="o">{</span>
 
     <span class="nd">@Inject</span>
@@ -241,24 +117,12 @@
     <span class="kd">public</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">Produto</span><span class="o">&gt;</span> <span class="nf">listaItens</span><span class="o">()</span> <span class="o">{</span>
         <span class="k">return</span> <span class="n">carrinho</span><span class="o">.</span><span class="na">getTodosOsItens</span><span class="o">();</span>
     <span class="o">}</span>
-<span class="o">}</span></code></pre>
-
-<p>Além do escopo de sessão existe o escopo de Aplicação com a anotação <code>@ApplicationScoped</code>. Os componentes anotados com <code>@ApplicationScoped</code> serão criados apenas uma vez em toda a aplicação.</p>
-
-<h3 id="um-pouco-de-rest">Um pouco de REST</h3>
-
-<p>Seguindo a idéia REST de que URIs devem identificar recursos na rede para então podermos fazer valer as diversas vantagens estruturais que o protocolo HTTP nos proporciona, note o quão simples fica mapear os diversos métodos HTTP para a mesma URI, e com isso invocar diferentes métodos. Por exemplo, queremos usar as seguintes URIs para o cadastro de produtos:</p>
-
-<pre><code>    GET /produtos - lista todos os produtos
+<span class="o">}</span></code></pre> <p>Além do escopo de sessão existe o escopo de Aplicação com a anotação <code>@ApplicationScoped</code>. Os componentes anotados com <code>@ApplicationScoped</code> serão criados apenas uma vez em toda a aplicação.</p> <h2 id="um-pouco-de-rest">Um pouco de REST</h2> <p>Seguindo a idéia REST de que URIs devem identificar recursos na rede para então podermos fazer valer as diversas vantagens estruturais que o protocolo HTTP nos proporciona, note o quão simples fica mapear os diversos métodos HTTP para a mesma URI, e com isso invocar diferentes métodos. Por exemplo, queremos usar as seguintes URIs para o cadastro de produtos:</p> <pre><code>    GET /produtos - lista todos os produtos
     POST /produtos - adiciona um produto
     GET /produtos/{id} - visualiza o produto com o id passado
     PUT /produtos/{id} - atualiza as informações do produto com o id passado
     DELETE /produtos/{id} - remove o produto com o id passado
-</code></pre>
-
-<p>Para criar esse comportamento REST no VRaptor, podemos usar as anotações <code>@Path</code> - que muda qual é a URI que vai acessar o determinado método, e as anotações com os nomes dos métodos HTTP <code>@Get</code>, <code>@Post</code>, <code>@Delete</code>, <code>@Put</code>, que indicam que o método anotado só pode ser acessado se a requisição estiver com o método HTTP indicado. Então, uma versão REST do nosso <code>ProdutosController</code> seria:</p>
-
-<pre><code class="language-java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">ProdutosController</span> <span class="o">{</span>
+</code></pre> <p>Para criar esse comportamento REST no VRaptor, podemos usar as anotações <code>@Path</code> - que muda qual é a URI que vai acessar o determinado método, e as anotações com os nomes dos métodos HTTP <code>@Get</code>, <code>@Post</code>, <code>@Delete</code>, <code>@Put</code>, que indicam que o método anotado só pode ser acessado se a requisição estiver com o método HTTP indicado. Então, uma versão REST do nosso <code>ProdutosController</code> seria:</p> <pre><code class="language-java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">ProdutosController</span> <span class="o">{</span>
     <span class="c1">//...</span>
 
     <span class="nd">@Get</span> <span class="nd">@Path</span><span class="o">(</span><span class="s">"/produtos"</span><span class="o">)</span>
@@ -276,31 +140,9 @@
     <span class="nd">@Delete</span><span class="o">(</span><span class="s">"/produtos/{produto.id}"</span><span class="o">)</span>
     <span class="kd">public</span> <span class="kt">void</span> <span class="nf">remove</span><span class="o">(</span><span class="n">Produto</span> <span class="n">produto</span><span class="o">)</span> <span class="o">{...}</span>
 
-<span class="o">}</span></code></pre>
-
-<p>Note que podemos receber parâmetros nas URIs. Por exemplo, se chamarmos a URI <code>GET /produtos/5</code>, o método <code>visualiza</code> será invocado, e o parâmetro <code>produto</code> vai ter o <code>id</code> populado com <code>5</code>.</p>
-
-<p>Mais informações sobre isso no capítulo de <a href="https://github.com/caelum/vraptor4/wiki/03-Controllers-REST">Resources-REST</a>.</p>
-
-<h3 id="arquivo-de-mensagens">Arquivo de mensagens</h3>
-
-<p>Internacionalização (i18n) é um recurso poderoso, e que está presente em quase todos os frameworks Web hoje em dia. E não é diferente no VRaptor. Com i18n podemos fazer com que nossa aplicação suporte várias línguas (francês, português, espanhol, inglês etc) de uma maneira que não nos cause muito esforço, bastando apenas fazermos a tradução das mensagens da nossa aplicação.</p>
-
-<p>Para isso, é só criarmos um arquivo chamado <code>messages.properties</code> e disponibilizá-lo no classpath da nossa aplicação (<code>WEB-INF/classes</code>). Esse arquivo conterá várias linhas compostas por um conjunto de chave/valor, como por exemplo:</p>
-
-<pre><code class="language-jsp">campo.nomeUsuario = Nome de Usuário
-campo.senha = Senha</code></pre>
-
-<p>Até então está fácil, mas e se quisermos criar esses arquivos para várias línguas, como por exemplo, inglês? Simples, basta criarmos um outro arquivo properties chamado <code>messages_en.properties</code>. Repare no sufixo <code>_en</code> no nome do arquivo. Isso indica que quando o usuário acessar sua aplicação em uma máquina configurada com locale em inglês as mensagens desse arquivo serão utilizadas. O conteúdo desse arquivo então ficaria:</p>
-
-<pre><code class="language-jsp">campo.nomeUsuario = Username
-campo.senha = Password</code></pre>
-
-<p>Repare que as chaves são mantidas, mudando apenas o valor para a língua escolhida. Para usar essas mensagens em seus arquivos JSP, você pode utilizar a JSTL. </p>
-
-<p>Dessa forma, o código ficaria:</p>
-
-<pre><code class="language-jsp"><span class="cp">&lt;!%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %&gt;</span>
+<span class="o">}</span></code></pre> <p>Note que podemos receber parâmetros nas URIs. Por exemplo, se chamarmos a URI <code>GET /produtos/5</code>, o método <code>visualiza</code> será invocado, e o parâmetro <code>produto</code> vai ter o <code>id</code> populado com <code>5</code>.</p> <p>Mais informações sobre isso no capítulo de <a href="../controllers-rest">Resources-REST</a>.</p> <h2 id="arquivo-de-mensagens">Arquivo de mensagens</h2> <p>Internacionalização (i18n) é um recurso poderoso, e que está presente em quase todos os frameworks Web hoje em dia. E não é diferente no VRaptor. Com i18n podemos fazer com que nossa aplicação suporte várias línguas (francês, português, espanhol, inglês etc) de uma maneira que não nos cause muito esforço, bastando apenas fazermos a tradução das mensagens da nossa aplicação.</p> <p>Para isso, é só criarmos um arquivo chamado <code>messages.properties</code> e disponibilizá-lo no classpath da nossa aplicação (<code>WEB-INF/classes</code>). Esse arquivo conterá várias linhas compostas por um conjunto de chave/valor, como por exemplo:</p> <pre><code class="language-jsp">campo.nomeUsuario = Nome de Usuário
+campo.senha = Senha</code></pre> <p>Até então está fácil, mas e se quisermos criar esses arquivos para várias línguas, como por exemplo, inglês? Simples, basta criarmos um outro arquivo properties chamado <code>messages_en.properties</code>. Repare no sufixo <code>_en</code> no nome do arquivo. Isso indica que quando o usuário acessar sua aplicação em uma máquina configurada com locale em inglês as mensagens desse arquivo serão utilizadas. O conteúdo desse arquivo então ficaria:</p> <pre><code class="language-jsp">campo.nomeUsuario = Username
+campo.senha = Password</code></pre> <p>Repare que as chaves são mantidas, mudando apenas o valor para a língua escolhida. Para usar essas mensagens em seus arquivos JSP, você pode utilizar a JSTL. </p> <p>Dessa forma, o código ficaria:</p> <pre><code class="language-jsp"><span class="cp">&lt;!%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %&gt;</span>
 <span class="nt">&lt;html&gt;</span>
     <span class="nt">&lt;body&gt;</span>
         <span class="nt">&lt;fmt:message</span> <span class="na">key=</span><span class="s">"campo.usuario"</span> <span class="nt">/&gt;</span> <span class="nt">&lt;input</span> <span class="na">name=</span><span class="s">"usuario.nomeUsuario"</span> <span class="nt">/&gt;</span>
@@ -311,25 +153,4 @@ campo.senha = Password</code></pre>
 
         <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"submit"</span> <span class="nt">/&gt;</span>
     <span class="nt">&lt;/body&gt;</span>
-<span class="nt">&lt;/html&gt;</span></code></pre>
-    </div>
-    <div id="sidebar">
-      <ul>
-<li><a href="../guia-de-1-minuto">Guia inicial de 1 minuto</a></li>
-        <li><a href=".">Guia inicial de 10 minutos</a></li>
-        <li><a href="../controllers-rest">Controllers Rest</a></li>
-        <li><a href="../components">Components</a></li>
-        <li><a href="../conversores">Conversores</a></li>
-        <li><a href="../validacao">Validação</a></li>
-        <li><a href="../interceptadores">Interceptadores</a></li>
-        <li><a href="../trabalhando-com-a-view">Trabalhando com a View</a></li>
-        <li><a href="../download-e-upload">Download e Upload</a></li>
-        <li><a href="../environment">Environment</a></li>
-        <li><a href="../plugins">Plugins</a></li>
-        <li><a href="../dependencias-e-pre-requisitos">Dependências e pré requisitos</a></li>
-        <li><a href="../migrando-um-projeto-com-vraptor3">Migrando um projeto com VRaptor 3</a></li>
-        <li><a href="../contribuindo-com-o-vraptor">Contribuindo com o VRaptor</a></li>
-      </ul>
-</div>
-  </body>
-</html>
+<span class="nt">&lt;/html&gt;</span></code></pre> </main> </body> </html>

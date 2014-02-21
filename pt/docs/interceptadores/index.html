@@ -1,32 +1,4 @@
-<!DOCTYPE HTML>
-<html lang="en">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<meta charset="utf-8">
-<title>VRaptor 4 - Interceptadores</title>
-<link rel="stylesheet" href="../../../style.css">
-<link rel="stylesheet" href="../../../custom-highlight.css">
-<!-- you don't need to keep this, but it's cool for stats! --><meta name="generator" content="nanoc 3.6.7">
-</head>
-<body>
-    <div id="main" class="highlight">
-      <div id="header">
-        <a id="logo" href="../.."><img src="../../../logo.png"></a>
-        <span>Framework Java MVC</span>
-      </div>
-      <p>O uso de interceptadores é feito para executar alguma tarefa antes e/ou depois de uma lógica de negócios, sendo os usos mais comuns a validação de dados, controle de conexão e transação do banco, log e criptografia/compactação de dados.</p>
-
-<h3 id="como-interceptar">Como interceptar?</h3>
-
-<p>No VRaptor utilizamos uma abordagem onde o interceptador define quem será interceptado, muito mais próxima a abordagens de interceptação que aparecem em sistemas baseados em <strong>AOP</strong> (Programação Orientada a Aspectos).</p>
-
-<p>Portanto, para interceptar uma requisição, basta anotar a classe com a anotação <code>@Intercepts</code>. Assim como qualquer outro componente, com o uso das anotações de escopo você pode dizer em que escopo o interceptador será armazenado.</p>
-
-<h3 id="exemplo-simples">Exemplo simples</h3>
-
-<p>A classe a seguir mostra um exemplo de como interceptar todas as requisições em um escopo de requisição e simplesmente mostrar na saída do console o que está sendo invocado. Lembre-se de que o interceptador é um componente como qualquer outro e pode receber quaisquer dependências por meio de Injeção de Dependências.</p>
-
-<pre><code class="language-java"><span class="nd">@Intercepts</span>
+<!DOCTYPE HTML> <html lang="pt"> <head> <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> <meta charset="utf-8"> <meta name="viewport" content="width=device-width"> <title>VRaptor 4 - Interceptadores</title> <link rel="stylesheet" href="/css/style.min.css"/> </head> <body> <header class="container"><h1 class="logo"><a class="logo-link" href="../.."> <img src="../../../img/logo.png" alt="VRaptor"></a></h1> <ul class="community"> <li><a href="https://groups.google.com/forum/#!forum/caelum-vraptor" target="_blank">Google Groups</a></li> <li><a href="https://github.com/caelum/vraptor4/" target="_blank">GitHub</a></li> <li><a href="http://www.guj.com.br/tag/vraptor" target="_blank">GUJ Respostas</a></li> </ul> <ul class="site-languages"> <li> <a class="site-language flag flag-en not-selected" title="en" href="../../../en"> EN </a> </li> <li> <a class="site-language flag flag-pt " title="pt" href="../.."> PT </a> </li> </ul></header><input type="checkbox" id="nav-visibility"><label for="nav-visibility" class="nav-toggle">Menu</label> <nav class="main-nav"><ul> <li><a href="../../download">Download</a></li> <li><a href="../guia-de-1-minuto/">Documentação</a></li> <li><a href="../../cookbook/aceitando-urls-com-ou-sem-barra-no-final">Cookbook</a></li> <li><a href="https://github.com/caelum/vraptor4/releases" target="_blank">Changelog</a></li> <li><a href="../../roadmap">Roadmap</a></li> <li><a href="../../../javadoc">Javadoc</a></li> </ul></nav><nav class="doc-nav container"><h1>Documentação</h1> <ul> <li><a href="../guia-de-1-minuto">Guia inicial de 1 minuto</a></li> <li><a href="../guia-de-10-minutos">Guia inicial de 10 minutos</a></li> <li><a href="../controllers-rest">Controllers Rest</a></li> <li><a href="../components">Components</a></li> <li><a href="../conversores">Conversores</a></li> <li><a href="../validacao">Validação</a></li> <li><a href=".">Interceptadores</a></li> <li><a href="../trabalhando-com-a-view">Trabalhando com a View</a></li> <li><a href="../download-e-upload">Download e Upload</a></li> <li><a href="../environment">Environment</a></li> <li><a href="../plugins">Plugins</a></li> <li><a href="../dependencias-e-pre-requisitos">Dependências e pré requisitos</a></li> <li><a href="../migrando-de-um-projeto-com-vraptor3">Migrando de um projeto com VRaptor 3</a></li> <li><a href="../contribuindo-com-o-vraptor">Contribuindo com o VRaptor</a></li> </ul></nav><main class="container"><h1 id="quando-interceptar">Quando interceptar?</h1> <p>O uso de interceptadores é feito para executar alguma tarefa antes e/ou depois de uma lógica de negócios, sendo os usos mais comuns a validação de dados, controle de conexão e transação do banco, log e criptografia/compactação de dados.</p> <h2 id="como-interceptar">Como interceptar?</h2> <p>No VRaptor utilizamos uma abordagem onde o interceptador define quem será interceptado, muito mais próxima a abordagens de interceptação que aparecem em sistemas baseados em <strong>AOP</strong> (Programação Orientada a Aspectos).</p> <p>Portanto, para interceptar uma requisição, basta anotar a classe com a anotação <code>@Intercepts</code>. Assim como qualquer outro componente, com o uso das anotações de escopo você pode dizer em que escopo o interceptador será armazenado.</p> <h2 id="exemplo-simples">Exemplo simples</h2> <p>A classe a seguir mostra um exemplo de como interceptar todas as requisições em um escopo de requisição e simplesmente mostrar na saída do console o que está sendo invocado. Lembre-se de que o interceptador é um componente como qualquer outro e pode receber quaisquer dependências por meio de Injeção de Dependências.</p> <pre><code class="language-java"><span class="nd">@Intercepts</span>
 <span class="nd">@RequestScoped</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">Log</span> <span class="o">{</span>
 
@@ -40,11 +12,7 @@
 
         <span class="n">stack</span><span class="o">.</span><span class="na">next</span><span class="o">();</span> <span class="c1">// continua a execução</span>
     <span class="o">}</span>
-<span class="o">}</span></code></pre>
-
-<p>Para executar um código apenas antes ou depois da execução do controller, podemos usar as anotações <code>@BeforeCall</code> e <code>@AfterCall</code>:</p>
-
-<pre><code class="language-java"><span class="nd">@Intercepts</span>
+<span class="o">}</span></code></pre> <p>Para executar um código apenas antes ou depois da execução do controller, podemos usar as anotações <code>@BeforeCall</code> e <code>@AfterCall</code>:</p> <pre><code class="language-java"><span class="nd">@Intercepts</span>
 <span class="nd">@RequestScoped</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">Log</span> <span class="o">{</span>
     <span class="nd">@BeforeCall</span>
@@ -55,45 +23,23 @@
     <span class="kd">public</span> <span class="kt">void</span> <span class="nf">after</span><span class="o">()</span> <span class="o">{</span>
         <span class="c1">// código a ser executado depois da lógica</span>
     <span class="o">}</span>
-<span class="o">}</span></code></pre>
-
-<p>Repare que não é mais obrigatório implementar a interface <code>Interceptor</code>, basta criar a classe e usar as anotações acima.</p>
-
-<h3 id="definindo-quando-interceptar">Definindo quando interceptar</h3>
-
-<p>No exemplo acima todas as requisições são interceptadas. Podemos então definir que iremos interceptar apenas os métodos que possuem uma anotação chamada <code>@Audit</code>. Para isso basta implementar um método que retorne um <code>boolean</code>com a condição necessária e anotá-lo com <code>@Accepts</code>.</p>
-
-<pre><code class="language-java">    <span class="nd">@Accepts</span>
+<span class="o">}</span></code></pre> <p>Repare que não é mais obrigatório implementar a interface <code>Interceptor</code>, basta criar a classe e usar as anotações acima.</p> <h2 id="definindo-quando-interceptar">Definindo quando interceptar</h2> <p>No exemplo acima todas as requisições são interceptadas. Podemos então definir que iremos interceptar apenas os métodos que possuem uma anotação chamada <code>@Audit</code>. Para isso basta implementar um método que retorne um <code>boolean</code>com a condição necessária e anotá-lo com <code>@Accepts</code>.</p> <pre><code class="language-java">    <span class="nd">@Accepts</span>
     <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">accepts</span><span class="o">(</span><span class="n">ControllerMethod</span> <span class="n">method</span><span class="o">)</span> <span class="o">{</span>
         <span class="k">return</span> <span class="n">method</span><span class="o">.</span><span class="na">containsAnnotation</span><span class="o">(</span><span class="n">Audit</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
-    <span class="o">}</span></code></pre>
-
-<p>No VRaptor4 também temos outra maneira de definir a condição de aceitação. O exemplo acima é um caso bem comum e acabamos tendo de repetir esse código muitas vezes. Para essas situações você pode usar a annotation <code>@AcceptsWithAnnotations</code>. </p>
-
-<pre><code class="language-java"><span class="nd">@AcceptsWithAnnotations</span><span class="o">(</span><span class="n">Audit</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
+    <span class="o">}</span></code></pre> <p>No VRaptor4 também temos outra maneira de definir a condição de aceitação. O exemplo acima é um caso bem comum e acabamos tendo de repetir esse código muitas vezes. Para essas situações você pode usar a annotation <code>@AcceptsWithAnnotations</code>. </p> <pre><code class="language-java"><span class="nd">@AcceptsWithAnnotations</span><span class="o">(</span><span class="n">Audit</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">AuditInterceptor</span> <span class="o">{</span>
     
     <span class="nd">@AroundCall</span>
     <span class="kd">public</span> <span class="kt">void</span> <span class="nf">around</span><span class="o">(</span><span class="n">SimpleInterceptorStack</span> <span class="n">stack</span><span class="o">){</span>
         <span class="n">stack</span><span class="o">.</span><span class="na">next</span><span class="o">();</span>
     <span class="o">}</span>
-<span class="o">}</span></code></pre>
-
-<h3 id="criando-o-seu-accepts-customizado">Criando o seu Accepts customizado</h3>
-
-<p>Logo acima usamos o exemplo do Accepts customizado. Este é um que já vem pronto VRaptor. Mas nada impede de você criar o seu para as suas necessidades. O fluxo é bem parecido com o de criação de uma validação customizada para a BeanValidation. Primeiro você deve criar sua Annotation.</p>
-
-<pre><code class="language-java"><span class="nd">@Retention</span><span class="o">(</span><span class="n">RetentionPolicy</span><span class="o">.</span><span class="na">RUNTIME</span><span class="o">)</span>
+<span class="o">}</span></code></pre> <h2 id="criando-o-seu-accepts-customizado">Criando o seu Accepts customizado</h2> <p>Logo acima usamos o exemplo do Accepts customizado. Este é um que já vem pronto VRaptor. Mas nada impede de você criar o seu para as suas necessidades. O fluxo é bem parecido com o de criação de uma validação customizada para a BeanValidation. Primeiro você deve criar sua Annotation.</p> <pre><code class="language-java"><span class="nd">@Retention</span><span class="o">(</span><span class="n">RetentionPolicy</span><span class="o">.</span><span class="na">RUNTIME</span><span class="o">)</span>
 <span class="nd">@Target</span><span class="o">(</span><span class="n">ElementType</span><span class="o">.</span><span class="na">TYPE</span><span class="o">)</span>
 <span class="nd">@AcceptsConstraint</span><span class="o">(</span><span class="n">WithAnnotationAcceptor</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
 <span class="nd">@Inherited</span>
 <span class="kd">public</span> <span class="nd">@interface</span> <span class="n">AcceptsWithAnnotations</span> <span class="o">{</span>
       <span class="kd">public</span> <span class="n">Class</span><span class="o">&lt;?</span> <span class="kd">extends</span> <span class="n">Annotation</span><span class="o">&gt;[]</span> <span class="n">value</span><span class="o">();</span>
-<span class="o">}</span></code></pre>
-
-<p>Perceba que usamos a Annotation <code>@AcceptsConstraint</code> para indicar qual a classe responsável por fazer a verificação. Agora precisamos implementar essa classe.</p>
-
-<pre><code class="language-java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">WithAnnotationAcceptor</span> <span class="kd">implements</span> <span class="n">AcceptsValidator</span><span class="o">&lt;</span><span class="n">AcceptsWithAnnotations</span><span class="o">&gt;</span> <span class="o">{</span>
+<span class="o">}</span></code></pre> <p>Perceba que usamos a Annotation <code>@AcceptsConstraint</code> para indicar qual a classe responsável por fazer a verificação. Agora precisamos implementar essa classe.</p> <pre><code class="language-java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">WithAnnotationAcceptor</span> <span class="kd">implements</span> <span class="n">AcceptsValidator</span><span class="o">&lt;</span><span class="n">AcceptsWithAnnotations</span><span class="o">&gt;</span> <span class="o">{</span>
 
     <span class="nd">@Override</span>
     <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">validate</span><span class="o">(</span><span class="n">ControllerMethod</span> <span class="n">controllerMethod</span><span class="o">,</span>
@@ -107,83 +53,16 @@
                 <span class="c1">//aqui você pode acessar as informações contidas na annotation customizada.</span>
         <span class="k">this</span><span class="o">.</span><span class="na">allowedTypes</span> <span class="o">=</span> <span class="n">Arrays</span><span class="o">.</span><span class="na">asList</span><span class="o">(</span><span class="n">annotation</span><span class="o">.</span><span class="na">value</span><span class="o">());</span>
     <span class="o">}</span>
-<span class="o">}</span></code></pre>
-
-<p>Esta classe só precisa implemetar a interface <code>AcceptsValidator&lt;T&gt;</code> onde T é o tipo da sua Annotation customizada. Dessa maneira você pode criar as suas condições customizadas e disponibilizá-las para todos os projetos que você precisa.</p>
-
-<h3 id="como-garantir-ordem-after-e-before">Como garantir ordem: after e before</h3>
-
-<p>Se é preciso garantir a ordem de execução de um conjunto de interceptors, você pode usar os atributos <code>after</code> e <code>before</code> da anotação <code>@Intercepts</code>. Suponha que o <code>PrimeiroInterceptor</code> tenha que rodar antes do <code>SegundoInterceptor</code>, então você pode configurar isso tanto com:</p>
-
-<pre><code class="language-java"><span class="nd">@Intercepts</span><span class="o">(</span><span class="n">before</span><span class="o">=</span><span class="n">SegundoInterceptor</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
+<span class="o">}</span></code></pre> <p>Esta classe só precisa implemetar a interface <code>AcceptsValidator&lt;T&gt;</code> onde T é o tipo da sua Annotation customizada. Dessa maneira você pode criar as suas condições customizadas e disponibilizá-las para todos os projetos que você precisa.</p> <h2 id="como-garantir-ordem-after-e-before">Como garantir ordem: after e before</h2> <p>Se é preciso garantir a ordem de execução de um conjunto de interceptors, você pode usar os atributos <code>after</code> e <code>before</code> da anotação <code>@Intercepts</code>. Suponha que o <code>PrimeiroInterceptor</code> tenha que rodar antes do <code>SegundoInterceptor</code>, então você pode configurar isso tanto com:</p> <pre><code class="language-java"><span class="nd">@Intercepts</span><span class="o">(</span><span class="n">before</span><span class="o">=</span><span class="n">SegundoInterceptor</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">PrimeiroInterceptor</span> <span class="o">{</span>
     <span class="o">...</span>
-<span class="o">}</span></code></pre>
-
-<p>quanto com:</p>
-
-<pre><code class="language-java"><span class="nd">@Intercepts</span><span class="o">(</span><span class="n">after</span><span class="o">=</span><span class="n">PrimeiroInterceptor</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
+<span class="o">}</span></code></pre> <p>quanto com:</p> <pre><code class="language-java"><span class="nd">@Intercepts</span><span class="o">(</span><span class="n">after</span><span class="o">=</span><span class="n">PrimeiroInterceptor</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">SegundoInterceptor</span> <span class="o">{</span>
     <span class="o">...</span>
-<span class="o">}</span></code></pre>
-
-<p>Você pode especificar mais de um Interceptor:</p>
-
-<pre><code class="language-java"><span class="nd">@Intercepts</span><span class="o">(</span><span class="n">after</span><span class="o">={</span><span class="n">PrimeiroInterceptor</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="n">SegundoInterceptor</span><span class="o">.</span><span class="na">class</span><span class="o">},</span>
+<span class="o">}</span></code></pre> <p>Você pode especificar mais de um Interceptor:</p> <pre><code class="language-java"><span class="nd">@Intercepts</span><span class="o">(</span><span class="n">after</span><span class="o">={</span><span class="n">PrimeiroInterceptor</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="n">SegundoInterceptor</span><span class="o">.</span><span class="na">class</span><span class="o">},</span>
             <span class="n">before</span><span class="o">={</span><span class="n">QuartoInterceptor</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="n">QuintoInterceptor</span><span class="o">.</span><span class="na">class</span><span class="o">})</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">TerceiroInterceptor</span> <span class="o">{</span>
     <span class="o">...</span>
-<span class="o">}</span></code></pre>
-
-<p>O VRaptor lançará uma exception se existir um ciclo na ordem dos interceptors, então tenha cuidado.</p>
-
-<h3 id="interagindo-com-os-interceptors-do-vraptor">Interagindo com os interceptors do VRaptor</h3>
-
-<p>O VRaptor possui sua própria sequência de interceptor, e você pode definir a ordem dos seus interceptors baseados na do VRaptor.</p>
-
-<p>Aqui estão os principais interceptors do VRaptor e o que eles produzem:</p>
-
-<ul>
-<li>
-    <p><code>ControllerLookupInterceptor</code> - o primeiro interceptor. Procura o ControllerMethod correto, que será passado como argumento nos métodos <code>accepts()</code> e <code>intercept()</code>. É o after padrão.</p>
-  </li>
-  <li>
-    <p><code>ParametersInstantiatorInterceptor</code> - instancia os parâmetros do método baseado no request. Os parâmetros estarão disponíveis via <code>MethodInfo#getParameters()</code>.</p>
-  </li>
-  <li>
-    <p><code>InstantiateInterceptor</code> - instancia o controller, que será passado como último parâmetro do método <code>intercept()</code>.</p>
-  </li>
-  <li>
-    <p><code>ExecuteMethodInterceptor</code> - executa o <code>ControllerMethod</code>. O retorno do método estará disponível via <code>MethodInfo#getResult()</code>. É o before padrão.</p>
-  </li>
-  <li>
-    <p><code>OutjectResult</code> - inclui o retorno do <code>ResourceMethod</code> na view.</p>
-  </li>
-  <li>
-    <p><code>ForwardToDefaultViewInterceptor</code> - redireciona (forward) para a jsp padrão se nenhuma outra view foi usada.</p>
-  </li>
-</ul>
-<p>Se você precisa executar um interceptor após o <code>ExecuteMethodInterceptor</code>, você <strong>deve</strong> setar o atributo <code>before</code>, para evitar ciclos. O <code>ForwardToDefaultViewInterceptor</code> é um bom valor, já que nenhum outro interceptor pode rodar depois dele:</p>
-
-<pre><code class="language-java"><span class="nd">@Intercepts</span><span class="o">(</span><span class="n">after</span><span class="o">=</span><span class="n">ExecuteMethodInterceptor</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="n">before</span><span class="o">=</span><span class="n">ForwardToDefaultViewInterceptor</span><span class="o">.</span><span class="na">class</span><span class="o">)</span></code></pre>
-    </div>
-    <div id="sidebar">
-      <ul>
-<li><a href="../guia-de-1-minuto">Guia inicial de 1 minuto</a></li>
-        <li><a href="../guia-de-10-minutos">Guia inicial de 10 minutos</a></li>
-        <li><a href="../controllers-rest">Controllers Rest</a></li>
-        <li><a href="../components">Components</a></li>
-        <li><a href="../conversores">Conversores</a></li>
-        <li><a href="../validacao">Validação</a></li>
-        <li><a href=".">Interceptadores</a></li>
-        <li><a href="../trabalhando-com-a-view">Trabalhando com a View</a></li>
-        <li><a href="../download-e-upload">Download e Upload</a></li>
-        <li><a href="../environment">Environment</a></li>
-        <li><a href="../plugins">Plugins</a></li>
-        <li><a href="../dependencias-e-pre-requisitos">Dependências e pré requisitos</a></li>
-        <li><a href="../migrando-um-projeto-com-vraptor3">Migrando um projeto com VRaptor 3</a></li>
-        <li><a href="../contribuindo-com-o-vraptor">Contribuindo com o VRaptor</a></li>
-      </ul>
-</div>
-  </body>
-</html>
+<span class="o">}</span></code></pre> <p>O VRaptor lançará uma exception se existir um ciclo na ordem dos interceptors, então tenha cuidado.</p> <h2 id="interagindo-com-os-interceptors-do-vraptor">Interagindo com os interceptors do VRaptor</h2> <p>O VRaptor possui sua própria sequência de interceptor, e você pode definir a ordem dos seus interceptors baseados na do VRaptor.</p> <p>Aqui estão os principais interceptors do VRaptor e o que eles produzem:</p> <ul> <li> <p><code>ExceptionHandlerInterceptor</code> - intercepta todas as requisições para tratar as exceções não capturadas</p> </li> <li> <p><code>FlashInterceptor</code> - mantém por mais uma request os parâmetros da request</p> </li> <li> <p><code>ForwardToDefaultViewInterceptor</code> - redireciona (forward) para a jsp padrão se nenhuma outra view foi usada.</p> </li> </ul> <p>Se você precisa executar um interceptor antes ou depois de algum interceptor do VRaptor, basta utilizar os atributos <code>after</code> e <code>before</code> passando a classe do interceptor como valor. Algo como:</p> <pre><code class="language-java"><span class="nd">@Intercepts</span><span class="o">(</span>
+    <span class="n">after</span><span class="o">=</span><span class="n">ExceptionHandlerInterceptor</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> 
+    <span class="n">before</span><span class="o">=</span><span class="n">ForwardToDefaultViewInterceptor</span><span class="o">.</span><span class="na">class</span><span class="o">)</span></code></pre> </main> </body> </html>

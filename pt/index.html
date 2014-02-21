@@ -1,46 +1,11 @@
-<!DOCTYPE HTML>
-<html lang="en">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<meta charset="utf-8">
-<title>VRaptor 4 - Home</title>
-<link rel="stylesheet" href="../style.css">
-<link rel="stylesheet" href="../custom-highlight.css">
-<!-- you don't need to keep this, but it's cool for stats! --><meta name="generator" content="nanoc 3.6.7">
-</head>
-<body>
-    <div id="main" class="highlight">
-      <div id="header">
-        <a id="logo" href="."><img src="../logo.png"></a>
-        <span>Framework Java MVC</span>
-      </div>
-      <h2 id="vraptor-4-is-a-mvc-action-based-framework-on-top-of-cdi">VRaptor 4 is a MVC action-based framework, on top of CDI.</h2>
-
-<p>For a quick start, you can use this snippet in your maven POM:</p>
-
-<pre><code class="language-xml"><span class="nt">&lt;dependency&gt;</span>
-    <span class="nt">&lt;groupId&gt;</span>br.com.caelum<span class="nt">&lt;/groupId&gt;</span>
-    <span class="nt">&lt;artifactId&gt;</span>vraptor<span class="nt">&lt;/artifactId&gt;</span>
-    <span class="nt">&lt;version&gt;</span>4.0.0-beta-3<span class="nt">&lt;/version&gt;</span> <span class="c">&lt;!--or the latest version--&gt;</span>
-<span class="nt">&lt;/dependency&gt;</span></code></pre>
-
-<p>Or you can download it directly <a href="https://bintray.com/caelum/VRaptor4/br.com.caelum.vraptor/vraptor-4.0.0-beta-3/files">at our artifacts repository</a>.</p>
-    </div>
-    <div id="sidebar">
-      <ul>
-<li><a href="download">Download</a></li>
-        <li><a href="docs/guia-de-1-minuto/">Documentação</a></li>
-        <li><a href="cookbook">Cookbook</a></li>
-        <li><a href="https://github.com/caelum/vraptor4/releases" target="_blank">Changelog</a></li>
-        <li><a href="roadmap">Roadmap</a></li>
-        <li><a href="../javadoc">Javadoc</a></li>
-      </ul>
-<h2>Comunidade</h2>
-      <ul>
-<li><a href="https://groups.google.com/forum/#!forum/caelum-vraptor" target="_blank">Google Groups</a></li>
-        <li><a href="https://github.com/caelum/vraptor4/" target="_blank">GitHub</a></li>
-        <li><a href="http://www.guj.com.br/tag/vraptor" target="_blank">GUJ Respostas</a></li>
-      </ul>
-</div>
-  </body>
-</html>
+<!DOCTYPE HTML> <html lang="pt"> <head> <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> <meta charset="utf-8"> <meta name="viewport" content="width=device-width"> <title>VRaptor 4 - Home</title> <link rel="stylesheet" href="/css/style.min.css"/> </head> <body> <header class="container"><h1 class="logo"><a class="logo-link" href="."> <img src="../img/logo.png" alt="VRaptor"></a></h1> <ul class="community"> <li><a href="https://groups.google.com/forum/#!forum/caelum-vraptor" target="_blank">Google Groups</a></li> <li><a href="https://github.com/caelum/vraptor4/" target="_blank">GitHub</a></li> <li><a href="http://www.guj.com.br/tag/vraptor" target="_blank">GUJ Respostas</a></li> </ul> <ul class="site-languages"> <li> <a class="site-language flag flag-en not-selected" title="en" href="../en"> EN </a> </li> <li> <a class="site-language flag flag-pt " title="pt" href="."> PT </a> </li> </ul></header><input type="checkbox" id="nav-visibility"><label for="nav-visibility" class="nav-toggle">Menu</label> <nav class="main-nav"><ul> <li><a href="download">Download</a></li> <li><a href="docs/guia-de-1-minuto/">Documentação</a></li> <li><a href="cookbook/aceitando-urls-com-ou-sem-barra-no-final">Cookbook</a></li> <li><a href="https://github.com/caelum/vraptor4/releases" target="_blank">Changelog</a></li> <li><a href="roadmap">Roadmap</a></li> <li><a href="../javadoc">Javadoc</a></li> </ul></nav><main class="container"><section class="home-call"><p>O VRaptor 4 traz alta produtividade e desenvolvimento rápido e fácil de sistemas Web em Java. É um framework MVC brasileiro opensource com grande comunidade de desenvolvedores e usuários e com documentação em português.</p> <a href="download" class="download-btn">Download</a> </section><section class="home-example"><h2 id="simples-assim">Simples assim!</h2> <div class="home-example-column"> <p>Sua lógica no <code>PrimeiroController.java</code>:</p> <pre><code class="language-java"><span class="nd">@Controller</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">PrimeiroController</span> <span class="o">{</span>
+  <span class="nd">@Get</span><span class="o">(</span><span class="s">"/home"</span><span class="o">)</span>
+  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">home</span><span class="o">()</span> <span class="o">{</span>
+  <span class="o">}</span>
+<span class="o">}</span></code></pre> </div> <div class="home-example-column"> <p>E o HTML em <code>WEB-INF/jsp/primeiro/home.jsp</code>:</p> <pre><code class="language-jsp"><span class="cp">&lt;!DOCTYPE html&gt;</span>
+<span class="nt">&lt;html&gt;</span>
+  <span class="nt">&lt;body&gt;</span>
+    Página inicial
+  <span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span></code></pre> </div> <p>Pronto! Agora é só acessar <code>localhost:8080/home</code>. Veja mais exemplos <a href="docs/guia-de-1-minuto">em nossa documentação</a>.</p> </section><section class="home-advantages"><h2>Por que usar o VRaptor</h2> <ul> <li class="productivity"> <strong>Alta Produtividade</strong> <p>Usar o VRaptor 4 é simples e intuitivo. Você atingirá níveis altíssimos de produtividade com Java para Web.</p> </li> <li class="learning"> <strong>Curva de Aprendizado</strong> <p>Em pouco tempo você conseguirá aprender tudo o que é necessário para desenvolver suas aplicações com o VRaptor.</p> </li> <li class="testability"> <strong>Testabilidade</strong> <p>Escreva código modularizado e desacoplado do VRaptor. Sua aplicação fica altamente testável e de fácil manutenção.</p> </li> <li class="economy"> <strong>Economia</strong> <p>Economize muitas horas de trabalho com a alta produtividade do VRaptor, a facilidade em treinar a sua equipe e a qualidade final do seu projeto.</p> </li> <li class="soa"> <strong>SOA e Rest - Ready</strong> <p>Faça aplicações RESTful ou orientadas a serviço sem complicações, como se estivesse fazendo aplicações Web normais.</p> </li> <li class="best-practices"> <strong>Melhores práticas de desenvolvimento</strong> <p>Utilizando os conceitos de Injeção de Dependência, Inversão de Controle e POJOs, seu código fica simples e testável.</p> </li> <li class="pt-docs"> <strong>Documentação em Português</strong> <p>Aprenda tudo sobre VRaptor 4 contando com uma ampla documentação, fóruns e listas de discussão em português.</p> </li> </ul></section></main><footer><h1>Quem usa</h1> <ul class="who-uses"> <li class="guj">GUJ</li> <li class="wine">wine.com.br</li> <li class="defferrari">Grupo Defferrari</li> <li class="locaweb">Locaweb</li> <li class="agenciaclick">Agência Click</li> </ul></footer> </body> </html>

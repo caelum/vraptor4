@@ -1,0 +1,287 @@
+body {
+  color: #333333;
+  font-size: 100%;
+  font-family: Helvetica, arial, freesans, clean, sans-serif;
+  background-color: #fff;
+}
+
+tt,code,pre {
+  font-family:Consolas, "Liberation Mono", Courier, monospace;
+}
+
+a {
+  color: #4183c4;
+  text-decoration: none;
+}
+
+h1,h2,h3 {
+  line-height: 1.2;
+  margin: .5em 0;
+}
+
+h1 {
+  font-size: 1.8em;
+}
+
+h2 {
+  font-size: 1.3em;
+  margin-bottom: 0;
+  padding-bottom: .5em;
+  border-bottom: 1px solid #eee;
+}
+
+h3 {
+  font-size: 1.1em;
+}
+
+::-moz-selection {
+  text-shadow: none;
+  background: rgba(65,131,196,0.4);
+}
+
+::selection {
+  text-shadow: none;
+  background: rgba(65,131,196,0.4);
+}
+
+main p {
+  margin: 2em 0;
+}
+
+main p,
+main li {
+  line-height: 1.7;
+}
+
+main ul, main ol {
+  margin: 1em;
+}
+
+main li {
+  margin: 1.5em 0;
+  list-style-type: square;
+}
+
+pre {
+  background-color: #f8f8f8;
+  overflow: auto;
+  padding: .25em;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  font-size: .9em;
+  line-height: 1.3;
+  margin: 1em 0;
+}
+
+header {
+  margin-top: .5em;
+  text-align: center;
+}
+
+.container {
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 1em .5em;
+}
+
+.logo {
+  display: block;
+  margin: 0;
+}
+
+.community li {
+  display: inline-block;
+  margin: .5em;
+}
+
+.community a {
+  width: 32px;
+  height: 32px;
+  overflow: hidden;
+  padding: 0;
+  display: block;
+}
+
+.community a:before {
+  display: inline-block;
+  content: '';
+  -webkit-background-size: contain;
+  background-size: contain;
+  width: 32px;
+  height: 32px;
+}
+
+.community a[href*="groups.google.com"]:before {
+  background-image: url(../img/logo-gplus.png);
+}
+
+.community a[href*="github.com"]:before {
+  background-image: url(../img/logo-github.png);
+}
+
+.community a[href*="guj.com.br"]:before {
+  background-image: url(../img/logo-guj.png);
+}
+
+.download-btn {
+  display: block;
+  text-align: center;
+  background-color: #224;
+  color: #eee;
+  font-size: 2em;
+  border-radius: 5px;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.download-btn:before {
+  content: '';
+  background-image: url(../img/download.png);
+  -webkit-background-size: contain;
+  background-size: contain;
+  width: 1.2em;
+  height: 1.2em;
+  display: inline-block;
+  vertical-align: -.7em; /* don't ask why, just believe */
+  margin: .5em .5em .5em 0;
+}
+
+.download-btn:hover,
+.download-btn:focus {
+  background-color: #449;
+}
+
+.home-advantages li {
+  list-style: none;
+}
+
+.home-advantages li:before {
+  content: '';
+  background-image: url(../img/advantages.png);
+  background-repeat: no-repeat;
+  width: 105px;
+  height: 100px;
+  float: left;
+  margin-right: 1em;
+  margin-bottom: 1em;
+}
+
+.home-advantages strong {
+  font-weight: bold;
+  display: block;
+}
+
+.home-advantages .productivity:before {
+  background-position: 0 -574px;
+}
+
+.home-advantages .learning:before {
+  background-position: 0 14px;
+}
+
+.home-advantages .testability:before {
+  background-position: 0 -680px;
+}
+
+.home-advantages .economy:before {
+  background-position: 0 -90px;
+}
+
+.home-advantages .flexibility:before {
+  background-position: 0 -205px;
+}
+
+.home-advantages .soa:before {
+  background-position: 0 -808px;
+}
+
+.home-advantages .best-practices:before {
+  background-position: 0 -448px;
+}
+
+.home-advantages .pt-docs:before {
+  background-position: 0 -322px;
+}
+
+@media (min-width: 480px) {
+  .community {
+    display: inline-block;
+    margin-right: 2em;
+  }
+}
+
+@media (min-width: 640px) {
+  .container {
+    padding: 1em 2em;
+  }
+}
+
+@media (min-width: 760px) {
+  header {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+    -ms-flex-align: center;
+    align-items: center;
+    padding: 1em;
+  }
+
+  .logo {
+    -webkit-box-flex: 1;
+    -webkit-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
+    text-align: left;
+  }
+
+  .home-advantages li {
+    display: inline-block;
+    width: 48%;
+    vertical-align: top;
+  }
+
+  .home-advantages li:nth-child(odd) {
+    margin-right: 2%;
+  }
+
+  .home-example-column {
+    display: inline-block;
+    width: 48%;
+    vertical-align: top;
+  }
+
+  .home-example-column:nth-of-type(odd) {
+    margin-right: 2%;
+  }
+}
+
+@media (min-width: 60em) {
+  .home-call {
+    text-align: justify;
+  }
+
+  .home-call:after {
+    content: '';
+    display: inline-block;
+    width: 100%;
+  }
+
+  .home-call p {
+    width: 39em;
+    text-align: left;
+  }
+
+  .download-btn {
+    width: 8em;
+  }
+
+  .home-call p,
+  .download-btn {
+    display: inline-block;
+    vertical-align: middle;
+  }
+}

@@ -19,7 +19,6 @@ package br.com.caelum.vraptor.observer;
 
 import static com.google.common.base.Preconditions.checkState;
 
-import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.event.Observes;
 import javax.enterprise.inject.Produces;

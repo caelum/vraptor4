@@ -1,0 +1,26 @@
+{
+  "name": "vraptor-site-survey",
+  "version": "0.0.0",
+  "description": "",
+  "main": "Gruntfile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Sr. Saude",
+  "license": "MIT",
+  "devDependencies": {
+    "grunt-cli": "~0.1.13",
+    "grunt-contrib-cssmin": "~0.7.0",
+    "grunt": "~0.4.2",
+    "grunt-contrib-uglify": "~0.3.2",
+    "grunt-contrib-copy": "~0.5.0",
+    "grunt-contrib-clean": "~0.5.0",
+    "grunt-contrib-watch": "~0.5.3",
+    "grunt-contrib-connect": "~0.6.0",
+    "grunt-autoprefixer": "~0.6.5",
+    "grunt-htmlcompressor": "~0.1.10",
+    "grunt-contrib-imagemin": "~0.5.0",
+    "grunt-usemin": "~2.0.2",
+    "grunt-contrib-concat": "~0.3.0"
+  }
+}

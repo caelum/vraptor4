@@ -53,9 +53,10 @@ public class DefaultMultipartConfig implements MultipartConfig {
 	public File getDirectory() {
 		if (tmpdir == null) {
 			tmpdir = getTemporaryDirectory();
-			if (tmpdir == null) {
-				tmpdir = createDirInsideApplication();
-			}
+		}
+
+		if (tmpdir == null) {
+			tmpdir = createDirInsideApplication();
 		}
 
 		return tmpdir.toFile();

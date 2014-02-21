@@ -42,6 +42,7 @@ import com.google.common.base.Throwables;
 public class DefaultMultipartConfig implements MultipartConfig {
 
 	private final Logger logger = LoggerFactory.getLogger(DefaultMultipartConfig.class);
+	private Path tmpdir;
 
 	@Override
 	public long getSizeLimit() {
@@ -50,12 +51,15 @@ public class DefaultMultipartConfig implements MultipartConfig {
 
 	@Override
 	public File getDirectory() {
-		Path tmp = getTemporaryDirectory();
-		if (tmp == null) {
-			tmp = createDirInsideApplication();
+		if (tmpdir == null) {
+			tmpdir = getTemporaryDirectory();
 		}
-		
-		return tmp.toFile();
+
+		if (tmpdir == null) {
+			tmpdir = createDirInsideApplication();
+		}
+
+		return tmpdir.toFile();
 	}
 
 	protected Path getTemporaryDirectory() {

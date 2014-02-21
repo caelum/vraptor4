@@ -1,7 +1,7 @@
-<% path = @item[:filename].start_with?('content/en') ? '/en' : '/pt' %>
+<% path = @item[:filename].start_with?('content/en') ? 'en' : 'pt' %>
 
 <header>
-  <h1 class="logo"><a class="logo-link" href="<%=path%>">
+  <h1 class="logo"><a class="logo-link" href="/<%=path%>">
       <img src="/img/logo.png" alt="VRaptor">
   </a></h1>
 
@@ -13,15 +13,16 @@
 
   <ul class="site-languages">
     <li>
-      <a class="site-language flag flag-en <%=path == '/en' ? '' : 'not-selected'%>" title="en" href="/en">
+      <a class="site-language flag flag-en <%=path == 'en' ? '' : 'not-selected'%>" title="en" href="/en">
         EN
       </a>
     </li>
     <li>
-      <a class="site-language flag flag-pt <%=path == '/pt' ? '' : 'not-selected'%>" title="pt" href="/pt">
+      <a class="site-language flag flag-pt <%=path == 'pt' ? '' : 'not-selected'%>" title="pt" href="/pt">
         PT
       </a>
     </li>
   </ul>
 
 </header>
+<%= render path + '/menu' %>

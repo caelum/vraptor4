@@ -3,18 +3,6 @@
   <%= render 'head' %>
   <body>
     <%= render 'header' %>
-    <input type="checkbox" id="nav-visibility">
-    <label for="nav-visibility" class="nav-toggle">Menu</label>
-    <nav class="main-nav">
-      <ul>
-        <li><a href="/pt/download">Download</a></li>
-        <li><a href="/pt/docs/guia-de-1-minuto/">Documentação</a></li>
-        <li><a href="/pt/cookbook/aceitando-urls-com-ou-sem-barra-no-final">Cookbook</a></li>
-        <li><a href="https://github.com/caelum/vraptor4/releases" target="_blank">Changelog</a></li>
-        <li><a href="/pt/roadmap">Roadmap</a></li>
-        <li><a href="/javadoc">Javadoc</a></li>
-      </ul>
-    </nav>
     <main>
       <%= yield %>
     </main>

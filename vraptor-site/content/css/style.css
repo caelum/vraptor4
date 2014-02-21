@@ -234,24 +234,38 @@ main {
   .home-advantages li:nth-child(odd) {
     margin-right: 2%;
   }
+
+  .home-example-column {
+    display: inline-block;
+    width: 48%;
+    vertical-align: top;
+  }
+
+  .home-example-column:nth-of-type(odd) {
+    margin-right: 2%;
+  }
 }
 
 @media (min-width: 60em) {
   .home-call {
     text-align: justify;
   }
+
   .home-call:after {
     content: '';
     display: inline-block;
     width: 100%;
   }
+
   .home-call p {
-    width: 40em;
+    width: 39em;
     text-align: left;
   }
+
   .download-btn {
     width: 8em;
   }
+
   .home-call p,
   .download-btn {
     display: inline-block;

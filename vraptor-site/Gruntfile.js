@@ -27,10 +27,15 @@ module.exports = function(grunt) {
         },
         imagemin: {
             site: {
-                expand: true,
-                cwd: 'output/',
-                src: ['**/*.{png,gif,jpg}'],
-                dest: 'deploy/'
+                options: {
+                  pngquant: true
+                },
+                files: [{
+                  cwd: 'output/',
+                  src: ['**/*.{png,gif,jpg}'],
+                  dest: 'deploy/',
+                  expand: true
+                }]
             }
         },
         useminPrepare: {
@@ -60,5 +65,5 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-htmlcompressor');
     grunt.loadNpmTasks('grunt-usemin');
 
-    grunt.registerTask('default', ['clean', 'copy', 'useminPrepare', 'usemin', 'autoprefixer', 'concat', 'cssmin', 'htmlcompressor']);
+    grunt.registerTask('default', ['clean', 'copy', 'imagemin', 'useminPrepare', 'usemin', 'autoprefixer', 'concat', 'cssmin', 'htmlcompressor']);
 };

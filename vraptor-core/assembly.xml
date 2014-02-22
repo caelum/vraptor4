@@ -33,7 +33,7 @@
 				<include>javax.annotation:javax.annotation-api</include>
 				<include>javax.interceptor:javax.interceptor-api</include>
 				<include>javax.enterprise:cdi-api</include>
-				<include>javax.ejb:ejb-api</include>
+				<include>javax.ejb:javax.ejb-api</include>
 			</includes>
 		</dependencySet>
 

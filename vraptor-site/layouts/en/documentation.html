@@ -3,7 +3,8 @@
   <%= render 'head' %>
   <body>
     <%= render 'header' %>
-    <nav class="main-nav">
+    <nav class="doc-nav container">
+      <h1>Documentation</h1>
       <ul>
         <li><a href="/en/docs/one-minute-guide">One minute guide</a></li>
         <li><a href="/en/docs/ten-minute-guide">Ten minute guide</a></li>
@@ -20,7 +21,7 @@
         <li><a href="/en/docs/how-to-contribute">How to contribute to VRaptor</a></li>
       </ul>
     </nav>
-    <main>
+    <main class="container">
       <%= yield %>
     </main>
   </body>

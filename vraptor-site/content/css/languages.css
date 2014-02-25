@@ -1,0 +1,46 @@
+.site-languages {
+  display: block;
+}
+
+.site-languages li {
+  display: inline-block;
+}
+
+.site-language {
+  padding: 1em;
+  display: inline-block;
+}
+
+.flag:before {
+  content: '';
+  width: 16px;
+  height: 11px;
+  display: inline-block;
+  background: url(../img/flags.png) no-repeat;
+}
+
+.flag-pt:before {
+  background-position: -16px 0;
+}
+
+.flag-en:before {
+  background-position: -32px 0;
+}
+
+.flag.not-selected {
+  color: #8A99A7;
+}
+
+.flag-pt.not-selected:before {
+  background-position: -16px -11px;
+}
+
+.flag-en.not-selected:before {
+  background-position: -32px -11px;
+}
+
+@media (min-width: 480px) {
+  .site-languages {
+    display: inline-block;
+  }
+}

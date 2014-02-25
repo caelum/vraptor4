@@ -3,24 +3,18 @@
   <%= render 'head' %>
   <body>
     <%= render 'header' %>
-    <nav class="main-nav">
-      <ul>
-        <li><a href="/pt/download">Download</a></li>
-        <li><a href="/pt/docs/guia-de-1-minuto/">Documentação</a></li>
-        <li><a href="/pt/cookbook/aceitando-urls-com-ou-sem-barra-no-final">Cookbook</a></li>
-        <li><a href="https://github.com/caelum/vraptor4/releases" target="_blank">Changelog</a></li>
-        <li><a href="/pt/roadmap">Roadmap</a></li>
-        <li><a href="/javadoc">Javadoc</a></li>
-      </ul>
-      <h2>Comunidade</h2>
-      <ul>
-        <li><a href="https://groups.google.com/forum/#!forum/caelum-vraptor" target="_blank">Google Groups</a></li>
-        <li><a href="https://github.com/caelum/vraptor4/" target="_blank">GitHub</a></li>
-        <li><a href="http://www.guj.com.br/tag/vraptor" target="_blank">GUJ Respostas</a></li>
-      </ul>
-    </nav>
-    <main>
+    <main class="container">
       <%= yield %>
     </main>
+    <footer>
+      <h1>Quem usa</h1>
+      <ul class="who-uses">
+        <li class="guj">GUJ</li>
+        <li class="wine">wine.com.br</li>
+        <li class="defferrari">Grupo Defferrari</li>
+        <li class="locaweb">Locaweb</li>
+        <li class="agenciaclick">Agência Click</li>
+      </ul>
+    </footer>
   </body>
 </html>

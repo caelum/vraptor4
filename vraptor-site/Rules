@@ -23,10 +23,6 @@ def stylized(*archive, layout)
   end
 end
 
-compile '/css/*' do
-    filter :rainpress
-end
-
 stylized '/img/*', '/css/*', false
 
 stylized '/pt/docs/*', '/pt/documentacao'

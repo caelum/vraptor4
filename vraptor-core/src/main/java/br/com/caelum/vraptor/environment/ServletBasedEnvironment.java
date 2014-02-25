@@ -31,7 +31,7 @@ public class ServletBasedEnvironment extends DefaultEnvironment {
 
 	@Inject
 	public ServletBasedEnvironment(ServletContext context) throws IOException {
-		super(EnvironmentType.of(env(context)));
+		super(new EnvironmentType(env(context)));
 	}
 
 	private static String env(ServletContext context) {

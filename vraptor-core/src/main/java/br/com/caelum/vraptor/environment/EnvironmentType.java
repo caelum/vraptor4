@@ -1,23 +1,63 @@
 package br.com.caelum.vraptor.environment;
 
-import static com.google.common.base.Strings.isNullOrEmpty;
-
 /**
- * An Enum to represents usual {@link Environment} types 
+ * An class to represent usual {@link Environment} types 
  * 
  * @author Rodrigo Turini
+ * @author Chico Sokol
  * @since 4.0
  */
-public enum EnvironmentType {
+public class EnvironmentType {
 
-	PRODUCTION, DEVELOPMENT, ACCEPTANCE, TEST;
+	private String name;
+	
+	public EnvironmentType(String name) {
+		this.name = name;
+	}
+
+	public static EnvironmentType production() {
+		return new EnvironmentType("production");
+	}
+	
+	public static EnvironmentType acceptance() {
+		return new EnvironmentType("acceptance");
+	}
+	
+	public static EnvironmentType test() {
+		return new EnvironmentType("test");
+	}
+	
+	public static EnvironmentType development() {
+		return new EnvironmentType("development");
+	}
 
 	public String getName() {
-		return name().toLowerCase();
+		return this.name;
+	}
+	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		return result;
 	}
 
-	public static EnvironmentType of(String name) {
-		if (isNullOrEmpty(name)) return null;
-		return valueOf(name.toUpperCase());
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		EnvironmentType other = (EnvironmentType) obj;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		return true;
 	}
+	
 }

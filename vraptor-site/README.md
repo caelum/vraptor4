@@ -8,7 +8,7 @@ You will need **grunt** installed also. You can see how to [install it here](htt
 npm install -g grunt-cli
 ```
 
-Grunt are installed and managed via `npm`, the `Node.js` package manager.
+Grunt is installed and managed via `npm`, the `Node.js` package manager.
 
 # Some useful nanoc commands
 

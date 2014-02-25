@@ -1,8 +1,8 @@
 package br.com.caelum.vraptor.environment;
 
-import static br.com.caelum.vraptor.environment.EnvironmentType.development;
-import static br.com.caelum.vraptor.environment.EnvironmentType.production;
-import static br.com.caelum.vraptor.environment.EnvironmentType.test;
+import static br.com.caelum.vraptor.environment.EnvironmentType.DEVELOPMENT;
+import static br.com.caelum.vraptor.environment.EnvironmentType.PRODUCTION;
+import static br.com.caelum.vraptor.environment.EnvironmentType.TEST;
 import static com.google.common.base.Objects.firstNonNull;
 import static org.slf4j.LoggerFactory.getLogger;
 
@@ -40,7 +40,7 @@ public class DefaultEnvironment implements Environment {
 	}
 
 	public DefaultEnvironment(EnvironmentType environmentType) throws IOException {
-		this.environmentType = firstNonNull(environmentType, development());
+		this.environmentType = firstNonNull(environmentType, EnvironmentType.DEVELOPMENT);
 		loadAndPut("environment");
 		loadAndPut(getName());
 	}
@@ -98,17 +98,17 @@ public class DefaultEnvironment implements Environment {
 
 	@Override
 	public boolean isProduction() {
-		return production().equals(environmentType);
+		return PRODUCTION.equals(environmentType);
 	}
 
 	@Override
 	public boolean isDevelopment() {
-		return development().equals(environmentType);
+		return DEVELOPMENT.equals(environmentType);
 	}
 
 	@Override
 	public boolean isTest() {
-		return test().equals(environmentType);
+		return TEST.equals(environmentType);
 	}
 
 	@Override

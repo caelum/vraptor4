@@ -1,5 +1,7 @@
 package br.com.caelum.vraptor.environment;
 
+import com.google.common.base.Objects;
+
 /**
  * An class to represent usual {@link Environment} types 
  * 
@@ -8,27 +10,15 @@ package br.com.caelum.vraptor.environment;
  * @since 4.0
  */
 public class EnvironmentType {
+	
+	public static final EnvironmentType PRODUCTION = new EnvironmentType("production");
+	public static final EnvironmentType DEVELOPMENT = new EnvironmentType("development");
+	public static final EnvironmentType TEST = new EnvironmentType("test");
 
 	private String name;
 	
 	public EnvironmentType(String name) {
 		this.name = name;
-	}
-
-	public static EnvironmentType production() {
-		return new EnvironmentType("production");
-	}
-	
-	public static EnvironmentType acceptance() {
-		return new EnvironmentType("acceptance");
-	}
-	
-	public static EnvironmentType test() {
-		return new EnvironmentType("test");
-	}
-	
-	public static EnvironmentType development() {
-		return new EnvironmentType("development");
 	}
 
 	public String getName() {
@@ -39,7 +29,7 @@ public class EnvironmentType {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + Objects.hashCode(name);
 		return result;
 	}
 
@@ -52,12 +42,7 @@ public class EnvironmentType {
 		if (getClass() != obj.getClass())
 			return false;
 		EnvironmentType other = (EnvironmentType) obj;
-		if (name == null) {
-			if (other.name != null)
-				return false;
-		} else if (!name.equals(other.name))
-			return false;
-		return true;
+		return Objects.equal(name, other.name);
 	}
 	
 }

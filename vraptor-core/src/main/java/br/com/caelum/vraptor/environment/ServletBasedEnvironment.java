@@ -1,5 +1,7 @@
 package br.com.caelum.vraptor.environment;
 
+import static com.google.common.base.Objects.firstNonNull;
+
 import java.io.IOException;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -43,6 +45,8 @@ public class ServletBasedEnvironment extends DefaultEnvironment {
 		if (systemProperty != null) {
 			return systemProperty;
 		}
-		return context.getInitParameter(ENVIRONMENT_PROPERTY);
+		String containerProperty = context.getInitParameter(ENVIRONMENT_PROPERTY);
+		
+		return firstNonNull(containerProperty, "development");
 	}
 }

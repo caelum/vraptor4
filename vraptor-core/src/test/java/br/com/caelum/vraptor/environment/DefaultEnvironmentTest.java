@@ -68,7 +68,7 @@ public class DefaultEnvironmentTest {
 	
 	@Test
 	public void shouldTrimValueWhenEvaluatingSupport() throws Exception {
-		DefaultEnvironment defaultEnvironment = new DefaultEnvironment(DEVELOPMENT);
+		DefaultEnvironment defaultEnvironment = new DefaultEnvironment(EnvironmentType.DEVELOPMENT);
 		assertThat(defaultEnvironment.supports("untrimmed_boolean"), is(true));
 	}
 }

@@ -66,4 +66,10 @@ public class DefaultEnvironmentTest {
 		String value = defaultEnvironment.get("env_name", "fallback");
 		assertEquals("development", value);
 	}
+	
+	@Test
+	public void shouldTrimValueWhenEvaluatingSupport() throws Exception {
+		DefaultEnvironment defaultEnvironment = new DefaultEnvironment(DEVELOPMENT);
+		assertThat(defaultEnvironment.supports("untrimmed_boolean"), is(true));
+	}
 }

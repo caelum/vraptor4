@@ -62,7 +62,7 @@ public class DefaultEnvironment implements Environment {
 
 	@Override
 	public boolean supports(String feature) {
-		return Boolean.parseBoolean(get(feature));
+		return Boolean.parseBoolean(get(feature).trim());
 	}
 
 	@Override

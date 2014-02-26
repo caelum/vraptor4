@@ -132,6 +132,7 @@ header {
 .download-btn:before {
   content: '';
   background-image: url(../img/download.png);
+  background-repeat: no-repeat;
   background-size: contain;
   width: 1.2em;
   height: 1.2em;

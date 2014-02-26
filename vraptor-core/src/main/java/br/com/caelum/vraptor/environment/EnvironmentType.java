@@ -1,23 +1,45 @@
 package br.com.caelum.vraptor.environment;
 
-import static com.google.common.base.Strings.isNullOrEmpty;
+import com.google.common.base.Objects;
 
 /**
- * An Enum to represents usual {@link Environment} types 
+ * An class to represent usual {@link Environment} types 
  * 
  * @author Rodrigo Turini
+ * @author Chico Sokol
  * @since 4.0
  */
-public enum EnvironmentType {
+public class EnvironmentType {
+	
+	public static final EnvironmentType PRODUCTION = new EnvironmentType("production");
+	public static final EnvironmentType DEVELOPMENT = new EnvironmentType("development");
+	public static final EnvironmentType TEST = new EnvironmentType("test");
 
-	PRODUCTION, DEVELOPMENT, ACCEPTANCE, TEST;
+	private String name;
+	
+	public EnvironmentType(String name) {
+		this.name = name;
+	}
 
 	public String getName() {
-		return name().toLowerCase();
+		return this.name;
+	}
+	
+	@Override
+	public int hashCode() {
+		return Objects.hashCode(name);
 	}
 
-	public static EnvironmentType of(String name) {
-		if (isNullOrEmpty(name)) return null;
-		return valueOf(name.toUpperCase());
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		EnvironmentType other = (EnvironmentType) obj;
+		return Objects.equal(name, other.name);
 	}
+	
 }

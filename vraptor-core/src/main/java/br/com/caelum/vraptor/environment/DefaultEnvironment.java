@@ -40,7 +40,7 @@ public class DefaultEnvironment implements Environment {
 	}
 
 	public DefaultEnvironment(EnvironmentType environmentType) throws IOException {
-		this.environmentType = firstNonNull(environmentType, DEVELOPMENT);
+		this.environmentType = firstNonNull(environmentType, EnvironmentType.DEVELOPMENT);
 		loadAndPut("environment");
 		loadAndPut(getName());
 	}

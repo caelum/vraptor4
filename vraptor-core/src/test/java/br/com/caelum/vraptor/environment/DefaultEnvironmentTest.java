@@ -1,6 +1,5 @@
 package br.com.caelum.vraptor.environment;
 
-import static br.com.caelum.vraptor.environment.EnvironmentType.DEVELOPMENT;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
@@ -55,14 +54,14 @@ public class DefaultEnvironmentTest {
 
 	@Test
 	public void shouldGetDefaultValueIfTheValueIsntSet() throws Exception {
-		DefaultEnvironment defaultEnvironment = new DefaultEnvironment(DEVELOPMENT);
+		DefaultEnvironment defaultEnvironment = new DefaultEnvironment(EnvironmentType.DEVELOPMENT);
 		String value = defaultEnvironment.get("inexistent", "fallback");
 		assertEquals("fallback", value);
 	}
 
 	@Test
 	public void shouldGetValueIfIsSetInProperties() throws Exception {
-		DefaultEnvironment defaultEnvironment = new DefaultEnvironment(DEVELOPMENT);
+		DefaultEnvironment defaultEnvironment = new DefaultEnvironment(EnvironmentType.DEVELOPMENT);
 		String value = defaultEnvironment.get("env_name", "fallback");
 		assertEquals("development", value);
 	}

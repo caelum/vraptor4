@@ -51,9 +51,6 @@ public class JstlLocalization {
 	private static final String DEFAULT_BUNDLE_NAME = "messages";
 
 	private final HttpServletRequest request;
-	
-	private ResourceBundle bundle;
-	private Locale locale;
 
 	/** 
 	 * @deprecated CDI eyes only
@@ -61,7 +58,7 @@ public class JstlLocalization {
 	protected JstlLocalization() {
 		this(null);
 	}
-	
+
 	@Inject
 	public JstlLocalization(HttpServletRequest request) {
 		this.request = request;
@@ -69,22 +66,10 @@ public class JstlLocalization {
 
 	@Produces
 	public ResourceBundle getBundle() {
-		if (bundle == null) {
-			initializeBundle();
-		}
-
-		return bundle;
-	}
-
-	/**
-	 * Find the bundle. If the bundle is not found, return an empty for safety operations (avoid
-	 * {@link MissingResourceException}.
-	 */
-	private void initializeBundle() {
 		Object bundle = findByKey(Config.FMT_LOCALIZATION_CONTEXT);
 		ResourceBundle unsafe = extractUnsafeBundle(bundle);
 
-		this.bundle = new SafeResourceBundle(unsafe);
+		return new SafeResourceBundle(unsafe);
 	}
 
 	private ResourceBundle extractUnsafeBundle(Object bundle) {
@@ -105,23 +90,15 @@ public class JstlLocalization {
 		logger.warn("Can't handle bundle {}. Please report this bug. Using an empty bundle", bundle);
 		return new EmptyBundle();
 	}
-	
+
 	@Produces
 	public Locale getLocale() {
-		if (locale == null) {
-			initializeLocale();
-		}
-		
-		return locale;
-	}
-
-	private void initializeLocale() {
 		Locale locale = localeFor(Config.FMT_LOCALE);
 		if (locale == null) {
-			locale = Locale.getDefault();
+			return Locale.getDefault();
 		}
-		
-		this.locale = locale;
+
+		return locale;
 	}
 
 	private Locale localeFor(String key) {

@@ -12,13 +12,12 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.servlet.jsp.jstl.fmt.LocalizationContext;
 
 import org.junit.Before;
 import org.junit.Test;
-
-import br.com.caelum.vraptor.http.MutableRequest;
 
 /**
  * Test class for {@link JstlLocalization}.
@@ -31,13 +30,13 @@ public class JstlLocalizationTest {
 
 	private JstlLocalization localization;
 
-	private MutableRequest request;
+	private HttpServletRequest request;
 	private ServletContext servletContext;
 	private HttpSession session;
 
 	@Before
 	public void setUp() {
-		request = mock(MutableRequest.class);
+		request = mock(HttpServletRequest.class);
 		servletContext = mock(ServletContext.class);
 		session = mock(HttpSession.class);
 		

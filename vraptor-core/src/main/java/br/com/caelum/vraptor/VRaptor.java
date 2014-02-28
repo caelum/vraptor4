@@ -112,8 +112,7 @@ public class VRaptor implements Filter {
 		if (staticHandler.requestingStaticFile(baseRequest)) {
 			staticHandler.deferProcessingToContainer(chain, baseRequest, baseResponse);
 		} else {
-			logger.debug("VRaptor received a new request");
-			logger.trace("Request: {}", req);
+			logger.debug("VRaptor received a new request {}", req);
 
 			VRaptorRequest mutableRequest = new VRaptorRequest(baseRequest);
 			VRaptorResponse mutableResponse = new VRaptorResponse(baseResponse);

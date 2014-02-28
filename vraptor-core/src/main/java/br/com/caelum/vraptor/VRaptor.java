@@ -23,6 +23,7 @@ import java.io.IOException;
 
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
+import javax.interceptor.Interceptor.Priority;
 import javax.servlet.DispatcherType;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -85,8 +86,8 @@ public class VRaptor implements Filter {
 	public void init(FilterConfig cfg) throws ServletException {
 		servletContext = cfg.getServletContext();
 
-		validateIfCdiIsFound();
 		validateJavaEE7Environment();
+		validateIfCdiIsFound();
 		warnIfBeansXmlIsFound();
 
 		contextEvent.fire(servletContext);
@@ -146,17 +147,19 @@ public class VRaptor implements Filter {
 		}
 	}
 
-	private void validateIfCdiIsFound() throws ServletException {
-		if (provider == null) {
-			throw new ServletException("Container Provider is null. Do you have a Weld/CDI listener setup in your web.xml?");
+	private void validateJavaEE7Environment() throws ServletException {
+		try {
+			servletContext.getJspConfigDescriptor(); // check servlet 3
+			Priority.class.toString(); // check CDI 1.1
+		} catch (NoClassDefFoundError | java.lang.NoSuchMethodError e) {
+			throw new ServletException("VRaptor only runs under Java EE 7 environment or Servlet Containers that "
+					+ "supports Servlets 3.1 with CDI jars.");
 		}
 	}
 
-	private void validateJavaEE7Environment() throws ServletException {
-		try {
-			servletContext.getVirtualServerName();
-		} catch (NoSuchMethodError e) {
-			throw new ServletException("VRaptor only runs under Servlet 3.1. Please upgrade your Servlet Container or Application Server.");
+	private void validateIfCdiIsFound() throws ServletException {
+		if (provider == null) {
+			throw new ServletException("Container Provider is null. Do you have a Weld/CDI listener setup in your web.xml?");
 		}
 	}
 }

@@ -86,6 +86,7 @@ public class VRaptor implements Filter {
 		servletContext = cfg.getServletContext();
 
 		validateIfCdiIsFound();
+		validateJavaEE7Environment();
 		warnIfBeansXmlIsFound();
 
 		contextEvent.fire(servletContext);
@@ -93,11 +94,6 @@ public class VRaptor implements Filter {
 
 		initializedEvent.fire(new VRaptorInitialized());
 		logger.info("VRaptor {} successfuly initialized", VERSION);
-	}
-
-	@Override
-	public void destroy() {
-		servletContext = null;
 	}
 
 	@Override
@@ -133,6 +129,11 @@ public class VRaptor implements Filter {
 		}
 	}
 
+	@Override
+	public void destroy() {
+		servletContext = null;
+	}
+
 	private void validateServletEnvironment(ServletRequest req, ServletResponse res) throws ServletException {
 		if (!(req instanceof HttpServletRequest) || !(res instanceof HttpServletResponse)) {
 			throw new ServletException("VRaptor must be run inside a Servlet environment. Portlets and others aren't supported.");
@@ -148,6 +149,14 @@ public class VRaptor implements Filter {
 	private void validateIfCdiIsFound() throws ServletException {
 		if (provider == null) {
 			throw new ServletException("Container Provider is null. Do you have a Weld/CDI listener setup in your web.xml?");
+		}
+	}
+
+	private void validateJavaEE7Environment() throws ServletException {
+		try {
+			servletContext.getVirtualServerName();
+		} catch (NoSuchMethodError e) {
+			throw new ServletException("VRaptor only runs under Servlet 3.1. Please upgrade your Servlet Container or Application Server.");
 		}
 	}
 }

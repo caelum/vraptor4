@@ -82,6 +82,20 @@ public class VRaptor implements Filter {
 	private Event<NewRequest> newRequestEvent;
 
 	@Override
+	public void init(FilterConfig cfg) throws ServletException {
+		servletContext = cfg.getServletContext();
+
+		validateIfCdiIsFound();
+		warnIfBeansXmlIsFound();
+
+		contextEvent.fire(servletContext);
+		provider.start();
+
+		initializedEvent.fire(new VRaptorInitialized());
+		logger.info("VRaptor {} successfuly initialized", VERSION);
+	}
+
+	@Override
 	public void destroy() {
 		servletContext = null;
 	}
@@ -90,10 +104,7 @@ public class VRaptor implements Filter {
 	public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException,
 			ServletException {
 
-		if (!(req instanceof HttpServletRequest) || !(res instanceof HttpServletResponse)) {
-			throw new ServletException(
-					"VRaptor must be run inside a Servlet environment. Portlets and others aren't supported.");
-		}
+		validateServletEnvironment(req, res);
 
 		final HttpServletRequest baseRequest = (HttpServletRequest) req;
 		final HttpServletResponse baseResponse = (HttpServletResponse) res;
@@ -123,21 +134,21 @@ public class VRaptor implements Filter {
 		}
 	}
 
-	@Override
-	public void init(FilterConfig cfg) throws ServletException {
+	private void validateServletEnvironment(ServletRequest req, ServletResponse res) throws ServletException {
+		if (!(req instanceof HttpServletRequest) || !(res instanceof HttpServletResponse)) {
+			throw new ServletException("VRaptor must be run inside a Servlet environment. Portlets and others aren't supported.");
+		}
+	}
+
+	private void warnIfBeansXmlIsFound() {
+		if (servletContext.getRealPath("/WEB-INF/beans.xml") == null) {
+			logger.warn("A beans.xml isn't found. Check if your beans.xml is properly located at /WEB-INF/beans.xml");
+		}
+	}
+
+	private void validateIfCdiIsFound() throws ServletException {
 		if (provider == null) {
 			throw new ServletException("Container Provider is null. Do you have a Weld/CDI listener setup in your web.xml?");
 		}
-
-		if (cfg.getServletContext().getRealPath("/WEB-INF/beans.xml") == null) {
-			logger.warn("A beans.xml isn't found. Check if your beans.xml is properly located at /WEB-INF/beans.xml");
-		}
-
-		servletContext = cfg.getServletContext();
-		contextEvent.fire(servletContext);
-		provider.start();
-
-		initializedEvent.fire(new VRaptorInitialized());
-		logger.info("VRaptor {} successfuly initialized", VERSION);
 	}
 }

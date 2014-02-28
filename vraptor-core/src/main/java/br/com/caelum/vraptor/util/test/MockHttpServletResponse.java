@@ -222,4 +222,8 @@ public class MockHttpServletResponse implements HttpServletResponse {
 	public Collection<String> getHeaderNames() {
 		return null;
 	}
+	
+	@Override
+	public void setContentLengthLong(long len) {
+	}
 }

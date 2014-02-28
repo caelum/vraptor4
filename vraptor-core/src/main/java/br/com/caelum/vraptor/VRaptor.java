@@ -88,7 +88,7 @@ public class VRaptor implements Filter {
 
 		validateJavaEE7Environment();
 		validateIfCdiIsFound();
-		warnIfBeansXmlIsFound();
+		warnIfBeansXmlIsNotFound();
 
 		contextEvent.fire(servletContext);
 		provider.start();
@@ -141,7 +141,7 @@ public class VRaptor implements Filter {
 		}
 	}
 
-	private void warnIfBeansXmlIsFound() {
+	private void warnIfBeansXmlIsNotFound() {
 		if (servletContext.getRealPath("/WEB-INF/beans.xml") == null) {
 			logger.warn("A beans.xml isn't found. Check if your beans.xml is properly located at /WEB-INF/beans.xml");
 		}

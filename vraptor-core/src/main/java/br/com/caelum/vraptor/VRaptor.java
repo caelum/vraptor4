@@ -153,7 +153,7 @@ public class VRaptor implements Filter {
 			Priority.class.toString(); // check CDI 1.1
 		} catch (NoClassDefFoundError | java.lang.NoSuchMethodError e) {
 			throw new ServletException("VRaptor only runs under Java EE 7 environment or Servlet Containers that "
-					+ "supports Servlets 3.1 with CDI jars.");
+					+ "supports Servlets 3 with CDI 1.1 jars.");
 		}
 	}
 

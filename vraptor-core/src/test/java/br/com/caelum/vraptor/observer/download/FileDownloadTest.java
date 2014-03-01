@@ -11,6 +11,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 import javax.servlet.ServletOutputStream;
+import javax.servlet.WriteListener;
 import javax.servlet.http.HttpServletResponse;
 
 import org.junit.After;
@@ -46,6 +47,15 @@ public class FileDownloadTest {
 			@Override
 			public void write(int b) throws IOException {
 				outputStream.write(b);
+			}
+
+			@Override
+			public boolean isReady() {
+				return false;
+			}
+
+			@Override
+			public void setWriteListener(WriteListener writeListener) {
 			}
 		};
 

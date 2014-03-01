@@ -39,6 +39,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.servlet.http.HttpUpgradeHandler;
 import javax.servlet.http.Part;
 
 import br.com.caelum.vraptor.http.MutableRequest;
@@ -429,5 +430,20 @@ public class HttpServletRequestMock implements MutableRequest {
 	@Override
 	public ServletContext getServletContext() {
 		return session.getServletContext();
+	}
+	
+	@Override
+	public String changeSessionId() {
+		return wrapper.changeSessionId();
+	}
+	
+	@Override
+	public long getContentLengthLong() {
+		return wrapper.getContentLengthLong();
+	}
+	
+	@Override
+	public <T extends HttpUpgradeHandler> T upgrade(Class<T> handlerClass) throws IOException, ServletException {
+		return wrapper.upgrade(handlerClass);
 	}
 }

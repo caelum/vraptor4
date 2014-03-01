@@ -23,6 +23,7 @@ import java.io.IOException;
 
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
+import javax.interceptor.Interceptor.Priority;
 import javax.servlet.DispatcherType;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -82,18 +83,25 @@ public class VRaptor implements Filter {
 	private Event<NewRequest> newRequestEvent;
 
 	@Override
-	public void destroy() {
-		servletContext = null;
+	public void init(FilterConfig cfg) throws ServletException {
+		servletContext = cfg.getServletContext();
+
+		validateJavaEE7Environment();
+		validateIfCdiIsFound();
+		warnIfBeansXmlIsNotFound();
+
+		contextEvent.fire(servletContext);
+		provider.start();
+
+		initializedEvent.fire(new VRaptorInitialized());
+		logger.info("VRaptor {} successfuly initialized", VERSION);
 	}
 
 	@Override
 	public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException,
 			ServletException {
 
-		if (!(req instanceof HttpServletRequest) || !(res instanceof HttpServletResponse)) {
-			throw new ServletException(
-					"VRaptor must be run inside a Servlet environment. Portlets and others aren't supported.");
-		}
+		validateServletEnvironment(req, res);
 
 		final HttpServletRequest baseRequest = (HttpServletRequest) req;
 		final HttpServletResponse baseResponse = (HttpServletResponse) res;
@@ -101,8 +109,7 @@ public class VRaptor implements Filter {
 		if (staticHandler.requestingStaticFile(baseRequest)) {
 			staticHandler.deferProcessingToContainer(chain, baseRequest, baseResponse);
 		} else {
-			logger.debug("VRaptor received a new request");
-			logger.trace("Request: {}", req);
+			logger.trace("VRaptor received a new request {}", req);
 
 			VRaptorRequest mutableRequest = new VRaptorRequest(baseRequest);
 			VRaptorResponse mutableResponse = new VRaptorResponse(baseResponse);
@@ -124,20 +131,35 @@ public class VRaptor implements Filter {
 	}
 
 	@Override
-	public void init(FilterConfig cfg) throws ServletException {
+	public void destroy() {
+		servletContext = null;
+	}
+
+	private void validateServletEnvironment(ServletRequest req, ServletResponse res) throws ServletException {
+		if (!(req instanceof HttpServletRequest) || !(res instanceof HttpServletResponse)) {
+			throw new ServletException("VRaptor must be run inside a Servlet environment. Portlets and others aren't supported.");
+		}
+	}
+
+	private void warnIfBeansXmlIsNotFound() {
+		if (servletContext.getRealPath("/WEB-INF/beans.xml") == null) {
+			logger.warn("A beans.xml isn't found. Check if your beans.xml is properly located at /WEB-INF/beans.xml");
+		}
+	}
+
+	private void validateJavaEE7Environment() throws ServletException {
+		try {
+			servletContext.getJspConfigDescriptor(); // check servlet 3
+			Priority.class.toString(); // check CDI 1.1
+		} catch (NoClassDefFoundError | java.lang.NoSuchMethodError e) {
+			throw new ServletException("VRaptor only runs under Java EE 7 environment or Servlet Containers that "
+					+ "supports Servlets 3 with CDI 1.1 jars.");
+		}
+	}
+
+	private void validateIfCdiIsFound() throws ServletException {
 		if (provider == null) {
 			throw new ServletException("Container Provider is null. Do you have a Weld/CDI listener setup in your web.xml?");
 		}
-
-		if (cfg.getServletContext().getRealPath("/WEB-INF/beans.xml") == null) {
-			logger.warn("A beans.xml isn't found. Check if your beans.xml is properly located at /WEB-INF/beans.xml");
-		}
-
-		servletContext = cfg.getServletContext();
-		contextEvent.fire(servletContext);
-		provider.start();
-
-		initializedEvent.fire(new VRaptorInitialized());
-		logger.info("VRaptor {} successfuly initialized", VERSION);
 	}
 }

@@ -46,6 +46,8 @@ import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.proxy.ProxyInvocationException;
 import br.com.caelum.vraptor.proxy.SuperMethod;
 
+import com.google.common.base.Throwables;
+
 /**
  * The default implementation of LogicResult.<br>
  * Uses cglib to provide proxies for client side redirect (url creation).
@@ -116,9 +118,7 @@ public class DefaultLogicResult implements LogicResult {
 					}
 					return null;
 				} catch (InvocationTargetException e) {
-					if (e.getCause() instanceof RuntimeException) {
-						throw (RuntimeException) e.getCause();
-					}
+					Throwables.propagateIfPossible(e.getCause());
 					throw new ProxyInvocationException(e);
 				} catch (Exception e) {
 					throw new ProxyInvocationException(e);

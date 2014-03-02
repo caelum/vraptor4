@@ -20,7 +20,6 @@ package br.com.caelum.vraptor.controller;
 import java.io.IOException;
 
 import javax.enterprise.context.ApplicationScoped;
-import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 
 import br.com.caelum.vraptor.InterceptionException;
@@ -37,12 +36,10 @@ public class DefaultControllerNotFoundHandler implements ControllerNotFoundHandl
 
 	@Override
 	public void couldntFind(RequestInfo request) {
-		FilterChain chain = request.getChain();
 		try {
-			chain.doFilter(request.getRequest(), request.getResponse());
+			request.getChain().doFilter(request.getRequest(), request.getResponse());
 		} catch (IOException | ServletException e) {
 			throw new InterceptionException(e);
 		}
 	}
-
 }

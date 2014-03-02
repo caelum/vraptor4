@@ -47,5 +47,4 @@ public class DefaultMethodNotAllowedHandler implements MethodNotAllowedHandler {
 			throw new InterceptionException(e);
 		}
 	}
-
 }

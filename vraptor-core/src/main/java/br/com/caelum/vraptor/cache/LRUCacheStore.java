@@ -49,13 +49,15 @@ public class LRUCacheStore<K, V> extends LinkedHashMap<K, V> implements CacheSto
 	@Override
 	public V fetch(K key, Callable<V> valueProvider) {
 		if (!this.containsKey(key)){
-			try {
-				V value = valueProvider.call();
-				put(key, value);
-				return value;
-			} catch (Exception e) {
-				Throwables.propagateIfPossible(e);
-				throw new CacheException("Error computing the value", e);
+			synchronized (this) {
+				try {
+					V value = valueProvider.call();
+					put(key, value);
+					return value;
+				} catch (Exception e) {
+					Throwables.propagateIfPossible(e);
+					throw new CacheException("Error computing the value", e);
+				}
 			}
 		}
 		return get(key);
@@ -63,7 +65,9 @@ public class LRUCacheStore<K, V> extends LinkedHashMap<K, V> implements CacheSto
 
 	@Override
 	public V write(K key, V value) {
-		return put(key, value);
+		synchronized (this) {
+			return put(key, value);
+		}
 	}
 
 	@Override

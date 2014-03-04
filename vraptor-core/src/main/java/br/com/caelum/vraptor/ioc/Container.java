@@ -18,34 +18,29 @@
 package br.com.caelum.vraptor.ioc;
 
 /**
- * Provides components.<br>
- * Registerable components can have different scopes: request (by default),
- * session and application scope (only one instance for the entire app). App
- * scoped components are registered through the use of the annotation
- * \@ApplicatonScope.
+ * Class responsible to get instances for components.
  * 
  * @author Guilherme Silveira
  */
 public interface Container {
 
 	/**
-	 * Retrieves the appropriate instance for the given class.
+	 * Retrieves the appropriate instance for the given class. If the container can't provide
+	 * a properly instance an exception occurs.
 	 * 
-	 * @param type
-	 *            of the required component
+	 * @param type of the required component
 	 * @param <T>
-	 * @return the registered component
+	 * @return the instance for registered component
 	 */
 	<T> T instanceFor(Class<T> type);
 	
 	/**
-	 * Verifies if this container can provide an instance for
-	 * the given class.
+	 * Returns <code>true</code> if this container can provide an instance for
+	 * the given class, <code>false</code> otherwise.
 	 * 
-	 * @param type
-	 *            of the required component
+	 * @param type of the required component
 	 * @param <T>
-	 * @return true iff instanceFor(type) can return a valid instance.
+	 * @return true if instanceFor(type) can return a valid instance.
 	 */
 	<T> boolean canProvide(Class<T> type);
 

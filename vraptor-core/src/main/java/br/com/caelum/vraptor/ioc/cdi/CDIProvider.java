@@ -29,5 +29,4 @@ public class CDIProvider implements ContainerProvider {
 	public void start() {
 		stereotypesRegistry.configure();
 	}
-
 }

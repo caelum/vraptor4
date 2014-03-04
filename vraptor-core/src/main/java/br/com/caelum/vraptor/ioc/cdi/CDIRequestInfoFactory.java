@@ -8,16 +8,16 @@ import br.com.caelum.vraptor.core.RequestInfo;
 
 @RequestScoped
 public class CDIRequestInfoFactory {
-	
+
 	private RequestInfo requestInfo;
 
 	public void observesRequest(@Observes RequestInfo requestInfo){
 		this.requestInfo = requestInfo;
 	}
-	
+
 	@Produces
+	@RequestScoped
 	public RequestInfo producesRequestInfo(){
 		return requestInfo;
-	}		
-	
+	}
 }

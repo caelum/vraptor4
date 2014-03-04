@@ -16,7 +16,8 @@ public class CDIFilterChainFactory{
 	@Inject
 	private CDIRequestInfoFactory cdiRequestInfoFactory;
 
-	@Produces @javax.enterprise.context.RequestScoped
+	@Produces
+	@RequestScoped
 	public FilterChain getInstance(){
 		return cdiRequestInfoFactory.producesRequestInfo().getChain();
 	}

@@ -20,7 +20,6 @@ public class ServletContextFactory{
 	}
 
 	@Produces
-	@javax.enterprise.context.ApplicationScoped
 	public ServletContext getInstance(){
 		return this.context;
 	}

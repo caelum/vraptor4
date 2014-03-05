@@ -30,7 +30,7 @@ import br.com.caelum.vraptor.interceptor.InterceptorRegistry;
 import br.com.caelum.vraptor.interceptor.InterceptorValidator;
 
 /**
- * Called when a interceptor is discovered, registers then
+ * Called when a interceptor is discovered, registers it.
  */
 @Dependent
 public class InterceptorStereotypeHandler {

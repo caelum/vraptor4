@@ -40,7 +40,7 @@ public interface Container {
 	 * 
 	 * @param type of the required component
 	 * @param <T>
-	 * @return true if instanceFor(type) can return a valid instance.
+	 * @return true iff instanceFor(type) can return a valid instance.
 	 */
 	<T> boolean canProvide(Class<T> type);
 

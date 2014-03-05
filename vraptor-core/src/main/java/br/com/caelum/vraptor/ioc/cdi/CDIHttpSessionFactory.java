@@ -16,7 +16,8 @@ public class CDIHttpSessionFactory{
 	@Inject
 	private CDIRequestInfoFactory cdiRequestInfoFactory;
 
-	@Produces @javax.enterprise.context.RequestScoped
+	@Produces
+	@RequestScoped
 	public HttpSession getInstance(){
 		return cdiRequestInfoFactory.producesRequestInfo().getRequest().getSession();
 	}

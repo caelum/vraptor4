@@ -17,7 +17,8 @@ public class CDIHttpServletResponseFactory{
 	@Inject
 	private CDIRequestInfoFactory cdiRequestInfoFactory;
 
-	@Produces @javax.enterprise.context.RequestScoped
+	@Produces
+	@RequestScoped
 	public MutableResponse getInstance(){
 		return cdiRequestInfoFactory.producesRequestInfo().getResponse();
 	}

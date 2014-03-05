@@ -29,14 +29,16 @@ import br.com.caelum.vraptor.core.InterceptsQualifier;
 import br.com.caelum.vraptor.interceptor.InterceptorRegistry;
 import br.com.caelum.vraptor.interceptor.InterceptorValidator;
 
+/**
+ * Called when a interceptor is discovered, registers it.
+ */
 @Dependent
-public class InterceptorStereotypeHandler{
+public class InterceptorStereotypeHandler {
 
 	private static final Logger logger = getLogger(InterceptorStereotypeHandler.class);
 
 	private final InterceptorRegistry registry;
-
-	private InterceptorValidator interceptorValidator;
+	private final InterceptorValidator interceptorValidator;
 
 	/**
 	 * @deprecated CDI eyes only
@@ -46,11 +48,9 @@ public class InterceptorStereotypeHandler{
 	}
 
 	@Inject
-	public InterceptorStereotypeHandler(InterceptorRegistry registry,
-			InterceptorValidator interceptorValidator) {
-
+	public InterceptorStereotypeHandler(InterceptorRegistry registry, InterceptorValidator validator) {
 		this.registry = registry;
-		this.interceptorValidator = interceptorValidator;
+		this.interceptorValidator = validator;
 	}
 
 	public void handle(@Observes @InterceptsQualifier BeanClass beanClass) {

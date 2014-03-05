@@ -22,9 +22,9 @@ public class CDIHttpServletRequestFactory{
 	@Inject
 	private CDIRequestInfoFactory cdiRequestInfoFactory;
 
-	@Produces @javax.enterprise.context.RequestScoped
+	@Produces
+	@RequestScoped
 	public MutableRequest getInstance(){
 		return cdiRequestInfoFactory.producesRequestInfo().getRequest();
 	}
-
 }

@@ -2,7 +2,6 @@ package br.com.caelum.vraptor.ioc.cdi;
 
 import java.lang.annotation.Annotation;
 import java.util.Map;
-import java.util.Set;
 
 import javax.enterprise.context.Dependent;
 import javax.enterprise.inject.spi.Bean;
@@ -32,26 +31,24 @@ import com.google.common.collect.ImmutableMap;
 public class StereotypesRegistry {
 
 	private static final Map<Class<?>, StereotypeInfo> STEREOTYPES_INFO;
+
 	@Inject private BeanManager beanManager;
 	@Inject private InterceptorStackHandlersCache interceptorsCache;
 
 	public void configure(){
-		Set<Bean<?>> beans = beanManager.getBeans(Object.class);
-		for (Bean<?> bean : beans) {
+		for (Bean<?> bean : beanManager.getBeans(Object.class)) {
 			Annotation qualifier = tryToFindAStereotypeQualifier(bean);
-			if(qualifier!=null){
-				beanManager.fireEvent(new DefaultBeanClass(bean.getBeanClass()),qualifier);
+			if (qualifier != null) {
+				beanManager.fireEvent(new DefaultBeanClass(bean.getBeanClass()), qualifier);
 			}
 		}
 		interceptorsCache.init();
 	}
 
 	private Annotation tryToFindAStereotypeQualifier(Bean<?> bean) {
-		Set<Class<? extends Annotation>> annotations = bean.getStereotypes();
-		Map<Class<?>, StereotypeInfo> stereotypesInfo = StereotypesRegistry.STEREOTYPES_INFO;
-		for(Class<? extends Annotation> annotation : annotations){
-			if(stereotypesInfo.containsKey(annotation)){
-				return stereotypesInfo.get(annotation).getStereotypeQualifier();
+		for (Class<? extends Annotation> annotation : bean.getStereotypes()) {
+			if (STEREOTYPES_INFO.containsKey(annotation)) {
+				return STEREOTYPES_INFO.get(annotation).getStereotypeQualifier();
 			}
 		}
 		return null;

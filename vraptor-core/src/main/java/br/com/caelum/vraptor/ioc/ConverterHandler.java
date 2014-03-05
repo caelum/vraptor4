@@ -26,6 +26,9 @@ import br.com.caelum.vraptor.converter.Converter;
 import br.com.caelum.vraptor.core.ConvertQualifier;
 import br.com.caelum.vraptor.core.Converters;
 
+/**
+ * Called when a converter is discovered, registers it.
+ */
 @Dependent
 public class ConverterHandler{
 

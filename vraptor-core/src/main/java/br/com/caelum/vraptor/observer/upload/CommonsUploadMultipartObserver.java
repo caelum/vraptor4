@@ -75,6 +75,7 @@ public class CommonsUploadMultipartObserver {
 
 		ServletFileUpload uploader = createServletFileUpload(config);
 		uploader.setSizeMax(config.getSizeLimit());
+		uploader.setFileSizeMax(config.getSizeLimit());
 
 		try {
 			final List<FileItem> items = uploader.parseRequest(request);

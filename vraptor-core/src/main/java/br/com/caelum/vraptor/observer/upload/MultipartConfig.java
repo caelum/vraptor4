@@ -34,6 +34,13 @@ public interface MultipartConfig {
 	long getSizeLimit();
 
 	/**
+	 * The max size of each uploaded file (in bytes).
+	 * 
+	 * @return
+	 */
+	long getFileSizeLimit();
+
+	/**
 	 * Gets the temporary directory.
 	 * 
 	 * @return

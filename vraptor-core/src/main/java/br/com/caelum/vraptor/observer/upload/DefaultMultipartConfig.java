@@ -50,6 +50,11 @@ public class DefaultMultipartConfig implements MultipartConfig {
 	}
 
 	@Override
+	public long getFileSizeLimit() {
+		return 2 * 1024 * 1024;
+	}
+
+	@Override
 	public File getDirectory() {
 		if (tmpdir == null) {
 			tmpdir = getTemporaryDirectory();

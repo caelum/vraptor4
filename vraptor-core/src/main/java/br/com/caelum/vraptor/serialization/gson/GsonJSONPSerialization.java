@@ -68,7 +68,6 @@ public class GsonJSONPSerialization implements JSONPSerialization {
 								response.getWriter().append(callbackName).append("(");
 								super.serialize();
 								response.getWriter().append(")");
-								response.getWriter().flush();
 							} catch (IOException e) {
 								throw new ResultException("Unable to serialize data", e);
 							}

@@ -31,6 +31,7 @@ import org.slf4j.Logger;
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.core.MethodInfo;
+import br.com.caelum.vraptor.events.BeforeExecuteMethod;
 import br.com.caelum.vraptor.events.EndOfInterceptorStack;
 import br.com.caelum.vraptor.events.MethodExecuted;
 import br.com.caelum.vraptor.events.ReadyToExecuteMethod;
@@ -55,6 +56,7 @@ public class ExecuteMethod {
 	private final Validator validator;
 	private final MethodExecutor methodExecutor;
 
+	private Event<BeforeExecuteMethod> beforeExecuteMethod;
 	private Event<MethodExecuted> methodExecutedEvent;
 	private Event<ReadyToExecuteMethod> readyToExecuteMethod;
 
@@ -62,23 +64,28 @@ public class ExecuteMethod {
 	 * @deprecated CDI eyes only
 	 */
 	protected ExecuteMethod() {
-		this(null, null, null, null, null);
+		this(null, null, null, null, null, null);
 	}
 
 	@Inject
 	public ExecuteMethod(MethodInfo methodInfo, Validator validator, MethodExecutor methodExecutor,
-			Event<MethodExecuted> methodExecutedEvent, Event<ReadyToExecuteMethod> readyToExecuteMethod) {
+			Event<MethodExecuted> methodExecutedEvent, Event<ReadyToExecuteMethod> readyToExecuteMethod, 
+			Event<BeforeExecuteMethod> beforeExecuteMethod) {
+		
 		this.methodInfo = methodInfo;
 		this.validator = validator;
 		this.methodExecutor = methodExecutor;
 		this.methodExecutedEvent = methodExecutedEvent;
 		this.readyToExecuteMethod = readyToExecuteMethod;
+		this.beforeExecuteMethod = beforeExecuteMethod;
 	}
 
 	public void execute(@Observes EndOfInterceptorStack event) {
 		
+		
 		try {
 			ControllerMethod method = event.getControllerMethod();
+			beforeExecuteMethod.fire(new BeforeExecuteMethod(method));
 			readyToExecuteMethod.fire(new ReadyToExecuteMethod(method));
 			Method reflectionMethod = method .getMethod();
 			Object[] parameters = methodInfo.getParametersValues();

@@ -40,7 +40,9 @@ public class DefaultControllerNotFoundHandler implements ControllerNotFoundHandl
 	
 	private final Event<ControllerNotFound> event;
 
-	@Deprecated
+	/**
+	 * @deprecated CDI eyes only
+	 */
 	DefaultControllerNotFoundHandler() {
 		this(null);
 	}
@@ -52,7 +54,7 @@ public class DefaultControllerNotFoundHandler implements ControllerNotFoundHandl
 
 	@Override
 	public void couldntFind(RequestInfo request) {
-		event.fire(new ControllerNotFound(request));
+		event.fire(new ControllerNotFound());
 		FilterChain chain = request.getChain();
 		try {
 			chain.doFilter(request.getRequest(), request.getResponse());

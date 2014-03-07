@@ -40,7 +40,6 @@ import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.events.ControllerMethodDiscovered;
 import br.com.caelum.vraptor.events.NewRequest;
-import br.com.caelum.vraptor.events.StackStarting;
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.http.MutableResponse;
 import br.com.caelum.vraptor.http.UrlToControllerTranslator;
@@ -59,13 +58,12 @@ public class RequestHandlerObserverTest {
 	private @Mock MethodNotAllowedHandler methodNotAllowedHandler;
 	private @Mock Event<ControllerMethodDiscovered> event;
 	private @Mock InterceptorStack interceptorStack;
-	private @Mock Event<StackStarting> stackStartingEvent;
 
 	@Before
 	public void config() {
 		MockitoAnnotations.initMocks(this);
 		info = new RequestInfo(null, null, webRequest, webResponse);
-		observer = new RequestHandlerObserver(translator, notFoundHandler, methodNotAllowedHandler, event, interceptorStack, stackStartingEvent);
+		observer = new RequestHandlerObserver(translator, notFoundHandler, methodNotAllowedHandler, event, interceptorStack);
 	}
 
 	@Test

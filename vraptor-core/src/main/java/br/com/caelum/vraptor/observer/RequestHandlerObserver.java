@@ -55,8 +55,7 @@ public class RequestHandlerObserver {
 	private final ControllerNotFoundHandler controllerNotFoundHandler;
 	private final MethodNotAllowedHandler methodNotAllowedHandler;
 	private final Event<ControllerMethodDiscovered> controllerMethodEvent;
-
-	private InterceptorStack interceptorStack;
+	private final InterceptorStack interceptorStack;
 
 	/**
 	 * @deprecated CDI eyes only

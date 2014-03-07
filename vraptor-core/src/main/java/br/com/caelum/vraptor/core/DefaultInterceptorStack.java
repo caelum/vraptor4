@@ -46,11 +46,11 @@ public class DefaultInterceptorStack implements InterceptorStack {
 
 	private static final Logger logger = getLogger(DefaultInterceptorStack.class);
 	private final InterceptorStackHandlersCache cache;
-	private LinkedList<Iterator<InterceptorHandler>> internalStack = new LinkedList<>();
-	private Instance<ControllerMethod> controllerMethod;
-	private Instance<ControllerInstance> controllerInstance;
-	private Event<EndOfInterceptorStack> event;
-	private Event<StackStarting> stackStartingEvent;
+	private final LinkedList<Iterator<InterceptorHandler>> internalStack = new LinkedList<>();
+	private final Instance<ControllerMethod> controllerMethod;
+	private final Instance<ControllerInstance> controllerInstance;
+	private final Event<EndOfInterceptorStack> event;
+	private final Event<StackStarting> stackStartingEvent;
 
 	/**
 	 * @deprecated CDI eyes only

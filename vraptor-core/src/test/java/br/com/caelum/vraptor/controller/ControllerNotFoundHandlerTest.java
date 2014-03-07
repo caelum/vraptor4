@@ -22,6 +22,7 @@ import static org.mockito.Mockito.verify;
 
 import java.io.IOException;
 
+import javax.enterprise.event.Event;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 
@@ -32,6 +33,7 @@ import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.core.RequestInfo;
+import br.com.caelum.vraptor.events.ControllerNotFound;
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.http.MutableResponse;
 
@@ -41,13 +43,14 @@ public class ControllerNotFoundHandlerTest {
 	private @Mock MutableRequest webRequest;
 	private @Mock MutableResponse webResponse;
 	private @Mock FilterChain chain;
+	private @Mock Event<ControllerNotFound> event;
 	private RequestInfo request;
 
 	@Before
 	public void setUp() {
 		MockitoAnnotations.initMocks(this);
 		request = new RequestInfo(null, chain, webRequest, webResponse);
-		notFoundHandler = new DefaultControllerNotFoundHandler();
+		notFoundHandler = new DefaultControllerNotFoundHandler(event);
 	}
 
 	@Test

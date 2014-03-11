@@ -32,6 +32,7 @@ import br.com.caelum.vraptor.Consumes;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.events.ReadyToExecuteMethod;
+import br.com.caelum.vraptor.events.StackStarting;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.serialization.Deserializer;
 import br.com.caelum.vraptor.serialization.Deserializers;
@@ -66,7 +67,7 @@ public class DeserializingObserver {
 		this.container = container;
 	}
 
-	public void deserializes(@Observes ReadyToExecuteMethod event, HttpServletRequest request,
+	public void deserializes(@Observes StackStarting event, HttpServletRequest request,
 			MethodInfo methodInfo, Status status) throws IOException {
 
 		ControllerMethod method = event.getControllerMethod();

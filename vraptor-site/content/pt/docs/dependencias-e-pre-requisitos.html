@@ -44,6 +44,10 @@ src/test/resources    arquivos de config. para testes      - ignorado -
 
 Se você não quiser usar o Maven, basta criar um projeto em branco na sua IDE preferida e adicionar o jar do VRaptor com as dependências.
 
+## Usando o Eclipse sem Maven
+
+Para usar o vraptor-blank-project sem o Maven no Eclipse, basta baixar o nosso blank-project e rodar mvn eclipse:eclipse e em seguida mvn assembly:assembly. Depois importar o arquivo target/vraptor-blank-project.war no seu Eclipse
+
 ## Logging
 
 Utilizamos o SLF4J (Simple Logging Facade for Java) para imprimir os logs dos eventos internos. SLF4J pode direcionar o logging para vários frameworks de logging como NOP, Simple, log4j e JDK Logging. Para configurar o logging você precisa adicionar no seu classpath o jar `slf4j-api.jar` juntamente com o jar de binding que você escolher. Veja mais sobre o assunto na <a href="http://www.slf4j.org/manual.html">documentação do SLF4J</a>.

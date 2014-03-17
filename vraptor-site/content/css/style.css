@@ -80,6 +80,16 @@ header {
   padding: 1em .5em;
 }
 
+div.note {
+  background-color: rgb(194, 194, 194);
+  text-indent: 10px;
+}
+
+div.note p {
+  margin: auto;
+  padding: 1em;
+}
+
 .logo {
   display: block;
   margin: 0;

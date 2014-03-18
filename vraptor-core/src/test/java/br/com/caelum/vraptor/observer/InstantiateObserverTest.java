@@ -30,7 +30,6 @@ import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.controller.DefaultBeanClass;
 import br.com.caelum.vraptor.core.InterceptorStack;
-import br.com.caelum.vraptor.events.ControllerMethodDiscovered;
 import br.com.caelum.vraptor.interceptor.InstanceContainer;
 import br.com.caelum.vraptor.view.DogController;
 
@@ -50,7 +49,7 @@ public class InstantiateObserverTest {
 		InstanceContainer container = new InstanceContainer(myDog);
 		InstantiateObserver observer = new InstantiateObserver(container);
 		when(method.getController()).thenReturn(new DefaultBeanClass(DogController.class));
-		observer.instantiate(new ControllerMethodDiscovered(method));
+		observer.instantiate(method);
 		assertEquals(myDog,observer.getControllerInstance().getController());
 	}
 }

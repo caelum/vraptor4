@@ -25,8 +25,8 @@ import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 
 import br.com.caelum.vraptor.controller.ControllerInstance;
+import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.controller.DefaultControllerInstance;
-import br.com.caelum.vraptor.events.ControllerMethodDiscovered;
 import br.com.caelum.vraptor.ioc.Container;
 
 /**
@@ -53,8 +53,8 @@ public class InstantiateObserver {
 		this.container = container;
 	}
 
-	public void instantiate(@Observes ControllerMethodDiscovered event) {
-		Object instance = container.instanceFor(event.getController().getType());
+	public void instantiate(@Observes ControllerMethod method) {
+		Object instance = container.instanceFor(method.getController().getType());
 		this.controllerInstance = new DefaultControllerInstance(instance);
 	}
 

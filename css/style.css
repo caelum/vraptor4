@@ -85,6 +85,16 @@ header {
   padding: 1em .5em;
 }
 
+div.note {
+  background-color: rgb(194, 194, 194);
+  text-indent: 10px;
+}
+
+div.note p {
+  margin: auto;
+  padding: 1em;
+}
+
 .logo {
   display: block;
   margin: 0;
@@ -138,6 +148,7 @@ header {
 .download-btn:before {
   content: '';
   background-image: url(../img/download.png);
+  background-repeat: no-repeat;
   -webkit-background-size: contain;
   background-size: contain;
   width: 1.2em;

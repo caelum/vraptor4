@@ -20,7 +20,7 @@ public class MockInstanceImpl<T> implements Instance<T> {
 		this.elements = elements;
 	}
 
-	public MockInstanceImpl(Object... elements) {
+	public MockInstanceImpl(T... elements) {
 		this.elements = new ArrayList<>();
 		for(Object element: elements)
 			this.elements.add((T) element);

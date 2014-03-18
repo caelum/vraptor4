@@ -19,7 +19,7 @@ package br.com.caelum.vraptor.core;
 
 import java.util.EnumSet;
 
-import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 
 import br.com.caelum.vraptor.controller.HttpMethod;
@@ -32,11 +32,12 @@ import br.com.caelum.vraptor.proxy.Proxifier;
  * @author guilherme silveira
  * @since 3.0.3
  */
-@ApplicationScoped
+@RequestScoped
 public class DefaultRoutes implements Routes{
 
 	private final Proxifier proxifier;
 	private final Router router;
+	private String uri;
 
 	/** 
 	 * @deprecated CDI eyes only
@@ -50,8 +51,6 @@ public class DefaultRoutes implements Routes{
 		this.router = router;
 		this.proxifier = proxifier;
 	}
-
-	private String uri;
 
 	@Override
 	public <T> T uriFor(final Class<T> type) {
@@ -74,5 +73,4 @@ public class DefaultRoutes implements Routes{
 	public EnumSet<HttpMethod> allowedMethodsFor(String uri) {
 		return router.allowedMethodsFor(uri);
 	}
-
 }

@@ -17,9 +17,11 @@
 package br.com.caelum.vraptor.core;
 
 import javax.enterprise.context.RequestScoped;
+import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 
 import br.com.caelum.vraptor.controller.ControllerMethod;
+import br.com.caelum.vraptor.events.ControllerMethodDiscovered;
 import br.com.caelum.vraptor.http.Parameter;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.http.ValuedParameter;
@@ -51,6 +53,10 @@ public class MethodInfo {
 		this.parameterNameProvider = parameterNameProvider;
 	}
 
+	public void setControllerMethod(@Observes ControllerMethodDiscovered event) {
+		setControllerMethod(event.getControllerMethod());
+	}
+	
 	public ControllerMethod getControllerMethod() {
 		return controllerMethod;
 	}

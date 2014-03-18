@@ -75,10 +75,9 @@ public class RequestHandlerObserver {
 		this.interceptorStack = interceptorStack;
 	}
 
-	public void handle(@Observes NewRequest event, MethodInfo methodInfo, RequestInfo requestInfo) {
+	public void handle(@Observes NewRequest event, RequestInfo requestInfo) {
 		try {
 			ControllerMethod method = translator.translate(requestInfo);
-			methodInfo.setControllerMethod(method);
 			controllerMethodEvent.fire(new ControllerMethodDiscovered(method));
 			interceptorStack.start();
 		} catch (ControllerNotFoundException e) {

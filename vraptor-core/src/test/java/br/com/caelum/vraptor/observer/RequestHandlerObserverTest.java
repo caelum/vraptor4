@@ -68,7 +68,7 @@ public class RequestHandlerObserverTest {
 	@Test
 	public void shouldHandle404() throws Exception {
 		when(translator.translate(info)).thenThrow(new ControllerNotFoundException());
-		observer.handle(new NewRequest(), info);
+		observer.handle(new NewRequest(info));
 		verify(notFoundHandler).couldntFind(info);
 		verify(interceptorStack, never()).start();
 	}
@@ -77,7 +77,7 @@ public class RequestHandlerObserverTest {
 	public void shouldHandle405() throws Exception {
 		EnumSet<HttpMethod> allowedMethods = EnumSet.of(HttpMethod.GET);
 		when(translator.translate(info)).thenThrow(new MethodNotAllowedException(allowedMethods, POST.toString()));
-		observer.handle(new NewRequest(), info);
+		observer.handle(new NewRequest(info));
 		verify(methodNotAllowedHandler).deny(info, allowedMethods);
 		verify(interceptorStack, never()).start();
 	}
@@ -86,7 +86,7 @@ public class RequestHandlerObserverTest {
 	public void shouldUseControllerMethodFoundWithNextInterceptor() throws Exception {
 		final ControllerMethod method = mock(ControllerMethod.class);
 		when(translator.translate(info)).thenReturn(method);
-		observer.handle(new NewRequest(), info);
+		observer.handle(new NewRequest(info));
 		verify(interceptorStack).start();
 	}
 }

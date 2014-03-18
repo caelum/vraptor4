@@ -75,16 +75,16 @@ public class RequestHandlerObserver {
 		this.interceptorStack = interceptorStack;
 	}
 
-	public void handle(@Observes NewRequest event, RequestInfo requestInfo) {
+	public void handle(@Observes NewRequest event) {
 		try {
-			ControllerMethod method = translator.translate(requestInfo);
+			ControllerMethod method = translator.translate(event.getRequest());
 			controllerMethodEvent.fire(new ControllerMethodDiscovered(method));
 			interceptorStack.start();
 		} catch (ControllerNotFoundException e) {
-			controllerNotFoundHandler.couldntFind(requestInfo);
+			controllerNotFoundHandler.couldntFind(event.getRequest());
 		} catch (MethodNotAllowedException e) {
 			LOGGER.debug(e.getMessage(), e);
-			methodNotAllowedHandler.deny(requestInfo, e.getAllowedMethods());
+			methodNotAllowedHandler.deny(event.getRequest(), e.getAllowedMethods());
 		}
 	}
 }

@@ -13,7 +13,7 @@ import com.google.common.util.concurrent.Service;
  * Class to avoid erros when using in CDI environments. See 
  * https://code.google.com/p/guava-libraries/issues/detail?id=1433 for more details.
  */
-@Dependent // we still need this?
+@Dependent
 public class GuavaServiceProducer {
 
 	@Produces

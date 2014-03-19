@@ -20,7 +20,9 @@ public class StepInvoker {
 
 	private final MethodExecutor methodExecutor;
 
-	/** @deprecated CDI eyes only*/
+	/**
+	 * @deprecated CDI eyes only
+	 */
 	protected StepInvoker() {
 		this(null);
 	}

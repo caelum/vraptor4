@@ -17,7 +17,7 @@
 
 package br.com.caelum.vraptor.util.test;
 
-import javax.enterprise.inject.Alternative;
+import javax.enterprise.inject.Vetoed;
 
 import br.com.caelum.vraptor.View;
 import br.com.caelum.vraptor.proxy.JavassistProxifier;
@@ -26,7 +26,6 @@ import br.com.caelum.vraptor.view.DefaultStatus;
 import br.com.caelum.vraptor.view.HttpResult;
 
 /**
- *
  * A mocked Result for testing the http body, content type and character encoding.
  *
  * It will store the http body when using result.use(Results.http()).addHeader("Content-Type", "application/json; charset=utf-8").body(json)
@@ -34,8 +33,9 @@ import br.com.caelum.vraptor.view.HttpResult;
  *
  * @author Danilo Muñoz
  */
-@Alternative
+@Vetoed
 public class MockHttpResult extends MockResult{
+	
 	private MockHttpServletResponse response = new MockHttpServletResponse();
 
 	public MockHttpResult() {

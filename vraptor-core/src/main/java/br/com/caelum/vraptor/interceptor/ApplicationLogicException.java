@@ -1,5 +1,7 @@
 package br.com.caelum.vraptor.interceptor;
 
+import javax.enterprise.inject.Vetoed;
+
 import br.com.caelum.vraptor.InterceptionException;
 
 
@@ -8,6 +10,7 @@ import br.com.caelum.vraptor.InterceptionException;
  * we can unwrap after it leaves the interceptor stack
  *
  */
+@Vetoed
 public class ApplicationLogicException extends InterceptionException {
 
 	private static final long serialVersionUID = -8388907262726903974L;

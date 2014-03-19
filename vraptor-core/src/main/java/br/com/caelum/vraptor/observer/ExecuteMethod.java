@@ -22,6 +22,7 @@ import static org.slf4j.LoggerFactory.getLogger;
 
 import java.lang.reflect.Method;
 
+import javax.enterprise.context.Dependent;
 import javax.enterprise.event.Event;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
@@ -47,6 +48,7 @@ import br.com.caelum.vraptor.validator.Validator;
  * @author Rodrigo Turini
  * @author Victor Harada
  */
+@Dependent
 public class ExecuteMethod {
 
 	private final static Logger log = getLogger(ExecuteMethod.class);

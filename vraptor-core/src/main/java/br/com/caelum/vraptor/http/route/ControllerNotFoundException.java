@@ -17,12 +17,15 @@
 
 package br.com.caelum.vraptor.http.route;
 
+import javax.enterprise.inject.Vetoed;
+
 /**
  * Exception thrown when no routes matching URI are found.
  *
  * @author Lucas Cavalcanti
  * @author Caio Filipini
  */
+@Vetoed
 public class ControllerNotFoundException extends RuntimeException {
 	private static final long serialVersionUID = 121345908850681707L;
 

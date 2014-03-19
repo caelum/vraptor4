@@ -20,11 +20,14 @@ package br.com.caelum.vraptor.util;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.enterprise.inject.Vetoed;
+
 /**
  * Utility methods to handle strings
-
+ * 
  * @author Lucas Cavalcanti
  */
+@Vetoed
 public class StringUtils {
 
 	public static String decapitalize(String name) {

@@ -4,6 +4,7 @@ import static java.util.Collections.emptySet;
 
 import java.util.Set;
 
+import javax.enterprise.context.Dependent;
 import javax.enterprise.inject.Produces;
 
 import com.google.common.util.concurrent.Service;
@@ -12,6 +13,7 @@ import com.google.common.util.concurrent.Service;
  * Class to avoid erros when using in CDI environments. See 
  * https://code.google.com/p/guava-libraries/issues/detail?id=1433 for more details.
  */
+@Dependent
 public class GuavaServiceProducer {
 
 	@Produces

@@ -37,9 +37,6 @@ public class DefaultDeserializers implements Deserializers {
 
 	private final Map<String, Class<? extends Deserializer>> deserializers = new HashMap<>();
 
-	public DefaultDeserializers() {
-	}
-
 	@Override
 	public Deserializer deserializerFor(String contentType, Container container) {
 		if (deserializers.containsKey(contentType)) {

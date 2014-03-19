@@ -20,6 +20,8 @@ package br.com.caelum.vraptor.http.route;
 import java.text.MessageFormat;
 import java.util.Set;
 
+import javax.enterprise.inject.Vetoed;
+
 import br.com.caelum.vraptor.controller.HttpMethod;
 
 /**
@@ -28,6 +30,7 @@ import br.com.caelum.vraptor.controller.HttpMethod;
  * @author Lucas Cavalcanti
  * @author Caio Filipini
  */
+@Vetoed
 public class MethodNotAllowedException extends RuntimeException {
 
 	private static final long serialVersionUID = 3864735692068670362L;

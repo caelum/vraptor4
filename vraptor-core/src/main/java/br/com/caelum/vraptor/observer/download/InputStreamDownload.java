@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import javax.enterprise.inject.Vetoed;
 import javax.servlet.http.HttpServletResponse;
 
 import com.google.common.io.ByteStreams;
@@ -34,6 +35,7 @@ import com.google.common.io.ByteStreams;
  * @see ByteArrayDownload
  * @see FileDownload
  */
+@Vetoed
 public class InputStreamDownload implements Download {
 	private final InputStream stream;
 	private final String contentType;

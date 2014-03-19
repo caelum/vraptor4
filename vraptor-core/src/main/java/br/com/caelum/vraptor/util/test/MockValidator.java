@@ -22,7 +22,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import javax.enterprise.inject.Alternative;
+import javax.enterprise.inject.Vetoed;
 
 import br.com.caelum.vraptor.View;
 import br.com.caelum.vraptor.validator.AbstractValidator;
@@ -52,7 +52,7 @@ import br.com.caelum.vraptor.validator.Validator;
  *
  * @author Lucas Cavalcanti
  */
-@Alternative
+@Vetoed
 public class MockValidator extends AbstractValidator {
 
 	private List<Message> errors = new ArrayList<>();

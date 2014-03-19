@@ -21,6 +21,8 @@ import java.lang.reflect.TypeVariable;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.enterprise.inject.Vetoed;
+
 import net.vidageek.mirror.dsl.Mirror;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.proxy.MethodInvocation;
@@ -36,6 +38,7 @@ import br.com.caelum.vraptor.proxy.SuperMethod;
  * @author Lucas Cavalcanti
  * @since 3.2
  */
+@Vetoed
 public class ExceptionRecorder<T> implements MethodInvocation<T> {
 
 	private final List<ExceptionRecorderParameter> parameters = new ArrayList<>();

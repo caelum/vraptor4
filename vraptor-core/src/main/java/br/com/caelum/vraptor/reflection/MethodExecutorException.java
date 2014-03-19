@@ -18,9 +18,6 @@ public class MethodExecutorException extends VRaptorException{
 		super(e);
 	}
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 8852406152147489684L;
 
 }

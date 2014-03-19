@@ -22,6 +22,7 @@ import static br.com.caelum.vraptor.proxy.CDIProxies.unproxifyIfPossible;
 import java.io.IOException;
 import java.lang.reflect.Method;
 
+import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 import javax.servlet.ServletException;
 
@@ -44,6 +45,7 @@ import br.com.caelum.vraptor.proxy.SuperMethod;
  * @author Guilherme Silveira
  * @author Lucas Cavalcanti
  */
+@Dependent
 public class DefaultPageResult implements PageResult {
 
 	private static final Logger logger = LoggerFactory.getLogger(DefaultPageResult.class);

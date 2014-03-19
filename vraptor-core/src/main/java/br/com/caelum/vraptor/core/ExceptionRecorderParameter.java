@@ -19,6 +19,8 @@ package br.com.caelum.vraptor.core;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 
+import javax.enterprise.inject.Vetoed;
+
 /**
  * Wraps the input parameters for {@link ExceptionRecorder}.
  *
@@ -27,6 +29,7 @@ import java.util.Arrays;
  * @author Otávio Scherer Garcia
  * @since 3.2
  */
+@Vetoed
 class ExceptionRecorderParameter {
 	public Object[] args;
 	public Method method;

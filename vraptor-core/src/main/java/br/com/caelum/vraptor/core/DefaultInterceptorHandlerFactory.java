@@ -41,9 +41,9 @@ public class DefaultInterceptorHandlerFactory implements InterceptorHandlerFacto
 	private final Container container;
 	private final CacheStore<Class<?>, InterceptorHandler> cachedHandlers;
 	private final StepInvoker stepInvoker;
-	private InterceptorAcceptsExecutor acceptsExecutor;
-	private CustomAcceptsExecutor customAcceptsExecutor;
-	private InterceptorExecutor interceptorExecutor;
+	private final InterceptorAcceptsExecutor acceptsExecutor;
+	private final CustomAcceptsExecutor customAcceptsExecutor;
+	private final InterceptorExecutor interceptorExecutor;
 
 	/**
 	 * @deprecated CDI eyes only

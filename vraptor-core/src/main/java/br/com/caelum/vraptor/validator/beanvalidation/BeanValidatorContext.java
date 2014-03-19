@@ -15,19 +15,21 @@
  */
 package br.com.caelum.vraptor.validator.beanvalidation;
 
+import javax.enterprise.inject.Vetoed;
 import javax.validation.ConstraintViolation;
 import javax.validation.MessageInterpolator;
 import javax.validation.metadata.ConstraintDescriptor;
 
 /**
- * Create a personalized implementation for {@link javax.validation.MessageInterpolator.Context}. This class
- * is need to interpolate the constraint violation message with localized messages.
+ * Create a personalized implementation for
+ * {@link javax.validation.MessageInterpolator.Context}. This class is need to
+ * interpolate the constraint violation message with localized messages.
  *
  * @author Otávio Scherer Garcia
  * @version $Revision$
  */
-public class BeanValidatorContext
-	implements MessageInterpolator.Context {
+@Vetoed
+public class BeanValidatorContext implements MessageInterpolator.Context {
 
 	private final ConstraintDescriptor<?> descriptor;
 	private final Object validatedValue;

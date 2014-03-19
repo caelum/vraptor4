@@ -15,12 +15,15 @@
  */
 package br.com.caelum.vraptor.serialization;
 
+import javax.enterprise.inject.Vetoed;
+
 /**
  * Doesn't serialize anything
  * @author Lucas Cavalcanti
  * @author Jose Donizetti
  * @since 3.0.3
  */
+@Vetoed
 public class IgnoringSerializer implements SerializerBuilder {
 
 	@Override

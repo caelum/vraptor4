@@ -20,6 +20,7 @@ package br.com.caelum.vraptor.observer.download;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
+import javax.enterprise.inject.Vetoed;
 import javax.servlet.http.HttpServletResponse;
 
 /**
@@ -32,6 +33,7 @@ import javax.servlet.http.HttpServletResponse;
  * @see InputStreamDownload
  * @see FileDownload
  */
+@Vetoed
 public class ByteArrayDownload implements Download {
 	
 	private final InputStreamDownload download;

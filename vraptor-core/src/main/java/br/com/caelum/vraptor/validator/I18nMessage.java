@@ -20,6 +20,8 @@ import static com.google.common.base.Objects.toStringHelper;
 import java.text.MessageFormat;
 import java.util.ResourceBundle;
 
+import javax.enterprise.inject.Vetoed;
+
 
 /**
  * In this Message implementation, the message is i18n'ed while the category is literal.
@@ -29,6 +31,7 @@ import java.util.ResourceBundle;
  * @author Lucas Cavalcanti
  * @since 3.1.3
  */
+@Vetoed
 public class I18nMessage implements Message {
 
 	private static final long serialVersionUID = 1L;

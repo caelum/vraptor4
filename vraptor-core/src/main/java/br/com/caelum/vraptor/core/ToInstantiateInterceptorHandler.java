@@ -17,6 +17,8 @@
 
 package br.com.caelum.vraptor.core;
 
+import javax.enterprise.inject.Vetoed;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,6 +32,7 @@ import br.com.caelum.vraptor.ioc.Container;
  *
  * @author Guilherme Silveira
  */
+@Vetoed
 public class ToInstantiateInterceptorHandler implements InterceptorHandler {
 
 	private static final Logger logger = LoggerFactory.getLogger(ToInstantiateInterceptorHandler.class);

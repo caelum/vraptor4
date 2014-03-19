@@ -38,9 +38,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 
-import br.com.caelum.vraptor.core.NewRequest;
 import br.com.caelum.vraptor.core.StaticContentHandler;
 import br.com.caelum.vraptor.events.EndRequest;
+import br.com.caelum.vraptor.events.NewRequest;
 import br.com.caelum.vraptor.events.VRaptorInitialized;
 import br.com.caelum.vraptor.http.EncodingHandler;
 import br.com.caelum.vraptor.http.VRaptorRequest;

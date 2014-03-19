@@ -9,7 +9,7 @@ import javax.interceptor.Interceptor;
 import javax.servlet.FilterChain;
 import javax.servlet.http.HttpSession;
 
-import br.com.caelum.vraptor.core.NewRequest;
+import br.com.caelum.vraptor.events.NewRequest;
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.http.MutableResponse;
 

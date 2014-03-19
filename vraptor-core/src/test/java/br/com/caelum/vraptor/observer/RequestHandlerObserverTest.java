@@ -37,7 +37,7 @@ import br.com.caelum.vraptor.controller.ControllerNotFoundHandler;
 import br.com.caelum.vraptor.controller.HttpMethod;
 import br.com.caelum.vraptor.controller.MethodNotAllowedHandler;
 import br.com.caelum.vraptor.core.InterceptorStack;
-import br.com.caelum.vraptor.core.NewRequest;
+import br.com.caelum.vraptor.events.NewRequest;
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.http.MutableResponse;
 import br.com.caelum.vraptor.http.UrlToControllerTranslator;

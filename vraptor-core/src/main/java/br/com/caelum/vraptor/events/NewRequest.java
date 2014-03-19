@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package br.com.caelum.vraptor.core;
+package br.com.caelum.vraptor.events;
 
 import javax.servlet.FilterChain;
 

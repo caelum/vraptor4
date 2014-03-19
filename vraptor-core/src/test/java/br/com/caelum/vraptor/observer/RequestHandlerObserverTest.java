@@ -37,6 +37,7 @@ import br.com.caelum.vraptor.controller.HttpMethod;
 import br.com.caelum.vraptor.controller.MethodNotAllowedHandler;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.core.RequestInfo;
+import br.com.caelum.vraptor.events.ControllerFound;
 import br.com.caelum.vraptor.events.NewRequest;
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.http.MutableResponse;
@@ -53,7 +54,7 @@ public class RequestHandlerObserverTest {
 	private RequestHandlerObserver observer;
 	private @Mock ControllerNotFoundHandler notFoundHandler;
 	private @Mock MethodNotAllowedHandler methodNotAllowedHandler;
-	private @Mock Event<ControllerMethod> event;
+	private @Mock Event<ControllerFound> event;
 	private @Mock InterceptorStack interceptorStack;
 
 	@Before

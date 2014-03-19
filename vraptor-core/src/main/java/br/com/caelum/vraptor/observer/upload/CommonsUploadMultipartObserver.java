@@ -37,6 +37,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 
 import br.com.caelum.vraptor.controller.ControllerMethod;
+import br.com.caelum.vraptor.events.ControllerFound;
 import br.com.caelum.vraptor.http.InvalidParameterException;
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.validator.I18nMessage;
@@ -61,7 +62,7 @@ public class CommonsUploadMultipartObserver {
 
 	private static final Logger logger = getLogger(CommonsUploadMultipartObserver.class);
 
-	public void upload(@Observes ControllerMethod method, MutableRequest request,
+	public void upload(@Observes ControllerFound event, MutableRequest request,
 			MultipartConfig config, Validator validator) {
 
 		if (!ServletFileUpload.isMultipartContent(request)) {

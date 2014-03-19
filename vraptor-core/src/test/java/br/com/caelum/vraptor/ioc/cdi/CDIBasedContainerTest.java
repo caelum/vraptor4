@@ -4,16 +4,17 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.concurrent.Callable;
 
+import javax.enterprise.event.Event;
 import javax.inject.Inject;
 
 import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import br.com.caelum.cdi.component.UsingCacheComponent;
 import br.com.caelum.vraptor.WeldJunitRunner;
 import br.com.caelum.vraptor.core.RequestInfo;
+import br.com.caelum.vraptor.events.VRaptorInitialized;
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.http.MutableResponse;
 import br.com.caelum.vraptor.ioc.GenericContainerTest;
@@ -23,14 +24,14 @@ import br.com.caelum.vraptor.ioc.WhatToDo;
 public class CDIBasedContainerTest extends GenericContainerTest {
 
 	@Inject private CDIBasedContainer cdiBasedContainer;
+	@Inject private Event<VRaptorInitialized> initEvent;
 	@Inject private Contexts contexts;
-	@Inject private StereotypesRegistry stereotypesRegistry;
 
 	private int counter;
 	
 	@Override
 	public void setup() throws Exception {
-		stereotypesRegistry.configure();
+		initEvent.fire(new VRaptorInitialized(null));
 		super.setup();
 	}
 	

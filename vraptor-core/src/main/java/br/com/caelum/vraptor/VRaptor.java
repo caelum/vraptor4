@@ -46,7 +46,6 @@ import br.com.caelum.vraptor.http.EncodingHandler;
 import br.com.caelum.vraptor.http.VRaptorRequest;
 import br.com.caelum.vraptor.http.VRaptorResponse;
 import br.com.caelum.vraptor.interceptor.ApplicationLogicException;
-import br.com.caelum.vraptor.ioc.cdi.StereotypesRegistry;
 
 /**
  * VRaptor entry point.<br>
@@ -62,14 +61,6 @@ public class VRaptor implements Filter {
 
 	private final Logger logger = getLogger(VRaptor.class);
 
-	@Inject
-	private StereotypesRegistry stereotypesRegistry;
-	
-	@Inject
-	private Event<ServletContext> contextEvent;
-
-	@Inject
-	private Event<VRaptorInitialized> initializedEvent;
 
 	private ServletContext servletContext;
 
@@ -78,6 +69,9 @@ public class VRaptor implements Filter {
 
 	@Inject
 	private EncodingHandler encodingHandler;
+	
+	@Inject
+	private Event<VRaptorInitialized> initializedEvent;
 
 	@Inject
 	private Event<RequestInfo> newRequestEvent;
@@ -93,10 +87,8 @@ public class VRaptor implements Filter {
 		validateIfCdiIsFound();
 		warnIfBeansXmlIsNotFound();
 
-		contextEvent.fire(servletContext);
-		stereotypesRegistry.configure();
-
-		initializedEvent.fire(new VRaptorInitialized());
+		initializedEvent.fire(new VRaptorInitialized(servletContext));
+		
 		logger.info("VRaptor {} successfuly initialized", VERSION);
 	}
 
@@ -161,7 +153,7 @@ public class VRaptor implements Filter {
 	}
 
 	private void validateIfCdiIsFound() throws ServletException {
-		if (stereotypesRegistry == null) {
+		if (staticHandler == null) {
 			throw new ServletException("Dependencies were not set. Do you have a Weld/CDI listener setup in your web.xml?");
 		}
 	}

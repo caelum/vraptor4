@@ -19,8 +19,6 @@ package br.com.caelum.vraptor.core;
 
 import static javax.servlet.RequestDispatcher.INCLUDE_REQUEST_URI;
 
-import javax.enterprise.inject.Alternative;
-import javax.inject.Inject;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletContext;
 
@@ -33,22 +31,13 @@ import br.com.caelum.vraptor.http.MutableResponse;
  * @author Fabio Kung
  * @author Guilherme Silveira
  */
-@Alternative
 public class RequestInfo {
 
 	private final ServletContext servletContext;
 	private final MutableRequest request;
 	private final MutableResponse response;
 	private final FilterChain chain;
-	
-	/** 
-	 * @deprecated CDI eyes only
-	 */
-	protected RequestInfo() {
-		this(null, null, null, null);
-	}
 
-	@Inject
 	public RequestInfo(ServletContext servletContext, FilterChain chain, MutableRequest request, MutableResponse response) {
 		this.servletContext = servletContext;
 		this.chain = chain;

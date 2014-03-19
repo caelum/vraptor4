@@ -123,7 +123,7 @@ public class VRaptor implements Filter {
 			try {
 				encodingHandler.setEncoding(baseRequest, baseResponse);
 				provider.provideForRequest(request);
-				newRequestEvent.fire(new NewRequest());
+				newRequestEvent.fire(new NewRequest(request));
 
 			} catch (ApplicationLogicException e) {
 				// it is a business logic exception, we dont need to show

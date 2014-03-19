@@ -30,9 +30,6 @@ import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.controller.ControllerNotFoundHandler;
 import br.com.caelum.vraptor.controller.MethodNotAllowedHandler;
 import br.com.caelum.vraptor.core.InterceptorStack;
-import br.com.caelum.vraptor.core.MethodInfo;
-import br.com.caelum.vraptor.core.RequestInfo;
-import br.com.caelum.vraptor.events.ControllerMethodDiscovered;
 import br.com.caelum.vraptor.events.NewRequest;
 import br.com.caelum.vraptor.http.UrlToControllerTranslator;
 import br.com.caelum.vraptor.http.route.ControllerNotFoundException;
@@ -54,7 +51,7 @@ public class RequestHandlerObserver {
 	private final UrlToControllerTranslator translator;
 	private final ControllerNotFoundHandler controllerNotFoundHandler;
 	private final MethodNotAllowedHandler methodNotAllowedHandler;
-	private final Event<ControllerMethodDiscovered> controllerMethodEvent;
+	private final Event<ControllerMethod> controllerMethodEvent;
 	private final InterceptorStack interceptorStack;
 
 	/**
@@ -67,7 +64,7 @@ public class RequestHandlerObserver {
 	@Inject
 	public RequestHandlerObserver(UrlToControllerTranslator translator,
 			ControllerNotFoundHandler controllerNotFoundHandler, MethodNotAllowedHandler methodNotAllowedHandler,
-			Event<ControllerMethodDiscovered> event, InterceptorStack interceptorStack) {
+			Event<ControllerMethod> event, InterceptorStack interceptorStack) {
 		this.translator = translator;
 		this.methodNotAllowedHandler = methodNotAllowedHandler;
 		this.controllerNotFoundHandler = controllerNotFoundHandler;
@@ -75,17 +72,16 @@ public class RequestHandlerObserver {
 		this.interceptorStack = interceptorStack;
 	}
 
-	public void handle(@Observes NewRequest event, MethodInfo methodInfo, RequestInfo requestInfo) {
+	public void handle(@Observes NewRequest event) {
 		try {
-			ControllerMethod method = translator.translate(requestInfo);
-			methodInfo.setControllerMethod(method);
-			controllerMethodEvent.fire(new ControllerMethodDiscovered(method));
+			ControllerMethod method = translator.translate(event.getRequest());
+			controllerMethodEvent.fire(method);
 			interceptorStack.start();
 		} catch (ControllerNotFoundException e) {
-			controllerNotFoundHandler.couldntFind(requestInfo);
+			controllerNotFoundHandler.couldntFind(event.getRequest());
 		} catch (MethodNotAllowedException e) {
 			LOGGER.debug(e.getMessage(), e);
-			methodNotAllowedHandler.deny(requestInfo, e.getAllowedMethods());
+			methodNotAllowedHandler.deny(event.getRequest(), e.getAllowedMethods());
 		}
 	}
 }

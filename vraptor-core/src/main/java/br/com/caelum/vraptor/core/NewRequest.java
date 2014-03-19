@@ -28,13 +28,13 @@ import br.com.caelum.vraptor.http.MutableResponse;
  * @author Fabio Kung
  * @author Guilherme Silveira
  */
-public class RequestInfo {
+public class NewRequest {
 
 	private final MutableRequest request;
 	private final MutableResponse response;
 	private final FilterChain chain;
 
-	public RequestInfo(FilterChain chain, MutableRequest request, MutableResponse response) {
+	public NewRequest(FilterChain chain, MutableRequest request, MutableResponse response) {
 		this.chain = chain;
 		this.request = request;
 		this.response = response;

@@ -38,7 +38,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 
-import br.com.caelum.vraptor.core.RequestInfo;
+import br.com.caelum.vraptor.core.NewRequest;
 import br.com.caelum.vraptor.core.StaticContentHandler;
 import br.com.caelum.vraptor.events.EndRequest;
 import br.com.caelum.vraptor.events.VRaptorInitialized;
@@ -74,7 +74,7 @@ public class VRaptor implements Filter {
 	private Event<VRaptorInitialized> initializedEvent;
 
 	@Inject
-	private Event<RequestInfo> newRequestEvent;
+	private Event<NewRequest> newRequestEvent;
 	
 	@Inject
 	private Event<EndRequest> endRequestEvent;
@@ -109,7 +109,7 @@ public class VRaptor implements Filter {
 			VRaptorRequest mutableRequest = new VRaptorRequest(baseRequest);
 			VRaptorResponse mutableResponse = new VRaptorResponse(baseResponse);
 
-			final RequestInfo request = new RequestInfo(chain, mutableRequest, mutableResponse);
+			final NewRequest request = new NewRequest(chain, mutableRequest, mutableResponse);
 
 			try {
 				encodingHandler.setEncoding(baseRequest, baseResponse);

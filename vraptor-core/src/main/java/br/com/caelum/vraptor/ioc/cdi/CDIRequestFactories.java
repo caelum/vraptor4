@@ -9,7 +9,7 @@ import javax.interceptor.Interceptor;
 import javax.servlet.FilterChain;
 import javax.servlet.http.HttpSession;
 
-import br.com.caelum.vraptor.core.RequestInfo;
+import br.com.caelum.vraptor.core.NewRequest;
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.http.MutableResponse;
 
@@ -18,9 +18,9 @@ import br.com.caelum.vraptor.http.MutableResponse;
 @Priority(Interceptor.Priority.LIBRARY_BEFORE)
 public class CDIRequestFactories {
 
-	private RequestInfo info;
+	private NewRequest info;
 
-	public void setRequest(@Observes RequestInfo info) {
+	public void setRequest(@Observes NewRequest info) {
 		this.info = info;
 	}
 	

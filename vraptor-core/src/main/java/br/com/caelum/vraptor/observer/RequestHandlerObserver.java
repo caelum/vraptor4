@@ -74,7 +74,7 @@ public class RequestHandlerObserver {
 
 	public void handle(@Observes RequestInfo event) {
 		try {
-			ControllerMethod method = translator.translate(event);
+			ControllerMethod method = translator.translate(event.getRequest());
 			controllerMethodEvent.fire(method);
 			interceptorStack.start();
 		} catch (ControllerNotFoundException e) {

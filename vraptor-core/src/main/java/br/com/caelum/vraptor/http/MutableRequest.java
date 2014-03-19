@@ -27,4 +27,6 @@ public interface MutableRequest extends HttpServletRequest {
 
 	void setParameter(String key, String... value);
 
+	String getRequestedUri();
+
 }

@@ -49,7 +49,7 @@ public class RequestHandlerObserverTest {
 	private @Mock UrlToControllerTranslator translator;
 	private @Mock MutableRequest webRequest;
 	private @Mock MutableResponse webResponse;
-	private @Mock RequestInfo info;
+	private RequestInfo info;
 	private RequestHandlerObserver observer;
 	private @Mock ControllerNotFoundHandler notFoundHandler;
 	private @Mock MethodNotAllowedHandler methodNotAllowedHandler;
@@ -66,7 +66,7 @@ public class RequestHandlerObserverTest {
 
 	@Test
 	public void shouldHandle404() throws Exception {
-		when(translator.translate(info)).thenThrow(new ControllerNotFoundException());
+		when(translator.translate(webRequest)).thenThrow(new ControllerNotFoundException());
 		observer.handle(info);
 		verify(notFoundHandler).couldntFind(chain, webRequest, webResponse);
 		verify(interceptorStack, never()).start();
@@ -75,7 +75,7 @@ public class RequestHandlerObserverTest {
 	@Test
 	public void shouldHandle405() throws Exception {
 		EnumSet<HttpMethod> allowedMethods = EnumSet.of(HttpMethod.GET);
-		when(translator.translate(info)).thenThrow(new MethodNotAllowedException(allowedMethods, POST.toString()));
+		when(translator.translate(webRequest)).thenThrow(new MethodNotAllowedException(allowedMethods, POST.toString()));
 		observer.handle(info);
 		verify(methodNotAllowedHandler).deny(webRequest, webResponse, allowedMethods);
 		verify(interceptorStack, never()).start();
@@ -84,7 +84,7 @@ public class RequestHandlerObserverTest {
 	@Test
 	public void shouldUseControllerMethodFoundWithNextInterceptor() throws Exception {
 		final ControllerMethod method = mock(ControllerMethod.class);
-		when(translator.translate(info)).thenReturn(method);
+		when(translator.translate(webRequest)).thenReturn(method);
 		observer.handle(info);
 		verify(interceptorStack).start();
 	}

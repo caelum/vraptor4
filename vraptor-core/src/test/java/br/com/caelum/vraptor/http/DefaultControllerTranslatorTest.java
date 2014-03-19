@@ -47,7 +47,6 @@ public class DefaultControllerTranslatorTest {
 	private @Mock ControllerMethod method;
 
 	private VRaptorRequest webRequest;
-	private RequestInfo info;
 
 
 	private DefaultControllerTranslator translator;
@@ -58,7 +57,6 @@ public class DefaultControllerTranslatorTest {
 
 		this.webRequest = new VRaptorRequest(request);
 		this.translator = new DefaultControllerTranslator(router);
-		this.info = new RequestInfo(null,null, webRequest,null);
 		when(request.getContextPath()).thenReturn("");
 	}
 
@@ -69,7 +67,7 @@ public class DefaultControllerTranslatorTest {
 		when(request.getMethod()).thenReturn("POST");
 		when(router.parse("/url", HttpMethod.POST, webRequest)).thenReturn(method);
 
-		ControllerMethod controller = translator.translate(info);
+		ControllerMethod controller = translator.translate(webRequest);
 		assertThat(controller, is(sameInstance(method)));
 	}
 
@@ -80,7 +78,7 @@ public class DefaultControllerTranslatorTest {
 		when(request.getMethod()).thenReturn("POST");
 		when(router.parse("/url", HttpMethod.POST,webRequest)).thenReturn(method);
 
-		ControllerMethod controller = translator.translate(info);
+		ControllerMethod controller = translator.translate(webRequest);
 		assertThat(controller, is(equalTo(method)));
 	}
 
@@ -90,7 +88,7 @@ public class DefaultControllerTranslatorTest {
 		when(request.getMethod()).thenReturn("pOsT");
 		when(router.parse("/url", HttpMethod.POST,webRequest)).thenReturn(method);
 
-		ControllerMethod controller = translator.translate(info);
+		ControllerMethod controller = translator.translate(webRequest);
 
 		assertThat(controller, is(equalTo(method)));
 	}
@@ -102,7 +100,7 @@ public class DefaultControllerTranslatorTest {
 		when(request.getMethod()).thenReturn("POST");
 		when(router.parse("/url", HttpMethod.GET, webRequest)).thenReturn(method);
 
-		ControllerMethod controller = translator.translate(info);
+		ControllerMethod controller = translator.translate(webRequest);
 		assertThat(controller, is(equalTo(method)));
 	}
 
@@ -113,7 +111,7 @@ public class DefaultControllerTranslatorTest {
 		when(request.getMethod()).thenReturn("COOK");
 		when(router.parse(anyString(), any(HttpMethod.class), any(MutableRequest.class))).thenReturn(method);
 
-		translator.translate(info);
+		translator.translate(webRequest);
 	}
 
 	@Test
@@ -123,7 +121,7 @@ public class DefaultControllerTranslatorTest {
 		when(request.getMethod()).thenReturn("POST");
 		when(router.parse("/url", HttpMethod.DELETE, webRequest)).thenReturn(method);
 
-		ControllerMethod controller = translator.translate(info);
+		ControllerMethod controller = translator.translate(webRequest);
 		assertThat(controller, is(equalTo(method)));
 	}
 
@@ -134,7 +132,7 @@ public class DefaultControllerTranslatorTest {
 		when(request.getMethod()).thenReturn("GET");
 		when(router.parse("/url", HttpMethod.GET, webRequest)).thenReturn(method);
 
-		ControllerMethod controller = translator.translate(info);
+		ControllerMethod controller = translator.translate(webRequest);
 		assertThat(controller, is(equalTo(method)));
 
 	}
@@ -146,7 +144,7 @@ public class DefaultControllerTranslatorTest {
 		when(request.getMethod()).thenReturn("GET");
 		when(router.parse("/url", HttpMethod.GET, webRequest)).thenReturn(method);
 
-		ControllerMethod controller = translator.translate(info);
+		ControllerMethod controller = translator.translate(webRequest);
 		assertThat(controller, is(equalTo(method)));
 	}
 
@@ -156,7 +154,7 @@ public class DefaultControllerTranslatorTest {
 		when(request.getMethod()).thenReturn("GET");
 		when(router.parse("/", HttpMethod.GET, webRequest)).thenReturn(method);
 
-		ControllerMethod controller = translator.translate(info);
+		ControllerMethod controller = translator.translate(webRequest);
 		assertThat(controller, is(equalTo(method)));
    	}
 
@@ -166,7 +164,7 @@ public class DefaultControllerTranslatorTest {
 		when(request.getMethod()).thenReturn("GET");
 		when(router.parse("/products/1", HttpMethod.GET, webRequest)).thenReturn(method);
 
-		ControllerMethod controller = translator.translate(info);
+		ControllerMethod controller = translator.translate(webRequest);
 		assertThat(controller, is(equalTo(method)));
 	}
 
@@ -177,7 +175,7 @@ public class DefaultControllerTranslatorTest {
 		when(request.getMethod()).thenReturn("GET");
 		when(router.parse("/products/1", HttpMethod.GET, webRequest)).thenReturn(method);
 
-		ControllerMethod controller = translator.translate(info);
+		ControllerMethod controller = translator.translate(webRequest);
 		assertThat(controller, is(equalTo(method)));
 	}
 	@Test
@@ -190,9 +188,9 @@ public class DefaultControllerTranslatorTest {
 		when(request.getMethod()).thenReturn("GET");
 		when(router.parse("/products/1", HttpMethod.GET, webRequest)).thenReturn(method);
 
-		assertThat(translator.translate(info), is(equalTo(method)));
-		assertThat(translator.translate(info), is(equalTo(method)));
-		assertThat(translator.translate(info), is(equalTo(method)));
+		assertThat(translator.translate(webRequest), is(equalTo(method)));
+		assertThat(translator.translate(webRequest), is(equalTo(method)));
+		assertThat(translator.translate(webRequest), is(equalTo(method)));
 
 	}
 
@@ -203,7 +201,7 @@ public class DefaultControllerTranslatorTest {
 		when(request.getMethod()).thenReturn("GET");
 		when(router.parse("/", HttpMethod.GET, webRequest)).thenReturn(method);
 
-		ControllerMethod controller = translator.translate(info);
+		ControllerMethod controller = translator.translate(webRequest);
 		assertThat(controller, is(equalTo(method)));
 	}
 

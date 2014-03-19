@@ -60,12 +60,4 @@ public class RequestInfo {
 	public MutableResponse getResponse() {
 		return response;
 	}
-
-	public String getRequestedUri() {
-		if (request.getAttribute(INCLUDE_REQUEST_URI) != null) {
-			return (String) request.getAttribute(INCLUDE_REQUEST_URI);
-		}
-		String uri = request.getRequestURI().substring(request.getContextPath().length());
-		return uri.replaceFirst("(?i);jsessionid=.*$", "");
-	}
 }

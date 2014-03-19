@@ -60,7 +60,7 @@ public class RequestHandlerObserverTest {
 	@Before
 	public void config() {
 		MockitoAnnotations.initMocks(this);
-		info = new RequestInfo(null, chain, webRequest, webResponse);
+		info = new RequestInfo(chain, webRequest, webResponse);
 		observer = new RequestHandlerObserver(translator, notFoundHandler, methodNotAllowedHandler, event, interceptorStack);
 	}
 

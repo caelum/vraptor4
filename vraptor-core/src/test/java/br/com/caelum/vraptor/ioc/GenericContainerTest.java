@@ -147,7 +147,6 @@ public abstract class GenericContainerTest {
 		executeInsideRequest(new WhatToDo<Converters>() {
 			@Override
 			public Converters execute(RequestInfo request, final int counter) {
-				provider.provideForRequest(request);
 				Converters converters = currentContainer.instanceFor(Converters.class);
 				Converter<?> converter = converters.to(Void.class);
 				assertThat(converter, is(instanceOf(ConverterInTheClasspath.class)));
@@ -167,7 +166,6 @@ public abstract class GenericContainerTest {
 			@Override
 			public Void execute(RequestInfo request, int counter) {
 
-				provider.provideForRequest(request);
 				Deserializers deserializers = currentContainer.instanceFor(Deserializers.class);
 				List<String> types = asList("application/json", "json", "application/xml",
 					"xml", "text/xml", "application/x-www-form-urlencoded");
@@ -186,8 +184,6 @@ public abstract class GenericContainerTest {
 		executeInsideRequest(new WhatToDo<Void>(){
 			@Override
 			public Void execute(RequestInfo request, int counter) {
-				provider.provideForRequest(request);
-
 				Converters converters = currentContainer.instanceFor(Converters.class);
 
 				final HashMap<Class<?>, Class<?>> EXPECTED_CONVERTERS = new HashMap<Class<?>, Class<?>>() {

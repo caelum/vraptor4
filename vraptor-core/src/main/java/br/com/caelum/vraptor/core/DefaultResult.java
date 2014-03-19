@@ -25,7 +25,6 @@ import java.util.Map;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
@@ -41,7 +40,6 @@ import br.com.caelum.vraptor.ioc.Container;
  * @author guilherme silveira
  */
 @RequestScoped
-@Named("result") // porque named?
 public class DefaultResult extends AbstractResult {
 	
 	private static final Logger logger = LoggerFactory.getLogger(DefaultResult.class);

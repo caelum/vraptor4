@@ -46,7 +46,7 @@ import br.com.caelum.vraptor.http.EncodingHandler;
 import br.com.caelum.vraptor.http.VRaptorRequest;
 import br.com.caelum.vraptor.http.VRaptorResponse;
 import br.com.caelum.vraptor.interceptor.ApplicationLogicException;
-import br.com.caelum.vraptor.ioc.ContainerProvider;
+import br.com.caelum.vraptor.ioc.cdi.StereotypesRegistry;
 
 /**
  * VRaptor entry point.<br>
@@ -63,8 +63,8 @@ public class VRaptor implements Filter {
 	private final Logger logger = getLogger(VRaptor.class);
 
 	@Inject
-	private ContainerProvider provider;
-
+	private StereotypesRegistry stereotypesRegistry;
+	
 	@Inject
 	private Event<ServletContext> contextEvent;
 
@@ -80,6 +80,9 @@ public class VRaptor implements Filter {
 	private EncodingHandler encodingHandler;
 
 	@Inject
+	private Event<RequestInfo> newRequestEvent;
+	
+	@Inject
 	private Event<EndRequest> endRequestEvent;
 
 	@Override
@@ -91,7 +94,7 @@ public class VRaptor implements Filter {
 		warnIfBeansXmlIsNotFound();
 
 		contextEvent.fire(servletContext);
-		provider.start();
+		stereotypesRegistry.configure();
 
 		initializedEvent.fire(new VRaptorInitialized());
 		logger.info("VRaptor {} successfuly initialized", VERSION);
@@ -118,7 +121,7 @@ public class VRaptor implements Filter {
 
 			try {
 				encodingHandler.setEncoding(baseRequest, baseResponse);
-				provider.provideForRequest(request);
+				newRequestEvent.fire(request);
 			} catch (ApplicationLogicException e) {
 				// it is a business logic exception, we dont need to show
 				// all interceptors stack trace
@@ -158,8 +161,8 @@ public class VRaptor implements Filter {
 	}
 
 	private void validateIfCdiIsFound() throws ServletException {
-		if (provider == null) {
-			throw new ServletException("Container Provider is null. Do you have a Weld/CDI listener setup in your web.xml?");
+		if (stereotypesRegistry == null) {
+			throw new ServletException("Dependencies were not set. Do you have a Weld/CDI listener setup in your web.xml?");
 		}
 	}
 }

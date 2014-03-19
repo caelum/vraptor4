@@ -6,6 +6,8 @@ import java.util.concurrent.Callable;
 
 import javax.inject.Inject;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -14,7 +16,6 @@ import br.com.caelum.vraptor.WeldJunitRunner;
 import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.http.MutableResponse;
-import br.com.caelum.vraptor.ioc.ContainerProvider;
 import br.com.caelum.vraptor.ioc.GenericContainerTest;
 import br.com.caelum.vraptor.ioc.WhatToDo;
 
@@ -22,19 +23,19 @@ import br.com.caelum.vraptor.ioc.WhatToDo;
 public class CDIBasedContainerTest extends GenericContainerTest {
 
 	@Inject private CDIBasedContainer cdiBasedContainer;
-	@Inject private CDIProvider cdiProvider;
 	@Inject private Contexts contexts;
+	@Inject private StereotypesRegistry stereotypesRegistry;
 
 	private int counter;
-
+	
 	@Override
-	protected ContainerProvider getProvider() {
-		return cdiProvider;
+	public void setup() throws Exception {
+		stereotypesRegistry.configure();
+		super.setup();
 	}
-
-	@Override
+	
+	@After
 	public void tearDown() {
-		super.tearDown();
 		contexts.stopRequestScope();
 		contexts.stopConversationScope();
 		contexts.stopSessionScope();

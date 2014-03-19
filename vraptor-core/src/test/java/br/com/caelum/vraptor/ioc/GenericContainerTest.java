@@ -86,27 +86,13 @@ import br.com.caelum.vraptor.serialization.Deserializers;
  */
 public abstract class GenericContainerTest {
 
-	protected ContainerProvider provider;
 	private Container currentContainer;
 
-	protected abstract ContainerProvider getProvider();
 	protected abstract <T> T executeInsideRequest(WhatToDo<T> execution);
 
 	@Before
 	public void setup() throws Exception {
-		getStartedProvider();
 		currentContainer = getCurrentContainer();
-	}
-
-	protected void getStartedProvider() {
-		provider = getProvider();
-		provider.start();
-	}
-
-	@After
-	public void tearDown() {
-		provider.stop();
-		provider = null;
 	}
 
 	@Test

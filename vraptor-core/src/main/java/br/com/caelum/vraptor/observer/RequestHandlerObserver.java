@@ -78,10 +78,10 @@ public class RequestHandlerObserver {
 			controllerMethodEvent.fire(method);
 			interceptorStack.start();
 		} catch (ControllerNotFoundException e) {
-			controllerNotFoundHandler.couldntFind(event);
+			controllerNotFoundHandler.couldntFind(event.getChain(), event.getRequest(), event.getResponse());
 		} catch (MethodNotAllowedException e) {
 			LOGGER.debug(e.getMessage(), e);
-			methodNotAllowedHandler.deny(event, e.getAllowedMethods());
+			methodNotAllowedHandler.deny(event.getRequest(), event.getResponse(), e.getAllowedMethods());
 		}
 	}
 }

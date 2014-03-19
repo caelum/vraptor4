@@ -25,6 +25,7 @@ import static org.mockito.Mockito.when;
 import java.util.EnumSet;
 
 import javax.enterprise.event.Event;
+import javax.servlet.FilterChain;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -54,11 +55,12 @@ public class RequestHandlerObserverTest {
 	private @Mock MethodNotAllowedHandler methodNotAllowedHandler;
 	private @Mock Event<ControllerMethod> event;
 	private @Mock InterceptorStack interceptorStack;
+	private @Mock FilterChain chain;
 
 	@Before
 	public void config() {
 		MockitoAnnotations.initMocks(this);
-		info = new RequestInfo(null, null, webRequest, webResponse);
+		info = new RequestInfo(null, chain, webRequest, webResponse);
 		observer = new RequestHandlerObserver(translator, notFoundHandler, methodNotAllowedHandler, event, interceptorStack);
 	}
 
@@ -66,7 +68,7 @@ public class RequestHandlerObserverTest {
 	public void shouldHandle404() throws Exception {
 		when(translator.translate(info)).thenThrow(new ControllerNotFoundException());
 		observer.handle(info);
-		verify(notFoundHandler).couldntFind(info);
+		verify(notFoundHandler).couldntFind(chain, webRequest, webResponse);
 		verify(interceptorStack, never()).start();
 	}
 
@@ -75,7 +77,7 @@ public class RequestHandlerObserverTest {
 		EnumSet<HttpMethod> allowedMethods = EnumSet.of(HttpMethod.GET);
 		when(translator.translate(info)).thenThrow(new MethodNotAllowedException(allowedMethods, POST.toString()));
 		observer.handle(info);
-		verify(methodNotAllowedHandler).deny(info, allowedMethods);
+		verify(methodNotAllowedHandler).deny(webRequest, webResponse, allowedMethods);
 		verify(interceptorStack, never()).start();
 	}
 

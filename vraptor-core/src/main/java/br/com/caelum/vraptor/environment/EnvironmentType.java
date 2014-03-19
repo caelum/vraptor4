@@ -1,5 +1,7 @@
 package br.com.caelum.vraptor.environment;
 
+import javax.enterprise.inject.Vetoed;
+
 import com.google.common.base.Objects;
 
 /**
@@ -9,6 +11,7 @@ import com.google.common.base.Objects;
  * @author Chico Sokol
  * @since 4.0
  */
+@Vetoed
 public class EnvironmentType {
 	
 	public static final EnvironmentType PRODUCTION = new EnvironmentType("production");

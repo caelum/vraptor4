@@ -41,7 +41,7 @@ import br.com.caelum.vraptor.ioc.Container;
  * @author guilherme silveira
  */
 @RequestScoped
-@Named("result")
+@Named("result") // porque named?
 public class DefaultResult extends AbstractResult {
 	
 	private static final Logger logger = LoggerFactory.getLogger(DefaultResult.class);

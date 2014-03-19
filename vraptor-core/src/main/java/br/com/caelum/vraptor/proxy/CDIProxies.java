@@ -1,5 +1,7 @@
 package br.com.caelum.vraptor.proxy;
 
+import javax.enterprise.inject.Vetoed;
+
 import org.jboss.weld.bean.proxy.ProxyObject;
 import org.jboss.weld.interceptor.util.proxy.TargetInstanceProxy;
 
@@ -11,6 +13,7 @@ import org.jboss.weld.interceptor.util.proxy.TargetInstanceProxy;
  * @author Otávio Scherer Garcia
  * @author Mario Amaral
  */
+@Vetoed
 public final class CDIProxies {
 
 	public static boolean isCDIProxy(Class<?> type) {

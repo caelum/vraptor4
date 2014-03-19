@@ -20,6 +20,9 @@ package br.com.caelum.vraptor.controller;
 import java.lang.annotation.Annotation;
 import java.util.Objects;
 
+import javax.enterprise.inject.Vetoed;
+
+@Vetoed
 public class DefaultBeanClass implements BeanClass {
 
 	private final Class<?> type;

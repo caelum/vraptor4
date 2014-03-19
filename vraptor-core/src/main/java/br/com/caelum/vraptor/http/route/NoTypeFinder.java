@@ -20,9 +20,9 @@ import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.Map;
 
-import javax.enterprise.inject.Alternative;
+import javax.enterprise.inject.Vetoed;
 
-@Alternative
+@Vetoed
 public class NoTypeFinder implements TypeFinder {
 
 	@Override

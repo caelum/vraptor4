@@ -21,6 +21,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Map.Entry;
 
+import javax.enterprise.inject.Vetoed;
+
 import net.vidageek.mirror.dsl.Mirror;
 import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
 import br.com.caelum.vraptor.serialization.Serializee;
@@ -30,6 +32,7 @@ import com.google.common.base.Supplier;
 import com.thoughtworks.xstream.mapper.Mapper;
 import com.thoughtworks.xstream.mapper.MapperWrapper;
 
+@Vetoed
 public class VRaptorClassMapper extends MapperWrapper {
 
 	private final Supplier<TypeNameExtractor> extractor;

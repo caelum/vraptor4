@@ -1,5 +1,7 @@
 package br.com.caelum.vraptor.serialization.xstream;
 
+import javax.enterprise.inject.Vetoed;
+
 import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
 
 import com.google.common.base.Supplier;
@@ -8,6 +10,7 @@ import com.thoughtworks.xstream.converters.reflection.PureJavaReflectionProvider
 import com.thoughtworks.xstream.io.HierarchicalStreamDriver;
 import com.thoughtworks.xstream.mapper.MapperWrapper;
 
+@Vetoed
 public final class VRaptorXStream extends XStream {
 	private final TypeNameExtractor extractor;
 	private VRaptorClassMapper vraptorMapper;

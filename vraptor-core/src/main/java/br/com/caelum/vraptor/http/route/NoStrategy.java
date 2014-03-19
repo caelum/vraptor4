@@ -20,6 +20,8 @@ package br.com.caelum.vraptor.http.route;
 import java.lang.reflect.Method;
 import java.util.EnumSet;
 
+import javax.enterprise.inject.Vetoed;
+
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.controller.HttpMethod;
 import br.com.caelum.vraptor.http.MutableRequest;
@@ -30,6 +32,7 @@ import br.com.caelum.vraptor.http.MutableRequest;
  *
  * @author guilherme silveira
  */
+@Vetoed
 public class NoStrategy implements Route {
 
 	@Override

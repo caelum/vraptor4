@@ -21,7 +21,6 @@ import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 import javax.enterprise.context.RequestScoped;
-import javax.enterprise.inject.Default;
 import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 import javax.servlet.ServletContext;
@@ -43,7 +42,6 @@ import com.google.common.base.Strings;
  * @author Otávio Scherer Garcia
  */
 @RequestScoped
-@Default
 public class JstlLocalization {
 
 	private static final Logger logger = LoggerFactory.getLogger(JstlLocalization.class);

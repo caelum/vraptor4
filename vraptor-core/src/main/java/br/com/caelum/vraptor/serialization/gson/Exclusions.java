@@ -19,6 +19,8 @@ import static br.com.caelum.vraptor.serialization.gson.GsonSerializer.shouldSeri
 
 import java.util.Map.Entry;
 
+import javax.enterprise.inject.Vetoed;
+
 import net.vidageek.mirror.dsl.Mirror;
 import br.com.caelum.vraptor.serialization.Serializee;
 
@@ -30,7 +32,7 @@ import com.google.gson.FieldAttributes;
  * @author Renan Reis
  * @author Guilherme Mangabeira
  */
-
+@Vetoed
 public class Exclusions implements ExclusionStrategy {
 
 	private Serializee serializee;

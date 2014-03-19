@@ -8,6 +8,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import javax.enterprise.context.Dependent;
+
 import br.com.caelum.vraptor.controller.ControllerInstance;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 
@@ -19,6 +21,7 @@ import com.google.common.base.Function;
  * @author Alberto Souza
  *
  */
+@Dependent
 public class WithAnnotationAcceptor implements AcceptsValidator<AcceptsWithAnnotations> {
 
 	private List<Class<? extends Annotation>> allowedTypes;

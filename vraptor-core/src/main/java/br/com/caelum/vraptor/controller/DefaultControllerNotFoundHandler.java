@@ -22,7 +22,6 @@ import java.io.IOException;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
-import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 
 import br.com.caelum.vraptor.InterceptionException;

@@ -19,6 +19,7 @@ package br.com.caelum.vraptor.controller;
 
 import java.lang.annotation.Annotation;
 
+import javax.enterprise.inject.Vetoed;
 import javax.servlet.http.HttpServletRequest;
 
 import br.com.caelum.vraptor.Delete;
@@ -30,6 +31,7 @@ import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.Put;
 import br.com.caelum.vraptor.Trace;
 
+@Vetoed
 public enum HttpMethod {
 	GET(Get.class), POST(Post.class), PUT(Put.class), DELETE(Delete.class), TRACE(Trace.class), HEAD(Head.class), OPTIONS(Options.class), PATCH(Patch.class);
 

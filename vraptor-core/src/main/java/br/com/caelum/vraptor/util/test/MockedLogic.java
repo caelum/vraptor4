@@ -18,7 +18,7 @@ package br.com.caelum.vraptor.util.test;
 
 import java.lang.reflect.Method;
 
-import javax.enterprise.inject.Alternative;
+import javax.enterprise.inject.Vetoed;
 
 import br.com.caelum.vraptor.proxy.JavassistProxifier;
 import br.com.caelum.vraptor.proxy.MethodInvocation;
@@ -26,8 +26,9 @@ import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.proxy.SuperMethod;
 import br.com.caelum.vraptor.view.LogicResult;
 
-@Alternative
+@Vetoed
 public class MockedLogic implements LogicResult {
+	
 	private final Proxifier proxifier;
 
 	public MockedLogic() {

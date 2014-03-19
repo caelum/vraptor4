@@ -17,6 +17,8 @@
 
 package br.com.caelum.vraptor.view;
 
+import javax.enterprise.inject.Vetoed;
+
 import br.com.caelum.vraptor.serialization.I18nMessageSerialization;
 import br.com.caelum.vraptor.serialization.JSONPSerialization;
 import br.com.caelum.vraptor.serialization.JSONSerialization;
@@ -28,6 +30,7 @@ import br.com.caelum.vraptor.serialization.XMLSerialization;
  *
  * @author Guilherme Silveira
  */
+@Vetoed
 public class Results {
 
 	/**

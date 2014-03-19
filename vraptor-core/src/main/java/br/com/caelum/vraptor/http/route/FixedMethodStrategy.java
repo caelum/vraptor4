@@ -23,6 +23,8 @@ import java.util.EnumSet;
 import java.util.Objects;
 import java.util.Set;
 
+import javax.enterprise.inject.Vetoed;
+
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.controller.HttpMethod;
 import br.com.caelum.vraptor.http.MutableRequest;
@@ -33,6 +35,7 @@ import br.com.caelum.vraptor.http.Parameter;
  *
  * @author guilherme silveira
  */
+@Vetoed
 public class FixedMethodStrategy implements Route {
 
 	private final ControllerMethod controllerMethod;

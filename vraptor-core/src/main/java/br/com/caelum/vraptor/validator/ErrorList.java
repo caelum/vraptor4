@@ -6,6 +6,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import javax.enterprise.inject.Vetoed;
+
 import com.google.common.base.Function;
 import com.google.common.collect.ForwardingList;
 
@@ -14,6 +16,7 @@ import com.google.common.collect.ForwardingList;
  * 
  * @author Otávio Scherer Garcia
  */
+@Vetoed
 public class ErrorList extends ForwardingList<Message> {
 
 	private static Function<Message, String> byCategory = new Function<Message, String>() {

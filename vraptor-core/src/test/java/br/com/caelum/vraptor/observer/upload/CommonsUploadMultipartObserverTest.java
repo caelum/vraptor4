@@ -28,8 +28,9 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.core.InterceptorStack;
-import br.com.caelum.vraptor.events.ControllerMethodDiscovered;
+import br.com.caelum.vraptor.events.ControllerFound;
 import br.com.caelum.vraptor.http.InvalidParameterException;
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.validator.I18nMessage;
@@ -43,7 +44,7 @@ import br.com.caelum.vraptor.validator.Validator;
 public class CommonsUploadMultipartObserverTest {
 
 	@Mock private InterceptorStack stack;
-	@Mock private ControllerMethodDiscovered event;
+	@Mock private ControllerFound event;
 	@Mock private MutableRequest request;
 	@Mock private Validator validator;
 	@Mock private ServletFileUpload servletFileUpload;

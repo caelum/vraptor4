@@ -23,10 +23,11 @@ import java.util.Set;
 import javax.enterprise.context.ApplicationScoped;
 import javax.servlet.http.HttpServletResponse;
 
-import com.google.common.base.Joiner;
-
 import br.com.caelum.vraptor.InterceptionException;
-import br.com.caelum.vraptor.core.RequestInfo;
+import br.com.caelum.vraptor.http.MutableRequest;
+import br.com.caelum.vraptor.http.MutableResponse;
+
+import com.google.common.base.Joiner;
 
 /**
  * Default implementation which sets the header and send an error response.
@@ -37,11 +38,11 @@ import br.com.caelum.vraptor.core.RequestInfo;
 public class DefaultMethodNotAllowedHandler implements MethodNotAllowedHandler {
 
 	@Override
-	public void deny(RequestInfo request, Set<HttpMethod> allowedMethods) {
-		request.getResponse().addHeader("Allow", Joiner.on(", ").join(allowedMethods));
+	public void deny(MutableRequest request, MutableResponse response, Set<HttpMethod> allowedMethods) {
+		response.addHeader("Allow", Joiner.on(", ").join(allowedMethods));
 		try {
-			if (!"OPTIONS".equalsIgnoreCase(request.getRequest().getMethod())) {
-				request.getResponse().sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
+			if (!"OPTIONS".equalsIgnoreCase(request.getMethod())) {
+				response.sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
 			}
 		} catch (IOException e) {
 			throw new InterceptionException(e);

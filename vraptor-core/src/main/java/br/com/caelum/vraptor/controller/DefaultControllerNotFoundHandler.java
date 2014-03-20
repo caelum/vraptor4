@@ -22,11 +22,13 @@ import java.io.IOException;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
+import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 
 import br.com.caelum.vraptor.InterceptionException;
-import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.events.ControllerNotFound;
+import br.com.caelum.vraptor.http.MutableRequest;
+import br.com.caelum.vraptor.http.MutableResponse;
 
 /**
  * Default 404 component. It defers the request back to container
@@ -52,10 +54,10 @@ public class DefaultControllerNotFoundHandler implements ControllerNotFoundHandl
 	}
 
 	@Override
-	public void couldntFind(RequestInfo request) {
+	public void couldntFind(FilterChain chain, MutableRequest request, MutableResponse response) {
 		event.fire(new ControllerNotFound());
 		try {
-			request.getChain().doFilter(request.getRequest(), request.getResponse());
+			chain.doFilter(request, response);
 		} catch (IOException | ServletException e) {
 			throw new InterceptionException(e);
 		}

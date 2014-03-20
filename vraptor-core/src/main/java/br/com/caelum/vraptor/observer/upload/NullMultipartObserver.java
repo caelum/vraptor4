@@ -25,7 +25,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 
-import br.com.caelum.vraptor.events.ControllerMethodDiscovered;
+import br.com.caelum.vraptor.events.ControllerFound;
 
 /**
  * This observer will warn a message in console when no commons-fileupload was
@@ -40,7 +40,7 @@ public class NullMultipartObserver {
 
 	private static final Logger logger = getLogger(NullMultipartObserver.class);
 
-	public void nullUpload(@Observes ControllerMethodDiscovered event, HttpServletRequest request) {
+	public void nullUpload(@Observes ControllerFound event, HttpServletRequest request) {
 		if (request.getMethod().toUpperCase().equals("POST")
 				&& nullToEmpty(request.getContentType()).startsWith("multipart/form-data")) {
 			logger.warn("There is no file upload handlers registered. If you are willing to "

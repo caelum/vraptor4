@@ -4,6 +4,7 @@ import java.lang.annotation.Annotation;
 import java.util.Map;
 
 import javax.enterprise.context.Dependent;
+import javax.enterprise.event.Observes;
 import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.enterprise.util.AnnotationLiteral;
@@ -19,6 +20,7 @@ import br.com.caelum.vraptor.core.DeserializesQualifier;
 import br.com.caelum.vraptor.core.InterceptorStackHandlersCache;
 import br.com.caelum.vraptor.core.InterceptsQualifier;
 import br.com.caelum.vraptor.core.StereotypeInfo;
+import br.com.caelum.vraptor.events.VRaptorInitialized;
 import br.com.caelum.vraptor.ioc.ControllerHandler;
 import br.com.caelum.vraptor.ioc.ConverterHandler;
 import br.com.caelum.vraptor.ioc.InterceptorStereotypeHandler;
@@ -35,7 +37,7 @@ public class StereotypesRegistry {
 	@Inject private BeanManager beanManager;
 	@Inject private InterceptorStackHandlersCache interceptorsCache;
 
-	public void configure(){
+	public void configure(@Observes VRaptorInitialized event){
 		for (Bean<?> bean : beanManager.getBeans(Object.class)) {
 			Annotation qualifier = tryToFindAStereotypeQualifier(bean);
 			if (qualifier != null) {

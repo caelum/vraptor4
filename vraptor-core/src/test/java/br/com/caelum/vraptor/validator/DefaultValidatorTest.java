@@ -31,7 +31,11 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
+import java.util.Locale;
 import java.util.ResourceBundle;
+
+import javax.validation.MessageInterpolator;
+import javax.validation.ValidatorFactory;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -65,8 +69,13 @@ public class DefaultValidatorTest {
 	public void setup() {
 		ResourceBundle bundle = new SafeResourceBundle(ResourceBundle.getBundle("messages"));
 
+		ValidatorFactory validatorFactory = javax.validation.Validation.buildDefaultValidatorFactory();
+		javax.validation.Validator bvalidator = validatorFactory.getValidator();
+		MessageInterpolator interpolator = validatorFactory.getMessageInterpolator();
+
 		Proxifier proxifier = new JavassistProxifier();
-		this.validator = new DefaultValidator(result, new DefaultValidationViewsFactory(result, proxifier), outjector, proxifier, bundle);
+		validator = new DefaultValidator(result, new DefaultValidationViewsFactory(result, proxifier), outjector, proxifier,
+				bundle, bvalidator, interpolator, Locale.ENGLISH);
 		when(result.use(LogicResult.class)).thenReturn(logicResult);
 		when(result.use(PageResult.class)).thenReturn(pageResult);
 		when(logicResult.forwardTo(MyComponent.class)).thenReturn(instance);
@@ -156,6 +165,24 @@ public class DefaultValidatorTest {
 		validator.check(c.name != null, new SimpleMessage("client.name", "not null"));
 		assertThat(validator.getErrors(), hasSize(1));
 		assertThat(validator.getErrors().get(0).getMessage(), containsString("not null"));
+	}
+
+	@Test
+	public void shouldReturnEmptyCollectionIsBeanIsNull() {
+		validator.validate(null);
+		assertThat(validator.getErrors(), hasSize(0));
+	}
+
+	@Test
+	public void shouldReturnEmptyCollectionForValidBean() {
+		validator.validate(new MethodValidatorTest.Customer(1, "Otto, the dog"));
+		assertThat(validator.getErrors(), hasSize(0));
+	}
+
+	@Test
+	public void shouldReturnElementsForInvalidBean() {
+		validator.validate(new MethodValidatorTest.Customer(null, null));
+		assertThat(validator.getErrors(), hasSize(2));
 	}
 
 	@Controller

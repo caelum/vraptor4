@@ -75,9 +75,9 @@ public class DefaultValidator extends AbstractValidator {
 		this.outjector = outjector;
 		this.proxifier = proxifier;
 		this.bundle = bundle;
-		this.bvalidator=bvalidator;
-		this.interpolator=interpolator;
-		this.locale=locale;
+		this.bvalidator = bvalidator;
+		this.interpolator = interpolator;
+		this.locale = locale;
 	}
 
 	@Override

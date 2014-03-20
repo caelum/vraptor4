@@ -4,7 +4,7 @@ import javax.servlet.ServletContext;
 
 public class VRaptorInitialized {
 
-	private ServletContext servletContext;
+	private final ServletContext servletContext;
 
 	public VRaptorInitialized(ServletContext servletContext) {
 		this.servletContext = servletContext;

@@ -37,7 +37,16 @@ public interface Validator {
 	 * @param message {@link Message} object
 	 */
 	Validator check(boolean expression, Message message);
-	
+
+	/**
+	 * Validate an object instance using bean validation.
+	 * 
+	 * @param object object to validate.
+	 * @param groups if you want to validate a group of properties.
+	 * @return
+	 */
+	Validator validate(Object object, Class<?>... groups);
+
 	/**
 	 * If validator has errors, you can use this method to define what to do. WARN: this method don't stop the flow.
 	 * @param view

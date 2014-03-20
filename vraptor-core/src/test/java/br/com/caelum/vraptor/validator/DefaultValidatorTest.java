@@ -168,7 +168,7 @@ public class DefaultValidatorTest {
 	}
 
 	@Test
-	public void shouldReturnEmptyCollectionIsBeanIsNull() {
+	public void shouldReturnEmptyCollectionIfBeanIsNull() {
 		validator.validate(null);
 		assertThat(validator.getErrors(), hasSize(0));
 	}

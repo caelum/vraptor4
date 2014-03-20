@@ -63,6 +63,11 @@ public class MockValidator extends AbstractValidator {
 	}
 
 	@Override
+	public Validator validate(Object object, Class<?>... groups) {
+		return this;
+	}
+
+	@Override
 	public <T extends View> T onErrorUse(Class<T> view) {
 		if(!this.errors.isEmpty()) {
 			throw new ValidationException(errors);

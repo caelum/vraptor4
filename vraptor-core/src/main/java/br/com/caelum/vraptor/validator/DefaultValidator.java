@@ -20,10 +20,14 @@ package br.com.caelum.vraptor.validator;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Locale;
 import java.util.ResourceBundle;
+import java.util.Set;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import javax.validation.ConstraintViolation;
+import javax.validation.MessageInterpolator;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,6 +36,7 @@ import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.View;
 import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.util.test.MockResult;
+import br.com.caelum.vraptor.validator.beanvalidation.BeanValidatorContext;
 import br.com.caelum.vraptor.view.ValidationViewsFactory;
 
 /**
@@ -51,20 +56,28 @@ public class DefaultValidator extends AbstractValidator {
 	private final Proxifier proxifier;
 	private final ResourceBundle bundle;
 
+	private final javax.validation.Validator bvalidator;
+	private final MessageInterpolator interpolator;
+	private final Locale locale;
+
 	/** 
 	 * @deprecated CDI eyes only
 	 */
 	protected DefaultValidator() {
-		this(null, null, null, null, null);
+		this(null, null, null, null, null, null, null, null);
 	}
 
 	@Inject
-	public DefaultValidator(Result result, ValidationViewsFactory factory, Outjector outjector, Proxifier proxifier, ResourceBundle bundle) {
+	public DefaultValidator(Result result, ValidationViewsFactory factory, Outjector outjector, Proxifier proxifier, 
+			ResourceBundle bundle, javax.validation.Validator bvalidator, MessageInterpolator interpolator, Locale locale) {
 		this.result = result;
 		this.viewsFactory = factory;
 		this.outjector = outjector;
 		this.proxifier = proxifier;
 		this.bundle = bundle;
+		this.bvalidator=bvalidator;
+		this.interpolator=interpolator;
+		this.locale=locale;
 	}
 
 	@Override
@@ -72,6 +85,22 @@ public class DefaultValidator extends AbstractValidator {
 		message.setBundle(bundle);
 		if (!condition) {
 			errors.add(message);
+		}
+		return this;
+	}
+
+	@Override
+	public Validator validate(Object object, Class<?>... groups) {
+		if (object != null) {
+			Set<ConstraintViolation<Object>> violations = bvalidator.validate(object, groups);
+
+			for (ConstraintViolation<Object> v : violations) {
+				BeanValidatorContext ctx = new BeanValidatorContext(v);
+				String msg = interpolator.interpolate(v.getMessageTemplate(), ctx, locale);
+				String category = v.getPropertyPath().toString();
+				add(new SimpleMessage(category, msg));
+				logger.debug("added message {}={} for contraint violation", category, msg);
+			}
 		}
 		return this;
 	}

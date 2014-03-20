@@ -17,7 +17,10 @@
 
 package br.com.caelum.vraptor.controller;
 
-import br.com.caelum.vraptor.core.RequestInfo;
+import javax.servlet.FilterChain;
+
+import br.com.caelum.vraptor.http.MutableRequest;
+import br.com.caelum.vraptor.http.MutableResponse;
 
 /**
  * A component capable of handling not found components.
@@ -26,5 +29,5 @@ import br.com.caelum.vraptor.core.RequestInfo;
  */
 public interface ControllerNotFoundHandler {
 
-	public void couldntFind (RequestInfo request);
+	public void couldntFind (FilterChain chain, MutableRequest request, MutableResponse response);
 }

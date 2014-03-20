@@ -13,10 +13,7 @@ import org.junit.runner.RunWith;
 
 import br.com.caelum.cdi.component.UsingCacheComponent;
 import br.com.caelum.vraptor.WeldJunitRunner;
-import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.events.VRaptorInitialized;
-import br.com.caelum.vraptor.http.MutableRequest;
-import br.com.caelum.vraptor.http.MutableResponse;
 import br.com.caelum.vraptor.ioc.GenericContainerTest;
 import br.com.caelum.vraptor.ioc.WhatToDo;
 
@@ -51,11 +48,7 @@ public class CDIBasedContainerTest extends GenericContainerTest {
 				contexts.startRequestScope();
 				contexts.startSessionScope();
 
-				RequestInfo request = new RequestInfo(null, null,
-						cdiBasedContainer.instanceFor(MutableRequest.class),
-						cdiBasedContainer.instanceFor(MutableResponse.class));
-
-				T result = execution.execute(request, counter);
+				T result = execution.execute(counter);
 
 				contexts.stopRequestScope();
 				contexts.stopSessionScope();

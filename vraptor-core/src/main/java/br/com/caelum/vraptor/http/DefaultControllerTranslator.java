@@ -25,7 +25,6 @@ import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.controller.HttpMethod;
-import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.http.route.MethodNotAllowedException;
 import br.com.caelum.vraptor.http.route.Router;
 
@@ -55,9 +54,8 @@ public class DefaultControllerTranslator implements UrlToControllerTranslator {
 	}
 
 	@Override
-	public ControllerMethod translate(RequestInfo info) {
-		MutableRequest request = info.getRequest();
-		String controllerName = info.getRequestedUri();
+	public ControllerMethod translate(MutableRequest request) {
+		String controllerName = request.getRequestedUri();
 
 		logger.debug("trying to access {}", controllerName);
 

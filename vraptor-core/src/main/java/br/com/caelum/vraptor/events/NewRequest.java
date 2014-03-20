@@ -15,14 +15,9 @@
  * limitations under the License.
  */
 
-package br.com.caelum.vraptor.core;
+package br.com.caelum.vraptor.events;
 
-import static javax.servlet.RequestDispatcher.INCLUDE_REQUEST_URI;
-
-import javax.enterprise.inject.Alternative;
-import javax.inject.Inject;
 import javax.servlet.FilterChain;
-import javax.servlet.ServletContext;
 
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.http.MutableResponse;
@@ -33,24 +28,13 @@ import br.com.caelum.vraptor.http.MutableResponse;
  * @author Fabio Kung
  * @author Guilherme Silveira
  */
-@Alternative
-public class RequestInfo {
+public class NewRequest {
 
-	private final ServletContext servletContext;
 	private final MutableRequest request;
 	private final MutableResponse response;
 	private final FilterChain chain;
-	
-	/** 
-	 * @deprecated CDI eyes only
-	 */
-	protected RequestInfo() {
-		this(null, null, null, null);
-	}
 
-	@Inject
-	public RequestInfo(ServletContext servletContext, FilterChain chain, MutableRequest request, MutableResponse response) {
-		this.servletContext = servletContext;
+	public NewRequest(FilterChain chain, MutableRequest request, MutableResponse response) {
 		this.chain = chain;
 		this.request = request;
 		this.response = response;
@@ -60,23 +44,11 @@ public class RequestInfo {
 		return chain;
 	}
 
-	public ServletContext getServletContext() {
-		return servletContext;
-	}
-
 	public MutableRequest getRequest() {
 		return request;
 	}
 
 	public MutableResponse getResponse() {
 		return response;
-	}
-
-	public String getRequestedUri() {
-		if (request.getAttribute(INCLUDE_REQUEST_URI) != null) {
-			return (String) request.getAttribute(INCLUDE_REQUEST_URI);
-		}
-		String uri = request.getRequestURI().substring(request.getContextPath().length());
-		return uri.replaceFirst("(?i);jsessionid=.*$", "");
 	}
 }

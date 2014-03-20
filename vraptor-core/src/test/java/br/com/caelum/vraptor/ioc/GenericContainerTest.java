@@ -67,7 +67,6 @@ import br.com.caelum.vraptor.converter.ShortConverter;
 import br.com.caelum.vraptor.converter.jodatime.LocalDateConverter;
 import br.com.caelum.vraptor.converter.jodatime.LocalTimeConverter;
 import br.com.caelum.vraptor.core.Converters;
-import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.http.route.Route;
 import br.com.caelum.vraptor.http.route.Router;
 import br.com.caelum.vraptor.interceptor.InterceptorRegistry;
@@ -132,7 +131,7 @@ public abstract class GenericContainerTest {
 	public void shoudRegisterConvertersInConverters() {
 		executeInsideRequest(new WhatToDo<Converters>() {
 			@Override
-			public Converters execute(RequestInfo request, final int counter) {
+			public Converters execute(final int counter) {
 				Converters converters = currentContainer.instanceFor(Converters.class);
 				Converter<?> converter = converters.to(Void.class);
 				assertThat(converter, is(instanceOf(ConverterInTheClasspath.class)));
@@ -150,7 +149,7 @@ public abstract class GenericContainerTest {
 		executeInsideRequest(new WhatToDo<Void>(){
 
 			@Override
-			public Void execute(RequestInfo request, int counter) {
+			public Void execute(int counter) {
 
 				Deserializers deserializers = currentContainer.instanceFor(Deserializers.class);
 				List<String> types = asList("application/json", "json", "application/xml",
@@ -169,7 +168,7 @@ public abstract class GenericContainerTest {
 	public void shouldReturnAllDefaultConverters() {
 		executeInsideRequest(new WhatToDo<Void>(){
 			@Override
-			public Void execute(RequestInfo request, int counter) {
+			public Void execute(int counter) {
 				Converters converters = currentContainer.instanceFor(Converters.class);
 
 				final HashMap<Class<?>, Class<?>> EXPECTED_CONVERTERS = new HashMap<Class<?>, Class<?>>() {

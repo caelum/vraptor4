@@ -30,7 +30,7 @@ import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.controller.ControllerNotFoundHandler;
 import br.com.caelum.vraptor.controller.MethodNotAllowedHandler;
 import br.com.caelum.vraptor.core.InterceptorStack;
-import br.com.caelum.vraptor.core.RequestInfo;
+import br.com.caelum.vraptor.events.NewRequest;
 import br.com.caelum.vraptor.http.UrlToControllerTranslator;
 import br.com.caelum.vraptor.http.route.ControllerNotFoundException;
 import br.com.caelum.vraptor.http.route.MethodNotAllowedException;
@@ -72,16 +72,16 @@ public class RequestHandlerObserver {
 		this.interceptorStack = interceptorStack;
 	}
 
-	public void handle(@Observes RequestInfo event) {
+	public void handle(@Observes NewRequest event) {
 		try {
-			ControllerMethod method = translator.translate(event);
+			ControllerMethod method = translator.translate(event.getRequest());
 			controllerMethodEvent.fire(method);
 			interceptorStack.start();
 		} catch (ControllerNotFoundException e) {
-			controllerNotFoundHandler.couldntFind(event);
+			controllerNotFoundHandler.couldntFind(event.getChain(), event.getRequest(), event.getResponse());
 		} catch (MethodNotAllowedException e) {
 			LOGGER.debug(e.getMessage(), e);
-			methodNotAllowedHandler.deny(event, e.getAllowedMethods());
+			methodNotAllowedHandler.deny(event.getRequest(), event.getResponse(), e.getAllowedMethods());
 		}
 	}
 }

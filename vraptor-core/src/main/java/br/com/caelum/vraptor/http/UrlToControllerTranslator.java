@@ -18,7 +18,6 @@
 package br.com.caelum.vraptor.http;
 
 import br.com.caelum.vraptor.controller.ControllerMethod;
-import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.http.route.ControllerNotFoundException;
 import br.com.caelum.vraptor.http.route.MethodNotAllowedException;
 
@@ -31,7 +30,7 @@ import br.com.caelum.vraptor.http.route.MethodNotAllowedException;
  */
 public interface UrlToControllerTranslator {
 
-	ControllerMethod translate(RequestInfo info)
+	ControllerMethod translate(MutableRequest request)
 			throws ControllerNotFoundException, MethodNotAllowedException;
 
 }

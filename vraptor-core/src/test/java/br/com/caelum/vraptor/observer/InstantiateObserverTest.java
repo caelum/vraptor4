@@ -27,16 +27,16 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor.InterceptionException;
-import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.controller.DefaultBeanClass;
 import br.com.caelum.vraptor.core.InterceptorStack;
+import br.com.caelum.vraptor.events.ControllerFound;
 import br.com.caelum.vraptor.interceptor.InstanceContainer;
 import br.com.caelum.vraptor.view.DogController;
 
 public class InstantiateObserverTest {
 
 	private @Mock InterceptorStack stack;
-	private @Mock ControllerMethod method;
+	private @Mock ControllerFound event;
 
 	@Before
 	public void setup() {
@@ -48,8 +48,8 @@ public class InstantiateObserverTest {
 		final DogController myDog = new DogController();
 		InstanceContainer container = new InstanceContainer(myDog);
 		InstantiateObserver observer = new InstantiateObserver(container);
-		when(method.getController()).thenReturn(new DefaultBeanClass(DogController.class));
-		observer.instantiate(method);
+		when(event.getController()).thenReturn(new DefaultBeanClass(DogController.class));
+		observer.instantiate(event);
 		assertEquals(myDog,observer.getControllerInstance().getController());
 	}
 }

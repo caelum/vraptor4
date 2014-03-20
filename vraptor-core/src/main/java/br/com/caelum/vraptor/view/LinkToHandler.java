@@ -64,9 +64,10 @@ import com.google.common.collect.ForwardingMap;
 
 /**
  * View helper for generating uris
+ * 
+ * @author Otávio Garcia
  * @author Lucas Cavalcanti
  * @since 3.4.0
- *
  */
 @Named("linkTo")
 @ApplicationScoped
@@ -115,21 +116,23 @@ public class LinkToHandler extends ForwardingMap<Class<?>, Object> {
 		Class<?> linkToInterface = interfaces.get(controller);
 		if (linkToInterface == null) {
 			logger.debug("interface not found, creating one {}", controller);
-			
+
 			lock.lock();
 			try {
 				linkToInterface = interfaces.get(controller);
 				if (linkToInterface == null) {
-					String interfaceName = controller.getName() + "$linkTo";
+					String path = context.getContextPath().replace('/', '$');
+					String interfaceName = controller.getName() + "$linkTo" + path;
 					linkToInterface = createLinkToInterface(controller, interfaceName);
 					interfaces.put(controller, linkToInterface);
-					
+
 					logger.debug("created interface {} to {}", interfaceName, controller);
 				}
 			} finally {
 				lock.unlock();
 			}
 		}
+
 		return proxifier.proxify(linkToInterface, new MethodInvocation<Object>() {
 			@Override
 			public Object intercept(Object proxy, Method method, Object[] args, SuperMethod superMethod) {
@@ -150,7 +153,7 @@ public class LinkToHandler extends ForwardingMap<Class<?>, Object> {
 		final Set<CtMethod> used = new HashSet<>();
 		ClassPool pool = ClassPool.getDefault();
 		CtClass inter = pool.makeInterface(interfaceName);
-		
+
 		try {
 			CtClass returnType = pool.get(String.class.getName());
 			CtClass objectType = pool.get(Object.class.getName());
@@ -180,7 +183,7 @@ public class LinkToHandler extends ForwardingMap<Class<?>, Object> {
 			throw new ProxyCreationException(e);
 		}
 	}
-	
+
 	private CtClass[] createParameters(CtClass objectType, int num) {
 		CtClass[] params = new CtClass[num];
 		fill(params, objectType);
@@ -200,7 +203,7 @@ public class LinkToHandler extends ForwardingMap<Class<?>, Object> {
 		sort(methods, new SortByArgumentsLengthDesc());
 		return methods;
 	}
-	
+
 	private final class SortByArgumentsLengthDesc implements Comparator<Method> {
 		@Override
 		public int compare(Method o1, Method o2) {
@@ -289,9 +292,12 @@ public class LinkToHandler extends ForwardingMap<Class<?>, Object> {
 				classes[i] = params.get(i).getClass();
 			}
 			return classes;
-	   }
+		}
 	}
-	
+
+	/**
+	 * Remove generated classes when application stops, due reload context issues.
+	 */
 	@PreDestroy
 	public void removeGeneratedClasses() {
 		ClassPool pool = ClassPool.getDefault();

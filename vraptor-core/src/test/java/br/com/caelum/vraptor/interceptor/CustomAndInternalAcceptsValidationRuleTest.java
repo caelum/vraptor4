@@ -8,7 +8,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.Accepts;
-import br.com.caelum.vraptor.factory.Factories;
 import br.com.caelum.vraptor.interceptor.example.NotLogged;
 
 public class CustomAndInternalAcceptsValidationRuleTest {
@@ -18,7 +17,7 @@ public class CustomAndInternalAcceptsValidationRuleTest {
 
 	@Before
 	public void setUp() {
-		stepInvoker = Factories.createStepInvoker();
+		stepInvoker = new StepInvoker();
 		validationRule = new CustomAndInternalAcceptsValidationRule(stepInvoker);
 	}
 

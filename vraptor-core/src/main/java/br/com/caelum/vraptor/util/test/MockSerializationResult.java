@@ -89,7 +89,7 @@ public class MockSerializationResult extends MockResult {
 				public String getAcceptFormat() {
 					return "xml";
 				}
-			}, this, new MockInstanceImpl<Serialization>(this.serialization)));
+			}, this, new MockInstanceImpl<>(this.serialization)));
 		}
 
 		return proxifier.proxify(view, returnOnFinalMethods(view));

@@ -18,9 +18,6 @@
 package br.com.caelum.vraptor.observer;
 
 import static br.com.caelum.vraptor.view.Results.nothing;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -31,7 +28,6 @@ import java.util.Collections;
 
 import javax.enterprise.event.Event;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -44,9 +40,7 @@ import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.events.EndOfInterceptorStack;
 import br.com.caelum.vraptor.events.MethodExecuted;
 import br.com.caelum.vraptor.events.ReadyToExecuteMethod;
-import br.com.caelum.vraptor.factory.Factories;
 import br.com.caelum.vraptor.interceptor.DogAlike;
-import br.com.caelum.vraptor.reflection.MethodExecutor;
 import br.com.caelum.vraptor.validator.Message;
 import br.com.caelum.vraptor.validator.ValidationException;
 import br.com.caelum.vraptor.validator.Validator;
@@ -57,13 +51,12 @@ public class ExecuteMethodTest {
 	@Mock private Validator validator;
 	@Mock private Event<MethodExecuted> methodEvecutedEvent;
 	@Mock private Event<ReadyToExecuteMethod> readyToExecuteMethodEvent;
-	private MethodExecutor methodExecutor = Factories.createMethodExecutor();
 	private ExecuteMethod observer;
 
 	@Before
 	public void setup() throws NoSuchMethodException {
 		MockitoAnnotations.initMocks(this);
-		observer = new ExecuteMethod(methodInfo, validator, methodExecutor, methodEvecutedEvent, readyToExecuteMethodEvent);
+		observer = new ExecuteMethod(methodInfo, validator, methodEvecutedEvent, readyToExecuteMethodEvent);
 	}
 
 	@Test
@@ -73,21 +66,6 @@ public class ExecuteMethodTest {
 		when(methodInfo.getParametersValues()).thenReturn(new Object[0]);
 		observer.execute(new EndOfInterceptorStack(method, auau));
 		verify(auau).bark();
-	}
-
-	@Test
-	public void shouldThrowMethodExceptionIfThereIsAnInvocationException() throws Exception {
-		ControllerMethod method = new DefaultControllerMethod(null, DogAlike.class.getMethod("bark"));
-		final DogAlike auau = mock(DogAlike.class);
-		final RuntimeException exception = new RuntimeException();
-		doThrow(exception).when(auau).bark();
-		when(methodInfo.getParametersValues()).thenReturn(new Object[0]);
-		try {
-			observer.execute(new EndOfInterceptorStack(method, auau));
-			Assert.fail();
-		} catch (InterceptionException e) {
-			assertThat((RuntimeException) e.getCause(), is(equalTo(exception)));
-		}
 	}
 
 	@Test

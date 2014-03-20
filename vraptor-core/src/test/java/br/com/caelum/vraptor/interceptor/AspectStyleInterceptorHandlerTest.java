@@ -22,7 +22,6 @@ import org.mockito.MockitoAnnotations;
 import br.com.caelum.vraptor.controller.ControllerInstance;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.core.InterceptorStack;
-import br.com.caelum.vraptor.factory.Factories;
 import br.com.caelum.vraptor.interceptor.example.AcceptsInterceptor;
 import br.com.caelum.vraptor.interceptor.example.AcceptsWithoutArgsInterceptor;
 import br.com.caelum.vraptor.interceptor.example.AlwaysAcceptsAspectInterceptor;
@@ -50,7 +49,7 @@ public class AspectStyleInterceptorHandlerTest {
 	@Before
 	public void setup() {
 		MockitoAnnotations.initMocks(this);
-		stepInvoker = Factories.createStepInvoker();
+		stepInvoker = new StepInvoker();
 	}
 
 	@Test
@@ -249,12 +248,12 @@ public class AspectStyleInterceptorHandlerTest {
 		acceptsExecutor = new InterceptorAcceptsExecutor(parametersResolver, stepInvoker);
 
 		customAcceptsExecutor = new CustomAcceptsExecutor(
-			new MockInstanceImpl<ControllerMethod>(controllerMethod),
-			new MockInstanceImpl<ControllerInstance>(controllerInstance),
+			new MockInstanceImpl<>(controllerMethod),
+			new MockInstanceImpl<>(controllerInstance),
 			stepInvoker, new CustomAcceptsVerifier(container));
 
 		interceptorExecutor = new InterceptorExecutor(stepInvoker, parametersResolver,
-				new MockInstanceImpl<SimpleInterceptorStack>(simpleInterceptorStack));
+				new MockInstanceImpl<>(simpleInterceptorStack));
 
 		return new AspectStyleInterceptorHandler(interceptorClass, stepInvoker, container, customAcceptsExecutor,
 				acceptsExecutor, interceptorExecutor);

@@ -92,17 +92,18 @@ public class DefaultValidator extends AbstractValidator {
 	@Override
 	public Validator validate(Object object, Class<?>... groups) {
 		if (object != null) {
-			Set<ConstraintViolation<Object>> violations = bvalidator.validate(object, groups);
-
-			for (ConstraintViolation<Object> v : violations) {
-				BeanValidatorContext ctx = new BeanValidatorContext(v);
-				String msg = interpolator.interpolate(v.getMessageTemplate(), ctx, locale);
-				String category = v.getPropertyPath().toString();
-				add(new SimpleMessage(category, msg));
-				logger.debug("added message {}={} for contraint violation", category, msg);
-			}
+			addAll(bvalidator.validate(object, groups));
 		}
 		return this;
+	}
+
+	private void addAll(Set<ConstraintViolation<Object>> errors) {
+		for (ConstraintViolation<Object> v : errors) {
+			String msg = interpolator.interpolate(v.getMessageTemplate(), new BeanValidatorContext(v), locale);
+			String category = v.getPropertyPath().toString();
+			add(new SimpleMessage(category, msg));
+			logger.debug("added message {}={} for contraint violation", category, msg);
+		}
 	}
 
 	@Override

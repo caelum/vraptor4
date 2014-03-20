@@ -156,24 +156,3 @@ public class TerceiroInterceptor {
 
 O VRaptor lançará uma exception se existir um ciclo na ordem dos interceptors, então tenha cuidado.
 
-##Interagindo com os interceptors do VRaptor
-
-O VRaptor possui sua própria sequência de interceptor, e você pode definir a ordem dos seus interceptors baseados na do VRaptor.
-
-Aqui estão os principais interceptors do VRaptor e o que eles produzem:
-
-* `ExceptionHandlerInterceptor` - intercepta todas as requisições para tratar as exceções não capturadas
-
-* `FlashInterceptor` - mantém por mais uma request os parâmetros da request
-
-* `ForwardToDefaultViewInterceptor` - redireciona (forward) para a jsp padrão se nenhuma outra view foi usada.
-
-
-Se você precisa executar um interceptor antes ou depois de algum interceptor do VRaptor, basta utilizar os atributos `after` e `before` passando a classe do interceptor como valor. Algo como:
-
-~~~ 
-#!java
-@Intercepts(
-    after=ExceptionHandlerInterceptor.class, 
-    before=ForwardToDefaultViewInterceptor.class)
-~~~ 

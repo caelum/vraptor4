@@ -69,9 +69,7 @@ clientes[1].id=23 #funciona se você receber uma lista de clientes no método
 
 ##Reflection no nome dos parâmetros
 
-Infelizmente, o Java não realiza reflection em cima de parâmetros, pois esses dados não ficam disponíveis em bytecode (a não ser se compilado em debug mode, porém é algo opcional). Isso faz com que a maioria dos frameworks que precisem desse tipo de informção criem uma anotação própria para isso, o que polui muito o código (exemplo no JAX-WS, onde é comum encontrar um método como o acima com a assinatura `void add(@WebParam(name="cliente") Cliente cliente)`.
-
-O VRaptor tira proveito do framework <a href="http://paranamer.codehaus.org">Paranamer</a>, que consegue tirar essa informação por meio da pré compilação ou dos dados de debug, evitando criar mais uma anotação. Alguns dos desenvolvedores do VRaptor também participam no desenvolvimento do Paranamer.
+O VRaptor tira proveito do framework [Paranamer](http://paranamer.codehaus.org), que consegue extrair essa informação por meio dos dados de debug. Alguns dos desenvolvedores do VRaptor também participam no desenvolvimento do Paranamer.
 
 ##Escopos
 

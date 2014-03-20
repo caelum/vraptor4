@@ -14,7 +14,7 @@ São suportados utilizando o padrão de localização da sua aplicação. `Doubl
 
 `Calendar` e `Date` são suportados por padrão usando a localização da sua aplicação.
 
-Existem conversores para os principais tipos do Joda-time como `DateTime`, `LocalDate`, `LocalDateTime` e `LocalTime`. Os conversores do Joda-time são ativados automaticamente se você tiver o joda-time no classpath.
+Existem conversores para os principais tipos do Joda-time como `DateTime`, `LocalDate`, `LocalDateTime` e `LocalTime`. Os conversores do Joda-time são ativados automaticamente se você tiver o joda-time no classpath. Mais informações [aqui](/pt/dependencias-e-pre-requisitos).
 
 ##Definindo a localização (Locale) da aplicação
 
@@ -27,6 +27,8 @@ A localização dos componentes pode ser alterada utilizando a seguinte configur
   <param-value>pt_BR</param-value>
 </context-param>
 ~~~ 
+
+Ou vocẽ pode iniciar o servidor de aplicações ou servlet container com o parâmetro `-Duser.language=pt -Duser.region=BR`.
 
 ##Criando seu próprio converter
 

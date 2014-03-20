@@ -26,9 +26,7 @@ import br.com.caelum.vraptor.http.ParametersProvider;
 import br.com.caelum.vraptor.validator.Message;
 
 /**
- * 
  * @author Celso Dantas
- *
  */
 @Deserializes("application/x-www-form-urlencoded")
 public class FormDeserializer implements Deserializer {

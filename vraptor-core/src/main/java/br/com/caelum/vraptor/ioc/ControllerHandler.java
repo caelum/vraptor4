@@ -21,8 +21,6 @@ package br.com.caelum.vraptor.ioc;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
-import java.util.List;
-
 import javax.enterprise.context.Dependent;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
@@ -36,6 +34,9 @@ import br.com.caelum.vraptor.http.route.Route;
 import br.com.caelum.vraptor.http.route.Router;
 import br.com.caelum.vraptor.http.route.RoutesParser;
 
+/**
+ * Called when a controller is discovered, registering routes for it.
+ */
 @Dependent
 public class ControllerHandler{
 
@@ -62,10 +63,10 @@ public class ControllerHandler{
 
 	public void handle(@Observes @ControllerQualifier BeanClass annotatedType) {
 		logger.debug("Found controller: {}", annotatedType);
-		List<Route> routes = parser.rulesFor(annotatedType);
-		for (Route route : routes) {
+		for (Route route : parser.rulesFor(annotatedType)) {
 			router.add(route);
 		}
+
 		registerLinkToClass(annotatedType);
 	}
 

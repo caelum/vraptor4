@@ -6,12 +6,14 @@ import java.util.Iterator;
 import java.util.List;
 
 import javax.enterprise.inject.Instance;
+import javax.enterprise.inject.Vetoed;
 import javax.enterprise.util.TypeLiteral;
 
 /**
  * Fake implementation for {@link Instance} to test injection with list of elements.
  * @author Otávio Scherer Garcia
  */
+@Vetoed
 public class MockInstanceImpl<T> implements Instance<T> {
 
 	private List<T> elements;
@@ -20,7 +22,7 @@ public class MockInstanceImpl<T> implements Instance<T> {
 		this.elements = elements;
 	}
 
-	public MockInstanceImpl(Object... elements) {
+	public MockInstanceImpl(T... elements) {
 		this.elements = new ArrayList<>();
 		for(Object element: elements)
 			this.elements.add((T) element);

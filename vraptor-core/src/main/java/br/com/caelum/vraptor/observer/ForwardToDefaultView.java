@@ -19,12 +19,14 @@ package br.com.caelum.vraptor.observer;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
+import javax.enterprise.context.Dependent;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 
 import org.slf4j.Logger;
 
 import br.com.caelum.vraptor.Result;
+import br.com.caelum.vraptor.events.EndRequest;
 import br.com.caelum.vraptor.events.MethodExecuted;
 import br.com.caelum.vraptor.view.Results;
 
@@ -36,6 +38,7 @@ import br.com.caelum.vraptor.view.Results;
  * @author Rodrigo Turini
  * @author Victor Harada
  */
+@Dependent
 public class ForwardToDefaultView {
 	
 	private final Result result;
@@ -54,7 +57,7 @@ public class ForwardToDefaultView {
 		this.result = result;
 	}
 
-	public void forward(@Observes MethodExecuted event) {
+	public void forward(@Observes EndRequest event) {
 		if (result.used()) {
 			logger.debug("Request already dispatched and commited somewhere else, not forwarding.");
 			return;

@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 
+import javax.enterprise.context.Dependent;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 
@@ -46,6 +47,7 @@ import br.com.caelum.vraptor.view.FlashScope;
  * @author Rodrigo Turini
  * @author Victor Harada
  */
+@Dependent
 public class ParametersInstantiator {
 	
 	private static final Logger logger = getLogger(ParametersInstantiator.class);

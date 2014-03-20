@@ -33,6 +33,7 @@ import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.controller.ControllerInstance;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.events.EndOfInterceptorStack;
+import br.com.caelum.vraptor.events.StackStarting;
 
 /**
  * Default implementation of an {@link InterceptorStack}
@@ -45,25 +46,28 @@ public class DefaultInterceptorStack implements InterceptorStack {
 
 	private static final Logger logger = getLogger(DefaultInterceptorStack.class);
 	private final InterceptorStackHandlersCache cache;
-	private LinkedList<Iterator<InterceptorHandler>> internalStack = new LinkedList<>();
-	private Instance<ControllerMethod> controllerMethod;
-	private Instance<ControllerInstance> controllerInstance;
-	private Event<EndOfInterceptorStack> event;
+	private final LinkedList<Iterator<InterceptorHandler>> internalStack = new LinkedList<>();
+	private final Instance<ControllerMethod> controllerMethod;
+	private final Instance<ControllerInstance> controllerInstance;
+	private final Event<EndOfInterceptorStack> event;
+	private final Event<StackStarting> stackStartingEvent;
 
 	/**
 	 * @deprecated CDI eyes only
 	 */
 	protected DefaultInterceptorStack() {
-		this(null, null, null, null);
+		this(null, null, null, null, null);
 	}
 
 	@Inject
 	public DefaultInterceptorStack(InterceptorStackHandlersCache cache, Instance<ControllerMethod>
-			controllerMethod, Instance<ControllerInstance> controllerInstance, Event<EndOfInterceptorStack> event) {
+			controllerMethod, Instance<ControllerInstance> controllerInstance, Event<EndOfInterceptorStack> event,
+			Event<StackStarting> stackStartingEvent) {
 		this.cache = cache;
 		this.controllerMethod = controllerMethod;
 		this.controllerInstance = controllerInstance;
 		this.event = event;
+		this.stackStartingEvent = stackStartingEvent;
 	}
 
 	@Override
@@ -82,9 +86,11 @@ public class DefaultInterceptorStack implements InterceptorStack {
 
 	@Override
 	public void start() {
+		ControllerMethod method = controllerMethod.get();
+		stackStartingEvent.fire(new StackStarting(method));
 		LinkedList<InterceptorHandler> handlers = cache.getInterceptorHandlers();
 		internalStack.addFirst(handlers.iterator());
-		this.next(controllerMethod.get(), controllerInstance.get().getController());
+		this.next(method, controllerInstance.get().getController());
 		internalStack.poll();
 	}
 }

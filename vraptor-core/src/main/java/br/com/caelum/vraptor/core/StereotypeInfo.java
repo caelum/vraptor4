@@ -3,6 +3,9 @@ package br.com.caelum.vraptor.core;
 import java.lang.annotation.Annotation;
 import java.util.Objects;
 
+import javax.enterprise.inject.Vetoed;
+
+@Vetoed
 public class StereotypeInfo {
 
 	private final Class<? extends Annotation> stereotype;

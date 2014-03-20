@@ -3,6 +3,7 @@ package br.com.caelum.vraptor.observer.download;
 import java.io.IOException;
 import java.io.OutputStream;
 
+import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
 
@@ -13,6 +14,7 @@ import br.com.caelum.vraptor.View;
  * @author Rodrigo Turini
  * @author Victor Kendy Harada
  */
+@Dependent
 public class DownloadView implements View {
 
 	private HttpServletResponse response;

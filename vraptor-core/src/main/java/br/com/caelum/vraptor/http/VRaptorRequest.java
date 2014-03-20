@@ -18,6 +18,7 @@
 package br.com.caelum.vraptor.http;
 
 import static java.util.Collections.enumeration;
+import static javax.servlet.RequestDispatcher.INCLUDE_REQUEST_URI;
 
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -80,6 +81,15 @@ public class VRaptorRequest extends HttpServletRequestWrapper implements Mutable
 	public void setParameter(String key, String... value) {
 		logger.debug("Setting {} with {}", key, value);
 		extraParameters.put(key, value);
+	}
+	
+	@Override
+	public String getRequestedUri() {
+		if (getAttribute(INCLUDE_REQUEST_URI) != null) {
+			return (String) getAttribute(INCLUDE_REQUEST_URI);
+		}
+		String uri = getRequestURI().substring(getContextPath().length());
+		return uri.replaceFirst("(?i);jsessionid=.*$", "");
 	}
 
 	@Override

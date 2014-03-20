@@ -20,9 +20,12 @@ import static com.google.common.base.Objects.toStringHelper;
 
 import java.io.InputStream;
 
+import javax.enterprise.inject.Vetoed;
+
 /**
  * Default implementation for {@link UploadedFile}.
  */
+@Vetoed
 public class DefaultUploadedFile implements UploadedFile {
 	
 	private final String contentType;

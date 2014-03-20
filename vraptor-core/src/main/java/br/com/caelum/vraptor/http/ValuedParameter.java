@@ -2,12 +2,15 @@ package br.com.caelum.vraptor.http;
 
 import java.util.Objects;
 
+import javax.enterprise.inject.Vetoed;
+
 /**
  * Represents a parameter with value.
  * 
  * @author Otávio Scherer Garcia
  * @since 4.0
  */
+@Vetoed
 public class ValuedParameter {
 
 	private final Parameter parameter;

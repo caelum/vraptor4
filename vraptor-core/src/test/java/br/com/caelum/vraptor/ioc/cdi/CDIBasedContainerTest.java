@@ -4,17 +4,16 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.concurrent.Callable;
 
+import javax.enterprise.event.Event;
 import javax.inject.Inject;
 
+import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import br.com.caelum.cdi.component.UsingCacheComponent;
 import br.com.caelum.vraptor.WeldJunitRunner;
-import br.com.caelum.vraptor.core.RequestInfo;
-import br.com.caelum.vraptor.http.MutableRequest;
-import br.com.caelum.vraptor.http.MutableResponse;
-import br.com.caelum.vraptor.ioc.ContainerProvider;
+import br.com.caelum.vraptor.events.VRaptorInitialized;
 import br.com.caelum.vraptor.ioc.GenericContainerTest;
 import br.com.caelum.vraptor.ioc.WhatToDo;
 
@@ -22,19 +21,19 @@ import br.com.caelum.vraptor.ioc.WhatToDo;
 public class CDIBasedContainerTest extends GenericContainerTest {
 
 	@Inject private CDIBasedContainer cdiBasedContainer;
-	@Inject private CDIProvider cdiProvider;
+	@Inject private Event<VRaptorInitialized> initEvent;
 	@Inject private Contexts contexts;
 
 	private int counter;
-
+	
 	@Override
-	protected ContainerProvider getProvider() {
-		return cdiProvider;
+	public void setup() throws Exception {
+		initEvent.fire(new VRaptorInitialized(null));
+		super.setup();
 	}
-
-	@Override
+	
+	@After
 	public void tearDown() {
-		super.tearDown();
 		contexts.stopRequestScope();
 		contexts.stopConversationScope();
 		contexts.stopSessionScope();
@@ -49,11 +48,7 @@ public class CDIBasedContainerTest extends GenericContainerTest {
 				contexts.startRequestScope();
 				contexts.startSessionScope();
 
-				RequestInfo request = new RequestInfo(null, null,
-						cdiBasedContainer.instanceFor(MutableRequest.class),
-						cdiBasedContainer.instanceFor(MutableResponse.class));
-
-				T result = execution.execute(request, counter);
+				T result = execution.execute(counter);
 
 				contexts.stopRequestScope();
 				contexts.stopSessionScope();

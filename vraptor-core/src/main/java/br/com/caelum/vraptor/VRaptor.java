@@ -38,15 +38,14 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 
-import br.com.caelum.vraptor.core.RequestInfo;
 import br.com.caelum.vraptor.core.StaticContentHandler;
+import br.com.caelum.vraptor.events.EndRequest;
 import br.com.caelum.vraptor.events.NewRequest;
 import br.com.caelum.vraptor.events.VRaptorInitialized;
 import br.com.caelum.vraptor.http.EncodingHandler;
 import br.com.caelum.vraptor.http.VRaptorRequest;
 import br.com.caelum.vraptor.http.VRaptorResponse;
 import br.com.caelum.vraptor.interceptor.ApplicationLogicException;
-import br.com.caelum.vraptor.ioc.ContainerProvider;
 
 /**
  * VRaptor entry point.<br>
@@ -62,14 +61,6 @@ public class VRaptor implements Filter {
 
 	private final Logger logger = getLogger(VRaptor.class);
 
-	@Inject
-	private ContainerProvider provider;
-
-	@Inject
-	private Event<ServletContext> contextEvent;
-
-	@Inject
-	private Event<VRaptorInitialized> initializedEvent;
 
 	private ServletContext servletContext;
 
@@ -78,9 +69,15 @@ public class VRaptor implements Filter {
 
 	@Inject
 	private EncodingHandler encodingHandler;
+	
+	@Inject
+	private Event<VRaptorInitialized> initializedEvent;
 
 	@Inject
 	private Event<NewRequest> newRequestEvent;
+	
+	@Inject
+	private Event<EndRequest> endRequestEvent;
 
 	@Override
 	public void init(FilterConfig cfg) throws ServletException {
@@ -90,10 +87,8 @@ public class VRaptor implements Filter {
 		validateIfCdiIsFound();
 		warnIfBeansXmlIsNotFound();
 
-		contextEvent.fire(servletContext);
-		provider.start();
-
-		initializedEvent.fire(new VRaptorInitialized());
+		initializedEvent.fire(new VRaptorInitialized(servletContext));
+		
 		logger.info("VRaptor {} successfuly initialized", VERSION);
 	}
 
@@ -114,18 +109,18 @@ public class VRaptor implements Filter {
 			VRaptorRequest mutableRequest = new VRaptorRequest(baseRequest);
 			VRaptorResponse mutableResponse = new VRaptorResponse(baseResponse);
 
-			final RequestInfo request = new RequestInfo(servletContext, chain, mutableRequest, mutableResponse);
+			final NewRequest request = new NewRequest(chain, mutableRequest, mutableResponse);
 
 			try {
 				encodingHandler.setEncoding(baseRequest, baseResponse);
-				provider.provideForRequest(request);
-				newRequestEvent.fire(new NewRequest());
-
+				newRequestEvent.fire(request);
 			} catch (ApplicationLogicException e) {
 				// it is a business logic exception, we dont need to show
 				// all interceptors stack trace
 				throw new ServletException(e.getMessage(), e.getCause());
 			}
+			
+			endRequestEvent.fire(new EndRequest());
 			logger.debug("VRaptor ended the request");
 		}
 	}
@@ -158,8 +153,8 @@ public class VRaptor implements Filter {
 	}
 
 	private void validateIfCdiIsFound() throws ServletException {
-		if (provider == null) {
-			throw new ServletException("Container Provider is null. Do you have a Weld/CDI listener setup in your web.xml?");
+		if (staticHandler == null) {
+			throw new ServletException("Dependencies were not set. Do you have a Weld/CDI listener setup in your web.xml?");
 		}
 	}
 }

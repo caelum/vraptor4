@@ -21,6 +21,7 @@ import static org.slf4j.LoggerFactory.getLogger;
 
 import java.lang.reflect.Type;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 
@@ -37,6 +38,7 @@ import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
  * @author guilherme silveira
  * @author Rodrigo Turini
  */
+@ApplicationScoped
 public class OutjectResult {
 
 	private static final Logger logger = getLogger(OutjectResult.class);

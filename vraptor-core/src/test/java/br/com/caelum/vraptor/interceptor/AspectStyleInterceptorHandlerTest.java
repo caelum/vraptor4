@@ -248,12 +248,12 @@ public class AspectStyleInterceptorHandlerTest {
 		acceptsExecutor = new InterceptorAcceptsExecutor(parametersResolver, stepInvoker);
 
 		customAcceptsExecutor = new CustomAcceptsExecutor(
-			new MockInstanceImpl<ControllerMethod>(controllerMethod),
-			new MockInstanceImpl<ControllerInstance>(controllerInstance),
+			new MockInstanceImpl<>(controllerMethod),
+			new MockInstanceImpl<>(controllerInstance),
 			stepInvoker, new CustomAcceptsVerifier(container));
 
 		interceptorExecutor = new InterceptorExecutor(stepInvoker, parametersResolver,
-				new MockInstanceImpl<SimpleInterceptorStack>(simpleInterceptorStack));
+				new MockInstanceImpl<>(simpleInterceptorStack));
 
 		return new AspectStyleInterceptorHandler(interceptorClass, stepInvoker, container, customAcceptsExecutor,
 				acceptsExecutor, interceptorExecutor);

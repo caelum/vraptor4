@@ -22,11 +22,14 @@ import static com.google.common.base.Objects.toStringHelper;
 import java.text.MessageFormat;
 import java.util.ResourceBundle;
 
+import javax.enterprise.inject.Vetoed;
+
 /**
  * A simple validation message.
  *
  * @author Guilherme Silveira
  */
+@Vetoed
 public class SimpleMessage implements Message {
 
 	private static final long serialVersionUID = 1L;

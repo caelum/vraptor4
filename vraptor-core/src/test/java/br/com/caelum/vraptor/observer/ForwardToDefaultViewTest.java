@@ -30,6 +30,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.core.MethodInfo;
+import br.com.caelum.vraptor.events.EndRequest;
 import br.com.caelum.vraptor.events.MethodExecuted;
 import br.com.caelum.vraptor.view.MockedPage;
 import br.com.caelum.vraptor.view.PageResult;
@@ -50,7 +51,7 @@ public class ForwardToDefaultViewTest {
 	@Test
 	public void doesNothingIfResultWasAlreadyUsed() {
 		when(result.used()).thenReturn(true);
-		interceptor.forward(new MethodExecuted(method, methodInfo));
+		interceptor.forward(new EndRequest());
 		verify(result, never()).use(PageResult.class);
 	}
 
@@ -58,7 +59,7 @@ public class ForwardToDefaultViewTest {
 	public void shouldForwardToViewWhenResultWasNotUsed() {
 		when(result.used()).thenReturn(false);
 		when(result.use(PageResult.class)).thenReturn(new MockedPage());
-		interceptor.forward(new MethodExecuted(null, null));
+		interceptor.forward(new EndRequest());
 		verify(result).use(PageResult.class);
 	}
 }

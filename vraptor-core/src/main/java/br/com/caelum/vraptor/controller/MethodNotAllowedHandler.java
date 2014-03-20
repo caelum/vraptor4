@@ -19,7 +19,8 @@ package br.com.caelum.vraptor.controller;
 
 import java.util.Set;
 
-import br.com.caelum.vraptor.core.RequestInfo;
+import br.com.caelum.vraptor.http.MutableRequest;
+import br.com.caelum.vraptor.http.MutableResponse;
 
 /**
  * Handler for Method Not Allowed Http Status (405).
@@ -34,6 +35,6 @@ public interface MethodNotAllowedHandler {
 	 * @param request
 	 * @param allowedMethods
 	 */
-	void deny(RequestInfo request, Set<HttpMethod> allowedMethods);
+	void deny(MutableRequest request, MutableResponse response, Set<HttpMethod> allowedMethods);
 
 }

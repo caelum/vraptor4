@@ -23,6 +23,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
+import javax.enterprise.inject.Vetoed;
 import javax.servlet.http.HttpServletResponse;
 
 /**
@@ -34,6 +35,7 @@ import javax.servlet.http.HttpServletResponse;
  * @see InputStreamDownload
  * @see ByteArrayDownload
  */
+@Vetoed
 public class FileDownload implements Download {
 	private final File file;
 	private final String contentType;

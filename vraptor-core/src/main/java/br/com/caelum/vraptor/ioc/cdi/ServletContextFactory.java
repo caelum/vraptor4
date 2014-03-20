@@ -8,6 +8,8 @@ import javax.enterprise.inject.Produces;
 import javax.interceptor.Interceptor;
 import javax.servlet.ServletContext;
 
+import br.com.caelum.vraptor.events.VRaptorInitialized;
+
 @ApplicationScoped
 @Alternative
 @Priority(Interceptor.Priority.LIBRARY_BEFORE)
@@ -15,12 +17,12 @@ public class ServletContextFactory{
 
 	private ServletContext context;
 
-	public void observesContext(@Observes ServletContext context){
-		this.context = context;
+	public void observesContext(@Observes VRaptorInitialized event){
+		this.context = event.getServletContext();
 	}
 
 	@Produces
-	@javax.enterprise.context.ApplicationScoped
+	@ApplicationScoped
 	public ServletContext getInstance(){
 		return this.context;
 	}

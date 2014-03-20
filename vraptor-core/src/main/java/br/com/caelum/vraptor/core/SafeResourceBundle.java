@@ -21,6 +21,8 @@ import java.util.Enumeration;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
+import javax.enterprise.inject.Vetoed;
+
 /**
  * A Resource bundle that doesn't throw exception when there is no resource of given key.
  * It only returns ??? + key + ??? when the key doesn't exist.
@@ -28,6 +30,7 @@ import java.util.ResourceBundle;
  * @author Lucas Cavalcanti
  * @since 3.0.2
  */
+@Vetoed
 public class SafeResourceBundle extends ResourceBundle {
 
 	private final ResourceBundle delegate;

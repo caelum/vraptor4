@@ -2,9 +2,9 @@ package br.com.caelum.vraptor.ioc.cdi;
 
 import java.lang.annotation.Annotation;
 import java.util.Map;
-import java.util.Set;
 
 import javax.enterprise.context.Dependent;
+import javax.enterprise.event.Observes;
 import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.enterprise.util.AnnotationLiteral;
@@ -20,6 +20,7 @@ import br.com.caelum.vraptor.core.DeserializesQualifier;
 import br.com.caelum.vraptor.core.InterceptorStackHandlersCache;
 import br.com.caelum.vraptor.core.InterceptsQualifier;
 import br.com.caelum.vraptor.core.StereotypeInfo;
+import br.com.caelum.vraptor.events.VRaptorInitialized;
 import br.com.caelum.vraptor.ioc.ControllerHandler;
 import br.com.caelum.vraptor.ioc.ConverterHandler;
 import br.com.caelum.vraptor.ioc.InterceptorStereotypeHandler;
@@ -32,26 +33,24 @@ import com.google.common.collect.ImmutableMap;
 public class StereotypesRegistry {
 
 	private static final Map<Class<?>, StereotypeInfo> STEREOTYPES_INFO;
+
 	@Inject private BeanManager beanManager;
 	@Inject private InterceptorStackHandlersCache interceptorsCache;
 
-	public void configure(){
-		Set<Bean<?>> beans = beanManager.getBeans(Object.class);
-		for (Bean<?> bean : beans) {
+	public void configure(@Observes VRaptorInitialized event){
+		for (Bean<?> bean : beanManager.getBeans(Object.class)) {
 			Annotation qualifier = tryToFindAStereotypeQualifier(bean);
-			if(qualifier!=null){
-				beanManager.fireEvent(new DefaultBeanClass(bean.getBeanClass()),qualifier);
+			if (qualifier != null) {
+				beanManager.fireEvent(new DefaultBeanClass(bean.getBeanClass()), qualifier);
 			}
 		}
 		interceptorsCache.init();
 	}
 
 	private Annotation tryToFindAStereotypeQualifier(Bean<?> bean) {
-		Set<Class<? extends Annotation>> annotations = bean.getStereotypes();
-		Map<Class<?>, StereotypeInfo> stereotypesInfo = StereotypesRegistry.STEREOTYPES_INFO;
-		for(Class<? extends Annotation> annotation : annotations){
-			if(stereotypesInfo.containsKey(annotation)){
-				return stereotypesInfo.get(annotation).getStereotypeQualifier();
+		for (Class<? extends Annotation> annotation : bean.getStereotypes()) {
+			if (STEREOTYPES_INFO.containsKey(annotation)) {
+				return STEREOTYPES_INFO.get(annotation).getStereotypeQualifier();
 			}
 		}
 		return null;

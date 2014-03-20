@@ -25,6 +25,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.enterprise.inject.Vetoed;
+
 import br.com.caelum.vraptor.serialization.Serializee;
 import br.com.caelum.vraptor.serialization.Serializer;
 import br.com.caelum.vraptor.serialization.SerializerBuilder;
@@ -36,6 +38,7 @@ import com.thoughtworks.xstream.XStream;
  * @author Lucas Cavalcanti
  * @since 3.0.2
  */
+@Vetoed
 public class XStreamSerializer implements SerializerBuilder {
 
 	private final XStream xstream;

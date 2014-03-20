@@ -27,6 +27,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.enterprise.inject.Vetoed;
+
 import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
 import br.com.caelum.vraptor.serialization.Serializer;
 import br.com.caelum.vraptor.serialization.SerializerBuilder;
@@ -39,6 +41,7 @@ import com.google.gson.Gson;
  * @author Renan Reis
  * @author Guilherme Mangabeira
  */
+@Vetoed
 public class GsonSerializer implements SerializerBuilder {
 
 	private GsonSerializerBuilder builder;

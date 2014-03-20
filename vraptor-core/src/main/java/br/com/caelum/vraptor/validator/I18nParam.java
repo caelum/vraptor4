@@ -17,6 +17,8 @@ package br.com.caelum.vraptor.validator;
 
 import java.util.ResourceBundle;
 
+import javax.enterprise.inject.Vetoed;
+
 /**
  * Represents a lazy i18n parameter
  * Use:
@@ -26,7 +28,9 @@ import java.util.ResourceBundle;
  * @author Lucas Cavalcanti
  * @since 3.4.0
  */
+@Vetoed
 public class I18nParam {
+	
 	private final String key;
 
 	public I18nParam(String key) {

@@ -22,6 +22,7 @@ import static org.mockito.Mockito.verify;
 
 import java.io.IOException;
 
+import javax.enterprise.event.Event;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 
@@ -31,7 +32,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor.InterceptionException;
-import br.com.caelum.vraptor.core.RequestInfo;
+import br.com.caelum.vraptor.events.ControllerNotFound;
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.http.MutableResponse;
 
@@ -41,31 +42,30 @@ public class ControllerNotFoundHandlerTest {
 	private @Mock MutableRequest webRequest;
 	private @Mock MutableResponse webResponse;
 	private @Mock FilterChain chain;
-	private RequestInfo request;
+	private @Mock Event<ControllerNotFound> event;
 
 	@Before
 	public void setUp() {
 		MockitoAnnotations.initMocks(this);
-		request = new RequestInfo(null, chain, webRequest, webResponse);
-		notFoundHandler = new DefaultControllerNotFoundHandler();
+		notFoundHandler = new DefaultControllerNotFoundHandler(event);
 	}
 
 	@Test
 	public void couldntFindDefersRequestToContainer() throws Exception {
-		notFoundHandler.couldntFind(request);
+		notFoundHandler.couldntFind(chain, webRequest, webResponse);
 		verify(chain, only()).doFilter(webRequest, webResponse);
 	}
 	
 	@Test(expected=InterceptionException.class)
 	public void shouldThrowInterceptionExceptionIfIOExceptionOccurs() throws Exception {
 		doThrow(new IOException()).when(chain).doFilter(webRequest, webResponse);
-		notFoundHandler.couldntFind(request);
+		notFoundHandler.couldntFind(chain, webRequest, webResponse);
 	}
 	
 	@Test(expected=InterceptionException.class)
 	public void shouldThrowInterceptionExceptionIfServletExceptionOccurs() throws Exception {
 		doThrow(new ServletException()).when(chain).doFilter(webRequest, webResponse);
-		notFoundHandler.couldntFind(request);
+		notFoundHandler.couldntFind(chain, webRequest, webResponse);
 	}
 	
 }

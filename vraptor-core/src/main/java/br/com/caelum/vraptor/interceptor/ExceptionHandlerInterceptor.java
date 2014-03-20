@@ -43,8 +43,7 @@ import com.google.common.base.Throwables;
  */
 @Intercepts
 @RequestScoped
-public class ExceptionHandlerInterceptor
-	implements Interceptor {
+public class ExceptionHandlerInterceptor implements Interceptor {
 
 	private static final Logger logger = LoggerFactory.getLogger(ExceptionHandlerInterceptor.class);
 

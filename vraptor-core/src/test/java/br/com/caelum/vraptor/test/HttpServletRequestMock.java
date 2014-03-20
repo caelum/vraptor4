@@ -53,6 +53,11 @@ public class HttpServletRequestMock implements MutableRequest {
 	private HttpServletRequestWrapper wrapper;
 
 	@Override
+	public String getRequestedUri() {
+		return null;
+	}
+	
+	@Override
 	public boolean authenticate(HttpServletResponse response)
 			throws IOException, ServletException {
 		return wrapper.authenticate(response);

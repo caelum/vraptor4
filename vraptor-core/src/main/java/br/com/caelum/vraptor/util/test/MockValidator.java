@@ -21,8 +21,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.Set;
 
 import javax.enterprise.inject.Alternative;
+import javax.validation.ConstraintViolation;
 
 import br.com.caelum.vraptor.View;
 import br.com.caelum.vraptor.validator.AbstractValidator;
@@ -56,7 +58,7 @@ import br.com.caelum.vraptor.validator.Validator;
 public class MockValidator extends AbstractValidator {
 
 	private List<Message> errors = new ArrayList<>();
-	
+
 	@Override
 	public Validator check(boolean condition, Message message) {
 		return this;
@@ -65,6 +67,10 @@ public class MockValidator extends AbstractValidator {
 	@Override
 	public Validator validate(Object object, Class<?>... groups) {
 		return this;
+	}
+
+	@Override
+	public <T> void addAll(Set<ConstraintViolation<T>> errors) {
 	}
 
 	@Override

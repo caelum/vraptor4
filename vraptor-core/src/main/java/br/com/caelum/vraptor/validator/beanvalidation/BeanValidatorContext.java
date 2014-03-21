@@ -32,7 +32,7 @@ public class BeanValidatorContext
 	private final ConstraintDescriptor<?> descriptor;
 	private final Object validatedValue;
 
-	public BeanValidatorContext(ConstraintViolation<Object> violation) {
+	public BeanValidatorContext(ConstraintViolation<?> violation) {
 		descriptor = violation.getConstraintDescriptor();
 		validatedValue = violation.getInvalidValue();
 	}

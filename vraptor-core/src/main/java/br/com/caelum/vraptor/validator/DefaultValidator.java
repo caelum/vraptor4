@@ -97,8 +97,8 @@ public class DefaultValidator extends AbstractValidator {
 		return this;
 	}
 
-	private void addAll(Set<ConstraintViolation<Object>> errors) {
-		for (ConstraintViolation<Object> v : errors) {
+	public <T> void addAll(Set<ConstraintViolation<T>>  errors) {
+		for (ConstraintViolation<T> v : errors) {
 			String msg = interpolator.interpolate(v.getMessageTemplate(), new BeanValidatorContext(v), locale);
 			String category = v.getPropertyPath().toString();
 			add(new SimpleMessage(category, msg));

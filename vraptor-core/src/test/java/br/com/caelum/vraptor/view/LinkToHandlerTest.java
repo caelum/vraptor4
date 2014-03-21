@@ -1,5 +1,6 @@
 package br.com.caelum.vraptor.view;
 
+import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.startsWith;
 import static org.junit.Assert.assertThat;
@@ -19,6 +20,7 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor.controller.DefaultBeanClass;
@@ -157,6 +159,24 @@ public class LinkToHandlerTest {
 		} catch (IllegalArgumentException e) {
 			assertThat(e.getMessage().toLowerCase(), startsWith("wrong number of arguments"));
 		}
+	}
+
+	@Test
+	public void shouldAvoidFrozenClassIfTwoVRaptorInstancesAreLoaded() throws Throwable {
+		ServletContext context0 = Mockito.mock(ServletContext.class);
+		ServletContext context1 = Mockito.mock(ServletContext.class);
+
+		when(context0.getContextPath()).thenReturn("");
+		when(context1.getContextPath()).thenReturn("/another");
+
+		LinkToHandler handler0 = new LinkToHandler(context0, router, new JavassistProxifier());
+		LinkToHandler handler1 = new LinkToHandler(context1, router, new JavassistProxifier());
+
+		Object object0 = handler0.get(new DefaultBeanClass(TestController.class));
+		assertThat(object0.getClass().getName(), containsString("$linkTo_$$"));
+
+		Object object1 = handler1.get(new DefaultBeanClass(TestController.class));
+		assertThat(object1.getClass().getName(), containsString("$linkTo$another_$$"));
 	}
 
 	private String invoke(Object obj, String methodName, Object...args) throws Throwable {

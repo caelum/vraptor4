@@ -30,6 +30,7 @@ import br.com.caelum.vraptor.View;
 import br.com.caelum.vraptor.validator.AbstractValidator;
 import br.com.caelum.vraptor.validator.I18nMessage;
 import br.com.caelum.vraptor.validator.Message;
+import br.com.caelum.vraptor.validator.SimpleMessage;
 import br.com.caelum.vraptor.validator.ValidationException;
 import br.com.caelum.vraptor.validator.Validator;
 
@@ -71,6 +72,9 @@ public class MockValidator extends AbstractValidator {
 
 	@Override
 	public <T> void addAll(Set<ConstraintViolation<T>> errors) {
+		for (ConstraintViolation<T> v : errors) {
+			add(new SimpleMessage(v.getPropertyPath().toString(), v.getMessage()));
+		}
 	}
 
 	@Override

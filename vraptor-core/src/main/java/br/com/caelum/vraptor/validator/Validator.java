@@ -19,6 +19,9 @@ package br.com.caelum.vraptor.validator;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
+
+import javax.validation.ConstraintViolation;
 
 import br.com.caelum.vraptor.View;
 
@@ -127,5 +130,11 @@ public interface Validator {
 	 * the actual validation errors list will be used.
 	 */
 	void onErrorSendBadRequest();
+
+	/**
+	 * Add messages from bean validation translating to vraptor {@link Message}.
+	 * @param errors
+	 */
+	<T> void addAll(Set<ConstraintViolation<T>> errors);
 
 }

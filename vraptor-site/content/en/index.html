@@ -1,3 +1,92 @@
 ---
 title: Home
 ---
+
+<section class="home-call">
+
+  <p markdown="1">VRaptor 4 brings high productivity, fast and easy development 
+  	of Java Web applications on top of [CDI](http://cdi-spec.org/). It's a brazilian 
+  	opensource MVC framework with a large developers and users community.</p>
+
+  <a href="/pt/download" class="download-btn">Download</a>
+</section>
+
+<section class="home-example" markdown="1">
+## Really simple!
+
+  <div class="home-example-column" markdown="1">
+Your first logic on `FirstController.java`:
+
+~~~
+#!java
+@Controller
+public class FirstController {
+  @Get("/home")
+  public void home() {
+  }
+}
+~~~
+  </div>
+
+  <div class="home-example-column" markdown="1">
+And HTML file inside `WEB-INF/jsp/first/home.jsp`:
+
+~~~
+#!jsp
+<!DOCTYPE html>
+<html>
+  <body>
+    Initial page
+  </body>
+</html>
+~~~
+  </div>
+
+It's done! Now you may just access [localhost:8080/home](http://localhost:8080/home). See more examples [on our documentation](/en/docs/one-minute-guide).
+</section>
+
+<section class="home-advantages">
+<h2>Reasons for using VRaptor</h2>
+<ul>
+  <li class="productivity">
+    <strong>High Productivity</strong>
+    <p>Using VRaptor3 is simple and intuitive. You will reach extreme productivity levels in Java for the web.</p>
+  </li>
+
+  <li class="learning">
+    <strong>Learning Curve</strong>
+    <p>In very short time, you will learn everything you need to know to develop web applications with VRaptor.</p>
+  </li>
+
+  <li class="testability">
+    <strong>Testability</strong>
+    <p>Write modular and loosely coupled code with VRaptor. Your application's maintenability and testability increase will be sensible.</p>
+  </li>
+
+  <li class="economy">
+    <strong>Savings</strong>
+    <p>Save many work hours with VRaptor. Training your team and enhancing your final software quality became 
+    	easier.</p>
+  </li>
+
+  <li class="soa">
+    <strong>SOA and Rest - Ready</strong>
+    <p>Make RESTful and service oriented applications with no complications. Just like you're writing common web applications.</p>
+  </li>
+
+  <li class="best-practices">
+    <strong>Best development practices</strong>
+    <p>By using Injection of Dependencies, Inversion of Control and POJO's, your code gets simpler and testable.</p>
+  </li>
+
+  <li class="cdi">
+    <strong>CDI</strong>
+    <p>Take advantage of powerful Java EE 7 CDI (Context Dependency Injection) specification.</p>
+  </li>
+
+  <li class="pt-docs">
+    <strong>Portuguese documentation</strong>
+    <p>Although the main language is Portuguese, you can count on a vast documentation, and the discussion lists in English.</p>
+  </li>
+</ul>
+</section>

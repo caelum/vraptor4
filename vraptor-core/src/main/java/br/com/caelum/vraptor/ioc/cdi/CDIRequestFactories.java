@@ -18,33 +18,33 @@ import br.com.caelum.vraptor.http.MutableResponse;
 @Priority(Interceptor.Priority.LIBRARY_BEFORE)
 public class CDIRequestFactories {
 
-	private NewRequest info;
+	private NewRequest newRequest;
 
-	public void setRequest(@Observes NewRequest info) {
-		this.info = info;
+	public void setRequest(NewRequest info) {
+		this.newRequest = info;
 	}
 	
 	@Produces
 	@RequestScoped
 	public HttpSession getSession(){
-		return info.getRequest().getSession();
+		return newRequest.getRequest().getSession();
 	}
 	
 	@Produces
 	@RequestScoped
 	public MutableResponse getResponse(){
-		return info.getResponse();
+		return newRequest.getResponse();
 	}
 	
 	@Produces
 	@RequestScoped
 	public MutableRequest getRequest(){
-		return info.getRequest();
+		return newRequest.getRequest();
 	}
 	
 	@Produces
 	@RequestScoped
 	public FilterChain getChain(){
-		return info.getChain();
+		return newRequest.getChain();
 	}
 }

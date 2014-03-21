@@ -11,12 +11,14 @@ Os servidores já testados e suportados são:
 - Tomcat 7 (+ jars do Weld 2.0)
 - Jetty 8  (+ jars do Weld 2.0)
 
-> O Wildfly possui uma restrição para a classe `MutableResponse`. Para contornar isso você precisa adicionar o seguinte parâmetro no arquivo `standalone.xml` na tag `servlet-container` do subsystem `undertown`:
+Ao usar um Servlet Container como o Tomcat ou Jetty, é preciso adicionar os jars do Weld 2.x, além do seguinte listener em seu `web.xml`:
 
-~~~ 
+~~~
 #!xml
-allow-non-standard-wrappers="true"
-~~~ 
+<listener>
+    <listener-class>org.jboss.weld.environment.servlet.Listener</listener-class>
+</listener>
+~~~
 
 ## Maven
 
@@ -43,6 +45,32 @@ src/test/resources    arquivos de config. para testes      - ignorado -
 ~~~
 
 Se você não quiser usar o Maven, basta criar um projeto em branco na sua IDE preferida e adicionar o jar do VRaptor com as dependências.
+
+### CDI
+
+Esta é a dependência mais importante do VRaptor 4. Se você usa um Application Server, ele já possui esta dependência, portanto você pode declarar no seu `pom.xml` como `provided` conforme exemplo:
+
+~~~
+#!xml
+<dependency>
+ <groupId>javax.inject</groupId>
+ <artifactId>javax.inject</artifactId>
+ <version>1</version>
+ <scope>provided</scope>
+</dependency>
+~~~
+
+E se você utiliza um Servler Container (como o Tomcat ou Jetty) você precisa adicionar a implementação de referência do CDI: o Weld.
+
+~~~
+#!xml
+<dependency>
+ <groupId>org.jboss.weld.servlet</groupId>
+ <artifactId>weld-servlet</artifactId>
+ <version>2.1.2.Final</version>
+</dependency>
+~~~
+
 
 ## Logging
 
@@ -110,6 +138,19 @@ E para o Gson
 Necessário para utilizar a funcionalidade de validação. Você precisará adicionar a API `validation-api` e alguma implementação, como por exemplo, o <a href="http://www.hibernate.org/subprojects/validator.html">Hibernate Validator</a> ou o <a href="https://bval.apache.org/">Apache BVal</a>.
 
 Se você usa um servidor de aplicações não é necessário adicionar a dependência do Bean Validation, pois já está incluído no Java EE 7.
+
+### Joda-time
+
+Joda-time é uma API para facilitar o trabalho de dados temporais em Java. Os componentes do Joda-time são opcionais e ativados somente se o Joda-time for encontrado no classpath.
+
+~~~
+#!xml
+<dependency>
+   <groupId>joda-time</groupId>
+   <artifactId>joda-time</artifactId>
+   <version>2.1.0</version>
+</dependency>
+~~~
 
 ## Paranamer
 

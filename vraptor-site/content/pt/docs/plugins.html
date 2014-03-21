@@ -24,6 +24,17 @@ Para usá-lo basta você copiar o jar para a sua aplicação, ou declarar o plug
 
 É importante que a `persistence unit` chame-se `default`, e que o `persistence.xml` esteja no diretório `src/main/resources/META-INF/`.
 
+O plugin não possui nenhum provider. Com isso é necessário que você declare algum provider, como por exemplo, o Hibernate.
+
+~~~
+#!xml
+<dependency>
+ <groupId>org.hibernate</groupId>
+ <artifactId>hibernate-entitymanager</artifactId>
+ <version>4.3.0.Final</version> <!-- Ou outra versão compatível com JPA 2.1 -->
+</dependency>
+~~~
+
 Plugin no Gihub: https://github.com/caelum/vraptor-jpa
 
 ##VRaptor Hibernate

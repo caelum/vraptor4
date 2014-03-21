@@ -35,6 +35,7 @@ import br.com.caelum.vraptor.events.NewRequest;
 import br.com.caelum.vraptor.http.UrlToControllerTranslator;
 import br.com.caelum.vraptor.http.route.ControllerNotFoundException;
 import br.com.caelum.vraptor.http.route.MethodNotAllowedException;
+import br.com.caelum.vraptor.ioc.cdi.CDIRequestFactories;
 
 /**
  * Looks up the {@link ControllerMethod} for a specific request and start {@link 
@@ -73,8 +74,9 @@ public class RequestHandlerObserver {
 		this.interceptorStack = interceptorStack;
 	}
 
-	public void handle(@Observes NewRequest event) {
+	public void handle(@Observes NewRequest event, CDIRequestFactories factories) {
 		try {
+			factories.setRequest(event);
 			ControllerMethod method = translator.translate(event.getRequest());
 			controllerFoundEvent.fire(new ControllerFound(method));
 			interceptorStack.start();

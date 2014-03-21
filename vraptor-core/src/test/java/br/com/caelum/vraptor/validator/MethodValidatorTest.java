@@ -95,7 +95,7 @@ public class MethodValidatorTest {
 	/**
 	 * Customer for using in bean validator tests.
 	 */
-	public class Customer {
+	public static class Customer {
 
 		@NotNull public Integer id;
 		@NotNull public String name;

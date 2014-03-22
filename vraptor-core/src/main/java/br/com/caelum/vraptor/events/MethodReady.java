@@ -9,11 +9,11 @@ import br.com.caelum.vraptor.observer.ExecuteMethod;
  * @author Rodrigo Turini
  * @since 4.0
  */
-public class ReadyToExecuteMethod {
+public class MethodReady {
 
 	private final ControllerMethod controllermethod;
 
-	public ReadyToExecuteMethod(ControllerMethod method) {
+	public MethodReady(ControllerMethod method) {
 		this.controllermethod = method;
 	}
 

@@ -9,7 +9,7 @@ import javax.interceptor.Interceptor;
 import javax.servlet.FilterChain;
 import javax.servlet.http.HttpSession;
 
-import br.com.caelum.vraptor.events.NewRequest;
+import br.com.caelum.vraptor.events.RequestStarted;
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.http.MutableResponse;
 
@@ -18,33 +18,33 @@ import br.com.caelum.vraptor.http.MutableResponse;
 @Priority(Interceptor.Priority.LIBRARY_BEFORE)
 public class CDIRequestFactories {
 
-	private NewRequest newRequest;
+	private RequestStarted requestStarted;
 
-	public void setRequest(NewRequest info) {
-		this.newRequest = info;
+	public void setRequest(RequestStarted info) {
+		this.requestStarted = info;
 	}
 	
 	@Produces
 	@RequestScoped
 	public HttpSession getSession(){
-		return newRequest.getRequest().getSession();
+		return requestStarted.getRequest().getSession();
 	}
 	
 	@Produces
 	@RequestScoped
 	public MutableResponse getResponse(){
-		return newRequest.getResponse();
+		return requestStarted.getResponse();
 	}
 	
 	@Produces
 	@RequestScoped
 	public MutableRequest getRequest(){
-		return newRequest.getRequest();
+		return requestStarted.getRequest();
 	}
 	
 	@Produces
 	@RequestScoped
 	public FilterChain getChain(){
-		return newRequest.getChain();
+		return requestStarted.getChain();
 	}
 }

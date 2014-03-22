@@ -16,8 +16,8 @@ import org.mockito.stubbing.Answer;
 import br.com.caelum.vraptor.controller.ControllerInstance;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.controller.DefaultControllerInstance;
-import br.com.caelum.vraptor.events.EndOfInterceptorStack;
-import br.com.caelum.vraptor.events.StackStarting;
+import br.com.caelum.vraptor.events.InterceptorsExecuted;
+import br.com.caelum.vraptor.events.InterceptorsReady;
 import br.com.caelum.vraptor.util.test.MockInstanceImpl;
 
 public class DefaultInterceptorStackTest {
@@ -27,8 +27,8 @@ public class DefaultInterceptorStackTest {
 	private @Mock Object controller;
 	private @Mock InterceptorStackHandlersCache cache;
 	private @Mock ControllerMethod controllerMethod;
-	private @Mock Event<EndOfInterceptorStack> event;
-	private @Mock Event<StackStarting> stackStartingEvent;
+	private @Mock Event<InterceptorsReady> interceptorsReadyEvent;
+	private @Mock Event<InterceptorsExecuted> interceptorsExecutedEvent;
 	private @Mock InterceptorHandler handler;
 	
 	private DefaultInterceptorStack stack;
@@ -38,7 +38,7 @@ public class DefaultInterceptorStackTest {
 	public void setUp() {
 		MockitoAnnotations.initMocks(this);
 		controllerInstance = new DefaultControllerInstance(controller);
-		stack = new DefaultInterceptorStack(cache, new MockInstanceImpl<>(controllerMethod), new MockInstanceImpl<>(controllerInstance), event, stackStartingEvent);
+		stack = new DefaultInterceptorStack(cache, new MockInstanceImpl<>(controllerMethod), new MockInstanceImpl<>(controllerInstance), interceptorsExecutedEvent, interceptorsReadyEvent);
 		LinkedList<InterceptorHandler> handlers = new LinkedList<>();
 		handlers.add(handler);
 		
@@ -49,7 +49,7 @@ public class DefaultInterceptorStackTest {
 	public void firesStartEventOnStart() throws Exception {
 		stack.start();
 		
-		verify(stackStartingEvent).fire(any(StackStarting.class));
+		verify(interceptorsReadyEvent).fire(any(InterceptorsReady.class));
 	}
 	
 	@Test
@@ -63,7 +63,7 @@ public class DefaultInterceptorStackTest {
 	public void doesntFireEndOfStackIfTheInterceptorsDontContinueTheStack() throws Exception {	
 		stack.start();
 		
-		verify(event, never()).fire(any(EndOfInterceptorStack.class));
+		verify(interceptorsExecutedEvent, never()).fire(any(InterceptorsExecuted.class));
 	}
 	
 	@Test
@@ -72,7 +72,7 @@ public class DefaultInterceptorStackTest {
 		
 		stack.start();
 		
-		verify(event).fire(any(EndOfInterceptorStack.class));
+		verify(interceptorsExecutedEvent).fire(any(InterceptorsExecuted.class));
 	}
 
 	private Answer<Void> callNext() {

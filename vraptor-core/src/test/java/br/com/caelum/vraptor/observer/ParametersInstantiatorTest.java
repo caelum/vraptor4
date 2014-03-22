@@ -44,7 +44,7 @@ import br.com.caelum.vraptor.HeaderParam;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.controller.DefaultControllerMethod;
 import br.com.caelum.vraptor.core.MethodInfo;
-import br.com.caelum.vraptor.events.StackStarting;
+import br.com.caelum.vraptor.events.InterceptorsReady;
 import br.com.caelum.vraptor.factory.Factories;
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.http.ParametersProvider;
@@ -98,7 +98,7 @@ public class ParametersInstantiatorTest {
 		methodInfo.setControllerMethod(method);
 
 		verifyNoMoreInteractions(parametersProvider, validator, request, flash);
-		instantiator.instantiate(new StackStarting(method));
+		instantiator.instantiate(new InterceptorsReady(method));
 	}
 
 	@Test
@@ -108,7 +108,7 @@ public class ParametersInstantiatorTest {
 
 		when(parametersProvider.getParametersFor(otherMethod, errors)).thenReturn(values);
 
-		instantiator.instantiate(new StackStarting(otherMethod));
+		instantiator.instantiate(new InterceptorsReady(otherMethod));
 
 		verify(validator).addAll(Collections.<Message> emptyList());
 
@@ -122,7 +122,7 @@ public class ParametersInstantiatorTest {
 		when(parametersProvider.getParametersFor(otherMethod, errors)).thenReturn(new Object[1]);
 
 		methodInfo.setControllerMethod(otherMethod);
-		instantiator.instantiate(new StackStarting(otherMethod));
+		instantiator.instantiate(new InterceptorsReady(otherMethod));
 
 		verify(request).setParameter("someParam[0].id", "one");
 		verify(request).setParameter("someParam[1].id", "two");
@@ -139,7 +139,7 @@ public class ParametersInstantiatorTest {
 		when(request.getParameterNames()).thenReturn(enumeration(asList("someParam.class.id", "unrelatedParam")));
 		when(request.getParameterValues("someParam.class.id")).thenReturn(new String[] {"whatever"});
 
-		instantiator.instantiate(new StackStarting(otherMethod));
+		instantiator.instantiate(new InterceptorsReady(otherMethod));
 	}
 
 	@Test
@@ -149,7 +149,7 @@ public class ParametersInstantiatorTest {
 
 		when(flash.consumeParameters(otherMethod)).thenReturn(values);
 
-		instantiator.instantiate(new StackStarting(otherMethod));
+		instantiator.instantiate(new InterceptorsReady(otherMethod));
 
 		verify(validator).addAll(Collections.<Message>emptyList());
 		verify(parametersProvider, never()).getParametersFor(otherMethod, errors);
@@ -164,7 +164,7 @@ public class ParametersInstantiatorTest {
 		when(parametersProvider.getParametersFor(otherMethod, errors))
 			.thenAnswer(addErrorsToListAndReturn(new Object[] { 0 }, "error1"));
 
-		instantiator.instantiate(new StackStarting(otherMethod));
+		instantiator.instantiate(new InterceptorsReady(otherMethod));
 
 		verify(validator).addAll(errors);
 		assertEquals(methodInfo.getValuedParameters()[0].getValue(), 0);
@@ -180,7 +180,7 @@ public class ParametersInstantiatorTest {
 		when(request.getHeader("X-MyApp-Password")).thenReturn("123");
 		when(parametersProvider.getParametersFor(controllerMethod, errors)).thenReturn(values);
 
-		instantiator.instantiate(new StackStarting(controllerMethod));
+		instantiator.instantiate(new InterceptorsReady(controllerMethod));
 
 		verify(request).setParameter("password", "123");
 		verify(validator).addAll(Collections.<Message> emptyList());
@@ -192,7 +192,7 @@ public class ParametersInstantiatorTest {
 		when(parametersProvider.getParametersFor(otherMethod, errors)).thenReturn(values);
 
 		methodInfo.setControllerMethod(otherMethod);
-		instantiator.instantiate(new StackStarting(otherMethod));
+		instantiator.instantiate(new InterceptorsReady(otherMethod));
 
 		verify(request, never()).setParameter(anyString(), anyString());
 		verify(validator).addAll(Collections.<Message>emptyList());

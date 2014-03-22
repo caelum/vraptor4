@@ -19,7 +19,7 @@ import br.com.caelum.vraptor.Consumes;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.controller.DefaultControllerMethod;
 import br.com.caelum.vraptor.core.MethodInfo;
-import br.com.caelum.vraptor.events.StackStarting;
+import br.com.caelum.vraptor.events.InterceptorsReady;
 import br.com.caelum.vraptor.factory.Factories;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.serialization.Deserializer;
@@ -63,7 +63,7 @@ public class DeserializingObserverTest {
 
 	@Test
 	public void shouldOnlyAcceptMethodsWithConsumesAnnotation() throws Exception {
-		observer.deserializes(new StackStarting(doesntConsume), request, methodInfo, status);
+		observer.deserializes(new InterceptorsReady(doesntConsume), request, methodInfo, status);
 		verifyZeroInteractions(request);
 	}
 
@@ -71,7 +71,7 @@ public class DeserializingObserverTest {
 	public void willSetHttpStatusCode415IfTheControllerMethodDoesNotSupportTheGivenMediaTypes() throws Exception {
 		when(request.getContentType()).thenReturn("image/jpeg");
 
-		observer.deserializes(new StackStarting(consumeXml), request, methodInfo, status);
+		observer.deserializes(new InterceptorsReady(consumeXml), request, methodInfo, status);
 
 		verify(status).unsupportedMediaType("Request with media type [image/jpeg]. Expecting one of [application/xml].");
 	}
@@ -81,7 +81,7 @@ public class DeserializingObserverTest {
 		when(request.getContentType()).thenReturn("application/xml");
 		when(deserializers.deserializerFor("application/xml", container)).thenReturn(null);
 
-		observer.deserializes(new StackStarting(consumeXml), request, methodInfo, status);
+		observer.deserializes(new InterceptorsReady(consumeXml), request, methodInfo, status);
 
 		verify(status).unsupportedMediaType("Unable to handle media type [application/xml]: no deserializer found.");
 	}
@@ -96,7 +96,7 @@ public class DeserializingObserverTest {
 		when(deserializer.deserialize(null, consumeXml)).thenReturn(new Object[] {"abc", "def"});
 		when(deserializers.deserializerFor("application/xml", container)).thenReturn(deserializer);
 
-		observer.deserializes(new StackStarting(consumeXml), request, methodInfo, status);
+		observer.deserializes(new InterceptorsReady(consumeXml), request, methodInfo, status);
 
 		assertEquals(methodInfo.getValuedParameters()[0].getValue(), "abc");
 		assertEquals(methodInfo.getValuedParameters()[1].getValue(), "def");
@@ -112,7 +112,7 @@ public class DeserializingObserverTest {
 		when(deserializer.deserialize(null, consumeXml)).thenReturn(new Object[] {"abc", "def"});
 		when(deserializers.deserializerFor("application/xml", container)).thenReturn(deserializer);
 
-		observer.deserializes(new StackStarting(consumeXml), request, methodInfo, status);
+		observer.deserializes(new InterceptorsReady(consumeXml), request, methodInfo, status);
 
 		assertEquals(methodInfo.getValuedParameters()[0].getValue(), "abc");
 		assertEquals(methodInfo.getValuedParameters()[1].getValue(), "def");
@@ -131,7 +131,7 @@ public class DeserializingObserverTest {
 		when(deserializer.deserialize(null, consumesAnything)).thenReturn(new Object[] {"abc", "def"});
 
 		when(deserializers.deserializerFor("application/xml", container)).thenReturn(deserializer);
-		observer.deserializes(new StackStarting(consumesAnything), request, methodInfo, status);
+		observer.deserializes(new InterceptorsReady(consumesAnything), request, methodInfo, status);
 
 		assertEquals(methodInfo.getValuedParameters()[0].getValue(), "abc");
 		assertEquals(methodInfo.getValuedParameters()[1].getValue(), "def");
@@ -149,7 +149,7 @@ public class DeserializingObserverTest {
 		when(deserializer.deserialize(null, consumeXml)).thenReturn(new Object[] {null, "deserialized"});
 
 		when(deserializers.deserializerFor("application/xml", container)).thenReturn(deserializer);
-		observer.deserializes(new StackStarting(consumeXml), request, methodInfo, status);
+		observer.deserializes(new InterceptorsReady(consumeXml), request, methodInfo, status);
 
 		assertEquals(methodInfo.getValuedParameters()[0].getValue(), "original1");
 		assertEquals(methodInfo.getValuedParameters()[1].getValue(), "deserialized");
@@ -162,6 +162,6 @@ public class DeserializingObserverTest {
 
 		final Deserializer deserializer = mock(Deserializer.class);
 		when(deserializers.deserializerFor("application/xml", container)).thenReturn(deserializer);
-		observer.deserializes(new StackStarting(consumeXml), request, methodInfo, status);
+		observer.deserializes(new InterceptorsReady(consumeXml), request, methodInfo, status);
 	}
 }

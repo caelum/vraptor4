@@ -22,7 +22,7 @@ import org.mockito.MockitoAnnotations;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.controller.DefaultControllerInstance;
 import br.com.caelum.vraptor.core.MethodInfo;
-import br.com.caelum.vraptor.events.ReadyToExecuteMethod;
+import br.com.caelum.vraptor.events.MethodReady;
 import br.com.caelum.vraptor.factory.Factories;
 import br.com.caelum.vraptor.util.test.MockValidator;
 import br.com.caelum.vraptor.validator.beanvalidation.MessageInterpolatorFactory;
@@ -68,14 +68,14 @@ public class MethodValidatorTest {
 		methodInfo.setControllerMethod(withConstraint);
 
 		DefaultControllerInstance controller = spy(instance);
-		getMethodValidator().validate(new ReadyToExecuteMethod(withConstraint), controller, methodInfo, validator);
+		getMethodValidator().validate(new MethodReady(withConstraint), controller, methodInfo, validator);
 		verify(controller).getController();
 	}
 
 	@Test
 	public void shouldNotAcceptIfMethodHasConstraint() {
 		DefaultControllerInstance controller = spy(instance);
-		getMethodValidator().validate(new ReadyToExecuteMethod(withoutConstraint), controller, methodInfo, validator);
+		getMethodValidator().validate(new MethodReady(withoutConstraint), controller, methodInfo, validator);
 		verify(controller, never()).getController();
 	}
 
@@ -83,7 +83,7 @@ public class MethodValidatorTest {
 	public void shouldValidateMethodWithConstraint() throws Exception {
 		methodInfo.setControllerMethod(withConstraint);
 
-		getMethodValidator().validate(new ReadyToExecuteMethod(withConstraint), instance, methodInfo, validator);
+		getMethodValidator().validate(new MethodReady(withConstraint), instance, methodInfo, validator);
 		assertThat(validator.getErrors(), hasSize(1));
 		assertThat(validator.getErrors().get(0).getCategory(), is("withConstraint.email"));
 	}

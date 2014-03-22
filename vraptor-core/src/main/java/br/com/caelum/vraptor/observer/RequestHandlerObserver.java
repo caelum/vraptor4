@@ -31,8 +31,8 @@ import br.com.caelum.vraptor.controller.ControllerNotFoundHandler;
 import br.com.caelum.vraptor.controller.MethodNotAllowedHandler;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.events.ControllerFound;
-import br.com.caelum.vraptor.events.EndRequest;
-import br.com.caelum.vraptor.events.NewRequest;
+import br.com.caelum.vraptor.events.RequestSucceded;
+import br.com.caelum.vraptor.events.RequestStarted;
 import br.com.caelum.vraptor.http.UrlToControllerTranslator;
 import br.com.caelum.vraptor.http.route.ControllerNotFoundException;
 import br.com.caelum.vraptor.http.route.MethodNotAllowedException;
@@ -57,7 +57,7 @@ public class RequestHandlerObserver {
 	private final Event<ControllerFound> controllerFoundEvent;
 	private final InterceptorStack interceptorStack;
 
-	private Event<EndRequest> endRequestEvent;
+	private Event<RequestSucceded> endRequestEvent;
 
 	/**
 	 * @deprecated CDI eyes only
@@ -70,7 +70,7 @@ public class RequestHandlerObserver {
 	public RequestHandlerObserver(UrlToControllerTranslator translator,
 			ControllerNotFoundHandler controllerNotFoundHandler, MethodNotAllowedHandler methodNotAllowedHandler,
 			Event<ControllerFound> controllerFoundEvent, 
-			Event<EndRequest> endRequestEvent, 
+			Event<RequestSucceded> endRequestEvent, 
 			InterceptorStack interceptorStack) {
 		this.translator = translator;
 		this.methodNotAllowedHandler = methodNotAllowedHandler;
@@ -80,13 +80,13 @@ public class RequestHandlerObserver {
 		this.interceptorStack = interceptorStack;
 	}
 
-	public void handle(@Observes NewRequest event, CDIRequestFactories factories) {
+	public void handle(@Observes RequestStarted event, CDIRequestFactories factories) {
 		try {
 			factories.setRequest(event);
 			ControllerMethod method = translator.translate(event.getRequest());
 			controllerFoundEvent.fire(new ControllerFound(method));
 			interceptorStack.start();
-			endRequestEvent.fire(new EndRequest(event.getRequest(), event.getResponse()));
+			endRequestEvent.fire(new RequestSucceded(event.getRequest(), event.getResponse()));
 		} catch (ControllerNotFoundException e) {
 			controllerNotFoundHandler.couldntFind(event.getChain(), event.getRequest(), event.getResponse());
 		} catch (MethodNotAllowedException e) {

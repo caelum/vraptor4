@@ -37,9 +37,9 @@ import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.controller.DefaultControllerMethod;
 import br.com.caelum.vraptor.core.MethodInfo;
-import br.com.caelum.vraptor.events.EndOfInterceptorStack;
+import br.com.caelum.vraptor.events.InterceptorsExecuted;
 import br.com.caelum.vraptor.events.MethodExecuted;
-import br.com.caelum.vraptor.events.ReadyToExecuteMethod;
+import br.com.caelum.vraptor.events.MethodReady;
 import br.com.caelum.vraptor.interceptor.DogAlike;
 import br.com.caelum.vraptor.validator.Message;
 import br.com.caelum.vraptor.validator.ValidationException;
@@ -50,7 +50,7 @@ public class ExecuteMethodTest {
 	@Mock private MethodInfo methodInfo;
 	@Mock private Validator validator;
 	@Mock private Event<MethodExecuted> methodEvecutedEvent;
-	@Mock private Event<ReadyToExecuteMethod> readyToExecuteMethodEvent;
+	@Mock private Event<MethodReady> readyToExecuteMethodEvent;
 	private ExecuteMethod observer;
 
 	@Before
@@ -64,7 +64,7 @@ public class ExecuteMethodTest {
 		ControllerMethod method = new DefaultControllerMethod(null, DogAlike.class.getMethod("bark"));
 		DogAlike auau = mock(DogAlike.class);
 		when(methodInfo.getParametersValues()).thenReturn(new Object[0]);
-		observer.execute(new EndOfInterceptorStack(method, auau));
+		observer.execute(new InterceptorsExecuted(method, auau));
 		verify(auau).bark();
 	}
 
@@ -73,7 +73,7 @@ public class ExecuteMethodTest {
 		ControllerMethod method = new DefaultControllerMethod(null, DogAlike.class.getMethod("bark", int.class));
 		DogAlike auau = mock(DogAlike.class);
 		when(methodInfo.getParametersValues()).thenReturn(new Object[] { 3 });
-		observer.execute(new EndOfInterceptorStack(method, auau));
+		observer.execute(new InterceptorsExecuted(method, auau));
 		verify(auau).bark(3);
 	}
 
@@ -90,7 +90,7 @@ public class ExecuteMethodTest {
 		ControllerMethod method = new DefaultControllerMethod(null, XController.class.getMethod("method", Object.class));
 		final XController controller = new XController();
 		when(methodInfo.getParametersValues()).thenReturn(new Object[] { "string" });
-		observer.execute(new EndOfInterceptorStack(method, controller));
+		observer.execute(new InterceptorsExecuted(method, controller));
 	}
 
 	@Test
@@ -98,7 +98,7 @@ public class ExecuteMethodTest {
 		ControllerMethod method = new DefaultControllerMethod(null, XController.class.getMethod("method", Object.class));
 		final XController controller = new XController();
 		when(methodInfo.getParametersValues()).thenReturn(new Object[] { null });
-		observer.execute(new EndOfInterceptorStack(method, controller));
+		observer.execute(new InterceptorsExecuted(method, controller));
 		verify(methodInfo).setResult(null);
 	}
 
@@ -110,7 +110,7 @@ public class ExecuteMethodTest {
 		when(methodInfo.getParametersValues()).thenReturn(new Object[0]);
 		doThrow(new ValidationException(Collections.<Message> emptyList())).when(validator).onErrorUse(nothing());
 		when(validator.hasErrors()).thenReturn(true);
-		observer.execute(new EndOfInterceptorStack(method, controller));
+		observer.execute(new InterceptorsExecuted(method, controller));
 	}
 
 	@Test(expected=InterceptionException.class)
@@ -120,7 +120,7 @@ public class ExecuteMethodTest {
 		final AnyController controller = new AnyController(validator);
 		when(methodInfo.getParametersValues()).thenReturn(new Object[0]);
 		when(validator.hasErrors()).thenReturn(true);
-		observer.execute(new EndOfInterceptorStack(method, controller));
+		observer.execute(new InterceptorsExecuted(method, controller));
 	}
 
 	public static class AnyController {

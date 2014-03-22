@@ -7,7 +7,7 @@ import javax.enterprise.event.Observes;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 
-import br.com.caelum.vraptor.events.ReadyToExecuteMethod;
+import br.com.caelum.vraptor.events.MethodReady;
 import br.com.caelum.vraptor.interceptor.IncludeParameters;
 import br.com.caelum.vraptor.validator.Outjector;
 
@@ -35,7 +35,7 @@ public class ParameterIncluder {
 		this.outjector = outjector;
 	}
 
-	public void include(@Observes ReadyToExecuteMethod event) {
+	public void include(@Observes MethodReady event) {
 		Method method = event.getControllerMethod().getMethod();
 		if (method.isAnnotationPresent(IncludeParameters.class)) {
 			outjector.get().outjectRequestMap();

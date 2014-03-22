@@ -30,7 +30,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.core.MethodInfo;
-import br.com.caelum.vraptor.events.EndRequest;
+import br.com.caelum.vraptor.events.RequestSucceded;
 import br.com.caelum.vraptor.events.MethodExecuted;
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.http.MutableResponse;
@@ -55,14 +55,14 @@ public class ForwardToDefaultViewTest {
 	@Test
 	public void doesNothingIfResultWasAlreadyUsed() {
 		when(result.used()).thenReturn(true);
-		interceptor.forward(new EndRequest(request, response));
+		interceptor.forward(new RequestSucceded(request, response));
 		verify(result, never()).use(PageResult.class);
 	}
 	
 	@Test
 	public void doesNothingIfResponseIsCommited() {
 		when(response.isCommitted()).thenReturn(true);
-		interceptor.forward(new EndRequest(request, response));
+		interceptor.forward(new RequestSucceded(request, response));
 		verify(result, never()).use(PageResult.class);
 	}
 
@@ -70,7 +70,7 @@ public class ForwardToDefaultViewTest {
 	public void shouldForwardToViewWhenResultWasNotUsed() {
 		when(result.used()).thenReturn(false);
 		when(result.use(PageResult.class)).thenReturn(new MockedPage());
-		interceptor.forward(new EndRequest(request, response));
+		interceptor.forward(new RequestSucceded(request, response));
 		verify(result).use(PageResult.class);
 	}
 }

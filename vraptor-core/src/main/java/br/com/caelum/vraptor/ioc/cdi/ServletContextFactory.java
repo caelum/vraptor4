@@ -2,13 +2,12 @@ package br.com.caelum.vraptor.ioc.cdi;
 
 import javax.annotation.Priority;
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.Initialized;
 import javax.enterprise.event.Observes;
 import javax.enterprise.inject.Alternative;
 import javax.enterprise.inject.Produces;
 import javax.interceptor.Interceptor;
 import javax.servlet.ServletContext;
-
-import br.com.caelum.vraptor.events.VRaptorInitialized;
 
 @ApplicationScoped
 @Alternative
@@ -17,8 +16,8 @@ public class ServletContextFactory{
 
 	private ServletContext context;
 
-	public void observesContext(@Observes VRaptorInitialized event){
-		this.context = event.getServletContext();
+	public void observesContext(@Observes @Initialized(ApplicationScoped.class) ServletContext context){
+		this.context = context;
 	}
 
 	@Produces

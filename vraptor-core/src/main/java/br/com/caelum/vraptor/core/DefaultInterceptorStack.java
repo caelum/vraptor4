@@ -32,8 +32,8 @@ import org.slf4j.Logger;
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.controller.ControllerInstance;
 import br.com.caelum.vraptor.controller.ControllerMethod;
-import br.com.caelum.vraptor.events.EndOfInterceptorStack;
-import br.com.caelum.vraptor.events.StackStarting;
+import br.com.caelum.vraptor.events.InterceptorsExecuted;
+import br.com.caelum.vraptor.events.InterceptorsReady;
 
 /**
  * Default implementation of an {@link InterceptorStack}
@@ -49,8 +49,8 @@ public class DefaultInterceptorStack implements InterceptorStack {
 	private final LinkedList<Iterator<InterceptorHandler>> internalStack = new LinkedList<>();
 	private final Instance<ControllerMethod> controllerMethod;
 	private final Instance<ControllerInstance> controllerInstance;
-	private final Event<EndOfInterceptorStack> event;
-	private final Event<StackStarting> stackStartingEvent;
+	private final Event<InterceptorsReady> interceptorsReadyEvent;
+	private final Event<InterceptorsExecuted> interceptorsExecutedEvent;
 
 	/**
 	 * @deprecated CDI eyes only
@@ -61,13 +61,13 @@ public class DefaultInterceptorStack implements InterceptorStack {
 
 	@Inject
 	public DefaultInterceptorStack(InterceptorStackHandlersCache cache, Instance<ControllerMethod>
-			controllerMethod, Instance<ControllerInstance> controllerInstance, Event<EndOfInterceptorStack> event,
-			Event<StackStarting> stackStartingEvent) {
+			controllerMethod, Instance<ControllerInstance> controllerInstance, Event<InterceptorsExecuted> event,
+			Event<InterceptorsReady> stackStartingEvent) {
 		this.cache = cache;
 		this.controllerMethod = controllerMethod;
 		this.controllerInstance = controllerInstance;
-		this.event = event;
-		this.stackStartingEvent = stackStartingEvent;
+		this.interceptorsExecutedEvent = event;
+		this.interceptorsReadyEvent = stackStartingEvent;
 	}
 
 	@Override
@@ -75,7 +75,7 @@ public class DefaultInterceptorStack implements InterceptorStack {
 		Iterator<InterceptorHandler> iterator = internalStack.peek();
 
 		if (!iterator.hasNext()) {
-			event.fire(new EndOfInterceptorStack(controllerMethod.get(), controllerInstance));
+			interceptorsExecutedEvent.fire(new InterceptorsExecuted(controllerMethod.get(), controllerInstance));
 			logger.debug("All registered interceptors have been called. End of VRaptor Request Execution.");
 			return;
 		}
@@ -87,7 +87,7 @@ public class DefaultInterceptorStack implements InterceptorStack {
 	@Override
 	public void start() {
 		ControllerMethod method = controllerMethod.get();
-		stackStartingEvent.fire(new StackStarting(method));
+		interceptorsReadyEvent.fire(new InterceptorsReady(method));
 		LinkedList<InterceptorHandler> handlers = cache.getInterceptorHandlers();
 		internalStack.addFirst(handlers.iterator());
 		this.next(method, controllerInstance.get().getController());

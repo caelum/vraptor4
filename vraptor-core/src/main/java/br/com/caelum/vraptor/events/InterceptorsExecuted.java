@@ -9,12 +9,12 @@ import br.com.caelum.vraptor.core.InterceptorStack;
  * @author Rodrigo Turini
  * @author Victor Harada
  */
-public class EndOfInterceptorStack {
+public class InterceptorsExecuted {
 
 	private ControllerMethod controllerMethod;
 	private Object controllerInstance;
 
-	public EndOfInterceptorStack(ControllerMethod controllerMethod, Object controllerInstance) {
+	public InterceptorsExecuted(ControllerMethod controllerMethod, Object controllerInstance) {
 		this.controllerMethod = controllerMethod;
 		this.controllerInstance = controllerInstance;
 	}

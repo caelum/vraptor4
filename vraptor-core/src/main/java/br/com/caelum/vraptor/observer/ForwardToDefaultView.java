@@ -26,7 +26,7 @@ import javax.inject.Inject;
 import org.slf4j.Logger;
 
 import br.com.caelum.vraptor.Result;
-import br.com.caelum.vraptor.events.EndRequest;
+import br.com.caelum.vraptor.events.RequestSucceded;
 import br.com.caelum.vraptor.events.MethodExecuted;
 import br.com.caelum.vraptor.view.Results;
 
@@ -57,7 +57,7 @@ public class ForwardToDefaultView {
 		this.result = result;
 	}
 
-	public void forward(@Observes EndRequest event) {
+	public void forward(@Observes RequestSucceded event) {
 		if (result.used() || event.getResponse().isCommitted()) {
 			logger.debug("Request already dispatched and commited somewhere else, not forwarding.");
 			return;

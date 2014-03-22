@@ -34,9 +34,9 @@ import org.slf4j.Logger;
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.core.MethodInfo;
-import br.com.caelum.vraptor.events.EndOfInterceptorStack;
+import br.com.caelum.vraptor.events.InterceptorsExecuted;
 import br.com.caelum.vraptor.events.MethodExecuted;
-import br.com.caelum.vraptor.events.ReadyToExecuteMethod;
+import br.com.caelum.vraptor.events.MethodReady;
 import br.com.caelum.vraptor.validator.ValidationException;
 import br.com.caelum.vraptor.validator.Validator;
 
@@ -56,7 +56,7 @@ public class ExecuteMethod {
 	private final Validator validator;
 
 	private Event<MethodExecuted> methodExecutedEvent;
-	private Event<ReadyToExecuteMethod> readyToExecuteMethod;
+	private Event<MethodReady> methodReady;
 
 	/**
 	 * @deprecated CDI eyes only
@@ -67,17 +67,17 @@ public class ExecuteMethod {
 
 	@Inject
 	public ExecuteMethod(MethodInfo methodInfo, Validator validator, 
-			Event<MethodExecuted> methodExecutedEvent, Event<ReadyToExecuteMethod> readyToExecuteMethod) {
+			Event<MethodExecuted> methodExecutedEvent, Event<MethodReady> methodReady) {
 		this.methodInfo = methodInfo;
 		this.validator = validator;
 		this.methodExecutedEvent = methodExecutedEvent;
-		this.readyToExecuteMethod = readyToExecuteMethod;
+		this.methodReady = methodReady;
 	}
 
-	public void execute(@Observes EndOfInterceptorStack event) {
+	public void execute(@Observes InterceptorsExecuted event) {
 		try {
 			ControllerMethod method = event.getControllerMethod();
-			readyToExecuteMethod.fire(new ReadyToExecuteMethod(method));
+			methodReady.fire(new MethodReady(method));
 			Method reflectionMethod = method .getMethod();
 			Object[] parameters = methodInfo.getParametersValues();
 

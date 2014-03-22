@@ -11,11 +11,11 @@ import br.com.caelum.vraptor.observer.RequestHandlerObserver;
  * @author Rodrigo Turini
  * @author Victor Kendy Harada
  */
-public class StackStarting {
+public class InterceptorsReady {
 
 	private ControllerMethod method;
 
-	public StackStarting(ControllerMethod method) {
+	public InterceptorsReady(ControllerMethod method) {
 		this.method = method;
 	}
 

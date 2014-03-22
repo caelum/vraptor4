@@ -37,7 +37,7 @@ import org.slf4j.Logger;
 import br.com.caelum.vraptor.controller.ControllerInstance;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.core.MethodInfo;
-import br.com.caelum.vraptor.events.ReadyToExecuteMethod;
+import br.com.caelum.vraptor.events.MethodReady;
 import br.com.caelum.vraptor.http.ValuedParameter;
 import br.com.caelum.vraptor.validator.SimpleMessage;
 import br.com.caelum.vraptor.validator.Validator;
@@ -88,7 +88,7 @@ public class MethodValidator {
 		return descriptor != null && descriptor.hasConstrainedParameters();
 	}
 
-	public void validate(@Observes ReadyToExecuteMethod event, ControllerInstance controllerInstance,
+	public void validate(@Observes MethodReady event, ControllerInstance controllerInstance,
 			MethodInfo methodInfo, Validator validator) {
 		ControllerMethod controllerMethod = event.getControllerMethod();
 

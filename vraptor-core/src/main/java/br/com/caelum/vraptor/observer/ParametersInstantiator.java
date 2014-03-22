@@ -32,7 +32,7 @@ import org.slf4j.Logger;
 
 import br.com.caelum.vraptor.HeaderParam;
 import br.com.caelum.vraptor.core.MethodInfo;
-import br.com.caelum.vraptor.events.StackStarting;
+import br.com.caelum.vraptor.events.InterceptorsReady;
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.http.ParametersProvider;
 import br.com.caelum.vraptor.http.ValuedParameter;
@@ -81,7 +81,7 @@ public class ParametersInstantiator {
 		return methodInfo.getControllerMethod().getArity() > 0;
 	}
 
-	public void instantiate(@Observes StackStarting event) {
+	public void instantiate(@Observes InterceptorsReady event) {
 		if (isNotParameterless()) {
 			fixIndexedParameters(request);
 			addHeaderParametersToAttribute();

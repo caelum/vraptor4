@@ -32,6 +32,8 @@ import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.events.EndRequest;
 import br.com.caelum.vraptor.events.MethodExecuted;
+import br.com.caelum.vraptor.http.MutableRequest;
+import br.com.caelum.vraptor.http.MutableResponse;
 import br.com.caelum.vraptor.view.MockedPage;
 import br.com.caelum.vraptor.view.PageResult;
 
@@ -39,9 +41,11 @@ import br.com.caelum.vraptor.view.PageResult;
 public class ForwardToDefaultViewTest {
 
 	private ForwardToDefaultView interceptor;
-	@Mock private Result result;
-	@Mock private ControllerMethod method;
-	@Mock private MethodInfo methodInfo;
+	private @Mock Result result;
+	private @Mock ControllerMethod method;
+	private @Mock MethodInfo methodInfo;
+	private @Mock MutableRequest request;
+	private @Mock MutableResponse response;
 
 	@Before
 	public void setup() {
@@ -51,7 +55,14 @@ public class ForwardToDefaultViewTest {
 	@Test
 	public void doesNothingIfResultWasAlreadyUsed() {
 		when(result.used()).thenReturn(true);
-		interceptor.forward(new EndRequest());
+		interceptor.forward(new EndRequest(request, response));
+		verify(result, never()).use(PageResult.class);
+	}
+	
+	@Test
+	public void doesNothingIfResponseIsCommited() {
+		when(response.isCommitted()).thenReturn(true);
+		interceptor.forward(new EndRequest(request, response));
 		verify(result, never()).use(PageResult.class);
 	}
 
@@ -59,7 +70,7 @@ public class ForwardToDefaultViewTest {
 	public void shouldForwardToViewWhenResultWasNotUsed() {
 		when(result.used()).thenReturn(false);
 		when(result.use(PageResult.class)).thenReturn(new MockedPage());
-		interceptor.forward(new EndRequest());
+		interceptor.forward(new EndRequest(request, response));
 		verify(result).use(PageResult.class);
 	}
 }

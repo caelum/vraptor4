@@ -120,7 +120,7 @@ public class VRaptor implements Filter {
 				throw new ServletException(e.getMessage(), e.getCause());
 			}
 			
-			endRequestEvent.fire(new EndRequest());
+			endRequestEvent.fire(new EndRequest(mutableRequest, mutableResponse));
 			logger.debug("VRaptor ended the request");
 		}
 	}

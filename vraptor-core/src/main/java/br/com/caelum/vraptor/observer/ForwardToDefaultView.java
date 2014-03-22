@@ -58,12 +58,11 @@ public class ForwardToDefaultView {
 	}
 
 	public void forward(@Observes EndRequest event) {
-		if (result.used()) {
+		if (result.used() || event.getResponse().isCommitted()) {
 			logger.debug("Request already dispatched and commited somewhere else, not forwarding.");
 			return;
 		}
-		// TODO: maybe the response.isCommited is true, we should warn before
-		// trying to forward
+		
 		logger.debug("forwarding to the dafault page for this logic");
 		result.use(Results.page()).defaultView();
 	}

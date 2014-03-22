@@ -21,6 +21,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.any;
 
 import java.util.EnumSet;
 
@@ -30,6 +31,7 @@ import javax.servlet.FilterChain;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor.controller.ControllerMethod;
@@ -38,6 +40,7 @@ import br.com.caelum.vraptor.controller.HttpMethod;
 import br.com.caelum.vraptor.controller.MethodNotAllowedHandler;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.events.ControllerFound;
+import br.com.caelum.vraptor.events.EndRequest;
 import br.com.caelum.vraptor.events.NewRequest;
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.http.MutableResponse;
@@ -55,7 +58,8 @@ public class RequestHandlerObserverTest {
 	private RequestHandlerObserver observer;
 	private @Mock ControllerNotFoundHandler notFoundHandler;
 	private @Mock MethodNotAllowedHandler methodNotAllowedHandler;
-	private @Mock Event<ControllerFound> event;
+	private @Mock Event<ControllerFound> controllerFoundEvent;
+	private @Mock Event<EndRequest> endRequestEvent;
 	private @Mock InterceptorStack interceptorStack;
 	private @Mock FilterChain chain;
 
@@ -63,7 +67,7 @@ public class RequestHandlerObserverTest {
 	public void config() {
 		MockitoAnnotations.initMocks(this);
 		newRequest = new NewRequest(chain, webRequest, webResponse);
-		observer = new RequestHandlerObserver(translator, notFoundHandler, methodNotAllowedHandler, event, interceptorStack);
+		observer = new RequestHandlerObserver(translator, notFoundHandler, methodNotAllowedHandler, controllerFoundEvent, endRequestEvent, interceptorStack);
 	}
 
 	@Test
@@ -89,5 +93,21 @@ public class RequestHandlerObserverTest {
 		when(translator.translate(webRequest)).thenReturn(method);
 		observer.handle(newRequest, new CDIRequestFactories());
 		verify(interceptorStack).start();
+	}
+	
+	@Test
+	public void shouldFireTheControllerWasFound() throws Exception {
+		final ControllerMethod method = mock(ControllerMethod.class);
+		when(translator.translate(webRequest)).thenReturn(method);
+		observer.handle(newRequest, new CDIRequestFactories());
+		verify(controllerFoundEvent).fire(any(ControllerFound.class));
+	}
+	
+	@Test
+	public void shouldFireTheRequestSuceeded() throws Exception {
+		final ControllerMethod method = mock(ControllerMethod.class);
+		when(translator.translate(webRequest)).thenReturn(method);
+		observer.handle(newRequest, new CDIRequestFactories());
+		verify(endRequestEvent).fire(any(EndRequest.class));
 	}
 }

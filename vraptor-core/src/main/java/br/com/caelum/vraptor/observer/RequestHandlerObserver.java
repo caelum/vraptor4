@@ -31,6 +31,7 @@ import br.com.caelum.vraptor.controller.ControllerNotFoundHandler;
 import br.com.caelum.vraptor.controller.MethodNotAllowedHandler;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.events.ControllerFound;
+import br.com.caelum.vraptor.events.EndRequest;
 import br.com.caelum.vraptor.events.NewRequest;
 import br.com.caelum.vraptor.http.UrlToControllerTranslator;
 import br.com.caelum.vraptor.http.route.ControllerNotFoundException;
@@ -56,21 +57,26 @@ public class RequestHandlerObserver {
 	private final Event<ControllerFound> controllerFoundEvent;
 	private final InterceptorStack interceptorStack;
 
+	private Event<EndRequest> endRequestEvent;
+
 	/**
 	 * @deprecated CDI eyes only
 	 */
 	protected RequestHandlerObserver() {
-		this(null, null, null, null, null);
+		this(null, null, null, null, null, null);
 	}
 
 	@Inject
 	public RequestHandlerObserver(UrlToControllerTranslator translator,
 			ControllerNotFoundHandler controllerNotFoundHandler, MethodNotAllowedHandler methodNotAllowedHandler,
-			Event<ControllerFound> event, InterceptorStack interceptorStack) {
+			Event<ControllerFound> controllerFoundEvent, 
+			Event<EndRequest> endRequestEvent, 
+			InterceptorStack interceptorStack) {
 		this.translator = translator;
 		this.methodNotAllowedHandler = methodNotAllowedHandler;
 		this.controllerNotFoundHandler = controllerNotFoundHandler;
-		this.controllerFoundEvent = event;
+		this.controllerFoundEvent = controllerFoundEvent;
+		this.endRequestEvent = endRequestEvent;
 		this.interceptorStack = interceptorStack;
 	}
 
@@ -80,6 +86,7 @@ public class RequestHandlerObserver {
 			ControllerMethod method = translator.translate(event.getRequest());
 			controllerFoundEvent.fire(new ControllerFound(method));
 			interceptorStack.start();
+			endRequestEvent.fire(new EndRequest(event.getRequest(), event.getResponse()));
 		} catch (ControllerNotFoundException e) {
 			controllerNotFoundHandler.couldntFind(event.getChain(), event.getRequest(), event.getResponse());
 		} catch (MethodNotAllowedException e) {

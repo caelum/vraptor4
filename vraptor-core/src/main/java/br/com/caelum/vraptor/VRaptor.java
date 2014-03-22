@@ -39,7 +39,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 
 import br.com.caelum.vraptor.core.StaticContentHandler;
-import br.com.caelum.vraptor.events.EndRequest;
 import br.com.caelum.vraptor.events.NewRequest;
 import br.com.caelum.vraptor.events.VRaptorInitialized;
 import br.com.caelum.vraptor.http.EncodingHandler;
@@ -76,9 +75,6 @@ public class VRaptor implements Filter {
 	@Inject
 	private Event<NewRequest> newRequestEvent;
 	
-	@Inject
-	private Event<EndRequest> endRequestEvent;
-
 	@Override
 	public void init(FilterConfig cfg) throws ServletException {
 		servletContext = cfg.getServletContext();
@@ -120,7 +116,6 @@ public class VRaptor implements Filter {
 				throw new ServletException(e.getMessage(), e.getCause());
 			}
 			
-			endRequestEvent.fire(new EndRequest());
 			logger.debug("VRaptor ended the request");
 		}
 	}

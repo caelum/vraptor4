@@ -62,5 +62,4 @@ public class SafeResourceBundle extends ResourceBundle {
 			return "???" + key + "???";
 		}
 	}
-
 }

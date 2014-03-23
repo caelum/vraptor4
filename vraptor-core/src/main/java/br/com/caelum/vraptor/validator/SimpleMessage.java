@@ -38,10 +38,16 @@ public class SimpleMessage implements Message {
 	private final Severity severity;
 	private final Object[] messageParameters;
 
+	/** 
+	 * Creates an instance for {@link SimpleMessage} using {@link Severity#ERROR} as severity.
+	 */
 	public SimpleMessage(String category, String message, Object... messageParameters) {
-		this(category,message,Severity.ERROR,messageParameters);
+		this(category, message, Severity.ERROR, messageParameters);
 	}
-	
+
+	/** 
+	 * Creates an instance for {@link SimpleMessage}.
+	 */
 	public SimpleMessage(String category, String message, Severity severity, Object... messageParameters) {
 		this.category = category;
 		this.message = message;
@@ -56,7 +62,7 @@ public class SimpleMessage implements Message {
 		}
 		return message;
 	}
-	
+
 	@Override
 	public Severity getSeverity() {
 		return severity;
@@ -72,7 +78,7 @@ public class SimpleMessage implements Message {
 
 	@Override
 	public String toString() {
-		return toStringHelper(this).add("category", category).add("message", message).add("severity",severity).add("parameters", messageParameters).toString();
+		return toStringHelper(this).add("category", category).add("message", message)
+				.add("severity",severity).add("parameters", messageParameters).toString();
 	}
-
 }

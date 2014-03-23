@@ -26,7 +26,6 @@ import javax.validation.metadata.ConstraintDescriptor;
  * interpolate the constraint violation message with localized messages.
  *
  * @author Otávio Scherer Garcia
- * @version $Revision$
  */
 @Vetoed
 public class BeanValidatorContext implements MessageInterpolator.Context {

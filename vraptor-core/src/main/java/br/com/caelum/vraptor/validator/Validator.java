@@ -37,7 +37,7 @@ public interface Validator {
 	 * 
 	 * @since 4.0.0
 	 * @param expression expression to test
-	 * @param message {@link Message} object
+	 * @param message the message to add if expression is false.
 	 */
 	Validator check(boolean expression, Message message);
 

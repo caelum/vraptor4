@@ -20,7 +20,7 @@ package br.com.caelum.vraptor.view;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 
 /**
- * Decides the url to go to after a request was executed.
+ * Decides the url to forward after a request was executed.
  * 
  * @author Guilherme Silveira
  */

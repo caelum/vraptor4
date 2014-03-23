@@ -51,23 +51,22 @@ public interface Validator {
 	Validator validate(Object object, Class<?>... groups);
 
 	/**
-	 * If validator has errors, you can use this method to define what to do. WARN: this method don't stop the flow.
-	 * @param view
-	 * @return
-	 */
-	<T extends View> T onErrorUse(Class<T> view);
-
-	/**
-	 * Adds the list of messages.
-	 * @param messages
-	 */
-	void addAll(Collection<? extends Message> messages);
-
-	/**
-	 * Adds the message.
+	 * Adds the message and return the same validator instance.
 	 * @param message
 	 */
-	void add(Message message);
+	Validator add(Message message);
+
+	/**
+	 * Adds the list of messages and return the same validator instance.
+	 * @param messages
+	 */
+	Validator addAll(Collection<? extends Message> messages);
+
+	/**
+	 * Add messages from bean validation translating to vraptor {@link Message}.
+	 * @param errors
+	 */
+	<T> Validator addAll(Set<ConstraintViolation<T>> errors);
 
 	/**
 	 * Returns a list of errors.
@@ -80,6 +79,13 @@ public interface Validator {
 	 * @return
 	 */
 	boolean hasErrors();
+
+	/**
+	 * If validator has errors, you can use this method to define what to do. WARN: this method don't stop the flow.
+	 * @param view
+	 * @return
+	 */
+	<T extends View> T onErrorUse(Class<T> view);
 
 	/**
 	 * Shortcut for <br>
@@ -130,11 +136,5 @@ public interface Validator {
 	 * the actual validation errors list will be used.
 	 */
 	void onErrorSendBadRequest();
-
-	/**
-	 * Add messages from bean validation translating to vraptor {@link Message}.
-	 * @param errors
-	 */
-	<T> void addAll(Set<ConstraintViolation<T>> errors);
 
 }

@@ -71,10 +71,11 @@ public class MockValidator extends AbstractValidator {
 	}
 
 	@Override
-	public <T> void addAll(Set<ConstraintViolation<T>> errors) {
+	public <T> Validator addAll(Set<ConstraintViolation<T>> errors) {
 		for (ConstraintViolation<T> v : errors) {
 			add(new SimpleMessage(v.getPropertyPath().toString(), v.getMessage()));
 		}
+		return this;
 	}
 
 	@Override
@@ -86,15 +87,17 @@ public class MockValidator extends AbstractValidator {
 	}
 
 	@Override
-	public void addAll(Collection<? extends Message> messages) {
+	public Validator addAll(Collection<? extends Message> messages) {
 		for(Message message: messages) {
 			add(message);
 		}
+		return this;
 	}
 
 	@Override
-	public void add(Message message) {
+	public Validator add(Message message) {
 		errors.add(message);
+		return this;
 	}
 
 	@Override

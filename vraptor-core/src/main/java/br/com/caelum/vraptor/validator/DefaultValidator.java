@@ -97,13 +97,29 @@ public class DefaultValidator extends AbstractValidator {
 		return this;
 	}
 
-	public <T> void addAll(Set<ConstraintViolation<T>>  errors) {
+	@Override
+	public Validator addAll(Collection<? extends Message> messages) {
+		for (Message message : messages) {
+			add(message);
+		}
+		return this;
+	}
+
+	@Override
+	public Validator add(Message message) {
+		message.setBundle(bundle);
+		errors.add(message);
+		return this;
+	}
+
+	public <T> Validator addAll(Set<ConstraintViolation<T>>  errors) {
 		for (ConstraintViolation<T> v : errors) {
 			String msg = interpolator.interpolate(v.getMessageTemplate(), new BeanValidatorContext(v), locale);
 			String category = v.getPropertyPath().toString();
 			add(new SimpleMessage(category, msg));
 			logger.debug("added message {}={} for contraint violation", category, msg);
 		}
+		return this;
 	}
 
 	@Override
@@ -117,19 +133,6 @@ public class DefaultValidator extends AbstractValidator {
 		
 		logger.debug("there are errors on result: {}", errors);
 		return viewsFactory.instanceFor(view, errors);
-	}
-
-	@Override
-	public void addAll(Collection<? extends Message> messages) {
-		for (Message message : messages) {
-			add(message);
-		}
-	}
-
-	@Override
-	public void add(Message message) {
-		message.setBundle(bundle);
-		errors.add(message);
 	}
 
 	@Override

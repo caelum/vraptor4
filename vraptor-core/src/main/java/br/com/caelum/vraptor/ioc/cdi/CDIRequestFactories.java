@@ -2,7 +2,6 @@ package br.com.caelum.vraptor.ioc.cdi;
 
 import javax.annotation.Priority;
 import javax.enterprise.context.RequestScoped;
-import javax.enterprise.event.Observes;
 import javax.enterprise.inject.Alternative;
 import javax.enterprise.inject.Produces;
 import javax.interceptor.Interceptor;
@@ -20,28 +19,28 @@ public class CDIRequestFactories {
 
 	private RequestStarted requestStarted;
 
-	public void setRequest(RequestStarted info) {
-		this.requestStarted = info;
+	public void setRequest(RequestStarted requestStarted) {
+		this.requestStarted = requestStarted;
 	}
-	
+
 	@Produces
 	@RequestScoped
 	public HttpSession getSession(){
 		return requestStarted.getRequest().getSession();
 	}
-	
+
 	@Produces
 	@RequestScoped
 	public MutableResponse getResponse(){
 		return requestStarted.getResponse();
 	}
-	
+
 	@Produces
 	@RequestScoped
 	public MutableRequest getRequest(){
 		return requestStarted.getRequest();
 	}
-	
+
 	@Produces
 	@RequestScoped
 	public FilterChain getChain(){

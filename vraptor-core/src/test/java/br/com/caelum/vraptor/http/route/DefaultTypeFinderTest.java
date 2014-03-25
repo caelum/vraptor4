@@ -26,8 +26,8 @@ import net.vidageek.mirror.dsl.Mirror;
 import org.junit.Before;
 import org.junit.Test;
 
-import br.com.caelum.vraptor.factory.Factories;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
+import br.com.caelum.vraptor.http.ParanamerNameProvider;
 
 public class DefaultTypeFinderTest {
 
@@ -35,7 +35,7 @@ public class DefaultTypeFinderTest {
 	
 	@Before
 	public void setup() {
-		provider = Factories.createParameterNameProvider();
+		provider = new ParanamerNameProvider();
 	}
 
 	public static class AController {

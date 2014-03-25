@@ -23,7 +23,7 @@ import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.controller.DefaultControllerInstance;
 import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.events.MethodReady;
-import br.com.caelum.vraptor.factory.Factories;
+import br.com.caelum.vraptor.http.ParanamerNameProvider;
 import br.com.caelum.vraptor.util.test.MockValidator;
 import br.com.caelum.vraptor.validator.beanvalidation.MessageInterpolatorFactory;
 import br.com.caelum.vraptor.validator.beanvalidation.MethodValidator;
@@ -45,7 +45,7 @@ public class MethodValidatorTest {
 	private ControllerMethod withoutConstraint;
 	private DefaultControllerInstance instance;
 
-	private MethodInfo methodInfo = new MethodInfo(Factories.createParameterNameProvider());
+	private MethodInfo methodInfo = new MethodInfo(new ParanamerNameProvider());
 
 	@Before
 	public void setup() throws Exception {

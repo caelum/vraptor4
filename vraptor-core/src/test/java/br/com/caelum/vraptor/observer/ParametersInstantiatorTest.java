@@ -45,9 +45,9 @@ import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.controller.DefaultControllerMethod;
 import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.events.InterceptorsReady;
-import br.com.caelum.vraptor.factory.Factories;
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.http.ParametersProvider;
+import br.com.caelum.vraptor.http.ParanamerNameProvider;
 import br.com.caelum.vraptor.validator.Message;
 import br.com.caelum.vraptor.validator.SimpleMessage;
 import br.com.caelum.vraptor.validator.Validator;
@@ -55,7 +55,7 @@ import br.com.caelum.vraptor.view.FlashScope;
 
 public class ParametersInstantiatorTest {
 
-	private MethodInfo methodInfo = new MethodInfo(Factories.createParameterNameProvider());
+	private MethodInfo methodInfo = new MethodInfo(new ParanamerNameProvider());
 	private @Mock ParametersProvider parametersProvider;
 	private @Mock Validator validator;
 	private @Mock ResourceBundle bundle;

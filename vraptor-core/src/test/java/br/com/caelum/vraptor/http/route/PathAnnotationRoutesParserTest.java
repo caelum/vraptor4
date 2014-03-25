@@ -50,9 +50,9 @@ import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.controller.DefaultBeanClass;
 import br.com.caelum.vraptor.controller.HttpMethod;
 import br.com.caelum.vraptor.core.Converters;
-import br.com.caelum.vraptor.factory.Factories;
 import br.com.caelum.vraptor.http.EncodingHandler;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
+import br.com.caelum.vraptor.http.ParanamerNameProvider;
 import br.com.caelum.vraptor.proxy.JavassistProxifier;
 import br.com.caelum.vraptor.proxy.Proxifier;
 
@@ -73,7 +73,7 @@ public class PathAnnotationRoutesParserTest {
 
 		this.proxifier = new JavassistProxifier();
 		this.typeFinder = new NoTypeFinder();
-		this.nameProvider = Factories.createParameterNameProvider();
+		this.nameProvider = new ParanamerNameProvider();
 
 		when(router.builderFor(anyString())).thenAnswer(new Answer<DefaultRouteBuilder>() {
 

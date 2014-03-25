@@ -27,8 +27,6 @@ import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -40,32 +38,27 @@ import javax.enterprise.inject.spi.CDI;
 
 import org.hamcrest.Matcher;
 import org.hamcrest.MatcherAssert;
-import org.joda.time.LocalDate;
-import org.joda.time.LocalTime;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.converter.BooleanConverter;
 import br.com.caelum.vraptor.converter.ByteConverter;
-import br.com.caelum.vraptor.converter.Converter;
-import br.com.caelum.vraptor.converter.EnumConverter;
-import br.com.caelum.vraptor.converter.IntegerConverter;
 import br.com.caelum.vraptor.converter.CalendarConverter;
+import br.com.caelum.vraptor.converter.Converter;
 import br.com.caelum.vraptor.converter.DateConverter;
 import br.com.caelum.vraptor.converter.DoubleConverter;
+import br.com.caelum.vraptor.converter.EnumConverter;
 import br.com.caelum.vraptor.converter.FloatConverter;
-import br.com.caelum.vraptor.converter.PrimitiveDoubleConverter;
-import br.com.caelum.vraptor.converter.PrimitiveFloatConverter;
+import br.com.caelum.vraptor.converter.IntegerConverter;
 import br.com.caelum.vraptor.converter.LongConverter;
 import br.com.caelum.vraptor.converter.PrimitiveBooleanConverter;
 import br.com.caelum.vraptor.converter.PrimitiveByteConverter;
+import br.com.caelum.vraptor.converter.PrimitiveDoubleConverter;
+import br.com.caelum.vraptor.converter.PrimitiveFloatConverter;
 import br.com.caelum.vraptor.converter.PrimitiveIntConverter;
 import br.com.caelum.vraptor.converter.PrimitiveLongConverter;
 import br.com.caelum.vraptor.converter.PrimitiveShortConverter;
 import br.com.caelum.vraptor.converter.ShortConverter;
-import br.com.caelum.vraptor.converter.jodatime.LocalDateConverter;
-import br.com.caelum.vraptor.converter.jodatime.LocalTimeConverter;
 import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.http.route.Route;
 import br.com.caelum.vraptor.http.route.Router;
@@ -92,15 +85,6 @@ public abstract class GenericContainerTest {
 	@Before
 	public void setup() throws Exception {
 		currentContainer = getCurrentContainer();
-	}
-
-	@Test
-	public void canProvideJodaTimeConverters() {
-		assertNotNull(instanceFor(LocalDateConverter.class));
-		assertNotNull(instanceFor(LocalTimeConverter.class));
-		Converters converters = instanceFor(Converters.class);
-		assertTrue(converters.existsFor(LocalDate.class));
-		assertTrue(converters.existsFor(LocalTime.class));
 	}
 
 	private CDIBasedContainer getCurrentContainer() {

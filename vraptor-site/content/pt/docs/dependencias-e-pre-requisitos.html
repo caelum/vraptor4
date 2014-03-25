@@ -141,14 +141,27 @@ Se você usa um servidor de aplicações não é necessário adicionar a depend�
 
 ### Joda-time
 
-Joda-time é uma API para facilitar o trabalho de dados temporais em Java. Os componentes do Joda-time são opcionais e ativados somente se o Joda-time for encontrado no classpath.
+Joda-time é uma API para facilitar o trabalho de dados temporais em Java. Para usar o joda-time basta acionar o plugin `vraptor-jodatime`. Mais informações em https://github.com/caelum/vraptor-time-converters.
 
 ~~~
 #!xml
 <dependency>
-   <groupId>joda-time</groupId>
-   <artifactId>joda-time</artifactId>
-   <version>2.1.0</version>
+   <groupId>br.com.caelum.vraptor</groupId>
+   <artifactId>vraptor-jodatime</artifactId>
+   <version>4.0.0</version> <!-- ou a última versão disponível -->
+</dependency>
+~~~
+
+### Nova API de datas do Java
+
+Se você utiliza Java 8, você pode tirar proveito da nova API de datas do pacote `java.time`. Basta incluir o plugin `vraptor-javatime`. Mais informações em https://github.com/caelum/vraptor-time-converters.
+
+~~~
+#!xml
+<dependency>
+   <groupId>br.com.caelum.vraptor</groupId>
+   <artifactId>vraptor-javatime</artifactId>
+   <version>4.0.0</version> <!-- ou a última versão disponível -->
 </dependency>
 ~~~
 

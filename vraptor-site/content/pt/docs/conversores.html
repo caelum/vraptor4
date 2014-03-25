@@ -10,11 +10,13 @@ Sempre que um parâmetro é recebido, é necessário ter um conversor. O VRaptor
 
 São suportados utilizando o padrão de localização da sua aplicação. `Double` e `Float` são suportados tanto o tipo primitivo quanto o tipo objeto.
 
-##Calendar, Date e Joda-time
+##Trabalhando com datas e calendários
 
 `Calendar` e `Date` são suportados por padrão usando a localização da sua aplicação.
 
-Existem conversores para os principais tipos do Joda-time como `DateTime`, `LocalDate`, `LocalDateTime` e `LocalTime`. Os conversores do Joda-time são ativados automaticamente se você tiver o joda-time no classpath. Mais informações [aqui](/pt/dependencias-e-pre-requisitos).
+Existem conversores para os principais tipos do Joda-time como `DateTime`, `LocalDate`, `LocalDateTime` e `LocalTime`. Os conversores do Joda-time estão disponíveis usando o plugin <b>vraptor-jodatime</b>. Mais informações [aqui](/pt/dependencias-e-pre-requisitos).
+
+Se você está usando JDK 8, você pode tirar proveito dos conversores do pacote `java.time`, que estão disponíveis usando o plugin <b>vraptor-javatime</b>. Mais informações [aqui](/pt/dependencias-e-pre-requisitos).
 
 ##Definindo a localização (Locale) da aplicação
 

@@ -21,28 +21,17 @@ import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
 
-import java.lang.reflect.AccessibleObject;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Named;
 
-import org.junit.Before;
 import org.junit.Test;
-
-import br.com.caelum.vraptor.cache.CacheStore;
-import br.com.caelum.vraptor.cache.DefaultCacheStore;
 
 public class ParanamerNameProviderTest {
 
-	private ParanamerNameProvider provider;
+	private ParanamerNameProvider provider = new ParanamerNameProvider();
 
-	@Before
-	public void setup() {
-		CacheStore<AccessibleObject, Parameter[]> cache = new DefaultCacheStore<>();
-		provider = new ParanamerNameProvider(cache);
-	}
-	
 	private List<String> toNames(Parameter[] parameters) {
 		List<String> out = new ArrayList<>();
 		for (Parameter p : parameters)

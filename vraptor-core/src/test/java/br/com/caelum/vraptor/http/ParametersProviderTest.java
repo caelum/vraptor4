@@ -34,7 +34,6 @@ import br.com.caelum.vraptor.converter.LongConverter;
 import br.com.caelum.vraptor.converter.PrimitiveLongConverter;
 import br.com.caelum.vraptor.converter.StringConverter;
 import br.com.caelum.vraptor.core.Converters;
-import br.com.caelum.vraptor.factory.Factories;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.validator.DefaultValidationException;
 import br.com.caelum.vraptor.validator.Message;
@@ -72,7 +71,7 @@ public abstract class ParametersProviderTest {
 	@Before
 	public void setup() throws Exception {
 		MockitoAnnotations.initMocks(this);
-		nameProvider = Factories.createParameterNameProvider();
+		nameProvider = new ParanamerNameProvider();
 		this.provider = getProvider();
 		this.errors = new ArrayList<>();
 		

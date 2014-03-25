@@ -20,7 +20,7 @@ import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.controller.DefaultControllerMethod;
 import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.events.InterceptorsReady;
-import br.com.caelum.vraptor.factory.Factories;
+import br.com.caelum.vraptor.http.ParanamerNameProvider;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.serialization.Deserializer;
 import br.com.caelum.vraptor.serialization.Deserializers;
@@ -43,7 +43,7 @@ public class DeserializingObserverTest {
 	public void setUp() throws Exception {
 		MockitoAnnotations.initMocks(this);
 
-		methodInfo = new MethodInfo(Factories.createParameterNameProvider());
+		methodInfo = new MethodInfo(new ParanamerNameProvider());
 
 		observer = new DeserializingObserver(deserializers, container);
 		consumeXml = new DefaultControllerMethod(null, DummyResource.class.getDeclaredMethod("consumeXml", String.class, String.class));

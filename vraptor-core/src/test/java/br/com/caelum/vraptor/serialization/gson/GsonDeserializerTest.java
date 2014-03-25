@@ -31,8 +31,8 @@ import br.com.caelum.vraptor.controller.BeanClass;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.controller.DefaultBeanClass;
 import br.com.caelum.vraptor.controller.DefaultControllerMethod;
-import br.com.caelum.vraptor.factory.Factories;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
+import br.com.caelum.vraptor.http.ParanamerNameProvider;
 import br.com.caelum.vraptor.util.test.MockInstanceImpl;
 import br.com.caelum.vraptor.view.GenericController;
 
@@ -57,7 +57,7 @@ public class GsonDeserializerTest {
 
 	@Before
 	public void setUp() throws Exception {
-		provider = Factories.createParameterNameProvider();
+		provider = new ParanamerNameProvider();
 		request = mock(HttpServletRequest.class);
 
 		List<JsonDeserializer<?>> jsonDeserializers = new ArrayList<>();

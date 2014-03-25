@@ -13,12 +13,12 @@ import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.controller.DefaultControllerMethod;
 import br.com.caelum.vraptor.core.MethodInfo;
-import br.com.caelum.vraptor.factory.Factories;
+import br.com.caelum.vraptor.http.ParanamerNameProvider;
 
 public class ReplicatorOutjectorTest {
 
 	private @Mock Result result;
-	private MethodInfo methodInfo = new MethodInfo(Factories.createParameterNameProvider());
+	private MethodInfo methodInfo = new MethodInfo(new ParanamerNameProvider());
 	private Outjector outjector;
 
 	@Before

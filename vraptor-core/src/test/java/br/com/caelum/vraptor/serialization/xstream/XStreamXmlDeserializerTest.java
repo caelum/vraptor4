@@ -18,8 +18,8 @@ import br.com.caelum.vraptor.controller.BeanClass;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.controller.DefaultBeanClass;
 import br.com.caelum.vraptor.controller.DefaultControllerMethod;
-import br.com.caelum.vraptor.factory.Factories;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
+import br.com.caelum.vraptor.http.ParanamerNameProvider;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
@@ -35,7 +35,7 @@ public class XStreamXmlDeserializerTest {
 
 	@Before
 	public void setUp() throws Exception {
-		provider = Factories.createParameterNameProvider();
+		provider = new ParanamerNameProvider();
 
 		deserializer = new XStreamXMLDeserializer(provider, cleanInstance(new CalendarConverter()));
 		BeanClass controllerClass = new DefaultBeanClass(DogController.class);

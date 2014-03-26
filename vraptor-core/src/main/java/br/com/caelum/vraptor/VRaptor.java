@@ -56,7 +56,7 @@ import br.com.caelum.vraptor.interceptor.ApplicationLogicException;
 @WebFilter(filterName="vraptor", urlPatterns="/*", dispatcherTypes={DispatcherType.FORWARD, DispatcherType.REQUEST})
 public class VRaptor implements Filter {
 
-	public static final String VERSION = "4.0.0-RC2";
+	public static final String VERSION = "4.0.0-RC3-SNAPSHOT";
 
 	private final Logger logger = getLogger(VRaptor.class);
 

@@ -3,6 +3,8 @@ package br.com.caelum.vraptor.environment;
 import static com.google.common.base.Objects.firstNonNull;
 
 import java.io.IOException;
+import java.security.AccessController;
+import java.security.PrivilegedAction;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -37,14 +39,28 @@ public class ServletBasedEnvironment extends DefaultEnvironment {
 	}
 
 	private static String env(ServletContext context) {
-		String systemEnv = System.getenv("VRAPTOR_ENV");
+		String systemEnv = AccessController.doPrivileged(new PrivilegedAction<String>() {
+			@Override
+			public String run() {
+				return System.getenv("VRAPTOR_ENV");
+			}
+		});
+
 		if (systemEnv != null) {
 			return systemEnv;
 		}
-		String systemProperty = System.getProperty(ENVIRONMENT_PROPERTY);
+
+		String systemProperty = AccessController.doPrivileged(new PrivilegedAction<String>() {
+			@Override
+			public String run() {
+				return System.getProperty(ENVIRONMENT_PROPERTY);
+			}
+		});
+
 		if (systemProperty != null) {
 			return systemProperty;
 		}
+
 		String containerProperty = context.getInitParameter(ENVIRONMENT_PROPERTY);
 		
 		return firstNonNull(containerProperty, "development");

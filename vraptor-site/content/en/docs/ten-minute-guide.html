@@ -2,3 +2,71 @@
 title: Ten minutes guide
 ---
 
+#Starting a project: an e-commerce
+
+##A product CRUD
+
+We will start the system with product registration. For that, we will need a class that models a product and we will also use it to save products in a database, using JPA/Hibernate:
+
+~~~ 
+#!java
+@Entity
+public class Product {
+    @Id
+    @GeneratedValue
+    private Long id;
+
+    private String name;
+    private String description;
+    private Double price;
+
+    // getter and setters and other necessary business methods
+}
+~~~
+
+We also need a class that will manage product registration, dealing with web requests. This class will be the products Controller:
+
+~~~ 
+#!java
+public class ProductsController {
+}
+~~~
+
+The `ProductController` class will expose URIs that can be accessed through the web, i.e., it will expose your application resources. This type of classes have to annotated with `@Controller`:
+
+~~~ 
+#!java
+@Controller
+public class ProductsController {
+}
+~~~
+
+Whenever you annotate a class with `@Controller` all its public methods are accessible through the web. Take the list method as an example:
+
+~~~ 
+#!java
+@Controller
+public class ProductsController {
+    public List<Product> list() {
+        return new ArrayList<Product>();
+    }
+}
+~~~
+
+VRaptor will automatically redirect all request to `/products/list` to this method. That, of course, means the convention for URI's is `/<controller_name>/<method name>`. After the method is executed, VRaptor will dispatch the request to `/WEB-INF/jsp/products/list.jsp`, and that is because VRaptor's convention is to dispatch it to `/WEB-INF/jsp/<controller_name>/<method_name>.jsp`, by default.
+
+The method `list` returns a product's list, and you can access it at the JSP through request attributes. For that example, an attribute called `productList` can be found at that JSP:
+
+~~~ 
+#!jsp
+<ul>
+<c:forEach items="${productList}" var="product">
+    <li>${product.name} - ${product.description}</li>
+</c:forEach>
+</ul>
+~~~
+
+The exported attribute name convention is quite intuitive: if it is a Collection, the attribute will have the `List` sufix; in case it is a regular class, its name is the same as the class, but in lower case. For example, if you method returns a `Product`, you will be able to access it at the JSP through `${product}`. Exporting more than one object to the page is a topic we will cover at another chapter.
+
+##Creating ProductDao: Dependency Injection (DI)
+

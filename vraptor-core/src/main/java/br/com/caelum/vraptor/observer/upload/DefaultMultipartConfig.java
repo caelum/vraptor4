@@ -22,6 +22,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.security.AccessController;
+import java.security.PrivilegedAction;
 
 import javax.enterprise.context.ApplicationScoped;
 
@@ -68,32 +70,39 @@ public class DefaultMultipartConfig implements MultipartConfig {
 	}
 
 	protected Path getTemporaryDirectory() {
-		try {
-			Path tmp = Files.createTempFile("vraptor", "upload");
-			Path parent = tmp.getParent();
-			logger.debug("Using temporary directory as {}", parent);
-			
-			Files.delete(tmp);
-			return parent;
-		} catch (IOException e) {
-			logger.warn("Unable to find temp directory", e);
-			return null;
-		}
+		return AccessController.doPrivileged(new PrivilegedAction<Path>() {
+			@Override
+			public Path run() {
+				try {
+					Path tmp = Files.createTempFile("vraptor", "upload");
+					Path parent = tmp.getParent();
+					logger.debug("Using temporary directory as {}", parent);
+
+					Files.delete(tmp);
+					return parent;
+				} catch (IOException e) {
+					logger.warn("Unable to find temp directory", e);
+					return null;
+				}
+			}
+		});
 	}
-	
+
 	protected Path createDirInsideApplication() {
 		logger.debug("Creating a dir inside the application");
-		
-		Path path = Paths.get(".tmp-multipart-upload");
-		
-		try {
-			path = Files.createDirectories(path);
-			logger.debug("Using temporary directory as {}", path);
-		} catch (IOException e) {
-			logger.error("Unable to use temp directory inside application", e);
-			throw Throwables.propagate(e);
-		}
-		
-		return path;
+
+		return AccessController.doPrivileged(new PrivilegedAction<Path>() {
+			@Override
+			public Path run() {
+				try {
+					Path path = Paths.get(".tmp-multipart-upload");
+					logger.debug("Using temporary directory as {}", path);
+					return Files.createDirectories(path);
+				} catch (IOException e) {
+					logger.error("Unable to use temp directory inside application", e);
+					throw Throwables.propagate(e);
+				}
+			}
+		});
 	}
 }

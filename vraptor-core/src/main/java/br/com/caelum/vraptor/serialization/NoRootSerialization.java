@@ -17,8 +17,6 @@
 
 package br.com.caelum.vraptor.serialization;
 
-import java.io.IOException;
-
 import br.com.caelum.vraptor.View;
 
 /**
@@ -30,7 +28,6 @@ import br.com.caelum.vraptor.View;
 public interface NoRootSerialization extends View {
 	/**
 	 * Serializes this object to the clients writer with out ROOT alias.
-	 * @throws IOException
 	 */
 	public <T> Serializer from(T object);
 }

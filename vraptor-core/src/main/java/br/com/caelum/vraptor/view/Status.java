@@ -43,7 +43,7 @@ public interface Status extends View {
 	/**
 	 * Sets the status to 201 and sets the location to the server's location +
 	 * the location content.<br>
-	 * created("/order/2") ==> http://localhost:8080/my_context/order/2
+	 * created("/order/2") ==&gt; http://localhost:8080/my_context/order/2
 	 *
 	 * @param location
 	 */
@@ -74,7 +74,6 @@ public interface Status extends View {
 	 * <pre>
 	 *    result.use(representation()).from(errors, "errors").serialize();
 	 * </pre>
-	 * @param message
 	 */
 	void badRequest(List<?> errors);
 
@@ -108,10 +107,9 @@ public interface Status extends View {
 	/**
 	 * Send redirect with Moved Permanently (301) Header Example:
 	 * result.use(status()).movedPermanentlyTo("/clients"); will move to
-	 * /<contextPath>/clients
+	 * /{contextPath}/clients
 	 *
-	 * @param uri
-	 *            absolute uri to redirect
+	 * @param url absolute uri to redirect
 	 */
 	void movedPermanentlyTo(String url);
 
@@ -133,8 +131,6 @@ public interface Status extends View {
 
 	/**
 	 * The accepted media type is not supported.(406)
-	 *
-	 * @param errorMessage
 	 */
 	void notAcceptable();
 

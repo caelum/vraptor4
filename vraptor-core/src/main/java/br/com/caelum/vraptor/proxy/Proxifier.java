@@ -44,7 +44,7 @@ public interface Proxifier {
 	/**
 	 * Return <code>true</code> if the type is a proxy, false otherwise.
 	 *
-	 * @param o The object to test
+	 * @param type Type to test
 	 * @return <code>true</code> if the object is a proxy, false otherwise.
 	 */
 	boolean isProxyType(Class<?> type);

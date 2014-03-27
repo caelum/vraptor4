@@ -48,17 +48,17 @@ public interface Environment {
 	Iterable<String> getKeys();
 
 	/**
-	 * an alias to {@link Environment#supports(PRODUCTION)}
+	 * An alias to {@link Environment#supports(String)} with {@link EnvironmentType#PRODUCTION}.
 	 */
 	boolean isProduction();
 
 	/**
-	 * an alias to {@link Environment#supports(DEVELOPMENT)}
+	 * An alias to {@link Environment#supports(String)} with {@link EnvironmentType#DEVELOPMENT}.
 	 */
 	boolean isDevelopment();
 
 	/**
-	 * an alias to {@link Environment#supports(TEST)}
+	 * An alias to {@link Environment#supports(String)} with {@link EnvironmentType#TEST}.
 	 */
 	boolean isTest();
 

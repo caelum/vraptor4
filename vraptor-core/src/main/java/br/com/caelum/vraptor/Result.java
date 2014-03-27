@@ -59,7 +59,6 @@ public interface Result {
 	 * Add an {@link Exception} to be handled by Exception Handler.
 	 *
 	 * @param exception The exception to handle.
-	 * @throws a {@link NullPointerException} if exception is null.
 	 */
 	Result on(Class<? extends Exception> exception);
 

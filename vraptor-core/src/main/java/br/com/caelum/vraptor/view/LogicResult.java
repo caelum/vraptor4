@@ -32,6 +32,7 @@ public interface LogicResult extends View {
 	 * <p>
 	 * Any method called in the returned instance will cause a server side redirect (forward) to the called action.
 	 * </p>
+	 * @param <T> controller type
 	 */
 	<T> T forwardTo(Class<T> type);
 
@@ -41,6 +42,7 @@ public interface LogicResult extends View {
 	 * Any method called in the returned instance will cause a client side redirect to the called action, with the
 	 * given parameters as HTTP parameters.
 	 * </p>
+	 * @param <T> controller type
 	 */
 	<T> T redirectTo(Class<T> type);
 

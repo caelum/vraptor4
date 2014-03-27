@@ -14,7 +14,7 @@ import javax.inject.Inject;
  * 
  * 	<pre>
  * 		<code>
- * 			@Inject @Qualifier("mail.server.host") 
+ * 			\@Inject \@Qualifier("mail.server.host") 
  * 			private String mailHost;
  * 		</code>
  * 	</pre>

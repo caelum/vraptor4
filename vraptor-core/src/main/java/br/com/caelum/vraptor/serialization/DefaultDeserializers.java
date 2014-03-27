@@ -25,8 +25,7 @@ import javax.enterprise.context.ApplicationScoped;
 import br.com.caelum.vraptor.ioc.Container;
 
 /**
- * A set of deserializers.<br/>
- * Returns null if no serializer is capable of coping with the required media type.
+ * A set of deserializers. Returns null if no serializer is capable of coping with the required media type.
  *
  * @author Lucas Cavalcanti
  * @author Ricardo Nakamura

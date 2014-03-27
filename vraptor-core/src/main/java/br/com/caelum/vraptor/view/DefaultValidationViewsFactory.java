@@ -38,11 +38,11 @@ import br.com.caelum.vraptor.validator.ValidationException;
  * Default implementation for ValidationViewsFactory
  *
  * If you want to extend this behavior use:
- * @Component
+ * \@Component
  * public class MyValidatorViewsFactory extends DefaultValidationViewsFactory {
  * 		//delegate constructor
- * 		@Override
- * 		public <T extends View> T instanceFor(Class<T> view, List<Message> errors) {
+ * 		\@Override
+ * 		public &lt;T extends View&gt; T instanceFor(Class&lt;T&gt; view, List&lt;Message&gt; errors) {
  * 			//return my own Validation view version or
  * 			return super.instanceFor(view, errors);
  * 		}

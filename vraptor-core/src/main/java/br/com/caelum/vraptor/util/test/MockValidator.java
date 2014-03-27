@@ -45,13 +45,13 @@ import br.com.caelum.vraptor.validator.Validator;
  * 		controller.method();
  * 		Assert.fail();
  * } catch (ValidationError e) {
- * 		List<Message> errors = e.getErrors();
+ * 		List&lt;Message&gt; errors = e.getErrors();
  * 		// asserts
  * }
  *
  * or
  *
- * @Test(expected=ValidationError.class)
+ * \@Test(expected=ValidationError.class)
  *
  * @author Lucas Cavalcanti
  */

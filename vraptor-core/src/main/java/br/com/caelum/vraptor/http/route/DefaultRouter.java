@@ -51,7 +51,7 @@ import com.google.common.collect.Iterables;
 
 /**
  * The default implementation of controller localization rules. It also uses a Path annotation to discover
- * path->method mappings using the supplied ControllerLookupInterceptor.
+ * path-&gt;method mappings using the supplied ControllerLookupInterceptor.
  * 
  * @author Guilherme Silveira
  */

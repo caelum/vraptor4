@@ -52,6 +52,7 @@ public interface PageResult extends View {
 	 * Render the default view of given logic, without executing the logic.
 	 * Ex: result.use(page()).of(ClientsController.class).list();
 	 * will render the view /WEB-INF/jsp/clients/list.jsp without calling list method.
+	 * @param <T> controller type
 	 */
 	<T> T of(Class<T> controllerType);
 	

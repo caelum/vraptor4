@@ -47,7 +47,7 @@ public interface RouteBuilder {
 	/**
 	 * Accepts also all given http methods.
 	 *
-	 * @param method
+	 * @param methods
 	 * @return
 	 */
 	RouteBuilder with(Set<HttpMethod> methods);

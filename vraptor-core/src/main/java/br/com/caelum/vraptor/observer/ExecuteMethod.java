@@ -37,6 +37,7 @@ import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.events.InterceptorsExecuted;
 import br.com.caelum.vraptor.events.MethodExecuted;
 import br.com.caelum.vraptor.events.MethodReady;
+import br.com.caelum.vraptor.interceptor.ApplicationLogicException;
 import br.com.caelum.vraptor.validator.ValidationException;
 import br.com.caelum.vraptor.validator.Validator;
 
@@ -106,7 +107,7 @@ public class ExecuteMethod {
 		} catch (IllegalArgumentException e) {
 			throw new InterceptionException(e);
 		} catch (Exception e) {
-			throwIfNotValidationException(e, new InterceptionException(e));
+			throwIfNotValidationException(e, new ApplicationLogicException(e));
 		}
 	}
 

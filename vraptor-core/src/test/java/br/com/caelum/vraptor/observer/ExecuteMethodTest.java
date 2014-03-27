@@ -17,6 +17,7 @@
 
 package br.com.caelum.vraptor.observer;
 
+import static br.com.caelum.vraptor.controller.DefaultControllerMethod.instanceFor;
 import static br.com.caelum.vraptor.view.Results.nothing;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
@@ -40,6 +41,7 @@ import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.events.InterceptorsExecuted;
 import br.com.caelum.vraptor.events.MethodExecuted;
 import br.com.caelum.vraptor.events.MethodReady;
+import br.com.caelum.vraptor.interceptor.ApplicationLogicException;
 import br.com.caelum.vraptor.interceptor.DogAlike;
 import br.com.caelum.vraptor.validator.Message;
 import br.com.caelum.vraptor.validator.ValidationException;
@@ -122,6 +124,15 @@ public class ExecuteMethodTest {
 		when(validator.hasErrors()).thenReturn(true);
 		observer.execute(new InterceptorsExecuted(method, controller));
 	}
+	
+	@Test(expected=ApplicationLogicException.class)
+	public void shoulThrowApplicationLogicExceptionIfItsABusinessException() throws Exception {
+		Method method = AnyController.class.getDeclaredMethod("throwException");
+		ControllerMethod controllerMethod = instanceFor(AnyController.class, method);
+		AnyController controller = new AnyController(validator);
+		observer.execute(new InterceptorsExecuted(controllerMethod, controller));
+	}
+	
 
 	public static class AnyController {
 		private final Validator validator;
@@ -134,6 +145,9 @@ public class ExecuteMethodTest {
 		}
 		public void specifiedWhereToGo() {
 			this.validator.onErrorUse(nothing());
+		}
+		public void throwException() {
+			throw new RuntimeException("something bad");
 		}
 	}
 }

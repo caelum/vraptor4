@@ -1,4 +1,4 @@
-package br.com.caelum.vraptor.core;
+package br.com.caelum.vraptor.util;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
@@ -8,6 +8,8 @@ import java.util.PropertyResourceBundle;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import br.com.caelum.vraptor.util.SafeResourceBundle;
 
 public class SafeResourceBundleTest {
 

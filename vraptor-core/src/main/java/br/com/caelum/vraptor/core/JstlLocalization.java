@@ -31,6 +31,9 @@ import javax.servlet.jsp.jstl.fmt.LocalizationContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import br.com.caelum.vraptor.util.EmptyBundle;
+import br.com.caelum.vraptor.util.SafeResourceBundle;
+
 import com.google.common.base.Strings;
 
 /**

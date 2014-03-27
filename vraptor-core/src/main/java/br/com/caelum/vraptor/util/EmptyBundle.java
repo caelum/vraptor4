@@ -1,7 +1,7 @@
 /**
  *
  */
-package br.com.caelum.vraptor.core;
+package br.com.caelum.vraptor.util;
 
 import java.util.ListResourceBundle;
 

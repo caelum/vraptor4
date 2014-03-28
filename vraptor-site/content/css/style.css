@@ -109,23 +109,24 @@ div.note p {
 }
 
 .community a:before {
+  background: url(../img/community.png) no-repeat top left;
   display: inline-block;
   content: '';
-  background-size: contain;
-  width: 32px;
-  height: 32px;
+  background-size: 32px;
+  width: 35px;
+  height: 35px;
 }
 
 .community a[href*="groups.google.com"]:before {
-  background-image: url(../img/logo-gplus.png);
+  background-position: 0 -45px;
 }
 
 .community a[href*="github.com"]:before {
-  background-image: url(../img/logo-github.png);
+  background-position: 0 0;
 }
 
 .community a[href*="guj.com.br"]:before {
-  background-image: url(../img/logo-guj.png);
+  background-position: 0 -89px;
 }
 
 .download-btn {

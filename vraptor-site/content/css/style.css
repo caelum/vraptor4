@@ -162,8 +162,7 @@ div.note p {
 
 .home-advantages li:before {
   content: '';
-  background-image: url(../img/advantages.png);
-  background-repeat: no-repeat;
+  background: url(../img/advantages.png) no-repeat top left;
   width: 105px;
   height: 100px;
   float: left;
@@ -177,35 +176,35 @@ div.note p {
 }
 
 .home-advantages .productivity:before {
-  background-position: 0 -574px;
+  background-position: 0 -576px; 
 }
 
 .home-advantages .learning:before {
-  background-position: 0 14px;
+  background-position: 0 -444px; 
 }
 
 .home-advantages .testability:before {
-  background-position: 0 -680px;
+  background-position: 0 -964px; 
 }
 
 .home-advantages .economy:before {
-  background-position: 0 -90px;
+  background-position: 0 -153px; 
 }
 
-.home-advantages .flexibility:before {
-  background-position: 0 -205px;
+.home-advantages .injection:before {
+  background-position: 0 -292px; 
 }
 
 .home-advantages .soa:before {
-  background-position: 0 -808px;
+  background-position: 0 -845px; 
 }
 
 .home-advantages .best-practices:before {
-  background-position: 0 -448px;
+  background-position: 0 0; 
 }
 
 .home-advantages .pt-docs:before {
-  background-position: 0 -322px;
+  background-position: 0 -709px; 
 }
 
 @media (min-width: 480px) {

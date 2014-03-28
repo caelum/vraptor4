@@ -31,13 +31,13 @@
 		    <version>2.2</version>
 		    <scope>provided</scope>
 		</dependency>
-
+		
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-validator-cdi</artifactId>
-			<version>5.0.2.Final</version>
+			<version>5.1.0.Final</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>javax.inject</groupId>
 			<artifactId>javax.inject</artifactId>

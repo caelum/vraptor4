@@ -129,8 +129,7 @@ public class DefaultRouter implements Router {
 
 	private Collection<Route> routesMatchingUriAndMethod(String uri, HttpMethod method) {
 		Collection<Route> routesMatchingMethod = FluentIterable.from(routesMatchingUri(uri))
-				.filter(allow(method))
-				.toSet();
+				.filter(allow(method)).toSet();
 
 		if (routesMatchingMethod.isEmpty()) {
 			EnumSet<HttpMethod> allowed = allowedMethodsFor(uri);
@@ -150,8 +149,7 @@ public class DefaultRouter implements Router {
 
 	private Collection<Route> routesMatchingUri(String uri) {
 		Collection<Route> routesMatchingURI = FluentIterable.from(routes)
-				.filter(canHandle(uri))
-				.toSet();
+				.filter(canHandle(uri)).toSet();
 
 		if (routesMatchingURI.isEmpty()) {
 			throw new ControllerNotFoundException();

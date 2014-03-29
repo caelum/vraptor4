@@ -162,10 +162,7 @@ public class DefaultRouter implements Router {
 		Route route = cache.fetch(invocation, new Callable<Route>() {
 			@Override
 			public Route call() throws Exception {
-				Collection<Route> matches = Collections2.filter(routes, canHandle(rawtype, method));
-				logger.debug("Routes matched for {} is {}", method, matches);
-
-				return Iterables.getFirst(matches, NULL);
+				return Iterables.tryFind(routes, canHandle(rawtype, method)).or(NULL);
 			}
 		});
 

@@ -45,7 +45,6 @@ import br.com.caelum.vraptor.proxy.Proxifier;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
-import com.google.common.collect.Iterables;
 
 /**
  * The default implementation of controller localization rules. It also uses a Path annotation to discover
@@ -168,7 +167,8 @@ public class DefaultRouter implements Router {
 		Route route = cache.fetch(invocation, new Callable<Route>() {
 			@Override
 			public Route call() throws Exception {
-				return Iterables.tryFind(routes, canHandle(rawtype, method)).or(NULL);
+				return FluentIterable.from(routes).filter(canHandle(rawtype, method))
+					.first().or(NULL);
 			}
 		});
 

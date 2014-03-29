@@ -41,7 +41,14 @@ final class ArrayAdapter implements Instantiator<Object> {
 
 	@Override
 	public Object instantiate(final Target<?> target, Parameters parameters) {
-		Function<Parameter, Parameter> INDEXED_PARAMETERS = new Function<Parameter, Parameter>() {
+		List<Parameter> fixed = FluentIterable.from(parameters.forTarget(target))
+				.transform(indexedParameters(target)).toList();
+
+		return delegate.instantiate(target, new Parameters(fixed));
+	}
+
+	private Function<Parameter, Parameter> indexedParameters(final Target<?> target) {
+		return new Function<Parameter, Parameter>() {
 			int i = 0;
 			@Override
 			public Parameter apply(Parameter parameter) {
@@ -51,10 +58,6 @@ final class ArrayAdapter implements Instantiator<Object> {
 				return parameter;
 			}
 		};
-		List<Parameter> fixed = FluentIterable.from(parameters.forTarget(target))
-				.transform(INDEXED_PARAMETERS).toList();
-
-		return delegate.instantiate(target, new Parameters(fixed));
 	}
 
 	@Override

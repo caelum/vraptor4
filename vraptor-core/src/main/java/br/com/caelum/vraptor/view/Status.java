@@ -48,11 +48,39 @@ public interface Status extends View {
 	 * @param location
 	 */
 	void created(String location);
+	
+	/**
+	 * Return Accepted (202) Status
+	 */
+	void accepted();
 
 	/**
 	 * Returns a No Content status (204)
 	 */
 	void noContent();
+	
+	/**
+	 * Send redirect with Moved Permanently (301) Header Example:
+	 * result.use(status()).movedPermanentlyTo("/clients"); will move to
+	 * /{contextPath}/clients
+	 *
+	 * @param url absolute uri to redirect
+	 */
+	void movedPermanentlyTo(String url);
+
+	/**
+	 * same as movedPermanentlyTo(String), but will use the url for
+	 * controller.method(args);
+	 *
+	 * Example:
+	 * result.use(status()).movedPermanentlyTo(ClientsController.class).list();
+	 */
+	<T> T movedPermanentlyTo(Class<T> controller);
+	
+	/**
+	 * Returns a Not Modified (304) status
+	 */
+	void notModified();
 
 	/**
 	 * Returns a Bad Request (400) status
@@ -90,37 +118,20 @@ public interface Status extends View {
 	void notFound();
 
 	/**
+	 * Returns a Method Not Allowed (405) status
+	 * @param allowedMethods the allowed methods for this URI
+	 */
+	void methodNotAllowed(EnumSet<HttpMethod> allowedMethods);
+	
+	/**
+	 * The accepted media type is not supported.(406)
+	 */
+	void notAcceptable();
+	
+	/**
 	 * Returns a Conflict (409) status
 	 */
 	void conflict();
-
-	void header(String key, String value);
-
-
-	void methodNotAllowed(EnumSet<HttpMethod> allowedMethods);
-
-	/**
-	 * Returns a Not Modified (304) status
-	 */
-	void notModified();
-
-	/**
-	 * Send redirect with Moved Permanently (301) Header Example:
-	 * result.use(status()).movedPermanentlyTo("/clients"); will move to
-	 * /{contextPath}/clients
-	 *
-	 * @param url absolute uri to redirect
-	 */
-	void movedPermanentlyTo(String url);
-
-	/**
-	 * same as movedPermanentlyTo(String), but will use the url for
-	 * controller.method(args);
-	 *
-	 * Example:
-	 * result.use(status()).movedPermanentlyTo(ClientsController.class).list();
-	 */
-	<T> T movedPermanentlyTo(Class<T> controller);
 
 	/**
 	 * The media type sent to the server is not supported.(415)
@@ -130,19 +141,9 @@ public interface Status extends View {
 	void unsupportedMediaType(String errorMessage);
 
 	/**
-	 * The accepted media type is not supported.(406)
-	 */
-	void notAcceptable();
-
-
-	/**
-	 * Return Accepted (202) Status
-	 */
-	void accepted();
-
-	/**
 	 * Return Not implemented (501) Status
 	 */
 	void notImplemented();
-
+	
+	void header(String key, String value);
 }

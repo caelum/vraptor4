@@ -132,7 +132,7 @@ Você também pode buscar por um erro somente de uma determinada categoria:
 ~~~ 
 #!xml
 	<input type="text" name="title" />
-	<span class="error">${errors.asMap().title} // retorna a mensagem para o campo title
+	<span class="error">${errors.from('title')} // retorna a mensagem para o campo title
 ~~~ 
 
 ﻿##Customizando as Mensagens 

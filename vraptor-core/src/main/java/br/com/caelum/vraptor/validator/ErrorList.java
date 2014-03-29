@@ -35,13 +35,21 @@ public class ErrorList extends ForwardingList<Message> {
 
 	/**
 	 * Return messages grouped by category. This method can useful if you want to get messages for a specific
-	 * field.
+	 * category.
 	 */
 	public Map<String, Collection<Message>> getGrouped() {
 		if (grouped == null) {
 			grouped = index(delegate, byCategory).asMap();
 		}
 		return grouped;
+	}
+
+	/**
+	 * Return all messages by category. This method can useful if you want to get messages for a specific
+	 * category.
+	 */
+	public Collection<Message> from(String category) {
+		return getGrouped().get(category);
 	}
 
 	@Override

@@ -31,6 +31,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -156,6 +157,15 @@ public class DefaultValidatorTest {
 
 		validator.check(c.name != null, new SimpleMessage("client.name", "not null"));
 		assertThat(validator.getErrors(), hasSize(0));
+	}
+
+	@Test
+	public void shouldGroupMessagesFromSameCategory() {
+		validator.add(new SimpleMessage("client.name", "not null"));
+		validator.add(new SimpleMessage("client.name", "not empty"));
+
+		Collection<Message> errors = ((ErrorList) validator.getErrors()).from("client.name");
+		assertThat(errors, hasSize(2));
 	}
 
 	@Test

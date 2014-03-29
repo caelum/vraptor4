@@ -1,7 +1,6 @@
 package br.com.caelum.vraptor.interceptor;
 
 import static com.google.common.base.Preconditions.checkState;
-import static com.google.common.collect.Collections2.filter;
 import static java.util.Arrays.asList;
 
 import java.lang.reflect.Method;
@@ -18,6 +17,7 @@ import br.com.caelum.vraptor.BeforeCall;
 import br.com.caelum.vraptor.core.InterceptorStack;
 
 import com.google.common.base.Predicate;
+import com.google.common.collect.FluentIterable;
 
 @Dependent
 public class NoStackParamValidationRule implements ValidationRule {
@@ -64,6 +64,6 @@ public class NoStackParamValidationRule implements ValidationRule {
 			}
 		};
 
-		return !filter(parameterTypes, hasStack).isEmpty();
+		return !FluentIterable.from(parameterTypes).filter(hasStack).isEmpty();
 	}
 }

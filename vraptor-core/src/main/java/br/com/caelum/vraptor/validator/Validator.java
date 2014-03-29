@@ -38,9 +38,29 @@ public interface Validator {
 	 * @since 4.0.0
 	 * @param expression expression to test
 	 * @param message the message to add if expression is false.
+	 * @return the same validator
+	 */
+	Validator ensure(boolean expression, Message message);
+	
+	/**
+	 * alias to ensure
+	 * @since 4.0.0
+	 * @param expression expression to test
+	 * @param message  the message to add if expression is false.
+	 * @return the same validator
 	 */
 	Validator check(boolean expression, Message message);
 
+	/**
+	 * Adds the message to validation errors if the expression is true.
+	 * 
+	 * @since 4.0.0
+	 * @param expression expression to test
+	 * @param message the message to add if expression is true.
+	 * @return the same validator
+	 */
+	Validator addIf(boolean expression, Message message);
+	
 	/**
 	 * Validate an object instance using bean validation.
 	 * 

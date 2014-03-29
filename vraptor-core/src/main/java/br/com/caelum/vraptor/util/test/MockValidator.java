@@ -62,7 +62,19 @@ public class MockValidator extends AbstractValidator {
 
 	@Override
 	public Validator check(boolean condition, Message message) {
+		return ensure(condition, message);
+	}
+	
+	@Override
+	public Validator addIf(boolean expression, Message message) {
+		if (expression) {
+			add(message);
+		}
 		return this;
+	}
+	@Override
+	public Validator ensure(boolean expression, Message message) {
+		return addIf(!expression, message);
 	}
 
 	@Override

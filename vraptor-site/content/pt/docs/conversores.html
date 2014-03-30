@@ -18,6 +18,23 @@ Existem conversores para os principais tipos do Joda-time como `DateTime`, `Loca
 
 Se você está usando JDK 8, você pode tirar proveito dos conversores do pacote `java.time`, que estão disponíveis usando o plugin <b>vraptor-javatime</b>. Mais informações [aqui](/pt/dependencias-e-pre-requisitos).
 
+##Mensagem de erro de conversão
+
+Quando o VRaptor tenta converter um objeto, e ocorrer algum erro, é retornada para a apicação uma exception indicando o erro de conversão. Por exemplo, se você receber um parametro com valor `A` para um campo `Integer`, a conversão irá falhar e você receberá uma `ConversionException` internacionalizada. Para exibir as mensagens na sua aplicação, basta adicionar as seguintes chaves no seu resource bundle:
+
+~~~ 
+#!xml
+is_not_a_valid_number = {0} não é um número válido.
+is_not_a_valid_integer = {0} não é um inteiro válido.
+is_not_a_valid_character = {0} não é um caracter válido.
+is_not_a_valid_enum_value = {0} não é uma opção válida.
+is_not_a_valid_date = {0} não é uma data válida.
+is_not_a_valid_boolean = {0} não é um valor boolean válido.
+is_not_a_valid_time = {0} não é um horário válido.
+is_not_a_valid_datetime = {0} não é uma data e horário válidos.
+~~~ 
+
+
 ##Definindo a localização (Locale) da aplicação
 
 A localização dos componentes pode ser alterada utilizando a seguinte configuração no web.xml:

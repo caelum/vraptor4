@@ -158,6 +158,51 @@ public class DefaultValidatorTest {
 		validator.check(c.name != null, new SimpleMessage("client.name", "not null"));
 		assertThat(validator.getErrors(), hasSize(0));
 	}
+	
+	@Test
+	public void shouldAddMessageIfCheckingFails() {
+		Client c = new Client();
+
+		validator.check(c.name != null, new SimpleMessage("client.name", "not null"));
+		assertThat(validator.getErrors(), hasSize(1));
+		assertThat(validator.getErrors().get(0).getMessage(), containsString("not null"));
+	}
+	
+	@Test
+	public void doNothingIfEnsuringSuccess() {
+		Client c = new Client();
+		c.name = "The name";
+
+		validator.ensure(c.name != null, new SimpleMessage("client.name", "not null"));
+		assertThat(validator.getErrors(), hasSize(0));
+	}
+	
+	@Test
+	public void shouldAddMessageIfEnsuringFails() {
+		Client c = new Client();
+
+		validator.ensure(c.name != null, new SimpleMessage("client.name", "not null"));
+		assertThat(validator.getErrors(), hasSize(1));
+		assertThat(validator.getErrors().get(0).getMessage(), containsString("not null"));
+	}
+	
+	@Test
+	public void doNothingIfFalse() {
+		Client c = new Client();
+		c.name = "The name";
+
+		validator.addIf(c.name == null, new SimpleMessage("client.name", "not null"));
+		assertThat(validator.getErrors(), hasSize(0));
+	}
+	
+	@Test
+	public void shouldAddMessageIfTrue() {
+		Client c = new Client();
+
+		validator.addIf(c.name == null, new SimpleMessage("client.name", "not null"));
+		assertThat(validator.getErrors(), hasSize(1));
+		assertThat(validator.getErrors().get(0).getMessage(), containsString("not null"));
+	}
 
 	@Test
 	public void shouldGroupMessagesFromSameCategory() {
@@ -166,15 +211,6 @@ public class DefaultValidatorTest {
 
 		Collection<Message> errors = ((ErrorList) validator.getErrors()).from("client.name");
 		assertThat(errors, hasSize(2));
-	}
-
-	@Test
-	public void shouldAddMessageIfCheckingFails() {
-		Client c = new Client();
-
-		validator.check(c.name != null, new SimpleMessage("client.name", "not null"));
-		assertThat(validator.getErrors(), hasSize(1));
-		assertThat(validator.getErrors().get(0).getMessage(), containsString("not null"));
 	}
 
 	@Test

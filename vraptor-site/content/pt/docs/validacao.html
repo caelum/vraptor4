@@ -139,13 +139,10 @@ Você também pode buscar por um erro somente de uma determinada categoria:
 
 Quando há erros de validação, o Bean Validation anexa um atributo, do tipo lista chave-valor, na resposta da requisição, chamada <code>errors</code>. Essa lista é representada por items chave-valor, onde temos:
 
-* <code>category</code>: representa o atributo que originou o erro, cujo valor é uma convenção para metodoController.objeto.atributo
+* <code>category</code>: representa o caminho do atributo que originou o erro.
 * <code>message</code>: representa a mensagem padrão da API do Bean Validation, normalmente um sufixo como: "deve estar no futuro", "não pode ser nulo", etc.
 
-
-Na maioria dos casos, queremos customizar essas mensagens com uma descrição mais amigável.
-
-Para isso, basta adicionar o arquivo <code>ValidationMessages.properties</code> em <code>/src/main/resources</code>.
+Se você preferir é possível customizar com uma mensagem diferente. Para isso, basta adicionar o arquivo <code>ValidationMessages.properties</code> em <code>/src/main/resources</code>.
 
 Considerando o exemplo acima da classe <code>Cliente</code>, o arquivo poderia ter a seguinte estrutura para customizar as mensagens padrões:
 
@@ -160,7 +157,7 @@ E a classe teria que ser alterada para incluir essas chaves
 ~~~
 #!java
 public class Cliente {
-	@NotEmpty(message="{cliente.nome.vazio}")
+	@NotEmpty(message="{cliente.nome.vazio}") // o valor entre {} indica que a mensagem é internacionalizável
 	@Size(min=10, max=50, message="{cliente.nome.tamanho}")
 	private String nome;
 

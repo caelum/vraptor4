@@ -2,3 +2,117 @@
 title: Converters
 ---
 
+# When use a Converter?
+
+When a parameter is received, we need to convert to an Object. VRaptor already have registered converters for all types define in  `Java Language Specification`. If the type is primitive and parameter is `null`, the default value for the type will be returned. Example: if your type is an `int` and the value is `null`, the value `0` will be returned. For the non-primitive types the `null` value is returned if the parameter is `null` or empty.
+
+##BigDecimal, Double and Float with localization
+
+Are supported using application locale. `Double` and `Float` supports both primitive and non-primitive types.
+
+##Working with Date and Calendar
+
+`Calendar` and `Date` are supported using application locale.
+
+There are converters for most types of Joda-time like `DateTime`, `LocalDate`, `LocalDateTime` and `LocalTime` available using the <b>vraptor-jodatime</b> plugin. More info [here](/en/plugins).
+
+If you are using JDK 8, you can use the new `java.time` API available using <b>vraptor-javatime</b> plugin. More info [here](/en/plugins).
+
+##And if conversion fails
+
+When a conversion fails VRaptor will add the error message using localization. To see these messages you need to add the lines below in your resource bundle:
+
+~~~ 
+#!xml
+is_not_a_valid_number = {0} is not a valid number.
+is_not_a_valid_integer = {0} is not a valid integer.
+is_not_a_valid_character = {0} is not a valid character.
+is_not_a_valid_enum_value = {0} is not a valid option.
+is_not_a_valid_date = {0} is not a valid date.
+is_not_a_valid_boolean = {0} is not a valid boolean. Please use true/false, yes/no, y/n or on/off
+is_not_a_valid_time = {0} is not a valid time.
+is_not_a_valid_datetime = {0} is not a valid datetime.
+~~~ 
+
+
+##Changing your Locale
+
+The converters uses the JVM's default locale. You can override the JVM locale adding these lines in your web.xml:
+
+~~~ 
+#!xml
+<context-param>
+  <param-name>javax.servlet.jsp.jstl.fmt.locale</param-name>
+  <param-value>en_US</param-value>
+</context-param>
+~~~ 
+
+Or you can start your application server or servlet container using `-Duser.language=en -Duser.region=US` VM parameter.
+
+##Creating your own converter
+
+All converters must implement VRaptor's Converter interface. The concrete class will define which type it is able to convert, and will be invoked with a request parameter, the target type and a resource bundle containing i18n messages, useful if you wish to raise a ConversionException in case of convertion errors.
+
+~~~ 
+#!java
+public interface Converter<T> {
+  T convert(String value, Class<? extends T> type);
+}
+~~~ 
+
+Also you must tell VRaptor (not the compiler) which type your converter is able to handle. You do that by annotating your converter class with @Convert:
+
+~~~ 
+#!java
+@Convert(Long.class)
+public class LongConverter implements Converter<Long> {
+  // ...
+}
+~~~ 
+
+Finally, don't forget to specify the scope of your converter, just like you do with any other resource in VRaptor. For example, if your converter doesn't need any user specific information, it can be registered as application scoped and only one instance of that converter will be created:
+
+~~~ 
+#!java
+@Convert(Long.class)
+@ApplicationScoped
+public class LongConverter implements Converter<Long> {
+  // ...
+}
+~~~ 
+
+In the following lines, you can see a LongConverter implementation, showing how simple it is to assemble all the information mentioned above:
+
+~~~ 
+#!java
+@Convert(Long.class)
+@ApplicationScoped
+public class LongConverter implements Converter<Long> {
+
+  public Long convert(String value, Class<? extends Long> type) {
+    if (isNullOrEmpty(value)) {
+      return null;
+    }
+    
+    try {
+      return Long.valueOf(value);
+    } catch (NumberFormatException e) {
+      throw new ConversionException(new ConversionMessage("is_not_a_valid_integer", value));
+    }
+  }
+}
+~~~ 
+
+##Overriding core converters
+
+You can also overrise any existing converters. You only need extends the core converter and after to add `@Specializes` annotation. Below you can see an example how to override a converter `LocaleBasedBigDecimalConverter`:
+
+~~~ 
+#!java
+@Specializes
+public class MyCustomBigDecimalConverter extends LocaleBasedBigDecimalConverter {
+  protected NumberFormat getNumberFormat() {
+    // my code here
+  }
+}
+~~~ 

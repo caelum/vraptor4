@@ -1,6 +1,6 @@
 VRaptor site was built using `nanoc` as static site generator
 
-To install dependencies, you can run `bundle install` inside `/vraptor-site` folder.
+To install dependencies, you need to install `ruby` with `bundler` gem. After you can run `bundle install` inside `/vraptor-site` folder.
 
 You will need **grunt** installed also. You can see how to [install it here](http://gruntjs.com/getting-started), but basically you can run the command:
 

@@ -27,7 +27,7 @@ import com.google.common.collect.ImmutableMap;
 @Dependent
 public class StereotypesRegistry {
 
-	private static final Map<Class<?>, Annotation> STEREOTYPES_INFO;
+	private static final Map<Class<?>, Annotation> STEREOTYPES;
 
 	@Inject private BeanManager beanManager;
 	@Inject private InterceptorStackHandlersCache interceptorsCache;
@@ -44,15 +44,15 @@ public class StereotypesRegistry {
 
 	private Annotation tryToFindAStereotypeQualifier(Bean<?> bean) {
 		for (Class<? extends Annotation> annotation : bean.getStereotypes()) {
-			if (STEREOTYPES_INFO.containsKey(annotation)) {
-				return STEREOTYPES_INFO.get(annotation);
+			if (STEREOTYPES.containsKey(annotation)) {
+				return STEREOTYPES.get(annotation);
 			}
 		}
 		return null;
 	}
 
 	static {
-		STEREOTYPES_INFO = ImmutableMap.<Class<?>, Annotation>of(
+		STEREOTYPES = ImmutableMap.<Class<?>, Annotation>of(
 			Controller.class, new AnnotationLiteral<ControllerQualifier>() {},
 			Convert.class, new AnnotationLiteral<ConvertQualifier>() {},
 			Deserializes.class, new AnnotationLiteral<DeserializesQualifier>() {},

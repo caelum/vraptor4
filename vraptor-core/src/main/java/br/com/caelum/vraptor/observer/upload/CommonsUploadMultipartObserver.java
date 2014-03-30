@@ -36,7 +36,6 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 
-import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.events.ControllerFound;
 import br.com.caelum.vraptor.http.InvalidParameterException;
 import br.com.caelum.vraptor.http.MutableRequest;

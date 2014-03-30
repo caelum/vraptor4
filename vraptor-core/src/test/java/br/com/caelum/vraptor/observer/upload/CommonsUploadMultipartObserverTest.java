@@ -28,7 +28,6 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.events.ControllerFound;
 import br.com.caelum.vraptor.http.InvalidParameterException;
@@ -196,7 +195,7 @@ public class CommonsUploadMultipartObserverTest {
 	@Test
 	public void shouldValidateWhenSizeLimitExceededExceptionOccurs() throws Exception {
 		when(observer.createServletFileUpload(config)).thenReturn(servletFileUpload);
-		when(servletFileUpload.parseRequest(request)).thenThrow(new FileUploadBase.SizeLimitExceededException("", 1L, 2L));
+		when(servletFileUpload.parseRequest(request)).thenThrow(new FileUploadBase.SizeLimitExceededException("", 3L, 2L));
 
 		observer.upload(event, request, config, validator);
 

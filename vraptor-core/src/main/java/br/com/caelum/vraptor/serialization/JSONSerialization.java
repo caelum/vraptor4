@@ -15,9 +15,6 @@
  */
 package br.com.caelum.vraptor.serialization;
 
-import java.io.IOException;
-
-
 /**
  * Basic json serialization support using a Json SerializerBuilder.
  *

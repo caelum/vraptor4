@@ -15,8 +15,6 @@
  */
 package br.com.caelum.vraptor.serialization;
 
-import java.io.IOException;
-
 /**
  * Creates a serializer of a given format.
  *

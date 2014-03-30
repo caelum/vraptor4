@@ -14,6 +14,7 @@ import java.util.ResourceBundle;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.servlet.jsp.jstl.core.Config;
 import javax.servlet.jsp.jstl.fmt.LocalizationContext;
 
 import org.junit.Before;
@@ -92,5 +93,26 @@ public class JstlLocalizationTest {
 		when(request.getAttribute(FMT_LOCALE + ".request")).thenReturn(PT_BR);
 		when(session.getAttribute(FMT_LOCALE + ".session")).thenReturn(Locale.ENGLISH);
 		assertThat(localization.getLocale(), equalTo(PT_BR));
+	}
+
+	@Test
+	public void parseLocaleWithLanguage() {
+		when(servletContext.getInitParameter(Config.FMT_LOCALE)).thenReturn("pt");
+		assertThat(localization.getLocale().getLanguage(), equalTo("pt"));
+	}
+
+	@Test
+	public void parseLocaleWithLanguageAndCountry() {
+		when(servletContext.getInitParameter(Config.FMT_LOCALE)).thenReturn("pt_BR");
+		assertThat(localization.getLocale().getLanguage(), equalTo("pt"));
+		assertThat(localization.getLocale().getCountry(), equalTo("BR"));
+	}
+
+	@Test
+	public void parseLocaleWithLanguageAndCountryAndVariant() {
+		when(servletContext.getInitParameter(Config.FMT_LOCALE)).thenReturn("pt_BR_XYZ");
+		assertThat(localization.getLocale().getLanguage(), equalTo("pt"));
+		assertThat(localization.getLocale().getCountry(), equalTo("BR"));
+		assertThat(localization.getLocale().getVariant(), equalTo("XYZ"));
 	}
 }

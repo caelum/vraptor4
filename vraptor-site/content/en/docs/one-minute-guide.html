@@ -32,7 +32,7 @@ public class ClientsController {
      * /clients/form and will redirect to the jsp /WEB-INF/jsp/clients/form.jsp
      */
     public void form() {
-        // código que carrega dados para checkboxes, selects, etc
+        // code that loads data for checkboxes, selects, etc
     }
 
     /*
@@ -89,10 +89,10 @@ Please note how API independent this class is. Code is also extremely simple and
 /clients/view?id=3  invokes view(3l) e devolve ${client} to the JSP
 ~~~
 
-Mais para a frente veremos como é fácil trocar a URI `/clients/view?id=3` por `/clients/view/3`, deixando a URI mais amigável e elegante.
+Later, you will learn how simple it is to change the URI from `/clients/view?id=3` to `/clients/view/3`, making it more friendly and elegant.
 
-O `ClientDao` será injetado pelo VRaptor, como também veremos adiante. Você já pode passar para o [Guia inicial de 10 minutos](/pt/docs/guia-de-10-minutos).
+VRaptor will also be able to inject the `ClientDao` on the controller. You are good to go! Learn more about at the [10 minute guide](/en/docs/ten-minute-guide).
 
-##Dúvidas
+##Questions
 
 While studying VRaptor, should you have any doubts please refer to <a href="http://www.guj.com.br/tag/vraptor">GUJ</a> por Portuguese answers, or visit our discussion list at <a href="https://groups.google.com/forum/#!forum/caelum-vraptor">discussion list</a>.

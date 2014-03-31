@@ -335,3 +335,40 @@ Also, note that we can receive parameters on the URIs. For example, if we call a
 
 More information about that is available on the [REST Resources](/en/docs/controllers-rest) chapter.
 
+##Message files
+
+Internationalization (i18n) is a powerful resource, present in almost every current web frameworks. VRaptor is not an exception. I18n helps us have our application running in various languages with little effort. All we will need is the messages translation.
+
+In order to have that running on your app, all you have to do is have a `messages.properties` file on our application classpath (`WEB-INF/classes`). That file will contain many key/value entries in the application primary language, such as:
+
+~~~ 
+#!jsp
+userName.field = Username
+password.field = Password
+~~~
+
+Now, if we wanted to translate our application to Portuguese, all we need to do is to create a new file, much like the previous one, but with the language suffix: `messages_pt.properties`. The `_pt` suffix indicates that a user that accesses the application from a machine configured to a locale of Portuguese will see that message values, instead:
+
+~~~ 
+#!jsp
+userName.field = Nome do usuário
+password.field = Senha
+~~~
+
+The keys are the same, of course, but the values change accordingly to the language. Then, you can use those messages on your JSP by using the formatting JSTL:
+
+~~~ 
+#!jsp
+<!%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<html>
+    <body>
+        <fmt:message key="userName.field" /> <input name="user.username" />
+
+        <br />
+
+        <fmt:message key="password.field" /> <input type="password" name="user.password" />
+
+        <input type="submit" />
+    </body>
+</html>
+~~~

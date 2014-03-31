@@ -159,7 +159,7 @@ public class ProductsController {
 }
 ~~~
 
-Note the input names: `product.name`, `product.description`, and `product.price`. If we get a `Product` called `products` as an `add` method parameter, VRaptor will populate its `name`, `description` and `price` fields using values from the inputs on the product's setters. Even the `price` field will be converted to a `Double` before being set to the product. Learn more about this on the [converters](/en/docs/converters) chapter.
+Note the input names: `product.name`, `product.description`, and `product.price`. If we get a `Product` called `product` as an `add` method parameter, VRaptor will populate its `name`, `description` and `price` fields using values from the inputs on the product's setters. Even the `price` field will be converted to a `Double` before being set to the product. Learn more about this on the [converters](/en/docs/converters) chapter.
 
 Then, by using the correct names on the form inputs, all you need to do is to make the `add` method receive a `Product` for parameter:
 
@@ -333,7 +333,7 @@ public class ProductsController {
 
 Also, note that we can receive parameters on the URIs. For example, if we call a `GET /products/5` URI, the `view` method will be invoked, and the `product` parameter id will be populated with `5`.
 
-More information about that is available on the [REST Resources](/en/docs/controllers-rest) chapter.
+More information about that is available on the [REST Controller](/en/docs/controllers-rest) chapter.
 
 ##Message files
 

@@ -17,12 +17,10 @@
 
 package br.com.caelum.vraptor.http.route;
 
-import static com.google.common.collect.Collections2.filter;
+import static com.google.common.base.Preconditions.checkState;
 
 import java.lang.reflect.Method;
-import java.text.MessageFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.EnumSet;
@@ -46,8 +44,7 @@ import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.proxy.Proxifier;
 
 import com.google.common.base.Predicate;
-import com.google.common.collect.Collections2;
-import com.google.common.collect.Iterables;
+import com.google.common.collect.FluentIterable;
 
 /**
  * The default implementation of controller localization rules. It also uses a Path annotation to discover
@@ -69,7 +66,12 @@ public class DefaultRouter implements Router {
 	private final CacheStore<Invocation, Route> cache;
 	private final EncodingHandler encodingHandler;
 
-	private static final Route NULL = new NoStrategy();
+	private static final Route NULL = new NoStrategy() {
+		@Override
+		public String urlFor(Class<?> type, Method m, Object... params) {
+			throw new RouteNotFoundException("The selected route is invalid for redirection: " + type + "." + m.getName());
+		}
+	};
 
 	/**
 	 * @deprecated CDI eyes only
@@ -119,17 +121,16 @@ public class DefaultRouter implements Router {
 	private void checkIfThereIsAnotherRoute(String uri, HttpMethod method, Iterator<Route> iterator, Route route) {
 		if (iterator.hasNext()) {
 			Route otherRoute = iterator.next();
-			if (route.getPriority() == otherRoute.getPriority()) {
-				throw new IllegalStateException(MessageFormat.format(
-						"There are two rules that matches the uri ''{0}'' with method {1}: {2} with same priority."
-								+ " Consider using @Path priority attribute.", uri, method,
-						Arrays.asList(route, otherRoute)));
-			}
+			checkState(route.getPriority() != otherRoute.getPriority(),
+					"There are two rules that matches the uri '%s' with method %s: %s, %s with same priority."
+						+ " Consider using @Path priority attribute.", uri, method, route, otherRoute);
 		}
 	}
 
 	private Collection<Route> routesMatchingUriAndMethod(String uri, HttpMethod method) {
-		Collection<Route> routesMatchingMethod = filter(routesMatchingUri(uri), allow(method));
+		Collection<Route> routesMatchingMethod = FluentIterable.from(routesMatchingUri(uri))
+				.filter(allow(method)).toSet();
+
 		if (routesMatchingMethod.isEmpty()) {
 			EnumSet<HttpMethod> allowed = allowedMethodsFor(uri);
 			throw new MethodNotAllowedException(allowed, method.toString());
@@ -147,7 +148,9 @@ public class DefaultRouter implements Router {
 	}
 
 	private Collection<Route> routesMatchingUri(String uri) {
-		Collection<Route> routesMatchingURI = filter(routes, canHandle(uri));
+		Collection<Route> routesMatchingURI = FluentIterable.from(routes)
+				.filter(canHandle(uri)).toSet();
+
 		if (routesMatchingURI.isEmpty()) {
 			throw new ControllerNotFoundException();
 		}
@@ -162,20 +165,12 @@ public class DefaultRouter implements Router {
 		Route route = cache.fetch(invocation, new Callable<Route>() {
 			@Override
 			public Route call() throws Exception {
-				Collection<Route> matches = Collections2.filter(routes, canHandle(rawtype, method));
-				logger.debug("Routes matched for {} is {}", method, matches);
-
-				return Iterables.getFirst(matches, NULL);
+				return FluentIterable.from(routes).filter(canHandle(rawtype, method))
+					.first().or(NULL);
 			}
 		});
 
 		logger.debug("Selected route for {} is {}", method, route);
-
-		if (route == NULL) {
-			throw new RouteNotFoundException("The selected route is invalid for redirection: " + rawtype.getName()
-					+ "." + method.getName());
-		}
-
 		String url = route.urlFor(type, method, params);
 		logger.debug("Returning URL {} for {}", url, route);
 

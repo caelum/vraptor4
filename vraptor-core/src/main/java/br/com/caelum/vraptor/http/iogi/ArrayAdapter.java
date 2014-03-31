@@ -28,7 +28,7 @@ import br.com.caelum.iogi.parameters.Parameters;
 import br.com.caelum.iogi.reflection.Target;
 
 import com.google.common.base.Function;
-import com.google.common.collect.Lists;
+import com.google.common.collect.FluentIterable;
 
 @Vetoed
 final class ArrayAdapter implements Instantiator<Object> {
@@ -41,7 +41,14 @@ final class ArrayAdapter implements Instantiator<Object> {
 
 	@Override
 	public Object instantiate(final Target<?> target, Parameters parameters) {
-		List<Parameter> fixed = Lists.transform(parameters.forTarget(target), new Function<Parameter, Parameter>() {
+		List<Parameter> fixed = FluentIterable.from(parameters.forTarget(target))
+				.transform(indexedParameters(target)).toList();
+
+		return delegate.instantiate(target, new Parameters(fixed));
+	}
+
+	private Function<Parameter, Parameter> indexedParameters(final Target<?> target) {
+		return new Function<Parameter, Parameter>() {
 			int i = 0;
 			@Override
 			public Parameter apply(Parameter parameter) {
@@ -50,13 +57,11 @@ final class ArrayAdapter implements Instantiator<Object> {
 				}
 				return parameter;
 			}
-		});
-		return delegate.instantiate(target, new Parameters(fixed));
+		};
 	}
 
 	@Override
 	public boolean isAbleToInstantiate(Target<?> target) {
 		return delegate.isAbleToInstantiate(target);
 	}
-
 }

@@ -16,8 +16,6 @@
  */
 package br.com.caelum.vraptor.view;
 
-import static com.google.common.collect.Collections2.transform;
-
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
@@ -33,6 +31,7 @@ import br.com.caelum.vraptor.cache.CacheStore;
 import br.com.caelum.vraptor.cache.LRU;
 
 import com.google.common.base.Function;
+import com.google.common.collect.FluentIterable;
 
 /**
  * The default AcceptHeaderToFormat implementation searches for registered mime types. It also
@@ -136,7 +135,9 @@ public class DefaultAcceptHeaderToFormat implements AcceptHeaderToFormat {
 			mimes.add(convertToMimeType(string));
 		}
 
-		return transform(mimes, mimeType()).toArray(new String[mimes.size()]);
+		return FluentIterable.from(mimes)
+				.transform(mimeType())
+				.toArray(String.class);
 	}
 
 	private Function<MimeType, String> mimeType() {

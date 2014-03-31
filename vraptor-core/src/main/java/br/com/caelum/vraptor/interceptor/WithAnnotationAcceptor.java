@@ -1,11 +1,10 @@
 package br.com.caelum.vraptor.interceptor;
 
-import static com.google.common.collect.Collections2.transform;
 import static java.util.Arrays.asList;
+import static java.util.Collections.disjoint;
 
 import java.lang.annotation.Annotation;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 import javax.enterprise.context.Dependent;
@@ -14,6 +13,7 @@ import br.com.caelum.vraptor.controller.ControllerInstance;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 
 import com.google.common.base.Function;
+import com.google.common.collect.FluentIterable;
 
 /**
  * Verify if certain annotations are presents in class or method.
@@ -33,8 +33,11 @@ public class WithAnnotationAcceptor implements AcceptsValidator<AcceptsWithAnnot
 	}
 	
 	private boolean containsAllowedTypes(Annotation[] annotations) {
-		Collection<Class<? extends Annotation>> currentTypes = transform(asList(annotations), new AnnotationInstanceToType());
-		return !Collections.disjoint(allowedTypes, currentTypes);
+		Collection<Class<? extends Annotation>> currentTypes = FluentIterable.from(asList(annotations))
+				.transform(new AnnotationInstanceToType())
+				.toList();
+
+		return !disjoint(allowedTypes, currentTypes);
 	}
 
 	@Override

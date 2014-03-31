@@ -1,7 +1,5 @@
 package br.com.caelum.vraptor.validator;
 
-import static com.google.common.collect.Multimaps.index;
-
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -9,6 +7,7 @@ import java.util.Map;
 import javax.enterprise.inject.Vetoed;
 
 import com.google.common.base.Function;
+import com.google.common.collect.FluentIterable;
 import com.google.common.collect.ForwardingList;
 
 /**
@@ -39,7 +38,7 @@ public class ErrorList extends ForwardingList<Message> {
 	 */
 	public Map<String, Collection<Message>> getGrouped() {
 		if (grouped == null) {
-			grouped = index(delegate, byCategory).asMap();
+			grouped = FluentIterable.from(delegate).index(byCategory).asMap();
 		}
 		return grouped;
 	}

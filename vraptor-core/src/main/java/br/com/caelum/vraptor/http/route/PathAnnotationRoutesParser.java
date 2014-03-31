@@ -21,13 +21,12 @@ import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Predicates.instanceOf;
 import static com.google.common.base.Predicates.or;
 import static com.google.common.base.Strings.isNullOrEmpty;
-import static com.google.common.collect.Iterables.find;
+import static java.util.Arrays.asList;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
 
@@ -49,6 +48,7 @@ import br.com.caelum.vraptor.controller.HttpMethod;
 import br.com.caelum.vraptor.util.StringUtils;
 
 import com.google.common.base.Predicate;
+import com.google.common.collect.FluentIterable;
 
 /**
  * The default parser routes creator uses the path annotation to create rules.
@@ -164,7 +164,9 @@ public class PathAnnotationRoutesParser implements RoutesParser {
 	}
 
 	private String[] getUris(Method javaMethod){
-		Annotation method = find(Arrays.asList(javaMethod.getAnnotations()), instanceOfMethodAnnotation(), null);
+		Annotation method = FluentIterable.from(asList(javaMethod.getAnnotations()))
+				.firstMatch(instanceOfMethodAnnotation()).orNull();
+
 		if (method == null) {
 			return new String[0];
 		}

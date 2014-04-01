@@ -2,7 +2,7 @@
 title: Converters
 ---
 
-# When use a Converter?
+#When to use a Converter?
 
 When a parameter is received, we need to convert to an Object. VRaptor already have registered converters for all types define in  `Java Language Specification`. If the type is primitive and parameter is `null`, the default value for the type will be returned. Example: if your type is an `int` and the value is `null`, the value `0` will be returned. For the non-primitive types the `null` value is returned if the parameter is `null` or empty.
 
@@ -14,11 +14,11 @@ Are supported using application locale. `Double` and `Float` supports both primi
 
 `Calendar` and `Date` are supported using application locale.
 
-There are converters for most types of Joda-time like `DateTime`, `LocalDate`, `LocalDateTime` and `LocalTime` available using the <b>vraptor-jodatime</b> plugin. More info [here](/en/plugins).
+There are converters for the main Joda-time types: `DateTime`, `LocalDate`, `LocalDateTime` and `LocalTime` available using the <b>vraptor-jodatime</b> plugin. More info [here](/en/plugins).
 
 If you are using JDK 8, you can use the new `java.time` API available using <b>vraptor-javatime</b> plugin. More info [here](/en/plugins).
 
-##And if conversion fails
+##If conversion fails
 
 When a conversion fails VRaptor will add the error message using localization. To see these messages you need to add the lines below in your resource bundle:
 

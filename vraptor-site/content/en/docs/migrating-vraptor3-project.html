@@ -29,6 +29,8 @@ Now to trigger a code when VRaptor starts, you need to observes the event `VRapt
 @ApplicationScoped
 public class PrintLog {
 
+	@Inject private Logger logger;
+
     public void whenApplicationStarts(@Observes VRaptorInitialized initialized) {
         logger.info("My application is UP");
     }
@@ -39,25 +41,25 @@ public class PrintLog {
 
 Some classes and methods was changed or removed. If you have override some internal behaviour, you need to checkout our Javadocs to see what's changed.
 
-All methods and classes annotated with `@Deprecated` was removed.
+All methods and classes annotated with `@Deprecated` were removed.
 
 ##OGNL
 
-OGNL supporte was removed. Now we uses IOGI to instantiate parameters, that supports immutable objects, `Set`s and more. 
+OGNL support was removed. Now we use IOGI to instantiate parameters, that supports immutable objects, `Set`s and more. 
 
 ##Validation
 
-The fluent validation was removed. From now we only support Bean Validation. For legacy compatibility you can use `Validator.check(boolean, Message)` to do simple validation.
+The fluent validation was removed. From now we only support Bean Validation. For legacy compatibility you can use `Validator.addIf(boolean, Message)` or `Validator.ensure(boolean, Message)` to do simple validation.
 
 The `Validator` interface was moved to `br.com.caelum.vraptor.validator.Validator` package.
 
-The inherited classes from `Message` was changed. `ValidationMessage` was renamed to `SimpleMessage` and the constructor was refactored to `SimpleMessage(String param, String message, Object... params)` signature to keep compatibility if another classes for same package.
+The inherited classes from `Message` was changed. `ValidationMessage` was renamed to `SimpleMessage` and the constructor was refactored to `SimpleMessage(String category, String message, Object... params)` signature to keep compatibility if another classes for same package.
 
 ##Converters
 
-All localized converters are merged with non-localized converters. From now you don't need to declare these converters in the `web.xml`.
+All localized converters are merged with non-localized converters. From now on you don't need to declare these converters in the `web.xml`.
 
-All converters are refactored, and now it's don't have the `ResourceBundle` parameter in the `convert` method. If you need to use some localization features you can inject `Locale` in the class.
+All converters are refactored, and `Converter#convert` doesn't have a `ResourceBundle` parameter anymore. If you need to use some localization features you can inject `Locale` in the class.
 
 The `Converter` interface was moved to `br.com.caelum.vraptor.converter` package.
 
@@ -85,7 +87,7 @@ Due CDI behaviour you need to annotate your class with `@Specializes` annotation
 
 ##@Resource is now @Controller
 
-The `@Resource` annotation was renamed to `@Controller` and have the same behaviour.
+The `@Resource` annotation was renamed to `@Controller` and has the same behaviour.
 
 ##There is no Localization interface
 

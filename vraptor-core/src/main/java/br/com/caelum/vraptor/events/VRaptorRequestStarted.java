@@ -27,13 +27,28 @@ import br.com.caelum.vraptor.http.MutableResponse;
  *
  * @author Fabio Kung
  * @author Guilherme Silveira
- * @author Erich Egert
  */
-public interface RequestStarted {
+public class VRaptorRequestStarted implements RequestStarted {
 
-	public FilterChain getChain();
+	private final MutableRequest request;
+	private final MutableResponse response;
+	private final FilterChain chain;
 
-	public MutableRequest getRequest();
+	public VRaptorRequestStarted(FilterChain chain, MutableRequest request, MutableResponse response) {
+		this.chain = chain;
+		this.request = request;
+		this.response = response;
+	}
 
-	public MutableResponse getResponse();
+	public FilterChain getChain() {
+		return chain;
+	}
+
+	public MutableRequest getRequest() {
+		return request;
+	}
+
+	public MutableResponse getResponse() {
+		return response;
+	}
 }

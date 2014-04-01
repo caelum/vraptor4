@@ -13,7 +13,7 @@ import org.jboss.weld.context.bound.BoundSessionContext;
 import org.jboss.weld.context.bound.MutableBoundRequest;
 
 public class Contexts {
-	
+
 	@Inject
 	private ApplicationContext applicationContext;
 
@@ -25,15 +25,15 @@ public class Contexts {
 
 	@Inject
 	private BoundConversationContext conversationContext;
-	
+
 	private Map<String, Object> sessionMap = new HashMap<>();;
 	private Map<String, Object> requestMap = new HashMap<>();;
 
-	void startApplicationScope() {
+	public void startApplicationScope() {
 		// Welds ApplicationContext is always active
 	}
 
-	void stopApplicationScope() {
+	public void stopApplicationScope() {
 		if (applicationContext.isActive()) {
 			if (applicationContext instanceof AbstractSharedContext) {
 				((AbstractSharedContext) applicationContext).getBeanStore().clear();
@@ -41,12 +41,12 @@ public class Contexts {
 		}
 	}
 
-	void startSessionScope() {
+	public void startSessionScope() {
 		sessionContext.associate(sessionMap);
 		sessionContext.activate();
 	}
 
-	void stopSessionScope() {
+	public void stopSessionScope() {
 		if (sessionContext.isActive()) {
 			sessionContext.invalidate();
 			sessionContext.deactivate();
@@ -55,12 +55,12 @@ public class Contexts {
 		}
 	}
 
-	void startConversationScope(String cid) {
+	public void startConversationScope(String cid) {
 		conversationContext.associate(new MutableBoundRequest(requestMap,sessionMap));
 		conversationContext.activate(cid);
 	}
 
-	void stopConversationScope() {
+	public void stopConversationScope() {
 		if (conversationContext.isActive()) {
 			conversationContext.invalidate();
 			conversationContext.deactivate();
@@ -68,12 +68,12 @@ public class Contexts {
 		}
 	}
 
-	void startRequestScope() {
+	public void startRequestScope() {
 		requestContext.associate(requestMap);
 		requestContext.activate();
 	}
 
-	void stopRequestScope() {
+	public void stopRequestScope() {
 		if (requestContext.isActive()) {
 			requestContext.invalidate();
 			requestContext.deactivate();

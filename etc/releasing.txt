@@ -1,0 +1,28 @@
+After release a new version of VRaptor, we should:
+
+* Upload core, blank-project and musicjungle zips to bintray:
+
+bintray.com/caelum/VRaptor4/br.com.caelum.vraptor
+
+* Update blank-project and musicjungle pom (using the new version)
+
+* Update vraptor-site download pages (both pt and en)
+
+* Update and release the most frequently used plugins:
+
+	vraptor-time-converters
+	vraptor-simplemail
+	vraptor-errorcontrol
+	vraptor-brutauth
+	vraptor-quartzjob
+	vraptor-freemarker
+	vraptor-jpa
+	vraptor-hibernate
+	vraptor-dash
+	vraptor-authz
+	vraptor-shiro
+
+
+* notify users about the new release (by mail, guj or caelum's blog)
+
+

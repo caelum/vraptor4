@@ -1,3 +1,117 @@
 ---
 title: Migrating from VRaptor 3
 ---
+
+# Migrating from a VRaptor 3 project
+
+##Java 7 and CDI 1.1
+
+To use VRaptor you need a JDK 7 and an Application Server or Servlet Container that supports Servlets 3.1.
+
+
+##IoC Containers
+
+Now VRaptor uses CDI as container. So you don't need to use Guice, Pico or Spring.
+
+CDI spec **obligates** that all managed class have a no-arg constructor. So you need to create a no-arg constructor even you have another constructor annotated with `@Inject`.
+
+### Static scanning
+
+Since CDI can scan the classpath, this feature is not nedded anymore.
+
+
+##Startup events
+
+Now to trigger a code when VRaptor starts, you need to observes the event `VRaptorInitialized` as example below:
+
+~~~ 
+#!java
+@ApplicationScoped
+public class PrintLog {
+
+	@Inject private Logger logger;
+
+    public void whenApplicationStarts(@Observes VRaptorInitialized initialized) {
+        logger.info("My application is UP");
+    }
+}
+~~~ 
+
+##Changes in classes and method signatures
+
+Some classes and methods was changed or removed. If you have override some internal behaviour, you need to checkout our Javadocs to see what's changed.
+
+All methods and classes annotated with `@Deprecated` were removed.
+
+##OGNL
+
+OGNL support was removed. Now we use IOGI to instantiate parameters, that supports immutable objects, `Set`s and more. 
+
+##Validation
+
+The fluent validation was removed. From now we only support Bean Validation. For legacy compatibility you can use `Validator.addIf(boolean, Message)` or `Validator.ensure(boolean, Message)` to do simple validation.
+
+The `Validator` interface was moved to `br.com.caelum.vraptor.validator.Validator` package.
+
+The inherited classes from `Message` was changed. `ValidationMessage` was renamed to `SimpleMessage` and the constructor was refactored to `SimpleMessage(String category, String message, Object... params)` signature to keep compatibility if another classes for same package.
+
+##Converters
+
+All localized converters are merged with non-localized converters. From now on you don't need to declare these converters in the `web.xml`.
+
+All converters are refactored, and `Converter#convert` doesn't have a `ResourceBundle` parameter anymore. If you need to use some localization features you can inject `Locale` in the class.
+
+The `Converter` interface was moved to `br.com.caelum.vraptor.converter` package.
+
+##VRaptor scopes removed
+
+All VRaptor scopes are removed in flavor to use CDI scopes under package `javax.enterprise.context`:
+
+~~~ 
+#!java
+@javax.enterprise.context.RequestScoped
+@javax.enterprise.context.SessionScoped
+@javax.enterprise.context.ApplicationScoped
+@javax.enterprise.context.ConversationScoped
+@javax.enterprise.context.Dependent
+~~~ 
+
+
+##Component factories
+
+The `ComponentFactory` interface don't exists anymore. From now you can use `@Produces` from CDI spec. You can see more [here](/en/components).
+
+##Overriding components
+
+Due CDI behaviour you need to annotate your class with `@Specializes` annotation.
+
+##@Resource is now @Controller
+
+The `@Resource` annotation was renamed to `@Controller` and has the same behaviour.
+
+##There is no Localization interface
+
+Instead of using `Localization` and call `.getLocale()` or `.getBundle()` methods, from now you can inject these objects directly like this:
+
+~~~ 
+#!java
+public class MyClass {
+
+	@Inject private Locale locale;
+	@Inject private ResourceBundle bundle;
+}
+~~~ 
+
+##LinkTo
+
+The ***LinkTo*** feature was updated, and now supports method sintax. From now instead of using `${linkTo[Controller].metodo[0, 1]}` you can use `${linkTo[Controller].metodo(0, 1)}`. More information [here](/en/view-and-ajax).
+
+To easy migration we shared a `.sh` script [here](https://gist.github.com/rponte/7546377).
+
+##Serialization and deserialization
+
+To stay closer with HTML5 spec, all date and time used with serialization and deserialization uses the ISO8601 format.
+
+##Restfulie
+
+It's not supported anymore.

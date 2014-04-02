@@ -2,3 +2,104 @@
 title: Download and Upload
 ---
 
+#One minute example: download
+
+The example bellow explains how to send a download to the browser. Again, see how simple this code is:
+
+~~~ 
+#!java
+@Controller
+public class ProfileController {
+	
+	public File picture(Profile profile) {
+		return new File("/path/to/userpic." + profile.getId()+ ".jpg");
+	}
+}
+~~~ 
+
+##Adding more download info
+
+If you want to add more information about download, you can return a `FileDownload`:
+
+~~~ 
+#!java
+@Controller
+public class ProfileController {
+	public Download picture(Profile profile) {
+		File file = new File("/path/to/userpic." + perfil.getId()+ ".jpg");
+		String contentType = "image/jpg";
+		String filename = profile.getName() + ".jpg";
+
+		return new FileDownload(file, contentType, filename);
+	}
+}
+~~~ 
+
+You can also use the `InputStreamDownload` to work with Streams or `ByteArrayDownload` to send a byte array.
+
+##Upload
+
+To activate upload support it's necessary to add `commons-upload` and `commons-io` artifacts in your classpath. You can see more info [here](/en/dependencies-and-prerequisites).
+
+#One minute example: upload
+
+The first example is based on the multipart upload feature.
+
+~~~ 
+#!java
+@Controller
+public class PerfilController {
+
+	@Inject private final PerfilDao dao;
+		
+	public void atualizaFoto(Perfil perfil, UploadedFile foto) {
+		try (InputStream input = file.getFile()) {
+			dao.atribui(input, perfil);
+		}
+	}
+}
+~~~ 
+
+##More about Upload
+
+The `UploadedFile` returns the uploaded file as an `InputStream`. If you want to copy the file to disc easily, you can use the `Files` class from Java 7:
+
+~~~ 
+#!java
+public void atualizaFoto(Perfil perfil, UploadedFile foto) {
+	try (InputStream input = file.getFile()) {
+		File fotoSalva = new File();
+		Files.write(input, fotoSalva);
+		dao.atribui(fotoSalva, perfil);
+	}
+}
+~~~ 
+
+##Overriding upload settings
+
+You can also change the default upload settings overriding the class MultipartConfig. In example below, the size limit of upload is changed.
+
+~~~ 
+#!java
+@Specializes
+@ApplicationScoped
+public class CustomMultipartConfig extends DefaultMultipartConfig {
+	
+	public long getSizeLimit() {
+		return 50 * 1024 * 1024; // 50MB
+	}
+}
+~~~ 
+
+##Changes in form
+
+You need to add the parameter enctype with multipart/form-data value. Without this attribute, the browser cannot upload files:
+
+~~~ 
+#!jsp
+<form action="minha-action" method="post" enctype="multipart/form-data">
+~~~ 
+
+##Validating upload
+
+When the maximum size for uploaded file exceeds the configured value, VRaptor add a message on the `Validator` object.

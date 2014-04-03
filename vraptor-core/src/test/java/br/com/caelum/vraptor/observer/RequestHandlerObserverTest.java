@@ -39,21 +39,20 @@ import br.com.caelum.vraptor.controller.HttpMethod;
 import br.com.caelum.vraptor.controller.MethodNotAllowedHandler;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.events.ControllerFound;
-import br.com.caelum.vraptor.events.RequestStarted;
 import br.com.caelum.vraptor.events.RequestSucceded;
+import br.com.caelum.vraptor.events.VRaptorRequestStarted;
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.http.MutableResponse;
 import br.com.caelum.vraptor.http.UrlToControllerTranslator;
 import br.com.caelum.vraptor.http.route.ControllerNotFoundException;
 import br.com.caelum.vraptor.http.route.MethodNotAllowedException;
-import br.com.caelum.vraptor.ioc.cdi.CDIRequestFactories;
 
 public class RequestHandlerObserverTest {
 
 	private @Mock UrlToControllerTranslator translator;
 	private @Mock MutableRequest webRequest;
 	private @Mock MutableResponse webResponse;
-	private RequestStarted requestStarted;
+	private VRaptorRequestStarted requestStarted;
 	private RequestHandlerObserver observer;
 	private @Mock ControllerNotFoundHandler notFoundHandler;
 	private @Mock MethodNotAllowedHandler methodNotAllowedHandler;
@@ -65,14 +64,14 @@ public class RequestHandlerObserverTest {
 	@Before
 	public void config() {
 		MockitoAnnotations.initMocks(this);
-		requestStarted = new RequestStarted(chain, webRequest, webResponse);
+		requestStarted = new VRaptorRequestStarted(chain, webRequest, webResponse);
 		observer = new RequestHandlerObserver(translator, notFoundHandler, methodNotAllowedHandler, controllerFoundEvent, requestSucceededEvent, interceptorStack);
 	}
 
 	@Test
 	public void shouldHandle404() throws Exception {
 		when(translator.translate(webRequest)).thenThrow(new ControllerNotFoundException());
-		observer.handle(requestStarted, new CDIRequestFactories());
+		observer.handle(requestStarted);
 		verify(notFoundHandler).couldntFind(chain, webRequest, webResponse);
 		verify(interceptorStack, never()).start();
 	}
@@ -81,7 +80,7 @@ public class RequestHandlerObserverTest {
 	public void shouldHandle405() throws Exception {
 		EnumSet<HttpMethod> allowedMethods = EnumSet.of(HttpMethod.GET);
 		when(translator.translate(webRequest)).thenThrow(new MethodNotAllowedException(allowedMethods, POST.toString()));
-		observer.handle(requestStarted, new CDIRequestFactories());
+		observer.handle(requestStarted);
 		verify(methodNotAllowedHandler).deny(webRequest, webResponse, allowedMethods);
 		verify(interceptorStack, never()).start();
 	}
@@ -90,7 +89,7 @@ public class RequestHandlerObserverTest {
 	public void shouldUseControllerMethodFoundWithNextInterceptor() throws Exception {
 		final ControllerMethod method = mock(ControllerMethod.class);
 		when(translator.translate(webRequest)).thenReturn(method);
-		observer.handle(requestStarted, new CDIRequestFactories());
+		observer.handle(requestStarted);
 		verify(interceptorStack).start();
 	}
 	
@@ -98,7 +97,7 @@ public class RequestHandlerObserverTest {
 	public void shouldFireTheControllerWasFound() throws Exception {
 		final ControllerMethod method = mock(ControllerMethod.class);
 		when(translator.translate(webRequest)).thenReturn(method);
-		observer.handle(requestStarted, new CDIRequestFactories());
+		observer.handle(requestStarted);
 		verify(controllerFoundEvent).fire(any(ControllerFound.class));
 	}
 	
@@ -106,7 +105,7 @@ public class RequestHandlerObserverTest {
 	public void shouldFireTheRequestSuceeded() throws Exception {
 		final ControllerMethod method = mock(ControllerMethod.class);
 		when(translator.translate(webRequest)).thenReturn(method);
-		observer.handle(requestStarted, new CDIRequestFactories());
+		observer.handle(requestStarted);
 		verify(requestSucceededEvent).fire(any(RequestSucceded.class));
 	}
 }

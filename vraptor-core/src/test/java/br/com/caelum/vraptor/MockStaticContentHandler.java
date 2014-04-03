@@ -13,13 +13,14 @@ import br.com.caelum.vraptor.core.DefaultStaticContentHandler;
 
 @SuppressWarnings("deprecation")
 @Specializes
-class MockStaticContentHandler extends DefaultStaticContentHandler {
+public class MockStaticContentHandler extends DefaultStaticContentHandler {
 
 	private boolean deferProcessingToContainerCalled;
+	private boolean requestingStaticFile;
 
 	@Override
 	public boolean requestingStaticFile(HttpServletRequest request) throws MalformedURLException {
-		return true;
+		return requestingStaticFile;
 	}
 
 	@Override
@@ -30,5 +31,9 @@ class MockStaticContentHandler extends DefaultStaticContentHandler {
 
 	public boolean isDeferProcessingToContainerCalled() {
 		return deferProcessingToContainerCalled;
+	}
+
+	public void setRequestingStaticFile(boolean requestingStaticFile) {
+		this.requestingStaticFile = requestingStaticFile;
 	}
 }

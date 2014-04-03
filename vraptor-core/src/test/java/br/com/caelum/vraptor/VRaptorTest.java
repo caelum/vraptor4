@@ -49,6 +49,7 @@ public class VRaptorTest {
 		HttpServletRequest request = mock(HttpServletRequest.class);
 		HttpServletResponse response = mock(HttpServletResponse.class);
 		FilterChain chain = mock(FilterChain.class);
+		handler.setRequestingStaticFile(true);
 		vRaptor.doFilter(request, response, chain);
 		assertThat(handler.isDeferProcessingToContainerCalled(), is(true));
 	}

@@ -42,9 +42,9 @@ import br.com.caelum.vraptor.core.StaticContentHandler;
 import br.com.caelum.vraptor.events.RequestStarted;
 import br.com.caelum.vraptor.events.VRaptorInitialized;
 import br.com.caelum.vraptor.http.EncodingHandler;
-import br.com.caelum.vraptor.http.VRaptorRequest;
-import br.com.caelum.vraptor.http.VRaptorResponse;
 import br.com.caelum.vraptor.interceptor.ApplicationLogicException;
+import br.com.caelum.vraptor.ioc.RequestStartedFactory;
+import br.com.caelum.vraptor.ioc.cdi.CDIRequestFactories;
 
 /**
  * VRaptor entry point.<br>
@@ -68,13 +68,19 @@ public class VRaptor implements Filter {
 
 	@Inject
 	private EncodingHandler encodingHandler;
-	
+
 	@Inject
 	private Event<VRaptorInitialized> initializedEvent;
 
 	@Inject
 	private Event<RequestStarted> requestStartedEvent;
-	
+
+	@Inject
+	private RequestStartedFactory requestStartedFactory;
+
+	@Inject
+	private CDIRequestFactories cdiRequestFactories;
+
 	@Override
 	public void init(FilterConfig cfg) throws ServletException {
 		servletContext = cfg.getServletContext();
@@ -84,7 +90,7 @@ public class VRaptor implements Filter {
 		warnIfBeansXmlIsNotFound();
 
 		initializedEvent.fire(new VRaptorInitialized(servletContext));
-		
+
 		logger.info("VRaptor {} successfuly initialized", VERSION);
 	}
 
@@ -102,20 +108,18 @@ public class VRaptor implements Filter {
 		} else {
 			logger.trace("VRaptor received a new request {}", req);
 
-			VRaptorRequest mutableRequest = new VRaptorRequest(baseRequest);
-			VRaptorResponse mutableResponse = new VRaptorResponse(baseResponse);
-
-			final RequestStarted request = new RequestStarted(chain, mutableRequest, mutableResponse);
-
 			try {
 				encodingHandler.setEncoding(baseRequest, baseResponse);
-				requestStartedEvent.fire(request);
+				RequestStarted requestStarted = requestStartedFactory.createEvent(baseRequest, baseResponse, chain);
+
+				cdiRequestFactories.setRequest(requestStarted);
+				requestStartedEvent.fire(requestStarted);
 			} catch (ApplicationLogicException e) {
 				// it is a business logic exception, we dont need to show
 				// all interceptors stack trace
 				throw new ServletException(e.getMessage(), e.getCause());
 			}
-			
+
 			logger.debug("VRaptor ended the request");
 		}
 	}

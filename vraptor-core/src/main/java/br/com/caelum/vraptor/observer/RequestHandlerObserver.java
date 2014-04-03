@@ -32,14 +32,13 @@ import br.com.caelum.vraptor.controller.MethodNotAllowedHandler;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.events.ControllerFound;
 import br.com.caelum.vraptor.events.RequestSucceded;
-import br.com.caelum.vraptor.events.RequestStarted;
+import br.com.caelum.vraptor.events.VRaptorRequestStarted;
 import br.com.caelum.vraptor.http.UrlToControllerTranslator;
 import br.com.caelum.vraptor.http.route.ControllerNotFoundException;
 import br.com.caelum.vraptor.http.route.MethodNotAllowedException;
-import br.com.caelum.vraptor.ioc.cdi.CDIRequestFactories;
 
 /**
- * Looks up the {@link ControllerMethod} for a specific request and start {@link 
+ * Looks up the {@link ControllerMethod} for a specific request and start {@link
  * InterceptorStack} if it was found, otherwise delegates for the 404 component.
  *
  * @author Guilherme Silveira
@@ -69,8 +68,8 @@ public class RequestHandlerObserver {
 	@Inject
 	public RequestHandlerObserver(UrlToControllerTranslator translator,
 			ControllerNotFoundHandler controllerNotFoundHandler, MethodNotAllowedHandler methodNotAllowedHandler,
-			Event<ControllerFound> controllerFoundEvent, 
-			Event<RequestSucceded> endRequestEvent, 
+			Event<ControllerFound> controllerFoundEvent,
+			Event<RequestSucceded> endRequestEvent,
 			InterceptorStack interceptorStack) {
 		this.translator = translator;
 		this.methodNotAllowedHandler = methodNotAllowedHandler;
@@ -80,9 +79,8 @@ public class RequestHandlerObserver {
 		this.interceptorStack = interceptorStack;
 	}
 
-	public void handle(@Observes RequestStarted event, CDIRequestFactories factories) {
+	public void handle(@Observes VRaptorRequestStarted event) {
 		try {
-			factories.setRequest(event);
 			ControllerMethod method = translator.translate(event.getRequest());
 			controllerFoundEvent.fire(new ControllerFound(method));
 			interceptorStack.start();

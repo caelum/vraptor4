@@ -208,6 +208,11 @@ div.note p {
   background-position: 0 -709px; 
 }
 
+img#eventPileline {
+  min-width: 700px;
+  width: 90%;
+}
+
 @media (min-width: 480px) {
   .community {
     display: inline-block;

@@ -1,0 +1,42 @@
+# Trabalhando com o recurso de Eventos do CDI
+
+O VRaptor agora trata o fluxo principal do request utilizando eventos do CDI. A seguinte imagem exibe os eventos disparados e seus respectivos observers:
+
+<img src="/img/vraptorEventPipeline.png" id="eventPileline" alt="VRaptor 4 Event Pipeline">
+
+## Eventos disparados pelo VRaptor
+
+* `VRaptorInitialized` disparado no startup da aplicação, indicando que o VRaptor foi inicializado.
+* `RequestStarted` disparado no início de cada request.
+* `RequestSucceeded` disparado no final do request, apenas caso ela tenha sido processada sem nenhum erro.
+* `ControllerFound` e `ControllerNotFound` vão indicar se o Controller que atende a url do request foi encontrado ou não.
+* `InterceptorsReady` e `InterceptorsExecuted` indicam o momento em que a stack de interceptors será executada e logo após sua conclusão.
+* `MethodReady` e `MethodExecuted` quando o método do controller será executado e logo após sua conclusão.
+
+
+
+## Observando nossos eventos
+
+Você pode observar qualquer evento disparado pelo VRaptor, para isso basta criar um método com a anotação `@Observes` do pacote `javax.enterprise.event` antes do evento como parâmetro. Algo como:
+
+~~~
+#!java
+import javax.enterprise.event.Observes;
+
+import br.com.caelum.vraptor.events.ControllerNotFound;
+
+public class MeuObserver {
+	
+	public void metodo(@Observes ControllerNotFound evento) {
+		// alguma ação para quando o controller não for encontrado
+	}
+}
+~~~
+
+É importante lembrar que não existe ordem na execução dos observers, ou seja, não há garantia que o meu método será executado antes ou depois de qualquer outro método que observe este mesmo evento. Caso a ordem seja importante, considere utilizar interceptors.
+
+
+## Mais sobre eventos
+
+Esse interessante recurso te ajuda a diminuir o acoplamento de seu código de forma elegante. Você pode ler mais a respeito dos eventos do CDI [em sua especificação](http://docs.jboss.org/cdi/spec/1.1/cdi-spec.html#_event_example) e também [nesse post do blog da caelum](http://blog.caelum.com.br/diminua-suas-dependencias-com-os-eventos-do-cdi/).
+

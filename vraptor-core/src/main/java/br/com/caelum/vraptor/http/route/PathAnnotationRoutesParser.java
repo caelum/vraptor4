@@ -163,7 +163,7 @@ public class PathAnnotationRoutesParser implements RoutesParser {
 		return new String[] { defaultUriFor(extractControllerNameFrom(type), javaMethod.getName()) };
 	}
 
-	private String[] getUris(Method javaMethod){
+	protected String[] getUris(Method javaMethod){
 		Annotation method = FluentIterable.from(asList(javaMethod.getAnnotations()))
 				.firstMatch(instanceOfMethodAnnotation()).orNull();
 

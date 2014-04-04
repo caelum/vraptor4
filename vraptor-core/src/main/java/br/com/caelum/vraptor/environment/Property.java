@@ -3,6 +3,7 @@ package br.com.caelum.vraptor.environment;
 import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.ElementType.TYPE;
+import static java.lang.annotation.ElementType.PARAMETER;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
@@ -21,7 +22,7 @@ import javax.inject.Qualifier;
 @Qualifier
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ TYPE, METHOD, FIELD })
+@Target({ TYPE, METHOD, FIELD, PARAMETER })
 public @interface Property {
 	@Nonbinding String value() default "";
 }

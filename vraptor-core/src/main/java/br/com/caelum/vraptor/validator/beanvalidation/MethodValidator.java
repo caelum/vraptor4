@@ -88,20 +88,19 @@ public class MethodValidator {
 		return descriptor != null && descriptor.hasConstrainedParameters();
 	}
 
-	public void validate(@Observes MethodReady event, ControllerInstance controllerInstance,
-			MethodInfo methodInfo, Validator validator) {
-		ControllerMethod controllerMethod = event.getControllerMethod();
+	public void validate(@Observes MethodReady event, ControllerInstance controllerInstance, MethodInfo methodInfo, 
+			Validator validator) {
+		ControllerMethod method = event.getControllerMethod();
 
-		if (hasConstraints(controllerMethod)) {
+		if (hasConstraints(method)) {
 			Set<ConstraintViolation<Object>> violations = bvalidator.forExecutables().validateParameters(
-					controllerInstance.getController(), controllerMethod.getMethod(), methodInfo.getParametersValues());
+					controllerInstance.getController(), method.getMethod(), methodInfo.getParametersValues());
 
-			logger.debug("there are {} constraint violations at method {}.", violations.size(), controllerMethod);
+			logger.debug("there are {} constraint violations at method {}.", violations.size(), method);
 
 			for (ConstraintViolation<Object> v : violations) {
-				BeanValidatorContext ctx = new BeanValidatorContext(v);
-				String msg = interpolator.interpolate(v.getMessageTemplate(), ctx, locale);
 				String category = extractCategory(methodInfo.getValuedParameters(), v);
+				String msg = extractInternacionalizedMessage(v);
 				validator.add(new SimpleMessage(category, msg));
 				logger.debug("added message {}={} for contraint violation", category, msg);
 			}
@@ -110,8 +109,7 @@ public class MethodValidator {
 
 	/**
 	 * Returns the category for this constraint violation. By default, the category returned
-	 * is the name of method with full path for property. You can override this method to
-	 * change this behaviour.
+	 * is the full path for property. You can override this method if you prefer another strategy.
 	 */
 	protected String extractCategory(ValuedParameter[] params, ConstraintViolation<Object> violation) {
 		Iterator<Node> path = violation.getPropertyPath().iterator();
@@ -125,5 +123,12 @@ public class MethodValidator {
 		}
 
 		return cat.toString();
+	}
+
+	/**
+	 * Returns the internacionalized message for this constraint violation.
+	 */
+	protected String extractInternacionalizedMessage(ConstraintViolation<Object> v) {
+		return interpolator.interpolate(v.getMessageTemplate(), new BeanValidatorContext(v), locale);
 	}
 }

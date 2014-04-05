@@ -35,6 +35,9 @@ import br.com.caelum.vraptor.cache.LRU;
 import br.com.caelum.vraptor.converter.Converter;
 import br.com.caelum.vraptor.ioc.Container;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.FluentIterable;
+
 @ApplicationScoped
 public class DefaultConverters implements Converters {
 
@@ -81,20 +84,20 @@ public class DefaultConverters implements Converters {
 		return cache.fetch(clazz, new Callable<Class<? extends Converter<?>>>() {
 			@Override
 			public Class<? extends Converter<?>> call() throws Exception {
-				return findConverterFromList(clazz);
+				return FluentIterable.from(classes).filter(matchConverter(clazz))
+						.first().or(NullConverter.class);
 			}
-
 		});
 	}
 
-	private Class<? extends Converter<?>> findConverterFromList(Class<?> clazz) {
-		for (Class<? extends Converter<?>> converterType : classes) {
-			Class<?> boundType = converterType.getAnnotation(Convert.class).value();
-			if (boundType.isAssignableFrom(clazz)) {
-				return converterType;
+	private Predicate<Class<?>> matchConverter(final Class<?> clazz) {
+		return new Predicate<Class<?>>() {
+			@Override
+			public boolean apply(Class<?> input) {
+				Class<?> boundType = input.getAnnotation(Convert.class).value();
+				return boundType.isAssignableFrom(clazz);
 			}
-		}
-		return NullConverter.class;
+		};
 	}
 
 	private interface NullConverter extends Converter<Object> {};

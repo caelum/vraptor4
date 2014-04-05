@@ -96,7 +96,7 @@ public class MethodValidator {
 			Set<ConstraintViolation<Object>> violations = bvalidator.forExecutables().validateParameters(
 					controllerInstance.getController(), controllerMethod.getMethod(), methodInfo.getParametersValues());
 
-			logger.debug("there are {} violations at method {}.", violations.size(), controllerMethod);
+			logger.debug("there are {} constraint violations at method {}.", violations.size(), controllerMethod);
 
 			for (ConstraintViolation<Object> v : violations) {
 				BeanValidatorContext ctx = new BeanValidatorContext(v);

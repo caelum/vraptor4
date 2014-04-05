@@ -20,6 +20,7 @@ package br.com.caelum.vraptor.validator;
 import static com.google.common.base.Objects.toStringHelper;
 
 import java.text.MessageFormat;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 import javax.enterprise.inject.Vetoed;
@@ -80,5 +81,22 @@ public class SimpleMessage implements Message {
 	public String toString() {
 		return toStringHelper(this).add("category", category).add("message", message)
 				.add("severity",severity).add("parameters", messageParameters).toString();
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hashCode(category) ^ Objects.hashCode(message) ^ Objects.hash(messageParameters) 
+				^ Objects.hashCode(severity);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		return obj.hashCode() == hashCode();
 	}
 }

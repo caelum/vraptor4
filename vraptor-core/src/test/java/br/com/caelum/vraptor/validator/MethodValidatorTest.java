@@ -14,7 +14,6 @@ import java.util.Locale;
 import javax.validation.MessageInterpolator;
 import javax.validation.ValidatorFactory;
 import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.Email;
 import org.junit.Before;
@@ -96,17 +95,6 @@ public class MethodValidatorTest {
 
 	private MethodValidator getMethodValidator() {
 		return new MethodValidator(new Locale("pt", "br"), interpolator, validatorFactory.getValidator());
-	}
-
-	public static class Customer {
-
-		@NotNull public Integer id;
-		@NotNull public String name;
-
-		public Customer(Integer id, String name) {
-			this.id = id;
-			this.name = name;
-		}
 	}
 
 	public class MyController {

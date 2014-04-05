@@ -37,6 +37,7 @@ import java.util.ResourceBundle;
 
 import javax.validation.MessageInterpolator;
 import javax.validation.ValidatorFactory;
+import javax.validation.constraints.NotNull;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -221,13 +222,13 @@ public class DefaultValidatorTest {
 
 	@Test
 	public void shouldReturnEmptyCollectionForValidBean() {
-		validator.validate(new MethodValidatorTest.Customer(1, "Otto, the dog"));
+		validator.validate(new Customer(1, "Otto, the dog"));
 		assertThat(validator.getErrors(), hasSize(0));
 	}
 
 	@Test
 	public void shouldReturnElementsForInvalidBean() {
-		validator.validate(new MethodValidatorTest.Customer(null, null));
+		validator.validate(new Customer(null, null));
 		assertThat(validator.getErrors(), hasSize(2));
 	}
 
@@ -241,4 +242,14 @@ public class DefaultValidatorTest {
 		public int age;
 	}
 
+	public static class Customer {
+
+		@NotNull public Integer id;
+		@NotNull public String name;
+
+		public Customer(Integer id, String name) {
+			this.id = id;
+			this.name = name;
+		}
+	}
 }

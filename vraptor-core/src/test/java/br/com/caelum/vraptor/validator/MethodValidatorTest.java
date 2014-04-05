@@ -85,7 +85,7 @@ public class MethodValidatorTest {
 
 		getMethodValidator().validate(new MethodReady(withConstraint), instance, methodInfo, validator);
 		assertThat(validator.getErrors(), hasSize(1));
-		assertThat(validator.getErrors().get(0).getCategory(), is("withConstraint.email"));
+		assertThat(validator.getErrors().get(0).getCategory(), is("email"));
 	}
 
 	private MethodValidator getMethodValidator() {

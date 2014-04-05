@@ -25,7 +25,6 @@ import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.Mockito.when;
 
 import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.Locale;
 
 import javax.servlet.ServletContext;
@@ -58,8 +57,12 @@ public class CalendarConverterTest {
 
 	@Test
 	public void shouldBeAbleToConvert() {
-		assertThat(converter.convert("10/06/2008", Calendar.class),
-				is(equalTo((Calendar) new GregorianCalendar(2008, 5, 10))));
+		Calendar expected = Calendar.getInstance(new Locale("pt", "BR"));
+		expected.set(2008, 5, 10, 0, 0, 0);
+		expected.set(Calendar.MILLISECOND, 0);
+		
+		assertThat(converter.convert("10/06/2008", Calendar.class), 
+				is(equalTo(expected)));
 	}
 
 	@Test

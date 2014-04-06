@@ -36,7 +36,7 @@ public class CustomAndInternalAcceptsValidationRule implements ValidationRule {
 		Method accepts = invoker.findMethod(methods, Accepts.class, originalType);
 		List<Annotation> constraints = getCustomAcceptsAnnotations(originalType);
 
-		checkState(accepts == null || constraints.isEmpty(), "Interceptor "
-			+ "%s must declare internal accepts or custom, not both.", originalType);
+		checkState(accepts == null || constraints.isEmpty(), 
+				"Interceptor %s must declare internal accepts or custom, not both.", originalType);
 	}
 }

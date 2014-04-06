@@ -1,6 +1,7 @@
 package br.com.caelum.vraptor.interceptor;
 
-import java.util.Arrays;
+import static java.util.Arrays.asList;
+
 import java.util.List;
 
 import javax.enterprise.context.Dependent;
@@ -26,7 +27,6 @@ public class PackagesAcceptor implements AcceptsValidator<AcceptsForPackages> {
 
 	@Override
 	public void initialize(AcceptsForPackages annotation) {
-		this.allowedPackages = Arrays.asList(annotation.value());
+		this.allowedPackages = asList(annotation.value());
 	}
-
 }

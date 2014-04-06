@@ -33,5 +33,4 @@ public class DefaultSimpleInterceptorStack implements SimpleInterceptorStack {
 	public void next() {
 		delegate.next(controllerMethod, controllerInstance.getController());
 	}
-
 }

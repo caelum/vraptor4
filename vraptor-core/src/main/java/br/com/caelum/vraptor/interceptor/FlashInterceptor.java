@@ -98,6 +98,4 @@ public class FlashInterceptor implements Interceptor {
 		stack.next(method, controllerInstance);
 
 	}
-
-
 }

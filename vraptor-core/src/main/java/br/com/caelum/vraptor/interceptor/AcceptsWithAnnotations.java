@@ -15,5 +15,5 @@ import java.lang.annotation.Target;
 @Inherited
 public @interface AcceptsWithAnnotations {
 
-	 public Class<? extends Annotation>[] value();
+	 Class<? extends Annotation>[] value();
 }

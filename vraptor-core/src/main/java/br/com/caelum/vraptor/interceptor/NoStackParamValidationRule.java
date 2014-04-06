@@ -58,7 +58,7 @@ public class NoStackParamValidationRule implements ValidationRule {
 		}
 
 		List<Class<?>> parameterTypes = asList(method.getParameterTypes());
-		return !FluentIterable.from(parameterTypes).filter(hasStack()).isEmpty();
+		return FluentIterable.from(parameterTypes).anyMatch(hasStack());
 	}
 
 	private Predicate<Class<?>> hasStack() {

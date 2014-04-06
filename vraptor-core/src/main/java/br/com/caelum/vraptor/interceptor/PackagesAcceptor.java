@@ -9,6 +9,9 @@ import javax.enterprise.context.Dependent;
 import br.com.caelum.vraptor.controller.ControllerInstance;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.FluentIterable;
+
 @Dependent
 public class PackagesAcceptor implements AcceptsValidator<AcceptsForPackages> {
 
@@ -17,12 +20,18 @@ public class PackagesAcceptor implements AcceptsValidator<AcceptsForPackages> {
 	@Override
 	public boolean validate(ControllerMethod method, ControllerInstance instance) {
 		String controllerPackageName = instance.getBeanClass().getPackageName();
-		for (String packageName : allowedPackages) {
-			if(controllerPackageName.contains(packageName)){
-				return true;
+		
+		return FluentIterable.from(allowedPackages)
+			.anyMatch(currentOrSubpackage(controllerPackageName));
+	}
+
+	private Predicate<String> currentOrSubpackage(final String controllerPackageName) {
+		return new Predicate<String>() {
+			@Override
+			public boolean apply(String input) {
+				return controllerPackageName.contains(input);
 			}
-		}
-		return false;
+		};
 	}
 
 	@Override

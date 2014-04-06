@@ -56,5 +56,4 @@ public class TopologicalSortedInterceptorRegistry implements InterceptorRegistry
 			set.addEdge(other, interceptor);
 		}
 	}
-
 }

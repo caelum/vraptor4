@@ -1,6 +1,6 @@
 package br.com.caelum.vraptor.interceptor;
 
-import static java.lang.String.format;
+import static com.google.common.base.Preconditions.checkState;
 
 import java.lang.reflect.Method;
 
@@ -19,16 +19,13 @@ public class InterceptorValidator {
 	private @Inject @Any StepInvoker stepInvoker;
 
 	public void validate(Class<?> originalType) {
-
 		boolean implementsInterceptor = Interceptor.class.isAssignableFrom(originalType);
 		boolean containsIntercepts = originalType.isAnnotationPresent(Intercepts.class);
 
-		if (implementsInterceptor || containsIntercepts) {
-			applyNewInterceptorValidationRules(originalType, implementsInterceptor);
-		} else {
-			throw new IllegalStateException(format("Annotation @Intercepts found in %s, "
-				+ "but it is not an Interceptor.", originalType));
-		}
+		checkState(implementsInterceptor || containsIntercepts, 
+				"Annotation @Intercepts found in %s, but it is not an Interceptor.", originalType);
+
+		applyNewInterceptorValidationRules(originalType, implementsInterceptor);
 	}
 
 	private void applyNewInterceptorValidationRules(Class<?> originalType,

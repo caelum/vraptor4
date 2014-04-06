@@ -55,7 +55,6 @@ public class StepInvoker {
 	}
 
 	private boolean isNotSameClass(MirrorList<Method> methods, Class<?> interceptorClass) {
-
 		for (Method possibleMethod : methods) {
 			if (!possibleMethod.getDeclaringClass().equals(interceptorClass)) {
 				return false;

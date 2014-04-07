@@ -19,6 +19,8 @@ package br.com.caelum.vraptor.validator;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.empty;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
@@ -37,6 +39,7 @@ import java.util.ResourceBundle;
 
 import javax.validation.MessageInterpolator;
 import javax.validation.ValidatorFactory;
+import javax.validation.constraints.NotNull;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -208,9 +211,22 @@ public class DefaultValidatorTest {
 	public void shouldGroupMessagesFromSameCategory() {
 		validator.add(new SimpleMessage("client.name", "not null"));
 		validator.add(new SimpleMessage("client.name", "not empty"));
+		validator.add(new SimpleMessage("client.email", "is not valid e-mail"));
 
-		Collection<Message> errors = ((ErrorList) validator.getErrors()).from("client.name");
+		Collection<String> errors = ((ErrorList) validator.getErrors()).from("client.name");
 		assertThat(errors, hasSize(2));
+		assertThat(errors, hasItem("not null"));
+		assertThat(errors, hasItem("not empty"));
+		assertThat(errors, not(hasItem("is not valid e-mail")));
+	}
+
+	@Test
+	public void shouldDisplayMessagesJoiningWithCommas() {
+		validator.add(new SimpleMessage("client.name", "not null"));
+		validator.add(new SimpleMessage("client.name", "not empty"));
+
+		Collection<String> errors = ((ErrorList) validator.getErrors()).from("client.name");
+		assertThat(errors.toString(), equalTo("not null, not empty"));
 	}
 
 	@Test
@@ -221,13 +237,13 @@ public class DefaultValidatorTest {
 
 	@Test
 	public void shouldReturnEmptyCollectionForValidBean() {
-		validator.validate(new MethodValidatorTest.Customer(1, "Otto, the dog"));
+		validator.validate(new Customer(1, "Otto, the dog"));
 		assertThat(validator.getErrors(), hasSize(0));
 	}
 
 	@Test
 	public void shouldReturnElementsForInvalidBean() {
-		validator.validate(new MethodValidatorTest.Customer(null, null));
+		validator.validate(new Customer(null, null));
 		assertThat(validator.getErrors(), hasSize(2));
 	}
 
@@ -241,4 +257,14 @@ public class DefaultValidatorTest {
 		public int age;
 	}
 
+	public static class Customer {
+
+		@NotNull public Integer id;
+		@NotNull public String name;
+
+		public Customer(Integer id, String name) {
+			this.id = id;
+			this.name = name;
+		}
+	}
 }

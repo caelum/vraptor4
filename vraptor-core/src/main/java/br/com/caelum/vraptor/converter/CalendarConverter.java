@@ -22,7 +22,6 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.Locale;
 
 import javax.enterprise.context.RequestScoped;
@@ -61,7 +60,7 @@ public class CalendarConverter implements Converter<Calendar> {
 
 		try {
 			Date date = getDateFormat().parse(value);
-			Calendar calendar = new GregorianCalendar();
+			Calendar calendar = Calendar.getInstance(locale);
 			calendar.setTime(date);
 			return calendar;
 		} catch (ParseException e) {

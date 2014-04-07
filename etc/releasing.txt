@@ -22,6 +22,7 @@ bintray.com/caelum/VRaptor4/br.com.caelum.vraptor
 	vraptor-authz
 	vraptor-shiro
 
+* Update plugin versions on vraptor-site (both pt and en)
 
 * notify users about the new release (by mail, guj or caelum's blog)
 

@@ -19,6 +19,8 @@ package br.com.caelum.vraptor.validator;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.empty;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
@@ -208,9 +210,22 @@ public class DefaultValidatorTest {
 	public void shouldGroupMessagesFromSameCategory() {
 		validator.add(new SimpleMessage("client.name", "not null"));
 		validator.add(new SimpleMessage("client.name", "not empty"));
+		validator.add(new SimpleMessage("client.email", "is not valid e-mail"));
 
-		Collection<Message> errors = ((ErrorList) validator.getErrors()).from("client.name");
+		Collection<String> errors = ((ErrorList) validator.getErrors()).from("client.name");
 		assertThat(errors, hasSize(2));
+		assertThat(errors, hasItem("not null"));
+		assertThat(errors, hasItem("not empty"));
+		assertThat(errors, not(hasItem("is not valid e-mail")));
+	}
+
+	@Test
+	public void shouldDisplayMessagesJoiningWithCommas() {
+		validator.add(new SimpleMessage("client.name", "not null"));
+		validator.add(new SimpleMessage("client.name", "not empty"));
+
+		Collection<String> errors = ((ErrorList) validator.getErrors()).from("client.name");
+		assertThat(errors.toString(), equalTo("not null, not empty"));
 	}
 
 	@Test

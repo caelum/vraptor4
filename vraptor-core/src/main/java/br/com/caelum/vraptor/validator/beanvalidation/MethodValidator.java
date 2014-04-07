@@ -113,7 +113,8 @@ public class MethodValidator {
 	 */
 	protected String extractCategory(ValuedParameter[] params, ConstraintViolation<Object> violation) {
 		Iterator<Node> path = violation.getPropertyPath().iterator();
-		path.next(); // skip method name
+		Node method = path.next();
+		logger.debug("Constraint violation on method {}: {}", method, violation);
 
 		StringBuilder cat = new StringBuilder();
 		cat.append(params[path.next().as(ParameterNode.class).getParameterIndex()].getName());// parameter name

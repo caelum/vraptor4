@@ -16,8 +16,8 @@
 package br.com.caelum.vraptor.validator;
 
 import static br.com.caelum.vraptor.controller.DefaultControllerMethod.instanceFor;
+import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.spy;
@@ -28,8 +28,9 @@ import java.util.Locale;
 
 import javax.validation.MessageInterpolator;
 import javax.validation.ValidatorFactory;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Min;
 
+import org.hibernate.validator.constraints.Email;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.MockitoAnnotations;
@@ -97,32 +98,22 @@ public class MethodValidatorTest {
 	@Test
 	public void shouldValidateMethodWithConstraint() throws Exception {
 		methodInfo.setControllerMethod(withConstraint);
+		methodInfo.setParameter(0, "a");
+
+		Message[] expected = { new SimpleMessage("email", "deve ser maior ou igual a 10"),
+				new SimpleMessage("email", "Não é um endereço de e-mail") };
 
 		getMethodValidator().validate(new MethodReady(withConstraint), instance, methodInfo, validator);
-		assertThat(validator.getErrors(), hasSize(1));
-		assertThat(validator.getErrors().get(0).getCategory(), is("withConstraint.email"));
+		assertThat(validator.getErrors(), hasSize(2));
+		assertThat(validator.getErrors(), containsInAnyOrder(expected));
 	}
 
 	private MethodValidator getMethodValidator() {
 		return new MethodValidator(new Locale("pt", "br"), interpolator, validatorFactory.getValidator());
 	}
 
-	/**
-	 * Customer for using in bean validator tests.
-	 */
-	public static class Customer {
-
-		@NotNull public Integer id;
-		@NotNull public String name;
-
-		public Customer(Integer id, String name) {
-			this.id = id;
-			this.name = name;
-		}
-	}
-
 	public class MyController {
-		public void withConstraint(@NotNull String email) { }
+		public void withConstraint(@Min(10) @Email String email) { }
 		public void withoutConstraint(String foo) { }
 	}
 }

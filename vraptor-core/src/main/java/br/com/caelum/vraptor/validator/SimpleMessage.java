@@ -21,6 +21,7 @@ import static com.google.common.base.Objects.toStringHelper;
 
 import java.text.MessageFormat;
 import java.util.Objects;
+import java.util.Arrays;
 import java.util.ResourceBundle;
 
 import javax.enterprise.inject.Vetoed;
@@ -97,6 +98,10 @@ public class SimpleMessage implements Message {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		return obj.hashCode() == hashCode();
+		SimpleMessage other = (SimpleMessage) obj;
+		return Objects.equals(category, other.category) && Objects.equals(message, other.message)
+			&& ((messageParameters == null &&  other.messageParameters == null)
+				|| Arrays.equals(messageParameters, other.messageParameters))
+			&& Objects.equals(severity, other.severity);
 	}
 }

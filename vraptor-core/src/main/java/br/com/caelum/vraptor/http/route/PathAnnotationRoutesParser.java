@@ -165,7 +165,8 @@ public class PathAnnotationRoutesParser implements RoutesParser {
 
 	protected String[] getUris(Method javaMethod){
 		Annotation method = FluentIterable.from(asList(javaMethod.getAnnotations()))
-				.firstMatch(instanceOfMethodAnnotation()).orNull();
+				.filter(instanceOfMethodAnnotation())
+				.first().orNull();
 
 		if (method == null) {
 			return new String[0];

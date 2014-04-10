@@ -60,11 +60,11 @@ public class ResultSerializationTest extends AcceptanceTestCase{
 	}
 
 	private String JSON(Music music) {
-		return new StringBuilder("{\"id\":").append(music.getId())
-			.append(",\"title\":\"").append(music.getTitle())
-			.append("\",\"description\":\"").append(music.getDescription())
-			.append("\",\"type\":\"").append(music.getType().toString())
-			.append("\"}").toString();
+		return String.format("{\"id\":%s,\"title\":\"%s\",\"description\":\"%s\",\"type\":\"%s\"}", 
+				music.getId(), 
+				music.getTitle(), 
+				music.getDescription(), 
+				music.getType().toString());
 	}
 
 	private String getExpectedXml() {

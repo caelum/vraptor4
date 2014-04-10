@@ -24,12 +24,12 @@ public class RoutesTest extends AcceptanceTestCase {
 
 	private LoginPage loginPage;
 	private Music music;
-	private String userName = "vraptortest";
+	private String userName = "acceptancetest";
 
 	@Before
 	public void setUp() {
 		this.loginPage = loginPage();
-		loginPage.loginAsUser(userName);
+		loginPage.createAndloginAsUser(userName);
 		this.music = new MusicBuilder(3, "Please Please Me", "Beatles", ROCK).create();
 		homePage().addMusic(music);
 		loginPage.logout();
@@ -58,7 +58,7 @@ public class RoutesTest extends AcceptanceTestCase {
 	}
 
 	private void shouldAccessPostMethodWithDefaultURLValue() {
-		assertPageContains(loginPage, "VRaptor Music Jungle", "Sign In");
+		assertPageContains(loginPage, "VRaptor Music Jungle", "Sign in");
 	}
 
 	private void assertPageContains(PageObject page, String ...args) {

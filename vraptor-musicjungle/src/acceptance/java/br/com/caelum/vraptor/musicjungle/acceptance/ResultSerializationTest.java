@@ -56,14 +56,14 @@ public class ResultSerializationTest extends AcceptanceTestCase{
 	}
 	
 	private String getExpectedJson() {
-		return "{\"list\": [" + JSON(mozart) + "," + JSON(beethoven) + "]}";
+		return "{\"list\":[" + JSON(mozart) + "," + JSON(beethoven) + "]}";
 	}
 
 	private String JSON(Music music) {
-		return new StringBuilder("{\"id\": ").append(music.getId())
-			.append(",\"title\": \"").append(music.getTitle())
-			.append("\",\"description\": \"").append(music.getDescription())
-			.append("\",\"type\": \"").append(music.getType().toString())
+		return new StringBuilder("{\"id\":").append(music.getId())
+			.append(",\"title\":\"").append(music.getTitle())
+			.append("\",\"description\":\"").append(music.getDescription())
+			.append("\",\"type\":\"").append(music.getType().toString())
 			.append("\"}").toString();
 	}
 

@@ -13,7 +13,7 @@ public class LoginPage extends PageObject {
 
 	public void loginAsUser(String user) {
 		createUser(user);
-		By cssSelector = cssSelector("form:nth-child(1)");
+		By cssSelector = cssSelector("form[action$='login']");
 		PageForm form = new PageForm(driver, cssSelector);
 		form.input("login", user);
 		form.input("password", user);
@@ -21,7 +21,7 @@ public class LoginPage extends PageObject {
 	}
 
 	private void createUser(String value) {
-		By cssSelector = cssSelector("form:nth-child(2)");
+		By cssSelector = cssSelector("form[action$='users']");
 		PageForm form = new PageForm(driver, cssSelector);
 		form.input("user.name", value);
 		form.input("user.login", value);

@@ -6,6 +6,14 @@ module.exports = function(grunt) {
                 cwd: 'output',
                 src: '**',
                 dest: 'deploy'
+            },
+            index: {
+                files: [{
+                    cwd: 'output/en',
+                    src: 'index.html',
+                    dest: 'deploy',
+                    expand: true
+                }]
             }
         },
         clean: ['deploy'],

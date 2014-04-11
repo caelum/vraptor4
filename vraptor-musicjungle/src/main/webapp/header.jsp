@@ -1,11 +1,11 @@
-ï»¿<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <!DOCTYPE html>
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<meta name="author" content="Caelum - Ensino e InovaÃ§Ã£o"/>
+	<meta name="author" content="Caelum - Ensino e Inovação"/>
 	<meta name="reply-to" content="contato@caelum.com.br"/>
 	<meta name="description" content="<fmt:message key="meta.description"/>"/>
 	<meta name="keywords" content="sites, web, desenvolvimento, development, java, opensource"/>
@@ -52,7 +52,7 @@
 				<ul class="nav navbar-nav">
 					<li class="divider-vertical"></li>
 					<li class="active"><a href="?language=en">ENGLISH</a></li>
-					<li><a href="?language=pt_BR">PORTUGUÃŠS</a></li>
+					<li><a href="?language=pt_BR">PORTUGUÊS</a></li>
 					<li class="divider-vertical"></li>
 				</ul>
 
@@ -79,8 +79,8 @@
 	<c:if test="${not empty errors}">
 		<div class="alert alert-danger">
 			<button type="button" class="close" data-dismiss="alert">&times;</button>
-			<c:forEach items="${errors }" var="error">
-				<b><fmt:message key="${error.category}" /></b> - ${error.message}
+			<c:forEach items="${errors}" var="error">
+				<b><fmt:message key="${error.category}"/></b> - ${error.message} <br/>
 			</c:forEach>
 		</div>
 	</c:if>

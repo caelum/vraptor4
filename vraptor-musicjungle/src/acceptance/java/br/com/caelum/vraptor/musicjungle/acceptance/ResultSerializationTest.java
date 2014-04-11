@@ -26,7 +26,7 @@ public class ResultSerializationTest extends AcceptanceTestCase{
 	
 	@Before
 	public void setUpBeforeClass() {
-		loginPage().loginAsUser("vraptortest");
+		loginPage().createAndloginAsUser("vraptortest");
 		HomePage page = homePage();
 		this.mozart = new MusicBuilder(1, "Mozart - Symphony #40", "Mozart", CLASSICAL).create();
 		this.beethoven = new MusicBuilder(2, "Moonlight Sonata", "Beethoven", CLASSICAL).create();
@@ -56,15 +56,15 @@ public class ResultSerializationTest extends AcceptanceTestCase{
 	}
 	
 	private String getExpectedJson() {
-		return "{\"list\": [" + JSON(mozart) + "," + JSON(beethoven) + "]}";
+		return "{\"list\":[" + JSON(mozart) + "," + JSON(beethoven) + "]}";
 	}
 
 	private String JSON(Music music) {
-		return new StringBuilder("{\"id\": ").append(music.getId())
-			.append(",\"title\": \"").append(music.getTitle())
-			.append("\",\"description\": \"").append(music.getDescription())
-			.append("\",\"type\": \"").append(music.getType().toString())
-			.append("\"}").toString();
+		return String.format("{\"id\":%s,\"title\":\"%s\",\"description\":\"%s\",\"type\":\"%s\"}", 
+				music.getId(), 
+				music.getTitle(), 
+				music.getDescription(), 
+				music.getType().toString());
 	}
 
 	private String getExpectedXml() {

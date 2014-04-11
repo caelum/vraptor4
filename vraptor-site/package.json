@@ -21,6 +21,7 @@
     "grunt-htmlcompressor": "~0.1.10",
     "grunt-contrib-imagemin": "~0.4.0",
     "grunt-usemin": "~2.0.2",
-    "grunt-contrib-concat": "~0.3.0"
+    "grunt-contrib-concat": "~0.3.0",
+    "grunt-text-replace": "^0.3.11"
   }
 }

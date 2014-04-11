@@ -46,20 +46,27 @@ module.exports = function(grunt) {
                 }]
             }
         },
-        useminPrepare: {
+        replace: {
             html: {
                 src: ['deploy/**/*.html'],
-                options: {
-                  dest: 'deploy'
-                }
+                overwrite: true,
+                replacements: [{
+                    from: /build:css \/css\/([^ ]+)(.*href=")(.*)\/css\//,
+                    to: 'build:css $3/css/$1$2$3/css/'
+                }]
+            }
+        },
+        useminPreparePrepare: {
+            html: 'deploy/**/*.html',
+            options: {
+              src: 'deploy',
+              dest: 'deploy'
             }
         },
         usemin: {
-            html: {
-                src: ['deploy/**/*.html'],
-                options: {
-                  dest: 'deploy'
-                }
+            html: 'deploy/**/*.html',
+            options: {
+              dest: 'deploy'
             }
         }
     });
@@ -72,6 +79,8 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-autoprefixer');
     grunt.loadNpmTasks('grunt-htmlcompressor');
     grunt.loadNpmTasks('grunt-usemin');
+    grunt.loadNpmTasks('grunt-text-replace');
+    grunt.loadTasks('grunt-utils/tasks');
 
-    grunt.registerTask('default', ['clean', 'copy', 'imagemin', 'useminPrepare', 'usemin', 'autoprefixer', 'concat', 'cssmin', 'htmlcompressor']);
+    grunt.registerTask('default', ['clean', 'copy', 'imagemin', 'replace', 'useminPreparePrepare', 'useminPrepare', 'usemin', 'autoprefixer', 'concat', 'cssmin', 'htmlcompressor']);
 };

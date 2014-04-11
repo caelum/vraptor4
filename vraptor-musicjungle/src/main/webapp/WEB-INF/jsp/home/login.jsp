@@ -1,4 +1,4 @@
-﻿
+
 <%@ include file="../../../header.jsp" %> 
 
 <div class="well login-logo">
@@ -12,12 +12,12 @@
 			<h3>Sign in</h3>
 			<form action="${linkTo[HomeController].login}" method="post" class="form-horizontal">
 				<div class="form-group">
-					<label class="sr-only" for="login"><fmt:message key="login"/></label>
-					<input type="text" class="form-control" id="login" name="login" placeholder="<fmt:message key="login"/>"/>
+					<label class="sr-only" for="login"><fmt:message key="user.login"/></label>
+					<input type="text" class="form-control" id="login" name="login" placeholder="<fmt:message key="user.login"/>"/>
 				</div>
 				<div class="form-group">
-					<label class="sr-only" for="password"><fmt:message key="password"/></label>
-					<input type="password" class="form-control" name="password" placeholder="<fmt:message key="password"/>" />
+					<label class="sr-only" for="password"><fmt:message key="user.password"/></label>
+					<input type="password" class="form-control" name="password" placeholder="<fmt:message key="user.password"/>" />
 				</div>
 				<div class="form-group pull-right">	
 					<button type="submit" id="submit" class="btn btn-large btn-primary">
@@ -32,16 +32,16 @@
 			<h3>Sign Up</h3>
 			<form action="${linkTo[UsersController].add}" method="post" class="form-horizontal">
 				<div class="form-group">
-					<label class="sr-only" for="login"><fmt:message key="login"/></label>
-					<input type="text" class="form-control" id="newname" name="user.name" value="${user.name}" placeholder="<fmt:message key="name"/>" />
+					<label class="sr-only" for="login"><fmt:message key="user.login"/></label>
+					<input type="text" class="form-control" id="newname" name="user.name" value="${user.name}" placeholder="<fmt:message key="user.name"/>" />
 				</div>
 				<div class="form-group">
-					<label class="sr-only" for="login"><fmt:message key="login"/></label>
-					<input type="text" class="form-control" id="newlogin" name="user.login" value="${user.login}" placeholder="<fmt:message key="login"/>" />
+					<label class="sr-only" for="login"><fmt:message key="user.login"/></label>
+					<input type="text" class="form-control" id="newlogin" name="user.login" value="${user.login}" placeholder="<fmt:message key="user.login"/>" />
 				</div>
 				<div class="form-group">
-					<label class="sr-only" for="password"><fmt:message key="password"/></label>
-					<input type="password" class="form-control" name="user.password" value="${user.password}" placeholder="<fmt:message key="password"/>" />
+					<label class="sr-only" for="password"><fmt:message key="user.password"/></label>
+					<input type="password" class="form-control" name="user.password" value="${user.password}" placeholder="<fmt:message key="user.password"/>" />
 				</div>
 				<div class="form-group pull-right">					
 					<button type="submit" class="btn btn-large btn-primary">

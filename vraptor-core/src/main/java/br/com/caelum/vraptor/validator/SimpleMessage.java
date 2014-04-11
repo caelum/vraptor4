@@ -20,8 +20,8 @@ package br.com.caelum.vraptor.validator;
 import static com.google.common.base.Objects.toStringHelper;
 
 import java.text.MessageFormat;
-import java.util.Objects;
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 import javax.enterprise.inject.Vetoed;
@@ -59,7 +59,7 @@ public class SimpleMessage implements Message {
 
 	@Override
 	public String getMessage() {
-		if (messageParameters != null) {
+		if (messageParameters != null && messageParameters.length > 0) {
 			return MessageFormat.format(message, messageParameters);
 		}
 		return message;

@@ -152,6 +152,14 @@ public class DefaultValidatorTest {
 		assertThat(message0.getMessage(), is("The simple message"));
 		assertThat(message1.getMessage(), is("The simple message"));
 	}
+	
+	@Test
+	public void shouldntThrowExceptionWithEmptyMessageParameter() {
+		String weirdMessage = "{weird message with braces}";
+		Object[] emptyParams = new Object[]{};
+		SimpleMessage message = new SimpleMessage("category", weirdMessage, emptyParams);
+		assertThat(message.getMessage(), is(weirdMessage));
+	}
 
 	@Test
 	public void doNothingIfCheckingSuccess() {
@@ -228,7 +236,7 @@ public class DefaultValidatorTest {
 		Collection<String> errors = ((ErrorList) validator.getErrors()).from("client.name");
 		assertThat(errors.toString(), equalTo("not null, not empty"));
 	}
-
+	
 	@Test
 	public void shouldReturnEmptyCollectionIfBeanIsNull() {
 		validator.validate(null);

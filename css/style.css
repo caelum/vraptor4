@@ -114,24 +114,25 @@ div.note p {
 }
 
 .community a:before {
+  background: url(../img/community.png) no-repeat top left;
   display: inline-block;
   content: '';
-  -webkit-background-size: contain;
-  background-size: contain;
-  width: 32px;
-  height: 32px;
+  -webkit-background-size: 32px;
+  background-size: 32px;
+  width: 35px;
+  height: 35px;
 }
 
 .community a[href*="groups.google.com"]:before {
-  background-image: url(../img/logo-gplus.png);
+  background-position: 0 -45px;
 }
 
 .community a[href*="github.com"]:before {
-  background-image: url(../img/logo-github.png);
+  background-position: 0 0;
 }
 
 .community a[href*="guj.com.br"]:before {
-  background-image: url(../img/logo-guj.png);
+  background-position: 0 -89px;
 }
 
 .download-btn {
@@ -169,8 +170,7 @@ div.note p {
 
 .home-advantages li:before {
   content: '';
-  background-image: url(../img/advantages.png);
-  background-repeat: no-repeat;
+  background: url(../img/advantages.png) no-repeat top left;
   width: 105px;
   height: 100px;
   float: left;
@@ -184,35 +184,40 @@ div.note p {
 }
 
 .home-advantages .productivity:before {
-  background-position: 0 -574px;
+  background-position: 0 -576px; 
 }
 
 .home-advantages .learning:before {
-  background-position: 0 14px;
+  background-position: 0 -444px; 
 }
 
 .home-advantages .testability:before {
-  background-position: 0 -680px;
+  background-position: 0 -964px; 
 }
 
 .home-advantages .economy:before {
-  background-position: 0 -90px;
+  background-position: 0 -153px; 
 }
 
-.home-advantages .flexibility:before {
-  background-position: 0 -205px;
+.home-advantages .injection:before {
+  background-position: 0 -292px; 
 }
 
 .home-advantages .soa:before {
-  background-position: 0 -808px;
+  background-position: 0 -845px; 
 }
 
 .home-advantages .best-practices:before {
-  background-position: 0 -448px;
+  background-position: 0 0; 
 }
 
 .home-advantages .pt-docs:before {
-  background-position: 0 -322px;
+  background-position: 0 -709px; 
+}
+
+img#eventPileline {
+  min-width: 700px;
+  width: 90%;
 }
 
 @media (min-width: 480px) {

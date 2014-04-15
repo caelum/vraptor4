@@ -8,6 +8,18 @@ You will need **grunt** installed also. You can see how to [install it here](htt
 npm install -g grunt-cli
 ```
 
+You will need also some dependencies of grunt. To install them, run
+
+```bash
+npm install
+```
+
+This installs Grunt too so, if you don't want (or don't have permissions) to run the first command, you can run just the command above and run grunt as
+
+```bash
+./node_modules/grunt-cli/bin/grunt
+```
+
 Grunt is installed and managed via `npm`, the `Node.js` package manager.
 
 # Some useful nanoc commands
@@ -42,6 +54,4 @@ We have `guard` installed in this project. You can see modifications to your pro
 
 If you run `nanoc view` command, you'll see that localhost:3000/pt will be started, but without grunt optimizations (html, css and images compression, css will be without `-webkit` and `-moz` prefixes... and so on).
 
-If you want to deploy site, you need to run `grunt` after `nanoc` command, and all compiled and optimized content will be available on **deploy** folder. All you need to do is to move that compiled content to `gh-pages` branch.
-
-
+If you want to deploy site, you need to run `grunt` after `nanoc` command, then run `grunt deploy`.

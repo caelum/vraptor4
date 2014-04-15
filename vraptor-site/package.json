@@ -22,6 +22,7 @@
     "grunt-contrib-imagemin": "~0.4.0",
     "grunt-usemin": "~2.0.2",
     "grunt-contrib-concat": "~0.3.0",
-    "grunt-text-replace": "^0.3.11"
+    "grunt-text-replace": "^0.3.11",
+    "grunt-gh-pages": "^0.9.1"
   }
 }

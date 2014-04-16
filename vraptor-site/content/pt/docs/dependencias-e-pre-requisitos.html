@@ -66,10 +66,22 @@ E se você utiliza um Servler Container (como o Tomcat ou Jetty) você precisa a
 #!xml
 <dependency>
  <groupId>org.jboss.weld.servlet</groupId>
- <artifactId>weld-servlet</artifactId>
+ <artifactId>weld-servlet-core</artifactId>
+ <version>2.1.2.Final</version>
+</dependency>
+
+<dependency>
+ <groupId>org.jboss.weld</groupId>
+ <artifactId>weld-core-impl</artifactId>
  <version>2.1.2.Final</version>
 </dependency>
 ~~~
+
+**Observação importante**: evite usar o artefato org.jboss.weld.servlet:weld-servlet. Este    
+artefato contém todas as classes necessárias, porém contém mais classes do que é   
+preciso para subir a sua aplicação. Em particular, o weld-servlet contém uma **cópia** de  
+todo o código do guava, que já é dependência do VRaptor, o que pode gerar conflitos    
+entre as classes dos dois artefatos (o terrível class loader hell).
 
 
 ## Logging

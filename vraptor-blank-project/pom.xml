@@ -10,6 +10,7 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<weld.version>2.1.2.Final</weld.version>
 	</properties>
 
 	<dependencies>
@@ -21,9 +22,15 @@
 
 		<dependency>
 			<groupId>org.jboss.weld.servlet</groupId>
-			<artifactId>weld-servlet</artifactId>
-			<version>2.1.2.Final</version>
+			<artifactId>weld-servlet-core</artifactId>
+			<version>${weld.version}</version>
 		</dependency>
+		
+        <dependency>
+            <groupId>org.jboss.weld</groupId>
+            <artifactId>weld-core-impl</artifactId>
+            <version>${weld.version}</version>
+        </dependency>
 
 		<dependency>
 		    <groupId>javax.el</groupId>

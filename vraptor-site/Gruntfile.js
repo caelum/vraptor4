@@ -63,7 +63,7 @@ module.exports = function(grunt) {
                 overwrite: true,
                 replacements: [
                     { from: '../', to: '' },
-                    { from: /href="(((?!css\/|img\/|https:\/\/|\/javadoc|\/pt|\/en)).*)"/g, to: 'href="en/$1"' }
+                    { from: /href="(((?!css\/|img\/|https:\/\/|javadoc|\/pt|\/en)).*)"/g, to: 'href="en/$1"' }
                 ]
             }
         },

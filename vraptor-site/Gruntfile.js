@@ -61,7 +61,10 @@ module.exports = function(grunt) {
             index: {
                 src: ['deploy/index.html'],
                 overwrite: true,
-                replacements: [{ from: '../', to: '' }]
+                replacements: [
+                    { from: '../', to: '' },
+                    { from: /href="(((?!css\/|img\/|https:\/\/|\/javadoc|\/pt|\/en)).*)"/g, to: 'href="en/$1"' }
+                ]
             }
         },
         useminPreparePrepare: {

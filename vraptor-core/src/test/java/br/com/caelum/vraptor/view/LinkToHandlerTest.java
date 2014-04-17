@@ -32,7 +32,6 @@ import net.vidageek.mirror.dsl.Mirror;
 import net.vidageek.mirror.exception.MirrorException;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -59,20 +58,6 @@ public class LinkToHandlerTest {
 		this.method2params = new Mirror().on(TestController.class).reflect().method("method").withArgs(String.class, int.class);
 		this.method1param = new Mirror().on(TestController.class).reflect().method("method").withArgs(String.class);
 		this.anotherMethod = new Mirror().on(TestController.class).reflect().method("anotherMethod").withArgs(String.class, int.class);
-	}
-
-	@Ignore("Does it worth?")
-	@Test(expected = IllegalArgumentException.class)
-	public void shouldThrowExceptionWhenInvocationIsIncomplete() {
-		//${linkTo[TestController]}
-		handler.get(new DefaultBeanClass(TestController.class)).toString();
-	}
-
-	@Ignore("The method won't exist")
-	@Test(expected = IllegalArgumentException.class)
-	public void shouldThrowExceptionWhenInvokingInexistantMethod() throws Throwable {
-		//${linkTo[TestController].nonExists}
-		invoke(handler.get(new DefaultBeanClass(TestController.class)), "nonExists");
 	}
 
 	@Test

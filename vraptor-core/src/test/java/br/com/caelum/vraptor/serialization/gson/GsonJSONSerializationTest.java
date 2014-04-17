@@ -36,7 +36,6 @@ import java.util.TimeZone;
 import javax.servlet.http.HttpServletResponse;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.interceptor.DefaultTypeNameExtractor;
@@ -275,20 +274,6 @@ public class GsonJSONSerializationTest {
 		assertThat(result(), not(containsString("\"price\"")));
 		assertThat(result(), not(containsString("12.99")));
 		assertThat(result(), not(containsString("15.0")));
-	}
-
-	@Test
-	@Ignore("not supported yet")
-	public void shouldSerializeCollectionWithPrefixTagAndNamespace() {
-		String expectedResult = "<o:order><o:price>15.0</o:price><o:comments>pack it nicely, please</o:comments></o:order>";
-		expectedResult += expectedResult;
-		expectedResult = "<o:orders xmlns:o=\"http://www.caelum.com.br/order\">" + expectedResult
-				+ "</o:orders>";
-		// Order order = new Order(new Client("guilherme silveira"), 15.0,
-		// "pack it nicely, please");
-		// serializer.from("orders", Arrays.asList(order,
-		// order)).namespace("http://www.caelum.com.br/order","o").serialize();
-		assertThat(result(), is(equalTo(expectedResult)));
 	}
 
 	static class WithAdvanced {

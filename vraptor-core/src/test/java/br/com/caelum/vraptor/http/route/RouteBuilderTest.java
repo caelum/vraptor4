@@ -25,7 +25,6 @@ import java.lang.reflect.Method;
 import java.math.BigDecimal;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -224,19 +223,4 @@ public class RouteBuilderTest {
 			this.y = y;
 		}
 	}
-
-	@Test
-	@Ignore("Should it work someday?")
-	public void shouldUseGenericParameters() throws SecurityException, NoSuchMethodException {
-		builder = newBuilder("/my/{abc.y}");
-
-		Method method = Generic.class.getDeclaredMethods()[0];
-		builder.is(Specific.class, method);
-
-		Route route = builder.build();
-
-		assertTrue(route.canHandle("/my/123"));
-		assertFalse(route.canHandle("/my/abc"));
-	}
-
 }

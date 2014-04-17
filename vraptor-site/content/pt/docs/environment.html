@@ -124,3 +124,11 @@ public class MeuController {
     }
 }
 ~~~ 
+
+Você também pode definir um valor default para essa propriedade:
+
+~~~
+#!java
+@Inject @Property(defaultValue = "config.properties") 
+private String fileName;
+~~~

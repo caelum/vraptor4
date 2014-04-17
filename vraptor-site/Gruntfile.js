@@ -57,6 +57,11 @@ module.exports = function(grunt) {
                     from: /build:css \/css\/([^ ]+)(.*href=")(.*)\/css\//,
                     to: 'build:css $3/css/$1$2$3/css/'
                 }]
+            },
+            index: {
+                src: ['deploy/index.html'],
+                overwrite: true,
+                replacements: [{ from: '../', to: '' }]
             }
         },
         useminPreparePrepare: {

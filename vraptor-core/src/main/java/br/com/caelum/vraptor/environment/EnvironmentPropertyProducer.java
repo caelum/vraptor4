@@ -62,6 +62,12 @@ public class EnvironmentPropertyProducer {
 		if (isNullOrEmpty(key)) {
 			key = ip.getMember().getName();
 		}
+		
+		String defaultValue = property.defaultValue();
+		if(!isNullOrEmpty(defaultValue)){
+			return environment.get(key, defaultValue);
+		}
+		
 		return environment.get(key);
 	}
 }

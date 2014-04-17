@@ -38,6 +38,12 @@ public class EnvironmentPropertyProducerTest {
 	@Inject @Property("non-existent.key") 
 	private Instance<String> nonExistent;
 	
+	@Inject @Property(defaultValue = "default") 
+	private String defaultValue;
+	
+	@Inject @Property(defaultValue = "default") 
+	private String ignoreDefaultValue;
+	
 	@Test
 	public void shouldInjectAnEnvironmentProperty() {
 		assertEquals("vraptor.caelum.com.br", mailHost);
@@ -51,5 +57,15 @@ public class EnvironmentPropertyProducerTest {
 	@Test(expected=NoSuchElementException.class)
 	public void shouldNotResolveUnexistentKeys() throws Exception {
 		nonExistent.get();
+	}
+	
+	@Test
+	public void shouldResultDefaultValue() throws Exception {
+		assertEquals("default", defaultValue);
+	}
+	
+	@Test
+	public void shouldResultValueOfProperties() throws Exception {
+		assertEquals("should ignore default value!", ignoreDefaultValue);
 	}
 }

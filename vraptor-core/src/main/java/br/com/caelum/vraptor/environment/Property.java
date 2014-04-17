@@ -40,4 +40,6 @@ import javax.inject.Qualifier;
 @Target({ TYPE, METHOD, FIELD, PARAMETER })
 public @interface Property {
 	@Nonbinding String value() default "";
+
+	@Nonbinding String defaultValue() default "";
 }

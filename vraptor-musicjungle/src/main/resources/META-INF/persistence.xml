@@ -6,13 +6,18 @@
 	version="2.0">
 	
 	<persistence-unit name="default">
+	
+		<class>br.com.caelum.vraptor.musicjungle.model.Music</class>
+		<class>br.com.caelum.vraptor.musicjungle.model.User</class>
+		<class>br.com.caelum.vraptor.musicjungle.model.MusicOwner</class>
+	
 		<properties>
 			<property name="javax.persistence.jdbc.driver" value="org.hsqldb.jdbcDriver" />
 			<property name="javax.persistence.jdbc.url" value="jdbc:hsqldb:mem:musicjungleDB" />
 			<property name="javax.persistence.jdbc.user" value="sa" />
 			<property name="javax.persistence.jdbc.password" value="" />
 			
-			<property name="hibernate.dialect" value="org.hibernate.dialect.HSQLDialect"/>
+			<property name="hibernate.dialect" value="br.com.caelum.vraptor.dialect.TemporaryHSQLDBDialect"/>
 			<property name="hibernate.show_sql" value="true" />
 			<property name="hibernate.format_sql" value="false" />
 			<property name="hibernate.hbm2ddl.auto" value="update" />

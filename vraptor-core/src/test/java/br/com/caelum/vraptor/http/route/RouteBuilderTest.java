@@ -203,6 +203,20 @@ public class RouteBuilderTest {
 
 		assertTrue(route.canHandle("/my/troublesome/uri"));
 	}
+	
+	@Test
+	@Ignore("Should it work someday?")
+	public void shouldUseGenericParameters() throws SecurityException, NoSuchMethodException {
+		builder = newBuilder("/my/{abc.y}");
+
+		Method method = Generic.class.getDeclaredMethods()[0];
+		builder.is(Specific.class, method);
+
+		Route route = builder.build();
+
+		assertTrue(route.canHandle("/my/123"));
+		assertFalse(route.canHandle("/my/abc"));
+	}
 
 	static class Generic<T> {
 
@@ -224,19 +238,4 @@ public class RouteBuilderTest {
 			this.y = y;
 		}
 	}
-
-	@Test
-	@Ignore("Should it work someday?")
-	public void shouldUseGenericParameters() throws SecurityException, NoSuchMethodException {
-		builder = newBuilder("/my/{abc.y}");
-
-		Method method = Generic.class.getDeclaredMethods()[0];
-		builder.is(Specific.class, method);
-
-		Route route = builder.build();
-
-		assertTrue(route.canHandle("/my/123"));
-		assertFalse(route.canHandle("/my/abc"));
-	}
-
 }

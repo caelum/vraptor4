@@ -39,7 +39,6 @@ import java.util.TimeZone;
 import javax.servlet.http.HttpServletResponse;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.serialization.Serialization;
@@ -328,17 +327,6 @@ public class XStreamXMLSerializationTest {
 				new Item("name", 12.99));
 		serialization.from(order).include("?wrongFieldName.?another").serialize();
 		assertThat(result(), containsString("<order>\n  <price>15.0</price>\n  <comments>pack it nicely, please</comments>\n</order>"));
-	}
-
-	@Test
-	@Ignore("not supported yet")
-	public void shouldSerializeCollectionWithPrefixTagAndNamespace() {
-		String expectedResult = "<o:order>\n  <o:price>15.0</o:price>\n  <o:comments>pack it nicely, please</o:comments>\n</o:order>";
-		expectedResult += expectedResult;
-		expectedResult = "<o:orders xmlns:o=\"http://www.caelum.com.br/order\">" + expectedResult + "</o:orders>";
-//		Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please");
-//		serializer.from("orders", Arrays.asList(order, order)).namespace("http://www.caelum.com.br/order","o").serialize();
-		assertThat(result(), is(equalTo(expectedResult)));
 	}
 
 	@Test

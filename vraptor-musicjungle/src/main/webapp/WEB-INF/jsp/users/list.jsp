@@ -1,4 +1,4 @@
-﻿<%@ include file="/header.jsp" %> 
+<%@ include file="/header.jsp" %> 
 
 <div class="well well-small">
 	<h2><fmt:message key="list_users"/></h2>
@@ -8,8 +8,8 @@
 	<thead>
 		<tr class="info">
 			<th></th>
-			<th><fmt:message key='name'/></th>
-			<th><fmt:message key='login'/></th>
+			<th><fmt:message key='user.name'/></th>
+			<th><fmt:message key='user.login'/></th>
 		</tr>
   	</thead>
   	<tbody>

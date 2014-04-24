@@ -49,4 +49,5 @@ Enviando e-mail para: ${environment.get('email_de_teste')}</code></pre> <h2 id="
     <span class="kd">public</span> <span class="kt">void</span> <span class="nf">sendMail</span><span class="o">(</span><span class="n">String</span> <span class="n">email</span><span class="o">)</span> <span class="o">{</span>
         <span class="n">sender</span><span class="o">.</span><span class="na">sendMailTo</span><span class="o">(</span><span class="n">email</span><span class="o">);</span>
     <span class="o">}</span>
-<span class="o">}</span></code></pre> </main> </body> </html>
+<span class="o">}</span></code></pre> <p>Você também pode definir um valor default para essa propriedade:</p> <pre><code class="language-java"><span class="nd">@Inject</span> <span class="nd">@Property</span><span class="o">(</span><span class="n">defaultValue</span> <span class="o">=</span> <span class="s">"config.properties"</span><span class="o">)</span> 
+<span class="kd">private</span> <span class="n">String</span> <span class="n">fileName</span><span class="o">;</span></code></pre> </main> </body> </html>

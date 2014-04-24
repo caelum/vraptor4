@@ -16,7 +16,7 @@ a {
 
 h1,h2,h3 {
   line-height: 1.2;
-  margin: .5em 0;
+  margin: 1.5em 0;
 }
 
 h1 {
@@ -129,15 +129,19 @@ div.note p {
   background-position: 0 -89px;
 }
 
-.download-btn {
+.home-call-links {
   display: block;
   text-align: center;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.download-btn {
+  display: block;
   background-color: #224;
   color: #eee;
   font-size: 2em;
   border-radius: 5px;
-  max-width: 400px;
-  margin: 0 auto;
 }
 
 .download-btn:before {
@@ -155,6 +159,13 @@ div.note p {
 .download-btn:hover,
 .download-btn:focus {
   background-color: #449;
+}
+
+.old-vraptor-msg {
+  display: block;
+  margin: 1em auto;
+  font-style: italic;
+  font-size: .9em;
 }
 
 .home-advantages li {
@@ -177,35 +188,35 @@ div.note p {
 }
 
 .home-advantages .productivity:before {
-  background-position: 0 -576px; 
+  background-position: 0 -576px;
 }
 
 .home-advantages .learning:before {
-  background-position: 0 -444px; 
+  background-position: 0 -444px;
 }
 
 .home-advantages .testability:before {
-  background-position: 0 -964px; 
+  background-position: 0 -964px;
 }
 
 .home-advantages .economy:before {
-  background-position: 0 -153px; 
+  background-position: 0 -153px;
 }
 
 .home-advantages .injection:before {
-  background-position: 0 -292px; 
+  background-position: 0 -292px;
 }
 
 .home-advantages .soa:before {
-  background-position: 0 -845px; 
+  background-position: 0 -845px;
 }
 
 .home-advantages .best-practices:before {
-  background-position: 0 0; 
+  background-position: 0 0;
 }
 
 .home-advantages .pt-docs:before {
-  background-position: 0 -709px; 
+  background-position: 0 -709px;
 }
 
 img#eventPileline {
@@ -275,13 +286,13 @@ img#eventPileline {
     text-align: left;
   }
 
-  .download-btn {
-    width: 8em;
+  .home-call-links {
+    width: 16em;
   }
 
   .home-call p,
-  .download-btn {
+  .home-call-links {
     display: inline-block;
-    vertical-align: middle;
+    vertical-align: bottom;
   }
 }

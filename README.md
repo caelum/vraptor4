@@ -1,4 +1,4 @@
-#VRaptor 4 Beta
+#VRaptor 4
 
 ![Build status](https://secure.travis-ci.org/caelum/vraptor4.png)
 

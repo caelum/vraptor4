@@ -27,8 +27,12 @@ This is your first logic on `FirstController.java`:
 #!java
 @Controller
 public class FirstController {
+  
+  @Inject private Result result;
+
   @Get("/home")
   public void home() {
+    result.include("message", "Hello, VRaptor 4!");
   }
 }
 ~~~
@@ -40,9 +44,13 @@ And HTML file placed at `WEB-INF/jsp/first/home.jsp`:
 ~~~
 #!jsp
 <!DOCTYPE html>
+
 <html>
+  <head>
+    <title>Home page</title>
+  </head>
   <body>
-    Initial page
+    ${message}
   </body>
 </html>
 ~~~

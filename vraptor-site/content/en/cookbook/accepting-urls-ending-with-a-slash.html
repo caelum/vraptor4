@@ -1,0 +1,76 @@
+---
+title: Accepting URLs ending with a slash
+---
+
+# by Tomaz Lavieri, applied to VRaptor 4
+
+For those who had some trouble to determine urls like:
+
+~~~
+#!java
+@Path("product/{product.id}")
+~~~
+
+when typing a URI **/product/1/** and the link didn't work, here's a simple way to fixes the problem.
+
+<div class="note" markdown="1">
+## Editor's Note
+This is not necessarily a problem ... the URL /abc is different of /abc/, so the behavior to give 404 is expected. But if you want them to be equivalent URLs you can write the class below.
+</div>
+
+~~~
+#!java
+import javax.enterprise.context.RequestScoped;
+import javax.enterprise.inject.Specializes;
+import javax.inject.Inject;
+
+import br.com.caelum.vraptor.Result;
+import br.com.caelum.vraptor.controller.DefaultControllerNotFoundHandler;
+import br.com.caelum.vraptor.controller.HttpMethod;
+import br.com.caelum.vraptor.core.RequestInfo;
+import br.com.caelum.vraptor.http.route.ControllerNotFoundException;
+import br.com.caelum.vraptor.http.route.Router;
+import br.com.caelum.vraptor.view.Results;
+
+@RequestScoped
+@Specializes
+public class Error404 extends DefaultControllerNotFoundHandler {
+
+    private final Router router;
+    private final Result result;
+
+    @Inject
+    public Error404(Router router, Result result) {
+        this.router = router;
+        this.result = result;
+    }
+    
+    /**
+     * @deprecated CDI eyes only
+     */
+    public Error404() {
+        this(null, null);
+    }
+    
+    @Override
+    public void couldntFind(RequestInfo requestInfo) {
+        try {
+            String uri = requestInfo.getRequestedUri();
+            if (uri.endsWith("/")) {
+                tryMovePermanentlyTo(requestInfo, uri.substring(0, uri.length()-1));
+            } else {
+                tryMovePermanentlyTo(requestInfo, uri + "/");
+            }
+        } catch (ControllerNotFoundException ex) {
+            super.couldntFind(requestInfo);
+        }
+    }
+    
+    private void tryMovePermanentlyTo(RequestInfo requestInfo, String newUri) {
+        router.parse(newUri, HttpMethod.of(requestInfo.getRequest()),
+            requestInfo.getRequest());
+        result.use(Results.status()).movedPermanentlyTo(newUri);
+    }
+
+}
+~~~

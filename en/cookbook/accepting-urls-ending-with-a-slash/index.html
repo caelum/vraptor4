@@ -1,0 +1,53 @@
+<!DOCTYPE HTML> <html lang="en"> <head> <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> <meta charset="utf-8"> <meta name="viewport" content="width=device-width"> <title>VRaptor 4 - Accepting URLs ending with a slash</title> <link rel="stylesheet" href="../../../css/style.min.css"/> </head> <body> <header class="container"><h1 class="logo"><a class="logo-link" href="../.."> <img src="../../../img/logo.png" alt="VRaptor"></a></h1> <ul class="community"> <li><a href="https://groups.google.com/forum/?hl=en#!forum/vraptor4" target="_blank">Google Groups</a></li> <li><a href="https://github.com/caelum/vraptor4/" target="_blank">GitHub</a></li> <li><a href="http://www.guj.com.br/tag/vraptor" target="_blank">GUJ Respostas</a></li> </ul> <ul class="site-languages"> <li> <a class="site-language flag flag-en " title="en" href="../.."> EN </a> </li> <li> <a class="site-language flag flag-pt not-selected" title="pt" href="../../../pt"> PT </a> </li> </ul></header><input type="checkbox" id="nav-visibility"><label for="nav-visibility" class="nav-toggle">Menu</label> <nav class="main-nav"><ul> <li><a href="../../download">Download</a></li> <li><a href="../../docs/one-minute-guide/">Documentation</a></li> <li><a href=".">Cookbook</a></li> <li><a href="https://github.com/caelum/vraptor4/releases" target="_blank">Changelog</a></li> <li><a href="https://github.com/caelum/vraptor4/issues/milestones" target="_blank">Roadmap</a></li> <li><a href="../../../javadoc">Javadoc</a></li> </ul></nav><nav class="doc-nav container"><h1>Cookbook</h1> <ul> <li> <a href="."> Accepting URLs ending with a slash </a> </li> </ul></nav><main class="container"><h1 id="by-tomaz-lavieri-applied-to-vraptor-4">by Tomaz Lavieri, applied to VRaptor 4</h1> <p>For those who had some trouble to determine urls like:</p> <pre><code class="language-java"><span class="nd">@Path</span><span class="o">(</span><span class="s">"product/{product.id}"</span><span class="o">)</span></code></pre> <p>when typing a URI <strong>/product/1/</strong> and the link didn’t work, here’s a simple way to fixes the problem.</p> <div class="note"> <h2 id="editors-note">Editor’s Note</h2> <p>This is not necessarily a problem … the URL /abc is different of /abc/, so the behavior to give 404 is expected. But if you want them to be equivalent URLs you can write the class below.</p> </div> <pre><code class="language-java"><span class="kn">import</span> <span class="nn">javax.enterprise.context.RequestScoped</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">javax.enterprise.inject.Specializes</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">javax.inject.Inject</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">br.com.caelum.vraptor.Result</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">br.com.caelum.vraptor.controller.DefaultControllerNotFoundHandler</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">br.com.caelum.vraptor.controller.HttpMethod</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">br.com.caelum.vraptor.core.RequestInfo</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">br.com.caelum.vraptor.http.route.ControllerNotFoundException</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">br.com.caelum.vraptor.http.route.Router</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">br.com.caelum.vraptor.view.Results</span><span class="o">;</span>
+
+<span class="nd">@RequestScoped</span>
+<span class="nd">@Specializes</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Error404</span> <span class="kd">extends</span> <span class="n">DefaultControllerNotFoundHandler</span> <span class="o">{</span>
+
+    <span class="kd">private</span> <span class="kd">final</span> <span class="n">Router</span> <span class="n">router</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="n">Result</span> <span class="n">result</span><span class="o">;</span>
+
+    <span class="nd">@Inject</span>
+    <span class="kd">public</span> <span class="nf">Error404</span><span class="o">(</span><span class="n">Router</span> <span class="n">router</span><span class="o">,</span> <span class="n">Result</span> <span class="n">result</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">router</span> <span class="o">=</span> <span class="n">router</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">result</span> <span class="o">=</span> <span class="n">result</span><span class="o">;</span>
+    <span class="o">}</span>
+    
+    <span class="cm">/**</span>
+<span class="cm">     * @deprecated CDI eyes only</span>
+<span class="cm">     */</span>
+    <span class="kd">public</span> <span class="nf">Error404</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">(</span><span class="kc">null</span><span class="o">,</span> <span class="kc">null</span><span class="o">);</span>
+    <span class="o">}</span>
+    
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">couldntFind</span><span class="o">(</span><span class="n">RequestInfo</span> <span class="n">requestInfo</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">try</span> <span class="o">{</span>
+            <span class="n">String</span> <span class="n">uri</span> <span class="o">=</span> <span class="n">requestInfo</span><span class="o">.</span><span class="na">getRequestedUri</span><span class="o">();</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">uri</span><span class="o">.</span><span class="na">endsWith</span><span class="o">(</span><span class="s">"/"</span><span class="o">))</span> <span class="o">{</span>
+                <span class="n">tryMovePermanentlyTo</span><span class="o">(</span><span class="n">requestInfo</span><span class="o">,</span> <span class="n">uri</span><span class="o">.</span><span class="na">substring</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="n">uri</span><span class="o">.</span><span class="na">length</span><span class="o">()-</span><span class="mi">1</span><span class="o">));</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                <span class="n">tryMovePermanentlyTo</span><span class="o">(</span><span class="n">requestInfo</span><span class="o">,</span> <span class="n">uri</span> <span class="o">+</span> <span class="s">"/"</span><span class="o">);</span>
+            <span class="o">}</span>
+        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">ControllerNotFoundException</span> <span class="n">ex</span><span class="o">)</span> <span class="o">{</span>
+            <span class="kd">super</span><span class="o">.</span><span class="na">couldntFind</span><span class="o">(</span><span class="n">requestInfo</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+    
+    <span class="kd">private</span> <span class="kt">void</span> <span class="nf">tryMovePermanentlyTo</span><span class="o">(</span><span class="n">RequestInfo</span> <span class="n">requestInfo</span><span class="o">,</span> <span class="n">String</span> <span class="n">newUri</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">router</span><span class="o">.</span><span class="na">parse</span><span class="o">(</span><span class="n">newUri</span><span class="o">,</span> <span class="n">HttpMethod</span><span class="o">.</span><span class="na">of</span><span class="o">(</span><span class="n">requestInfo</span><span class="o">.</span><span class="na">getRequest</span><span class="o">()),</span>
+            <span class="n">requestInfo</span><span class="o">.</span><span class="na">getRequest</span><span class="o">());</span>
+        <span class="n">result</span><span class="o">.</span><span class="na">use</span><span class="o">(</span><span class="n">Results</span><span class="o">.</span><span class="na">status</span><span class="o">()).</span><span class="na">movedPermanentlyTo</span><span class="o">(</span><span class="n">newUri</span><span class="o">);</span>
+    <span class="o">}</span>
+
+<span class="o">}</span></code></pre> </main> </body> </html>

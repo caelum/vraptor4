@@ -9,6 +9,11 @@ footer h1 {
   text-shadow: 1px 1px white;
 }
 
+ul.who-uses {
+  width: 80%;
+  margin: auto;
+}
+
 .who-uses li {
   background: url(../img/whoUses.png) no-repeat top left;
   display: inline-block;
@@ -45,4 +50,10 @@ footer h1 {
   background-position: 0 -413px; 
   width: 139px; 
   height: 56px;
+}
+
+.who-uses .mamute {
+  background: url(../img/mamute.png) no-repeat;
+  width: 235px; 
+  height: 70px;
 }

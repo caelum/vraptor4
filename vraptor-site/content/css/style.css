@@ -125,7 +125,8 @@ div.note p {
   background-position: 0 0;
 }
 
-.community a[href*="guj.com.br"]:before {
+.community a[href*="guj.com.br"]:before,
+.community a[href*="questions.vraptor"]:before {
   background-position: 0 -89px;
 }
 

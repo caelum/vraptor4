@@ -10,7 +10,12 @@
     <li><a href="https://groups.google.com/forum/<%=path == 'en' ? '?hl=en#!forum/vraptor4' : '#!forum/caelum-vraptor'%>" target="_blank">Google Groups</a></li>
 
     <li><a href="https://github.com/caelum/vraptor4/" target="_blank">GitHub</a></li>
-    <li><a href="http://www.guj.com.br/tag/vraptor" target="_blank">GUJ Respostas</a></li>
+
+    <% if path == 'en'%>
+      <li><a href="http://questions.vraptor.org" target="_blank">VRaptor Questions</a></li>
+    <% else %>
+      <li><a href="http://www.guj.com.br/tag/vraptor" target="_blank">GUJ Respostas</a></li>
+    <% end %>
   </ul>
 
   <ul class="site-languages">

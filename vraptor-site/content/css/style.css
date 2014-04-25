@@ -188,35 +188,35 @@ div.note p {
 }
 
 .home-advantages .productivity:before {
-  background-position: 0 -576px;
+  background-position: 0 -720px;
 }
 
 .home-advantages .learning:before {
-  background-position: 0 -444px;
+  background-position: 0 -588px;
 }
 
 .home-advantages .testability:before {
-  background-position: 0 -964px;
+  background-position: 0 -972px;
 }
 
 .home-advantages .economy:before {
-  background-position: 0 -153px;
+  background-position: 0 -297px;
 }
 
 .home-advantages .injection:before {
-  background-position: 0 -292px;
+  background-position: 0 -436px;
 }
 
 .home-advantages .soa:before {
-  background-position: 0 -845px;
+  background-position: 0 -853px; 
 }
 
 .home-advantages .best-practices:before {
   background-position: 0 0;
 }
 
-.home-advantages .pt-docs:before {
-  background-position: 0 -709px;
+.home-advantages .docs:before {
+  background-position: 0 -153px;
 }
 
 img#eventPileline {

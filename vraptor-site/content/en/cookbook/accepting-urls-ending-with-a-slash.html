@@ -9,14 +9,29 @@ For those who had some trouble to determine urls like:
 ~~~
 #!java
 @Path("product/{product.id}")
+public void view(Product product) {...}
 ~~~
 
-when typing a URI **/product/1/** and the link didn't work, here's a simple way to fixes the problem.
+when typing a URI **/product/1/** and the link didn't work, here's two simple ways to fixes the problem.
 
 <div class="note" markdown="1">
 ## Editor's Note
-This is not necessarily a problem ... the URL /abc is different of /abc/, so the behavior to give 404 is expected. But if you want them to be equivalent URLs you can write the class below.
+This is not necessarily a problem ... the URL /abc is different of /abc/, so the behavior to give 404 is expected.
 </div>
+
+
+The first way is put two kind of URLs (with or without slash) in the @Path annotation, like that:
+
+~~~
+#!java
+@Path(value = {"product/{product.id}", "product/{product.id}/"})
+public void view(Product product) {...}
+~~~
+
+Note this change **only** will work to method with @Path anottation. The others methods will *not* be affected by this change.
+
+
+The other way is write the class below. Thus, unlike the first, will cause the two URLs (with or without slash) are equivalent.
 
 ~~~
 #!java

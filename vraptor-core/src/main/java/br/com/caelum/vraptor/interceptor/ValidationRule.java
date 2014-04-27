@@ -31,5 +31,5 @@ public interface ValidationRule {
 	 * @param originalType - Interceptor type to be validated
 	 * @param allMethods - MirrorList of all interceptor methods
 	 */
-	public void validate(Class<?> originalType, MirrorList<Method> allMethods);
+	void validate(Class<?> originalType, MirrorList<Method> allMethods);
 }

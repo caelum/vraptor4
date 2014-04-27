@@ -53,7 +53,6 @@ public class NoInterceptMethodsValidationRule implements ValidationRule {
 		boolean hasBeforeMethod = hasAnnotatedMethod(BeforeCall.class, originalType, methods);
 
 		if (!hasAfterMethod && !hasAroundMethod && !hasBeforeMethod) {
-
 			throw new InterceptionException(format("Interceptor %s must "
 				+ "declare at least one method whith @AfterCall, @AroundCall "
 				+ "or @BeforeCall annotation", originalType.getCanonicalName()));
@@ -62,7 +61,6 @@ public class NoInterceptMethodsValidationRule implements ValidationRule {
 
 	private boolean hasAnnotatedMethod(Class<? extends Annotation> step,
 			Class<?> originalType, MirrorList<Method> methods) {
-
 		return stepInvoker.findMethod(methods, step, originalType) != null;
 	}
 }

@@ -55,10 +55,16 @@ public class CustomAcceptsExecutor {
 	}
 
 	public boolean accepts(Object interceptor, Method method, List<Annotation> constraints) {
-		if (constraints.isEmpty()) return false;
+		if (constraints.isEmpty()) {
+			return false;
+		}
+
 		boolean customAccepts = acceptsVerifier.isValid(interceptor,
 				controllerMethod.get(), controllerInstance.get(), constraints);
-		if (!customAccepts) invoker.tryToInvoke(interceptor, method);
+		if (!customAccepts) {
+			invoker.tryToInvoke(interceptor, method);
+		}
+
 		return customAccepts;
 	}
 

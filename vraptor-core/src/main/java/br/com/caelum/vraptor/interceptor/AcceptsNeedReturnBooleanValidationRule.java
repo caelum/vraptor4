@@ -43,13 +43,15 @@ public class AcceptsNeedReturnBooleanValidationRule implements ValidationRule {
 
 	@Override
 	public void validate(Class<?> originalType, MirrorList<Method> methods) {
-
 		Method accepts = invoker.findMethod(methods, Accepts.class, originalType);
 
-		if (accepts != null && !accepts.getReturnType().equals(Boolean.class)
-				&& !accepts.getReturnType().equals(boolean.class)) {
-			throw new InterceptionException(format("@%s method must return "
-				+ "	boolean", Accepts.class.getSimpleName()));
+		if (accepts != null && !isBooleanReturn(accepts.getReturnType())) {
+			throw new InterceptionException(format("@%s method must return boolean", 
+					Accepts.class.getSimpleName()));
 		}
+	}
+
+	private boolean isBooleanReturn(Class<?> returnType) {
+		return returnType.equals(Boolean.class) || returnType.equals(boolean.class);
 	}
 }

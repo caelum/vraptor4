@@ -96,7 +96,10 @@ public class AspectStyleInterceptorHandler implements InterceptorHandler {
 	}
 
 	private boolean internalAccepts(Object interceptor, List<Annotation> customAccepts) {
-		if (!customAccepts.isEmpty()) return false;
+		if (!customAccepts.isEmpty()) {
+			return false;
+		}
+
 		return acceptsExecutor.accepts(interceptor, acceptsMethod);
 	}
 

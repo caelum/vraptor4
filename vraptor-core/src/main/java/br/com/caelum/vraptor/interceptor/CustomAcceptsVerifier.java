@@ -61,15 +61,17 @@ public class CustomAcceptsVerifier {
 		return true;
 	}
 
-	private static class AcceptsConstraintMatcher implements Matcher<Annotation> {
-		@Override
-		public boolean accepts(Annotation element) {
-			return element.annotationType().isAnnotationPresent(AcceptsConstraint.class);
-		}
+	private static Matcher<Annotation> acceptsConstraintMatcher() {
+		return new Matcher<Annotation>() {
+			@Override
+			public boolean accepts(Annotation element) {
+				return element.annotationType().isAnnotationPresent(AcceptsConstraint.class);
+			}
+		};
 	}
 
 	public static List<Annotation> getCustomAcceptsAnnotations(Class<?> clazz){
 		return new Mirror().on((AnnotatedElement) clazz).reflectAll()
-				.annotations().matching(new AcceptsConstraintMatcher());
+				.annotations().matching(acceptsConstraintMatcher());
 	}
 }

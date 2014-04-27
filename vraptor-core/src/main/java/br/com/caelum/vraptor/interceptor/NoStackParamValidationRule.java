@@ -68,17 +68,21 @@ public class NoStackParamValidationRule implements ValidationRule {
 	}
 
 	private boolean containsStack(Method method) {
-		if (method == null) return false;
+		if (method == null) {
+			return false;
+		}
 
 		List<Class<?>> parameterTypes = asList(method.getParameterTypes());
-		Predicate<Class<?>> hasStack = new Predicate<Class<?>>() {
+		return FluentIterable.from(parameterTypes).anyMatch(hasStack());
+	}
+
+	private Predicate<Class<?>> hasStack() {
+		return new Predicate<Class<?>>() {
 			@Override
 			public boolean apply(Class<?> input) {
 				return SimpleInterceptorStack.class.isAssignableFrom(input)
 					|| InterceptorStack.class.isAssignableFrom(input);
 			}
 		};
-
-		return !FluentIterable.from(parameterTypes).filter(hasStack).isEmpty();
 	}
 }

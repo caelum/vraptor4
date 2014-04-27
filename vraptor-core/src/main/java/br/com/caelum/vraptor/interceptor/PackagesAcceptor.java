@@ -44,7 +44,7 @@ public class PackagesAcceptor implements AcceptsValidator<AcceptsForPackages> {
 		return new Predicate<String>() {
 			@Override
 			public boolean apply(String input) {
-				return controllerPackageName.contains(input);
+				return controllerPackageName.startsWith(input);
 			}
 		};
 	}

@@ -20,7 +20,7 @@ Isso não é necessariamente um problema... a URL /abc é diferente da /abc/ por
 </div>
 
 
-A primeira maneira é colocar os dois tipos de URL (com e sem barra) na anotação @Path, assim:
+A primeira maneira é colocar os dois tipos de URL (com e sem barra) na anotação `@Path`, assim:
 
 ~~~
 #!java
@@ -28,7 +28,7 @@ A primeira maneira é colocar os dois tipos de URL (com e sem barra) na anotaç�
 public void visualiza(Produto produto) {...}
 ~~~
 
-Note que esta modificação só irá funcionar para o método que possui a anotação @Path. Os outros métodos **não** serão afetados por esta mudança.
+Note que esta modificação só irá funcionar para o método que possui a anotação `@Path`. Os outros métodos **não** serão afetados por esta mudança.
 
 
 A outra maneira é escrever a classe abaixo. Desta forma, diferentemente da primeira, fará com que as duas URLs (com ou sem barra) sejam equivalentes.
@@ -63,6 +63,7 @@ public class Error404 extends DefaultControllerNotFoundHandler {
     /**
      * @deprecated CDI eyes only
      */
+    @Deprecated
     public Error404() {
         this(null, null);
     }

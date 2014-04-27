@@ -12,7 +12,7 @@ For those who had some trouble to determine urls like:
 public void view(Product product) {...}
 ~~~
 
-when typing a URI **/product/1/** and the link didn't work, here's two simple ways to fixes the problem.
+when typing a URI **/product/1/** and the link didn't work, here's two simple ways to fix the problem.
 
 <div class="note" markdown="1">
 ## Editor's Note
@@ -20,7 +20,7 @@ This is not necessarily a problem ... the URL /abc is different of /abc/, so the
 </div>
 
 
-The first way is put two kind of URLs (with or without slash) in the @Path annotation, like that:
+The first way is put two kind of URLs (with or without slash) in the `@Path` annotation, like that:
 
 ~~~
 #!java
@@ -28,7 +28,7 @@ The first way is put two kind of URLs (with or without slash) in the @Path annot
 public void view(Product product) {...}
 ~~~
 
-Note this change **only** will work to method with @Path anottation. The others methods will *not* be affected by this change.
+Note this change **only** will work to method with `@Path` annotation. The others methods will *not* be affected by this change.
 
 
 The other way is write the class below. Thus, unlike the first, will cause the two URLs (with or without slash) are equivalent.
@@ -63,6 +63,7 @@ public class Error404 extends DefaultControllerNotFoundHandler {
     /**
      * @deprecated CDI eyes only
      */
+    @Deprecated
     public Error404() {
         this(null, null);
     }

@@ -3,6 +3,7 @@ out
 .project
 .settings
 .metadata
+.grunt
 !vraptor-blank-project/.classpath
 !vraptor-blank-project/.settings/
 !vraptor-blank-project/.project

@@ -4,19 +4,34 @@ title: Aceitando URLs com ou sem barra no final
 
 # por Tomaz Lavieri, adaptado para VRaptor 4
 
-Para quem teve dificuldade como eu em conseguir determinar urls como:
+Para quem teve dificuldade em conseguir determinar urls como:
 
 ~~~
 #!java
 @Path("produto/{produto.id}")
+public void visualiza(Produto produto) {...}
 ~~~
 
-quando digitava a URI **/produto/1/** e o link não funcionava, segue abaixo uma modificação que corrige o problema.
+quando digitava a URI **/produto/1/** e o link não funcionava, segue abaixo duas maneiras de corrigir o problema.
 
 <div class="note" markdown="1">
 ## Nota do editor
-Isso não é necessariamente um problema... a URL /abc é diferente da /abc/ portanto o comportamento de dar 404 é o esperado. Mas se você quiser que sejam urls equivalentes você pode escrever a classe abaixo.
+Isso não é necessariamente um problema... a URL /abc é diferente da /abc/ portanto o comportamento de dar 404 é o esperado.
 </div>
+
+
+A primeira maneira é colocar os dois tipos de URL (com e sem barra) na anotação `@Path`, assim:
+
+~~~
+#!java
+@Path(value = {"produto/{produto.id}", "produto/{produto.id}/"})
+public void visualiza(Produto produto) {...}
+~~~
+
+Note que esta modificação só irá funcionar para o método que possui a anotação `@Path`. Os outros métodos **não** serão afetados por esta mudança.
+
+
+A outra maneira é escrever a classe abaixo. Desta forma, diferentemente da primeira, fará com que as duas URLs (com ou sem barra) sejam equivalentes.
 
 ~~~
 #!java
@@ -48,6 +63,7 @@ public class Error404 extends DefaultControllerNotFoundHandler {
     /**
      * @deprecated CDI eyes only
      */
+    @Deprecated
     public Error404() {
         this(null, null);
     }

@@ -29,31 +29,6 @@ public void cadastrar(@NotNull @Valid Cliente cliente) {
 
 Para ativar a validação é necessário ter no _classpath_ alguma implementação para o Bean Validator. Veja mais informações [aqui](/pt/dependencias-e-pre-requisitos).
 
-Se você estiver usando um _servidor de aplicações_ como Wildfly ou Glassfish, você não precisa adicionar nenhuma dependência. Porém se você usar apenas um _servlet container_, é necessário adicionar o Hibernate validator em seu projeto maven, basta incluir no _classpath_ o artefato:
-
-~~~
-#!xml
-<dependency>
-	<groupId>org.hibernate</groupId>
-	<artifactId>hibernate-validator-cdi</artifactId>
-	<version>5.0.1.Final</version>
-</dependency>
-~~~
-
-É necessário também indicar ao CDI para não validar os métodos automaticamente. Para isso adicione o arquivo <code>META-INF/validation.xml</code> com o segunte conteúdo:
-
-~~~
-#!xml
-<?xml version="1.0" encoding="UTF-8"?>
-<validation-config xmlns="http://jboss.org/xml/ns/javax/validation/configuration"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://jboss.org/xml/ns/javax/validation/configuration
-        validation-configuration-1.1.xsd"
-        version="1.1">
-    <executable-validation enabled="false"/>
-</validation-config>
-~~~
-
 ##Criando validações customizadas
 
 Com o Bean Validator você pode criar anotações com suas validações customizadas. Se você quer, por exemplo, validar se o login de um usuário já está em uso, basta criar o código abaixo:

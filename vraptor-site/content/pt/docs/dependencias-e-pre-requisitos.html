@@ -4,12 +4,12 @@ title: Dependências e pré requisitos
 
 #Dependências e pré requisitos
 
-O VRaptor 4 depende do JDK 1.7 e do CDI 1.1, portanto só funcionará nos servidores que suportem essa versão do CDI.
-Os servidores já testados e suportados são:
-- Glassfish 4
-- WildFly 8.0
-- Tomcat 7 (+ jars do Weld 2.0)
-- Jetty 8 e 9  (+ jars do Weld 2.0)
+O VRaptor 4 depende do JDK 1.7 e do CDI 1.1, portanto só funcionará nos servidores que suportem essa versão do CDI. Os servidores já testados e suportados são:
+
+* Glassfish 4
+* WildFly 8.0
+* Tomcat 7 (+ jars do Weld 2.0)
+* Jetty 8 e 9  (+ jars do Weld 2.0)
 
 Ao usar um Servlet Container como o Tomcat ou Jetty, é preciso adicionar os jars do Weld 2.x, além do seguinte listener em seu `web.xml`:
 
@@ -53,10 +53,10 @@ Esta é a dependência mais importante do VRaptor 4. Se você usa um Application
 ~~~
 #!xml
 <dependency>
- <groupId>javax.inject</groupId>
- <artifactId>javax.inject</artifactId>
- <version>1</version>
- <scope>provided</scope>
+    <groupId>javax.inject</groupId>
+    <artifactId>javax.inject</artifactId>
+    <version>1</version>
+    <scope>provided</scope>
 </dependency>
 ~~~
 
@@ -65,23 +65,19 @@ E se você utiliza um Servler Container (como o Tomcat ou Jetty) você precisa a
 ~~~
 #!xml
 <dependency>
- <groupId>org.jboss.weld.servlet</groupId>
- <artifactId>weld-servlet-core</artifactId>
- <version>2.1.2.Final</version>
+    <groupId>org.jboss.weld.servlet</groupId>
+    <artifactId>weld-servlet-core</artifactId>
+    <version>2.1.2.Final</version>
 </dependency>
 
 <dependency>
- <groupId>org.jboss.weld</groupId>
- <artifactId>weld-core-impl</artifactId>
- <version>2.1.2.Final</version>
+    <groupId>org.jboss.weld</groupId>
+    <artifactId>weld-core-impl</artifactId>
+    <version>2.1.2.Final</version>
 </dependency>
 ~~~
 
-**Observação importante**: evite usar o artefato org.jboss.weld.servlet:weld-servlet. Este    
-artefato contém todas as classes necessárias, porém contém mais classes do que é   
-preciso para subir a sua aplicação. Em particular, o weld-servlet contém uma **cópia** de  
-todo o código do guava, que já é dependência do VRaptor, o que pode gerar conflitos    
-entre as classes dos dois artefatos (o terrível class loader hell).
+**Observação importante**: evite usar o artefato `org.jboss.weld.servlet:weld-servlet`. Este artefato contém todas as classes necessárias, porém contém mais classes do que é preciso para subir a sua aplicação. Em particular, o `weld-servlet` contém uma **cópia** de todo o código do guava, que já é dependência do VRaptor, o que pode gerar conflitos entre as classes dos dois artefatos.
 
 
 ## Logging
@@ -99,7 +95,7 @@ A maioria dos projetos preferem usar o *log4j* como implementação de logging. 
 </dependency>
 ~~~ 
 
-Incluir um arquivo de configuração chamado `log4j.xml` na pasta de `src/main/resources` do projeto, por exemplo:
+E inclua um arquivo de configuração chamado `log4j.xml` na pasta de `src/main/resources` do projeto, por exemplo:
 
 ~~~ 
 #!xml
@@ -149,12 +145,35 @@ E para o Gson
 
 Necessário para utilizar a funcionalidade de validação. Você precisará adicionar a API `validation-api` e alguma implementação, como por exemplo, o <a href="http://www.hibernate.org/subprojects/validator.html">Hibernate Validator</a> ou o <a href="https://bval.apache.org/">Apache BVal</a>.
 
-Se você usa um servidor de aplicações não é necessário adicionar a dependência do Bean Validation, pois já está incluído no Java EE 7.
+Se você usa um servidor de aplicações não é necessário adicionar a dependência do Bean Validation, pois já está incluído no Java EE 7. Porém se você usar apenas um _servlet container_, é necessário adicionar o Hibernate validator em seu projeto maven incluindo o artefato:
+
+~~~
+#!xml
+<dependency>
+	<groupId>org.hibernate</groupId>
+	<artifactId>hibernate-validator-cdi</artifactId>
+	<version>5.0.1.Final</version>
+</dependency>
+~~~
+
+É necessário também indicar ao CDI para não validar os métodos automaticamente. Para isso adicione o arquivo <code>META-INF/validation.xml</code> com o segunte conteúdo:
+
+~~~
+#!xml
+<?xml version="1.0" encoding="UTF-8"?>
+<validation-config xmlns="http://jboss.org/xml/ns/javax/validation/configuration"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://jboss.org/xml/ns/javax/validation/configuration
+        validation-configuration-1.1.xsd"
+        version="1.1">
+    <executable-validation enabled="false"/>
+</validation-config>
+~~~
 
 
 ## Paranamer
 
-Infelizmente, o Java não realiza reflection de parâmetros em métodos e construtores, pois esses dados não ficam disponíveis em bytecode (a não ser se compilado em **debug mode**, porém é algo opcional). Isso faz com que a maioria dos frameworks que precisem desse tipo de informação criem uma anotação própria para isso, o que polui muito o código (exemplo no JAX-WS, onde é comum encontrar um método como o acima com a assinatura `void add(@WebParam(name="cliente") Cliente cliente)`. 
+Infelizmente, nas versões anteriores ao Java 8, não é possível fazer reflection de parâmetros em métodos e construtores, pois esses dados não ficam disponíveis em bytecode (a não ser se compilado em **debug mode**, porém é algo opcional). Isso faz com que a maioria dos frameworks que precisem desse tipo de informação criem uma anotação própria para isso, o que polui muito o código (exemplo no JAX-WS, onde é comum encontrar um método como o acima com a assinatura `void add(@WebParam(name="cliente") Cliente cliente)`. 
 
 O VRaptor tira proveito do framework <a href="http://paranamer.codehaus.org/">Paranamer</a>, que consegue tirar essa informação por meio da pré compilação ou dos dados de debug, evitando criar mais uma anotação. Alguns dos desenvolvedores do VRaptor também participam no desenvolvimento do **Paranamer**.
 

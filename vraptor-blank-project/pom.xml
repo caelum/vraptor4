@@ -49,7 +49,8 @@
 			<groupId>javax.inject</groupId>
 			<artifactId>javax.inject</artifactId>
 			<version>1</version>
-			<scope>provided</scope>
+			<!-- uncomment this line on app servers -->
+			<!-- <scope>provided</scope> -->
 		</dependency>
 
 		<dependency>

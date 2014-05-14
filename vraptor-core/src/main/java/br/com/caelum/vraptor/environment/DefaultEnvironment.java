@@ -48,7 +48,7 @@ public class DefaultEnvironment implements Environment {
 	private final EnvironmentType environmentType;
 
 	/**
-	 * CDI eyes only
+	 * @deprecated CDI eyes only
 	 */
 	public DefaultEnvironment() throws IOException {
 		this(null);

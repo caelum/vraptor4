@@ -143,7 +143,7 @@ E para o Gson
 
 ## Bean Validation
 
-Necessário para utilizar a funcionalidade de validação. Você precisará adicionar a API `validation-api` e alguma implementação, como por exemplo, o <a href="http://www.hibernate.org/subprojects/validator.html">Hibernate Validator</a> ou o <a href="https://bval.apache.org/">Apache BVal</a>.
+Você precisará adicionar a API `validation-api` e alguma implementação, como por exemplo, o [Hibernate Validator](http://www.hibernate.org/subprojects/validator.html) ou o [Apache BVal](https://bval.apache.org/). Essa dependência é obrigatoria pois o VRaptor utiliza os recursos de validação do bean validation em sua classe `Validator`. 
 
 Se você usa um servidor de aplicações não é necessário adicionar a dependência do Bean Validation, pois já está incluído no Java EE 7. Porém se você usar apenas um _servlet container_, é necessário adicionar o Hibernate validator em seu projeto maven incluindo o artefato:
 

@@ -54,7 +54,7 @@ public class PerfilController {
 	@Inject private final PerfilDao dao;
 		
 	public void atualizaFoto(Perfil perfil, UploadedFile foto) {
-		try (InputStream input = file.getFile()) {
+		try (InputStream input = foto.getFile()) {
 			dao.atribui(input, perfil);
 		}
 	}
@@ -68,7 +68,7 @@ O UploadedFile retorna o arquivo como um `InputStream`. Se você quiser copiar p
 ~~~ 
 #!java
 public void atualizaFoto(Perfil perfil, UploadedFile foto) {
-	try (InputStream input = file.getFile()) {
+	try (InputStream input = foto.getFile()) {
 		File fotoSalva = new File();
 		Files.write(input, fotoSalva);
 		dao.atribui(fotoSalva, perfil);

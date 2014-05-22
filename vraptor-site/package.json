@@ -24,6 +24,7 @@
     "grunt-contrib-concat": "~0.3.0",
     "grunt-text-replace": "^0.3.11",
     "grunt-gh-pages": "^0.9.1",
-    "grunt-shell": "~0.6.4"
+    "grunt-shell": "~0.6.4",
+    "grunt-contrib-concat" : "~0.4.0"
   }
 }

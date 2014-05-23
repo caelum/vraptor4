@@ -36,7 +36,7 @@ import br.com.caelum.vraptor.validator.Outjector;
 @ApplicationScoped
 public class ParameterIncluder {
 
-	private Instance<Outjector> outjector;
+	private Instance<Outjector> outjectorInstance;
 
 	/**
 	 * @deprecated CDI eyes only
@@ -47,13 +47,15 @@ public class ParameterIncluder {
 
 	@Inject
 	public ParameterIncluder(Instance<Outjector> outjector) {
-		this.outjector = outjector;
+		this.outjectorInstance = outjector;
 	}
 
 	public void include(@Observes MethodReady event) {
 		Method method = event.getControllerMethod().getMethod();
 		if (method.isAnnotationPresent(IncludeParameters.class)) {
-			outjector.get().outjectRequestMap();
+			Outjector outjector = outjectorInstance.get();
+			outjector.outjectRequestMap();
+			outjectorInstance.destroy(outjector);
 		}
 	}
 }

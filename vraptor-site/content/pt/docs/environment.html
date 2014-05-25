@@ -20,7 +20,19 @@ Em seu `web.xml`, adicione:
         
 Onde `nome_do_ambiente` é o ambiente atual (`PRODUCTION` ou `DEVELOPMENT`, por exemplo).
 
-Ou se preferir, você também pode criar uma variável global do sistema chamada `VRAPTOR_ENVIRONMENT`.
+Ou se preferir, você também pode criar uma variável de ambiente conforme seu sistema operacional, chamada `VRAPTOR_ENV`.
+
+Exemplo no windows:
+
+~~~ 
+set VRAPTOR_ENV=PRODUCTION
+~~~ 
+
+Exemplo no unix:
+
+~~~ 
+export VRAPTOR_ENV=PRODUCTION
+~~~ 
 
 ## nome_do_ambiente.properties
 

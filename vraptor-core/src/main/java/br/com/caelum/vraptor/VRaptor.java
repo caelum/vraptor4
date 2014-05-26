@@ -20,12 +20,9 @@ package br.com.caelum.vraptor;
 import static org.slf4j.LoggerFactory.getLogger;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.Set;
 
 import javax.enterprise.event.Event;
-import javax.enterprise.inject.spi.CDI;
 import javax.inject.Inject;
 import javax.interceptor.Interceptor.Priority;
 import javax.servlet.DispatcherType;
@@ -41,9 +38,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
-
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Sets;
 
 import br.com.caelum.vraptor.core.StaticContentHandler;
 import br.com.caelum.vraptor.events.RequestStarted;

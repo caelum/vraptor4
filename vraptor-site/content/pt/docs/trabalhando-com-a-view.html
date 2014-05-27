@@ -281,7 +281,7 @@ public class CustomXMLSerialization extends XStreamBuilderImpl {
 
 
     @Override
-    protected XStream xmlInstance {
+    protected XStream xmlInstance() {
         XStream xStream = super.xmlInstance();
         //suas configurações ao XStream aqui
         return xStream;

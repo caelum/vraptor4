@@ -32,6 +32,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
@@ -391,15 +393,19 @@ public abstract class ParametersProviderTest {
 		when(request.getParameterMap()).thenReturn(Collections.<String, String[]>emptyMap());
 	}
 
-	protected void requestParameterIs(ControllerMethod method, String paramName, String... values) {
-		when(request.getParameterValues(paramName)).thenReturn(values);
-		String[] values1 = { paramName };
-		when(request.getParameterNames()).thenReturn(Collections.enumeration(Arrays.asList(values1)));
-		when(request.getParameterMap()).thenReturn(Collections.singletonMap(paramName, values));
-		when(request.getParameter(paramName)).thenReturn(values[0]);
+	protected void requestParametersAre(ControllerMethod method, Map<String, String[]> map) {
+		for(Entry<String, String[]> entry : map.entrySet()) {
+			when(request.getParameterValues(entry.getKey())).thenReturn(entry.getValue());
+			when(request.getParameter(entry.getKey())).thenReturn(entry.getValue()[0]);
+		}
+		when(request.getParameterNames()).thenReturn(Collections.enumeration(map.keySet()));
+		when(request.getParameterMap()).thenReturn(map);
 	}
-
-
+	
+	protected void requestParameterIs(ControllerMethod method, String paramName, String... values) {
+		requestParametersAre(method, ImmutableMap.of(paramName, values));
+	}
+	
 	@SuppressWarnings("unchecked")
 	protected <T> T getParameters(ControllerMethod method) {
 		return (T) provider.getParametersFor(method, errors)[0];
@@ -514,6 +520,7 @@ public abstract class ParametersProviderTest {
 
 	public static class ABC {
 		private Long x;
+		private Long y;
 
 		public Long getX() {
 			return x;
@@ -521,6 +528,14 @@ public abstract class ParametersProviderTest {
 
 		public void setX(Long x) {
 			this.x = x;
+		}
+
+		public Long getY() {
+			return y;
+		}
+
+		public void setY(Long y) {
+			this.y = y;
 		}
 	}
 

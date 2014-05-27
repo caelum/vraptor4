@@ -160,7 +160,7 @@ public class VRaptorInstantiator implements InstantiatorWithErrors, Instantiator
 			List<Parameter> params = parameters.forTarget(target);
 			Parameter parameter = findParamFor(params, target);
 
-			Object converted = converterForTarget(target).convert(parameter.getValue(), target.getClassType());
+			Object converted = converterForTarget(target).convert(parameter == null? null : parameter.getValue(), target.getClassType());
 
 			return new NewObject(this, parameters.focusedOn(target), converted).valueWithPropertiesSet();
 		}

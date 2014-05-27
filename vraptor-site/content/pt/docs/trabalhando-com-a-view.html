@@ -277,13 +277,11 @@ A implementação padrão é baseada no XStream, então é possível configurar 
 ~~~ 
 #!java
 @Specializes
-public class CustomXMLSerialization extends XStreamXMLSerialization {
-//or public class CustomJSONSerialization extends XStreamJSONSerialization {
-    //delegate constructor
+public class CustomXMLSerialization extends XStreamBuilderImpl {
 
     @Override
-    protected XStream getXStream() {
-        XStream xStream = super.getXStream();
+    protected XStream xmlInstance {
+        XStream xStream = super.xmlInstance();
         //suas configurações ao XStream aqui
         return xStream;
     }

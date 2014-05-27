@@ -135,7 +135,7 @@ O `value` do método `converter` só será preenchido quando um unico atributo d
 public class FotoConverter implements Converter<Foto> {
 
   public Foto convert(String value, Class<? extends Foto> type) {
-    Foto foto = return new Foto();
+    Foto foto = new Foto();
     if (!isNullOrEmpty(value)) {
       foto.setCampo(value)
     }

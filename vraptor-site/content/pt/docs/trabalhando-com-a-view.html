@@ -272,13 +272,12 @@ result.use(xml()).from(usuario).exclude("email").serialize(); // excluir o campo
 result.use(xml()).from(usuario).excludeAll().serialize(); // exclui todos os campos
 ~~~ 
 
-A implementação padrão é baseada no XStream, então é possível configurar a serialização por anotações ou configurações diretas ao XStream, bastando criar a classe:
+A implementação para serialização de XML padrão é baseada no XStream, então é possível configurar a serialização por anotações ou configurações diretas ao XStream, bastando criar a classe:
 
 ~~~ 
 #!java
 @Specializes
-public class CustomXMLSerialization extends XStreamBuilderImpl {
-
+public class CustomXStreamBuilder extends XStreamBuilderImpl {
 
     @Override
     protected XStream xmlInstance() {
@@ -288,6 +287,8 @@ public class CustomXMLSerialization extends XStreamBuilderImpl {
     }
 }
 ~~~ 
+
+Para configurar a serialização com JSON você pode criar uma classe que estenda de 'GsonJSONSerialization' e sobrescrever o método 'getSerializer()' com as suas configurações.
 
 ##Serializando Collections##
 

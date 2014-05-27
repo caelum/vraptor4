@@ -47,10 +47,13 @@ import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
 import org.junit.Test;
+
+import com.google.common.collect.ImmutableMap;
 
 import br.com.caelum.iogi.parameters.Parameter;
 import br.com.caelum.iogi.parameters.Parameters;
@@ -186,6 +189,21 @@ public class IogiParametersProviderTest extends ParametersProviderTest {
 
 		assertThat(out[0], is(not((Object) result)));
 		assertThat(out[0], is((Object) "buggy"));
+	}
+	
+	@Test
+	public void isCapableOfClassesThatHaveConverters() throws Exception {
+		ControllerMethod abcMethod = method("abc", ABC.class);
+		
+		when(converters.existsFor(ABC.class)).thenReturn(true);
+		when(converters.to(ABC.class)).thenReturn(new ABCConverter());
+
+		requestParametersAre(abcMethod, ImmutableMap.of("abc.x", new String[]{ "1" }, "abc.y", new String[]{ "2" }));
+		
+		ABC abc = getParameters(abcMethod);
+
+		assertThat(abc.getX(), is(1l));
+		assertThat(abc.getY(), is(2l));
 	}
 
 	//----------

@@ -31,6 +31,7 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.TimeZone;
@@ -69,6 +70,7 @@ public class GsonDeserializerTest {
 	private ControllerMethod noParameter;
 	private ControllerMethod listDog;
 	private ControllerMethod integerAndDogParameter;
+	private ControllerMethod dateParameter;
 
 	@Before
 	public void setUp() throws Exception {
@@ -85,6 +87,7 @@ public class GsonDeserializerTest {
 
 		noParameter = new DefaultControllerMethod(controllerClass, DogController.class.getDeclaredMethod("noParameter"));
 		dogParameter = new DefaultControllerMethod(controllerClass, DogController.class.getDeclaredMethod("dogParameter", Dog.class));
+		dateParameter = new DefaultControllerMethod(controllerClass, DogController.class.getDeclaredMethod("dateParameter", Date.class));
 		dogAndIntegerParameter = new DefaultControllerMethod(controllerClass, DogController.class.getDeclaredMethod("dogAndIntegerParameter", Dog.class,
 				Integer.class));
 		integerAndDogParameter = new DefaultControllerMethod(controllerClass, DogController.class.getDeclaredMethod("integerAndDogParameter",
@@ -97,7 +100,7 @@ public class GsonDeserializerTest {
 		private Integer age;
 		private Calendar birthday;
 	}
-
+	
 	static class DogController {
 
 		public void noParameter() {}
@@ -107,6 +110,8 @@ public class GsonDeserializerTest {
 		public void dogAndIntegerParameter(Dog dog, Integer times) {}
 
 		public void integerAndDogParameter(Integer times, Dog dog) {}
+
+		public void dateParameter(Date date) {}
 
 		public void list(List<Dog> dogs) {}
 	}
@@ -354,6 +359,17 @@ public class GsonDeserializerTest {
 		assertThat(dog.birthday.compareTo(birthday), is(0));
 	}
 
+	@Test
+	public void shouldDeserializeADateWithISO8601() {
+		InputStream stream = asStream("{\"date\":\"1988-02-25T02:30:15Z\"}");
+		Object[] deserialized = deserializer.deserialize(stream, dateParameter);
+		assertThat(deserialized.length, is(1));
+		assertThat(deserialized[0], is(instanceOf(Date.class)));
+		Date deserializedDate = (Date) deserialized[0];
+		Date date = new GregorianCalendar(1988, 1, 25, 2, 30, 15).getTime();
+		assertThat(deserializedDate.compareTo(date), is(0));
+	}
+	
 	private InputStream asStream(String str, Charset charset) {
 		return new ByteArrayInputStream(str.getBytes(charset));
 	}

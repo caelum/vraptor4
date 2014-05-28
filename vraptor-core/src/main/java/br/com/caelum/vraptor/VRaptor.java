@@ -88,7 +88,7 @@ public class VRaptor implements Filter {
 
 		validateJavaEE7Environment();
 		validateIfCdiIsFound();
-		warnIfBeansXmlIsNotFound();
+		validateIfBeansXmlIsNotFound();
 
 		initializedEvent.fire(new VRaptorInitialized(servletContext));
 
@@ -136,7 +136,7 @@ public class VRaptor implements Filter {
 		}
 	}
 
-	private void warnIfBeansXmlIsNotFound() throws ServletException {
+	private void validateIfBeansXmlIsNotFound() throws ServletException {
 		
 		Set<String> webInfFile = servletContext.getResourcePaths("/WEB-INF/beans.xml");
 		Set<String> metaInfFile = servletContext.getResourcePaths("/WEB-INF/classes/META-INF/beans.xml");

@@ -122,11 +122,11 @@ public class LongConverter implements Converter<Long> {
 }
 ~~~ 
 
-##Criando converter para `JavaBeans`
+##Criando converter para classes `Java`
 
-Você pode criar um converter para `JavaBeans` seguindo o mesmo processo já citado anteriormente, com algumas diferanças conforme citado abaixo:
+Você pode criar um converter para `Classes` seguindo o mesmo processo já citado anteriormente, com algumas diferanças conforme citado abaixo:
 
-O `value` do método `converter` só será preenchido quando um unico atributo do `JavaBean` estiver presente, caso haja outros atributos presentes `value` sempre será nulo, sendo assim o retorno deve ser sempre o objeto já instanciado para que os atributos presentes sejam preenchidos automáticamente.
+O `value` do método `converter` só será preenchido quando um parâmetro da request fizer referência ao atributo da `Class`, caso haja mais que um parâmetro na request que faz referência aos atributos da `Class` o `value` será nulo, sendo assim o retorno deve ser sempre o objeto já instanciado para que os atributos presentes sejam preenchidos automáticamente.
 
 ~~~ 
 #!java

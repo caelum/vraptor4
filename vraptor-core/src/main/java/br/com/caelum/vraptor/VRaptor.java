@@ -20,6 +20,7 @@ package br.com.caelum.vraptor;
 import static org.slf4j.LoggerFactory.getLogger;
 
 import java.io.IOException;
+import java.util.Set;
 
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
@@ -87,7 +88,7 @@ public class VRaptor implements Filter {
 
 		validateJavaEE7Environment();
 		validateIfCdiIsFound();
-		warnIfBeansXmlIsNotFound();
+		validateIfBeansXmlIsNotFound();
 
 		initializedEvent.fire(new VRaptorInitialized(servletContext));
 
@@ -135,9 +136,14 @@ public class VRaptor implements Filter {
 		}
 	}
 
-	private void warnIfBeansXmlIsNotFound() {
-		if (servletContext.getRealPath("/WEB-INF/beans.xml") == null) {
-			logger.warn("A beans.xml isn't found. Check if your beans.xml is properly located at /WEB-INF/beans.xml");
+	private void validateIfBeansXmlIsNotFound() throws ServletException {
+		
+		Set<String> webInfFile = servletContext.getResourcePaths("/WEB-INF/beans.xml");
+		Set<String> metaInfFile = servletContext.getResourcePaths("/WEB-INF/classes/META-INF/beans.xml");
+		
+		if (webInfFile == null && metaInfFile == null) {
+			throw new ServletException("A beans.xml isn't found. Check if your beans.xml is properly "
+					+ "located at /WEB-INF/beans.xml or /WEB-INF/classes/META-INF/beans.xml");
 		}
 	}
 

@@ -4,7 +4,9 @@ title: Dependências e pré requisitos
 
 #Dependências e pré requisitos
 
-O VRaptor 4 depende do JDK 1.7 e do CDI 1.1, portanto só funcionará nos servidores que suportem essa versão do CDI. Os servidores já testados e suportados são:
+O VRaptor 4 depende diretamente do CDI versão 1.1, portanto só funcionará nos servidores que suportem essa versão do CDI. Também é necessário possuir um JDK compatível com a versão 1.7 ou superior.
+
+Os servidores já testados e suportados são:
 
 * Glassfish 4
 * WildFly 8.0
@@ -117,7 +119,7 @@ E inclua um arquivo de configuração chamado `log4j.xml` na pasta de `src/main/
 
 ## XStream e Gson
 
-São utililizadas para serialização e deserialização XML e JSON respectivamente. Ambas são opcionais. Ou seja, se você não usar os recursos de serialização e deserialização, você pode removê-los do classpath.
+São utililizadas para serialização e deserialização XML e JSON respectivamente. Ambas são opcionais, ou seja, se você não usar os recursos de serialização e deserialização, você pode removê-los do classpath. Atualmente elas já vêm com a dependência do VRaptor no Maven.
 
 Para XStream:
 
@@ -143,9 +145,9 @@ E para o Gson
 
 ## Bean Validation
 
-Você precisará adicionar a API `validation-api` e alguma implementação, como por exemplo, o [Hibernate Validator](http://www.hibernate.org/subprojects/validator.html) ou o [Apache BVal](https://bval.apache.org/). Essa dependência é obrigatoria pois o VRaptor utiliza os recursos de validação do bean validation em sua classe `Validator`. 
+Você precisará adicionar a API `validation-api` e alguma implementação, como por exemplo, o [Hibernate Validator](http://www.hibernate.org/subprojects/validator.html). Essa dependência é obrigatória pois o VRaptor utiliza os recursos de validação do bean validation em sua classe `Validator`. 
 
-Se você usa um servidor de aplicações não é necessário adicionar a dependência do Bean Validation, pois já está incluído no Java EE 7. Porém se você usar apenas um _servlet container_, é necessário adicionar o Hibernate validator em seu projeto maven incluindo o artefato:
+Se você usa um servidor de aplicações não é necessário adicionar a dependência do Bean Validation, pois já está incluído no Java EE 7. Porém se você usar apenas um _servlet container_, é necessário adicionar alguma implementação, como o Hibernate validator, em seu projeto incluindo o artefato:
 
 ~~~
 #!xml

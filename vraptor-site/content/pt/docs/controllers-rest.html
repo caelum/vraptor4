@@ -349,11 +349,13 @@ Assim, o path `/post/atual` vai ser testado antes do `/post/{post.autor}`, e o V
 
 ##Paths com headers
 
-Você também pode injetar HTTP-Headers na sua lógica usando a anotação `HeaderParam`:
+Você também pode injetar HTTP-Headers na sua lógica usando a anotação `HeaderParam`. No exemplo abaixo o campo `username` será injetado com o valor do header `X-Auth-User`.
 
 ~~~ 
 #!java
-public void profile(@HeaderParam('X-Auth-User') username) {
+public void profile(@HeaderParam(""X-Auth-User") username) {
     ...
 }
 ~~~
+
+*Atenção*: No exemplo acima, se você tiver um formulário com o campo `username` e você definir o `HeaderParam` com o mesmo nome do campo do formulário, ela será automaticamente sobrescrita com o valor do `HeaderParam`.

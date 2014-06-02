@@ -18,6 +18,13 @@ public class NoCacheInterceptor {
         this.response = response;
     }
 
+    /**
+     * @deprecated CDI eyes only
+     */
+    protected NoCacheInterceptor(){
+        this(null);
+    }
+
     @BeforeCall
     public void intercept() {
 

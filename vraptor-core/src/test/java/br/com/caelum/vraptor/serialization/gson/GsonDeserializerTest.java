@@ -19,6 +19,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -40,6 +41,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import net.vidageek.mirror.dsl.Mirror;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -74,12 +76,13 @@ public class GsonDeserializerTest {
 
 	@Before
 	public void setUp() throws Exception {
+		TimeZone.setDefault(TimeZone.getTimeZone("GMT-0300"));
 		provider = new ParanamerNameProvider();
 		request = mock(HttpServletRequest.class);
-
 		List<JsonDeserializer<?>> jsonDeserializers = new ArrayList<>();
 		List<JsonSerializer<?>> jsonSerializers = new ArrayList<>();
 		jsonDeserializers.add(new CalendarGsonConverter());
+		jsonDeserializers.add(new DateGsonConverter());
 
 		builder = new GsonBuilderWrapper(new MockInstanceImpl<>(jsonSerializers), new MockInstanceImpl<>(jsonDeserializers));
 		deserializer = new GsonDeserialization(builder, provider, request);
@@ -361,13 +364,13 @@ public class GsonDeserializerTest {
 
 	@Test
 	public void shouldDeserializeADateWithISO8601() {
-		InputStream stream = asStream("{\"date\":\"1988-02-25T02:30:15Z\"}");
+		InputStream stream = asStream("{\"date\":\"1988-02-25T02:30:15 -0300\"}");
 		Object[] deserialized = deserializer.deserialize(stream, dateParameter);
 		assertThat(deserialized.length, is(1));
 		assertThat(deserialized[0], is(instanceOf(Date.class)));
 		Date deserializedDate = (Date) deserialized[0];
 		Date date = new GregorianCalendar(1988, 1, 25, 2, 30, 15).getTime();
-		assertThat(deserializedDate.compareTo(date), is(0));
+		assertEquals(date, deserializedDate);
 	}
 	
 	private InputStream asStream(String str, Charset charset) {

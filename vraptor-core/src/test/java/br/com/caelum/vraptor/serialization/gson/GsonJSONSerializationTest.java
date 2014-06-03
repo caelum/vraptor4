@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.TimeZone;
@@ -64,6 +65,8 @@ public class GsonJSONSerializationTest {
 
 	@Before
 	public void setup() throws Exception {
+		TimeZone.setDefault(TimeZone.getTimeZone("GMT-0300"));
+		
 		this.stream = new ByteArrayOutputStream();
 
 		response = mock(HttpServletResponse.class);
@@ -73,6 +76,7 @@ public class GsonJSONSerializationTest {
 		List<JsonSerializer<?>> jsonSerializers = new ArrayList<>();
 		List<JsonDeserializer<?>> jsonDeserializers = new ArrayList<>();
 		jsonSerializers.add(new CalendarGsonConverter());
+		jsonSerializers.add(new DateGsonConverter());
 		jsonSerializers.add(new CollectionSerializer());
 		jsonSerializers.add(new EnumSerializer());
 
@@ -448,6 +452,14 @@ public class GsonJSONSerializationTest {
 		String expectedResult = "{\"client\":{\"name\":\"renan\",\"included\":\"2012-09-03T01:05:09-03:00\"}}";
 
 		assertThat(result, is(equalTo(expectedResult)));
+	}
+	
+	@Test
+	public void shouldSerializeDateWithISO8601() {
+		Date date = new GregorianCalendar(1988, 0, 25, 1, 30, 15).getTime();
+		serialization.from(date).serialize();
+		String expectedResult = "{\"date\":\"1988-01-25T01:30:15-0300\"}";
+		assertThat(result(), is(equalTo(expectedResult)));
 	}
 
 	@Test

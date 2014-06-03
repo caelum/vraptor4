@@ -19,6 +19,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -31,6 +32,7 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.TimeZone;
@@ -39,6 +41,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import net.vidageek.mirror.dsl.Mirror;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -69,15 +72,17 @@ public class GsonDeserializerTest {
 	private ControllerMethod noParameter;
 	private ControllerMethod listDog;
 	private ControllerMethod integerAndDogParameter;
+	private ControllerMethod dateParameter;
 
 	@Before
 	public void setUp() throws Exception {
+		TimeZone.setDefault(TimeZone.getTimeZone("GMT-0300"));
 		provider = new ParanamerNameProvider();
 		request = mock(HttpServletRequest.class);
-
 		List<JsonDeserializer<?>> jsonDeserializers = new ArrayList<>();
 		List<JsonSerializer<?>> jsonSerializers = new ArrayList<>();
 		jsonDeserializers.add(new CalendarGsonConverter());
+		jsonDeserializers.add(new DateGsonConverter());
 
 		builder = new GsonBuilderWrapper(new MockInstanceImpl<>(jsonSerializers), new MockInstanceImpl<>(jsonDeserializers));
 		deserializer = new GsonDeserialization(builder, provider, request);
@@ -85,6 +90,7 @@ public class GsonDeserializerTest {
 
 		noParameter = new DefaultControllerMethod(controllerClass, DogController.class.getDeclaredMethod("noParameter"));
 		dogParameter = new DefaultControllerMethod(controllerClass, DogController.class.getDeclaredMethod("dogParameter", Dog.class));
+		dateParameter = new DefaultControllerMethod(controllerClass, DogController.class.getDeclaredMethod("dateParameter", Date.class));
 		dogAndIntegerParameter = new DefaultControllerMethod(controllerClass, DogController.class.getDeclaredMethod("dogAndIntegerParameter", Dog.class,
 				Integer.class));
 		integerAndDogParameter = new DefaultControllerMethod(controllerClass, DogController.class.getDeclaredMethod("integerAndDogParameter",
@@ -97,7 +103,7 @@ public class GsonDeserializerTest {
 		private Integer age;
 		private Calendar birthday;
 	}
-
+	
 	static class DogController {
 
 		public void noParameter() {}
@@ -107,6 +113,8 @@ public class GsonDeserializerTest {
 		public void dogAndIntegerParameter(Dog dog, Integer times) {}
 
 		public void integerAndDogParameter(Integer times, Dog dog) {}
+
+		public void dateParameter(Date date) {}
 
 		public void list(List<Dog> dogs) {}
 	}
@@ -354,6 +362,17 @@ public class GsonDeserializerTest {
 		assertThat(dog.birthday.compareTo(birthday), is(0));
 	}
 
+	@Test
+	public void shouldDeserializeADateWithISO8601() {
+		InputStream stream = asStream("{\"date\":\"1988-02-25T02:30:15 -0300\"}");
+		Object[] deserialized = deserializer.deserialize(stream, dateParameter);
+		assertThat(deserialized.length, is(1));
+		assertThat(deserialized[0], is(instanceOf(Date.class)));
+		Date deserializedDate = (Date) deserialized[0];
+		Date date = new GregorianCalendar(1988, 1, 25, 2, 30, 15).getTime();
+		assertEquals(date, deserializedDate);
+	}
+	
 	private InputStream asStream(String str, Charset charset) {
 		return new ByteArrayInputStream(str.getBytes(charset));
 	}

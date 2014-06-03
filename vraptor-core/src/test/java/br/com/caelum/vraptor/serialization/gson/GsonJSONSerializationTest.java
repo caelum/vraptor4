@@ -458,7 +458,7 @@ public class GsonJSONSerializationTest {
 	public void shouldSerializeDateWithISO8601() {
 		Date date = new GregorianCalendar(1988, 0, 25, 1, 30, 15).getTime();
 		serialization.from(date).serialize();
-		String expectedResult = "{\"date\":\"1988-01-25T01:30:15 -0300\"}";
+		String expectedResult = "{\"date\":\"1988-01-25T01:30:15-0300\"}";
 		assertThat(result(), is(equalTo(expectedResult)));
 	}
 

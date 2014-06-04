@@ -72,8 +72,43 @@ custom.name=Paulo Silveira
 custom.address=Vergueiro St 
 ~~~
 
-That will cause `Client` fields `name` and `address` of `add` method to be filled, respectively, with `Paulo Silveira` and `Vergueiro St`, via getters e setters.
+That will cause `Client` fields `name` and `address` of `add` method to be filled, respectively, with `Paulo Silveira` and `Vergueiro St`, via setters or constructor, using parameters with the same names of the attributes.
 
+An example via setter would be:
+~~~
+#!java
+public class Client {
+
+    private String name;
+    private String address;
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Client setAddress(String address) {
+        this.address = address;
+    }
+}
+~~~
+
+Or you may prefer receive the values via constructor. This also works as long as you respect the rule of using the same names of the request parameters, for example:
+~~~
+#!java
+public class Client {
+
+    private final String name;
+    private final String address;
+
+    public Client(String name, String address) {
+        this.name = name;
+        this.address = address;
+    }
+
+}
+~~~
+
+With this, we can receive the `custom` as a parameter of method `add` and the VRaptor will care to instantiate your attributes.
 ~~~
 #!java
 public void add(Client custom) {

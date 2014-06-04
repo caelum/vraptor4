@@ -74,7 +74,7 @@ custom.address=R.Vergueiro
 
 Então os campos `name` e `address` do parâmetro `Client` que chamamos de `custom` no método `add` serão populados com `Paulo Silveira` e `R.Vergueiro` via setters ou construtor, utilizando parâmetros com os mesmos nomes dos atributos. 
 
-Via Setters:
+Um exemplo via setters seria:
 ~~~
 #!java
 @Controller
@@ -93,14 +93,14 @@ public class Client {
 }
 ~~~
 
-Via Construtor:
+Ou você pode preferir receber os valores pelo construtor. Isso também funciona desde que respeite a regra de usar os mesmos nomes dos parâmetros do request, por exemplo:
 ~~~
 #!java
 @Controller
 public class Client {
 
-    private String name;
-    private String address;
+    private final String name;
+    private final String address;
 
     public Client(String name, String address) {
         this.name = name;

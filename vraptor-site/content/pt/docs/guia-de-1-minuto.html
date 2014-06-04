@@ -72,7 +72,43 @@ custom.name=Paulo Silveira
 custom.address=R.Vergueiro
 ~~~
 
-Então os campos `name` e `address` do parâmetro `Client` que chamamos de `custom` no método `add` serão populados com `Paulo Silveira` e `R.Vergueiro` via getters e setters. 
+Então os campos `name` e `address` do parâmetro `Client` que chamamos de `custom` no método `add` serão populados com `Paulo Silveira` e `R.Vergueiro` via setters ou construtor, utilizando parâmetros com os mesmos nomes dos atributos. 
+
+Via Setters:
+~~~
+#!java
+@Controller
+public class Client {
+
+    private String name;
+    private String address;
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Client setAddress(String address) {
+        this.address = address;
+    }
+}
+~~~
+
+Via Construtor:
+~~~
+#!java
+@Controller
+public class Client {
+
+    private String name;
+    private String address;
+
+    public Client(String name, String address) {
+        this.name = name;
+        this.address = address;
+    }
+
+}
+~~~
 
 ~~~
 #!java

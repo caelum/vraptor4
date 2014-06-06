@@ -23,7 +23,7 @@ def stylized(*archive, layout)
   end
 end
 
-stylized '/img/*', '/css/*', false
+stylized '/img/*', '/css/*', '/js/*', false
 
 stylized '/pt/docs/*', '/pt/documentacao'
 
@@ -50,6 +50,10 @@ define_layout '/en/*', '/en/default'
 define_layout '/*', '/pt/default'
 
 route 'css/*' do
+    item.identifier.chop + '.' + item[:extension]
+end
+
+route 'js/*' do
     item.identifier.chop + '.' + item[:extension]
 end
 

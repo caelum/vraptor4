@@ -10,7 +10,7 @@ Todo o controle de Injeção de Dependência é feito através do CDI, isso pode
 
 O que acontece quando fazemos a DI via atributo, é que precisaremos do contexto do CDI e o mesmo não é suportado pelo JUnit, visto que esse cria todo um ambiente para os testes e não levanta esse contexto. No entanto há soluções para que você possa dentro do seu caso de teste subir o contexto CDI e assim usufruir das injeções de dependências, controle transacionais e tudo aquilo que você precisa do CDI, uma delas é o Arquillian(http://arquillian.org/) que por sinal possui uma excelente documentação, além de que você pode encontrar vários artigos na internet.
 
-Os componentes do VRaptor mais presentes em sua aplicação são o Result e o Validator, esses por serem um pouco mais complexos, com inteface fluente, dificulta a criação de mocks(falsas implementações). Com o intuito de facilitar a nossa vida nos testes, o VRaptor já nos disponibiliza esses mocks já implementados, são eles: MockResult e MockValidator.
+Os componentes do VRaptor mais presentes em sua aplicação são o Result e o Validator, esses por serem um pouco mais complexos, com interface fluente, dificulta a criação de mocks(falsas implementações). Com o intuito de facilitar a nossa vida nos testes, o VRaptor nos disponibiliza esses mocks já implementados, são eles: MockResult e MockValidator.
 
 ##MockResult
 

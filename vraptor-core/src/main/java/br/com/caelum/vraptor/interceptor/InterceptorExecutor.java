@@ -74,7 +74,9 @@ public class InterceptorExecutor {
 			Object[] params = parametersResolver.parametersFor(method);
 			stepInvoker.tryToInvoke(interceptor, method, params);
 		} else {
-			simpleInterceptorStack.get().next();
+			SimpleInterceptorStack stack = simpleInterceptorStack.get();
+			stack.next();
+			simpleInterceptorStack.destroy(stack);
 		}
 	}
 }

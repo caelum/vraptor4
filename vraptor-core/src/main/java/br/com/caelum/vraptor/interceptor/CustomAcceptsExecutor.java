@@ -59,12 +59,17 @@ public class CustomAcceptsExecutor {
 			return false;
 		}
 
-		boolean customAccepts = acceptsVerifier.isValid(interceptor,
-				controllerMethod.get(), controllerInstance.get(), constraints);
+		ControllerMethod cMethod = controllerMethod.get();
+		ControllerInstance cInstance = controllerInstance.get();
+		
+		boolean customAccepts = acceptsVerifier.isValid(interceptor, cMethod, cInstance, constraints);
+		
+		controllerMethod.destroy(cMethod);
+		controllerInstance.destroy(cInstance);
+		
 		if (!customAccepts) {
 			invoker.tryToInvoke(interceptor, method);
 		}
-
 		return customAccepts;
 	}
 

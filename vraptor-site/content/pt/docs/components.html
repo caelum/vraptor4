@@ -124,6 +124,32 @@ public class ClienteController {
 }
 ~~~ 
 
+## Trabalhando com o Instance do CDI
+
+Utilizamos `Instance` pra receber multiplas instâncias de alguma classe gerenciada via injeção de dependências, como por exemplo:
+
+~~~ 
+#!java
+@Inject @Any private Instance<Converter> instances;
+~~~
+
+Nesse caso recebemos do container todas as implementações da interface `Converter`.
+
+Apenas quando chamamos o método `get()` que o CDI vai resolver essa dependência e nos retornar um objeto construido, neste caso é um `Converter`:
+
+~~~ 
+#!java
+Converter converter = instances.get();
+~~~
+
+Por padrão, esse objeto vai continuar em memoria (gerenciado) até que a `Instance<Converter>` completa seja destruida, portanto isso pode facilmente gerar um *memory leak*. Pra evitar isso, somos fortemente encorajados pela especificação a explicitamente destruir o objeto quando não precisarmos mais dele. Podemos fazer isso chamando o método `Instance.destroy()`, algo como:
+
+~~~ 
+#!java
+instances.destroy(converter);
+~~~
+
+
 ## Disparando eventos
 
 Para disparar eventos você pode usar a anotação `@Observes`, que é usada quando um evento inicia.

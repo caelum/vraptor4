@@ -12,7 +12,10 @@ O que acontece quando fazemos a DI via atributo, é que precisaremos do contexto
 
 Os componentes do VRaptor mais presentes em sua aplicação são o Result e o Validator, esses por serem um pouco mais complexos, com interface fluente, dificulta a criação de mocks(falsas implementações). Com o intuito de facilitar a nossa vida nos testes, o VRaptor nos disponibiliza esses mocks já implementados, são eles: MockResult e MockValidator.
 
-Para os exemplos dos testes, usaremos o seguinte Controller:
+##MockResult
+
+O MockResult ignora os redirecionamentos que você fizer, e acumula os objetos incluídos, para você poder inspecioná-los e fazer as suas asserções. Um exemplo de uso seria:
+
 ~~~
 #!java
 @Controller
@@ -49,21 +52,19 @@ public class PessoaController {
 }
 ~~~
 
-##MockResult
-
-O MockResult ignora os redirecionamentos que você fizer, e acumula os objetos incluídos, para você poder inspecioná-los e fazer as suas asserções. Um exemplo de uso seria:
-
 ~~~
 #!java
 public class PessoaControllerTest {
 
 	private MockResult result;
+	private MockValidator validator;
 	private PessoaController controller;
 	
 	@Before
 	public void setUp() {
 		result = new MockResult();
-		controller = new PessoaController(result); //Passamos o MockResult como dependência do nosso controller
+		validator = new MockValidator();
+		controller = new PessoaController(result, validator); //Passando MockResult e MockValidator como dependência.
 	}
 	
 	@Test
@@ -88,27 +89,11 @@ Como estamos fora do contexto CDI, vamos abordar apenas o caso de validação do
 O MockValidator vai acumular os erros gerados, e quando o validator.onErrorUse for chamado, vai lançar um ValidationException caso haja algum erro. Assim, você pode inspecionar os erros adicionados, ou simplesmente ver se deu algum erro. Segue um exemplo de uso:
 
 Os testes de validação podem ser feitos das seguintes formas:
-
 ~~~
 #!java
-public class PessoaControllerTest {
-
-	private MockResult result;
-	private MockValidator validator;
-	private PessoaController controller;
-	
-	@Before
-	public void setUp() {
-		result = new MockResult();
-		validator = new MockValidator();
-		controller = new PessoaController(result, validator); //MockResult e MockValidator como dependência do nosso controller
-	}
-
-	@Test(expected = ValidationException.class)
-	public void shouldThrowValidationException() {
-		controller.add(new Pessoa());
-	}
-	
+@Test(expected = ValidationException.class)
+public void shouldThrowValidationException() {
+	controller.add(new Pessoa());
 }
 ~~~
 

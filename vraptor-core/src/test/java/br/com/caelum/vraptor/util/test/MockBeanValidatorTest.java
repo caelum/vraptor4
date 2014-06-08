@@ -67,7 +67,7 @@ public class MockBeanValidatorTest {
 	}
 
 	@Test
-	public void shouldHaveNoErrorsEvenValidationFromValidBean() {
+	public void shouldHaveNoErrorsEvenValidationFromVRaptor() {
 		Customer customer = new Customer(1, "Fulano");
 		validator.addIf(customer.id == null, new SimpleMessage("id", "Id não pode ser nulo."));
 		validator.addIf(customer.name == null, new SimpleMessage("nome", "Nome não pode ser nulo."));

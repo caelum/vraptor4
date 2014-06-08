@@ -23,6 +23,8 @@ import javax.validation.constraints.NotNull;
 import org.junit.Before;
 import org.junit.Test;
 
+import br.com.caelum.vraptor.validator.SimpleMessage;
+
 public class MockBeanValidatorTest {
 	private MockBeanValidator validator;
 
@@ -46,6 +48,29 @@ public class MockBeanValidatorTest {
 	@Test
 	public void shouldHaveNoErrorsForValidBean() {
 		validator.validate(new Customer(1, "Fulano"));
+		assertThat(validator.getErrors(), hasSize(0));
+	}
+
+	@Test
+	public void shouldHaveOneErrorEvenValidationFromVRaptor() {
+		Customer customer = new Customer(1, null);
+		validator.addIf(customer.name == null, new SimpleMessage("nome", "Nome não pode ser nulo."));
+		assertThat(validator.getErrors(), hasSize(1));
+	}
+
+	@Test
+	public void shouldHaveTwoErrorsEvenValidationFromVRaptor() {
+		Customer customer = new Customer(null, null);
+		validator.addIf(customer.id == null, new SimpleMessage("id", "Id não pode ser nulo."));
+		validator.addIf(customer.name == null, new SimpleMessage("nome", "Nome não pode ser nulo."));
+		assertThat(validator.getErrors(), hasSize(2));
+	}
+
+	@Test
+	public void shouldHaveNoErrorsEvenValidationFromValidBean() {
+		Customer customer = new Customer(1, "Fulano");
+		validator.addIf(customer.id == null, new SimpleMessage("id", "Id não pode ser nulo."));
+		validator.addIf(customer.name == null, new SimpleMessage("nome", "Nome não pode ser nulo."));
 		assertThat(validator.getErrors(), hasSize(0));
 	}
 	

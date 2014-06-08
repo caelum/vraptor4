@@ -52,14 +52,14 @@ public class MockBeanValidatorTest {
 	}
 
 	@Test
-	public void shouldHaveOneErrorEvenValidationFromVRaptor() {
+	public void shouldHaveOneErrorEvenIsVRaptorValidation() {
 		Customer customer = new Customer(1, null);
 		validator.addIf(customer.name == null, new SimpleMessage("nome", "Nome não pode ser nulo."));
 		assertThat(validator.getErrors(), hasSize(1));
 	}
 
 	@Test
-	public void shouldHaveTwoErrorsEvenValidationFromVRaptor() {
+	public void shouldHaveTwoErrorsEvenIsVRaptorValidation() {
 		Customer customer = new Customer(null, null);
 		validator.addIf(customer.id == null, new SimpleMessage("id", "Id não pode ser nulo."));
 		validator.addIf(customer.name == null, new SimpleMessage("nome", "Nome não pode ser nulo."));
@@ -67,7 +67,7 @@ public class MockBeanValidatorTest {
 	}
 
 	@Test
-	public void shouldHaveNoErrorsEvenValidationFromVRaptor() {
+	public void shouldHaveNoErrorsEvenIsVRaptorValidation() {
 		Customer customer = new Customer(1, "Fulano");
 		validator.addIf(customer.id == null, new SimpleMessage("id", "Id não pode ser nulo."));
 		validator.addIf(customer.name == null, new SimpleMessage("nome", "Nome não pode ser nulo."));

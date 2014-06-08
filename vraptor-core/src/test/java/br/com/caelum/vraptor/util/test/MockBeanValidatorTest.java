@@ -44,7 +44,7 @@ public class MockBeanValidatorTest {
 	}
 
 	@Test
-	public void shouldNotHaveErrorsForValidBean() {
+	public void shouldHaveNoErrorsForValidBean() {
 		validator.validate(new Customer(1, "Fulano"));
 		assertThat(validator.getErrors(), hasSize(0));
 	}

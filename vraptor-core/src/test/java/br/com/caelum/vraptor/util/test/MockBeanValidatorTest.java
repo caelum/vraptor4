@@ -15,9 +15,11 @@
  */
 package br.com.caelum.vraptor.util.test;
 
+import static org.hamcrest.Matchers.hasSize;
+import static org.junit.Assert.assertThat;
+
 import javax.validation.constraints.NotNull;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -30,30 +32,21 @@ public class MockBeanValidatorTest {
 	}
 
 	@Test
-	public void shouldHaveOneError() {
-		Customer customer = new Customer(1, null);
-		validator.validate(customer);
-		
-		Assert.assertTrue(validator.hasErrors());
-		Assert.assertEquals(1, validator.getErrors().size());
+	public void shouldHaveOneErrorForInvalidBean() {
+		validator.validate(new Customer(1, null));
+		assertThat(validator.getErrors(), hasSize(1));
 	}
 
 	@Test
-	public void shouldHaveTwoErrors() {
-		Customer customer = new Customer(null, null);
-		validator.validate(customer);
-		
-		Assert.assertTrue(validator.hasErrors());
-		Assert.assertEquals(2, validator.getErrors().size());
+	public void shouldHaveTwoErrorsForInvalidBean() {
+		validator.validate(new Customer(null, null));
+		assertThat(validator.getErrors(), hasSize(2));
 	}
 
 	@Test
-	public void shouldNotHaveErrors() {
-		Customer customer = new Customer(1, "Renan Montenegro");
-		validator.validate(customer);
-		
-		Assert.assertFalse(validator.hasErrors());
-		Assert.assertTrue(validator.getErrors().isEmpty());
+	public void shouldNotHaveErrorsForValidBean() {
+		validator.validate(new Customer(1, "Fulano"));
+		assertThat(validator.getErrors(), hasSize(0));
 	}
 	
 	public static class Customer {

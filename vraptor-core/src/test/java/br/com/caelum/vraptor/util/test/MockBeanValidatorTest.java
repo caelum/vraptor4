@@ -17,6 +17,7 @@ package br.com.caelum.vraptor.util.test;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.spy;
 
 import javax.validation.constraints.NotNull;
 
@@ -30,7 +31,7 @@ public class MockBeanValidatorTest {
 
 	@Before
 	public void setUp() {
-		validator = new MockBeanValidator();
+		validator = spy(new MockBeanValidator());
 	}
 
 	@Test

@@ -1,0 +1,140 @@
+---
+title: Testando Componentes e Controllers
+---
+
+# Testando Componentes e Controllers
+
+Fazer testes de unidade com o VRaptor 4 na maioria das vezes é simples, não fugindo muito dos testes de unidade de uma classe qualquer.
+
+Todo o controle de Injeção de Dependência é feito através do CDI e para melhorar a testabilidade de suas classes aconselhamos a injeção de dependências por construtor, dessa forma você pode trabalhar com mocks facilmente, como por exemplo:
+
+Fazendo a injeção de dependência por construtor:
+
+~~~
+#!java
+@Controller
+public class PessoaController {
+
+	private final Result result;
+	private final Validator validator;
+
+	@Inject
+	public PessoaController(Result result, Validator validator) {
+		this.result = result;
+		this.validator = validator;
+	}
+
+	/**
+	 * @deprecated CDI eyes only
+	 */
+	public PessoaController() {
+		this(null, null);
+	}
+	
+}
+~~~
+
+Para testar esse controller, podemos usar o `MockResult` e `MockValidator` como dependência:
+
+~~~
+#!java
+public class PessoaControllerTest {
+
+	private MockResult result;
+	private MockValidator validator;
+	private PessoaController controller;
+	
+	@Before
+	public void setUp() {
+		result = new MockResult();
+		validator = new MockValidator();
+		controller = new PessoaController(result, validator);
+	}
+	
+}
+~~~
+
+O que acontece quando fazemos a injeção de dependência via atributo, é que precisaremos do contexto do CDI e o mesmo não é suportado pelo JUnit, visto que esse cria todo um ambiente para os testes e não levanta esse contexto. No entanto há soluções para que você possa dentro do seu caso de teste subir o contexto CDI e assim usufruir da injeção de dependência, controle transacional e tudo aquilo que você precisa do CDI.
+
+`Result` e `Validator` são componentes quase sempre presentes em seus Controllers, para facilitar seus testes o VRaptor fornece mocks para essas implementações.
+
+##MockResult
+
+O `MockResult` ignora os redirecionamentos que você fizer, e acumula os objetos incluídos, para você poder inspecioná-los e fazer as suas asserções.
+
+Considere o seguinte método da classe `PessoaController`:
+
+~~~
+#!java
+@Post("/pessoa/adiciona")
+public void add(Pessoa pessoa) {
+	validator.addIf(pessoa.getNome() == null, new SimpleMessage("nome", "O nome deve ser preenchido"));
+	validator.onErrorRedirectTo(IndexController.class).index();
+
+	result.include("success", "Incluído com sucesso.");
+	
+	result.redirectTo(IndexController.class).index();
+}
+~~~
+
+Para testá-lo você pode em sua classe `PessoaController` fazer algo como:
+
+~~~
+#!java
+public class PessoaControllerTest {
+
+	private MockResult result;
+	private MockValidator validator;
+	private PessoaController controller;
+	
+	@Before
+	public void setUp() {
+		result = new MockResult();
+		validator = new MockValidator();
+		controller = new PessoaController(result, validator);
+	}
+	
+	@Test
+	public void shouldHaveSuccessMessage() {
+		Pessoa pessoa = new Pessoa();
+		pessoa.setNome("Renan Montenegro");
+		
+		controller.add(pessoa);
+		
+		Assert.assertTrue(result.included().containsKey("success"));
+		Assert.assertEquals("Incluído com sucesso.", result.included("success"));
+	}
+	
+}
+~~~
+
+OBS: Note que quaquer chamada do tipo `result.use(...)` serão ignoradas.
+
+##MockValidator
+
+O `MockValidator` vai acumular os erros gerados, e quando o `validator.onErrorUse` for chamado, vai lançar um `ValidationException` caso haja algum erro. Assim, você pode inspecionar os erros adicionados, consultar sua lista de erros.
+
+Os testes de validação podem ser feitos da seguinte forma:
+
+~~~
+#!java
+@Test(expected = ValidationException.class)
+public void shouldThrowValidationException() {
+	controller.add(new Pessoa());
+}
+~~~
+
+Ou no método `shouldThrowValidationException` da classe de teste, usarmos da seguinte forma:
+
+~~~
+#!java
+@Test
+public void shouldThrowValidationException() {
+	try {
+		controller.add(new Pessoa());
+		Assert.fail();
+	} catch (ValidationException e) {
+		List<Message> errors = e.getErrors();
+	}
+}
+~~~

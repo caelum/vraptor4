@@ -8,8 +8,6 @@ Fazer testes de unidade com o VRaptor 4 na maioria das vezes é simples, não fu
 
 Todo o controle de Injeção de Dependência é feito através do CDI e para melhorar a testabilidade de suas classes aconselhamos a injeção de dependências por construtor, dessa forma você pode trabalhar com mocks facilmente, como por exemplo:
 
-Fazendo a injeção de dependência por construtor:
-
 ~~~
 #!java
 @Controller
@@ -77,34 +75,19 @@ public void add(Pessoa pessoa) {
 }
 ~~~
 
-Para testá-lo você pode em sua classe `PessoaController` fazer algo como:
+Para testá-lo você pode em sua classe `PessoaControllerTest` fazer algo como:
 
 ~~~
 #!java
-public class PessoaControllerTest {
-
-	private MockResult result;
-	private MockValidator validator;
-	private PessoaController controller;
+@Test
+public void shouldHaveSuccessMessage() {
+	Pessoa pessoa = new Pessoa();
+	pessoa.setNome("Renan Montenegro");
 	
-	@Before
-	public void setUp() {
-		result = new MockResult();
-		validator = new MockValidator();
-		controller = new PessoaController(result, validator);
-	}
+	controller.add(pessoa);
 	
-	@Test
-	public void shouldHaveSuccessMessage() {
-		Pessoa pessoa = new Pessoa();
-		pessoa.setNome("Renan Montenegro");
-		
-		controller.add(pessoa);
-		
-		Assert.assertTrue(result.included().containsKey("success"));
-		Assert.assertEquals("Incluído com sucesso.", result.included("success"));
-	}
-	
+	Assert.assertTrue(result.included().containsKey("success"));
+	Assert.assertEquals("Incluído com sucesso.", result.included("success"));
 }
 ~~~
 

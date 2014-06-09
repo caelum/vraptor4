@@ -60,9 +60,9 @@ O que acontece quando fazemos a injeção de dependência via atributo, é que p
 
 ##MockResult
 
-O `MockResult` ignora os redirecionamentos que você fizer, e acumula os objetos incluídos, para você poder inspecioná-los e fazer as suas asserções. Um exemplo de uso seria:
+O `MockResult` ignora os redirecionamentos que você fizer, e acumula os objetos incluídos, para você poder inspecioná-los e fazer as suas asserções.
 
-Considere o seguinte método da classe PessoaController:
+Considere o seguinte método da classe `PessoaController`:
 
 ~~~
 #!java
@@ -114,7 +114,7 @@ OBS: Note que quaquer chamada do tipo `result.use(...)` serão ignoradas.
 
 ##MockValidator
 
-O `MockValidator` vai acumular os erros gerados, e quando o `validator.onErrorUse` for chamado, vai lançar um `ValidationException` caso haja algum erro. Assim, você pode inspecionar os erros adicionados, consultar sua lista de erros. Segue um exemplo de uso:
+O `MockValidator` vai acumular os erros gerados, e quando o `validator.onErrorUse` for chamado, vai lançar um `ValidationException` caso haja algum erro. Assim, você pode inspecionar os erros adicionados, consultar sua lista de erros.
 
 Os testes de validação podem ser feitos da seguinte forma:
 

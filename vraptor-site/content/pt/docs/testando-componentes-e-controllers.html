@@ -60,43 +60,23 @@ O que acontece quando fazemos a injeção de dependência via atributo, é que p
 
 O `MockResult` ignora os redirecionamentos que você fizer, e acumula os objetos incluídos, para você poder inspecioná-los e fazer as suas asserções. Um exemplo de uso seria:
 
+Considere o seguinte método da classe PessoaController:
 ~~~
 #!java
-@Controller
-public class PessoaController {
-
-	private final Result result;
-	private final Validator validator;
-
-	@Inject
-	public PessoaController(Result result, Validator validator) {
-		this.result = result;
-		this.validator = validator;
-	}
-
-	/**
-	 * @deprecated CDI eyes only
-	 */
-	public PessoaController() {
-		this(null, null);
-	}
+@Post("/pessoa/adiciona")
+public void add(Pessoa pessoa) {
+	validator.addIf(pessoa.getNome() == null, new SimpleMessage("nome", "O nome deve ser preenchido"));
+	validator.onErrorRedirectTo(IndexController.class).index();
 	
-	@Post("/pessoa/adiciona")
-	public void add(Pessoa pessoa) {
-		validator.addIf(pessoa.getNome() == null, new SimpleMessage("nome", "O nome deve ser preenchido"));
-		validator.onErrorRedirectTo(IndexController.class).index();
-		
-		//chamadas de DAOs, Services...
+	//chamadas de DAOs, Services...
 
-		result.include("success", "Incluído com sucesso.");
-		
-		result.redirectTo(IndexController.class).index();
-	}
+	result.include("success", "Incluído com sucesso.");
 	
+	result.redirectTo(IndexController.class).index();
 }
 ~~~
 
-Para testarmos o nosso controller, podemos criar a classe `PessoaControllerTest`:
+Para testá-lo você pode em sua classe `PessoaController` fazer algo como:
 ~~~
 #!java
 public class PessoaControllerTest {
@@ -126,13 +106,13 @@ public class PessoaControllerTest {
 }
 ~~~
 
-OBS: Quaisquer chamadas do tipo `result.use(...)` serão ignoradas.
+OBS: Note que quaquer chamada do tipo `result.use(...)` serão ignoradas.
 
 ##MockValidator
 
-O `MockValidator` vai acumular os erros gerados, e quando o `validator.onErrorUse` for chamado, vai lançar um `ValidationException` caso haja algum erro. Assim, você pode inspecionar os erros adicionados, ou simplesmente ver se deu algum erro. Segue um exemplo de uso:
+O `MockValidator` vai acumular os erros gerados, e quando o `validator.onErrorUse` for chamado, vai lançar um `ValidationException` caso haja algum erro. Assim, você pode inspecionar os erros adicionados, consultar sua lista de erros. Segue um exemplo de uso:
 
-Os testes de validação podem ser feitos das seguintes formas:
+Os testes de validação podem ser feitos da seguinte forma:
 ~~~
 #!java
 @Test(expected = ValidationException.class)
@@ -141,8 +121,7 @@ public void shouldThrowValidationException() {
 }
 ~~~
 
-Ou no método shouldThrowValidationException da classe de teste, usarmos da seguinte forma:
-
+Ou no método `shouldThrowValidationException` da classe de teste, usarmos da seguinte forma:
 ~~~
 #!java
 @Test

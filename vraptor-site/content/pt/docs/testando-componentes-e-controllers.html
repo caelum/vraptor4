@@ -4,25 +4,18 @@ title: Testando Componentes e Controllers
 
 # Testando Componentes e Controllers
 
-Fazer testes unitários com o VRaptor 4 na maioria das vezes é simples, não fugindo muito dos testes unitários de uma classe qualquer.
+Fazer testes de unidade com o VRaptor 4 na maioria das vezes é simples, não fugindo muito dos testes de unidade de uma classe qualquer.
 
-Todo o controle de Injeção de Dependência é feito através do CDI, isso pode dificultar um pouco a sua vida na hora de criar os testes unitários se você faz a DI via atributos, no entanto se você faz via contrutor, tudo fica mais fácil. A vantagem de se fazer via construtor é que podemos passar nossas dependências via parâmetro no mesmo.
+Todo o controle de Injeção de Dependência é feito através do CDI e para melhorar a testabilidade de suas classes aconselhamos a injeção de dependências por construtor, dessa forma você pode trabalhar com mocks facilmente, como por exemplo:
 
-O que acontece quando fazemos a DI via atributo, é que precisaremos do contexto do CDI e o mesmo não é suportado pelo JUnit, visto que esse cria todo um ambiente para os testes e não levanta esse contexto. No entanto há soluções para que você possa dentro do seu caso de teste subir o contexto CDI e assim usufruir das injeções de dependências, controle transacionais e tudo aquilo que você precisa do CDI, uma delas é o Arquillian(http://arquillian.org/) que por sinal possui uma excelente documentação, além de que você pode encontrar vários artigos na internet.
-
-Os componentes do VRaptor mais presentes em sua aplicação são o Result e o Validator, esses por serem um pouco mais complexos, com interface fluente, dificulta a criação de mocks(falsas implementações). Com o intuito de facilitar a nossa vida nos testes, o VRaptor nos disponibiliza esses mocks já implementados, são eles: MockResult e MockValidator.
-
-##MockResult
-
-O MockResult ignora os redirecionamentos que você fizer, e acumula os objetos incluídos, para você poder inspecioná-los e fazer as suas asserções. Um exemplo de uso seria:
-
+Fazendo a injeção de dependência por construtor:
 ~~~
 #!java
 @Controller
 public class PessoaController {
 
-	private Result result;
-	private Validator validator;
+	private final Result result;
+	private final Validator validator;
 
 	@Inject
 	public PessoaController(Result result, Validator validator) {
@@ -34,10 +27,61 @@ public class PessoaController {
 	 * @deprecated CDI eyes only
 	 */
 	public PessoaController() {
+		this(null, null);
 	}
 	
-	@Post
-	@Path("/pessoa/add")
+}
+~~~
+
+Usando classes mocks como dependência:
+~~~
+#!java
+public class PessoaControllerTest {
+
+	private MockResult result;
+	private MockValidator validator;
+	private PessoaController controller;
+	
+	@Before
+	public void setUp() {
+		result = new MockResult();
+		validator = new MockValidator();
+		controller = new PessoaController(result, validator); //Passando MockResult e MockValidator como dependência.
+	}
+	
+}
+~~~
+
+O que acontece quando fazemos a injeção de dependência via atributo, é que precisaremos do contexto do CDI e o mesmo não é suportado pelo JUnit, visto que esse cria todo um ambiente para os testes e não levanta esse contexto. No entanto há soluções para que você possa dentro do seu caso de teste subir o contexto CDI e assim usufruir das injeções de dependências, controle transacionais e tudo aquilo que você precisa do CDI.
+
+Os componentes do VRaptor mais presentes em sua aplicação são o `Result` e o `Validator`, esses por serem um pouco mais complexos, com interface fluente, dificulta a criação de mocks(falsas implementações). Com o intuito de facilitar a nossa vida nos testes, o VRaptor nos disponibiliza esses mocks já implementados, são eles: `MockResult` e `MockValidator`.
+
+##MockResult
+
+O `MockResult` ignora os redirecionamentos que você fizer, e acumula os objetos incluídos, para você poder inspecioná-los e fazer as suas asserções. Um exemplo de uso seria:
+
+~~~
+#!java
+@Controller
+public class PessoaController {
+
+	private final Result result;
+	private final Validator validator;
+
+	@Inject
+	public PessoaController(Result result, Validator validator) {
+		this.result = result;
+		this.validator = validator;
+	}
+
+	/**
+	 * @deprecated CDI eyes only
+	 */
+	public PessoaController() {
+		this(null, null);
+	}
+	
+	@Post("/pessoa/adiciona")
 	public void add(Pessoa pessoa) {
 		validator.addIf(pessoa.getNome() == null, new SimpleMessage("nome", "O nome deve ser preenchido"));
 		validator.onErrorRedirectTo(IndexController.class).index();
@@ -52,6 +96,7 @@ public class PessoaController {
 }
 ~~~
 
+Para testarmos o nosso controller, podemos criar a classe `PessoaControllerTest`:
 ~~~
 #!java
 public class PessoaControllerTest {
@@ -81,12 +126,11 @@ public class PessoaControllerTest {
 }
 ~~~
 
-OBS: Quaisquer chamadas do tipo result.use(...) serão ignoradas.
+OBS: Quaisquer chamadas do tipo `result.use(...)` serão ignoradas.
 
 ##MockValidator
 
-Como estamos fora do contexto CDI, vamos abordar apenas o caso de validação do próprio Validator do VRaptor.
-O MockValidator vai acumular os erros gerados, e quando o validator.onErrorUse for chamado, vai lançar um ValidationException caso haja algum erro. Assim, você pode inspecionar os erros adicionados, ou simplesmente ver se deu algum erro. Segue um exemplo de uso:
+O `MockValidator` vai acumular os erros gerados, e quando o `validator.onErrorUse` for chamado, vai lançar um `ValidationException` caso haja algum erro. Assim, você pode inspecionar os erros adicionados, ou simplesmente ver se deu algum erro. Segue um exemplo de uso:
 
 Os testes de validação podem ser feitos das seguintes formas:
 ~~~

@@ -9,6 +9,17 @@ footer h1 {
   text-shadow: 1px 1px white;
 }
 
+main.container h1, main.container h2 {
+  text-decoration: none;
+  color: black;
+}
+
+main.container h1:hover:after, 
+main.container h2:hover:after {
+  content: url(../img/link-icon.png) no-repeat top left;
+  margin-left: 10px;
+}
+
 ul.who-uses {
   width: 80%;
   margin: auto;

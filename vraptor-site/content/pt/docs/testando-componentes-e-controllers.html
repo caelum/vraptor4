@@ -91,11 +91,11 @@ public void shouldHaveSuccessMessage() {
 }
 ~~~
 
-OBS: Note que quaquer chamada do tipo `result.use(...)` serão ignoradas.
+OBS: Note que qualquer chamada do tipo `result.use(...)` serão ignoradas.
 
 ##MockValidator
 
-O `MockValidator` vai acumular os erros gerados, e quando o `validator.onErrorUse` for chamado, vai lançar um `ValidationException` caso haja algum erro. Assim, você pode inspecionar os erros adicionados, consultar sua lista de erros.
+O `MockValidator` vai executar a validação acumulando possíveis erros que irão gerar um `ValidationException` na chamada do método `validator.onErrorUse`. Isso permitirá que os resultados sejam inspecionados.
 
 Os testes de validação podem ser feitos da seguinte forma:
 

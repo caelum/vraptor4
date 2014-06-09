@@ -9,6 +9,7 @@ Fazer testes de unidade com o VRaptor 4 na maioria das vezes é simples, não fu
 Todo o controle de Injeção de Dependência é feito através do CDI e para melhorar a testabilidade de suas classes aconselhamos a injeção de dependências por construtor, dessa forma você pode trabalhar com mocks facilmente, como por exemplo:
 
 Fazendo a injeção de dependência por construtor:
+
 ~~~
 #!java
 @Controller
@@ -34,6 +35,7 @@ public class PessoaController {
 ~~~
 
 Para testar esse controller, podemos usar o MockResult e MockValidator como dependência:
+
 ~~~
 #!java
 public class PessoaControllerTest {
@@ -61,6 +63,7 @@ O que acontece quando fazemos a injeção de dependência via atributo, é que p
 O `MockResult` ignora os redirecionamentos que você fizer, e acumula os objetos incluídos, para você poder inspecioná-los e fazer as suas asserções. Um exemplo de uso seria:
 
 Considere o seguinte método da classe PessoaController:
+
 ~~~
 #!java
 @Post("/pessoa/adiciona")
@@ -77,6 +80,7 @@ public void add(Pessoa pessoa) {
 ~~~
 
 Para testá-lo você pode em sua classe `PessoaController` fazer algo como:
+
 ~~~
 #!java
 public class PessoaControllerTest {
@@ -113,6 +117,7 @@ OBS: Note que quaquer chamada do tipo `result.use(...)` serão ignoradas.
 O `MockValidator` vai acumular os erros gerados, e quando o `validator.onErrorUse` for chamado, vai lançar um `ValidationException` caso haja algum erro. Assim, você pode inspecionar os erros adicionados, consultar sua lista de erros. Segue um exemplo de uso:
 
 Os testes de validação podem ser feitos da seguinte forma:
+
 ~~~
 #!java
 @Test(expected = ValidationException.class)
@@ -122,6 +127,7 @@ public void shouldThrowValidationException() {
 ~~~
 
 Ou no método `shouldThrowValidationException` da classe de teste, usarmos da seguinte forma:
+
 ~~~
 #!java
 @Test

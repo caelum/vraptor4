@@ -56,6 +56,10 @@ module.exports = function(grunt) {
                 replacements: [{
                     from: /build:css \/css\/([^ ]+)(.*href=")(.*)\/css\//,
                     to: 'build:css $3/css/$1$2$3/css/'
+                },
+                {
+                    from: /build:js \/js\/([^ ]+)(.*href=")(.*)\/js\//,
+                    to: 'build:js $3/js/$1$2$3/js/'
                 }]
             },
             index: {
@@ -63,7 +67,7 @@ module.exports = function(grunt) {
                 overwrite: true,
                 replacements: [
                     { from: '../', to: '' },
-                    { from: /href="(((?!css\/|img\/|https:\/\/|http:\/\/|javadoc|pt|en)).*)"/g, to: 'href="en/$1"' }
+                    { from: /href="(((?!css\/|js\/|img\/|https:\/\/|http:\/\/|javadoc|pt|en)).*)"/g, to: 'href="en/$1"' }
                 ]
             }
         },
@@ -91,6 +95,12 @@ module.exports = function(grunt) {
             nanoc: {
                 command: 'bundle exec nanoc'
             }
+        },
+        uglify: {
+            headers: {
+                src: 'output/js/headers.js',
+                dest: 'deploy/js/headers.min.js'
+            }
         }
     });
 
@@ -99,6 +109,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-contrib-imagemin');
+    grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-autoprefixer');
     grunt.loadNpmTasks('grunt-htmlcompressor');
     grunt.loadNpmTasks('grunt-usemin');
@@ -107,6 +118,6 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-shell');
     grunt.loadTasks('grunt-utils/tasks');
 
-    grunt.registerTask('default', ['clean:grunt', 'copy', 'imagemin', 'replace', 'useminPreparePrepare', 'useminPrepare', 'usemin', 'autoprefixer', 'concat', 'cssmin', 'htmlcompressor']);
+    grunt.registerTask('default', ['clean:grunt', 'copy', 'imagemin', 'replace', 'useminPreparePrepare', 'useminPrepare', 'usemin', 'autoprefixer', 'concat', 'cssmin', 'uglify:headers', 'htmlcompressor']);
     grunt.registerTask('deploy', ['clean:nanoc', 'shell:nanoc', 'default', 'gh-pages']);
 };

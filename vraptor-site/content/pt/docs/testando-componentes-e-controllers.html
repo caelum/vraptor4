@@ -54,7 +54,7 @@ public class PessoaControllerTest {
 
 O que acontece quando fazemos a injeção de dependência via atributo, é que precisaremos do contexto do CDI e o mesmo não é suportado pelo JUnit, visto que esse cria todo um ambiente para os testes e não levanta esse contexto. No entanto há soluções para que você possa dentro do seu caso de teste subir o contexto CDI e assim usufruir das injeções de dependências, controle transacionais e tudo aquilo que você precisa do CDI.
 
-Os componentes do VRaptor mais presentes em sua aplicação são o `Result` e o `Validator`, esses por serem um pouco mais complexos, com interface fluente, dificulta a criação de mocks(falsas implementações). Com o intuito de facilitar a nossa vida nos testes, o VRaptor nos disponibiliza esses mocks já implementados, são eles: `MockResult` e `MockValidator`.
+`Result` e `Validator` são componentes quase sempre presentes em seus Controllers, para facilitar seus testes o VRaptor fornece mocks para essas implementações
 
 ##MockResult
 

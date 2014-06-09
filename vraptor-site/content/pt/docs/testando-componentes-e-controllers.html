@@ -48,7 +48,7 @@ public class PessoaControllerTest {
 	public void setUp() {
 		result = new MockResult();
 		validator = new MockValidator();
-		controller = new PessoaController(result, validator); //Passando MockResult e MockValidator como dependência.
+		controller = new PessoaController(result, validator);
 	}
 	
 }
@@ -70,8 +70,6 @@ Considere o seguinte método da classe `PessoaController`:
 public void add(Pessoa pessoa) {
 	validator.addIf(pessoa.getNome() == null, new SimpleMessage("nome", "O nome deve ser preenchido"));
 	validator.onErrorRedirectTo(IndexController.class).index();
-	
-	//chamadas de DAOs, Services...
 
 	result.include("success", "Incluído com sucesso.");
 	
@@ -93,7 +91,7 @@ public class PessoaControllerTest {
 	public void setUp() {
 		result = new MockResult();
 		validator = new MockValidator();
-		controller = new PessoaController(result, validator); //Passando MockResult e MockValidator como dependência.
+		controller = new PessoaController(result, validator);
 	}
 	
 	@Test

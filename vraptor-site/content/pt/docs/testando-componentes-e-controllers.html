@@ -106,6 +106,8 @@ public void shouldThrowValidationException() {
 		Assert.fail();
 	} catch (ValidationException e) {
 		List<Message> errors = e.getErrors();
+		Assert.assertTrue(errors.contains(new SimpleMessage("nome", "O nome deve ser preenchido")));
+		Assert.assertEquals(1, errors.size());
 	}
 }
 ~~~

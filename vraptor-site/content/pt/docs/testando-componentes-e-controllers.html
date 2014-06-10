@@ -91,23 +91,11 @@ public void shouldHaveSuccessMessage() {
 }
 ~~~
 
-OBS: Note que quaquer chamada do tipo `result.use(...)` serão ignoradas.
+Note que qualquer chamada do tipo `result.use(...)` será ignorada.
 
 ##MockValidator
 
-O `MockValidator` vai acumular os erros gerados, e quando o `validator.onErrorUse` for chamado, vai lançar um `ValidationException` caso haja algum erro. Assim, você pode inspecionar os erros adicionados, consultar sua lista de erros.
-
-Os testes de validação podem ser feitos da seguinte forma:
-
-~~~
-#!java
-@Test(expected = ValidationException.class)
-public void shouldThrowValidationException() {
-	controller.add(new Pessoa());
-}
-~~~
-
-Ou no método `shouldThrowValidationException` da classe de teste, usarmos da seguinte forma:
+O `MockValidator` vai executar a validação acumulando possíveis erros. Para recuperá-los você pode usar o método `getErrors()` como você pode ver no exemplo:
 
 ~~~
 #!java
@@ -118,6 +106,18 @@ public void shouldThrowValidationException() {
 		Assert.fail();
 	} catch (ValidationException e) {
 		List<Message> errors = e.getErrors();
+		Assert.assertTrue(errors.contains(new SimpleMessage("nome", "O nome deve ser preenchido")));
+		Assert.assertEquals(1, errors.size());
 	}
+}
+~~~
+
+A chamada do método `validator.onErrorUse`, no caso de problema de validação, irá gerar uma `ValidationException`, que pode ser usado como um resultado esperado pelo seu teste, como a seguir:
+
+~~~
+#!java
+@Test(expected = ValidationException.class)
+public void shouldThrowValidationException() {
+	controller.add(new Pessoa());
 }
 ~~~

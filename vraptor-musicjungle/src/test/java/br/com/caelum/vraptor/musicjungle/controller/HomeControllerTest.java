@@ -1,9 +1,17 @@
 package br.com.caelum.vraptor.musicjungle.controller;
 
-import static org.mockito.Mockito.when;
+import static org.hamcrest.Matchers.hasSize;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
-import org.junit.Assert;
+import java.util.List;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -12,6 +20,8 @@ import br.com.caelum.vraptor.musicjungle.interceptor.UserInfo;
 import br.com.caelum.vraptor.musicjungle.model.User;
 import br.com.caelum.vraptor.util.test.MockResult;
 import br.com.caelum.vraptor.util.test.MockValidator;
+import br.com.caelum.vraptor.validator.Message;
+import br.com.caelum.vraptor.validator.SimpleMessage;
 import br.com.caelum.vraptor.validator.ValidationException;
 
 public class HomeControllerTest {
@@ -41,8 +51,8 @@ public class HomeControllerTest {
 		
 		controller.login(user.getLogin(), user.getPassword());
 		
-		Assert.assertEquals(user, userInfo.getUser());
-		Assert.assertFalse(validator.hasErrors());
+		assertEquals(user, userInfo.getUser());
+		assertFalse(validator.hasErrors());
 	}
 
 	@Test(expected=ValidationException.class)
@@ -50,6 +60,30 @@ public class HomeControllerTest {
 		when(dao.find(user.getLogin(), user.getPassword())).thenReturn(null);
 		
 		controller.login(user.getLogin(), user.getPassword());
+	}
+
+	@Test
+	public void shouldNotLoginWhenUserDoesNotExistAndHasOneError() {
+		when(dao.find(user.getLogin(), user.getPassword())).thenReturn(null);
+		
+		try {
+			controller.login(user.getLogin(), user.getPassword());
+			fail();
+		} catch (ValidationException e) {
+			List<Message> errors = e.getErrors();
+			
+			assertThat(errors, hasSize(1));
+			assertTrue(errors.contains(new SimpleMessage("login", "invalid_login_or_password")));
+		}
+	}
+
+	@Test
+	public void shouldLogoutUser() {
+		userInfo.login(user);
+		
+		controller.logout();
+		
+		assertNull(userInfo.getUser());
 	}
 	
 	public User createUser() {

@@ -147,12 +147,11 @@ URI: `/clients/view` e view: `/WEB-INF/jsp/clients/view.jsp`.
 
 Repare como essa classe está completamente independente da API de `javax.servlet`. O código também está extremamente simples e fácil de ser testado como unidade. O VRaptor já faz várias associações para as URIs como default, por exemplo:
 
-~~~
-/client/form   invoca form()
-/client/add    invoca add(client) populando o objeto client com os parâmetros da requisição
-/clients/list  invoca list() e devolve ${clientList} ao JSP
-/clients/view?id=3  invoca view(3l) e devolve ${client} ao JSP
-~~~
+|/client/form        |  invoca form() |
+|/client/add         |  invoca add(client) populando o objeto client com os parâmetros da requisição |
+|/clients/list       |  invoca list() e devolve ${clientList} ao JSP |
+|/clients/view?id=3  |  invoca view(3l) e devolve ${client} ao JSP |
+{: .content-table}
 
 Mais para a frente veremos como é fácil trocar a URI `/clients/view?id=3` por `/clients/view/3`, deixando a URI mais amigável e elegante.
 

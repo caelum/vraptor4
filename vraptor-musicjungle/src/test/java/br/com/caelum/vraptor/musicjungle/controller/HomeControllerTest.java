@@ -7,6 +7,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.verify;
 
 import java.util.List;
 
@@ -79,7 +80,7 @@ public class HomeControllerTest {
 	public void shouldLogoutUser() {
 		controller.logout();
 		
-		Mockito.verify(userInfo).logout();
+		verify(userInfo).logout();
 	}
 	
 	public User createUser() {

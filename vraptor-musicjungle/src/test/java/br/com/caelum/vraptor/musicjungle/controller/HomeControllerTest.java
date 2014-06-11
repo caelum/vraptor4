@@ -1,9 +1,7 @@
 package br.com.caelum.vraptor.musicjungle.controller;
 
 import static org.hamcrest.Matchers.hasSize;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -14,6 +12,7 @@ import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 import br.com.caelum.vraptor.musicjungle.dao.UserDao;
 import br.com.caelum.vraptor.musicjungle.interceptor.UserInfo;
@@ -39,7 +38,7 @@ public class HomeControllerTest {
 		result = new MockResult();
 		validator = new MockValidator();
 		dao = mock(UserDao.class);
-		userInfo = new UserInfo();
+		userInfo = mock(UserInfo.class);
 		controller = new HomeController(dao, userInfo, result, validator);
 		
 		user = createUser();
@@ -51,7 +50,6 @@ public class HomeControllerTest {
 		
 		controller.login(user.getLogin(), user.getPassword());
 		
-		assertEquals(user, userInfo.getUser());
 		assertFalse(validator.hasErrors());
 	}
 
@@ -79,11 +77,9 @@ public class HomeControllerTest {
 
 	@Test
 	public void shouldLogoutUser() {
-		userInfo.login(user);
-		
 		controller.logout();
 		
-		assertNull(userInfo.getUser());
+		Mockito.verify(userInfo).logout();
 	}
 	
 	public User createUser() {

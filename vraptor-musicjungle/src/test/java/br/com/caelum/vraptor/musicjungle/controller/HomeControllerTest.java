@@ -6,14 +6,13 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mockito;
 
 import br.com.caelum.vraptor.musicjungle.dao.UserDao;
 import br.com.caelum.vraptor.musicjungle.interceptor.UserInfo;
@@ -83,7 +82,7 @@ public class HomeControllerTest {
 		verify(userInfo).logout();
 	}
 	
-	public User createUser() {
+	private User createUser() {
 		User user = new User();
 		user.setLogin("renanigt");
 		user.setName("Renan");

@@ -290,13 +290,12 @@ Além do escopo de sessão existe o escopo de Aplicação com a anotação `@App
 
 Seguindo a idéia REST de que URIs devem identificar recursos na rede para então podermos fazer valer as diversas vantagens estruturais que o protocolo HTTP nos proporciona, note o quão simples fica mapear os diversos métodos HTTP para a mesma URI, e com isso invocar diferentes métodos. Por exemplo, queremos usar as seguintes URIs para o cadastro de produtos:
 
-~~~ 
-    GET /produtos - lista todos os produtos
-    POST /produtos - adiciona um produto
-    GET /produtos/{id} - visualiza o produto com o id passado
-    PUT /produtos/{id} - atualiza as informações do produto com o id passado
-    DELETE /produtos/{id} - remove o produto com o id passado
-~~~
+| GET       |  /produtos          |   lista todos os produtos  |
+| POST      |  /produtos          |   adiciona um produto  |
+| GET       |  /produtos/{id}     |   visualiza o produto com o id passado  |
+| PUT       |  /produtos/{id}     |   atualiza as informações do produto com o id passado  |
+| DELETE    |  /produtos/{id}     |   remove o produto com o id passado  |
+{: .content-table}
 
 Para criar esse comportamento REST no VRaptor, podemos usar as anotações `@Path` - que muda qual é a URI que vai acessar o determinado método, e as anotações com os nomes dos métodos HTTP `@Get`, `@Post`, `@Delete`, `@Put`, que indicam que o método anotado só pode ser acessado se a requisição estiver com o método HTTP indicado. Então, uma versão REST do nosso `ProdutosController` seria:
 

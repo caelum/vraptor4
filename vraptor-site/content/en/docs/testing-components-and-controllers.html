@@ -17,7 +17,7 @@ public class PersonController {
 	private final Validator validator;
 
 	@Inject
-	protected PersonController(Result result, Validator validator) {
+	public PersonController(Result result, Validator validator) {
 		this.result = result;
 		this.validator = validator;
 	}
@@ -25,7 +25,7 @@ public class PersonController {
 	/**
 	 * @deprecated CDI eyes only
 	 */
-	public PersonController() {
+	protected PersonController() {
 		this(null, null);
 	}
 	

@@ -4,9 +4,9 @@ title: Testing Components and Controllers
 
 # Testing Components and Controllers
 
-Do unit tests with VRaptor 4 is often simple, which isn't so different from unit tests of any class.
+To do unit tests with VRaptor 4 is often simple, which isn't so different from unit tests of any class.
 
-All the control of Dependency Injection is made by CDI and to improve the testability of your class, we advise the dependency injection by constructor, thus you may work easily with mocks, such as:
+CDI takes care of your application's Dependency Injection (DI) and to improve the testability of your class, we advise the dependency injection by constructor, thus you may work easily with mocks, such as:
 
 ~~~
 #!java
@@ -17,7 +17,7 @@ public class PersonController {
 	private final Validator validator;
 
 	@Inject
-	public PersonController(Result result, Validator validator) {
+	protected PersonController(Result result, Validator validator) {
 		this.result = result;
 		this.validator = validator;
 	}
@@ -32,7 +32,7 @@ public class PersonController {
 }
 ~~~
 
-To test your controller, we can use the `MockResult` and `MockValidator` as dependency:
+`MockResult` and `MockValidator` classes will help you to test your VRaptor's Controller:
 
 ~~~
 #!java
@@ -52,15 +52,15 @@ public class PersonControllerTest {
 }
 ~~~
 
-What happens when we made the dependency injection by attribute, as that we need the CDI context and itself isn't supported by JUnit, since it creates all an enviroment for the tests and don’t up this context. However there are solutions to help you in your test case to up the CDI context and enjoy of the dependency injection, transaction control and all that you need of CDI.
+If you use field injection Junit by itself will not provide the CDI dependencies for you, since it do not start CDI context. However there are a lot of solutions to help you with that, i.e Arquilian.
 
-`Result` and `Validator` are components almost always present in your Controllers, to make your tests easier the VRaptor provides mocks for these implementations.
+`Result` and `Validator` are components almost always present in your Controllers, to make your tests easier, VRaptor provides mocks for these implementations.
 
 ##MockResult
 
 The `MockResult` ignores the redirecting that you do, and collects the included objects, so you can inspect them and make your assertions.
 
-Consider the following method of the class `PersonController`:
+Consider the following `PersonController`'s method:
 
 ~~~
 #!java

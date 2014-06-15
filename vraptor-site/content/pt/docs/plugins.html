@@ -9,7 +9,7 @@ Plugins são complementos ao VRaptor. Eles são úteis para situações como ace
 ##VRaptor JPA
 
 O plugin VRaptor JPA cuida da criação e injeção de depedência da `EntityManager` e `EntityManagerFactory`. Além disso, o plugin aplica o padrão
-Open EntityManager In View, isto é, ele abre uma transação com o banco de dados no ínicio da requisição e comita a transação no fim da requisição.
+Open EntityManager In View, isto é, ele abre uma transação com o banco de dados no ínicio da requisição e executa o commit da transação no fim da requisição.
 
 Para usá-lo basta você copiar o jar para a sua aplicação, ou declarar o plugin como dependência do Maven conforme o trecho abaixo.
 
@@ -35,7 +35,19 @@ O plugin não possui nenhum provider. Com isso é necessário que você declare 
 </dependency>
 ~~~
 
+Ou se você prefere usar o Eclipselink:
+
+~~~
+#!xml
+<dependency>
+	<groupId>org.eclipse.persistence</groupId>
+	<artifactId>org.eclipse.persistence.jpa</artifactId>
+	<version>2.5.1</version>
+</dependency>
+~~~
+
 [Plugin no Gihub](https://github.com/caelum/vraptor-jpa).
+
 
 ##VRaptor Hibernate
 
@@ -55,6 +67,7 @@ Você pode adicioná-lo em seu projeto Maven conforme o trecho abaixo, ou copiar
 
 [Plugin no Gihub](https://github.com/caelum/vraptor-hibernate).
 
+
 ##Simple mail
 
 Permite envio de e-mails.
@@ -69,6 +82,7 @@ Permite envio de e-mails.
 ~~~ 
 
 [Plugin no Gihub](https://github.com/caelum/vraptor-simplemail).
+
 
 ##VRaptor Shiro
 
@@ -85,9 +99,10 @@ O VRaptor Apache Shiro Plugin provê suporte a autenticação, autorização, cr
 
 [Plugin no Gihub](https://github.com/dipold/vraptor-shiro).
 
+
 ## Joda-time
 
-Joda-time é uma API para facilitar o trabalho de dados temporais em Java. Para usar o joda-time basta acionar o plugin `vraptor-jodatime`. 
+Joda-time é uma API para facilitar o trabalho de dados temporais em Java. Para usar o joda-time basta acionar o plugin `vraptor-jodatime`. Adicionando o plugin, os converters são registrados automaticamente.
 
 ~~~
 #!xml
@@ -100,9 +115,10 @@ Joda-time é uma API para facilitar o trabalho de dados temporais em Java. Para 
 
 [Plugin no Gihub](https://github.com/caelum/vraptor-time-converters).
 
+
 ## Nova API de datas do Java
 
-Se você utiliza Java 8, você pode tirar proveito da nova API de datas do pacote `java.time`. Basta incluir o plugin `vraptor-javatime`.
+Se você utiliza Java 8, você pode tirar proveito da nova API de datas do pacote `java.time`. Basta incluir o plugin `vraptor-javatime`. Adicionando o plugin, os converters são registrados automaticamente.
 
 ~~~
 #!xml
@@ -114,6 +130,7 @@ Se você utiliza Java 8, você pode tirar proveito da nova API de datas do pacot
 ~~~
 
 [Plugin no Gihub](https://github.com/caelum/vraptor-time-converters).
+
 
 ##VRaptor Error-Control
 
@@ -130,6 +147,7 @@ Controle dos erros de sua aplicação em tempo real com o envio de e-mail.
 
 [Plugin no Gihub](https://github.com/caelum/vraptor-error-control).
 
+
 ##VRaptor Brutauth
 
 Forma fácil de verificar as permissões de acesso das ações de seu controller.
@@ -144,6 +162,7 @@ Forma fácil de verificar as permissões de acesso das ações de seu controller
 ~~~ 
 
 [Plugin no Gihub](https://github.com/leonardowolter/vraptor-brutauth).
+
 
 ##VRaptor QuartzJob
 
@@ -160,9 +179,10 @@ Agendamento de tarefas com Quartz.
 
 [Plugin no Gihub](http://github.com/caelum/vraptor-quartzjob).
 
+
 ##VRaptor Freemarker
 
-Renderizar templates freemarker.
+Renderiza templates do Freemarker.
 
 ~~~ 
 #!xml
@@ -174,6 +194,7 @@ Renderizar templates freemarker.
 ~~~ 
 
 [Plugin no Gihub](http://github.com/caelum/vraptor-freemarker).
+
 
 ##VRaptor Dash
 
@@ -190,6 +211,7 @@ Dashboard com varias ferramentas para seus projetos VRaptor.
 
 [Plugin no Gihub](http://github.com/caelum/vraptor-dash).
 
+
 ##VRaptor Authz
 
 Alternativa para controle de acesso (autorização) de seus métodos do controller.
@@ -204,6 +226,7 @@ Alternativa para controle de acesso (autorização) de seus métodos do controll
 ~~~ 
 
 [Plugin no Gihub](https://github.com/Turini/vraptor-authz).
+
 
 
 ##VRaptor I18n

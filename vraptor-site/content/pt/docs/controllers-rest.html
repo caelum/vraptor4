@@ -113,8 +113,7 @@ public class ClienteController {
 
 ##Http Methods
 
-O ideal é definir uma URI específica para diversos métodos HTTP diferentes, como GET, POST, PUT etc.
-Para atingir esse objetivo, utilizamos as anotações `@Get`, `@Post`, `@Delete`, etc que também permitem configurar uma URI diferente da URI padrão, da mesma forma que a anotação `@Path`. O exemplo a seguir altera os padrões de URI do `ClienteController` para utilizar duas URIs distintas, com diversos métodos HTTP:
+O ideal é definir uma URI específica para diversos métodos HTTP diferentes, como `GET`, `POST`, `PUT` etc. Para atingir esse objetivo, utilizamos as anotações `@Get`, `@Post`, `@Delete`, etc que também permitem configurar uma URI diferente da URI padrão, da mesma forma que a anotação `@Path`. O exemplo a seguir altera os padrões de URI do `ClienteController` para utilizar duas URIs distintas, com diversos métodos HTTP:
 
 ~~~
 #!java
@@ -149,7 +148,7 @@ public class ClienteController {
 
 Como você pode notar, utilizamos os métodos HTTP + uma URI específica para identificar cada um dos métodos da nossa classe Java.
 
-No momento de criar os links e formulários HTML devemos tomar um cuidado <strong>muito importante</strong> pois os browsers só dão suporte aos métodos POST e GET por meio de formulários hoje em dia. Por isso, você deverá criar as requisições para métodos do tipo DELETE, PUT etc usando JavaScript ou passando um parâmetro extra, chamado `_method`. O último só funciona em requisições POST. Esse parâmetro sobrescreverá o método HTTP real sendo invocado.
+No momento de criar os links e formulários HTML devemos tomar um cuidado **muito importante** pois os browsers só dão suporte aos métodos `POST` e `GET` por meio de formulários hoje em dia. Por isso, você deverá criar as requisições para métodos do tipo `DELETE`, `PUT` etc usando JavaScript ou passando um parâmetro extra, chamado `_method`. O último só funciona em requisições `POST`. Esse parâmetro sobrescreverá o método HTTP real sendo invocado.
 
 O exemplo a seguir mostra um link para o método visualiza de cliente:
 
@@ -168,7 +167,7 @@ Agora um exemplo de como invocar o método de adicionar um cliente:
 </form>
 ~~~
 
-E, note que para permitir a remoção pelo método DELETE, temos que usar o parâmetro _method, uma vez que o browser ainda não suporta tais requisições:
+E, note que para permitir a remoção pelo método `DELETE`, temos que usar o parâmetro `_method`, uma vez que o browser ainda não suporta tais requisições:
 
 ~~~ 
 #!jsp

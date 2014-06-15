@@ -1,0 +1,123 @@
+---
+title: Testing Components and Controllers
+---
+
+# Testing Components and Controllers
+
+To do unit tests with VRaptor 4 is often simple, which isn't so different from unit tests of any class.
+
+CDI takes care of your application's Dependency Injection (DI) and to improve the testability of your class, we advise the dependency injection by constructor, thus you may work easily with mocks, such as:
+
+~~~
+#!java
+@Controller
+public class PersonController {
+
+	private final Result result;
+	private final Validator validator;
+
+	@Inject
+	public PersonController(Result result, Validator validator) {
+		this.result = result;
+		this.validator = validator;
+	}
+
+	/**
+	 * @deprecated CDI eyes only
+	 */
+	protected PersonController() {
+		this(null, null);
+	}
+	
+}
+~~~
+
+`MockResult` and `MockValidator` classes will help you to test your VRaptor's Controller:
+
+~~~
+#!java
+public class PersonControllerTest {
+
+	private MockResult result;
+	private MockValidator validator;
+	private PersonController controller;
+	
+	@Before
+	public void setUp() {
+		result = new MockResult();
+		validator = new MockValidator();
+		controller = new PersonController(result, validator);
+	}
+	
+}
+~~~
+
+If you use field injection Junit by itself will not provide the CDI dependencies for you, since it do not start CDI context. However there are a lot of solutions to help you with that, i.e Arquilian.
+
+`Result` and `Validator` are components almost always present in your Controllers, to make your tests easier, VRaptor provides mocks for these implementations.
+
+##MockResult
+
+The `MockResult` ignores the redirecting that you do, and collects the included objects, so you can inspect them and make your assertions.
+
+Consider the following `PersonController`'s method:
+
+~~~
+#!java
+@Post("/person/add")
+public void add(Person person) {
+	validator.addIf(person.getName() == null, new SimpleMessage("name", "The name should be filled."));
+	validator.onErrorRedirectTo(IndexController.class).index();
+
+	result.include("success", "Successfully added.");
+	
+	result.redirectTo(IndexController.class).index();
+}
+~~~
+
+To test it you can use on your class `PersonControllerTest` something like:
+
+~~~
+#!java
+@Test
+public void shouldHaveSuccessMessage() {
+	Person person = new Person();
+	person.setName("Renan Montenegro");
+	
+	controller.add(person);
+	
+	Assert.assertTrue(result.included().containsKey("success"));
+	Assert.assertEquals("Successfully added.", result.included("success"));
+}
+~~~
+
+Note that any call of the type `result.use(...)` will be ignored.
+
+##MockValidator
+
+The `MockValidator` will execute the validation accumulating possible errors. To retrieve them you can use the method `getErrors()` as you can see in the example:
+
+~~~
+#!java
+@Test
+public void shouldThrowValidationException() {
+	try {
+		controller.add(new Person());
+		Assert.fail();
+	} catch (ValidationException e) {
+		List<Message> errors = e.getErrors();
+		Assert.assertTrue(errors.contains(new SimpleMessage("name", "The name should be filled.")));
+		Assert.assertEquals(1, errors.size());
+	}
+}
+~~~
+
+The calling of the method `validator.onErrorUse`, in case of validation problem, will generate a `ValidationException`, that can be used as an expected result by your test, as the following:
+
+~~~
+#!java
+@Test(expected = ValidationException.class)
+public void shouldThrowValidationException() {
+	controller.add(new Person());
+}
+~~~

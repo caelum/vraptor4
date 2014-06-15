@@ -18,20 +18,29 @@
 package br.com.caelum.vraptor.util.test;
 
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.enterprise.inject.Vetoed;
+
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonSerializer;
 
 import br.com.caelum.vraptor.View;
 import br.com.caelum.vraptor.http.FormatResolver;
 import br.com.caelum.vraptor.interceptor.DefaultTypeNameExtractor;
+import br.com.caelum.vraptor.proxy.JavassistProxifier;
 import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.serialization.DefaultRepresentationResult;
 import br.com.caelum.vraptor.serialization.JSONSerialization;
 import br.com.caelum.vraptor.serialization.RepresentationResult;
 import br.com.caelum.vraptor.serialization.Serialization;
 import br.com.caelum.vraptor.serialization.XMLSerialization;
+import br.com.caelum.vraptor.serialization.gson.GsonBuilderWrapper;
 import br.com.caelum.vraptor.serialization.gson.GsonJSONSerialization;
 import br.com.caelum.vraptor.serialization.gson.GsonSerializerBuilder;
 import br.com.caelum.vraptor.serialization.xstream.XStreamBuilder;
+import static br.com.caelum.vraptor.serialization.xstream.XStreamBuilderFactory.cleanInstance;
 import br.com.caelum.vraptor.serialization.xstream.XStreamXMLSerialization;
 import br.com.caelum.vraptor.view.EmptyResult;
 
@@ -52,6 +61,8 @@ public class MockSerializationResult extends MockResult {
 	private DefaultTypeNameExtractor extractor;
 	private XStreamBuilder xstreambuilder;
 	private GsonSerializerBuilder gsonBuilder;
+	List<JsonSerializer<?>> jsonSerializers = new ArrayList<>();
+	List<JsonDeserializer<?>> jsonDeserializers = new ArrayList<>();
 
 
 	public MockSerializationResult(Proxifier proxifier, XStreamBuilder xstreambuilder, GsonSerializerBuilder gsonBuilder) {
@@ -62,6 +73,13 @@ public class MockSerializationResult extends MockResult {
 		this.gsonBuilder = gsonBuilder;
 	}
 
+	public MockSerializationResult() {
+		this(new JavassistProxifier(), cleanInstance(),
+				new GsonBuilderWrapper(new MockInstanceImpl<>(new ArrayList<JsonSerializer<?>>()), 
+						new MockInstanceImpl<>(new ArrayList<JsonDeserializer<?>>()))
+		);
+	}
+	
 	@Override
 	public <T extends View> T use(final Class<T> view) {
 		this.typeToUse = view;

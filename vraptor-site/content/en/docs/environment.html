@@ -1,3 +1,133 @@
 ---
 title: Environment
 ---
+
+# Working with environments
+
+Environment is a VRaptor's feature that allow you to define different components depending on the environment like: production, testing, development, and so son..
+
+## How to configure
+
+In your `web.xml`, you need to add:
+
+~~~ 
+#!xml
+<context-param>
+    <param-name>br.com.caelum.vraptor.environment</param-name>
+    <param-value>your_environment_name</param-value>
+</context-param>
+~~~ 
+
+In `param-value` tag, replace `your_environment_name` to your current environment (`PRODUCTION` or `DEVELOPMENT`, as example). Or if you prefer you can create a system environment called `VRAPTOR_ENV`.
+
+Windows example:
+
+~~~ 
+set VRAPTOR_ENV=PRODUCTION
+~~~ 
+
+Unix example:
+
+~~~ 
+export VRAPTOR_ENV=PRODUCTION
+~~~ 
+
+## Setting an environment properties
+
+The `your_environment_name.properties` file must be created in `src/main/resources` location. Below an example for `development.properties`:
+
+~~~ 
+test_environment = true
+test_email = test.mail@mail.com
+environment.controller = true
+~~~ 
+
+## Getting environment properties in your code
+
+~~~ 
+#!java
+@Controller
+public class MyController {
+    private final Environment environment;
+    private final MailSender sender;
+
+    @Inject
+    public MeuController(Environment environment, MailSender sender) {
+        this.environment = environment;
+        this.sender = sender;
+    }
+
+    public void sendMail(String email) {
+        if(environment.isDevelopment()) {
+            sender.sendMailTo(environment.get("test_email"));
+            return;
+        }
+        sender.sendMailTo(email);
+    }
+}
+~~~ 
+
+## Getting environment properties in your JSP
+
+~~~ 
+#!xml
+<c:if test="${environment.isTest()}">
+    <p>You are now in the test environment. Your actions here will not affect the system.</p>
+</c:if>
+
+Send an e-mail to: ${environment.get('test_email')}
+~~~ 
+        
+## Accessing configuration files according to the environment
+
+If you need to access a file in a different setting for your libraries according to your environment, you can also use the environemnt. Just put, for example, your `hibernate.cfg.xml` under directories located with the name of your environment: *development* and *production* (for example). `Environment.getResource (...)` returns the resource according to your current environment:
+
+~~~ 
+#!java
+cfg = new AnnotationConfiguration();
+cfg.configure(environment.getResource("/hibernate.cfg.xml"));
+~~~ 
+
+To keep compatibility with applications that don't not environment, if the file isn't found in the directory with the name of the environment, it will be loaded from classpath.
+
+## Injecting the value of your configuration programmatically
+
+You can also inject your settings programmatically using `@Property` annotation, like:
+
+~~~ 
+#!java
+@Controller
+public class MyController {
+
+    @Inject @Property("test_email") private String email;
+
+    public void sendMail(String email) {
+        sender.sendMailTo(email);
+    }
+}
+~~~ 
+
+If your environment is `DEVELOPMENT`, the value for key `test_email` will be loaded using `development.properties`. And if your environment is `PRODUCTION` the value will be loaded from `production.properties`. This feature allow you to keep away from conditional statements like: `if (environment.isDevelopment ()) {...}` in your code.
+
+And if the field name is the same from the key, you can use only the `@Property` annotation without define a value, like this:
+
+~~~ 
+#!java      
+@Controller
+public class MyController {
+
+    @Inject @Property private String email;
+
+    public void sendMail(String email) {
+        sender.sendMailTo(email);
+    }
+}
+~~~ 
+
+You can also set a default value for this property:
+
+~~~
+#!java
+@Inject @Property(defaultValue = "config.properties") 
+private String fileName;
+~~~

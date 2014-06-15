@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -17,6 +16,8 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor.musicjungle.dao.MusicDao;
 import br.com.caelum.vraptor.musicjungle.enums.MusicType;
@@ -33,26 +34,26 @@ public class MusicControllerTest {
 
 	private MockResult result;
 	private MockValidator validator;
+	@Mock
 	private UserInfo userInfo;
+	@Mock
 	private MusicDao dao;
+	@Mock
 	private Musics musics;
 	private MusicController controller;
 	
 	private Music music;
 	private User user;
 
+	@Mock
 	private UploadedFile uploadFile;
 	
 	@Before
 	public void setUp() {
+		MockitoAnnotations.initMocks(this);
 		result = new MockResult();
 		validator = new MockValidator();
-		userInfo = mock(UserInfo.class);
-		dao = mock(MusicDao.class);
-		musics = mock(Musics.class);
 		controller = new MusicController(dao, userInfo, result, validator, musics);
-		
-		uploadFile = mock(UploadedFile.class);
 		
 		music = createMusic();
 		user = createUser();

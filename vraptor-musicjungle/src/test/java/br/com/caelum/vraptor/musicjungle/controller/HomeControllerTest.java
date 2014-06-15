@@ -13,6 +13,8 @@ import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor.musicjungle.dao.UserDao;
 import br.com.caelum.vraptor.musicjungle.interceptor.UserInfo;
@@ -28,17 +30,18 @@ public class HomeControllerTest {
 	private MockResult result;
 	private MockValidator validator;
 	private HomeController controller;
+	@Mock
 	private UserDao dao;
+	@Mock
 	private UserInfo userInfo;
 	
 	private User user;
 	
 	@Before
 	public void setUp() {
+		MockitoAnnotations.initMocks(this);
 		result = new MockResult();
 		validator = new MockValidator();
-		dao = mock(UserDao.class);
-		userInfo = mock(UserInfo.class);
 		controller = new HomeController(dao, userInfo, result, validator);
 		
 		user = createUser();

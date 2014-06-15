@@ -48,7 +48,7 @@ public class HomeControllerTest {
 	}
 	
 	@Test
-	public void shouldLoginWhenUserExist() {
+	public void shouldLoginWhenUserExists() {
 		when(dao.find(user.getLogin(), user.getPassword())).thenReturn(user);
 		
 		controller.login(user.getLogin(), user.getPassword());
@@ -57,14 +57,14 @@ public class HomeControllerTest {
 	}
 
 	@Test(expected=ValidationException.class)
-	public void shouldNotLoginWhenUserDoesNotExist() {
+	public void shouldNotLoginWhenUserDoesNotExists() {
 		when(dao.find(user.getLogin(), user.getPassword())).thenReturn(null);
 		
 		controller.login(user.getLogin(), user.getPassword());
 	}
 
 	@Test
-	public void shouldNotLoginWhenUserDoesNotExistAndHasOneError() {
+	public void shouldNotLoginWhenUserDoesNotExistsAndHasOneError() {
 		when(dao.find(user.getLogin(), user.getPassword())).thenReturn(null);
 		
 		try {

@@ -19,7 +19,6 @@
 				<include>org.slf4j:slf4j-api</include>
 				<include>org.slf4j:slf4j-simple</include>
 				<include>net.vidageek:mirror</include>
-				<include>com.headius:invokebinder</include>
 				<include>com.thoughtworks.paranamer:paranamer</include>
 			</includes>
 		</dependencySet>
@@ -51,21 +50,12 @@
 		<dependencySet>
 			<unpack>false</unpack>
 			<outputDirectory>lib/validation</outputDirectory>
+			<scope>test</scope>
 			<includes>
 				<include>javax.validation:validation-api</include>
 				<include>org.hibernate:hibernate-validator</include>
 				<include>org.jboss.logging:jboss-logging</include>
 				<include>com.fasterxml:classmate</include>
-				<include>org.glassfish.web:javax.el</include>
-				<include>javax.el:javax.el-api</include>
-			</includes>
-		</dependencySet>
-
-		<dependencySet>
-			<unpack>false</unpack>
-			<outputDirectory>lib/jodatime</outputDirectory>
-			<includes>
-				<include>joda-time:joda-time</include>
 			</includes>
 		</dependencySet>
 

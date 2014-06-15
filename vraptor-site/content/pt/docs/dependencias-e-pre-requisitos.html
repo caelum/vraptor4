@@ -22,6 +22,8 @@ Ao usar um Servlet Container como o Tomcat ou Jetty, é preciso adicionar os jar
 </listener>
 ~~~
 
+Algumas dependências podem variar se você usa um Application Server ou um Servlet Container. Pacotes da especificação, como o CDI ou Bean Validation, não são necessários quando você usa um Application Server.
+
 # JDK 8
 
 É possível usar JDK 8 com o VRaptor. Porém é importante você mandar a dependência do Javassist atualizada para a última versão, pois as anteriores ainda não possuem suporte ao bytecode gerado pelo Java 8.
@@ -34,16 +36,18 @@ Ao usar um Servlet Container como o Tomcat ou Jetty, é preciso adicionar os jar
 </dependency>
 ```
 
+**Nota**: Se você usa Wildfly, tente usar a versão 8.1, pois o Javassist já é disponibilizado nos módulos do servidor. Sendo assim mesmo que você defina a dependência na aplicação, ela será ignorada. Uma alternativa, se você não pode usar a versão 8.1, é atualizar o módulo direto no servidor.
+
 ## Maven
 
-O VRaptor 4 usa como padrão o Maven para gerenciar as dependências. Com isso basta você adicionar o artefato do vraptor como dependência, e o Maven irá se encarregar de fazer o download de todas as dependências.
+O VRaptor 4 usa como padrão o Maven para gerenciar as dependências. Com isso basta você adicionar o artefato do vraptor como dependência, e o Maven irá se encarregar de fazer o download de todas as dependências obrigatórias.
 
 ~~~ 
 #!xml
 <dependency>
     <groupId>br.com.caelum</groupId>
     <artifactId>vraptor</artifactId>
-    <version>4.0.0</version> <!--or the latest version-->
+    <version>4.0.0</version> <!--ou a última versão-->
 </dependency>
 ~~~ 
 
@@ -131,7 +135,7 @@ E inclua um arquivo de configuração chamado `log4j.xml` na pasta de `src/main/
 
 ## XStream e Gson
 
-São utililizadas para serialização e deserialização XML e JSON respectivamente. Ambas são opcionais, ou seja, se você não usar os recursos de serialização e deserialização, você pode removê-los do classpath. Atualmente elas já vêm com a dependência do VRaptor no Maven.
+São utililizadas para serialização e deserialização XML e JSON respectivamente. Ambas são opcionais, ou seja, se você não usar os recursos de serialização e deserialização, você pode removê-los do classpath. Atualmente elas já vêm com a dependência do VRaptor no Maven e você não precisa declarar as dependências.
 
 Para XStream:
 
@@ -157,9 +161,7 @@ E para o Gson
 
 ## Bean Validation
 
-Você precisará adicionar a API `validation-api` e alguma implementação, como por exemplo, o [Hibernate Validator](http://www.hibernate.org/subprojects/validator.html). Essa dependência é obrigatória pois o VRaptor utiliza os recursos de validação do bean validation em sua classe `Validator`. 
-
-Se você usa um servidor de aplicações não é necessário adicionar a dependência do Bean Validation, pois já está incluído no Java EE 7. Porém se você usar apenas um _servlet container_, é necessário adicionar alguma implementação, como o Hibernate validator, em seu projeto incluindo o artefato:
+Se você usa um servidor de aplicações não é necessário adicionar a dependência do *Bean Validation*, pois já está incluído no Java EE 7. Porém se você usar apenas um _servlet container_, é necessário adicionar alguma implementação, como o *Hibernate validator*, em seu projeto incluindo o artefato:
 
 ~~~
 #!xml
@@ -169,6 +171,9 @@ Se você usa um servidor de aplicações não é necessário adicionar a depend�
 	<version>5.1.1.Final</version>
 </dependency>
 ~~~
+
+Esta dependência é obrigatória pois o VRaptor utiliza os recursos de validação do bean validation em sua classe `Validator`. 
+
 
 É necessário também indicar ao CDI para não validar os métodos automaticamente. Para isso adicione o arquivo <code>META-INF/validation.xml</code> com o segunte conteúdo:
 

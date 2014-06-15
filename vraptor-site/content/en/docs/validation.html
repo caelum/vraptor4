@@ -1,3 +1,187 @@
 ---
 title: Validation
 ---
+
+# Validation
+
+VRaptor validation uses Bean Validation, spec present in Java EE 7, that allow us to validate our beans based on annotations. With this you can use embedded constraints or create your custom constraint.
+
+~~~
+#!java
+public class Client {
+	// validates if name is not empty and size between 10 and 50
+	@NotEmpty @Size(min=10, max=50) private String name;
+
+	// validates if birth date is past
+	@Past private Date birth;
+}
+~~~
+
+And in your controller:
+
+~~~
+#!java
+public void store(@NotNull @Valid Client client) {
+	// if client is not valid, redirect to form page
+	validation.onErrorForwardTo(this).form();
+}
+~~~
+
+##Creating your custom constraints
+
+With Bean validation you can create your own custom validations. If you want to validate if phone number is in `(00) 0000-0000` pattern, you can do something like this:
+
+```java
+@Documented
+@Constraint(validatedBy = {})
+@Target({ METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER })
+@Retention(RUNTIME)
+@ReportAsSingleViolation
+@Pattern(regexp = "\\((\\d{2})\\) (\\d{4})-(\\d{4})")
+public @interface PhoneNumber {
+	// you can put a fixed message like "Invalid number" or a message from ResourceBundle with {}
+	String message() default "{br.com.vraptor.validations.phonenumber.message}";
+
+	Class<?>[] groups() default {};
+
+	Class<? extends Payload>[] payload() default {};
+}
+```
+
+You can create complex constraints that access database or uses any managed component. If you want, as example, check if the user already exists in the database, ou can write a code like this:
+
+~~~
+#!java
+@Target({ ElementType.PARAMETER })
+@Retention(RetentionPolicy.RUNTIME)
+@Constraint(validatedBy = { LoginAvailableValidator.class })
+@Documented
+public @interface LoginAvailable {
+
+    String message() default "{login_already_exists}";
+
+    Class<?>[] groups() default {};
+
+    Class<? extends Payload>[] payload() default {};
+}
+~~~
+
+And `LoginAvailableValidator` that checks the constraint:
+
+~~~
+#!java
+public class LoginAvailableValidator implements ConstraintValidator<LoginAvailable, User> {
+
+	@Inject private UserDao userDao;
+
+	public boolean isValid(User user, ConstraintValidatorContext context) {
+		return !userDao.containsUserWithLogin(user.getLogin());
+	}
+}
+~~~
+
+##Redirecting when a constraint error occurs
+
+When a constraint error occurs, you can redirect or forward the user to another page. Below the possible actions:
+
+~~~
+#!java
+validator.onErrorForwardTo(MusicController.class).list() ==> validator.onErrorUse(logic()).forwardTo(MusicController.class).list();
+validator.onErrorRedirectTo(MusicController.class).list() ==> validator.onErrorUse(logic()).redirectTo(MusicController.class).list();
+validator.onErrorUsePageOf(MusicController.class).list() ==> validator.onErrorUse(page()).of(MusicController.class).list();
+validator.onErrorSendBadRequest() ==> validator.onErrorUse(status()).badRequest(errors);
+~~~
+
+If you want to redirect to the same controller, you can use:
+
+~~~
+#!java
+validator.onErrorForwardTo(this).list() ==> validator.onErrorUse(logic()).forwardTo(this.getClass()).list();
+validator.onErrorRedirectTo(this).list() ==> validator.onErrorUse(logic()).redirectTo(this.getClass()).list();
+validator.onErrorUsePageOf(this).list() ==> validator.onErrorUse(page()).of(this.getClass()).list();
+~~~
+
+##Print the errors in the view
+
+When an error exists, VRaptor puts an attribute named `errors` in the request scope, that contains a list with all constraint errors. This list contains a key-value object that represents:
+
+- <code>category</code>: represents the full path of the attribute like `object.attribute`
+- <code>message</code>: represents the error message like: "must be in the future", "may not be empty", and so on.
+
+In the view you can do something like this:
+
+~~~
+#!xml
+	<c:forEach var="error" items="${errors}">
+		${error.category} - ${error.message}<br />
+	</c:forEach>
+~~~
+
+You can search for an error for a specific category, that can be useful to display constraint the messages beside the field.
+
+~~~
+#!xml
+	<input type="text" name="client.name" />
+	<span class="error">${errors.from('client.name')} // prints: 'may not be empty, size must be between 10 and 50'
+	<span class="error">${errors.from('client.name').join(' - ')} // prints: 'may not be empty - size must be between 10 and 50'
+~~~
+
+﻿##Using custom messages
+
+If you prefer, you can use custom messages with Bean Validation. For this you need to add the file <code>ValidationMessages.properties</code> in your _classpath_. In a Mavem project, the location is <code>/src/main/resources</code>.
+
+Considering the previous example, the file might have the following content to customize the default messages:
+
+~~~
+client.name.empty = The client name may not be empty
+client.name.size = The client name size must be between 10 and 50'
+client.birth.past = The birth must be in the future
+~~~
+
+And the class:
+
+~~~
+#!java
+public class Cliente {
+	@NotEmpty(message="{client.name.empty}") // the value {} indicates that the message comes from the ResourceBundle
+	@Size(min=10, max=50, message="{client.name.size}")
+	private String name;
+
+	@Past(message="{client.birth.past}")
+	private Date birth;
+}
+~~~
+
+See that was added parameters in order to let our most dynamic and reusable messages. The possibilities are currently:
+
+* attribute values ​​of the restriction mapped with the attribute names, like <code>{min}</code> and <code>{max}</code> for <code>@Size</code>
+* the current value to be validated with the name <code>${validatedValue}</code>
+* a ternary operation like: <code>${value > 1 ? 's' : ''}</code>
+* a bean mapped with the name <code>formatter</code> exposing a var-arg method <code>format(String format, Object... args)</code> 
+which behaves like <code>java.util.Formatter.format(String format, Object... args)</code>. Example: <code>${formatter.format('%1$.2f', validatedValue)}</code>
+
+
+## Validation using Validator class methods
+
+If you don't want to use Bean Validation, you can use other methods located at `Validator` class. Below an example with `add` method:
+
+~~~
+#!java
+if (client.getName() == null) {
+  //an hard-coded message
+  validator.add(new SimpleMessage("name", "The name is mandatory"));
+
+  //i18n message
+  validator.add(new I18nMessage("name", "name.mandatory"));
+}
+~~~
+
+You can use another methods like <code>addIf</code>, that only adds the message if a precondition is `true`, and <code>ensure</code> that only adds the message if the precondition is `false`:
+
+~~~
+#!java
+validator.addIf(client.getName() == null, new SimpleMessage("name", "The name is mandatory"));
+
+validator.ensure(client.getName() != null, new SimpleMessage("name", "The name is mandatory"));
+~~~
+

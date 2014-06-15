@@ -291,13 +291,13 @@ Besides the session scope, there is also de application scope. Components annota
 
 The REST approach is to have URIs identify resources on the web, so we can profit from the many structural advantages the HTTP protocol provides us. If we could map various HTTP method calls to one URI while having different controller methods respond to them, we could have the following calls for out product's registration:  
 
-~~~ 
-    GET /products - list all products
-    POST /products - add a produto
-    GET /products/{id} - view the product with that id
-    PUT /products/{id} - update information from product with that id
-    DELETE /products/{id} - remove product with that id
-~~~
+| GET      |   /products        |  list all products  |
+| POST     |   /products        |  add a produto  |
+| GET      |   /products/{id}   |  view the product with that id  |
+| PUT      |   /products/{id}   |  update information from product with that id  |
+| DELETE   |   /products/{id}   |  remove product with that id  |
+{: .content-table}
+
 
 In order to create that REST behaviour on VRaptor, the method name convention won't suffice, so we need to change them. The `@Path` annotation can change the URI pointing to a method without limiting the HTTP verb that can access it. For example, annotating the list method with `@Path("/products")` will have all requests to "/products" call the `list` method:
 

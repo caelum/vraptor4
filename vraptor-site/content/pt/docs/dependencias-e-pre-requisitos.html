@@ -208,3 +208,16 @@ Dependência opcional utilizada apenas se sua aplicação possui funcionalidade 
     <version>1.3</version>
 </dependency>
 ~~~ 
+
+## Iogi
+
+O **Iogi** é uma biblioteca usada internamente pelo VRaptor para injeção de parâmetros da requisição. A grande vantagem do Iogi é permitir que seus beans possam ser imutáveis, ou seja, instanciados apenas pelo construtor. Ou da forma usual, por meio de *setters* and *getters*.
+
+Iogi é uma dependência obrigatória e já vem incluída por padrão se você usa Maven.
+
+## Mirror
+
+A biblioteca Mirror permite instanciar beans via *Reflection* usando uma interface fluente. É usada internamente para instanciar os objetos.
+
+Mirror é uma dependência obrigatória e já vem incluída por padrão se você usa Maven.
+

@@ -210,13 +210,7 @@ public void adiciona(Produto produto) {
 
 Veja mais informações sobre o `Result` no capítulo [Views e Ajax](/pt/docs/trabalhando-com-a-view).
 
-##Validação
-
-Veja mais informações sobre o `Validator` no capítulo de [Validações](/pt/docs/validacao).
-
-Com o que foi visto até agora, você já consegue fazer 90% da sua aplicação! As próximas sessões desse tutorial mostram a solução para alguns problemas frequentes que estão nos outros 10% da sua aplicação.
-
-###Usando o JPA/Hibernate para guardar os Produtos
+##Usando o JPA/Hibernate para guardar os Produtos
 
 Agora vamos fazer uma implementação de verdade do `ProdutoDao`, usando o JPA para persistir os produtos. Para isso, nosso `ProdutoDao` precisa de um `EntityManager`. Como o VRaptor usa injeção de dependências, basta declarar um atributo do tipo `EntityManager` e anota-lo com `@Inject`.
 

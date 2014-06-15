@@ -353,7 +353,7 @@ Você também pode injetar HTTP-Headers na sua lógica usando a anotação `Head
 
 ~~~ 
 #!java
-public void profile(@HeaderParam(""X-Auth-User") username) {
+public void profile(@HeaderParam("X-Auth-User") username) {
     ...
 }
 ~~~

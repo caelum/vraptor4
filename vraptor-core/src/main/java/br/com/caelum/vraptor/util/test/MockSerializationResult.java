@@ -18,22 +18,30 @@
 package br.com.caelum.vraptor.util.test;
 
 
+import java.util.ArrayList;
+
 import javax.enterprise.inject.Vetoed;
 
 import br.com.caelum.vraptor.View;
 import br.com.caelum.vraptor.http.FormatResolver;
 import br.com.caelum.vraptor.interceptor.DefaultTypeNameExtractor;
+import br.com.caelum.vraptor.proxy.JavassistProxifier;
 import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.serialization.DefaultRepresentationResult;
 import br.com.caelum.vraptor.serialization.JSONSerialization;
 import br.com.caelum.vraptor.serialization.RepresentationResult;
 import br.com.caelum.vraptor.serialization.Serialization;
 import br.com.caelum.vraptor.serialization.XMLSerialization;
+import br.com.caelum.vraptor.serialization.gson.GsonBuilderWrapper;
 import br.com.caelum.vraptor.serialization.gson.GsonJSONSerialization;
 import br.com.caelum.vraptor.serialization.gson.GsonSerializerBuilder;
 import br.com.caelum.vraptor.serialization.xstream.XStreamBuilder;
+import br.com.caelum.vraptor.serialization.xstream.XStreamBuilderFactory;
 import br.com.caelum.vraptor.serialization.xstream.XStreamXMLSerialization;
 import br.com.caelum.vraptor.view.EmptyResult;
+
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonSerializer;
 
 /**
  *
@@ -59,6 +67,13 @@ public class MockSerializationResult extends MockResult {
 		this.extractor = new DefaultTypeNameExtractor();
 		this.xstreambuilder = xstreambuilder;
 		this.gsonBuilder = gsonBuilder;
+	}
+
+	public MockSerializationResult() {
+		this(new JavassistProxifier(), XStreamBuilderFactory.cleanInstance(),
+				new GsonBuilderWrapper(new MockInstanceImpl<>(new ArrayList<JsonSerializer<?>>()), 
+						new MockInstanceImpl<>(new ArrayList<JsonDeserializer<?>>()))
+		);
 	}
 	
 	@Override

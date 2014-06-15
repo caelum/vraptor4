@@ -2,8 +2,8 @@ package br.com.caelum.vraptor.musicjungle.controller;
 
 import java.util.Arrays;
 
-import org.hamcrest.Matchers;
-import org.junit.Assert;
+import static org.hamcrest.Matchers.hasSize;
+import static org.junit.Assert.assertThat;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -36,7 +36,7 @@ public class UsersControllerTest {
 		controller.home();
 		MusicType[] musicsType = (MusicType[]) result.included().get("musicTypes");
 		
-		Assert.assertThat(Arrays.asList(musicsType), Matchers.hasSize(MusicType.values().length));
+		assertThat(Arrays.asList(musicsType), hasSize(MusicType.values().length));
 	}
 	
 }

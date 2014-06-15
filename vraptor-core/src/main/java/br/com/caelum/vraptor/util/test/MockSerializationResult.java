@@ -61,9 +61,6 @@ public class MockSerializationResult extends MockResult {
 	private DefaultTypeNameExtractor extractor;
 	private XStreamBuilder xstreambuilder;
 	private GsonSerializerBuilder gsonBuilder;
-	List<JsonSerializer<?>> jsonSerializers = new ArrayList<>();
-	List<JsonDeserializer<?>> jsonDeserializers = new ArrayList<>();
-
 
 	public MockSerializationResult(Proxifier proxifier, XStreamBuilder xstreambuilder, GsonSerializerBuilder gsonBuilder) {
 		super(proxifier);

@@ -6,15 +6,15 @@ title: Contribuindo com o VRaptor
 
 ##Participando das listas de discussão
 
-Você pode responder às dúvidas dos outros usuários no <a href="http://www.guj.com.br/tag/vraptor">GUJ Respostas</a>, no <a href="http://stackoverflow.com/questions/tagged/vraptor">Stackoverflow</a> ou no <a href="http://groups.google.com/group/caelum-vraptor">Google Groups</a>.
+Você pode responder às dúvidas dos outros usuários no <a href="http://www.guj.com.br/tag/vraptor">GUJ Respostas</a>, no <a href="http://stackoverflow.com/questions/tagged/vraptor">Stackoverflow</a> ou na nossa lista de discussão para usuários no <a href="http://groups.google.com/group/caelum-vraptor">Google Groups</a>.
 
 ##Colaborando com documentação
 
-Você pode ajudar escrevendo Javadocs, melhorando o conteúdo do site, com alguma receita ou com algum artigo em seu blog. A documentação do VRaptor está no subprojeto `vraptor-site` no Github. Mais informações <a href="https://github.com/caelum/vraptor4/tree/master/vraptor-site">aqui</a>.
+Você pode ajudar escrevendo Javadocs, melhorando o conteúdo do site, com alguma receita em nosso Cookbook ou com algum artigo em seu blog. A documentação do VRaptor está no subprojeto `vraptor-site` no Github. Mais informações <a href="https://github.com/caelum/vraptor4/tree/master/vraptor-site">aqui</a>.
 
 ##Reportando bugs e sugerindo novas funcionalidades
 
-Se você encontrou um bug, avise a equipe de desenvolvimento do VRaptor usando a <a href="http://groups.google.com/group/caelum-vraptor">lista de discussão para usuários</a>. Se você quer sugerir o desenvolvimento de uma funcionalidade use a <a href="http://groups.google.com/group/caelum-vraptor-dev">lista de desenvolvedores</a>. Você também pode cadastrar uma <a href="http://github.com/caelum/vraptor4/issues">issue no Github</a>.
+Se você encontrou um bug, avise a equipe de desenvolvimento do VRaptor usando a <a href="http://groups.google.com/group/caelum-vraptor">lista de discussão para usuários</a>. Se você quer sugerir o desenvolvimento de uma funcionalidade use a <a href="http://groups.google.com/group/caelum-vraptor-dev">lista para desenvolvedores</a>. Você também pode cadastrar uma <a href="http://github.com/caelum/vraptor4/issues">issue no Github</a>.
 
 ##Colaborando com código
 
@@ -28,4 +28,10 @@ Contribuições de funcionalidades como segurança, paginação, multitenant, e 
 
 ##Montando o ambiente 
 
-Todos os módulos do VRaptor usam o <a href="https://maven.apache.org/">Apache Maven</a>, que possui suporte nas principais IDEs. Basta fazer um clone do projeto no Github e importar o projeto como um Projeto Maven.
+O primeiro passo para começar a contribuir com código no VRaptor é fazer um fork do projeto. Acesse nosso <a href="https://github.com/caelum/vraptor4">projeto no Github</a> e faça um fork do projeto. Um fork, em poucas palavras, é uma cópia que você faz do nosso projeto. Assim você pode fazer todas as alterações que você quiser em seu fork, e quando quiser enviar essas alterações para nós, basta fazer um <b>pull request</b>.
+
+Um <b>pull request</b> é uma ação que envia para nós as suas alterações. Assim nós podemos avaliar sua contribuição e dar algumas sugestões. Assim que sua contribuição estiver completa, nós podemos fazer um merge para assim estar disponível na próxima versão do VRaptor.
+
+Todos os módulos do VRaptor usam o <a href="https://maven.apache.org/">Apache Maven</a>, que possui suporte nas principais IDEs. Depois que você fizer o clone do seu fork, basta importá-lo na sua IDE preferida como um <b>Maven project</b>.
+
+Uma boa prática que sugerimos é deixar o branch `master` sempre atualizado com o código oficial do vraptor, e criar suas modificações sempre em um branch novo criado a partir do master. Desta forma quando você enviar um **pull request** para nós, você estará enviando sempre o código mais atualizado possível.

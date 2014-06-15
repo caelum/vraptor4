@@ -19,6 +19,22 @@ A maior alteração do VRaptor é de usar o CDI (Context Dependency Injection). 
 
 O CDI **exige** que cada classe possua o construtor padrão (sem argumentos). Sendo assim você deverá adicionar o construtor padrão em todos os componentes. E o construtor onde serão injetados os componentes deve possuir a anotação `@Inject`.
 
+```java
+@Controller
+public class MeuController {
+	private final MeuComponente meuComponente;
+
+	/** @deprecated Construtor usado apenas para o CDI */
+	public MeuController() {
+		this(null);
+	}
+
+	public MeuController(MeuComponente meuComponente) {
+		this.meuComponente = meuComponente;
+	}
+}
+```
+
 ### Static scanning
 
 Se você usava este recurso, ele não é mais necessário, pois o scanning de classes é feito de forma otmizada pelo CDI. Basta remover as configurações do seu build.

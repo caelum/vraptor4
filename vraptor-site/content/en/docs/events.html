@@ -1,0 +1,45 @@
+---
+title: Events
+---
+
+# Working with CDI events
+
+VRaptor now comes the main stream of the request using CDI events. The following image displays the triggered events and their observers:
+
+<img src="/img/vraptorEventPipeline.png" id="eventPileline" alt="VRaptor 4 Event Pipeline">
+
+## Events triggered by VRaptor
+
+* `VRaptorInitialized` triggered on application startup, indicating that VRaptor was initialized.
+* `RequestStarted` triggered the beginning of each request.
+* `RequestSucceeded` fired at the end of the request only if it has been processed without error.
+* `ControllerFound` and `ControllerNotFound` will indicate whether the Controller that answer the url was found or not.
+* `InterceptorsReady` and `InterceptorsExecuted` indicate when the stack will be executed and after its completion.
+* `MethodReady` and `MethodExecuted` when the controller method will run and after its completion.
+
+
+
+## Observing VRaptor events
+
+You can observe any event triggered by VRaptor. You just need create a method with the `@Observes` annotation under the package `javax.enterprise.event` before the event as a parameter. Something like:
+
+~~~
+#!java
+import javax.enterprise.event.Observes;
+
+import br.com.caelum.vraptor.events.ControllerNotFound;
+
+public class MyObserver {
+	
+	public void method(@Observes ControllerNotFound event) {
+		// execute an action here
+	}
+}
+~~~
+
+It's important to remember that there is no order in the observers execution, that means, there is no guarantee that a method will be executed before or after any other method that observes this same event. If the order is important, consider using interceptors.
+
+
+## More about events
+
+This cool feature helps you reduce the coupling of your code in an elegant manner. You can see more information about CDI events [in the CDI spec](http://docs.jboss.org/cdi/spec/1.1/cdi-spec.html#_event_example).

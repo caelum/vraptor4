@@ -18,9 +18,7 @@ Em seu `web.xml`, adicione:
 </context-param>
 ~~~ 
         
-Onde `nome_do_ambiente` é o ambiente atual (`PRODUCTION` ou `DEVELOPMENT`, por exemplo).
-
-Ou se preferir, você também pode criar uma variável de ambiente conforme seu sistema operacional, chamada `VRAPTOR_ENV`.
+Onde `nome_do_ambiente` é o ambiente atual (`PRODUCTION` ou `DEVELOPMENT`, por exemplo). Ou se preferir, você também pode criar uma variável de ambiente conforme seu sistema operacional, chamada `VRAPTOR_ENV`.
 
 Exemplo no windows:
 
@@ -34,9 +32,9 @@ Exemplo no unix:
 export VRAPTOR_ENV=PRODUCTION
 ~~~ 
 
-## nome_do_ambiente.properties
+## Definindo as propriedades de um ambiente
 
-Seu nome_do_ambiente.properties deve ser criado em `src/main/resources`. Exemplo (development.properties):
+O arquivo `nome_do_ambiente.properties` deve ser criado em `src/main/resources`. Exemplo de um arquivo `development.properties`:
 
 ~~~ 
 ambiente_de_teste = true
@@ -48,8 +46,6 @@ environment.controller = true
 
 ~~~ 
 #!java
-import br.com.caelum.vraptor.environment.Environment;
-
 @Controller
 public class MeuController {
     private final Environment environment;
@@ -63,7 +59,7 @@ public class MeuController {
 
     public void sendMail(String email) {
         if(environment.isDevelopment()) {
-            sender.sendMailTo(environment.get("dev_mail"));
+            sender.sendMailTo(environment.get("email_de_teste"));
             return;
         }
         sender.sendMailTo(email);
@@ -71,7 +67,7 @@ public class MeuController {
 }
 ~~~ 
 
-## Acessando propriedades de ambiente no jsp
+## Acessando propriedades de ambiente no JSP
 
 ~~~ 
 #!xml
@@ -84,11 +80,7 @@ Enviando e-mail para: ${environment.get('email_de_teste')}
         
 ## Acessando arquivos de configuração de acordo com o environment
 
-Se você precisa acessar um arquivo de configuração diferente para suas bibliotecas,
-de acordo com seu ambiente, você também pode utilizar o Environemnt.
-Basta colocar, por exemplo, seu `hibernate.cfg.xml` em diretórios com o nome
-de seus ambientes: *development* e *production* (por exemplo).
-`Environment.getResource(...)` retornará o resource de acordo com seu ambiente atual:
+Se você precisa acessar um arquivo de configuração diferente para suas bibliotecas, de acordo com seu ambiente, você também pode utilizar o Environemnt. Basta colocar, por exemplo, seu `hibernate.cfg.xml` em diretórios com o nome de seus ambientes: *development* e *production* (por exemplo). `Environment.getResource(...)` retornará o resource de acordo com seu ambiente atual:
 
 ~~~ 
 #!java
@@ -105,8 +97,6 @@ Você também consegue injetar suas configurações programaticamente usando o `
 
 ~~~ 
 #!java
-import br.com.caelum.vraptor.environment.Environment;
-
 @Controller
 public class MeuController {
 
@@ -124,8 +114,6 @@ Outra facilidade, é que se o nome da chave for o mesmo nome do field injetado, 
 
 ~~~ 
 #!java      
-import br.com.caelum.vraptor.environment.Environment;
-
 @Controller
 public class MeuController {
 

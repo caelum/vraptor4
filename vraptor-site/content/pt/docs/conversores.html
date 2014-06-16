@@ -4,7 +4,26 @@ title: Conversores
 
 # Quando usar um Conversor?
 
-Sempre que um parâmetro é recebido, é necessário ter um conversor. O VRaptor já possui registrado conversores para todos os tipos definidos na `Java Language Specification`. Para os tipos primitivos, caso o parâmetro seja recebido como `null`, será retornado o valor padrão do campo. Por exemplo, se você receber um `int` cujo valor seja `null`, o converter irá retornar `0`. Já para os tipos objetos, se o parâmetro recebido for `null` ou vazio, o valor retornado será `null`.
+Quando recebemos um parametro do browser, recebemos como uma String. Por isso é necessário um conversor para fazer a tradução deste parametro para seu respectivo objeto. O VRaptor já possui registrado conversores para todos os tipos definidos na `Java Language Specification`. Para os tipos primitivos, caso o parâmetro seja recebido como `null`, será retornado o valor padrão do campo. Por exemplo, se você receber um `int` cujo valor seja `null`, o converter irá retornar `0`. Já para os tipos objetos, se o parâmetro recebido for `null` ou vazio, o valor retornado será `null`.
+
+Por exemplo, se recebermos os seguintes parâmetros do browser para a classe abaixo:
+
+| cliente.id | 10 |
+| cliente.idade | null |
+{: .content-table}
+
+```java
+public class Cliente {
+	private Long id;
+	private Integer idade;
+	
+	// getters and setters
+}
+```
+
+Ao injetar os dados da requisição na classe, o VRaptor irá usar o conversor `LongConverter` para o campo `id` e o conversor `PrimitiveIntegerConverter` para o campo `idade`. Neste caso, o atributo `id` receberá o valor `10`, e o campo `idade` receberá o valor `0`, pois o parametro recebido é `null`.
+
+Você pode obter a lista completa dos conversores padrão do vraptor <a href="http://www.vraptor.org/javadoc/br/com/caelum/vraptor/converter/package-frame.html">aqui</a>.
 
 ##BigDecimal, Double e Float localizados
 

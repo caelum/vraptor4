@@ -211,13 +211,10 @@ public void add(Product product) {
 
 Learn more about the `Result` on the [Views and Ajax](/en/docs/view-and-ajax) methods.
 
-##Validation
-
-Learn more about the `Validator` on the [Validations](/en/docs/validation).
-
 Notice that you already know enough to build 90% of your application! The next sections are focused on some of the frequent problems that represent the other 10% of your application construction.
 
-###Using JPA/Hibernate to save Products
+
+##Using JPA/Hibernate to save Products
 
 Now we will focus on the actual implementation of the `ProductDAO`, using the JPA to assist us persist products. In order to do that, our `ProductDAO` needs an `EntityManager`. Using VRaptor DI, all you'll need to do is to declare an `EntityManager` field and annotate it with `@Inject`.
 

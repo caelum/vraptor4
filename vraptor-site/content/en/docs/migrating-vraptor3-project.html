@@ -15,6 +15,23 @@ Now VRaptor uses CDI as container. So you don't need to use Guice, Pico or Sprin
 
 CDI spec **obligates** that all managed class have a no-arg constructor. So you need to create a no-arg constructor even you have another constructor annotated with `@Inject`.
 
+```java
+@Controller
+public class MyController {
+	private final MyComponent myComponent;
+
+	/** @deprecated CDI eyes only */
+	protected MyComponent() {
+		this(null);
+	}
+
+	public MyController(MyComponent myComponent) {
+		this.myComponent = myComponent;
+	}
+}
+```
+
+
 ### Static scanning
 
 Since CDI can scan the classpath, this feature is not nedded anymore.
@@ -29,7 +46,7 @@ Now to trigger a code when VRaptor starts, you need to observes the event `VRapt
 @ApplicationScoped
 public class PrintLog {
 
-	@Inject private Logger logger;
+    @Inject private Logger logger;
 
     public void whenApplicationStarts(@Observes VRaptorInitialized initialized) {
         logger.info("My application is UP");
@@ -97,8 +114,8 @@ Instead of using `Localization` and call `.getLocale()` or `.getBundle()` method
 #!java
 public class MyClass {
 
-	@Inject private Locale locale;
-	@Inject private ResourceBundle bundle;
+    @Inject private Locale locale;
+    @Inject private ResourceBundle bundle;
 }
 ~~~ 
 

@@ -6,6 +6,25 @@ title: Converters
 
 When a parameter is received, we need to convert to an Object. VRaptor already have registered converters for all types define in  `Java Language Specification`. If the type is primitive and parameter is `null`, the default value for the type will be returned. Example: if your type is an `int` and the value is `null`, the value `0` will be returned. For the non-primitive types the `null` value is returned if the parameter is `null` or empty.
 
+For example, if we receive the parameters for the class below:
+
+| client.id | 10 |
+| client.age | null |
+{: .content-table}
+
+```java
+public class Client {
+	private Long id;
+	private int age;
+	// getters and setters
+}
+```
+
+When inject the parameter data, VRaptor will call `LongConverter` for the field `id` and `PrimitiveIntConverter` for the field `age`. In this case `id` will receive value `10`, and `age` will receive value `0` because parameter is null.
+
+You can see a complete list with all available converters <a href="http://www.vraptor.org/javadoc/br/com/caelum/vraptor/converter/package-frame.html">here</a>.
+
+
 ##BigDecimal, Double and Float with localization
 
 Are supported using application locale. `Double` and `Float` supports both primitive and non-primitive types.

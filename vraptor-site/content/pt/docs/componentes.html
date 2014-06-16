@@ -104,7 +104,7 @@ Você pode também adicionar os listeners `@PostConstruct`, `@PreDestroy` e `@Di
 
 ##Injeção de dependências
 
-O VRaptor utiliza o CDI para controlar o que é necessário para instanciar cada um de seus componentes e recursos. Sendo assim, os dois exemplos anteriores permitem que quaisquer um dos seus recursos ou componentes recebam um `ClienteDao` em seu construtor, por exemplo:
+O VRaptor utiliza o CDI para controlar o que é necessário para instanciar cada um de seus componentes e recursos. Sendo assim, os dois exemplos anteriores permitem que quaisquer um dos seus recursos ou componentes recebam um `ClienteDao` em seu construtor, para isso o CDI nos obriga a termos o construtor padrão, por exemplo:
 
 ~~~ 
 #!java
@@ -115,6 +115,13 @@ public class ClienteController {
     @Inject
     public ClienteController(ClienteDao dao) {
         this.dao = dao;
+    }
+
+    /**
+     * @deprecated CDI eyes only
+     */
+    protected ClienteController() {
+        this(null);
     }
 
     @Post

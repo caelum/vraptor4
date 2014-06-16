@@ -28,7 +28,7 @@ import org.junit.Test;
 
 import br.com.caelum.vraptor.proxy.JavassistProxifier;
 import br.com.caelum.vraptor.serialization.gson.GsonBuilderWrapper;
-import br.com.caelum.vraptor.serialization.xstream.XStreamBuilderFactory;
+import br.com.caelum.vraptor.serialization.xstream.XStreamBuilderImpl;
 
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonSerializer;
@@ -42,7 +42,7 @@ public class MockSerializationResultTest {
 		List<JsonSerializer<?>> jsonSerializers = new ArrayList<>();
 		List<JsonDeserializer<?>> jsonDeserializers = new ArrayList<>();
 
-		result = new MockSerializationResult(new JavassistProxifier(), XStreamBuilderFactory.cleanInstance(),
+		result = new MockSerializationResult(new JavassistProxifier(), XStreamBuilderImpl.cleanInstance(),
 				new GsonBuilderWrapper(new MockInstanceImpl<>(jsonSerializers), new MockInstanceImpl<>(jsonDeserializers)));;
 	}
 

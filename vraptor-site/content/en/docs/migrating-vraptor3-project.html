@@ -21,7 +21,7 @@ public class MyController {
 	private final MyComponent myComponent;
 
 	/** @deprecated CDI eyes only */
-	public MyComponent() {
+	protected MyComponent() {
 		this(null);
 	}
 
@@ -46,7 +46,7 @@ Now to trigger a code when VRaptor starts, you need to observes the event `VRapt
 @ApplicationScoped
 public class PrintLog {
 
-	@Inject private Logger logger;
+    @Inject private Logger logger;
 
     public void whenApplicationStarts(@Observes VRaptorInitialized initialized) {
         logger.info("My application is UP");
@@ -114,8 +114,8 @@ Instead of using `Localization` and call `.getLocale()` or `.getBundle()` method
 #!java
 public class MyClass {
 
-	@Inject private Locale locale;
-	@Inject private ResourceBundle bundle;
+    @Inject private Locale locale;
+    @Inject private ResourceBundle bundle;
 }
 ~~~ 
 

@@ -21,7 +21,7 @@ public class Cliente {
 }
 ```
 
-Ao injetar os dados da requisição na classe, o VRaptor irá usar o conversor `LongConverter` para o campo `id` e o conversor `PrimitiveIntegerConverter` para o campo `idade`.
+Ao injetar os dados da requisição na classe, o VRaptor irá usar o conversor `LongConverter` para o campo `id` e o conversor `PrimitiveIntegerConverter` para o campo `idade`. Neste caso, o atributo `id` receberá o valor `10`, e o campo `idade` receberá o valor `0`, pois o parametro recebido é `null`.
 
 Você pode obter a lista completa dos conversores padrão do vraptor <a href="http://www.vraptor.org/javadoc/br/com/caelum/vraptor/converter/package-frame.html">aqui</a>.
 

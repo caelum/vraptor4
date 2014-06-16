@@ -15,11 +15,13 @@ Por exemplo, se recebermos os seguintes parâmetros do browser para a classe aba
 ```java
 public class Cliente {
 	private Long id;
-	private int idade;
+	private Integer idade;
+	
+	// getters and setters
 }
 ```
 
-Ao injetar os dados da requisição na classe, o VRaptor irá usar o conversor `LongConverter` para o campo `id` e o conversor `PrimitiveIntConverter` para o campo `idade`.
+Ao injetar os dados da requisição na classe, o VRaptor irá usar o conversor `LongConverter` para o campo `id` e o conversor `PrimitiveIntegerConverter` para o campo `idade`.
 
 Você pode obter a lista completa dos conversores padrão do vraptor <a href="http://www.vraptor.org/javadoc/br/com/caelum/vraptor/converter/package-frame.html">aqui</a>.
 

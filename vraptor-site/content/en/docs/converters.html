@@ -20,7 +20,7 @@ public class Client {
 }
 ```
 
-When inject the parameter data, VRaptor will call `LongConverter` for the field `id` and `PrimitiveIntConverter` for the field `age`.
+When inject the parameter data, VRaptor will call `LongConverter` for the field `id` and `PrimitiveIntConverter` for the field `age`. In this case `id` will receive value `10`, and `age` will receive value `0` because parameter is null.
 
 You can see a complete list with all available converters <a href="http://www.vraptor.org/javadoc/br/com/caelum/vraptor/converter/package-frame.html">here</a>.
 

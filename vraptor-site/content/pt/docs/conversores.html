@@ -12,14 +12,15 @@ Por exemplo, se recebermos os seguintes parâmetros do browser para a classe aba
 | cliente.idade | null |
 {: .content-table}
 
-```java
+~~~
+#!java
 public class Cliente {
 	private Long id;
 	private int idade;
 
 	// getters and setters
 }
-```
+~~~
 
 Ao injetar os dados da requisição na classe, o VRaptor irá usar o conversor `LongConverter` para o campo `id` e o conversor `PrimitiveIntegerConverter` para o campo `idade`. Neste caso, o atributo `id` receberá o valor `10`, e o campo `idade` receberá o valor `0`, pois o parametro recebido é `null`.
 

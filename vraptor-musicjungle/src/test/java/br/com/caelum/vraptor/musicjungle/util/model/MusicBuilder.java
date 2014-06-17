@@ -1,8 +1,10 @@
-package br.com.caelum.vraptor.musicjungle.model;
+package br.com.caelum.vraptor.musicjungle.util.model;
 
 import java.util.Set;
 
 import br.com.caelum.vraptor.musicjungle.enums.MusicType;
+import br.com.caelum.vraptor.musicjungle.model.Music;
+import br.com.caelum.vraptor.musicjungle.model.MusicOwner;
 
 public class MusicBuilder extends Music {
 

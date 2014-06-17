@@ -18,7 +18,7 @@ import org.mockito.MockitoAnnotations;
 import br.com.caelum.vraptor.musicjungle.dao.UserDao;
 import br.com.caelum.vraptor.musicjungle.interceptor.UserInfo;
 import br.com.caelum.vraptor.musicjungle.model.User;
-import br.com.caelum.vraptor.musicjungle.model.UserBuilder;
+import br.com.caelum.vraptor.musicjungle.util.model.UserBuilder;
 import br.com.caelum.vraptor.util.test.MockResult;
 import br.com.caelum.vraptor.util.test.MockValidator;
 import br.com.caelum.vraptor.validator.Message;

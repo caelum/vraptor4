@@ -1,6 +1,9 @@
-package br.com.caelum.vraptor.musicjungle.model;
+package br.com.caelum.vraptor.musicjungle.util.model;
 
 import java.util.Set;
+
+import br.com.caelum.vraptor.musicjungle.model.MusicOwner;
+import br.com.caelum.vraptor.musicjungle.model.User;
 
 @SuppressWarnings("serial")
 public class UserBuilder extends User {

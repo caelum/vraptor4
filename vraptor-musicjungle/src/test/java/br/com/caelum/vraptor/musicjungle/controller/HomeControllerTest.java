@@ -18,6 +18,7 @@ import org.mockito.MockitoAnnotations;
 import br.com.caelum.vraptor.musicjungle.dao.UserDao;
 import br.com.caelum.vraptor.musicjungle.interceptor.UserInfo;
 import br.com.caelum.vraptor.musicjungle.model.User;
+import br.com.caelum.vraptor.musicjungle.model.UserBuilder;
 import br.com.caelum.vraptor.util.test.MockResult;
 import br.com.caelum.vraptor.util.test.MockValidator;
 import br.com.caelum.vraptor.validator.Message;
@@ -43,7 +44,7 @@ public class HomeControllerTest {
 		validator = new MockValidator();
 		controller = new HomeController(dao, userInfo, result, validator);
 		
-		user = createUser();
+		user = new UserBuilder().withName("Renan").withLogin("renanigt").withPassword("1234");
 	}
 	
 	@Test
@@ -84,12 +85,4 @@ public class HomeControllerTest {
 		verify(userInfo).logout();
 	}
 	
-	private User createUser() {
-		User user = new User();
-		user.setLogin("renanigt");
-		user.setName("Renan");
-		user.setPassword("1234");
-
-		return user;
-	}
 }

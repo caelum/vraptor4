@@ -16,6 +16,7 @@ import org.mockito.MockitoAnnotations;
 import br.com.caelum.vraptor.musicjungle.dao.UserDao;
 import br.com.caelum.vraptor.musicjungle.enums.MusicType;
 import br.com.caelum.vraptor.musicjungle.model.User;
+import br.com.caelum.vraptor.musicjungle.model.UserBuilder;
 import br.com.caelum.vraptor.util.test.MockResult;
 import br.com.caelum.vraptor.util.test.MockValidator;
 
@@ -37,8 +38,8 @@ public class UsersControllerTest {
 		validator = new MockValidator();
 		controller = new UsersController(userDao, result, validator);
 		
-		user = createUser();
-		anotherUser = createAnotherUser();
+		user = new UserBuilder().withName("Renan").withLogin("renanigt").withPassword("1234");
+		anotherUser = new UserBuilder().withName("Fulano").withLogin("fulano").withPassword("3456");
 	}
 
 	@Test
@@ -67,24 +68,6 @@ public class UsersControllerTest {
 		when(userDao.find(user.getLogin())).thenReturn(user);
 		controller.show(user);
 		assertEquals(user, result.included().get("user"));
-	}
-	
-	private User createUser() {
-		User user = new User();
-		user.setLogin("renanigt");
-		user.setName("Renan");
-		user.setPassword("1234");
-
-		return user;
-	}
-
-	private User createAnotherUser() {
-		User user = new User();
-		user.setLogin("fulano");
-		user.setName("Fulano");
-		user.setPassword("3456");
-		
-		return user;
 	}
 	
 }

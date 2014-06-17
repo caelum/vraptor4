@@ -24,8 +24,10 @@ import br.com.caelum.vraptor.musicjungle.enums.MusicType;
 import br.com.caelum.vraptor.musicjungle.files.Musics;
 import br.com.caelum.vraptor.musicjungle.interceptor.UserInfo;
 import br.com.caelum.vraptor.musicjungle.model.Music;
+import br.com.caelum.vraptor.musicjungle.model.MusicBuilder;
 import br.com.caelum.vraptor.musicjungle.model.MusicOwner;
 import br.com.caelum.vraptor.musicjungle.model.User;
+import br.com.caelum.vraptor.musicjungle.model.UserBuilder;
 import br.com.caelum.vraptor.observer.upload.UploadedFile;
 import br.com.caelum.vraptor.util.test.MockResult;
 import br.com.caelum.vraptor.util.test.MockValidator;
@@ -55,8 +57,8 @@ public class MusicControllerTest {
 		validator = new MockValidator();
 		controller = new MusicController(dao, userInfo, result, validator, musics);
 		
-		music = createMusic();
-		user = createUser();
+		music = new MusicBuilder().withId(1L).withType(MusicType.ROCK).withTitle("Some Music").withDescription("Some description");
+		user = new UserBuilder().withName("Renan").withLogin("renanigt").withPassword("1234");
 	}
 	
 	@Test
@@ -116,25 +118,6 @@ public class MusicControllerTest {
 		} catch (FileNotFoundException e) {
 			verify(musics).getFile(music);
 		}
-	}
-	
-	private Music createMusic() {
-		Music music = new Music();
-		music.setId(1L);
-		music.setType(MusicType.ROCK);
-		music.setTitle("Some Music");
-		music.setDescription("Some description");
-		
-		return music;
-	}
-	
-	private User createUser() {
-		User user = new User();
-		user.setLogin("renanigt");
-		user.setName("Renan");
-		user.setPassword("1234");
-
-		return user;
 	}
 	
 }

@@ -16,8 +16,10 @@ import br.com.caelum.vraptor.musicjungle.dao.UserDao;
 import br.com.caelum.vraptor.musicjungle.enums.MusicType;
 import br.com.caelum.vraptor.musicjungle.interceptor.UserInfo;
 import br.com.caelum.vraptor.musicjungle.model.Music;
+import br.com.caelum.vraptor.musicjungle.model.MusicBuilder;
 import br.com.caelum.vraptor.musicjungle.model.MusicOwner;
 import br.com.caelum.vraptor.musicjungle.model.User;
+import br.com.caelum.vraptor.musicjungle.model.UserBuilder;
 import br.com.caelum.vraptor.util.test.MockResult;
 import br.com.caelum.vraptor.util.test.MockValidator;
 import br.com.caelum.vraptor.validator.ValidationException;
@@ -45,9 +47,9 @@ public class MusicOwnerControllerTest {
 		validator = new MockValidator();
 		controller = new MusicOwnerController(musicDao, userDao, userInfo, result, validator);
 		
-		music = createMusic();
-		user = createUser();
-		anotherUser = createAnotherUser();
+		music = new MusicBuilder().withId(1L).withType(MusicType.ROCK).withTitle("Some Music").withDescription("Some description");
+		user = new UserBuilder().withName("Renan").withLogin("renanigt").withPassword("1234").withMusicOwners(createMusicOwners());
+		anotherUser = new UserBuilder().withName("Fulano").withLogin("fulano").withPassword("3456");
 	}
 
 	@Test
@@ -68,39 +70,10 @@ public class MusicOwnerControllerTest {
 		when(userInfo.getUser()).thenReturn(user);
 		controller.addToMyList(user, music);
 	}
-	
-	private Music createMusic() {
-		Music music = new Music();
-		music.setId(1L);
-		music.setType(MusicType.ROCK);
-		music.setTitle("Some Music");
-		music.setDescription("Some description");
-		
-		return music;
-	}
-	
-	private User createUser() {
-		User user = new User();
-		user.setLogin("renanigt");
-		user.setName("Renan");
-		user.setPassword("1234");
-		user.setMusicOwners(createMusicOwners());
 
-		return user;
-	}
-
-	private User createAnotherUser() {
-		User user = new User();
-		user.setLogin("fulano");
-		user.setName("Fulano");
-		user.setPassword("3456");
-		
-		return user;
-	}
-	
 	private Set<MusicOwner> createMusicOwners() {
 		Set<MusicOwner> musicOwners = new HashSet<MusicOwner>();
-		MusicOwner musicOwner = new MusicOwner(createAnotherUser(), createMusic());
+		MusicOwner musicOwner = new MusicOwner(anotherUser, music);
 		
 		musicOwners.add(musicOwner);
 		

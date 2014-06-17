@@ -12,15 +12,15 @@ Para começar o sistema, vamos começar com cadastro de produtos. Precisamos de 
 #!java
 @Entity
 public class Produto {
-    @Id
-    @GeneratedValue
-    private Long id;
+	@Id
+	@GeneratedValue
+	private Long id;
 
-    private String nome;
-    private String descricao;
-    private Double preco;
+	private String nome;
+	private String descricao;
+	private Double preco;
 
-    // getter e setters e métodos de negócio que julgar necessário
+	// getter e setters e métodos de negócio que julgar necessário
 }
 ~~~
 
@@ -47,9 +47,9 @@ Ao colocar essa anotação na classe, todos os métodos públicos dela serão ac
 #!java
 @Controller
 public class ProdutosController {
-    public List<Produto> lista() {
-        return new ArrayList<Produto>();
-    }
+	public List<Produto> lista() {
+		return new ArrayList<Produto>();
+	}
 }
 ~~~
 
@@ -61,7 +61,7 @@ O método `lista` retorna uma lista de produtos, mas como acessá-la no JSP? No 
 #!jsp
 <ul>
 <c:forEach items="${produtoList}" var="produto">
-    <li> ${produto.nome} - ${produto.descricao} </li>
+	<li> ${produto.nome} - ${produto.descricao} </li>
 </c:forEach>
 </ul>
 ~~~
@@ -76,10 +76,9 @@ O VRaptor usa fortemente o conceito de Injeção de Dependências (DI) e Invers�
 #!java
 public class ProdutoDao {
 
-    public List<Produto> listaTodos() {
-        return new ArrayList<Produto>();
-    }
-
+	public List<Produto> listaTodos() {
+		return new ArrayList<Produto>();
+	}
 }
 ~~~
 
@@ -90,12 +89,11 @@ E no nosso `ProdutosController` podemos usar o dao pra fazer a listagem de produ
 @Controller
 public class ProdutosController {
 
-    private ProdutoDao dao;
+	private ProdutoDao dao;
 
-    public List<Produto> lista() {
-        return dao.listaTodos();
-    }
-
+	public List<Produto> lista() {
+		return dao.listaTodos();
+	}
 }
 ~~~
 
@@ -111,13 +109,12 @@ public class ProdutoDao {
 @Controller
 public class ProdutosController {
 
-    @Inject
-    private ProdutoDao dao;
+	@Inject
+	private ProdutoDao dao;
 
-    public List<Produto> lista() {
-        return dao.listaTodos();
-    }
-
+	public List<Produto> lista() {
+		return dao.listaTodos();
+	}
 }
 ~~~
 
@@ -129,9 +126,9 @@ Temos uma listagem de produtos, mas ainda não temos como cadastrá-los. Vamos e
 #!java
 @Controller
 public class ProdutosController {
-    //...
-    public void form() {
-    }
+	//...
+	public void form() {
+	}
 }
 ~~~
 
@@ -140,10 +137,10 @@ Podemos acessar o formulário, que estará em `/WEB-INF/jsp/produtos/form.jsp`, 
 ~~~ 
 #!jsp
 <form action="<c:url value='/produtos/adiciona'/>">
-    Nome:             <input type="text" name="produto.nome" /><br/>
-    Descrição:    <input type="text" name="produto.descricao" /><br/>
-    Preço:            <input type="text" name="produto.preco" /><br/>
-    <input type="submit" value="Salvar" />
+	Nome:             <input type="text" name="produto.nome" /><br/>
+	Descrição:    <input type="text" name="produto.descricao" /><br/>
+	Preço:            <input type="text" name="produto.preco" /><br/>
+	<input type="submit" value="Salvar" />
 </form>
 ~~~
 
@@ -153,9 +150,9 @@ Como o formulário vai salvar o produto pela URI `/produtos/adiciona`, precisamo
 #!java
 @Controller
 public class ProdutosController {
-    //...
-    public void adiciona() {
-    }
+	//...
+	public void adiciona() {
+	}
 }
 ~~~
 
@@ -167,10 +164,10 @@ Então, usando os nomes corretamente nos inputs do form, basta criar seu método
 #!java
 @Controller
 public class ProdutosController {
-    //...
-    public void adiciona(Produto produto) {
-        dao.adiciona(produto);
-    }
+	//...
+	public void adiciona(Produto produto) {
+		dao.adiciona(produto);
+	}
 }
 ~~~
 
@@ -181,10 +178,10 @@ Geralmente, depois de adicionar algo no sistema queremos voltar para a sua lista
 @Controller
 public class ProdutosController {
 
-    @Inject
-    private ProdutoDao dao;
-    @Inject
-    private Result result;
+	@Inject
+	private ProdutoDao dao;
+	@Inject
+	private Result result;
 
 }
 ~~~
@@ -203,8 +200,8 @@ Então nosso método adiciona ficaria:
 ~~~ 
 #!java
 public void adiciona(Produto produto) {
-    dao.adiciona(produto);
-    result.redirectTo(ProdutosController.class).lista();
+	dao.adiciona(produto);
+	result.redirectTo(ProdutosController.class).lista();
 }
 ~~~
 
@@ -218,13 +215,13 @@ Agora vamos fazer uma implementação de verdade do `ProdutoDao`, usando o JPA p
 #!java
 public class ProdutoDao {
 
-    @Inject
-    private EntityManager manager;
+	@Inject
+	private EntityManager manager;
 
-    public void adiciona(Produto produto) {
-        manager.persist(produto);
-    }
-    //...
+	public void adiciona(Produto produto) {
+		manager.persist(produto);
+	}
+	//...
 }
 ~~~
 
@@ -244,15 +241,15 @@ Se quisermos criar um carrinho de compras no nosso sistema, precisamos de alguma
 #!java
 @SessionScoped
 public class CarrinhoDeCompras implements Serializable{
-    private List<Produto> itens = new ArrayList<Produto>();
+	private List<Produto> itens = new ArrayList<Produto>();
 
-    public List<Produto> getTodosOsItens() {
-        return itens;
-    }
+	public List<Produto> getTodosOsItens() {
+		return itens;
+	}
 
-    public void adicionaItem(Produto item) {
-        itens.add(item);
-    }
+	public void adicionaItem(Produto item) {
+		itens.add(item);
+	}
 }
 ~~~
 
@@ -265,16 +262,16 @@ Como esse carrinho de compras é um componente, podemos recebê-lo no controller
 @Controller
 public class CarrinhoController {
 
-    @Inject
-    private final CarrinhoDeCompras carrinho;
+	@Inject
+	private final CarrinhoDeCompras carrinho;
 
-    public void adiciona(Produto produto) {
-        carrinho.adicionaItem(produto);
-    }
+	public void adiciona(Produto produto) {
+		carrinho.adicionaItem(produto);
+	}
 
-    public List<Produto> listaItens() {
-        return carrinho.getTodosOsItens();
-    }
+	public List<Produto> listaItens() {
+		return carrinho.getTodosOsItens();
+	}
 }
 ~~~
 
@@ -296,23 +293,22 @@ Para criar esse comportamento REST no VRaptor, podemos usar as anotações `@Pat
 ~~~ 
 #!java
 public class ProdutosController {
-    //...
+	//...
 
-    @Get @Path("/produtos")
-    public List<Produto> lista() {...}
+	@Get @Path("/produtos")
+	public List<Produto> lista() {...}
 
-    @Post("/produtos")
-    public void adiciona(Produto produto) {...}
+	@Post("/produtos")
+	public void adiciona(Produto produto) {...}
 
-    @Get("/produtos/{produto.id}")
-    public void visualiza(Produto produto) {...}
+	@Get("/produtos/{produto.id}")
+	public void visualiza(Produto produto) {...}
 
-    @Put("/produtos/{produto.id}")
-    public void atualiza(Produto produto) {...}
+	@Put("/produtos/{produto.id}")
+	public void atualiza(Produto produto) {...}
 
-    @Delete("/produtos/{produto.id}")
-    public void remove(Produto produto) {...}
-
+	@Delete("/produtos/{produto.id}")
+	public void remove(Produto produto) {...}
 }
 ~~~
 
@@ -348,14 +344,14 @@ Dessa forma, o código ficaria:
 #!jsp
 <!%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <html>
-    <body>
-        <fmt:message key="campo.usuario" /> <input name="usuario.nomeUsuario" />
+	<body>
+		<fmt:message key="campo.usuario" /> <input name="usuario.nomeUsuario" />
 
-        <br />
+		<br />
 
-        <fmt:message key="campo.senha" /> <input type="password" name="usuario.senha" />
+		<fmt:message key="campo.senha" /> <input type="password" name="usuario.senha" />
 
-        <input type="submit" />
-    </body>
+		<input type="submit" />
+	</body>
 </html>
 ~~~

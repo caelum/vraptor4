@@ -13,8 +13,8 @@ Em seu `web.xml`, adicione:
 ~~~ 
 #!xml
 <context-param>
-    <param-name>br.com.caelum.vraptor.environment</param-name>
-    <param-value>nome_do_ambiente</param-value>
+	<param-name>br.com.caelum.vraptor.environment</param-name>
+	<param-value>nome_do_ambiente</param-value>
 </context-param>
 ~~~ 
         
@@ -72,7 +72,7 @@ public class MeuController {
 ~~~ 
 #!xml
 <c:if test="${environment.isTest()}">
-    <p>Você está no ambiente de teste. Suas ações aqui não afetarão o sistema.</p>
+	<p>Você está no ambiente de teste. Suas ações aqui não afetarão o sistema.</p>
 </c:if>
 
 Enviando e-mail para: ${environment.get('email_de_teste')}
@@ -100,11 +100,11 @@ Você também consegue injetar suas configurações programaticamente usando o `
 @Controller
 public class MeuController {
 
-    @Inject @Property("email") private String email;
+	@Inject @Property("email") private String email;
 
-    public void sendMail(String email) {
-        sender.sendMailTo(email);
-    }
+	public void sendMail(String email) {
+		sender.sendMailTo(email);
+	}
 }
 ~~~ 
 
@@ -117,11 +117,11 @@ Outra facilidade, é que se o nome da chave for o mesmo nome do field injetado, 
 @Controller
 public class MeuController {
 
-    @Inject @Property private String email;
+	@Inject @Property private String email;
 
-    public void sendMail(String email) {
-        sender.sendMailTo(email);
-    }
+	public void sendMail(String email) {
+		sender.sendMailTo(email);
+	}
 }
 ~~~ 
 

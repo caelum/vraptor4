@@ -10,12 +10,12 @@ Para registrar objetos a serem acessados na view, usamos o método include:
 #!java
 @Controller
 class ClientController {
-    @Inject private final Result result;
+	@Inject private final Result result;
 
-    public void busca(int id) {
-        result.include("mensagem", "Alguma mensagem");
-        result.include("cliente", new Cliente(id));
-    }
+	public void busca(int id) {
+		result.include("mensagem", "Alguma mensagem");
+		result.include("cliente", new Cliente(id));
+	}
 }
 ~~~ 
 
@@ -26,11 +26,11 @@ Agora as variáveis `mensagem` e `cliente` estão disponíveis para uso em seu t
 #!java
 @Controller
 class ClientController {
-    @Inject private final Result result;
+	@Inject private final Result result;
 
-    public void busca(int id) {
-        result.include("Alguma mensagem").include(new Cliente(id));
-    }
+	public void busca(int id) {
+		result.include("Alguma mensagem").include(new Cliente(id));
+	}
 }
 ~~~ 
 
@@ -43,9 +43,9 @@ Por padrão, para renderizar suas views, o VRaptor segue a convenção:
 ~~~ 
 #!java
 public class ClientsController {
-    public void list() {
-        //...
-    }
+	public void list() {
+		//...
+	}
 }
 ~~~ 
 
@@ -55,13 +55,13 @@ Este método acima renderizará a view `/WEB-INF/jsp/clients/list.jsp`. No entan
 #!java
 @Specializes
 public class FreemarkerPathResolver extends DefaultPathResolver {
-    protected String getPrefix() {
-        return "/WEB-INF/freemarker/";
-    }
+	protected String getPrefix() {
+		return "/WEB-INF/freemarker/";
+	}
 
-    protected String getExtension() {
-        return "ftl";
-    }
+	protected String getExtension() {
+		return "ftl";
+	}
 }
 ~~~ 
 
@@ -76,14 +76,14 @@ Se você quiser mudar a view de alguma lógica específica, você pode usar o ob
 @Controller
 public class ClientsController {
 
-    @Inject private final Result result;
+	@Inject private final Result result;
 
-    public void list() {}
+	public void list() {}
 
-    public void save(Client client) {
-        //...
-        result.use(Results.logic()).redirectTo(ClientsController.class).list();
-    }
+	public void save(Client client) {
+		//...
+		result.use(Results.logic()).redirectTo(ClientsController.class).list();
+	}
 }
 ~~~ 
 
@@ -141,9 +141,9 @@ Se você adicionar objetos no `Result` e fizer um Redirect, esses objetos estar�
 ~~~ 
 #!java
 public void adiciona(Cliente cliente) {
-    dao.adiciona(cliente);
-    result.include("mensagem", "Cliente adicionado com sucesso");
-    result.redirectTo(ClientesController.class).lista();
+	dao.adiciona(cliente);
+	result.include("mensagem", "Cliente adicionado com sucesso");
+	result.redirectTo(ClientesController.class).lista();
 }
 ~~~ 
 
@@ -152,7 +152,7 @@ lista.jsp:
 ~~~ 
 #!xml
 <div id="mensagem">
-   <h3>${mensagem}</h3>
+	<h3>${mensagem}</h3>
 </div>
 ~~~ 
 
@@ -178,12 +178,12 @@ E na lógica:
 @Controller
 public class ClientsController {
 
-    @Inject private final Result result;
-    @Inject private final ClientDao dao;
+	@Inject private final Result result;
+	@Inject private final ClientDao dao;
 
-    public void load(Client client) {
-        result.include("client", dao.load(client));
-    }
+	public void load(Client client) {
+		result.include("client", dao.load(client));
+	}
 }
 ~~~ 
 
@@ -197,15 +197,15 @@ import static br.com.caelum.vraptor.view.Results.*;
 @Controller
 public class ClientsController {
 
-    @Inject private final Result result;
-    @Inject private final ClientDao dao;
+	@Inject private final Result result;
+	@Inject private final ClientDao dao;
 
-    public void loadJson(Cliente cliente) {
-        result.use(json()).from(cliente).serialize();
-    }
-    public void loadXml(Cliente cliente) {
-        result.use(xml()).from(cliente).serialize();
-    }
+	public void loadJson(Cliente cliente) {
+		result.use(json()).from(cliente).serialize();
+	}
+	public void loadXml(Cliente cliente) {
+		result.use(xml()).from(cliente).serialize();
+	}
 }
 ~~~ 
 
@@ -279,12 +279,12 @@ A implementação para serialização de XML padrão é baseada no XStream, ent�
 @Specializes
 public class CustomXStreamBuilder extends XStreamBuilderImpl {
 
-    @Override
-    protected XStream xmlInstance() {
-        XStream xStream = super.xmlInstance();
-        //suas configurações ao XStream aqui
-        return xStream;
-    }
+	@Override
+	protected XStream xmlInstance() {
+		XStream xStream = super.xmlInstance();
+		//suas configurações ao XStream aqui
+		return xStream;
+	}
 }
 ~~~ 
 
@@ -317,12 +317,12 @@ ou
 ~~~ 
 #!xml
 <list>
-    <cliente>
-        <nome>Joao</nome>
-    </cliente>
-    <cliente>
-        <nome>Maria</nome>
-    </cliente>
+	<cliente>
+		<nome>Joao</nome>
+	</cliente>
+	<cliente>
+		<nome>Maria</nome>
+	</cliente>
 </list>
 ~~~ 
 
@@ -351,12 +351,12 @@ ou
 ~~~ 
 #!xml
 <clientes>
-    <cliente>
-        <nome>Joao</nome>
-    </cliente>
-    <cliente>
-        <nome>Maria</nome>
-    </cliente>
+	<cliente>
+		<nome>Joao</nome>
+	</cliente>
+	<cliente>
+		<nome>Maria</nome>
+	</cliente>
 </clientes>
 ~~~ 
 
@@ -403,15 +403,15 @@ Para o seguinte controller:
 ~~~ 
 #!java
 public class ClientController {
-    @Path("/client/list")
-    public void list() {
-        // alguma lógica aqui
-    }
+	@Path("/client/list")
+	public void list() {
+		// alguma lógica aqui
+	}
 
-    @Path("/client/{id}")
-    public void show(Long id) {
-        // alguma lógica aqui
-    }
+	@Path("/client/{id}")
+	public void show(Long id) {
+		// alguma lógica aqui
+	}
 }
 ~~~ 
 
@@ -460,15 +460,15 @@ Então, no lugar de fazer algo como:
 
 ~~~ 
 #!java
-    public void filtra(Intervalo intervalo, Representante representante,
-            Unidade unidade, BigDecimal valorMaximo, BigDecimal valorMin) {
+	public void filtra(Intervalo intervalo, Representante representante,
+		    Unidade unidade, BigDecimal valorMaximo, BigDecimal valorMin) {
 
-        // lógica de filtro
+		// lógica de filtro
 
-        result.include("intervalo", intervalo);
-        result.include("representante", representante);
-        result.include("valorMaximo", valorMaximo);
-        result.include("valorMin", valorMin);
+		result.include("intervalo", intervalo);
+		result.include("representante", representante);
+		result.include("valorMaximo", valorMaximo);
+		result.include("valorMin", valorMin);
 }
 ~~~ 
 
@@ -476,12 +476,12 @@ Agora você pode fazer:
 
 ~~~ 
 #!java
-    @IncludeParameters
-    public void filtra(Intervalo intervalo, Representante representante,
-            Unidade unidade, BigDecimal valorMaximo, BigDecimal valorMin) {
+	@IncludeParameters
+	public void filtra(Intervalo intervalo, Representante representante,
+		    Unidade unidade, BigDecimal valorMaximo, BigDecimal valorMin) {
 
-        // lógica de filtro
-}
+		// lógica de filtro
+	}
 ~~~ 
 
 Todos os parâmetros estarão disponiveis pela jsp com EL: `${intervalo.inicio}` 

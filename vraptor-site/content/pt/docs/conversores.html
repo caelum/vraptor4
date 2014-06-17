@@ -15,8 +15,8 @@ Por exemplo, se recebermos os seguintes parâmetros do browser para a classe aba
 ```java
 public class Cliente {
 	private Long id;
-	private Integer idade;
-	
+	private int idade;
+
 	// getters and setters
 }
 ```
@@ -61,8 +61,8 @@ A localização dos componentes pode ser alterada utilizando a seguinte configur
 ~~~ 
 #!xml
 <context-param>
-  <param-name>javax.servlet.jsp.jstl.fmt.locale</param-name>
-  <param-value>pt_BR</param-value>
+	<param-name>javax.servlet.jsp.jstl.fmt.locale</param-name>
+	<param-value>pt_BR</param-value>
 </context-param>
 ~~~ 
 
@@ -75,7 +75,7 @@ Todos os conversores devem implementar a interface `Converter` do vraptor. A cla
 ~~~ 
 #!java
 public interface Converter<T> {
-  T convert(String value, Class<? extends T> type);
+	T convert(String value, Class<? extends T> type);
 }
 ~~~ 
 
@@ -85,7 +85,7 @@ Além disso, seu conversor deve ser anotado com o tipo que seu conversor é capa
 #!java
 @Convert(Long.class)
 public class LongConverter implements Converter<Long> {
-  // ...
+	// ...
 }
 ~~~ 
 
@@ -96,7 +96,7 @@ Por fim, lembre-se de dizer se seu conversor pode ser instanciado em um escopo d
 @Convert(Long.class)
 @ApplicationScoped
 public class LongConverter implements Converter<Long> {
-  // ...
+	// ...
 }
 ~~~ 
 
@@ -108,17 +108,17 @@ A seguir, a implementação de `LongConverter` mostra como tudo isso pode ser ut
 @ApplicationScoped
 public class LongConverter implements Converter<Long> {
 
-  public Long convert(String value, Class<? extends Long> type) {
-    if (isNullOrEmpty(value)) {
-      return null;
-    }
-    
-    try {
-      return Long.valueOf(value);
-    } catch (NumberFormatException e) {
-      throw new ConversionException(new ConversionMessage("is_not_a_valid_integer", value));
-    }
-  }
+	public Long convert(String value, Class<? extends Long> type) {
+		if (isNullOrEmpty(value)) {
+			return null;
+		}
+
+		try {
+			return Long.valueOf(value);
+		} catch (NumberFormatException e) {
+			throw new ConversionException(new ConversionMessage("is_not_a_valid_integer", value));
+		}
+	}
 }
 ~~~ 
 
@@ -130,8 +130,8 @@ Você pode sobrescrever qualquer converter já existente no VRaptor. Para isso b
 #!java
 @Specializes
 public class MeuBigDecimalConverter extends LocaleBasedBigDecimalConverter {
-  protected NumberFormat getNumberFormat() {
-    // meu formato
-  }
+	protected NumberFormat getNumberFormat() {
+		// meu formato
+	}
 }
 ~~~ 

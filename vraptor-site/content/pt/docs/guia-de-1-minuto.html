@@ -15,24 +15,24 @@ Um controller simples seria:
 @Controller
 public class ClientsController {
 
-    @Inject
-    private ClientDao dao;
+	@Inject
+	private ClientDao dao;
 
-    public void form() {
-        // código que carrega dados para checkboxes, selects, etc
-    }
+	public void form() {
+		// código que carrega dados para checkboxes, selects, etc
+	}
 
-    public void add(Client custom) {
-        dao.save(custom);
-    }
+	public void add(Client custom) {
+		dao.save(custom);
+	}
 
-    public List<Client> list() {
-        return dao.listAll():
-    }
+	public List<Client> list() {
+		return dao.listAll():
+	}
 
-    public Client view(Long id) {
-        return dao.load(id);
-    }
+	public Client view(Long id) {
+		return dao.load(id);
+	}
 }
 ~~~
 
@@ -45,21 +45,21 @@ Você pode injetar as dependências da sua classe adicionando a anotação `@Inj
 @Controller
 public class ClientsController {
 
-    private final ClientDao dao;
+	private final ClientDao dao;
 
-    @Inject
-    public ClientsController(ClientDao dao){
-        this.dao = dao;
-    }
+	@Inject
+	public ClientsController(ClientDao dao){
+		this.dao = dao;
+	}
 
-    /**
-     * @deprecated CDI eyes only
-     */
-    public ClientsController(){
-        this(null);
-    }
+	/**
+	 * @deprecated CDI eyes only
+	 */
+	public ClientsController(){
+		this(null);
+	}
 
-    // métodos do controller
+	// métodos do controller
 }
 ~~~
 
@@ -82,16 +82,16 @@ Um exemplo via setters seria:
 #!java
 public class Client {
 
-    private String name;
-    private String address;
+	private String name;
+	private String address;
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    public Client setAddress(String address) {
-        this.address = address;
-    }
+	public Client setAddress(String address) {
+		this.address = address;
+	}
 }
 ~~~
 
@@ -101,14 +101,13 @@ Ou você pode preferir receber os valores pelo construtor. Isso também funciona
 #!java
 public class Client {
 
-    private final String name;
-    private final String address;
+	private final String name;
+	private final String address;
 
-    public Client(String name, String address) {
-        this.name = name;
-        this.address = address;
-    }
-
+	public Client(String name, String address) {
+		this.name = name;
+		this.address = address;
+	}
 }
 ~~~
 
@@ -117,7 +116,7 @@ Com isso podemos receber o custom como parâmetro do método `add` e o VRaptor v
 ~~~
 #!java
 public void add(Client custom) {
-    dao.save(custom);
+	dao.save(custom);
 }
 ~~~
 
@@ -128,7 +127,7 @@ O retorno dos métodos do controller são exportados para a view. No caso do nos
 ~~~
 #!java
 public List<Client> list() {
-    return dao.listAll():
+	return dao.listAll():
 }
 ~~~
 
@@ -141,7 +140,7 @@ Outro ponto é que devemos ter um parâmetro da requisição `id=5` por exemplo,
 ~~~
 #!java
 public Client view(Long id) {
-    return dao.load(id);
+	return dao.load(id);
 }
 ~~~
 

@@ -117,18 +117,22 @@ E na view você pode imprimir:
 
 ~~~
 #!xml
-	<c:forEach var="error" items="${errors}">
-		${error.category} - ${error.message}<br />
-	</c:forEach>
+<c:forEach var="error" items="${errors}">
+	${error.category} - ${error.message}<br />
+</c:forEach>
 ~~~
 
 Você também pode buscar por um erro somente de uma determinada categoria, que é muito útil para quando você quer exibir os erros de validação ao lado de cada campo.
 
 ~~~
 #!xml
-	<input type="text" name="cliente.nome" />
-	<span class="error">${errors.from('cliente.nome')} // retorna: 'não pode ser nulo, não pode ser menor que 50'
-	<span class="error">${errors.from('cliente.nome').join(' - ')} // retorna: 'não pode ser nulo - não pode ser menor que 50'
+<input type="text" name="cliente.nome" />
+
+<span class="error">${errors.from('cliente.nome')}</span> 
+// retorna: 'não pode ser nulo, não pode ser menor que 50'
+
+<span class="error">${errors.from('cliente.nome').join(' - ')}</span> 
+// retorna: 'não pode ser nulo - não pode ser menor que 50'
 ~~~
 
 ﻿##Customizando as Mensagens

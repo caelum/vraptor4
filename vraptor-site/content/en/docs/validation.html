@@ -113,18 +113,22 @@ In the view you can do something like this:
 
 ~~~
 #!xml
-	<c:forEach var="error" items="${errors}">
-		${error.category} - ${error.message}<br />
-	</c:forEach>
+<c:forEach var="error" items="${errors}">
+	${error.category} - ${error.message}<br />
+</c:forEach>
 ~~~
 
 You can search for an error for a specific category, that can be useful to display constraint the messages beside the field.
 
 ~~~
 #!xml
-	<input type="text" name="client.name" />
-	<span class="error">${errors.from('client.name')} // prints: 'may not be empty, size must be between 10 and 50'
-	<span class="error">${errors.from('client.name').join(' - ')} // prints: 'may not be empty - size must be between 10 and 50'
+<input type="text" name="client.name" />
+
+<span class="error">${errors.from('client.name')}</span>
+// prints: 'may not be empty, size must be between 10 and 50'
+
+<span class="error">${errors.from('client.name').join(' - ')}</span>
+// prints: 'may not be empty - size must be between 10 and 50'
 ~~~
 
 ﻿##Using custom messages

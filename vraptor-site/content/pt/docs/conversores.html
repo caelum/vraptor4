@@ -122,6 +122,31 @@ public class LongConverter implements Converter<Long> {
 }
 ~~~ 
 
+##Setando outras propriedades do objeto convertido.
+
+É possível criar um `converter` para preencher outras propriedades de um `objeto`, basta criar um `converter` seguindo o mesmo processo já citado anteriormente, com algumas ressalvas.
+
+No request devem estar presente os parâmetros referente ao `objeto` que devem ser preenchido, neste caso o `value` será nulo, sendo necessário o retorno do `objeto` que deseja ser convertido já instanciado para que os atributos presentes no request sejam preenchidos automáticamente em seu `objeto`.
+
+O `value` do método `converter` só será preenchido quando um unico parâmetro referente ao `objeto` estiver presente no request.
+
+~~~ 
+#!java
+@Convert(Foto.class)
+@ApplicationScoped
+public class FotoConverter implements Converter<Foto> {
+
+	public Foto convert(String value, Class<? extends Foto> type) {
+		Foto foto = new Foto();
+		if (!isNullOrEmpty(value)) {
+			foto.setCampo(value)
+		}
+
+		return foto;
+	}
+}
+~~~ 
+
 ##Sobrescrevendo o comportamento dos conversores existentes
 
 Você pode sobrescrever qualquer converter já existente no VRaptor. Para isso basta estender a classe anotando-a com `@Specializes`. Um bom exemplo para isso é sobrescrever o conversor `LocaleBasedBigDecimalConverter` para alterar o formato do valor.

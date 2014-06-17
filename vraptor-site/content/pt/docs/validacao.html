@@ -31,7 +31,8 @@ public void cadastrar(@NotNull @Valid Cliente cliente) {
 
 Com o Bean Validator você pode criar anotações com suas validações customizadas. Se você quer, por exemplo, validar se o telefone está no formato `(00) 0000-0000`, você pode criar uma anotação assim:
 
-```java
+~~~
+#!java
 @Documented
 @Constraint(validatedBy = {})
 @Target({ METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER })
@@ -47,7 +48,8 @@ public @interface PhoneNumber {
 
 	Class<? extends Payload>[] payload() default {};
 }
-```
+~~~
+
 
 Você pode também criar validações mais complexas que fazem acesso ao banco de dados, ou algum componente existente. Se você quiser validar se o login de um usuário já está em uso, basta criar o código abaixo:
 

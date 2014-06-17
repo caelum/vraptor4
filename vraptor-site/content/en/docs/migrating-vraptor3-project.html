@@ -15,7 +15,8 @@ Now VRaptor uses CDI as container. So you don't need to use Guice, Pico or Sprin
 
 CDI spec **obligates** that all managed class have a no-arg constructor. So you need to create a no-arg constructor even you have another constructor annotated with `@Inject`.
 
-```java
+~~~
+#!java
 @Controller
 public class MyController {
 	private final MyComponent myComponent;
@@ -29,8 +30,7 @@ public class MyController {
 		this.myComponent = myComponent;
 	}
 }
-```
-
+~~~
 
 ### Static scanning
 

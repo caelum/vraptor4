@@ -137,9 +137,13 @@ The form jsp will be placed at `/WEB-INF/jsp/products/form.jsp`, and can be acce
 ~~~ 
 #!jsp
 <form action="<c:url value='/products/add'/>">
-	Name:               <input type="text" name="product.name" /><br/>
-	Description: <input type="text" name="product.description" /><br/>
-	Price:             <input type="text" name="product.price" /><br/>
+	Name:               
+	<input type="text" name="product.name"/><br/>
+	Description: 
+	<input type="text" name="product.description"/><br/>
+	Price:             
+	<input type="text" name="product.price"/><br/>
+
 	<input type="submit" value="Save" />
 </form>
 ~~~
@@ -356,13 +360,13 @@ The keys are the same, of course, but the values change accordingly to the langu
 <!%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <html>
 	<body>
-		<fmt:message key="userName.field" /> <input name="user.username" />
+		<fmt:message key="userName.field"/> 
+		<input name="user.username"/> <br/>
 
-		<br />
+		<fmt:message key="password.field"/> 
+		<input type="password" name="user.password"/>
 
-		<fmt:message key="password.field" /> <input type="password" name="user.password" />
-
-		<input type="submit" />
+		<input type="submit"/>
 	</body>
 </html>
 ~~~

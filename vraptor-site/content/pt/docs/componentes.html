@@ -15,20 +15,20 @@ O exemplo a seguir mostra um componente a ser gerenciado pelo VRaptor:
 @RequestScoped
 public class ClienteDao {
 
-  private Session session;
+	private Session session;
 
-  // o CDI obriga que você tenha o construtor padrão
-  protected ClienteDao() {
-  }
-  
-  @Inject
-  public ClienteDao(Session session) {
-      this.session = session;
-  }
+	// o CDI obriga que você tenha o construtor padrão
+	protected ClienteDao() {
+	}
 
-  public void adiciona(Cliente cliente) {
-        session.save(cliente);
-  }
+	@Inject
+	public ClienteDao(Session session) {
+		this.session = session;
+	}
+
+	public void adiciona(Cliente cliente) {
+		session.save(cliente);
+	}
 }
 ~~~ 
 
@@ -51,14 +51,15 @@ O exemplo a seguir mostra o fornecedor de conexões com o banco baseado no Hiber
 @ApplicationScoped
 public class HibernateControl {
 
-  private final SessionFactory factory;
-  public HibernateControl() {
-      this.factory = new AnnotationConfiguration().configure().buildSessionFactory();
-  }
+	private final SessionFactory factory;
 
-  public Session getSession() {
-      return factory.openSession();
-  }
+	public HibernateControl() {
+		this.factory = new AnnotationConfiguration().configure().buildSessionFactory();
+	}
+
+	public Session getSession() {
+		return factory.openSession();
+	}
 }
 ~~~ 
 
@@ -85,18 +86,18 @@ Para poder fazer isto, basta criar um `Produces`:
 @RequestScoped
 public class SessionCreator {
 
-    @Inject private SessionFactory sessionFactory;
+	@Inject private SessionFactory sessionFactory;
 
-    @Produces @RequestScoped
-    public Session getSession() {
-        return sessionFactory.openSession();
-    }
+	@Produces @RequestScoped
+	public Session getSession() {
+		return sessionFactory.openSession();
+	}
 
-    public void close(@Disposes Session session) {
-        if (session.isOpen()) {
-            session.close();
-        }
-    }
+	public void close(@Disposes Session session) {
+		if (session.isOpen()) {
+		    session.close();
+		}
+	}
 }
 ~~~ 
 
@@ -110,24 +111,24 @@ O VRaptor utiliza o CDI para controlar o que é necessário para instanciar cada
 #!java
 @Controller
 public class ClienteController {
-    private ClienteDao dao;
+	private ClienteDao dao;
 
-    @Inject
-    public ClienteController(ClienteDao dao) {
-        this.dao = dao;
-    }
+	@Inject
+	public ClienteController(ClienteDao dao) {
+		this.dao = dao;
+	}
 
-    /**
-     * @deprecated CDI eyes only
-     */
-    protected ClienteController() {
-        this(null);
-    }
+	/**
+	 * @deprecated CDI eyes only
+	 */
+	protected ClienteController() {
+		this(null);
+	}
 
-    @Post
-    public void adiciona(Cliente cliente) {
-        this.dao.adiciona(cliente);
-    }
+	@Post
+	public void adiciona(Cliente cliente) {
+		this.dao.adiciona(cliente);
+	}
 }
 ~~~ 
 
@@ -142,9 +143,9 @@ Se você quiser, por exemplo, imprimir uma mensagem na inicialização da aplica
 @ApplicationScoped
 public class PrintLog {
 
-    public void observesContext(@Observes ServletContext context) {
-        System.out.println("My application is UP");
-    }
+	public void observesContext(@Observes ServletContext context) {
+		System.out.println("My application is UP");
+	}
 ~~~ 
 
 
@@ -168,25 +169,24 @@ Se você precisa mudar a view renderizada por padrão, ou mudar o local em que e
 @Specializes
 public class CustomPathResolver extends DefaultPathResolver {
 
-    @Override
-    protected String getPrefix() {
-        return "/pasta/raiz/";
-    }
+	@Override
+	protected String getPrefix() {
+		return "/pasta/raiz/";
+	}
 
-    @Override
-    protected String getExtension() {
-        return "ftl"; // ou qualquer outra extensão
-    }
+	@Override
+	protected String getExtension() {
+		return "ftl"; // ou qualquer outra extensão
+	}
 
-    @Override
-    protected String extractControllerFromName(String baseName) {
-        return //sua convenção aqui
-               //ex.: Em vez de redirecionar UserController para 'user'
-               //você quer redirecionar para 'userResource'
-               //ex.2: Se você sobrescreveu a conveção para nome dos Controllers para XXXResource
-               //e quer continuar redirecionando para 'user' e não para 'userResource'
-    }
-
+	@Override
+	protected String extractControllerFromName(String baseName) {
+		return //sua convenção aqui
+			//ex.: Em vez de redirecionar UserController para 'user'
+			//você quer redirecionar para 'userResource'
+			//ex.2: Se você sobrescreveu a conveção para nome dos Controllers para XXXResource
+			//e quer continuar redirecionando para 'user' e não para 'userResource'
+	}
 }
 ~~~ 
 
@@ -201,14 +201,14 @@ Por padrão, a URI para o método `ClientesController.lista()` é `/clientes/lis
 #!java
 @Specializes @ApplicationScoped
 public class MeuRoutesParser extends PathAnnotationRoutesParser {
-    //delegate constructor
-    protected String extractControllerNameFrom(Class<?> type) {
-        return //sua convenção aqui
-    }
+	//delegate constructor
+	protected String extractControllerNameFrom(Class<?> type) {
+		return //sua convenção aqui
+	}
 
-    protected String defaultUriFor(String controllerName, String methodName) {
-        return //sua convenção aqui
-    }
+	protected String defaultUriFor(String controllerName, String methodName) {
+		return //sua convenção aqui
+	}
 }
 ~~~ 
 
@@ -221,8 +221,8 @@ Se você quiser que todas as requisições da sua aplicação sejam de um encodi
 ~~~ 
 #!xml
 <context-param>
-    <param-name>br.com.caelum.vraptor.encoding</param-name>
-    <param-value>UTF-8</param-value>
+	<param-name>br.com.caelum.vraptor.encoding</param-name>
+	<param-value>UTF-8</param-value>
 </context-param>
 ~~~ 
 

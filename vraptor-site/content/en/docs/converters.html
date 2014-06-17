@@ -16,6 +16,7 @@ For example, if we receive the parameters for the class below:
 public class Client {
 	private Long id;
 	private int age;
+
 	// getters and setters
 }
 ```
@@ -61,8 +62,8 @@ The converters uses the JVM's default locale. You can override the JVM locale ad
 ~~~ 
 #!xml
 <context-param>
-  <param-name>javax.servlet.jsp.jstl.fmt.locale</param-name>
-  <param-value>en_US</param-value>
+	<param-name>javax.servlet.jsp.jstl.fmt.locale</param-name>
+	<param-value>en_US</param-value>
 </context-param>
 ~~~ 
 
@@ -75,7 +76,7 @@ All converters must implement VRaptor's Converter interface. The concrete class 
 ~~~ 
 #!java
 public interface Converter<T> {
-  T convert(String value, Class<? extends T> type);
+	T convert(String value, Class<? extends T> type);
 }
 ~~~ 
 
@@ -85,7 +86,7 @@ Also you must tell VRaptor (not the compiler) which type your converter is able 
 #!java
 @Convert(Long.class)
 public class LongConverter implements Converter<Long> {
-  // ...
+	// your code here
 }
 ~~~ 
 
@@ -96,7 +97,7 @@ Finally, don't forget to specify the scope of your converter, just like you do w
 @Convert(Long.class)
 @ApplicationScoped
 public class LongConverter implements Converter<Long> {
-  // ...
+	// your code here
 }
 ~~~ 
 
@@ -108,17 +109,17 @@ In the following lines, you can see a LongConverter implementation, showing how 
 @ApplicationScoped
 public class LongConverter implements Converter<Long> {
 
-  public Long convert(String value, Class<? extends Long> type) {
-    if (isNullOrEmpty(value)) {
-      return null;
-    }
-    
-    try {
-      return Long.valueOf(value);
-    } catch (NumberFormatException e) {
-      throw new ConversionException(new ConversionMessage("is_not_a_valid_integer", value));
-    }
-  }
+	public Long convert(String value, Class<? extends Long> type) {
+		if (isNullOrEmpty(value)) {
+			return null;
+		}
+
+		try {
+			return Long.valueOf(value);
+		} catch (NumberFormatException e) {
+			throw new ConversionException(new ConversionMessage("is_not_a_valid_integer", value));
+		}
+	}
 }
 ~~~ 
 
@@ -130,8 +131,8 @@ You can also overrise any existing converters. You only need extends the core co
 #!java
 @Specializes
 public class MyCustomBigDecimalConverter extends LocaleBasedBigDecimalConverter {
-  protected NumberFormat getNumberFormat() {
-    // my code here
-  }
+	protected NumberFormat getNumberFormat() {
+		// your code here
+	}
 }
 ~~~ 

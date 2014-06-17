@@ -15,24 +15,24 @@ A simple controller looks like this:
 @Controller
 public class ClientsController {
 
-    @Inject
-    private ClientDao dao;
+	@Inject
+	private ClientDao dao;
 
-    public void form() {
-        // code that loads data for checkboxes, selects, etc
-    }
+	public void form() {
+		// code that loads data for checkboxes, selects, etc
+	}
 
-    public void add(Client custom) {
-        dao.save(custom);
-    }
+	public void add(Client custom) {
+		dao.save(custom);
+	}
 
-    public List<Client> list() {
-        return dao.listAll():
-    }
+	public List<Client> list() {
+		return dao.listAll():
+	}
 
-    public Client view(Long id) {
-        return dao.load(id);
-    }
+	public Client view(Long id) {
+		return dao.load(id);
+	}
 }
 ~~~
 
@@ -45,21 +45,21 @@ You can inject your class' dependencies using the `@Inject` annotation. Then CDI
 @Controller
 public class ClientsController {
 
-    private final ClientDao dao;
+	private final ClientDao dao;
 
-    @Inject
-    public ClientsController(ClientDao dao){
-        this.dao = dao;
-    }
+	@Inject
+	public ClientsController(ClientDao dao){
+		this.dao = dao;
+	}
 
-    /**
-     * @deprecated CDI eyes only
-     */
-    public ClientsController(){
-        this(null);
-    }
+	/**
+	 * @deprecated CDI eyes only
+	 */
+	public ClientsController(){
+		this(null);
+	}
 
-    // controller methods
+	// controller methods
 }
 ~~~
 
@@ -82,16 +82,16 @@ An example via setter would be:
 #!java
 public class Client {
 
-    private String name;
-    private String address;
+	private String name;
+	private String address;
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    public Client setAddress(String address) {
-        this.address = address;
-    }
+	public Client setAddress(String address) {
+		this.address = address;
+	}
 }
 ~~~
 
@@ -101,14 +101,13 @@ Or you may prefer receive the values via constructor. This also works as long as
 #!java
 public class Client {
 
-    private final String name;
-    private final String address;
+	private final String name;
+	private final String address;
 
-    public Client(String name, String address) {
-        this.name = name;
-        this.address = address;
-    }
-
+	public Client(String name, String address) {
+		this.name = name;
+		this.address = address;
+	}
 }
 ~~~
 
@@ -117,7 +116,7 @@ With this, we can receive the `custom` as a parameter of method `add` and the VR
 ~~~
 #!java
 public void add(Client custom) {
-    dao.save(custom);
+	dao.save(custom);
 }
 ~~~
 
@@ -128,7 +127,7 @@ The return of your controller's methods will automatically be exported to the vi
 ~~~
 #!java
 public List<Client> list() {
-    return dao.listAll():
+	return dao.listAll():
 }
 ~~~
 
@@ -139,7 +138,7 @@ In case you return a simple type, the exported variable's name will start lower 
 ~~~
 #!java
 public Client view(Long id) {
-    return dao.load(id);
+	return dao.load(id);
 }
 ~~~
 

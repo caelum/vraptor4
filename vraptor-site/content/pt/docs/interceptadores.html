@@ -22,16 +22,16 @@ A classe a seguir mostra um exemplo de como interceptar todas as requisições e
 @RequestScoped
 public class Log {
 
-    @Inject
-    private final HttpServletRequest request;
+	@Inject
+	private final HttpServletRequest request;
 
-    @AroundCall
-    public void intercept(SimpleInterceptorStack stack) {
-        System.out.println("Interceptando " + request.getRequestURI());
-        // código a ser executado antes da lógica
+	@AroundCall
+	public void intercept(SimpleInterceptorStack stack) {
+		System.out.println("Interceptando " + request.getRequestURI());
+		// código a ser executado antes da lógica
 
-        stack.next(); // continua a execução
-    }
+		stack.next(); // continua a execução
+	}
 }
 ~~~ 
 
@@ -42,14 +42,14 @@ Para executar um código apenas antes ou depois da execução do controller, pod
 @Intercepts
 @RequestScoped
 public class Log {
-    @BeforeCall
-    public void before() {
-        // código a ser executado antes da lógica
-    }
-    @AfterCall
-    public void after() {
-        // código a ser executado depois da lógica
-    }
+	@BeforeCall
+	public void before() {
+		// código a ser executado antes da lógica
+	}
+	@AfterCall
+	public void after() {
+		// código a ser executado depois da lógica
+	}
 }
 ~~~ 
 
@@ -61,10 +61,10 @@ No exemplo acima todas as requisições são interceptadas. Podemos então defin
 
 ~~~ 
 #!java
-    @Accepts
-    public boolean accepts(ControllerMethod method) {
-        return method.containsAnnotation(Audit.class);
-    }
+	@Accepts
+	public boolean accepts(ControllerMethod method) {
+		return method.containsAnnotation(Audit.class);
+	}
 ~~~ 
 
 No VRaptor4 também temos outra maneira de definir a condição de aceitação. O exemplo acima é um caso bem comum e acabamos tendo de repetir esse código muitas vezes. Para essas situações você pode usar a annotation `@AcceptsWithAnnotations`. 
@@ -74,10 +74,10 @@ No VRaptor4 também temos outra maneira de definir a condição de aceitação. 
 @AcceptsWithAnnotations(Audit.class)
 public class AuditInterceptor {
     
-    @AroundCall
-    public void around(SimpleInterceptorStack stack){
-        stack.next();
-    }
+	@AroundCall
+	public void around(SimpleInterceptorStack stack){
+		stack.next();
+	}
 }
 ~~~ 
 
@@ -93,7 +93,7 @@ Logo acima usamos o exemplo do Accepts customizado. Este é um que já vem pront
 @AcceptsConstraint(WithAnnotationAcceptor.class)
 @Inherited
 public @interface AcceptsWithAnnotations {
-      public Class<? extends Annotation>[] value();
+	public Class<? extends Annotation>[] value();
 }
 ~~~ 
 
@@ -103,18 +103,17 @@ Perceba que usamos a Annotation `@AcceptsConstraint` para indicar qual a classe 
 #!java
 public class WithAnnotationAcceptor implements AcceptsValidator<AcceptsWithAnnotations> {
 
-    @Override
-    public boolean validate(ControllerMethod controllerMethod,
-            ControllerInstance instance) {
-                //aqui entra sua logica de validação do método ou instancia do controller.
-        return true;
-    }
+	@Override
+	public boolean validate(ControllerMethod controllerMethod, ControllerInstance instance) {
+		//aqui entra sua logica de validação do método ou instancia do controller.
+		return true;
+	}
 
-    @Override
-    public void initialize(AcceptsWithAnnotations annotation) {
-                //aqui você pode acessar as informações contidas na annotation customizada.
-        this.allowedTypes = Arrays.asList(annotation.value());
-    }
+	@Override
+	public void initialize(AcceptsWithAnnotations annotation) {
+		//aqui você pode acessar as informações contidas na annotation customizada.
+		this.allowedTypes = Arrays.asList(annotation.value());
+	}
 }
 ~~~ 
 
@@ -129,7 +128,7 @@ Se é preciso garantir a ordem de execução de um conjunto de interceptors, voc
 #!java
 @Intercepts(before=SegundoInterceptor.class)
 public class PrimeiroInterceptor {
-    ...
+	...
 }
 ~~~ 
 
@@ -139,7 +138,7 @@ quanto com:
 #!java
 @Intercepts(after=PrimeiroInterceptor.class)
 public class SegundoInterceptor {
-    ...
+	...
 }
 ~~~ 
 
@@ -148,9 +147,9 @@ Você pode especificar mais de um Interceptor:
 ~~~ 
 #!java
 @Intercepts(after={PrimeiroInterceptor.class, SegundoInterceptor.class},
-            before={QuartoInterceptor.class, QuintoInterceptor.class})
+			before={QuartoInterceptor.class, QuintoInterceptor.class})
 public class TerceiroInterceptor {
-    ...
+	...
 }
 ~~~ 
 

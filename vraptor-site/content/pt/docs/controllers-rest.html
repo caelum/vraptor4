@@ -13,25 +13,25 @@ O exemplo a seguir mostra um recurso chamado `ClienteController` que possui mét
 @Controller
 public class ClienteController {
 
-  public void adiciona(Cliente cliente) {
+	public void adiciona(Cliente cliente) {
 
-  }
+	}
 
-  public List<Cliente> lista() {
-    return ...
-  }
+	public List<Cliente> lista() {
+		return ...
+	}
 
-  public Cliente visualiza(Cliente perfil) {
-    return ...
-  }
+	public Cliente visualiza(Cliente perfil) {
+		return ...
+	}
 
-  public void remove(Cliente cliente) {
-  ...
-  }
+	public void remove(Cliente cliente) {
+		...
+	}
 
-  public void atualiza(Cliente cliente) {
-    ...
-  }
+	public void atualiza(Cliente cliente) {
+		...
+	}
 }
 ~~~ 
 
@@ -42,7 +42,7 @@ Você pode receber parâmetros nos métodos dos seus controllers, e se o objeto 
 ~~~ 
 #!java
 public void atualiza(Cliente cliente) {
-   //...
+	//...
 }
 ~~~ 
 
@@ -84,10 +84,10 @@ A anotação `@Path` permite que você customize as URIs de acesso a seus métod
 @Controller
 public class ClienteController {
 
-  @Path("/cliente")
-  @Post
-  public void adiciona(Cliente cliente) {
-  }
+	@Path("/cliente")
+	@Post
+	public void adiciona(Cliente cliente) {
+	}
 }
 ~~~ 
 
@@ -98,16 +98,16 @@ Se você anotar o `ClienteController` com `@Path`, o valor especificado vai ser 
 @Controller
 @Path("/clientes")
 public class ClienteController {
-    //URI: /clientes/lista
-    public void lista() {...}
+	//URI: /clientes/lista
+	public void lista() {...}
 
-    //URI: /clientes/salva
-    @Path("salva")
-    public void adiciona() {...}
+	//URI: /clientes/salva
+	@Path("salva")
+	public void adiciona() {...}
 
-    //URI: /clientes/todosOsClientes
-    @Path("/todosOsClientes")
-    public void listaTudo() {...}
+	//URI: /clientes/todosOsClientes
+	@Path("/todosOsClientes")
+	public void listaTudo() {...}
 }
 ~~~
 
@@ -120,29 +120,29 @@ O ideal é definir uma URI específica para diversos métodos HTTP diferentes, c
 @Controller
 public class ClienteController {
 
-  @Post("/cliente")
-  public void adiciona(Cliente cliente) {
-  }
+	@Post("/cliente")
+	public void adiciona(Cliente cliente) {
+	}
 
-  @Path("/")
-  public List<Cliente> lista() {
-    return ...
-  }
+	@Path("/")
+	public List<Cliente> lista() {
+		return ...
+	}
 
-  @Get("/cliente")
-  public Cliente visualiza(Cliente cliente) {
-    return ...
-  }
+	@Get("/cliente")
+	public Cliente visualiza(Cliente cliente) {
+		return ...
+	}
 
-  @Delete("/cliente")
-  public void remove(Cliente cliente) {
-    ...
-  }
+	@Delete("/cliente")
+	public void remove(Cliente cliente) {
+		...
+	}
 
-  @Put("/cliente")
-  public void atualiza(Cliente cliente) {
-    ...
-  }
+	@Put("/cliente")
+	public void atualiza(Cliente cliente) {
+		...
+	}
 }
 ~~~
 
@@ -162,8 +162,8 @@ Agora um exemplo de como invocar o método de adicionar um cliente:
 ~~~ 
 #!jsp
 <form action="/cliente" method="post">
-    <input name="cliente.nome" />
-    <input type="submit" />
+	<input name="cliente.nome" />
+	<input type="submit" />
 </form>
 ~~~
 
@@ -172,8 +172,8 @@ E, note que para permitir a remoção pelo método `DELETE`, temos que usar o pa
 ~~~ 
 #!jsp
 <form action="/cliente" method="post">
-    <input name="cliente.id" value="5" type="hidden" />
-    <button type="submit" name="_method" value="DELETE">remover cliente 5</button>
+	<input name="cliente.id" value="5" type="hidden" />
+	<button type="submit" name="_method" value="DELETE">remover cliente 5</button>
 </form>
 ~~~
 
@@ -185,7 +185,7 @@ Você pode restringir o valor dos parâmetros da sua URI com expressões regular
 #!java
 @Path("/cor/{cor:[0-9A-Fa-f]{6}}")
 public void setCor(String cor) {
-    //...
+	//...
 }
 ~~~
 
@@ -211,11 +211,11 @@ Dessa maneira, criamos URIs únicas para identificar recursos diferentes do noss
 @Controller
 public class ClienteController {
 
-  @Get
-  @Path("/cliente/{cliente.id}")
-  public Cliente visualiza(Cliente cliente) {
-    return ...
-  }
+	@Get
+	@Path("/cliente/{cliente.id}")
+	public Cliente visualiza(Cliente cliente) {
+		return ...
+	}
 }
 ~~~
 
@@ -226,12 +226,11 @@ Você pode ir além e setar diversos parâmetros pela URI:
 @Controller
 public class ClienteController {
 
-  @Get
-  @Path("/cliente/{cliente.id}/visualiza/{secao}")
-  public Cliente visualiza(Cliente cliente, String secao) {
-    return ...
-  }
-
+	@Get
+	@Path("/cliente/{cliente.id}/visualiza/{secao}")
+	public Cliente visualiza(Cliente cliente, String secao) {
+		return ...
+	}
 }
 ~~~
 
@@ -244,11 +243,10 @@ Você pode setar mais de um path para a mesma lógica fazendo:
 @Controller
 public class ClienteController {
 
-  @Path({"/cliente/{cliente.id}/visualiza/{secao}", "/cliente/{cliente.id}/visualiza/"})
-  public Cliente visualiza(Cliente cliente, String secao) {
-    return ...
-  }
-
+	@Path({"/cliente/{cliente.id}/visualiza/{secao}", "/cliente/{cliente.id}/visualiza/"})
+	public Cliente visualiza(Cliente cliente, String secao) {
+		return ...
+	}
 }
 ~~~
 
@@ -261,12 +259,11 @@ Você também pode utilizar o `*` como método de seleção para a sua URI. O ex
 @Controller
 public class ClienteController {
 
-  @Get
-  @Path("/cliente/{cliente.id}/foto/*")
-  public File foto(Cliente cliente) {
-    return ...
-  }
-
+	@Get
+	@Path("/cliente/{cliente.id}/foto/*")
+	public File foto(Cliente cliente) {
+		return ...
+	}
 }
 ~~~
 
@@ -277,12 +274,11 @@ E agora o mesmo código, mas utilizado para baixar uma foto específica de um cl
 @Controller
 public class ClienteController {
 
-  @Get
-  @Path("/cliente/{cliente.id}/foto/{foto.id}")
-  public File foto(Cliente cliente, Foto foto) {
-    return ...
-  }
-
+	@Get
+	@Path("/cliente/{cliente.id}/foto/{foto.id}")
+	public File foto(Cliente cliente, Foto foto) {
+		return ...
+	}
 }
 ~~~
 
@@ -293,12 +289,11 @@ Por vezes você deseja que o parâmetro a ser setado inclua também `/s`. Para i
 @Controller
 public class ClienteController {
 
-  @Get
-  @Path("/cliente/{cliente.id}/download/{path*}")
-  public File download(Cliente cliente, String path) {
-    return ...
-  }
-
+	@Get
+	@Path("/cliente/{cliente.id}/download/{path*}")
+	public File download(Cliente cliente, String path) {
+		return ...
+	}
 }
 ~~~
 
@@ -311,13 +306,13 @@ public class ClienteController {
 @Controller
 public class PostController {
 
-  @Get
-  @Path("/post/{post.autor}")
-  public void mostra(Post post) { ... }
+	@Get
+	@Path("/post/{post.autor}")
+	public void mostra(Post post) { ... }
 
-  @Get
-  @Path("/post/atual")
-  public void atual() { ... }
+	@Get
+	@Path("/post/atual")
+	public void atual() { ... }
 }
 ~~~
 
@@ -330,17 +325,17 @@ Para fazer isso, podemos definir prioridades para os `@Paths`, assim o VRaptor v
 @Controller
 public class PostController {
 
-    @Get
-    @Path(value = "/post/{post.autor}", priority=Path.LOW)
-    public void mostra(Post post) {
-       ... 
-    }
+	@Get
+	@Path(value = "/post/{post.autor}", priority=Path.LOW)
+	public void mostra(Post post) {
+		... 
+	}
 
-    @Get
-    @Path(value = "/post/atual", priority=Path.HIGH)
-    public void atual() {
-        ...
-    }
+	@Get
+	@Path(value = "/post/atual", priority=Path.HIGH)
+	public void atual() {
+		...
+	}
 }
 ~~~
 
@@ -353,7 +348,7 @@ Você também pode injetar HTTP-Headers na sua lógica usando a anotação `Head
 ~~~ 
 #!java
 public void profile(@HeaderParam("X-Auth-User") username) {
-    ...
+	...
 }
 ~~~
 

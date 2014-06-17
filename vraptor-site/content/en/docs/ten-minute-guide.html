@@ -12,15 +12,15 @@ We will start the system with product registration. For that, we will need a cla
 #!java
 @Entity
 public class Product {
-    @Id
-    @GeneratedValue
-    private Long id;
+	@Id
+	@GeneratedValue
+	private Long id;
 
-    private String name;
-    private String description;
-    private Double price;
+	private String name;
+	private String description;
+	private Double price;
 
-    // getter and setters and other necessary business methods
+	// getter and setters and other necessary business methods
 }
 ~~~
 
@@ -47,9 +47,9 @@ Whenever you annotate a class with `@Controller` all its public methods are acce
 #!java
 @Controller
 public class ProductsController {
-    public List<Product> list() {
-        return new ArrayList<Product>();
-    }
+	public List<Product> list() {
+		return new ArrayList<Product>();
+	}
 }
 ~~~
 
@@ -61,7 +61,7 @@ The method `list` returns a product's list, and you can access it at the JSP thr
 #!jsp
 <ul>
 <c:forEach items="${productList}" var="product">
-    <li>${product.name} - ${product.description}</li>
+	<li>${product.name} - ${product.description}</li>
 </c:forEach>
 </ul>
 ~~~
@@ -76,10 +76,9 @@ VRaptor strongly relies on dependency injection (DI) and Inversion of Control (I
 #!java
 public class ProductDAO {
 
-    public List<Product> listAll() {
-        return list; //a list retrieved from your database
-    }
-
+	public List<Product> listAll() {
+		return list; //a list retrieved from your database
+	}
 }
 ~~~
 
@@ -90,12 +89,11 @@ And, we can use the DAO on the `ProductsController` to list products:
 @Controller
 public class ProductsController {
 
-    private ProductDAO dao;
+	private ProductDAO dao;
 
-    public List<Product> list() {
-        return dao.listAll();
-    }
-
+	public List<Product> list() {
+		return dao.listAll();
+	}
 }
 ~~~
 
@@ -105,19 +103,18 @@ We can instantiate `ProductDAO` from the controller, but that can be complicated
 #!java
 @RequestScoped
 public class ProductDAO {
-    //...
+	//...
 }
 
 @Controller
 public class ProductsController {
 
-    @Inject
-    private ProductDAO dao;
+	@Inject
+	private ProductDAO dao;
 
-    public List<Product> list() {
-        return dao.listAll();
-    }
-
+	public List<Product> list() {
+		return dao.listAll();
+	}
 }
 ~~~
 
@@ -129,9 +126,9 @@ We already have the product lists, but we can't register them yet. We will creat
 #!java
 @Controller
 public class ProductsController {
-    //...
-    public void form() {
-    }
+	//...
+	public void form() {
+	}
 }
 ~~~
 
@@ -140,10 +137,10 @@ The form jsp will be placed at `/WEB-INF/jsp/products/form.jsp`, and can be acce
 ~~~ 
 #!jsp
 <form action="<c:url value='/products/add'/>">
-    Name:               <input type="text" name="product.name" /><br/>
-    Description: <input type="text" name="product.description" /><br/>
-    Price:             <input type="text" name="product.price" /><br/>
-    <input type="submit" value="Save" />
+	Name:               <input type="text" name="product.name" /><br/>
+	Description: <input type="text" name="product.description" /><br/>
+	Price:             <input type="text" name="product.price" /><br/>
+	<input type="submit" value="Save" />
 </form>
 ~~~
 
@@ -153,9 +150,9 @@ The form, as we designed it, will save the product through the URI `/products/ad
 #!java
 @Controller
 public class ProductsController {
-    //...
-    public void add() {
-    }
+	//...
+	public void add() {
+	}
 }
 ~~~
 
@@ -167,10 +164,10 @@ Then, by using the correct names on the form inputs, all you need to do is to ma
 #!java
 @Controller
 public class ProductsController {
-    //...
-    public void add(Product product) {
-        dao.add(product);
-    }
+	//...
+	public void add(Product product) {
+		dao.add(product);
+	}
 }
 ~~~
 
@@ -181,12 +178,12 @@ After adding something to the application, it is common to navigate back to the 
 @Controller
 public class ProductsController {
 
-    @Inject
-    private ProductDAO dao;
-    @Inject
-    private Result result;
+	@Inject
+	private ProductDAO dao;
+	@Inject
+	private Result result;
 
-    //...
+	//...
 }
 ~~~
 
@@ -204,8 +201,8 @@ Our `add` method will be:
 ~~~ 
 #!java
 public void add(Product product) {
-    dao.add(product);
-    result.redirectTo(ProductsController.class).list();
+	dao.add(product);
+	result.redirectTo(ProductsController.class).list();
 }
 ~~~
 
@@ -222,13 +219,13 @@ Now we will focus on the actual implementation of the `ProductDAO`, using the JP
 #!java
 public class ProductDAO {
 
-    @Inject
-    private EntityManager manager;
+	@Inject
+	private EntityManager manager;
 
-    public void add(Product product) {
-        manager.persist(product);
-    }
-    //...
+	public void add(Product product) {
+		manager.persist(product);
+	}
+	//...
 }
 ~~~
 
@@ -248,15 +245,15 @@ When we need to create a shopping cart on our application, we need to keep cart 
 #!java
 @SessionScoped
 public class ShoppingCart implements Serializable{
-    private List<Product> items = new ArrayList<Product>();
+	private List<Product> items = new ArrayList<Product>();
 
-    public List<Product> getAllItems() {
-        return items;
-    }
+	public List<Product> getAllItems() {
+		return items;
+	}
 
-    public void addItem(Product item) {
-        itens.add(item);
-    }
+	public void addItem(Product item) {
+		itens.add(item);
+	}
 }
 ~~~
 
@@ -269,16 +266,16 @@ The shopping cart is a component, therefore it can be injected in the controller
 @Controller
 public class CartController {
 
-    @Inject
-    private final ShoppingCart cart;
+	@Inject
+	private final ShoppingCart cart;
 
-    public void add(Product product) {
-        cart.addItem(product);
-    }
+	public void add(Product product) {
+		cart.addItem(product);
+	}
 
-    public List<Product> listItems() {
-        return cart.getAllItems();
-    }
+	public List<Product> listItems() {
+		return cart.getAllItems();
+	}
 }
 ~~~
 
@@ -309,22 +306,22 @@ However, if we want to restrict it to a specific HTTP method, we can use `@Get`,
 ~~~ 
 #!java
 public class ProductsController {
-    //...
+	//...
 
-    @Get("/products")
-    public List<Producto> list() {...}
+	@Get("/products")
+	public List<Producto> list() {...}
 
-    @Post("/products")
-    public void add(Product product) {...}
+	@Post("/products")
+	public void add(Product product) {...}
 
-    @Get("/products/{product.id}")
-    public void view(Product product) {...}
+	@Get("/products/{product.id}")
+	public void view(Product product) {...}
 
-    @Put("/products/{product.id}")
-    public void update(Product product) {...}
+	@Put("/products/{product.id}")
+	public void update(Product product) {...}
 
-    @Delete("/products/{product.id}")
-    public void remove(Product product) {...}
+	@Delete("/products/{product.id}")
+	public void remove(Product product) {...}
 }
 ~~~
 
@@ -358,14 +355,14 @@ The keys are the same, of course, but the values change accordingly to the langu
 #!jsp
 <!%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <html>
-    <body>
-        <fmt:message key="userName.field" /> <input name="user.username" />
+	<body>
+		<fmt:message key="userName.field" /> <input name="user.username" />
 
-        <br />
+		<br />
 
-        <fmt:message key="password.field" /> <input type="password" name="user.password" />
+		<fmt:message key="password.field" /> <input type="password" name="user.password" />
 
-        <input type="submit" />
-    </body>
+		<input type="submit" />
+	</body>
 </html>
 ~~~

@@ -16,11 +16,16 @@
 package br.com.caelum.vraptor.serialization.xstream;
 
 import javax.enterprise.context.Dependent;
+import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 
+import br.com.caelum.vraptor.interceptor.DefaultTypeNameExtractor;
 import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
+import br.com.caelum.vraptor.util.test.MockInstanceImpl;
 
 import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.converters.Converter;
+import com.thoughtworks.xstream.converters.SingleValueConverter;
 
 /**
  * Implementation of default XStream configuration
@@ -48,6 +53,13 @@ public class XStreamBuilderImpl implements XStreamBuilder {
 		this.extractor = extractor;
 	}
 
+	public static XStreamBuilder cleanInstance(Converter...converters) {
+		Instance<Converter> convertersInst = new MockInstanceImpl<>(converters);
+		Instance<SingleValueConverter> singleValueConverters = new MockInstanceImpl<>();
+		XStreamConverters xStreamConverters = new XStreamConverters(convertersInst, singleValueConverters);
+		return new XStreamBuilderImpl(xStreamConverters, new DefaultTypeNameExtractor());
+	}
+	
 	@Override
 	public XStream xmlInstance() {
 		return configure(new VRaptorXStream(extractor));

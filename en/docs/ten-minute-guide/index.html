@@ -1,156 +1,148 @@
-<!DOCTYPE HTML> <html lang="en"> <head> <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> <meta charset="utf-8"> <meta name="viewport" content="width=device-width"> <title>VRaptor 4 - Ten minutes guide</title> <link rel="stylesheet" href="../../../css/style.min.css"/> </head> <body> <header class="container"><h1 class="logo"><a class="logo-link" href="../.."> <img src="../../../img/logo.png" alt="VRaptor"></a></h1> <ul class="community"> <li><a href="https://groups.google.com/forum/?hl=en#!forum/vraptor4" target="_blank">Google Groups</a></li> <li><a href="https://github.com/caelum/vraptor4/" target="_blank">GitHub</a></li> <li><a href="http://questions.vraptor.org" target="_blank">VRaptor Questions</a></li> </ul> <ul class="site-languages"> <li> <a class="site-language flag flag-en " title="en" href="../.."> EN </a> </li> <li> <a class="site-language flag flag-pt not-selected" title="pt" href="../../../pt"> PT </a> </li> </ul></header><input type="checkbox" id="nav-visibility"><label for="nav-visibility" class="nav-toggle">Menu</label> <nav class="main-nav"><ul> <li><a href="../../download">Download</a></li> <li><a href="../one-minute-guide/">Documentation</a></li> <li><a href="../../cookbook/accepting-urls-ending-with-a-slash">Cookbook</a></li> <li><a href="https://github.com/caelum/vraptor4/releases" target="_blank">Changelog</a></li> <li><a href="https://github.com/caelum/vraptor4/issues/milestones" target="_blank">Roadmap</a></li> <li><a href="../../../javadoc">Javadoc</a></li> </ul></nav><nav class="doc-nav container"><h1>Documentation</h1> <ul> <li><a href="../one-minute-guide">One minute guide</a></li> <li><a href=".">Ten minute guide</a></li> <li><a href="../converters">Converters</a></li> <li><a href="../download-and-upload">Download and Upload</a></li> <li><a href="../plugins">Plugins</a></li> <li><a href="../migrating-vraptor3-project">Migrating from VRaptor 3</a></li> </ul></nav><main class="container"><h1 id="starting-a-project-an-e-commerce">Starting a project: an e-commerce</h1> <h2 id="a-product-crud">A product CRUD</h2> <p>We will start the system with product registration. For that, we will need a class that models a product and we will also use it to save products in a database, using JPA/Hibernate:</p> <pre><code class="language-java"><span class="nd">@Entity</span>
+<!DOCTYPE HTML> <html lang="en"> <head> <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> <meta charset="utf-8"> <meta name="viewport" content="width=device-width"> <title>VRaptor 4 - Ten minutes guide</title> <link rel="stylesheet" href="../../../css/style.min.css"/> </head> <body> <header class="container"><h1 class="logo"><a class="logo-link" href="../.."> <img src="../../../img/logo.png" alt="VRaptor"></a></h1> <ul class="community"> <li><a href="https://groups.google.com/forum/?hl=en#!forum/vraptor4" target="_blank">Google Groups</a></li> <li><a href="https://github.com/caelum/vraptor4/" target="_blank">GitHub</a></li> <li><a href="http://questions.vraptor.org" target="_blank">VRaptor Questions</a></li> </ul> <ul class="site-languages"> <li> <a class="site-language flag flag-en " title="en" href="../.."> EN </a> </li> <li> <a class="site-language flag flag-pt not-selected" title="pt" href="../../../pt"> PT </a> </li> </ul></header><input type="checkbox" id="nav-visibility"><label for="nav-visibility" class="nav-toggle">Menu</label> <nav class="main-nav"><ul> <li><a href="../../download">Download</a></li> <li><a href="../one-minute-guide/">Documentation</a></li> <li><a href="../../cookbook/accepting-urls-ending-with-a-slash">Cookbook</a></li> <li><a href="https://github.com/caelum/vraptor4/releases" target="_blank">Changelog</a></li> <li><a href="https://github.com/caelum/vraptor4/issues/milestones" target="_blank">Roadmap</a></li> <li><a href="../../../javadoc">Javadoc</a></li> </ul></nav><nav class="doc-nav container"><h1>Documentation</h1> <ul> <li><a href="../one-minute-guide">One minute guide</a></li> <li><a href=".">Ten minute guide</a></li> <li><a href="../converters">Converters</a></li> <li><a href="../validation">Validation</a></li> <li><a href="../events">Events</a></li> <li><a href="../download-and-upload">Download and Upload</a></li> <li><a href="../environment">Environment</a></li> <li><a href="../plugins">Plugins</a></li> <li><a href="../testing-components-and-controllers">Testing Components and Controllers</a></li> <li><a href="../migrating-vraptor3-project">Migrating from VRaptor 3</a></li> <li><a href="../contributing-to-vraptor">Contributing to VRaptor</a></li> </ul></nav><main class="container"><h1 id="starting-a-project-an-e-commerce">Starting a project: an e-commerce</h1> <h2 id="a-product-crud">A product CRUD</h2> <p>We will start the system with product registration. For that, we will need a class that models a product and we will also use it to save products in a database, using JPA/Hibernate:</p> <pre><code class="language-java"><span class="nd">@Entity</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">Product</span> <span class="o">{</span>
-    <span class="nd">@Id</span>
-    <span class="nd">@GeneratedValue</span>
-    <span class="kd">private</span> <span class="n">Long</span> <span class="n">id</span><span class="o">;</span>
+	<span class="nd">@Id</span>
+	<span class="nd">@GeneratedValue</span>
+	<span class="kd">private</span> <span class="n">Long</span> <span class="n">id</span><span class="o">;</span>
 
-    <span class="kd">private</span> <span class="n">String</span> <span class="n">name</span><span class="o">;</span>
-    <span class="kd">private</span> <span class="n">String</span> <span class="n">description</span><span class="o">;</span>
-    <span class="kd">private</span> <span class="n">Double</span> <span class="n">price</span><span class="o">;</span>
+	<span class="kd">private</span> <span class="n">String</span> <span class="n">name</span><span class="o">;</span>
+	<span class="kd">private</span> <span class="n">String</span> <span class="n">description</span><span class="o">;</span>
+	<span class="kd">private</span> <span class="n">Double</span> <span class="n">price</span><span class="o">;</span>
 
-    <span class="c1">// getter and setters and other necessary business methods</span>
+	<span class="c1">// getter and setters and other necessary business methods</span>
 <span class="o">}</span></code></pre> <p>We also need a class that will manage product registration, dealing with web requests. This class will be the products Controller:</p> <pre><code class="language-java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">ProductsController</span> <span class="o">{</span>
 <span class="o">}</span></code></pre> <p>The <code>ProductController</code> class will expose URIs that can be accessed through the web, i.e., it will expose your application resources. This type of classes have to annotated with <code>@Controller</code>:</p> <pre><code class="language-java"><span class="nd">@Controller</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">ProductsController</span> <span class="o">{</span>
 <span class="o">}</span></code></pre> <p>Whenever you annotate a class with <code>@Controller</code> all its public methods are accessible through the web. Take the list method as an example:</p> <pre><code class="language-java"><span class="nd">@Controller</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">ProductsController</span> <span class="o">{</span>
-    <span class="kd">public</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">Product</span><span class="o">&gt;</span> <span class="nf">list</span><span class="o">()</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">Product</span><span class="o">&gt;();</span>
-    <span class="o">}</span>
+	<span class="kd">public</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">Product</span><span class="o">&gt;</span> <span class="nf">list</span><span class="o">()</span> <span class="o">{</span>
+		<span class="k">return</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">Product</span><span class="o">&gt;();</span>
+	<span class="o">}</span>
 <span class="o">}</span></code></pre> <p>VRaptor will automatically redirect all request to <code>/products/list</code> to this method. That, of course, means the convention for URI’s is <code>/&lt;controller_name&gt;/&lt;method name&gt;</code>. After the method is executed, VRaptor will dispatch the request to <code>/WEB-INF/jsp/products/list.jsp</code>, and that is because VRaptor’s convention is to dispatch it to <code>/WEB-INF/jsp/&lt;controller_name&gt;/&lt;method_name&gt;.jsp</code>, by default.</p> <p>The method <code>list</code> returns a product’s list, and you can access it at the JSP through request attributes. For that example, an attribute called <code>productList</code> can be found at that JSP:</p> <pre><code class="language-jsp"><span class="nt">&lt;ul&gt;</span>
 <span class="nt">&lt;c:forEach</span> <span class="na">items=</span><span class="s">"${productList}"</span> <span class="na">var=</span><span class="s">"product"</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;li&gt;</span>${product.name} - ${product.description}<span class="nt">&lt;/li&gt;</span>
+	<span class="nt">&lt;li&gt;</span>${product.name} - ${product.description}<span class="nt">&lt;/li&gt;</span>
 <span class="nt">&lt;/c:forEach&gt;</span>
 <span class="nt">&lt;/ul&gt;</span></code></pre> <p>The exported attribute name convention is quite intuitive: if it is a Collection, the attribute will have the <code>List</code> sufix; in case it is a regular class, its name is the same as the class, but in lower case. For example, if you method returns a <code>Product</code>, you will be able to access it at the JSP through <code>${product}</code>. Exporting more than one object to the page is a topic we will cover at another chapter.</p> <h2 id="creating-productdao-dependency-injection-di">Creating ProductDao: Dependency Injection (DI)</h2> <p>VRaptor strongly relies on dependency injection (DI) and Inversion of Control (IoC) concepts. The intention is that you won’t need to create or load your class’ dependencies - instead you will just receive the objects VRaptor creates for you. The previous example returns an empty list on our <code>list</code> method. It would be much more interesting returning a real list, with all the registered products. Let’s create a Product DAO, responsible for listing products</p> <pre><code class="language-java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">ProductDAO</span> <span class="o">{</span>
 
-    <span class="kd">public</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">Product</span><span class="o">&gt;</span> <span class="nf">listAll</span><span class="o">()</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="n">list</span><span class="o">;</span> <span class="c1">//a list retrieved from your database</span>
-    <span class="o">}</span>
-
+	<span class="kd">public</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">Product</span><span class="o">&gt;</span> <span class="nf">listAll</span><span class="o">()</span> <span class="o">{</span>
+		<span class="k">return</span> <span class="n">list</span><span class="o">;</span> <span class="c1">//a list retrieved from your database</span>
+	<span class="o">}</span>
 <span class="o">}</span></code></pre> <p>And, we can use the DAO on the <code>ProductsController</code> to list products:</p> <pre><code class="language-java"><span class="nd">@Controller</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">ProductsController</span> <span class="o">{</span>
 
-    <span class="kd">private</span> <span class="n">ProductDAO</span> <span class="n">dao</span><span class="o">;</span>
+	<span class="kd">private</span> <span class="n">ProductDAO</span> <span class="n">dao</span><span class="o">;</span>
 
-    <span class="kd">public</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">Product</span><span class="o">&gt;</span> <span class="nf">list</span><span class="o">()</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="n">dao</span><span class="o">.</span><span class="na">listAll</span><span class="o">();</span>
-    <span class="o">}</span>
-
+	<span class="kd">public</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">Product</span><span class="o">&gt;</span> <span class="nf">list</span><span class="o">()</span> <span class="o">{</span>
+		<span class="k">return</span> <span class="n">dao</span><span class="o">.</span><span class="na">listAll</span><span class="o">();</span>
+	<span class="o">}</span>
 <span class="o">}</span></code></pre> <p>We can instantiate <code>ProductDAO</code> from the controller, but that can be complicated, specially if the DAO itself has its own dependencies. It would be much more interesting to take advantage from VRaptor’s dependency management. By annotating the DAO with <code>@RequestScoped</code>, and the controller attribute with <code>@Inject</code> we indicate the DAO should be injected to the Controller.</p> <pre><code class="language-java"><span class="nd">@RequestScoped</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">ProductDAO</span> <span class="o">{</span>
-    <span class="c1">//...</span>
+	<span class="c1">//...</span>
 <span class="o">}</span>
 
 <span class="nd">@Controller</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">ProductsController</span> <span class="o">{</span>
 
-    <span class="nd">@Inject</span>
-    <span class="kd">private</span> <span class="n">ProductDAO</span> <span class="n">dao</span><span class="o">;</span>
+	<span class="nd">@Inject</span>
+	<span class="kd">private</span> <span class="n">ProductDAO</span> <span class="n">dao</span><span class="o">;</span>
 
-    <span class="kd">public</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">Product</span><span class="o">&gt;</span> <span class="nf">list</span><span class="o">()</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="n">dao</span><span class="o">.</span><span class="na">listAll</span><span class="o">();</span>
-    <span class="o">}</span>
-
+	<span class="kd">public</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">Product</span><span class="o">&gt;</span> <span class="nf">list</span><span class="o">()</span> <span class="o">{</span>
+		<span class="k">return</span> <span class="n">dao</span><span class="o">.</span><span class="na">listAll</span><span class="o">();</span>
+	<span class="o">}</span>
 <span class="o">}</span></code></pre> <h2 id="create-form-redirecting">Create form: redirecting</h2> <p>We already have the product lists, but we can’t register them yet. We will create a form to add products. In order to avoid accessing the JSP directly, we will create an empty logic that will only redirect to the JSP:</p> <pre><code class="language-java"><span class="nd">@Controller</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">ProductsController</span> <span class="o">{</span>
-    <span class="c1">//...</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">form</span><span class="o">()</span> <span class="o">{</span>
-    <span class="o">}</span>
+	<span class="c1">//...</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">form</span><span class="o">()</span> <span class="o">{</span>
+	<span class="o">}</span>
 <span class="o">}</span></code></pre> <p>The form jsp will be placed at <code>/WEB-INF/jsp/products/form.jsp</code>, and can be accessed through the URI <code>/produtos/form</code>:</p> <pre><code class="language-jsp"><span class="nt">&lt;form</span> <span class="na">action=</span><span class="s">"&lt;c:url value='/products/add'/&gt;"</span><span class="nt">&gt;</span>
-    Name:               <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"text"</span> <span class="na">name=</span><span class="s">"product.name"</span> <span class="nt">/&gt;&lt;br/&gt;</span>
-    Description: <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"text"</span> <span class="na">name=</span><span class="s">"product.description"</span> <span class="nt">/&gt;&lt;br/&gt;</span>
-    Price:             <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"text"</span> <span class="na">name=</span><span class="s">"product.price"</span> <span class="nt">/&gt;&lt;br/&gt;</span>
-    <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"submit"</span> <span class="na">value=</span><span class="s">"Save"</span> <span class="nt">/&gt;</span>
+	Name:               <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"text"</span> <span class="na">name=</span><span class="s">"product.name"</span> <span class="nt">/&gt;&lt;br/&gt;</span>
+	Description: <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"text"</span> <span class="na">name=</span><span class="s">"product.description"</span> <span class="nt">/&gt;&lt;br/&gt;</span>
+	Price:             <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"text"</span> <span class="na">name=</span><span class="s">"product.price"</span> <span class="nt">/&gt;&lt;br/&gt;</span>
+	<span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"submit"</span> <span class="na">value=</span><span class="s">"Save"</span> <span class="nt">/&gt;</span>
 <span class="nt">&lt;/form&gt;</span></code></pre> <p>The form, as we designed it, will save the product through the URI <code>/products/add</code>, threfore we need to create that method on the controller:</p> <pre><code class="language-java"><span class="nd">@Controller</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">ProductsController</span> <span class="o">{</span>
-    <span class="c1">//...</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">add</span><span class="o">()</span> <span class="o">{</span>
-    <span class="o">}</span>
+	<span class="c1">//...</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">add</span><span class="o">()</span> <span class="o">{</span>
+	<span class="o">}</span>
 <span class="o">}</span></code></pre> <p>Note the input names: <code>product.name</code>, <code>product.description</code>, and <code>product.price</code>. If we get a <code>Product</code> called <code>product</code> as an <code>add</code> method parameter, VRaptor will populate its <code>name</code>, <code>description</code> and <code>price</code> fields using values from the inputs on the product’s setters. Even the <code>price</code> field will be converted to a <code>Double</code> before being set to the product. Learn more about this on the <a href="../converters">converters</a> chapter.</p> <p>Then, by using the correct names on the form inputs, all you need to do is to make the <code>add</code> method receive a <code>Product</code> for parameter:</p> <pre><code class="language-java"><span class="nd">@Controller</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">ProductsController</span> <span class="o">{</span>
-    <span class="c1">//...</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">add</span><span class="o">(</span><span class="n">Product</span> <span class="n">product</span><span class="o">)</span> <span class="o">{</span>
-        <span class="n">dao</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">product</span><span class="o">);</span>
-    <span class="o">}</span>
+	<span class="c1">//...</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">add</span><span class="o">(</span><span class="n">Product</span> <span class="n">product</span><span class="o">)</span> <span class="o">{</span>
+		<span class="n">dao</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">product</span><span class="o">);</span>
+	<span class="o">}</span>
 <span class="o">}</span></code></pre> <p>After adding something to the application, it is common to navigate back to the list, or the product registration form. In our example, we want to redirect back to the products list, whenever a new product is added. VRaptor’s <code>Result</code> component is responsible for adding attributes to a request, and change the redirection view. In case we need a <code>Result</code> instance, all we need to do is to have a result field annotated with <code>@Inject</code>:</p> <pre><code class="language-java"><span class="nd">@Controller</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">ProductsController</span> <span class="o">{</span>
 
-    <span class="nd">@Inject</span>
-    <span class="kd">private</span> <span class="n">ProductDAO</span> <span class="n">dao</span><span class="o">;</span>
-    <span class="nd">@Inject</span>
-    <span class="kd">private</span> <span class="n">Result</span> <span class="n">result</span><span class="o">;</span>
+	<span class="nd">@Inject</span>
+	<span class="kd">private</span> <span class="n">ProductDAO</span> <span class="n">dao</span><span class="o">;</span>
+	<span class="nd">@Inject</span>
+	<span class="kd">private</span> <span class="n">Result</span> <span class="n">result</span><span class="o">;</span>
 
-    <span class="c1">//...</span>
+	<span class="c1">//...</span>
 <span class="o">}</span></code></pre> <p>And, in order to redirect to the listing, we can use the <code>result</code>:</p> <pre><code class="language-java"><span class="n">result</span><span class="o">.</span><span class="na">redirectTo</span><span class="o">(</span><span class="n">ProductsController</span><span class="o">.</span><span class="na">class</span><span class="o">).</span><span class="na">list</span><span class="o">();</span></code></pre> <p>We can read this line of code: as a result, redirect to the <code>list</code> method of the <code>ProductsController</code>. The redirect configuration is 100% java, not Strings! The code is very clear in showing that the result is not the default, but the configured one. There is no need to worry about configuration files. And, even better, if you ever change the name of the <code>list</code> method, a simple IDE rename refactor, will automatically change such call: everything just works!</p> <p>Our <code>add</code> method will be:</p> <pre><code class="language-java"><span class="kd">public</span> <span class="kt">void</span> <span class="nf">add</span><span class="o">(</span><span class="n">Product</span> <span class="n">product</span><span class="o">)</span> <span class="o">{</span>
-    <span class="n">dao</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">product</span><span class="o">);</span>
-    <span class="n">result</span><span class="o">.</span><span class="na">redirectTo</span><span class="o">(</span><span class="n">ProductsController</span><span class="o">.</span><span class="na">class</span><span class="o">).</span><span class="na">list</span><span class="o">();</span>
-<span class="o">}</span></code></pre> <p>Learn more about the <code>Result</code> on the <a href="../view-and-ajax">Views and Ajax</a> methods.</p> <h2 id="validation">Validation</h2> <p>Learn more about the <code>Validator</code> on the <a href="../validation">Validations</a>.</p> <p>Notice that you already know enough to build 90% of your application! The next sections are focused on some of the frequent problems that represent the other 10% of your application construction.</p> <h3 id="using-jpahibernate-to-save-products">Using JPA/Hibernate to save Products</h3> <p>Now we will focus on the actual implementation of the <code>ProductDAO</code>, using the JPA to assist us persist products. In order to do that, our <code>ProductDAO</code> needs an <code>EntityManager</code>. Using VRaptor DI, all you’ll need to do is to declare an <code>EntityManager</code> field and annotate it with <code>@Inject</code>.</p> <pre><code class="language-java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">ProductDAO</span> <span class="o">{</span>
+	<span class="n">dao</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">product</span><span class="o">);</span>
+	<span class="n">result</span><span class="o">.</span><span class="na">redirectTo</span><span class="o">(</span><span class="n">ProductsController</span><span class="o">.</span><span class="na">class</span><span class="o">).</span><span class="na">list</span><span class="o">();</span>
+<span class="o">}</span></code></pre> <p>Learn more about the <code>Result</code> on the <a href="../view-and-ajax">Views and Ajax</a> methods.</p> <p>Notice that you already know enough to build 90% of your application! The next sections are focused on some of the frequent problems that represent the other 10% of your application construction.</p> <h2 id="using-jpahibernate-to-save-products">Using JPA/Hibernate to save Products</h2> <p>Now we will focus on the actual implementation of the <code>ProductDAO</code>, using the JPA to assist us persist products. In order to do that, our <code>ProductDAO</code> needs an <code>EntityManager</code>. Using VRaptor DI, all you’ll need to do is to declare an <code>EntityManager</code> field and annotate it with <code>@Inject</code>.</p> <pre><code class="language-java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">ProductDAO</span> <span class="o">{</span>
 
-    <span class="nd">@Inject</span>
-    <span class="kd">private</span> <span class="n">EntityManager</span> <span class="n">manager</span><span class="o">;</span>
+	<span class="nd">@Inject</span>
+	<span class="kd">private</span> <span class="n">EntityManager</span> <span class="n">manager</span><span class="o">;</span>
 
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">add</span><span class="o">(</span><span class="n">Product</span> <span class="n">product</span><span class="o">)</span> <span class="o">{</span>
-        <span class="n">manager</span><span class="o">.</span><span class="na">persist</span><span class="o">(</span><span class="n">product</span><span class="o">);</span>
-    <span class="o">}</span>
-    <span class="c1">//...</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">add</span><span class="o">(</span><span class="n">Product</span> <span class="n">product</span><span class="o">)</span> <span class="o">{</span>
+		<span class="n">manager</span><span class="o">.</span><span class="na">persist</span><span class="o">(</span><span class="n">product</span><span class="o">);</span>
+	<span class="o">}</span>
+	<span class="c1">//...</span>
 <span class="o">}</span></code></pre> <p>VRaptor needs to know how to create that <code>EntityManager</code> and we cannot annotate an <code>EntityManager</code> as <code>@RequestScoped</code>, since that is a JPA class. That is when we need to create a Producer.</p> <p>Check out the <a href="../components">Components</a> chapter. Alternatively, you can simply use the JPA plugin. Learn more about that plugin on the <a href="../plugins">Plugins</a> chapter.</p> <h2 id="transaction-control-interceptors">Transaction control: Interceptors</h2> <p>We often want to intercept all requests (or some of them) and execute some logic, such as transaction management. That is where VRaptor interceptors jump in to help you out. Get to know how to use them at the <a href="../../../pt/docs/interceptors">Interceptors</a> chapter.</p> <h2 id="shopping-cart-session-components">Shopping Cart: session components</h2> <p>When we need to create a shopping cart on our application, we need to keep cart items somehow. In order to do so, we can create a session scoped component, i.e., an unique component that will last through the user session. For that, annotate your component with <code>@SessionScoped</code> instead:</p> <pre><code class="language-java"><span class="nd">@SessionScoped</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">ShoppingCart</span> <span class="kd">implements</span> <span class="n">Serializable</span><span class="o">{</span>
-    <span class="kd">private</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">Product</span><span class="o">&gt;</span> <span class="n">items</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">Product</span><span class="o">&gt;();</span>
+	<span class="kd">private</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">Product</span><span class="o">&gt;</span> <span class="n">items</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">Product</span><span class="o">&gt;();</span>
 
-    <span class="kd">public</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">Product</span><span class="o">&gt;</span> <span class="nf">getAllItems</span><span class="o">()</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="n">items</span><span class="o">;</span>
-    <span class="o">}</span>
+	<span class="kd">public</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">Product</span><span class="o">&gt;</span> <span class="nf">getAllItems</span><span class="o">()</span> <span class="o">{</span>
+		<span class="k">return</span> <span class="n">items</span><span class="o">;</span>
+	<span class="o">}</span>
 
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">addItem</span><span class="o">(</span><span class="n">Product</span> <span class="n">item</span><span class="o">)</span> <span class="o">{</span>
-        <span class="n">itens</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">item</span><span class="o">);</span>
-    <span class="o">}</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">addItem</span><span class="o">(</span><span class="n">Product</span> <span class="n">item</span><span class="o">)</span> <span class="o">{</span>
+		<span class="n">itens</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">item</span><span class="o">);</span>
+	<span class="o">}</span>
 <span class="o">}</span></code></pre> <p>This class needs to implement <code>Serializable</code>. That happens because, since it is <code>@SessionScoped</code>, objects created from it may need to be serialized in order to keep the session state. That need is described at the CDI specification and must be respected, otherwise the container will throw an exception during initialization.</p> <p>The shopping cart is a component, therefore it can be injected in the controller:</p> <pre><code class="language-java"><span class="nd">@Controller</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">CartController</span> <span class="o">{</span>
 
-    <span class="nd">@Inject</span>
-    <span class="kd">private</span> <span class="kd">final</span> <span class="n">ShoppingCart</span> <span class="n">cart</span><span class="o">;</span>
+	<span class="nd">@Inject</span>
+	<span class="kd">private</span> <span class="kd">final</span> <span class="n">ShoppingCart</span> <span class="n">cart</span><span class="o">;</span>
 
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">add</span><span class="o">(</span><span class="n">Product</span> <span class="n">product</span><span class="o">)</span> <span class="o">{</span>
-        <span class="n">cart</span><span class="o">.</span><span class="na">addItem</span><span class="o">(</span><span class="n">product</span><span class="o">);</span>
-    <span class="o">}</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">add</span><span class="o">(</span><span class="n">Product</span> <span class="n">product</span><span class="o">)</span> <span class="o">{</span>
+		<span class="n">cart</span><span class="o">.</span><span class="na">addItem</span><span class="o">(</span><span class="n">product</span><span class="o">);</span>
+	<span class="o">}</span>
 
-    <span class="kd">public</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">Product</span><span class="o">&gt;</span> <span class="nf">listItems</span><span class="o">()</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="n">cart</span><span class="o">.</span><span class="na">getAllItems</span><span class="o">();</span>
-    <span class="o">}</span>
-<span class="o">}</span></code></pre> <p>Besides the session scope, there is also de application scope. Components annotated with <code>@ApplicationScoped</code> are created a single time during the application run.</p> <h2 id="a-bit-of-rest">A bit of REST</h2> <p>The REST approach is to have URIs identify resources on the web, so we can profit from the many structural advantages the HTTP protocol provides us. If we could map various HTTP method calls to one URI while having different controller methods respond to them, we could have the following calls for out product’s registration: </p> <pre><code>    GET /products - list all products
-    POST /products - add a produto
-    GET /products/{id} - view the product with that id
-    PUT /products/{id} - update information from product with that id
-    DELETE /products/{id} - remove product with that id
-</code></pre> <p>In order to create that REST behaviour on VRaptor, the method name convention won’t suffice, so we need to change them. The <code>@Path</code> annotation can change the URI pointing to a method without limiting the HTTP verb that can access it. For example, annotating the list method with <code>@Path("/products")</code> will have all requests to “/products” call the <code>list</code> method:</p> <pre><code class="language-java"><span class="nd">@Path</span><span class="o">(</span><span class="s">"/products"</span><span class="o">)</span>
+	<span class="kd">public</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">Product</span><span class="o">&gt;</span> <span class="nf">listItems</span><span class="o">()</span> <span class="o">{</span>
+		<span class="k">return</span> <span class="n">cart</span><span class="o">.</span><span class="na">getAllItems</span><span class="o">();</span>
+	<span class="o">}</span>
+<span class="o">}</span></code></pre> <p>Besides the session scope, there is also de application scope. Components annotated with <code>@ApplicationScoped</code> are created a single time during the application run.</p> <h2 id="a-bit-of-rest">A bit of REST</h2> <p>The REST approach is to have URIs identify resources on the web, so we can profit from the many structural advantages the HTTP protocol provides us. If we could map various HTTP method calls to one URI while having different controller methods respond to them, we could have the following calls for out product’s registration: </p> <table class="content-table"><tbody> <tr> <td>GET</td> <td>/products</td> <td>list all products</td> </tr> <tr> <td>POST</td> <td>/products</td> <td>add a produto</td> </tr> <tr> <td>GET</td> <td>/products/{id}</td> <td>view the product with that id</td> </tr> <tr> <td>PUT</td> <td>/products/{id}</td> <td>update information from product with that id</td> </tr> <tr> <td>DELETE</td> <td>/products/{id}</td> <td>remove product with that id</td> </tr> </tbody></table> <p>In order to create that REST behaviour on VRaptor, the method name convention won’t suffice, so we need to change them. The <code>@Path</code> annotation can change the URI pointing to a method without limiting the HTTP verb that can access it. For example, annotating the list method with <code>@Path("/products")</code> will have all requests to “/products” call the <code>list</code> method:</p> <pre><code class="language-java"><span class="nd">@Path</span><span class="o">(</span><span class="s">"/products"</span><span class="o">)</span>
 <span class="kd">public</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">Product</span><span class="o">&gt;</span> <span class="nf">list</span><span class="o">()</span> <span class="o">{...}</span></code></pre> <p>However, if we want to restrict it to a specific HTTP method, we can use <code>@Get</code>, <code>@Post</code>, <code>@Delete</code>, and <code>@Put</code> annotations, instead, with the same attribute syntax:</p> <pre><code class="language-java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">ProductsController</span> <span class="o">{</span>
-    <span class="c1">//...</span>
+	<span class="c1">//...</span>
 
-    <span class="nd">@Get</span><span class="o">(</span><span class="s">"/products"</span><span class="o">)</span>
-    <span class="kd">public</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">Producto</span><span class="o">&gt;</span> <span class="nf">list</span><span class="o">()</span> <span class="o">{...}</span>
+	<span class="nd">@Get</span><span class="o">(</span><span class="s">"/products"</span><span class="o">)</span>
+	<span class="kd">public</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">Producto</span><span class="o">&gt;</span> <span class="nf">list</span><span class="o">()</span> <span class="o">{...}</span>
 
-    <span class="nd">@Post</span><span class="o">(</span><span class="s">"/products"</span><span class="o">)</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">add</span><span class="o">(</span><span class="n">Product</span> <span class="n">product</span><span class="o">)</span> <span class="o">{...}</span>
+	<span class="nd">@Post</span><span class="o">(</span><span class="s">"/products"</span><span class="o">)</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">add</span><span class="o">(</span><span class="n">Product</span> <span class="n">product</span><span class="o">)</span> <span class="o">{...}</span>
 
-    <span class="nd">@Get</span><span class="o">(</span><span class="s">"/products/{product.id}"</span><span class="o">)</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">view</span><span class="o">(</span><span class="n">Product</span> <span class="n">product</span><span class="o">)</span> <span class="o">{...}</span>
+	<span class="nd">@Get</span><span class="o">(</span><span class="s">"/products/{product.id}"</span><span class="o">)</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">view</span><span class="o">(</span><span class="n">Product</span> <span class="n">product</span><span class="o">)</span> <span class="o">{...}</span>
 
-    <span class="nd">@Put</span><span class="o">(</span><span class="s">"/products/{product.id}"</span><span class="o">)</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">update</span><span class="o">(</span><span class="n">Product</span> <span class="n">product</span><span class="o">)</span> <span class="o">{...}</span>
+	<span class="nd">@Put</span><span class="o">(</span><span class="s">"/products/{product.id}"</span><span class="o">)</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">update</span><span class="o">(</span><span class="n">Product</span> <span class="n">product</span><span class="o">)</span> <span class="o">{...}</span>
 
-    <span class="nd">@Delete</span><span class="o">(</span><span class="s">"/products/{product.id}"</span><span class="o">)</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">remove</span><span class="o">(</span><span class="n">Product</span> <span class="n">product</span><span class="o">)</span> <span class="o">{...}</span>
+	<span class="nd">@Delete</span><span class="o">(</span><span class="s">"/products/{product.id}"</span><span class="o">)</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">remove</span><span class="o">(</span><span class="n">Product</span> <span class="n">product</span><span class="o">)</span> <span class="o">{...}</span>
 <span class="o">}</span></code></pre> <p>Also, note that we can receive parameters on the URIs. For example, if we call a <code>GET /products/5</code> URI, the <code>view</code> method will be invoked, and the <code>product</code> parameter id will be populated with <code>5</code>.</p> <p>More information about that is available on the <a href="../controllers-rest">REST Controller</a> chapter.</p> <h2 id="message-files">Message files</h2> <p>Internationalization (i18n) is a powerful resource, present in almost every current web frameworks. VRaptor is not an exception. I18n helps us have our application running in various languages with little effort. All we will need is the messages translation.</p> <p>In order to have that running on your app, all you have to do is have a <code>messages.properties</code> file on our application classpath (<code>WEB-INF/classes</code>). That file will contain many key/value entries in the application primary language, such as:</p> <pre><code class="language-jsp">userName.field = Username
 password.field = Password</code></pre> <p>Now, if we wanted to translate our application to Portuguese, all we need to do is to create a new file, much like the previous one, but with the language suffix: <code>messages_pt.properties</code>. The <code>_pt</code> suffix indicates that a user that accesses the application from a machine configured to a locale of Portuguese will see that message values, instead:</p> <pre><code class="language-jsp">userName.field = User name
 password.field = Password</code></pre> <p>The keys are the same, of course, but the values change accordingly to the language. Then, you can use those messages on your JSP by using the formatting JSTL:</p> <pre><code class="language-jsp"><span class="cp">&lt;!%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %&gt;</span>
 <span class="nt">&lt;html&gt;</span>
-    <span class="nt">&lt;body&gt;</span>
-        <span class="nt">&lt;fmt:message</span> <span class="na">key=</span><span class="s">"userName.field"</span> <span class="nt">/&gt;</span> <span class="nt">&lt;input</span> <span class="na">name=</span><span class="s">"user.username"</span> <span class="nt">/&gt;</span>
+	<span class="nt">&lt;body&gt;</span>
+		<span class="nt">&lt;fmt:message</span> <span class="na">key=</span><span class="s">"userName.field"</span> <span class="nt">/&gt;</span> <span class="nt">&lt;input</span> <span class="na">name=</span><span class="s">"user.username"</span> <span class="nt">/&gt;</span>
 
-        <span class="nt">&lt;br</span> <span class="nt">/&gt;</span>
+		<span class="nt">&lt;br</span> <span class="nt">/&gt;</span>
 
-        <span class="nt">&lt;fmt:message</span> <span class="na">key=</span><span class="s">"password.field"</span> <span class="nt">/&gt;</span> <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"password"</span> <span class="na">name=</span><span class="s">"user.password"</span> <span class="nt">/&gt;</span>
+		<span class="nt">&lt;fmt:message</span> <span class="na">key=</span><span class="s">"password.field"</span> <span class="nt">/&gt;</span> <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"password"</span> <span class="na">name=</span><span class="s">"user.password"</span> <span class="nt">/&gt;</span>
 
-        <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"submit"</span> <span class="nt">/&gt;</span>
-    <span class="nt">&lt;/body&gt;</span>
+		<span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"submit"</span> <span class="nt">/&gt;</span>
+	<span class="nt">&lt;/body&gt;</span>
 <span class="nt">&lt;/html&gt;</span></code></pre> <script src="/js/headers.min.js"></script> </body> </html>

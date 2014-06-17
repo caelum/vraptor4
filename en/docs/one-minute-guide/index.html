@@ -1,74 +1,69 @@
-<!DOCTYPE HTML> <html lang="en"> <head> <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> <meta charset="utf-8"> <meta name="viewport" content="width=device-width"> <title>VRaptor 4 - One minute guide</title> <link rel="stylesheet" href="../../../css/style.min.css"/> </head> <body> <header class="container"><h1 class="logo"><a class="logo-link" href="../.."> <img src="../../../img/logo.png" alt="VRaptor"></a></h1> <ul class="community"> <li><a href="https://groups.google.com/forum/?hl=en#!forum/vraptor4" target="_blank">Google Groups</a></li> <li><a href="https://github.com/caelum/vraptor4/" target="_blank">GitHub</a></li> <li><a href="http://questions.vraptor.org" target="_blank">VRaptor Questions</a></li> </ul> <ul class="site-languages"> <li> <a class="site-language flag flag-en " title="en" href="../.."> EN </a> </li> <li> <a class="site-language flag flag-pt not-selected" title="pt" href="../../../pt"> PT </a> </li> </ul></header><input type="checkbox" id="nav-visibility"><label for="nav-visibility" class="nav-toggle">Menu</label> <nav class="main-nav"><ul> <li><a href="../../download">Download</a></li> <li><a href="./">Documentation</a></li> <li><a href="../../cookbook/accepting-urls-ending-with-a-slash">Cookbook</a></li> <li><a href="https://github.com/caelum/vraptor4/releases" target="_blank">Changelog</a></li> <li><a href="https://github.com/caelum/vraptor4/issues/milestones" target="_blank">Roadmap</a></li> <li><a href="../../../javadoc">Javadoc</a></li> </ul></nav><nav class="doc-nav container"><h1>Documentation</h1> <ul> <li><a href=".">One minute guide</a></li> <li><a href="../ten-minute-guide">Ten minute guide</a></li> <li><a href="../converters">Converters</a></li> <li><a href="../download-and-upload">Download and Upload</a></li> <li><a href="../plugins">Plugins</a></li> <li><a href="../migrating-vraptor3-project">Migrating from VRaptor 3</a></li> </ul></nav><main class="container"><h1 id="a-simple-controller">A simple controller</h1> <p>We will call a <code>Controller</code> classes that contain de business model of your application. Those are classes commonly called actions or even services by other frameworks, although they don’t mean exactly the same.</p> <p>With VRaptor’s jar in your project, create our controllers in order to receive requests and start building your project.</p> <p>A simple controller looks like this:</p> <pre><code class="language-java"><span class="nd">@Controller</span>
+<!DOCTYPE HTML> <html lang="en"> <head> <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> <meta charset="utf-8"> <meta name="viewport" content="width=device-width"> <title>VRaptor 4 - One minute guide</title> <link rel="stylesheet" href="../../../css/style.min.css"/> </head> <body> <header class="container"><h1 class="logo"><a class="logo-link" href="../.."> <img src="../../../img/logo.png" alt="VRaptor"></a></h1> <ul class="community"> <li><a href="https://groups.google.com/forum/?hl=en#!forum/vraptor4" target="_blank">Google Groups</a></li> <li><a href="https://github.com/caelum/vraptor4/" target="_blank">GitHub</a></li> <li><a href="http://questions.vraptor.org" target="_blank">VRaptor Questions</a></li> </ul> <ul class="site-languages"> <li> <a class="site-language flag flag-en " title="en" href="../.."> EN </a> </li> <li> <a class="site-language flag flag-pt not-selected" title="pt" href="../../../pt"> PT </a> </li> </ul></header><input type="checkbox" id="nav-visibility"><label for="nav-visibility" class="nav-toggle">Menu</label> <nav class="main-nav"><ul> <li><a href="../../download">Download</a></li> <li><a href="./">Documentation</a></li> <li><a href="../../cookbook/accepting-urls-ending-with-a-slash">Cookbook</a></li> <li><a href="https://github.com/caelum/vraptor4/releases" target="_blank">Changelog</a></li> <li><a href="https://github.com/caelum/vraptor4/issues/milestones" target="_blank">Roadmap</a></li> <li><a href="../../../javadoc">Javadoc</a></li> </ul></nav><nav class="doc-nav container"><h1>Documentation</h1> <ul> <li><a href=".">One minute guide</a></li> <li><a href="../ten-minute-guide">Ten minute guide</a></li> <li><a href="../converters">Converters</a></li> <li><a href="../validation">Validation</a></li> <li><a href="../events">Events</a></li> <li><a href="../download-and-upload">Download and Upload</a></li> <li><a href="../environment">Environment</a></li> <li><a href="../plugins">Plugins</a></li> <li><a href="../testing-components-and-controllers">Testing Components and Controllers</a></li> <li><a href="../migrating-vraptor3-project">Migrating from VRaptor 3</a></li> <li><a href="../contributing-to-vraptor">Contributing to VRaptor</a></li> </ul></nav><main class="container"><h1 id="a-simple-controller">A simple controller</h1> <p>We will call a <code>Controller</code> classes that contain de business model of your application. Those are classes commonly called actions or even services by other frameworks, although they don’t mean exactly the same.</p> <p>With VRaptor’s jar in your project, create our controllers in order to receive requests and start building your project.</p> <p>A simple controller looks like this:</p> <pre><code class="language-java"><span class="nd">@Controller</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">ClientsController</span> <span class="o">{</span>
 
-    <span class="nd">@Inject</span>
-    <span class="kd">private</span> <span class="n">ClientDao</span> <span class="n">dao</span><span class="o">;</span>
+	<span class="nd">@Inject</span>
+	<span class="kd">private</span> <span class="n">ClientDao</span> <span class="n">dao</span><span class="o">;</span>
 
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">form</span><span class="o">()</span> <span class="o">{</span>
-        <span class="c1">// code that loads data for checkboxes, selects, etc</span>
-    <span class="o">}</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">form</span><span class="o">()</span> <span class="o">{</span>
+		<span class="c1">// code that loads data for checkboxes, selects, etc</span>
+	<span class="o">}</span>
 
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">add</span><span class="o">(</span><span class="n">Client</span> <span class="n">custom</span><span class="o">)</span> <span class="o">{</span>
-        <span class="n">dao</span><span class="o">.</span><span class="na">save</span><span class="o">(</span><span class="n">custom</span><span class="o">);</span>
-    <span class="o">}</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">add</span><span class="o">(</span><span class="n">Client</span> <span class="n">custom</span><span class="o">)</span> <span class="o">{</span>
+		<span class="n">dao</span><span class="o">.</span><span class="na">save</span><span class="o">(</span><span class="n">custom</span><span class="o">);</span>
+	<span class="o">}</span>
 
-    <span class="kd">public</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">Client</span><span class="o">&gt;</span> <span class="nf">list</span><span class="o">()</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="n">dao</span><span class="o">.</span><span class="na">listAll</span><span class="o">():</span>
-    <span class="o">}</span>
+	<span class="kd">public</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">Client</span><span class="o">&gt;</span> <span class="nf">list</span><span class="o">()</span> <span class="o">{</span>
+		<span class="k">return</span> <span class="n">dao</span><span class="o">.</span><span class="na">listAll</span><span class="o">():</span>
+	<span class="o">}</span>
 
-    <span class="kd">public</span> <span class="n">Client</span> <span class="nf">view</span><span class="o">(</span><span class="n">Long</span> <span class="n">id</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="n">dao</span><span class="o">.</span><span class="na">load</span><span class="o">(</span><span class="n">id</span><span class="o">);</span>
-    <span class="o">}</span>
+	<span class="kd">public</span> <span class="n">Client</span> <span class="nf">view</span><span class="o">(</span><span class="n">Long</span> <span class="n">id</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">return</span> <span class="n">dao</span><span class="o">.</span><span class="na">load</span><span class="o">(</span><span class="n">id</span><span class="o">);</span>
+	<span class="o">}</span>
 <span class="o">}</span></code></pre> <p>Use the <code>@Controller</code> annotation and your public methods will be available for web requests.</p> <p>You can inject your class’ dependencies using the <code>@Inject</code> annotation. Then CDI and VRaptor will create or locate such instances for you. As an alternative, annotate the contructor with <code>@Inject</code>, but you would also need to have a default constructor for that approach to work, i.e:</p> <pre><code class="language-java"><span class="nd">@Controller</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">ClientsController</span> <span class="o">{</span>
 
-    <span class="kd">private</span> <span class="kd">final</span> <span class="n">ClientDao</span> <span class="n">dao</span><span class="o">;</span>
+	<span class="kd">private</span> <span class="kd">final</span> <span class="n">ClientDao</span> <span class="n">dao</span><span class="o">;</span>
 
-    <span class="nd">@Inject</span>
-    <span class="kd">public</span> <span class="nf">ClientsController</span><span class="o">(</span><span class="n">ClientDao</span> <span class="n">dao</span><span class="o">){</span>
-        <span class="k">this</span><span class="o">.</span><span class="na">dao</span> <span class="o">=</span> <span class="n">dao</span><span class="o">;</span>
-    <span class="o">}</span>
+	<span class="nd">@Inject</span>
+	<span class="kd">public</span> <span class="nf">ClientsController</span><span class="o">(</span><span class="n">ClientDao</span> <span class="n">dao</span><span class="o">){</span>
+		<span class="k">this</span><span class="o">.</span><span class="na">dao</span> <span class="o">=</span> <span class="n">dao</span><span class="o">;</span>
+	<span class="o">}</span>
 
-    <span class="cm">/**</span>
-<span class="cm">     * @deprecated CDI eyes only</span>
-<span class="cm">     */</span>
-    <span class="kd">public</span> <span class="nf">ClientsController</span><span class="o">(){</span>
-        <span class="k">this</span><span class="o">(</span><span class="kc">null</span><span class="o">);</span>
-    <span class="o">}</span>
+	<span class="cm">/**</span>
+<span class="cm">	 * @deprecated CDI eyes only</span>
+<span class="cm">	 */</span>
+	<span class="kd">public</span> <span class="nf">ClientsController</span><span class="o">(){</span>
+		<span class="k">this</span><span class="o">(</span><span class="kc">null</span><span class="o">);</span>
+	<span class="o">}</span>
 
-    <span class="c1">// controller methods</span>
-<span class="o">}</span></code></pre> <p>All public methods at your controller are accessible from the web. For instance, the <code>form</code> method can be accessed through the URI <code>/clients/form</code> and will redirect to the jsp <code>/WEB-INF/jsp/clients/form.jsp</code>.</p> <p>Method parameters will be populated accordingly to the request fields received, as long as they follow a simple convention: </p> <pre><code>custom.name=Paulo Silveira 
+	<span class="c1">// controller methods</span>
+<span class="o">}</span></code></pre> <p>There are no differences using injection by construtor or by field. But using injection via constructor can be useful when you write your unit tests, that we can <a href="../testing-components-and-controllers">explain later</a>.</p> <p>All public methods at your controller are accessible from the web. For instance, the <code>form</code> method can be accessed through the URI <code>/clients/form</code> and will redirect to the jsp <code>/WEB-INF/jsp/clients/form.jsp</code>.</p> <p>Method parameters will be populated accordingly to the request fields received, as long as they follow a simple convention: </p> <pre><code>custom.name=Paulo Silveira 
 custom.address=Vergueiro St 
 </code></pre> <p>That will cause <code>Client</code> fields <code>name</code> and <code>address</code> of <code>add</code> method to be filled, respectively, with <code>Paulo Silveira</code> and <code>Vergueiro St</code>, via setters or constructor, using parameters with the same names of the attributes.</p> <p>An example via setter would be:</p> <pre><code class="language-java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Client</span> <span class="o">{</span>
 
-    <span class="kd">private</span> <span class="n">String</span> <span class="n">name</span><span class="o">;</span>
-    <span class="kd">private</span> <span class="n">String</span> <span class="n">address</span><span class="o">;</span>
+	<span class="kd">private</span> <span class="n">String</span> <span class="n">name</span><span class="o">;</span>
+	<span class="kd">private</span> <span class="n">String</span> <span class="n">address</span><span class="o">;</span>
 
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setName</span><span class="o">(</span><span class="n">String</span> <span class="n">name</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">this</span><span class="o">.</span><span class="na">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">;</span>
-    <span class="o">}</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">setName</span><span class="o">(</span><span class="n">String</span> <span class="n">name</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">this</span><span class="o">.</span><span class="na">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">;</span>
+	<span class="o">}</span>
 
-    <span class="kd">public</span> <span class="n">Client</span> <span class="nf">setAddress</span><span class="o">(</span><span class="n">String</span> <span class="n">address</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">this</span><span class="o">.</span><span class="na">address</span> <span class="o">=</span> <span class="n">address</span><span class="o">;</span>
-    <span class="o">}</span>
+	<span class="kd">public</span> <span class="n">Client</span> <span class="nf">setAddress</span><span class="o">(</span><span class="n">String</span> <span class="n">address</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">this</span><span class="o">.</span><span class="na">address</span> <span class="o">=</span> <span class="n">address</span><span class="o">;</span>
+	<span class="o">}</span>
 <span class="o">}</span></code></pre> <p>Or you may prefer receive the values via constructor. This also works as long as you respect the rule of using the same names of the request parameters, for example:</p> <pre><code class="language-java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Client</span> <span class="o">{</span>
 
-    <span class="kd">private</span> <span class="kd">final</span> <span class="n">String</span> <span class="n">name</span><span class="o">;</span>
-    <span class="kd">private</span> <span class="kd">final</span> <span class="n">String</span> <span class="n">address</span><span class="o">;</span>
+	<span class="kd">private</span> <span class="kd">final</span> <span class="n">String</span> <span class="n">name</span><span class="o">;</span>
+	<span class="kd">private</span> <span class="kd">final</span> <span class="n">String</span> <span class="n">address</span><span class="o">;</span>
 
-    <span class="kd">public</span> <span class="nf">Client</span><span class="o">(</span><span class="n">String</span> <span class="n">name</span><span class="o">,</span> <span class="n">String</span> <span class="n">address</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">this</span><span class="o">.</span><span class="na">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">;</span>
-        <span class="k">this</span><span class="o">.</span><span class="na">address</span> <span class="o">=</span> <span class="n">address</span><span class="o">;</span>
-    <span class="o">}</span>
-
+	<span class="kd">public</span> <span class="nf">Client</span><span class="o">(</span><span class="n">String</span> <span class="n">name</span><span class="o">,</span> <span class="n">String</span> <span class="n">address</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">this</span><span class="o">.</span><span class="na">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">;</span>
+		<span class="k">this</span><span class="o">.</span><span class="na">address</span> <span class="o">=</span> <span class="n">address</span><span class="o">;</span>
+	<span class="o">}</span>
 <span class="o">}</span></code></pre> <p>With this, we can receive the <code>custom</code> as a parameter of method <code>add</code> and the VRaptor will care to instantiate your attributes.</p> <pre><code class="language-java"><span class="kd">public</span> <span class="kt">void</span> <span class="nf">add</span><span class="o">(</span><span class="n">Client</span> <span class="n">custom</span><span class="o">)</span> <span class="o">{</span>
-    <span class="n">dao</span><span class="o">.</span><span class="na">save</span><span class="o">(</span><span class="n">custom</span><span class="o">);</span>
+	<span class="n">dao</span><span class="o">.</span><span class="na">save</span><span class="o">(</span><span class="n">custom</span><span class="o">);</span>
 <span class="o">}</span></code></pre> <p>In this case the URL will be <code>/clients/add</code> and the view <code>/WEB-INF/jsp/clients/add.jsp</code>.</p> <p>The return of your controller’s methods will automatically be exported to the view. For our <code>list</code> method, as the return is a list of <code>Client</code>, the EL accessible variable will be <code>${clientList}</code>.</p> <pre><code class="language-java"><span class="kd">public</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">Client</span><span class="o">&gt;</span> <span class="nf">list</span><span class="o">()</span> <span class="o">{</span>
-    <span class="k">return</span> <span class="n">dao</span><span class="o">.</span><span class="na">listAll</span><span class="o">():</span>
+	<span class="k">return</span> <span class="n">dao</span><span class="o">.</span><span class="na">listAll</span><span class="o">():</span>
 <span class="o">}</span></code></pre> <p>URI: <code>/clients/list</code> and view: <code>/WEB-INF/jsp/clients/list.jsp</code>.</p> <p>In case you return a simple type, the exported variable’s name will start lower case. In <code>view</code> method example, at the return type is <code>Client</code>, the EL accessible variable will be <code>${client}</code>. VRaptor is in charge of needed conversions so that form fields are filled with their expected types. </p> <pre><code class="language-java"><span class="kd">public</span> <span class="n">Client</span> <span class="nf">view</span><span class="o">(</span><span class="n">Long</span> <span class="n">id</span><span class="o">)</span> <span class="o">{</span>
-    <span class="k">return</span> <span class="n">dao</span><span class="o">.</span><span class="na">load</span><span class="o">(</span><span class="n">id</span><span class="o">);</span>
-<span class="o">}</span></code></pre> <p>URI: <code>/clients/view</code> and view: <code>/WEB-INF/jsp/clients/view.jsp</code>.</p> <p>Please note how API independent this class is. Code is also extremely simple and testable, even with unit tests. VRaptor makes a lot of associations by default, such as:</p> <pre><code>/client/form   invokes form()
-/client/add    invokes add(client) populating the client object client with request parameters
-/clients/list  invokes list() and return ${clientList} to the JSP
-/clients/view?id=3  invokes view(3l) e devolve ${client} to the JSP
-</code></pre> <p>Later, you will learn how simple it is to change the URI from <code>/clients/view?id=3</code> to <code>/clients/view/3</code>, making it more friendly and elegant.</p> <p>VRaptor will also be able to inject the <code>ClientDao</code> on the controller. You are good to go! Learn more about at the <a href="../ten-minute-guide">10 minute guide</a>.</p> <h2 id="questions">Questions</h2> <p>While studying VRaptor, should you have any doubts please refer to <a href="http://questions.vraptor.org/">questions.vraptor.org</a>, or visit our discussion list at <a href="https://groups.google.com/forum/?hl=en#!forum/vraptor4">discussion list</a>.</p> <script src="/js/headers.min.js"></script> </body> </html>
+	<span class="k">return</span> <span class="n">dao</span><span class="o">.</span><span class="na">load</span><span class="o">(</span><span class="n">id</span><span class="o">);</span>
+<span class="o">}</span></code></pre> <p>URI: <code>/clients/view</code> and view: <code>/WEB-INF/jsp/clients/view.jsp</code>.</p> <p>Please note how API independent this class is. Code is also extremely simple and testable, even with unit tests. VRaptor makes a lot of associations by default, such as:</p> <table class="content-table"><tbody> <tr> <td>/client/form</td> <td>invokes form()</td> </tr> <tr> <td>/client/add</td> <td>invokes add(client) populating the client object client with request parameters</td> </tr> <tr> <td>/clients/list</td> <td>invokes list() and return ${clientList} to the JSP</td> </tr> <tr> <td>/clients/view?id=3</td> <td>invokes view(3l) e devolve ${client} to the JSP</td> </tr> </tbody></table> <p>Later, you will learn how simple it is to change the URI from <code>/clients/view?id=3</code> to <code>/clients/view/3</code>, making it more friendly and elegant.</p> <p>VRaptor will also be able to inject the <code>ClientDao</code> on the controller. You are good to go! Learn more about at the <a href="../ten-minute-guide">10 minute guide</a>.</p> <h2 id="questions">Questions</h2> <p>While studying VRaptor, should you have any doubts please refer to <a href="http://questions.vraptor.org/">questions.vraptor.org</a>, or visit our discussion list at <a href="http://groups.google.com/group/caelum-vraptor-en">discussion list</a>.</p> <script src="/js/headers.min.js"></script> </body> </html>

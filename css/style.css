@@ -232,6 +232,20 @@ img#eventPileline {
   width: 90%;
 }
 
+
+.content-table {
+    width: 100%;
+}
+
+.content-table tr {
+    border-bottom: 1px solid #CECECE;
+}
+
+.content-table tr td {
+    padding: 15px 10px 15px 0;
+    vertical-align: bottom;
+}
+
 @media (min-width: 480px) {
   .community {
     display: inline-block;

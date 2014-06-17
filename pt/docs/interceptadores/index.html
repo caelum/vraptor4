@@ -2,65 +2,64 @@
 <span class="nd">@RequestScoped</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">Log</span> <span class="o">{</span>
 
-    <span class="nd">@Inject</span>
-    <span class="kd">private</span> <span class="kd">final</span> <span class="n">HttpServletRequest</span> <span class="n">request</span><span class="o">;</span>
+	<span class="nd">@Inject</span>
+	<span class="kd">private</span> <span class="kd">final</span> <span class="n">HttpServletRequest</span> <span class="n">request</span><span class="o">;</span>
 
-    <span class="nd">@AroundCall</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">intercept</span><span class="o">(</span><span class="n">SimpleInterceptorStack</span> <span class="n">stack</span><span class="o">)</span> <span class="o">{</span>
-        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Interceptando "</span> <span class="o">+</span> <span class="n">request</span><span class="o">.</span><span class="na">getRequestURI</span><span class="o">());</span>
-        <span class="c1">// código a ser executado antes da lógica</span>
+	<span class="nd">@AroundCall</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">intercept</span><span class="o">(</span><span class="n">SimpleInterceptorStack</span> <span class="n">stack</span><span class="o">)</span> <span class="o">{</span>
+		<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Interceptando "</span> <span class="o">+</span> <span class="n">request</span><span class="o">.</span><span class="na">getRequestURI</span><span class="o">());</span>
+		<span class="c1">// código a ser executado antes da lógica</span>
 
-        <span class="n">stack</span><span class="o">.</span><span class="na">next</span><span class="o">();</span> <span class="c1">// continua a execução</span>
-    <span class="o">}</span>
+		<span class="n">stack</span><span class="o">.</span><span class="na">next</span><span class="o">();</span> <span class="c1">// continua a execução</span>
+	<span class="o">}</span>
 <span class="o">}</span></code></pre> <p>Para executar um código apenas antes ou depois da execução do controller, podemos usar as anotações <code>@BeforeCall</code> e <code>@AfterCall</code>:</p> <pre><code class="language-java"><span class="nd">@Intercepts</span>
 <span class="nd">@RequestScoped</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">Log</span> <span class="o">{</span>
-    <span class="nd">@BeforeCall</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">before</span><span class="o">()</span> <span class="o">{</span>
-        <span class="c1">// código a ser executado antes da lógica</span>
-    <span class="o">}</span>
-    <span class="nd">@AfterCall</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">after</span><span class="o">()</span> <span class="o">{</span>
-        <span class="c1">// código a ser executado depois da lógica</span>
-    <span class="o">}</span>
-<span class="o">}</span></code></pre> <p>Repare que não é mais obrigatório implementar a interface <code>Interceptor</code>, basta criar a classe e usar as anotações acima.</p> <h2 id="definindo-quando-interceptar">Definindo quando interceptar</h2> <p>No exemplo acima todas as requisições são interceptadas. Podemos então definir que iremos interceptar apenas os métodos que possuem uma anotação chamada <code>@Audit</code>. Para isso basta implementar um método que retorne um <code>boolean</code>com a condição necessária e anotá-lo com <code>@Accepts</code>.</p> <pre><code class="language-java">    <span class="nd">@Accepts</span>
-    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">accepts</span><span class="o">(</span><span class="n">ControllerMethod</span> <span class="n">method</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="n">method</span><span class="o">.</span><span class="na">containsAnnotation</span><span class="o">(</span><span class="n">Audit</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
-    <span class="o">}</span></code></pre> <p>No VRaptor4 também temos outra maneira de definir a condição de aceitação. O exemplo acima é um caso bem comum e acabamos tendo de repetir esse código muitas vezes. Para essas situações você pode usar a annotation <code>@AcceptsWithAnnotations</code>. </p> <pre><code class="language-java"><span class="nd">@AcceptsWithAnnotations</span><span class="o">(</span><span class="n">Audit</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
+	<span class="nd">@BeforeCall</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">before</span><span class="o">()</span> <span class="o">{</span>
+		<span class="c1">// código a ser executado antes da lógica</span>
+	<span class="o">}</span>
+	<span class="nd">@AfterCall</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">after</span><span class="o">()</span> <span class="o">{</span>
+		<span class="c1">// código a ser executado depois da lógica</span>
+	<span class="o">}</span>
+<span class="o">}</span></code></pre> <p>Repare que não é mais obrigatório implementar a interface <code>Interceptor</code>, basta criar a classe e usar as anotações acima.</p> <h2 id="definindo-quando-interceptar">Definindo quando interceptar</h2> <p>No exemplo acima todas as requisições são interceptadas. Podemos então definir que iremos interceptar apenas os métodos que possuem uma anotação chamada <code>@Audit</code>. Para isso basta implementar um método que retorne um <code>boolean</code>com a condição necessária e anotá-lo com <code>@Accepts</code>.</p> <pre><code class="language-java">	<span class="nd">@Accepts</span>
+	<span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">accepts</span><span class="o">(</span><span class="n">ControllerMethod</span> <span class="n">method</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">return</span> <span class="n">method</span><span class="o">.</span><span class="na">containsAnnotation</span><span class="o">(</span><span class="n">Audit</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+	<span class="o">}</span></code></pre> <p>No VRaptor4 também temos outra maneira de definir a condição de aceitação. O exemplo acima é um caso bem comum e acabamos tendo de repetir esse código muitas vezes. Para essas situações você pode usar a annotation <code>@AcceptsWithAnnotations</code>. </p> <pre><code class="language-java"><span class="nd">@AcceptsWithAnnotations</span><span class="o">(</span><span class="n">Audit</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">AuditInterceptor</span> <span class="o">{</span>
     
-    <span class="nd">@AroundCall</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">around</span><span class="o">(</span><span class="n">SimpleInterceptorStack</span> <span class="n">stack</span><span class="o">){</span>
-        <span class="n">stack</span><span class="o">.</span><span class="na">next</span><span class="o">();</span>
-    <span class="o">}</span>
+	<span class="nd">@AroundCall</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">around</span><span class="o">(</span><span class="n">SimpleInterceptorStack</span> <span class="n">stack</span><span class="o">){</span>
+		<span class="n">stack</span><span class="o">.</span><span class="na">next</span><span class="o">();</span>
+	<span class="o">}</span>
 <span class="o">}</span></code></pre> <h2 id="criando-o-seu-accepts-customizado">Criando o seu Accepts customizado</h2> <p>Logo acima usamos o exemplo do Accepts customizado. Este é um que já vem pronto VRaptor. Mas nada impede de você criar o seu para as suas necessidades. O fluxo é bem parecido com o de criação de uma validação customizada para a BeanValidation. Primeiro você deve criar sua Annotation.</p> <pre><code class="language-java"><span class="nd">@Retention</span><span class="o">(</span><span class="n">RetentionPolicy</span><span class="o">.</span><span class="na">RUNTIME</span><span class="o">)</span>
 <span class="nd">@Target</span><span class="o">(</span><span class="n">ElementType</span><span class="o">.</span><span class="na">TYPE</span><span class="o">)</span>
 <span class="nd">@AcceptsConstraint</span><span class="o">(</span><span class="n">WithAnnotationAcceptor</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
 <span class="nd">@Inherited</span>
 <span class="kd">public</span> <span class="nd">@interface</span> <span class="n">AcceptsWithAnnotations</span> <span class="o">{</span>
-      <span class="kd">public</span> <span class="n">Class</span><span class="o">&lt;?</span> <span class="kd">extends</span> <span class="n">Annotation</span><span class="o">&gt;[]</span> <span class="n">value</span><span class="o">();</span>
+	<span class="kd">public</span> <span class="n">Class</span><span class="o">&lt;?</span> <span class="kd">extends</span> <span class="n">Annotation</span><span class="o">&gt;[]</span> <span class="n">value</span><span class="o">();</span>
 <span class="o">}</span></code></pre> <p>Perceba que usamos a Annotation <code>@AcceptsConstraint</code> para indicar qual a classe responsável por fazer a verificação. Agora precisamos implementar essa classe.</p> <pre><code class="language-java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">WithAnnotationAcceptor</span> <span class="kd">implements</span> <span class="n">AcceptsValidator</span><span class="o">&lt;</span><span class="n">AcceptsWithAnnotations</span><span class="o">&gt;</span> <span class="o">{</span>
 
-    <span class="nd">@Override</span>
-    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">validate</span><span class="o">(</span><span class="n">ControllerMethod</span> <span class="n">controllerMethod</span><span class="o">,</span>
-            <span class="n">ControllerInstance</span> <span class="n">instance</span><span class="o">)</span> <span class="o">{</span>
-                <span class="c1">//aqui entra sua logica de validação do método ou instancia do controller.</span>
-        <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
-    <span class="o">}</span>
+	<span class="nd">@Override</span>
+	<span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">validate</span><span class="o">(</span><span class="n">ControllerMethod</span> <span class="n">controllerMethod</span><span class="o">,</span> <span class="n">ControllerInstance</span> <span class="n">instance</span><span class="o">)</span> <span class="o">{</span>
+		<span class="c1">//aqui entra sua logica de validação do método ou instancia do controller.</span>
+		<span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+	<span class="o">}</span>
 
-    <span class="nd">@Override</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">initialize</span><span class="o">(</span><span class="n">AcceptsWithAnnotations</span> <span class="n">annotation</span><span class="o">)</span> <span class="o">{</span>
-                <span class="c1">//aqui você pode acessar as informações contidas na annotation customizada.</span>
-        <span class="k">this</span><span class="o">.</span><span class="na">allowedTypes</span> <span class="o">=</span> <span class="n">Arrays</span><span class="o">.</span><span class="na">asList</span><span class="o">(</span><span class="n">annotation</span><span class="o">.</span><span class="na">value</span><span class="o">());</span>
-    <span class="o">}</span>
+	<span class="nd">@Override</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">initialize</span><span class="o">(</span><span class="n">AcceptsWithAnnotations</span> <span class="n">annotation</span><span class="o">)</span> <span class="o">{</span>
+		<span class="c1">//aqui você pode acessar as informações contidas na annotation customizada.</span>
+		<span class="k">this</span><span class="o">.</span><span class="na">allowedTypes</span> <span class="o">=</span> <span class="n">Arrays</span><span class="o">.</span><span class="na">asList</span><span class="o">(</span><span class="n">annotation</span><span class="o">.</span><span class="na">value</span><span class="o">());</span>
+	<span class="o">}</span>
 <span class="o">}</span></code></pre> <p>Esta classe só precisa implemetar a interface <code>AcceptsValidator&lt;T&gt;</code> onde T é o tipo da sua Annotation customizada. Dessa maneira você pode criar as suas condições customizadas e disponibilizá-las para todos os projetos que você precisa.</p> <h2 id="como-garantir-ordem-after-e-before">Como garantir ordem: after e before</h2> <p>Se é preciso garantir a ordem de execução de um conjunto de interceptors, você pode usar os atributos <code>after</code> e <code>before</code> da anotação <code>@Intercepts</code>. Suponha que o <code>PrimeiroInterceptor</code> tenha que rodar antes do <code>SegundoInterceptor</code>, então você pode configurar isso tanto com:</p> <pre><code class="language-java"><span class="nd">@Intercepts</span><span class="o">(</span><span class="n">before</span><span class="o">=</span><span class="n">SegundoInterceptor</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">PrimeiroInterceptor</span> <span class="o">{</span>
-    <span class="o">...</span>
+	<span class="o">...</span>
 <span class="o">}</span></code></pre> <p>quanto com:</p> <pre><code class="language-java"><span class="nd">@Intercepts</span><span class="o">(</span><span class="n">after</span><span class="o">=</span><span class="n">PrimeiroInterceptor</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">SegundoInterceptor</span> <span class="o">{</span>
-    <span class="o">...</span>
+	<span class="o">...</span>
 <span class="o">}</span></code></pre> <p>Você pode especificar mais de um Interceptor:</p> <pre><code class="language-java"><span class="nd">@Intercepts</span><span class="o">(</span><span class="n">after</span><span class="o">={</span><span class="n">PrimeiroInterceptor</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="n">SegundoInterceptor</span><span class="o">.</span><span class="na">class</span><span class="o">},</span>
-            <span class="n">before</span><span class="o">={</span><span class="n">QuartoInterceptor</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="n">QuintoInterceptor</span><span class="o">.</span><span class="na">class</span><span class="o">})</span>
+			<span class="n">before</span><span class="o">={</span><span class="n">QuartoInterceptor</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="n">QuintoInterceptor</span><span class="o">.</span><span class="na">class</span><span class="o">})</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">TerceiroInterceptor</span> <span class="o">{</span>
-    <span class="o">...</span>
+	<span class="o">...</span>
 <span class="o">}</span></code></pre> <p>O VRaptor lançará uma exception se existir um ciclo na ordem dos interceptors, então tenha cuidado.</p> <script src="/js/headers.min.js"></script> </body> </html>

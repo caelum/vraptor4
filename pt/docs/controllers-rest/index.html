@@ -1,27 +1,27 @@
 <!DOCTYPE HTML> <html lang="pt"> <head> <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> <meta charset="utf-8"> <meta name="viewport" content="width=device-width"> <title>VRaptor 4 - Controllers REST</title> <link rel="stylesheet" href="../../../css/style.min.css"/> </head> <body> <header class="container"><h1 class="logo"><a class="logo-link" href="../.."> <img src="../../../img/logo.png" alt="VRaptor"></a></h1> <ul class="community"> <li><a href="https://groups.google.com/forum/#!forum/caelum-vraptor" target="_blank">Google Groups</a></li> <li><a href="https://github.com/caelum/vraptor4/" target="_blank">GitHub</a></li> <li><a href="http://www.guj.com.br/tag/vraptor" target="_blank">GUJ Respostas</a></li> </ul> <ul class="site-languages"> <li> <a class="site-language flag flag-en not-selected" title="en" href="../../../en"> EN </a> </li> <li> <a class="site-language flag flag-pt " title="pt" href="../.."> PT </a> </li> </ul></header><input type="checkbox" id="nav-visibility"><label for="nav-visibility" class="nav-toggle">Menu</label> <nav class="main-nav"><ul> <li><a href="../../download">Download</a></li> <li><a href="../guia-de-1-minuto/">Documentação</a></li> <li><a href="../../cookbook/aceitando-urls-com-ou-sem-barra-no-final">Cookbook</a></li> <li><a href="https://github.com/caelum/vraptor4/releases" target="_blank">Changelog</a></li> <li><a href="https://github.com/caelum/vraptor4/issues/milestones" target="_blank">Roadmap</a></li> <li><a href="../../../javadoc">Javadoc</a></li> </ul></nav><nav class="doc-nav container"><h1>Documentação</h1> <ul> <li><a href="../guia-de-1-minuto">Guia inicial de 1 minuto</a></li> <li><a href="../guia-de-10-minutos">Guia inicial de 10 minutos</a></li> <li><a href=".">Controllers Rest</a></li> <li><a href="../componentes">Componentes</a></li> <li><a href="../conversores">Conversores</a></li> <li><a href="../validacao">Validação</a></li> <li><a href="../interceptadores">Interceptadores</a></li> <li><a href="../eventos">Eventos</a></li> <li><a href="../trabalhando-com-a-view">Trabalhando com a View</a></li> <li><a href="../download-e-upload">Download e Upload</a></li> <li><a href="../environment">Environment</a></li> <li><a href="../plugins">Plugins</a></li> <li><a href="../dependencias-e-pre-requisitos">Dependências e pré requisitos</a></li> <li><a href="../testando-componentes-e-controllers">Testando Componentes e Controllers</a></li> <li><a href="../migrando-de-um-projeto-com-vraptor3">Migrando de um projeto com VRaptor 3</a></li> <li><a href="../contribuindo-com-o-vraptor">Contribuindo com o VRaptor</a></li> </ul></nav><main class="container"><h1 id="o-que-so-controllers">O que são Controllers?</h1> <p>Controller são o que poderíamos pensar como recursos a serem disponibilizados para acesso pelos nossos clientes. No caso de uma aplicação Web baseada no VRaptor, um recurso deve ser anotado com a anotação <code>@Controller</code>. Assim que o programador insere tal anotação em seu código, todos os métodos públicos desse recurso se tornam acessíveis através de chamadas do tipo GET ou POST a URIs específicas.</p> <p>O exemplo a seguir mostra um recurso chamado <code>ClienteController</code> que possui métodos para diversas funcionalidades ligadas a um cliente. Simplesmente criar essa classe e os métodos faz com que as URLs <code>/cliente/adiciona</code>, <code>/cliente/lista</code>, <code>/cliente/visualiza</code>, <code>/cliente/remove</code> e <code>/cliente/atualiza</code> sejam disponibilizadas, cada uma invocando o respectivo método em sua classe.</p> <pre><code class="language-java"><span class="nd">@Controller</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">ClienteController</span> <span class="o">{</span>
 
-  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">adiciona</span><span class="o">(</span><span class="n">Cliente</span> <span class="n">cliente</span><span class="o">)</span> <span class="o">{</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">adiciona</span><span class="o">(</span><span class="n">Cliente</span> <span class="n">cliente</span><span class="o">)</span> <span class="o">{</span>
 
-  <span class="o">}</span>
+	<span class="o">}</span>
 
-  <span class="kd">public</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">Cliente</span><span class="o">&gt;</span> <span class="nf">lista</span><span class="o">()</span> <span class="o">{</span>
-    <span class="k">return</span> <span class="o">...</span>
-  <span class="o">}</span>
+	<span class="kd">public</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">Cliente</span><span class="o">&gt;</span> <span class="nf">lista</span><span class="o">()</span> <span class="o">{</span>
+		<span class="k">return</span> <span class="o">...</span>
+	<span class="o">}</span>
 
-  <span class="kd">public</span> <span class="n">Cliente</span> <span class="nf">visualiza</span><span class="o">(</span><span class="n">Cliente</span> <span class="n">perfil</span><span class="o">)</span> <span class="o">{</span>
-    <span class="k">return</span> <span class="o">...</span>
-  <span class="o">}</span>
+	<span class="kd">public</span> <span class="n">Cliente</span> <span class="nf">visualiza</span><span class="o">(</span><span class="n">Cliente</span> <span class="n">perfil</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">return</span> <span class="o">...</span>
+	<span class="o">}</span>
 
-  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">remove</span><span class="o">(</span><span class="n">Cliente</span> <span class="n">cliente</span><span class="o">)</span> <span class="o">{</span>
-  <span class="o">...</span>
-  <span class="o">}</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">remove</span><span class="o">(</span><span class="n">Cliente</span> <span class="n">cliente</span><span class="o">)</span> <span class="o">{</span>
+		<span class="o">...</span>
+	<span class="o">}</span>
 
-  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">atualiza</span><span class="o">(</span><span class="n">Cliente</span> <span class="n">cliente</span><span class="o">)</span> <span class="o">{</span>
-    <span class="o">...</span>
-  <span class="o">}</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">atualiza</span><span class="o">(</span><span class="n">Cliente</span> <span class="n">cliente</span><span class="o">)</span> <span class="o">{</span>
+		<span class="o">...</span>
+	<span class="o">}</span>
 <span class="o">}</span></code></pre> <h2 id="parmetros-dos-mtodos">Parâmetros dos métodos</h2> <p>Você pode receber parâmetros nos métodos dos seus controllers, e se o objeto usar a convenção de java beans (getters e setters para os atributos da classe), você pode usar pontos para navegar entre os atributos. Por exemplo, no método:</p> <pre><code class="language-java"><span class="kd">public</span> <span class="kt">void</span> <span class="nf">atualiza</span><span class="o">(</span><span class="n">Cliente</span> <span class="n">cliente</span><span class="o">)</span> <span class="o">{</span>
-   <span class="c1">//...</span>
+	<span class="c1">//...</span>
 <span class="o">}</span></code></pre> <p>você pode passar como parâmetro na requisição:</p> <pre><code class="language-jsp">cliente.id=3
 cliente.nome=Fulano
 cliente.usuario.login=fulano</code></pre> <p>e os campos correspondentes, navegando por getters e setters a partir do cliente, serão setados. Se um atributo do objeto ou parâmetro do método for uma lista (List&lt;&gt;, array ou Set&lt;&gt;), você pode passar vários parâmetros usando colchetes e índices:</p> <pre><code class="language-jsp">cliente.telefones[0]=(11) 5571-2751 #no caso de ser uma lista de String
@@ -31,136 +31,131 @@ cliente.dependentes[0].nome=Cicrano #se usar o mesmo índice, vai ser setado no 
 clientes[1].id=23 #funciona se você receber uma lista de clientes no método</code></pre> <h2 id="reflection-no-nome-dos-parmetros">Reflection no nome dos parâmetros</h2> <p>O VRaptor tira proveito do framework <a href="http://paranamer.codehaus.org">Paranamer</a>, que consegue extrair essa informação por meio dos dados de debug. Alguns dos desenvolvedores do VRaptor também participam no desenvolvimento do Paranamer.</p> <h2 id="escopos">Escopos</h2> <p>Por vezes você deseja compartilhar um componente entre todos os usuários, entre todas as requisições de um mesmo usuário ou a cada requisição de um usuário. Para definir em que escopo o seu componente vive, basta utilizar as anotações <code>@ApplicationScoped</code>, <code>@SessionScoped</code>, <code>@RequestScoped</code>, <code>@Dependent</code> e <code>@Conversation</code>. Caso nenhuma anotação seja utilizada, o VRaptor assume que seu componente ficará no escopo de request, isto é, você terá um novo componente a cada nova requisição.</p> <h2 id="path">@Path</h2> <p>A anotação <code>@Path</code> permite que você customize as URIs de acesso a seus métodos. O uso básico dessa anotação é feito por meio de uma URI fixa. O exemplo a seguir mostra a customização de uma URI para um método, que somente receberá requisições do tipo POST na URI <code>/cliente</code>:</p> <pre><code class="language-java"><span class="nd">@Controller</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">ClienteController</span> <span class="o">{</span>
 
-  <span class="nd">@Path</span><span class="o">(</span><span class="s">"/cliente"</span><span class="o">)</span>
-  <span class="nd">@Post</span>
-  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">adiciona</span><span class="o">(</span><span class="n">Cliente</span> <span class="n">cliente</span><span class="o">)</span> <span class="o">{</span>
-  <span class="o">}</span>
+	<span class="nd">@Path</span><span class="o">(</span><span class="s">"/cliente"</span><span class="o">)</span>
+	<span class="nd">@Post</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">adiciona</span><span class="o">(</span><span class="n">Cliente</span> <span class="n">cliente</span><span class="o">)</span> <span class="o">{</span>
+	<span class="o">}</span>
 <span class="o">}</span></code></pre> <p>Se você anotar o <code>ClienteController</code> com <code>@Path</code>, o valor especificado vai ser usado como prefixo para todas as URIs desse controller:</p> <pre><code class="language-java"><span class="nd">@Controller</span>
 <span class="nd">@Path</span><span class="o">(</span><span class="s">"/clientes"</span><span class="o">)</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">ClienteController</span> <span class="o">{</span>
-    <span class="c1">//URI: /clientes/lista</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">lista</span><span class="o">()</span> <span class="o">{...}</span>
+	<span class="c1">//URI: /clientes/lista</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">lista</span><span class="o">()</span> <span class="o">{...}</span>
 
-    <span class="c1">//URI: /clientes/salva</span>
-    <span class="nd">@Path</span><span class="o">(</span><span class="s">"salva"</span><span class="o">)</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">adiciona</span><span class="o">()</span> <span class="o">{...}</span>
+	<span class="c1">//URI: /clientes/salva</span>
+	<span class="nd">@Path</span><span class="o">(</span><span class="s">"salva"</span><span class="o">)</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">adiciona</span><span class="o">()</span> <span class="o">{...}</span>
 
-    <span class="c1">//URI: /clientes/todosOsClientes</span>
-    <span class="nd">@Path</span><span class="o">(</span><span class="s">"/todosOsClientes"</span><span class="o">)</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">listaTudo</span><span class="o">()</span> <span class="o">{...}</span>
-<span class="o">}</span></code></pre> <h2 id="http-methods">Http Methods</h2> <p>O ideal é definir uma URI específica para diversos métodos HTTP diferentes, como GET, POST, PUT etc. Para atingir esse objetivo, utilizamos as anotações <code>@Get</code>, <code>@Post</code>, <code>@Delete</code>, etc que também permitem configurar uma URI diferente da URI padrão, da mesma forma que a anotação <code>@Path</code>. O exemplo a seguir altera os padrões de URI do <code>ClienteController</code> para utilizar duas URIs distintas, com diversos métodos HTTP:</p> <pre><code class="language-java"><span class="nd">@Controller</span>
+	<span class="c1">//URI: /clientes/todosOsClientes</span>
+	<span class="nd">@Path</span><span class="o">(</span><span class="s">"/todosOsClientes"</span><span class="o">)</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">listaTudo</span><span class="o">()</span> <span class="o">{...}</span>
+<span class="o">}</span></code></pre> <h2 id="http-methods">Http Methods</h2> <p>O ideal é definir uma URI específica para diversos métodos HTTP diferentes, como <code>GET</code>, <code>POST</code>, <code>PUT</code> etc. Para atingir esse objetivo, utilizamos as anotações <code>@Get</code>, <code>@Post</code>, <code>@Delete</code>, etc que também permitem configurar uma URI diferente da URI padrão, da mesma forma que a anotação <code>@Path</code>. O exemplo a seguir altera os padrões de URI do <code>ClienteController</code> para utilizar duas URIs distintas, com diversos métodos HTTP:</p> <pre><code class="language-java"><span class="nd">@Controller</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">ClienteController</span> <span class="o">{</span>
 
-  <span class="nd">@Post</span><span class="o">(</span><span class="s">"/cliente"</span><span class="o">)</span>
-  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">adiciona</span><span class="o">(</span><span class="n">Cliente</span> <span class="n">cliente</span><span class="o">)</span> <span class="o">{</span>
-  <span class="o">}</span>
+	<span class="nd">@Post</span><span class="o">(</span><span class="s">"/cliente"</span><span class="o">)</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">adiciona</span><span class="o">(</span><span class="n">Cliente</span> <span class="n">cliente</span><span class="o">)</span> <span class="o">{</span>
+	<span class="o">}</span>
 
-  <span class="nd">@Path</span><span class="o">(</span><span class="s">"/"</span><span class="o">)</span>
-  <span class="kd">public</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">Cliente</span><span class="o">&gt;</span> <span class="nf">lista</span><span class="o">()</span> <span class="o">{</span>
-    <span class="k">return</span> <span class="o">...</span>
-  <span class="o">}</span>
+	<span class="nd">@Path</span><span class="o">(</span><span class="s">"/"</span><span class="o">)</span>
+	<span class="kd">public</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">Cliente</span><span class="o">&gt;</span> <span class="nf">lista</span><span class="o">()</span> <span class="o">{</span>
+		<span class="k">return</span> <span class="o">...</span>
+	<span class="o">}</span>
 
-  <span class="nd">@Get</span><span class="o">(</span><span class="s">"/cliente"</span><span class="o">)</span>
-  <span class="kd">public</span> <span class="n">Cliente</span> <span class="nf">visualiza</span><span class="o">(</span><span class="n">Cliente</span> <span class="n">cliente</span><span class="o">)</span> <span class="o">{</span>
-    <span class="k">return</span> <span class="o">...</span>
-  <span class="o">}</span>
+	<span class="nd">@Get</span><span class="o">(</span><span class="s">"/cliente"</span><span class="o">)</span>
+	<span class="kd">public</span> <span class="n">Cliente</span> <span class="nf">visualiza</span><span class="o">(</span><span class="n">Cliente</span> <span class="n">cliente</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">return</span> <span class="o">...</span>
+	<span class="o">}</span>
 
-  <span class="nd">@Delete</span><span class="o">(</span><span class="s">"/cliente"</span><span class="o">)</span>
-  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">remove</span><span class="o">(</span><span class="n">Cliente</span> <span class="n">cliente</span><span class="o">)</span> <span class="o">{</span>
-    <span class="o">...</span>
-  <span class="o">}</span>
+	<span class="nd">@Delete</span><span class="o">(</span><span class="s">"/cliente"</span><span class="o">)</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">remove</span><span class="o">(</span><span class="n">Cliente</span> <span class="n">cliente</span><span class="o">)</span> <span class="o">{</span>
+		<span class="o">...</span>
+	<span class="o">}</span>
 
-  <span class="nd">@Put</span><span class="o">(</span><span class="s">"/cliente"</span><span class="o">)</span>
-  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">atualiza</span><span class="o">(</span><span class="n">Cliente</span> <span class="n">cliente</span><span class="o">)</span> <span class="o">{</span>
-    <span class="o">...</span>
-  <span class="o">}</span>
-<span class="o">}</span></code></pre> <p>Como você pode notar, utilizamos os métodos HTTP + uma URI específica para identificar cada um dos métodos da nossa classe Java.</p> <p>No momento de criar os links e formulários HTML devemos tomar um cuidado <strong>muito importante</strong> pois os browsers só dão suporte aos métodos POST e GET por meio de formulários hoje em dia. Por isso, você deverá criar as requisições para métodos do tipo DELETE, PUT etc usando JavaScript ou passando um parâmetro extra, chamado <code>_method</code>. O último só funciona em requisições POST. Esse parâmetro sobrescreverá o método HTTP real sendo invocado.</p> <p>O exemplo a seguir mostra um link para o método visualiza de cliente:</p> <pre><code class="language-jsp"><span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">"/cliente?cliente.id=5"</span><span class="nt">&gt;</span>ver cliente 5<span class="nt">&lt;/a&gt;</span></code></pre> <p>Agora um exemplo de como invocar o método de adicionar um cliente:</p> <pre><code class="language-jsp"><span class="nt">&lt;form</span> <span class="na">action=</span><span class="s">"/cliente"</span> <span class="na">method=</span><span class="s">"post"</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;input</span> <span class="na">name=</span><span class="s">"cliente.nome"</span> <span class="nt">/&gt;</span>
-    <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"submit"</span> <span class="nt">/&gt;</span>
-<span class="nt">&lt;/form&gt;</span></code></pre> <p>E, note que para permitir a remoção pelo método DELETE, temos que usar o parâmetro _method, uma vez que o browser ainda não suporta tais requisições:</p> <pre><code class="language-jsp"><span class="nt">&lt;form</span> <span class="na">action=</span><span class="s">"/cliente"</span> <span class="na">method=</span><span class="s">"post"</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;input</span> <span class="na">name=</span><span class="s">"cliente.id"</span> <span class="na">value=</span><span class="s">"5"</span> <span class="na">type=</span><span class="s">"hidden"</span> <span class="nt">/&gt;</span>
-    <span class="nt">&lt;button</span> <span class="na">type=</span><span class="s">"submit"</span> <span class="na">name=</span><span class="s">"_method"</span> <span class="na">value=</span><span class="s">"DELETE"</span><span class="nt">&gt;</span>remover cliente 5<span class="nt">&lt;/button&gt;</span>
+	<span class="nd">@Put</span><span class="o">(</span><span class="s">"/cliente"</span><span class="o">)</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">atualiza</span><span class="o">(</span><span class="n">Cliente</span> <span class="n">cliente</span><span class="o">)</span> <span class="o">{</span>
+		<span class="o">...</span>
+	<span class="o">}</span>
+<span class="o">}</span></code></pre> <p>Como você pode notar, utilizamos os métodos HTTP + uma URI específica para identificar cada um dos métodos da nossa classe Java.</p> <p>No momento de criar os links e formulários HTML devemos tomar um cuidado <strong>muito importante</strong> pois os browsers só dão suporte aos métodos <code>POST</code> e <code>GET</code> por meio de formulários hoje em dia. Por isso, você deverá criar as requisições para métodos do tipo <code>DELETE</code>, <code>PUT</code> etc usando JavaScript ou passando um parâmetro extra, chamado <code>_method</code>. O último só funciona em requisições <code>POST</code>. Esse parâmetro sobrescreverá o método HTTP real sendo invocado.</p> <p>O exemplo a seguir mostra um link para o método visualiza de cliente:</p> <pre><code class="language-jsp"><span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">"/cliente?cliente.id=5"</span><span class="nt">&gt;</span>ver cliente 5<span class="nt">&lt;/a&gt;</span></code></pre> <p>Agora um exemplo de como invocar o método de adicionar um cliente:</p> <pre><code class="language-jsp"><span class="nt">&lt;form</span> <span class="na">action=</span><span class="s">"/cliente"</span> <span class="na">method=</span><span class="s">"post"</span><span class="nt">&gt;</span>
+	<span class="nt">&lt;input</span> <span class="na">name=</span><span class="s">"cliente.nome"</span> <span class="nt">/&gt;</span>
+	<span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"submit"</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/form&gt;</span></code></pre> <p>E, note que para permitir a remoção pelo método <code>DELETE</code>, temos que usar o parâmetro <code>_method</code>, uma vez que o browser ainda não suporta tais requisições:</p> <pre><code class="language-jsp"><span class="nt">&lt;form</span> <span class="na">action=</span><span class="s">"/cliente"</span> <span class="na">method=</span><span class="s">"post"</span><span class="nt">&gt;</span>
+	<span class="nt">&lt;input</span> <span class="na">name=</span><span class="s">"cliente.id"</span> <span class="na">value=</span><span class="s">"5"</span> <span class="na">type=</span><span class="s">"hidden"</span> <span class="nt">/&gt;</span>
+	<span class="nt">&lt;button</span> <span class="na">type=</span><span class="s">"submit"</span> <span class="na">name=</span><span class="s">"_method"</span> <span class="na">value=</span><span class="s">"DELETE"</span><span class="nt">&gt;</span>remover cliente 5<span class="nt">&lt;/button&gt;</span>
 <span class="nt">&lt;/form&gt;</span></code></pre> <h2 id="paths-com-expresses-regulares">Paths com expressões regulares</h2> <p>Você pode restringir o valor dos parâmetros da sua URI com expressões regulares, dessa maneira:</p> <pre><code class="language-java"><span class="nd">@Path</span><span class="o">(</span><span class="s">"/cor/{cor:[0-9A-Fa-f]{6}}"</span><span class="o">)</span>
 <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setCor</span><span class="o">(</span><span class="n">String</span> <span class="n">cor</span><span class="o">)</span> <span class="o">{</span>
-    <span class="c1">//...</span>
+	<span class="c1">//...</span>
 <span class="o">}</span></code></pre> <p>Tudo que estiver depois do <code>:</code> será tratado como uma regex, e a URI só vai casar se o parâmetro casar com a regex:</p> <pre><code class="language-jsp">/cor/a0b3c4 =&gt; casa
 /cor/AABBCC =&gt; casa
 /cor/branco =&gt; não casa</code></pre> <h2 id="path-com-injeo-de-variveis">Path com injeção de variáveis</h2> <p>Em diversos casos, desejamos que a URI que identifica nosso recurso tenha como parte de seu valor, por exemplo, o identificador único do nosso recurso.</p> <p>Suponha o exemplo de um controle de clientes onde meu identificador único (chave primária) é um número, podemos então mapear as URIs <code>/cliente/{cliente.id}</code> para a visualização de cada cliente. Isto é, se acessarmos a URI <code>/cliente/2</code>, o método <code>visualiza</code> será invocado e o parâmetro <code>cliente.id</code> será setado para <code>2</code>. Caso a URI <code>/cliente/1717</code> seja acessada, o mesmo método será invocado com o valor <code>1717</code>.</p> <p>Dessa maneira, criamos URIs únicas para identificar recursos diferentes do nosso sistema. Veja o exemplo:</p> <pre><code class="language-java"><span class="nd">@Controller</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">ClienteController</span> <span class="o">{</span>
 
-  <span class="nd">@Get</span>
-  <span class="nd">@Path</span><span class="o">(</span><span class="s">"/cliente/{cliente.id}"</span><span class="o">)</span>
-  <span class="kd">public</span> <span class="n">Cliente</span> <span class="nf">visualiza</span><span class="o">(</span><span class="n">Cliente</span> <span class="n">cliente</span><span class="o">)</span> <span class="o">{</span>
-    <span class="k">return</span> <span class="o">...</span>
-  <span class="o">}</span>
+	<span class="nd">@Get</span>
+	<span class="nd">@Path</span><span class="o">(</span><span class="s">"/cliente/{cliente.id}"</span><span class="o">)</span>
+	<span class="kd">public</span> <span class="n">Cliente</span> <span class="nf">visualiza</span><span class="o">(</span><span class="n">Cliente</span> <span class="n">cliente</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">return</span> <span class="o">...</span>
+	<span class="o">}</span>
 <span class="o">}</span></code></pre> <p>Você pode ir além e setar diversos parâmetros pela URI:</p> <pre><code class="language-java"><span class="nd">@Controller</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">ClienteController</span> <span class="o">{</span>
 
-  <span class="nd">@Get</span>
-  <span class="nd">@Path</span><span class="o">(</span><span class="s">"/cliente/{cliente.id}/visualiza/{secao}"</span><span class="o">)</span>
-  <span class="kd">public</span> <span class="n">Cliente</span> <span class="nf">visualiza</span><span class="o">(</span><span class="n">Cliente</span> <span class="n">cliente</span><span class="o">,</span> <span class="n">String</span> <span class="n">secao</span><span class="o">)</span> <span class="o">{</span>
-    <span class="k">return</span> <span class="o">...</span>
-  <span class="o">}</span>
-
+	<span class="nd">@Get</span>
+	<span class="nd">@Path</span><span class="o">(</span><span class="s">"/cliente/{cliente.id}/visualiza/{secao}"</span><span class="o">)</span>
+	<span class="kd">public</span> <span class="n">Cliente</span> <span class="nf">visualiza</span><span class="o">(</span><span class="n">Cliente</span> <span class="n">cliente</span><span class="o">,</span> <span class="n">String</span> <span class="n">secao</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">return</span> <span class="o">...</span>
+	<span class="o">}</span>
 <span class="o">}</span></code></pre> <h2 id="vrios-paths-para-a-mesma-lgica">Vários paths para a mesma lógica</h2> <p>Você pode setar mais de um path para a mesma lógica fazendo:</p> <pre><code class="language-java"><span class="nd">@Controller</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">ClienteController</span> <span class="o">{</span>
 
-  <span class="nd">@Path</span><span class="o">({</span><span class="s">"/cliente/{cliente.id}/visualiza/{secao}"</span><span class="o">,</span> <span class="s">"/cliente/{cliente.id}/visualiza/"</span><span class="o">})</span>
-  <span class="kd">public</span> <span class="n">Cliente</span> <span class="nf">visualiza</span><span class="o">(</span><span class="n">Cliente</span> <span class="n">cliente</span><span class="o">,</span> <span class="n">String</span> <span class="n">secao</span><span class="o">)</span> <span class="o">{</span>
-    <span class="k">return</span> <span class="o">...</span>
-  <span class="o">}</span>
-
+	<span class="nd">@Path</span><span class="o">({</span><span class="s">"/cliente/{cliente.id}/visualiza/{secao}"</span><span class="o">,</span> <span class="s">"/cliente/{cliente.id}/visualiza/"</span><span class="o">})</span>
+	<span class="kd">public</span> <span class="n">Cliente</span> <span class="nf">visualiza</span><span class="o">(</span><span class="n">Cliente</span> <span class="n">cliente</span><span class="o">,</span> <span class="n">String</span> <span class="n">secao</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">return</span> <span class="o">...</span>
+	<span class="o">}</span>
 <span class="o">}</span></code></pre> <h2 id="paths-com-">Paths com *</h2> <p>Você também pode utilizar o <code>*</code> como método de seleção para a sua URI. O exemplo a seguir ignora qualquer coisa após a palavra <code>foto/</code> :</p> <pre><code class="language-java"><span class="nd">@Controller</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">ClienteController</span> <span class="o">{</span>
 
-  <span class="nd">@Get</span>
-  <span class="nd">@Path</span><span class="o">(</span><span class="s">"/cliente/{cliente.id}/foto/*"</span><span class="o">)</span>
-  <span class="kd">public</span> <span class="n">File</span> <span class="nf">foto</span><span class="o">(</span><span class="n">Cliente</span> <span class="n">cliente</span><span class="o">)</span> <span class="o">{</span>
-    <span class="k">return</span> <span class="o">...</span>
-  <span class="o">}</span>
-
+	<span class="nd">@Get</span>
+	<span class="nd">@Path</span><span class="o">(</span><span class="s">"/cliente/{cliente.id}/foto/*"</span><span class="o">)</span>
+	<span class="kd">public</span> <span class="n">File</span> <span class="nf">foto</span><span class="o">(</span><span class="n">Cliente</span> <span class="n">cliente</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">return</span> <span class="o">...</span>
+	<span class="o">}</span>
 <span class="o">}</span></code></pre> <p>E agora o mesmo código, mas utilizado para baixar uma foto específica de um cliente:</p> <pre><code class="language-java"><span class="nd">@Controller</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">ClienteController</span> <span class="o">{</span>
 
-  <span class="nd">@Get</span>
-  <span class="nd">@Path</span><span class="o">(</span><span class="s">"/cliente/{cliente.id}/foto/{foto.id}"</span><span class="o">)</span>
-  <span class="kd">public</span> <span class="n">File</span> <span class="nf">foto</span><span class="o">(</span><span class="n">Cliente</span> <span class="n">cliente</span><span class="o">,</span> <span class="n">Foto</span> <span class="n">foto</span><span class="o">)</span> <span class="o">{</span>
-    <span class="k">return</span> <span class="o">...</span>
-  <span class="o">}</span>
-
+	<span class="nd">@Get</span>
+	<span class="nd">@Path</span><span class="o">(</span><span class="s">"/cliente/{cliente.id}/foto/{foto.id}"</span><span class="o">)</span>
+	<span class="kd">public</span> <span class="n">File</span> <span class="nf">foto</span><span class="o">(</span><span class="n">Cliente</span> <span class="n">cliente</span><span class="o">,</span> <span class="n">Foto</span> <span class="n">foto</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">return</span> <span class="o">...</span>
+	<span class="o">}</span>
 <span class="o">}</span></code></pre> <p>Por vezes você deseja que o parâmetro a ser setado inclua também <code>/s</code>. Para isso você deve utilizar o padrão <code>{...*}</code>:</p> <pre><code class="language-java"><span class="nd">@Controller</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">ClienteController</span> <span class="o">{</span>
 
-  <span class="nd">@Get</span>
-  <span class="nd">@Path</span><span class="o">(</span><span class="s">"/cliente/{cliente.id}/download/{path*}"</span><span class="o">)</span>
-  <span class="kd">public</span> <span class="n">File</span> <span class="nf">download</span><span class="o">(</span><span class="n">Cliente</span> <span class="n">cliente</span><span class="o">,</span> <span class="n">String</span> <span class="n">path</span><span class="o">)</span> <span class="o">{</span>
-    <span class="k">return</span> <span class="o">...</span>
-  <span class="o">}</span>
-
+	<span class="nd">@Get</span>
+	<span class="nd">@Path</span><span class="o">(</span><span class="s">"/cliente/{cliente.id}/download/{path*}"</span><span class="o">)</span>
+	<span class="kd">public</span> <span class="n">File</span> <span class="nf">download</span><span class="o">(</span><span class="n">Cliente</span> <span class="n">cliente</span><span class="o">,</span> <span class="n">String</span> <span class="n">path</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">return</span> <span class="o">...</span>
+	<span class="o">}</span>
 <span class="o">}</span></code></pre> <h2 id="definindo-prioridades-para-seus-paths">Definindo prioridades para seus paths</h2> <p>É possível que algumas das nossas URIs possam ser tratada por mais de um método da classe:</p> <pre><code class="language-java"><span class="nd">@Controller</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">PostController</span> <span class="o">{</span>
 
-  <span class="nd">@Get</span>
-  <span class="nd">@Path</span><span class="o">(</span><span class="s">"/post/{post.autor}"</span><span class="o">)</span>
-  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">mostra</span><span class="o">(</span><span class="n">Post</span> <span class="n">post</span><span class="o">)</span> <span class="o">{</span> <span class="o">...</span> <span class="o">}</span>
+	<span class="nd">@Get</span>
+	<span class="nd">@Path</span><span class="o">(</span><span class="s">"/post/{post.autor}"</span><span class="o">)</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">mostra</span><span class="o">(</span><span class="n">Post</span> <span class="n">post</span><span class="o">)</span> <span class="o">{</span> <span class="o">...</span> <span class="o">}</span>
 
-  <span class="nd">@Get</span>
-  <span class="nd">@Path</span><span class="o">(</span><span class="s">"/post/atual"</span><span class="o">)</span>
-  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">atual</span><span class="o">()</span> <span class="o">{</span> <span class="o">...</span> <span class="o">}</span>
+	<span class="nd">@Get</span>
+	<span class="nd">@Path</span><span class="o">(</span><span class="s">"/post/atual"</span><span class="o">)</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">atual</span><span class="o">()</span> <span class="o">{</span> <span class="o">...</span> <span class="o">}</span>
 <span class="o">}</span></code></pre> <p>A URI <code>/post/atual</code> pode ser tratada tanto pelo método mostra, quanto pelo atual. Mas eu quero que quando seja exatamente <code>/post/atual</code> o método executado seja o atual. O que eu quero é que o VRaptor teste primeiro o path do método atual, para não correr o risco de cair no método mostra.</p> <p>Para fazer isso, podemos definir prioridades para os <code>@Paths</code>, assim o VRaptor vai testar primeiro os paths com maior prioridade, ou seja, valor menor de prioridade:</p> <pre><code class="language-java"><span class="nd">@Controller</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">PostController</span> <span class="o">{</span>
 
-    <span class="nd">@Get</span>
-    <span class="nd">@Path</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"/post/{post.autor}"</span><span class="o">,</span> <span class="n">priority</span><span class="o">=</span><span class="n">Path</span><span class="o">.</span><span class="na">LOW</span><span class="o">)</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">mostra</span><span class="o">(</span><span class="n">Post</span> <span class="n">post</span><span class="o">)</span> <span class="o">{</span>
-       <span class="o">...</span> 
-    <span class="o">}</span>
+	<span class="nd">@Get</span>
+	<span class="nd">@Path</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"/post/{post.autor}"</span><span class="o">,</span> <span class="n">priority</span><span class="o">=</span><span class="n">Path</span><span class="o">.</span><span class="na">LOW</span><span class="o">)</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">mostra</span><span class="o">(</span><span class="n">Post</span> <span class="n">post</span><span class="o">)</span> <span class="o">{</span>
+		<span class="o">...</span> 
+	<span class="o">}</span>
 
-    <span class="nd">@Get</span>
-    <span class="nd">@Path</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"/post/atual"</span><span class="o">,</span> <span class="n">priority</span><span class="o">=</span><span class="n">Path</span><span class="o">.</span><span class="na">HIGH</span><span class="o">)</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">atual</span><span class="o">()</span> <span class="o">{</span>
-        <span class="o">...</span>
-    <span class="o">}</span>
-<span class="o">}</span></code></pre> <p>Assim, o path <code>/post/atual</code> vai ser testado antes do <code>/post/{post.autor}</code>, e o VRaptor vai fazer o que a gente gostaria que ele fizesse. Você não precisa definir prioridades se tivermos as uris: <code>/post/{post.id}</code> e <code>/post/atual</code>, pois na <code>/post/{post.id}</code> o vraptor só vai aceitar números.</p> <h2 id="paths-com-headers">Paths com headers</h2> <p>Você também pode injetar HTTP-Headers na sua lógica usando a anotação <code>HeaderParam</code>. No exemplo abaixo o campo <code>username</code> será injetado com o valor do header <code>X-Auth-User</code>.</p> <pre><code class="language-java"><span class="kd">public</span> <span class="kt">void</span> <span class="nf">profile</span><span class="o">(</span><span class="nd">@HeaderParam</span><span class="o">(</span><span class="s">""</span><span class="n">X</span><span class="o">-</span><span class="n">Auth</span><span class="o">-</span><span class="n">User</span><span class="err">"</span><span class="o">)</span> <span class="n">username</span><span class="o">)</span> <span class="o">{</span>
-    <span class="o">...</span>
+	<span class="nd">@Get</span>
+	<span class="nd">@Path</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"/post/atual"</span><span class="o">,</span> <span class="n">priority</span><span class="o">=</span><span class="n">Path</span><span class="o">.</span><span class="na">HIGH</span><span class="o">)</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">atual</span><span class="o">()</span> <span class="o">{</span>
+		<span class="o">...</span>
+	<span class="o">}</span>
+<span class="o">}</span></code></pre> <p>Assim, o path <code>/post/atual</code> vai ser testado antes do <code>/post/{post.autor}</code>, e o VRaptor vai fazer o que a gente gostaria que ele fizesse. Você não precisa definir prioridades se tivermos as uris: <code>/post/{post.id}</code> e <code>/post/atual</code>, pois na <code>/post/{post.id}</code> o vraptor só vai aceitar números.</p> <h2 id="paths-com-headers">Paths com headers</h2> <p>Você também pode injetar HTTP-Headers na sua lógica usando a anotação <code>HeaderParam</code>. No exemplo abaixo o campo <code>username</code> será injetado com o valor do header <code>X-Auth-User</code>.</p> <pre><code class="language-java"><span class="kd">public</span> <span class="kt">void</span> <span class="nf">profile</span><span class="o">(</span><span class="nd">@HeaderParam</span><span class="o">(</span><span class="s">"X-Auth-User"</span><span class="o">)</span> <span class="n">username</span><span class="o">)</span> <span class="o">{</span>
+	<span class="o">...</span>
 <span class="o">}</span></code></pre> <p><em>Atenção</em>: No exemplo acima, se você tiver um formulário com o campo <code>username</code> e você definir o <code>HeaderParam</code> com o mesmo nome do campo do formulário, ela será automaticamente sobrescrita com o valor do <code>HeaderParam</code>.</p> <script src="/js/headers.min.js"></script> </body> </html>

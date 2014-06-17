@@ -31,7 +31,8 @@ public void store(@NotNull @Valid Client client) {
 
 With Bean validation you can create your own custom validations. If you want to validate if phone number is in `(00) 0000-0000` pattern, you can do something like this:
 
-```java
+~~~
+#!java
 @Documented
 @Constraint(validatedBy = {})
 @Target({ METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER })
@@ -46,7 +47,7 @@ public @interface PhoneNumber {
 
 	Class<? extends Payload>[] payload() default {};
 }
-```
+~~~
 
 You can create complex constraints that access database or uses any managed component. If you want, as example, check if the user already exists in the database, ou can write a code like this:
 

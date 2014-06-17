@@ -1,5 +1,6 @@
 package br.com.caelum.vraptor.musicjungle.controller;
 
+import static br.com.caelum.vraptor.musicjungle.serialization.XStreamBuilderFactory.cleanInstance;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
@@ -29,12 +30,19 @@ import br.com.caelum.vraptor.musicjungle.model.User;
 import br.com.caelum.vraptor.musicjungle.util.model.MusicBuilder;
 import br.com.caelum.vraptor.musicjungle.util.model.UserBuilder;
 import br.com.caelum.vraptor.observer.upload.UploadedFile;
-import br.com.caelum.vraptor.util.test.MockResult;
+import br.com.caelum.vraptor.proxy.JavassistProxifier;
+import br.com.caelum.vraptor.serialization.gson.GsonBuilderWrapper;
+import br.com.caelum.vraptor.util.test.MockHttpResult;
+import br.com.caelum.vraptor.util.test.MockInstanceImpl;
+import br.com.caelum.vraptor.util.test.MockSerializationResult;
 import br.com.caelum.vraptor.util.test.MockValidator;
+
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonSerializer;
 
 public class MusicControllerTest {
 
-	private MockResult result;
+	private MockSerializationResult result;
 	private MockValidator validator;
 	@Mock
 	private UserInfo userInfo;
@@ -53,7 +61,13 @@ public class MusicControllerTest {
 	@Before
 	public void setUp() {
 		MockitoAnnotations.initMocks(this);
-		result = new MockResult();
+		
+		List<JsonSerializer<?>> jsonSerializers = new ArrayList<>();
+		List<JsonDeserializer<?>> jsonDeserializers = new ArrayList<>();
+		
+		result = new MockSerializationResult(new JavassistProxifier(), cleanInstance(),
+				new GsonBuilderWrapper(new MockInstanceImpl<>(jsonSerializers), new MockInstanceImpl<>(jsonDeserializers)));
+		
 		validator = new MockValidator();
 		controller = new MusicController(dao, userInfo, result, validator, musics);
 		
@@ -118,6 +132,51 @@ public class MusicControllerTest {
 		} catch (FileNotFoundException e) {
 			verify(musics).getFile(music);
 		}
+	}
+	
+	@Test
+	public void shouldShowAllMusicsAsJSON() throws Exception {
+		when(dao.listAll()).thenReturn(Arrays.asList(music));
+		controller.showAllMusicsAsJSON();
+		assertEquals("{\"list\":[{\"id\":1,\"title\":\"Some Music\"," +
+				"\"description\":\"Some description\",\"type\":\"ROCK\"}]}", result.serializedResult());
+	}
+	
+	@Test
+	public void shouldShowAllMusicsAsXML() throws Exception {
+		when(dao.listAll()).thenReturn(Arrays.asList(music));
+		controller.showAllMusicsAsXML();
+		assertEquals("<list>\n" +
+					 "  <musicBuilder>\n" +
+					 "    <id>1</id>\n" +
+					 "    <title>Some Music</title>\n" +
+					 "    <description>Some description</description>\n" +
+					 "    <type>ROCK</type>\n" +
+					 "  </musicBuilder>\n" +
+					 "</list>", result.serializedResult());
+	}
+	
+	@Test
+	public void shouldShowAllMusicsAsHTTP() {
+		MockHttpResult mockHttpResult = new MockHttpResult();
+		controller = new MusicController(dao, userInfo, mockHttpResult, validator, musics);
+		when(dao.listAll()).thenReturn(Arrays.asList(music));
+		controller.showAllMusicsAsHTTP();
+		assertEquals("<p class=\"content\">"+ Arrays.asList(music).toString()+"</p>", mockHttpResult.getBody());
+	}
+	
+	@Test
+	public void shouldListAs() throws Exception {
+		when(dao.listAll()).thenReturn(Arrays.asList(music));
+		controller.listAs();
+		assertEquals("<list>\n" +
+				"  <musicBuilder>\n" +
+				"    <id>1</id>\n" +
+				"    <title>Some Music</title>\n" +
+				"    <description>Some description</description>\n" +
+				"    <type>ROCK</type>\n" +
+				"  </musicBuilder>\n" +
+				"</list>", result.serializedResult());
 	}
 	
 }

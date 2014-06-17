@@ -137,9 +137,13 @@ Podemos acessar o formulário, que estará em `/WEB-INF/jsp/produtos/form.jsp`, 
 ~~~ 
 #!jsp
 <form action="<c:url value='/produtos/adiciona'/>">
-	Nome:             <input type="text" name="produto.nome" /><br/>
-	Descrição:    <input type="text" name="produto.descricao" /><br/>
-	Preço:            <input type="text" name="produto.preco" /><br/>
+	Nome:             
+	<input type="text" name="produto.nome"/><br/>
+	Descrição:    
+	<input type="text" name="produto.descricao"/><br/>
+	Preço:            
+	<input type="text" name="produto.preco"/><br/>
+
 	<input type="submit" value="Salvar" />
 </form>
 ~~~
@@ -345,13 +349,13 @@ Dessa forma, o código ficaria:
 <!%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <html>
 	<body>
-		<fmt:message key="campo.usuario" /> <input name="usuario.nomeUsuario" />
+		<fmt:message key="campo.usuario"/> 
+		<input name="usuario.nomeUsuario"/> <br/>
 
-		<br />
+		<fmt:message key="campo.senha"/> 
+		<input type="password" name="usuario.senha"/>
 
-		<fmt:message key="campo.senha" /> <input type="password" name="usuario.senha" />
-
-		<input type="submit" />
+		<input type="submit"/>
 	</body>
 </html>
 ~~~

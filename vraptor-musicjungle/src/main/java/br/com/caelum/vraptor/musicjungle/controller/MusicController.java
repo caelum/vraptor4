@@ -65,16 +65,19 @@ public class MusicController {
 
 	private static final Logger logger = LoggerFactory.getLogger(MusicController.class);
 
-	private Result result;
-	private Validator validator;
-	private UserInfo userInfo;
-	private MusicDao musicDao;
-	private Musics musics;
+	private final Result result;
+	private final Validator validator;
+	private final UserInfo userInfo;
+	private final MusicDao musicDao;
+	private final Musics musics;
 
-	// CDI eyes only
-	@Deprecated
-	public MusicController() {
+	/**
+	 * CDI eyes only
+	 */
+	protected MusicController() {
+		this(null, null, null, null, null);
 	}
+
 
 	/**
 	 * Receives dependencies through the constructor.

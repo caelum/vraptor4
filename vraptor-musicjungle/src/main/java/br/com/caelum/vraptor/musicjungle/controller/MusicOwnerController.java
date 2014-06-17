@@ -38,15 +38,17 @@ import br.com.caelum.vraptor.validator.Validator;
 @Controller
 public class MusicOwnerController {
 
-	private Result result;
-	private Validator validator;
-	private UserInfo userInfo;
-	private MusicDao musicDao;
-	private UserDao userDao;
+	private final Result result;
+	private final Validator validator;
+	private final UserInfo userInfo;
+	private final MusicDao musicDao;
+	private final UserDao userDao;
 	
-	//CDI eyes only
-	@Deprecated
-	public MusicOwnerController() {
+	/**
+	 * CDI eyes only
+	 */
+	protected MusicOwnerController() {
+		this(null, null, null, null, null);
 	}
 
 	/**

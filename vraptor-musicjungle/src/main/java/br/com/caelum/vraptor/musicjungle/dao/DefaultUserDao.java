@@ -34,11 +34,14 @@ import br.com.caelum.vraptor.musicjungle.model.User;
  */
 public class DefaultUserDao implements UserDao {
 
-	private EntityManager entityManager;
+	private final EntityManager entityManager;
 
-	@Deprecated // CDI eyes only
-	public DefaultUserDao() {
-    }
+	/**
+	 * CDI eyes only
+	 */
+	protected DefaultUserDao() {
+		this(null);
+	}
 
 	/**
 	 * Creates a new UserDao. You can receive dependencies 

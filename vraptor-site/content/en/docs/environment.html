@@ -13,8 +13,8 @@ In your `web.xml`, you need to add:
 ~~~ 
 #!xml
 <context-param>
-    <param-name>br.com.caelum.vraptor.environment</param-name>
-    <param-value>your_environment_name</param-value>
+	<param-name>br.com.caelum.vraptor.environment</param-name>
+	<param-value>your_environment_name</param-value>
 </context-param>
 ~~~ 
 
@@ -48,22 +48,22 @@ environment.controller = true
 #!java
 @Controller
 public class MyController {
-    private final Environment environment;
-    private final MailSender sender;
+	private final Environment environment;
+	private final MailSender sender;
 
-    @Inject
-    public MeuController(Environment environment, MailSender sender) {
-        this.environment = environment;
-        this.sender = sender;
-    }
+	@Inject
+	public MeuController(Environment environment, MailSender sender) {
+		this.environment = environment;
+		this.sender = sender;
+	}
 
-    public void sendMail(String email) {
-        if(environment.isDevelopment()) {
-            sender.sendMailTo(environment.get("test_email"));
-            return;
-        }
-        sender.sendMailTo(email);
-    }
+	public void sendMail(String email) {
+		if(environment.isDevelopment()) {
+			sender.sendMailTo(environment.get("test_email"));
+			return;
+		}
+		sender.sendMailTo(email);
+	}
 }
 ~~~ 
 
@@ -99,11 +99,11 @@ You can also inject your settings programmatically using `@Property` annotation,
 @Controller
 public class MyController {
 
-    @Inject @Property("test_email") private String email;
+	@Inject @Property("test_email") private String email;
 
-    public void sendMail(String email) {
-        sender.sendMailTo(email);
-    }
+	public void sendMail(String email) {
+		sender.sendMailTo(email);
+	}
 }
 ~~~ 
 
@@ -116,11 +116,11 @@ And if the field name is the same from the key, you can use only the `@Property`
 @Controller
 public class MyController {
 
-    @Inject @Property private String email;
+	@Inject @Property private String email;
 
-    public void sendMail(String email) {
-        sender.sendMailTo(email);
-    }
+	public void sendMail(String email) {
+		sender.sendMailTo(email);
+	}
 }
 ~~~ 
 

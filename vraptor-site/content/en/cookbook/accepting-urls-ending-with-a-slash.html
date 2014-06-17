@@ -53,41 +53,40 @@ import br.com.caelum.vraptor.view.Results;
 @Specializes
 public class Error404 extends DefaultControllerNotFoundHandler {
 
-    private final Router router;
-    private final Result result;
+	private final Router router;
+	private final Result result;
 
-    @Inject
-    public Error404(Router router, Result result, Event<ControllerNotFound> event) {
-        super(event);
-        this.router = router;
-        this.result = result;
-    }
+	@Inject
+	public Error404(Router router, Result result, Event<ControllerNotFound> event) {
+		super(event);
+		this.router = router;
+		this.result = result;
+	}
     
-    /**
-     * @deprecated CDI eyes only
-     */
-    public Error404() {
-        this(null, null, null);
-    }
+	/**
+	* @deprecated CDI eyes only
+	*/
+	public Error404() {
+		this(null, null, null);
+	}
     
-    @Override
-    public void couldntFind(FilterChain chain, 
-            MutableRequest request, MutableResponse response) {
-        try {
-            String uri = request.getRequestedUri();
-            if (uri.endsWith("/")) {
-                tryMovePermanentlyTo(request, uri.substring(0, uri.length()-1));
-            } else {
-                tryMovePermanentlyTo(request, uri + "/");
-            }
-        } catch (ControllerNotFoundException ex) {
-            super.couldntFind(chain, request, response);
-        }
-    }
-    
-    private void tryMovePermanentlyTo(MutableRequest request, String newUri) {
-        router.parse(newUri, HttpMethod.of(request), request);
-        result.use(Results.status()).movedPermanentlyTo(newUri);
-    }
+	@Override
+	public void couldntFind(FilterChain chain, MutableRequest request, MutableResponse response) {
+		try {
+			String uri = request.getRequestedUri();
+			if (uri.endsWith("/")) {
+				tryMovePermanentlyTo(request, uri.substring(0, uri.length()-1));
+			} else {
+				tryMovePermanentlyTo(request, uri + "/");
+			}
+		} catch (ControllerNotFoundException ex) {
+			super.couldntFind(chain, request, response);
+		}
+	}
+
+	private void tryMovePermanentlyTo(MutableRequest request, String newUri) {
+		router.parse(newUri, HttpMethod.of(request), request);
+		result.use(Results.status()).movedPermanentlyTo(newUri);
+	}
 }
 ~~~

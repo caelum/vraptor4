@@ -27,12 +27,12 @@ This is your first logic on `FirstController.java`:
 @Controller
 public class FirstController {
   
-  @Inject private Result result;
+	@Inject private Result result;
 
-  @Get("/home")
-  public void home() {
-    result.include("message", "Hello, VRaptor 4!");
-  }
+	@Get("/home")
+	public void home() {
+		result.include("message", "Hello, VRaptor 4!");
+	}
 }
 ~~~
   </div>

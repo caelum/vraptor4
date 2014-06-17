@@ -1,7 +1,7 @@
 package br.com.caelum.vraptor.musicjungle.controller;
 
+import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.hasSize;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -53,7 +53,7 @@ public class HomeControllerTest {
 		
 		controller.login(user.getLogin(), user.getPassword());
 		
-		assertFalse(validator.hasErrors());
+		assertThat(validator.getErrors(), empty());
 	}
 
 	@Test(expected=ValidationException.class)

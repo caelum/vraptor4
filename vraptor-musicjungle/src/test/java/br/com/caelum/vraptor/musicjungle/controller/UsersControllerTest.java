@@ -1,12 +1,14 @@
 package br.com.caelum.vraptor.musicjungle.controller;
 
+import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.hasSize;
-import static org.junit.Assert.assertEquals;
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -49,25 +51,26 @@ public class UsersControllerTest {
 		assertThat(Arrays.asList(musicsType), hasSize(MusicType.values().length));
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Test
 	public void shouldListAllUsers() {
 		when(userDao.listAll()).thenReturn(Arrays.asList(user, anotherUser));
 		controller.list();
-		assertEquals(Arrays.asList(user, anotherUser), result.included().get("users"));
+		assertThat((List<User>)result.included().get("users"), contains(user, anotherUser));
 	}
 	
 	@Test
 	public void shouldAddUser() {
 		controller.add(user);
 		verify(userDao).add(user);
-		assertEquals("User " + user.getName() + " successfully added", result.included().get("notice"));
+		assertThat(result.included().get("notice").toString(), is("User " + user.getName() + " successfully added"));
 	}
 	
 	@Test
 	public void shouldShowUser() {
 		when(userDao.find(user.getLogin())).thenReturn(user);
 		controller.show(user);
-		assertEquals(user, result.included().get("user"));
+		assertThat((User) result.included().get("user"), is(user));
 	}
 	
 }

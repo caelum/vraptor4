@@ -1,9 +1,12 @@
 package br.com.caelum.vraptor.musicjungle.controller;
 
 import static br.com.caelum.vraptor.musicjungle.serialization.XStreamBuilderFactory.cleanInstance;
-import static org.junit.Assert.assertEquals;
+import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.empty;
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -14,7 +17,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -85,7 +87,7 @@ public class MusicControllerTest {
 		verify(dao).add(any(MusicOwner.class));
 		verify(musics).save(uploadFile, music);
 
-		assertEquals(music.getTitle() + " music added", result.included().get("notice"));
+		assertThat(result.included().get("notice").toString(), is(music.getTitle() + " music added"));
 	}
 
 	@Test
@@ -95,7 +97,7 @@ public class MusicControllerTest {
 		controller.show(music);
 		
 		assertNotNull(result.included().get("music"));
-		assertEquals(music, result.included().get("music"));
+		assertThat((Music) result.included().get("music"), is(music));
 	}
 	
 	@Test
@@ -107,11 +109,12 @@ public class MusicControllerTest {
 		assertNull(result.included().get("music"));
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Test
 	public void shouldReturnMusicList() {
 		when(dao.searchSimilarTitle(music.getTitle())).thenReturn(Arrays.asList(music));
 		controller.search(music);
-		assertEquals(Arrays.asList(music), result.included().get("musics"));
+		assertThat((List<Music>) result.included().get("musics"), contains(music));
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -120,7 +123,7 @@ public class MusicControllerTest {
 		when(dao.searchSimilarTitle(music.getTitle())).thenReturn(new ArrayList<Music>());
 		controller.search(music);
 		List<Music> musics = (List<Music>) result.included().get("musics");
-		Assert.assertTrue(musics.isEmpty());
+		assertThat(musics, empty());
 	}
 	
 	@Test
@@ -138,22 +141,22 @@ public class MusicControllerTest {
 	public void shouldShowAllMusicsAsJSON() throws Exception {
 		when(dao.listAll()).thenReturn(Arrays.asList(music));
 		controller.showAllMusicsAsJSON();
-		assertEquals("{\"list\":[{\"id\":1,\"title\":\"Some Music\"," +
-				"\"description\":\"Some description\",\"type\":\"ROCK\"}]}", result.serializedResult());
+		assertThat(result.serializedResult(), is("{\"list\":[{\"id\":1,\"title\":\"Some Music\"," +
+				"\"description\":\"Some description\",\"type\":\"ROCK\"}]}"));
 	}
 	
 	@Test
 	public void shouldShowAllMusicsAsXML() throws Exception {
 		when(dao.listAll()).thenReturn(Arrays.asList(music));
 		controller.showAllMusicsAsXML();
-		assertEquals("<list>\n" +
-					 "  <musicBuilder>\n" +
-					 "    <id>1</id>\n" +
-					 "    <title>Some Music</title>\n" +
-					 "    <description>Some description</description>\n" +
-					 "    <type>ROCK</type>\n" +
-					 "  </musicBuilder>\n" +
-					 "</list>", result.serializedResult());
+		assertThat(result.serializedResult(), is("<list>\n" +
+												 "  <musicBuilder>\n" +
+												 "    <id>1</id>\n" +
+												 "    <title>Some Music</title>\n" +
+												 "    <description>Some description</description>\n" +
+												 "    <type>ROCK</type>\n" +
+												 "  </musicBuilder>\n" +
+												 "</list>"));
 	}
 	
 	@Test
@@ -162,21 +165,21 @@ public class MusicControllerTest {
 		controller = new MusicController(dao, userInfo, mockHttpResult, validator, musics);
 		when(dao.listAll()).thenReturn(Arrays.asList(music));
 		controller.showAllMusicsAsHTTP();
-		assertEquals("<p class=\"content\">"+ Arrays.asList(music).toString()+"</p>", mockHttpResult.getBody());
+		assertThat(mockHttpResult.getBody(), is("<p class=\"content\">"+ Arrays.asList(music).toString()+"</p>"));
 	}
 	
 	@Test
 	public void shouldListAs() throws Exception {
 		when(dao.listAll()).thenReturn(Arrays.asList(music));
 		controller.listAs();
-		assertEquals("<list>\n" +
+		assertThat(result.serializedResult(), is("<list>\n" +
 				"  <musicBuilder>\n" +
 				"    <id>1</id>\n" +
 				"    <title>Some Music</title>\n" +
 				"    <description>Some description</description>\n" +
 				"    <type>ROCK</type>\n" +
 				"  </musicBuilder>\n" +
-				"</list>", result.serializedResult());
+				"</list>"));
 	}
 	
 }

@@ -44,7 +44,7 @@ public class HomeControllerTest {
 		validator = new MockValidator();
 		controller = new HomeController(dao, userInfo, result, validator);
 		
-		user = new UserBuilder().withName("Renan").withLogin("renanigt").withPassword("1234");
+		user = new UserBuilder().withName("Renan").withLogin("renanigt").withPassword("1234").build();
 	}
 	
 	@Test

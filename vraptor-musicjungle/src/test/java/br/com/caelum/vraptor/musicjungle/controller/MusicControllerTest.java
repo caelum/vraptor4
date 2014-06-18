@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -73,8 +74,8 @@ public class MusicControllerTest {
 		validator = new MockValidator();
 		controller = new MusicController(dao, userInfo, result, validator, musics);
 		
-		music = new MusicBuilder().withId(1L).withType(MusicType.ROCK).withTitle("Some Music").withDescription("Some description");
-		user = new UserBuilder().withName("Renan").withLogin("renanigt").withPassword("1234");
+		music = new MusicBuilder().withId(1L).withType(MusicType.ROCK).withTitle("Some Music").withDescription("Some description").build();
+		user = new UserBuilder().withName("Renan").withLogin("renanigt").withPassword("1234").build();
 	}
 	
 	@Test
@@ -132,6 +133,7 @@ public class MusicControllerTest {
 		when(musics.getFile(music)).thenReturn(new File("/tmp/uploads/Music_" + music.getId() + ".mp3"));
 		try {
 			controller.download(music);
+			Assert.fail("Should throw an exception.");
 		} catch (FileNotFoundException e) {
 			verify(musics).getFile(music);
 		}
@@ -149,14 +151,15 @@ public class MusicControllerTest {
 	public void shouldShowAllMusicsAsXML() throws Exception {
 		when(dao.listAll()).thenReturn(Arrays.asList(music));
 		controller.showAllMusicsAsXML();
-		assertThat(result.serializedResult(), is("<list>\n" +
-												 "  <musicBuilder>\n" +
-												 "    <id>1</id>\n" +
-												 "    <title>Some Music</title>\n" +
-												 "    <description>Some description</description>\n" +
-												 "    <type>ROCK</type>\n" +
-												 "  </musicBuilder>\n" +
-												 "</list>"));
+		assertThat(result.serializedResult(), 
+				is("<list>\n" +
+				   "  <music>\n" +
+				   "    <id>1</id>\n" +
+				   "    <title>Some Music</title>\n" +
+				   "    <description>Some description</description>\n" +
+				   "    <type>ROCK</type>\n" +
+				   "  </music>\n" +
+				   "</list>"));
 	}
 	
 	@Test
@@ -172,14 +175,15 @@ public class MusicControllerTest {
 	public void shouldListAs() throws Exception {
 		when(dao.listAll()).thenReturn(Arrays.asList(music));
 		controller.listAs();
-		assertThat(result.serializedResult(), is("<list>\n" +
-				"  <musicBuilder>\n" +
-				"    <id>1</id>\n" +
-				"    <title>Some Music</title>\n" +
-				"    <description>Some description</description>\n" +
-				"    <type>ROCK</type>\n" +
-				"  </musicBuilder>\n" +
-				"</list>"));
+		assertThat(result.serializedResult(), 
+				is("<list>\n" +
+				   "  <music>\n" +
+				   "    <id>1</id>\n" +
+				   "    <title>Some Music</title>\n" +
+				   "    <description>Some description</description>\n" +
+				   "    <type>ROCK</type>\n" +
+				   "  </music>\n" +
+				   "</list>"));
 	}
 	
 }

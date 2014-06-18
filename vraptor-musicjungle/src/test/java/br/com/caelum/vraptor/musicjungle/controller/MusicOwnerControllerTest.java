@@ -47,9 +47,9 @@ public class MusicOwnerControllerTest {
 		validator = new MockValidator();
 		controller = new MusicOwnerController(musicDao, userDao, userInfo, result, validator);
 		
-		music = new MusicBuilder().withId(1L).withType(MusicType.ROCK).withTitle("Some Music").withDescription("Some description");
-		user = new UserBuilder().withName("Renan").withLogin("renanigt").withPassword("1234").withMusicOwners(createMusicOwners());
-		anotherUser = new UserBuilder().withName("Fulano").withLogin("fulano").withPassword("3456");
+		music = new MusicBuilder().withId(1L).withType(MusicType.ROCK).withTitle("Some Music").withDescription("Some description").build();
+		user = new UserBuilder().withName("Renan").withLogin("renanigt").withPassword("1234").withMusicOwners(createMusicOwners()).build();
+		anotherUser = new UserBuilder().withName("Fulano").withLogin("fulano").withPassword("3456").build();
 	}
 
 	@Test

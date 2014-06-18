@@ -40,8 +40,8 @@ public class UsersControllerTest {
 		validator = new MockValidator();
 		controller = new UsersController(userDao, result, validator);
 		
-		user = new UserBuilder().withName("Renan").withLogin("renanigt").withPassword("1234");
-		anotherUser = new UserBuilder().withName("Fulano").withLogin("fulano").withPassword("3456");
+		user = new UserBuilder().withName("Renan").withLogin("renanigt").withPassword("1234").build();
+		anotherUser = new UserBuilder().withName("Fulano").withLogin("fulano").withPassword("3456").build();
 	}
 
 	@Test

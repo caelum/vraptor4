@@ -5,27 +5,31 @@ import java.util.Set;
 import br.com.caelum.vraptor.musicjungle.model.MusicOwner;
 import br.com.caelum.vraptor.musicjungle.model.User;
 
-@SuppressWarnings("serial")
-public class UserBuilder extends User {
+public class UserBuilder {
 
+	private final User user = new User();
+	
 	public UserBuilder withLogin(String login) {
-		setLogin(login);
+		user.setLogin(login);
 		return this;
 	}
 	
 	public UserBuilder withPassword(String password) {
-		setPassword(password);
+		user.setPassword(password);
 		return this;
 	}
 
 	public UserBuilder withName(String name) {
-		setName(name);
+		user.setName(name);
 		return this;
 	}
 	
 	public UserBuilder withMusicOwners(Set<MusicOwner> musicOwners) {
-		setMusicOwners(musicOwners);
+		user.setMusicOwners(musicOwners);
 		return this;
 	}
 	
+	public User build() {
+		return user;
+	}
 }

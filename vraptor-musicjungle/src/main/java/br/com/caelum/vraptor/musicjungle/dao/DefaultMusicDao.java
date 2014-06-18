@@ -35,11 +35,13 @@ import br.com.caelum.vraptor.musicjungle.model.MusicOwner;
  */
 public class DefaultMusicDao implements MusicDao {
 
-	private EntityManager entityManager;
+	private final EntityManager entityManager;
 
-	//CDI eyes only
-	@Deprecated
-	public DefaultMusicDao() {
+	/**
+	 * @deprecated CDI eyes only
+	 */
+	protected DefaultMusicDao() {
+		this(null);
 	}
 	
 	/**

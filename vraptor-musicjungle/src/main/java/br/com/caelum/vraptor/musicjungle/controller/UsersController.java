@@ -38,13 +38,15 @@ import br.com.caelum.vraptor.validator.Validator;
 @Controller
 public class UsersController {
 
-	private Validator validator;
-	private Result result;
-	private UserDao userDao;
+	private final Validator validator;
+	private final Result result;
+	private final UserDao userDao;
 
-	// CDI eyes only
-	@Deprecated
-	public UsersController() {
+	/**
+	 * @deprecated CDI eyes only
+	 */
+	protected UsersController() {
+		this(null, null, null);
 	}
 
 	/**

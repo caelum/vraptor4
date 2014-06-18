@@ -40,14 +40,17 @@ import br.com.caelum.vraptor.validator.Validator;
 @Controller
 public class HomeController {
 
-    private Result result;
-    private Validator validator;
-    private UserInfo userInfo;
-	private UserDao dao;
-
-	//CDI eyes only
-	@Deprecated
-	public HomeController() {}
+	private final Result result;
+	private final Validator validator;
+	private final UserInfo userInfo;
+	private final UserDao dao;
+	
+	/**
+	 * @deprecated CDI eyes only
+	 */
+	protected HomeController() {
+		this(null, null, null, null);
+	}
 
 	/**
 	 * You can receive any dependency on constructor. If VRaptor knows all dependencies, this

@@ -123,27 +123,25 @@ public class LongConverter implements Converter<Long> {
 }
 ~~~ 
 
-##Setando outras propriedades do objeto convertido.
+##Populando outras propriedades de um objeto convertido
 
-É possível criar um `converter` para preencher outras propriedades de um `objeto`, basta criar um `converter` seguindo o mesmo processo já citado anteriormente, com algumas ressalvas.
+Nos exemplos acima, usamos os converters para converter um parâmetro do request em um objeto, por exemplo, parâmetro `pais` converter em um objeto `Pais`. Porém há casos onde precisamos apenas criar um objeto com alguma propriedade populada. Exemplo: para o parametro `pais.nome` podemos ter um objeto `Pais` com o atributo `nome` preenchido.
 
-No request devem estar presente os parâmetros referente ao `objeto` que devem ser preenchido, neste caso o `value` será nulo, sendo necessário o retorno do `objeto` que deseja ser convertido já instanciado para que os atributos presentes no request sejam preenchidos automáticamente em seu `objeto`.
-
-O `value` do método `converter` só será preenchido quando um unico parâmetro referente ao `objeto` estiver presente no request.
+Neste caso, o `value` recebido no método será o valor do atributo `nome`. Basta então criar um converter como no exemplo abaixo:
 
 ~~~ 
 #!java
-@Convert(Foto.class)
+@Convert(Pais.class)
 @ApplicationScoped
-public class FotoConverter implements Converter<Foto> {
+public class PaisConverter implements Converter<Pais> {
 
-	public Foto convert(String value, Class<? extends Foto> type) {
-		Foto foto = new Foto();
+	public Pais convert(String value, Class<? extends Pais> type) {
+		Pais pais = new Pais();
 		if (!isNullOrEmpty(value)) {
-			foto.setCampo(value)
+			pais.setNome(value)
 		}
 
-		return foto;
+		return pais;
 	}
 }
 ~~~ 

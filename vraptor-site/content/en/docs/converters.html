@@ -124,6 +124,30 @@ public class LongConverter implements Converter<Long> {
 }
 ~~~ 
 
+##Setting nested properties
+
+In the previous examples, we learn how to convert a request parameter to an object. For example, a parameter `country` can converted to a object `Country`. But there are some cases that you want to only setting a nested property, like a country name. 
+
+For this case, if you have a request parameter `country.name`, you can create the converter below to instantiate a new Country instance only with name setted.
+
+~~~ 
+#!java
+@Convert(Country.class)
+@ApplicationScoped
+public class CountryConverter implements Converter<Country> {
+
+	public Country convert(String value, Class<? extends Country> type) {
+		Country country = new Country();
+		if (!isNullOrEmpty(value)) {
+			country.setName(value)
+		}
+
+		return country;
+	}
+}
+~~~ 
+
+
 ##Overriding core converters
 
 You can also overrise any existing converters. You only need extends the core converter and after to add `@Specializes` annotation. Below you can see an example how to override a converter `LocaleBasedBigDecimalConverter`:

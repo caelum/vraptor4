@@ -43,7 +43,7 @@ public class UsersController {
 	private final UserDao userDao;
 
 	/**
-	 * CDI eyes only
+	 * @deprecated CDI eyes only
 	 */
 	protected UsersController() {
 		this(null, null, null);

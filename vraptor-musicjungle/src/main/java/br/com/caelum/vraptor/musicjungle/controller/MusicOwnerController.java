@@ -45,7 +45,7 @@ public class MusicOwnerController {
 	private final UserDao userDao;
 	
 	/**
-	 * CDI eyes only
+	 * @deprecated CDI eyes only
 	 */
 	protected MusicOwnerController() {
 		this(null, null, null, null, null);

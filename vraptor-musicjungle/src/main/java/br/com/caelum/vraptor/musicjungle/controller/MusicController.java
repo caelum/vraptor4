@@ -72,7 +72,7 @@ public class MusicController {
 	private final Musics musics;
 
 	/**
-	 * CDI eyes only
+	 * @deprecated CDI eyes only
 	 */
 	protected MusicController() {
 		this(null, null, null, null, null);

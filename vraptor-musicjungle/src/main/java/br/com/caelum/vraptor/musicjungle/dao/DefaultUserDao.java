@@ -37,7 +37,7 @@ public class DefaultUserDao implements UserDao {
 	private final EntityManager entityManager;
 
 	/**
-	 * CDI eyes only
+	 * @deprecated CDI eyes only
 	 */
 	protected DefaultUserDao() {
 		this(null);

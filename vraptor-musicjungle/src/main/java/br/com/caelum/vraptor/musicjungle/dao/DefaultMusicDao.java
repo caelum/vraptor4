@@ -38,7 +38,7 @@ public class DefaultMusicDao implements MusicDao {
 	private final EntityManager entityManager;
 
 	/**
-	 * CDI eyes only
+	 * @deprecated CDI eyes only
 	 */
 	protected DefaultMusicDao() {
 		this(null);

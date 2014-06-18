@@ -46,7 +46,7 @@ public class HomeController {
 	private final UserDao dao;
 	
 	/**
-	 * CDI eyes only
+	 * @deprecated CDI eyes only
 	 */
 	protected HomeController() {
 		this(null, null, null, null);

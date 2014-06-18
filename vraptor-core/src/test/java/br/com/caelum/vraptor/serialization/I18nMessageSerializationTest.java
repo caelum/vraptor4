@@ -43,7 +43,7 @@ import br.com.caelum.vraptor.serialization.gson.GsonSerializerBuilder;
 import br.com.caelum.vraptor.serialization.gson.MessageGsonConverter;
 import br.com.caelum.vraptor.serialization.xstream.MessageConverter;
 import br.com.caelum.vraptor.serialization.xstream.XStreamBuilder;
-import br.com.caelum.vraptor.serialization.xstream.XStreamBuilderFactory;
+import br.com.caelum.vraptor.serialization.xstream.XStreamBuilderImpl;
 import br.com.caelum.vraptor.serialization.xstream.XStreamXMLSerialization;
 import br.com.caelum.vraptor.util.test.MockInstanceImpl;
 import br.com.caelum.vraptor.validator.SingletonResourceBundle;
@@ -62,7 +62,7 @@ public class I18nMessageSerializationTest {
 		HttpServletResponse response = mock(HttpServletResponse.class);
 		when(response.getWriter()).thenReturn(new PrintWriter(stream));
 		DefaultTypeNameExtractor extractor = new DefaultTypeNameExtractor();
-		XStreamBuilder builder = XStreamBuilderFactory.cleanInstance(new MessageConverter());
+		XStreamBuilder builder = XStreamBuilderImpl.cleanInstance(new MessageConverter());
 		XStreamXMLSerialization xmlSerialization = new XStreamXMLSerialization(response, builder);
 
 		List<JsonSerializer<?>> jsonSerializers = new ArrayList<>();

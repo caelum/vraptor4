@@ -15,7 +15,7 @@
  */
 package br.com.caelum.vraptor.serialization.xstream;
 
-import static br.com.caelum.vraptor.serialization.xstream.XStreamBuilderFactory.cleanInstance;
+import static br.com.caelum.vraptor.serialization.xstream.XStreamBuilderImpl.cleanInstance;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;

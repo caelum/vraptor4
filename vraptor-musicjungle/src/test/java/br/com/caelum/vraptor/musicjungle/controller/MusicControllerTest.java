@@ -140,14 +140,7 @@ public class MusicControllerTest {
 		when(dao.listAll()).thenReturn(Arrays.asList(music));
 		controller.showAllMusicsAsXML();
 		assertThat(result.serializedResult(), 
-				is("<list>\n" +
-				   "  <music>\n" +
-				   "    <id>1</id>\n" +
-				   "    <title>Some Music</title>\n" +
-				   "    <description>Some description</description>\n" +
-				   "    <type>ROCK</type>\n" +
-				   "  </music>\n" +
-				   "</list>"));
+				is("<list><music><id>1</id><title>Some Music</title><description>Some description</description><type>ROCK</type></music></list>"));
 	}
 	
 	@Test
@@ -164,14 +157,7 @@ public class MusicControllerTest {
 		when(dao.listAll()).thenReturn(Arrays.asList(music));
 		controller.listAs();
 		assertThat(result.serializedResult(), 
-				is("<list>\n" +
-				   "  <music>\n" +
-				   "    <id>1</id>\n" +
-				   "    <title>Some Music</title>\n" +
-				   "    <description>Some description</description>\n" +
-				   "    <type>ROCK</type>\n" +
-				   "  </music>\n" +
-				   "</list>"));
+				is("<list><music><id>1</id><title>Some Music</title><description>Some description</description><type>ROCK</type></music></list>"));
 	}
 	
 }

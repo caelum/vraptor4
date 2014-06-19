@@ -24,4 +24,8 @@ package br.com.caelum.vraptor.serialization;
  */
 public interface XMLSerialization extends Serialization {
 
+	/**
+	 * This option adds indentation to output XML. By default indentation is disabled.
+	 */
+	XMLSerialization indented();
 }

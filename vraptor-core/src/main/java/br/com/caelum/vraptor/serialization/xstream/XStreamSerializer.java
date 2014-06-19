@@ -32,6 +32,8 @@ import br.com.caelum.vraptor.serialization.Serializer;
 import br.com.caelum.vraptor.serialization.SerializerBuilder;
 
 import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
+import com.thoughtworks.xstream.io.xml.PrettyPrintWriter;
 
 /**
  * A SerializerBuilder based on XStream
@@ -42,13 +44,17 @@ import com.thoughtworks.xstream.XStream;
 public class XStreamSerializer implements SerializerBuilder {
 
 	private final XStream xstream;
-	private final Writer writer;
+	private final HierarchicalStreamWriter writer;
 	private final Serializee serializee;
 
-	public XStreamSerializer(XStream xstream, Writer writer) {
+	public XStreamSerializer(XStream xstream, HierarchicalStreamWriter writer) {
 		this.xstream = xstream;
 		this.writer = writer;
 		this.serializee = ((VRaptorXStream) xstream).getVRaptorMapper().getSerializee();
+	}
+
+	public XStreamSerializer(XStream xstream, Writer writer) {
+		this(xstream, new PrettyPrintWriter(writer));
 	}
 
 	@Override
@@ -137,7 +143,7 @@ public class XStreamSerializer implements SerializerBuilder {
 
 	@Override
 	public void serialize() {
-		xstream.toXML(serializee.getRoot(), writer);
+		xstream.marshal(serializee.getRoot(), writer);
 	}
 
 	@Override

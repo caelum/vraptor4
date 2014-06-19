@@ -90,20 +90,14 @@ public class I18nMessageSerializationTest {
 
 	@Test
 	public void shouldCallXStreamXmlSerialization() {
-		String expectedResult = "<message>\n" +
-								"  <message>Just another {0} in {1}</message>\n" +
-								"  <category>success</category>\n" +
-								"</message>";
+		String expectedResult = "<message><message>Just another {0} in {1}</message><category>success</category></message>";
 		serialization.from("success", "message.cat").as(xml());
 		assertThat(result(), is(equalTo(expectedResult)));
 	}
 
 	@Test
 	public void shouldCallXStreamSerializationWithParams() {
-		String expectedResult = "<message>\n" +
-				"  <message>Just another object in memory</message>\n" +
-				"  <category>success</category>\n" +
-				"</message>";
+		String expectedResult = "<message><message>Just another object in memory</message><category>success</category></message>";
 		Object[] params = {"object", "memory"};
 		serialization.from("success", "message.cat", params).as(xml());
 		assertThat(result(), is(equalTo(expectedResult)));

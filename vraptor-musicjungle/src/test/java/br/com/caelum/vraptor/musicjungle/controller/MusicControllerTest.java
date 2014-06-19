@@ -1,6 +1,5 @@
 package br.com.caelum.vraptor.musicjungle.controller;
 
-import static br.com.caelum.vraptor.musicjungle.serialization.XStreamBuilderFactory.cleanInstance;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.is;
@@ -33,15 +32,10 @@ import br.com.caelum.vraptor.musicjungle.model.User;
 import br.com.caelum.vraptor.musicjungle.util.model.MusicBuilder;
 import br.com.caelum.vraptor.musicjungle.util.model.UserBuilder;
 import br.com.caelum.vraptor.observer.upload.UploadedFile;
-import br.com.caelum.vraptor.proxy.JavassistProxifier;
-import br.com.caelum.vraptor.serialization.gson.GsonBuilderWrapper;
+import br.com.caelum.vraptor.serialization.xstream.XStreamBuilderImpl;
 import br.com.caelum.vraptor.util.test.MockHttpResult;
-import br.com.caelum.vraptor.util.test.MockInstanceImpl;
 import br.com.caelum.vraptor.util.test.MockSerializationResult;
 import br.com.caelum.vraptor.util.test.MockValidator;
-
-import com.google.gson.JsonDeserializer;
-import com.google.gson.JsonSerializer;
 
 public class MusicControllerTest {
 
@@ -65,11 +59,9 @@ public class MusicControllerTest {
 	public void setUp() {
 		MockitoAnnotations.initMocks(this);
 		
-		List<JsonSerializer<?>> jsonSerializers = new ArrayList<>();
-		List<JsonDeserializer<?>> jsonDeserializers = new ArrayList<>();
+		XStreamBuilderImpl.cleanInstance();
 		
-		result = new MockSerializationResult(new JavassistProxifier(), cleanInstance(),
-				new GsonBuilderWrapper(new MockInstanceImpl<>(jsonSerializers), new MockInstanceImpl<>(jsonDeserializers)));
+		result = new MockSerializationResult();
 		
 		validator = new MockValidator();
 		controller = new MusicController(dao, userInfo, result, validator, musics);

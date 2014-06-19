@@ -32,7 +32,6 @@ import br.com.caelum.vraptor.musicjungle.model.User;
 import br.com.caelum.vraptor.musicjungle.util.model.MusicBuilder;
 import br.com.caelum.vraptor.musicjungle.util.model.UserBuilder;
 import br.com.caelum.vraptor.observer.upload.UploadedFile;
-import br.com.caelum.vraptor.serialization.xstream.XStreamBuilderImpl;
 import br.com.caelum.vraptor.util.test.MockHttpResult;
 import br.com.caelum.vraptor.util.test.MockSerializationResult;
 import br.com.caelum.vraptor.util.test.MockValidator;

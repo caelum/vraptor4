@@ -41,7 +41,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.junit.Before;
 import org.junit.Test;
 
-import br.com.caelum.vraptor.serialization.Serialization;
 import br.com.caelum.vraptor.serialization.XMLSerialization;
 
 import com.google.common.collect.Lists;
@@ -189,7 +188,10 @@ public class XStreamXMLSerializationTest {
 
 	@Test
 	public void shouldSerializeAllBasicFieldsIndented() {
-		String expectedResult = "<order>\n  <price>15.0</price>\n  <comments>pack it nicely, please</comments>\n</order>";
+		String expectedResult = "<order>\n"
+				+ "  <price>15.0</price>\n"
+				+ "  <comments>pack it nicely, please</comments>\n"
+				+ "</order>";
 		Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please");
 		serialization.indented().from(order).serialize();
 		assertThat(result(), is(equalTo(expectedResult)));

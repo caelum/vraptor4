@@ -58,11 +58,8 @@ public class MusicControllerTest {
 	@Before
 	public void setUp() {
 		MockitoAnnotations.initMocks(this);
-		
-		XStreamBuilderImpl.cleanInstance();
-		
+
 		result = new MockSerializationResult();
-		
 		validator = new MockValidator();
 		controller = new MusicController(dao, userInfo, result, validator, musics);
 		

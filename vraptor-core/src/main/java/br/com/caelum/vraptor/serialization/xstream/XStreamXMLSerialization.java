@@ -16,6 +16,7 @@
 package br.com.caelum.vraptor.serialization.xstream;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -25,6 +26,10 @@ import br.com.caelum.vraptor.serialization.Serializer;
 import br.com.caelum.vraptor.serialization.SerializerBuilder;
 import br.com.caelum.vraptor.serialization.XMLSerialization;
 import br.com.caelum.vraptor.view.ResultException;
+
+import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
+import com.thoughtworks.xstream.io.xml.CompactWriter;
+import com.thoughtworks.xstream.io.xml.PrettyPrintWriter;
 
 /**
  * XStream implementation for XmlSerialization
@@ -37,6 +42,7 @@ public class XStreamXMLSerialization implements XMLSerialization {
 
 	private final HttpServletResponse response;
 	private final XStreamBuilder builder;
+	private boolean indented;
 
 	/** 
 	 * @deprecated CDI eyes only
@@ -55,6 +61,12 @@ public class XStreamXMLSerialization implements XMLSerialization {
 	public boolean accepts(String format) {
 		return "xml".equals(format);
 	}
+	
+	@Override
+	public XMLSerialization indented() {
+		indented = true;
+		return this;
+	}
 
 	@Override
 	public <T> Serializer from(T object) {
@@ -63,8 +75,13 @@ public class XStreamXMLSerialization implements XMLSerialization {
 	}
 
 	protected SerializerBuilder getSerializer() {
+		return new XStreamSerializer(builder.xmlInstance(), getWriter());
+	}
+
+	protected HierarchicalStreamWriter getWriter() {
 		try {
-			return new XStreamSerializer(builder.xmlInstance(), response.getWriter());
+			PrintWriter writer = response.getWriter();
+			return indented ? new PrettyPrintWriter(writer) : new CompactWriter(writer);
 		} catch (IOException e) {
 			throw new ResultException("Unable to serialize data", e);
 		}

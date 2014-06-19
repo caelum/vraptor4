@@ -24,4 +24,5 @@ package br.com.caelum.vraptor.serialization;
  */
 public interface XMLSerialization extends Serialization {
 
+	XMLSerialization indented();
 }

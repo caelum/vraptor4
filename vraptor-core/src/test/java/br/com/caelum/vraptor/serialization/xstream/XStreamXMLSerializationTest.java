@@ -42,13 +42,14 @@ import org.junit.Before;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.serialization.Serialization;
+import br.com.caelum.vraptor.serialization.XMLSerialization;
 
 import com.google.common.collect.Lists;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 public class XStreamXMLSerializationTest {
 
-	protected Serialization serialization;
+	protected XMLSerialization serialization;
 	protected ByteArrayOutputStream stream;
 
 	@Before
@@ -185,6 +186,15 @@ public class XStreamXMLSerializationTest {
 		serialization.from(order).serialize();
 		assertThat(result(), is(equalTo(expectedResult)));
 	}
+
+	@Test
+	public void shouldSerializeAllBasicFieldsIndented() {
+		String expectedResult = "<order>\n  <price>15.0</price>\n  <comments>pack it nicely, please</comments>\n</order>";
+		Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please");
+		serialization.indented().from(order).serialize();
+		assertThat(result(), is(equalTo(expectedResult)));
+	}
+
 	@Test
 	public void shouldUseAlias() {
 		String expectedResult = "<customOrder><price>15.0</price><comments>pack it nicely, please</comments></customOrder>";

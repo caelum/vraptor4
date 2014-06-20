@@ -27,6 +27,8 @@ public void store(@NotNull @Valid Client client) {
 }
 ~~~
 
+**Note**: If your application uses Hibernate or JPA and you have your entities annotated with Bean Validation constraints, you need to call `Session.flush()` or `EntityManager.flush()` to validate your model before redirect or forward.
+
 ##Creating your custom constraints
 
 With Bean validation you can create your own custom validations. If you want to validate if phone number is in `(00) 0000-0000` pattern, you can do something like this:

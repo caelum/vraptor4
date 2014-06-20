@@ -24,6 +24,9 @@ package br.com.caelum.vraptor.serialization;
  */
 public interface XMLSerialization extends Serialization {
 
+	/**
+	 * Key used to search via environment if XML will be printed with indentation or not. Indentation via code have more priority than via properties.
+	 */
 	String ENVIRONMENT_INDENTED_KEY = "br.com.caelum.vraptor.serialization.xml.indented";
 
 	/**

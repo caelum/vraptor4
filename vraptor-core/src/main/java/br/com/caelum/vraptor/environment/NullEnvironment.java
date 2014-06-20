@@ -2,11 +2,9 @@ package br.com.caelum.vraptor.environment;
 
 import java.net.URL;
 
-import javax.enterprise.context.Dependent;
-import javax.enterprise.inject.Alternative;
+import javax.enterprise.inject.Vetoed;
 
-@Dependent
-@Alternative
+@Vetoed
 public class NullEnvironment implements Environment {
 
 	@Override

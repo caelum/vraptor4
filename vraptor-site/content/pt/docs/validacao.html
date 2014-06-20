@@ -27,7 +27,7 @@ public void cadastrar(@NotNull @Valid Cliente cliente) {
 }
 ~~~
 
-**Nota**: Se sua aplicação usa Hibernate ou JPA, e você tem seu modelo anotado com as anotações do Bean Validation, você precisará chamar os métodos `Session.flush()` ou `EntityManager.flush()` para disparar a validação do Bean Validation antes de fazer qualquer `redirect` ou `forward`.
+**Nota**: Se sua aplicação usa Hibernate ou JPA e você tem seu modelo anotado com as anotações do Bean Validation, você precisará chamar os métodos `Session.flush()` ou `EntityManager.flush()` para disparar a validação do Bean Validation antes de fazer qualquer `redirect` ou `forward`.
 
 
 ##Criando validações customizadas

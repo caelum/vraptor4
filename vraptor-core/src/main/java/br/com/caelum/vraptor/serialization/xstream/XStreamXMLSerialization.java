@@ -67,7 +67,7 @@ public class XStreamXMLSerialization implements XMLSerialization {
 	
 	@Override
 	public XMLSerialization indented() {
-		indented = environment.get(ENVIRONMENT_INDENTED_KEY, "true").equals("true");
+		indented = environment.get(ENVIRONMENT_INDENTED_KEY, "true").equalsIgnoreCase("true");
 		return this;
 	}
 

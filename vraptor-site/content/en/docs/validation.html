@@ -27,7 +27,7 @@ public void store(@NotNull @Valid Client client) {
 }
 ~~~
 
-**Note**: If your application uses Hibernate or JPA and you have your entities annotated with Bean Validation constraints, you need to call `Session.flush()` or `EntityManager.flush()` to validate your model before redirect or forward.
+**Note**: If your application uses Hibernate or JPA and you have your entities annotated with Bean Validation constraints, you need to call `Session.flush()` or `EntityManager.flush()` to validate your model before redirect or forward. The method `flush` synchronizes state from your objects to database. So Bean Validation constraint will only validate when `flush` is triggered.
 
 ##Creating your custom constraints
 

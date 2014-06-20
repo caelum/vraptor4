@@ -24,6 +24,8 @@ package br.com.caelum.vraptor.serialization;
  */
 public interface XMLSerialization extends Serialization {
 
+	String ENVIRONMENT_INDENTED_KEY = "br.com.caelum.vraptor.serialization.xml.indented";
+
 	/**
 	 * This option adds indentation to output XML. By default indentation is disabled.
 	 */

@@ -137,7 +137,7 @@ public class DefaultRepresentationResultTest {
 		List<Serialization> serializers = new ArrayList<>();
 
 		serializers.add(new DumbSerialization());
-		serializers.add(new XStreamXMLSerialization(null, null));
+		serializers.add(new XStreamXMLSerialization(null, null, null));
 		serializers.add(new GsonJSONSerialization(null, null, null));
 		serializers.add(new HTMLSerialization(null, null));
 
@@ -151,7 +151,7 @@ public class DefaultRepresentationResultTest {
 	public void shouldSortBasedOnPackageNamesLessPriorityToCaelumInitialList3rdPartyLast() {
 		List<Serialization> serializers = new ArrayList<>();
 
-		serializers.add(new XStreamXMLSerialization(null, null));
+		serializers.add(new XStreamXMLSerialization(null, null, null));
 		serializers.add(new GsonJSONSerialization(null, null, null));
 		serializers.add(new HTMLSerialization(null, null));
 		serializers.add(new DumbSerialization());

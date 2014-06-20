@@ -21,6 +21,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -41,6 +42,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.junit.Before;
 import org.junit.Test;
 
+import br.com.caelum.vraptor.environment.Environment;
 import br.com.caelum.vraptor.serialization.XMLSerialization;
 
 import com.google.common.collect.Lists;
@@ -50,15 +52,17 @@ public class XStreamXMLSerializationTest {
 
 	protected XMLSerialization serialization;
 	protected ByteArrayOutputStream stream;
+	protected Environment environment;
 
 	@Before
 	public void setup() throws Exception {
 		stream = new ByteArrayOutputStream();
+		environment = mock(Environment.class);
 
 		HttpServletResponse response = mock(HttpServletResponse.class);
 		when(response.getWriter()).thenReturn(new PrintWriter(stream));
 
-		serialization = new XStreamXMLSerialization(response, cleanInstance(new CalendarConverter()));
+		serialization = new XStreamXMLSerialization(response, cleanInstance(new CalendarConverter()), environment);
 	}
 
 	public static class Address {
@@ -188,10 +192,22 @@ public class XStreamXMLSerializationTest {
 
 	@Test
 	public void shouldSerializeAllBasicFieldsIndented() {
+		when(environment.get(anyString(), anyString())).thenReturn("true");
+
 		String expectedResult = "<order>\n"
 				+ "  <price>15.0</price>\n"
 				+ "  <comments>pack it nicely, please</comments>\n"
 				+ "</order>";
+		Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please");
+		serialization.indented().from(order).serialize();
+		assertThat(result(), is(equalTo(expectedResult)));
+	}
+
+	@Test
+	public void shouldIndentedByEnvironmentMorePriorityThenJavaCode() {
+		when(environment.get(anyString(), anyString())).thenReturn("false");
+
+		String expectedResult = "<order><price>15.0</price><comments>pack it nicely, please</comments></order>";
 		Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please");
 		serialization.indented().from(order).serialize();
 		assertThat(result(), is(equalTo(expectedResult)));

@@ -22,6 +22,7 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
 
+import br.com.caelum.vraptor.environment.Environment;
 import br.com.caelum.vraptor.serialization.Serializer;
 import br.com.caelum.vraptor.serialization.SerializerBuilder;
 import br.com.caelum.vraptor.serialization.XMLSerialization;
@@ -43,18 +44,20 @@ public class XStreamXMLSerialization implements XMLSerialization {
 	private final HttpServletResponse response;
 	private final XStreamBuilder builder;
 	private boolean indented;
+	private Environment environment;
 
 	/** 
 	 * @deprecated CDI eyes only
 	 */
 	protected XStreamXMLSerialization() {
-		this(null, null);
+		this(null, null, null);
 	}
 
 	@Inject
-	public XStreamXMLSerialization(HttpServletResponse response, XStreamBuilder builder) {
+	public XStreamXMLSerialization(HttpServletResponse response, XStreamBuilder builder, Environment environment) {
 		this.response = response;
 		this.builder = builder;
+		this.environment = environment;
 	}
 
 	@Override
@@ -64,7 +67,7 @@ public class XStreamXMLSerialization implements XMLSerialization {
 	
 	@Override
 	public XMLSerialization indented() {
-		indented = true;
+		indented = environment.get(ENVIRONMENT_INDENTED_KEY, "true").equals("true");
 		return this;
 	}
 

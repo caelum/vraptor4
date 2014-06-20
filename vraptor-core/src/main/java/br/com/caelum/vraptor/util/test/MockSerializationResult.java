@@ -71,7 +71,6 @@ public class MockSerializationResult extends MockResult {
 	 */
 	public MockSerializationResult(Proxifier proxifier, XStreamBuilder xstreambuilder, GsonSerializerBuilder gsonBuilder) {
 		this(new MockHttpServletResponse(), new DefaultTypeNameExtractor(), xstreambuilder, gsonBuilder, new NullEnvironment());
-		super(proxifier);
 	}
 
 	public MockSerializationResult(Proxifier proxifier, XStreamBuilder xstreambuilder, GsonSerializerBuilder gsonBuilder,

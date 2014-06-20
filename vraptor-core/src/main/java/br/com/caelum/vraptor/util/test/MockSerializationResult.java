@@ -70,7 +70,7 @@ public class MockSerializationResult extends MockResult {
 	 * that provides a {@link Environment}.
 	 */
 	public MockSerializationResult(Proxifier proxifier, XStreamBuilder xstreambuilder, GsonSerializerBuilder gsonBuilder) {
-		this(new MockHttpServletResponse(), new DefaultTypeNameExtractor(), xstreambuilder, gsonBuilder, new NullEnvironment());
+		this(proxifier, xstreambuilder, gsonBuilder, new NullEnvironment());
 	}
 
 	public MockSerializationResult(Proxifier proxifier, XStreamBuilder xstreambuilder, GsonSerializerBuilder gsonBuilder,

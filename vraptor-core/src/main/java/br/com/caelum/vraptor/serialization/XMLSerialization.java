@@ -30,7 +30,8 @@ public interface XMLSerialization extends Serialization {
 	String ENVIRONMENT_INDENTED_KEY = "br.com.caelum.vraptor.serialization.xml.indented";
 
 	/**
-	 * This option adds indentation to output XML. By default indentation is disabled.
+	 * This option adds indentation to output XML. If the key {@link XMLSerialization#ENVIRONMENT_INDENTED_KEY} is found
+	 * in environment, the value will evaluated.
 	 */
 	XMLSerialization indented();
 }

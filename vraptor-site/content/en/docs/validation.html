@@ -9,8 +9,8 @@ VRaptor validation uses Bean Validation, spec present in Java EE 7, that allow u
 ~~~
 #!java
 public class Client {
-	// validates if name is not empty and size between 10 and 50
-	@NotEmpty @Size(min=10, max=50) private String name;
+	// validates if name is not null and size between 10 and 50
+	@NotNull @Size(min=10, max=50) private String name;
 
 	// validates if birth date is past
 	@Past private Date birth;
@@ -26,6 +26,8 @@ public void store(@NotNull @Valid Client client) {
 	validation.onErrorForwardTo(this).form();
 }
 ~~~
+
+**Note**: If your application uses Hibernate or JPA and you have your entities annotated with Bean Validation constraints, you need to call `Session.flush()` or `EntityManager.flush()` to validate your model before redirect or forward. The method `flush` synchronizes state from your objects to database. So Bean Validation constraint will only validate when `flush` is triggered.
 
 ##Creating your custom constraints
 
@@ -148,7 +150,7 @@ And the class:
 ~~~
 #!java
 public class Cliente {
-	@NotEmpty(message="{client.name.empty}") // the value {} indicates that the message comes from the ResourceBundle
+	@NotNull(message="{client.name.empty}") // the value {} indicates that the message comes from the ResourceBundle
 	@Size(min=10, max=50, message="{client.name.size}")
 	private String name;
 

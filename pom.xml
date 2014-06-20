@@ -100,7 +100,6 @@
 	
 	<modules>
 		<module>vraptor-core</module>
-		<module>vraptor-musicjungle</module>
 	</modules>
 	
 	<build>

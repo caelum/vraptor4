@@ -353,3 +353,27 @@ public void profile(@HeaderParam("X-Auth-User") username) {
 ~~~
 
 *Atenção*: No exemplo acima, se você tiver um formulário com o campo `username` e você definir o `HeaderParam` com o mesmo nome do campo do formulário, ela será automaticamente sobrescrita com o valor do `HeaderParam`.
+
+
+## Tratando exceções
+
+O VRaptor possui um Exception Handler, que captura as exceções não tratadas em sua aplicação.
+
+No exemplo abaixo, se o método `adicionar(Cliente)` lançar uma ClienteJaExisteException ou qualquer exceção filha, o usuário será redirecionado para o método `formulario()`.
+
+
+~~~ 
+#!java
+@Get
+public void formulario() {
+	...
+}
+
+@Post
+public void adicionar(Cliente cliente) {
+    result.on(ClienteJaExisteException.class).forwardTo(this).formulario();
+
+    clienteDAO.salvar(cliente);
+}
+~~~
+

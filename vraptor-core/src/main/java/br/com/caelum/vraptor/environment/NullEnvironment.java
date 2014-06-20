@@ -4,6 +4,11 @@ import java.net.URL;
 
 import javax.enterprise.inject.Vetoed;
 
+/**
+ * Environment implementation that doesn't' anything.
+ * @author Otávio Scherer Garcia
+ * @since 4.0.1
+ */
 @Vetoed
 public class NullEnvironment implements Environment {
 

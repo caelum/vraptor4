@@ -9,8 +9,8 @@ VRaptor validation uses Bean Validation, spec present in Java EE 7, that allow u
 ~~~
 #!java
 public class Client {
-	// validates if name is not empty and size between 10 and 50
-	@NotEmpty @Size(min=10, max=50) private String name;
+	// validates if name is not null and size between 10 and 50
+	@NotNull @Size(min=10, max=50) private String name;
 
 	// validates if birth date is past
 	@Past private Date birth;
@@ -148,7 +148,7 @@ And the class:
 ~~~
 #!java
 public class Cliente {
-	@NotEmpty(message="{client.name.empty}") // the value {} indicates that the message comes from the ResourceBundle
+	@NotNull(message="{client.name.empty}") // the value {} indicates that the message comes from the ResourceBundle
 	@Size(min=10, max=50, message="{client.name.size}")
 	private String name;
 

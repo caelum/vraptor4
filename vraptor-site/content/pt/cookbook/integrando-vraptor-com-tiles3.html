@@ -4,7 +4,7 @@ title: Integrando o VRaptor com Tiles 3
 
 # por Otávio Garcia
 
-Apache Tiles é um framework que implementa o design pattern Composite View. Com ele é possível você criar templates para sua aplicação de forma bem simples. Mais informações você encontra no <a href="http://tiles.apache.org">site do projeto</a>.
+Apache Tiles é um framework que implementa o design pattern Composite View. Com ele é possível você criar templates para sua aplicação de forma bem simples. Mais informações você encontrará no <a href="http://tiles.apache.org">site do projeto</a>.
 
 O primeiro passo é incluir em seu projeto Maven o artefato abaixo. Se você não usa Maven, você pode ir no site do Tiles e baixar os arquivos manualmente.
 
@@ -26,7 +26,7 @@ E depois adicionar o listener que informa ao tiles que a aplicação está inici
 </listener>
 ~~~
 
-E por último o servlet que irá responder as requisições do Tiles. No exemplo abaixo, qualquer requisição para a URL `*.tiles` será direcionada para os templates do Tiles.
+E por último o servlet que irá responder às requisições do Tiles. No exemplo abaixo, qualquer requisição para a URL `*.tiles` será direcionada para os templates do Tiles.
 
 ~~~
 #!xml
@@ -61,7 +61,7 @@ public class TilesPathResolver extends DefaultPathResolver {
 }
 ~~~
 
-Com isso, se você requisitar o método `ClienteController.formulario`, o VRaptor irá efetuar o forward para o template `cliente.formulario`. Basta então você criarmos o template para atender ao `forward`:
+Com isso, se você requisitar o método `ClienteController.formulario`, o VRaptor irá efetuar o forward para o template `cliente.formulario`. Basta então criarmos o template para atender ao `forward`:
 
 ~~~
 #!xml

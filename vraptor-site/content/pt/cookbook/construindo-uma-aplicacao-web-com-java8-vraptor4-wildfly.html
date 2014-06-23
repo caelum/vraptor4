@@ -12,11 +12,13 @@ Neste post irei mostrar como construir uma aplicação VRaptor 4, usando recurso
 
 O código da aplicação completa está disponível [aqui](http://github.com/rsaraiva/v4_wildfly_jta).
 
-Para começar, crie um projeto Web com Maven utilizando sua IDE preferida. Abra o arquivo de configuração do Maven, pom.xml e inclua as dependências contidas no arquivo abaixo.
+Para começar, crie um projeto Web com Maven utilizando sua IDE preferida. Abra o arquivo de configuração do Maven, `pom.xml` e inclua as dependências contidas no arquivo abaixo.
 
 ~~~
 #!xml
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" 
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.rsaraiva.labs</groupId>
     <artifactId>events</artifactId>
@@ -80,7 +82,7 @@ Para começar, crie um projeto Web com Maven utilizando sua IDE preferida. Abra 
 </project>
 ~~~
 
-A primeira dependência é a do novo VRaptor 4, versão final. Na sequência, incluimos o plugin vraptor-javatime que faz o VRaptor reconhecer todos os tipos da nova api de datas. Depois vem a dependência da JSTL para trabalharmos nas JSPs, o hibernate, a lib do CDI e pro fim, a lib do Java EE 7. Na tag plugins, definimos que queremos utilizar Java 8 na construção da aplicação.
+A primeira dependência é a do novo VRaptor 4, versão final. Na sequência, incluimos o plugin `vraptor-javatime` que faz o VRaptor reconhecer todos os tipos da nova api de datas. Depois vem a dependência da JSTL para trabalharmos nas JSPs, o hibernate, a lib do CDI e pro fim, a lib do Java EE 7. Na tag plugins, definimos que queremos utilizar Java 8 na construção da aplicação.
 
 Agora vamos criar nosso modelo - uma simples entidade para representar Eventos.
 
@@ -109,7 +111,7 @@ public class Event implements Serializable {
 }
 ~~~
 
-Veja que o atributo date é do tipo LocalDate, classe da nova api de Datas do Java 8.
+Veja que o atributo date é do tipo `LocalDate`, classe da nova api de Datas do Java 8.
 
 Mas para isso ser possível, é necessário criar um Converter da JPA, já que a JPA 2.1 ainda não suporta os tipos da nova Date and Time API.
 
@@ -130,7 +132,7 @@ public class LocalDatePersistenceConverter implements AttributeConverter<LocalDa
 }
 ~~~
 
-Este converter deve ser registrado no Persistence.xml conforme abaixo.
+Este converter deve ser registrado no `persistence.xml` conforme abaixo.
 
 ~~~
 #!xml
@@ -146,7 +148,7 @@ Este converter deve ser registrado no Persistence.xml conforme abaixo.
 </persistence>
 ~~~
 
-Agora vamos criar um Service que sabe criar um novo evento e listar todos os eventos. Perceba a integração com JavaEE pelo uso das anotações @Stateless e @PersistenceContext.
+Agora vamos criar um `Service` que sabe criar um novo evento e listar todos os eventos. Perceba a integração com JavaEE pelo uso das anotações `@Stateless` e `@PersistenceContext`.
 
 ~~~
 #!java
@@ -189,7 +191,7 @@ public class EventController implements Serializable {
 }
 ~~~
 
-Nosso controller possui dois métodos. O primeiro usa o EventService para consultar todos os eventos cadastrados e inclui a lista no contexto da JSP. O segundo recebe o post do formulário da JSP e persiste o evento no banco de dados.
+Nosso controller possui dois métodos. O primeiro usa `EventService` para consultar todos os eventos cadastrados e inclui a lista no contexto da JSP. O segundo recebe o post do formulário da JSP e persiste o evento no banco de dados.
 
 Enfim, devemos criar a jsp com a lista de eventos e o formulário de cadastro.
 

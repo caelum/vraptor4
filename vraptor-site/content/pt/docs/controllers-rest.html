@@ -4,7 +4,11 @@ title: Controllers REST
 
 #O que são Controllers?
 
-Controller são o que poderíamos pensar como recursos a serem disponibilizados para acesso pelos nossos clientes. No caso de uma aplicação Web baseada no VRaptor, um recurso deve ser anotado com a anotação `@Controller`. Assim que o programador insere tal anotação em seu código, todos os métodos públicos desse recurso se tornam acessíveis através de chamadas do tipo GET ou POST a URIs específicas.
+Um controller é uma classe que disponibiliza recursos a nossos clientes. No
+caso de uma aplicação Web baseada no VRaptor, um controller deve ser anotado
+com a anotação `@Controller`. Assim que o programador insere tal anotação em
+seu código, todos os métodos públicos desse recurso se tornam acessíveis
+através de chamadas do tipo GET ou POST a URIs específicas.
 
 O exemplo a seguir mostra um recurso chamado `ClienteController` que possui métodos para diversas funcionalidades ligadas a um cliente. Simplesmente criar essa classe e os métodos faz com que as URLs `/cliente/adiciona`, `/cliente/lista`, `/cliente/visualiza`, `/cliente/remove` e `/cliente/atualiza` sejam disponibilizadas, cada uma invocando o respectivo método em sua classe.
 
@@ -73,7 +77,16 @@ O VRaptor tira proveito do framework [Paranamer](http://paranamer.codehaus.org),
 
 ##Escopos
 
-Por vezes você deseja compartilhar um componente entre todos os usuários, entre todas as requisições de um mesmo usuário ou a cada requisição de um usuário. Para definir em que escopo o seu componente vive, basta utilizar as anotações `@ApplicationScoped`, `@SessionScoped`, `@RequestScoped`, `@Dependent` e `@Conversation`. Caso nenhuma anotação seja utilizada, o VRaptor assume que seu componente ficará no escopo de request, isto é, você terá um novo componente a cada nova requisição.
+Por vezes você deseja compartilhar um componente entre todos os usuários, entre
+todas as requisições de um mesmo usuário ou a cada requisição de um usuário.
+Para definir em que escopo o seu componente vive, basta utilizar as anotações
+`@ApplicationScoped`, `@SessionScoped`, `@RequestScoped`, `@Dependent` e
+`@Conversation`. Caso nenhuma anotação seja utilizada, o VRaptor assume que seu
+componente ficará com escopo dependent, isto é, você terá um novo componente a
+cada ponto de injeção.
+
+Esses escopos estão definidos na especificação do CDI, para mais informações
+acesse a documentação do [Java EE 7](http://docs.oracle.com/javaee/7/tutorial/doc/partcdi.htm#GJBNR)
 
 ##@Path
 
@@ -111,9 +124,15 @@ public class ClienteController {
 }
 ~~~
 
-##Http Methods
+##Métodos HTTP
 
-O ideal é definir uma URI específica para diversos métodos HTTP diferentes, como `GET`, `POST`, `PUT` etc. Para atingir esse objetivo, utilizamos as anotações `@Get`, `@Post`, `@Delete`, etc que também permitem configurar uma URI diferente da URI padrão, da mesma forma que a anotação `@Path`. O exemplo a seguir altera os padrões de URI do `ClienteController` para utilizar duas URIs distintas, com diversos métodos HTTP:
+Desenvolvendo sua aplicação com recursos REST, o ideal é aproveitar a semântica
+de cada método HTTP. Portanto às vezes precisamos usamar métodos como `GET`,
+`POST`, `PUT` etc para acessar uma mesma URI.  Para atingir esse objetivo,
+utilizamos as anotações `@Get`, `@Post`, `@Delete`, etc que também permitem
+configurar uma URI diferente da URI padrão, da mesma forma que a anotação
+`@Path`. O exemplo a seguir altera os padrões de URI do `ClienteController`
+para utilizar duas URIs distintas, com diversos métodos HTTP:
 
 ~~~
 #!java
@@ -177,26 +196,6 @@ E, note que para permitir a remoção pelo método `DELETE`, temos que usar o pa
 </form>
 ~~~
 
-##Paths com expressões regulares
-
-Você pode restringir o valor dos parâmetros da sua URI com expressões regulares, dessa maneira:
-
-~~~ 
-#!java
-@Path("/cor/{cor:[0-9A-Fa-f]{6}}")
-public void setCor(String cor) {
-	//...
-}
-~~~
-
-Tudo que estiver depois do `:` será tratado como uma regex, e a URI só vai casar se o parâmetro casar com a regex:
-
-~~~ 
-#!jsp
-/cor/a0b3c4 => casa
-/cor/AABBCC => casa
-/cor/branco => não casa
-~~~
 
 ##Path com injeção de variáveis
 
@@ -248,6 +247,27 @@ public class ClienteController {
 		return ...
 	}
 }
+~~~
+
+##Paths com expressões regulares
+
+Você pode restringir o valor dos parâmetros da sua URI com expressões regulares, dessa maneira:
+
+~~~ 
+#!java
+@Path("/cor/{cor:[0-9A-Fa-f]{6}}")
+public void setCor(String cor) {
+	//...
+}
+~~~
+
+Tudo que estiver depois do `:` será tratado como uma regex, e a URI só vai casar se o parâmetro casar com a regex:
+
+~~~ 
+#!jsp
+/cor/a0b3c4 => casa
+/cor/AABBCC => casa
+/cor/branco => não casa
 ~~~
 
 ##Paths com *
@@ -343,7 +363,9 @@ Assim, o path `/post/atual` vai ser testado antes do `/post/{post.autor}`, e o V
 
 ##Paths com headers
 
-Você também pode injetar HTTP-Headers na sua lógica usando a anotação `HeaderParam`. No exemplo abaixo o campo `username` será injetado com o valor do header `X-Auth-User`.
+Você também pode injetar HTTP-Headers na sua lógica usando a anotação
+`HeaderParam`. No exemplo abaixo o parâmetro `username` será injetado com o valor
+do header `X-Auth-User`.
 
 ~~~ 
 #!java
@@ -352,7 +374,9 @@ public void profile(@HeaderParam("X-Auth-User") username) {
 }
 ~~~
 
-*Atenção*: No exemplo acima, se você tiver um formulário com o campo `username` e você definir o `HeaderParam` com o mesmo nome do campo do formulário, ela será automaticamente sobrescrita com o valor do `HeaderParam`.
+*Atenção*: No exemplo acima, se você tiver paramêtro com a chave `username`
+e você definir o `HeaderParam` com o mesmo nome do parâmetro, o valor
+do parâmetro será sobrescrito com o valor do header.
 
 
 ## Tratando exceções

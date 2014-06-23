@@ -8,7 +8,7 @@ title: Ten minutes guide
 
 We will start the system with product registration. For that, we will need a class that models a product and we will also use it to save products in a database, using JPA/Hibernate:
 
-~~~ 
+~~~
 #!java
 @Entity
 public class Product {
@@ -26,7 +26,7 @@ public class Product {
 
 We also need a class that will manage product registration, dealing with web requests. This class will be the products Controller:
 
-~~~ 
+~~~
 #!java
 public class ProductsController {
 }
@@ -34,7 +34,7 @@ public class ProductsController {
 
 The `ProductController` class will expose URIs that can be accessed through the web, i.e., it will expose your application resources. This type of classes have to annotated with `@Controller`:
 
-~~~ 
+~~~
 #!java
 @Controller
 public class ProductsController {
@@ -43,7 +43,7 @@ public class ProductsController {
 
 Whenever you annotate a class with `@Controller` all its public methods are accessible through the web. Take the list method as an example:
 
-~~~ 
+~~~
 #!java
 @Controller
 public class ProductsController {
@@ -57,7 +57,7 @@ VRaptor will automatically redirect all request to `/products/list` to this meth
 
 The method `list` returns a product's list, and you can access it at the JSP through request attributes. For that example, an attribute called `productList` can be found at that JSP:
 
-~~~ 
+~~~
 #!jsp
 <ul>
 <c:forEach items="${productList}" var="product">
@@ -72,7 +72,7 @@ The exported attribute name convention is quite intuitive: if it is a Collection
 
 VRaptor strongly relies on dependency injection (DI) and Inversion of Control (IoC) concepts. The intention is that you won't need to create or load your class' dependencies - instead you will just receive the objects VRaptor creates for you. The previous example returns an empty list on our `list` method. It would be much more interesting returning a real list, with all the registered products. Let's create a Product DAO, responsible for listing products
 
-~~~ 
+~~~
 #!java
 public class ProductDAO {
 
@@ -84,7 +84,7 @@ public class ProductDAO {
 
 And, we can use the DAO on the `ProductsController` to list products:
 
-~~~ 
+~~~
 #!java
 @Controller
 public class ProductsController {
@@ -99,7 +99,7 @@ public class ProductsController {
 
 We can instantiate `ProductDAO` from the controller, but that can be complicated, specially if the DAO itself has its own dependencies. It would be much more interesting to take advantage from VRaptor's dependency management. By annotating the DAO with `@RequestScoped`, and the controller attribute with `@Inject` we indicate the DAO should be injected to the Controller.
 
-~~~ 
+~~~
 #!java
 @RequestScoped
 public class ProductDAO {
@@ -122,7 +122,7 @@ public class ProductsController {
 
 We already have the product lists, but we can't register them yet. We will create a form to add products. In order to avoid accessing the JSP directly, we will create an empty logic that will only redirect to the JSP:
 
-~~~ 
+~~~
 #!java
 @Controller
 public class ProductsController {
@@ -134,14 +134,14 @@ public class ProductsController {
 
 The form jsp will be placed at `/WEB-INF/jsp/products/form.jsp`, and can be accessed through the URI `/produtos/form`:
 
-~~~ 
+~~~
 #!jsp
 <form action="<c:url value='/products/add'/>">
-	Name:               
+	Name:
 	<input type="text" name="product.name"/><br/>
-	Description: 
+	Description:
 	<input type="text" name="product.description"/><br/>
-	Price:             
+	Price:
 	<input type="text" name="product.price"/><br/>
 
 	<input type="submit" value="Save" />
@@ -150,7 +150,7 @@ The form jsp will be placed at `/WEB-INF/jsp/products/form.jsp`, and can be acce
 
 The form, as we designed it, will save the product through the URI `/products/add`, threfore we need to create that method on the controller:
 
-~~~ 
+~~~
 #!java
 @Controller
 public class ProductsController {
@@ -164,7 +164,7 @@ Note the input names: `product.name`, `product.description`, and `product.price`
 
 Then, by using the correct names on the form inputs, all you need to do is to make the `add` method receive a `Product` for parameter:
 
-~~~ 
+~~~
 #!java
 @Controller
 public class ProductsController {
@@ -177,7 +177,7 @@ public class ProductsController {
 
 After adding something to the application, it is common to navigate back to the list, or the product registration form. In our example, we want to redirect back to the products list, whenever a new product is added. VRaptor's `Result` component is responsible for adding attributes to a request, and change the redirection view. In case we need a `Result` instance, all we need to do is to have a result field annotated with `@Inject`:
 
-~~~ 
+~~~
 #!java
 @Controller
 public class ProductsController {
@@ -193,7 +193,7 @@ public class ProductsController {
 
 And, in order to redirect to the listing, we can use the `result`:
 
-~~~ 
+~~~
 #!java
 result.redirectTo(ProductsController.class).list();
 ~~~
@@ -202,7 +202,7 @@ We can read this line of code: as a result, redirect to the `list` method of the
 
 Our `add` method will be:
 
-~~~ 
+~~~
 #!java
 public void add(Product product) {
 	dao.add(product);
@@ -219,7 +219,7 @@ Notice that you already know enough to build 90% of your application! The next s
 
 Now we will focus on the actual implementation of the `ProductDAO`, using the JPA to assist us persist products. In order to do that, our `ProductDAO` needs an `EntityManager`. Using VRaptor DI, all you'll need to do is to declare an `EntityManager` field and annotate it with `@Inject`.
 
-~~~ 
+~~~
 #!java
 public class ProductDAO {
 
@@ -245,7 +245,7 @@ We often want to intercept all requests (or some of them) and execute some logic
 
 When we need to create a shopping cart on our application, we need to keep cart items somehow. In order to do so, we can create a session scoped component, i.e., an unique component that will last through the user session. For that, annotate your component with `@SessionScoped` instead:
 
-~~~ 
+~~~
 #!java
 @SessionScoped
 public class ShoppingCart implements Serializable{
@@ -265,7 +265,7 @@ This class needs to implement `Serializable`. That happens because, since it is 
 
 The shopping cart is a component, therefore it can be injected in the controller:
 
-~~~ 
+~~~
 #!java
 @Controller
 public class CartController {
@@ -287,7 +287,7 @@ Besides the session scope, there is also de application scope. Components annota
 
 ##A bit of REST
 
-The REST approach is to have URIs identify resources on the web, so we can profit from the many structural advantages the HTTP protocol provides us. If we could map various HTTP method calls to one URI while having different controller methods respond to them, we could have the following calls for out product's registration:  
+The REST approach is to have URIs identify resources on the web, so we can profit from the many structural advantages the HTTP protocol provides us. If we could map various HTTP method calls to one URI while having different controller methods respond to them, we could have the following calls for out product's registration:
 
 | GET      |   /products        |  list all products  |
 | POST     |   /products        |  add a produto  |
@@ -299,7 +299,7 @@ The REST approach is to have URIs identify resources on the web, so we can profi
 
 In order to create that REST behaviour on VRaptor, the method name convention won't suffice, so we need to change them. The `@Path` annotation can change the URI pointing to a method without limiting the HTTP verb that can access it. For example, annotating the list method with `@Path("/products")` will have all requests to "/products" call the `list` method:
 
-~~~ 
+~~~
 #!java
 @Path("/products")
 public List<Product> list() {...}
@@ -307,7 +307,7 @@ public List<Product> list() {...}
 
 However, if we want to restrict it to a specific HTTP method, we can use `@Get`, `@Post`, `@Delete`, and `@Put` annotations, instead, with the same attribute syntax:
 
-~~~ 
+~~~
 #!java
 public class ProductsController {
 	//...
@@ -339,7 +339,7 @@ Internationalization (i18n) is a powerful resource, present in almost every curr
 
 In order to have that running on your app, all you have to do is have a `messages.properties` file on our application classpath (`WEB-INF/classes`). That file will contain many key/value entries in the application primary language, such as:
 
-~~~ 
+~~~
 #!jsp
 userName.field = Username
 password.field = Password
@@ -347,7 +347,7 @@ password.field = Password
 
 Now, if we wanted to translate our application to Portuguese, all we need to do is to create a new file, much like the previous one, but with the language suffix: `messages_pt.properties`. The `_pt` suffix indicates that a user that accesses the application from a machine configured to a locale of Portuguese will see that message values, instead:
 
-~~~ 
+~~~
 #!jsp
 userName.field = User name
 password.field = Password
@@ -355,18 +355,24 @@ password.field = Password
 
 The keys are the same, of course, but the values change accordingly to the language. Then, you can use those messages on your JSP by using the formatting JSTL:
 
-~~~ 
+~~~
 #!jsp
 <!%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <html>
 	<body>
-		<fmt:message key="userName.field"/> 
+		<fmt:message key="userName.field"/>
 		<input name="user.username"/> <br/>
 
-		<fmt:message key="password.field"/> 
+		<fmt:message key="password.field"/>
 		<input type="password" name="user.password"/>
 
 		<input type="submit"/>
 	</body>
 </html>
 ~~~
+
+## Next steps
+
+Continue exploring the other sections of this documentation and <a href="/pt/cookbook/aceitando-urls-com-ou-sem-barra-no-final">Cookbooks</a>, with solutions to common problems.
+
+While studying VRaptor, should you have any doubts please refer to <a href="http://questions.vraptor.org/">questions.vraptor.org</a>, or visit our discussion list at <a href="http://groups.google.com/group/caelum-vraptor-en">discussion list</a>.

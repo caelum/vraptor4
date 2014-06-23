@@ -8,7 +8,7 @@ title: O guia inicial de 10 minutos
 
 Para começar o sistema, vamos começar com cadastro de produtos. Precisamos de uma classe que vai representar o produto, e vamos usá-la para guardar produtos no banco, usando o JPA/Hibernate:
 
-~~~ 
+~~~
 #!java
 @Entity
 public class Produto {
@@ -26,7 +26,7 @@ public class Produto {
 
 Precisamos também de uma classe que vai controlar o cadastro de produtos, tratando requisições web. Essa classe vai ser o Controller de produtos:
 
-~~~ 
+~~~
 #!java
 public class ProdutosController {
 }
@@ -34,7 +34,7 @@ public class ProdutosController {
 
 A classe `ProdutosController` vai expor URIs para serem acessadas via web, ou seja, vai expor recursos da sua aplicação. E, para indicar isso, você precisa anotá-la com com `@Controller`:
 
-~~~ 
+~~~
 #!java
 @Controller
 public class ProdutosController {
@@ -43,7 +43,7 @@ public class ProdutosController {
 
 Ao colocar essa anotação na classe, todos os métodos públicos dela serão acessíveis pela web. Por exemplo, se tivermos um método lista na classe:
 
-~~~ 
+~~~
 #!java
 @Controller
 public class ProdutosController {
@@ -53,11 +53,11 @@ public class ProdutosController {
 }
 ~~~
 
-O VRaptor automaticamente redirecionará todas as requisições à URI `/produtos/lista` para esse método. Ou seja, a convenção para a criação de URIs é `/<nome_do_controller>/<nome_do_metodo>`. Ao terminar a execução do método, o VRaptor fará o dispatch da requisição para o JSP `/WEB-INF/jsp/produtos/lista.jsp`. Ou seja, a convenção para a view padrão é `/WEB-INF/jsp/<nome_do_controller>/<nome_do_metodo>.jsp`. 
+O VRaptor automaticamente redirecionará todas as requisições à URI `/produtos/lista` para esse método. Ou seja, a convenção para a criação de URIs é `/<nome_do_controller>/<nome_do_metodo>`. Ao terminar a execução do método, o VRaptor fará o dispatch da requisição para o JSP `/WEB-INF/jsp/produtos/lista.jsp`. Ou seja, a convenção para a view padrão é `/WEB-INF/jsp/<nome_do_controller>/<nome_do_metodo>.jsp`.
 
 O método `lista` retorna uma lista de produtos, mas como acessá-la no JSP? No VRaptor, o retorno do método é exportado para a JSP por meio de atributos da requisição. No caso do método lista, vai existir um atributo chamado `produtoList` contendo a lista retornada:
 
-~~~ 
+~~~
 #!jsp
 <ul>
 <c:forEach items="${produtoList}" var="produto">
@@ -72,7 +72,7 @@ A convenção para o nome dos atributos exportados é bastante intuitiva: se for
 
 O VRaptor usa fortemente o conceito de Injeção de Dependências (DI) e Inversão de Controle (IoC). A ideia é que você não precise criar ou buscar as dependências da sua classe, você simplesmente as recebe e o VRaptor se encarrega de criá-las pra você. Estamos retornando uma lista vazia no nosso método `lista`. Seria muito mais interessante retornar uma lista de verdade, por exemplo todas os produtos cadastrados no sistema. Para isso vamos criar um DAO de produtos, para fazer a listagem:
 
-~~~ 
+~~~
 #!java
 public class ProdutoDao {
 
@@ -84,7 +84,7 @@ public class ProdutoDao {
 
 E no nosso `ProdutosController` podemos usar o dao pra fazer a listagem de produtos:
 
-~~~ 
+~~~
 #!java
 @Controller
 public class ProdutosController {
@@ -99,7 +99,7 @@ public class ProdutosController {
 
 Podemos instanciar o `ProdutoDao` direto do controller, porém é muito mais interessante aproveitar o gerenciamento de dependências que o VRaptor faz e receber o DAO. E, para que isso seja possível, basta anotar o DAO com `@RequestScoped`, anotar o atributo `dao` do controller com `@Inject` e o VRaptor vai se encarregar de criá-lo e injetá-lo na sua classe:
 
-~~~ 
+~~~
 #!java
 @RequestScoped
 public class ProdutoDao {
@@ -122,7 +122,7 @@ public class ProdutosController {
 
 Temos uma listagem de produtos, mas ainda não temos como cadastrá-los. Vamos então criar um formulário de adição de produtos. Para não ter que acessar o JSP diretamente, vamos criar uma lógica vazia que só redireciona para o JSP:
 
-~~~ 
+~~~
 #!java
 @Controller
 public class ProdutosController {
@@ -134,14 +134,14 @@ public class ProdutosController {
 
 Podemos acessar o formulário, que estará em `/WEB-INF/jsp/produtos/form.jsp`, pela URI `/produtos/form`:
 
-~~~ 
+~~~
 #!jsp
 <form action="<c:url value='/produtos/adiciona'/>">
-	Nome:             
+	Nome:
 	<input type="text" name="produto.nome"/><br/>
-	Descrição:    
+	Descrição:
 	<input type="text" name="produto.descricao"/><br/>
-	Preço:            
+	Preço:
 	<input type="text" name="produto.preco"/><br/>
 
 	<input type="submit" value="Salvar" />
@@ -150,7 +150,7 @@ Podemos acessar o formulário, que estará em `/WEB-INF/jsp/produtos/form.jsp`, 
 
 Como o formulário vai salvar o produto pela URI `/produtos/adiciona`, precisamos criar esse método no nosso controller:
 
-~~~ 
+~~~
 #!java
 @Controller
 public class ProdutosController {
@@ -164,7 +164,7 @@ Repare nos nomes dos nossos inputs: `produto.nome`, `produto.descricao` e `produ
 
 Então, usando os nomes corretamente nos inputs do form, basta criar seu método adiciona:
 
-~~~ 
+~~~
 #!java
 @Controller
 public class ProdutosController {
@@ -177,7 +177,7 @@ public class ProdutosController {
 
 Geralmente, depois de adicionar algo no sistema queremos voltar para a sua listagem, ou para o formulário novamente. No nosso caso, queremos voltar pra listagem de produtos ao adicionar um produto novo. Para isso existe um componente do VRaptor: o `Result`. Ele é responsável por adicionar atributos na requisição, e por mudar a view a ser carregada. Se eu quiser uma instância de `Result`, basta declarar o atributo no controller e anota-lo com `@Inject`:
 
-~~~ 
+~~~
 #!java
 @Controller
 public class ProdutosController {
@@ -192,7 +192,7 @@ public class ProdutosController {
 
 E para redirecionar para a listagem basta usar o `result`:
 
-~~~ 
+~~~
 #!java
 result.redirectTo(ProdutosController.class).lista();
 ~~~
@@ -201,7 +201,7 @@ Podemos ler esse código como: Como resultado, redirecione para o método `lista
 
 Então nosso método adiciona ficaria:
 
-~~~ 
+~~~
 #!java
 public void adiciona(Produto produto) {
 	dao.adiciona(produto);
@@ -215,7 +215,7 @@ Veja mais informações sobre o `Result` no capítulo [Views e Ajax](/pt/docs/tr
 
 Agora vamos fazer uma implementação de verdade do `ProdutoDao`, usando o JPA para persistir os produtos. Para isso, nosso `ProdutoDao` precisa de um `EntityManager`. Como o VRaptor usa injeção de dependências, basta declarar um atributo do tipo `EntityManager` e anota-lo com `@Inject`.
 
-~~~ 
+~~~
 #!java
 public class ProdutoDao {
 
@@ -241,7 +241,7 @@ Muitas vezes, queremos interceptar todas as requisições (ou uma parte delas) e
 
 Se quisermos criar um carrinho de compras no nosso sistema, precisamos de alguma forma manter os itens do carrinho na sessão do usuário. Para fazer isso, podemos criar um componente que está no escopo de sessão, ou seja, ele vai ser único na sessão do usuário. Para isso, basta criar um componente anotado com `@SessionScoped`:
 
-~~~ 
+~~~
 #!java
 @SessionScoped
 public class CarrinhoDeCompras implements Serializable{
@@ -261,7 +261,7 @@ Essa classe precisa implementar Serializable já que o escopo dela é o `Session
 
 Como esse carrinho de compras é um componente, podemos recebê-lo no controller que vai cuidar do carrinho de compras:
 
-~~~ 
+~~~
 #!java
 @Controller
 public class CarrinhoController {
@@ -294,7 +294,7 @@ Seguindo a idéia REST de que URIs devem identificar recursos na rede para entã
 
 Para criar esse comportamento REST no VRaptor, podemos usar as anotações `@Path` - que muda qual é a URI que vai acessar o determinado método, e as anotações com os nomes dos métodos HTTP `@Get`, `@Post`, `@Delete`, `@Put`, que indicam que o método anotado só pode ser acessado se a requisição estiver com o método HTTP indicado. Então, uma versão REST do nosso `ProdutosController` seria:
 
-~~~ 
+~~~
 #!java
 public class ProdutosController {
 	//...
@@ -326,7 +326,7 @@ Internacionalização (i18n) é um recurso poderoso, e que está presente em qua
 
 Para isso, é só criarmos um arquivo chamado `messages.properties` e disponibilizá-lo no classpath da nossa aplicação (`WEB-INF/classes`). Esse arquivo conterá várias linhas compostas por um conjunto de chave/valor, como por exemplo:
 
-~~~ 
+~~~
 #!jsp
 campo.nomeUsuario = Nome de Usuário
 campo.senha = Senha
@@ -334,28 +334,34 @@ campo.senha = Senha
 
 Até então está fácil, mas e se quisermos criar esses arquivos para várias línguas, como por exemplo, inglês? Simples, basta criarmos um outro arquivo properties chamado `messages_en.properties`. Repare no sufixo `_en` no nome do arquivo. Isso indica que quando o usuário acessar sua aplicação em uma máquina configurada com locale em inglês as mensagens desse arquivo serão utilizadas. O conteúdo desse arquivo então ficaria:
 
-~~~ 
+~~~
 #!jsp
 campo.nomeUsuario = Username
 campo.senha = Password
 ~~~
 
-Repare que as chaves são mantidas, mudando apenas o valor para a língua escolhida. Para usar essas mensagens em seus arquivos JSP, você pode utilizar a JSTL. 
+Repare que as chaves são mantidas, mudando apenas o valor para a língua escolhida. Para usar essas mensagens em seus arquivos JSP, você pode utilizar a JSTL.
 
 Dessa forma, o código ficaria:
 
-~~~ 
+~~~
 #!jsp
 <!%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <html>
 	<body>
-		<fmt:message key="campo.usuario"/> 
+		<fmt:message key="campo.usuario"/>
 		<input name="usuario.nomeUsuario"/> <br/>
 
-		<fmt:message key="campo.senha"/> 
+		<fmt:message key="campo.senha"/>
 		<input type="password" name="usuario.senha"/>
 
 		<input type="submit"/>
 	</body>
 </html>
 ~~~
+
+##Próximos passos
+
+Continue explorando as próximas seções desta documentação, os <a href="/pt/cookbook/aceitando-urls-com-ou-sem-barra-no-final">Cookbooks</a>, com soluções de problemas comuns e o <a href="http://www.casadocodigo.com.br/products/livro-vraptor">Livro de VRaptor pela editora Casa do Código</a>.
+
+Se você tiver dúvidas, procure ajuda no <a href="http://www.guj.com.br/tag/vraptor">GUJ</a> ou na nossa <a href="https://groups.google.com/forum/#!forum/caelum-vraptor">lista de discussão</a>.

@@ -139,7 +139,7 @@ public class VRaptor implements Filter {
 	private void validateIfBeansXmlIsNotFound() throws ServletException {
 		Set<String> webInfResources = servletContext.getResourcePaths("/WEB-INF/");
 
-		if (!webInfResources.contains("/WEB-INF/web.xml") && !webInfResources.contains("/WEB-INF/classes/META-INF/beans.xml")) {
+		if (!webInfResources.contains("/WEB-INF/beans.xml") && !webInfResources.contains("/WEB-INF/classes/META-INF/beans.xml")) {
 			throw new ServletException("A beans.xml isn't found. Check if is properly located at "
 					+ "/WEB-INF/beans.xml or /WEB-INF/classes/META-INF/beans.xml");
 		}

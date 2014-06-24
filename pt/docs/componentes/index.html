@@ -32,7 +32,7 @@
 * @ConversationScoped - a instância do componente é mantida durante uma conversation.
 * @RequestScoped - o componente é o mesmo durante uma requisição.
 * @Dependent - component é instanciado sempre que requisitado.
-</code></pre> <p>Você pode pesquisar mais sobre os <a href="http://docs.oracle.com/javaee/7/tutorial/doc/cdi-basic008.htm">escopos do CDI aqui</a>.</p> <h2 id="fabricando-componentes">Fabricando componentes</h2> <p>Muitas vezes você quer receber como dependência da sua classe alguma classe que não é do seu projeto, como por exemplo uma Session do Hibernate ou um EntityManager da JPA.</p> <p>Para poder fazer isto, basta criar um <code>Produces</code>:</p> <pre><code class="language-java"><span class="nd">@RequestScoped</span>
+</code></pre> <p>Você pode pesquisar mais sobre os escopos <a href="http://docs.oracle.com/javaee/7/tutorial/doc/cdi-basic008.htm">na documentação do Java EE 7</a>.</p> <h2 id="fabricando-componentes">Fabricando componentes</h2> <p>Muitas vezes você quer receber como dependência da sua classe alguma classe que não é do seu projeto, como por exemplo uma Session do Hibernate ou um EntityManager da JPA.</p> <p>Para poder fazer isto, basta criar um <code>Produces</code>:</p> <pre><code class="language-java"><span class="nd">@RequestScoped</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">SessionCreator</span> <span class="o">{</span>
 
 	<span class="nd">@Inject</span> <span class="kd">private</span> <span class="n">SessionFactory</span> <span class="n">sessionFactory</span><span class="o">;</span>

@@ -37,6 +37,18 @@ is_not_a_valid_datetime = {0} is not a valid datetime.</code></pre> <h2 id="chan
 			<span class="k">throw</span> <span class="k">new</span> <span class="nf">ConversionException</span><span class="o">(</span><span class="k">new</span> <span class="n">ConversionMessage</span><span class="o">(</span><span class="s">"is_not_a_valid_integer"</span><span class="o">,</span> <span class="n">value</span><span class="o">));</span>
 		<span class="o">}</span>
 	<span class="o">}</span>
+<span class="o">}</span></code></pre> <h2 id="setting-nested-properties">Setting nested properties</h2> <p>In the previous examples, we learn how to convert a request parameter to an object. For example, a parameter <code>country</code> can converted to a object <code>Country</code>. But there are some cases that you want to only setting a nested property, like a country name. </p> <p>For this case, if you have a request parameter <code>country.name</code>, you can create the converter below to instantiate a new Country instance only with name setted.</p> <pre><code class="language-java"><span class="nd">@Convert</span><span class="o">(</span><span class="n">Country</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
+<span class="nd">@ApplicationScoped</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">CountryConverter</span> <span class="kd">implements</span> <span class="n">Converter</span><span class="o">&lt;</span><span class="n">Country</span><span class="o">&gt;</span> <span class="o">{</span>
+
+	<span class="kd">public</span> <span class="n">Country</span> <span class="nf">convert</span><span class="o">(</span><span class="n">String</span> <span class="n">value</span><span class="o">,</span> <span class="n">Class</span><span class="o">&lt;?</span> <span class="kd">extends</span> <span class="n">Country</span><span class="o">&gt;</span> <span class="n">type</span><span class="o">)</span> <span class="o">{</span>
+		<span class="n">Country</span> <span class="n">country</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Country</span><span class="o">();</span>
+		<span class="k">if</span> <span class="o">(!</span><span class="n">isNullOrEmpty</span><span class="o">(</span><span class="n">value</span><span class="o">))</span> <span class="o">{</span>
+			<span class="n">country</span><span class="o">.</span><span class="na">setName</span><span class="o">(</span><span class="n">value</span><span class="o">)</span>
+		<span class="o">}</span>
+
+		<span class="k">return</span> <span class="n">country</span><span class="o">;</span>
+	<span class="o">}</span>
 <span class="o">}</span></code></pre> <h2 id="overriding-core-converters">Overriding core converters</h2> <p>You can also overrise any existing converters. You only need extends the core converter and after to add <code>@Specializes</code> annotation. Below you can see an example how to override a converter <code>LocaleBasedBigDecimalConverter</code>:</p> <pre><code class="language-java"><span class="nd">@Specializes</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyCustomBigDecimalConverter</span> <span class="kd">extends</span> <span class="n">LocaleBasedBigDecimalConverter</span> <span class="o">{</span>
 	<span class="kd">protected</span> <span class="n">NumberFormat</span> <span class="nf">getNumberFormat</span><span class="o">()</span> <span class="o">{</span>

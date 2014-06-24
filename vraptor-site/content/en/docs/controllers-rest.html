@@ -1,3 +1,430 @@
 ---
-title: Controllers Rest
+title: REST Controllers
 ---
+
+#What are Controllers?
+
+A controller is a class that can provide resources to be accessed by your
+clients. With VRaptor, a controller must be annotated with `@Controller`. All
+public methods of an annotated class become accessible through GET or POST requests to
+specific URIs. 
+
+The following example shows a controller named `CustomerController`, which
+provides several operations over customers. Creating the class below with all
+its methods instantly make the URIs `/customer/add`, `/customer/list`,
+`/customer/show`, `/customer/remove` and `/customer/update` available, each one
+invoking the respective method.
+
+
+~~~ 
+#!java
+@Controller
+public class CustomerController {
+
+	public void add(Customer customer) {
+
+	}
+
+	public List<Customer> list() {
+		return ...
+	}
+
+	public Customer view(Customer customer) {
+		return ...
+	}
+
+	public void remove(Customer customer) {
+		...
+	}
+
+	public void update(Customer customer) {
+		...
+	}
+}
+~~~ 
+
+##Method parameters
+
+You can receive parameters on your controller methods, and if those parameters
+follow the java beans convention (getters and setters for class fields), you
+can use dots for browsing through the fields. For instance, on method:
+
+~~~ 
+#!java
+public void update(Customer customer) {
+	//...
+}
+~~~ 
+
+you can receive on the request parameters:
+
+~~~ 
+#!properties
+customer.id=3
+customer.nome=John Doe
+customer.user.login=johndoe
+~~~ 
+
+and the respective fields will be set, browsing through getters and setters
+starting from customer. If an object field or a method parameter is a list
+(`List<>` or array), you can receive several request parameters, using square
+brackets and indexes:
+
+~~~ 
+#!jsp
+customer.phones[0]=+55 11 5571-2751 #if it is a string list
+customer.relatives[0].id=1 #if it is an arbitrary object, you can continue to browse
+customer.relatives[3].id=1 #indexes don't need to be sequential
+customer.relatives[0].name=Mary Doe #using the same index, it will be set on same object
+customers[1].id=23 #it works if you receive a customer list as method parameter
+~~~ 
+
+##Reflection on parameter names
+
+VRaptor uses the [Paranamer framework](http://paranamer.codehaus.org), which can
+get parameter names information through pre compilation or debug data, avoiding
+the creation of annotations for this purpose. Some VRaptor developers also
+contribute in Paranamer development.
+
+##Scopes
+
+Sometimes you want to share a component among all users, or through all
+requests from the same user or one instance for each user request. To specify
+in which scope your component will live, use the annotations
+`@ApplicationScoped`, `@SessionScoped`, `@RequestScoped`, `@Dependent` and
+`@Conversation`. If you don't specify a scope for your component, VRaptor
+assumes the dependent scope, meaning a fresh instance will be created for each
+time it needs to be injected.
+
+Those scopes are from CDI specification, see the [Java EE 7
+documentation](http://docs.oracle.com/javaee/7/tutorial/doc/partcdi.htm#GJBNR)
+for more information.
+
+##@Path
+
+The `@Path` annotation allows you to specify custom access URIs to your
+controller methods. The basic usage of the annotation is to specify a fixed
+URI. The following example shows how to customize the access URI for a method
+that accepts POST requests only. The URI we want to specify is `/customer`:
+
+~~~ 
+#!java
+@Controller
+public class CustomerController {
+
+	@Path("/customer")
+	@Post
+	public void customer(Customer customer) {
+	}
+}
+~~~ 
+
+If you place the `@Path` on `CustomerController`, the specified value will be used as
+prefix for all URIs from this controller.
+
+~~~ 
+#!java
+@Controller
+@Path("/customers")
+public class CustomerController {
+	//URI: /customers/list
+	public void list() {...}
+
+	//URI: /customers/save
+	@Path("save")
+	public void add() {...}
+
+	//URI: /customers/allCustomers
+	@Path("/allCustomers")
+	public void listAll() {...}
+}
+~~~
+
+##HTTP methods
+
+The best practice when designing REST resources is to use the sematincs of each
+HTTP method. Therefore, eventually we need to use methods like `GET`, `POST`,
+`PUT` etc, for the same URI. In order to accomplish that, we use annotations
+`@Get`, `@Post`, `@Delete` etc, which also allows us to configure a custom URI
+in the same way as `@Path`. The following example changes the default URIs for
+`CustomerController`.  Now we specify two different URIs for different HTTP
+methods:
+
+~~~
+#!java
+@Controller
+public class CustomerController {
+    @Post("/")
+    public void add(Customer customer) {
+    }
+
+    @Path("/")
+    public List<Customer> list() 
+        return ...
+    }
+
+    @Get("/customer")
+    public Customer show(Customer customer) {
+        return ...
+    }
+
+    @Delete("/customer")
+    public void remove(Customer customer) {
+        ...
+    }
+
+    @Put("/customer")
+    public void update(Customer customer) {
+        ...
+    }
+
+}
+~~~
+
+As you can see, we used HTTP methods + a specific URI to identify each method
+in our Java class.
+
+We must be **very careful** when creating hyperlinks and HTML forms, because web
+browsers currently support only `POST` and `GET` methods. For that reason, requests
+for methods `DELETE`, `PUT` etc should be performed through JavaScript, or by adding
+an extra parameter called `_method`. The latter one only works on `POST` requests.
+This parameter will overwrite the real HTTP method being invoked. 
+
+The following example creates a link to show one customer's data:
+
+~~~ 
+#!jsp
+<a href="/customer?customer.id=5">show customer 5</a>
+~~~ 
+
+Now an example on how to invoke the method to add a customer:
+
+~~~ 
+#!jsp
+<form action="/customer" method="post">
+    <input name="customer.name" />
+    <input type="submit" />
+</form>
+~~~
+
+Notice that if we want to remove a customer using the `DELETE` HTTP method, we
+have to use the `_method` parameter, since browsers still don't support that kind
+of requests:
+
+~~~ 
+#!jsp
+<form action="/customer" method="POST">
+    <input name="customer.id" value="5" type="hidden" />
+    <button type="submit" name="_method" value="DELETE">remove customer 5</button>
+</form>
+~~~
+
+##Path with variable injection 
+
+Sometimes we want the URI to include, for example, the unique identifier of a
+resource. 
+
+Suppose a customer controller application where the customer's unique
+identifier (primary key) is a number. We can map our URIs as
+`/customer/{customer.id}`, so we can visualize each customer. That is, if we
+access the URI `/customer/2`, the show method will be invoked and the
+`customer.id` parameter will be set to 2. If the URI `/customer/1717` is
+accessed, the same method will be invoked with the `1717` value. 
+
+That way we can create unique URIs to identify different resources in our
+application. See the mentioned example:
+
+~~~ 
+#!java
+@Controller
+public class CustomerController {
+
+  @Get
+  @Path("/customer/{customer.id}")
+  public Customer show(Customer customer) {
+    return ...
+  }
+
+}
+~~~
+
+You can go further and set several parameters through the URI:
+
+~~~ 
+#!java
+@Controller
+public class CustomerController {
+
+	@Get
+	@Path("/customer/{customer.id}/show/{section}")
+	public Customer show(Customer customer, String section) {
+		return ...
+	}
+}
+~~~
+
+##Multiple paths for the same logic method
+
+You can set more than one path for the same logic method:
+
+~~~ 
+#!java
+@Controller
+public class CustomerController {
+
+  @Get
+  @Path({"/customer/{customer.id}/show/{section}", "/customer/{customer.id}/show/"})
+  public Customer show(Customer customer, String section) {
+    return ...
+  }
+
+}
+~~~
+
+##Paths with regular expressions
+
+You can limit your parameter values using regular expressions using this idiom:
+
+~~~ 
+#!java
+@Path("/color/{color:[0-9A-Fa-f]{6}}")
+public void setColor(String color) {
+    //...
+}
+~~~
+
+Everything that is after the colon is treated as a regex, and the URI will only
+match if the parameter matches the regex:
+
+~~~ 
+#!jsp
+/color/a0b3c4 => matches
+/color/AABBCC => matches
+/color/white => doesn't match
+~~~ 
+
+##Paths with wildcards
+
+You can also use the * wildcard as a selection method for your URI. The
+following example ignores anything that comes after the word `photo/`:
+
+~~~ 
+#!java
+@Get
+@Path("/customer/{customer.id}/photo/*")
+public File photo(Customer customer) {
+    return ...
+}
+~~~
+
+And now a similar code, but used to download a specific photo from a customer:
+
+~~~ 
+#!java
+@Get
+@Path("/customer/{customer.id}/photo/{photo.id}")
+public File photo(Customer customer, Photo photo) {
+    return ...
+}
+~~~
+
+Sometimes you want the parameter to include the `/` character. In that case, you
+should use the pattern `{...*}`:
+
+~~~ 
+#!java
+@Get
+@Path("/customer/{customer.id}/download/{path*}")
+public File download(Customer customer, String path) {
+    return ...
+}
+~~~
+
+##Specifying priorities for your paths
+
+It is possible for some URIs to be handled by more than one method in our class:
+
+~~~ 
+#!java
+@Controller
+public class PostController {
+
+    @Get
+    @Path("/post/{post.author}")
+    public void show(Post post) { ... }
+
+    @Get
+    @Path("/post/current")
+    public void current() { ... }
+}
+~~~
+
+The URI `/post/current` can be handled by both show and current methods. But we
+don't want to invoke the show method with that URI, we want that VRaptor
+test the current path first, avoiding the invocation of the show method. 
+
+In order to do that, we can define priorities for `@Path`, so VRaptor will
+first test paths with with higher priority values.
+
+~~~ 
+#!java
+@Controller
+public class PostController {
+
+    @Get
+    @Path(value = "/post/{post.author}", priority = Path.LOW)
+    public void show(Post post) { ... }
+
+    @Get
+    @Path(value = "/post/current", priority = Path.HIGH)
+    public void current() { ... }
+}
+~~~
+
+This way, the `/post/current` path will be tested before `/post/{post.author}`
+by VRaptor, solving our problem. In case we had the following URI's:
+`/post/{post.id}` and `/post/current`, we wouldn't need to define priorities
+because `{post.id}` only matches numbers. 
+
+##Paths with header parameters injection
+
+It's also possible to inject HTTP headers into a method using the annotation
+`@HeaderParam`.  In the following example the parameter `username` will be
+injected with the value of the header `X-Auth-User`.
+
+~~~ 
+#!java
+public void profile(@HeaderParam("X-Auth-User") username) {
+	...
+}
+~~~
+
+**Warning**: In this example, if you had a request parameter named `username`
+(from a form, for example) and still define the `HeaderParam` with the same
+name of the parameter, it will be overwritten with the header value.
+
+
+## Handling exceptions
+
+VRaptor has an Exception Handler that captures exceptions not handled by your
+application.
+
+In the following example, if the method `add(Customer)` throw a
+`DuplicatedCustomerException` or any subclass, the user will be redirected to
+the method `form()`.
+
+~~~ 
+#!java
+@Get
+public void form() {
+	...
+}
+
+@Post
+public void add(Customer customer) {
+    result.on(DuplicatedCustomerException.class).forwardTo(this).form();
+
+    customerDAO.save(customer);
+}
+~~~
+

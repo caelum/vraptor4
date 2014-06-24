@@ -42,7 +42,12 @@ Nos links abaixo você pode obter mais informações sobre o CDI:
 
 ##Escopos
 
-Assim como os recursos, os componentes vivem em um escopo específico e seguem as mesmas regras, por padrão pertencendo ao escopo de requisicão, isto é, a cada nova requisição seu componente será novamente instanciado.
+Assim como os controllers, os componentes vivem em um escopo específico mas
+seguem regras diferentes por padrão. Um controller pertence ao escopo de
+requisicão, isto é, a cada nova requisição seu componente será novamente
+instanciado. Já um componente do VRaptor, por padrão, é construído sempre
+que necessário, para cada ponto de injeção (o escopo dependent que veremos
+mais adiante).
 
 O exemplo a seguir mostra o fornecedor de conexões com o banco baseado no Hibernate. Esse fornecedor está no escopo de aplicacação, portanto será instanciado somente uma vez por contexto:
 

@@ -2,3 +2,284 @@
 title: Components
 ---
 
+#What are components?
+
+Components are object instances that your application need to execute tasks or
+to keep state in different situations. 
+
+Common examples of components are DAOs and e-mail senders. The best practices
+suggest you should always create interfaces for your components to implement.
+This makes your code much easier to unit test. 
+
+The following example shows a VRaptor-managed component:
+
+~~~ 
+#!java
+@RequestScoped
+public class CustomerDao {
+
+	private Session session;
+
+	// CDI forces the existence of this default constructor
+	protected Dao() {
+	}
+
+	@Inject
+	public CustomerDao(Session session) {
+		this.session = session;
+	}
+
+	public void add(Customer customer) {
+		session.save(customer);
+	}
+}
+~~~ 
+
+Every component from VRaptor is managed by CDI (Context Dependenxy Injection)
+from Java EE 7. Therefore, all capabilities implemented by CDI are present in
+VRaptor.
+
+For more information about CDI, check the [Java EE 7
+docs](http://docs.oracle.com/javaee/7/tutorial/doc/partcdi.htm#GJBNR).
+
+##Scopes
+
+It's important to notice that components has their own lifecycle. The default
+behavior is that a new instance will be built everytime it needs to be injected
+and discarded together with the object in which it was injected (the dependent
+scope as we will see later).
+
+The following example shows a provider of Hibernate sessions. This provider is
+in the application scope, so it will be instaciated only once for the entire
+application:
+
+~~~ 
+#!java
+@ApplicationScoped
+public class HibernateControl {
+
+	private final SessionFactory factory;
+
+	public HibernateControl() {
+		this.factory = new AnnotationConfiguration().configure().buildSessionFactory();
+	}
+
+	public Session getSession() {
+		return factory.openSession();
+	}
+}
+~~~ 
+
+The implemented scopes are:
+
+* `@ApplicationScoped` - the component is an singletorm, only one for the entire application.
+* `@SessionScoped` - the component is the same during the http session of the container.
+* `@ConversationScoped` - the component instance is kept during a conversation.
+* `@RequestScoped` - the component is the same during a request.
+* `@Dependent` - the component is instanciated whenever it is requested.
+
+For more information about scopes, check [the Java EE 7
+documentation](http://docs.oracle.com/javaee/7/tutorial/doc/cdi-basic008.htm#GJBBK)
+about scopes.
+
+##Building components
+
+Sometimes you need to inject a dependency that isn't from your application, for example 
+an Hibernate Session or an JPA EnitityManager.
+
+To do this, you need to create a method annotated with `@Produces`:
+
+~~~ 
+#!java
+@RequestScoped
+public class SessionCreator {
+
+	@Inject private SessionFactory sessionFactory;
+
+	@Produces @RequestScoped
+	public Session getSession() {
+		return sessionFactory.openSession();
+	}
+
+	public void close(@Disposes Session session) {
+		if (session.isOpen()) {
+		    session.close();
+		}
+	}
+}
+~~~ 
+
+See that we are injecting and SessionFactory, so we would also need a producer
+of SessionFactory:
+
+~~~ 
+#!java
+@ApplicationScoped
+public class SessionFactoryCreator {
+
+    private final SessionFactory factory;
+
+    public SessionFactoryCreator() {
+        this.factory = new AnnotationConfiguration().configure().buildSessionFactory();
+    }
+
+    @Produces
+    public SessionFactory getSession() {
+        return factory;
+    }
+
+    @PreDestroy
+    public void close() {
+        if (!factory.isClosed()) {
+            factory.close();
+        }
+    }
+}
+~~~ 
+
+You can also use the listeners `@PostConstruct`, `@PreDestroy` and `@Disposes`
+to get notified about the lifecycle of the component and control the allocation
+and deallocation of resources. This works with any VRaptor component you
+create, all you need to do is annotate and method of your class with any of
+those annotations.
+
+##Dependency Injection
+
+VRaptor uses CDI to instantiate components and controllers. Thus, the previous
+examples (`CustomerDao` and `SessionCreator`) enable that any controller or
+component receive and `CustomerDao` injected in its constructor. To do so, CDI
+forces us to implement an default constructor, for example:
+
+~~~ 
+#!java
+@Controller
+public class CustomerController {
+	private final CustomerDao dao;
+
+	@Inject
+	public CustomerController(CustomerDao dao) {
+		this.dao = dao;
+	}
+
+	/**
+	 * @deprecated CDI eyes only
+	 */
+	protected CustomerController() {
+		this(null);
+	}
+
+	@Post
+	public void add(Customer customer) {
+		this.dao.add(customer);
+	}
+}
+~~~ 
+
+## Firing events
+
+You can fire events and handle them with the `@Observes` annotation.
+
+If you need, for example, log an message during the bootstrap of your application,
+you can observe the `VRaptorInitialized` event, like this:
+
+~~~ 
+#!java
+@ApplicationScoped
+public class PrintLog {
+
+	public void observesBootstrap(@Observes VRaptorInitialized event) {
+		System.out.println("My application is UP");
+	}
+~~~ 
+
+
+## Overriding components
+
+The majority of VRaptor's convetions and behaviors can be customized. It's simple
+to customize something: all you need to do is extend an internal class from
+VRaptor and annotate it with `@Specializes`. After doing this, the framework
+will use the custom implementation instead of the default one.
+
+In case you need to implement an internal interface, you need to annotate the
+implementation with `@Priority`, so VRaptor will use your implementation instead
+of its own:
+
+~~~
+#!java
+@Priority(Interceptor.Priority.LIBRARY_BEFORE + 10)
+~~~
+
+##Customizing VRaptor
+
+Let's see how we can customize some of the default behaviors of VRaptor.
+
+###Customizing the default view
+
+If you need to change the default rendered view, or change the place where
+it'll be look for, you'll only need to create the following class:
+
+
+~~~ 
+#!java
+@Specializes
+public class CustomPathResolver extends DefaultPathResolver {
+
+	@Override
+	protected String getPrefix() {
+		return "/root/directory/";
+	}
+
+	@Override
+	protected String getExtension() {
+		return "ftl"; // ou any other extension
+	}
+
+	@Override
+	protected String extractControllerFromName(String baseName) {
+		return //your convention here
+               //ex.: If you want to redirect UserController to 'userResource' instead of 'user'
+               //ex.2: If you override the convention for Controllers name to XXXResource
+               //and still want to redirect to 'user' and not to 'userResource'
+	}
+}
+~~~ 
+
+If you need a more complex convention, just implement the `PathResolver` interface.
+
+###Changing default URI
+
+The default URI for CustomerController.list() is /customer/list, i.e,
+controller_name/method_name. If you want to override this convention, you can
+create a class like:
+
+~~~ 
+#!java
+@Specializes @ApplicationScoped
+public class MeuRoutesParser extends PathAnnotationRoutesParser {
+	//delegated constructors 
+	protected String extractControllerNameFrom(Class<?> type) {
+		return //your conention here
+	}
+
+	protected String defaultUriFor(String controllerName, String methodName) {
+		return //your conention here
+	}
+}
+~~~ 
+
+If you need a more complex convention, just implement the `RoutesParser` interface.
+
+###Changing the application character encoding
+
+For using an arbitrary character encoding on all your requests and responses,
+avoiding encoding inconsistencies, you can set this parameter on your web.xml.
+
+~~~ 
+#!xml
+<context-param>
+	<param-name>br.com.caelum.vraptor.encoding</param-name>
+	<param-value>UTF-8</param-value>
+</context-param>
+~~~ 
+
+This way all of your pages and form data will use the UTF-8.

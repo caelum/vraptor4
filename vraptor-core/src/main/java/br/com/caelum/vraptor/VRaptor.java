@@ -88,7 +88,7 @@ public class VRaptor implements Filter {
 
 		validateJavaEE7Environment();
 		validateIfCdiIsFound();
-		validateIfBeansXmlIsNotFound();
+		warnIfBeansXmlIsNotFound();
 
 		initializedEvent.fire(new VRaptorInitialized(servletContext));
 
@@ -136,11 +136,13 @@ public class VRaptor implements Filter {
 		}
 	}
 
-	private void validateIfBeansXmlIsNotFound() throws ServletException {
-		Set<String> webInfResources = servletContext.getResourcePaths("/WEB-INF/");
-
-		if (!webInfResources.contains("/WEB-INF/beans.xml") && !webInfResources.contains("/WEB-INF/classes/META-INF/beans.xml")) {
-			throw new ServletException("A beans.xml isn't found. Check if is properly located at "
+	private void warnIfBeansXmlIsNotFound() throws ServletException {
+		
+		Set<String> webInfFile = servletContext.getResourcePaths("/WEB-INF/beans.xml");
+		Set<String> metaInfFile = servletContext.getResourcePaths("/WEB-INF/classes/META-INF/beans.xml");
+		
+		if (webInfFile == null && metaInfFile == null) {
+			logger.warn("A beans.xml isn't found. Check if is properly located at "
 					+ "/WEB-INF/beans.xml or /WEB-INF/classes/META-INF/beans.xml");
 		}
 	}

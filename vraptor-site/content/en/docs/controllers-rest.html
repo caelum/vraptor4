@@ -66,7 +66,7 @@ customer.user.login=johndoe
 ~~~ 
 
 and the respective fields will be set, browsing through getters and setters
-starting from client. If an object field or a method parameter is a list
+starting from customer. If an object field or a method parameter is a list
 (`List<>` or array), you can receive several request parameters, using square
 brackets and indexes:
 
@@ -76,7 +76,7 @@ customer.phones[0]=+55 11 5571-2751 #if it is a string list
 customer.relatives[0].id=1 #if it is an arbitrary object, you can continue to browse
 customer.relatives[3].id=1 #indexes don't need to be sequential
 customer.relatives[0].name=Mary Doe #using the same index, it will be set on same object
-customers[1].id=23 #it works if you receive a client list as method parameter
+customers[1].id=23 #it works if you receive a customer list as method parameter
 ~~~ 
 
 ##Reflection on parameter names
@@ -102,7 +102,7 @@ for more information.
 
 ##@Path
 
-The @Path annotation allows you to specify custom access URIs to your
+The `@Path` annotation allows you to specify custom access URIs to your
 controller methods. The basic usage of the annotation is to specify a fixed
 URI. The following example shows how to customize the access URI for a method
 that accepts POST requests only. The URI we want to specify is `/customer`:
@@ -119,7 +119,7 @@ public class CustomerController {
 }
 ~~~ 
 
-If you place the `@Path` on `ClientController`, the specified value will be used as
+If you place the `@Path` on `CustomerController`, the specified value will be used as
 prefix for all URIs from this controller.
 
 ~~~ 
@@ -134,8 +134,8 @@ public class CustomerController {
 	@Path("save")
 	public void add() {...}
 
-	//URI: /customers/allClients
-	@Path("/allClients")
+	//URI: /customers/allCustomers
+	@Path("/allCustomers")
 	public void listAll() {...}
 }
 ~~~
@@ -173,7 +173,7 @@ public class CustomerController {
         ...
     }
 
-    @Put("/client")
+    @Put("/customer")
     public void update(Customer customer) {
         ...
     }
@@ -190,7 +190,7 @@ for methods `DELETE`, `PUT` etc should be performed through JavaScript, or by ad
 an extra parameter called `_method`. The latter one only works on `POST` requests.
 This parameter will overwrite the real HTTP method being invoked. 
 
-The following example creates a link to show one client's data:
+The following example creates a link to show one customer's data:
 
 ~~~ 
 #!jsp
@@ -207,7 +207,7 @@ Now an example on how to invoke the method to add a customer:
 </form>
 ~~~
 
-Notice that if we want to remove a cliente using the `DELETE` HTTP method, we
+Notice that if we want to remove a customer using the `DELETE` HTTP method, we
 have to use the `_method` parameter, since browsers still don't support that kind
 of requests:
 
@@ -270,11 +270,11 @@ You can set more than one path for the same logic method:
 ~~~ 
 #!java
 @Controller
-public class ClientController {
+public class CustomerController {
 
   @Get
-  @Path({"/customer/{customer.id}/show/{section}", "/client/{customer.id}/show/"})
-  public Client show(Customer customer, String section) {
+  @Path({"/customer/{customer.id}/show/{section}", "/customer/{customer.id}/show/"})
+  public Customer show(Customer customer, String section) {
     return ...
   }
 
@@ -317,7 +317,7 @@ public File photo(Customer customer) {
 }
 ~~~
 
-And now a similar code, but used to download a specific photo from a client:
+And now a similar code, but used to download a specific photo from a customer:
 
 ~~~ 
 #!java
@@ -328,7 +328,7 @@ public File photo(Customer customer, Photo photo) {
 }
 ~~~
 
-Sometimes you want the parameter to include the / character. In that case, you
+Sometimes you want the parameter to include the `/` character. In that case, you
 should use the pattern `{...*}`:
 
 ~~~ 

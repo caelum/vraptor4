@@ -30,6 +30,8 @@ import javax.inject.Inject;
 
 import org.slf4j.Logger;
 
+import com.google.common.base.Strings;
+
 import br.com.caelum.vraptor.HeaderParam;
 import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.events.InterceptorsReady;
@@ -105,7 +107,9 @@ public class ParametersInstantiator {
 			if (param.getParameter().isAnnotationPresent(HeaderParam.class)) {
 				HeaderParam headerParam = param.getParameter().getAnnotation(HeaderParam.class);
 				String value = request.getHeader(headerParam.value());
-				request.setParameter(param.getName(), value);
+				if (!Strings.isNullOrEmpty(value)) {
+					request.setParameter(param.getName(), value);
+				}
 			}
 		}
 	}

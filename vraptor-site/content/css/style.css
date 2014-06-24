@@ -80,12 +80,12 @@ header {
   padding: 1em .5em;
 }
 
-div.note {
+.note {
   background-color: rgb(194, 194, 194);
   text-indent: 10px;
 }
 
-div.note p {
+.note p {
   margin: auto;
   padding: 1em;
 }
@@ -209,7 +209,7 @@ div.note p {
 }
 
 .home-advantages .soa:before {
-  background-position: 0 -853px; 
+  background-position: 0 -853px;
 }
 
 .home-advantages .best-practices:before {
@@ -220,11 +220,10 @@ div.note p {
   background-position: 0 -153px;
 }
 
-img#eventPileline {
+#eventPileline {
   min-width: 700px;
   width: 90%;
 }
-
 
 .content-table {
     width: 100%;
@@ -237,6 +236,12 @@ img#eventPileline {
 .content-table tr td {
     padding: 15px 10px 15px 0;
     vertical-align: bottom;
+}
+
+.doc-container {
+    max-width: 55em;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 @media (min-width: 480px) {

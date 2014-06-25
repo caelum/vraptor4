@@ -48,20 +48,34 @@ public class XStreamXmlDeserializerTest {
 	private ControllerMethod dropDead;
 	private ControllerMethod annotated;
 
+	private ControllerMethod walk;
+
 	@Before
 	public void setUp() throws Exception {
 		provider = new ParanamerNameProvider();
 
 		deserializer = new XStreamXMLDeserializer(provider, cleanInstance(new CalendarConverter()));
 		BeanClass controllerClass = new DefaultBeanClass(DogController.class);
+		BeanClass peopleControllerClass = new DefaultBeanClass(PeopleController.class);
 
 		woof = new DefaultControllerMethod(controllerClass, DogController.class.getDeclaredMethod("woof"));
 		bark = new DefaultControllerMethod(controllerClass, DogController.class.getDeclaredMethod("bark", Dog.class));
 		jump = new DefaultControllerMethod(controllerClass, DogController.class.getDeclaredMethod("jump", Dog.class, Integer.class));
 		dropDead = new DefaultControllerMethod(controllerClass, DogController.class.getDeclaredMethod("dropDead", Integer.class, Dog.class));
 		annotated = new DefaultControllerMethod(controllerClass, DogController.class.getDeclaredMethod("annotated", DogWithAnnotations.class));
+
+		walk = new DefaultControllerMethod(peopleControllerClass, PeopleController.class.getDeclaredMethod("walk", People.class));
 	}
 
+	static class People {
+		private String name;
+		private Dog dog;
+	}
+	
+	static class PeopleController {
+		public void walk(People people){}
+	}
+	
 	@XStreamAlias("dogAnnotated")
 	static class DogWithAnnotations {
 
@@ -98,6 +112,22 @@ public class XStreamXmlDeserializerTest {
 	public void shouldNotAcceptMethodsWithoutArguments() throws Exception {
 		deserializer.deserialize(new ByteArrayInputStream(new byte[0]), woof);
 	}
+
+	@Test
+	public void shouldBeAbleToDeserializeAPeopleWithD0g() throws Exception {
+		InputStream stream = new ByteArrayInputStream("<people><name>Renan</name><dog><name>Brutus</name><age>7</age></dog></people>".getBytes());
+		
+		
+		Object[] deserialized = deserializer.deserialize(stream, walk);
+		
+		assertThat(deserialized.length, is(1));
+		assertThat(deserialized[0], is(instanceOf(People.class)));
+		People people = (People) deserialized[0];
+		assertThat(people.name, is("Renan"));
+		assertThat(people.dog.name, is("Brutus"));
+		assertThat(people.dog.age, is(7));
+	}
+	
 	@Test
 	public void shouldBeAbleToDeserializeADog() throws Exception {
 		InputStream stream = new ByteArrayInputStream("<dog><name>Brutus</name><age>7</age></dog>".getBytes());

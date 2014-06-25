@@ -66,7 +66,7 @@ public class TilesPathResolver extends DefaultPathResolver {
 }
 ~~~
 
-Com isso, se você requisitar o método `ClienteController.formulario`, o VRaptor irá efetuar o forward para o template `cliente.formulario`. Basta então criarmos o template para atender ao `forward`:
+Com isso, se você requisitar o método `ClienteController.formulario`, o VRaptor irá efetuar o forward para o template `cliente.formulario`. Basta então criarmos o template para atender ao `forward` no arquivo `/WEB-INF/tiles.xml`:
 
 ~~~
 #!xml
@@ -74,4 +74,3 @@ Com isso, se você requisitar o método `ClienteController.formulario`, o VRapto
 	[...]
 </definition>
 ~~~
-

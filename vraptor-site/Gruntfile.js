@@ -36,19 +36,6 @@ module.exports = function(grunt) {
                 dest: 'deploy'
             }
         },
-        imagemin: {
-            site: {
-                options: {
-                  pngquant: true
-                },
-                files: [{
-                  cwd: 'output/',
-                  src: ['**/*.{png,gif,jpg}'],
-                  dest: 'deploy/',
-                  expand: true
-                }]
-            }
-        },
         replace: {
             html: {
                 src: ['deploy/**/*.html'],
@@ -108,7 +95,6 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
-    grunt.loadNpmTasks('grunt-contrib-imagemin');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-autoprefixer');
     grunt.loadNpmTasks('grunt-htmlcompressor');
@@ -118,6 +104,6 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-shell');
     grunt.loadTasks('grunt-utils/tasks');
 
-    grunt.registerTask('default', ['clean:grunt', 'copy', 'imagemin', 'replace', 'useminPreparePrepare', 'useminPrepare', 'usemin', 'autoprefixer', 'concat', 'cssmin', 'uglify:headers', 'htmlcompressor']);
+    grunt.registerTask('default', ['clean:grunt', 'copy', 'replace', 'useminPreparePrepare', 'useminPrepare', 'usemin', 'autoprefixer', 'concat', 'cssmin', 'uglify:headers', 'htmlcompressor']);
     grunt.registerTask('deploy', ['clean:nanoc', 'shell:nanoc', 'default', 'gh-pages']);
 };

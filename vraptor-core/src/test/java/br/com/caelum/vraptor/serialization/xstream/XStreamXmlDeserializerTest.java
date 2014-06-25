@@ -114,7 +114,7 @@ public class XStreamXmlDeserializerTest {
 	}
 
 	@Test
-	public void shouldBeAbleToDeserializeAPeopleWithD0g() throws Exception {
+	public void shouldBeAbleToDeserializeAPeopleWithDog() throws Exception {
 		InputStream stream = new ByteArrayInputStream("<people><name>Renan</name><dog><name>Brutus</name><age>7</age></dog></people>".getBytes());
 		
 		

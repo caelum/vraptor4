@@ -56,7 +56,7 @@ public class XStreamXmlDeserializerTest {
 
 		deserializer = new XStreamXMLDeserializer(provider, cleanInstance(new CalendarConverter()));
 		BeanClass controllerClass = new DefaultBeanClass(DogController.class);
-		BeanClass peopleControllerClass = new DefaultBeanClass(PeopleController.class);
+		BeanClass personControllerClass = new DefaultBeanClass(PersonController.class);
 
 		woof = new DefaultControllerMethod(controllerClass, DogController.class.getDeclaredMethod("woof"));
 		bark = new DefaultControllerMethod(controllerClass, DogController.class.getDeclaredMethod("bark", Dog.class));
@@ -64,16 +64,16 @@ public class XStreamXmlDeserializerTest {
 		dropDead = new DefaultControllerMethod(controllerClass, DogController.class.getDeclaredMethod("dropDead", Integer.class, Dog.class));
 		annotated = new DefaultControllerMethod(controllerClass, DogController.class.getDeclaredMethod("annotated", DogWithAnnotations.class));
 
-		walk = new DefaultControllerMethod(peopleControllerClass, PeopleController.class.getDeclaredMethod("walk", People.class));
+		walk = new DefaultControllerMethod(personControllerClass, PersonController.class.getDeclaredMethod("walk", Person.class));
 	}
 
-	static class People {
+	static class Person {
 		private String name;
 		private Dog dog;
 	}
 	
-	static class PeopleController {
-		public void walk(People people){}
+	static class PersonController {
+		public void walk(Person person){}
 	}
 	
 	@XStreamAlias("dogAnnotated")
@@ -114,18 +114,18 @@ public class XStreamXmlDeserializerTest {
 	}
 
 	@Test
-	public void shouldBeAbleToDeserializeAPeopleWithDog() throws Exception {
-		InputStream stream = new ByteArrayInputStream("<people><name>Renan</name><dog><name>Brutus</name><age>7</age></dog></people>".getBytes());
+	public void shouldBeAbleToDeserializeAPersonWithDog() throws Exception {
+		InputStream stream = new ByteArrayInputStream("<person><name>Renan</name><dog><name>Brutus</name><age>7</age></dog></person>".getBytes());
 		
 		
 		Object[] deserialized = deserializer.deserialize(stream, walk);
 		
 		assertThat(deserialized.length, is(1));
-		assertThat(deserialized[0], is(instanceOf(People.class)));
-		People people = (People) deserialized[0];
-		assertThat(people.name, is("Renan"));
-		assertThat(people.dog.name, is("Brutus"));
-		assertThat(people.dog.age, is(7));
+		assertThat(deserialized[0], is(instanceOf(Person.class)));
+		Person person = (Person) deserialized[0];
+		assertThat(person.name, is("Renan"));
+		assertThat(person.dog.name, is("Brutus"));
+		assertThat(person.dog.age, is(7));
 	}
 	
 	@Test

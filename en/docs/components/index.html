@@ -1,1 +1,142 @@
-<!DOCTYPE HTML> <html lang="en"> <head> <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> <meta charset="utf-8"> <meta name="viewport" content="width=device-width"> <title>VRaptor 4 - Components</title> <link rel="shortcut icon" href="../../../img/favicon.png"> <link rel="stylesheet" href="../../../css/style.min.css"/> </head> <body> <header class="container"><h1 class="logo"><a class="logo-link" href="../.."> <img src="../../../img/logo.png" alt="VRaptor"></a></h1> <ul class="community"> <li><a href="https://groups.google.com/forum/?hl=en#!forum/vraptor4" target="_blank">Google Groups</a></li> <li><a href="https://github.com/caelum/vraptor4/" target="_blank">GitHub</a></li> <li><a href="http://questions.vraptor.org" target="_blank">VRaptor Questions</a></li> </ul> <ul class="site-languages"> <li> <a class="site-language flag flag-en " title="en" href="../.."> EN </a> </li> <li> <a class="site-language flag flag-pt not-selected" title="pt" href="../../../pt"> PT </a> </li> </ul></header><input type="checkbox" id="nav-visibility"><label for="nav-visibility" class="nav-toggle">Menu</label> <nav class="main-nav"><ul> <li><a href="../../download">Download</a></li> <li><a href="../one-minute-guide/">Documentation</a></li> <li><a href="../../cookbook/accepting-urls-ending-with-a-slash">Cookbook</a></li> <li><a href="https://github.com/caelum/vraptor4/releases" target="_blank">Changelog</a></li> <li><a href="https://github.com/caelum/vraptor4/issues/milestones" target="_blank">Roadmap</a></li> <li><a href="../../../javadoc">Javadoc</a></li> </ul></nav><nav class="doc-nav container"><h1>Documentation</h1> <ul> <li><a href="../one-minute-guide">One minute guide</a></li> <li><a href="../ten-minute-guide">Ten minute guide</a></li> <li><a href="../controllers-rest">REST Controllers</a></li> <li><a href="../converters">Converters</a></li> <li><a href="../validation">Validation</a></li> <li><a href="../events">Events</a></li> <li><a href="../download-and-upload">Download and Upload</a></li> <li><a href="../environment">Environment</a></li> <li><a href="../plugins">Plugins</a></li> <li><a href="../testing-components-and-controllers">Testing Components and Controllers</a></li> <li><a href="../migrating-vraptor3-project">Migrating from VRaptor 3</a></li> <li><a href="../contributing-to-vraptor">Contributing to VRaptor</a></li> <script src="/js/headers.min.js"></script> </body> </html>
+<!DOCTYPE HTML> <html lang="en"> <head> <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> <meta charset="utf-8"> <meta name="viewport" content="width=device-width"> <title>VRaptor 4 - Components</title> <link rel="shortcut icon" href="../../../img/favicon.png"> <link rel="stylesheet" href="../../../css/style.min.css"/> </head> <body> <header class="container"><h1 class="logo"><a class="logo-link" href="../.."> <img src="../../../img/logo.png" alt="VRaptor"></a></h1> <ul class="community"> <li><a href="https://groups.google.com/forum/?hl=en#!forum/vraptor4" target="_blank">Google Groups</a></li> <li><a href="https://github.com/caelum/vraptor4/" target="_blank">GitHub</a></li> <li><a href="http://questions.vraptor.org" target="_blank">VRaptor Questions</a></li> </ul> <ul class="site-languages"> <li> <a class="site-language flag flag-en " title="en" href="../.."> EN </a> </li> <li> <a class="site-language flag flag-pt not-selected" title="pt" href="../../../pt"> PT </a> </li> </ul></header><input type="checkbox" id="nav-visibility"><label for="nav-visibility" class="nav-toggle">Menu</label> <nav class="main-nav"><ul> <li><a href="../../download">Download</a></li> <li><a href="../one-minute-guide/">Documentation</a></li> <li><a href="../../cookbook/accepting-urls-ending-with-a-slash">Cookbook</a></li> <li><a href="https://github.com/caelum/vraptor4/releases" target="_blank">Changelog</a></li> <li><a href="https://github.com/caelum/vraptor4/issues/milestones" target="_blank">Roadmap</a></li> <li><a href="../../../javadoc">Javadoc</a></li> </ul></nav><nav class="doc-nav container"><h1>Documentation</h1> <ul> <li><a href="../one-minute-guide">One minute guide</a></li> <li><a href="../ten-minute-guide">Ten minute guide</a></li> <li><a href="../controllers-rest">REST Controllers</a></li> <li><a href=".">Components</a></li> <li><a href="../converters">Converters</a></li> <li><a href="../validation">Validation</a></li> <li><a href="../events">Events</a></li> <li><a href="../download-and-upload">Download and Upload</a></li> <li><a href="../environment">Environment</a></li> <li><a href="../plugins">Plugins</a></li> <li><a href="../testing-components-and-controllers">Testing Components and Controllers</a></li> <li><a href="../migrating-vraptor3-project">Migrating from VRaptor 3</a></li> <li><a href="../contributing-to-vraptor">Contributing to VRaptor</a></li> </ul></nav><main class="container doc-container"><h1 id="what-are-components">What are components?</h1> <p>Components are object instances that your application need to execute tasks or to keep state in different situations. </p> <p>Common examples of components are DAOs and e-mail senders. The best practices suggest you should always create interfaces for your components to implement. This makes your code much easier to unit test. </p> <p>The following example shows a VRaptor-managed component:</p> <pre><code class="language-java"><span class="nd">@RequestScoped</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">CustomerDao</span> <span class="o">{</span>
+
+    <span class="kd">private</span> <span class="kd">final</span> <span class="n">Session</span> <span class="n">session</span><span class="o">;</span>
+
+    <span class="c1">// CDI forces the existence of this default constructor</span>
+    <span class="kd">protected</span> <span class="nf">CustomerDao</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">(</span><span class="kc">null</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Inject</span>
+    <span class="kd">public</span> <span class="nf">CustomerDao</span><span class="o">(</span><span class="n">Session</span> <span class="n">session</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">session</span> <span class="o">=</span> <span class="n">session</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">add</span><span class="o">(</span><span class="n">Customer</span> <span class="n">customer</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">session</span><span class="o">.</span><span class="na">save</span><span class="o">(</span><span class="n">customer</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span></code></pre> <p>Every component from VRaptor is managed by CDI (Context Dependency Injection) from Java EE 7. Therefore, all capabilities implemented by CDI are present in VRaptor.</p> <p>For more information about CDI, check the <a href="http://docs.oracle.com/javaee/7/tutorial/doc/partcdi.htm#GJBNR">Java EE 7 docs</a>.</p> <h2 id="scopes">Scopes</h2> <p>It’s important to notice that components has its own lifecycle. The default behavior is that a new instance will be built everytime it needs to be injected and disposed together with the object in which it was injected (the dependent scope <a href="">as we will see later</a>).</p> <p>The following example shows a class to hold email configurations of an application. Any compoment of the application could receive this object to read email configurations (notice that this just an simple example, the recommended way to implement it would be using <a href="../environment/">environment support</a> of VRaptor).</p> <p>This component has application scope, so will be instantiated just once per application lifecycle.</p> <pre><code class="language-java"><span class="nd">@ApplicationScoped</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">EmailConfiguration</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="n">String</span> <span class="n">host</span> <span class="o">=</span> <span class="s">"smtp.bazinga.com"</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="n">String</span> <span class="n">user</span> <span class="o">=</span> <span class="s">"foo"</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="n">String</span> <span class="n">password</span> <span class="o">=</span> <span class="s">"bar"</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="n">Session</span> <span class="nf">getHost</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">host</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="kd">public</span> <span class="n">Session</span> <span class="nf">getUser</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">user</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="n">Session</span> <span class="nf">getPassword</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">password</span><span class="o">;</span>
+    <span class="o">}</span>
+
+<span class="o">}</span></code></pre> <p>The implemented scopes are:</p> <ul> <li> <code>@ApplicationScoped</code> - the component is a singleton, just one for the entire application.</li> <li> <code>@SessionScoped</code> - the component is the same during the http session of the container.</li> <li> <code>@ConversationScoped</code> - the component instance is kept during a conversation.</li> <li> <code>@RequestScoped</code> - the component is the same during a request.</li> <li> <code>@Dependent</code> - the component is instanciated whenever it is requested.</li> </ul> <p>For more information about scopes, check <a href="http://docs.oracle.com/javaee/7/tutorial/doc/cdi-basic008.htm#GJBBK">the Java EE 7 documentation</a> about scopes.</p> <h2 id="building-components">Building components</h2> <p>Sometimes you need to inject a dependency that isn’t from your application, for example a Hibernate Session or a JPA EnitityManager.</p> <p>To do this, you need to create a method annotated with <code>@Produces</code>:</p> <pre><code class="language-java"><span class="nd">@RequestScoped</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">SessionCreator</span> <span class="o">{</span>
+
+    <span class="nd">@Inject</span> <span class="kd">private</span> <span class="n">SessionFactory</span> <span class="n">sessionFactory</span><span class="o">;</span>
+
+    <span class="nd">@Produces</span> <span class="nd">@RequestScoped</span>
+    <span class="kd">public</span> <span class="n">Session</span> <span class="nf">getSession</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">sessionFactory</span><span class="o">.</span><span class="na">openSession</span><span class="o">();</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">close</span><span class="o">(</span><span class="nd">@Disposes</span> <span class="n">Session</span> <span class="n">session</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">session</span><span class="o">.</span><span class="na">isOpen</span><span class="o">())</span> <span class="o">{</span>
+            <span class="n">session</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span></code></pre> <p>See that we are injecting and <code>SessionFactory</code>, so we would also need a producer of SessionFactory:</p> <pre><code class="language-java"><span class="nd">@ApplicationScoped</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">SessionFactoryCreator</span> <span class="o">{</span>
+
+    <span class="kd">private</span> <span class="kd">final</span> <span class="n">SessionFactory</span> <span class="n">factory</span><span class="o">;</span>
+
+    <span class="nd">@PostConstruct</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">init</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">factory</span> <span class="o">=</span> <span class="k">new</span> <span class="n">AnnotationConfiguration</span><span class="o">().</span><span class="na">configure</span><span class="o">().</span><span class="na">buildSessionFactory</span><span class="o">();</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Produces</span>
+    <span class="kd">public</span> <span class="n">SessionFactory</span> <span class="nf">getSession</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">factory</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="nd">@PreDestroy</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">close</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(!</span><span class="n">factory</span><span class="o">.</span><span class="na">isClosed</span><span class="o">())</span> <span class="o">{</span>
+            <span class="n">factory</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span></code></pre> <p>You can use the listeners <code>@PostConstruct</code>, <code>@PreDestroy</code> and <code>@Disposes</code> to get notified about the lifecycle of the component and control the allocation and deallocation of resources.</p> <p>In the previous example, we annotated the method <code>init()</code> that will be executed right after the instatiation of the class. The method <code>close()</code> will be invoked before the DI container dispose this object.</p> <p>You can annotate the methods of your VRaptor’s components with all of the mentioned annotations.</p> <h2 id="dependency-injection">Dependency Injection</h2> <p>VRaptor uses CDI to instantiate components and controllers. Thus, the previous examples (<code>CustomerDao</code> and <code>SessionCreator</code>) enable that any controller or component receive a <code>CustomerDao</code> injected in its constructor. To do so, CDI forces us to implement a default constructor, for example:</p> <pre><code class="language-java"><span class="nd">@Controller</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">CustomerController</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="n">CustomerDao</span> <span class="n">dao</span><span class="o">;</span>
+
+    <span class="nd">@Inject</span>
+    <span class="kd">public</span> <span class="nf">CustomerController</span><span class="o">(</span><span class="n">CustomerDao</span> <span class="n">dao</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">dao</span> <span class="o">=</span> <span class="n">dao</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="cm">/**</span>
+<span class="cm">     * @deprecated CDI eyes only</span>
+<span class="cm">     */</span>
+    <span class="kd">protected</span> <span class="nf">CustomerController</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">(</span><span class="kc">null</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Post</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">add</span><span class="o">(</span><span class="n">Customer</span> <span class="n">customer</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">dao</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">customer</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span></code></pre> <h2 id="observing-and-firing-events">Observing and firing events</h2> <p>You can fire events and handle them with the <code>@Observes</code> annotation.</p> <p>If you need, for example, log an message during the bootstrap of your application, you can observe the <code>VRaptorInitialized</code> event, like this:</p> <pre><code class="language-java"><span class="nd">@ApplicationScoped</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">PrintLog</span> <span class="o">{</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">observesBootstrap</span><span class="o">(</span><span class="nd">@Observes</span> <span class="n">VRaptorInitialized</span> <span class="n">event</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"My application is UP"</span><span class="o">);</span>
+    <span class="o">}</span></code></pre> <p>See the <a href="../events/">events documentation page</a> for more information about VRaptor’s events.</p> <h2 id="overriding-components">Overriding components</h2> <p>Most of VRaptor’s conventions and behaviors can be customized. It’s simple to customize something: all you need to do is extend an internal class from VRaptor and annotate it with <code>@Specializes</code>. After doing this, the framework will use the custom implementation instead of the default one.</p> <p>In case you need to implement an internal interface, you need to annotate the implementation with <code>@Priority</code>, so VRaptor will use your implementation instead of its own:</p> <pre><code class="language-java"><span class="nd">@Priority</span><span class="o">(</span><span class="n">Interceptor</span><span class="o">.</span><span class="na">Priority</span><span class="o">.</span><span class="na">LIBRARY_BEFORE</span> <span class="o">+</span> <span class="mi">10</span><span class="o">)</span></code></pre> <h2 id="customizing-vraptor">Customizing VRaptor</h2> <p>Let’s see how we can customize some of the default behaviors of VRaptor.</p> <h3 id="customizing-the-default-view">Customizing the default view</h3> <p>If you need to change the default rendered view, or change the place where it’ll be look for, you’ll only need to create the following class:</p> <pre><code class="language-java"><span class="nd">@Specializes</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">CustomPathResolver</span> <span class="kd">extends</span> <span class="n">DefaultPathResolver</span> <span class="o">{</span>
+
+    <span class="cm">/**</span>
+<span class="cm">    * @deprecated CDI eyes only</span>
+<span class="cm">    */</span>
+    <span class="kd">protected</span> <span class="nf">CustomPathResolver</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">(</span><span class="kc">null</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Inject</span>
+    <span class="kd">public</span> <span class="nf">CustomPathResolver</span><span class="o">(</span><span class="n">FormatResolver</span> <span class="n">resolver</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kd">super</span><span class="o">(</span><span class="n">resolver</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">protected</span> <span class="n">String</span> <span class="nf">getPrefix</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="s">"/root/directory/"</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">protected</span> <span class="n">String</span> <span class="nf">getExtension</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="s">"ftl"</span><span class="o">;</span> <span class="c1">// ou any other extension</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">protected</span> <span class="n">String</span> <span class="nf">extractControllerFromName</span><span class="o">(</span><span class="n">String</span> <span class="n">baseName</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="c1">//your convention here</span>
+               <span class="c1">//ex.: If you want to redirect UserController to 'userResource' instead of 'user'</span>
+               <span class="c1">//ex.2: If you override the convention for Controllers name to XXXResource</span>
+               <span class="c1">//and still want to redirect to 'user' and not to 'userResource'</span>
+    <span class="o">}</span>
+<span class="o">}</span></code></pre> <p>If you need a more complex convention, just implement the <code>PathResolver</code> interface.</p> <h3 id="changing-default-uri">Changing default URI</h3> <p>The default URI for <code>CustomerController.list()</code> is <code>/customer/list</code>, i.e, <code>controller_name/method_name</code>. If you want to override this convention, you can create a class like:</p> <pre><code class="language-java"><span class="nd">@Specializes</span> <span class="nd">@ApplicationScoped</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">MeuRoutesParser</span> <span class="kd">extends</span> <span class="n">PathAnnotationRoutesParser</span> <span class="o">{</span>
+    <span class="c1">//delegated constructors </span>
+    <span class="kd">protected</span> <span class="n">String</span> <span class="nf">extractControllerNameFrom</span><span class="o">(</span><span class="n">Class</span><span class="o">&lt;?&gt;</span> <span class="n">type</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="c1">//your convention here</span>
+    <span class="o">}</span>
+
+    <span class="kd">protected</span> <span class="n">String</span> <span class="nf">defaultUriFor</span><span class="o">(</span><span class="n">String</span> <span class="n">controllerName</span><span class="o">,</span> <span class="n">String</span> <span class="n">methodName</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="c1">//your convention here</span>
+    <span class="o">}</span>
+<span class="o">}</span></code></pre> <p>If you need a more complex convention, just implement the <code>RoutesParser</code> interface.</p> <h3 id="changing-the-application-character-encoding">Changing the application character encoding</h3> <p>For using an arbitrary character encoding on all your requests and responses, avoiding encoding inconsistencies, you can set this parameter on your web.xml.</p> <pre><code class="language-xml"><span class="nt">&lt;context-param&gt;</span>
+    <span class="nt">&lt;param-name&gt;</span>br.com.caelum.vraptor.encoding<span class="nt">&lt;/param-name&gt;</span>
+    <span class="nt">&lt;param-value&gt;</span>UTF-8<span class="nt">&lt;/param-value&gt;</span>
+<span class="nt">&lt;/context-param&gt;</span></code></pre> <p>This way all of your pages and form data will use the UTF-8.</p> <script src="/js/headers.min.js"></script> </body> </html>

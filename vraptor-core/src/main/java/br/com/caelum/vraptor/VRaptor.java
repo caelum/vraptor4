@@ -140,24 +140,24 @@ public class VRaptor implements Filter {
 
 	private void warnIfBeansXmlIsNotFound() throws ServletException {
 		
-        URL webInfFile = getResource("/WEB-INF/beans.xml");
-        URL metaInfFile = getResource("/WEB-INF/classes/META-INF/beans.xml");
+		URL webInfFile = getResource("/WEB-INF/beans.xml");
+		URL metaInfFile = getResource("/WEB-INF/classes/META-INF/beans.xml");
 
-        if (webInfFile == null && metaInfFile == null) {
+		if (webInfFile == null && metaInfFile == null) {
 			logger.warn("A beans.xml isn't found. Check if is properly located at "
 					+ "/WEB-INF/beans.xml or /WEB-INF/classes/META-INF/beans.xml");
 		}
 	}
 
-    private URL getResource(String path) throws ServletException {
-        try {
-            return servletContext.getResource(path);
-        } catch (MalformedURLException e) {
-            throw new ServletException("Something went wrong when trying to locate a beans.xml file", e);
-        }
-    }
+	private URL getResource(String path) throws ServletException {
+		try {
+			return servletContext.getResource(path);
+		} catch (MalformedURLException e) {
+			throw new ServletException("Something went wrong when trying to locate a beans.xml file", e);
+		}
+	}
 
-    private void validateJavaEE7Environment() throws ServletException {
+	private void validateJavaEE7Environment() throws ServletException {
 		try {
 			servletContext.getJspConfigDescriptor(); // check servlet 3
 			Priority.class.toString(); // check CDI 1.1

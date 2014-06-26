@@ -20,6 +20,8 @@ package br.com.caelum.vraptor;
 import static org.slf4j.LoggerFactory.getLogger;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Set;
 
 import javax.enterprise.event.Event;
@@ -138,16 +140,24 @@ public class VRaptor implements Filter {
 
 	private void warnIfBeansXmlIsNotFound() throws ServletException {
 		
-		Set<String> webInfFile = servletContext.getResourcePaths("/WEB-INF/beans.xml");
-		Set<String> metaInfFile = servletContext.getResourcePaths("/WEB-INF/classes/META-INF/beans.xml");
-		
-		if (webInfFile == null && metaInfFile == null) {
+        URL webInfFile = getResource("/WEB-INF/beans.xml");
+        URL metaInfFile = getResource("/WEB-INF/classes/META-INF/beans.xml");
+
+        if (webInfFile == null && metaInfFile == null) {
 			logger.warn("A beans.xml isn't found. Check if is properly located at "
 					+ "/WEB-INF/beans.xml or /WEB-INF/classes/META-INF/beans.xml");
 		}
 	}
 
-	private void validateJavaEE7Environment() throws ServletException {
+    private URL getResource(String path) throws ServletException {
+        try {
+            return servletContext.getResource(path);
+        } catch (MalformedURLException e) {
+            throw new ServletException("Something went wrong when trying to locate a beans.xml file", e);
+        }
+    }
+
+    private void validateJavaEE7Environment() throws ServletException {
 		try {
 			servletContext.getJspConfigDescriptor(); // check servlet 3
 			Priority.class.toString(); // check CDI 1.1

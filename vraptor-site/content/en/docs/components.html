@@ -21,7 +21,7 @@ public class CustomerDao {
 	private final Session session;
 
 	// CDI forces the existence of this default constructor
-    protected Dao() {
+    protected CustomerDao() {
         this(null);
 	}
 
@@ -142,12 +142,12 @@ You can use the listeners `@PostConstruct`, `@PreDestroy` and `@Disposes`
 to get notified about the lifecycle of the component and control the allocation
 and deallocation of resources.
 
-In the previous example, we annotated the method `init()` will be executed
+In the previous example, we annotated the method `init()` that will be executed
 right after the instatiation of the class. The method `close()` will be invoked
 before the DI container dispose this object.
 
-Those annotations work with any VRaptor component you create, all you need to do is
-annotate any method of your class with any of those annotations.
+You can annotate the methods of your VRaptor's components with all of the
+mentioned annotations.
 
 ##Dependency Injection
 
@@ -233,8 +233,11 @@ it'll be look for, you'll only need to create the following class:
 @Specializes
 public class CustomPathResolver extends DefaultPathResolver {
 
-    @Deprecated //CDI eyes only
+    /**
+    * @deprecated CDI eyes only
+    */
     protected CustomPathResolver() {
+        this(null);
     }
 
     @Inject

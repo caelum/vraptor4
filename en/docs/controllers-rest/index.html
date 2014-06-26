@@ -1,1 +1,158 @@
-<!DOCTYPE HTML> <html lang="en"> <head> <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> <meta charset="utf-8"> <meta name="viewport" content="width=device-width"> <title>VRaptor 4 - Controllers Rest</title> <link rel="stylesheet" href="../../../css/style.min.css"/> </head> <body> <header class="container"><h1 class="logo"><a class="logo-link" href="../.."> <img src="../../../img/logo.png" alt="VRaptor"></a></h1> <ul class="community"> <li><a href="https://groups.google.com/forum/?hl=en#!forum/vraptor4" target="_blank">Google Groups</a></li> <li><a href="https://github.com/caelum/vraptor4/" target="_blank">GitHub</a></li> <li><a href="http://questions.vraptor.org" target="_blank">VRaptor Questions</a></li> </ul> <ul class="site-languages"> <li> <a class="site-language flag flag-en " title="en" href="../.."> EN </a> </li> <li> <a class="site-language flag flag-pt not-selected" title="pt" href="../../../pt"> PT </a> </li> </ul></header><input type="checkbox" id="nav-visibility"><label for="nav-visibility" class="nav-toggle">Menu</label> <nav class="main-nav"><ul> <li><a href="../../download">Download</a></li> <li><a href="../one-minute-guide/">Documentation</a></li> <li><a href="../../cookbook/accepting-urls-ending-with-a-slash">Cookbook</a></li> <li><a href="https://github.com/caelum/vraptor4/releases" target="_blank">Changelog</a></li> <li><a href="https://github.com/caelum/vraptor4/issues/milestones" target="_blank">Roadmap</a></li> <li><a href="../../../javadoc">Javadoc</a></li> </ul></nav><nav class="doc-nav container"><h1>Documentation</h1> <ul> <li><a href="../one-minute-guide">One minute guide</a></li> <li><a href="../ten-minute-guide">Ten minute guide</a></li> <li><a href="../converters">Converters</a></li> <li><a href="../validation">Validation</a></li> <li><a href="../events">Events</a></li> <li><a href="../download-and-upload">Download and Upload</a></li> <li><a href="../environment">Environment</a></li> <li><a href="../plugins">Plugins</a></li> <li><a href="../testing-components-and-controllers">Testing Components and Controllers</a></li> <li><a href="../migrating-vraptor3-project">Migrating from VRaptor 3</a></li> <li><a href="../contributing-to-vraptor">Contributing to VRaptor</a></li> <script src="/js/headers.min.js"></script> </body> </html>
+<!DOCTYPE HTML> <html lang="en"> <head> <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> <meta charset="utf-8"> <meta name="viewport" content="width=device-width"> <title>VRaptor 4 - REST Controllers</title> <link rel="shortcut icon" href="../../../img/favicon.png"> <link rel="stylesheet" href="../../../css/style.min.css"/> </head> <body> <header class="container"><h1 class="logo"><a class="logo-link" href="../.."> <img src="../../../img/logo.png" alt="VRaptor"></a></h1> <ul class="community"> <li><a href="https://groups.google.com/forum/?hl=en#!forum/vraptor4" target="_blank">Google Groups</a></li> <li><a href="https://github.com/caelum/vraptor4/" target="_blank">GitHub</a></li> <li><a href="http://questions.vraptor.org" target="_blank">VRaptor Questions</a></li> </ul> <ul class="site-languages"> <li> <a class="site-language flag flag-en " title="en" href="../.."> EN </a> </li> <li> <a class="site-language flag flag-pt not-selected" title="pt" href="../../../pt"> PT </a> </li> </ul></header><input type="checkbox" id="nav-visibility"><label for="nav-visibility" class="nav-toggle">Menu</label> <nav class="main-nav"><ul> <li><a href="../../download">Download</a></li> <li><a href="../one-minute-guide/">Documentation</a></li> <li><a href="../../cookbook/accepting-urls-ending-with-a-slash">Cookbook</a></li> <li><a href="https://github.com/caelum/vraptor4/releases" target="_blank">Changelog</a></li> <li><a href="https://github.com/caelum/vraptor4/issues/milestones" target="_blank">Roadmap</a></li> <li><a href="../../../javadoc">Javadoc</a></li> </ul></nav><nav class="doc-nav container"><h1>Documentation</h1> <ul> <li><a href="../one-minute-guide">One minute guide</a></li> <li><a href="../ten-minute-guide">Ten minute guide</a></li> <li><a href=".">REST Controllers</a></li> <li><a href="../converters">Converters</a></li> <li><a href="../validation">Validation</a></li> <li><a href="../events">Events</a></li> <li><a href="../download-and-upload">Download and Upload</a></li> <li><a href="../environment">Environment</a></li> <li><a href="../plugins">Plugins</a></li> <li><a href="../testing-components-and-controllers">Testing Components and Controllers</a></li> <li><a href="../migrating-vraptor3-project">Migrating from VRaptor 3</a></li> <li><a href="../contributing-to-vraptor">Contributing to VRaptor</a></li> </ul></nav><main class="container doc-container"><h1 id="what-are-controllers">What are Controllers?</h1> <p>A controller is a class that can provide resources to be accessed by your clients. With VRaptor, a controller must be annotated with <code>@Controller</code>. All public methods of an annotated class become accessible through GET or POST requests to specific URIs. </p> <p>The following example shows a controller named <code>CustomerController</code>, which provides several operations over customers. Creating the class below with all its methods instantly make the URIs <code>/customer/add</code>, <code>/customer/list</code>, <code>/customer/show</code>, <code>/customer/remove</code> and <code>/customer/update</code> available, each one invoking the respective method.</p> <pre><code class="language-java"><span class="nd">@Controller</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">CustomerController</span> <span class="o">{</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">add</span><span class="o">(</span><span class="n">Customer</span> <span class="n">customer</span><span class="o">)</span> <span class="o">{</span>
+
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">Customer</span><span class="o">&gt;</span> <span class="nf">list</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="o">...</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="n">Customer</span> <span class="nf">view</span><span class="o">(</span><span class="n">Customer</span> <span class="n">customer</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="o">...</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">remove</span><span class="o">(</span><span class="n">Customer</span> <span class="n">customer</span><span class="o">)</span> <span class="o">{</span>
+        <span class="o">...</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">update</span><span class="o">(</span><span class="n">Customer</span> <span class="n">customer</span><span class="o">)</span> <span class="o">{</span>
+        <span class="o">...</span>
+    <span class="o">}</span>
+<span class="o">}</span></code></pre> <h2 id="method-parameters">Method parameters</h2> <p>You can receive parameters on your controller methods, and if those parameters follow the java beans convention (getters and setters for class fields), you can use dots for browsing through the fields. For instance, on method:</p> <pre><code class="language-java"><span class="kd">public</span> <span class="kt">void</span> <span class="nf">update</span><span class="o">(</span><span class="n">Customer</span> <span class="n">customer</span><span class="o">)</span> <span class="o">{</span>
+    <span class="c1">//...</span>
+<span class="o">}</span></code></pre> <p>you can receive on the request parameters:</p> <pre><code class="language-properties"><span class="na">customer.id</span><span class="o">=</span><span class="s">3</span>
+<span class="na">customer.nome</span><span class="o">=</span><span class="s">John Doe</span>
+<span class="na">customer.user.login</span><span class="o">=</span><span class="s">johndoe</span></code></pre> <p>and the respective fields will be set, browsing through getters and setters starting from customer. If an object field or a method parameter is a list (<code>List&lt;&gt;</code> or array), you can receive several request parameters, using square brackets and indexes:</p> <pre><code class="language-jsp">customer.phones[0]=+55 11 5571-2751 #if it is a string list
+customer.relatives[0].id=1 #if it is an arbitrary object, you can continue to browse
+customer.relatives[3].id=1 #indexes don't need to be sequential
+customer.relatives[0].name=Mary Doe #using the same index, it will be set on same object
+customers[1].id=23 #it works if you receive a customer list as method parameter</code></pre> <h2 id="reflection-on-parameter-names">Reflection on parameter names</h2> <p>VRaptor uses the <a href="http://paranamer.codehaus.org">Paranamer framework</a>, which can get parameter names information through pre compilation or debug data, avoiding the creation of annotations for this purpose. Some VRaptor developers also contribute in Paranamer development.</p> <h2 id="scopes">Scopes</h2> <p>Sometimes you want to share a component among all users, or through all requests from the same user or one instance for each user request. To specify in which scope your component will live, use the annotations <code>@ApplicationScoped</code>, <code>@SessionScoped</code>, <code>@RequestScoped</code>, <code>@Dependent</code> and <code>@Conversation</code>. If you don’t specify a scope for your component, VRaptor assumes the dependent scope, meaning a fresh instance will be created for each time it needs to be injected.</p> <p>Those scopes are from CDI specification, see the <a href="http://docs.oracle.com/javaee/7/tutorial/doc/partcdi.htm#GJBNR">Java EE 7 documentation</a> for more information.</p> <h2 id="path">@Path</h2> <p>The <code>@Path</code> annotation allows you to specify custom access URIs to your controller methods. The basic usage of the annotation is to specify a fixed URI. The following example shows how to customize the access URI for a method that accepts POST requests only. The URI we want to specify is <code>/customer</code>:</p> <pre><code class="language-java"><span class="nd">@Controller</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">CustomerController</span> <span class="o">{</span>
+
+    <span class="nd">@Path</span><span class="o">(</span><span class="s">"/customer"</span><span class="o">)</span>
+    <span class="nd">@Post</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">customer</span><span class="o">(</span><span class="n">Customer</span> <span class="n">customer</span><span class="o">)</span> <span class="o">{</span>
+    <span class="o">}</span>
+<span class="o">}</span></code></pre> <p>If you place the <code>@Path</code> on <code>CustomerController</code>, the specified value will be used as prefix for all URIs from this controller.</p> <pre><code class="language-java"><span class="nd">@Controller</span>
+<span class="nd">@Path</span><span class="o">(</span><span class="s">"/customers"</span><span class="o">)</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">CustomerController</span> <span class="o">{</span>
+    <span class="c1">//URI: /customers/list</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">list</span><span class="o">()</span> <span class="o">{...}</span>
+
+    <span class="c1">//URI: /customers/save</span>
+    <span class="nd">@Path</span><span class="o">(</span><span class="s">"save"</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">add</span><span class="o">()</span> <span class="o">{...}</span>
+
+    <span class="c1">//URI: /customers/allCustomers</span>
+    <span class="nd">@Path</span><span class="o">(</span><span class="s">"/allCustomers"</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">listAll</span><span class="o">()</span> <span class="o">{...}</span>
+<span class="o">}</span></code></pre> <h2 id="http-methods">HTTP methods</h2> <p>The best practice when designing REST resources is to use the sematincs of each HTTP method. Therefore, eventually we need to use methods like <code>GET</code>, <code>POST</code>, <code>PUT</code> etc, for the same URI. In order to accomplish that, we use annotations <code>@Get</code>, <code>@Post</code>, <code>@Delete</code> etc, which also allows us to configure a custom URI in the same way as <code>@Path</code>. The following example changes the default URIs for <code>CustomerController</code>. Now we specify two different URIs for different HTTP methods:</p> <pre><code class="language-java"><span class="nd">@Controller</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">CustomerController</span> <span class="o">{</span>
+    <span class="nd">@Post</span><span class="o">(</span><span class="s">"/"</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">add</span><span class="o">(</span><span class="n">Customer</span> <span class="n">customer</span><span class="o">)</span> <span class="o">{</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Path</span><span class="o">(</span><span class="s">"/"</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">Customer</span><span class="o">&gt;</span> <span class="nf">list</span><span class="o">()</span> 
+        <span class="k">return</span> <span class="o">...</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Get</span><span class="o">(</span><span class="s">"/customer"</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="n">Customer</span> <span class="nf">show</span><span class="o">(</span><span class="n">Customer</span> <span class="n">customer</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="o">...</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Delete</span><span class="o">(</span><span class="s">"/customer"</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">remove</span><span class="o">(</span><span class="n">Customer</span> <span class="n">customer</span><span class="o">)</span> <span class="o">{</span>
+        <span class="o">...</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Put</span><span class="o">(</span><span class="s">"/customer"</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">update</span><span class="o">(</span><span class="n">Customer</span> <span class="n">customer</span><span class="o">)</span> <span class="o">{</span>
+        <span class="o">...</span>
+    <span class="o">}</span>
+
+<span class="o">}</span></code></pre> <p>As you can see, we used HTTP methods + a specific URI to identify each method in our Java class.</p> <p>We must be <strong>very careful</strong> when creating hyperlinks and HTML forms, because web browsers currently support only <code>POST</code> and <code>GET</code> methods. For that reason, requests for methods <code>DELETE</code>, <code>PUT</code> etc should be performed through JavaScript, or by adding an extra parameter called <code>_method</code>. The latter one only works on <code>POST</code> requests. This parameter will overwrite the real HTTP method being invoked. </p> <p>The following example creates a link to show one customer’s data:</p> <pre><code class="language-jsp"><span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">"/customer?customer.id=5"</span><span class="nt">&gt;</span>show customer 5<span class="nt">&lt;/a&gt;</span></code></pre> <p>Now an example on how to invoke the method to add a customer:</p> <pre><code class="language-jsp"><span class="nt">&lt;form</span> <span class="na">action=</span><span class="s">"/customer"</span> <span class="na">method=</span><span class="s">"post"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;input</span> <span class="na">name=</span><span class="s">"customer.name"</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"submit"</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/form&gt;</span></code></pre> <p>Notice that if we want to remove a customer using the <code>DELETE</code> HTTP method, we have to use the <code>_method</code> parameter, since browsers still don’t support that kind of requests:</p> <pre><code class="language-jsp"><span class="nt">&lt;form</span> <span class="na">action=</span><span class="s">"/customer"</span> <span class="na">method=</span><span class="s">"POST"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;input</span> <span class="na">name=</span><span class="s">"customer.id"</span> <span class="na">value=</span><span class="s">"5"</span> <span class="na">type=</span><span class="s">"hidden"</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;button</span> <span class="na">type=</span><span class="s">"submit"</span> <span class="na">name=</span><span class="s">"_method"</span> <span class="na">value=</span><span class="s">"DELETE"</span><span class="nt">&gt;</span>remove customer 5<span class="nt">&lt;/button&gt;</span>
+<span class="nt">&lt;/form&gt;</span></code></pre> <h2 id="path-with-variable-injection">Path with variable injection</h2> <p>Sometimes we want the URI to include, for example, the unique identifier of a resource. </p> <p>Suppose a customer controller application where the customer’s unique identifier (primary key) is a number. We can map our URIs as <code>/customer/{customer.id}</code>, so we can visualize each customer. That is, if we access the URI <code>/customer/2</code>, the show method will be invoked and the <code>customer.id</code> parameter will be set to 2. If the URI <code>/customer/1717</code> is accessed, the same method will be invoked with the <code>1717</code> value. </p> <p>That way we can create unique URIs to identify different resources in our application. See the mentioned example:</p> <pre><code class="language-java"><span class="nd">@Controller</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">CustomerController</span> <span class="o">{</span>
+
+  <span class="nd">@Get</span>
+  <span class="nd">@Path</span><span class="o">(</span><span class="s">"/customer/{customer.id}"</span><span class="o">)</span>
+  <span class="kd">public</span> <span class="n">Customer</span> <span class="nf">show</span><span class="o">(</span><span class="n">Customer</span> <span class="n">customer</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="o">...</span>
+  <span class="o">}</span>
+
+<span class="o">}</span></code></pre> <p>You can go further and set several parameters through the URI:</p> <pre><code class="language-java"><span class="nd">@Controller</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">CustomerController</span> <span class="o">{</span>
+
+    <span class="nd">@Get</span>
+    <span class="nd">@Path</span><span class="o">(</span><span class="s">"/customer/{customer.id}/show/{section}"</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="n">Customer</span> <span class="nf">show</span><span class="o">(</span><span class="n">Customer</span> <span class="n">customer</span><span class="o">,</span> <span class="n">String</span> <span class="n">section</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="o">...</span>
+    <span class="o">}</span>
+<span class="o">}</span></code></pre> <h2 id="multiple-paths-for-the-same-logic-method">Multiple paths for the same logic method</h2> <p>You can set more than one path for the same logic method:</p> <pre><code class="language-java"><span class="nd">@Controller</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">CustomerController</span> <span class="o">{</span>
+
+  <span class="nd">@Get</span>
+  <span class="nd">@Path</span><span class="o">({</span><span class="s">"/customer/{customer.id}/show/{section}"</span><span class="o">,</span> <span class="s">"/customer/{customer.id}/show/"</span><span class="o">})</span>
+  <span class="kd">public</span> <span class="n">Customer</span> <span class="nf">show</span><span class="o">(</span><span class="n">Customer</span> <span class="n">customer</span><span class="o">,</span> <span class="n">String</span> <span class="n">section</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="o">...</span>
+  <span class="o">}</span>
+
+<span class="o">}</span></code></pre> <h2 id="paths-with-regular-expressions">Paths with regular expressions</h2> <p>You can limit your parameter values using regular expressions using this idiom:</p> <pre><code class="language-java"><span class="nd">@Path</span><span class="o">(</span><span class="s">"/color/{color:[0-9A-Fa-f]{6}}"</span><span class="o">)</span>
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">setColor</span><span class="o">(</span><span class="n">String</span> <span class="n">color</span><span class="o">)</span> <span class="o">{</span>
+    <span class="c1">//...</span>
+<span class="o">}</span></code></pre> <p>Everything that is after the colon is treated as a regex, and the URI will only match if the parameter matches the regex:</p> <pre><code class="language-jsp">/color/a0b3c4 =&gt; matches
+/color/AABBCC =&gt; matches
+/color/white =&gt; doesn't match</code></pre> <h2 id="paths-with-wildcards">Paths with wildcards</h2> <p>You can also use the * wildcard as a selection method for your URI. The following example ignores anything that comes after the word <code>photo/</code>:</p> <pre><code class="language-java"><span class="nd">@Get</span>
+<span class="nd">@Path</span><span class="o">(</span><span class="s">"/customer/{customer.id}/photo/*"</span><span class="o">)</span>
+<span class="kd">public</span> <span class="n">File</span> <span class="nf">photo</span><span class="o">(</span><span class="n">Customer</span> <span class="n">customer</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="o">...</span>
+<span class="o">}</span></code></pre> <p>And now a similar code, but used to download a specific photo from a customer:</p> <pre><code class="language-java"><span class="nd">@Get</span>
+<span class="nd">@Path</span><span class="o">(</span><span class="s">"/customer/{customer.id}/photo/{photo.id}"</span><span class="o">)</span>
+<span class="kd">public</span> <span class="n">File</span> <span class="nf">photo</span><span class="o">(</span><span class="n">Customer</span> <span class="n">customer</span><span class="o">,</span> <span class="n">Photo</span> <span class="n">photo</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="o">...</span>
+<span class="o">}</span></code></pre> <p>Sometimes you want the parameter to include the <code>/</code> character. In that case, you should use the pattern <code>{...*}</code>:</p> <pre><code class="language-java"><span class="nd">@Get</span>
+<span class="nd">@Path</span><span class="o">(</span><span class="s">"/customer/{customer.id}/download/{path*}"</span><span class="o">)</span>
+<span class="kd">public</span> <span class="n">File</span> <span class="nf">download</span><span class="o">(</span><span class="n">Customer</span> <span class="n">customer</span><span class="o">,</span> <span class="n">String</span> <span class="n">path</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="o">...</span>
+<span class="o">}</span></code></pre> <h2 id="specifying-priorities-for-your-paths">Specifying priorities for your paths</h2> <p>It is possible for some URIs to be handled by more than one method in our class:</p> <pre><code class="language-java"><span class="nd">@Controller</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">PostController</span> <span class="o">{</span>
+
+    <span class="nd">@Get</span>
+    <span class="nd">@Path</span><span class="o">(</span><span class="s">"/post/{post.author}"</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">show</span><span class="o">(</span><span class="n">Post</span> <span class="n">post</span><span class="o">)</span> <span class="o">{</span> <span class="o">...</span> <span class="o">}</span>
+
+    <span class="nd">@Get</span>
+    <span class="nd">@Path</span><span class="o">(</span><span class="s">"/post/current"</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">current</span><span class="o">()</span> <span class="o">{</span> <span class="o">...</span> <span class="o">}</span>
+<span class="o">}</span></code></pre> <p>The URI <code>/post/current</code> can be handled by both show and current methods. But we don’t want to invoke the show method with that URI, we want that VRaptor test the current path first, avoiding the invocation of the show method. </p> <p>In order to do that, we can define priorities for <code>@Path</code>, so VRaptor will first test paths with with higher priority values.</p> <pre><code class="language-java"><span class="nd">@Controller</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">PostController</span> <span class="o">{</span>
+
+    <span class="nd">@Get</span>
+    <span class="nd">@Path</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"/post/{post.author}"</span><span class="o">,</span> <span class="n">priority</span> <span class="o">=</span> <span class="n">Path</span><span class="o">.</span><span class="na">LOW</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">show</span><span class="o">(</span><span class="n">Post</span> <span class="n">post</span><span class="o">)</span> <span class="o">{</span> <span class="o">...</span> <span class="o">}</span>
+
+    <span class="nd">@Get</span>
+    <span class="nd">@Path</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"/post/current"</span><span class="o">,</span> <span class="n">priority</span> <span class="o">=</span> <span class="n">Path</span><span class="o">.</span><span class="na">HIGH</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">current</span><span class="o">()</span> <span class="o">{</span> <span class="o">...</span> <span class="o">}</span>
+<span class="o">}</span></code></pre> <p>This way, the <code>/post/current</code> path will be tested before <code>/post/{post.author}</code> by VRaptor, solving our problem. In case we had the following URI’s: <code>/post/{post.id}</code> and <code>/post/current</code>, we wouldn’t need to define priorities because <code>{post.id}</code> only matches numbers. </p> <h2 id="paths-with-header-parameters-injection">Paths with header parameters injection</h2> <p>It’s also possible to inject HTTP headers into a method using the annotation <code>@HeaderParam</code>. In the following example the parameter <code>username</code> will be injected with the value of the header <code>X-Auth-User</code>.</p> <pre><code class="language-java"><span class="kd">public</span> <span class="kt">void</span> <span class="nf">profile</span><span class="o">(</span><span class="nd">@HeaderParam</span><span class="o">(</span><span class="s">"X-Auth-User"</span><span class="o">)</span> <span class="n">username</span><span class="o">)</span> <span class="o">{</span>
+    <span class="o">...</span>
+<span class="o">}</span></code></pre> <p><strong>Warning</strong>: In this example, if you had a request parameter named <code>username</code> (from a form, for example) and still define the <code>HeaderParam</code> with the same name of the parameter, it will be overwritten with the header value.</p> <h2 id="handling-exceptions">Handling exceptions</h2> <p>VRaptor has an Exception Handler that captures exceptions not handled by your application.</p> <p>In the following example, if the method <code>add(Customer)</code> throw a <code>DuplicatedCustomerException</code> or any subclass, the user will be redirected to the method <code>form()</code>.</p> <pre><code class="language-java"><span class="nd">@Get</span>
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">form</span><span class="o">()</span> <span class="o">{</span>
+    <span class="o">...</span>
+<span class="o">}</span>
+
+<span class="nd">@Post</span>
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">add</span><span class="o">(</span><span class="n">Customer</span> <span class="n">customer</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">result</span><span class="o">.</span><span class="na">on</span><span class="o">(</span><span class="n">DuplicatedCustomerException</span><span class="o">.</span><span class="na">class</span><span class="o">).</span><span class="na">forwardTo</span><span class="o">(</span><span class="k">this</span><span class="o">).</span><span class="na">form</span><span class="o">();</span>
+
+    <span class="n">customerDAO</span><span class="o">.</span><span class="na">save</span><span class="o">(</span><span class="n">customer</span><span class="o">);</span>
+<span class="o">}</span></code></pre> <script src="/js/headers.min.js"></script> </body> </html>

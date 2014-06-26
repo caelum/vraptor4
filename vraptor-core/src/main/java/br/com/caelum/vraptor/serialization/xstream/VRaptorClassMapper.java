@@ -59,7 +59,7 @@ public class VRaptorClassMapper extends MapperWrapper {
 	@Override
 	public boolean shouldSerializeMember(Class definedIn, String fieldName) {
 		if(deserialization.get()) {
-			serializee.setRecursive(deserialization.get());
+			serializee.setRecursive(true);
 		}
 		
 		for (Entry<String, Class<?>> include : serializee.getIncludes().entries()) {

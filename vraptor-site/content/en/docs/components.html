@@ -50,23 +50,34 @@ behavior is that a new instance will be built everytime it needs to be injected
 and disposed together with the object in which it was injected (the dependent
 scope <a href="">as we will see later</a>).
 
-The following example shows a provider of Hibernate sessions. This provider has
-application scope, so will be instantiated just once per application lifecycle.
+The following example shows a class to hold email configurations of an
+application. Any compoment of the application could receive this object to read
+email configurations (notice that this just an simple example, the recommended
+way to implement it would be using <a href="/en/docs/environment/">environment
+support</a> of VRaptor).
+
+This component has application scope, so will be instantiated just once per
+application lifecycle.
 
 ~~~ 
 #!java
 @ApplicationScoped
-public class HibernateControl {
+public class EmailConfiguration {
+    private final String host = "smtp.bazinga.com"
+    private final String user = "foo";
+    private final String password = "bar";
 
-	private final SessionFactory factory;
-
-	public HibernateControl() {
-		this.factory = new AnnotationConfiguration().configure().buildSessionFactory();
+	public Session getHost() {
+        return host;
+	}
+	public Session getUser() {
+        return user;
 	}
 
-	public Session getSession() {
-		return factory.openSession();
+	public Session getPassword() {
+        return password;
 	}
+
 }
 ~~~ 
 

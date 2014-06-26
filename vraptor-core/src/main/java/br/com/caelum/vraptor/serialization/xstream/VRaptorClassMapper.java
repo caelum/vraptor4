@@ -37,10 +37,12 @@ public class VRaptorClassMapper extends MapperWrapper {
 
 	private final Supplier<TypeNameExtractor> extractor;
 	private final Serializee serializee = new Serializee();
+	private final Supplier<Boolean> deserialization;
 
-	public VRaptorClassMapper(Mapper wrapped, Supplier<TypeNameExtractor> supplier) {
+	public VRaptorClassMapper(Mapper wrapped, Supplier<TypeNameExtractor> supplier, Supplier<Boolean> supplierDeserialization) {
 		super(wrapped);
 		this.extractor = supplier;
+		this.deserialization = supplierDeserialization;
 	}
 
 	static boolean isPrimitive(Class<?> type) {
@@ -56,6 +58,10 @@ public class VRaptorClassMapper extends MapperWrapper {
 
 	@Override
 	public boolean shouldSerializeMember(Class definedIn, String fieldName) {
+		if(deserialization.get()) {
+			serializee.setRecursive(deserialization.get());
+		}
+		
 		for (Entry<String, Class<?>> include : serializee.getIncludes().entries()) {
 			if (isCompatiblePath(include, definedIn, fieldName)) {
 				return true;

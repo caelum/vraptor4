@@ -39,6 +39,7 @@ public class XStreamBuilderImpl implements XStreamBuilder {
 	private final XStreamConverters converters;
 	private final TypeNameExtractor extractor;
 	private boolean indented = false;
+	private boolean deserializer = false;
 	
 	/** 
 	 * @deprecated CDI eyes only
@@ -62,7 +63,7 @@ public class XStreamBuilderImpl implements XStreamBuilder {
 	
 	@Override
 	public XStream xmlInstance() {
-		return configure(new VRaptorXStream(extractor));
+		return configure(new VRaptorXStream(extractor, deserializer));
 	}
 
 	@Override
@@ -75,6 +76,16 @@ public class XStreamBuilderImpl implements XStreamBuilder {
 	public XStreamBuilder indented() {
 		indented = true;
 		return this;
+	}
+
+	@Override
+	public XStreamBuilder deserialize() {
+		deserializer = true;
+		return this;
+	}
+	
+	boolean isDeserialization()  {
+		return deserializer;
 	}
 	
 	boolean isIndented() {

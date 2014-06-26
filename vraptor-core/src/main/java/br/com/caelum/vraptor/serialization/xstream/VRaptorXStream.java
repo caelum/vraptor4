@@ -29,17 +29,20 @@ import com.thoughtworks.xstream.mapper.MapperWrapper;
 public final class VRaptorXStream extends XStream {
 	private final TypeNameExtractor extractor;
 	private VRaptorClassMapper vraptorMapper;
+	private final Boolean deserialization;
 
 	{setMode(NO_REFERENCES);}
 
-	public VRaptorXStream(TypeNameExtractor extractor) {
+	public VRaptorXStream(TypeNameExtractor extractor, Boolean deserialization) {
 		super(new PureJavaReflectionProvider());
 		this.extractor = extractor;
+		this.deserialization = deserialization;
 	}
 	
-	public VRaptorXStream(TypeNameExtractor extractor, HierarchicalStreamDriver hierarchicalStreamDriver) {
+	public VRaptorXStream(TypeNameExtractor extractor, HierarchicalStreamDriver hierarchicalStreamDriver, Boolean deserialization) {
 		super(new PureJavaReflectionProvider(),hierarchicalStreamDriver);
 		this.extractor = extractor;
+		this.deserialization = deserialization;
 	}
 
 	@Override
@@ -52,6 +55,12 @@ public final class VRaptorXStream extends XStream {
 			@Override
 			public TypeNameExtractor get() {
 				return extractor;
+			}
+		},
+		new Supplier<Boolean>() {
+			@Override
+			public Boolean get() {
+				return deserialization;
 			}
 		});
 		return vraptorMapper;

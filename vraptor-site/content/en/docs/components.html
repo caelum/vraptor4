@@ -18,10 +18,11 @@ The following example shows a VRaptor-managed component:
 @RequestScoped
 public class CustomerDao {
 
-	private Session session;
+	private final Session session;
 
 	// CDI forces the existence of this default constructor
-	protected Dao() {
+    protected Dao() {
+        this(null);
 	}
 
 	@Inject
@@ -35,7 +36,7 @@ public class CustomerDao {
 }
 ~~~ 
 
-Every component from VRaptor is managed by CDI (Context Dependenxy Injection)
+Every component from VRaptor is managed by CDI (Context Dependency Injection)
 from Java EE 7. Therefore, all capabilities implemented by CDI are present in
 VRaptor.
 
@@ -44,14 +45,13 @@ docs](http://docs.oracle.com/javaee/7/tutorial/doc/partcdi.htm#GJBNR).
 
 ##Scopes
 
-It's important to notice that components has their own lifecycle. The default
+It's important to notice that components has its own lifecycle. The default
 behavior is that a new instance will be built everytime it needs to be injected
-and discarded together with the object in which it was injected (the dependent
-scope as we will see later).
+and disposed together with the object in which it was injected (the dependent
+scope <a href="">as we will see later</a>).
 
-The following example shows a provider of Hibernate sessions. This provider is
-in the application scope, so it will be instaciated only once for the entire
-application:
+The following example shows a provider of Hibernate sessions. This provider has
+application scope, so will be instantiated just once per application lifecycle.
 
 ~~~ 
 #!java
@@ -72,7 +72,7 @@ public class HibernateControl {
 
 The implemented scopes are:
 
-* `@ApplicationScoped` - the component is an singletorm, only one for the entire application.
+* `@ApplicationScoped` - the component is a singleton, just one for the entire application.
 * `@SessionScoped` - the component is the same during the http session of the container.
 * `@ConversationScoped` - the component instance is kept during a conversation.
 * `@RequestScoped` - the component is the same during a request.
@@ -85,7 +85,7 @@ about scopes.
 ##Building components
 
 Sometimes you need to inject a dependency that isn't from your application, for example 
-an Hibernate Session or an JPA EnitityManager.
+a Hibernate Session or a JPA EnitityManager.
 
 To do this, you need to create a method annotated with `@Produces`:
 
@@ -109,7 +109,7 @@ public class SessionCreator {
 }
 ~~~ 
 
-See that we are injecting and SessionFactory, so we would also need a producer
+See that we are injecting and `SessionFactory`, so we would also need a producer
 of SessionFactory:
 
 ~~~ 
@@ -119,7 +119,8 @@ public class SessionFactoryCreator {
 
     private final SessionFactory factory;
 
-    public SessionFactoryCreator() {
+    @PostConstruct
+    public void init() {
         this.factory = new AnnotationConfiguration().configure().buildSessionFactory();
     }
 
@@ -137,18 +138,23 @@ public class SessionFactoryCreator {
 }
 ~~~ 
 
-You can also use the listeners `@PostConstruct`, `@PreDestroy` and `@Disposes`
+You can use the listeners `@PostConstruct`, `@PreDestroy` and `@Disposes`
 to get notified about the lifecycle of the component and control the allocation
-and deallocation of resources. This works with any VRaptor component you
-create, all you need to do is annotate and method of your class with any of
-those annotations.
+and deallocation of resources.
+
+In the previous example, we annotated the method `init()` will be executed
+right after the instatiation of the class. The method `close()` will be invoked
+before the DI container dispose this object.
+
+Those annotations work with any VRaptor component you create, all you need to do is
+annotate any method of your class with any of those annotations.
 
 ##Dependency Injection
 
 VRaptor uses CDI to instantiate components and controllers. Thus, the previous
 examples (`CustomerDao` and `SessionCreator`) enable that any controller or
-component receive and `CustomerDao` injected in its constructor. To do so, CDI
-forces us to implement an default constructor, for example:
+component receive a `CustomerDao` injected in its constructor. To do so, CDI
+forces us to implement a default constructor, for example:
 
 ~~~ 
 #!java
@@ -175,7 +181,7 @@ public class CustomerController {
 }
 ~~~ 
 
-## Firing events
+## Observing and firing events
 
 You can fire events and handle them with the `@Observes` annotation.
 
@@ -192,10 +198,13 @@ public class PrintLog {
 	}
 ~~~ 
 
+See the <a href="/en/docs/events/">events documentation page</a> for more
+information about VRaptor's events.
+
 
 ## Overriding components
 
-The majority of VRaptor's convetions and behaviors can be customized. It's simple
+Most of VRaptor's conventions and behaviors can be customized. It's simple
 to customize something: all you need to do is extend an internal class from
 VRaptor and annotate it with `@Specializes`. After doing this, the framework
 will use the custom implementation instead of the default one.
@@ -224,6 +233,15 @@ it'll be look for, you'll only need to create the following class:
 @Specializes
 public class CustomPathResolver extends DefaultPathResolver {
 
+    @Deprecated //CDI eyes only
+    protected CustomPathResolver() {
+    }
+
+    @Inject
+    public CustomPathResolver(FormatResolver resolver) {
+        super(resolver);
+    }
+
 	@Override
 	protected String getPrefix() {
 		return "/root/directory/";
@@ -248,8 +266,8 @@ If you need a more complex convention, just implement the `PathResolver` interfa
 
 ###Changing default URI
 
-The default URI for CustomerController.list() is /customer/list, i.e,
-controller_name/method_name. If you want to override this convention, you can
+The default URI for `CustomerController.list()` is `/customer/list`, i.e,
+`controller_name/method_name`. If you want to override this convention, you can
 create a class like:
 
 ~~~ 
@@ -258,11 +276,11 @@ create a class like:
 public class MeuRoutesParser extends PathAnnotationRoutesParser {
 	//delegated constructors 
 	protected String extractControllerNameFrom(Class<?> type) {
-		return //your conention here
+		return //your convention here
 	}
 
 	protected String defaultUriFor(String controllerName, String methodName) {
-		return //your conention here
+		return //your convention here
 	}
 }
 ~~~ 

@@ -2,7 +2,7 @@
 title: Using Referer Header to redirect
 ---
 
-Usually when you click on a link or submits a form, the browser sends a request to your application's server 
+Usually when you click on a link or submit a form, the browser sends a request to your application's server 
 putting a header called *Referer*. This header contains the current page that originated the request. 
 
 You can use this Header with VRaptor to do redirects, i.e:
@@ -37,4 +37,15 @@ try {
 } catch (IllegalStateException e) {
     result.use(logic()).redirectTo(HomeController.class).index();
 }
+~~~
+
+Or you can use `on(IllegalStateException.class)` to do it fluently:
+
+~~~
+#!java
+result.use(referer())
+	.redirect()
+	.on(IllegalStateException.class)
+	.redirectTo(HomeController.class)
+	.index();
 ~~~

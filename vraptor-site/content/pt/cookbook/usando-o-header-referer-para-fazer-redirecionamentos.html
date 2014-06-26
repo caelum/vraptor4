@@ -32,3 +32,14 @@ try {
     result.use(logic()).redirectTo(HomeController.class).index();
 }
 ~~~
+
+Ou você pode usar o `on(IllegalStateException.class)` pra fazer isso de forma fluente:
+
+~~~
+#!java
+result.use(referer())
+	.redirect()
+	.on(IllegalStateException.class)
+	.redirectTo(HomeController.class)
+	.index();
+~~~

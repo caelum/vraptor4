@@ -47,6 +47,10 @@ module.exports = function(grunt) {
                 {
                     from: /build:js \/js\/([^ ]+)(.*href=")(.*)\/js\//,
                     to: 'build:js $3/js/$1$2$3/js/'
+                },
+                {
+                    from: /\t/g,
+                    to: '    '
                 }]
             },
             index: {

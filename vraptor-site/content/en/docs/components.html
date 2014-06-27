@@ -83,11 +83,13 @@ public class EmailConfiguration {
 
 The implemented scopes are:
 
-* `@ApplicationScoped` - the component is a singleton, just one for the entire application.
-* `@SessionScoped` - the component is the same during the http session of the container.
-* `@ConversationScoped` - the component instance is kept during a conversation.
-* `@RequestScoped` - the component is the same during a request.
-* `@Dependent` - the component is instanciated whenever it is requested.
+~~~
+* @ApplicationScoped - the component is a singleton, just one for the entire application.
+* @SessionScoped - the component is the same during the http session of the container.
+* @ConversationScoped - the component instance is kept during a conversation.
+* @RequestScoped - the component is the same during a request.
+* @Dependent - the component is instanciated whenever it is requested.
+~~~
 
 For more information about scopes, check [the Java EE 7
 documentation](http://docs.oracle.com/javaee/7/tutorial/doc/cdi-basic008.htm#GJBBK)

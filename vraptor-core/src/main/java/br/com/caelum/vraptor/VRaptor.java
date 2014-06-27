@@ -153,7 +153,8 @@ public class VRaptor implements Filter {
 		try {
 			return servletContext.getResource(path);
 		} catch (MalformedURLException e) {
-			throw new ServletException("Something went wrong when trying to locate a beans.xml file", e);
+			logger.error("Something went wrong when trying to locate a beans.xml file", e);
+			return null;
 		}
 	}
 

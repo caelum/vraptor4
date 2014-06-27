@@ -44,8 +44,8 @@ public class XStreamXMLSerialization implements XMLSerialization {
 
 	private final HttpServletResponse response;
 	private final XStreamBuilder builder;
+	private final Environment environment;
 	private boolean indented;
-	private Environment environment;
 
 	/** 
 	 * @deprecated CDI eyes only

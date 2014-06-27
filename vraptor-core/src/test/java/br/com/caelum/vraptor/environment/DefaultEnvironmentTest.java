@@ -60,6 +60,13 @@ public class DefaultEnvironmentTest {
 		assertThat(env.get("env_name"), is(equalTo("production")));
 	}
 
+	@Test
+	public void shouldUseFalseIfFeatureIsNotPresent() throws IOException {
+		Environment env = new DefaultEnvironment(EnvironmentType.PRODUCTION);
+
+		assertThat(env.supports("feature_that_doesnt_exists"), equalTo(false));
+	}
+
 	@Test(expected = NoSuchElementException.class)
 	public void shouldThrowExceptionIfKeyDoesNotExist() throws Exception {
 		ServletContext context = mock(ServletContext.class);

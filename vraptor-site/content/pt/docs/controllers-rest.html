@@ -62,14 +62,13 @@ cliente.usuario.login=fulano
 e os campos correspondentes, navegando por getters e setters a partir do cliente, serão setados.
 Se um atributo do objeto ou parâmetro do método for uma lista (List<>, array ou Set<>), você pode passar vários parâmetros usando colchetes e índices:
 
-~~~ 
-#!jsp
-cliente.telefones[0]=(11) 5571-2751 #no caso de ser uma lista de String
-cliente.dependentes[0].id=1 #no caso de ser qualquer objeto, você pode continuar a navegação
-cliente.dependentes[3].id=1 #os índices não precisam ser sequenciais
-cliente.dependentes[0].nome=Cicrano #se usar o mesmo índice, vai ser setado no mesmo objeto
-clientes[1].id=23 #funciona se você receber uma lista de clientes no método
-~~~ 
+
+| cliente.telefones[0]=(11) 5571-2751   | no caso de ser uma lista de String
+| cliente.dependentes[0].id=1           | no caso de ser qualquer objeto, você pode continuar a navegação
+| cliente.dependentes[3].id=1           | os índices não precisam ser sequenciais
+| cliente.dependentes[0].nome=Cicrano   | se usar o mesmo índice, vai ser setado no mesmo objeto
+| clientes[1].id=23                     | funciona se você receber uma lista de clientes no método
+{: .content-table}
 
 ##Reflection no nome dos parâmetros
 

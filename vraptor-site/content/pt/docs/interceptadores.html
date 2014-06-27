@@ -61,10 +61,10 @@ No exemplo acima todas as requisições são interceptadas. Podemos então defin
 
 ~~~ 
 #!java
-	@Accepts
-	public boolean accepts(ControllerMethod method) {
-		return method.containsAnnotation(Audit.class);
-	}
+@Accepts
+public boolean accepts(ControllerMethod method) {
+	return method.containsAnnotation(Audit.class);
+}
 ~~~ 
 
 No VRaptor4 também temos outra maneira de definir a condição de aceitação. O exemplo acima é um caso bem comum e acabamos tendo de repetir esse código muitas vezes. Para essas situações você pode usar a annotation `@AcceptsWithAnnotations`. 

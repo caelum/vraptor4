@@ -6,11 +6,13 @@ title: Converters
 
 When a parameter is received, we need to convert to an Object. VRaptor already have registered converters for all types define in  `Java Language Specification`. If the type is primitive and parameter is `null`, the default value for the type will be returned. Example: if your type is an `int` and the value is `null`, the value `0` will be returned. For the non-primitive types the `null` value is returned if the parameter is `null` or empty.
 
-For example, if we receive the parameters for the class below:
+For example, if we receive the parameters: 
 
 | client.id | 10 |
 | client.age | null |
 {: .content-table}
+
+for the class below:
 
 ~~~
 #!java
@@ -44,7 +46,7 @@ If you are using JDK 8, you can use the new `java.time` API available using <b>v
 When a conversion fails VRaptor will add the error message using localization. To see these messages you need to add the lines below in your resource bundle:
 
 ~~~ 
-#!xml
+#!properties
 is_not_a_valid_number = {0} is not a valid number.
 is_not_a_valid_integer = {0} is not a valid integer.
 is_not_a_valid_character = {0} is not a valid character.
@@ -68,7 +70,11 @@ The converters uses the JVM's default locale. You can override the JVM locale ad
 </context-param>
 ~~~ 
 
-Or you can start your application server or servlet container using `-Duser.language=en -Duser.region=US` VM parameter.
+Or you can start your application server or servlet container using the VM parameter:
+
+~~~
+-Duser.language=en -Duser.region=US
+~~~
 
 ##Creating your own converter
 

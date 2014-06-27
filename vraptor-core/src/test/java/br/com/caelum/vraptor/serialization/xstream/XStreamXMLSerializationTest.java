@@ -43,14 +43,13 @@ import org.junit.Before;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.environment.Environment;
-import br.com.caelum.vraptor.serialization.XMLSerialization;
 
 import com.google.common.collect.Lists;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 public class XStreamXMLSerializationTest {
 
-	protected XMLSerialization serialization;
+	protected XStreamXMLSerialization serialization;
 	protected ByteArrayOutputStream stream;
 	protected Environment environment;
 
@@ -204,12 +203,24 @@ public class XStreamXMLSerializationTest {
 	}
 
 	@Test
-	public void shouldIndentedByEnvironmentMorePriorityThenJavaCode() {
-		when(environment.get(anyString(), anyString())).thenReturn("false");
+	public void shouldIndentedWhenEnvironmentReturnsTrue() {
+		when(environment.supports(anyString())).thenReturn(true);
+		serialization.init();
+
+		String expectedResult = "<order>\n  <price>15.0</price>\n  <comments>pack it nicely, please</comments>\n</order>";
+		Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please");
+		serialization.from(order).serialize();
+		assertThat(result(), is(equalTo(expectedResult)));
+	}
+
+	@Test
+	public void shouldNotIndentedWhenEnvironmentReturnsFalse() {
+		when(environment.supports(anyString())).thenReturn(false);
+		serialization.init();
 
 		String expectedResult = "<order><price>15.0</price><comments>pack it nicely, please</comments></order>";
 		Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please");
-		serialization.indented().from(order).serialize();
+		serialization.from(order).serialize();
 		assertThat(result(), is(equalTo(expectedResult)));
 	}
 

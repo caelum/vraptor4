@@ -18,6 +18,7 @@ package br.com.caelum.vraptor.serialization.xstream;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
@@ -60,6 +61,11 @@ public class XStreamXMLSerialization implements XMLSerialization {
 		this.environment = environment;
 	}
 
+	@PostConstruct
+	protected void init() {
+		indented = environment.supports(ENVIRONMENT_INDENTED_KEY);
+	}
+
 	@Override
 	public boolean accepts(String format) {
 		return "xml".equals(format);
@@ -67,7 +73,7 @@ public class XStreamXMLSerialization implements XMLSerialization {
 	
 	@Override
 	public XMLSerialization indented() {
-		indented = environment.get(ENVIRONMENT_INDENTED_KEY, "true").equals("true");
+		indented = true;
 		return this;
 	}
 

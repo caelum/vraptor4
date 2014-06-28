@@ -1,18 +1,18 @@
 ---
-title: Building a Web Application With Java 8 and VRaptor 4 in the Wildfly
+title: Building a Web Application with Java 8 and VRaptor 4 under Wildfly
 ---
 
 # by Rubens Saraiva
 
-There is little more two month we follow the launch Java 1.8, with new features and new APIs. In the same way, and almost at the same time, arrived the version 4 of Vraptor, Brazilian framework who have been increasingly used in the Brazil and other places of world.
+Some months ago Java 8 was lauched, with new features and APIs. And some weeks before, the VRaptor, a brazilian framework, was launched too.
 
-The VRaptor 4 was totally modified for using the CDI in your engine de Injection Dependency. This makes the framework totally compatible with the Java Enterprise Edition platform (JavaEE).
+VRaptor 4 was complete refactored to support CDI built-in, and now are compatible to use Java EE 7 resources.
 
-In this post I will show how building a Vraptor 4 Application, used new features of Java 8 and running on the WildFly 8, the new application server of Jboss who implements Java EE 7.In relation to database, the application uses the WildFly default datasource who uses HSQLDB Database.
+In this post I will explain how building a Vraptor 4 Application, used new features of Java 8 and running on the WildFly 8, the new Application Server built by JBoss that implements Java EE 7.The database used by this article will be HSQLDB, available out of box by Wildfly.
 
 The complete application code is available [here](http://github.com/rsaraiva/v4_wildfly_jta).
 
-To begin, create a project web with Maven using your favorite IDE. Open the Maven configuration file , `pom.xml` and include the dependencies contained in the file below.
+To start, create a project web with Maven using your favorite IDE. Open the Maven configuration file ,`pom.xml` and include the dependencies described in the file below.
 
 ~~~
 #!xml
@@ -82,9 +82,9 @@ To begin, create a project web with Maven using your favorite IDE. Open the Mave
 </project>
 ~~~
 
-The first dependency is the new VRaptor 4, final version. Next we included the plugin `vraptor-javatime` that makes the VRaptor recognize all types of new date API. After comes the dependency of JSTL for to work in the JSPs, the hibernate, the CDI library and in the final, the Java EE 7 library. In tag plugins, we defined who we want to use Java 8 in the build of the application.
+The first dependency of you project is VRaptor 4, and before we need to include `vraptor-javatime` to allow vraptor to work with new Java Date API. And the next step will include Java EE dependencies like JSTL, JPA provider and so on. And most important: we need to declare in plugins node that we want to use Java 1.8 compilation.
 
-Now, come on create our model - a simple entity to represent Events.
+Now we will create our model - a simple entity to represent Events.
 
 ~~~
 #!java
@@ -111,9 +111,8 @@ public class Event implements Serializable {
 }
 ~~~
 
-See that the date attribute is of type `LocalDate`, the new class of api dates of java 8.
+As you can see, the date attribute was declared as `LocalDate`, the new class introduced in Java 8.
 
-Mas para isso ser possível, é necessário criar um Converter da JPA, já que a JPA 2.1 ainda não suporta os tipos da nova Date and Time API.
 But for that to be possible, it's necessary create a JPA Converter, since the JPA 2.1 still not support the types of the new Date and Time API.
 ~~~
 #!java
@@ -132,7 +131,7 @@ public class LocalDatePersistenceConverter implements AttributeConverter<LocalDa
 }
 ~~~
 
-This converter need to be registered in the `persistence.xml` how below.
+This converter needs to be registered in the `persistence.xml` as describes below.
 
 ~~~
 #!xml
@@ -148,7 +147,7 @@ This converter need to be registered in the `persistence.xml` how below.
 </persistence>
 ~~~
 
-Now come on create a `Service` who knows create a new event and list all events.Note the integration with JavaEE by the use of annotation `@Stateless` and `@PersistenceContext`.
+Now we will create a `Service` , the logic class to create and list events. Notice the integration with JavaEE with the annotations `@Stateless` and `@PersistenceContext`.
 
 ~~~
 #!java
@@ -168,7 +167,7 @@ public class EventService {
 }
 ~~~
 
-Now we will use the CDI for inject the service in the controller from VRaptor
+Now we will use the CDI to inject the service in the controller from VRaptor
 
 ~~~
 #!java
@@ -191,7 +190,7 @@ public class EventController implements Serializable {
 }
 ~~~
 
-Our controller have two methods. The first uses `EventService` for consulting all events registered and includes the list in the JSP context. The second receive the 'post' of JSP form and persists the event in database.
+Our controller have two methods. The first uses `EventService` for querying all events registered and includes the list in the JSP context. The second receive the 'post' from JSP form and persists the event into database.
 
 In the end, we must create a jsp with a events list and the register form.
 
@@ -228,5 +227,5 @@ In the end, we must create a jsp with a events list and the register form.
 </html>
 ~~~
 
-Cookbook originally posted in [rsaraiva.com](http://rsaraiva.com)
+Cookbook originally posted at [rsaraiva.com](http://rsaraiva.com)
 

@@ -15,6 +15,7 @@
  */
 package br.com.caelum.vraptor.serialization.xstream;
 
+import static br.com.caelum.vraptor.serialization.XMLSerialization.ENVIRONMENT_INDENTED_KEY;
 import static br.com.caelum.vraptor.serialization.xstream.XStreamBuilderImpl.cleanInstance;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
@@ -204,7 +205,7 @@ public class XStreamXMLSerializationTest {
 
 	@Test
 	public void shouldIndentedWhenEnvironmentReturnsTrue() {
-		when(environment.supports(anyString())).thenReturn(true);
+		when(environment.supports(ENVIRONMENT_INDENTED_KEY)).thenReturn(true);
 		serialization.init();
 
 		String expectedResult = "<order>\n  <price>15.0</price>\n  <comments>pack it nicely, please</comments>\n</order>";

@@ -1,0 +1,66 @@
+---
+title: Avoiding browser cache
+---
+
+# by Otávio Garcia e Lucas Cavalcanti
+
+This interceptor will called always, and tells the browser to don't cache your pages, adding some headers that expires the page.
+
+~~~
+#!java
+@Intercepts
+public class NoCacheInterceptor {
+
+    private final HttpServletResponse response;
+
+    @Inject
+    public NoCacheInterceptor(HttpServletResponse response) {
+        this.response = response;
+    }
+
+    /**
+     * @deprecated CDI eyes only
+     */
+    protected NoCacheInterceptor(){
+        this(null);
+    }
+
+    @BeforeCall
+    public void intercept() {
+
+        // set the expires to past
+        response.setHeader("Expires", "Wed, 31 Dec 1969 21:00:00 GMT");
+
+        // no-cache headers for HTTP/1.1
+        response.setHeader("Cache-Control", "no-store, no-cache, must-revalidate");
+
+        // no-cache headers for HTTP/1.1 (IE)
+        response.addHeader("Cache-Control", "post-check=0, pre-check=0");
+
+        // no-cache headers for HTTP/1.0
+        response.setHeader("Pragma", "no-cache");
+    }
+}
+~~~
+
+If you want to define which pages won't be cached, you can create an annotation:
+
+~~~
+#!java
+@Target({ElementType.METHOD, ElementType.TYPE})
+@Documented
+@Retention(RetentionPolicy.RUNTIME)
+public @interface NoCache {
+
+}
+~~~
+
+And in the `accepts` method you can create a rule to intercept only methods that contains the `NoCache` annotation.
+
+~~~
+#!java
+@Accepts
+public boolean accepts(ControllerMethod method) {
+    return method.containsAnnotation(NoCache.class);
+}
+~~~

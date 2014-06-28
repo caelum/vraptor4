@@ -15,6 +15,7 @@
  */
 package br.com.caelum.vraptor.serialization.gson;
 
+import static br.com.caelum.vraptor.serialization.JSONSerialization.ENVIRONMENT_INDENTED_KEY;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
@@ -39,9 +40,9 @@ import javax.servlet.http.HttpServletResponse;
 import org.junit.Before;
 import org.junit.Test;
 
+import br.com.caelum.vraptor.environment.Environment;
 import br.com.caelum.vraptor.interceptor.DefaultTypeNameExtractor;
 import br.com.caelum.vraptor.serialization.JSONPSerialization;
-import br.com.caelum.vraptor.serialization.JSONSerialization;
 import br.com.caelum.vraptor.util.test.MockInstanceImpl;
 
 import com.google.common.collect.ForwardingCollection;
@@ -56,10 +57,11 @@ import com.google.gson.JsonSerializer;
 
 public class GsonJSONSerializationTest {
 
-	private JSONSerialization serialization;
+	private GsonJSONSerialization serialization;
 	private ByteArrayOutputStream stream;
 	private HttpServletResponse response;
 	private DefaultTypeNameExtractor extractor;
+	private Environment environment;
 
 	private GsonSerializerBuilder builder;
 
@@ -67,11 +69,12 @@ public class GsonJSONSerializationTest {
 	public void setup() throws Exception {
 		TimeZone.setDefault(TimeZone.getTimeZone("GMT-0300"));
 		
-		this.stream = new ByteArrayOutputStream();
+		stream = new ByteArrayOutputStream();
 
 		response = mock(HttpServletResponse.class);
 		when(response.getWriter()).thenReturn(new PrintWriter(stream));
 		extractor = new DefaultTypeNameExtractor();
+		environment = mock(Environment.class);
 
 		List<JsonSerializer<?>> jsonSerializers = new ArrayList<>();
 		List<JsonDeserializer<?>> jsonDeserializers = new ArrayList<>();
@@ -81,7 +84,7 @@ public class GsonJSONSerializationTest {
 		jsonSerializers.add(new EnumSerializer());
 
 		builder = new GsonBuilderWrapper(new MockInstanceImpl<>(jsonSerializers), new MockInstanceImpl<>(jsonDeserializers));
-		this.serialization = new GsonJSONSerialization(response, extractor, builder);
+		serialization = new GsonJSONSerialization(response, extractor, builder, environment);
 	}
 
 	public static class Address {
@@ -206,10 +209,32 @@ public class GsonJSONSerializationTest {
 	}
 
 	@Test
-	public void shouldSerializeAllBasicFieldsIdented() {
+	public void shouldSerializeAllBasicFieldsIndented() {
 		String expectedResult = "{\n  \"order\": {\n    \"price\": 15.0,\n    \"comments\": \"pack it nicely, please\"\n  }\n}";
 		Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please");
 		serialization.indented().from(order).serialize();
+		assertThat(result(), is(equalTo(expectedResult)));
+	}
+
+	@Test
+	public void shouldIndentedWhenEnvironmentReturnsTrue() {
+		when(environment.supports(ENVIRONMENT_INDENTED_KEY)).thenReturn(true);
+		serialization.init();
+
+		String expectedResult = "{\n  \"order\": {\n    \"price\": 15.0,\n    \"comments\": \"pack it nicely, please\"\n  }\n}";
+		Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please");
+		serialization.from(order).serialize();
+		assertThat(result(), is(equalTo(expectedResult)));
+	}
+
+	@Test
+	public void shouldNotIndentedWhenEnvironmentReturnsFalse() {
+		when(environment.supports(ENVIRONMENT_INDENTED_KEY)).thenReturn(false);
+		serialization.init();
+
+		String expectedResult = "{\"order\":{\"price\":15.0,\"comments\":\"pack it nicely, please\"}}";
+		Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please");
+		serialization.from(order).serialize();
 		assertThat(result(), is(equalTo(expectedResult)));
 	}
 
@@ -396,7 +421,7 @@ public class GsonJSONSerializationTest {
 	}
 
 	@Test
-	public void shouldOptionallyRemoveRootIdented() {
+	public void shouldOptionallyRemoveRootIndented() {
 		String expected = "{\n  \"price\": 15.0,\n  \"comments\": \"pack it nicely, please\",\n  \"items\": [\n    {\n      \"name\": \"any item\"\n    }\n  ]\n}";
 		Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please", new Item(
 				"any item", 12.99));
@@ -488,7 +513,7 @@ public class GsonJSONSerializationTest {
 
 	@Test
 	public void shouldSerializeWithCallback() {
-		JSONPSerialization serialization = new GsonJSONPSerialization(response, extractor, builder);
+		JSONPSerialization serialization = new GsonJSONPSerialization(response, extractor, builder, environment);
 
 		String expectedResult = "calculate({\"order\":{\"price\":15.0}})";
 		Order order = new Order(new Client("nykolas lima"), 15.0, "gift bags, please");

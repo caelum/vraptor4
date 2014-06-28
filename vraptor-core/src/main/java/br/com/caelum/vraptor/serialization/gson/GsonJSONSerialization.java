@@ -17,10 +17,12 @@ package br.com.caelum.vraptor.serialization.gson;
 
 import java.io.IOException;
 
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
 
+import br.com.caelum.vraptor.environment.Environment;
 import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
 import br.com.caelum.vraptor.serialization.JSONSerialization;
 import br.com.caelum.vraptor.serialization.NoRootSerialization;
@@ -40,20 +42,29 @@ public class GsonJSONSerialization implements JSONSerialization {
 	private final HttpServletResponse response;
 	private final TypeNameExtractor extractor;
 	private final GsonSerializerBuilder builder;
+	private Environment environment;
 
 	/** 
 	 * @deprecated CDI eyes only
 	 */
 	protected GsonJSONSerialization() {
-		this(null, null, null);
+		this(null, null, null, null);
 	}
 
 	@Inject
 	public GsonJSONSerialization(HttpServletResponse response, TypeNameExtractor extractor,
-			GsonSerializerBuilder builder) {
+			GsonSerializerBuilder builder, Environment environment) {
 		this.response = response;
 		this.extractor = extractor;
 		this.builder = builder;
+		this.environment = environment;
+	}
+
+	@PostConstruct
+	protected void init() {
+		if (environment.supports(ENVIRONMENT_INDENTED_KEY)) {
+			builder.indented();
+		}
 	}
 
 	@Override

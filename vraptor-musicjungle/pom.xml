@@ -181,14 +181,6 @@
 					<wtpversion>2.0</wtpversion>
 					<ajdtVersion>none</ajdtVersion>
 				</configuration>
-				<executions>
-					<execution>
-						<phase>package</phase>
-						<goals>
-							<goal>eclipse</goal>
-						</goals>
-					</execution>
-				</executions>
 			</plugin>
 
 			<plugin>

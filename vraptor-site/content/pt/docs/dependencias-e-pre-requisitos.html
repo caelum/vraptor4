@@ -133,6 +133,29 @@ E inclua um arquivo de configuração chamado `log4j.xml` na pasta de `src/main/
 </log4j:configuration>
 ~~~ 
 
+**Nota:** Se você está fazendo deploy de sua aplicação no Wildfly, você precisará configurar o logging no arquivo `standalone.xml` (ou no `domain.xml` se você estiver executando em modo domain):
+
+~~~ 
+#!xml
+<subsystem xmlns="urn:jboss:domain:logging:2.0">
+    <logger category="br.com.caelum.vraptor">
+        <level name="DEBUG"/>
+    </logger>
+	<!-- restante do conteúdo -->
+</subsystem>
+~~~ 
+
+Porém se você preferir usar as configurações dentro de sua aplicação usando exemplo de `log4j.xml` acima, você pode indicar ao Wildfly para que ele considere a configuração na aplicação:
+
+~~~ 
+#!xml
+<subsystem xmlns="urn:jboss:domain:logging:2.0">
+    <use-deployment-logging-config value="false"/>
+	<!-- restante do conteúdo -->
+</subsystem>
+~~~ 
+
+
 ## XStream e Gson
 
 São utililizadas para serialização e deserialização XML e JSON respectivamente. Ambas são opcionais, ou seja, se você não usar os recursos de serialização e deserialização, você pode removê-los do classpath. Atualmente elas já vêm com a dependência do VRaptor no Maven e você não precisa declarar as dependências.

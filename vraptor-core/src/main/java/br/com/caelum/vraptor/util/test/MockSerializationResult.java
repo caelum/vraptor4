@@ -26,6 +26,8 @@ import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonSerializer;
 
 import br.com.caelum.vraptor.View;
+import br.com.caelum.vraptor.environment.Environment;
+import br.com.caelum.vraptor.environment.NullEnvironment;
 import br.com.caelum.vraptor.http.FormatResolver;
 import br.com.caelum.vraptor.interceptor.DefaultTypeNameExtractor;
 import br.com.caelum.vraptor.proxy.JavassistProxifier;
@@ -60,10 +62,21 @@ public class MockSerializationResult extends MockResult {
 	private DefaultTypeNameExtractor extractor;
 	private XStreamBuilder xstreambuilder;
 	private GsonSerializerBuilder gsonBuilder;
+	private Environment environment;
 
 
+	/**
+	 * @deprecated Prefer using {@link MockSerializationResult#MockSerializationResult(Proxifier, XStreamBuilder, GsonSerializerBuilder, Environment)}
+	 * that provides a {@link Environment}.
+	 */
 	public MockSerializationResult(Proxifier proxifier, XStreamBuilder xstreambuilder, GsonSerializerBuilder gsonBuilder) {
+		this(proxifier, xstreambuilder, gsonBuilder, new NullEnvironment());
+	}
+
+	public MockSerializationResult(Proxifier proxifier, XStreamBuilder xstreambuilder, GsonSerializerBuilder gsonBuilder,
+			Environment environment) {
 		super(proxifier);
+		this.environment = environment;
 		this.response = new MockHttpServletResponse();
 		this.extractor = new DefaultTypeNameExtractor();
 		this.xstreambuilder = xstreambuilder;
@@ -93,12 +106,12 @@ public class MockSerializationResult extends MockResult {
 		}
 
 		if (view.isAssignableFrom(XMLSerialization.class)){
-			serialization = new XStreamXMLSerialization(response, xstreambuilder);
+			serialization = new XStreamXMLSerialization(response, xstreambuilder, environment);
 			return view.cast(serialization);
 		}
 
 		if (view.isAssignableFrom(RepresentationResult.class)) {
-			serialization = new XStreamXMLSerialization(response, xstreambuilder);
+			serialization = new XStreamXMLSerialization(response, xstreambuilder, environment);
 			return view.cast(new DefaultRepresentationResult(new FormatResolver() {
 				@Override
 				public String getAcceptFormat() {

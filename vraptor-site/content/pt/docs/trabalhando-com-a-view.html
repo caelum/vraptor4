@@ -401,8 +401,20 @@ Por padrão, o resultado da serialização é sem indentação, o que pode ser �
 
 ~~~ 
 #!java
-result.use(json()).indented().from(carro).serialize(); //=> {\n  'carro': {\n  'cor': 'azul'\n  }\n}
+result.use(json()).indented().from(carro).serialize();
 ~~~ 
+
+Dessa forma o resultado seria:
+
+#!javascript
+{
+  'carro':
+  {
+    'cor': 'azul'
+  }
+}
+~~~ 
+
 
 Ou você pode também usar o <a href="/pt/docs/environment">Environment</a> para definir a indentação padrão conforme o ambiente. Neste caso você pode definir que no ambiente `DEVELOPMENT` a indentação será ativada, e no ambiente `PRODUCTION` será desativada.
 

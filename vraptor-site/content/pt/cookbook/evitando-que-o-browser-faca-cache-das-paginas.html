@@ -55,12 +55,13 @@ public @interface NoCache {
 }
 ~~~
 
-E adicionar o método `accepts` do interceptor com o código abaixo:
+E anotar o interceptor com a anotação `@AcceptsWithAnnotation(NoCache.class)`:
 
 ~~~
 #!java
-@Accepts
-public boolean accepts(ControllerMethod method) {
-    return method.containsAnnotation(NoCache.class);
+@Intercepts
+@AcceptsWithAnnotation(NoCache.class)
+public class NoCacheInterceptor {
+
 }
 ~~~

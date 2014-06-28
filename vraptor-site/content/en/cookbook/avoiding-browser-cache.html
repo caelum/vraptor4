@@ -55,12 +55,13 @@ public @interface NoCache {
 }
 ~~~
 
-And in the `accepts` method you can create a rule to intercept only methods that contains the `NoCache` annotation.
+And adds the annotation `@AcceptsWithAnnotation` in the interceptor class.
 
 ~~~
 #!java
-@Accepts
-public boolean accepts(ControllerMethod method) {
-    return method.containsAnnotation(NoCache.class);
+@Intercepts
+@AcceptsWithAnnotation(NoCache.class)
+public class NoCacheInterceptor {
+
 }
 ~~~

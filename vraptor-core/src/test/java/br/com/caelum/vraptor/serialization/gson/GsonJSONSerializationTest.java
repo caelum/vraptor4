@@ -15,6 +15,7 @@
  */
 package br.com.caelum.vraptor.serialization.gson;
 
+import static br.com.caelum.vraptor.serialization.JSONSerialization.ENVIRONMENT_INDENTED_KEY;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
@@ -42,7 +43,6 @@ import org.junit.Test;
 import br.com.caelum.vraptor.environment.Environment;
 import br.com.caelum.vraptor.interceptor.DefaultTypeNameExtractor;
 import br.com.caelum.vraptor.serialization.JSONPSerialization;
-import br.com.caelum.vraptor.serialization.JSONSerialization;
 import br.com.caelum.vraptor.util.test.MockInstanceImpl;
 
 import com.google.common.collect.ForwardingCollection;
@@ -57,7 +57,7 @@ import com.google.gson.JsonSerializer;
 
 public class GsonJSONSerializationTest {
 
-	private JSONSerialization serialization;
+	private GsonJSONSerialization serialization;
 	private ByteArrayOutputStream stream;
 	private HttpServletResponse response;
 	private DefaultTypeNameExtractor extractor;
@@ -209,10 +209,32 @@ public class GsonJSONSerializationTest {
 	}
 
 	@Test
-	public void shouldSerializeAllBasicFieldsIdented() {
+	public void shouldSerializeAllBasicFieldsIndented() {
 		String expectedResult = "{\n  \"order\": {\n    \"price\": 15.0,\n    \"comments\": \"pack it nicely, please\"\n  }\n}";
 		Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please");
 		serialization.indented().from(order).serialize();
+		assertThat(result(), is(equalTo(expectedResult)));
+	}
+
+	@Test
+	public void shouldIndentedWhenEnvironmentReturnsTrue() {
+		when(environment.supports(ENVIRONMENT_INDENTED_KEY)).thenReturn(true);
+		serialization.init();
+
+		String expectedResult = "{\n  \"order\": {\n    \"price\": 15.0,\n    \"comments\": \"pack it nicely, please\"\n  }\n}";
+		Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please");
+		serialization.from(order).serialize();
+		assertThat(result(), is(equalTo(expectedResult)));
+	}
+
+	@Test
+	public void shouldNotIndentedWhenEnvironmentReturnsFalse() {
+		when(environment.supports(ENVIRONMENT_INDENTED_KEY)).thenReturn(false);
+		serialization.init();
+
+		String expectedResult = "{\"order\":{\"price\":15.0,\"comments\":\"pack it nicely, please\"}}";
+		Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please");
+		serialization.from(order).serialize();
 		assertThat(result(), is(equalTo(expectedResult)));
 	}
 
@@ -399,7 +421,7 @@ public class GsonJSONSerializationTest {
 	}
 
 	@Test
-	public void shouldOptionallyRemoveRootIdented() {
+	public void shouldOptionallyRemoveRootIndented() {
 		String expected = "{\n  \"price\": 15.0,\n  \"comments\": \"pack it nicely, please\",\n  \"items\": [\n    {\n      \"name\": \"any item\"\n    }\n  ]\n}";
 		Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please", new Item(
 				"any item", 12.99));

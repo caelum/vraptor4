@@ -227,6 +227,7 @@ header {
 
 .content-table {
     width: 100%;
+    background-color: #F8F8F8;
 }
 
 .content-table tr {

@@ -70,14 +70,12 @@ starting from customer. If an object field or a method parameter is a list
 (`List<>` or array), you can receive several request parameters, using square
 brackets and indexes:
 
-~~~ 
-#!jsp
-customer.phones[0]=+55 11 5571-2751 #if it is a string list
-customer.relatives[0].id=1 #if it is an arbitrary object, you can continue to browse
-customer.relatives[3].id=1 #indexes don't need to be sequential
-customer.relatives[0].name=Mary Doe #using the same index, it will be set on same object
-customers[1].id=23 #it works if you receive a customer list as method parameter
-~~~ 
+| customer.phones[0]=+55 11 5571-2751  | if it is a string list
+| customer.relatives[0].id=1           | if it is an arbitrary object, you can continue to browse
+| customer.relatives[3].id=1           | indexes don't need to be sequential
+| customer.relatives[0].name=Mary Doe  | using the same index, it will be set on same object
+| customers[1].id=23                   | it works if you receive a customer list as method parameter
+{: .content-table}
 
 ##Reflection on parameter names
 

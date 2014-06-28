@@ -75,7 +75,7 @@ public class DefaultEnvironment implements Environment {
 
 	@Override
 	public boolean supports(String feature) {
-		if (properties.containsKey(feature)) {
+		if (has(feature)) {
 			return Boolean.parseBoolean(get(feature).trim());
 		}
 		return false;

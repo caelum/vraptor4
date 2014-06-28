@@ -21,6 +21,7 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
 
+import br.com.caelum.vraptor.environment.Environment;
 import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
 import br.com.caelum.vraptor.serialization.JSONPSerialization;
 import br.com.caelum.vraptor.serialization.JSONSerialization;
@@ -39,25 +40,27 @@ public class GsonJSONPSerialization implements JSONPSerialization {
 	private final HttpServletResponse response;
 	private final TypeNameExtractor extractor;
 	private final GsonSerializerBuilder builder;
+	private Environment environment;
 	
 	/** 
 	 * @deprecated CDI eyes only
 	 */
 	protected GsonJSONPSerialization() {
-		this(null, null, null);
+		this(null, null, null, null);
 	}
 
 	@Inject
 	public GsonJSONPSerialization(HttpServletResponse response, TypeNameExtractor extractor,
-			GsonSerializerBuilder builder) {
+			GsonSerializerBuilder builder, Environment environment) {
 		this.response = response;
 		this.extractor = extractor;
 		this.builder = builder;
+		this.environment = environment;
 	}
 	
 	@Override
 	public JSONSerialization withCallback(final String callbackName) {
-		return new GsonJSONSerialization(response, extractor, builder) {
+		return new GsonJSONSerialization(response, extractor, builder, environment) {
 			@Override
 			protected SerializerBuilder getSerializer() {
 				try {

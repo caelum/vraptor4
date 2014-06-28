@@ -39,6 +39,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.junit.Before;
 import org.junit.Test;
 
+import br.com.caelum.vraptor.environment.Environment;
 import br.com.caelum.vraptor.interceptor.DefaultTypeNameExtractor;
 import br.com.caelum.vraptor.serialization.JSONPSerialization;
 import br.com.caelum.vraptor.serialization.JSONSerialization;
@@ -60,6 +61,7 @@ public class GsonJSONSerializationTest {
 	private ByteArrayOutputStream stream;
 	private HttpServletResponse response;
 	private DefaultTypeNameExtractor extractor;
+	private Environment environment;
 
 	private GsonSerializerBuilder builder;
 
@@ -67,11 +69,12 @@ public class GsonJSONSerializationTest {
 	public void setup() throws Exception {
 		TimeZone.setDefault(TimeZone.getTimeZone("GMT-0300"));
 		
-		this.stream = new ByteArrayOutputStream();
+		stream = new ByteArrayOutputStream();
 
 		response = mock(HttpServletResponse.class);
 		when(response.getWriter()).thenReturn(new PrintWriter(stream));
 		extractor = new DefaultTypeNameExtractor();
+		environment = mock(Environment.class);
 
 		List<JsonSerializer<?>> jsonSerializers = new ArrayList<>();
 		List<JsonDeserializer<?>> jsonDeserializers = new ArrayList<>();
@@ -81,7 +84,7 @@ public class GsonJSONSerializationTest {
 		jsonSerializers.add(new EnumSerializer());
 
 		builder = new GsonBuilderWrapper(new MockInstanceImpl<>(jsonSerializers), new MockInstanceImpl<>(jsonDeserializers));
-		this.serialization = new GsonJSONSerialization(response, extractor, builder);
+		serialization = new GsonJSONSerialization(response, extractor, builder, environment);
 	}
 
 	public static class Address {
@@ -488,7 +491,7 @@ public class GsonJSONSerializationTest {
 
 	@Test
 	public void shouldSerializeWithCallback() {
-		JSONPSerialization serialization = new GsonJSONPSerialization(response, extractor, builder);
+		JSONPSerialization serialization = new GsonJSONPSerialization(response, extractor, builder, environment);
 
 		String expectedResult = "calculate({\"order\":{\"price\":15.0}})";
 		Order order = new Order(new Client("nykolas lima"), 15.0, "gift bags, please");

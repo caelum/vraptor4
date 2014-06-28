@@ -101,7 +101,7 @@ public class MockSerializationResult extends MockResult {
 
 	private <T extends View> T instanceView(Class<T> view){
 		if (view.isAssignableFrom(JSONSerialization.class)){
-			serialization = new GsonJSONSerialization(response, extractor, gsonBuilder);
+			serialization = new GsonJSONSerialization(response, extractor, gsonBuilder, environment);
 			return view.cast(serialization);
 		}
 

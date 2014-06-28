@@ -138,7 +138,7 @@ public class DefaultRepresentationResultTest {
 
 		serializers.add(new DumbSerialization());
 		serializers.add(new XStreamXMLSerialization(null, null, null));
-		serializers.add(new GsonJSONSerialization(null, null, null));
+		serializers.add(new GsonJSONSerialization(null, null, null, null));
 		serializers.add(new HTMLSerialization(null, null));
 
 		sort(serializers, new DefaultRepresentationResult.ApplicationPackageFirst());
@@ -152,7 +152,7 @@ public class DefaultRepresentationResultTest {
 		List<Serialization> serializers = new ArrayList<>();
 
 		serializers.add(new XStreamXMLSerialization(null, null, null));
-		serializers.add(new GsonJSONSerialization(null, null, null));
+		serializers.add(new GsonJSONSerialization(null, null, null, null));
 		serializers.add(new HTMLSerialization(null, null));
 		serializers.add(new DumbSerialization());
 

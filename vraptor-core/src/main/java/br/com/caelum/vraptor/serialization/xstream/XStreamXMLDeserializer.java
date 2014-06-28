@@ -77,7 +77,7 @@ public class XStreamXMLDeserializer implements Deserializer {
 	 * @return an xstream instance already configured.
 	 */
 	public XStream getConfiguredXStream(Method javaMethod, Class<?>[] types) {
-		XStream xStream = builder.deserialize().xmlInstance();
+		XStream xStream = builder.recursive().xmlInstance();
 
 		xStream.processAnnotations(types);
 

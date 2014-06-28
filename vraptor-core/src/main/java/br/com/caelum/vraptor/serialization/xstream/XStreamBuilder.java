@@ -31,5 +31,5 @@ public interface XStreamBuilder {
 	
 	public XStreamBuilder indented();
 
-	public XStreamBuilder deserialize();
+	public XStreamBuilder recursive();
 }

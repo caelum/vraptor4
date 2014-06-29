@@ -1,3 +1,488 @@
 ---
 title: View and Ajax
 ---
+
+#Sharing objects with view
+
+To register objects to be accessed by view, we use the `include` method:
+
+~~~ 
+#!java
+@Controller
+class ClientsController {
+	@Inject private final Result result;
+
+	public void search(int id) {
+		result.include("message", "Some message");
+		result.include("client", new Client(id));
+	}
+}
+~~~ 
+
+Now the variables `message` and `client` are available to use in your engine template.
+It's possible to register the object by invoking the `include` method with only one argument:
+
+~~~ 
+#!java
+@Controller
+class ClientsController {
+	@Inject private final Result result;
+
+	public void search(int id) {
+		result.include("Some message").include(new Client(id));
+	}
+}
+~~~ 
+
+In this case, the primary invocation registers the `string` key and the second the `client` key. You may change the behavior of key convention on your own `TypeNameExtractor`.
+
+##Custom PathResolver
+
+By default, to render your views, the VRaptor follows the convention:
+
+~~~ 
+#!java
+public class ClientsController {
+	public void list() {
+		//...
+	}
+}
+~~~ 
+
+The method above will render the view `/WEB-INF/jsp/clients/list.jsp`. However, not always we want this behavior and we need to use some engine template, for example, Freemarker or Velocity, and change this convention. One easy way to change this convention is to extend the `DefaultPathResolver` class.
+
+~~~ 
+#!java
+@Specializes
+public class FreemarkerPathResolver extends DefaultPathResolver {
+	protected String getPrefix() {
+		return "/WEB-INF/freemarker/";
+	}
+
+	protected String getExtension() {
+		return "ftl";
+	}
+}
+~~~ 
+
+Thus the logic will render the view `/WEB-INF/freemarker/clients/list.ftl`. If this still is not enough, you can implement the interface `PathResolver` and do any convention that you want, don't forgetting to annotate the class with `@Specializes`.
+
+##View
+
+If you want to change the view of some specific logic, you can use the `Result` object:
+
+~~~ 
+#!java
+@Controller
+public class ClientsController {
+
+	@Inject private final Result result;
+
+	public void list() {}
+
+	public void save(Client client) {
+		//...
+		result.use(Results.logic()).redirectTo(ClientsController.class).list();
+	}
+}
+~~~ 
+
+By default, there are these kinds of implemented views:
+
+~~~
+* Results.logic(), will redirect to another any system logic.
+* Results.page(), will redirect directly to one page, may be a JSP, HTML, or any URI on web application dir, or application context.
+* Results.http(), send informations of HTTP protocol with status code and headers.
+* Results.status(), send status code with more informations.
+* Results.referer(), use the header Referer to do redirects or forwards.
+* Results.nothing(), just returns the success code (HTTP 200 OK).
+* Results.xml(), serializes objects to XML.
+* Results.json(), serializes objects to JSON.
+* Results.representation(), serializes objects on a format determined by request (_format parameter or header Accept).
+~~~
+
+##Shortcuts on Result
+
+Some redirects are often used, so were created shortcuts for them. The available shortcuts are:
+
+~~~
+* result.forwardTo("/some/uri") ==> result.use(page()).forward("/some/uri");
+* result.redirectTo("/some/uri") ==> result.use(page()).redirect("/some/uri)
+* result.permanentlyRedirectTo("/some/uri") ==> result.use(status()).movedPermanentlyTo("/some/uri");
+* result.forwardTo(ClientsController.class).list() ==> result.use(logic()).forwardTo(ClientsController.class).list();
+* result.redirectTo(ClientsController.class).list() ==> result.use(logic()).redirectTo(ClientsController.class).list();
+* result.of(ClientsController.class).list() ==> result.use(page()).of(ClientsController.class).list();
+* result.permanentlyRedirectTo(Controller.class) ==> use(status()).movedPermanentlyTo(Controller.class);
+* result.notFound()  ==> use(status()).notFound()
+* result.nothing()   ==> use(nothing());
+~~~
+
+Furthermore if the redirect is to another method of the same Controller, we can use:
+
+~~~
+* result.forwardTo(this).list() ==> result.use(logic()).forwardTo(this.getClass()).list();
+* result.redirectTo(this).list() ==> result.use(logic()).redirectTo(this.getClass()).list();
+* result.of(this).list() ==> result.use(page()).of(this.getClass()).list();
+* result.permanentlyRedirectTo(this) ==> use(status()).movedPermanentlyTo(this.getClass());
+~~~
+
+##Redirect and forward
+
+On VRaptor we can use both perform a redirect or a forward of the user to another logic or a JSP. Although they are Servlet API concepts, worth remembering the difference: the redirect happens on client side through HTTP codes that will make the browser access a new URL; forward happens on server side, totally transparent for the client/browser.
+
+A good example of using the redirect is on the called 'redirect-after-post'. For example: when you add a client and after the submitted form, the client is returned to the client's listing page. Doing it with redirect, we prevent the user refresh the page (F5) and resubmit all the request, resulting in duplicate data.
+
+In the case of forward, an example of using is when you have a validation and it failed, often you want the user continues on the same screen of form with fulfilled data request, but internally you will make the forward to another business logic (that prepares the necessery data for the form).
+
+##Automatic Flash Scope
+
+If you will add object in the `Result` and make a redirect, these objects will be available in the next request.
+
+~~~ 
+#!java
+public void add(Client client) {
+	dao.add(client);
+	result.include("menssage", "Client successfully added");
+	result.redirectTo(ClientsController.class).list();
+}
+~~~ 
+
+list.jsp:
+
+~~~ 
+#!xml
+<div id="menssage">
+	<h3>${menssage}</h3>
+</div>
+~~~ 
+
+##Accepts and the _format parameter
+
+Many times, we need render different formats to the same logic. For example, we want return JSON instead of HTML. To do this, we can define the Header Accepts of request to accept the desired type, or put a `_format` parameter in the request.
+
+If it's a JSON format, the view rendered by default will be: `/WEB-INF/jsp/{controller}/{logic}.json.jsp`, in other words, in general will be render the view: `/WEB-INF/jsp/{controller}/{logic}.{format}.jsp`. If the format is HTML you don't need put it in the filename. The parameter `_format` has priority over the header Accepts.
+
+##Ajax: building in view
+
+To return a JSON in your view, just that your logic makes available the object to the view, and inside the view you form the JSON as desired.
+As example, your `/WEB-INF/jsp/clients/load.json.jsp`:
+
+~~~ 
+#!javascript
+{ name: '${client.name}', id: '${client.id}' }
+~~~ 
+
+And the logic:
+
+~~~ 
+#!java
+@Controller
+public class ClientsController {
+
+	@Inject private final Result result;
+	@Inject private final ClientDao dao;
+
+	public void load(Client client) {
+		result.include("client", dao.load(client));
+	}
+}
+~~~ 
+
+##Ajax: programmatic Version
+
+If you want the VRaptor automatically serialize your objects to XML or JSON, you can write in your logic:
+
+~~~ 
+#!java
+import static br.com.caelum.vraptor.view.Results.*;
+@Controller
+public class ClientsController {
+
+	@Inject private final Result result;
+	@Inject private final ClientDao dao;
+
+	public void loadJson(Client client) {
+		result.use(json()).from(client).serialize();
+	}
+	public void loadXml(Cliente cliente) {
+		result.use(xml()).from(client).serialize();
+	}
+}
+~~~ 
+
+The results will be simillar to:
+
+~~~ 
+#!javascript
+{"client": {
+    "name": "Joao"
+}}
+~~~ 
+
+and xml:
+
+~~~ 
+#!xml
+<client>
+    <name>Joao</name>
+</client>
+~~~ 
+
+By default, just fields of primitive types will be serialized (String, numbers, enums, dates), if you want include a field of non-primitive type you need include it explicitly:
+
+~~~ 
+#!java
+result.use(json()).from(client).include("address").serialize();
+~~~ 
+
+Will result in something like:
+
+~~~ 
+#!javascript
+{"client": {
+    "name": "Joao",
+    "address" {
+        "street": "Vergueiro"
+    }
+}}
+~~~ 
+
+You can also exclude some of serialization:
+
+~~~ 
+#!java
+result.use(json()).from(user).exclude("password").serialize();
+~~~ 
+
+Will result in something like:
+
+~~~ 
+#!javascript
+{"user": {
+    "name": "Joao",
+    "login": "joao"
+}}
+~~~ 
+
+You also can exclude or include many fields.
+
+~~~ 
+#!java
+result.use(json()).from(user).recursive().serialize(); // includes all fields recursively
+result.use(xml()).from(user).exclude("email").serialize(); // exclude the email field
+result.use(xml()).from(user).excludeAll().serialize(); // excludes all fields
+~~~ 
+
+The default implementation to XML serialization is based on XStream, then you can configure serialization by annotations or direct settings to XStream, just create the class:
+
+~~~ 
+#!java
+@Specializes
+public class CustomXStreamBuilder extends XStreamBuilderImpl {
+
+	@Override
+	protected XStream xmlInstance() {
+		XStream xStream = super.xmlInstance();
+		//your settings to XStream here
+		return xStream;
+	}
+}
+~~~ 
+
+To configure the JSON serialization you can create a class that extends of `GsonJSONSerialization` and overwrite the method `getSerializer()`.
+
+##Serializing Collections##
+
+When serializing collections, by default is put the tag `list` around elements:
+
+~~~ 
+#!java
+List<Client> clients = ...;
+result.use(json()).from(clients).serialize();
+//or
+result.use(xml()).from(clients).serialize();
+~~~ 
+
+Will result in something like:
+
+~~~ 
+#!javascript
+{"list": [
+    { "name": "Joao" },
+    { "name": "Maria" }
+]}
+~~~ 
+
+or
+
+~~~ 
+#!xml
+<list>
+	<client>
+		<name>Joao</name>
+	</client>
+	<client>
+		<name>Maria</name>
+	</client>
+</list>
+~~~ 
+
+You can customize the outside element, using the method:
+
+~~~ 
+#!java
+List<Client> clients = ...;
+result.use(json()).from(clients, "clients").serialize();
+//ou
+result.use(xml()).from(clients, "clients").serialize();
+~~~ 
+
+Will result in something like:
+
+~~~ 
+#!javascript
+{"clients": [
+    {"name": "Joao"},
+    {"name": "Maria"}
+]}
+~~~ 
+
+or
+
+~~~ 
+#!xml
+<clients>
+	<client>
+		<name>Joao</name>
+	</cliente>
+	<client>
+		<name>Maria</name>
+	</client>
+</clients>
+~~~ 
+
+The includes and excludes work as if you were applied in the element within the list. For example if you wnat include the address on the client:
+
+~~~ 
+#!java
+List<Client> clients = ...;
+result.use(json()).from(clients).include("address").serialize();
+~~~ 
+
+With result:
+
+~~~ 
+#!javascript
+{"list": [
+    {
+        "name": "Joao",
+        "address": { "street": "Vergueiro, 3185" }
+    },
+    {
+        "name": "Maria",
+        "address": { "street": "Vergueiro, 3185" }
+    }
+]}
+~~~ 
+
+##JSON serialization without root element
+
+If you want serialize an object in JSON format without naming it, you can do this with the method `withoutRoot`:
+
+~~~ 
+#!java
+result.use(json()).from(car).serialize(); //=> {'car': {'color': 'blue'}}
+result.use(json()).withoutRoot().from(car).serialize(); //=> {'color': 'blue'}
+~~~ 
+
+## Creating links on view with linkTo
+
+LinkTo is a functionality that allows you create links on JSP pages without writing link, but just indicating the class of controller, and the method.
+
+To the following controller:
+
+~~~ 
+#!java
+public class ClientController {
+	@Path("/client/list")
+	public void list() {
+		// some logic here
+	}
+
+	@Path("/client/{id}")
+	public void show(Long id) {
+		// some logic here
+	}
+}
+~~~ 
+
+To call the `list` and `show` methods respectively, we would have to write the JSP:
+
+~~~ 
+#!jsp
+<a href="/client/list">show clients</a>
+<a href="/client/1">see client 1</a>
+~~~ 
+
+Using the functionality of linkTo, we can simplify the call to the `list`method:
+
+~~~ 
+#!jsp
+<a href="${linkTo[ClientController].list()}">list clients</a>
+~~~ 
+
+
+As the method doesn't have parameters, you also can omit the parentheses.
+
+~~~ 
+#!jsp
+<a href="${linkTo[ClientController].list}">list clients</a>
+~~~ 
+
+To call the `show` method, we can make a call like this:
+
+~~~ 
+#!jsp
+<a href="${linkTo[ClientController].show(1)}">show cliente 1</a>
+~~~ 
+
+Instead of the fixed parameter, you can pass JSTL variables, for example:
+
+~~~ 
+#!jsp
+<a href="${linkTo[ClientController].show(client.id)}">show client ${client.name}</a>
+~~~ 
+
+##Automatic inclusion of parameters
+
+You can annotate your method with `@IncludeParameters` for all parameters of a method from your controller to be automatically included in the view.
+
+So, instead of doing something like:
+
+~~~ 
+#!java
+	public void filters(Interval interval, Representative representative,
+		    Unit unit, BigDecimal maxValue, BigDecimal minValue) {
+
+		// filter logic
+
+		result.include("interval", interval);
+		result.include("representative", representative);
+		result.include("maxValue", maxValue);
+		result.include("minValue", minValue);
+}
+~~~ 
+
+Now you can do:
+
+~~~ 
+#!java
+	@IncludeParameters
+	public void filters(Interval interval, Representative representative,
+		    Unit unit, BigDecimal maxValue, BigDecimal minValue) {
+
+		// filter logic
+	}
+~~~ 
+
+All the parameters will be available by jsp with EL: `${interval.begin}`

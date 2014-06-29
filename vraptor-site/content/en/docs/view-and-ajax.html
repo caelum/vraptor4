@@ -19,7 +19,7 @@ class ClientsController {
 }
 ~~~ 
 
-Now the variables `message` and `client` are available to use in your engine template.
+Now the variables `message` and `client` are available to use in your template engine.
 It's possible to register the object by invoking the `include` method with only one argument:
 
 ~~~ 
@@ -49,7 +49,7 @@ public class ClientsController {
 }
 ~~~ 
 
-The method above will render the view `/WEB-INF/jsp/clients/list.jsp`. However, not always we want this behavior and we need to use some engine template, for example, Freemarker or Velocity, and change this convention. One easy way to change this convention is to extend the `DefaultPathResolver` class.
+The method above will render the view `/WEB-INF/jsp/clients/list.jsp`. However, not always we want this behavior and we need to use some template engine, for example, Freemarker or Velocity, and we need change this convention. An easy way to change this convention is to extend the `DefaultPathResolver` class.
 
 ~~~ 
 #!java
@@ -160,11 +160,11 @@ list.jsp:
 
 Many times, we need render different formats to the same logic. For example, we want return JSON instead of HTML. To do this, we can define the Header Accepts of request to accept the desired type, or put a `_format` parameter in the request.
 
-If it's a JSON format, the view rendered by default will be: `/WEB-INF/jsp/{controller}/{logic}.json.jsp`, in other words, in general will be render the view: `/WEB-INF/jsp/{controller}/{logic}.{format}.jsp`. If the format is HTML you don't need put it in the filename. The parameter `_format` has priority over the header Accepts.
+If it's a JSON format, the view rendered by default will be: `/WEB-INF/jsp/{controller}/{logic}.json.jsp`, in other words, in general will be render the view: `/WEB-INF/jsp/{controller}/{logic}.{format}.jsp`. If the format is HTML you don't need put it in the filename. The `_format` parameter has priority over the header Accepts.
 
 ##Ajax: building in view
 
-To return a JSON in your view, just that your logic makes available the object to the view, and inside the view you form the JSON as desired.
+To return a JSON in your view, you just need to provide the object to the view, and inside the view you form the JSON as desired.
 As example, your `/WEB-INF/jsp/clients/load.json.jsp`:
 
 ~~~ 
@@ -361,7 +361,7 @@ or
 </clients>
 ~~~ 
 
-The includes and excludes work as if you were applied in the element within the list. For example if you wnat include the address on the client:
+The includes and excludes work as if you were applied in the element within the list. For example if you want include the address on the client:
 
 ~~~ 
 #!java
@@ -420,11 +420,11 @@ To call the `list` and `show` methods respectively, we would have to write the J
 
 ~~~ 
 #!jsp
-<a href="/client/list">show clients</a>
-<a href="/client/1">see client 1</a>
+<a href="/client/list">list clients</a>
+<a href="/client/1">show client 1</a>
 ~~~ 
 
-Using the functionality of linkTo, we can simplify the call to the `list`method:
+Using the linkTo functionality, we can simplify the call to the `list` method:
 
 ~~~ 
 #!jsp

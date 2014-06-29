@@ -1,0 +1,76 @@
+<assembly xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2 http://maven.apache.org/xsd/assembly-1.1.2.xsd">
+	<id>distribution-eclipse</id>
+	<formats>
+		<format>zip</format>
+	</formats>
+
+	<dependencySets>
+		<dependencySet>
+			<unpack>false</unpack>
+			<outputDirectory>/WebContent/WEB-INF/lib</outputDirectory>
+			<scope>test</scope>
+			<includes>
+				<include>*</include>
+			</includes>
+		</dependencySet>
+	</dependencySets>
+
+	<files>
+		<file>
+			<source>eclipsesettings/classpath</source>
+			<outputDirectory>/</outputDirectory>
+			<destName>.classpath</destName>
+			<filtered>true</filtered>
+		</file>
+		<file>
+			<source>eclipsesettings/project</source>
+			<outputDirectory>/</outputDirectory>
+			<destName>.project</destName>
+			<filtered>true</filtered>
+		</file>
+		<file>
+			<source>eclipsesettings/org.eclipse.wst.common.component</source>
+			<outputDirectory>/.settings</outputDirectory>
+			<filtered>true</filtered>
+		</file>
+		<file>
+			<source>eclipsesettings/org.eclipse.wst.common.project.facet.core.xml</source>
+			<outputDirectory>/.settings</outputDirectory>
+			<filtered>true</filtered>
+		</file>
+	</files>
+
+	<fileSets>
+		<fileSet>
+			<includes>
+				<include>.project</include>
+				<include>.classpath</include>
+				<include>LICENSE*</include>
+			</includes>
+		</fileSet>
+		<fileSet>
+			<directory>src/main/webapp</directory>
+			<outputDirectory>/WebContent</outputDirectory>
+			<includes>
+				<include>**/*.*</include>
+			</includes>
+		</fileSet>
+		<fileSet>
+			<directory>src/main/java</directory>
+			<outputDirectory>/src</outputDirectory>
+			<includes>
+				<include>**/*.*</include>
+			</includes>
+		</fileSet>
+		<fileSet>
+			<directory>src/main/resources</directory>
+			<outputDirectory>/src</outputDirectory>
+			<includes>
+				<include>**/*.*</include>
+			</includes>
+		</fileSet>
+	</fileSets>
+</assembly>
+

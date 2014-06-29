@@ -111,10 +111,23 @@
 				<version>2.3</version>
 				<executions>
 					<execution>
+						<id>distribution</id>
 						<phase>package</phase>
 						<configuration>
 							<descriptors>
 								<descriptor>assembly.xml</descriptor>
+							</descriptors>
+						</configuration>
+						<goals>
+							<goal>assembly</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>distribution-eclipse</id>
+						<phase>package</phase>
+						<configuration>
+							<descriptors>
+								<descriptor>assembly-eclipse.xml</descriptor>
 							</descriptors>
 						</configuration>
 						<goals>

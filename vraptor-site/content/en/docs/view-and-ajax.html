@@ -432,14 +432,14 @@ Using the linkTo functionality, we can simplify the call to the `list` method:
 ~~~ 
 
 
-As the method doesn't have parameters, you also can omit the parentheses.
+Because the method have no parameters, you also can omit the parentheses.
 
 ~~~ 
 #!jsp
 <a href="${linkTo[ClientController].list}">list clients</a>
 ~~~ 
 
-To call the `show` method, we can make a call like this:
+To call the `show` method, we can do a call like this:
 
 ~~~ 
 #!jsp
@@ -453,9 +453,9 @@ Instead of the fixed parameter, you can pass JSTL variables, for example:
 <a href="${linkTo[ClientController].show(client.id)}">show client ${client.name}</a>
 ~~~ 
 
-##Automatic inclusion of parameters
+##Automatic parameters inclusion
 
-You can annotate your method with `@IncludeParameters` for all parameters of a method from your controller to be automatically included in the view.
+If you annotate your method with `@IncludeParameters`, all method parameters will be automatically included in the view.
 
 So, instead of doing something like:
 
@@ -485,4 +485,4 @@ Now you can do:
 	}
 ~~~ 
 
-All the parameters will be available by jsp with EL: `${interval.begin}`
+All the parameters will be available by JSP with EL: `${interval.begin}`

@@ -34,11 +34,11 @@ class ClientsController {
 }
 ~~~ 
 
-In this case, the primary invocation registers the `string` key and the second the `client` key. You may change the behavior of key convention on your own `TypeNameExtractor`.
+In this case, the first invocation registers the `string` key and the second registers the `client` key. You can change this behavior writing your own `TypeNameExtractor`.
 
 ##Custom PathResolver
 
-By default, to render your views, the VRaptor follows the convention:
+By default, to render your views, VRaptor follows the convention:
 
 ~~~ 
 #!java
@@ -49,7 +49,7 @@ public class ClientsController {
 }
 ~~~ 
 
-The method above will render the view `/WEB-INF/jsp/clients/list.jsp`. However, not always we want this behavior and we need to use some template engine, for example, Freemarker or Velocity, and we need change this convention. An easy way to change this convention is to extend the `DefaultPathResolver` class.
+The method above will render the view `/WEB-INF/jsp/clients/list.jsp`. However, if you want to change this behavior for some reason, or if you want to use another template engine like Freemarker or Velocity, you just need to extend the `DefaultPathResolver` class.
 
 ~~~ 
 #!java
@@ -65,7 +65,7 @@ public class FreemarkerPathResolver extends DefaultPathResolver {
 }
 ~~~ 
 
-Thus the logic will render the view `/WEB-INF/freemarker/clients/list.ftl`. If this still is not enough, you can implement the interface `PathResolver` and do any convention that you want, don't forgetting to annotate the class with `@Specializes`.
+Thus the logic will render the view `/WEB-INF/freemarker/clients/list.ftl`. If you want more customization, you can implement the `PathResolver` interface. Remember that you need to annotate your implementation with `@Specializes` annotation.
 
 ##View
 
@@ -90,7 +90,7 @@ public class ClientsController {
 By default, there are these kinds of implemented views:
 
 ~~~
-* Results.logic(), will redirect to another any system logic.
+* Results.logic(), will redirect to another logic method.
 * Results.page(), will redirect directly to one page, may be a JSP, HTML, or any URI on web application dir, or application context.
 * Results.http(), send informations of HTTP protocol with status code and headers.
 * Results.status(), send status code with more informations.
@@ -117,7 +117,7 @@ Some redirects are often used, so were created shortcuts for them. The available
 * result.nothing()   ==> use(nothing());
 ~~~
 
-Furthermore if the redirect is to another method of the same Controller, we can use:
+Furthermore if the redirect is to another method in the same Controller, we can use:
 
 ~~~
 * result.forwardTo(this).list() ==> result.use(logic()).forwardTo(this.getClass()).list();
@@ -128,21 +128,21 @@ Furthermore if the redirect is to another method of the same Controller, we can 
 
 ##Redirect and forward
 
-On VRaptor we can use both perform a redirect or a forward of the user to another logic or a JSP. Although they are Servlet API concepts, worth remembering the difference: the redirect happens on client side through HTTP codes that will make the browser access a new URL; forward happens on server side, totally transparent for the client/browser.
+With VRaptor we can use both redirect or a forward to another logic or a JSP. Although they are Servlet API concepts, worth remembering the difference: the redirect happens on client side through HTTP codes that will make the browser access a new URL; forward happens on server side, totally transparent for the client/browser.
 
-A good example of using the redirect is on the called 'redirect-after-post'. For example: when you add a client and after the submitted form, the client is returned to the client's listing page. Doing it with redirect, we prevent the user refresh the page (F5) and resubmit all the request, resulting in duplicate data.
+A good redirect usage example is with 'redirect-after-post' pattern. As example: when you add a client and after the submitted form, the client is returned to the client's listing page. Doing it with redirect, we prevent the user refresh the page (F5) and resubmit all the request, resulting in duplicate data.
 
 In the case of forward, an example of using is when you have a validation and it failed, often you want the user continues on the same screen of form with fulfilled data request, but internally you will make the forward to another business logic (that prepares the necessery data for the form).
 
 ##Automatic Flash Scope
 
-If you will add object in the `Result` and make a redirect, these objects will be available in the next request.
+If you will add object in the `Result` and do a redirect, these objects will be available in the next request.
 
 ~~~ 
 #!java
 public void add(Client client) {
 	dao.add(client);
-	result.include("menssage", "Client successfully added");
+	result.include("message", "Client successfully added");
 	result.redirectTo(ClientsController.class).list();
 }
 ~~~ 
@@ -151,8 +151,8 @@ list.jsp:
 
 ~~~ 
 #!xml
-<div id="menssage">
-	<h3>${menssage}</h3>
+<div id="message">
+	<h3>${message}</h3>
 </div>
 ~~~ 
 
@@ -228,14 +228,14 @@ and xml:
 </client>
 ~~~ 
 
-By default, just fields of primitive types will be serialized (String, numbers, enums, dates), if you want include a field of non-primitive type you need include it explicitly:
+By default, just primitive types will be serialized (String, numbers, enums, dates), if you want include a field of non-primitive type you need include it explicitly:
 
 ~~~ 
 #!java
 result.use(json()).from(client).include("address").serialize();
 ~~~ 
 
-Will result in something like:
+Will result something like:
 
 ~~~ 
 #!javascript
@@ -247,14 +247,14 @@ Will result in something like:
 }}
 ~~~ 
 
-You can also exclude some of serialization:
+You can also exclude some fields:
 
 ~~~ 
 #!java
 result.use(json()).from(user).exclude("password").serialize();
 ~~~ 
 
-Will result in something like:
+Will result something like:
 
 ~~~ 
 #!javascript
@@ -264,7 +264,7 @@ Will result in something like:
 }}
 ~~~ 
 
-You also can exclude or include many fields.
+You can also exclude or include many fields.
 
 ~~~ 
 #!java
@@ -273,7 +273,7 @@ result.use(xml()).from(user).exclude("email").serialize(); // exclude the email 
 result.use(xml()).from(user).excludeAll().serialize(); // excludes all fields
 ~~~ 
 
-The default implementation to XML serialization is based on XStream, then you can configure serialization by annotations or direct settings to XStream, just create the class:
+The default XML Serialization implementation is based on XStream, then you can configure serialization by annotations or direct settings to XStream, just create the class:
 
 ~~~ 
 #!java
@@ -289,7 +289,7 @@ public class CustomXStreamBuilder extends XStreamBuilderImpl {
 }
 ~~~ 
 
-To configure the JSON serialization you can create a class that extends of `GsonJSONSerialization` and overwrite the method `getSerializer()`.
+To configure the JSON serialization you can create a class that extends `GsonJSONSerialization` and overwrite the method `getSerializer()`.
 
 ##Serializing Collections##
 
@@ -303,7 +303,7 @@ result.use(json()).from(clients).serialize();
 result.use(xml()).from(clients).serialize();
 ~~~ 
 
-Will result in something like:
+Will result something like:
 
 ~~~ 
 #!javascript
@@ -337,7 +337,7 @@ result.use(json()).from(clients, "clients").serialize();
 result.use(xml()).from(clients, "clients").serialize();
 ~~~ 
 
-Will result in something like:
+Will result something like:
 
 ~~~ 
 #!javascript

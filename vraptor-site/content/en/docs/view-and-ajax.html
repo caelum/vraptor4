@@ -204,7 +204,7 @@ public class ClientsController {
 	public void loadJson(Client client) {
 		result.use(json()).from(client).serialize();
 	}
-	public void loadXml(Cliente cliente) {
+	public void loadXml(Client client) {
 		result.use(xml()).from(client).serialize();
 	}
 }
@@ -354,7 +354,7 @@ or
 <clients>
 	<client>
 		<name>Joao</name>
-	</cliente>
+	</client>
 	<client>
 		<name>Maria</name>
 	</client>
@@ -443,7 +443,7 @@ To call the `show` method, we can make a call like this:
 
 ~~~ 
 #!jsp
-<a href="${linkTo[ClientController].show(1)}">show cliente 1</a>
+<a href="${linkTo[ClientController].show(1)}">show client 1</a>
 ~~~ 
 
 Instead of the fixed parameter, you can pass JSTL variables, for example:

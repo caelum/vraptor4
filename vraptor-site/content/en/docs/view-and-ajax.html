@@ -395,6 +395,47 @@ result.use(json()).from(car).serialize(); //=> {'car': {'color': 'blue'}}
 result.use(json()).withoutRoot().from(car).serialize(); //=> {'color': 'blue'}
 ~~~ 
 
+##JSON and XML result indentation
+
+By default, the serialization result is without indentation, what may be useful to improve the browser downloading time.
+
+~~~ 
+#!java
+result.use(json()).indented().from(car).serialize();
+~~~
+
+Will result somethink like:
+
+~~~
+#!javascript
+{
+  'car':
+  {
+    'color': 'blue'
+  }
+}
+~~~ 
+
+Or you can also use the <a href="/en/docs/environment">Environment</a> to define the default indentation according to the enviroment. In this case you can define that in the `DEVELOPMENT` enviroment the indentation will be enabled, and in the `PRODUCTION` enviroment will be disabled.
+
+`development.properties`:
+
+~~~ 
+#!properties
+br.com.caelum.vraptor.serialization.xml.indented=true
+br.com.caelum.vraptor.serialization.json.indented=true
+~~~ 
+
+`production.properties`:
+
+~~~ 
+#!properties
+br.com.caelum.vraptor.serialization.xml.indented=false
+br.com.caelum.vraptor.serialization.json.indented=false
+~~~ 
+
+**Note:** The `Enviroment` settings has lower priority than code. In other words, you can define `br.com.caelum.vraptor.serialization.xml.indented=false` on `Enviroment` and call the `indented` method in your code, the result will be an indented JSON or XML.
+
 ## Creating links on view with linkTo
 
 LinkTo is a functionality that allows you create links on JSP pages without writing link, but just indicating the class of controller, and the method.

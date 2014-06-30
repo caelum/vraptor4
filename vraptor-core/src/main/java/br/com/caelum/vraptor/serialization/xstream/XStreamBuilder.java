@@ -30,6 +30,4 @@ public interface XStreamBuilder {
 	public XStream configure(XStream xstream);
 	
 	public XStreamBuilder indented();
-
-	public XStreamBuilder recursive();
 }

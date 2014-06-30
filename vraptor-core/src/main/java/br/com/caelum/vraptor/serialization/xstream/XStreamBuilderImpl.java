@@ -39,7 +39,6 @@ public class XStreamBuilderImpl implements XStreamBuilder {
 	private final XStreamConverters converters;
 	private final TypeNameExtractor extractor;
 	private boolean indented = false;
-	private boolean recursive = false;
 	
 	/** 
 	 * @deprecated CDI eyes only
@@ -63,9 +62,7 @@ public class XStreamBuilderImpl implements XStreamBuilder {
 	
 	@Override
 	public XStream xmlInstance() {
-		VRaptorXStream xstream = new VRaptorXStream(extractor);
-		xstream.getVRaptorMapper().getSerializee().setRecursive(recursive);
-		return configure(xstream);
+		return configure(new VRaptorXStream(extractor));
 	}
 
 	@Override
@@ -78,16 +75,6 @@ public class XStreamBuilderImpl implements XStreamBuilder {
 	public XStreamBuilder indented() {
 		indented = true;
 		return this;
-	}
-
-	@Override
-	public XStreamBuilder recursive() {
-		recursive = true;
-		return this;
-	}
-	
-	boolean isRecursive()  {
-		return recursive;
 	}
 	
 	boolean isIndented() {

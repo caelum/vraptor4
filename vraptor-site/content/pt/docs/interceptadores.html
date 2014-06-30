@@ -8,7 +8,7 @@ O uso de interceptadores é feito para executar alguma tarefa antes e/ou depois 
 
 ##Como interceptar?
 
-No VRaptor utilizamos uma abordagem onde o interceptador define quem será interceptado, muito mais próxima a abordagens de interceptação que aparecem em sistemas baseados em <strong>AOP</strong> (Programação Orientada a Aspectos).
+No VRaptor utilizamos uma abordagem onde o interceptador define quem será interceptado, muito mais próxima a abordagens de interceptação que aparecem em sistemas baseados em <strong>AOP</strong> (Programação Orientada a Aspectos). O escopo padrão de um interceptor é `RequestScoped`.
 
 Portanto, para interceptar uma requisição, basta anotar a classe com a anotação `@Intercepts`. Assim como qualquer outro componente, com o uso das anotações de escopo você pode dizer em que escopo o interceptador será armazenado.
 

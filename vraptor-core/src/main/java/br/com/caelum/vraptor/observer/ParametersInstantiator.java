@@ -36,6 +36,7 @@ import br.com.caelum.vraptor.HeaderParam;
 import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.events.InterceptorsReady;
 import br.com.caelum.vraptor.http.MutableRequest;
+import br.com.caelum.vraptor.http.Parameter;
 import br.com.caelum.vraptor.http.ParametersProvider;
 import br.com.caelum.vraptor.http.ValuedParameter;
 import br.com.caelum.vraptor.validator.Message;
@@ -97,7 +98,13 @@ public class ParametersInstantiator {
 
 			ValuedParameter[] valuedParameters = methodInfo.getValuedParameters();
 			for (int i = 0; i < valuedParameters.length; i++) {
-				valuedParameters[i].setValue(values[i]);
+				Parameter parameter = valuedParameters[i].getParameter();
+				if (parameter.isAnnotationPresent(HeaderParam.class)) {
+					HeaderParam headerParam = parameter.getAnnotation(HeaderParam.class);
+					valuedParameters[i].setValue(request.getHeader(headerParam.value()));
+				} else {
+					valuedParameters[i].setValue(values[i]);
+				}
 			}
 		}
 	}

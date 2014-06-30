@@ -38,7 +38,7 @@ In this case, the first invocation registers the `string` key and the second reg
 
 ##Custom PathResolver
 
-By default, to render your views, VRaptor follows the convention:
+By default, to render your views, VRaptor uses the convention:
 
 ~~~ 
 #!java
@@ -69,7 +69,7 @@ Thus the logic will render the view `/WEB-INF/freemarker/clients/list.ftl`. If y
 
 ##View
 
-If you want to change the view of some specific logic, you can use the `Result` object:
+If you want to change the view of some logic, you can use the `Result` object:
 
 ~~~ 
 #!java
@@ -87,7 +87,7 @@ public class ClientsController {
 }
 ~~~ 
 
-By default, there are these kinds of implemented views:
+There are these kinds of implemented views:
 
 ~~~
 * Results.logic(), will redirect to another logic method.
@@ -188,7 +188,7 @@ public class ClientsController {
 }
 ~~~ 
 
-##Ajax: programmatic Version
+##Ajax: programmatic version
 
 If you want the VRaptor automatically serialize your objects to XML or JSON, you can write in your logic:
 
@@ -397,14 +397,14 @@ result.use(json()).withoutRoot().from(car).serialize(); //=> {'color': 'blue'}
 
 ##JSON and XML result indentation
 
-By default, the serialization result is without indentation, what may be useful to improve the browser downloading time.
+By default, the serialization result is without indentation, that is useful to improve browser downloading time.
 
 ~~~ 
 #!java
 result.use(json()).indented().from(car).serialize();
 ~~~
 
-Will result somethink like:
+Will result something like:
 
 ~~~
 #!javascript
@@ -416,7 +416,7 @@ Will result somethink like:
 }
 ~~~ 
 
-Or you can also use the <a href="/en/docs/environment">Environment</a> to define the default indentation according to the enviroment. In this case you can define that in the `DEVELOPMENT` enviroment the indentation will be enabled, and in the `PRODUCTION` enviroment will be disabled.
+Or you can also use the <a href="/en/docs/environment">Environment</a> to define the default indentation according with enviroment. In this case you can define that in `DEVELOPMENT` enviroment the indentation will be enabled, and in `PRODUCTION` enviroment will be disabled.
 
 `development.properties`:
 
@@ -434,7 +434,7 @@ br.com.caelum.vraptor.serialization.xml.indented=false
 br.com.caelum.vraptor.serialization.json.indented=false
 ~~~ 
 
-**Note:** The `Enviroment` settings has lower priority than code. In other words, you can define `br.com.caelum.vraptor.serialization.xml.indented=false` on `Enviroment` and call the `indented` method in your code, the result will be an indented JSON or XML.
+**Note:** The `Enviroment` settings has lower priority than code. In other words, if you define `br.com.caelum.vraptor.serialization.xml.indented=false` on `Enviroment` and call the `indented` method in your code, the result will be an indented JSON or XML.
 
 ## Creating links on view with linkTo
 

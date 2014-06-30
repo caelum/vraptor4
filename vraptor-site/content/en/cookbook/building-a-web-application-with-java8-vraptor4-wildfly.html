@@ -8,11 +8,11 @@ Some months ago Java 8 was lauched, with new features and APIs. And some weeks b
 
 VRaptor 4 was complete refactored to support CDI built-in, and now are compatible to use Java EE 7 resources.
 
-In this post I will explain how building a Vraptor 4 Application, used new features of Java 8 and running on the WildFly 8, the new Application Server built by JBoss that implements Java EE 7.The database used by this article will be HSQLDB, available out of box by Wildfly.
+In this post I will explain how building a VRaptor 4 Application, used new features of Java 8 and running on the WildFly 8, the new Application Server built by JBoss that implements Java EE 7. The database used by this article will be HSQLDB, available out of box by Wildfly.
 
 The complete application code is available [here](http://github.com/rsaraiva/v4_wildfly_jta).
 
-To start, create a project web with Maven using your favorite IDE. Open the Maven configuration file ,`pom.xml` and include the dependencies described in the file below.
+To start, create a maven web project using your favorite IDE. Open the Maven configuration file ,`pom.xml` and include the dependencies described in the file below.
 
 ~~~
 #!xml
@@ -82,7 +82,7 @@ To start, create a project web with Maven using your favorite IDE. Open the Mave
 </project>
 ~~~
 
-The first dependency of you project is VRaptor 4, and before we need to include `vraptor-javatime` to allow vraptor to work with new Java Date API. And the next step will include Java EE dependencies like JSTL, JPA provider and so on. And most important: we need to declare in plugins node that we want to use Java 1.8 compilation.
+The first dependency of you project is VRaptor 4, and before we need to include `vraptor-javatime` to allow VRaptor to work with new Java Date API. And the next step will include Java EE dependencies like JSTL, JPA provider and so on. And most important: we need to declare in plugins node that we want to use Java 1.8 compilation.
 
 Now we will create our model - a simple entity to represent Events.
 
@@ -167,7 +167,7 @@ public class EventService {
 }
 ~~~
 
-Now we will use the CDI to inject the service in the controller from VRaptor
+Now we will use the CDI to inject the service in the VRaptor controller
 
 ~~~
 #!java

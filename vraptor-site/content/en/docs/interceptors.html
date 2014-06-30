@@ -13,7 +13,8 @@ VRaptor uses an approach where the interceptor defines who will be intercepted, 
 interception approaches used by <strong>AOP</ strong> (Aspect Oriented Programming).
 
 Therefore, to intercept a request, you need just to annotate the class with the `@Intercepts`. Like any 
-other component, you can use scoped annotation to define the interceptor life cicle.
+other component, you can use scoped annotation to define the interceptor life cicle. The default scope 
+for an interceptor is `RequestScoped`.
 
 ##A simple example
 

@@ -7,15 +7,15 @@ title: Dependencies and prerequisites
 VRaptor 4 depends directly on CDI 1.1, so it will work only in servers that support
 this version of CDI. JDK 1.7 or higher it's also mandatory.
 
-The servers already supported and already tested are:
+The servers already supported and tested are:
 
 * Glassfish 4
 * WildFly 8.0 and 8.1
 * Tomcat 7 (+ Weld 2.x jars)
 * Jetty 8 and 9  (+ Weld 2.x jars)
 
-To use a Servlet Container such as Tomcat or Jetty, it is also necessary to add
-Weld 2.x jars and add the following listener to your `web.xml` file:
+To use a Servlet Container such as Tomcat or Jetty, it's also necessary to add
+Weld 2.x jars and the following listener to your `web.xml` file:
 
 ~~~
 #!xml
@@ -24,7 +24,7 @@ Weld 2.x jars and add the following listener to your `web.xml` file:
 </listener>
 ~~~
 
-Some dependencies may vary between applications running in an Application Sever
+Some dependencies may differ between applications running in an Application Server
 or a Servlet Container. Dependencies from Java EE specification, such as CDI or
 Bean Validation, are not required if you are using an Application Server.
 
@@ -45,8 +45,8 @@ default dependency):
 ~~~
 
 **Note**: If you are using Wildfly, try to use 8.1+ versions, because Javassist
-is already provided by the server. So even if you define the dependency in your
-application, it would not be used by the application. If you can't update to 8.1+,
+is already provided by the server. So even defining the dependency in your
+application, it won't be used by the application. If you can't update to 8.1+,
 an alternative is to update the module directly in the server.
 
 ## Maven
@@ -59,22 +59,21 @@ project, all you need to do is add the following dependency:
 <dependency>
 	<groupId>br.com.caelum</groupId>
 	<artifactId>vraptor</artifactId>
-	<version>4.0.0</version> <!--ou a última versão-->
+	<version>4.0.0</version> <!--or the latest version-->
 </dependency>
 ~~~ 
 
-The structure of a project based on Maven is different than the convetional
+The structure of a project based on Maven is different than the conventional
 structure used by most of the IDEs. However, when a project is packaged, Maven
 will build its structure as a WAR:
 
-~~~
-Maven Path            Description                          Path in the WAR file
-src/main/java         Java sources                         /WEB-INF/classes
-src/main/resources    configuration files                  /WEB-INF/classes
-src/main/webapp       web files                            /
-src/test/java         Java test sources                    - ignorado -
-src/test/resources    configuration files for testing      - ignorado -
-~~~
+| Maven Path            | Description                          | Path in the WAR file
+| src/main/java         | Java sources                         | /WEB-INF/classes
+| src/main/resources    | configuration files                  | /WEB-INF/classes
+| src/main/webapp       | web files                            | /
+| src/test/java         | Java test sources                    | - ignored -
+| src/test/resources    | configuration files for testing      | - ignored -
+{: .content-table}
 
 If you don't want to use Maven (or any build tool integrated with Maven
 repositories), you can create a project the IDE of your choice and add
@@ -115,8 +114,8 @@ the reference implementation of CDI: Weld.
 </dependency>
 ~~~
 
-**Warning**: avoid using the atifact `org.jboss.weld.servlet:weld-servlet`.
-This artifact contains a lot of unecessary classes to boot a VRaptor
+**Warning**: avoid using the artifact `org.jboss.weld.servlet:weld-servlet`.
+because contains a lot of unecessary classes to boot a VRaptor
 application. Particularly, this artifact contains a **copy** of whole guava
 code, which is already a dependency of VRaptor. This may cause several
 conflicts between classes of this two artifacts (which can cause typical
@@ -131,7 +130,7 @@ jar `slf4j-api.jar` and also the binding jar of the library of your choice. See 
 about this topic at <a href="http://www.slf4j.org/manual.html">SLF4J
 official docs</a>.
 
-Most of the projects choose **log4j** to implement logging. In case you 
+Most projects choose **log4j** to implement logging. In case you 
 want to use it, you need to add the following dependency:
 
 ~~~ 

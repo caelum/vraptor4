@@ -4,9 +4,9 @@ title: Integrating VRaptor with Tiles 3
 
 # by Otávio Garcia
 
-Apache Tiles is a framework that implements the Composite View pattern, and makes possible to create templates for your application in easy way. You can found more into visiting <a href="http://tiles.apache.org">Tiles website</a>.
+Apache Tiles is a framework that implements the Composite View pattern, and makes possible to create templates for your application in easy way. You can found more information visiting <a href="http://tiles.apache.org">Tiles website</a>.
 
-The first step is include the Tiles dependency in your Maven project as described below. If you don't use Maven, you can download all files and its dependencies in <a href="http://tiles.apache.org">Tiles website</a>.
+The first step is include the Tiles dependency in your Maven project as described below. If you don't uses Maven, you can download all files and its dependencies in <a href="http://tiles.apache.org">Tiles website</a>.
 
 ~~~
 #!xml
@@ -17,7 +17,7 @@ The first step is include the Tiles dependency in your Maven project as describe
 </dependency>
 ~~~
 
-And the next step is to add the listener that tell Tiles when your application is up and ready.
+And the next step is to add the listener that tells to Tiles when your application is up and ready.
 
 ~~~
 #!xml
@@ -42,7 +42,7 @@ And for the last step, you need to declare the `Servlet` that will respond Tiles
 
 And now we have Tiles listening requests.
 
-By default, VRaptor do forwards for JSPs. So we need to override this behavior to forward to Tiles templates. We can do it changing the class `DefaultPathResolver` as describe below.
+By default, VRaptor does forwards to JSPs. So we need to override this behavior to forward to Tiles templates. We can do it changing the class `DefaultPathResolver` as described below.
 
 ~~~
 #!java

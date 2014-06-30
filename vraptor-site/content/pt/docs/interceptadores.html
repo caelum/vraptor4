@@ -4,17 +4,27 @@ title: Interceptadores
 
 #Quando interceptar?
 
-O uso de interceptadores é feito para executar alguma tarefa antes e/ou depois de uma lógica de negócios, sendo os usos mais comuns a validação de dados, controle de conexão e transação do banco, log e criptografia/compactação de dados.
+O uso de interceptadores é feito para executar alguma tarefa antes e/ou depois de uma lógica de 
+negócios, sendo os usos mais comuns a validação de dados, controle de conexão e transação do 
+banco, log e criptografia/compactação de dados.
 
 ##Como interceptar?
 
-No VRaptor utilizamos uma abordagem onde o interceptador define quem será interceptado, muito mais próxima a abordagens de interceptação que aparecem em sistemas baseados em <strong>AOP</strong> (Programação Orientada a Aspectos). O escopo padrão de um interceptor é `RequestScoped`.
+No VRaptor utilizamos uma abordagem onde o interceptador define quem será interceptado, muito 
+mais próxima da abordagens de interceptação que aparecem em sistemas baseados 
+em <strong>AOP</strong> (Programação Orientada a Aspectos). O escopo padrão de um interceptor 
+é `RequestScoped`.
 
-Portanto, para interceptar uma requisição, basta anotar a classe com a anotação `@Intercepts`. Assim como qualquer outro componente, com o uso das anotações de escopo você pode dizer em que escopo o interceptador será armazenado.
+Portanto, para interceptar uma requisição, basta anotar a classe com a anotação `@Intercepts`. 
+Assim como qualquer outro componente, com o uso das anotações de escopo você pode dizer em que 
+escopo o interceptador será armazenado.
 
 ##Exemplo simples
 
-A classe a seguir mostra um exemplo de como interceptar todas as requisições em um escopo de requisição e simplesmente mostrar na saída do console o que está sendo invocado. Lembre-se de que o interceptador é um componente como qualquer outro e pode receber quaisquer dependências por meio de Injeção de Dependências.
+A classe a seguir mostra um exemplo de como interceptar todas as requisições em um escopo de 
+requisição e simplesmente mostrar na saída do console o que está sendo invocado. Lembre-se 
+de que o interceptador é um componente como qualquer outro e pode receber quaisquer 
+dependências por meio de Injeção de Dependências.
 
 ~~~ 
 #!java
@@ -35,7 +45,8 @@ public class Log {
 }
 ~~~ 
 
-Para executar um código apenas antes ou depois da execução do controller, podemos usar as anotações `@BeforeCall` e `@AfterCall`:
+Para executar um código apenas antes ou depois da execução do controller, podemos usar as 
+anotações `@BeforeCall` e `@AfterCall`:
 
 ~~~ 
 #!java
@@ -53,11 +64,14 @@ public class Log {
 }
 ~~~ 
 
-Repare que não é mais obrigatório implementar a interface `Interceptor`, basta criar a classe e usar as anotações acima.
+Repare que não é mais obrigatório implementar a interface `Interceptor`, basta criar a 
+classe e usar as anotações acima.
 
 ##Definindo quando interceptar
 
-No exemplo acima todas as requisições são interceptadas. Podemos então definir que iremos interceptar apenas os métodos que possuem uma anotação chamada `@Audit`. Para isso basta implementar um método que retorne um `boolean`com a condição necessária e anotá-lo com `@Accepts`.
+No exemplo acima todas as requisições são interceptadas. Podemos então definir que iremos 
+interceptar apenas os métodos que possuem uma anotação chamada `@Audit`. Para isso basta 
+implementar um método que retorne um `boolean`com a condição necessária e anotá-lo com `@Accepts`.
 
 ~~~ 
 #!java
@@ -67,7 +81,9 @@ public boolean accepts(ControllerMethod method) {
 }
 ~~~ 
 
-No VRaptor4 também temos outra maneira de definir a condição de aceitação. O exemplo acima é um caso bem comum e acabamos tendo de repetir esse código muitas vezes. Para essas situações você pode usar a annotation `@AcceptsWithAnnotations`. 
+No VRaptor4 também temos outra maneira de definir a condição de aceitação. O exemplo acima é 
+um caso bem comum e acabamos tendo de repetir esse código muitas vezes. Para essas situações 
+você pode usar a annotation `@AcceptsWithAnnotations`. 
 
 ~~~ 
 #!java
@@ -83,7 +99,9 @@ public class AuditInterceptor {
 
 ##Criando o seu Accepts customizado
 
-Logo acima usamos o exemplo do Accepts customizado. Este é um que já vem pronto VRaptor. Mas nada impede de você criar o seu para as suas necessidades. O fluxo é bem parecido com o de criação de uma validação customizada para a BeanValidation. Primeiro você deve criar sua Annotation.
+Logo acima usamos o exemplo do Accepts customizado. Este é um que já vem pronto VRaptor. Mas 
+nada impede de você criar o seu para as suas necessidades. O fluxo é bem parecido com o de 
+criação de uma validação customizada para a BeanValidation. Primeiro você deve criar sua Annotation.
 
 
 ~~~ 
@@ -97,7 +115,8 @@ public @interface AcceptsWithAnnotations {
 }
 ~~~ 
 
-Perceba que usamos a Annotation `@AcceptsConstraint` para indicar qual a classe responsável por fazer a verificação. Agora precisamos implementar essa classe.
+Perceba que usamos a Annotation `@AcceptsConstraint` para indicar qual a classe responsável 
+por fazer a verificação. Agora precisamos implementar essa classe.
 
 ~~~ 
 #!java
@@ -117,12 +136,17 @@ public class WithAnnotationAcceptor implements AcceptsValidator<AcceptsWithAnnot
 }
 ~~~ 
 
-Esta classe só precisa implemetar a interface `AcceptsValidator<T>` onde T é o tipo da sua Annotation customizada. Dessa maneira você pode criar as suas condições customizadas e disponibilizá-las para todos os projetos que você precisa.
+Esta classe só precisa implemetar a interface `AcceptsValidator<T>` onde T é o tipo da sua 
+Annotation customizada. Dessa maneira você pode criar as suas condições customizadas e 
+disponibilizá-las para todos os projetos que você precisa.
 
 
 ##Como garantir ordem: after e before
 
-Se é preciso garantir a ordem de execução de um conjunto de interceptors, você pode usar os atributos `after` e `before` da anotação `@Intercepts`. Suponha que o `PrimeiroInterceptor` tenha que rodar antes do `SegundoInterceptor`, então você pode configurar isso tanto com:
+Se é preciso garantir a ordem de execução de um conjunto de interceptors, você pode 
+usar os atributos `after` e `before` da anotação `@Intercepts`. Suponha que o 
+`PrimeiroInterceptor` tenha que rodar antes do `SegundoInterceptor`, então você pode 
+configurar isso tanto com:
 
 ~~~ 
 #!java
@@ -153,5 +177,6 @@ public class TerceiroInterceptor {
 }
 ~~~ 
 
-O VRaptor lançará uma exception se existir um ciclo na ordem dos interceptors, então tenha cuidado.
+O VRaptor lançará uma exception se existir um ciclo na ordem dos interceptors, então 
+tenha cuidado.
 

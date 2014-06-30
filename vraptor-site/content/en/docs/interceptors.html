@@ -4,22 +4,22 @@ title: Interceptors
 
 #When intercept?
 
-Interceptors are used to perform some task before or after a business logic like data validation, connection control, 
-database transaction logs and data encryption/compression.
+Interceptors are used to perform some task before or after a business logic like data validation, 
+connection control, database transaction logs and data encryption/compression.
 
 ##How to intercept?
 
-VRaptor uses an approach where the interceptor defines who will be intercepted, more closer to the interception 
-approaches used by <strong>AOP</ strong> (Aspect Oriented Programming).
+VRaptor uses an approach where the interceptor defines who will be intercepted, more closer to the 
+interception approaches used by <strong>AOP</ strong> (Aspect Oriented Programming).
 
-Therefore, to intercept a request, you need just to annotate the class with the `@Intercepts`. Like any other component, 
-you can use scoped annotation to define the interceptor life cicle.
+Therefore, to intercept a request, you need just to annotate the class with the `@Intercepts`. Like any 
+other component, you can use scoped annotation to define the interceptor life cicle.
 
 ##A simple example
 
-The class below shows an example how to intercept all requests in a request scoped and simply show the console 
-output that is being invoked. Remember that the interceptor is a component like any other and can receive any 
-dependencies using Dependency Injection.
+The class below shows an example how to intercept all requests in a request scoped and simply show 
+the console output that is being invoked. Remember that the interceptor is a component like any 
+other and can receive any dependencies using Dependency Injection.
 
 ~~~ 
 #!java
@@ -40,7 +40,8 @@ public class Log {
 }
 ~~~ 
 
-To execute the code just before or after the controller execution, we can use annotations `@BeforeCall` and `@AfterCall`:
+To execute the code just before or after the controller execution, we can use annotations 
+`@BeforeCall` and `@AfterCall`:
 
 ~~~ 
 #!java
@@ -60,9 +61,9 @@ public class Log {
 
 ##Defining when intercepting
 
-In the example above, all requests are intercepted. But we can define, as example, only methods annotated with 
-`@Audit` annotation. You just to implement a method that returns a `boolean` with the necessary condition and 
-annotate it with `@Accepts`.
+In the example above, all requests are intercepted. But we can define, as example, only methods 
+annotated with `@Audit` annotation. You just to implement a method that returns a `boolean` with 
+the necessary condition and annotate it with `@Accepts`.
 
 ~~~ 
 #!java
@@ -72,8 +73,8 @@ annotate it with `@Accepts`.
 	}
 ~~~ 
 
-Or we can use the more simple way. The example above is a very common case and thus often repeat this code. For this 
-situation we can use the annotation `@AcceptsWithAnnotations` as described below:
+Or we can use the more simple way. The example above is a very common case and thus often repeat 
+this code. For this situation we can use the annotation `@AcceptsWithAnnotations` as described below:
 
 ~~~ 
 #!java
@@ -89,7 +90,9 @@ public class AuditInterceptor {
 
 ##Customizing your Accepts
 
-In the example above we used a customized accepts with annotation `AcceptsWithAnnotations`. And if you need, you can create your custom annotation to define when intercepts. Before you need to create your annotation like this example below.
+In the example above we used a customized accepts with annotation `AcceptsWithAnnotations`. And if you 
+need, you can create your custom annotation to define when intercepts. Before you need to create your 
+annotation like this example below.
 
 ~~~ 
 #!java
@@ -102,8 +105,8 @@ public @interface AcceptsWithAnnotations {
 }
 ~~~ 
 
-As you can see, we use the Annotation `@AcceptsConstraint` to define the class that have our logic. Now we 
-need to implement this class.
+As you can see, we use the Annotation `@AcceptsConstraint` to define the class that have our logic. 
+Now we need to implement this class.
 
 ~~~ 
 #!java
@@ -123,14 +126,15 @@ public class WithAnnotationAcceptor implements AcceptsValidator<AcceptsWithAnnot
 }
 ~~~ 
 
-This class needs only to implements `AcceptsValidator<T>` interface, where generic `T` is the type of your 
-custom annotation.
+This class needs only to implements `AcceptsValidator<T>` interface, where generic `T` is the type 
+of your custom annotation.
 
 ##How to guarantee the order: after and before
 
-If you need to guarantee the execution order for your interceptors, you can use the `after` and `before` 
-attributes from the `@Intercepts` annotation. Like the example below, if you have an interceptor named 
-`FirstInterceptor` that needs to be executed before `SecondInterceptor`, you can declare like this:
+If you need to guarantee the execution order for your interceptors, you can use the `after` and 
+`before` attributes from the `@Intercepts` annotation. Like the example below, if you have an 
+interceptor named `FirstInterceptor` that needs to be executed before `SecondInterceptor`, you 
+can declare like this:
 
 ~~~ 
 #!java
@@ -161,6 +165,6 @@ public class ThirdInterceptor {
 }
 ~~~ 
 
-Note: VRaptor throws an exception if there is a cycle in the interceptors order. So be careful when you 
-define interceptors order to avoid cicles.
+Note: VRaptor throws an exception if there is a cycle in the interceptors order. So be 
+careful when you define interceptors order to avoid cicles.
 

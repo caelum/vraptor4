@@ -215,7 +215,7 @@ The results will be simillar to:
 ~~~ 
 #!javascript
 {"client": {
-    "name": "Joao"
+    "name": "John"
 }}
 ~~~ 
 
@@ -224,7 +224,7 @@ and xml:
 ~~~ 
 #!xml
 <client>
-    <name>Joao</name>
+    <name>John</name>
 </client>
 ~~~ 
 
@@ -240,7 +240,7 @@ Will result something like:
 ~~~ 
 #!javascript
 {"client": {
-    "name": "Joao",
+    "name": "John",
     "address" {
         "street": "Vergueiro"
     }
@@ -259,8 +259,8 @@ Will result something like:
 ~~~ 
 #!javascript
 {"user": {
-    "name": "Joao",
-    "login": "joao"
+    "name": "John",
+    "login": "john"
 }}
 ~~~ 
 
@@ -308,8 +308,8 @@ Will result something like:
 ~~~ 
 #!javascript
 {"list": [
-    { "name": "Joao" },
-    { "name": "Maria" }
+    { "name": "John" },
+    { "name": "Mary" }
 ]}
 ~~~ 
 
@@ -319,10 +319,10 @@ or
 #!xml
 <list>
 	<client>
-		<name>Joao</name>
+		<name>John</name>
 	</client>
 	<client>
-		<name>Maria</name>
+		<name>Mary</name>
 	</client>
 </list>
 ~~~ 
@@ -342,8 +342,8 @@ Will result something like:
 ~~~ 
 #!javascript
 {"clients": [
-    {"name": "Joao"},
-    {"name": "Maria"}
+    {"name": "John"},
+    {"name": "Mary"}
 ]}
 ~~~ 
 
@@ -353,10 +353,10 @@ or
 #!xml
 <clients>
 	<client>
-		<name>Joao</name>
+		<name>John</name>
 	</client>
 	<client>
-		<name>Maria</name>
+		<name>Mary</name>
 	</client>
 </clients>
 ~~~ 
@@ -375,11 +375,11 @@ With result:
 #!javascript
 {"list": [
     {
-        "name": "Joao",
+        "name": "John",
         "address": { "street": "Vergueiro, 3185" }
     },
     {
-        "name": "Maria",
+        "name": "Mary",
         "address": { "street": "Vergueiro, 3185" }
     }
 ]}

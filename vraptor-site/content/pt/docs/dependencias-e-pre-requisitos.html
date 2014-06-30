@@ -54,14 +54,13 @@ O VRaptor 4 usa como padrão o Maven para gerenciar as dependências. Com isso b
 
 A estrutura do projeto baseado no Maven é um pouco diferente da estrutura convencional usada pelas IDEs. No entanto quando o projeto é empacotado, o Maven irá gerar a estrutura padrão de um WAR.
 
-~~~
-Local Maven           Descrição                            Local no pacote WAR
-src/main/java         fontes Java                          /WEB-INF/classes
-src/main/resources    arquivos de configuração             /WEB-INF/classes
-src/main/webapp       arquivos web                         /
-src/test/java         fontes Java para testes              - ignorado -
-src/test/resources    arquivos de config. para testes      - ignorado -
-~~~
+| Local Maven           |  Descrição                           |  Local no pacote WAR
+| src/main/java         |  fontes Java                         |  /WEB-INF/classes
+| src/main/resources    |  arquivos de configuração            |  /WEB-INF/classes
+| src/main/webapp       |  arquivos web                        |  /
+| src/test/java         |  fontes Java para testes             |  - ignorado -
+| src/test/resources    |  arquivos de config. para testes     |  - ignorado -
+{: .content-table}
 
 Se você não quiser usar o Maven, basta criar um projeto em branco na sua IDE preferida e adicionar o jar do VRaptor com as dependências. Todos os jars necessários para usar o VRaptor estão disponibilizados no `zip` em nossa <a href="/pt/download">página de downloads</a>.
 

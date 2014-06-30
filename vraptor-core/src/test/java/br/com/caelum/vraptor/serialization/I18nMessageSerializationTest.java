@@ -34,6 +34,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.junit.Before;
 import org.junit.Test;
 
+import br.com.caelum.vraptor.environment.Environment;
 import br.com.caelum.vraptor.interceptor.DefaultTypeNameExtractor;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.serialization.gson.CalendarGsonConverter;
@@ -58,12 +59,14 @@ public class I18nMessageSerializationTest {
 	@Before
 	public void setup() throws Exception {
 		stream = new ByteArrayOutputStream();
+		
+		Environment environment = mock(Environment.class);
 
 		HttpServletResponse response = mock(HttpServletResponse.class);
 		when(response.getWriter()).thenReturn(new PrintWriter(stream));
 		DefaultTypeNameExtractor extractor = new DefaultTypeNameExtractor();
 		XStreamBuilder builder = XStreamBuilderImpl.cleanInstance(new MessageConverter());
-		XStreamXMLSerialization xmlSerialization = new XStreamXMLSerialization(response, builder);
+		XStreamXMLSerialization xmlSerialization = new XStreamXMLSerialization(response, builder, environment);
 
 		List<JsonSerializer<?>> jsonSerializers = new ArrayList<>();
 		List<JsonDeserializer<?>> jsonDeserializers = new ArrayList<>();
@@ -71,7 +74,7 @@ public class I18nMessageSerializationTest {
 		jsonSerializers.add(new MessageGsonConverter());
 
 		GsonSerializerBuilder gsonBuilder =  new GsonBuilderWrapper(new MockInstanceImpl<>(jsonSerializers), new MockInstanceImpl<>(jsonDeserializers));
-		GsonJSONSerialization jsonSerialization = new GsonJSONSerialization(response, extractor, gsonBuilder);
+		GsonJSONSerialization jsonSerialization = new GsonJSONSerialization(response, extractor, gsonBuilder, environment);
 
 		Container container = mock(Container.class);
 		when(container.instanceFor(JSONSerialization.class)).thenReturn(jsonSerialization);

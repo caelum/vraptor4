@@ -41,6 +41,9 @@ To highlight a block code, you can do something like:
 	my sample code here <br/>
 \~~~
 
+`html`, `xml`, `javascript`, `jsp`, `properties`, `bash` are also available formats.
+
+
 
 Another contents, like `inline code`, you can format just like github markdown.
 

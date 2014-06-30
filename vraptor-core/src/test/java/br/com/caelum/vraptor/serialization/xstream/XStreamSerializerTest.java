@@ -28,6 +28,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.junit.Before;
 
+import br.com.caelum.vraptor.environment.Environment;
 import br.com.caelum.vraptor.interceptor.DefaultTypeNameExtractor;
 import br.com.caelum.vraptor.util.test.MockInstanceImpl;
 
@@ -46,7 +47,8 @@ public class XStreamSerializerTest extends XStreamXMLSerializationTest {
 	@Override
 	@Before
 	public void setup() throws Exception {
-		this.stream = new ByteArrayOutputStream();
+		stream = new ByteArrayOutputStream();
+		environment = mock(Environment.class);
 
 		HttpServletResponse response = mock(HttpServletResponse.class);
 		when(response.getWriter()).thenReturn(new PrintWriter(stream));
@@ -59,6 +61,6 @@ public class XStreamSerializerTest extends XStreamXMLSerializationTest {
 		Instance<Converter> convertersInst = new MockInstanceImpl<>(converters);
 		Instance<SingleValueConverter> singleValueConverters = new MockInstanceImpl<>();
 		XStreamConverters xStreamConverters = new XStreamConverters(convertersInst, singleValueConverters);
-		this.serialization = new XStreamXMLSerialization(response, new XStreamBuilderImpl(xStreamConverters, extractor));
+		serialization = new XStreamXMLSerialization(response, new XStreamBuilderImpl(xStreamConverters, extractor), environment);
 	}
 }

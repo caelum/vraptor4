@@ -89,42 +89,40 @@ public class ClientsController {
 
 Por padrão, existem estes tipos de views implementadas:
 
-~~~
-* Results.logic(), que vai redirecionar para uma outra lógica qualquer do sistema
-* Results.page(), que vai redirecionar diretamente para uma página, podendo ser um JSP, um HTML, ou qualquer URI relativa ao web application dir, ou ao contexto da aplicação.
-* Results.http(), que manda informações do protocolo HTTP como status codes e headers.
-* Results.status(), manda status codes com mais informações.
-* Results.referer(), que usa o header Referer para fazer redirects ou forwards.
-* Results.nothing(), apenas retorna o código de sucesso (HTTP 200 OK).
-* Results.xml(), serializa objetos em XML.
-* Results.json(), serializa objetos em JSON.
-* Results.representation(), serializa objetos em um formato determinado pela requisição (parâmetro _format ou header Accept)
-~~~
+
+| Results.logic() | que vai redirecionar para uma outra lógica qualquer do sistema
+| Results.page() | que vai redirecionar diretamente para uma página, podendo ser um JSP, um HTML, ou qualquer URI relativa ao web application dir, ou ao contexto da aplicação.
+| Results.http() | que manda informações do protocolo HTTP como status codes e headers.
+| Results.status() | manda status codes com mais informações.
+| Results.referer() | que usa o header Referer para fazer redirects ou forwards.
+| Results.nothing() | apenas retorna o código de sucesso (HTTP 200 OK).
+| Results.xml() | serializa objetos em XML.
+| Results.json() | serializa objetos em JSON.
+| Results.representation() | serializa objetos em um formato determinado pela requisição (parâmetro _format ou header Accept)
+{: .content-table}
 
 ##Atalhos no Result
 
 Alguns redirecionamentos são bastante utilizados, então foram criados atalhos para eles. Os atalhos disponíveis são:
 
-~~~
-* result.forwardTo("/some/uri") ==> result.use(page()).forward("/some/uri");
-* result.redirectTo("/some/uri") ==> result.use(page()).redirect("/some/uri)
-* result.permanentlyRedirectTo("/some/uri") ==> result.use(status()).movedPermanentlyTo("/some/uri");
-* result.forwardTo(ClientController.class).list() ==> result.use(logic()).forwardTo(ClientController.class).list();
-* result.redirectTo(ClientController.class).list() ==> result.use(logic()).redirectTo(ClientController.class).list();
-* result.of(ClientController.class).list() ==> result.use(page()).of(ClientController.class).list();
-* result.permanentlyRedirectTo(Controller.class) ==> use(status()).movedPermanentlyTo(Controller.class);
-* result.notFound()  ==> use(status()).notFound()
-* result.nothing()   ==> use(nothing());
-~~~
+| result.forwardTo("/some/uri") | result.use(page()).forward("/some/uri");
+| result.redirectTo("/some/uri") | result.use(page()).redirect("/some/uri)
+| result.permanentlyRedirectTo("/some/uri") | result.use(status()).movedPermanentlyTo("/some/uri");
+| result.forwardTo(ClientController.class).list() | result.use(logic()).forwardTo(ClientController.class).list();
+| result.redirectTo(ClientController.class).list() | result.use(logic()).redirectTo(ClientController.class).list();
+| result.of(ClientController.class).list() | result.use(page()).of(ClientController.class).list();
+| result.permanentlyRedirectTo(Controller.class) | use(status()).movedPermanentlyTo(Controller.class);
+| result.notFound() | use(status()).notFound()
+| result.nothing()  | use(nothing());
+{: .content-table}
 
 Além disso, se o redirecionamento é para um método do mesmo Controller, podemos usar:
 
-~~~
-* result.forwardTo(this).list() ==> result.use(logic()).forwardTo(this.getClass()).list();
-* result.redirectTo(this).list() ==> result.use(logic()).redirectTo(this.getClass()).list();
-* result.of(this).list() ==> result.use(page()).of(this.getClass()).list();
-* result.permanentlyRedirectTo(this) ==> use(status()).movedPermanentlyTo(this.getClass());
-~~~
+| result.forwardTo(this).list() | result.use(logic()).forwardTo(this.getClass()).list();
+| result.redirectTo(this).list() | result.use(logic()).redirectTo(this.getClass()).list();
+| result.of(this).list() | result.use(page()).of(this.getClass()).list();
+| result.permanentlyRedirectTo(this) | use(status()).movedPermanentlyTo(this.getClass());
+{: .content-table}
 
 ##Redirecionamento e forward
 
@@ -394,6 +392,50 @@ result.use(json()).from(carro).serialize(); //=> {'carro': {'cor': 'azul'}}
 result.use(json()).withoutRoot().from(carro).serialize(); //=> {'cor': 'azul'}
 ~~~ 
 
+
+##Indentação do resultado JSON e XML
+
+Por padrão, o resultado da serialização é sem indentação, o que pode ser útil para melhorar o tempo de download do browser. Porém se você precisar exibir o resultado do JSON ou XML com indentação, você pode usar o método `indented`.
+
+~~~ 
+#!java
+result.use(json()).indented().from(carro).serialize();
+~~~ 
+
+Dessa forma o resultado seria:
+
+~~~
+#!javascript
+{
+  'carro':
+  {
+    'cor': 'azul'
+  }
+}
+~~~ 
+
+
+Ou você pode também usar o <a href="/pt/docs/environment">Environment</a> para definir a indentação padrão conforme o ambiente. Neste caso você pode definir que no ambiente `DEVELOPMENT` a indentação será ativada, e no ambiente `PRODUCTION` será desativada.
+
+`development.properties`:
+
+~~~ 
+#!properties
+br.com.caelum.vraptor.serialization.xml.indented=true
+br.com.caelum.vraptor.serialization.json.indented=true
+~~~ 
+
+`production.properties`:
+
+~~~ 
+#!properties
+br.com.caelum.vraptor.serialization.xml.indented=false
+br.com.caelum.vraptor.serialization.json.indented=false
+~~~ 
+
+**Nota:** A configuração do `Environment` possui prioridade menor que no código. Ou seja, se você definir `br.com.caelum.vraptor.serialization.xml.indented=false` no `Environment` e chamar o método `indented` no seu código, o resultado será um JSON ou XML indentado.
+
+
 ## Criando links na view com o linkTo
 
 LinkTo é uma funcionalidade que permite você criar links nas páginas JSP sem precisar escrever o link, mas sim indicando a classe do controller, e o método.
@@ -460,15 +502,15 @@ Então, no lugar de fazer algo como:
 
 ~~~ 
 #!java
-	public void filtra(Intervalo intervalo, Representante representante,
-		    Unidade unidade, BigDecimal valorMaximo, BigDecimal valorMin) {
+public void filtra(Intervalo intervalo, Representante representante,
+	    Unidade unidade, BigDecimal valorMaximo, BigDecimal valorMin) {
 
-		// lógica de filtro
+	// lógica de filtro
 
-		result.include("intervalo", intervalo);
-		result.include("representante", representante);
-		result.include("valorMaximo", valorMaximo);
-		result.include("valorMin", valorMin);
+	result.include("intervalo", intervalo);
+	result.include("representante", representante);
+	result.include("valorMaximo", valorMaximo);
+	result.include("valorMin", valorMin);
 }
 ~~~ 
 
@@ -476,12 +518,12 @@ Agora você pode fazer:
 
 ~~~ 
 #!java
-	@IncludeParameters
-	public void filtra(Intervalo intervalo, Representante representante,
-		    Unidade unidade, BigDecimal valorMaximo, BigDecimal valorMin) {
+@IncludeParameters
+public void filtra(Intervalo intervalo, Representante representante,
+	    Unidade unidade, BigDecimal valorMaximo, BigDecimal valorMin) {
 
-		// lógica de filtro
-	}
+	// lógica de filtro
+}
 ~~~ 
 
 Todos os parâmetros estarão disponiveis pela jsp com EL: `${intervalo.inicio}` 

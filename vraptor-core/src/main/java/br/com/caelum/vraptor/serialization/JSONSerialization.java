@@ -22,7 +22,13 @@ package br.com.caelum.vraptor.serialization;
  * @version 3.0.2
  */
 public interface JSONSerialization extends Serialization {
-	
+
+	/**
+	 * Key used to search via environment if JSON will be printed with indentation or not. Indentation via
+	 * code have more priority than via properties.
+	 */
+	String ENVIRONMENT_INDENTED_KEY = "br.com.caelum.vraptor.serialization.json.indented";
+
 	/**
 	 * Exclude the root alias from serialization.
 	 * @since 3.1.2

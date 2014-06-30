@@ -1,0 +1,76 @@
+---
+title: Integrando o VRaptor com Tiles 3
+---
+
+# por Otávio Garcia
+
+Apache Tiles é um framework que implementa o design pattern Composite View. Com ele é possível você criar templates para sua aplicação de forma bem simples. Mais informações você encontrará no <a href="http://tiles.apache.org">site do projeto</a>.
+
+O primeiro passo é incluir em seu projeto Maven o artefato abaixo. Se você não usa Maven, você pode ir no <a href="http://tiles.apache.org">site do Tiles</a> e baixar os arquivos manualmente.
+
+~~~
+#!xml
+<dependency>
+	<groupId>org.apache.tiles</groupId>
+	<artifactId>tiles-extras</artifactId>
+	<version>3.0.0</version> <!-- ou a última versão -->
+</dependency>
+~~~
+
+E depois adicionar o listener que informa ao tiles que a aplicação está inicializada:
+
+~~~
+#!xml
+<listener>
+    <listener-class>org.apache.tiles.extras.complete.CompleteAutoloadTilesListener</listener-class>
+</listener>
+~~~
+
+E por último o servlet que irá responder às requisições do Tiles. No exemplo abaixo, qualquer requisição para a URL `*.tiles` será direcionada para os templates do Tiles.
+
+~~~
+#!xml
+<servlet>
+    <servlet-name>TilesDispatchServlet</servlet-name>
+    <servlet-class>org.apache.tiles.web.util.TilesDispatchServlet</servlet-class>
+</servlet>
+<servlet-mapping>
+    <servlet-name>TilesDispatchServlet</servlet-name>
+    <url-pattern>*.tiles</url-pattern>
+</servlet-mapping>
+~~~
+
+Desta forma já temos o Tiles atendendo as requisições.
+
+Por padrão o VRaptor faz o forward para JSPs. Então precisaremos sobrescrever o comportamento da classe `DefaultPathResolver` para fazer o forward para o Tiles, usando o Servlet que criamos anteriormente.
+
+~~~
+#!java
+@Specializes
+public class TilesPathResolver extends DefaultPathResolver {
+
+	@Inject
+	protected TilesPathResolver(FormatResolver resolver) {
+		super(resolver);
+	}
+
+	@Override
+	protected String getPrefix() {
+		return "/";
+	}
+
+	@Override
+	protected String getExtension() {
+		return "tiles";
+	}
+}
+~~~
+
+Com isso, se você requisitar o método `ClienteController.formulario`, o VRaptor irá efetuar o forward para o template `cliente.formulario`. Basta então criarmos o template para atender ao `forward` no arquivo `/WEB-INF/tiles.xml`:
+
+~~~
+#!xml
+<definition name="cliente.formulario" template="/layouts/basic.jsp">
+	[...]
+</definition>
+~~~

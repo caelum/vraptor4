@@ -1,0 +1,51 @@
+---
+title: Using Referer Header to redirect
+---
+
+Usually when you click on a link or submit a form, the browser sends a request to your application's server 
+putting a header called *Referer*. This header contains the current page that originated the request. 
+
+You can use this Header with VRaptor to do redirects, i.e:
+
+~~~
+#!java
+import static br.com.caelum.vraptor.view.Results.referer;
+
+@Controller
+public class ShoppingController {
+    //...
+    public void addItem(Item item) {
+        validator.checking(...);
+        validator.onErrorUse(referer()).forward();
+
+        dao.add(item);
+
+        result.use(referer()).redirect();
+    }
+}
+~~~
+
+The problem about using the Referer is that it's not mandatory. So VRaptor will throw an `IllegalStateException` if the Referer does not come in the request.
+
+
+So if you want, you can specify a different logic to go if the Referer is not specified, just like this:
+
+~~~
+#!java
+try {
+    result.use(referer()).redirect();
+} catch (IllegalStateException e) {
+    result.use(logic()).redirectTo(HomeController.class).index();
+}
+~~~
+
+Or you can use `on(IllegalStateException.class)` to do it fluently:
+
+~~~
+#!java
+result.use(referer())
+	.redirect()
+	.on(IllegalStateException.class)
+	.redirectTo(HomeController.class)
+	.index();
+~~~

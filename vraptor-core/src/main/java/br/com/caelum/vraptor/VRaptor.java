@@ -20,6 +20,8 @@ package br.com.caelum.vraptor;
 import static org.slf4j.LoggerFactory.getLogger;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Set;
 
 import javax.enterprise.event.Event;
@@ -88,7 +90,7 @@ public class VRaptor implements Filter {
 
 		validateJavaEE7Environment();
 		validateIfCdiIsFound();
-		validateIfBeansXmlIsNotFound();
+		warnIfBeansXmlIsNotFound();
 
 		initializedEvent.fire(new VRaptorInitialized(servletContext));
 
@@ -136,12 +138,23 @@ public class VRaptor implements Filter {
 		}
 	}
 
-	private void validateIfBeansXmlIsNotFound() throws ServletException {
-		Set<String> webInfResources = servletContext.getResourcePaths("/WEB-INF/");
+	private void warnIfBeansXmlIsNotFound() throws ServletException {
+		
+		URL webInfFile = getResource("/WEB-INF/beans.xml");
+		URL metaInfFile = getResource("/WEB-INF/classes/META-INF/beans.xml");
 
-		if (!webInfResources.contains("/WEB-INF/beans.xml") && !webInfResources.contains("/WEB-INF/classes/META-INF/beans.xml")) {
-			throw new ServletException("A beans.xml isn't found. Check if is properly located at "
+		if (webInfFile == null && metaInfFile == null) {
+			logger.warn("A beans.xml isn't found. Check if is properly located at "
 					+ "/WEB-INF/beans.xml or /WEB-INF/classes/META-INF/beans.xml");
+		}
+	}
+
+	private URL getResource(String path) throws ServletException {
+		try {
+			return servletContext.getResource(path);
+		} catch (MalformedURLException e) {
+			logger.error("Something went wrong when trying to locate a beans.xml file", e);
+			return null;
 		}
 	}
 

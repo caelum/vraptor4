@@ -27,3 +27,4 @@ vraptor-site/tmp/**
 vraptor-site/crash.log
 *~
 vraptor-plugin-gae/build.tmp/
+.idea/

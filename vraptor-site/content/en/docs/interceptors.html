@@ -52,6 +52,7 @@ public class Log {
 	public void before() {
 		// code executed before
 	}
+
 	@AfterCall
 	public void after() {
 		// code executed after
@@ -67,10 +68,10 @@ the necessary condition and annotate it with `@Accepts`.
 
 ~~~ 
 #!java
-	@Accepts
-	public boolean accepts(ControllerMethod method) {
-		return method.containsAnnotation(Audit.class);
-	}
+@Accepts
+public boolean accepts(ControllerMethod method) {
+	return method.containsAnnotation(Audit.class);
+}
 ~~~ 
 
 Or we can use the more simple way. The example above is a very common case and thus often repeat 
@@ -82,7 +83,7 @@ this code. For this situation we can use the annotation `@AcceptsWithAnnotations
 public class AuditInterceptor {
     
 	@AroundCall
-	public void around(SimpleInterceptorStack stack){
+	public void around(SimpleInterceptorStack stack) {
 		stack.next();
 	}
 }

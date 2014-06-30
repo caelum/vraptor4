@@ -86,10 +86,6 @@ public class XStreamBuilderImpl implements XStreamBuilder {
 		return this;
 	}
 	
-	boolean isRecursive()  {
-		return recursive;
-	}
-	
 	boolean isIndented() {
 		return indented;
 	}

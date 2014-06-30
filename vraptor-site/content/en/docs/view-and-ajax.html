@@ -89,42 +89,39 @@ public class ClientsController {
 
 There are these kinds of implemented views:
 
-~~~
-* Results.logic(), will redirect to another logic method.
-* Results.page(), will redirect directly to one page, may be a JSP, HTML, or any URI on web application dir, or application context.
-* Results.http(), send informations of HTTP protocol with status code and headers.
-* Results.status(), send status code with more informations.
-* Results.referer(), use the header Referer to do redirects or forwards.
-* Results.nothing(), just returns the success code (HTTP 200 OK).
-* Results.xml(), serializes objects to XML.
-* Results.json(), serializes objects to JSON.
-* Results.representation(), serializes objects on a format determined by request (_format parameter or header Accept).
-~~~
+| Results.logic() | will redirect to another logic method.
+| Results.page() | will redirect directly to one page, may be a JSP, HTML, or any URI on web application dir, or application context.
+| Results.http() | send informations of HTTP protocol with status code and headers.
+| Results.status() | send status code with more informations.
+| Results.referer() | use the header Referer to do redirects or forwards.
+| Results.nothing() | just returns the success code (HTTP 200 OK).
+| Results.xml() | serializes objects to XML.
+| Results.json() | serializes objects to JSON.
+| Results.representation() | serializes objects on a format determined by request (_format parameter or header Accept).
+{: .content-table}
 
 ##Shortcuts on Result
 
 Some redirects are often used, so were created shortcuts for them. The available shortcuts are:
 
-~~~
-* result.forwardTo("/some/uri") ==> result.use(page()).forward("/some/uri");
-* result.redirectTo("/some/uri") ==> result.use(page()).redirect("/some/uri)
-* result.permanentlyRedirectTo("/some/uri") ==> result.use(status()).movedPermanentlyTo("/some/uri");
-* result.forwardTo(ClientsController.class).list() ==> result.use(logic()).forwardTo(ClientsController.class).list();
-* result.redirectTo(ClientsController.class).list() ==> result.use(logic()).redirectTo(ClientsController.class).list();
-* result.of(ClientsController.class).list() ==> result.use(page()).of(ClientsController.class).list();
-* result.permanentlyRedirectTo(Controller.class) ==> use(status()).movedPermanentlyTo(Controller.class);
-* result.notFound()  ==> use(status()).notFound()
-* result.nothing()   ==> use(nothing());
-~~~
+| result.forwardTo("/some/uri") | result.use(page()).forward("/some/uri");
+| result.redirectTo("/some/uri") | result.use(page()).redirect("/some/uri)
+| result.permanentlyRedirectTo("/some/uri") | result.use(status()).movedPermanentlyTo("/some/uri");
+| result.forwardTo(ClientsController.class).list() | result.use(logic()).forwardTo(ClientsController.class).list();
+| result.redirectTo(ClientsController.class).list() | result.use(logic()).redirectTo(ClientsController.class).list();
+| result.of(ClientsController.class).list() | result.use(page()).of(ClientsController.class).list();
+| result.permanentlyRedirectTo(Controller.class) | use(status()).movedPermanentlyTo(Controller.class);
+| result.notFound() | use(status()).notFound()
+| result.nothing() | use(nothing());
+{: .content-table}
 
 Furthermore if the redirect is to another method in the same Controller, we can use:
 
-~~~
-* result.forwardTo(this).list() ==> result.use(logic()).forwardTo(this.getClass()).list();
-* result.redirectTo(this).list() ==> result.use(logic()).redirectTo(this.getClass()).list();
-* result.of(this).list() ==> result.use(page()).of(this.getClass()).list();
-* result.permanentlyRedirectTo(this) ==> use(status()).movedPermanentlyTo(this.getClass());
-~~~
+| result.forwardTo(this).list() | result.use(logic()).forwardTo(this.getClass()).list();
+| result.redirectTo(this).list() | result.use(logic()).redirectTo(this.getClass()).list();
+| result.of(this).list() | result.use(page()).of(this.getClass()).list();
+| result.permanentlyRedirectTo(this) | use(status()).movedPermanentlyTo(this.getClass());
+{: .content-table}
 
 ##Redirect and forward
 
@@ -391,8 +388,35 @@ If you want serialize an object in JSON format without naming it, you can do thi
 
 ~~~ 
 #!java
-result.use(json()).from(car).serialize(); //=> {'car': {'color': 'blue'}}
-result.use(json()).withoutRoot().from(car).serialize(); //=> {'color': 'blue'}
+result.use(json()).from(car).serialize();
+~~~ 
+
+Will result something like:
+
+~~~
+#!javascript
+{
+  'car':
+  {
+    'color': 'blue'
+  }
+}
+~~~ 
+
+and
+
+~~~ 
+#!java
+result.use(json()).withoutRoot().from(car).serialize();
+~~~ 
+
+Will result something like:
+
+~~~
+#!javascript
+{
+  'color': 'blue'
+}
 ~~~ 
 
 ##JSON and XML result indentation
@@ -502,15 +526,15 @@ So, instead of doing something like:
 
 ~~~ 
 #!java
-	public void filters(Interval interval, Representative representative,
-		    Unit unit, BigDecimal maxValue, BigDecimal minValue) {
+public void filters(Interval interval, Representative representative,
+	    Unit unit, BigDecimal maxValue, BigDecimal minValue) {
 
-		// filter logic
+	// filter logic
 
-		result.include("interval", interval);
-		result.include("representative", representative);
-		result.include("maxValue", maxValue);
-		result.include("minValue", minValue);
+	result.include("interval", interval);
+	result.include("representative", representative);
+	result.include("maxValue", maxValue);
+	result.include("minValue", minValue);
 }
 ~~~ 
 
@@ -518,12 +542,12 @@ Now you can do:
 
 ~~~ 
 #!java
-	@IncludeParameters
-	public void filters(Interval interval, Representative representative,
-		    Unit unit, BigDecimal maxValue, BigDecimal minValue) {
+@IncludeParameters
+public void filters(Interval interval, Representative representative,
+	    Unit unit, BigDecimal maxValue, BigDecimal minValue) {
 
-		// filter logic
-	}
+	// filter logic
+}
 ~~~ 
 
 All the parameters will be available by JSP with EL: `${interval.begin}`

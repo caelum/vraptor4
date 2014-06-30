@@ -32,7 +32,7 @@ public class ProductsController {
 }
 ~~~
 
-The `ProductController` class will expose URIs that can be accessed through the web, i.e., it will expose your application resources. This type of classes have to annotated with `@Controller`:
+The `ProductsController` class will expose URIs that can be accessed through the web, i.e., it will expose your application resources. This type of classes have to annotated with `@Controller`:
 
 ~~~
 #!java
@@ -53,7 +53,7 @@ public class ProductsController {
 }
 ~~~
 
-VRaptor will automatically redirect all request to `/products/list` to this method. That, of course, means the convention for URI's is `/<controller_name>/<method name>`. After the method is executed, VRaptor will dispatch the request to `/WEB-INF/jsp/products/list.jsp`, and that is because VRaptor's convention is to dispatch it to `/WEB-INF/jsp/<controller_name>/<method_name>.jsp`, by default.
+VRaptor will automatically redirect all request to `/products/list` to this method. That, of course, means the convention for URI's is `/<controller_name>/<method_name>`. After the method is executed, VRaptor will dispatch the request to `/WEB-INF/jsp/products/list.jsp`, and that is because VRaptor's convention is to dispatch it to `/WEB-INF/jsp/<controller_name>/<method_name>.jsp`, by default.
 
 The method `list` returns a product's list, and you can access it at the JSP through request attributes. For that example, an attribute called `productList` can be found at that JSP:
 
@@ -290,7 +290,7 @@ Besides the session scope, there is also de application scope. Components annota
 The REST approach is to have URIs identify resources on the web, so we can profit from the many structural advantages the HTTP protocol provides us. If we could map various HTTP method calls to one URI while having different controller methods respond to them, we could have the following calls for out product's registration:
 
 | GET      |   /products        |  list all products  |
-| POST     |   /products        |  add a produto  |
+| POST     |   /products        |  add a product  |
 | GET      |   /products/{id}   |  view the product with that id  |
 | PUT      |   /products/{id}   |  update information from product with that id  |
 | DELETE   |   /products/{id}   |  remove product with that id  |
@@ -313,7 +313,7 @@ public class ProductsController {
 	//...
 
 	@Get("/products")
-	public List<Producto> list() {...}
+	public List<Product> list() {...}
 
 	@Post("/products")
 	public void add(Product product) {...}

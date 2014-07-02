@@ -28,10 +28,12 @@
 package br.com.caelum.vraptor.http.iogi;
 
 import static br.com.caelum.vraptor.VRaptorMatchers.hasMessage;
+import static br.com.caelum.vraptor.controller.DefaultControllerMethod.instanceFor;
 import static java.util.Collections.singletonMap;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
@@ -45,12 +47,14 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
+import org.hamcrest.Matchers;
 import org.junit.Test;
 
 import com.google.common.collect.ImmutableMap;
@@ -75,6 +79,16 @@ public class IogiParametersProviderTest extends ParametersProviderTest {
 		return new IogiParametersProvider(nameProvider, request, instantiator);
 	}
 
+	@Test
+	public void shouldInstantiateTheObjectEvenWhenThereAreNoParameters() throws Exception {
+		thereAreNoParameters();
+		Method setCat = House.class.getMethod("setCat", Cat.class);
+		ControllerMethod method = instanceFor(House.class, setCat);
+		Object[] params = provider.getParametersFor(method, errors);
+		assertThat(params[0], is(notNullValue()));
+		assertThat(params[0], instanceOf(Cat.class));
+	}
+	
 	@Test
 	public void returnsNullWhenInstantiatingAStringForWhichThereAreNoParameters() throws Exception {
 		thereAreNoParameters();

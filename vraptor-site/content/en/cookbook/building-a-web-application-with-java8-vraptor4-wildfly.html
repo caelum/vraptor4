@@ -1,0 +1,231 @@
+---
+title: Building a Web Application with Java 8 and VRaptor 4 under Wildfly
+---
+
+# by Rubens Saraiva
+
+Some months ago Java 8 was lauched, with new features and APIs. And some weeks before, the VRaptor, a brazilian framework, was launched too.
+
+VRaptor 4 was complete refactored to support CDI built-in, and now are compatible to use Java EE 7 resources.
+
+In this post I will explain how building a VRaptor 4 Application, used new features of Java 8 and running on the WildFly 8, the new Application Server built by JBoss that implements Java EE 7. The database used by this article will be HSQLDB, available out of box by Wildfly.
+
+The complete application code is available [here](http://github.com/rsaraiva/v4_wildfly_jta).
+
+To start, create a maven web project using your favorite IDE. Open the Maven configuration file ,`pom.xml` and include the dependencies described in the file below.
+
+~~~
+#!xml
+<project xmlns="http://maven.apache.org/POM/4.0.0" 
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.rsaraiva.labs</groupId>
+    <artifactId>events</artifactId>
+    <version>1.0</version>
+    <packaging>war</packaging>
+    <name>events</name>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>br.com.caelum</groupId>
+            <artifactId>vraptor</artifactId>
+            <version>4.0.0.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>br.com.caelum.vraptor</groupId>
+            <artifactId>vraptor-javatime</artifactId>
+            <version>4.0.0.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>jstl</groupId>
+            <artifactId>jstl</artifactId>
+            <version>1.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-entitymanager</artifactId>
+            <version>4.3.5.Final</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.inject</groupId>
+            <artifactId>javax.inject</artifactId>
+            <version>1</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax</groupId>
+            <artifactId>javaee-web-api</artifactId>
+            <version>7.0</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.1</version>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
+~~~
+
+The first dependency of you project is VRaptor 4, and before we need to include `vraptor-javatime` to allow VRaptor to work with new Java Date API. And the next step will include Java EE dependencies like JSTL, JPA provider and so on. And most important: we need to declare in plugins node that we want to use Java 1.8 compilation.
+
+Now we will create our model - a simple entity to represent Events.
+
+~~~
+#!java
+@Entity
+public class Event implements Serializable {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+
+    private LocalDate date;
+
+    private String description;
+
+    public Event() {
+    }
+
+    public Event(String description, LocalDate date) {
+        this.description = description;
+        this.date = date;
+    }
+
+    // gets and sets
+}
+~~~
+
+As you can see, the date attribute was declared as `LocalDate`, the new class introduced in Java 8.
+
+But for that to be possible, it's necessary create a JPA Converter, since the JPA 2.1 still not support the types of the new Date and Time API.
+~~~
+#!java
+@Converter(autoApply = true)
+public class LocalDatePersistenceConverter implements AttributeConverter<LocalDate, Date> {
+
+    @Override
+    public Date convertToDatabaseColumn(LocalDate entityValue) {
+        return (entityValue == null) ? null : Date.valueOf(entityValue);
+    }
+
+    @Override
+    public LocalDate convertToEntityAttribute(Date databaseValue) {
+        return databaseValue.toLocalDate();
+    }
+}
+~~~
+
+This converter needs to be registered in the `persistence.xml` as describes below.
+
+~~~
+#!xml
+<persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+  <persistence-unit name="default" transaction-type="JTA">
+    <jta-data-source>java:jboss/datasources/ExampleDS</jta-data-source>
+    <class>com.rsaraiva.labs.vraptor4.jpa.LocalDatePersistenceConverter</class>
+    <properties>
+      <property name="hibernate.transaction.jta.platform" value="org.hibernate.service.jta.platform.internal.JBossAppServerJtaPlatform"/>
+      <property name="hibernate.hbm2ddl.auto" value="update"/>
+    </properties>
+  </persistence-unit>
+</persistence>
+~~~
+
+Now we will create a `Service` , the logic class to create and list events. Notice the integration with JavaEE with the annotations `@Stateless` and `@PersistenceContext`.
+
+~~~
+#!java
+@Stateless
+public class EventService {
+    
+    @PersistenceContext
+    private EntityManager em;
+
+    public void persist(Event event) {
+        em.persist(event);
+    }
+    
+    public List<Event> findAll() {
+        return em.createQuery("select e from Event e order by e.description").getResultList();
+    }
+}
+~~~
+
+Now we will use the CDI to inject the service in the VRaptor controller
+
+~~~
+#!java
+@Controller
+public class EventController implements Serializable {
+
+    @Inject private EventService service;
+    @Inject private Result result;
+
+    @Get("/events")
+    public void event() {
+        result.include("events", service.findAll());
+    }
+
+    @Post
+    public void add(Event event) {
+        service.persist(event);
+        result.redirectTo(this).event();
+    }
+}
+~~~
+
+Our controller have two methods. The first uses `EventService` for querying all events registered and includes the list in the JSP context. The second receive the 'post' from JSP form and persists the event into database.
+
+In the end, we must create a jsp with a events list and the register form.
+
+~~~
+#!jsp
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>Events</title>
+    </head>
+    <body>
+        <h1>Events</h1>
+        <table>
+            <c:forEach items="${events}" var="item">
+                <tr>
+                    <td>${item.id}</td>
+                    <td>${item.description}</td>
+                    <td>${item.formattedDate}</td>
+                </tr>
+            </c:forEach>
+        </table>
+        <br/>
+        <form action="${linkTo[EventController].add}" method="post">
+            <span>Description: </span>
+            <input type="input" name="event.description"/>
+            <span>Date </span>
+            <input type="input" name="event.date"/>
+            <button>Add</button>
+        </form>
+    </body>
+</html>
+~~~
+
+Cookbook originally posted at [rsaraiva.com](http://rsaraiva.com)
+

@@ -371,6 +371,26 @@ public abstract class ParametersProviderTest {
 	}
 
 	@Test
+	public void continuesToFillObjectWithListIfItIsConvertable() throws Exception {
+		when(request.getParameterNames()).thenReturn(Collections.enumeration(Arrays.asList("abc", "abc.person[0].name")));
+		ImmutableMap<String, String[]> params = ImmutableMap.of("abc", new String[] {""}, "abc.person[0].name", new String[] {"bird"});
+		when(request.getParameterMap()).thenReturn(params);
+		when(request.getParameterValues("abc")).thenReturn(params.get("abc"));
+		when(request.getParameterValues("abc.abc.person[0].name")).thenReturn(params.get("abc.abc.person[0].name"));
+		
+		when(converters.existsFor(ABC.class)).thenReturn(true);
+		when(converters.to(ABC.class)).thenReturn(new Converter<ABC>() {
+			@Override
+			public ABC convert(String value, Class<? extends ABC> type) {
+				return new ABC();
+			}
+		});
+		
+		ABC returned = getParameters(abc);
+		assertThat(returned.getPerson().get(0).getName(), is("bird"));
+	}
+
+	@Test
 	public void returnsAnEmptyObjectArrayForZeroArityMethods() throws Exception {
 		thereAreNoParameters();
 
@@ -521,6 +541,16 @@ public abstract class ParametersProviderTest {
 	public static class ABC {
 		private Long x;
 		private Long y;
+		private List<Person> person;
+		
+		
+		public List<Person> getPerson() {
+			return person;
+		}
+
+		public void setPerson(List<Person> person) {
+			this.person = person;
+		}
 
 		public Long getX() {
 			return x;
@@ -537,6 +567,19 @@ public abstract class ParametersProviderTest {
 		public void setY(Long y) {
 			this.y = y;
 		}
+	}
+
+	public static class Person {
+		private String name;
+
+		public String getName() {
+			return name;
+		}
+
+		public void setName(String name) {
+			this.name = name;
+		}
+		
 	}
 
 

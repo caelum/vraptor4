@@ -148,7 +148,7 @@ public class VRaptorInstantiator implements InstantiatorWithErrors, Instantiator
 			try {
 				Parameter parameter = parameters.namedAfter(target);
 				
-				if(List.class.equals(target.getClassType())) {
+				if(List.class.isAssignableFrom(target.getClassType())) {
 					return multiInstantiator.instantiate(target, parameters);
 				}
 				

@@ -45,7 +45,7 @@ public class ServletBasedEnvironment extends DefaultEnvironment {
 	/**
 	 * @deprecated CDI eyes only
 	 */
-	public ServletBasedEnvironment() throws IOException {
+	protected ServletBasedEnvironment() throws IOException {
 	}
 
 	@Inject

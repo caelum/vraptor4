@@ -50,7 +50,7 @@ public class DefaultEnvironment implements Environment {
 	/**
 	 * @deprecated CDI eyes only
 	 */
-	public DefaultEnvironment() throws IOException {
+	protected DefaultEnvironment() throws IOException {
 		this(null);
 	}
 

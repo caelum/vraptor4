@@ -148,11 +148,11 @@ public class VRaptorInstantiator implements InstantiatorWithErrors, Instantiator
 			try {
 				Parameter parameter = parameters.namedAfter(target);
 				
-				if(!List.class.equals(target.getClassType())) {
-					return converterForTarget(target).convert(parameter.getValue(), target.getClassType());
+				if(List.class.equals(target.getClassType())) {
+					return multiInstantiator.instantiate(target, parameters);
 				}
 				
-				return multiInstantiator.instantiate(target, parameters);
+				return converterForTarget(target).convert(parameter.getValue(), target.getClassType());
 			} catch (ConversionException ex) {
 				errors.add(ex.getValidationMessage().withCategory(target.getName()));
 			} catch (IllegalStateException e) {

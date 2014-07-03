@@ -33,7 +33,7 @@ public class AcceptsNeedReturnBooleanValidationRule implements ValidationRule {
 
 	/** 
 	 * @deprecated CDI eyes only 
-	 * */
+	 */
 	protected AcceptsNeedReturnBooleanValidationRule() {
 		this(null);
 	}

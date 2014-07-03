@@ -376,7 +376,7 @@ public abstract class ParametersProviderTest {
 		ImmutableMap<String, String[]> params = ImmutableMap.of("abc", new String[] {""}, "abc.person[0].name", new String[] {"bird"});
 		when(request.getParameterMap()).thenReturn(params);
 		when(request.getParameterValues("abc")).thenReturn(params.get("abc"));
-		when(request.getParameterValues("abc.abc.person[0].name")).thenReturn(params.get("abc.abc.person[0].name"));
+		when(request.getParameterValues("abc.person[0].name")).thenReturn(params.get("abc.person[0].name"));
 		
 		when(converters.existsFor(ABC.class)).thenReturn(true);
 		when(converters.to(ABC.class)).thenReturn(new Converter<ABC>() {

@@ -146,8 +146,9 @@ public class VRaptorInstantiator implements InstantiatorWithErrors, Instantiator
 		@Override
 		public Object instantiate(Target<?> target, Parameters parameters) {
 			try {
+				Parameter parameter = parameters.namedAfter(target);
+				
 				if(!List.class.equals(target.getClassType())) {
-					Parameter parameter = parameters.namedAfter(target);
 					return converterForTarget(target).convert(parameter.getValue(), target.getClassType());
 				} else {
 					return multiInstantiator.instantiate(target, parameters);

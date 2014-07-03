@@ -1,3 +1,280 @@
 ---
 title: Dependencies and prerequisites
 ---
+
+#Dependencies and prerequisites
+
+VRaptor 4 depends directly on CDI 1.1, so it will work only in servers that support
+this version of CDI. JDK 1.7 or higher it's also mandatory.
+
+The servers already supported and tested are:
+
+* Glassfish 4
+* WildFly 8.0 and 8.1
+* Tomcat 7 (+ Weld 2.x jars)
+* Jetty 8 and 9  (+ Weld 2.x jars)
+
+To use a Servlet Container such as Tomcat or Jetty, it's also necessary to add
+Weld 2.x jars and the following listener to your `web.xml` file:
+
+~~~
+#!xml
+<listener>
+	<listener-class>org.jboss.weld.environment.servlet.Listener</listener-class>
+</listener>
+~~~
+
+Some dependencies may differ between applications running in an Application Server
+or a Servlet Container. Dependencies from Java EE specification, such as CDI or
+Bean Validation, are not required if you are using an Application Server.
+
+# JDK 8
+
+It's possible to use JDK 8 with VRaptor, but is necessary to use the latest
+version of Javassist dependency because the previous versions don't support
+Java 8 bytecode (note that starting from VRaptor-4.0.1 this is already the
+default dependency):
+
+~~~
+#!xml
+<dependency>
+	<groupId>org.javassist</groupId>
+	<artifactId>javassist</artifactId>
+	<version>3.18.1-GA</version>
+</dependency>
+~~~
+
+**Note**: If you are using Wildfly, try to use 8.1+ versions, because Javassist
+is already provided by the server. So even defining the dependency in your
+application, it won't be used by the application. If you can't update to 8.1+,
+an alternative is to update the module directly in the server.
+
+## Maven
+
+VRaptor 4 uses Maven to manage its dependencies. So to add VRaptor to your
+project, all you need to do is add the following dependency:
+
+~~~ 
+#!xml
+<dependency>
+	<groupId>br.com.caelum</groupId>
+	<artifactId>vraptor</artifactId>
+	<version>4.0.0</version> <!--or the latest version-->
+</dependency>
+~~~ 
+
+The structure of a project based on Maven is different than the conventional
+structure used by most IDEs. However, when a project is packaged, Maven
+will build its structure as a WAR:
+
+| Maven Path            | Description                          | Path in the WAR file
+| src/main/java         | Java sources                         | /WEB-INF/classes
+| src/main/resources    | configuration files                  | /WEB-INF/classes
+| src/main/webapp       | web files                            | /
+| src/test/java         | Java test sources                    | - ignored -
+| src/test/resources    | configuration files for testing      | - ignored -
+{: .content-table}
+
+If you don't want to use Maven (or any build tool integrated with Maven
+repositories), you can create a project in your prefered IDE and add
+VRaptor's jar and its dependencies. All the required jars to use VRaptor are
+available in a `zip` file in our <a href="/en/download">downloads page</a>.
+
+### CDI
+
+This is the most important dependency of VRaptor 4. If you use an Application Server,
+this dependency is already included, so you should declare CDI dependency with scope 
+`provided` in your `pom.xml`:
+
+~~~
+#!xml
+<dependency>
+	<groupId>javax.inject</groupId>
+	<artifactId>javax.inject</artifactId>
+	<version>1</version>
+	<scope>provided</scope>
+</dependency>
+~~~
+
+If you are using a Servlet Container (such as Tomcat or Jetty) you need to add
+the reference implementation of CDI: Weld.
+
+~~~
+#!xml
+<dependency>
+	<groupId>org.jboss.weld.servlet</groupId>
+	<artifactId>weld-servlet-core</artifactId>
+	<version>2.1.2.Final</version>
+</dependency>
+
+<dependency>
+	<groupId>org.jboss.weld</groupId>
+	<artifactId>weld-core-impl</artifactId>
+	<version>2.1.2.Final</version>
+</dependency>
+~~~
+
+**Warning**: avoid using the artifact `org.jboss.weld.servlet:weld-servlet`.
+because contains a lot of unecessary classes to boot a VRaptor
+application. Particularly, this artifact contains a **copy** of whole guava
+code, which is already a dependency of VRaptor. This may cause several
+conflicts between classes of this two artifacts (which can cause typical
+classloader problems such as `NoSuchMethodError`s).
+
+## Logging
+
+We use SLF4J (Simple Logging Facade for Java) to log internal events. SLF4J can
+redirect log messages to several other logging libraries such as NOP, Simple,
+log4j and JDK Logging. To configure logging you must add to your classpath the
+jar `slf4j-api.jar` and also the binding jar of the library of your choice. See more
+about this topic at <a href="http://www.slf4j.org/manual.html">SLF4J
+official docs</a>.
+
+Most projects choose **log4j** to implement logging. In case you 
+want to use it, you need to add the following dependency:
+
+~~~ 
+#!xml
+<dependency>
+	<groupId>org.slf4j</groupId>
+	<artifactId>slf4j-log4j12</artifactId>
+	<version>1.7.5</version> <!-- or the latest version avaiable -->
+</dependency>
+~~~ 
+
+And you should also include a configuration file named `log4j.xml` in the
+`src/main/resources` directory, for example:
+
+~~~ 
+#!xml
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+	<appender name="stdout" class="org.apache.log4j.ConsoleAppender">
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d{HH:mm:ss,SSS} %5p [%-20c{1}] %m%n" />
+		</layout>
+	</appender>
+	<category name="br.com.caelum.vraptor">
+        <priority value="DEBUG" /> <!-- or another value such as INFO to decrease verbosity -->
+		<appender-ref ref="stdout" />
+	</category>
+	<!-- include configurations of your project here -->
+</log4j:configuration>
+~~~ 
+
+## XStream and Gson
+
+XStream and Gson are used to serialize/deserialize XML and JSON
+respectively. Both libraries are optional, so if you don't need to use
+serializing/deserializing capabilities, you can exclude those dependencies,
+since it's already included as default.
+
+This is the XStream dependency:
+
+~~~ 
+#!xml
+<dependency>
+	<groupId>com.thoughtworks.xstream</groupId>
+	<artifactId>xstream</artifactId>
+	<version>1.4.4</version>
+</dependency>
+~~~ 
+
+And this is the Gson dependency:
+
+~~~ 
+#!xml
+<dependency>
+	<groupId>com.google.code.gson</groupId>
+	<artifactId>gson</artifactId>
+	<version>2.2.4</version>
+</dependency>
+~~~ 
+
+## Bean Validation
+
+If you use an Application Server, it's not necessary to add *Bean Validation*
+dependency because it's already bundled with Java EE 7. But if you are using a
+Servlet Container, it's required to add a implemetation, such as *Hibernate
+Validator*, to your project:
+
+~~~
+#!xml
+<dependency>
+	<groupId>org.hibernate</groupId>
+	<artifactId>hibernate-validator-cdi</artifactId>
+	<version>5.1.1.Final</version>
+</dependency>
+~~~
+
+This dependency is mandatory when running in a Servlet Container because
+VRaptor uses the Bean Validation API in the `Validator` class.
+
+It's also required to indicate CDI to do not validate methods automatically.
+To do that, add the file `META-INF/validation.xml` with the following content:
+
+~~~
+#!xml
+<?xml version="1.0" encoding="UTF-8"?>
+<validation-config xmlns="http://jboss.org/xml/ns/javax/validation/configuration"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://jboss.org/xml/ns/javax/validation/configuration
+		validation-configuration-1.1.xsd"
+		version="1.1">
+	<executable-validation enabled="false"/>
+</validation-config>
+~~~
+
+
+## Paranamer
+
+Sadly, before Java 8, it was impossible to use reflection to get parameter's
+names from methods or constructors, because this information was not available in
+the bytecode (unless the code is compiled in **debug mode**, which is
+optional). Because of this, most of the frameworks that need this kind of
+information usually create a custom annotation to store parameters names. In
+JAX-WS, for example, it's common to find a resource method such as `void add
+(@WebParam(name="customer") Customer customer)`.
+
+VRaptor use the <a href="http://paranamer.codehaus.org/">Paranamer</a>
+framework which is capable of extracting parameters information through pre
+compilation of your code or from debug bytecode, avoiding the use of
+annotations. Some of VRaptor's developers are also contributors of Paranamer.
+
+## Commons-fileupload
+
+This is an optional dependency required only if your application use file
+uploading:
+
+~~~ 
+#!xml
+<dependency>
+	<groupId>commons-fileupload</groupId>
+	<artifactId>commons-fileupload</artifactId>
+	<version>1.3</version>
+</dependency>
+~~~ 
+
+Note that if you are not using any maven-compatible build tool you also need
+to add `commons-io` library to the classpath.
+
+## Iogi
+
+**Iogi** is a library used internally in VRaptor to inject http request
+parameters.  Iogi is responsible for building the beans that you receive in
+controller methods.  The great benefit of Iogi is that it is capable of
+building imutable classes, without the need of **setters**. Iogi is also capable
+of building your beans trough setters.
+
+Iogi is a mandatory dependency and it's already included when you add VRaptor
+dependency.
+
+## Mirror
+
+[Mirror](http://projetos.vidageek.net/mirror/mirror/) is a library to ease the
+use of Reflection, providing a fluent interface to the original API.  Mirror is
+used internally to intantiate objects. It is a mandatory dependency and is
+already included when you add VRaptor dependency to your project.
+
+

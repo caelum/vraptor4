@@ -104,14 +104,6 @@
 					<wtpversion>2.0</wtpversion>
 					<ajdtVersion>none</ajdtVersion>
 				</configuration>
-				<executions>
-					<execution>
-						<phase>package</phase>
-						<goals>
-							<goal>eclipse</goal>
-						</goals>
-					</execution>
-				</executions>
 			</plugin>
 
 			<plugin>
@@ -119,10 +111,23 @@
 				<version>2.3</version>
 				<executions>
 					<execution>
+						<id>distribution</id>
 						<phase>package</phase>
 						<configuration>
 							<descriptors>
 								<descriptor>assembly.xml</descriptor>
+							</descriptors>
+						</configuration>
+						<goals>
+							<goal>assembly</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>distribution-eclipse</id>
+						<phase>package</phase>
+						<configuration>
+							<descriptors>
+								<descriptor>assembly-eclipse.xml</descriptor>
 							</descriptors>
 						</configuration>
 						<goals>

@@ -39,7 +39,9 @@ public class NoStackParamValidationRule implements ValidationRule {
 
 	private final StepInvoker invoker;
 	
-	/** @deprecated CDI eyes only */
+	/** 
+	 * @deprecated CDI eyes only 
+	 */
 	protected NoStackParamValidationRule() {
 		this(null);
 	}

@@ -392,6 +392,50 @@ result.use(json()).from(carro).serialize(); //=> {'carro': {'cor': 'azul'}}
 result.use(json()).withoutRoot().from(carro).serialize(); //=> {'cor': 'azul'}
 ~~~ 
 
+
+##Indentação do resultado JSON e XML
+
+Por padrão, o resultado da serialização é sem indentação, o que pode ser útil para melhorar o tempo de download do browser. Porém se você precisar exibir o resultado do JSON ou XML com indentação, você pode usar o método `indented`.
+
+~~~ 
+#!java
+result.use(json()).indented().from(carro).serialize();
+~~~ 
+
+Dessa forma o resultado seria:
+
+~~~
+#!javascript
+{
+  'carro':
+  {
+    'cor': 'azul'
+  }
+}
+~~~ 
+
+
+Ou você pode também usar o <a href="/pt/docs/environment">Environment</a> para definir a indentação padrão conforme o ambiente. Neste caso você pode definir que no ambiente `DEVELOPMENT` a indentação será ativada, e no ambiente `PRODUCTION` será desativada.
+
+`development.properties`:
+
+~~~ 
+#!properties
+br.com.caelum.vraptor.serialization.xml.indented=true
+br.com.caelum.vraptor.serialization.json.indented=true
+~~~ 
+
+`production.properties`:
+
+~~~ 
+#!properties
+br.com.caelum.vraptor.serialization.xml.indented=false
+br.com.caelum.vraptor.serialization.json.indented=false
+~~~ 
+
+**Nota:** A configuração do `Environment` possui prioridade menor que no código. Ou seja, se você definir `br.com.caelum.vraptor.serialization.xml.indented=false` no `Environment` e chamar o método `indented` no seu código, o resultado será um JSON ou XML indentado.
+
+
 ## Criando links na view com o linkTo
 
 LinkTo é uma funcionalidade que permite você criar links nas páginas JSP sem precisar escrever o link, mas sim indicando a classe do controller, e o método.

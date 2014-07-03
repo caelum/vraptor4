@@ -1,0 +1,159 @@
+<!DOCTYPE HTML> <html lang="en"> <head> <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> <meta charset="utf-8"> <meta name="viewport" content="width=device-width"> <title>VRaptor 4 - Building a Web Application with Java 8 and VRaptor 4 under Wildfly</title> <link rel="shortcut icon" href="../../../img/favicon.png"> <link rel="stylesheet" href="../../../css/style.min.css"/> </head> <body> <header class="container"><h1 class="logo"><a class="logo-link" href="../.."> <img src="../../../img/logo.png" alt="VRaptor"></a></h1> <ul class="community"> <li><a href="https://groups.google.com/forum/?hl=en#!forum/vraptor4" target="_blank">Google Groups</a></li> <li><a href="https://github.com/caelum/vraptor4/" target="_blank">GitHub</a></li> <li><a href="http://questions.vraptor.org" target="_blank">VRaptor Questions</a></li> </ul> <ul class="site-languages"> <li> <a class="site-language flag flag-en " title="en" href="../.."> EN </a> </li> <li> <a class="site-language flag flag-pt not-selected" title="pt" href="../../../pt"> PT </a> </li> </ul></header><input type="checkbox" id="nav-visibility"><label for="nav-visibility" class="nav-toggle">Menu</label> <nav class="main-nav"><ul> <li><a href="../../download">Download</a></li> <li><a href="../../docs/one-minute-guide/">Documentation</a></li> <li><a href="../accepting-urls-ending-with-a-slash">Cookbook</a></li> <li><a href="https://github.com/caelum/vraptor4/releases" target="_blank">Changelog</a></li> <li><a href="https://github.com/caelum/vraptor4/issues/milestones" target="_blank">Roadmap</a></li> <li><a href="../../../javadoc">Javadoc</a></li> </ul></nav><nav class="doc-nav container"><h1>Cookbook</h1> <ul> <li> <a href="../accepting-urls-ending-with-a-slash"> Accepting URLs ending with a slash </a> <a href="../avoiding-browser-cache"> Avoiding browser cache </a> </li> <li> <a href="../using-the-referer-header-to-redirect"> Using Referer Header to redirect </a> </li> <li> <a href="../integrating-vraptor-with-tiles3"> Integrating VRaptor with Tiles 3 </a> </li> </ul></nav><main class="container"><h1 id="by-rubens-saraiva">by Rubens Saraiva</h1> <p>Some months ago Java 8 was lauched, with new features and APIs. And some weeks before, the VRaptor, a brazilian framework, was launched too.</p> <p>VRaptor 4 was complete refactored to support CDI built-in, and now are compatible to use Java EE 7 resources.</p> <p>In this post I will explain how building a VRaptor 4 Application, used new features of Java 8 and running on the WildFly 8, the new Application Server built by JBoss that implements Java EE 7. The database used by this article will be HSQLDB, available out of box by Wildfly.</p> <p>The complete application code is available <a href="http://github.com/rsaraiva/v4_wildfly_jta">here</a>.</p> <p>To start, create a maven web project using your favorite IDE. Open the Maven configuration file ,<code>pom.xml</code> and include the dependencies described in the file below.</p> <pre><code class="language-xml"><span class="nt">&lt;project</span> <span class="na">xmlns=</span><span class="s">"http://maven.apache.org/POM/4.0.0"</span> 
+         <span class="na">xmlns:xsi=</span><span class="s">"http://www.w3.org/2001/XMLSchema-instance"</span> 
+         <span class="na">xsi:schemaLocation=</span><span class="s">"http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;modelVersion&gt;</span>4.0.0<span class="nt">&lt;/modelVersion&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>com.rsaraiva.labs<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>events<span class="nt">&lt;/artifactId&gt;</span>
+    <span class="nt">&lt;version&gt;</span>1.0<span class="nt">&lt;/version&gt;</span>
+    <span class="nt">&lt;packaging&gt;</span>war<span class="nt">&lt;/packaging&gt;</span>
+    <span class="nt">&lt;name&gt;</span>events<span class="nt">&lt;/name&gt;</span>
+
+    <span class="nt">&lt;properties&gt;</span>
+        <span class="nt">&lt;project.build.sourceEncoding&gt;</span>UTF-8<span class="nt">&lt;/project.build.sourceEncoding&gt;</span>
+    <span class="nt">&lt;/properties&gt;</span>
+
+    <span class="nt">&lt;dependencies&gt;</span>
+        <span class="nt">&lt;dependency&gt;</span>
+            <span class="nt">&lt;groupId&gt;</span>br.com.caelum<span class="nt">&lt;/groupId&gt;</span>
+            <span class="nt">&lt;artifactId&gt;</span>vraptor<span class="nt">&lt;/artifactId&gt;</span>
+            <span class="nt">&lt;version&gt;</span>4.0.0.Final<span class="nt">&lt;/version&gt;</span>
+        <span class="nt">&lt;/dependency&gt;</span>
+        <span class="nt">&lt;dependency&gt;</span>
+            <span class="nt">&lt;groupId&gt;</span>br.com.caelum.vraptor<span class="nt">&lt;/groupId&gt;</span>
+            <span class="nt">&lt;artifactId&gt;</span>vraptor-javatime<span class="nt">&lt;/artifactId&gt;</span>
+            <span class="nt">&lt;version&gt;</span>4.0.0.Final<span class="nt">&lt;/version&gt;</span>
+        <span class="nt">&lt;/dependency&gt;</span>
+        <span class="nt">&lt;dependency&gt;</span>
+            <span class="nt">&lt;groupId&gt;</span>jstl<span class="nt">&lt;/groupId&gt;</span>
+            <span class="nt">&lt;artifactId&gt;</span>jstl<span class="nt">&lt;/artifactId&gt;</span>
+            <span class="nt">&lt;version&gt;</span>1.2<span class="nt">&lt;/version&gt;</span>
+        <span class="nt">&lt;/dependency&gt;</span>
+        <span class="nt">&lt;dependency&gt;</span>
+            <span class="nt">&lt;groupId&gt;</span>org.hibernate<span class="nt">&lt;/groupId&gt;</span>
+            <span class="nt">&lt;artifactId&gt;</span>hibernate-entitymanager<span class="nt">&lt;/artifactId&gt;</span>
+            <span class="nt">&lt;version&gt;</span>4.3.5.Final<span class="nt">&lt;/version&gt;</span>
+            <span class="nt">&lt;scope&gt;</span>provided<span class="nt">&lt;/scope&gt;</span>
+        <span class="nt">&lt;/dependency&gt;</span>
+        <span class="nt">&lt;dependency&gt;</span>
+            <span class="nt">&lt;groupId&gt;</span>javax.inject<span class="nt">&lt;/groupId&gt;</span>
+            <span class="nt">&lt;artifactId&gt;</span>javax.inject<span class="nt">&lt;/artifactId&gt;</span>
+            <span class="nt">&lt;version&gt;</span>1<span class="nt">&lt;/version&gt;</span>
+            <span class="nt">&lt;scope&gt;</span>provided<span class="nt">&lt;/scope&gt;</span>
+        <span class="nt">&lt;/dependency&gt;</span>
+        <span class="nt">&lt;dependency&gt;</span>
+            <span class="nt">&lt;groupId&gt;</span>javax<span class="nt">&lt;/groupId&gt;</span>
+            <span class="nt">&lt;artifactId&gt;</span>javaee-web-api<span class="nt">&lt;/artifactId&gt;</span>
+            <span class="nt">&lt;version&gt;</span>7.0<span class="nt">&lt;/version&gt;</span>
+            <span class="nt">&lt;scope&gt;</span>provided<span class="nt">&lt;/scope&gt;</span>
+        <span class="nt">&lt;/dependency&gt;</span>
+    <span class="nt">&lt;/dependencies&gt;</span>
+
+    <span class="nt">&lt;build&gt;</span>
+        <span class="nt">&lt;plugins&gt;</span>
+            <span class="nt">&lt;plugin&gt;</span>
+                <span class="nt">&lt;groupId&gt;</span>org.apache.maven.plugins<span class="nt">&lt;/groupId&gt;</span>
+                <span class="nt">&lt;artifactId&gt;</span>maven-compiler-plugin<span class="nt">&lt;/artifactId&gt;</span>
+                <span class="nt">&lt;version&gt;</span>3.1<span class="nt">&lt;/version&gt;</span>
+                <span class="nt">&lt;configuration&gt;</span>
+                    <span class="nt">&lt;source&gt;</span>1.8<span class="nt">&lt;/source&gt;</span>
+                    <span class="nt">&lt;target&gt;</span>1.8<span class="nt">&lt;/target&gt;</span>
+                <span class="nt">&lt;/configuration&gt;</span>
+            <span class="nt">&lt;/plugin&gt;</span>
+        <span class="nt">&lt;/plugins&gt;</span>
+    <span class="nt">&lt;/build&gt;</span>
+<span class="nt">&lt;/project&gt;</span></code></pre> <p>The first dependency of you project is VRaptor 4, and before we need to include <code>vraptor-javatime</code> to allow VRaptor to work with new Java Date API. And the next step will include Java EE dependencies like JSTL, JPA provider and so on. And most important: we need to declare in plugins node that we want to use Java 1.8 compilation.</p> <p>Now we will create our model - a simple entity to represent Events.</p> <pre><code class="language-java"><span class="nd">@Entity</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Event</span> <span class="kd">implements</span> <span class="n">Serializable</span> <span class="o">{</span>
+
+    <span class="nd">@Id</span>
+    <span class="nd">@GeneratedValue</span><span class="o">(</span><span class="n">strategy</span> <span class="o">=</span> <span class="n">GenerationType</span><span class="o">.</span><span class="na">IDENTITY</span><span class="o">)</span>
+    <span class="kd">private</span> <span class="n">Integer</span> <span class="n">id</span><span class="o">;</span>
+
+    <span class="kd">private</span> <span class="n">LocalDate</span> <span class="n">date</span><span class="o">;</span>
+
+    <span class="kd">private</span> <span class="n">String</span> <span class="n">description</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="nf">Event</span><span class="o">()</span> <span class="o">{</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="nf">Event</span><span class="o">(</span><span class="n">String</span> <span class="n">description</span><span class="o">,</span> <span class="n">LocalDate</span> <span class="n">date</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">description</span> <span class="o">=</span> <span class="n">description</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">date</span> <span class="o">=</span> <span class="n">date</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="c1">// gets and sets</span>
+<span class="o">}</span></code></pre> <p>As you can see, the date attribute was declared as <code>LocalDate</code>, the new class introduced in Java 8.</p> <p>But for that to be possible, it’s necessary create a JPA Converter, since the JPA 2.1 still not support the types of the new Date and Time API. ~~~ #!java @Converter(autoApply = true) public class LocalDatePersistenceConverter implements AttributeConverter&lt;LocalDate, Date&gt; {</p> <pre><code>@Override
+public Date convertToDatabaseColumn(LocalDate entityValue) {
+    return (entityValue == null) ? null : Date.valueOf(entityValue);
+}
+
+@Override
+public LocalDate convertToEntityAttribute(Date databaseValue) {
+    return databaseValue.toLocalDate();
+} } ~~~
+</code></pre> <p>This converter needs to be registered in the <code>persistence.xml</code> as describes below.</p> <pre><code class="language-xml"><span class="nt">&lt;persistence</span> <span class="na">version=</span><span class="s">"2.1"</span> <span class="na">xmlns=</span><span class="s">"http://xmlns.jcp.org/xml/ns/persistence"</span> <span class="na">xmlns:xsi=</span><span class="s">"http://www.w3.org/2001/XMLSchema-instance"</span> <span class="na">xsi:schemaLocation=</span><span class="s">"http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;persistence-unit</span> <span class="na">name=</span><span class="s">"default"</span> <span class="na">transaction-type=</span><span class="s">"JTA"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;jta-data-source&gt;</span>java:jboss/datasources/ExampleDS<span class="nt">&lt;/jta-data-source&gt;</span>
+    <span class="nt">&lt;class&gt;</span>com.rsaraiva.labs.vraptor4.jpa.LocalDatePersistenceConverter<span class="nt">&lt;/class&gt;</span>
+    <span class="nt">&lt;properties&gt;</span>
+      <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"hibernate.transaction.jta.platform"</span> <span class="na">value=</span><span class="s">"org.hibernate.service.jta.platform.internal.JBossAppServerJtaPlatform"</span><span class="nt">/&gt;</span>
+      <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"hibernate.hbm2ddl.auto"</span> <span class="na">value=</span><span class="s">"update"</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;/properties&gt;</span>
+  <span class="nt">&lt;/persistence-unit&gt;</span>
+<span class="nt">&lt;/persistence&gt;</span></code></pre> <p>Now we will create a <code>Service</code> , the logic class to create and list events. Notice the integration with JavaEE with the annotations <code>@Stateless</code> and <code>@PersistenceContext</code>.</p> <pre><code class="language-java"><span class="nd">@Stateless</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">EventService</span> <span class="o">{</span>
+    
+    <span class="nd">@PersistenceContext</span>
+    <span class="kd">private</span> <span class="n">EntityManager</span> <span class="n">em</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">persist</span><span class="o">(</span><span class="n">Event</span> <span class="n">event</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">em</span><span class="o">.</span><span class="na">persist</span><span class="o">(</span><span class="n">event</span><span class="o">);</span>
+    <span class="o">}</span>
+    
+    <span class="kd">public</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">Event</span><span class="o">&gt;</span> <span class="nf">findAll</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">em</span><span class="o">.</span><span class="na">createQuery</span><span class="o">(</span><span class="s">"select e from Event e order by e.description"</span><span class="o">).</span><span class="na">getResultList</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">}</span></code></pre> <p>Now we will use the CDI to inject the service in the VRaptor controller</p> <pre><code class="language-java"><span class="nd">@Controller</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">EventController</span> <span class="kd">implements</span> <span class="n">Serializable</span> <span class="o">{</span>
+
+    <span class="nd">@Inject</span> <span class="kd">private</span> <span class="n">EventService</span> <span class="n">service</span><span class="o">;</span>
+    <span class="nd">@Inject</span> <span class="kd">private</span> <span class="n">Result</span> <span class="n">result</span><span class="o">;</span>
+
+    <span class="nd">@Get</span><span class="o">(</span><span class="s">"/events"</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">event</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">result</span><span class="o">.</span><span class="na">include</span><span class="o">(</span><span class="s">"events"</span><span class="o">,</span> <span class="n">service</span><span class="o">.</span><span class="na">findAll</span><span class="o">());</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Post</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">add</span><span class="o">(</span><span class="n">Event</span> <span class="n">event</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">service</span><span class="o">.</span><span class="na">persist</span><span class="o">(</span><span class="n">event</span><span class="o">);</span>
+        <span class="n">result</span><span class="o">.</span><span class="na">redirectTo</span><span class="o">(</span><span class="k">this</span><span class="o">).</span><span class="na">event</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">}</span></code></pre> <p>Our controller have two methods. The first uses <code>EventService</code> for querying all events registered and includes the list in the JSP context. The second receive the ‘post’ from JSP form and persists the event into database.</p> <p>In the end, we must create a jsp with a events list and the register form.</p> <pre><code class="language-jsp"><span class="k">&lt;%@</span><span class="n">page</span> <span class="n">contentType</span><span class="o">=</span><span class="s">"text/html"</span> <span class="n">pageEncoding</span><span class="o">=</span><span class="s">"UTF-8"</span><span class="k">%&gt;</span>
+<span class="k">&lt;%@</span> <span class="n">taglib</span> <span class="n">prefix</span><span class="o">=</span><span class="s">"c"</span> <span class="n">uri</span><span class="o">=</span><span class="s">"http://java.sun.com/jsp/jstl/core"</span> <span class="k">%&gt;</span>
+<span class="cp">&lt;!DOCTYPE html&gt;</span>
+<span class="nt">&lt;html&gt;</span>
+    <span class="nt">&lt;head&gt;</span>
+        <span class="nt">&lt;meta</span> <span class="na">http-equiv=</span><span class="s">"Content-Type"</span> <span class="na">content=</span><span class="s">"text/html; charset=UTF-8"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;title&gt;</span>Events<span class="nt">&lt;/title&gt;</span>
+    <span class="nt">&lt;/head&gt;</span>
+    <span class="nt">&lt;body&gt;</span>
+        <span class="nt">&lt;h1&gt;</span>Events<span class="nt">&lt;/h1&gt;</span>
+        <span class="nt">&lt;table&gt;</span>
+            <span class="nt">&lt;c:forEach</span> <span class="na">items=</span><span class="s">"${events}"</span> <span class="na">var=</span><span class="s">"item"</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;tr&gt;</span>
+                    <span class="nt">&lt;td&gt;</span>${item.id}<span class="nt">&lt;/td&gt;</span>
+                    <span class="nt">&lt;td&gt;</span>${item.description}<span class="nt">&lt;/td&gt;</span>
+                    <span class="nt">&lt;td&gt;</span>${item.formattedDate}<span class="nt">&lt;/td&gt;</span>
+                <span class="nt">&lt;/tr&gt;</span>
+            <span class="nt">&lt;/c:forEach&gt;</span>
+        <span class="nt">&lt;/table&gt;</span>
+        <span class="nt">&lt;br/&gt;</span>
+        <span class="nt">&lt;form</span> <span class="na">action=</span><span class="s">"${linkTo[EventController].add}"</span> <span class="na">method=</span><span class="s">"post"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;span&gt;</span>Description: <span class="nt">&lt;/span&gt;</span>
+            <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"input"</span> <span class="na">name=</span><span class="s">"event.description"</span><span class="nt">/&gt;</span>
+            <span class="nt">&lt;span&gt;</span>Date <span class="nt">&lt;/span&gt;</span>
+            <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"input"</span> <span class="na">name=</span><span class="s">"event.date"</span><span class="nt">/&gt;</span>
+            <span class="nt">&lt;button&gt;</span>Add<span class="nt">&lt;/button&gt;</span>
+        <span class="nt">&lt;/form&gt;</span>
+    <span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span></code></pre> <p>Cookbook originally posted at <a href="http://rsaraiva.com">rsaraiva.com</a></p> <script src="/js/headers.min.js"></script> </body> </html>

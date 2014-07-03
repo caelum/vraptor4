@@ -3,10 +3,9 @@
     <span class="nt">&lt;param-value&gt;</span>nome_do_ambiente<span class="nt">&lt;/param-value&gt;</span>
 <span class="nt">&lt;/context-param&gt;</span></code></pre> <p>Onde <code>nome_do_ambiente</code> é o ambiente atual (<code>PRODUCTION</code> ou <code>DEVELOPMENT</code>, por exemplo). Ou se preferir, você também pode criar uma variável de ambiente conforme seu sistema operacional, chamada <code>VRAPTOR_ENV</code>.</p> <p>Exemplo no windows:</p> <pre><code>set VRAPTOR_ENV=PRODUCTION
 </code></pre> <p>Exemplo no unix:</p> <pre><code>export VRAPTOR_ENV=PRODUCTION
-</code></pre> <h2 id="definindo-as-propriedades-de-um-ambiente">Definindo as propriedades de um ambiente</h2> <p>O arquivo <code>nome_do_ambiente.properties</code> deve ser criado em <code>src/main/resources</code>. Exemplo de um arquivo <code>development.properties</code>:</p> <pre><code>ambiente_de_teste = true
-email_de_teste = test.mail@mail.com
-environment.controller = true
-</code></pre> <h2 id="acessando-propriedades-de-ambiente-no-seu-cdigo">Acessando propriedades de ambiente no seu código</h2> <pre><code class="language-java"><span class="nd">@Controller</span>
+</code></pre> <h2 id="definindo-as-propriedades-de-um-ambiente">Definindo as propriedades de um ambiente</h2> <p>O arquivo <code>nome_do_ambiente.properties</code> deve ser criado em <code>src/main/resources</code>. Exemplo de um arquivo <code>development.properties</code>:</p> <pre><code class="language-properties"><span class="na">ambiente_de_teste</span> <span class="o">=</span> <span class="s">true</span>
+<span class="na">email_de_teste</span> <span class="o">=</span> <span class="s">test.mail@mail.com</span>
+<span class="na">environment.controller</span> <span class="o">=</span> <span class="s">true</span></code></pre> <h2 id="acessando-propriedades-de-ambiente-no-seu-cdigo">Acessando propriedades de ambiente no seu código</h2> <pre><code class="language-java"><span class="nd">@Controller</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">MeuController</span> <span class="o">{</span>
     <span class="kd">private</span> <span class="kd">final</span> <span class="n">Environment</span> <span class="n">environment</span><span class="o">;</span>
     <span class="kd">private</span> <span class="kd">final</span> <span class="n">MailSender</span> <span class="n">sender</span><span class="o">;</span>

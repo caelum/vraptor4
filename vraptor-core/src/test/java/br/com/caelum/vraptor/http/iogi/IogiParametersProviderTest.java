@@ -28,10 +28,12 @@
 package br.com.caelum.vraptor.http.iogi;
 
 import static br.com.caelum.vraptor.VRaptorMatchers.hasMessage;
+import static br.com.caelum.vraptor.controller.DefaultControllerMethod.instanceFor;
 import static java.util.Collections.singletonMap;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
@@ -45,15 +47,15 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-import org.junit.Test;
+import javax.servlet.http.HttpServletRequest;
 
-import com.google.common.collect.ImmutableMap;
+import org.junit.Test;
 
 import br.com.caelum.iogi.parameters.Parameter;
 import br.com.caelum.iogi.parameters.Parameters;
@@ -61,9 +63,12 @@ import br.com.caelum.iogi.reflection.Target;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.controller.DefaultControllerMethod;
+import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.http.ParametersProvider;
 import br.com.caelum.vraptor.http.ParametersProviderTest;
 import br.com.caelum.vraptor.validator.Message;
+
+import com.google.common.collect.ImmutableMap;
 
 public class IogiParametersProviderTest extends ParametersProviderTest {
 
@@ -71,10 +76,52 @@ public class IogiParametersProviderTest extends ParametersProviderTest {
 	protected ParametersProvider getProvider() {
 		VRaptorInstantiator instantiator = new VRaptorInstantiator(converters, new VRaptorDependencyProvider(container), new VRaptorParameterNamesProvider(nameProvider), request);
 		instantiator.createInstantiator();
-		
 		return new IogiParametersProvider(nameProvider, request, instantiator);
 	}
 
+	@Test
+	public void shouldInstantiateTheObjectEvenWhenThereAreNoParameters() throws Exception {
+		thereAreNoParameters();
+		Method setCat = House.class.getMethod("setCat", Cat.class);
+		ControllerMethod method = instanceFor(House.class, setCat);
+		Object[] params = provider.getParametersFor(method, errors);
+		assertThat(params[0], is(notNullValue()));
+		assertThat(params[0], instanceOf(Cat.class));
+	}
+
+	@Test
+	public void shouldnotInstantiateObjectWhenThereAreNoParameters() throws Exception {
+		
+		VRaptorInstantiator instantiator = new NullVRaptorInstantiator(converters, 
+				new VRaptorDependencyProvider(container), 
+				new VRaptorParameterNamesProvider(nameProvider), request);
+		
+		instantiator.createInstantiator();
+		IogiParametersProvider provider = new IogiParametersProvider(nameProvider, request, instantiator);
+		
+		thereAreNoParameters();
+		Method setCat = House.class.getMethod("setCat", Cat.class);
+		ControllerMethod method = instanceFor(House.class, setCat);
+		Object[] params = provider.getParametersFor(method, errors);
+		assertThat(params[0], is(nullValue()));
+	}
+
+	
+	static class NullVRaptorInstantiator extends VRaptorInstantiator {
+		
+		public NullVRaptorInstantiator(Converters converters,
+				VRaptorDependencyProvider provider,
+				VRaptorParameterNamesProvider nameProvider,
+				HttpServletRequest request) {
+			super(converters, provider, nameProvider, request);
+		}
+		
+		@Override
+		protected boolean useNullForMissingParameters() {
+			return true;
+		}
+	}
+	
 	@Test
 	public void returnsNullWhenInstantiatingAStringForWhichThereAreNoParameters() throws Exception {
 		thereAreNoParameters();

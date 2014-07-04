@@ -50,6 +50,7 @@ import com.google.common.collect.ImmutableList;
 
 @RequestScoped
 public class VRaptorInstantiator implements InstantiatorWithErrors, Instantiator<Object> {
+	
 	private MultiInstantiator multiInstantiator;
 	private List<Message> errors;
 	
@@ -57,7 +58,7 @@ public class VRaptorInstantiator implements InstantiatorWithErrors, Instantiator
 	private final DependencyProvider provider;
 	private final ParameterNamesProvider parameterNameProvider;
 	private final HttpServletRequest request;
-
+	
 	/** 
 	 * @deprecated CDI eyes only
 	 */
@@ -76,6 +77,13 @@ public class VRaptorInstantiator implements InstantiatorWithErrors, Instantiator
 
 	@PostConstruct
 	public void createInstantiator() {
+		
+		Instantiator<Object> objectInstantiator = new ObjectInstantiator(this, provider, parameterNameProvider);
+		
+		if (useNullForMissingParameters()) {
+			objectInstantiator = new NullDecorator(objectInstantiator);
+		}
+		
 		List<Instantiator<?>> instantiatorList = ImmutableList.of(
 				new RequestAttributeInstantiator(request),
 				new VRaptorTypeConverter(converters),
@@ -84,8 +92,12 @@ public class VRaptorInstantiator implements InstantiatorWithErrors, Instantiator
 				new NullDecorator(new ListInstantiator(this)),
 				new NullDecorator(new SetInstantiator(this)),
 				new DependencyInstantiator(),
-				new ObjectInstantiator(this, provider, parameterNameProvider));
+				objectInstantiator);
 		multiInstantiator = new MultiInstantiator(instantiatorList);
+	}
+
+	protected boolean useNullForMissingParameters() {
+		return false;
 	}
 
 	@Override

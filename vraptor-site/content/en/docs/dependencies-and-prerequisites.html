@@ -163,6 +163,30 @@ And you should also include a configuration file named `log4j.xml` in the
 </log4j:configuration>
 ~~~ 
 
+
+**Notice:** If you is deploying you application into Wildfly, you need to
+configure logging in the `standalone.xml` file (or in `domain.xml` if
+you is running in domain mode):
+ 
+~~~
+#!xml
+<subsystem xmlns="urn:jboss:domain:logging:2.0">
+<logger category="br.com.caelum.vraptor">
+<level name="DEBUG"/>
+</logger>
+</subsystem>
+~~~
+ 
+But if you want to use configuration inside your application, you can
+tell to Wildfly to read this configuration from your deployment:
+ 
+~~~
+#!xml
+<subsystem xmlns="urn:jboss:domain:logging:2.0">
+<use-deployment-logging-config value="false"/>
+</subsystem>
+~~~ 
+
 ## XStream and Gson
 
 XStream and Gson are used to serialize/deserialize XML and JSON

@@ -95,7 +95,7 @@ public class VRaptorInstantiator implements InstantiatorWithErrors, Instantiator
 		multiInstantiator = new MultiInstantiator(instantiatorList);
 	}
 
-	public boolean useNullForMissingParameters() {
+	protected boolean useNullForMissingParameters() {
 		return false;
 	}
 

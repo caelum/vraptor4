@@ -117,7 +117,7 @@ public class IogiParametersProviderTest extends ParametersProviderTest {
 		}
 		
 		@Override
-		public boolean useNullForMissingParameters() {
+		protected boolean useNullForMissingParameters() {
 			return true;
 		}
 	}

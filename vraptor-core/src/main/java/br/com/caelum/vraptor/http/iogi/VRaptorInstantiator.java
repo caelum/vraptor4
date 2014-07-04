@@ -149,7 +149,7 @@ public class VRaptorInstantiator implements InstantiatorWithErrors, Instantiator
 			try {
 				Parameter parameter = parameters.namedAfter(target);
 				
-				if(isAbleToDefaultInstantiator(target)) {
+				if(isSupportedCollection(target)) {
 					return multiInstantiator.instantiate(target, parameters);
 				}
 				
@@ -162,7 +162,7 @@ public class VRaptorInstantiator implements InstantiatorWithErrors, Instantiator
 			return null;
 		}
 
-		private boolean isAbleToDefaultInstantiator(Target<?> target) {
+		private boolean isSupportedCollection(Target<?> target) {
 			return List.class.isAssignableFrom(target.getClassType()) || Set.class.isAssignableFrom(target.getClassType());
 		}
 

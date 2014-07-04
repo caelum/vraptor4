@@ -391,6 +391,26 @@ public abstract class ParametersProviderTest {
 	}
 
 	@Test
+	public void continuesToFillObjectWithSetIfItIsConvertable() throws Exception {
+		when(request.getParameterNames()).thenReturn(Collections.enumeration(Arrays.asList("abc", "abc.addresses[0].street")));
+		ImmutableMap<String, String[]> params = ImmutableMap.of("abc", new String[] {""}, "abc.addresses[0].street", new String[] {"Some Street"});
+		when(request.getParameterMap()).thenReturn(params);
+		when(request.getParameterValues("abc")).thenReturn(params.get("abc"));
+		when(request.getParameterValues("abc.addresses[0].street")).thenReturn(params.get("abc.addresses[0].street"));
+		
+		when(converters.existsFor(ABC.class)).thenReturn(true);
+		when(converters.to(ABC.class)).thenReturn(new Converter<ABC>() {
+			@Override
+			public ABC convert(String value, Class<? extends ABC> type) {
+				return new ABC();
+			}
+		});
+		
+		ABC returned = getParameters(abc);
+		assertThat(returned.getAddresses().iterator().next().getStreet(), is("Some Street"));
+	}
+
+	@Test
 	public void returnsAnEmptyObjectArrayForZeroArityMethods() throws Exception {
 		thereAreNoParameters();
 
@@ -542,8 +562,16 @@ public abstract class ParametersProviderTest {
 		private Long x;
 		private Long y;
 		private List<Person> person;
+		private Set<Address> addresses;
 		
-		
+		public Set<Address> getAddresses() {
+			return addresses;
+		}
+
+		public void setAddresses(Set<Address> addresses) {
+			this.addresses = addresses;
+		}
+
 		public List<Person> getPerson() {
 			return person;
 		}
@@ -571,7 +599,7 @@ public abstract class ParametersProviderTest {
 
 	public static class Person {
 		private String name;
-
+		
 		public String getName() {
 			return name;
 		}
@@ -582,6 +610,18 @@ public abstract class ParametersProviderTest {
 		
 	}
 
+	public static class Address {
+		private String street;
+
+		public String getStreet() {
+			return street;
+		}
+
+		public void setStreet(String street) {
+			this.street = street;
+		}
+		
+	}
 
 	public static class AngryCat {
 		public void setId(String id) {

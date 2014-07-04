@@ -18,6 +18,7 @@
 package br.com.caelum.vraptor.http.iogi;
 
 import java.util.List;
+import java.util.Set;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
@@ -148,7 +149,7 @@ public class VRaptorInstantiator implements InstantiatorWithErrors, Instantiator
 			try {
 				Parameter parameter = parameters.namedAfter(target);
 				
-				if(List.class.isAssignableFrom(target.getClassType())) {
+				if(isAbleToDefaultInstantiator(target)) {
 					return multiInstantiator.instantiate(target, parameters);
 				}
 				
@@ -159,6 +160,10 @@ public class VRaptorInstantiator implements InstantiatorWithErrors, Instantiator
 				return setPropertiesAfterConversions(target, parameters);
 			}
 			return null;
+		}
+
+		private boolean isAbleToDefaultInstantiator(Target<?> target) {
+			return List.class.isAssignableFrom(target.getClassType()) || Set.class.isAssignableFrom(target.getClassType());
 		}
 
 		private Object setPropertiesAfterConversions(Target<?> target, Parameters parameters) {

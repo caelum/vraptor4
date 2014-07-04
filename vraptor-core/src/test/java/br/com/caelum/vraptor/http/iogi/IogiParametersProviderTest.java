@@ -107,7 +107,7 @@ public class IogiParametersProviderTest extends ParametersProviderTest {
 	}
 
 	
-	class NullVRaptorInstantiator extends VRaptorInstantiator {
+	static class NullVRaptorInstantiator extends VRaptorInstantiator {
 		
 		public NullVRaptorInstantiator(Converters converters,
 				VRaptorDependencyProvider provider,

@@ -315,3 +315,24 @@ avoiding encoding inconsistencies, you can set this parameter on your web.xml.
 ~~~ 
 
 This way all of your pages and form data will use the UTF-8.
+
+
+## Instantiating only request present parameters
+
+The default behavior is that all objects that you ask in your controller methods will be instantiated even if these parameters are not present in the request. You can change this behavior in a very simple way, overriding the `VRaptorInstantiator` class:
+
+~~~ 
+#!java
+@Specializes
+public class NullVRaptorInstantiator extends VRaptorInstantiator {
+
+	//delegate constructor
+
+	@Override
+	public boolean useNullForMissingParameters() {
+		return false;
+	}
+}	
+~~~ 
+
+Thus, when the data of an object are not present in the request, you will receive a `null` parameter instead of an empty instance.

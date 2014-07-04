@@ -18,6 +18,7 @@
 package br.com.caelum.vraptor.http.iogi;
 
 import java.util.List;
+import java.util.Set;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
@@ -147,6 +148,11 @@ public class VRaptorInstantiator implements InstantiatorWithErrors, Instantiator
 		public Object instantiate(Target<?> target, Parameters parameters) {
 			try {
 				Parameter parameter = parameters.namedAfter(target);
+				
+				if(isSupportedCollection(target)) {
+					return multiInstantiator.instantiate(target, parameters);
+				}
+				
 				return converterForTarget(target).convert(parameter.getValue(), target.getClassType());
 			} catch (ConversionException ex) {
 				errors.add(ex.getValidationMessage().withCategory(target.getName()));
@@ -154,6 +160,10 @@ public class VRaptorInstantiator implements InstantiatorWithErrors, Instantiator
 				return setPropertiesAfterConversions(target, parameters);
 			}
 			return null;
+		}
+
+		private boolean isSupportedCollection(Target<?> target) {
+			return List.class.isAssignableFrom(target.getClassType()) || Set.class.isAssignableFrom(target.getClassType());
 		}
 
 		private Object setPropertiesAfterConversions(Target<?> target, Parameters parameters) {

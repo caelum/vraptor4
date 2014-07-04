@@ -232,3 +232,24 @@ Se você quiser que todas as requisições da sua aplicação sejam de um encodi
 ~~~ 
 
 Assim, todas as suas páginas e dados passados para formulário usarão o encoding UTF-8, evitando problemas de acentuação.
+
+
+## Instanciando apenas parâmetros presentes no request
+
+Por padrão todos os objetos que você pedir nos métodos de seu controller serão instanciados, mesmo que esses parâmetros não estejam presentes no request. Você pode modificar esse comportamento de uma forma bem simples, sobrescrevendo a classe `VRaptorInstantiator`:
+
+~~~ 
+#!java
+@Specializes
+public class NullVRaptorInstantiator extends VRaptorInstantiator {
+
+	//delegate constructor
+
+	@Override
+	public boolean useNullForMissingParameters() {
+		return false;
+	}
+}	
+~~~ 
+
+Dessa forma, quando os dados de um objeto não estiverem presentes no request, você receberá um parâmetro `null` no lugar de uma instância vazia.

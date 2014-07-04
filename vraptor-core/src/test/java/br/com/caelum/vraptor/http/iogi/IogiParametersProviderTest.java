@@ -90,7 +90,7 @@ public class IogiParametersProviderTest extends ParametersProviderTest {
 	}
 
 	@Test
-	public void shouldnotInstantiateIfOverrideSuchBehavior() throws Exception {
+	public void shouldnotInstantiateObjectWhenThereAreNoParameters() throws Exception {
 		
 		VRaptorInstantiator instantiator = new NullVRaptorInstantiator(converters, 
 				new VRaptorDependencyProvider(container), 

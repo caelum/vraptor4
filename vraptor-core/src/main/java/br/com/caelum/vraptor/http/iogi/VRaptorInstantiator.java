@@ -79,7 +79,7 @@ public class VRaptorInstantiator implements InstantiatorWithErrors, Instantiator
 		
 		Instantiator<Object> objectInstantiator = new ObjectInstantiator(this, provider, parameterNameProvider);
 		
-		if (!useNullForMissingParameters()) {
+		if (useNullForMissingParameters()) {
 			objectInstantiator = new NullDecorator(objectInstantiator);
 		}
 		
@@ -96,7 +96,7 @@ public class VRaptorInstantiator implements InstantiatorWithErrors, Instantiator
 	}
 
 	public boolean useNullForMissingParameters() {
-		return true;
+		return false;
 	}
 
 	@Override

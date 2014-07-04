@@ -40,7 +40,13 @@
         <span class="nt">&lt;appender-ref</span> <span class="na">ref=</span><span class="s">"stdout"</span> <span class="nt">/&gt;</span>
     <span class="nt">&lt;/category&gt;</span>
     <span class="c">&lt;!-- include configurations of your project here --&gt;</span>
-<span class="nt">&lt;/log4j:configuration&gt;</span></code></pre> <h2 id="xstream-and-gson">XStream and Gson</h2> <p>XStream and Gson are used to serialize/deserialize XML and JSON respectively. Both libraries are optional, so if you don’t need to use serializing/deserializing capabilities, you can exclude those dependencies, since it’s already included as default.</p> <p>This is the XStream dependency:</p> <pre><code class="language-xml"><span class="nt">&lt;dependency&gt;</span>
+<span class="nt">&lt;/log4j:configuration&gt;</span></code></pre> <p><strong>Notice:</strong> If you is deploying you application into Wildfly, you need to configure logging in the <code>standalone.xml</code> file (or in <code>domain.xml</code> if you is running in domain mode):</p> <pre><code class="language-xml"><span class="nt">&lt;subsystem</span> <span class="na">xmlns=</span><span class="s">"urn:jboss:domain:logging:2.0"</span><span class="nt">&gt;</span>
+<span class="nt">&lt;logger</span> <span class="na">category=</span><span class="s">"br.com.caelum.vraptor"</span><span class="nt">&gt;</span>
+<span class="nt">&lt;level</span> <span class="na">name=</span><span class="s">"DEBUG"</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/logger&gt;</span>
+<span class="nt">&lt;/subsystem&gt;</span></code></pre> <p>But if you want to use configuration inside your application, you can tell to Wildfly to read this configuration from your deployment:</p> <pre><code class="language-xml"><span class="nt">&lt;subsystem</span> <span class="na">xmlns=</span><span class="s">"urn:jboss:domain:logging:2.0"</span><span class="nt">&gt;</span>
+<span class="nt">&lt;use-deployment-logging-config</span> <span class="na">value=</span><span class="s">"false"</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/subsystem&gt;</span></code></pre> <h2 id="xstream-and-gson">XStream and Gson</h2> <p>XStream and Gson are used to serialize/deserialize XML and JSON respectively. Both libraries are optional, so if you don’t need to use serializing/deserializing capabilities, you can exclude those dependencies, since it’s already included as default.</p> <p>This is the XStream dependency:</p> <pre><code class="language-xml"><span class="nt">&lt;dependency&gt;</span>
     <span class="nt">&lt;groupId&gt;</span>com.thoughtworks.xstream<span class="nt">&lt;/groupId&gt;</span>
     <span class="nt">&lt;artifactId&gt;</span>xstream<span class="nt">&lt;/artifactId&gt;</span>
     <span class="nt">&lt;version&gt;</span>1.4.4<span class="nt">&lt;/version&gt;</span>

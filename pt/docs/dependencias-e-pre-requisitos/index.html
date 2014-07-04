@@ -40,7 +40,15 @@
         <span class="nt">&lt;appender-ref</span> <span class="na">ref=</span><span class="s">"stdout"</span> <span class="nt">/&gt;</span>
     <span class="nt">&lt;/category&gt;</span>
     <span class="c">&lt;!-- incluir outras definições aqui --&gt;</span>
-<span class="nt">&lt;/log4j:configuration&gt;</span></code></pre> <h2 id="xstream-e-gson">XStream e Gson</h2> <p>São utililizadas para serialização e deserialização XML e JSON respectivamente. Ambas são opcionais, ou seja, se você não usar os recursos de serialização e deserialização, você pode removê-los do classpath. Atualmente elas já vêm com a dependência do VRaptor no Maven e você não precisa declarar as dependências.</p> <p>Para XStream:</p> <pre><code class="language-xml"><span class="nt">&lt;dependency&gt;</span>
+<span class="nt">&lt;/log4j:configuration&gt;</span></code></pre> <p><strong>Nota:</strong> Se você está fazendo deploy de sua aplicação no Wildfly, você precisará configurar o logging no arquivo <code>standalone.xml</code> (ou no <code>domain.xml</code> se você estiver executando em modo domain):</p> <pre><code class="language-xml"><span class="nt">&lt;subsystem</span> <span class="na">xmlns=</span><span class="s">"urn:jboss:domain:logging:2.0"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;logger</span> <span class="na">category=</span><span class="s">"br.com.caelum.vraptor"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;level</span> <span class="na">name=</span><span class="s">"DEBUG"</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;/logger&gt;</span>
+    <span class="c">&lt;!-- restante do conteúdo --&gt;</span>
+<span class="nt">&lt;/subsystem&gt;</span></code></pre> <p>Porém se você preferir usar as configurações dentro de sua aplicação usando exemplo de <code>log4j.xml</code> acima, você pode indicar ao Wildfly para que ele considere a configuração na aplicação:</p> <pre><code class="language-xml"><span class="nt">&lt;subsystem</span> <span class="na">xmlns=</span><span class="s">"urn:jboss:domain:logging:2.0"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;use-deployment-logging-config</span> <span class="na">value=</span><span class="s">"false"</span><span class="nt">/&gt;</span>
+    <span class="c">&lt;!-- restante do conteúdo --&gt;</span>
+<span class="nt">&lt;/subsystem&gt;</span></code></pre> <h2 id="xstream-e-gson">XStream e Gson</h2> <p>São utililizadas para serialização e deserialização XML e JSON respectivamente. Ambas são opcionais, ou seja, se você não usar os recursos de serialização e deserialização, você pode removê-los do classpath. Atualmente elas já vêm com a dependência do VRaptor no Maven e você não precisa declarar as dependências.</p> <p>Para XStream:</p> <pre><code class="language-xml"><span class="nt">&lt;dependency&gt;</span>
     <span class="nt">&lt;groupId&gt;</span>com.thoughtworks.xstream<span class="nt">&lt;/groupId&gt;</span>
     <span class="nt">&lt;artifactId&gt;</span>xstream<span class="nt">&lt;/artifactId&gt;</span>
     <span class="nt">&lt;version&gt;</span>1.4.4<span class="nt">&lt;/version&gt;</span>

@@ -22,6 +22,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
+import static org.junit.Assert.fail;
 
 import java.math.BigInteger;
 
@@ -61,6 +62,7 @@ public class BigIntegerConverterTest {
 	public void shouldComplainAboutInvalidNumber() {
 		try {
 			converter.convert("---", BigInteger.class);
+			fail("Should throws an exception");
 		} catch (ConversionException e) {
 			assertThat(e.getValidationMessage(), hasMessage("--- is not a valid integer."));
 		}

@@ -46,7 +46,7 @@ public class PrimitiveShortConverterTest {
 	public void shouldComplainAboutInvalidNumber() {
 		try {
 			converter.convert("---", short.class);
-			fail("Should throws an exception");
+			fail("should throw an exception");
 		} catch (ConversionException e) {
 			assertThat(e.getValidationMessage(), VRaptorMatchers.hasMessage("--- is not a valid integer."));
 		}

@@ -78,7 +78,7 @@ public class DateConverterTest {
 	public void shouldThrowExceptionWhenUnableToParse() {
 		try {
 			converter.convert("a,10/06/2008/a/b/c", Date.class);
-			fail("Should throws an exception");
+			fail("should throw an exception");
 		} catch (ConversionException e) {
 			assertThat(e.getValidationMessage(), hasMessage("a,10/06/2008/a/b/c is not a valid date."));
 		}

@@ -82,7 +82,7 @@ public class BooleanConverterTest {
 	public void shouldThrowExceptionForInvalidString() {
 		try {
 			converter.convert("not a boolean!", Boolean.class);
-			fail("Should throws an exception");
+			fail("should throw an exception");
 		} catch(ConversionException e) {
 			assertThat(e.getValidationMessage(), hasMessage("NOT A BOOLEAN! is not a valid boolean. Please use true/false, yes/no, y/n or on/off"));
 		}

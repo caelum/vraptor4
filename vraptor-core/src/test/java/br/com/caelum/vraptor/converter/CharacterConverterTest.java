@@ -46,7 +46,7 @@ public class CharacterConverterTest {
 	public void shouldComplainAboutStringTooBig() {
 		try {
 			converter.convert("---", Character.class);
-			fail("Should throws an exception");
+			fail("should throw an exception");
 		} catch (ConversionException e) {
 			assertThat(e.getValidationMessage(), hasMessage("--- is not a valid character."));
 		}

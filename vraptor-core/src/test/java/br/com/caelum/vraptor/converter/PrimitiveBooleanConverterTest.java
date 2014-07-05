@@ -86,7 +86,7 @@ public class PrimitiveBooleanConverterTest {
 	public void shouldThrowExceptionForInvalidString() {
 		try {
 			converter.convert("not a boolean!", boolean.class);
-			fail("Should throws an exception");
+			fail("should throw an exception");
 		} catch (ConversionException e) {
 			assertThat(e.getValidationMessage(),
 					VRaptorMatchers.hasMessage("NOT A BOOLEAN! is not a valid boolean. Please use true/false, yes/no, y/n or on/off"));

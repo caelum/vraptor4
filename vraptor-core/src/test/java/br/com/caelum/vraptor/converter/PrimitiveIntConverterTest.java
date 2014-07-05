@@ -45,7 +45,7 @@ public class PrimitiveIntConverterTest {
 	public void shouldComplainAboutInvalidNumber() {
 		try {
 			converter.convert("---", int.class);
-			fail("Should throws an exception");
+			fail("should throw an exception");
 		} catch (ConversionException e) {
 			assertThat(e.getValidationMessage(), hasMessage("--- is not a valid integer."));
 		}

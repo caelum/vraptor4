@@ -20,6 +20,7 @@ package br.com.caelum.vraptor.converter;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.fail;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -85,7 +86,7 @@ public class PrimitiveBooleanConverterTest {
 	public void shouldThrowExceptionForInvalidString() {
 		try {
 			converter.convert("not a boolean!", boolean.class);
-			Assert.assertTrue(false);
+			fail("should throw an exception");
 		} catch (ConversionException e) {
 			assertThat(e.getValidationMessage(),
 					VRaptorMatchers.hasMessage("NOT A BOOLEAN! is not a valid boolean. Please use true/false, yes/no, y/n or on/off"));

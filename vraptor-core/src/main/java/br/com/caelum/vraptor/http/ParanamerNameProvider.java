@@ -18,7 +18,9 @@ package br.com.caelum.vraptor.http;
 
 import java.lang.reflect.AccessibleObject;
 
+import javax.annotation.Priority;
 import javax.enterprise.context.ApplicationScoped;
+import javax.interceptor.Interceptor;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,6 +38,7 @@ import com.thoughtworks.paranamer.Paranamer;
  * @author Guilherme Silveira
  */
 @ApplicationScoped
+@Priority(Interceptor.Priority.LIBRARY_BEFORE + 10)
 public class ParanamerNameProvider implements ParameterNameProvider {
 	private static final Logger logger = LoggerFactory.getLogger(ParanamerNameProvider.class);
 

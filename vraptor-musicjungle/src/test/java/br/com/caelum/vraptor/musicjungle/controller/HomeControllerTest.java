@@ -69,7 +69,7 @@ public class HomeControllerTest {
 		
 		try {
 			controller.login(user.getLogin(), user.getPassword());
-			fail();
+			fail("Should throw an exception.");
 		} catch (ValidationException e) {
 			List<Message> errors = e.getErrors();
 			

@@ -31,7 +31,6 @@ import static org.mockito.Mockito.when;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -39,6 +38,7 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -390,6 +390,7 @@ public abstract class ParametersProviderTest {
 		
 		ABC returned = getParameters(abc);
 		assertThat(returned.getPerson().get(0).getName(), is("bird"));
+		assertThat(returned.getPerson().get(1).getName(), is("bird 2"));
 	}
 
 	@Test
@@ -411,10 +412,10 @@ public abstract class ParametersProviderTest {
 		
 		ABC returned = getParameters(abc);
 		
-		Iterator<Address> address = returned.getAddresses().iterator();
+		Address[] address = (Address[]) returned.getAddresses().toArray(new Address[2]);
+		List<String> streets = Arrays.asList(address[0].getStreet(), address[1].getStreet());
 		
-		assertThat(address.next().getStreet(), is("Some Street"));
-		assertThat(address.next().getStreet(), is("Some Street 2"));
+		assertThat(streets, Matchers.containsInAnyOrder("Some Street", "Some Street 2"));
 	}
 
 	@Test

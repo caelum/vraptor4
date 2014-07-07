@@ -31,6 +31,7 @@ import static org.mockito.Mockito.when;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -391,12 +392,13 @@ public abstract class ParametersProviderTest {
 	}
 
 	@Test
-	public void continuesToFillObjectWithSetIfItIsConvertable() throws Exception {
-		when(request.getParameterNames()).thenReturn(Collections.enumeration(Arrays.asList("abc", "abc.addresses[0].street")));
-		ImmutableMap<String, String[]> params = ImmutableMap.of("abc", new String[] {""}, "abc.addresses[0].street", new String[] {"Some Street"});
+	public void continuesToFillObjectWithListMoreThanOneElementIfItIsConvertable() throws Exception {
+		when(request.getParameterNames()).thenReturn(Collections.enumeration(Arrays.asList("abc", "abc.person[0].name")));
+		ImmutableMap<String, String[]> params = ImmutableMap.of("abc", new String[] {""}, "abc.person[0].name", new String[] {"bird"}, "abc.person[1].name", new String[] {"bird 2"});
 		when(request.getParameterMap()).thenReturn(params);
 		when(request.getParameterValues("abc")).thenReturn(params.get("abc"));
-		when(request.getParameterValues("abc.addresses[0].street")).thenReturn(params.get("abc.addresses[0].street"));
+		when(request.getParameterValues("abc.person[0].name")).thenReturn(params.get("abc.person[0].name"));
+		when(request.getParameterValues("abc.person[1].name")).thenReturn(params.get("abc.person[1].name"));
 		
 		when(converters.existsFor(ABC.class)).thenReturn(true);
 		when(converters.to(ABC.class)).thenReturn(new Converter<ABC>() {
@@ -407,7 +409,33 @@ public abstract class ParametersProviderTest {
 		});
 		
 		ABC returned = getParameters(abc);
-		assertThat(returned.getAddresses().iterator().next().getStreet(), is("Some Street"));
+		assertThat(returned.getPerson().get(0).getName(), is("bird"));
+		assertThat(returned.getPerson().get(1).getName(), is("bird 2"));
+	}
+
+	@Test
+	public void continuesToFillObjectWithSetMoreThanOneElementIfItIsConvertable() throws Exception {
+		when(request.getParameterNames()).thenReturn(Collections.enumeration(Arrays.asList("abc", "abc.addresses[0].street", "abc.addresses[1].street")));
+		ImmutableMap<String, String[]> params = ImmutableMap.of("abc", new String[] {""}, "abc.addresses[0].street", new String[] {"Some Street"}, "abc.addresses[1].street", new String[] {"Some Street 2"});
+		when(request.getParameterMap()).thenReturn(params);
+		when(request.getParameterValues("abc")).thenReturn(params.get("abc"));
+		when(request.getParameterValues("abc.addresses[0].street")).thenReturn(params.get("abc.addresses[0].street"));
+		when(request.getParameterValues("abc.addresses[1].street")).thenReturn(params.get("abc.addresses[1].street"));
+		
+		when(converters.existsFor(ABC.class)).thenReturn(true);
+		when(converters.to(ABC.class)).thenReturn(new Converter<ABC>() {
+			@Override
+			public ABC convert(String value, Class<? extends ABC> type) {
+				return new ABC();
+			}
+		});
+		
+		ABC returned = getParameters(abc);
+		
+		Iterator<Address> address = returned.getAddresses().iterator();
+		
+		assertThat(address.next().getStreet(), is("Some Street"));
+		assertThat(address.next().getStreet(), is("Some Street 2"));
 	}
 
 	@Test

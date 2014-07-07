@@ -392,12 +392,13 @@ public abstract class ParametersProviderTest {
 
 	@Test
 	public void continuesToFillObjectWithSetIfItIsConvertable() throws Exception {
-		when(request.getParameterNames()).thenReturn(Collections.enumeration(Arrays.asList("abc", "abc.addresses[0].street")));
-		ImmutableMap<String, String[]> params = ImmutableMap.of("abc", new String[] {""}, "abc.addresses[0].street", new String[] {"Some Street"});
+		when(request.getParameterNames()).thenReturn(Collections.enumeration(Arrays.asList("abc", "abc.addresses[0].street", "abc.addresses[1].street")));
+		ImmutableMap<String, String[]> params = ImmutableMap.of("abc", new String[] {""}, "abc.addresses[0].street", new String[] {"Some Street"}, "abc.addresses[1].street", new String[] {"Other Street"});
 		when(request.getParameterMap()).thenReturn(params);
 		when(request.getParameterValues("abc")).thenReturn(params.get("abc"));
 		when(request.getParameterValues("abc.addresses[0].street")).thenReturn(params.get("abc.addresses[0].street"));
-		
+		when(request.getParameterValues("abc.addresses[1].street")).thenReturn(params.get("abc.addresses[1].street"));
+
 		when(converters.existsFor(ABC.class)).thenReturn(true);
 		when(converters.to(ABC.class)).thenReturn(new Converter<ABC>() {
 			@Override
@@ -405,9 +406,10 @@ public abstract class ParametersProviderTest {
 				return new ABC();
 			}
 		});
-		
+
 		ABC returned = getParameters(abc);
 		assertThat(returned.getAddresses().iterator().next().getStreet(), is("Some Street"));
+		assertThat(returned.getAddresses().iterator().next().getStreet(), is("Other Street"));
 	}
 
 	@Test

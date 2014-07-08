@@ -55,6 +55,7 @@ import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.http.ParanamerNameProvider;
 import br.com.caelum.vraptor.proxy.JavassistProxifier;
 import br.com.caelum.vraptor.proxy.Proxifier;
+import br.com.caelum.vraptor.view.GenericController;
 
 public class PathAnnotationRoutesParserTest {
 
@@ -542,6 +543,31 @@ public class PathAnnotationRoutesParserTest {
 	@Test(expected=IllegalArgumentException.class)
 	public void throwsExceptionWhenTheGetControllerHasAmbiguousDeclaration() throws Exception {
 		parser.rulesFor(new DefaultBeanClass(WrongGetAnnotatedController.class));
+	}
+	
+	@Controller
+	public static class ExtendedController extends GenericController<Model> {
+		@Get("/withGetAnnotation")
+		public void withGetAnnotation() {
+		}
+	}
+	public static class Model {
+	}
+	
+	@Test
+	public void supportMethodOverridingGenericControllerWithMethodAnnotation() throws SecurityException, NoSuchMethodException {
+		List<Route> routes = parser.rulesFor(new DefaultBeanClass(ExtendedController.class));
+		Route route = getRouteMatching(routes, "/extended/methodWithoutArgs");
+
+		assertTrue(route.canHandle(ExtendedController.class, ExtendedController.class.getMethod("methodWithoutArgs")));
+	}
+	
+	@Test
+	public void supportMethodOverridingGenericControllerWithGetAnnotation() throws SecurityException, NoSuchMethodException {
+		List<Route> routes = parser.rulesFor(new DefaultBeanClass(ExtendedController.class));
+		Route route = getRouteMatching(routes, "/extended/withGetAnnotation");
+
+		assertTrue(route.canHandle(ExtendedController.class, ExtendedController.class.getDeclaredMethod("withGetAnnotation")));
 	}
 
 }

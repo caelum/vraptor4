@@ -26,6 +26,7 @@ import static java.util.Arrays.asList;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
@@ -152,15 +153,20 @@ public class PathAnnotationRoutesParser implements RoutesParser {
 
 			fixURIs(type, uris);
 			return uris;
-		}
-		String[] uris = getUris(javaMethod);
-
-		if(uris.length > 0){
-			fixURIs(type, uris);
-			return uris;
+		} else if (!isGenericType(type)) {
+			String[] uris = getUris(javaMethod);
+	
+			if(uris.length > 0){
+				fixURIs(type, uris);
+				return uris;
+			}
 		}
 
 		return new String[] { defaultUriFor(extractControllerNameFrom(type), javaMethod.getName()) };
+	}
+
+	private boolean isGenericType(Class<?> type) {
+		return type.getGenericSuperclass() instanceof ParameterizedType;
 	}
 
 	protected String[] getUris(Method javaMethod){

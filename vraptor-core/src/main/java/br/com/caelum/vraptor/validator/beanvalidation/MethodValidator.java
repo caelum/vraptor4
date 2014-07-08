@@ -84,6 +84,9 @@ public class MethodValidator {
 		}
 
 		BeanDescriptor bean = bvalidator.getConstraintsForClass(controllerMethod.getController().getType());
+		if(bean == null) {
+			return false;
+		}
 		MethodDescriptor descriptor = bean.getConstraintsForMethod(method.getName(), method.getParameterTypes());
 		return descriptor != null && descriptor.hasConstrainedParameters();
 	}

@@ -23,7 +23,7 @@ import br.com.caelum.vraptor.Get;
  *
  */
 public class GenericController<T> {
-	@Get("/methodWithoutArgs")
+	@Get("methodWithoutArgs")
 	public void methodWithoutArgs() {
 		System.out.println("Do Something");
 	}

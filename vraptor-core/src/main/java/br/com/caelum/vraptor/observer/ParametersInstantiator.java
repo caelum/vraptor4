@@ -30,10 +30,13 @@ import javax.inject.Inject;
 
 import org.slf4j.Logger;
 
+import com.google.common.base.Strings;
+
 import br.com.caelum.vraptor.HeaderParam;
 import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.events.InterceptorsReady;
 import br.com.caelum.vraptor.http.MutableRequest;
+import br.com.caelum.vraptor.http.Parameter;
 import br.com.caelum.vraptor.http.ParametersProvider;
 import br.com.caelum.vraptor.http.ValuedParameter;
 import br.com.caelum.vraptor.validator.Message;
@@ -95,7 +98,13 @@ public class ParametersInstantiator {
 
 			ValuedParameter[] valuedParameters = methodInfo.getValuedParameters();
 			for (int i = 0; i < valuedParameters.length; i++) {
-				valuedParameters[i].setValue(values[i]);
+				Parameter parameter = valuedParameters[i].getParameter();
+				if (parameter.isAnnotationPresent(HeaderParam.class)) {
+					HeaderParam headerParam = parameter.getAnnotation(HeaderParam.class);
+					valuedParameters[i].setValue(request.getHeader(headerParam.value()));
+				} else {
+					valuedParameters[i].setValue(values[i]);
+				}
 			}
 		}
 	}
@@ -105,7 +114,9 @@ public class ParametersInstantiator {
 			if (param.getParameter().isAnnotationPresent(HeaderParam.class)) {
 				HeaderParam headerParam = param.getParameter().getAnnotation(HeaderParam.class);
 				String value = request.getHeader(headerParam.value());
-				request.setParameter(param.getName(), value);
+				if (!Strings.isNullOrEmpty(value)) {
+					request.setParameter(param.getName(), value);
+				}
 			}
 		}
 	}

@@ -185,6 +185,19 @@ public class ParametersInstantiatorTest {
 		verify(request).setParameter("password", "123");
 		verify(validator).addAll(Collections.<Message> emptyList());
 	}
+	
+	@Test
+	public void shouldNotAddHeaderInformationToRequestIfHeaderParamValueIsNull() throws Exception {
+		Method method = HeaderParamComponent.class.getDeclaredMethod("method", String.class);
+		ControllerMethod controllerMethod = DefaultControllerMethod.instanceFor(HeaderParamComponent.class, method);
+		methodInfo.setControllerMethod(controllerMethod);
+
+		when(request.getHeader("X-MyApp-Password")).thenReturn(null);
+		when(parametersProvider.getParametersFor(controllerMethod, errors)).thenReturn(new Object[] { "" });
+
+		instantiator.instantiate(new InterceptorsReady(controllerMethod));
+		verify(request, never()).setParameter(anyString(), anyString());
+	}
 
 	@Test
 	public void shouldNotAddHeaderInformationToRequestWhenHeaderParamAnnotationIsNotPresent() throws Exception {

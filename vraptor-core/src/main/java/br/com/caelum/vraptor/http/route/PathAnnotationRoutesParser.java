@@ -256,7 +256,7 @@ public class PathAnnotationRoutesParser implements RoutesParser {
 		return or(instanceOf(Get.class), instanceOf(Post.class), instanceOf(Put.class), instanceOf(Delete.class), instanceOf(Options.class), instanceOf(Patch.class));
 	}
 
-	protected boolean isSubClassAndHasMethodExtractControllerNameFrom() {
+	protected boolean isSubClassAndHasDeclaredMethodExtractControllerNameFrom() {
 		boolean hasMethod = false;
 		
 		try {

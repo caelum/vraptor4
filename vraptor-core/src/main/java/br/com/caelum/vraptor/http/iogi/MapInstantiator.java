@@ -14,6 +14,12 @@ import br.com.caelum.iogi.parameters.Parameter;
 import br.com.caelum.iogi.parameters.Parameters;
 import br.com.caelum.iogi.reflection.Target;
 
+/**
+ * An instantiator that supports Maps.
+ *
+ * @author Otávio Scherer Garcia
+ * @since 4.1
+ */
 @Vetoed
 public class MapInstantiator
 	implements Instantiator<Map<Object, Object>> {
@@ -35,12 +41,19 @@ public class MapInstantiator
 			for (Parameter value : params) {
 				values.add(value.getValue());
 			}
-			return Collections.<Object, Object> singletonMap(key, values);
+			return createSingletonMap(key, values);
 		}
 
-		return Collections.<Object, Object> singletonMap(key, params.get(0).getValue());
+		return createSingletonMap(key, params.get(0).getValue());
 	}
 
+	private Map<Object, Object> createSingletonMap(String key, Object value) {
+		return Collections.<Object, Object> singletonMap(key, value);
+	}
+
+	/**
+	 * Return the parameter decoration. Example: for <code>map[name]</code> returns <code>name</code>.
+	 */
 	private String getParameterKey(List<br.com.caelum.iogi.parameters.Parameter> params) {
 		String key = params.get(0).getFirstNameComponentWithDecoration();
 		return key.substring(key.indexOf("[") + 1, key.indexOf("]"));

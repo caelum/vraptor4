@@ -49,7 +49,6 @@ import static org.mockito.Mockito.when;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -152,14 +151,14 @@ public class IogiParametersProviderTest extends ParametersProviderTest {
 		requestParameterIs(anyMethod, "name", "a", "b");
 
 		final InstantiatorWithErrors mockInstantiator = mock(InstantiatorWithErrors.class);
-		final Parameters expectedParamters = new Parameters(
-				Arrays.asList(new Parameter("name", "a"), new Parameter("name", "b")));
+		List<Parameter> expected = new ArrayList<>();
+		expected.add(new IogiParameter("name", "a"));
+		expected.add(new IogiParameter("name", "b"));
 
 		IogiParametersProvider iogiProvider = new IogiParametersProvider(nameProvider, request, mockInstantiator);
-
 		iogiProvider.getParametersFor(anyMethod, errors);
 
-		verify(mockInstantiator).instantiate(any(Target.class), eq(expectedParamters), eq(errors));
+		verify(mockInstantiator).instantiate(any(Target.class), eq(new Parameters(expected)), eq(errors));
 	}
 
 	@Test

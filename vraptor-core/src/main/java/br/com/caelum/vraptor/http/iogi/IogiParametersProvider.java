@@ -114,7 +114,7 @@ public class IogiParametersProvider implements ParametersProvider {
 
 		for (Entry<String, String[]> param: parameters.entrySet()) {
 			for (String value : param.getValue()) {
-				parameterList.add(new br.com.caelum.iogi.parameters.Parameter(param.getKey(), value));
+				parameterList.add(new IogiParameter(param.getKey(), value));
 			}
 		}
 

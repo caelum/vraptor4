@@ -151,7 +151,15 @@ public class PathAnnotationRoutesParser implements RoutesParser {
 					"You should specify paths either in @Path(\"/path\") or @Get(\"/path\") (or @Post, @Put, @Delete), not both at %s", javaMethod);
 
 			fixURIs(type, uris);
-			return uris;
+			
+			String[] urisWithControllerName = new String[uris.length];
+			
+			for(int i = 0; i < uris.length; i++) {
+				urisWithControllerName[i] = extractControllerNameFrom(null) + uris[i];
+			}
+			
+			return urisWithControllerName;
+			
 		}
 		String[] uris = getUris(javaMethod);
 
@@ -213,7 +221,13 @@ public class PathAnnotationRoutesParser implements RoutesParser {
 	 * controller name, given a type
 	 */
 	protected String extractControllerNameFrom(Class<?> type) {
-		String prefix = extractPrefix(type);
+		String prefix = "";
+		if(type == null) {
+			return prefix;
+		}
+		
+		prefix = extractPrefix(type);
+		
 		if (isNullOrEmpty(prefix)) {
 			String baseName = StringUtils.lowercaseFirst(type.getSimpleName());
 			if (baseName.endsWith("Controller")) {

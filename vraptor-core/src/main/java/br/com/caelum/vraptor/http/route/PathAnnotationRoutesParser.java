@@ -152,7 +152,7 @@ public class PathAnnotationRoutesParser implements RoutesParser {
 
 			fixURIs(type, uris);
 			
-			if(isSubClassAndHasMethodExtractControllerNameFrom()) {
+			if(isSubClassAndHasDeclaredMethodExtractControllerNameFrom()) {
 				String[] urisWithoutControllerName = new String[uris.length];
 				
 				for(int i = 0; i < uris.length; i++) {
@@ -266,7 +266,7 @@ public class PathAnnotationRoutesParser implements RoutesParser {
 			hasMethod = false;
 		}
 		
-		if(this.getClass().getSuperclass().equals(PathAnnotationRoutesParser.class) && hasMethod) {
+		if(PathAnnotationRoutesParser.class.isAssignableFrom(this.getClass().getSuperclass()) && hasMethod) {
 			return true;
 		}
 		

@@ -220,6 +220,8 @@ public class ParametersInstantiatorTest {
 		
 		ControllerMethod methodWithConsumes = DefaultControllerMethod
 				.instanceFor(Component.class, Component.class.getDeclaredMethod("consumesMethod"));
+
+		methodInfo.setControllerMethod(methodWithConsumes);
 		
 		instantiator.instantiate(new InterceptorsReady(methodWithConsumes));
 		verifyNoMoreInteractions(request);

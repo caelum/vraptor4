@@ -34,6 +34,7 @@ import com.google.common.base.Strings;
 
 import br.com.caelum.vraptor.Consumes;
 import br.com.caelum.vraptor.HeaderParam;
+import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.events.InterceptorsReady;
 import br.com.caelum.vraptor.http.MutableRequest;
@@ -81,15 +82,14 @@ public class ParametersInstantiator {
 		this.flash = flash;
 	}
 
-	public boolean isNotParameterless() {
-		return methodInfo.getControllerMethod().getArity() > 0;
+	public boolean hasConstraint() {
+		ControllerMethod method = methodInfo.getControllerMethod();
+		return method.getArity() < 0 || method.containsAnnotation(Consumes.class);
 	}
 
 	public void instantiate(@Observes InterceptorsReady event) {
 		
-		if (event.getControllerMethod().containsAnnotation(Consumes.class)) return;
-		
-		if (isNotParameterless()) {
+		if (!hasConstraint()) {
 			fixIndexedParameters(request);
 			addHeaderParametersToAttribute();
 

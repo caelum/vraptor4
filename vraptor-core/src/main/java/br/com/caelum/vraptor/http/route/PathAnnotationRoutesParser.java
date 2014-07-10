@@ -152,7 +152,7 @@ public class PathAnnotationRoutesParser implements RoutesParser {
 
 			fixURIs(type, uris);
 			
-			if(!this.getClass().equals(PathAnnotationRoutesParser.class)) {
+			if(this.getClass().getSuperclass().equals(PathAnnotationRoutesParser.class)) {
 				String[] urisWithoutControllerName = new String[uris.length];
 				
 				for(int i = 0; i < uris.length; i++) {

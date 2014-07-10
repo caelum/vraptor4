@@ -152,14 +152,13 @@ public class PathAnnotationRoutesParser implements RoutesParser {
 
 			fixURIs(type, uris);
 			
-			String[] urisWithControllerName = new String[uris.length];
+			String[] urisWithoutControllerName = new String[uris.length];
 			
 			for(int i = 0; i < uris.length; i++) {
-				urisWithControllerName[i] = extractControllerNameFrom(null) + uris[i];
+				urisWithoutControllerName[i] = extractControllerNameFrom(null) + uris[i];
 			}
 			
-			return urisWithControllerName;
-			
+			return urisWithoutControllerName;
 		}
 		String[] uris = getUris(javaMethod);
 

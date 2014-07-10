@@ -19,7 +19,7 @@ package br.com.caelum.vraptor.observer;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.enumeration;
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -40,6 +40,7 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
+import br.com.caelum.vraptor.Consumes;
 import br.com.caelum.vraptor.HeaderParam;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.controller.DefaultControllerMethod;
@@ -85,6 +86,9 @@ public class ParametersInstantiatorTest {
 		void method() {
 		}
 		void otherMethod(int oneParam){
+		}
+		@Consumes
+		void consumesMethod(){
 		}
 	}
 
@@ -209,6 +213,16 @@ public class ParametersInstantiatorTest {
 
 		verify(request, never()).setParameter(anyString(), anyString());
 		verify(validator).addAll(Collections.<Message>emptyList());
+	}
+	
+	@Test
+	public void shouldNotInstantiateIfMethodContainsConsumesAnnotation() throws Exception {
+		
+		ControllerMethod methodWithConsumes = DefaultControllerMethod
+				.instanceFor(Component.class, Component.class.getDeclaredMethod("consumesMethod"));
+		
+		instantiator.instantiate(new InterceptorsReady(methodWithConsumes));
+		verifyNoMoreInteractions(request);
 	}
 
 	private <T> Answer<T> addErrorsToListAndReturn(final T value, final String... messages) {

@@ -32,6 +32,7 @@ import org.slf4j.Logger;
 
 import com.google.common.base.Strings;
 
+import br.com.caelum.vraptor.Consumes;
 import br.com.caelum.vraptor.HeaderParam;
 import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.events.InterceptorsReady;
@@ -85,6 +86,9 @@ public class ParametersInstantiator {
 	}
 
 	public void instantiate(@Observes InterceptorsReady event) {
+		
+		if (event.getControllerMethod().containsAnnotation(Consumes.class)) return;
+		
 		if (isNotParameterless()) {
 			fixIndexedParameters(request);
 			addHeaderParametersToAttribute();

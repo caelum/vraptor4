@@ -1,7 +1,7 @@
 package br.com.caelum.vraptor.http.iogi;
 
 import java.util.regex.Pattern;
-
+import javax.enterprise.inject.Vetoed;
 import br.com.caelum.iogi.parameters.Parameter;
 
 /**
@@ -11,6 +11,7 @@ import br.com.caelum.iogi.parameters.Parameter;
  * @author Otávio Scherer Garcia
  * @since 4.1
  */
+@Vetoed
 public class IogiParameter extends Parameter {
 
 	private static final Pattern DECORATION_REGEX = Pattern.compile("\\[\\w+\\]$");

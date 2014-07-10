@@ -39,6 +39,7 @@ import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.events.MethodReady;
 import br.com.caelum.vraptor.http.ValuedParameter;
+import br.com.caelum.vraptor.proxy.CDIProxies;
 import br.com.caelum.vraptor.validator.SimpleMessage;
 import br.com.caelum.vraptor.validator.Validator;
 
@@ -82,7 +83,6 @@ public class MethodValidator {
 			logger.debug("method {} has no parameters, skipping", controllerMethod);
 			return false;
 		}
-
 		BeanDescriptor bean = bvalidator.getConstraintsForClass(controllerMethod.getController().getType());
 		if(bean == null) {
 			return false;

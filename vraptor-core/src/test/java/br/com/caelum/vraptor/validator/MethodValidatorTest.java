@@ -16,9 +16,12 @@
 package br.com.caelum.vraptor.validator;
 
 import static br.com.caelum.vraptor.controller.DefaultControllerMethod.instanceFor;
+
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.hasSize;
+
 import static org.junit.Assert.assertThat;
+
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
@@ -46,7 +49,7 @@ import br.com.caelum.vraptor.validator.beanvalidation.MethodValidator;
 
 /**
  * Test method validator feature.
- *
+ * 
  * @author Otávio Scherer Garcia
  * @author Rodrigo Turini
  * @since 3.5
@@ -59,6 +62,7 @@ public class MethodValidatorTest {
 
 	private ControllerMethod withConstraint;
 	private ControllerMethod withoutConstraint;
+	private ControllerMethod withoutConstraintAndDomainObject;
 	private DefaultControllerInstance instance;
 
 	private MethodInfo methodInfo = new MethodInfo(new ParanamerNameProvider());
@@ -70,13 +74,14 @@ public class MethodValidatorTest {
 		validatorFactory = javax.validation.Validation.buildDefaultValidatorFactory();
 		interpolator = new MessageInterpolatorFactory(validatorFactory).getInstance();
 		validator = new MockValidator();
-		withConstraint = instanceFor(MyController.class, getMethod("withConstraint"));
-		withoutConstraint = instanceFor(MyController.class, getMethod("withoutConstraint"));
+		withConstraint = instanceFor(MyController.class, getMethod("withConstraint",String.class));
+		withoutConstraint = instanceFor(MyController.class, getMethod("withoutConstraint",String.class));
+		withoutConstraintAndDomainObject = instanceFor(MyController.class, getMethod("withoutConstraintAndDomainObject",Example.class));
 		instance = new DefaultControllerInstance(new MyController());
 	}
 
-	private Method getMethod(String methodName) throws NoSuchMethodException {
-		return MyController.class.getMethod(methodName, String.class);
+	private Method getMethod(String methodName,Class<?> parameterClass) throws NoSuchMethodException {
+		return MyController.class.getMethod(methodName, parameterClass);
 	}
 
 	@Test
@@ -92,6 +97,14 @@ public class MethodValidatorTest {
 	public void shouldNotAcceptIfMethodHasConstraint() {
 		DefaultControllerInstance controller = spy(instance);
 		getMethodValidator().validate(new MethodReady(withoutConstraint), controller, methodInfo, validator);
+		verify(controller, never()).getController();
+	}
+	
+	@Test
+	public void shouldNotAcceptIfMethodDoesNotHaveConstraingAndHasDomainObjectParameter() {
+		//sorry about the method name.
+		DefaultControllerInstance controller = spy(instance);
+		getMethodValidator().validate(new MethodReady(withoutConstraintAndDomainObject), controller, methodInfo, validator);
 		verify(controller, never()).getController();
 	}
 
@@ -111,9 +124,38 @@ public class MethodValidatorTest {
 	private MethodValidator getMethodValidator() {
 		return new MethodValidator(new Locale("pt", "br"), interpolator, validatorFactory.getValidator());
 	}
+	
+	public class Example {
+		private int number;
+		private String name;
 
-	public class MyController {
-		public void withConstraint(@Min(10) @Email String email) { }
-		public void withoutConstraint(String foo) { }
+		public int getNumber() {
+			return number;
+		}
+
+		public void setNumber(int number) {
+			this.number = number;
+		}
+
+		public String getName() {
+			return name;
+		}
+
+		public void setName(String name) {
+			this.name = name;
+		}		
 	}
+	
+	public class MyController {
+		
+		public void withConstraint(@Min(10) @Email String email) {
+		}
+
+		public void withoutConstraint(String foo) {
+		}
+
+		public void withoutConstraintAndDomainObject(Example example) {
+		}
+	}
+
 }

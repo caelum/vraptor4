@@ -221,6 +221,7 @@ public class PathAnnotationRoutesParser implements RoutesParser {
 	 */
 	protected String extractControllerNameFrom(Class<?> type) {
 		String prefix = "";
+		
 		if(type == null) {
 			return prefix;
 		}

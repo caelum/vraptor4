@@ -29,7 +29,7 @@ public class MapInstantiator
 
 	@Override
 	public Map<Object, Object> instantiate(Target<?> target, Parameters parameters) {
-		List<br.com.caelum.iogi.parameters.Parameter> params = parameters.forTarget(target);
+		List<Parameter> params = parameters.forTarget(target);
 		if (params.isEmpty()) {
 			return emptyMap();
 		}
@@ -54,7 +54,7 @@ public class MapInstantiator
 	/**
 	 * Return the parameter decoration. Example: for <code>map[name]</code> returns <code>name</code>.
 	 */
-	private String getParameterKey(List<br.com.caelum.iogi.parameters.Parameter> params) {
+	private String getParameterKey(List<Parameter> params) {
 		String key = params.get(0).getFirstNameComponentWithDecoration();
 		return key.substring(key.indexOf("[") + 1, key.indexOf("]"));
 	}

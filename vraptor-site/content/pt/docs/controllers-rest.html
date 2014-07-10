@@ -402,7 +402,6 @@ Com isso você já pode fazer uma requisição `POST` com o content-type `applic
 
 O VRaptor vai cuidar de converter estes dados automaticamente para o seu objeto `Cliente`. 
 
-
 Há ainda como definir mais de um content-type aceito pelo seu método, como por exemplo:
 
 ~~~ 
@@ -413,7 +412,6 @@ public void adicionar(Cliente cliente) {
     clienteDAO.salvar(cliente);
 }
 ~~~ 
-
 
 **Nota**: O VRaptor vai retornar um `415 (Unsupported Media Type)` se o `media type` enviado não for suportado.
 

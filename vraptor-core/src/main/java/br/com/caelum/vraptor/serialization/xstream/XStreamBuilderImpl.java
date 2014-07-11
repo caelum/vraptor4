@@ -84,6 +84,10 @@ public class XStreamBuilderImpl implements XStreamBuilder {
 		return indented;
 	}
 	
+	public boolean isRecursive() {
+		return recursive;
+	}
+	
 	@Override
 	public XStreamBuilder recursive() {
 		recursive = true;

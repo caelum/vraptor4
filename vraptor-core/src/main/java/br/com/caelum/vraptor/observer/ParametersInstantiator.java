@@ -30,11 +30,7 @@ import javax.inject.Inject;
 
 import org.slf4j.Logger;
 
-import com.google.common.base.Strings;
-
-import br.com.caelum.vraptor.Consumes;
 import br.com.caelum.vraptor.HeaderParam;
-import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.events.InterceptorsReady;
 import br.com.caelum.vraptor.http.MutableRequest;
@@ -44,6 +40,8 @@ import br.com.caelum.vraptor.http.ValuedParameter;
 import br.com.caelum.vraptor.validator.Message;
 import br.com.caelum.vraptor.validator.Validator;
 import br.com.caelum.vraptor.view.FlashScope;
+
+import com.google.common.base.Strings;
 
 /**
  * An observer which instantiates parameters and provide them to the request.
@@ -82,35 +80,37 @@ public class ParametersInstantiator {
 		this.flash = flash;
 	}
 
-	public boolean hasConstraint() {
-		ControllerMethod method = methodInfo.getControllerMethod();
-		return method.getArity() < 0 || method.containsAnnotation(Consumes.class);
-	}
-
 	public void instantiate(@Observes InterceptorsReady event) {
 		
-		if (!hasConstraint()) {
-			fixIndexedParameters(request);
-			addHeaderParametersToAttribute();
+		if (!hasInstantiatableParameters()) return;
+		
+		fixIndexedParameters(request);
+		addHeaderParametersToAttribute();
 
-			Object[] values = getParametersForCurrentMethod();
+		Object[] values = getParametersForCurrentMethod();
 
-			validator.addAll(errors);
+		validator.addAll(errors);
 
-			logger.debug("Conversion errors: {}", errors);
-			logger.debug("Parameter values for {} are {}", methodInfo.getControllerMethod(), values);
+		logger.debug("Conversion errors: {}", errors);
+		logger.debug("Parameter values for {} are {}", methodInfo.getControllerMethod(), values);
 
-			ValuedParameter[] valuedParameters = methodInfo.getValuedParameters();
-			for (int i = 0; i < valuedParameters.length; i++) {
-				Parameter parameter = valuedParameters[i].getParameter();
-				if (parameter.isAnnotationPresent(HeaderParam.class)) {
-					HeaderParam headerParam = parameter.getAnnotation(HeaderParam.class);
-					valuedParameters[i].setValue(request.getHeader(headerParam.value()));
-				} else {
-					valuedParameters[i].setValue(values[i]);
+		ValuedParameter[] valuedParameters = methodInfo.getValuedParameters();
+		for (int i = 0; i < valuedParameters.length; i++) {
+			Parameter parameter = valuedParameters[i].getParameter();
+			if (parameter.isAnnotationPresent(HeaderParam.class)) {
+				HeaderParam headerParam = parameter.getAnnotation(HeaderParam.class);
+				valuedParameters[i].setValue(request.getHeader(headerParam.value()));
+			} else {
+				ValuedParameter valuedParameter = valuedParameters[i];
+				if (valuedParameter.getValue() == null) {
+					valuedParameter.setValue(values[i]);
 				}
 			}
 		}
+	}
+
+	private boolean hasInstantiatableParameters() {
+		return methodInfo.getControllerMethod().getArity() > 0;
 	}
 
 	private void addHeaderParametersToAttribute() {

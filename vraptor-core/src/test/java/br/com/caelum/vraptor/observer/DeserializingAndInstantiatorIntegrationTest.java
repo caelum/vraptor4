@@ -20,6 +20,7 @@ import br.com.caelum.vraptor.http.ParanamerNameProvider;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.serialization.Deserializer;
 import br.com.caelum.vraptor.serialization.Deserializers;
+import br.com.caelum.vraptor.validator.Message;
 import br.com.caelum.vraptor.validator.Validator;
 import br.com.caelum.vraptor.view.FlashScope;
 import br.com.caelum.vraptor.view.Status;
@@ -56,9 +57,9 @@ public class DeserializingAndInstantiatorIntegrationTest {
 		controllerMethod = new DefaultControllerMethod(null, DeserializingObserverTest
 				.DummyResource.class.getDeclaredMethod("consumeXml", String.class, String.class));
 		
-		when(provider.getParametersFor(controllerMethod, null)).thenReturn(new Object[] { "ignored", "ignored" });
+		when(provider.getParametersFor(controllerMethod, Collections.<Message>emptyList())).thenReturn(new Object[] { "123", "ignored"});
 		
-		when(deserializer.deserialize(null, controllerMethod)).thenReturn(new Object[] {"xmlValue", "otherXMl"});
+		when(deserializer.deserialize(null, controllerMethod)).thenReturn(new Object[] {null, "XMlValue"});
 		methodInfo.setControllerMethod(controllerMethod);
 	}
 	
@@ -66,16 +67,16 @@ public class DeserializingAndInstantiatorIntegrationTest {
 	public void shouldDeserializeWhenInstantiatorRunsBefore() throws Exception {
 		instantiator.instantiate(new InterceptorsReady(controllerMethod));
 		deserializing.deserializes(new InterceptorsReady(controllerMethod), request, methodInfo, status);
-		assertEquals("xmlValue", methodInfo.getValuedParameters()[0].getValue());
-		assertEquals("otherXMl", methodInfo.getValuedParameters()[1].getValue());
+		assertEquals("123", methodInfo.getValuedParameters()[0].getValue());
+		assertEquals("XMlValue", methodInfo.getValuedParameters()[1].getValue());
 	}	
 
 	@Test
 	public void shouldDeserializeWhenInstantiatorRunsAfter() throws Exception {
 		deserializing.deserializes(new InterceptorsReady(controllerMethod), request, methodInfo, status);
 		instantiator.instantiate(new InterceptorsReady(controllerMethod));
-		assertEquals("xmlValue", methodInfo.getValuedParameters()[0].getValue());
-		assertEquals("otherXMl", methodInfo.getValuedParameters()[1].getValue());
+		assertEquals("123", methodInfo.getValuedParameters()[0].getValue());
+		assertEquals("XMlValue", methodInfo.getValuedParameters()[1].getValue());
 	}	
 	
 }

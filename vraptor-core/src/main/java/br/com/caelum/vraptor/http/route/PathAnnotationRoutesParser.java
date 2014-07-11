@@ -151,6 +151,17 @@ public class PathAnnotationRoutesParser implements RoutesParser {
 					"You should specify paths either in @Path(\"/path\") or @Get(\"/path\") (or @Post, @Put, @Delete), not both at %s", javaMethod);
 
 			fixURIs(type, uris);
+			
+			if(isSubClassAndHasDeclaredMethodExtractControllerNameFrom()) {
+				String[] urisWithoutControllerName = new String[uris.length];
+				
+				for(int i = 0; i < uris.length; i++) {
+					urisWithoutControllerName[i] = extractControllerNameFrom(null) + uris[i];
+				}
+				
+				return urisWithoutControllerName;
+			}
+			
 			return uris;
 		}
 		String[] uris = getUris(javaMethod);
@@ -213,7 +224,14 @@ public class PathAnnotationRoutesParser implements RoutesParser {
 	 * controller name, given a type
 	 */
 	protected String extractControllerNameFrom(Class<?> type) {
-		String prefix = extractPrefix(type);
+		String prefix = "";
+		
+		if(type == null) {
+			return prefix;
+		}
+		
+		prefix = extractPrefix(type);
+		
 		if (isNullOrEmpty(prefix)) {
 			String baseName = StringUtils.lowercaseFirst(type.getSimpleName());
 			if (baseName.endsWith("Controller")) {
@@ -238,4 +256,21 @@ public class PathAnnotationRoutesParser implements RoutesParser {
 		return or(instanceOf(Get.class), instanceOf(Post.class), instanceOf(Put.class), instanceOf(Delete.class), instanceOf(Options.class), instanceOf(Patch.class));
 	}
 
+	protected boolean isSubClassAndHasDeclaredMethodExtractControllerNameFrom() {
+		boolean hasMethod = false;
+		
+		try {
+			this.getClass().getDeclaredMethod("extractControllerNameFrom", Class.class);
+			hasMethod = true;
+		} catch (NoSuchMethodException e) {
+			hasMethod = false;
+		}
+		
+		if(PathAnnotationRoutesParser.class.isAssignableFrom(this.getClass().getSuperclass()) && hasMethod) {
+			return true;
+		}
+		
+		return false;
+	}
+	
 }

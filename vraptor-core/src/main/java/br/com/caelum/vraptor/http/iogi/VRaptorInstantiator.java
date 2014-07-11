@@ -18,6 +18,7 @@
 package br.com.caelum.vraptor.http.iogi;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.annotation.PostConstruct;
@@ -175,7 +176,9 @@ public class VRaptorInstantiator implements InstantiatorWithErrors, Instantiator
 		}
 
 		private boolean isSupportedCollection(Target<?> target) {
-			return List.class.isAssignableFrom(target.getClassType()) || Set.class.isAssignableFrom(target.getClassType());
+			return List.class.isAssignableFrom(target.getClassType()) 
+				|| Set.class.isAssignableFrom(target.getClassType())
+				|| Map.class.isAssignableFrom(target.getClassType());
 		}
 
 		private Object setPropertiesAfterConversions(Target<?> target, Parameters parameters) {

@@ -39,7 +39,7 @@ public class XStreamBuilderImpl implements XStreamBuilder {
 	private final XStreamConverters converters;
 	private final TypeNameExtractor extractor;
 	private boolean indented = false;
-	protected boolean recursive = false;
+	private boolean recursive = false;
 	
 	/** 
 	 * @deprecated CDI eyes only
@@ -82,6 +82,10 @@ public class XStreamBuilderImpl implements XStreamBuilder {
 	
 	boolean isIndented() {
 		return indented;
+	}
+	
+	public boolean isRecursive() {
+		return recursive;
 	}
 	
 	@Override

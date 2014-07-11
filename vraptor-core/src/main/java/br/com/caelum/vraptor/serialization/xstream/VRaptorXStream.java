@@ -28,7 +28,7 @@ import com.thoughtworks.xstream.mapper.MapperWrapper;
 @Vetoed
 public  class VRaptorXStream extends XStream {
 	private final TypeNameExtractor extractor;
-	protected VRaptorClassMapper vraptorMapper;
+	private VRaptorClassMapper vraptorMapper;
 
 	{setMode(NO_REFERENCES);}
 

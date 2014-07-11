@@ -101,8 +101,7 @@ public class MethodValidatorTest {
 	}
 	
 	@Test
-	public void shouldNotAcceptIfMethodDoesNotHaveConstraingAndHasDomainObjectParameter() {
-		//sorry about the method name.
+	public void shouldNotAcceptIfMethodDoesNotHaveConstraintAndHasDomainObjectParameter() {
 		DefaultControllerInstance controller = spy(instance);
 		getMethodValidator().validate(new MethodReady(withoutConstraintAndDomainObject), controller, methodInfo, validator);
 		verify(controller, never()).getController();

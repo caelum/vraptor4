@@ -400,6 +400,13 @@ Com isso você já pode fazer uma requisição `POST` com o content-type `applic
 {"cliente":{"id":3,"nome":"Paulo"}}
 ~~~ 
 
+Você também pode consumir o JSON sem o elemento da raiz (`root`):
+
+~~~ 
+#!json
+{"id":3,"nome":"Paulo"}
+~~~ 
+
 O VRaptor vai cuidar de converter estes dados automaticamente para o seu objeto `Cliente`. 
 
 Há ainda como definir mais de um content-type aceito pelo seu método, como por exemplo:

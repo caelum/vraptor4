@@ -423,6 +423,13 @@ With this you can do a `POST` request with `application/json` content-type, prov
 {"customer":{"id":3,"name":"Paulo"}}
 ~~~ 
 
+You can also consumes a JSON without root element, as example below:
+
+~~~ 
+#!json
+{"id":3,"name":"Paulo"}
+~~~ 
+
 VRaptor will take care of converting this data automatically to your `customer` object.
 
 You can also to define more than one content type accepted by your method, i.e:

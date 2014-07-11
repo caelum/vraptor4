@@ -378,6 +378,51 @@ e você definir o `HeaderParam` com o mesmo nome do parâmetro, o valor
 do parâmetro será sobrescrito com o valor do header.
 
 
+## Consumindo em outros formatos
+
+Outra possibilidade é enviar os dados do objeto que você recebe como parâmetro nos métodos de seu controller em XML ou JSON. Para que isso funcione basta adicionar a anotação `@Consumes`, definindo o `media type` que será aceito neste método. 
+
+Um exemplo seria:
+
+~~~ 
+#!java
+@Consumes("application/json")
+@Post
+public void adicionar(Cliente cliente) {
+    clienteDAO.salvar(cliente);
+}
+~~~ 
+
+Com isso você já pode fazer uma requisição `POST` com o content-type `application/json` passando seu JSON como parâmetro, algo como:
+
+~~~ 
+#!json
+{"cliente":{"id":3,"nome":"Paulo"}}
+~~~ 
+
+Você também pode consumir o JSON sem o elemento da raiz (`root`):
+
+~~~ 
+#!json
+{"id":3,"nome":"Paulo"}
+~~~ 
+
+O VRaptor vai cuidar de converter estes dados automaticamente para o seu objeto `Cliente`. 
+
+Há ainda como definir mais de um content-type aceito pelo seu método, como por exemplo:
+
+~~~ 
+#!java
+@Consumes({"application/json", "application/xml"})
+@Post
+public void adicionar(Cliente cliente) {
+    clienteDAO.salvar(cliente);
+}
+~~~ 
+
+**Nota**: O VRaptor vai retornar um `415 (Unsupported Media Type)` se o `media type` enviado não for suportado.
+
+
 ## Tratando exceções
 
 O VRaptor possui um Exception Handler, que captura as exceções não tratadas em sua aplicação.

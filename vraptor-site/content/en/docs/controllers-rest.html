@@ -401,6 +401,50 @@ public void profile(@HeaderParam("X-Auth-User") username) {
 (from a form, for example) and still define the `HeaderParam` with the same
 name of the parameter, it will be overwritten with the header value.
 
+## Consuming in other formats
+
+You can also send the parameter's data of your controller methods in XML or JSON. To do that you just need to add the `@Consumes` annotation, defining the `media type` that the method can accept.
+
+An example would be:
+
+~~~ 
+#!java
+@Consumes("application/json")
+@Post
+public void add(Customer customer) {
+    customerDAO.save(customer);
+}
+~~~ 
+
+With this you can do a `POST` request with `application/json` content-type, providing a JSON as parameter. Something like this:
+
+~~~ 
+#!json
+{"customer":{"id":3,"name":"Paulo"}}
+~~~ 
+
+You can also consumes a JSON without root element, as example below:
+
+~~~ 
+#!json
+{"id":3,"name":"Paulo"}
+~~~ 
+
+VRaptor will take care of converting this data automatically to your `customer` object.
+
+You can also to define more than one content type accepted by your method, i.e:
+
+~~~ 
+#!java
+@Consumes({"application/json", "application/xml"})
+@Post
+public void add(Customer customer) {
+    customerDAO.save(customer);
+}
+~~~ 
+
+**Warning**: VRaptor will return `415 (Unsupported Media Type)` if the media type is not supported.
+
 
 ## Handling exceptions
 

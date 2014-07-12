@@ -24,7 +24,6 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.fail;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 

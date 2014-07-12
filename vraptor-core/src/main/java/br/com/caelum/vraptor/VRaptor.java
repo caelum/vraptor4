@@ -22,7 +22,6 @@ import static org.slf4j.LoggerFactory.getLogger;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Set;
 
 import javax.enterprise.event.Event;
 import javax.inject.Inject;

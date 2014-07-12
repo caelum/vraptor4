@@ -22,7 +22,6 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.fail;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 

@@ -41,7 +41,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import net.vidageek.mirror.dsl.Mirror;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 

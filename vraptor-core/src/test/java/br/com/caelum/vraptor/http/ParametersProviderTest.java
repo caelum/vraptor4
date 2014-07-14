@@ -17,6 +17,7 @@ package br.com.caelum.vraptor.http;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.arrayContaining;
+import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.hasItem;
@@ -38,7 +39,6 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -415,7 +415,7 @@ public abstract class ParametersProviderTest {
 		Address[] address = (Address[]) returned.getAddresses().toArray(new Address[2]);
 		List<String> streets = Arrays.asList(address[0].getStreet(), address[1].getStreet());
 		
-		assertThat(streets, Matchers.containsInAnyOrder("Some Street", "Some Street 2"));
+		assertThat(streets, containsInAnyOrder("Some Street", "Some Street 2"));
 	}
 
 	@Test

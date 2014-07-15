@@ -8,3 +8,5 @@ You can easily import into your IDE as Maven project. Or you can run using maven
 
 
 Este é um projeto de exemplo para ajudar você a aprender sobre o VRaptor. Você pode facilmente importá-lo na sua IDE favorita como um projeto Maven. Ou você pode rodar este projeto com os comandos do Maven: `mvn jetty:run` ou `mvn tomcat7:run`. Wildfly também está disponível pelo comando `mvn -P wildfly wildfly:run`.
+
+**Nota**: `mvn jetty:run` e `mvn tomcat7:run` não funcionam com algumas versões do maven. Se você pretende usar o plugin recomendamos fortemente que atualize a versão de seu maven para `3.2.2` (ou a mais recente). Assim tudo vai funcionar bem.

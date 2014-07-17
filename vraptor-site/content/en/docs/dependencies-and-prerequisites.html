@@ -171,9 +171,10 @@ you is running in domain mode):
 ~~~
 #!xml
 <subsystem xmlns="urn:jboss:domain:logging:2.0">
-<logger category="br.com.caelum.vraptor">
-<level name="DEBUG"/>
-</logger>
+	<logger category="br.com.caelum.vraptor">
+		<level name="DEBUG"/>
+	</logger>
+	<!-- other content -->
 </subsystem>
 ~~~
  
@@ -183,7 +184,8 @@ tell to Wildfly to read this configuration from your deployment:
 ~~~
 #!xml
 <subsystem xmlns="urn:jboss:domain:logging:2.0">
-<use-deployment-logging-config value="false"/>
+	<use-deployment-logging-config value="false"/>
+	<!-- other content -->
 </subsystem>
 ~~~ 
 

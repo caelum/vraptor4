@@ -16,7 +16,7 @@
 package br.com.caelum.vraptor.serialization.xstream;
 
 import static br.com.caelum.vraptor.serialization.xstream.VRaptorClassMapper.isPrimitive;
-import static com.google.common.base.Preconditions.checkNotNull;
+import static java.util.Objects.requireNonNull;
 
 import java.io.Writer;
 import java.util.ArrayList;
@@ -70,7 +70,7 @@ public class XStreamSerializer implements SerializerBuilder {
 	}
 
 	private void preConfigure(Object obj,String alias) {
-		checkNotNull(obj, "You can't serialize null objects");
+		requireNonNull(obj, "You can't serialize null objects");
 
 		xstream.processAnnotations(obj.getClass());
 

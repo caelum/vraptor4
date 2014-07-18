@@ -15,9 +15,9 @@
  */
 package br.com.caelum.vraptor.environment;
 
-import javax.enterprise.inject.Vetoed;
+import java.util.Objects;
 
-import com.google.common.base.Objects;
+import javax.enterprise.inject.Vetoed;
 
 /**
  * An class to represent usual {@link Environment} types 
@@ -57,7 +57,6 @@ public class EnvironmentType {
 		if (getClass() != obj.getClass())
 			return false;
 		EnvironmentType other = (EnvironmentType) obj;
-		return Objects.equal(name, other.name);
+		return Objects.equals(name, other.name);
 	}
-	
 }

@@ -16,7 +16,7 @@
  */
 package br.com.caelum.vraptor.core;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import static java.util.Objects.requireNonNull;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -61,7 +61,7 @@ public class DefaultExceptionMapper implements ExceptionMapper {
 
 	@Override
 	public Result record(Class<? extends Exception> exception) {
-		checkNotNull(exception, "Exception cannot be null.");
+		requireNonNull(exception, "Exception cannot be null.");
 
 		ExceptionRecorder<Result> instance = new ExceptionRecorder<>(proxifier);
 		exceptions.put(exception, instance);

@@ -16,6 +16,8 @@
  */
 package br.com.caelum.vraptor.interceptor;
 
+import static com.google.common.base.Throwables.getRootCause;
+
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 
@@ -29,8 +31,6 @@ import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.core.ExceptionMapper;
 import br.com.caelum.vraptor.core.ExceptionRecorder;
 import br.com.caelum.vraptor.core.InterceptorStack;
-
-import com.google.common.base.Throwables;
 
 /**
  * Intercept all requests to handling uncaught exceptions.

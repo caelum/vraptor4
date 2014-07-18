@@ -16,6 +16,7 @@
  */
 package br.com.caelum.vraptor.observer.upload;
 
+import static com.google.common.base.Strings.isNullOrEmpty;
 import static org.slf4j.LoggerFactory.getLogger;
 
 import java.io.IOException;
@@ -42,7 +43,6 @@ import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.validator.I18nMessage;
 import br.com.caelum.vraptor.validator.Validator;
 
-import com.google.common.base.Strings;
 import com.google.common.collect.HashMultiset;
 import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.Multimap;
@@ -154,7 +154,7 @@ public class CommonsUploadMultipartObserver {
 
 	protected String getValue(FileItem item, ServletRequest request) {
 		String encoding = request.getCharacterEncoding();
-		if (!Strings.isNullOrEmpty(encoding)) {
+		if (!isNullOrEmpty(encoding)) {
 			try {
 				return item.getString(encoding);
 			} catch (UnsupportedEncodingException e) {

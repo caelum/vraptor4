@@ -15,16 +15,15 @@
  */
 package br.com.caelum.vraptor.converter;
 
+import static com.google.common.base.Objects.firstNonNull;
 import static com.google.common.base.Objects.toStringHelper;
+import static com.google.common.base.Strings.emptyToNull;
 
 import java.util.ResourceBundle;
 
 import br.com.caelum.vraptor.validator.I18nMessage;
 import br.com.caelum.vraptor.validator.Message;
 import br.com.caelum.vraptor.validator.Severity;
-
-import com.google.common.base.Objects;
-import com.google.common.base.Strings;
 
 public class ConversionMessage implements Message {
 
@@ -71,7 +70,7 @@ public class ConversionMessage implements Message {
 
 	@Override
 	public String getCategory() {
-		return Objects.firstNonNull(Strings.emptyToNull(message.getCategory()), category);
+		return firstNonNull(emptyToNull(message.getCategory()), category);
 	}
 
 	@Override

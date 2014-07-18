@@ -81,7 +81,7 @@ public class ExceptionHandlerInterceptor implements Interceptor {
 	}
 
 	protected void reportException(Exception e) {
-		result.include("exception", Throwables.getRootCause(e));
+		result.include("exception", getRootCause(e));
 	}
 
 	protected boolean replay(Exception e) {

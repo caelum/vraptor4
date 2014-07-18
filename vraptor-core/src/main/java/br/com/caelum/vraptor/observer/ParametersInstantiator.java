@@ -18,6 +18,7 @@
 package br.com.caelum.vraptor.observer;
 
 import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Strings.isNullOrEmpty;
 import static org.slf4j.LoggerFactory.getLogger;
 
 import java.util.ArrayList;
@@ -40,8 +41,6 @@ import br.com.caelum.vraptor.http.ValuedParameter;
 import br.com.caelum.vraptor.validator.Message;
 import br.com.caelum.vraptor.validator.Validator;
 import br.com.caelum.vraptor.view.FlashScope;
-
-import com.google.common.base.Strings;
 
 /**
  * An observer which instantiates parameters and provide them to the request.
@@ -118,7 +117,7 @@ public class ParametersInstantiator {
 			if (param.getParameter().isAnnotationPresent(HeaderParam.class)) {
 				HeaderParam headerParam = param.getParameter().getAnnotation(HeaderParam.class);
 				String value = request.getHeader(headerParam.value());
-				if (!Strings.isNullOrEmpty(value)) {
+				if (!isNullOrEmpty(value)) {
 					request.setParameter(param.getName(), value);
 				}
 			}

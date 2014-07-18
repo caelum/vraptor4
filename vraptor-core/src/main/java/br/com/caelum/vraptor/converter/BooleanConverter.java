@@ -18,14 +18,13 @@
 package br.com.caelum.vraptor.converter;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
+import static com.google.common.collect.Sets.newHashSet;
 
 import java.util.Set;
 
 import javax.enterprise.context.ApplicationScoped;
 
 import br.com.caelum.vraptor.Convert;
-
-import com.google.common.collect.Sets;
 
 /**
  * VRaptor's Boolean converter.
@@ -38,8 +37,8 @@ import com.google.common.collect.Sets;
 @Convert(Boolean.class)
 @ApplicationScoped
 public class BooleanConverter implements Converter<Boolean> {
-	private static final Set<String> IS_TRUE  = Sets.newHashSet("TRUE", "1", "YES", "Y", "ON");
-	private static final Set<String> IS_FALSE = Sets.newHashSet("FALSE", "0", "NO", "N", "OFF");
+	private static final Set<String> IS_TRUE  = newHashSet("TRUE", "1", "YES", "Y", "ON");
+	private static final Set<String> IS_FALSE = newHashSet("FALSE", "0", "NO", "N", "OFF");
 
 	@Override
 	public Boolean convert(String value, Class<? extends Boolean> type) {

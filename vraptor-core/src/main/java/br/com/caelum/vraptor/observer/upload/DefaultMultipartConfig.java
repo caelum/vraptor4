@@ -17,6 +17,8 @@
 
 package br.com.caelum.vraptor.observer.upload;
 
+import static com.google.common.base.Throwables.propagate;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -29,8 +31,6 @@ import javax.enterprise.context.ApplicationScoped;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.google.common.base.Throwables;
 
 /**
  * Default implementation for {@link MultipartConfig}.
@@ -100,7 +100,7 @@ public class DefaultMultipartConfig implements MultipartConfig {
 					return Files.createDirectories(path);
 				} catch (IOException e) {
 					logger.error("Unable to use temp directory inside application", e);
-					throw Throwables.propagate(e);
+					throw propagate(e);
 				}
 			}
 		});

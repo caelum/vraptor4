@@ -19,6 +19,7 @@ package br.com.caelum.vraptor.view;
 
 import static br.com.caelum.vraptor.proxy.CDIProxies.unproxifyIfPossible;
 import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Throwables.propagateIfPossible;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -45,8 +46,6 @@ import br.com.caelum.vraptor.proxy.MethodInvocation;
 import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.proxy.ProxyInvocationException;
 import br.com.caelum.vraptor.proxy.SuperMethod;
-
-import com.google.common.base.Throwables;
 
 /**
  * The default implementation of LogicResult.<br>
@@ -118,7 +117,7 @@ public class DefaultLogicResult implements LogicResult {
 					}
 					return null;
 				} catch (InvocationTargetException e) {
-					Throwables.propagateIfPossible(e.getCause());
+					propagateIfPossible(e.getCause());
 					throw new ProxyInvocationException(e);
 				} catch (Exception e) {
 					throw new ProxyInvocationException(e);

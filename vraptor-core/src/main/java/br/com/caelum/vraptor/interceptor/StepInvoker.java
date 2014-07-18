@@ -15,6 +15,8 @@
  */
 package br.com.caelum.vraptor.interceptor;
 
+import static com.google.common.base.Throwables.propagateIfInstanceOf;
+
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
@@ -24,8 +26,6 @@ import net.vidageek.mirror.dsl.Mirror;
 import net.vidageek.mirror.list.dsl.Matcher;
 import net.vidageek.mirror.list.dsl.MirrorList;
 import br.com.caelum.vraptor.InterceptionException;
-
-import com.google.common.base.Throwables;
 
 @ApplicationScoped
 public class StepInvoker {
@@ -64,7 +64,7 @@ public class StepInvoker {
 		} catch (Exception e) {
 			// we dont wanna wrap it if it is a simple controller business logic
 			// exception
-			Throwables.propagateIfInstanceOf(e.getCause(), ApplicationLogicException.class);
+			propagateIfInstanceOf(e.getCause(), ApplicationLogicException.class);
 			throw new InterceptionException(e.getCause());
 		}
 	}

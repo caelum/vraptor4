@@ -16,13 +16,13 @@
  */
 package br.com.caelum.vraptor.cache;
 
+import static com.google.common.base.Throwables.propagateIfPossible;
+
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.Callable;
 
 import javax.enterprise.inject.Vetoed;
-
-import com.google.common.base.Throwables;
 
 /**
  * A LRU cache based on LinkedHashMap.
@@ -54,7 +54,7 @@ public class LRUCacheStore<K, V> extends LinkedHashMap<K, V> implements CacheSto
 				put(key, value);
 				return value;
 			} catch (Exception e) {
-				Throwables.propagateIfPossible(e);
+				propagateIfPossible(e);
 				throw new CacheException("Error computing the value", e);
 			}
 		}

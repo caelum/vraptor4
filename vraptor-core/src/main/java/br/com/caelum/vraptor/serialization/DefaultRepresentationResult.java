@@ -16,6 +16,7 @@
 package br.com.caelum.vraptor.serialization;
 
 import static br.com.caelum.vraptor.view.Results.status;
+import static com.google.common.collect.Lists.newArrayList;
 import static java.util.Collections.sort;
 
 import java.util.Comparator;
@@ -28,8 +29,6 @@ import javax.inject.Inject;
 
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.http.FormatResolver;
-
-import com.google.common.collect.Lists;
 
 /**
  * Default implementation for RepresentationResult that uses request Accept format to
@@ -80,7 +79,7 @@ public class DefaultRepresentationResult implements RepresentationResult {
 			return new IgnoringSerializer();
 		}
 		
-		List<Serialization> serializations = Lists.newArrayList(this.serializations);
+		List<Serialization> serializations = newArrayList(this.serializations);
 		sortSerializations(serializations);
 		
 		String format = formatResolver.getAcceptFormat();

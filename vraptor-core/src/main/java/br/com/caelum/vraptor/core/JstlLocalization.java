@@ -16,6 +16,8 @@
  */
 package br.com.caelum.vraptor.core;
 
+import static com.google.common.base.Strings.isNullOrEmpty;
+
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
@@ -33,8 +35,6 @@ import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.util.EmptyBundle;
 import br.com.caelum.vraptor.util.SafeResourceBundle;
-
-import com.google.common.base.Strings;
 
 /**
  * The default implementation of bundle provider uses JSTL's api to access user information on the bundle to be used.
@@ -145,7 +145,7 @@ public class JstlLocalization {
 	 * @return
 	 */
 	private Locale findLocalefromString(String str) {
-		if (!Strings.isNullOrEmpty(str)) {
+		if (!isNullOrEmpty(str)) {
 			String[] arr = str.split("_");
 			if (arr.length == 1) {
 				return new Locale(arr[0]);

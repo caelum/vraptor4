@@ -15,14 +15,14 @@
  */
 package br.com.caelum.vraptor.cache;
 
+import static com.google.common.base.Throwables.propagateIfPossible;
+
 import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 import javax.enterprise.context.Dependent;
 import javax.enterprise.inject.Default;
-
-import com.google.common.base.Throwables;
 
 @Default
 @Dependent
@@ -38,7 +38,7 @@ public class DefaultCacheStore<K,V> implements CacheStore<K,V> {
 				cache.put(key, value);
 				return value;
 			} catch (Exception e) {
-				Throwables.propagateIfPossible(e);
+				propagateIfPossible(e);
 				throw new CacheException("Error computing the value", e);
 			}
 		}

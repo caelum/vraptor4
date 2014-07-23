@@ -20,7 +20,7 @@ For a quick start, you can use this snippet in your maven POM and [configure pre
 Or you can download it directly [at our artifacts repository](https://bintray.com/caelum/VRaptor4/br.com.caelum.vraptor).
 
 ##Documentation
-[More detailed documentation](http://www.vraptor.org/en/docs/one-minute-guide/) and [JavaDoc](http://www.vraptor.org/javadoc/) are also available at [VRaptor's site](http://www.vraptor.org/en/)
+[More detailed documentation](http://www.vraptor.org/en/docs/one-minute-guide/) and [Javadoc](http://www.vraptor.org/javadoc/) are also available at [VRaptor's site](http://www.vraptor.org/en/)
 
 
 ##Building in your machine

@@ -1,10 +1,10 @@
-ruby '1.9.3'
+ruby '2.0.0'
 source 'https://rubygems.org'
 
 gem 'nanoc', '3.6.7'
 gem 'kramdown', '1.3.1'
 gem 'adsf', '1.2.0'
 gem 'pygments.rb', '0.5.4'
-gem 'nokogiri'
+gem 'nokogiri', '1.6.3.1'
 gem 'rainpress'
 gem 'guard-nanoc'

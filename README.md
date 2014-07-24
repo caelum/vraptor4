@@ -6,7 +6,7 @@ A web MVC action-based framework, on top of CDI, for fast and maintainable Java 
 
 ##Downloading directly or using it through Maven
 
-For a quick start, you can use this snippet in your maven POM and [configure prerequisites dependencies](http://www.vraptor.org/en/docs/dependencies-and-prerequisites/):
+For a quick start, you can use this snippet in your maven POM:
 
 ```xml
 <dependency>
@@ -16,8 +16,9 @@ For a quick start, you can use this snippet in your maven POM and [configure pre
 </dependency>
 ```
 
-
 Or you can download it directly [at our artifacts repository](https://bintray.com/caelum/VRaptor4/br.com.caelum.vraptor).
+
+More detailed prerequisites and dependencies can be found [here](http://www.vraptor.org/en/docs/dependencies-and-prerequisites/).
 
 ##Documentation
 [More detailed documentation](http://www.vraptor.org/en/docs/one-minute-guide/) and [Javadoc](http://www.vraptor.org/javadoc/) are also available at [VRaptor's website](http://www.vraptor.org/en/).

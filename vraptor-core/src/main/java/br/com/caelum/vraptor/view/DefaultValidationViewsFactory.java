@@ -38,7 +38,8 @@ import br.com.caelum.vraptor.validator.ValidationException;
  * Default implementation for ValidationViewsFactory
  *
  * If you want to extend this behavior use:
- * \@Component
+ * 
+ * \@Specializes
  * public class MyValidatorViewsFactory extends DefaultValidationViewsFactory {
  * 		//delegate constructor
  * 		\@Override

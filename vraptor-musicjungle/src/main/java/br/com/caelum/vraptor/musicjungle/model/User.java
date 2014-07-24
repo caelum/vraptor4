@@ -34,9 +34,7 @@ import com.google.common.collect.Collections2;
 /**
  * User entity representing the User table from the database. 
  * A persisted object of this class represents a record in the 
- * database.<br> It's annotated with <code>@Component</code> 
- * and <code>@SessionScoped</code>, thus its instances can be 
- * injected to other classes who depend on Users.
+ * database.
  */
 @Entity
 public class User implements Serializable {

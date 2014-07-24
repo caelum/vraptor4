@@ -45,9 +45,7 @@ public class DefaultUserDao implements UserDao {
 
 	/**
 	 * Creates a new UserDao. You can receive dependencies 
-	 * through constructor, because this class is annotated 
-	 * with <code>@Component</code>. This class can be used
-	 * as dependency of another class, as well.
+	 * through constructor adding CDI's \@Inject annotation.
 	 * 
 	 * @param entityManager JPA's EntityManager.
 	 */

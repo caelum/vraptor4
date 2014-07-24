@@ -25,10 +25,7 @@ import br.com.caelum.vraptor.musicjungle.model.Music;
 import br.com.caelum.vraptor.musicjungle.model.MusicOwner;
 
 /**
- * Default implementation for MusicDao. <br> Annotating 
- * this class with <code>@Component</code> we have the 
- * dependency injection support either on this class and 
- * on other classes that depend on MusicDao or DefaultMusicDao
+ * Default implementation for MusicDao.
  *
  * @author Lucas Cavalcanti
  * @author Rodrigo Turini

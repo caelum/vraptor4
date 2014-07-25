@@ -299,7 +299,7 @@ public class MyRoutesParser extends PathAnnotationRoutesParser {
 }
 ~~~ 
 
-If you need to change the convention to both default and annotated URI, you can create a class overwriting the convention. The example bellow will make that all URIs need to be accessed using the prefix `/prefix`.
+If you need to change the convention to both default and annotated URI, you can create a class overriding the convention. The example bellow will make all URIs accessible with `/prefix` prefix.
 
 ~~~ 
 #!java
@@ -317,6 +317,24 @@ public class PrefixedRoutesParser extends PathAnnotationRoutesParser {
 	}
 }
 ~~~ 
+
+Using the class above, in the following example, the URI of `index` method will be `/prefix/index`:
+
+~~~
+#!java
+@Controller
+public class IndexController {
+
+	/**
+	 * @deprecated CDI eyes only
+	 */
+	public IndexController() {
+	}
+
+	@Path("/index")
+	public void index() {
+	}
+}
 
 If you need a more complex convention, just implement the `RoutesParser` interface.
 

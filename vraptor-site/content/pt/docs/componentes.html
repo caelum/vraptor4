@@ -236,6 +236,24 @@ public class PrefixedRoutesParser extends PathAnnotationRoutesParser {
 }
 ~~~
 
+Usando a classe acima, no exemplo a seguir, a URI do método `index` será `/prefixo/index`:
+
+~~~
+#!java
+@Controller
+public class IndexController {
+
+	/**
+	 * @deprecated CDI eyes only
+	 */
+	public IndexController() {
+	}
+
+	@Path("/index")
+	public void index() {
+	}
+}
+
 Se você precisa mudar mais ainda a convenção, basta implementar a interface `RoutesParser`.
 
 ##Mudando o encoding da sua aplicação

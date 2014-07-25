@@ -219,6 +219,8 @@ public class MeuRoutesParser extends PathAnnotationRoutesParser {
 
 Se você deseja mudar a convenção para ambos os casos da URI ser padrão ou anotada, você pode criar uma classe sobrescrevendo essa convenção. O exemplo abaixo fará com que todas as URIs precisem ser acessadas usando o prefixo `/prefixo`.
 
+Portanto, se a rota é `/index`, a URI será `/prefix/index`.
+
 ~~~
 #!java
 @Specializes @ApplicationScoped
@@ -235,25 +237,6 @@ public class PrefixedRoutesParser extends PathAnnotationRoutesParser {
 	}
 }
 ~~~
-
-Usando a classe acima, no exemplo a seguir, a URI do método `index` será `/prefixo/index`:
-
-~~~
-#!java
-@Controller
-public class IndexController {
-
-	/**
-	 * @deprecated CDI eyes only
-	 */
-	protected IndexController() {
-	}
-
-	@Path("/index")
-	public void index() {
-	}
-}
-~~~ 
 
 Se você precisa mudar mais ainda a convenção, basta implementar a interface `RoutesParser`.
 

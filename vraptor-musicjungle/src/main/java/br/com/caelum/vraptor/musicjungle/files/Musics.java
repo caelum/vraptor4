@@ -8,19 +8,24 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
+import javax.annotation.PostConstruct;
+import javax.enterprise.context.Dependent;
+
 import br.com.caelum.vraptor.musicjungle.model.Music;
 import br.com.caelum.vraptor.observer.upload.UploadedFile;
 
+@Dependent
 public class Musics {
 	
-	private Path DEFAULT_FOLDER = Paths.get("/tmp/uploads/");
+	private final Path DEFAULT_FOLDER = Paths.get("/tmp/uploads/");
 	
-	public Musics(){
+	@PostConstruct
+	public void init() {
 		if(!Files.exists(DEFAULT_FOLDER)) {
 			try {
-			    Files.createDirectories(DEFAULT_FOLDER);
+				Files.createDirectories(DEFAULT_FOLDER);
 			} catch (IOException e) {
-			    throw new IllegalStateException(e);
+				throw new IllegalStateException(e);
 			}
 		}
 	}

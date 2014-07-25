@@ -84,10 +84,15 @@ You can also change the default upload settings overriding the class MultipartCo
 @Specializes
 @ApplicationScoped
 public class CustomMultipartConfig extends DefaultMultipartConfig {
-	
+
 	public long getSizeLimit() {
 		return 50 * 1024 * 1024; // 50MB
 	}
+
+	public long getFileSizeLimit() {
+		return 50 * 1024 * 1024; // 50MB
+	}
+
 }
 ~~~ 
 

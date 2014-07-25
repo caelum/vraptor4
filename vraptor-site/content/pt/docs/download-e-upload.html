@@ -85,10 +85,15 @@ Você pode alterar as configurações de upload sobrescrevendo a classe `Multipa
 @Specializes
 @ApplicationScoped
 public class CustomMultipartConfig extends DefaultMultipartConfig {
-	
+
 	public long getSizeLimit() {
 		return 50 * 1024 * 1024; // 50MB
 	}
+
+	public long getFileSizeLimit() {
+		return 50 * 1024 * 1024; // 50MB
+	}
+
 }
 ~~~ 
 

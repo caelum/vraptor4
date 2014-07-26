@@ -78,9 +78,9 @@ public void atualizaFoto(Perfil perfil, UploadedFile foto) {
 
 ##Sobrescrevendo as configurações de upload
 
-Você pode alterar as configurações de upload sobrescrevendo a classe `MultipartConfig`. No exemplo abaixo é alterado o tamanho máximo de upload.
+Você pode alterar as configurações de upload sobrescrevendo a classe `MultipartConfig`. No exemplo abaixo é alterado o tamanho total permitido no upload (soma de todos os arquivos).
 
-~~~ 
+~~~
 #!java
 @Specializes
 @ApplicationScoped
@@ -90,12 +90,23 @@ public class CustomMultipartConfig extends DefaultMultipartConfig {
 		return 50 * 1024 * 1024; // 50MB
 	}
 
+}
+~~~
+
+No exemplo a seguir podemos alterar o tamanho máximo permitido para cada arquivo:
+
+~~~
+#!java
+@Specializes
+@ApplicationScoped
+public class CustomMultipartConfig extends DefaultMultipartConfig {
+
 	public long getFileSizeLimit() {
 		return 50 * 1024 * 1024; // 50MB
 	}
 
 }
-~~~ 
+~~~
 
 ##Alterando o formulário de envio
 

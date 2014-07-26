@@ -77,9 +77,9 @@ public void updatePhoto(Profile profile, UploadedFile photo) {
 
 ##Overriding upload settings
 
-You can also change the default upload settings overriding the class MultipartConfig. In example below, the size limit of upload is changed.
+You can also change the default upload settings overriding the class MultipartConfig. In example below, we can change total allowable upload size (sum of all files).
 
-~~~ 
+~~~
 #!java
 @Specializes
 @ApplicationScoped
@@ -89,12 +89,23 @@ public class CustomMultipartConfig extends DefaultMultipartConfig {
 		return 50 * 1024 * 1024; // 50MB
 	}
 
+}
+~~~
+
+In the following example we can change the maximum size allowed for each file:
+
+~~~
+#!java
+@Specializes
+@ApplicationScoped
+public class CustomMultipartConfig extends DefaultMultipartConfig {
+
 	public long getFileSizeLimit() {
 		return 50 * 1024 * 1024; // 50MB
 	}
 
 }
-~~~ 
+~~~
 
 ##Changes in form
 

@@ -299,6 +299,27 @@ public class MyRoutesParser extends PathAnnotationRoutesParser {
 }
 ~~~ 
 
+If you need to change the convention to both default and annotated URI, you can create a class overriding the convention. The example bellow will make all URIs accessible with `/prefix` prefix.
+
+So, if the route is `/index`, the URI will be `/prefix/index`.
+
+~~~ 
+#!java
+@Specializes @ApplicationScoped
+public class PrefixedRoutesParser extends PathAnnotationRoutesParser {
+	//delegated constructors 
+
+	@Override
+	protected String[] getURIsFor(Method javaMethod, Class<?> type) {
+		String[] uris = super.getURIsFor(javaMethod, type);
+		for (int i = 0; i < uris.length; i++) {
+			uris[i] = "/prefix" + uris[i];
+		}
+		return uris;
+	}
+}
+~~~ 
+
 If you need a more complex convention, just implement the `RoutesParser` interface.
 
 ###Changing the application character encoding

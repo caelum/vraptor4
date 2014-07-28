@@ -10,7 +10,7 @@ To register objects to be accessed by view, we use the `include` method:
 #!java
 @Controller
 class ClientsController {
-	@Inject private final Result result;
+	@Inject private Result result;
 
 	public void search(int id) {
 		result.include("message", "Some message");
@@ -26,7 +26,7 @@ It's possible to register the object by invoking the `include` method with only 
 #!java
 @Controller
 class ClientsController {
-	@Inject private final Result result;
+	@Inject private Result result;
 
 	public void search(int id) {
 		result.include("Some message").include(new Client(id));
@@ -76,7 +76,7 @@ If you want to change the view of some logic, you can use the `Result` object:
 @Controller
 public class ClientsController {
 
-	@Inject private final Result result;
+	@Inject private Result result;
 
 	public void list() {}
 
@@ -176,8 +176,8 @@ And the logic:
 @Controller
 public class ClientsController {
 
-	@Inject private final Result result;
-	@Inject private final ClientDao dao;
+	@Inject private Result result;
+	@Inject private ClientDao dao;
 
 	public void load(Client client) {
 		result.include("client", dao.load(client));
@@ -195,8 +195,8 @@ import static br.com.caelum.vraptor.view.Results.*;
 @Controller
 public class ClientsController {
 
-	@Inject private final Result result;
-	@Inject private final ClientDao dao;
+	@Inject private Result result;
+	@Inject private ClientDao dao;
 
 	public void loadJson(Client client) {
 		result.use(json()).from(client).serialize();

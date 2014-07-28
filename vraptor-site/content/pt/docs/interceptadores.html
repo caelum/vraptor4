@@ -33,7 +33,7 @@ dependências por meio de Injeção de Dependências.
 public class Log {
 
 	@Inject
-	private final HttpServletRequest request;
+	private HttpServletRequest request;
 
 	@AroundCall
 	public void intercept(SimpleInterceptorStack stack) {

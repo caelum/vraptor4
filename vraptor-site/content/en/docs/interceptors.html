@@ -29,7 +29,7 @@ other and can receive any dependencies using Dependency Injection.
 public class Log {
 
 	@Inject
-	private final HttpServletRequest request;
+	private HttpServletRequest request;
 
 	@AroundCall
 	public void intercept(SimpleInterceptorStack stack) {

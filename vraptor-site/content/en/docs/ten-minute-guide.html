@@ -271,7 +271,7 @@ The shopping cart is a component, therefore it can be injected in the controller
 public class CartController {
 
 	@Inject
-	private final ShoppingCart cart;
+	private ShoppingCart cart;
 
 	public void add(Product product) {
 		cart.addItem(product);

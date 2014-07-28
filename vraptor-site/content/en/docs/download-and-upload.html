@@ -50,7 +50,7 @@ The first example is based on the multipart upload feature.
 @Controller
 public class ProfileController {
 
-	@Inject private final ProfileDao dao;
+	@Inject private ProfileDao dao;
 		
 	public void updatePhoto(Profile profile, UploadedFile photo) {
 		try (InputStream input = photo.getFile()) {

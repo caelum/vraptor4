@@ -267,7 +267,7 @@ Como esse carrinho de compras é um componente, podemos recebê-lo no controller
 public class CarrinhoController {
 
 	@Inject
-	private final CarrinhoDeCompras carrinho;
+	private CarrinhoDeCompras carrinho;
 
 	public void adiciona(Produto produto) {
 		carrinho.adicionaItem(produto);

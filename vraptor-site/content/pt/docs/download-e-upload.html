@@ -51,7 +51,7 @@ O primeiro exemplo será baseado na funcionalidade de upload multipart.
 @Controller
 public class PerfilController {
 
-	@Inject private final PerfilDao dao;
+	@Inject private PerfilDao dao;
 		
 	public void atualizaFoto(Perfil perfil, UploadedFile foto) {
 		try (InputStream input = foto.getFile()) {

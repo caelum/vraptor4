@@ -95,9 +95,8 @@ public class DefaultUserDao implements UserDao {
 	}
 
 	@Override
-	public User refresh(User user) {
+	public void refresh(User user) {
 		getSession().refresh(user); // You still can use Hibernate Session
-		return user;
 	}
 
 	@Override

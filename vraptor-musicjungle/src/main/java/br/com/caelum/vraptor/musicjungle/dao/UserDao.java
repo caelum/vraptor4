@@ -56,7 +56,7 @@ public interface UserDao {
 	 * Any not saved modification on user will be overwritten.
 	 * @return 
 	 */
-	User refresh(User user);
+	void refresh(User user);
 
 	/**
 	 * Update the user on database.

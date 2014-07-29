@@ -9,7 +9,6 @@
 	
 		<class>br.com.caelum.vraptor.musicjungle.model.Music</class>
 		<class>br.com.caelum.vraptor.musicjungle.model.User</class>
-		<class>br.com.caelum.vraptor.musicjungle.model.MusicOwner</class>
 	
 		<properties>
 			<property name="javax.persistence.jdbc.driver" value="org.hsqldb.jdbcDriver" />

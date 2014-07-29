@@ -15,8 +15,10 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import br.com.caelum.vraptor.musicjungle.dao.MusicDao;
 import br.com.caelum.vraptor.musicjungle.dao.UserDao;
 import br.com.caelum.vraptor.musicjungle.enums.MusicType;
+import br.com.caelum.vraptor.musicjungle.interceptor.UserInfo;
 import br.com.caelum.vraptor.musicjungle.model.User;
 import br.com.caelum.vraptor.musicjungle.util.model.UserBuilder;
 import br.com.caelum.vraptor.util.test.MockResult;
@@ -26,20 +28,20 @@ public class UsersControllerTest {
 
 	private MockResult result;
 	private MockValidator validator;
-	@Mock
-	private UserDao userDao;
-
 	private UsersController controller;
-	
 	private User user;
 	private User anotherUser;
+	
+	@Mock private UserDao userDao;
+	@Mock private UserInfo info;
+	@Mock private MusicDao musics;
+	
 	@Before
 	public void setUp() {
 		MockitoAnnotations.initMocks(this);
 		result = new MockResult();
 		validator = new MockValidator();
-		controller = new UsersController(userDao, result, validator);
-		
+		controller = new UsersController(userDao, result, validator, info, musics);
 		user = new UserBuilder().withName("Renan").withLogin("renanigt").withPassword("1234").build();
 		anotherUser = new UserBuilder().withName("Fulano").withLogin("fulano").withPassword("3456").build();
 	}

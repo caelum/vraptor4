@@ -7,7 +7,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
-import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -23,11 +22,11 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor.musicjungle.dao.MusicDao;
+import br.com.caelum.vraptor.musicjungle.dao.UserDao;
 import br.com.caelum.vraptor.musicjungle.enums.MusicType;
 import br.com.caelum.vraptor.musicjungle.files.Musics;
 import br.com.caelum.vraptor.musicjungle.interceptor.UserInfo;
 import br.com.caelum.vraptor.musicjungle.model.Music;
-import br.com.caelum.vraptor.musicjungle.model.MusicOwner;
 import br.com.caelum.vraptor.musicjungle.model.User;
 import br.com.caelum.vraptor.musicjungle.util.model.MusicBuilder;
 import br.com.caelum.vraptor.musicjungle.util.model.UserBuilder;
@@ -40,19 +39,15 @@ public class MusicControllerTest {
 
 	private MockSerializationResult result;
 	private MockValidator validator;
-	@Mock
-	private UserInfo userInfo;
-	@Mock
-	private MusicDao dao;
-	@Mock
-	private Musics musics;
 	private MusicController controller;
-	
 	private Music music;
 	private User user;
-
-	@Mock
-	private UploadedFile uploadFile;
+	
+	@Mock private UserInfo userInfo;
+	@Mock private MusicDao dao;
+	@Mock private Musics musics;
+	@Mock private UploadedFile uploadFile;
+	@Mock private UserDao userDao;
 	
 	@Before
 	public void setUp() {
@@ -60,7 +55,7 @@ public class MusicControllerTest {
 
 		result = new MockSerializationResult();
 		validator = new MockValidator();
-		controller = new MusicController(dao, userInfo, result, validator, musics);
+		controller = new MusicController(dao, userInfo, result, validator, musics, userDao);
 		
 		music = new MusicBuilder().withId(1L).withType(MusicType.ROCK).withTitle("Some Music").withDescription("Some description").build();
 		user = new UserBuilder().withName("Renan").withLogin("renanigt").withPassword("1234").build();
@@ -73,7 +68,6 @@ public class MusicControllerTest {
 		controller.add(music, uploadFile);
 		
 		verify(dao).add(music);
-		verify(dao).add(any(MusicOwner.class));
 		verify(musics).save(uploadFile, music);
 
 		assertThat(result.included().get("notice").toString(), is(music.getTitle() + " music added"));
@@ -146,7 +140,7 @@ public class MusicControllerTest {
 	@Test
 	public void shouldShowAllMusicsAsHTTP() {
 		MockHttpResult mockHttpResult = new MockHttpResult();
-		controller = new MusicController(dao, userInfo, mockHttpResult, validator, musics);
+		controller = new MusicController(dao, userInfo, mockHttpResult, validator, musics, userDao);
 		when(dao.listAll()).thenReturn(Arrays.asList(music));
 		controller.showAllMusicsAsHTTP();
 		assertThat(mockHttpResult.getBody(), is("<p class=\"content\">"+ Arrays.asList(music).toString()+"</p>"));

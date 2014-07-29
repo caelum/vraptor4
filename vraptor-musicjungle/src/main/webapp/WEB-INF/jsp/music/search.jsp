@@ -1,4 +1,4 @@
-﻿<%@ include file="/header.jsp" %> 
+<%@ include file="/header.jsp" %> 
 
 <h1><fmt:message key="search_results"/></h1>
 
@@ -20,12 +20,12 @@
 				<td>${music.description}</td>
 				<td><fmt:message key="${music.type}"/></td>
 				<td>
-					<c:forEach var="musicOwner" items="${music.musicOwners}">
-						${musicOwner.owner.name}<br/>
+					<c:forEach var="musicOwner" items="${music.owners}">
+						${musicOwner.name}<br/>
 					</c:forEach>
 				</td>
 				<td width="1px">
-					<form action="${linkTo[MusicOwnerController].addToMyList(userInfo.user, music)}" method="post">
+					<form action="${linkTo[UserController].addToMyList(userInfo.user, music)}" method="post">
 						<input type="hidden" name="_method" value="PUT"/>
 						<button type="submit" class="btn btn-primary">
 							<span class="glyphicon glyphicon-plus"></span>

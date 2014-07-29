@@ -101,7 +101,7 @@ public class GsonDeserialization implements Deserializer {
 						Parameter parameter = parameterNames[i];
 						JsonElement node = root.get(parameter.getName());
 						
-						if (isWithoutRoot(parameterNames, root) || method.containsAnnotation(WithoutRoot.class)) { 
+						if (isWithoutRoot(parameterNames, root, method)) { 
 							values[i] = gson.fromJson(root, parameter.getParameterizedType());
 							logger.info("json without root deserialized");
 							break;
@@ -150,7 +150,10 @@ public class GsonDeserialization implements Deserializer {
 		return charset.split(",")[0];
 	}
 
-	private boolean isWithoutRoot(Parameter[] parameters, JsonObject root) {
+	private boolean isWithoutRoot(Parameter[] parameters, JsonObject root, ControllerMethod method) {
+		if(method.containsAnnotation(WithoutRoot.class)) {
+			return true;
+		}
 		for (Parameter parameter : parameters) {
 			if (root.get(parameter.getName()) != null)
 				return false;

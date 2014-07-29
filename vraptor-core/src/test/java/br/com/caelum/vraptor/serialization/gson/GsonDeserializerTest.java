@@ -44,6 +44,7 @@ import net.vidageek.mirror.dsl.Mirror;
 import org.junit.Before;
 import org.junit.Test;
 
+import br.com.caelum.vraptor.WithoutRoot;
 import br.com.caelum.vraptor.controller.BeanClass;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.controller.DefaultBeanClass;
@@ -72,6 +73,7 @@ public class GsonDeserializerTest {
 	private ControllerMethod listDog;
 	private ControllerMethod integerAndDogParameter;
 	private ControllerMethod dateParameter;
+	private ControllerMethod parameterEqualsJsonProperty;
 
 	@Before
 	public void setUp() throws Exception {
@@ -95,6 +97,7 @@ public class GsonDeserializerTest {
 		integerAndDogParameter = new DefaultControllerMethod(controllerClass, DogController.class.getDeclaredMethod("integerAndDogParameter",
 				Integer.class, Dog.class));
 		listDog = new DefaultControllerMethod(controllerClass, DogController.class.getDeclaredMethod("list", List.class));
+		parameterEqualsJsonProperty = new DefaultControllerMethod(controllerClass, DogController.class.getDeclaredMethod("parameterEqualsJsonProperty", Dog.class));
 	}
 
 	static class Dog {
@@ -108,6 +111,9 @@ public class GsonDeserializerTest {
 		public void noParameter() {}
 
 		public void dogParameter(Dog dog) {}
+
+		@WithoutRoot
+		public void parameterEqualsJsonProperty(Dog name) {}
 		
 		public void dogAndIntegerParameter(Dog dog, Integer times) {}
 
@@ -195,6 +201,19 @@ public class GsonDeserializerTest {
 
 		Object[] deserialized = deserializer.deserialize(stream, dogParameter);
 
+		assertThat(deserialized.length, is(1));
+		assertThat(deserialized[0], is(instanceOf(Dog.class)));
+		Dog dog = (Dog) deserialized[0];
+		assertThat(dog.name, is("Brutus"));
+		assertThat(dog.age, is(7));
+	}
+
+	@Test
+	public void shouldBeAbleToDeserializeADogWithoutRootAndParameterEqualsJsonProperty() throws Exception {
+		InputStream stream = asStream("{'name':'Brutus','age':7}");
+		
+		Object[] deserialized = deserializer.deserialize(stream, parameterEqualsJsonProperty);
+		
 		assertThat(deserialized.length, is(1));
 		assertThat(deserialized[0], is(instanceOf(Dog.class)));
 		Dog dog = (Dog) deserialized[0];

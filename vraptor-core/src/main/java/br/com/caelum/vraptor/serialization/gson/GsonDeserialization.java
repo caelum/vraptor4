@@ -30,12 +30,12 @@ import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import br.com.caelum.vraptor.WithoutRoot;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.http.Parameter;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.serialization.Deserializer;
 import br.com.caelum.vraptor.serialization.Deserializes;
-import br.com.caelum.vraptor.serialization.gson.GsonDeserializerBuilder;
 import br.com.caelum.vraptor.view.ResultException;
 
 import com.google.common.io.CharStreams;
@@ -101,7 +101,7 @@ public class GsonDeserialization implements Deserializer {
 						Parameter parameter = parameterNames[i];
 						JsonElement node = root.get(parameter.getName());
 						
-						if (isWithoutRoot(parameterNames, root)) { 
+						if (isWithoutRoot(parameterNames, root) || method.containsAnnotation(WithoutRoot.class)) { 
 							values[i] = gson.fromJson(root, parameter.getParameterizedType());
 							logger.info("json without root deserialized");
 							break;

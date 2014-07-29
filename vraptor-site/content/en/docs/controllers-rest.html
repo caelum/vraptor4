@@ -432,6 +432,23 @@ You can also consumes a JSON without root element, as example below:
 
 VRaptor will take care of converting this data automatically to your `customer` object.
 
+If the JSON or XML has any property with the same name of some of method parameters, you need to use the `@WithoutRoot` annotation to force deserialization without root element.
+
+~~~ 
+#!json
+{"id":3,"customer":"Paulo"}
+~~~ 
+
+~~~ 
+#!java
+@Consumes("application/json")
+@WithoutRoot
+@Post
+public void add(Customer customer) {
+    customerDAO.save(customer);
+}
+~~~ 
+
 You can also to define more than one content type accepted by your method, i.e:
 
 ~~~ 

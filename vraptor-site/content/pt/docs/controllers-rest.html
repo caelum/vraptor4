@@ -409,6 +409,23 @@ Você também pode consumir o JSON sem o elemento da raiz (`root`):
 
 O VRaptor vai cuidar de converter estes dados automaticamente para o seu objeto `Cliente`. 
 
+Se o JSON ou XML contém alguma propriedade com o mesmo nome de algum dos parâmetros do método, você precisa usar a anotação `@WithoutRoot` para forçar a deserialização sem o elemento raiz.
+
+~~~ 
+#!json
+{"id":3,"cliente":"Paulo"}
+~~~ 
+
+~~~ 
+#!java
+@Consumes("application/json")
+@WithoutRoot
+@Post
+public void adicionar(Cliente cliente) {
+    clienteDAO.salvar(cliente);
+}
+~~~ 
+
 Há ainda como definir mais de um content-type aceito pelo seu método, como por exemplo:
 
 ~~~ 

@@ -34,4 +34,5 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Consumes {
 	String[] value() default {};
+	boolean withoutRoot() default false;
 }

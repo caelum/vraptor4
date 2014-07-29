@@ -44,13 +44,13 @@ import net.vidageek.mirror.dsl.Mirror;
 import org.junit.Before;
 import org.junit.Test;
 
+import br.com.caelum.vraptor.Consumes;
 import br.com.caelum.vraptor.controller.BeanClass;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.controller.DefaultBeanClass;
 import br.com.caelum.vraptor.controller.DefaultControllerMethod;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.http.ParanamerNameProvider;
-import br.com.caelum.vraptor.serialization.WithoutRoot;
 import br.com.caelum.vraptor.util.test.MockInstanceImpl;
 import br.com.caelum.vraptor.view.GenericController;
 
@@ -112,7 +112,7 @@ public class GsonDeserializerTest {
 
 		public void dogParameter(Dog dog) {}
 
-		@WithoutRoot
+		@Consumes(withoutRoot = true)
 		public void parameterEqualsJsonProperty(Dog name) {}
 		
 		public void dogAndIntegerParameter(Dog dog, Integer times) {}

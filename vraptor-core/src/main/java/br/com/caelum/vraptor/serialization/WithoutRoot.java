@@ -14,7 +14,7 @@
  * the License.
  */
 
-package br.com.caelum.vraptor;
+package br.com.caelum.vraptor.serialization;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
@@ -22,6 +22,15 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import br.com.caelum.vraptor.Consumes;
+
+/**
+ * Force the {@link Consumes} deserialization to be without root.
+ * 
+ * @author Renan Montenegro
+ * @since 4.1
+ *
+ */
 @Documented
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)

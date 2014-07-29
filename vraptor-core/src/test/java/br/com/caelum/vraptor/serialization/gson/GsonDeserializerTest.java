@@ -44,13 +44,13 @@ import net.vidageek.mirror.dsl.Mirror;
 import org.junit.Before;
 import org.junit.Test;
 
-import br.com.caelum.vraptor.WithoutRoot;
 import br.com.caelum.vraptor.controller.BeanClass;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.controller.DefaultBeanClass;
 import br.com.caelum.vraptor.controller.DefaultControllerMethod;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.http.ParanamerNameProvider;
+import br.com.caelum.vraptor.serialization.WithoutRoot;
 import br.com.caelum.vraptor.util.test.MockInstanceImpl;
 import br.com.caelum.vraptor.view.GenericController;
 

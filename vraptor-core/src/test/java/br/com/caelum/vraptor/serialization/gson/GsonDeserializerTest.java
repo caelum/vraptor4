@@ -110,17 +110,22 @@ public class GsonDeserializerTest {
 
 		public void noParameter() {}
 
+		@Consumes
 		public void dogParameter(Dog dog) {}
 
 		@Consumes(withoutRoot = true)
 		public void parameterEqualsJsonProperty(Dog name) {}
 		
+		@Consumes
 		public void dogAndIntegerParameter(Dog dog, Integer times) {}
 
+		@Consumes
 		public void integerAndDogParameter(Integer times, Dog dog) {}
 
+		@Consumes
 		public void dateParameter(Date date) {}
 
+		@Consumes
 		public void list(List<Dog> dogs) {}
 	}
 

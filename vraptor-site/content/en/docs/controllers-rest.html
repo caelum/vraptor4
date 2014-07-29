@@ -442,7 +442,6 @@ If the JSON has any property with the same name of some of method parameters, yo
 ~~~ 
 #!java
 @Consumes(value="application/json", withoutRoot=true)
-@WithoutRoot
 @Post
 public void add(Customer customer) {
     customerDAO.save(customer);

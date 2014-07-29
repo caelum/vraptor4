@@ -419,7 +419,6 @@ Se o JSON contém alguma propriedade com o mesmo nome de algum dos parâmetros d
 ~~~ 
 #!java
 @Consumes(value="application/json", withoutRoot=true)
-@WithoutRoot
 @Post
 public void adicionar(Cliente cliente) {
     clienteDAO.salvar(cliente);

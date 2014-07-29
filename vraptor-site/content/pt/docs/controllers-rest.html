@@ -409,7 +409,7 @@ Você também pode consumir o JSON sem o elemento da raiz (`root`):
 
 O VRaptor vai cuidar de converter estes dados automaticamente para o seu objeto `Cliente`. 
 
-Se o JSON contém alguma propriedade com o mesmo nome de algum dos parâmetros do método, você precisa usar a anotação `@WithoutRoot` para forçar a deserialização sem o elemento raiz.
+Se o JSON contém alguma propriedade com o mesmo nome de algum dos parâmetros do método, você precisa usar a propriedade `withoutRoot` da anotação `@Consumes` para forçar a deserialização sem o elemento raiz.
 
 ~~~ 
 #!json
@@ -418,7 +418,7 @@ Se o JSON contém alguma propriedade com o mesmo nome de algum dos parâmetros d
 
 ~~~ 
 #!java
-@Consumes("application/json")
+@Consumes(value="application/json", withoutRoot=true)
 @WithoutRoot
 @Post
 public void adicionar(Cliente cliente) {

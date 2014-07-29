@@ -151,7 +151,7 @@ public class GsonDeserialization implements Deserializer {
 	}
 
 	private boolean isWithoutRoot(Parameter[] parameters, JsonObject root, ControllerMethod method) {
-		if(method.containsAnnotation(Consumes.class) && method.getMethod().getAnnotation(Consumes.class).withoutRoot() == true) {
+		if(method.containsAnnotation(Consumes.class) && method.getMethod().getAnnotation(Consumes.class).withoutRoot()) {
 			return true;
 		}
 		for (Parameter parameter : parameters) {

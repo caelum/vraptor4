@@ -111,6 +111,10 @@ public class GsonDeserializerTest {
 		listDog = new DefaultControllerMethod(controllerClass, DogController.class.getDeclaredMethod("list", List.class));
 		dogParameterWithoutRoot = new DefaultControllerMethod(controllerClass, DogController.class.getDeclaredMethod("dogParameterWithoutRoot", Dog.class));
 		dogParameterNameEqualsJsonPropertyWithoutRoot = new DefaultControllerMethod(controllerClass, DogController.class.getDeclaredMethod("dogParameterNameEqualsJsonPropertyWithoutRoot", Dog.class));
+		
+		when(deserializeeInstance.get()).thenReturn(new Deserializee());
+		when(container.instanceFor(WithRoot.class)).thenReturn(new WithRoot());
+		when(container.instanceFor(WithoutRoot.class)).thenReturn(new WithoutRoot());
 	}
 
 	static class Dog {
@@ -189,8 +193,6 @@ public class GsonDeserializerTest {
 				"{'name':'name3','age':3}" + 
 			"]}");
  
-		when(deserializeeInstance.get()).thenReturn(new Deserializee());
-		
 		Object[] deserialized = deserializer.deserialize(stream, listDog);
 		List<Dog>  dogs = (List<Dog>) deserialized[0]; 
 		assertThat(dogs.size(), is(3));
@@ -209,9 +211,6 @@ public class GsonDeserializerTest {
 	public void shouldBeAbleToDeserializeADog() throws Exception {
 		InputStream stream = asStream("{'dog':{'name':'Brutus','age':7}}");
 
-		when(deserializeeInstance.get()).thenReturn(new Deserializee());
-		when(container.instanceFor(WithRoot.class)).thenReturn(new WithRoot());
-		
 		Object[] deserialized = deserializer.deserialize(stream, dogParameter);
 
 		assertThat(deserialized.length, is(1));
@@ -225,9 +224,6 @@ public class GsonDeserializerTest {
 	public void shouldBeAbleToDeserializeADogWithoutRootAndParameterNameEqualsJsonProperty() throws Exception {
 		InputStream stream = asStream("{'name':'Brutus','age':7}");
 
-		when(deserializeeInstance.get()).thenReturn(new Deserializee());
-		when(container.instanceFor(WithoutRoot.class)).thenReturn(new WithoutRoot());
-		
 		Object[] deserialized = deserializer.deserialize(stream, dogParameterNameEqualsJsonPropertyWithoutRoot);
 
 		assertThat(deserialized.length, is(1));
@@ -240,8 +236,6 @@ public class GsonDeserializerTest {
 	@Test
 	public void shouldBeAbleToDeserializeADogWithoutRoot() throws Exception {
 		InputStream stream = asStream("{'name':'Brutus','age':7}");
-		
-		when(deserializeeInstance.get()).thenReturn(new Deserializee());
 		
 		Object[] deserialized = deserializer.deserialize(stream, dogParameterWithoutRoot);
 		
@@ -263,9 +257,6 @@ public class GsonDeserializerTest {
 
 		InputStream stream = asStream("{'dog':{'name':'Renan Reis','age':'0'}}");
 
-		when(deserializeeInstance.get()).thenReturn(new Deserializee());
-		when(container.instanceFor(WithRoot.class)).thenReturn(new WithRoot());
-		
 		Object[] deserialized = deserializer.deserialize(stream, dogParameter);
 
 		assertThat(deserialized.length, is(1));
@@ -279,8 +270,6 @@ public class GsonDeserializerTest {
 	public void shouldBeAbleToDeserializeADogWhenMethodHasMoreThanOneArgument() throws Exception {
 		InputStream stream = asStream("{'dog':{'name':'Brutus','age':7}}");
 
-		when(deserializeeInstance.get()).thenReturn(new Deserializee());
-		
 		Object[] deserialized = deserializer.deserialize(stream, dogAndIntegerParameter);
 
 		assertThat(deserialized.length, is(2));
@@ -294,8 +283,6 @@ public class GsonDeserializerTest {
 	public void shouldBeAbleToDeserializeADogWhenMethodHasMoreThanOneArgumentAndJsonIsTheLastOne() throws Exception {
 		InputStream stream = asStream("{'dog':{'name':'Brutus','age':7}}");
 
-		when(deserializeeInstance.get()).thenReturn(new Deserializee());
-		
 		Object[] deserialized = deserializer.deserialize(stream, integerAndDogParameter);
 
 		assertThat(deserialized.length, is(2));
@@ -309,9 +296,6 @@ public class GsonDeserializerTest {
 	public void shouldBeAbleToDeserializeADogNamedDifferently() throws Exception {
 		InputStream stream = asStream("{'dog':{'name':'Brutus','age':7}}");
 
-		when(deserializeeInstance.get()).thenReturn(new Deserializee());
-		when(container.instanceFor(WithRoot.class)).thenReturn(new WithRoot());
-		
 		Object[] deserialized = deserializer.deserialize(stream, dogParameter);
 
 		assertThat(deserialized.length, is(1));
@@ -325,9 +309,7 @@ public class GsonDeserializerTest {
 	public void shouldHonorRequestHeaderAcceptCharset() throws Exception {
 		InputStream stream = asStream("{'dog':{'name':'Ã§'}}", StandardCharsets.ISO_8859_1);
 		
-		when(deserializeeInstance.get()).thenReturn(new Deserializee());
 		when(request.getHeader("Accept-Charset")).thenReturn("UTF-8,*;q=0.5");
-		when(container.instanceFor(WithRoot.class)).thenReturn(new WithRoot());
 		
 		Object[] deserialized = deserializer.deserialize(stream, dogParameter);
 
@@ -343,9 +325,7 @@ public class GsonDeserializerTest {
 	public void whenNoCharsetHeaderIsFoundThanAssumeItIsUTF8() throws Exception {
 		InputStream stream = asStream("{'dog':{'name':'Ã§'}}",  StandardCharsets.ISO_8859_1);
 
-		when(deserializeeInstance.get()).thenReturn(new Deserializee());
 		when(request.getHeader("Accept-Charset")).thenReturn(null);
-		when(container.instanceFor(WithRoot.class)).thenReturn(new WithRoot());
 		
 		Object[] deserialized = deserializer.deserialize(stream, dogParameter);
 
@@ -369,8 +349,6 @@ public class GsonDeserializerTest {
 	public void shouldBeAbleToDeserializeADogWhenMethodHasMoreThanOneArgumentAndHasNotRoot() {
 		InputStream stream = asStream("{'name':'Brutus','age':7}");
 
-		when(deserializeeInstance.get()).thenReturn(new Deserializee());
-		
 		Object[] deserialized = deserializer.deserialize(stream, dogAndIntegerParameter);
 
 		assertThat(deserialized[0], is(instanceOf(Dog.class)));
@@ -386,8 +364,6 @@ public class GsonDeserializerTest {
 		Method method = new Mirror().on(DogGenericController.class).reflect().method("method").withAnyArgs();
 		ControllerMethod resource = new DefaultControllerMethod(resourceClass, method);
 		
-		when(deserializeeInstance.get()).thenReturn(new Deserializee());
-		
 		Object[] deserialized = deserializer.deserialize(stream, resource);
 
 		Dog dog = (Dog) deserialized[0];
@@ -401,8 +377,6 @@ public class GsonDeserializerTest {
 		BeanClass resourceClass = new DefaultBeanClass(DogGenericController.class);
 		Method method = new Mirror().on(DogGenericController.class).reflect().method("anotherMethod").withAnyArgs();
 		ControllerMethod resource = new DefaultControllerMethod(resourceClass, method);
-		
-		when(deserializeeInstance.get()).thenReturn(new Deserializee());
 		
 		Object[] deserialized = deserializer.deserialize(stream, resource);
 
@@ -418,9 +392,6 @@ public class GsonDeserializerTest {
 	public void shouldDeserializeADogWithCalendarWithISO8601() {
 		InputStream stream = asStream("{'dog':{'name':'Otto','age':2,'birthday':'2013-07-23T17:14:14-03:00'}}");
 
-		when(deserializeeInstance.get()).thenReturn(new Deserializee());
-		when(container.instanceFor(WithRoot.class)).thenReturn(new WithRoot());
-		
 		Object[] deserialized = deserializer.deserialize(stream, dogParameter);
 
 		assertThat(deserialized.length, is(1));
@@ -439,8 +410,6 @@ public class GsonDeserializerTest {
 	@Test
 	public void shouldDeserializeADateWithISO8601() {
 		InputStream stream = asStream("{\"date\":\"1988-02-25T02:30:15 -0300\"}");
-		
-		when(deserializeeInstance.get()).thenReturn(new Deserializee());
 		
 		Object[] deserialized = deserializer.deserialize(stream, dateParameter);
 		assertThat(deserialized.length, is(1));

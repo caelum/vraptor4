@@ -21,12 +21,13 @@ import static com.google.common.base.Strings.isNullOrEmpty;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
+
+import net.vidageek.mirror.dsl.Mirror;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -105,9 +106,8 @@ public class GsonDeserialization implements Deserializer {
 					Consumes annotation = method.getMethod().getAnnotation(Consumes.class);
 					
 					for(int i = 0; i < annotation.options().length; i++) {
-						Method methodConfig = annotation.options()[i].getMethod("config", Deserializee.class);
 						Object objectConfig = Class.forName(annotation.options()[i].getName()).newInstance();
-						methodConfig.invoke(objectConfig, deserializee);
+						new Mirror().on(objectConfig).invoke().method("config").withArgs(deserializee);
 					}
 					
 					for (int i = 0; i < types.length; i++) {

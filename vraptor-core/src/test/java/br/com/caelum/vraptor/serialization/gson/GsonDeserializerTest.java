@@ -73,7 +73,8 @@ public class GsonDeserializerTest {
 	private ControllerMethod listDog;
 	private ControllerMethod integerAndDogParameter;
 	private ControllerMethod dateParameter;
-	private ControllerMethod dogParameterWithout;
+	private ControllerMethod dogParameterWithoutRoot;
+	private ControllerMethod dogParameterNameEqualsJsonPropertyWithoutRoot;
 
 	@Before
 	public void setUp() throws Exception {
@@ -97,7 +98,8 @@ public class GsonDeserializerTest {
 		integerAndDogParameter = new DefaultControllerMethod(controllerClass, DogController.class.getDeclaredMethod("integerAndDogParameter",
 				Integer.class, Dog.class));
 		listDog = new DefaultControllerMethod(controllerClass, DogController.class.getDeclaredMethod("list", List.class));
-		dogParameterWithout = new DefaultControllerMethod(controllerClass, DogController.class.getDeclaredMethod("dogParameterWithout", Dog.class));
+		dogParameterWithoutRoot = new DefaultControllerMethod(controllerClass, DogController.class.getDeclaredMethod("dogParameterWithoutRoot", Dog.class));
+		dogParameterNameEqualsJsonPropertyWithoutRoot = new DefaultControllerMethod(controllerClass, DogController.class.getDeclaredMethod("dogParameterNameEqualsJsonPropertyWithoutRoot", Dog.class));
 	}
 
 	static class Dog {
@@ -113,8 +115,11 @@ public class GsonDeserializerTest {
 		@Consumes(options=WithRoot.class)
 		public void dogParameter(Dog dog) {}
 
+		@Consumes
+		public void dogParameterWithoutRoot(Dog dog) {}
+
 		@Consumes(options=WithoutRoot.class)
-		public void dogParameterWithout(Dog name) {}
+		public void dogParameterNameEqualsJsonPropertyWithoutRoot(Dog name) {}
 
 		@Consumes
 		public void dogAndIntegerParameter(Dog dog, Integer times) {}
@@ -201,11 +206,24 @@ public class GsonDeserializerTest {
 	}
 
 	@Test
-	public void shouldBeAbleToDeserializeADogWithoutRoot() throws Exception {
+	public void shouldBeAbleToDeserializeADogWithoutRootAndParameterNameEqualsJsonProperty() throws Exception {
 		InputStream stream = asStream("{'name':'Brutus','age':7}");
 
-		Object[] deserialized = deserializer.deserialize(stream, dogParameterWithout);
+		Object[] deserialized = deserializer.deserialize(stream, dogParameterNameEqualsJsonPropertyWithoutRoot);
 
+		assertThat(deserialized.length, is(1));
+		assertThat(deserialized[0], is(instanceOf(Dog.class)));
+		Dog dog = (Dog) deserialized[0];
+		assertThat(dog.name, is("Brutus"));
+		assertThat(dog.age, is(7));
+	}
+
+	@Test
+	public void shouldBeAbleToDeserializeADogWithoutRoot() throws Exception {
+		InputStream stream = asStream("{'name':'Brutus','age':7}");
+		
+		Object[] deserialized = deserializer.deserialize(stream, dogParameterWithoutRoot);
+		
 		assertThat(deserialized.length, is(1));
 		assertThat(deserialized[0], is(instanceOf(Dog.class)));
 		Dog dog = (Dog) deserialized[0];

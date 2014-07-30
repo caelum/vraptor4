@@ -44,6 +44,7 @@ import net.vidageek.mirror.dsl.Mirror;
 import org.junit.Before;
 import org.junit.Test;
 
+import br.com.caelum.vraptor.Consumes;
 import br.com.caelum.vraptor.controller.BeanClass;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.controller.DefaultBeanClass;
@@ -72,6 +73,7 @@ public class GsonDeserializerTest {
 	private ControllerMethod listDog;
 	private ControllerMethod integerAndDogParameter;
 	private ControllerMethod dateParameter;
+	private ControllerMethod dogParameterWithout;
 
 	@Before
 	public void setUp() throws Exception {
@@ -95,6 +97,7 @@ public class GsonDeserializerTest {
 		integerAndDogParameter = new DefaultControllerMethod(controllerClass, DogController.class.getDeclaredMethod("integerAndDogParameter",
 				Integer.class, Dog.class));
 		listDog = new DefaultControllerMethod(controllerClass, DogController.class.getDeclaredMethod("list", List.class));
+		dogParameterWithout = new DefaultControllerMethod(controllerClass, DogController.class.getDeclaredMethod("dogParameterWithout", Dog.class));
 	}
 
 	static class Dog {
@@ -107,14 +110,22 @@ public class GsonDeserializerTest {
 
 		public void noParameter() {}
 
+		@Consumes(options=WithRoot.class)
 		public void dogParameter(Dog dog) {}
-		
+
+		@Consumes(options=WithoutRoot.class)
+		public void dogParameterWithout(Dog name) {}
+
+		@Consumes
 		public void dogAndIntegerParameter(Dog dog, Integer times) {}
 
+		@Consumes
 		public void integerAndDogParameter(Integer times, Dog dog) {}
 
+		@Consumes
 		public void dateParameter(Date date) {}
 
+		@Consumes
 		public void list(List<Dog> dogs) {}
 	}
 
@@ -193,7 +204,7 @@ public class GsonDeserializerTest {
 	public void shouldBeAbleToDeserializeADogWithoutRoot() throws Exception {
 		InputStream stream = asStream("{'name':'Brutus','age':7}");
 
-		Object[] deserialized = deserializer.deserialize(stream, dogParameter);
+		Object[] deserialized = deserializer.deserialize(stream, dogParameterWithout);
 
 		assertThat(deserialized.length, is(1));
 		assertThat(deserialized[0], is(instanceOf(Dog.class)));

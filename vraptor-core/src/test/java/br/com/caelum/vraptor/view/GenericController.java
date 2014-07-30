@@ -15,16 +15,20 @@
  */
 package br.com.caelum.vraptor.view;
 
+import br.com.caelum.vraptor.Consumes;
+
 /**
  * Controller used to test Generic Controllers on LinkToHandler
  * @author Nykolas Lima
  *
  */
 public class GenericController<T> {
+	@Consumes
 	public void method(T entity) {
 		System.out.println("Do Something");
 	}
 	
+	@Consumes
 	public void anotherMethod(T entity, String param) {
 		System.out.println("Do Another Thing");
 	}

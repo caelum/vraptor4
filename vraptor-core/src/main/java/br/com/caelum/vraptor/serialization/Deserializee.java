@@ -1,8 +1,8 @@
 package br.com.caelum.vraptor.serialization;
 
-import javax.enterprise.inject.Vetoed;
+import javax.enterprise.context.Dependent;
 
-@Vetoed
+@Dependent
 public class Deserializee {
 
 	private boolean withoutRoot;

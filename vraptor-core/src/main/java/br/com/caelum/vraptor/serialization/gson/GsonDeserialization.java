@@ -24,6 +24,7 @@ import java.io.InputStreamReader;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
+import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
@@ -63,20 +64,23 @@ public class GsonDeserialization implements Deserializer {
 	private final ParameterNameProvider paramNameProvider;
 	private final HttpServletRequest request;
 	private final Container container;
+	private final Instance<Deserializee> deserializeeInstance;
 
 	/** 
 	 * @deprecated CDI eyes only
 	 */
 	protected GsonDeserialization() {
-		this(null, null, null, null);
+		this(null, null, null, null, null);
 	}
 	
 	@Inject
-	public GsonDeserialization(GsonDeserializerBuilder builder, ParameterNameProvider paramNameProvider, HttpServletRequest request, Container container) {
+	public GsonDeserialization(GsonDeserializerBuilder builder, ParameterNameProvider paramNameProvider, HttpServletRequest request, 
+			Container container, Instance<Deserializee> deserializeeInstance) {
 		this.builder = builder;
 		this.paramNameProvider = paramNameProvider;
 		this.request = request;
 		this.container = container;
+		this.deserializeeInstance = deserializeeInstance;
 	}
 
 	@Override
@@ -91,7 +95,7 @@ public class GsonDeserialization implements Deserializer {
 		
 		final Parameter[] parameterNames = paramNameProvider.parametersFor(method.getMethod());
 		final Object[] values = new Object[parameterNames.length];
-		final Deserializee deserializee = new Deserializee();
+		final Deserializee deserializee = deserializeeInstance.get();
 
 		try {
 			String content = getContentOfStream(inputStream);

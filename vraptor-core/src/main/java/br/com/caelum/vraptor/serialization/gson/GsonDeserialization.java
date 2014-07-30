@@ -106,8 +106,8 @@ public class GsonDeserialization implements Deserializer {
 					
 					Class<? extends DeserializerConfig>[] options = method.getMethod().getAnnotation(Consumes.class).options();
 					
-					for(int i = 0; i < options.length; i++) {
-						Object objectConfig = Class.forName(options[i].getName()).newInstance();
+					for(Class<? extends DeserializerConfig> option: options) {
+						Object objectConfig = Class.forName(option.getName()).newInstance();
 						new Mirror().on(objectConfig).invoke().method("config").withArgs(deserializee);
 					}
 					

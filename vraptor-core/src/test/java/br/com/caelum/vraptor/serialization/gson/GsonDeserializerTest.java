@@ -44,7 +44,6 @@ import net.vidageek.mirror.dsl.Mirror;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor.Consumes;
@@ -203,7 +202,7 @@ public class GsonDeserializerTest {
 	public void shouldBeAbleToDeserializeADog() throws Exception {
 		InputStream stream = asStream("{'dog':{'name':'Brutus','age':7}}");
 
-		Mockito.when(container.instanceFor(WithRoot.class)).thenReturn(new WithRoot());
+		when(container.instanceFor(WithRoot.class)).thenReturn(new WithRoot());
 		
 		Object[] deserialized = deserializer.deserialize(stream, dogParameter);
 
@@ -218,7 +217,7 @@ public class GsonDeserializerTest {
 	public void shouldBeAbleToDeserializeADogWithoutRootAndParameterNameEqualsJsonProperty() throws Exception {
 		InputStream stream = asStream("{'name':'Brutus','age':7}");
 
-		Mockito.when(container.instanceFor(WithoutRoot.class)).thenReturn(new WithoutRoot());
+		when(container.instanceFor(WithoutRoot.class)).thenReturn(new WithoutRoot());
 		
 		Object[] deserialized = deserializer.deserialize(stream, dogParameterNameEqualsJsonPropertyWithoutRoot);
 
@@ -253,7 +252,7 @@ public class GsonDeserializerTest {
 
 		InputStream stream = asStream("{'dog':{'name':'Renan Reis','age':'0'}}");
 
-		Mockito.when(container.instanceFor(WithRoot.class)).thenReturn(new WithRoot());
+		when(container.instanceFor(WithRoot.class)).thenReturn(new WithRoot());
 		
 		Object[] deserialized = deserializer.deserialize(stream, dogParameter);
 
@@ -294,7 +293,7 @@ public class GsonDeserializerTest {
 	public void shouldBeAbleToDeserializeADogNamedDifferently() throws Exception {
 		InputStream stream = asStream("{'dog':{'name':'Brutus','age':7}}");
 
-		Mockito.when(container.instanceFor(WithRoot.class)).thenReturn(new WithRoot());
+		when(container.instanceFor(WithRoot.class)).thenReturn(new WithRoot());
 		
 		Object[] deserialized = deserializer.deserialize(stream, dogParameter);
 
@@ -394,7 +393,7 @@ public class GsonDeserializerTest {
 	public void shouldDeserializeADogWithCalendarWithISO8601() {
 		InputStream stream = asStream("{'dog':{'name':'Otto','age':2,'birthday':'2013-07-23T17:14:14-03:00'}}");
 
-		Mockito.when(container.instanceFor(WithRoot.class)).thenReturn(new WithRoot());
+		when(container.instanceFor(WithRoot.class)).thenReturn(new WithRoot());
 		
 		Object[] deserialized = deserializer.deserialize(stream, dogParameter);
 

@@ -38,6 +38,7 @@ import br.com.caelum.vraptor.http.Parameter;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.serialization.Deserializee;
 import br.com.caelum.vraptor.serialization.Deserializer;
+import br.com.caelum.vraptor.serialization.DeserializerConfig;
 import br.com.caelum.vraptor.serialization.Deserializes;
 import br.com.caelum.vraptor.view.ResultException;
 
@@ -103,10 +104,10 @@ public class GsonDeserialization implements Deserializer {
 		
 					deserializee.setWithoutRoot(isWithoutRoot(parameterNames, root));
 					
-					Consumes annotation = method.getMethod().getAnnotation(Consumes.class);
+					Class<? extends DeserializerConfig>[] options = method.getMethod().getAnnotation(Consumes.class).options();
 					
-					for(int i = 0; i < annotation.options().length; i++) {
-						Object objectConfig = Class.forName(annotation.options()[i].getName()).newInstance();
+					for(int i = 0; i < options.length; i++) {
+						Object objectConfig = Class.forName(options[i].getName()).newInstance();
 						new Mirror().on(objectConfig).invoke().method("config").withArgs(deserializee);
 					}
 					

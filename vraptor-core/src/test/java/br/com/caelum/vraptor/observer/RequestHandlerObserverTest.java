@@ -17,6 +17,7 @@
 package br.com.caelum.vraptor.observer;
 
 import static br.com.caelum.vraptor.controller.HttpMethod.POST;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
@@ -33,9 +34,11 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.controller.ControllerNotFoundHandler;
 import br.com.caelum.vraptor.controller.HttpMethod;
+import br.com.caelum.vraptor.controller.InvalidInputException;
 import br.com.caelum.vraptor.controller.MethodNotAllowedHandler;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.events.ControllerFound;
@@ -46,26 +49,29 @@ import br.com.caelum.vraptor.http.MutableResponse;
 import br.com.caelum.vraptor.http.UrlToControllerTranslator;
 import br.com.caelum.vraptor.http.route.ControllerNotFoundException;
 import br.com.caelum.vraptor.http.route.MethodNotAllowedException;
+import br.com.caelum.vraptor.util.test.MockResult;
 
 public class RequestHandlerObserverTest {
 
 	private @Mock UrlToControllerTranslator translator;
 	private @Mock MutableRequest webRequest;
 	private @Mock MutableResponse webResponse;
-	private VRaptorRequestStarted requestStarted;
-	private RequestHandlerObserver observer;
 	private @Mock ControllerNotFoundHandler notFoundHandler;
 	private @Mock MethodNotAllowedHandler methodNotAllowedHandler;
 	private @Mock Event<ControllerFound> controllerFoundEvent;
 	private @Mock Event<RequestSucceded> requestSucceededEvent;
 	private @Mock InterceptorStack interceptorStack;
 	private @Mock FilterChain chain;
+	
+	private Result result = new MockResult();
+	private VRaptorRequestStarted requestStarted;
+	private RequestHandlerObserver observer;
 
 	@Before
 	public void config() {
 		MockitoAnnotations.initMocks(this);
 		requestStarted = new VRaptorRequestStarted(chain, webRequest, webResponse);
-		observer = new RequestHandlerObserver(translator, notFoundHandler, methodNotAllowedHandler, controllerFoundEvent, requestSucceededEvent, interceptorStack);
+		observer = new RequestHandlerObserver(translator, notFoundHandler, methodNotAllowedHandler, controllerFoundEvent, requestSucceededEvent, interceptorStack, result);
 	}
 
 	@Test
@@ -82,6 +88,14 @@ public class RequestHandlerObserverTest {
 		when(translator.translate(webRequest)).thenThrow(new MethodNotAllowedException(allowedMethods, POST.toString()));
 		observer.handle(requestStarted);
 		verify(methodNotAllowedHandler).deny(webRequest, webResponse, allowedMethods);
+		verify(interceptorStack, never()).start();
+	}
+	
+	@Test
+	public void shouldHandle400() throws Exception {
+		when(translator.translate(webRequest)).thenThrow(new InvalidInputException(""));
+		observer.handle(requestStarted);
+		assertTrue(result.used());
 		verify(interceptorStack, never()).start();
 	}
 

@@ -20,6 +20,7 @@ import javax.enterprise.event.Observes;
 import javax.enterprise.inject.Specializes;
 import javax.inject.Inject;
 
+import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.controller.ControllerNotFoundHandler;
 import br.com.caelum.vraptor.controller.MethodNotAllowedHandler;
 import br.com.caelum.vraptor.core.InterceptorStack;
@@ -40,10 +41,9 @@ class MockRequestHandlerObserver extends RequestHandlerObserver{
 	public MockRequestHandlerObserver(UrlToControllerTranslator translator,
 			ControllerNotFoundHandler controllerNotFoundHandler, MethodNotAllowedHandler methodNotAllowedHandler,
 			Event<ControllerFound> controllerFoundEvent, Event<RequestSucceded> endRequestEvent,
-			InterceptorStack interceptorStack) {
+			InterceptorStack interceptorStack, Result result) {
 		super(translator, controllerNotFoundHandler, methodNotAllowedHandler, controllerFoundEvent, endRequestEvent,
-				interceptorStack);
-		// TODO Auto-generated constructor stub
+				interceptorStack, result);
 	}
 
 	public void handle(@Observes VRaptorRequestStarted event) {

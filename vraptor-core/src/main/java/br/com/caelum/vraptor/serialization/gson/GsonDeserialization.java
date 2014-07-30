@@ -27,8 +27,6 @@ import java.lang.reflect.Type;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
-import net.vidageek.mirror.dsl.Mirror;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,6 +34,7 @@ import br.com.caelum.vraptor.Consumes;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.http.Parameter;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
+import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.serialization.Deserializee;
 import br.com.caelum.vraptor.serialization.Deserializer;
 import br.com.caelum.vraptor.serialization.DeserializerConfig;
@@ -63,19 +62,21 @@ public class GsonDeserialization implements Deserializer {
 	private final GsonDeserializerBuilder builder;
 	private final ParameterNameProvider paramNameProvider;
 	private final HttpServletRequest request;
+	private final Container container;
 
 	/** 
 	 * @deprecated CDI eyes only
 	 */
 	protected GsonDeserialization() {
-		this(null, null, null);
+		this(null, null, null, null);
 	}
 	
 	@Inject
-	public GsonDeserialization(GsonDeserializerBuilder builder, ParameterNameProvider paramNameProvider, HttpServletRequest request) {
+	public GsonDeserialization(GsonDeserializerBuilder builder, ParameterNameProvider paramNameProvider, HttpServletRequest request, Container container) {
 		this.builder = builder;
 		this.paramNameProvider = paramNameProvider;
 		this.request = request;
+		this.container = container;
 	}
 
 	@Override
@@ -104,11 +105,9 @@ public class GsonDeserialization implements Deserializer {
 		
 					deserializee.setWithoutRoot(isWithoutRoot(parameterNames, root));
 					
-					Class<? extends DeserializerConfig>[] options = method.getMethod().getAnnotation(Consumes.class).options();
-					
-					for(Class<? extends DeserializerConfig> option: options) {
-						Object objectConfig = Class.forName(option.getName()).newInstance();
-						new Mirror().on(objectConfig).invoke().method("config").withArgs(deserializee);
+					for(Class<? extends DeserializerConfig> option: method.getMethod().getAnnotation(Consumes.class).options()) {
+						DeserializerConfig config = container.instanceFor(option);
+						config.config(deserializee);
 					}
 					
 					for (int i = 0; i < types.length; i++) {

@@ -43,6 +43,9 @@ import net.vidageek.mirror.dsl.Mirror;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor.Consumes;
 import br.com.caelum.vraptor.controller.BeanClass;
@@ -51,6 +54,7 @@ import br.com.caelum.vraptor.controller.DefaultBeanClass;
 import br.com.caelum.vraptor.controller.DefaultControllerMethod;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.http.ParanamerNameProvider;
+import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.util.test.MockInstanceImpl;
 import br.com.caelum.vraptor.view.GenericController;
 
@@ -75,9 +79,12 @@ public class GsonDeserializerTest {
 	private ControllerMethod dateParameter;
 	private ControllerMethod dogParameterWithoutRoot;
 	private ControllerMethod dogParameterNameEqualsJsonPropertyWithoutRoot;
+	
+	private @Mock Container container;
 
 	@Before
 	public void setUp() throws Exception {
+		MockitoAnnotations.initMocks(this);
 		TimeZone.setDefault(TimeZone.getTimeZone("GMT-0300"));
 		provider = new ParanamerNameProvider();
 		request = mock(HttpServletRequest.class);
@@ -87,7 +94,7 @@ public class GsonDeserializerTest {
 		jsonDeserializers.add(new DateGsonConverter());
 
 		builder = new GsonBuilderWrapper(new MockInstanceImpl<>(jsonSerializers), new MockInstanceImpl<>(jsonDeserializers));
-		deserializer = new GsonDeserialization(builder, provider, request);
+		deserializer = new GsonDeserialization(builder, provider, request, container);
 		BeanClass controllerClass = new DefaultBeanClass(DogController.class);
 
 		noParameter = new DefaultControllerMethod(controllerClass, DogController.class.getDeclaredMethod("noParameter"));
@@ -196,6 +203,8 @@ public class GsonDeserializerTest {
 	public void shouldBeAbleToDeserializeADog() throws Exception {
 		InputStream stream = asStream("{'dog':{'name':'Brutus','age':7}}");
 
+		Mockito.when(container.instanceFor(WithRoot.class)).thenReturn(new WithRoot());
+		
 		Object[] deserialized = deserializer.deserialize(stream, dogParameter);
 
 		assertThat(deserialized.length, is(1));
@@ -209,6 +218,8 @@ public class GsonDeserializerTest {
 	public void shouldBeAbleToDeserializeADogWithoutRootAndParameterNameEqualsJsonProperty() throws Exception {
 		InputStream stream = asStream("{'name':'Brutus','age':7}");
 
+		Mockito.when(container.instanceFor(WithoutRoot.class)).thenReturn(new WithoutRoot());
+		
 		Object[] deserialized = deserializer.deserialize(stream, dogParameterNameEqualsJsonPropertyWithoutRoot);
 
 		assertThat(deserialized.length, is(1));
@@ -238,10 +249,12 @@ public class GsonDeserializerTest {
 		deserializers.add(new DogDeserializer());
 
 		builder = new GsonBuilderWrapper(new MockInstanceImpl<>(serializers), new MockInstanceImpl<>(deserializers));
-		deserializer = new GsonDeserialization(builder, provider, request);
+		deserializer = new GsonDeserialization(builder, provider, request, container);
 
 		InputStream stream = asStream("{'dog':{'name':'Renan Reis','age':'0'}}");
 
+		Mockito.when(container.instanceFor(WithRoot.class)).thenReturn(new WithRoot());
+		
 		Object[] deserialized = deserializer.deserialize(stream, dogParameter);
 
 		assertThat(deserialized.length, is(1));
@@ -281,6 +294,8 @@ public class GsonDeserializerTest {
 	public void shouldBeAbleToDeserializeADogNamedDifferently() throws Exception {
 		InputStream stream = asStream("{'dog':{'name':'Brutus','age':7}}");
 
+		Mockito.when(container.instanceFor(WithRoot.class)).thenReturn(new WithRoot());
+		
 		Object[] deserialized = deserializer.deserialize(stream, dogParameter);
 
 		assertThat(deserialized.length, is(1));
@@ -295,6 +310,8 @@ public class GsonDeserializerTest {
 		InputStream stream = asStream("{'dog':{'name':'Ã§'}}", StandardCharsets.ISO_8859_1);
 		
 		when(request.getHeader("Accept-Charset")).thenReturn("UTF-8,*;q=0.5");
+		when(container.instanceFor(WithRoot.class)).thenReturn(new WithRoot());
+		
 		Object[] deserialized = deserializer.deserialize(stream, dogParameter);
 
 		assertThat(deserialized.length, is(1));
@@ -310,6 +327,8 @@ public class GsonDeserializerTest {
 		InputStream stream = asStream("{'dog':{'name':'Ã§'}}",  StandardCharsets.ISO_8859_1);
 
 		when(request.getHeader("Accept-Charset")).thenReturn(null);
+		when(container.instanceFor(WithRoot.class)).thenReturn(new WithRoot());
+		
 		Object[] deserialized = deserializer.deserialize(stream, dogParameter);
 
 		assertThat(deserialized.length, is(1));
@@ -375,6 +394,8 @@ public class GsonDeserializerTest {
 	public void shouldDeserializeADogWithCalendarWithISO8601() {
 		InputStream stream = asStream("{'dog':{'name':'Otto','age':2,'birthday':'2013-07-23T17:14:14-03:00'}}");
 
+		Mockito.when(container.instanceFor(WithRoot.class)).thenReturn(new WithRoot());
+		
 		Object[] deserialized = deserializer.deserialize(stream, dogParameter);
 
 		assertThat(deserialized.length, is(1));

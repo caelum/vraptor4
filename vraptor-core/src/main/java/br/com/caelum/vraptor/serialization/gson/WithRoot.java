@@ -1,11 +1,11 @@
 package br.com.caelum.vraptor.serialization.gson;
 
-import javax.enterprise.inject.Vetoed;
+import javax.enterprise.context.Dependent;
 
 import br.com.caelum.vraptor.serialization.Deserializee;
 import br.com.caelum.vraptor.serialization.DeserializerConfig;
 
-@Vetoed
+@Dependent
 public class WithRoot implements DeserializerConfig {
 
 	@Override

@@ -22,14 +22,11 @@ import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToMany;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
 import org.hibernate.validator.constraints.Length;
-
-import com.google.common.base.Function;
-import com.google.common.collect.Collections2;
 
 /**
  * User entity representing the User table from the database. 
@@ -55,29 +52,8 @@ public class User implements Serializable {
 	@Length(min = 3, max = 100)
 	private String name;
 
-	// user to music mapping,
-	@OneToMany(mappedBy="owner")
-	private Set<MusicOwner> musicOwners;
-
-	public Set<MusicOwner> getMusicOwners() {
-		if (musicOwners == null) {
-			musicOwners = new HashSet<MusicOwner>();
-		}
-		return musicOwners;
-	}
-
-	public void setMusicOwners(Set<MusicOwner> musicOwners) {
-		this.musicOwners = musicOwners;
-	}
-
-	public Set<Music> getMusics() {
-		return new HashSet<Music>(Collections2.transform(getMusicOwners(), new Function<MusicOwner, Music>() {
-			@Override
-			public Music apply(MusicOwner copy) {
-				return copy.getMusic();
-			}
-		}));
-	}
+	@ManyToMany
+	private Set<Music> musics = new HashSet<>();
 
 	public String getLogin() {
 		return login;
@@ -103,4 +79,16 @@ public class User implements Serializable {
 		this.password = password;
 	}
 
+	public Set<Music> getMusics() {
+		return musics;
+	}
+
+	public void setMusics(Set<Music> musics) {
+		this.musics = musics;
+	}
+
+	public void add(Music music) {
+		getMusics().add(music);
+		music.getOwners().add(this);
+	}
 }

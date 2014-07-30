@@ -1,10 +1,7 @@
 package br.com.caelum.vraptor.musicjungle.util.model;
 
-import java.util.Set;
-
 import br.com.caelum.vraptor.musicjungle.enums.MusicType;
 import br.com.caelum.vraptor.musicjungle.model.Music;
-import br.com.caelum.vraptor.musicjungle.model.MusicOwner;
 
 public class MusicBuilder {
 
@@ -22,11 +19,6 @@ public class MusicBuilder {
 
 	public MusicBuilder withDescription(String description) {
 		music.setDescription(description);
-		return this;
-	}
-	
-	public MusicBuilder withMusicOwners(Set<MusicOwner> musicOwners) {
-		music.setMusicOwners(musicOwners);
 		return this;
 	}
 	

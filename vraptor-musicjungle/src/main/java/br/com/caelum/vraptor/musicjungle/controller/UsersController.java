@@ -23,12 +23,17 @@ import br.com.caelum.vraptor.Controller;
 import br.com.caelum.vraptor.Get;
 import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.Post;
+import br.com.caelum.vraptor.Put;
 import br.com.caelum.vraptor.Result;
+import br.com.caelum.vraptor.musicjungle.dao.MusicDao;
 import br.com.caelum.vraptor.musicjungle.dao.UserDao;
 import br.com.caelum.vraptor.musicjungle.enums.MusicType;
 import br.com.caelum.vraptor.musicjungle.interceptor.Public;
+import br.com.caelum.vraptor.musicjungle.interceptor.UserInfo;
+import br.com.caelum.vraptor.musicjungle.model.Music;
 import br.com.caelum.vraptor.musicjungle.model.User;
 import br.com.caelum.vraptor.musicjungle.validation.LoginAvailable;
+import br.com.caelum.vraptor.validator.SimpleMessage;
 import br.com.caelum.vraptor.validator.Validator;
 
 /**
@@ -41,12 +46,14 @@ public class UsersController {
 	private final Validator validator;
 	private final Result result;
 	private final UserDao userDao;
+	private final UserInfo userInfo;
+	private final MusicDao musicDao;
 
 	/**
 	 * @deprecated CDI eyes only
 	 */
 	protected UsersController() {
-		this(null, null, null);
+		this(null, null, null, null, null);
 	}
 
 	/**
@@ -56,12 +63,17 @@ public class UsersController {
 	 * @param userInfo info on the logged user.
 	 * @param result VRaptor result handler.
 	 * @param validator VRaptor validator.
+	 * @param userInfo 
 	 */
 	@Inject
-	public UsersController(UserDao dao, Result result, Validator validator) {
+	public UsersController(UserDao dao, Result result, Validator validator, 
+			UserInfo userInfo, MusicDao musicDao) {
+		
 		this.userDao = dao;
 		this.result = result;
 		this.validator = validator;
+		this.userInfo = userInfo;
+		this.musicDao = musicDao;
 	}
 
 	/**
@@ -141,4 +153,40 @@ public class UsersController {
 	    result.forwardTo("/WEB-INF/jsp/users/view.jsp");
 	    
 	}
+	
+	/**
+     * Accepts HTTP PUT requests. <br>
+     * 
+     * <strong>URL:</strong> /users/login/musics/id (for example, 
+     * /users/john/musics/3 adds the music with id 3 to the john's 
+     * collection)<br>
+     * 
+     * <strong>View:</strong> redirects to user's home <br>
+     *
+     * You can use more than one variable on URI. Since the browsers 
+     * don't support PUT method you have to pass an additional parameter: 
+     * <strong>_method=PUT</strong> for calling this method.<br>
+     *
+     * This method adds a music to a user's collection.
+     */
+    @Path("/users/{user.login}/musics/{music.id}")
+    @Put
+	public void addToMyList(User user, Music music) {
+    	User currentUser = userInfo.getUser();
+	    userDao.refresh(currentUser);
+	    
+	    validator.check(user.getLogin().equals(currentUser.getLogin()), 
+	            new SimpleMessage("user", "you_cant_add_to_others_list"));
+
+	    validator.check(!currentUser.getMusics().contains(music), 
+	            new SimpleMessage("music", "you_already_have_this_music"));
+
+		validator.onErrorUsePageOf(UsersController.class).home();
+
+		music = musicDao.load(music);
+		currentUser.add(music);
+		
+		result.redirectTo(UsersController.class).home();
+	}
+
 }

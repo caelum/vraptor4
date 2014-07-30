@@ -57,9 +57,9 @@ public class AuthorizationInterceptor {
 	@AroundCall
 	public void intercept(SimpleInterceptorStack stack) {
 
-		User current = null;
+		User current = info.getUser();
 		try {
-			current = dao.refresh(info.getUser());
+			dao.refresh(current);
 		} catch (Exception e) {
 			// could happen if the user does not exist in the database or if there's no user logged in.
 		}
@@ -74,7 +74,6 @@ public class AuthorizationInterceptor {
 			result.redirectTo(HomeController.class).login();
 			return;
 		}
-
 		stack.next();
 	}
 

@@ -37,11 +37,12 @@ import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.musicjungle.dao.MusicDao;
+import br.com.caelum.vraptor.musicjungle.dao.UserDao;
 import br.com.caelum.vraptor.musicjungle.files.Musics;
 import br.com.caelum.vraptor.musicjungle.interceptor.Public;
 import br.com.caelum.vraptor.musicjungle.interceptor.UserInfo;
 import br.com.caelum.vraptor.musicjungle.model.Music;
-import br.com.caelum.vraptor.musicjungle.model.MusicOwner;
+import br.com.caelum.vraptor.musicjungle.model.User;
 import br.com.caelum.vraptor.observer.download.Download;
 import br.com.caelum.vraptor.observer.download.FileDownload;
 import br.com.caelum.vraptor.observer.upload.UploadedFile;
@@ -70,12 +71,13 @@ public class MusicController {
 	private final UserInfo userInfo;
 	private final MusicDao musicDao;
 	private final Musics musics;
+	private final UserDao userDao;
 
 	/**
 	 * @deprecated CDI eyes only
 	 */
 	protected MusicController() {
-		this(null, null, null, null, null);
+		this(null, null, null, null, null, null);
 	}
 
 
@@ -86,15 +88,17 @@ public class MusicController {
 	 * @param result VRaptor result handler.
 	 * @param validator VRaptor validator.
 	 * @param factory dao factory.
+	 * @param userDao
 	 */
 	@Inject
 	public MusicController(MusicDao musicDao, UserInfo userInfo, 
-				Result result, Validator validator, Musics musics) {
+				Result result, Validator validator, Musics musics, UserDao userDao) {
 		this.musicDao = musicDao;
 		this.result = result;
         this.validator = validator;
         this.userInfo = userInfo;
 		this.musics = musics;
+		this.userDao = userDao;
 	}
 
 	/**
@@ -115,7 +119,11 @@ public class MusicController {
 		validator.onErrorForwardTo(UsersController.class).home();
 
 		musicDao.add(music);
-		musicDao.add(new MusicOwner(userInfo.getUser(), music));
+		
+		User currentUser = userInfo.getUser();
+		userDao.refresh(currentUser);
+		
+		currentUser.add(music);
 		
 		// is there a file?
 		if (file != null) {

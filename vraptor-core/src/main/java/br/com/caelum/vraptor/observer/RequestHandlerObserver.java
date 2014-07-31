@@ -17,7 +17,6 @@
 
 package br.com.caelum.vraptor.observer;
 
-import static javax.servlet.http.HttpServletResponse.SC_BAD_REQUEST;
 import static org.slf4j.LoggerFactory.getLogger;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -27,10 +26,10 @@ import javax.inject.Inject;
 
 import org.slf4j.Logger;
 
-import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.controller.ControllerNotFoundHandler;
 import br.com.caelum.vraptor.controller.InvalidInputException;
+import br.com.caelum.vraptor.controller.InvalidInputHandler;
 import br.com.caelum.vraptor.controller.MethodNotAllowedHandler;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.events.ControllerFound;
@@ -41,7 +40,6 @@ import br.com.caelum.vraptor.http.MutableResponse;
 import br.com.caelum.vraptor.http.UrlToControllerTranslator;
 import br.com.caelum.vraptor.http.route.ControllerNotFoundException;
 import br.com.caelum.vraptor.http.route.MethodNotAllowedException;
-import br.com.caelum.vraptor.view.Results;
 
 /**
  * Looks up the {@link ControllerMethod} for a specific request and start {@link
@@ -62,7 +60,7 @@ public class RequestHandlerObserver {
 	private final Event<ControllerFound> controllerFoundEvent;
 	private final InterceptorStack interceptorStack;
 	private final Event<RequestSucceded> endRequestEvent;
-	private final Result result;
+	private final InvalidInputHandler invalidInputHandler;
 
 	/**
 	 * @deprecated CDI eyes only
@@ -75,7 +73,7 @@ public class RequestHandlerObserver {
 	public RequestHandlerObserver(UrlToControllerTranslator translator,
 			ControllerNotFoundHandler controllerNotFoundHandler, MethodNotAllowedHandler methodNotAllowedHandler,
 			Event<ControllerFound> controllerFoundEvent, Event<RequestSucceded> endRequestEvent,
-			InterceptorStack interceptorStack, Result result) {
+			InterceptorStack interceptorStack, InvalidInputHandler invalidInputHandler) {
 		
 		this.translator = translator;
 		this.methodNotAllowedHandler = methodNotAllowedHandler;
@@ -83,7 +81,7 @@ public class RequestHandlerObserver {
 		this.controllerFoundEvent = controllerFoundEvent;
 		this.endRequestEvent = endRequestEvent;
 		this.interceptorStack = interceptorStack;
-		this.result = result;
+		this.invalidInputHandler = invalidInputHandler;
 	}
 
 	public void handle(@Observes VRaptorRequestStarted event) {
@@ -101,7 +99,7 @@ public class RequestHandlerObserver {
 			methodNotAllowedHandler.deny(request, response, e.getAllowedMethods());
 		} catch (InvalidInputException e) {
 			LOGGER.debug(e.getMessage(), e);
-			result.use(Results.http()).sendError(SC_BAD_REQUEST, e.getMessage());
+			invalidInputHandler.deny(e);
 		}
 	}
 }

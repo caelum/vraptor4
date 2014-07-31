@@ -81,7 +81,7 @@ public class Linker {
 		return noMissingParamsArgs;
 	}
 
-	private Method findMethodWithName(Class<?> type, String name) {
+	protected Method findMethodWithName(Class<?> type, String name) {
 		for (Method method : type.getDeclaredMethods()) {
 			if (!method.isBridge() && method.getName().equals(name)) {
 				return method;
@@ -95,7 +95,7 @@ public class Linker {
 		return findMethodWithName(type.getSuperclass(), name);
 	}
 
-	private int countMethodsWithSameName() {
+	protected int countMethodsWithSameName() {
 		int amount = 0;
 		for (Method method : controller.getDeclaredMethods()) {
 			if (!method.isBridge() && method.getName().equals(methodName)) {

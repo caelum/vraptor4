@@ -39,6 +39,7 @@ import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.controller.ControllerNotFoundHandler;
 import br.com.caelum.vraptor.controller.HttpMethod;
 import br.com.caelum.vraptor.controller.InvalidInputException;
+import br.com.caelum.vraptor.controller.InvalidInputHandler;
 import br.com.caelum.vraptor.controller.MethodNotAllowedHandler;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.events.ControllerFound;
@@ -62,8 +63,8 @@ public class RequestHandlerObserverTest {
 	private @Mock Event<RequestSucceded> requestSucceededEvent;
 	private @Mock InterceptorStack interceptorStack;
 	private @Mock FilterChain chain;
+	private @Mock InvalidInputHandler invalidInputHandler;
 	
-	private Result result = new MockResult();
 	private VRaptorRequestStarted requestStarted;
 	private RequestHandlerObserver observer;
 
@@ -71,7 +72,7 @@ public class RequestHandlerObserverTest {
 	public void config() {
 		MockitoAnnotations.initMocks(this);
 		requestStarted = new VRaptorRequestStarted(chain, webRequest, webResponse);
-		observer = new RequestHandlerObserver(translator, notFoundHandler, methodNotAllowedHandler, controllerFoundEvent, requestSucceededEvent, interceptorStack, result);
+		observer = new RequestHandlerObserver(translator, notFoundHandler, methodNotAllowedHandler, controllerFoundEvent, requestSucceededEvent, interceptorStack, invalidInputHandler);
 	}
 
 	@Test
@@ -93,10 +94,11 @@ public class RequestHandlerObserverTest {
 	
 	@Test
 	public void shouldHandle400() throws Exception {
-		when(translator.translate(webRequest)).thenThrow(new InvalidInputException(""));
+		InvalidInputException invalidInputException = new InvalidInputException("");
+		when(translator.translate(webRequest)).thenThrow(invalidInputException);
 		observer.handle(requestStarted);
-		assertTrue(result.used());
 		verify(interceptorStack, never()).start();
+		verify(invalidInputHandler).deny(invalidInputException);
 	}
 
 	@Test

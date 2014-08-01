@@ -51,11 +51,10 @@ public class HttpMethodTest {
 		HttpMethod.of(request);
 	}
 	
-	@Test(expected = IllegalArgumentException.class)
-	public void shouldThrowIllegalArgumentExceptionIf_methodIsUsedInGETRequests() throws Exception {
+	@Test(expected = InvalidInputException.class)
+	public void shouldThrowInvalidInputExceptionIf_methodIsUsedInGETRequests() throws Exception {
 		when(request.getParameter("_method")).thenReturn("DELETE");
 		when(request.getMethod()).thenReturn("GET");
-				
 		HttpMethod.of(request);
 	}
 

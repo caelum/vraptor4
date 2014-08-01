@@ -28,11 +28,15 @@ import org.slf4j.Logger;
 
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.controller.ControllerNotFoundHandler;
+import br.com.caelum.vraptor.controller.InvalidInputException;
+import br.com.caelum.vraptor.controller.InvalidInputHandler;
 import br.com.caelum.vraptor.controller.MethodNotAllowedHandler;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.events.ControllerFound;
 import br.com.caelum.vraptor.events.RequestSucceded;
 import br.com.caelum.vraptor.events.VRaptorRequestStarted;
+import br.com.caelum.vraptor.http.MutableRequest;
+import br.com.caelum.vraptor.http.MutableResponse;
 import br.com.caelum.vraptor.http.UrlToControllerTranslator;
 import br.com.caelum.vraptor.http.route.ControllerNotFoundException;
 import br.com.caelum.vraptor.http.route.MethodNotAllowedException;
@@ -55,41 +59,47 @@ public class RequestHandlerObserver {
 	private final MethodNotAllowedHandler methodNotAllowedHandler;
 	private final Event<ControllerFound> controllerFoundEvent;
 	private final InterceptorStack interceptorStack;
-
-	private Event<RequestSucceded> endRequestEvent;
+	private final Event<RequestSucceded> endRequestEvent;
+	private final InvalidInputHandler invalidInputHandler;
 
 	/**
 	 * @deprecated CDI eyes only
 	 */
 	protected RequestHandlerObserver() {
-		this(null, null, null, null, null, null);
+		this(null, null, null, null, null, null, null);
 	}
 
 	@Inject
 	public RequestHandlerObserver(UrlToControllerTranslator translator,
 			ControllerNotFoundHandler controllerNotFoundHandler, MethodNotAllowedHandler methodNotAllowedHandler,
-			Event<ControllerFound> controllerFoundEvent,
-			Event<RequestSucceded> endRequestEvent,
-			InterceptorStack interceptorStack) {
+			Event<ControllerFound> controllerFoundEvent, Event<RequestSucceded> endRequestEvent,
+			InterceptorStack interceptorStack, InvalidInputHandler invalidInputHandler) {
+		
 		this.translator = translator;
 		this.methodNotAllowedHandler = methodNotAllowedHandler;
 		this.controllerNotFoundHandler = controllerNotFoundHandler;
 		this.controllerFoundEvent = controllerFoundEvent;
 		this.endRequestEvent = endRequestEvent;
 		this.interceptorStack = interceptorStack;
+		this.invalidInputHandler = invalidInputHandler;
 	}
 
 	public void handle(@Observes VRaptorRequestStarted event) {
+		MutableResponse response = event.getResponse();
+		MutableRequest request = event.getRequest();
 		try {
-			ControllerMethod method = translator.translate(event.getRequest());
+			ControllerMethod method = translator.translate(request);
 			controllerFoundEvent.fire(new ControllerFound(method));
 			interceptorStack.start();
-			endRequestEvent.fire(new RequestSucceded(event.getRequest(), event.getResponse()));
+			endRequestEvent.fire(new RequestSucceded(request, response));
 		} catch (ControllerNotFoundException e) {
-			controllerNotFoundHandler.couldntFind(event.getChain(), event.getRequest(), event.getResponse());
+			controllerNotFoundHandler.couldntFind(event.getChain(), request, response);
 		} catch (MethodNotAllowedException e) {
 			LOGGER.debug(e.getMessage(), e);
-			methodNotAllowedHandler.deny(event.getRequest(), event.getResponse(), e.getAllowedMethods());
+			methodNotAllowedHandler.deny(request, response, e.getAllowedMethods());
+		} catch (InvalidInputException e) {
+			LOGGER.debug(e.getMessage(), e);
+			invalidInputHandler.deny(e);
 		}
 	}
 }

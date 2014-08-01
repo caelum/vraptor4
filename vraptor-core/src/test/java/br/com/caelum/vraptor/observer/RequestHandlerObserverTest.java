@@ -36,6 +36,8 @@ import org.mockito.MockitoAnnotations;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.controller.ControllerNotFoundHandler;
 import br.com.caelum.vraptor.controller.HttpMethod;
+import br.com.caelum.vraptor.controller.InvalidInputException;
+import br.com.caelum.vraptor.controller.InvalidInputHandler;
 import br.com.caelum.vraptor.controller.MethodNotAllowedHandler;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.events.ControllerFound;
@@ -52,20 +54,22 @@ public class RequestHandlerObserverTest {
 	private @Mock UrlToControllerTranslator translator;
 	private @Mock MutableRequest webRequest;
 	private @Mock MutableResponse webResponse;
-	private VRaptorRequestStarted requestStarted;
-	private RequestHandlerObserver observer;
 	private @Mock ControllerNotFoundHandler notFoundHandler;
 	private @Mock MethodNotAllowedHandler methodNotAllowedHandler;
 	private @Mock Event<ControllerFound> controllerFoundEvent;
 	private @Mock Event<RequestSucceded> requestSucceededEvent;
 	private @Mock InterceptorStack interceptorStack;
 	private @Mock FilterChain chain;
+	private @Mock InvalidInputHandler invalidInputHandler;
+	
+	private VRaptorRequestStarted requestStarted;
+	private RequestHandlerObserver observer;
 
 	@Before
 	public void config() {
 		MockitoAnnotations.initMocks(this);
 		requestStarted = new VRaptorRequestStarted(chain, webRequest, webResponse);
-		observer = new RequestHandlerObserver(translator, notFoundHandler, methodNotAllowedHandler, controllerFoundEvent, requestSucceededEvent, interceptorStack);
+		observer = new RequestHandlerObserver(translator, notFoundHandler, methodNotAllowedHandler, controllerFoundEvent, requestSucceededEvent, interceptorStack, invalidInputHandler);
 	}
 
 	@Test
@@ -83,6 +87,15 @@ public class RequestHandlerObserverTest {
 		observer.handle(requestStarted);
 		verify(methodNotAllowedHandler).deny(webRequest, webResponse, allowedMethods);
 		verify(interceptorStack, never()).start();
+	}
+	
+	@Test
+	public void shouldHandle400() throws Exception {
+		InvalidInputException invalidInputException = new InvalidInputException("");
+		when(translator.translate(webRequest)).thenThrow(invalidInputException);
+		observer.handle(requestStarted);
+		verify(interceptorStack, never()).start();
+		verify(invalidInputHandler).deny(invalidInputException);
 	}
 
 	@Test

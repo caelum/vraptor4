@@ -126,12 +126,6 @@ public class DefaultLogicResult implements LogicResult {
 		});
 	}
 
-	private <T> void includeParametersInFlash(final Class<T> type, Method method, Object[] args) {
-		if (args != null && args.length != 0) {
-			flash.includeParameters(DefaultControllerMethod.instanceFor(type, method), args);
-		}
-	}
-
 	@Override
 	public <T> T redirectTo(final Class<T> type) {
 		logger.debug("redirecting to class {}", type.getSimpleName());
@@ -157,15 +151,23 @@ public class DefaultLogicResult implements LogicResult {
 		});
 	}
 
-	private boolean acceptsHttpGet(Method method) {
+	protected <T> void includeParametersInFlash(final Class<T> type, Method method, Object[] args) {
+		if (args != null && args.length != 0) {
+			flash.includeParameters(DefaultControllerMethod.instanceFor(type, method), args);
+		}
+	}
+
+	protected boolean acceptsHttpGet(Method method) {
 		if (method.isAnnotationPresent(Get.class)) {
 			return true;
 		}
+
 		for (HttpMethod httpMethod : HttpMethod.values()) {
 			if (method.isAnnotationPresent(httpMethod.getAnnotation())) {
 				return false;
 			}
 		}
+
 		return true;
 	}
 

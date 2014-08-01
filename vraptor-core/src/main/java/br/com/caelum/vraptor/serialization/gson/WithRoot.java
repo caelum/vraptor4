@@ -11,7 +11,6 @@ import br.com.caelum.vraptor.serialization.DeserializerConfig;
  * 
  * @author Renan Montenegro
  * @since REPLACE_ME_ON_NEXT_RELEASE
- *
  */
 @Dependent
 public class WithRoot implements DeserializerConfig {

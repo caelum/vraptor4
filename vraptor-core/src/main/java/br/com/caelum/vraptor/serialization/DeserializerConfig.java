@@ -9,7 +9,6 @@ import br.com.caelum.vraptor.serialization.gson.GsonDeserialization;
  * 
  * @author Renan Montenegro
  * @since REPLACE_ME_ON_NEXT_RELEASE
- *
  */
 public interface DeserializerConfig {
 	void config(Deserializee deserializee);

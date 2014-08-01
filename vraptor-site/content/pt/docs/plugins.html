@@ -68,6 +68,22 @@ Você pode adicioná-lo em seu projeto Maven conforme o trecho abaixo, ou copiar
 [Plugin no Github](https://github.com/caelum/vraptor-hibernate).
 
 
+##VRaptor Java 8
+
+Plugin de suporte para Java 8. Oferece converters para as classes do Java Time (JSR-310), reflection para o nome dos parâmetros e mais.
+
+~~~ 
+#!xml
+<dependency>
+	<groupId>br.com.caelum.vraptor</groupId>
+	<artifactId>vraptor-java8</artifactId>
+	<version>4.0.0-RC1</version> <!-- ou a última versão disponível -->
+</dependency>
+~~~ 
+
+[Plugin no Github](https://github.com/caelum/vraptor-java8).
+
+
 ##Simple mail
 
 Permite envio de e-mails.
@@ -93,22 +109,6 @@ Joda-time é uma API para facilitar o trabalho de dados temporais em Java. Para 
 <dependency>
 	<groupId>br.com.caelum.vraptor</groupId>
 	<artifactId>vraptor-jodatime</artifactId>
-	<version>4.0.0.Final</version> <!-- ou a última versão disponível -->
-</dependency>
-~~~
-
-[Plugin no Github](https://github.com/caelum/vraptor-time-converters).
-
-
-## Nova API de datas do Java
-
-Se você utiliza Java 8, você pode tirar proveito da nova API de datas do pacote `java.time`. Basta incluir o plugin `vraptor-javatime`. Adicionando o plugin, os converters são registrados automaticamente.
-
-~~~
-#!xml
-<dependency>
-	<groupId>br.com.caelum.vraptor</groupId>
-	<artifactId>vraptor-javatime</artifactId>
 	<version>4.0.0.Final</version> <!-- ou a última versão disponível -->
 </dependency>
 ~~~
@@ -227,21 +227,6 @@ Soluções de i18n na view
 ~~~ 
 
 [Plugin no Github](https://github.com/caelum/vraptor-i18n).
-
-##VRaptor Java 8
-
-Plugin de suporte para Java 8. Oferece converters para as classes do Java Time (JSR-310), reflection para o nome dos parâmetros e mais.
-
-~~~ 
-#!xml
-<dependency>
-	<groupId>br.com.caelum.vraptor</groupId>
-	<artifactId>vraptor-java8</artifactId>
-	<version>4.0.0-RC1</version> <!-- ou a última versão disponível -->
-</dependency>
-~~~ 
-
-[Plugin no Github](https://github.com/caelum/vraptor-java8).
 
 ##VRaptor Test
 

@@ -38,6 +38,7 @@ public class ProfileController {
 For situations where you have a `InputStream`, you can use `InputStreamDownload`, as you can see below:
 
 ~~~ 
+#!java
 public Download picture(Profile profile) {
 	InputStream stream = [...];
 	String contentType = "image/jpg";
@@ -61,7 +62,7 @@ public Download picture(Profile profile) {
 
 ##Upload
 
-To activate upload support it's necessary to add `commons-upload` and `commons-io` artifacts in your classpath. You can see more info [here](/en/docs/dependencies-and-prerequisites).
+To activate upload support it's necessary to add `commons-upload` and `commons-io` artifacts in your classpath. You can see more info [here](/en/docs/dependencies-and-prerequisites#commons-fileupload).
 
 #One minute example: upload
 
@@ -81,7 +82,7 @@ public void updatePhoto(Profile profile, UploadedFile photo) {
 
 ##Overriding upload settings
 
-You can also change the default upload settings overriding the class MultipartConfig. As example, the default value for an 
+You can also change the default upload settings overriding the class `MultipartConfig`. As example, the default value for an 
 uploaded file is 2MB. But you can easily change this settings.
 
 In example below, we can change total allowable upload size (sum of all files).

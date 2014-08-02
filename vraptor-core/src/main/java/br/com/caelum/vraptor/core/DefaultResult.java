@@ -27,7 +27,6 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
-import org.jboss.weld.exceptions.IllegalStateException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

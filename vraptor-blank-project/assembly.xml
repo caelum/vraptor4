@@ -6,6 +6,15 @@
 		<format>zip</format>
 	</formats>
 
+	<files>
+		<file>
+			<source>${project.build.directory}/pom-dist.xml</source>
+			<outputDirectory>/</outputDirectory>
+			<destName>pom.xml</destName>
+			<filtered>true</filtered>
+		</file>
+	</files>
+
 	<fileSets>
 		<fileSet>
 			<includes>

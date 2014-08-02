@@ -107,6 +107,25 @@
 			</plugin>
 
 			<plugin>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<version>1.7</version>
+				<executions>
+					<execution>
+						<phase>prepare-package</phase>
+						<configuration>
+							<target>
+								<copy file="${basedir}/pom-dist.xml" todir="${project.build.directory}" />
+								<replace file="${project.build.directory}/pom-dist.xml" token="VRAPTOR_VERSION_HERE" value="${project.version}" />
+							</target>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
 				<artifactId>maven-assembly-plugin</artifactId>
 				<version>2.3</version>
 				<executions>

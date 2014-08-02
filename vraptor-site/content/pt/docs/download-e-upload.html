@@ -36,7 +36,7 @@ public class PerfilController {
 }
 ~~~
 
-Para as situações em que você tem um InputStream, você pode utilizar o `InputStreamDownload`, conforme o exemplo abaixo:
+Para as situações em que você tem um `InputStream`, você pode utilizar o `InputStreamDownload`, conforme o exemplo abaixo:
 
 ~~~ 
 #!java
@@ -56,7 +56,7 @@ public Download foto(Perfil perfil) {
 	byte[] conteudoFoto = [...];
 	String contentType = "image/jpg";
 
-	return new ByteArrayDownload(stream, contentType, filename);
+	return new ByteArrayDownload(conteudoFoto, contentType, filename);
 }
 ~~~
 
@@ -67,7 +67,7 @@ Para ativar o suporte a upload é necessário adicionar as bibliotecas `commons-
 
 #Exemplo de 1 minuto: upload
 
-Para receber um upload você precisa receber um `UploadedFile` em seu método conforme o exemplo abaixo. O UploadedFile 
+Para receber um upload você precisa receber um `UploadedFile` em seu método conforme o exemplo abaixo. O `UploadedFile` 
 retorna o arquivo como um `InputStream`. Com isso você pode copiar o arquivo para o disco facilmente.
 
 ~~~ 

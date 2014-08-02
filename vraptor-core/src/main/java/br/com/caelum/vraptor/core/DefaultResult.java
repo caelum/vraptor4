@@ -27,6 +27,7 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
+import org.jboss.weld.exceptions.IllegalStateException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,6 +35,8 @@ import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.View;
 import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
 import br.com.caelum.vraptor.ioc.Container;
+import br.com.caelum.vraptor.validator.Validator;
+import br.com.caelum.vraptor.view.Results;
 
 /**
  * A basic implementation of a Result
@@ -48,28 +51,41 @@ public class DefaultResult extends AbstractResult {
 	private final Container container;
 	private final ExceptionMapper exceptions;
 	private final TypeNameExtractor extractor;
+	private Validator validator;
 	
 	private Map<String, Object> includedAttributes;
 	private boolean responseCommitted = false;
+	
 
 	/** 
 	 * @deprecated CDI eyes only
 	 */
 	protected DefaultResult() {
-		this(null, null, null, null);
+		this(null, null, null, null, null);
 	}
 
 	@Inject
-	public DefaultResult(HttpServletRequest request, Container container, ExceptionMapper exceptions, TypeNameExtractor extractor) {
+	public DefaultResult(HttpServletRequest request, Container container, ExceptionMapper exceptions, TypeNameExtractor extractor,
+			Validator validator) {
 		this.request = request;
 		this.container = container;
 		this.extractor = extractor;
 		this.includedAttributes = new HashMap<>();
 		this.exceptions = exceptions;
+		this.validator = validator;
 	}
 	
 	@Override
 	public <T extends View> T use(Class<T> view) {
+		if(view.isAssignableFrom(Results.json()) && validator.hasErrors()) {
+	        throw new IllegalStateException(
+	                "There are validation errors and you forgot to specify where to go. Please add in your method "
+	                        + "something like:\n"
+	                        + "validator.onErrorUse(page()).of(AnyController.class).anyMethod();\n"
+	                        + "or any view that you like.\n"
+	                        + "If you didn't add any validation error, it is possible that a conversion error had happened.");
+	    }
+		
 		responseCommitted = true;
 		return container.instanceFor(view);
 	}

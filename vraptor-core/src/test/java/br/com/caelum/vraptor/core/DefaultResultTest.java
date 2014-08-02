@@ -37,6 +37,7 @@ import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.View;
 import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
 import br.com.caelum.vraptor.ioc.Container;
+import br.com.caelum.vraptor.util.test.MockValidator;
 import br.com.caelum.vraptor.view.DefaultHttpResultTest.RandomController;
 import br.com.caelum.vraptor.view.LogicResult;
 import br.com.caelum.vraptor.view.PageResult;
@@ -49,11 +50,13 @@ public class DefaultResultTest {
 
 	private Result result;
 	@Mock private TypeNameExtractor extractor;
+	private MockValidator validator;
 
 	@Before
 	public void setup() {
 		MockitoAnnotations.initMocks(this);
-		result = new DefaultResult(request, container, null, extractor);
+		validator = new MockValidator();
+		result = new DefaultResult(request, container, null, extractor, validator);
 	}
 
 	public static class MyView implements View {

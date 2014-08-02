@@ -7,15 +7,18 @@ title: Dependencies and prerequisites
 VRaptor 4 depends directly on CDI 1.1, so it will work only in servers that support
 this version of CDI. JDK 1.7 or higher it's also mandatory.
 
-The servers already supported and tested are:
+The Application Servers already supported and tested are:
 
 * Glassfish 4
 * WildFly 8.0 and 8.1
+
+And Servlet Containers supported are:
+
 * Tomcat 7 (+ Weld 2.x jars)
 * Jetty 8 and 9  (+ Weld 2.x jars)
 
-To use a Servlet Container such as Tomcat or Jetty, it's also necessary to add
-Weld 2.x jars and the following listener to your `web.xml` file:
+To use the mentioned Servlet Containers its also necessary to add
+Weld 2.x jars and the following listener to your `web.xml` file to activate CDI:
 
 ~~~
 #!xml

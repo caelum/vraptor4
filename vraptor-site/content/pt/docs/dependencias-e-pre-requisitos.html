@@ -4,16 +4,19 @@ title: Dependências e pré-requisitos
 
 #Dependências e pré-requisitos
 
-O VRaptor 4 depende diretamente do CDI versão 1.1, portanto só funcionará nos servidores que suportem essa versão do CDI. Também é necessário possuir um JDK compatível com a versão 1.7 ou superior.
+O VRaptor 4 depende diretamente do CDI versão 1.1, portanto só funcionará nos servidores que suportem essa versão do CDI. Também é necessário possuir JDK 1.7 ou superior.
 
-Os servidores já testados e suportados são:
+Os Servidores de Aplicações já testados e suportados são:
 
 * Glassfish 4
 * WildFly 8.0 e 8.1
+
+E os Servlet Containers suportados são:
+
 * Tomcat 7 (+ jars do Weld 2.0)
 * Jetty 8 e 9  (+ jars do Weld 2.0)
 
-Ao usar um Servlet Container como o Tomcat ou Jetty, é preciso adicionar os jars do Weld 2.x, além do seguinte listener em seu `web.xml`:
+Ao usar um Servlet Container como o Tomcat ou Jetty, é preciso adicionar os jars do Weld 2.x, além do seguinte listener em seu `web.xml`, para que seja possível ativar o CDI:
 
 ~~~
 #!xml
@@ -22,11 +25,12 @@ Ao usar um Servlet Container como o Tomcat ou Jetty, é preciso adicionar os jar
 </listener>
 ~~~
 
+
 Algumas dependências podem variar se você usa um Application Server ou um Servlet Container. Pacotes da especificação, como o CDI ou Bean Validation, não são necessários quando você usa um Application Server.
 
 # JDK 8
 
-É possível usar JDK 8 com o VRaptor. Porém é importante você mandar a dependência do Javassist atualizada para a última versão, pois as anteriores ainda não possuem suporte ao bytecode gerado pelo Java 8.
+É possível usar JDK 8 com o VRaptor. Porém é importante atualizar a dependência do Javassist para a última versão, pois as anteriores ainda não possuem suporte ao bytecode gerado pelo Java 8.
 
 ~~~
 #!xml

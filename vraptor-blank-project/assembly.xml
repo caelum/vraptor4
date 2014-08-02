@@ -9,8 +9,6 @@
 	<fileSets>
 		<fileSet>
 			<includes>
-				<include>.project</include>
-				<include>.classpath</include>
 				<include>src/</include>
 				<include>README*</include>
 				<include>LICENSE*</include>

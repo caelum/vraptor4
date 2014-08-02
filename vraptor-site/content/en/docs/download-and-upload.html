@@ -4,7 +4,7 @@ title: Download and Upload
 
 #One minute example: download
 
-The example bellow explains how to send a download to the browser. Again, see how simple this code is:
+The example below explains how to send a download to the browser. Again, see how simple this code is:
 
 ~~~ 
 #!java
@@ -35,40 +35,45 @@ public class ProfileController {
 }
 ~~~ 
 
-You can also use the `InputStreamDownload` to work with Streams or `ByteArrayDownload` to send a byte array.
-
-##Upload
-
-To activate upload support it's necessary to add `commons-upload` and `commons-io` artifacts in your classpath. You can see more info [here](/en/docs/dependencies-and-prerequisites).
-
-#One minute example: upload
-
-The first example is based on the multipart upload feature.
+For situations where you have a `InputStream`, you can use `InputStreamDownload`, as you can see below:
 
 ~~~ 
 #!java
-@Controller
-public class ProfileController {
+public Download picture(Profile profile) {
+	InputStream stream = [...];
+	String contentType = "image/jpg";
 
-	@Inject private ProfileDao dao;
-		
-	public void updatePhoto(Profile profile, UploadedFile photo) {
-		try (InputStream input = photo.getFile()) {
-			dao.assign(input, profile);
-		}
-	}
+	return new InputStreamDownload(stream, contentType, filename);
 }
 ~~~ 
 
-##More about Upload
+You can also use a `ByteArrayDownload`, if you have a byte array as described below:
 
-The `UploadedFile` returns the uploaded file as an `InputStream`. If you want to copy the file to disc easily, you can use the `Files` class from Java 7:
+~~~ 
+#!java
+public Download picture(Profile profile) {
+	byte[] pictureContent = [...];
+	String contentType = "image/jpg";
+
+	return new ByteArrayDownload(pictureContent, contentType, filename);
+}
+~~~
+
+
+##Upload
+
+To activate upload support it's necessary to add `commons-upload` and `commons-io` artifacts in your classpath. You can see more info [here](/en/docs/dependencies-and-prerequisites#commons-fileupload).
+
+#One minute example: upload
+
+To receive an uploaded file in your controller, you need to use a parameter as `UploadedFile`. The `UploadedFile` class 
+contains the file content as an `InputStream`. So you can copy to disk (or another location) too easily as you can see in the example below:
 
 ~~~ 
 #!java
 public void updatePhoto(Profile profile, UploadedFile photo) {
 	try (InputStream input = photo.getFile()) {
-		File savedPhoto = new File();
+		File savedPhoto = new File("/path/to/photo/repository", photo.getFileName());
 		Files.write(input, savedPhoto);
 		dao.assign(savedPhoto, profile);
 	}
@@ -77,7 +82,10 @@ public void updatePhoto(Profile profile, UploadedFile photo) {
 
 ##Overriding upload settings
 
-You can also change the default upload settings overriding the class MultipartConfig. In example below, we can change total allowable upload size (sum of all files).
+You can also change the default upload settings overriding the class `MultipartConfig`. As example, the default value for an 
+uploaded file is 2MB. But you can easily change this settings.
+
+In example below, we can change total allowable upload size (sum of all files).
 
 ~~~
 #!java

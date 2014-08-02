@@ -34,9 +34,32 @@ public class PerfilController {
 		return new FileDownload(file, contentType, filename);
 	}
 }
-~~~ 
+~~~
 
-Você pode também usar a implementação `InputStreamDownload` para trabalhar diretamente com Streams ou `ByteArrayDownload` para array de bytes.
+Para as situações em que você tem um `InputStream`, você pode utilizar o `InputStreamDownload`, conforme o exemplo abaixo:
+
+~~~ 
+#!java
+public Download foto(Perfil perfil) {
+	InputStream stream = [...];
+	String contentType = "image/jpg";
+
+	return new InputStreamDownload(stream, contentType, filename);
+}
+~~~
+
+E como outra opção há o `ByteArrayDownload`, usado quando você tem um array de bytes.
+
+~~~ 
+#!java
+public Download foto(Perfil perfil) {
+	byte[] conteudoFoto = [...];
+	String contentType = "image/jpg";
+
+	return new ByteArrayDownload(conteudoFoto, contentType, filename);
+}
+~~~
+
 
 ##Upload
 
@@ -44,32 +67,14 @@ Para ativar o suporte a upload é necessário adicionar as bibliotecas `commons-
 
 #Exemplo de 1 minuto: upload
 
-O primeiro exemplo será baseado na funcionalidade de upload multipart.
-
-~~~ 
-#!java
-@Controller
-public class PerfilController {
-
-	@Inject private PerfilDao dao;
-		
-	public void atualizaFoto(Perfil perfil, UploadedFile foto) {
-		try (InputStream input = foto.getFile()) {
-			dao.atribui(input, perfil);
-		}
-	}
-}
-~~~ 
-
-##Mais sobre Upload
-
-O UploadedFile retorna o arquivo como um `InputStream`. Se você quiser copiar para um arquivo no disco facilmente, basta usar a classe `Files` do Java 7:
+Para receber um upload você precisa receber um `UploadedFile` em seu método conforme o exemplo abaixo. O `UploadedFile` 
+retorna o arquivo como um `InputStream`. Com isso você pode copiar o arquivo para o disco facilmente.
 
 ~~~ 
 #!java
 public void atualizaFoto(Perfil perfil, UploadedFile foto) {
 	try (InputStream input = foto.getFile()) {
-		File fotoSalva = new File();
+		File fotoSalva = new File("/path/to/file/repository", foto.getFileName());
 		Files.write(input, fotoSalva);
 		dao.atribui(fotoSalva, perfil);
 	}
@@ -78,7 +83,10 @@ public void atualizaFoto(Perfil perfil, UploadedFile foto) {
 
 ##Sobrescrevendo as configurações de upload
 
-Você pode alterar as configurações de upload sobrescrevendo a classe `MultipartConfig`. No exemplo abaixo é alterado o tamanho total permitido no upload (soma de todos os arquivos).
+Você pode alterar as configurações de upload sobrescrevendo a classe `MultipartConfig`. O valor padrão para upload de arquivos é limitado a 2MB, 
+mas você pode facilmente alterar estes valores.
+
+No exemplo abaixo é alterado o tamanho total permitido no upload (soma de todos os arquivos).
 
 ~~~
 #!java

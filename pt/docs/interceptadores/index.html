@@ -3,7 +3,7 @@
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">Log</span> <span class="o">{</span>
 
     <span class="nd">@Inject</span>
-    <span class="kd">private</span> <span class="kd">final</span> <span class="n">HttpServletRequest</span> <span class="n">request</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="n">HttpServletRequest</span> <span class="n">request</span><span class="o">;</span>
 
     <span class="nd">@AroundCall</span>
     <span class="kd">public</span> <span class="kt">void</span> <span class="nf">intercept</span><span class="o">(</span><span class="n">SimpleInterceptorStack</span> <span class="n">stack</span><span class="o">)</span> <span class="o">{</span>

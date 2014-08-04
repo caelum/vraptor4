@@ -103,6 +103,18 @@
     <span class="kd">protected</span> <span class="n">String</span> <span class="nf">defaultUriFor</span><span class="o">(</span><span class="n">String</span> <span class="n">controllerName</span><span class="o">,</span> <span class="n">String</span> <span class="n">methodName</span><span class="o">)</span> <span class="o">{</span>
         <span class="k">return</span> <span class="c1">//sua convenção aqui</span>
     <span class="o">}</span>
+<span class="o">}</span></code></pre> <p>Se você deseja mudar a convenção para ambos os casos da URI ser padrão ou anotada, você pode criar uma classe sobrescrevendo essa convenção. O exemplo abaixo fará com que todas as URIs precisem ser acessadas usando o prefixo <code>/prefixo</code>.</p> <p>Portanto, se a rota é <code>/index</code>, a URI será <code>/prefix/index</code>.</p> <pre><code class="language-java"><span class="nd">@Specializes</span> <span class="nd">@ApplicationScoped</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">PrefixedRoutesParser</span> <span class="kd">extends</span> <span class="n">PathAnnotationRoutesParser</span> <span class="o">{</span>
+    <span class="c1">//delegated constructors </span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">protected</span> <span class="n">String</span><span class="o">[]</span> <span class="nf">getURIsFor</span><span class="o">(</span><span class="n">Method</span> <span class="n">javaMethod</span><span class="o">,</span> <span class="n">Class</span><span class="o">&lt;?&gt;</span> <span class="n">type</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">String</span><span class="o">[]</span> <span class="n">uris</span> <span class="o">=</span> <span class="kd">super</span><span class="o">.</span><span class="na">getURIsFor</span><span class="o">(</span><span class="n">javaMethod</span><span class="o">,</span> <span class="n">type</span><span class="o">);</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">uris</span><span class="o">.</span><span class="na">length</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="n">uris</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="s">"/prefixo"</span> <span class="o">+</span> <span class="n">uris</span><span class="o">[</span><span class="n">i</span><span class="o">];</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">uris</span><span class="o">;</span>
+    <span class="o">}</span>
 <span class="o">}</span></code></pre> <p>Se você precisa mudar mais ainda a convenção, basta implementar a interface <code>RoutesParser</code>.</p> <h2 id="mudando-o-encoding-da-sua-aplicao">Mudando o encoding da sua aplicação</h2> <p>Se você quiser que todas as requisições da sua aplicação sejam de um encoding determinado, para evitar problemas de acentuação por exemplo, você pode colocar o seguinte parâmetro no seu web.xml:</p> <pre><code class="language-xml"><span class="nt">&lt;context-param&gt;</span>
     <span class="nt">&lt;param-name&gt;</span>br.com.caelum.vraptor.encoding<span class="nt">&lt;/param-name&gt;</span>
     <span class="nt">&lt;param-value&gt;</span>UTF-8<span class="nt">&lt;/param-value&gt;</span>

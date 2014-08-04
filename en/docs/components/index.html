@@ -136,7 +136,7 @@
     <span class="kd">protected</span> <span class="n">String</span> <span class="nf">defaultUriFor</span><span class="o">(</span><span class="n">String</span> <span class="n">controllerName</span><span class="o">,</span> <span class="n">String</span> <span class="n">methodName</span><span class="o">)</span> <span class="o">{</span>
         <span class="k">return</span> <span class="c1">//your convention here</span>
     <span class="o">}</span>
-<span class="o">}</span></code></pre> <p>If you need to change the convention to both default and annotated URI, you can create a class overriding the convention. The example bellow will make all URIs accessible with <code>/prefix</code> prefix.</p> <p>So, if the route is <code>/index</code>, the URI will be <code>/prefix/index</code>.</p> <pre><code class="language-java"><span class="nd">@Specializes</span> <span class="nd">@ApplicationScoped</span>
+<span class="o">}</span></code></pre> <p>If you need to change the convention to both default and annotated URI, you can create a class overriding the convention. The example below will make all URIs accessible with <code>/prefix</code> prefix.</p> <p>So, if the route is <code>/index</code>, the URI will be <code>/prefix/index</code>.</p> <pre><code class="language-java"><span class="nd">@Specializes</span> <span class="nd">@ApplicationScoped</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">PrefixedRoutesParser</span> <span class="kd">extends</span> <span class="n">PathAnnotationRoutesParser</span> <span class="o">{</span>
     <span class="c1">//delegated constructors </span>
 

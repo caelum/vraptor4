@@ -17,20 +17,6 @@
 
 package br.com.caelum.vraptor.observer;
 
-import static br.com.caelum.vraptor.view.Results.nothing;
-import static org.slf4j.LoggerFactory.getLogger;
-
-import java.lang.reflect.Method;
-
-import javax.enterprise.context.Dependent;
-import javax.enterprise.event.Event;
-import javax.enterprise.event.Observes;
-import javax.inject.Inject;
-
-import net.vidageek.mirror.dsl.Mirror;
-
-import org.slf4j.Logger;
-
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.core.MethodInfo;
@@ -40,6 +26,19 @@ import br.com.caelum.vraptor.events.MethodReady;
 import br.com.caelum.vraptor.interceptor.ApplicationLogicException;
 import br.com.caelum.vraptor.validator.ValidationException;
 import br.com.caelum.vraptor.validator.Validator;
+import com.google.common.base.Throwables;
+import net.vidageek.mirror.dsl.Mirror;
+import net.vidageek.mirror.exception.ReflectionProviderException;
+import org.slf4j.Logger;
+
+import javax.enterprise.context.Dependent;
+import javax.enterprise.event.Event;
+import javax.enterprise.event.Observes;
+import javax.inject.Inject;
+import java.lang.reflect.Method;
+
+import static br.com.caelum.vraptor.view.Results.nothing;
+import static org.slf4j.LoggerFactory.getLogger;
 
 /**
  * Interceptor that executes the logic method.
@@ -106,6 +105,8 @@ public class ExecuteMethod {
 			methodExecutedEvent.fire(new MethodExecuted(method, methodInfo));
 		} catch (IllegalArgumentException e) {
 			throw new InterceptionException(e);
+		} catch (ReflectionProviderException e) {
+			throwIfNotValidationException(e, new ApplicationLogicException(e.getCause()));
 		} catch (Exception e) {
 			throwIfNotValidationException(e, new ApplicationLogicException(e));
 		}

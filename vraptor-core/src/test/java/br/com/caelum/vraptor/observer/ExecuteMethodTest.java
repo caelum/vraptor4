@@ -19,6 +19,7 @@ package br.com.caelum.vraptor.observer;
 
 import static br.com.caelum.vraptor.controller.DefaultControllerMethod.instanceFor;
 import static br.com.caelum.vraptor.view.Results.nothing;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -29,6 +30,8 @@ import java.util.Collections;
 
 import javax.enterprise.event.Event;
 
+import org.hamcrest.Matchers;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -124,13 +127,18 @@ public class ExecuteMethodTest {
 		when(validator.hasErrors()).thenReturn(true);
 		observer.execute(new InterceptorsExecuted(method, controller));
 	}
-	
-	@Test(expected=ApplicationLogicException.class)
+
+	@Test
 	public void shoulThrowApplicationLogicExceptionIfItsABusinessException() throws Exception {
 		Method method = AnyController.class.getDeclaredMethod("throwException");
 		ControllerMethod controllerMethod = instanceFor(AnyController.class, method);
 		AnyController controller = new AnyController(validator);
-		observer.execute(new InterceptorsExecuted(controllerMethod, controller));
+		try {
+			observer.execute(new InterceptorsExecuted(controllerMethod, controller));
+			Assert.fail();
+		} catch(ApplicationLogicException e) {
+			assertEquals(e.getCause().getClass(), RuntimeException.class);
+		}
 	}
 	
 

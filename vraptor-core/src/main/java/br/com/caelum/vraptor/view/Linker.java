@@ -24,6 +24,7 @@ import javax.enterprise.inject.Vetoed;
 import javax.servlet.ServletContext;
 
 import net.vidageek.mirror.dsl.Mirror;
+import br.com.caelum.vraptor.http.route.Route;
 import br.com.caelum.vraptor.http.route.Router;
 
 @Vetoed
@@ -44,6 +45,23 @@ public class Linker {
 	}
 
 	protected String getLink() {
+		Method method = getMethod();
+		return getContextPath() + router.urlFor(controller, method, getArgs(method));
+	}
+
+	protected String getContextPath() {
+		return context.getContextPath();
+	}
+	
+	protected List<Route> allRoutes() {
+		return router.allRoutes();
+	}
+	
+	protected Class<?> getController() {
+		return controller;
+	}
+
+	protected Method getMethod() {
 		Method method = null;
 
 		if (countMethodsWithSameName() > 1) {
@@ -60,8 +78,7 @@ public class Linker {
 				String.format("There are no methods on %s named '%s' that receives args of types %s",
 						controller, methodName, Arrays.toString(getClasses(args))));
 		}
-
-		return context.getContextPath() + router.urlFor(controller, method, getArgs(method));
+		return method;
 	}
 
 	protected Object[] getArgs(Method method) {

@@ -22,6 +22,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import br.com.caelum.vraptor.serialization.DeserializerConfig;
+
 /**
  * Indicates that the controller method expects the specified MIME content-types
  * in the request.
@@ -34,4 +36,5 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Consumes {
 	String[] value() default {};
+	Class<? extends DeserializerConfig>[] options() default {};
 }

@@ -37,19 +37,25 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.TimeZone;
 
+import javax.enterprise.inject.Instance;
 import javax.servlet.http.HttpServletRequest;
 
 import net.vidageek.mirror.dsl.Mirror;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
+import br.com.caelum.vraptor.Consumes;
 import br.com.caelum.vraptor.controller.BeanClass;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.controller.DefaultBeanClass;
 import br.com.caelum.vraptor.controller.DefaultControllerMethod;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.http.ParanamerNameProvider;
+import br.com.caelum.vraptor.ioc.Container;
+import br.com.caelum.vraptor.serialization.Deserializee;
 import br.com.caelum.vraptor.util.test.MockInstanceImpl;
 import br.com.caelum.vraptor.view.GenericController;
 
@@ -72,9 +78,17 @@ public class GsonDeserializerTest {
 	private ControllerMethod listDog;
 	private ControllerMethod integerAndDogParameter;
 	private ControllerMethod dateParameter;
+	private ControllerMethod dogParameterWithoutRoot;
+	private ControllerMethod dogParameterNameEqualsJsonPropertyWithoutRoot;
+	
+	private @Mock Container container;
+	
+	private @Mock Instance<Deserializee> deserializeeInstance;
 
 	@Before
 	public void setUp() throws Exception {
+		MockitoAnnotations.initMocks(this);
+		
 		TimeZone.setDefault(TimeZone.getTimeZone("GMT-0300"));
 		provider = new ParanamerNameProvider();
 		request = mock(HttpServletRequest.class);
@@ -84,7 +98,7 @@ public class GsonDeserializerTest {
 		jsonDeserializers.add(new DateGsonConverter());
 
 		builder = new GsonBuilderWrapper(new MockInstanceImpl<>(jsonSerializers), new MockInstanceImpl<>(jsonDeserializers));
-		deserializer = new GsonDeserialization(builder, provider, request);
+		deserializer = new GsonDeserialization(builder, provider, request, container, deserializeeInstance);
 		BeanClass controllerClass = new DefaultBeanClass(DogController.class);
 
 		noParameter = new DefaultControllerMethod(controllerClass, DogController.class.getDeclaredMethod("noParameter"));
@@ -95,6 +109,12 @@ public class GsonDeserializerTest {
 		integerAndDogParameter = new DefaultControllerMethod(controllerClass, DogController.class.getDeclaredMethod("integerAndDogParameter",
 				Integer.class, Dog.class));
 		listDog = new DefaultControllerMethod(controllerClass, DogController.class.getDeclaredMethod("list", List.class));
+		dogParameterWithoutRoot = new DefaultControllerMethod(controllerClass, DogController.class.getDeclaredMethod("dogParameterWithoutRoot", Dog.class));
+		dogParameterNameEqualsJsonPropertyWithoutRoot = new DefaultControllerMethod(controllerClass, DogController.class.getDeclaredMethod("dogParameterNameEqualsJsonPropertyWithoutRoot", Dog.class));
+		
+		when(deserializeeInstance.get()).thenReturn(new Deserializee());
+		when(container.instanceFor(WithRoot.class)).thenReturn(new WithRoot());
+		when(container.instanceFor(WithoutRoot.class)).thenReturn(new WithoutRoot());
 	}
 
 	static class Dog {
@@ -107,14 +127,25 @@ public class GsonDeserializerTest {
 
 		public void noParameter() {}
 
+		@Consumes(options=WithRoot.class)
 		public void dogParameter(Dog dog) {}
-		
+
+		@Consumes
+		public void dogParameterWithoutRoot(Dog dog) {}
+
+		@Consumes(options=WithoutRoot.class)
+		public void dogParameterNameEqualsJsonPropertyWithoutRoot(Dog name) {}
+
+		@Consumes
 		public void dogAndIntegerParameter(Dog dog, Integer times) {}
 
+		@Consumes
 		public void integerAndDogParameter(Integer times, Dog dog) {}
 
+		@Consumes
 		public void dateParameter(Date date) {}
 
+		@Consumes
 		public void list(List<Dog> dogs) {}
 	}
 
@@ -190,11 +221,24 @@ public class GsonDeserializerTest {
 	}
 
 	@Test
-	public void shouldBeAbleToDeserializeADogWithoutRoot() throws Exception {
+	public void shouldBeAbleToDeserializeADogWithoutRootAndParameterNameEqualsJsonProperty() throws Exception {
 		InputStream stream = asStream("{'name':'Brutus','age':7}");
 
-		Object[] deserialized = deserializer.deserialize(stream, dogParameter);
+		Object[] deserialized = deserializer.deserialize(stream, dogParameterNameEqualsJsonPropertyWithoutRoot);
 
+		assertThat(deserialized.length, is(1));
+		assertThat(deserialized[0], is(instanceOf(Dog.class)));
+		Dog dog = (Dog) deserialized[0];
+		assertThat(dog.name, is("Brutus"));
+		assertThat(dog.age, is(7));
+	}
+
+	@Test
+	public void shouldBeAbleToDeserializeADogWithoutRoot() throws Exception {
+		InputStream stream = asStream("{'name':'Brutus','age':7}");
+		
+		Object[] deserialized = deserializer.deserialize(stream, dogParameterWithoutRoot);
+		
 		assertThat(deserialized.length, is(1));
 		assertThat(deserialized[0], is(instanceOf(Dog.class)));
 		Dog dog = (Dog) deserialized[0];
@@ -209,7 +253,7 @@ public class GsonDeserializerTest {
 		deserializers.add(new DogDeserializer());
 
 		builder = new GsonBuilderWrapper(new MockInstanceImpl<>(serializers), new MockInstanceImpl<>(deserializers));
-		deserializer = new GsonDeserialization(builder, provider, request);
+		deserializer = new GsonDeserialization(builder, provider, request, container, deserializeeInstance);
 
 		InputStream stream = asStream("{'dog':{'name':'Renan Reis','age':'0'}}");
 
@@ -266,6 +310,7 @@ public class GsonDeserializerTest {
 		InputStream stream = asStream("{'dog':{'name':'Ã§'}}", StandardCharsets.ISO_8859_1);
 		
 		when(request.getHeader("Accept-Charset")).thenReturn("UTF-8,*;q=0.5");
+		
 		Object[] deserialized = deserializer.deserialize(stream, dogParameter);
 
 		assertThat(deserialized.length, is(1));
@@ -281,6 +326,7 @@ public class GsonDeserializerTest {
 		InputStream stream = asStream("{'dog':{'name':'Ã§'}}",  StandardCharsets.ISO_8859_1);
 
 		when(request.getHeader("Accept-Charset")).thenReturn(null);
+		
 		Object[] deserialized = deserializer.deserialize(stream, dogParameter);
 
 		assertThat(deserialized.length, is(1));
@@ -364,6 +410,7 @@ public class GsonDeserializerTest {
 	@Test
 	public void shouldDeserializeADateWithISO8601() {
 		InputStream stream = asStream("{\"date\":\"1988-02-25T02:30:15 -0300\"}");
+		
 		Object[] deserialized = deserializer.deserialize(stream, dateParameter);
 		assertThat(deserialized.length, is(1));
 		assertThat(deserialized[0], is(instanceOf(Date.class)));

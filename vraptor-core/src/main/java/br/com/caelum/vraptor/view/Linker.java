@@ -24,7 +24,6 @@ import javax.enterprise.inject.Vetoed;
 import javax.servlet.ServletContext;
 
 import net.vidageek.mirror.dsl.Mirror;
-import br.com.caelum.vraptor.http.route.Route;
 import br.com.caelum.vraptor.http.route.Router;
 
 @Vetoed
@@ -53,8 +52,8 @@ public class Linker {
 		return context.getContextPath();
 	}
 	
-	protected List<Route> allRoutes() {
-		return router.allRoutes();
+	protected Router getRouter() {
+		return router;
 	}
 	
 	protected Class<?> getController() {

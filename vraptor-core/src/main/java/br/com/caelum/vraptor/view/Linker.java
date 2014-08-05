@@ -52,14 +52,6 @@ public class Linker {
 		return context.getContextPath();
 	}
 	
-	protected Router getRouter() {
-		return router;
-	}
-	
-	protected Class<?> getController() {
-		return controller;
-	}
-
 	protected Method getMethod() {
 		Method method = null;
 

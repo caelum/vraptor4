@@ -76,7 +76,7 @@ public class DefaultResult extends AbstractResult {
 	
 	@Override
 	public <T extends View> T use(Class<T> view) {
-		if(view.isAssignableFrom(Results.json()) && validator.hasErrors()) {
+	    if(view.isAssignableFrom(Results.json()) && validator.hasErrors()) {
 	        throw new IllegalStateException(
 	                "There are validation errors and you forgot to specify where to go. Please add in your method "
 	                        + "something like:\n"

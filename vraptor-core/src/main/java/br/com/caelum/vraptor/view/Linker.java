@@ -45,10 +45,10 @@ public class Linker {
 
 	protected String getLink() {
 		Method method = getMethod();
-		return getContextPath() + router.urlFor(controller, method, getArgs(method));
+		return getPrefix() + router.urlFor(controller, method, getArgs(method));
 	}
 
-	protected String getContextPath() {
+	protected String getPrefix() {
 		return context.getContextPath();
 	}
 	

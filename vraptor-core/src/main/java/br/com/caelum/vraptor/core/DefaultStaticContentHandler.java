@@ -63,10 +63,17 @@ public class DefaultStaticContentHandler implements StaticContentHandler {
 	}
 
 	private String uriRelativeToContextRoot(HttpServletRequest request) {
-		String uri = request.getRequestURI().substring(request.getContextPath().length());
+		String uri = getStrippedRequestURI(request);
 		return removeQueryStringAndJSessionId(uri);
 	}
-	
+
+	private String getStrippedRequestURI(HttpServletRequest request) {
+		if ("/".equals(request.getContextPath())) {
+			return request.getRequestURI();
+		}
+		return request.getRequestURI().substring(request.getContextPath().length());
+	}
+
 	private String removeQueryStringAndJSessionId(String uri) {
 		if (uri.contains("?") || uri.contains(";")) {
 			return uri.replaceAll("[\\?;].+", "");

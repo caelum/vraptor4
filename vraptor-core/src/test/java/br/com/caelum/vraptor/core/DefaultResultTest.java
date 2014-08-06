@@ -37,10 +37,11 @@ import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.View;
 import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
 import br.com.caelum.vraptor.ioc.Container;
-import br.com.caelum.vraptor.util.test.MockValidator;
+import br.com.caelum.vraptor.validator.Validator;
 import br.com.caelum.vraptor.view.DefaultHttpResultTest.RandomController;
 import br.com.caelum.vraptor.view.LogicResult;
 import br.com.caelum.vraptor.view.PageResult;
+import br.com.caelum.vraptor.view.Results;
 import br.com.caelum.vraptor.view.Status;
 
 public class DefaultResultTest {
@@ -50,19 +51,18 @@ public class DefaultResultTest {
 
 	private Result result;
 	@Mock private TypeNameExtractor extractor;
-	private MockValidator validator;
+	@Mock private Validator validator;
 
 	@Before
 	public void setup() {
 		MockitoAnnotations.initMocks(this);
-		validator = new MockValidator();
 		result = new DefaultResult(request, container, null, extractor, validator);
 	}
 
 	public static class MyView implements View {
 
 	}
-
+	
 	@Test
 	public void shouldUseContainerForNewView() {
 		final MyView expectedView = new MyView();
@@ -78,6 +78,34 @@ public class DefaultResultTest {
 		result.include("my_key", "my_value");
 
 		verify(request).setAttribute("my_key", "my_value");
+	}
+
+	@Test(expected=IllegalStateException.class)
+	public void shouldThrowExceptionIfHasValidatorErrorsWhenForward() throws Exception {
+		when(validator.hasErrors()).thenReturn(true);
+		
+		result.forwardTo("/any/uri");
+	}
+
+	@Test(expected=IllegalStateException.class)
+	public void shouldThrowExceptionIfHasValidatorErrorsWhenRedirect() throws Exception {
+		when(validator.hasErrors()).thenReturn(true);
+		
+		result.redirectTo("/any/uri");
+	}
+
+	@Test(expected=IllegalStateException.class)
+	public void shouldThrowExceptionIfHasValidatorErrorsWhenUsingJSON() throws Exception {
+		when(validator.hasErrors()).thenReturn(true);
+		
+		result.use(Results.json()).from("Blah").serialize();
+	}
+
+	@Test(expected=IllegalStateException.class)
+	public void shouldThrowExceptionIfHasValidatorErrorsWhenUsingXML() throws Exception {
+		when(validator.hasErrors()).thenReturn(true);
+		
+		result.use(Results.xml()).from("Blah").serialize();
 	}
 
 	@Test

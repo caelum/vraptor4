@@ -35,7 +35,6 @@ import br.com.caelum.vraptor.View;
 import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.validator.Validator;
-import br.com.caelum.vraptor.view.Results;
 
 /**
  * A basic implementation of a Result
@@ -76,19 +75,23 @@ public class DefaultResult extends AbstractResult {
 	
 	@Override
 	public <T extends View> T use(Class<T> view) {
-	    if(view.isAssignableFrom(Results.json()) && validator.hasErrors()) {
-	        throw new IllegalStateException(
-	                "There are validation errors and you forgot to specify where to go. Please add in your method "
-	                        + "something like:\n"
-	                        + "validator.onErrorUse(page()).of(AnyController.class).anyMethod();\n"
-	                        + "or any view that you like.\n"
-	                        + "If you didn't add any validation error, it is possible that a conversion error had happened.");
-	    }
-		
+		throwExceptionIfValidatorHasErrors();
+	    
 		responseCommitted = true;
 		return container.instanceFor(view);
 	}
 	
+	private void throwExceptionIfValidatorHasErrors() {
+		if(validator.hasErrors()) {
+			throw new IllegalStateException(
+					"There are validation errors and you forgot to specify where to go. Please add in your method "
+							+ "something like:\n"
+							+ "validator.onErrorUse(page()).of(AnyController.class).anyMethod();\n"
+							+ "or any view that you like.\n"
+							+ "If you didn't add any validation error, it is possible that a conversion error had happened.");
+		}
+	}
+
 	@Override
 	public Result on(Class<? extends Exception> exception) {
 		return exceptions.record(exception);

@@ -17,6 +17,9 @@
 
 package br.com.caelum.vraptor.view;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 
@@ -78,11 +81,26 @@ public class DefaultPathResolver implements PathResolver {
 		return "jsp";
 	}
 
-	protected String extractControllerFromName(String baseName) {
+	private String getFilteredControllerBaseName(String baseName) {
 		baseName = lowerFirstCharacter(baseName);
+		Pattern pattern = Pattern.compile("(\\w+Controller).*");
+		Matcher matcher = pattern.matcher(baseName);
+		
+		if (matcher.find()) {
+			return matcher.group(1);
+		}
+		
+		return baseName;
+	}
+	
+	protected String extractControllerFromName(String baseName) {
+		baseName = getFilteredControllerBaseName(
+			lowerFirstCharacter(baseName));
+		
 		if (baseName.endsWith("Controller")) {
 			return baseName.substring(0, baseName.lastIndexOf("Controller"));
 		}
+		
 		return baseName;
 	}
 

@@ -17,26 +17,6 @@
 
 package br.com.caelum.vraptor.observer;
 
-import static br.com.caelum.vraptor.controller.DefaultControllerMethod.instanceFor;
-import static br.com.caelum.vraptor.view.Results.nothing;
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.lang.reflect.Method;
-import java.util.Collections;
-
-import javax.enterprise.event.Event;
-
-import org.hamcrest.Matchers;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.controller.DefaultControllerMethod;
@@ -49,6 +29,21 @@ import br.com.caelum.vraptor.interceptor.DogAlike;
 import br.com.caelum.vraptor.validator.Message;
 import br.com.caelum.vraptor.validator.ValidationException;
 import br.com.caelum.vraptor.validator.Validator;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.ExpectedException;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
+import javax.enterprise.event.Event;
+import java.lang.reflect.Method;
+import java.util.Collections;
+
+import static br.com.caelum.vraptor.controller.DefaultControllerMethod.instanceFor;
+import static br.com.caelum.vraptor.view.Results.nothing;
+import static org.hamcrest.Matchers.any;
+import static org.mockito.Mockito.*;
 
 public class ExecuteMethodTest {
 
@@ -56,6 +51,7 @@ public class ExecuteMethodTest {
 	@Mock private Validator validator;
 	@Mock private Event<MethodExecuted> methodEvecutedEvent;
 	@Mock private Event<MethodReady> readyToExecuteMethodEvent;
+	@Rule public ExpectedException expected = ExpectedException.none();
 	private ExecuteMethod observer;
 
 	@Before
@@ -129,16 +125,14 @@ public class ExecuteMethodTest {
 	}
 
 	@Test
-	public void shoulThrowApplicationLogicExceptionIfItsABusinessException() throws Exception {
+	public void shouldThrowApplicationLogicExceptionIfItsABusinessException() throws Exception {
 		Method method = AnyController.class.getDeclaredMethod("throwException");
 		ControllerMethod controllerMethod = instanceFor(AnyController.class, method);
 		AnyController controller = new AnyController(validator);
-		try {
-			observer.execute(new InterceptorsExecuted(controllerMethod, controller));
-			Assert.fail();
-		} catch(ApplicationLogicException e) {
-			assertEquals(e.getCause().getClass(), RuntimeException.class);
-		}
+
+		expected.expect(ApplicationLogicException.class);
+		expected.expectCause(any(TestException.class));
+		observer.execute(new InterceptorsExecuted(controllerMethod, controller));
 	}
 	
 
@@ -155,7 +149,9 @@ public class ExecuteMethodTest {
 			this.validator.onErrorUse(nothing());
 		}
 		public void throwException() {
-			throw new RuntimeException("something bad");
+			throw new TestException();
 		}
 	}
+
+	private static class TestException extends RuntimeException {}
 }

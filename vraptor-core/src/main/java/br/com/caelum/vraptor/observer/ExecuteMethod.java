@@ -26,7 +26,6 @@ import br.com.caelum.vraptor.events.MethodReady;
 import br.com.caelum.vraptor.interceptor.ApplicationLogicException;
 import br.com.caelum.vraptor.validator.ValidationException;
 import br.com.caelum.vraptor.validator.Validator;
-import com.google.common.base.Throwables;
 import net.vidageek.mirror.dsl.Mirror;
 import net.vidageek.mirror.exception.ReflectionProviderException;
 import org.slf4j.Logger;
@@ -106,20 +105,20 @@ public class ExecuteMethod {
 		} catch (IllegalArgumentException e) {
 			throw new InterceptionException(e);
 		} catch (ReflectionProviderException e) {
-			throwIfNotValidationException(e, new ApplicationLogicException(e.getCause()));
+			throwIfNotValidationException(e, e.getCause());
 		} catch (Exception e) {
-			throwIfNotValidationException(e, new ApplicationLogicException(e));
+			throwIfNotValidationException(e, e);
 		}
 	}
 
-	private void throwIfNotValidationException(Throwable original, RuntimeException alternative) {
+	private void throwIfNotValidationException(Throwable original, Throwable alternativeCause) {
 		Throwable cause = original.getCause();
 
 		if (original instanceof ValidationException || cause instanceof ValidationException) {
 			// fine... already parsed
 			log.trace("swallowing {}", cause);
 		} else {
-			throw alternative;
+			throw new ApplicationLogicException(alternativeCause);
 		}
 	}
 }

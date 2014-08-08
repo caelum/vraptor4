@@ -21,7 +21,7 @@ public class Messages {
 
 	private List<Message> get(Severity severity) {
 		if (!messages.containsKey(severity)) {
-			messages.put(severity, new MessageList(new ArrayList<Message>()));
+			messages.put(severity, createMessageList());
 		}
 		return messages.get(severity);
 	}
@@ -36,5 +36,9 @@ public class Messages {
 
 	public List<Message> getWarn() {
 		return get(Severity.WARN);
+	}
+
+	private MessageList createMessageList() {
+		return new MessageList(new ArrayList<Message>());
 	}
 }

@@ -3,7 +3,7 @@
 
 	<groupId>br.com.caelum</groupId>
 	<artifactId>vraptor-blank-project</artifactId>
-	<version>4.1.0-RC1-SNAPSHOT</version>
+	<version>4.1.0-RC2-SNAPSHOT</version>
 	<packaging>war</packaging>
 
 	<description>A blank project to start using VRaptor 4</description>
@@ -104,6 +104,25 @@
 					<wtpversion>2.0</wtpversion>
 					<ajdtVersion>none</ajdtVersion>
 				</configuration>
+			</plugin>
+
+			<plugin>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<version>1.7</version>
+				<executions>
+					<execution>
+						<phase>prepare-package</phase>
+						<configuration>
+							<target>
+								<copy file="${basedir}/pom-dist.xml" todir="${project.build.directory}" />
+								<replace file="${project.build.directory}/pom-dist.xml" token="VRAPTOR_VERSION_HERE" value="${project.version}" />
+							</target>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 
 			<plugin>

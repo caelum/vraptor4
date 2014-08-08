@@ -8,6 +8,19 @@ import java.util.Map;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Named;
 
+/**
+ * Managed class that stores all application messages like errors, warnings and info. This
+ * class is useful to display messages categorized by severity in your view. To choose a severity
+ * you can construct your message like this:
+ * 
+ * <code>
+ * 	Message message = new SimpleMessage("name", "An info message", Severity.INFO);
+ * 	validation.add(message); // will stored as INFO severity
+ * </code>
+ * 
+ * @since 4.1
+ * @author Otávio S Garcia
+ */
 @Named
 @RequestScoped
 public class Messages {

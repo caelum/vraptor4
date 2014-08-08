@@ -78,8 +78,10 @@ public class DefaultValidatorTest {
 		MessageInterpolator interpolator = validatorFactory.getMessageInterpolator();
 
 		Proxifier proxifier = new JavassistProxifier();
+		Messages messages = new Messages();
+
 		validator = new DefaultValidator(result, new DefaultValidationViewsFactory(result, proxifier), outjector, proxifier,
-				bundle, bvalidator, interpolator, Locale.ENGLISH);
+				bundle, bvalidator, interpolator, Locale.ENGLISH, messages);
 		when(result.use(LogicResult.class)).thenReturn(logicResult);
 		when(result.use(PageResult.class)).thenReturn(pageResult);
 		when(logicResult.forwardTo(MyComponent.class)).thenReturn(instance);
@@ -221,7 +223,7 @@ public class DefaultValidatorTest {
 		validator.add(new SimpleMessage("client.name", "not empty"));
 		validator.add(new SimpleMessage("client.email", "is not valid e-mail"));
 
-		Collection<String> errors = ((ErrorList) validator.getErrors()).from("client.name");
+		Collection<String> errors = ((MessageList) validator.getErrors()).from("client.name");
 		assertThat(errors, hasSize(2));
 		assertThat(errors, hasItem("not null"));
 		assertThat(errors, hasItem("not empty"));
@@ -233,7 +235,7 @@ public class DefaultValidatorTest {
 		validator.add(new SimpleMessage("client.name", "not null"));
 		validator.add(new SimpleMessage("client.name", "not empty"));
 
-		Collection<String> errors = ((ErrorList) validator.getErrors()).from("client.name");
+		Collection<String> errors = ((MessageList) validator.getErrors()).from("client.name");
 		assertThat(errors.toString(), equalTo("not null, not empty"));
 	}
 	

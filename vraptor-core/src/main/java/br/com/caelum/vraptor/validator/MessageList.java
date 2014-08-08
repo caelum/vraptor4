@@ -33,7 +33,7 @@ import com.google.common.collect.ForwardingList;
  * @author Otávio Scherer Garcia
  */
 @Vetoed
-public class ErrorList extends ForwardingList<Message> {
+public class MessageList extends ForwardingList<Message> {
 
 	private static Function<Message, String> byCategory = new Function<Message, String>() {
 		@Override
@@ -45,7 +45,7 @@ public class ErrorList extends ForwardingList<Message> {
 	private final List<Message> delegate;
 	private Map<String, Collection<Message>> grouped;
 
-	public ErrorList(List<Message> delegate) {
+	public MessageList(List<Message> delegate) {
 		this.delegate = delegate;
 	}
 

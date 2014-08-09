@@ -47,7 +47,7 @@ public class Messages {
 		return get(Severity.INFO);
 	}
 
-	public List<Message> getWarn() {
+	public List<Message> getWarnings() {
 		return get(Severity.WARN);
 	}
 

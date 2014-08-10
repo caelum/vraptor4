@@ -19,11 +19,11 @@ import static java.lang.String.format;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.util.List;
 
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 
-import net.vidageek.mirror.list.dsl.MirrorList;
 import br.com.caelum.vraptor.AfterCall;
 import br.com.caelum.vraptor.AroundCall;
 import br.com.caelum.vraptor.BeforeCall;
@@ -47,7 +47,7 @@ public class NoInterceptMethodsValidationRule implements ValidationRule {
 	}
 
 	@Override
-	public void validate(Class<?> originalType, MirrorList<Method> methods) {
+	public void validate(Class<?> originalType, List<Method> methods) {
 
 		boolean hasAfterMethod = hasAnnotatedMethod(AfterCall.class, originalType, methods);
 		boolean hasAroundMethod = hasAnnotatedMethod(AroundCall.class, originalType, methods);
@@ -61,7 +61,7 @@ public class NoInterceptMethodsValidationRule implements ValidationRule {
 	}
 
 	private boolean hasAnnotatedMethod(Class<? extends Annotation> step,
-			Class<?> originalType, MirrorList<Method> methods) {
+			Class<?> originalType, List<Method> methods) {
 		return stepInvoker.findMethod(methods, step, originalType) != null;
 	}
 }

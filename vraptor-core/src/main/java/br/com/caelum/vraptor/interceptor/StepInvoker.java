@@ -15,37 +15,23 @@
  */
 package br.com.caelum.vraptor.interceptor;
 
+import static com.google.common.base.Predicates.not;
 import static com.google.common.base.Throwables.propagateIfInstanceOf;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.util.List;
 
 import javax.enterprise.context.ApplicationScoped;
 
 import net.vidageek.mirror.dsl.Mirror;
-import net.vidageek.mirror.list.dsl.Matcher;
-import net.vidageek.mirror.list.dsl.MirrorList;
 import br.com.caelum.vraptor.InterceptionException;
+
+import com.google.common.base.Predicate;
+import com.google.common.collect.FluentIterable;
 
 @ApplicationScoped
 public class StepInvoker {
-
-	private class InvokeMatcher implements Matcher<Method> {
-
-		private Class<? extends Annotation> step;
-
-		public InvokeMatcher(Class<? extends Annotation> step) {
-			this.step = step;
-		}
-
-		@Override
-		public boolean accepts(Method element) {
-			if(element.getDeclaringClass().getSimpleName().contains("$")) {
-				return false;
-			}
-			return element.isAnnotationPresent(this.step);
-		}
-	}
 
 	public Object tryToInvoke(Object interceptor, Method stepMethod, Object... params) {
 		if (stepMethod == null) {
@@ -69,27 +55,41 @@ public class StepInvoker {
 		}
 	}
 
-	private boolean isNotSameClass(MirrorList<Method> methods, Class<?> interceptorClass) {
-		for (Method possibleMethod : methods) {
-			if (!possibleMethod.getDeclaringClass().equals(interceptorClass)) {
-				return false;
-			}
-		}
-		return true;
-	}
-
-	public MirrorList<Method> findAllMethods(Class<?> interceptorClass) {
+	public List<Method> findAllMethods(Class<?> interceptorClass) {
 		return new Mirror().on(interceptorClass).reflectAll().methods();
 	}
 
-	public Method findMethod(MirrorList<Method> interceptorMethods, Class<? extends Annotation> step,
+	public Method findMethod(List<Method> interceptorMethods, final Class<? extends Annotation> step,
 			Class<?> interceptorClass) {
 
-		MirrorList<Method> possibleMethods = interceptorMethods.matching(new InvokeMatcher(step));
-		if (possibleMethods.size() > 1 && isNotSameClass(possibleMethods, interceptorClass)) {
-			throw new IllegalStateException(interceptorClass.getCanonicalName() + " - You should not "
-					+ "have more than one @" + step.getSimpleName() + " annotated method");
+		FluentIterable<Method> possibleMethods = FluentIterable.from(interceptorMethods).filter(hasStepAnnotation(step));
+
+		if (possibleMethods.size() > 1 && possibleMethods.allMatch(not(notSameClass(interceptorClass)))) {
+			throw new IllegalStateException(String.format("%s - You should not have more than one @%s annotated method",
+					interceptorClass.getCanonicalName(), step.getSimpleName()));
 		}
-		return possibleMethods.isEmpty() ? null : possibleMethods.get(0);
+
+		return possibleMethods.first().orNull();
+	}
+
+	private Predicate<Method> notSameClass(final Class<?> interceptorClass) {
+		return new Predicate<Method>() {
+			@Override
+			public boolean apply(Method possibleMethod) {
+				return !possibleMethod.getDeclaringClass().equals(interceptorClass);
+			}
+		};
+	}
+
+	private Predicate<Method> hasStepAnnotation(final Class<? extends Annotation> step) {
+		return new Predicate<Method>() {
+			@Override
+			public boolean apply(Method element) {
+				if(element.getDeclaringClass().getSimpleName().contains("$")) {
+					return false;
+				}
+				return element.isAnnotationPresent(step);
+			}
+		};
 	}
 }

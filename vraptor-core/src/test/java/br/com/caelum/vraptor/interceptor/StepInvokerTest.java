@@ -15,10 +15,13 @@
  */
 package br.com.caelum.vraptor.interceptor;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.mockito.Mockito.spy;
+
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
-
-import net.vidageek.mirror.list.dsl.MirrorList;
+import java.util.List;
 
 import org.junit.Test;
 
@@ -27,11 +30,6 @@ import br.com.caelum.vraptor.BeforeCall;
 import br.com.caelum.vraptor.interceptor.example.ExampleOfSimpleStackInterceptor;
 import br.com.caelum.vraptor.interceptor.example.InterceptorWithInheritance;
 import br.com.caelum.vraptor.interceptor.example.WeldProxy$$$StyleInterceptor;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-
-import static org.mockito.Mockito.spy;
 
 public class StepInvokerTest {
 
@@ -63,7 +61,7 @@ public class StepInvokerTest {
 	}
 
 	private Method findMethod(Class<?> interceptorClass, Class<? extends Annotation> step) {
-		MirrorList<Method> methods = stepInvoker.findAllMethods(interceptorClass);
+		List<Method> methods = stepInvoker.findAllMethods(interceptorClass);
 		Method method = stepInvoker.findMethod(methods, step, interceptorClass);
 		return method;
 	}

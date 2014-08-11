@@ -44,6 +44,15 @@ public class Linker {
 	}
 
 	protected String getLink() {
+		Method method = getMethod();
+		return getPrefix() + router.urlFor(controller, method, getArgs(method));
+	}
+
+	protected String getPrefix() {
+		return context.getContextPath();
+	}
+	
+	protected Method getMethod() {
 		Method method = null;
 
 		if (countMethodsWithSameName() > 1) {
@@ -60,8 +69,7 @@ public class Linker {
 				String.format("There are no methods on %s named '%s' that receives args of types %s",
 						controller, methodName, Arrays.toString(getClasses(args))));
 		}
-
-		return context.getContextPath() + router.urlFor(controller, method, getArgs(method));
+		return method;
 	}
 
 	protected Object[] getArgs(Method method) {

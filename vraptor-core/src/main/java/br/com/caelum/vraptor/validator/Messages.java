@@ -68,9 +68,9 @@ public class Messages {
 
 	public List<Message> getAll() {
 		List<Message> allMessages = new ArrayList();
-		allMessages.add(get(Severity.ERROR));
-		allMessages.add(get(Severity.WARN));
-		allMessages.add(get(Severity.INFO));
+		allMessages.addAll(get(Severity.ERROR));
+		allMessages.addAll(get(Severity.WARN));
+		allMessages.addAll(get(Severity.INFO));
 
 		return new MessageList(all);
 	}

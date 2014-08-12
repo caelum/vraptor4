@@ -37,6 +37,9 @@ import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.View;
 import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
 import br.com.caelum.vraptor.ioc.Container;
+import br.com.caelum.vraptor.proxy.CDIProxies;
+import br.com.caelum.vraptor.proxy.JavassistProxifier;
+import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.view.DefaultHttpResultTest.RandomController;
 import br.com.caelum.vraptor.view.LogicResult;
 import br.com.caelum.vraptor.view.PageResult;
@@ -48,12 +51,14 @@ public class DefaultResultTest {
 	@Mock private Container container;
 
 	private Result result;
+	private Proxifier proxifier;
 	@Mock private TypeNameExtractor extractor;
-
+	
 	@Before
 	public void setup() {
 		MockitoAnnotations.initMocks(this);
 		result = new DefaultResult(request, container, null, extractor);
+		proxifier = new JavassistProxifier();
 	}
 
 	public static class MyView implements View {
@@ -165,6 +170,39 @@ public class DefaultResultTest {
 
 	}
 
+	@Test
+	public void shouldDelegateToLogicResultOnRedirectToLogicWithProxifiedTypeInstance() throws Exception {
+		LogicResult logicResult = mockResult(LogicResult.class);
+		
+		RandomController randomProxy = proxifier.proxify(RandomController.class, null);
+		
+		result.redirectTo(randomProxy);
+		
+		verify(logicResult).redirectTo(CDIProxies.extractRawTypeIfPossible(randomProxy.getClass()));
+	}
+
+	@Test
+	public void shouldDelegateToLogicResultOnForwardToLogicWithProxifiedTypeInstance() throws Exception {
+		LogicResult logicResult = mockResult(LogicResult.class);
+		
+		RandomController randomProxy = proxifier.proxify(RandomController.class, null);
+		
+		result.forwardTo(randomProxy);
+		
+		verify(logicResult).forwardTo(CDIProxies.extractRawTypeIfPossible(randomProxy.getClass()));
+	}
+	
+	@Test
+	public void shouldDelegateToPageResultOnPageOfWithProxifiedTypeInstance() throws Exception {
+		PageResult logicResult = mockResult(PageResult.class);
+		
+		RandomController randomProxy = proxifier.proxify(RandomController.class, null);
+		
+		result.of(randomProxy);
+		
+		verify(logicResult).of(CDIProxies.extractRawTypeIfPossible(randomProxy.getClass()));
+	}
+	
 	@Test
 	public void shouldDelegateToStatusOnNotFound() throws Exception {
 

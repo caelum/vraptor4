@@ -16,8 +16,7 @@
 package br.com.caelum.vraptor.interceptor;
 
 import java.lang.reflect.Method;
-
-import net.vidageek.mirror.list.dsl.MirrorList;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -48,14 +47,14 @@ public class NoInterceptMethodsValidationRuleTest {
 	@Test(expected=InterceptionException.class)
 	public void shoulThrowExceptionIfInterceptorDontHaveAnyCallableMethod() {
 		Class<?> type = SimpleInterceptor.class;
-		MirrorList<Method> allMethods = stepInvoker.findAllMethods(type);
+		List<Method> allMethods = stepInvoker.findAllMethods(type);
 		new NoInterceptMethodsValidationRule(stepInvoker).validate(type, allMethods);
 	}
 
 	@Test
 	public void shoulWorksFineIfInterceptorHaveAtLeastOneCallableMethod() {
 		Class<?> type = SimpleInterceptorWithCallableMethod.class;
-		MirrorList<Method> allMethods = stepInvoker.findAllMethods(type);
+		List<Method> allMethods = stepInvoker.findAllMethods(type);
 		new NoInterceptMethodsValidationRule(stepInvoker).validate(type, allMethods);
 	}
 }

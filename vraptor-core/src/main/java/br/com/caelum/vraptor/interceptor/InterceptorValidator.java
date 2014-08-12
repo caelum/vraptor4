@@ -18,13 +18,13 @@ package br.com.caelum.vraptor.interceptor;
 import static com.google.common.base.Preconditions.checkState;
 
 import java.lang.reflect.Method;
+import java.util.List;
 
 import javax.enterprise.context.Dependent;
 import javax.enterprise.inject.Any;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 
-import net.vidageek.mirror.list.dsl.MirrorList;
 import br.com.caelum.vraptor.Intercepts;
 
 @Dependent
@@ -47,7 +47,7 @@ public class InterceptorValidator {
 			boolean implementsInterceptor) {
 
 		if (!implementsInterceptor) {
-			MirrorList<Method> allMethods = stepInvoker.findAllMethods(originalType);
+			List<Method> allMethods = stepInvoker.findAllMethods(originalType);
 			for (ValidationRule validationRule : this.validationRules) {
 				validationRule.validate(originalType, allMethods);
 			}

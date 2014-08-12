@@ -16,8 +16,7 @@
 package br.com.caelum.vraptor.interceptor;
 
 import java.lang.reflect.Method;
-
-import net.vidageek.mirror.list.dsl.MirrorList;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -39,21 +38,21 @@ public class CustomAndInternalAcceptsValidationRuleTest {
 	@Test(expected = IllegalStateException.class)
 	public void mustNotUseInternalAcceptsAndCustomAccepts(){
 		Class<?> type = InternalAndCustomAcceptsInterceptor.class;
-		MirrorList<Method> methods = stepInvoker.findAllMethods(type);
+		List<Method> methods = stepInvoker.findAllMethods(type);
 		validationRule.validate(type, methods);
 	}
 
 	@Test
 	public void shouldValidateIfConstainsOnlyInternalAccepts(){
 		Class<?> type = InternalAcceptsInterceptor.class;
-		MirrorList<Method> methods = stepInvoker.findAllMethods(type);
+		List<Method> methods = stepInvoker.findAllMethods(type);
 		validationRule.validate(type, methods);
 	}
 
 	@Test
 	public void shouldValidateIfConstainsOnlyCustomAccepts(){
 		Class<?> type = CustomAcceptsInterceptor.class;
-		MirrorList<Method> methods = stepInvoker.findAllMethods(type);
+		List<Method> methods = stepInvoker.findAllMethods(type);
 		validationRule.validate(type, methods);
 	}
 

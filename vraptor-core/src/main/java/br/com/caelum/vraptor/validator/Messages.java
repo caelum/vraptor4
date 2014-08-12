@@ -72,7 +72,7 @@ public class Messages {
 		allMessages.addAll(get(Severity.WARN));
 		allMessages.addAll(get(Severity.INFO));
 
-		return new MessageList(all);
+		return new MessageList(allMessages);
 	}
 
 	private MessageList createMessageList() {

@@ -59,8 +59,7 @@ public class StepInvoker {
 		return new Mirror().on(interceptorClass).reflectAll().methods();
 	}
 
-	public Method findMethod(List<Method> interceptorMethods, final Class<? extends Annotation> step,
-			Class<?> interceptorClass) {
+	public Method findMethod(List<Method> interceptorMethods, Class<? extends Annotation> step, Class<?> interceptorClass) {
 
 		FluentIterable<Method> possibleMethods = FluentIterable.from(interceptorMethods).filter(hasStepAnnotation(step));
 

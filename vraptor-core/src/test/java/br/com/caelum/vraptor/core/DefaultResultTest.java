@@ -17,6 +17,7 @@
 
 package br.com.caelum.vraptor.core;
 
+import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.anyObject;
@@ -28,6 +29,7 @@ import static org.mockito.Mockito.when;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.jboss.weld.bean.proxy.ProxyObject;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -37,9 +39,7 @@ import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.View;
 import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
 import br.com.caelum.vraptor.ioc.Container;
-import br.com.caelum.vraptor.proxy.CDIProxies;
-import br.com.caelum.vraptor.proxy.JavassistProxifier;
-import br.com.caelum.vraptor.proxy.Proxifier;
+import br.com.caelum.vraptor.proxy.WeldProxifier;
 import br.com.caelum.vraptor.view.DefaultHttpResultTest.RandomController;
 import br.com.caelum.vraptor.view.LogicResult;
 import br.com.caelum.vraptor.view.PageResult;
@@ -49,16 +49,16 @@ public class DefaultResultTest {
 
 	@Mock private HttpServletRequest request;
 	@Mock private Container container;
+	@Mock private TypeNameExtractor extractor;
 
 	private Result result;
-	private Proxifier proxifier;
-	@Mock private TypeNameExtractor extractor;
+	private WeldProxifier weldProxifier;
 	
 	@Before
 	public void setup() {
 		MockitoAnnotations.initMocks(this);
 		result = new DefaultResult(request, container, null, extractor);
-		proxifier = new JavassistProxifier();
+		weldProxifier = new WeldProxifier();
 	}
 
 	public static class MyView implements View {
@@ -173,34 +173,28 @@ public class DefaultResultTest {
 	@Test
 	public void shouldDelegateToLogicResultOnRedirectToLogicWithProxifiedTypeInstance() throws Exception {
 		LogicResult logicResult = mockResult(LogicResult.class);
-		
-		RandomController randomProxy = proxifier.proxify(RandomController.class, null);
-		
+		RandomController randomProxy = weldProxifier.proxify(RandomController.class);
+		assertThat(randomProxy, instanceOf(ProxyObject.class));
 		result.redirectTo(randomProxy);
-		
-		verify(logicResult).redirectTo(CDIProxies.extractRawTypeIfPossible(randomProxy.getClass()));
+		verify(logicResult).redirectTo(RandomController.class);
 	}
 
 	@Test
 	public void shouldDelegateToLogicResultOnForwardToLogicWithProxifiedTypeInstance() throws Exception {
 		LogicResult logicResult = mockResult(LogicResult.class);
-		
-		RandomController randomProxy = proxifier.proxify(RandomController.class, null);
-		
+		RandomController randomProxy = weldProxifier.proxify(RandomController.class);
+		assertThat(randomProxy, instanceOf(ProxyObject.class));
 		result.forwardTo(randomProxy);
-		
-		verify(logicResult).forwardTo(CDIProxies.extractRawTypeIfPossible(randomProxy.getClass()));
+		verify(logicResult).forwardTo(RandomController.class);
 	}
 	
 	@Test
 	public void shouldDelegateToPageResultOnPageOfWithProxifiedTypeInstance() throws Exception {
 		PageResult logicResult = mockResult(PageResult.class);
-		
-		RandomController randomProxy = proxifier.proxify(RandomController.class, null);
-		
+		RandomController randomProxy = weldProxifier.proxify(RandomController.class);
+		assertThat(randomProxy, instanceOf(ProxyObject.class));
 		result.of(randomProxy);
-		
-		verify(logicResult).of(CDIProxies.extractRawTypeIfPossible(randomProxy.getClass()));
+		verify(logicResult).of(RandomController.class);
 	}
 	
 	@Test

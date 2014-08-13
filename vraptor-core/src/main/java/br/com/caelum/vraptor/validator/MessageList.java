@@ -28,7 +28,8 @@ import com.google.common.collect.FluentIterable;
 import com.google.common.collect.ForwardingList;
 
 /**
- * Class that represents an error list.
+ * Class that represents an message list, allowing to use methods
+ * to groupping message by category.
  * 
  * @author Otávio Scherer Garcia
  */

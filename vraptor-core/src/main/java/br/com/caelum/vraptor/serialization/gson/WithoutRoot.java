@@ -10,7 +10,7 @@ import br.com.caelum.vraptor.serialization.DeserializerConfig;
  * A {@link Consumes} option to force deserialization without root element.
  * 
  * @author Renan Montenegro
- * @since REPLACE_ME_ON_NEXT_RELEASE
+ * @since 4.1
  */
 @Dependent
 public class WithoutRoot implements DeserializerConfig {

@@ -8,7 +8,7 @@ import br.com.caelum.vraptor.serialization.gson.GsonDeserialization;
  * the {@link GsonDeserialization} behavior.
  * 
  * @author Renan Montenegro
- * @since REPLACE_ME_ON_NEXT_RELEASE
+ * @since 4.1
  */
 public interface DeserializerConfig {
 	void config(Deserializee deserializee);

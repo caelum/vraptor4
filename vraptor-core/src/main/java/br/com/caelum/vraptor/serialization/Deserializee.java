@@ -8,7 +8,7 @@ import br.com.caelum.vraptor.serialization.gson.GsonDeserialization;
  * Used in {@link GsonDeserialization} to define some behaviors of deserializtion.
  * 
  * @author Renan Montenegro
- * @since REPLACE_ME_ON_NEXT_RELEASE
+ * @since 4.1
  */
 @Dependent
 public class Deserializee {

@@ -80,9 +80,11 @@ public class DefaultPathResolver implements PathResolver {
 
 	protected String extractControllerFromName(String baseName) {
 		baseName = lowerFirstCharacter(baseName);
+		
 		if (baseName.endsWith("Controller")) {
 			return baseName.substring(0, baseName.lastIndexOf("Controller"));
 		}
+		
 		return baseName;
 	}
 

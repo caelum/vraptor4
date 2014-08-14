@@ -10,14 +10,13 @@ O VRaptor agora trata o fluxo principal do request utilizando eventos do CDI. A 
 
 ## Eventos disparados pelo VRaptor
 
-* `VRaptorInitialized` disparado no startup da aplicação, indicando que o VRaptor foi inicializado.
-* `RequestStarted` disparado no início de cada request.
-* `RequestSucceeded` disparado no final do request, apenas caso ela tenha sido processada sem nenhum erro.
-* `ControllerFound` e `ControllerNotFound` vão indicar se o Controller que atende a url do request foi encontrado ou não.
-* `InterceptorsReady` e `InterceptorsExecuted` indicam o momento em que a stack de interceptors será executada e logo após sua conclusão.
-* `MethodReady` e `MethodExecuted` quando o método do controller será executado e logo após sua conclusão.
-
-
+| VRaptorInitialized | Disparado no startup da aplicação, indicando que o VRaptor foi inicializado.
+| RequestStarted | Disparado no início de cada request.
+| RequestSucceeded | Disparado no final do request, apenas caso ela tenha sido processada sem nenhum erro.
+| ControllerFound e ControllerNotFound | Vão indicar se o Controller que atende a url do request foi encontrado ou não.
+| InterceptorsReady e InterceptorsExecuted | Indicam o momento em que a stack de interceptors será executada e logo após sua conclusão.
+| MethodReady e MethodExecuted | Quando o método do controller será executado e logo após sua conclusão.
+{: .content-table}
 
 ## Observando nossos eventos
 

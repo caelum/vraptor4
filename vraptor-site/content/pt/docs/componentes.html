@@ -17,7 +17,12 @@ public class ClienteDao {
 
 	private Session session;
 
-	protected ClienteDao() {}
+	/**
+	 * @deprecated Construtor usado apenas para o CDI
+	 */
+	protected ClienteDao() {
+		this(null);
+	}
 
 	@Inject
 	public ClienteDao(Session session) {
@@ -70,13 +75,12 @@ public class HibernateControl {
 
 Os escopos implementados são:
 
-~~~
-* @ApplicationScoped - component é um singleton, apenas um por aplicação.
-* @SessionScoped - o componente é o mesmo durante uma http session.
-* @ConversationScoped - a instância do componente é mantida durante uma conversation.
-* @RequestScoped - o componente é o mesmo durante uma requisição.
-* @Dependent - component é instanciado sempre que requisitado.
-~~~
+| @ApplicationScoped | component é um singleton, apenas um por aplicação.
+| @SessionScoped | o componente é o mesmo durante uma http session.
+| @ConversationScoped | a instância do componente é mantida durante uma conversation.
+| @RequestScoped | o componente é o mesmo durante uma requisição.
+| @Dependent | component é instanciado sempre que requisitado.
+{: .content-table}
 
 Você pode pesquisar mais sobre os escopos [na documentação do Java EE 7](http://docs.oracle.com/javaee/7/tutorial/doc/cdi-basic008.htm).
 
@@ -91,7 +95,8 @@ Para poder fazer isto, basta criar um `Produces`:
 @RequestScoped
 public class SessionCreator {
 
-	@Inject private SessionFactory sessionFactory;
+	@Inject
+	private SessionFactory sessionFactory;
 
 	@Produces @RequestScoped
 	public Session getSession() {
@@ -116,18 +121,19 @@ O VRaptor utiliza o CDI para controlar o que é necessário para instanciar cada
 #!java
 @Controller
 public class ClienteController {
+
 	private ClienteDao dao;
+
+	/**
+	 * @deprecated Construtor usado apenas para o CDI
+	 */
+	protected ClienteController() {
+		this(null);
+	}
 
 	@Inject
 	public ClienteController(ClienteDao dao) {
 		this.dao = dao;
-	}
-
-	/**
-	 * @deprecated CDI eyes only
-	 */
-	protected ClienteController() {
-		this(null);
 	}
 
 	@Post
@@ -151,6 +157,7 @@ public class PrintLog {
 	public void observesContext(@Observes ServletContext context) {
 		System.out.println("My application is UP");
 	}
+}
 ~~~ 
 
 

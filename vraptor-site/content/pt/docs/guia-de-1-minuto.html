@@ -47,15 +47,19 @@ public class ClientsController {
 
 	private final ClientDao dao;
 
+	/**
+	 * @deprecated Construtor usado apenas para o CDI
+	 */
+	protected ClientsController(){
+		this(null);
+	}
+
 	@Inject
 	public ClientsController(ClientDao dao){
 		this.dao = dao;
 	}
-	
-	/**
- 	 * @deprecated CDI eyes only
-     */
-	public ClientsController(){}
+
+	// métodos do controller
 }
 ~~~
 

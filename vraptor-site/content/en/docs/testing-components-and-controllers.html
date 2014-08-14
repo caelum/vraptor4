@@ -14,13 +14,8 @@ CDI takes care of your application's Dependency Injection (DI) and to improve th
 public class PersonController {
 
 	private final Result result;
-	private final Validator validator;
 
-	@Inject
-	public PersonController(Result result, Validator validator) {
-		this.result = result;
-		this.validator = validator;
-	}
+	private final Validator validator;
 
 	/**
 	 * @deprecated CDI eyes only
@@ -28,7 +23,13 @@ public class PersonController {
 	protected PersonController() {
 		this(null, null);
 	}
-	
+
+	@Inject
+	public PersonController(Result result, Validator validator) {
+		this.result = result;
+		this.validator = validator;
+	}
+
 }
 ~~~
 

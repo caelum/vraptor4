@@ -13,16 +13,16 @@ public class NoCacheInterceptor {
 
     private final HttpServletResponse response;
 
-    @Inject
-    public NoCacheInterceptor(HttpServletResponse response) {
-        this.response = response;
-    }
-
     /**
-     * @deprecated CDI eyes only
+     * @deprecated Construtor usado apenas para o CDI
      */
     protected NoCacheInterceptor(){
         this(null);
+    }
+
+    @Inject
+    public NoCacheInterceptor(HttpServletResponse response) {
+        this.response = response;
     }
 
     @BeforeCall

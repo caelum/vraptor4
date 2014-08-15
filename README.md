@@ -2,7 +2,7 @@
 
 ![Build status](https://secure.travis-ci.org/caelum/vraptor4.png)
 
-A web MVC action-based framework, on top of CDI, for fast and maintainable Java development. 
+A web MVC action-based framework, on top of CDI, for fast and maintainable Java development. aaa
 
 ##Downloading directly or using it through Maven
 

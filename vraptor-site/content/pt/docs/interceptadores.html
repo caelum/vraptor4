@@ -124,17 +124,19 @@ public class WithAnnotationAcceptor implements AcceptsValidator<AcceptsWithAnnot
 
 	@Override
 	public boolean validate(ControllerMethod controllerMethod, ControllerInstance instance) {
-		//aqui entra sua logica de validação do método ou instancia do controller.
 		return true;
 	}
 
 	@Override
 	public void initialize(AcceptsWithAnnotations annotation) {
-		//aqui você pode acessar as informações contidas na annotation customizada.
 		this.allowedTypes = Arrays.asList(annotation.value());
 	}
 }
 ~~~ 
+
+No método `validate(...)` insira sua logica de validação do método ou instancia do controller.
+Já no método `initialize(...)` você pode acessar as informações contidas na annotation customizada.
+
 
 Esta classe só precisa implemetar a interface `AcceptsValidator<T>` onde T é o tipo da sua 
 Annotation customizada. Dessa maneira você pode criar as suas condições customizadas e 
@@ -151,9 +153,7 @@ configurar isso tanto com:
 ~~~ 
 #!java
 @Intercepts(before=SegundoInterceptor.class)
-public class PrimeiroInterceptor {
-	...
-}
+public class PrimeiroInterceptor { ... }
 ~~~ 
 
 quanto com:
@@ -161,9 +161,7 @@ quanto com:
 ~~~ 
 #!java
 @Intercepts(after=PrimeiroInterceptor.class)
-public class SegundoInterceptor {
-	...
-}
+public class SegundoInterceptor { ... }
 ~~~ 
 
 Você pode especificar mais de um Interceptor:
@@ -172,9 +170,7 @@ Você pode especificar mais de um Interceptor:
 #!java
 @Intercepts(after={PrimeiroInterceptor.class, SegundoInterceptor.class},
 			before={QuartoInterceptor.class, QuintoInterceptor.class})
-public class TerceiroInterceptor {
-	...
-}
+public class TerceiroInterceptor { ... }
 ~~~ 
 
 O VRaptor lançará uma exception se existir um ciclo na ordem dos interceptors, então 

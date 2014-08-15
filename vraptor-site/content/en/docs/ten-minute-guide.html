@@ -20,16 +20,16 @@ public class Product {
 	private String description;
 	private Double price;
 
-	// getter and setters and other necessary business methods
 }
 ~~~
+
+Into the class Product you can insert: getter and setters and other necessary business methods
 
 We also need a class that will manage product registration, dealing with web requests. This class will be the products Controller:
 
 ~~~
 #!java
-public class ProductsController {
-}
+public class ProductsController { ... }
 ~~~
 
 The `ProductsController` class will expose URIs that can be accessed through the web, i.e., it will expose your application resources. This type of classes have to annotated with `@Controller`:
@@ -37,8 +37,7 @@ The `ProductsController` class will expose URIs that can be accessed through the
 ~~~
 #!java
 @Controller
-public class ProductsController {
-}
+public class ProductsController { ... }
 ~~~
 
 Whenever you annotate a class with `@Controller` all its public methods are accessible through the web. Take the list method as an example:
@@ -102,9 +101,7 @@ We can instantiate `ProductDAO` from the controller, but that can be complicated
 ~~~
 #!java
 @RequestScoped
-public class ProductDAO {
-	//...
-}
+public class ProductDAO { ... }
 
 @Controller
 public class ProductsController {
@@ -126,9 +123,8 @@ We already have the product lists, but we can't register them yet. We will creat
 #!java
 @Controller
 public class ProductsController {
-	//...
-	public void form() {
-	}
+
+	public void form() { ... }
 }
 ~~~
 
@@ -154,9 +150,8 @@ The form, as we designed it, will save the product through the URI `/products/ad
 #!java
 @Controller
 public class ProductsController {
-	//...
-	public void add() {
-	}
+
+	public void add() { ... }
 }
 ~~~
 
@@ -168,7 +163,7 @@ Then, by using the correct names on the form inputs, all you need to do is to ma
 #!java
 @Controller
 public class ProductsController {
-	//...
+	
 	public void add(Product product) {
 		dao.add(product);
 	}
@@ -187,7 +182,6 @@ public class ProductsController {
 	@Inject
 	private Result result;
 
-	//...
 }
 ~~~
 
@@ -229,7 +223,6 @@ public class ProductDAO {
 	public void add(Product product) {
 		manager.persist(product);
 	}
-	//...
 }
 ~~~
 
@@ -310,7 +303,6 @@ However, if we want to restrict it to a specific HTTP method, we can use `@Get`,
 ~~~
 #!java
 public class ProductsController {
-	//...
 
 	@Get("/products")
 	public List<Product> list() {...}

@@ -19,17 +19,16 @@ public class Produto {
 	private String nome;
 	private String descricao;
 	private Double preco;
-
-	// getter e setters e métodos de negócio que julgar necessário
 }
 ~~~
+
+Caso necessário podemos incluir os getter, setters e métodos de negócio na classe Produto.
 
 Precisamos também de uma classe que vai controlar o cadastro de produtos, tratando requisições web. Essa classe vai ser o Controller de produtos:
 
 ~~~
 #!java
-public class ProdutosController {
-}
+public class ProdutosController {}
 ~~~
 
 A classe `ProdutosController` vai expor URIs para serem acessadas via web, ou seja, vai expor recursos da sua aplicação. E, para indicar isso, você precisa anotá-la com com `@Controller`:
@@ -37,8 +36,7 @@ A classe `ProdutosController` vai expor URIs para serem acessadas via web, ou se
 ~~~
 #!java
 @Controller
-public class ProdutosController {
-}
+public class ProdutosController {}
 ~~~
 
 Ao colocar essa anotação na classe, todos os métodos públicos dela serão acessíveis pela web. Por exemplo, se tivermos um método lista na classe:
@@ -102,9 +100,7 @@ Podemos instanciar o `ProdutoDao` direto do controller, porém é muito mais int
 ~~~
 #!java
 @RequestScoped
-public class ProdutoDao {
-    //...
-}
+public class ProdutoDao {}
 
 @Controller
 public class ProdutosController {
@@ -126,9 +122,7 @@ Temos uma listagem de produtos, mas ainda não temos como cadastrá-los. Vamos e
 #!java
 @Controller
 public class ProdutosController {
-	//...
-	public void form() {
-	}
+	public void form() {}
 }
 ~~~
 
@@ -154,9 +148,7 @@ Como o formulário vai salvar o produto pela URI `/produtos/adiciona`, precisamo
 #!java
 @Controller
 public class ProdutosController {
-	//...
-	public void adiciona() {
-	}
+	public void adiciona() { ... }
 }
 ~~~
 
@@ -168,7 +160,7 @@ Então, usando os nomes corretamente nos inputs do form, basta criar seu método
 #!java
 @Controller
 public class ProdutosController {
-	//...
+
 	public void adiciona(Produto produto) {
 		dao.adiciona(produto);
 	}
@@ -225,7 +217,6 @@ public class ProdutoDao {
 	public void adiciona(Produto produto) {
 		manager.persist(produto);
 	}
-	//...
 }
 ~~~
 
@@ -297,22 +288,21 @@ Para criar esse comportamento REST no VRaptor, podemos usar as anotações `@Pat
 ~~~
 #!java
 public class ProdutosController {
-	//...
 
 	@Get @Path("/produtos")
-	public List<Produto> lista() {...}
+	public List<Produto> lista() { ... }
 
 	@Post("/produtos")
-	public void adiciona(Produto produto) {...}
+	public void adiciona(Produto produto) { ... }
 
 	@Get("/produtos/{produto.id}")
-	public void visualiza(Produto produto) {...}
+	public void visualiza(Produto produto) { ... }
 
 	@Put("/produtos/{produto.id}")
-	public void atualiza(Produto produto) {...}
+	public void atualiza(Produto produto) { ... }
 
 	@Delete("/produtos/{produto.id}")
-	public void remove(Produto produto) {...}
+	public void remove(Produto produto) { ... }
 }
 ~~~
 

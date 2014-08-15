@@ -18,9 +18,7 @@ public class ClientsController {
 	@Inject
 	private ClientDao dao;
 
-	public void form() {
-		// código que carrega dados para checkboxes, selects, etc
-	}
+	public void form() {}
 
 	public void add(Client custom) {
 		dao.save(custom);
@@ -35,6 +33,8 @@ public class ClientsController {
 	}
 }
 ~~~
+
+Dentro do método form() podemos inserir os códigos que carregam os dados para checkboxes, selects, etc
 
 Anotando seu controller com `@Controller`, seus métodos públicos ficarão disponíveis para receber requisições web.
 
@@ -51,19 +51,21 @@ public class ClientsController {
 	public ClientsController(ClientDao dao){
 		this.dao = dao;
 	}
-
-	/**
-	 * @deprecated CDI eyes only
-	 */
-	public ClientsController(){
-		this(null);
-	}
-
-	// métodos do controller
+	
+	public ClientsController(){}
 }
 ~~~
 
 Para a aplicação não há diferença usar a injeção via construtor ou no atributo da classe. Porém utilizando a injeção via construtor será útil para você escrever seus testes unitários, o que veremos <a href="/pt/docs/testando-componentes-e-controllers">mais adiante</a>.
+
+Note também que temos um construtor vazio, isto porque CDI nos obriga ter um contrutor padrão. Podemos inserir logo acima deste construtor o comentário para indicar que é apenas para o uso do CDI:
+
+~~~
+#!java
+/**
+ * @deprecated CDI eyes only
+ */
+~~~
 
 Todos os métodos públicos do seu controller estarão acessíveis pela web. Por exemplo, o método `form` pode ser acessado pela URI `/clients/form` e vai redirecionar para a jsp `/WEB-INF/jsp/clients/form.jsp`.
 

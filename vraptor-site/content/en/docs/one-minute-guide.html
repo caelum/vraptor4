@@ -18,9 +18,7 @@ public class ClientsController {
 	@Inject
 	private ClientDao dao;
 
-	public void form() {
-		// code that loads data for checkboxes, selects, etc
-	}
+	public void form() { ... }
 
 	public void add(Client custom) {
 		dao.save(custom);
@@ -35,6 +33,8 @@ public class ClientsController {
 	}
 }
 ~~~
+
+Into the method `void form()` you can put the code that loads data for checkboxes, selects, etc.
 
 Use the `@Controller` annotation and your public methods will be available for web requests.
 

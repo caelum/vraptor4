@@ -43,9 +43,7 @@ By default, to render your views, VRaptor uses the convention:
 ~~~ 
 #!java
 public class ClientsController {
-	public void list() {
-		//...
-	}
+	public void list() { ... }
 }
 ~~~ 
 
@@ -81,7 +79,7 @@ public class ClientsController {
 	public void list() {}
 
 	public void save(Client client) {
-		//...
+
 		result.use(Results.logic()).redirectTo(ClientsController.class).list();
 	}
 }

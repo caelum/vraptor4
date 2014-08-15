@@ -17,9 +17,7 @@ O exemplo a seguir mostra um recurso chamado `ClienteController` que possui mét
 @Controller
 public class ClienteController {
 
-	public void adiciona(Cliente cliente) {
-
-	}
+	public void adiciona(Cliente cliente) {}
 
 	public List<Cliente> lista() {
 		return ...
@@ -29,13 +27,9 @@ public class ClienteController {
 		return ...
 	}
 
-	public void remove(Cliente cliente) {
-		...
-	}
+	public void remove(Cliente cliente) { ... }
 
-	public void atualiza(Cliente cliente) {
-		...
-	}
+	public void atualiza(Cliente cliente) { ... }
 }
 ~~~ 
 
@@ -45,9 +39,7 @@ Você pode receber parâmetros nos métodos dos seus controllers, e se o objeto 
 
 ~~~ 
 #!java
-public void atualiza(Cliente cliente) {
-	//...
-}
+public void atualiza(Cliente cliente) { ... }
 ~~~ 
 
 você pode passar como parâmetro na requisição:
@@ -98,8 +90,7 @@ public class ClienteController {
 
 	@Path("/cliente")
 	@Post
-	public void adiciona(Cliente cliente) {
-	}
+	public void adiciona(Cliente cliente) { ... }
 }
 ~~~ 
 
@@ -110,18 +101,23 @@ Se você anotar o `ClienteController` com `@Path`, o valor especificado vai ser 
 @Controller
 @Path("/clientes")
 public class ClienteController {
-	//URI: /clientes/lista
+	
 	public void lista() {...}
 
-	//URI: /clientes/salva
 	@Path("salva")
 	public void adiciona() {...}
 
-	//URI: /clientes/todosOsClientes
 	@Path("/todosOsClientes")
 	public void listaTudo() {...}
 }
 ~~~
+
+Anotando os métodos com @Path, teremos as seguntes URIs
+
+|void lista() 			| URI: /clientes/lista
+|void adiciona() 		| URI: /clientes/salva
+|void listaTudo()		| URI: /clientes/todosOsClientes
+{: .content-table}
 
 ##Métodos HTTP
 
@@ -139,8 +135,7 @@ para utilizar duas URIs distintas, com diversos métodos HTTP:
 public class ClienteController {
 
 	@Post("/cliente")
-	public void adiciona(Cliente cliente) {
-	}
+	public void adiciona(Cliente cliente) {...}
 
 	@Path("/")
 	public List<Cliente> lista() {
@@ -153,14 +148,10 @@ public class ClienteController {
 	}
 
 	@Delete("/cliente")
-	public void remove(Cliente cliente) {
-		...
-	}
+	public void remove(Cliente cliente) { ... }
 
 	@Put("/cliente")
-	public void atualiza(Cliente cliente) {
-		...
-	}
+	public void atualiza(Cliente cliente) { ... }
 }
 ~~~
 
@@ -255,9 +246,7 @@ Você pode restringir o valor dos parâmetros da sua URI com expressões regular
 ~~~ 
 #!java
 @Path("/cor/{cor:[0-9A-Fa-f]{6}}")
-public void setCor(String cor) {
-	//...
-}
+public void setCor(String cor) { ... }
 ~~~
 
 Tudo que estiver depois do `:` será tratado como uma regex, e a URI só vai casar se o parâmetro casar com a regex:
@@ -346,15 +335,11 @@ public class PostController {
 
 	@Get
 	@Path(value = "/post/{post.autor}", priority=Path.LOW)
-	public void mostra(Post post) {
-		... 
-	}
+	public void mostra(Post post) { ... }
 
 	@Get
 	@Path(value = "/post/atual", priority=Path.HIGH)
-	public void atual() {
-		...
-	}
+	public void atual() { ... }
 }
 ~~~
 
@@ -368,9 +353,7 @@ do header `X-Auth-User`.
 
 ~~~ 
 #!java
-public void profile(@HeaderParam("X-Auth-User") username) {
-	...
-}
+public void profile(@HeaderParam("X-Auth-User") username) { ... } 
 ~~~
 
 *Atenção*: No exemplo acima, se você tiver paramêtro com a chave `username`
@@ -451,14 +434,12 @@ No exemplo abaixo, se o método `adicionar(Cliente)` lançar uma `ClienteJaExist
 ~~~ 
 #!java
 @Get
-public void formulario() {
-	...
-}
+public void formulario() { ... }
 
 @Post
 public void adicionar(Cliente cliente) {
     result.on(ClienteJaExisteException.class).forwardTo(this).formulario();
-
+    
     clienteDAO.salvar(cliente);
 }
 ~~~

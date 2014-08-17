@@ -126,9 +126,9 @@ public class CustomerController {
 	public void listAll() {...}
 }
 ~~~
-Annotating the methods with @Path() we'll have the following URIs:
+By annotating the methods with `@Path` we'll have the following URIs:
 
-|void list()           | URI: /customers/list|
+|void list()            | URI: /customers/list|
 |void add()             | URI: /customers/save|
 |void listAll()         | URI: /customers/allCustomers|
 {: .content-table}
@@ -148,8 +148,7 @@ methods:
 @Controller
 public class CustomerController {
     @Post("/")
-    public void add(Customer customer) {
-    }
+    public void add(Customer customer) { }
 
     @Path("/")
     public List<Customer> list() 

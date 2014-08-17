@@ -30,7 +30,7 @@ public class ClienteDao {
 }
 ~~~ 
 
-Por padrão o CDI obriga que você tenha um construtor padrão, sem parâmetros como em: `protected ClienteDao() {}`
+O construtor padrão é necessário para que o CDI consiga gerenciar esta classe.
 
 Todos os componentes do VRaptor são gerenciados pelo CDI (Context Dependency Injection) do Java EE 7. Desta forma todas as funcionalidades presentes no CDI estão presentes no VRaptor. 
 
@@ -123,6 +123,9 @@ public class ClienteController {
 		this.dao = dao;
 	}
 
+	/**
+	 * @deprecated CDI eyes only
+	 */
 	protected ClienteController() {
 		this(null);
 	}
@@ -133,18 +136,6 @@ public class ClienteController {
 	}
 }
 ~~~ 
-
-Podemos também anotar o construtor padrão com:
-
-~~~
-#!java
-/**
- * @deprecated CDI eyes only
- */
- protected ClienteController() {
-		this(null);
-	}
-~~~
 
 ## Disparando eventos
 
@@ -202,8 +193,8 @@ public class CustomPathResolver extends DefaultPathResolver {
 
 Podemos ter os seguintes exeplos de convenção, como descrito abaixo:
 
-Exemplo 01: Em vez de redirecionar UserController para 'user' você quer redirecionar para 'userResource';
-Exemplo 02: Se você sobrescreveu a conveção para nome dos Controllers para XXXResource e quer continuar redirecionando para 'user' e não para 'userResource';
+Exemplo 01: Em vez de redirecionar `UserController` para `user` você quer redirecionar para `userResource`;
+Exemplo 02: Se você sobrescreveu a conveção para nome dos Controllers para `XXXResource` e quer continuar redirecionando para `user` e não para `userResource`;
 
 Caso precise mudar mais ainda a convenção basta implementar a interface `PathResolver`.
 
@@ -215,6 +206,7 @@ Por padrão, a URI para o método `ClientesController.lista()` é `/clientes/lis
 #!java
 @Specializes @ApplicationScoped
 public class MeuRoutesParser extends PathAnnotationRoutesParser {
+	//delegate constructor
 
 	protected String extractControllerNameFrom(Class<?> type) {
 		return //sua convenção aqui

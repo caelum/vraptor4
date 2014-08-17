@@ -19,10 +19,10 @@ para a classe abaixo:
 public class Cliente {
 	private Long id;
 	private int idade;
+
+	// getters and setters
 }
 ~~~
-
-Na classe Cliente podemos inserir os devidos getters, setters e também métodos de negócio.
 
 Ao injetar os dados da requisição na classe, o VRaptor irá usar o conversor `LongConverter` para o campo `id` e o conversor `PrimitiveIntegerConverter` para o campo `idade`. Neste caso, o atributo `id` receberá o valor `10`, e o campo `idade` receberá o valor `0`, pois o parametro recebido é `null`.
 
@@ -160,4 +160,4 @@ public class MeuBigDecimalConverter extends LocaleBasedBigDecimalConverter {
 }
 ~~~ 
 
-Na Classe `MeuBigDecimalConverter` realizo a implementação do meu formato.
+E no método `getNumberFormat` você pode implementar a conversão que precisa para esse formato

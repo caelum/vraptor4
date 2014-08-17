@@ -52,7 +52,12 @@ public @interface PhoneNumber {
 }
 ~~~
 
-Note que você pode colocar uma mensagem fixa, por exemplo, "Telefone inválido" ou usar uma mensagem de um ResourceBundle, bastando então colocar o valor desejado entre {} de `message()`
+Note que você pode colocar uma mensagem fixa, por exemplo, "Telefone inválido" ou usar uma mensagem de um `ResourceBundle`, com {}:
+
+~~~
+#!java
+String message() default  "Invalid number";
+~~~
 
 Você pode também criar validações mais complexas que fazem acesso ao banco de dados, ou algum componente existente. Se você quiser validar se o login de um usuário já está em uso, basta criar o código abaixo:
 
@@ -165,7 +170,7 @@ public class Cliente {
 }
 ~~~
 
-Observe que o Valor contido em message={}, nas anotações indica que a mensagem vem do ResourceBundle.
+Observe que o Valor contido em `message={}`, nas anotações indica que a mensagem vem do `ResourceBundle`.
 
 Veja que foi adicionado parâmetros afim de deixar nossas mensagens mais dinâmicas e reaproveitáveis. As possibilidades atualmente são:
 

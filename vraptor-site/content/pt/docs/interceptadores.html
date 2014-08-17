@@ -124,19 +124,17 @@ public class WithAnnotationAcceptor implements AcceptsValidator<AcceptsWithAnnot
 
 	@Override
 	public boolean validate(ControllerMethod controllerMethod, ControllerInstance instance) {
+		//aqui entra sua logica de validação do método ou instancia do controller.
 		return true;
 	}
 
 	@Override
 	public void initialize(AcceptsWithAnnotations annotation) {
+		//aqui você pode acessar as informações contidas na annotation customizada.
 		this.allowedTypes = Arrays.asList(annotation.value());
 	}
 }
 ~~~ 
-
-No método `validate(...)` insira sua logica de validação do método ou instancia do controller.
-Já no método `initialize(...)` você pode acessar as informações contidas na annotation customizada.
-
 
 Esta classe só precisa implemetar a interface `AcceptsValidator<T>` onde T é o tipo da sua 
 Annotation customizada. Dessa maneira você pode criar as suas condições customizadas e 

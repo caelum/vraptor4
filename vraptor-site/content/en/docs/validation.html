@@ -51,7 +51,12 @@ public @interface PhoneNumber {
 }
 ~~~
 
-You can put a fixed message like "Invalid number" or a message from ResourceBundle in String message() default  {"Invalid number"}.
+You can put a fixed message like "Invalid number" or a message from `ResourceBundle` with {}: 
+
+~~~
+#!java
+String message() default  "Invalid number";
+~~~
 
 You can create complex constraints that access database or uses any managed component. If you want, as example, check if the user already exists in the database, ou can write a code like this:
 
@@ -162,7 +167,7 @@ public class Cliente {
 }
 ~~~
 
-The value {} present in annotations indicates that the message comes from the ResourceBundle.
+The value `{}` present in annotations indicates that the message comes from the `ResourceBundle`.
 
 See that was added parameters in order to let our most dynamic and reusable messages. The possibilities are currently:
 

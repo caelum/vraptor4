@@ -17,6 +17,6 @@ package br.com.caelum.vraptor.validator;
 
 public enum Severity {
 	
-	INFO, WARN, ERROR;
+	INFO, WARN, ERROR, SUCCESS;
 
 }

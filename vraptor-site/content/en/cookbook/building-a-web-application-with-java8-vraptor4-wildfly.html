@@ -173,8 +173,11 @@ Now we will use the CDI to inject the service in the VRaptor controller
 @Controller
 public class EventController implements Serializable {
 
-    @Inject private EventService service;
-    @Inject private Result result;
+    @Inject
+    private EventService service;
+
+    @Inject
+    private Result result;
 
     @Get("/events")
     public void event() {

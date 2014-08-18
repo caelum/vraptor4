@@ -84,7 +84,8 @@ And `LoginAvailableValidator` that checks the constraint:
 #!java
 public class LoginAvailableValidator implements ConstraintValidator<LoginAvailable, User> {
 
-	@Inject private UserDao userDao;
+	@Inject
+	private UserDao userDao;
 
 	public boolean isValid(User user, ConstraintValidatorContext context) {
 		return !userDao.containsUserWithLogin(user.getLogin());

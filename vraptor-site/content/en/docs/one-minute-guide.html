@@ -47,16 +47,16 @@ public class ClientsController {
 
 	private final ClientDao dao;
 
-	@Inject
-	public ClientsController(ClientDao dao){
-		this.dao = dao;
-	}
-
 	/**
 	 * @deprecated CDI eyes only
 	 */
-	public ClientsController(){
+	protected ClientsController(){
 		this(null);
+	}
+
+	@Inject
+	public ClientsController(ClientDao dao){
+		this.dao = dao;
 	}
 
 	// controller methods

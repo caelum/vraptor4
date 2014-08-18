@@ -16,17 +16,17 @@ public class PessoaController {
 	private final Result result;
 	private final Validator validator;
 
-	@Inject
-	public PessoaController(Result result, Validator validator) {
-		this.result = result;
-		this.validator = validator;
-	}
-
 	/**
 	 * @deprecated CDI eyes only
 	 */
 	protected PessoaController() {
 		this(null, null);
+	}
+
+	@Inject
+	public PessoaController(Result result, Validator validator) {
+		this.result = result;
+		this.validator = validator;
 	}
 	
 }

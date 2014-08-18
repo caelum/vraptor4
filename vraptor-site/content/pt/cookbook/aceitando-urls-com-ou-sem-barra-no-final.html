@@ -52,19 +52,19 @@ public class Error404 extends DefaultControllerNotFoundHandler {
 
     private final Router router;
     private final Result result;
+    
+    /**
+     * @deprecated CDI eyes only
+     */
+    protected Error404() {
+        this(null, null, null);
+    }
 
     @Inject
     public Error404(Router router, Result result, Event<ControllerNotFound> event) {
         super(event);
         this.router = router;
         this.result = result;
-    }
-    
-    /**
-     * @deprecated CDI eyes only
-     */
-    public Error404() {
-        this(null, null, null);
     }
     
     @Override

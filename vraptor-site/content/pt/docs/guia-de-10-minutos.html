@@ -87,6 +87,7 @@ E no nosso `ProdutosController` podemos usar o dao pra fazer a listagem de produ
 @Controller
 public class ProdutosController {
 
+	@Inject
 	private ProdutoDao dao;
 
 	public List<Produto> lista() {
@@ -183,6 +184,7 @@ public class ProdutosController {
 
 	@Inject
 	private ProdutoDao dao;
+
 	@Inject
 	private Result result;
 
@@ -299,7 +301,8 @@ Para criar esse comportamento REST no VRaptor, podemos usar as anotações `@Pat
 public class ProdutosController {
 	//...
 
-	@Get @Path("/produtos")
+	@Get
+	@Path("/produtos")
 	public List<Produto> lista() { ... }
 
 	@Post("/produtos")

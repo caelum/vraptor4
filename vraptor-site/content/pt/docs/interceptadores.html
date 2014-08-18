@@ -151,9 +151,7 @@ configurar isso tanto com:
 ~~~ 
 #!java
 @Intercepts(before=SegundoInterceptor.class)
-public class PrimeiroInterceptor {
-	...
-}
+public class PrimeiroInterceptor { ... }
 ~~~ 
 
 quanto com:
@@ -161,9 +159,7 @@ quanto com:
 ~~~ 
 #!java
 @Intercepts(after=PrimeiroInterceptor.class)
-public class SegundoInterceptor {
-	...
-}
+public class SegundoInterceptor { ... }
 ~~~ 
 
 Você pode especificar mais de um Interceptor:
@@ -172,9 +168,7 @@ Você pode especificar mais de um Interceptor:
 #!java
 @Intercepts(after={PrimeiroInterceptor.class, SegundoInterceptor.class},
 			before={QuartoInterceptor.class, QuintoInterceptor.class})
-public class TerceiroInterceptor {
-	...
-}
+public class TerceiroInterceptor { ... }
 ~~~ 
 
 O VRaptor lançará uma exception se existir um ciclo na ordem dos interceptors, então 

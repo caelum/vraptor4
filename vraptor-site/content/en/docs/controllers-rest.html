@@ -21,9 +21,7 @@ invoking the respective method.
 @Controller
 public class CustomerController {
 
-	public void add(Customer customer) {
-
-	}
+	public void add(Customer customer) { ... }
 
 	public List<Customer> list() {
 		return ...
@@ -33,13 +31,9 @@ public class CustomerController {
 		return ...
 	}
 
-	public void remove(Customer customer) {
-		...
-	}
+	public void remove(Customer customer) { ... }
 
-	public void update(Customer customer) {
-		...
-	}
+	public void update(Customer customer) { ... }
 }
 ~~~ 
 
@@ -51,9 +45,7 @@ can use dots for browsing through the fields. For instance, on method:
 
 ~~~ 
 #!java
-public void update(Customer customer) {
-	//...
-}
+public void update(Customer customer) { ... }
 ~~~ 
 
 you can receive on the request parameters:
@@ -112,8 +104,7 @@ public class CustomerController {
 
 	@Path("/customer")
 	@Post
-	public void customer(Customer customer) {
-	}
+	public void customer(Customer customer) { ... }
 }
 ~~~ 
 
@@ -125,18 +116,22 @@ prefix for all URIs from this controller.
 @Controller
 @Path("/customers")
 public class CustomerController {
-	//URI: /customers/list
+
 	public void list() {...}
 
-	//URI: /customers/save
 	@Path("save")
 	public void add() {...}
 
-	//URI: /customers/allCustomers
 	@Path("/allCustomers")
 	public void listAll() {...}
 }
 ~~~
+By annotating the methods with `@Path` we'll have the following URIs:
+
+|void list()            | URI: /customers/list|
+|void add()             | URI: /customers/save|
+|void listAll()         | URI: /customers/allCustomers|
+{: .content-table}
 
 ##HTTP methods
 
@@ -153,8 +148,7 @@ methods:
 @Controller
 public class CustomerController {
     @Post("/")
-    public void add(Customer customer) {
-    }
+    public void add(Customer customer) { }
 
     @Path("/")
     public List<Customer> list() 
@@ -167,14 +161,10 @@ public class CustomerController {
     }
 
     @Delete("/customer")
-    public void remove(Customer customer) {
-        ...
-    }
+    public void remove(Customer customer) { ... }
 
     @Put("/customer")
-    public void update(Customer customer) {
-        ...
-    }
+    public void update(Customer customer) { ... }
 
 }
 ~~~
@@ -286,9 +276,7 @@ You can limit your parameter values using regular expressions using this idiom:
 ~~~ 
 #!java
 @Path("/color/{color:[0-9A-Fa-f]{6}}")
-public void setColor(String color) {
-    //...
-}
+public void setColor(String color) { ... }
 ~~~
 
 Everything that is after the colon is treated as a regex, and the URI will only
@@ -392,9 +380,7 @@ injected with the value of the header `X-Auth-User`.
 
 ~~~ 
 #!java
-public void profile(@HeaderParam("X-Auth-User") username) {
-	...
-}
+public void profile(@HeaderParam("X-Auth-User") username) { ... }
 ~~~
 
 **Warning**: In this example, if you had a request parameter named `username`
@@ -476,9 +462,7 @@ the method `form()`.
 ~~~ 
 #!java
 @Get
-public void form() {
-	...
-}
+public void form() { ... }
 
 @Post
 public void add(Customer customer) {

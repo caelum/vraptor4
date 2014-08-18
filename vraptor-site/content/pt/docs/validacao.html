@@ -43,8 +43,7 @@ Com o Bean Validator você pode criar anotações com suas validações customiz
 @ReportAsSingleViolation
 @Pattern(regexp = "\\((\\d{2})\\) (\\d{4})-(\\d{4})")
 public @interface PhoneNumber {
-	// você pode colocar uma mensagem fixa, por exemplo, "Telefone inválido" ou
-	// usar uma mensagem de um ResourceBundle, bastando então colocar entre {}
+	
 	String message() default "{br.com.vraptor.validations.phonenumber.message}";
 
 	Class<?>[] groups() default {};
@@ -53,6 +52,12 @@ public @interface PhoneNumber {
 }
 ~~~
 
+Note que você pode colocar uma mensagem fixa, por exemplo, "Telefone inválido" ou usar uma mensagem de um `ResourceBundle`, com {}:
+
+~~~
+#!java
+String message() default  "Invalid number";
+~~~
 
 Você pode também criar validações mais complexas que fazem acesso ao banco de dados, ou algum componente existente. Se você quiser validar se o login de um usuário já está em uso, basta criar o código abaixo:
 
@@ -156,7 +161,7 @@ E a classe teria que ser alterada para incluir essas chaves
 ~~~
 #!java
 public class Cliente {
-	@NotNull(message="{cliente.nome.vazio}") // o valor entre {} indica que a mensagem vem do ResourceBundle
+	@NotNull(message="{cliente.nome.vazio}")
 	@Size(min=10, max=50, message="{cliente.nome.tamanho}")
 	private String nome;
 
@@ -164,6 +169,8 @@ public class Cliente {
 	private Date nascimento;
 }
 ~~~
+
+Observe que o Valor contido em `message={}`, nas anotações indica que a mensagem vem do `ResourceBundle`.
 
 Veja que foi adicionado parâmetros afim de deixar nossas mensagens mais dinâmicas e reaproveitáveis. As possibilidades atualmente são:
 

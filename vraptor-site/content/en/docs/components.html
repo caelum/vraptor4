@@ -269,12 +269,15 @@ public class CustomPathResolver extends DefaultPathResolver {
 	@Override
 	protected String extractControllerFromName(String baseName) {
 		return //your convention here
-               //ex.: If you want to redirect UserController to 'userResource' instead of 'user'
-               //ex.2: If you override the convention for Controllers name to XXXResource
-               //and still want to redirect to 'user' and not to 'userResource'
+               
 	}
 }
 ~~~ 
+
+You can implement your own convention, for instance:
+
+ex.: If you want to redirect `UserController` to `userResource` instead of `user`
+ex.2: If you override the convention for `Controllers` name to `XXXResource` and still want to redirect to `user` and not to `userResource`
 
 If you need a more complex convention, just implement the `PathResolver` interface.
 

@@ -42,13 +42,20 @@ With Bean validation you can create your own custom validations. If you want to 
 @ReportAsSingleViolation
 @Pattern(regexp = "\\((\\d{2})\\) (\\d{4})-(\\d{4})")
 public @interface PhoneNumber {
-	// you can put a fixed message like "Invalid number" or a message from ResourceBundle with {}
+	
 	String message() default "{br.com.vraptor.validations.phonenumber.message}";
 
 	Class<?>[] groups() default {};
 
 	Class<? extends Payload>[] payload() default {};
 }
+~~~
+
+You can put a fixed message like "Invalid number" or a message from `ResourceBundle` with {}: 
+
+~~~
+#!java
+String message() default  "Invalid number";
 ~~~
 
 You can create complex constraints that access database or uses any managed component. If you want, as example, check if the user already exists in the database, ou can write a code like this:
@@ -151,7 +158,7 @@ And the class:
 ~~~
 #!java
 public class Cliente {
-	@NotNull(message="{client.name.empty}") // the value {} indicates that the message comes from the ResourceBundle
+	@NotNull(message="{client.name.empty}")
 	@Size(min=10, max=50, message="{client.name.size}")
 	private String name;
 
@@ -159,6 +166,8 @@ public class Cliente {
 	private Date birth;
 }
 ~~~
+
+The value `{}` present in annotations indicates that the message comes from the `ResourceBundle`.
 
 See that was added parameters in order to let our most dynamic and reusable messages. The possibilities are currently:
 

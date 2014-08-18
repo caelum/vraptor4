@@ -35,7 +35,7 @@ public class MeuObserver {
 }
 ~~~
 
-Note que dentro do método, `void metodo()` você pode inserir alguma ação para quando o controller não for encontrado
+Note que dentro do método `void metodo()` você pode inserir alguma ação para quando o controller não for encontrado.
 
 É importante lembrar que não existe ordem na execução dos observers, ou seja, não há garantia que o meu método será executado antes ou depois de qualquer outro método que observe este mesmo evento. Caso a ordem seja importante, considere utilizar interceptors.
 

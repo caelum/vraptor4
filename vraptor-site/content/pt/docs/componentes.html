@@ -227,6 +227,8 @@ Portanto, se a rota é `/index`, a URI será `/prefix/index`.
 @Specializes @ApplicationScoped
 public class PrefixedRoutesParser extends PathAnnotationRoutesParser {
 
+	//delegated constructors 
+
 	@Override
 	protected String[] getURIsFor(Method javaMethod, Class<?> type) {
 		String[] uris = super.getURIsFor(javaMethod, type);
@@ -263,6 +265,8 @@ Por padrão todos os objetos que você pedir nos métodos de seu controller ser�
 #!java
 @Specializes
 public class NullVRaptorInstantiator extends VRaptorInstantiator {
+
+	//delegated constructors 
 
 	@Override
 	public boolean useNullForMissingParameters() {

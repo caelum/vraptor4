@@ -65,12 +65,17 @@ public class Messages {
 	public List<Message> getWarnings() {
 		return get(Severity.WARN);
 	}
+	
+	public List<Message> getSuccess() {
+		return get(Severity.SUCCESS);
+	}
 
 	public List<Message> getAll() {
 		List<Message> allMessages = new ArrayList();
 		allMessages.addAll(get(Severity.ERROR));
 		allMessages.addAll(get(Severity.WARN));
 		allMessages.addAll(get(Severity.INFO));
+		allMessages.addAll(get(Severity.SUCCESS));
 
 		return new MessageList(allMessages);
 	}

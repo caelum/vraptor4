@@ -3,7 +3,7 @@
 
 	<groupId>br.com.caelum</groupId>
 	<artifactId>vraptor-blank-project</artifactId>
-	<version>4.1.0-RC2-SNAPSHOT</version>
+	<version>4.1.0-RC3-SNAPSHOT</version>
 	<packaging>war</packaging>
 
 	<description>A blank project to start using VRaptor 4</description>
@@ -58,6 +58,13 @@
 			<artifactId>jstl</artifactId>
 			<version>1.2</version>
 		</dependency>
+		
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>1.7.5</version>
+		</dependency>
+		
 	</dependencies>
 
 	<build>

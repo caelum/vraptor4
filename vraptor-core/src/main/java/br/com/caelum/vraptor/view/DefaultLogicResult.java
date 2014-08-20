@@ -34,7 +34,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.Get;
-import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.controller.DefaultControllerMethod;
 import br.com.caelum.vraptor.controller.HttpMethod;
 import br.com.caelum.vraptor.core.MethodInfo;
@@ -101,10 +100,8 @@ public class DefaultLogicResult implements LogicResult {
 			public Object intercept(T proxy, Method method, Object[] args, SuperMethod superMethod) {
 				try {
 					logger.debug("Executing {}", method);
-					ControllerMethod old = methodInfo.getControllerMethod();
 					methodInfo.setControllerMethod(DefaultControllerMethod.instanceFor(type, method));
 					Object result = method.invoke(container.instanceFor(type), args);
-					methodInfo.setControllerMethod(old);
 
 					Type returnType = method.getGenericReturnType();
 					if (!(returnType == void.class)) {
@@ -134,6 +131,8 @@ public class DefaultLogicResult implements LogicResult {
 			@Override
 			public Object intercept(T proxy, Method method, Object[] args, SuperMethod superMethod) {
 				checkArgument(acceptsHttpGet(method), "Your logic method must accept HTTP GET method if you want to redirect to it");
+				
+				methodInfo.setControllerMethod(DefaultControllerMethod.instanceFor(type, method));
 				
 				try {
 					String url = router.urlFor(type, method, args);

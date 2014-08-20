@@ -24,7 +24,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.controller.ControllerMethod;
-import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.http.FormatResolver;
 
 /**
@@ -40,26 +39,23 @@ public class DefaultPathResolver implements PathResolver {
 
 	private static final Logger logger = LoggerFactory.getLogger(DefaultPathResolver.class);
 	private final FormatResolver resolver;
-	private final MethodInfo methodInfo;
 	
 	/** 
 	 * @deprecated CDI eyes only
 	 */
 	protected DefaultPathResolver() {
-		this(null, null);
+		this(null);
 	}
 
 	@Inject
-	public DefaultPathResolver(FormatResolver resolver, MethodInfo methodInfo) {
+	public DefaultPathResolver(FormatResolver resolver) {
 		this.resolver = resolver;
-		this.methodInfo = methodInfo;
 	}
 	
 	@Override
 	public String pathFor(ControllerMethod method) {
 		logger.debug("Resolving path for {}", method);
 		
-		methodInfo.setControllerMethod(method);
 		String format = resolver.getAcceptFormat();
 
 		String suffix = "";

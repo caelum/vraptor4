@@ -19,7 +19,6 @@ package br.com.caelum.vraptor.view;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import org.junit.Before;
@@ -29,7 +28,6 @@ import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor.controller.BeanClass;
 import br.com.caelum.vraptor.controller.ControllerMethod;
-import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.http.FormatResolver;
 
 public class DefaultPathResolverTest {
@@ -37,7 +35,6 @@ public class DefaultPathResolverTest {
 	private @Mock ControllerMethod method;
 	private @Mock BeanClass controller;
 	private @Mock FormatResolver formatResolver;
-	private @Mock MethodInfo methodInfo;
 
 	private DefaultPathResolver resolver;
 
@@ -47,7 +44,7 @@ public class DefaultPathResolverTest {
 	public void config() throws Exception {
 		MockitoAnnotations.initMocks(this);
 
-		resolver = new DefaultPathResolver(formatResolver, methodInfo);
+		resolver = new DefaultPathResolver(formatResolver);
 		when(method.getController()).thenReturn(controller);
 		when(method.getMethod()  ).thenReturn(DogController.class.getDeclaredMethod("bark"));
 		when(controller.getType()  ).thenReturn((Class) DogController.class);
@@ -77,12 +74,6 @@ public class DefaultPathResolverTest {
 		String result = resolver.pathFor(method);
 
 		assertThat(result, is("/WEB-INF/jsp/dog/bark.jsp"));
-	}
-	
-	@Test
-	public void shouldUpdateMethodInfoWithActualControllerMethod() {
-	    resolver.pathFor(method);
-	    verify(methodInfo).setControllerMethod(method);
 	}
 
 }

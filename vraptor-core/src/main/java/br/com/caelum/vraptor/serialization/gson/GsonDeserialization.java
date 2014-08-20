@@ -24,18 +24,22 @@ import java.io.InputStreamReader;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
+import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import br.com.caelum.vraptor.Consumes;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.http.Parameter;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
+import br.com.caelum.vraptor.ioc.Container;
+import br.com.caelum.vraptor.serialization.Deserializee;
 import br.com.caelum.vraptor.serialization.Deserializer;
+import br.com.caelum.vraptor.serialization.DeserializerConfig;
 import br.com.caelum.vraptor.serialization.Deserializes;
-import br.com.caelum.vraptor.serialization.gson.GsonDeserializerBuilder;
 import br.com.caelum.vraptor.view.ResultException;
 
 import com.google.common.io.CharStreams;
@@ -59,19 +63,24 @@ public class GsonDeserialization implements Deserializer {
 	private final GsonDeserializerBuilder builder;
 	private final ParameterNameProvider paramNameProvider;
 	private final HttpServletRequest request;
+	private final Container container;
+	private final Instance<Deserializee> deserializeeInstance;
 
 	/** 
 	 * @deprecated CDI eyes only
 	 */
 	protected GsonDeserialization() {
-		this(null, null, null);
+		this(null, null, null, null, null);
 	}
 	
 	@Inject
-	public GsonDeserialization(GsonDeserializerBuilder builder, ParameterNameProvider paramNameProvider, HttpServletRequest request) {
+	public GsonDeserialization(GsonDeserializerBuilder builder, ParameterNameProvider paramNameProvider, HttpServletRequest request, 
+			Container container, Instance<Deserializee> deserializeeInstance) {
 		this.builder = builder;
 		this.paramNameProvider = paramNameProvider;
 		this.request = request;
+		this.container = container;
+		this.deserializeeInstance = deserializeeInstance;
 	}
 
 	@Override
@@ -86,6 +95,7 @@ public class GsonDeserialization implements Deserializer {
 		
 		final Parameter[] parameterNames = paramNameProvider.parametersFor(method.getMethod());
 		final Object[] values = new Object[parameterNames.length];
+		final Deserializee deserializee = deserializeeInstance.get();
 
 		try {
 			String content = getContentOfStream(inputStream);
@@ -97,11 +107,18 @@ public class GsonDeserialization implements Deserializer {
 				if (jsonElement.isJsonObject()) {
 					JsonObject root = jsonElement.getAsJsonObject();
 		
+					deserializee.setWithoutRoot(isWithoutRoot(parameterNames, root));
+					
+					for(Class<? extends DeserializerConfig> option: method.getMethod().getAnnotation(Consumes.class).options()) {
+						DeserializerConfig config = container.instanceFor(option);
+						config.config(deserializee);
+					}
+					
 					for (int i = 0; i < types.length; i++) {
 						Parameter parameter = parameterNames[i];
 						JsonElement node = root.get(parameter.getName());
 						
-						if (isWithoutRoot(parameterNames, root)) { 
+						if (deserializee.isWithoutRoot()) { 
 							values[i] = gson.fromJson(root, parameter.getParameterizedType());
 							logger.info("json without root deserialized");
 							break;

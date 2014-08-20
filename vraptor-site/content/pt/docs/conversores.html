@@ -91,9 +91,7 @@ Além disso, seu conversor deve ser anotado com o tipo que seu conversor é capa
 ~~~ 
 #!java
 @Convert(Long.class)
-public class LongConverter implements Converter<Long> {
-	// ...
-}
+public class LongConverter implements Converter<Long> { ... }
 ~~~ 
 
 Por fim, lembre-se de dizer se seu conversor pode ser instanciado em um escopo de `Application`, `Session` ou `Request`, assim como recursos e componentes quaisquer do VRaptor. Por exemplo, um conversor que não requer nenhuma informação do usuário logado pode ser registrado no escopo de `Application` e instanciado uma única vez:
@@ -102,9 +100,7 @@ Por fim, lembre-se de dizer se seu conversor pode ser instanciado em um escopo d
 #!java
 @Convert(Long.class)
 @ApplicationScoped
-public class LongConverter implements Converter<Long> {
-	// ...
-}
+public class LongConverter implements Converter<Long> { ... }
 ~~~ 
 
 A seguir, a implementação de `LongConverter` mostra como tudo isso pode ser utilizado de maneira bem simples:
@@ -160,8 +156,8 @@ Você pode sobrescrever qualquer converter já existente no VRaptor. Para isso b
 #!java
 @Specializes
 public class MeuBigDecimalConverter extends LocaleBasedBigDecimalConverter {
-	protected NumberFormat getNumberFormat() {
-		// meu formato
-	}
+	protected NumberFormat getNumberFormat() { }
 }
 ~~~ 
+
+E no método `getNumberFormat` você pode implementar a conversão que precisa para esse formato

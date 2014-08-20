@@ -25,7 +25,9 @@ O CDI **exige** que cada classe possua o construtor padrão (sem argumentos). Se
 public class MeuController {
 	private final MeuComponente meuComponente;
 
-	/** @deprecated Construtor usado apenas para o CDI */
+	/**
+	 * @deprecated CDI eyes only
+	 */
 	protected MeuController() {
 		this(null);
 	}
@@ -118,8 +120,11 @@ No lugar de receber a `Localization` e chamar os métodos `.getLocale()` ou `.ge
 #!java
 public class MinhaClasse {
 
-	@Inject private Locale locale;
-	@Inject private ResourceBundle bundle;
+	@Inject
+	private Locale locale;
+
+	@Inject
+	private ResourceBundle bundle;
 }
 ~~~ 
 

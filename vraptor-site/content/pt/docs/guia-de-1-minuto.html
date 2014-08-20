@@ -18,9 +18,7 @@ public class ClientsController {
 	@Inject
 	private ClientDao dao;
 
-	public void form() {
-		// código que carrega dados para checkboxes, selects, etc
-	}
+	public void form() { ... }
 
 	public void add(Client custom) {
 		dao.save(custom);
@@ -36,6 +34,8 @@ public class ClientsController {
 }
 ~~~
 
+Dentro do método `form()` podemos inserir os códigos que carregam os dados para checkboxes, selects, etc
+
 Anotando seu controller com `@Controller`, seus métodos públicos ficarão disponíveis para receber requisições web.
 
 Você pode injetar as dependências da sua classe adicionando a anotação `@Inject`, e o VRaptor com CDI vai se encarregar de criar ou localizar essas dependências pra você. Outra alternativa é adicionar o `@Inject` no construtor de sua classe, para que isso funcione você precisará adicionar também um construtor default, por exemplo:
@@ -47,16 +47,16 @@ public class ClientsController {
 
 	private final ClientDao dao;
 
-	@Inject
-	public ClientsController(ClientDao dao){
-		this.dao = dao;
-	}
-
 	/**
 	 * @deprecated CDI eyes only
 	 */
-	public ClientsController(){
+	protected ClientsController(){
 		this(null);
+	}
+
+	@Inject
+	public ClientsController(ClientDao dao){
+		this.dao = dao;
 	}
 
 	// métodos do controller

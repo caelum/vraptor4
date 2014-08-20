@@ -24,7 +24,6 @@ import java.util.List;
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 
-import net.vidageek.mirror.list.dsl.MirrorList;
 import br.com.caelum.vraptor.Accepts;
 import br.com.caelum.vraptor.AfterCall;
 import br.com.caelum.vraptor.AroundCall;
@@ -52,7 +51,7 @@ public class NoStackParamValidationRule implements ValidationRule {
 	}
 
 	@Override
-	public void validate(Class<?> originalType, MirrorList<Method> methods) {
+	public void validate(Class<?> originalType, List<Method> methods) {
 
 		Method aroundCall = invoker.findMethod(methods, AroundCall.class, originalType);
 		Method afterCall = invoker.findMethod(methods, AfterCall.class, originalType);

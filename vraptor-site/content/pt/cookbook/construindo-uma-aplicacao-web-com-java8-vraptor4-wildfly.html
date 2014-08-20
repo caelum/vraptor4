@@ -99,8 +99,7 @@ public class Event implements Serializable {
 
     private String description;
 
-    public Event() {
-    }
+    public Event() { }
 
     public Event(String description, LocalDate date) {
         this.description = description;
@@ -175,8 +174,11 @@ Agora usaremos o CDI para injetar o service no controller do VRaptor.
 @Controller
 public class EventController implements Serializable {
 
-    @Inject private EventService service;
-    @Inject private Result result;
+    @Inject
+    private EventService service;
+
+    @Inject
+    private Result result;
 
     @Get("/events")
     public void event() {

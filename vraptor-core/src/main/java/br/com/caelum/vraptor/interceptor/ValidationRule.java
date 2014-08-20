@@ -16,8 +16,7 @@
 package br.com.caelum.vraptor.interceptor;
 
 import java.lang.reflect.Method;
-
-import net.vidageek.mirror.list.dsl.MirrorList;
+import java.util.List;
 
 /**
  * A validation rule interface for new interceptors.
@@ -31,5 +30,5 @@ public interface ValidationRule {
 	 * @param originalType - Interceptor type to be validated
 	 * @param allMethods - MirrorList of all interceptor methods
 	 */
-	void validate(Class<?> originalType, MirrorList<Method> allMethods);
+	void validate(Class<?> originalType, List<Method> allMethods);
 }

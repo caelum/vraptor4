@@ -17,7 +17,6 @@
 
 package br.com.caelum.vraptor.validator;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
@@ -50,7 +49,6 @@ public class DefaultValidator extends AbstractValidator {
 	private static final Logger logger = LoggerFactory.getLogger(DefaultValidator.class);
 
 	private final Result result;
-	private final List<Message> errors = new ArrayList<>();
 	private final ValidationViewsFactory viewsFactory;
 	private final Outjector outjector;
 	private final Proxifier proxifier;
@@ -59,17 +57,19 @@ public class DefaultValidator extends AbstractValidator {
 	private final javax.validation.Validator bvalidator;
 	private final MessageInterpolator interpolator;
 	private final Locale locale;
+	private final Messages messages;
 
 	/** 
 	 * @deprecated CDI eyes only
 	 */
 	protected DefaultValidator() {
-		this(null, null, null, null, null, null, null, null);
+		this(null, null, null, null, null, null, null, null, null);
 	}
 
 	@Inject
 	public DefaultValidator(Result result, ValidationViewsFactory factory, Outjector outjector, Proxifier proxifier, 
-			ResourceBundle bundle, javax.validation.Validator bvalidator, MessageInterpolator interpolator, Locale locale) {
+			ResourceBundle bundle, javax.validation.Validator bvalidator, MessageInterpolator interpolator, Locale locale,
+			Messages messages) {
 		this.result = result;
 		this.viewsFactory = factory;
 		this.outjector = outjector;
@@ -78,6 +78,7 @@ public class DefaultValidator extends AbstractValidator {
 		this.bvalidator = bvalidator;
 		this.interpolator = interpolator;
 		this.locale = locale;
+		this.messages = messages;
 	}
 
 	@Override
@@ -94,7 +95,7 @@ public class DefaultValidator extends AbstractValidator {
 	public Validator addIf(boolean expression, Message message) {
 		message.setBundle(bundle);
 		if (expression) {
-			errors.add(message);
+			messages.add(message);
 		}
 		return this;
 	}
@@ -118,7 +119,7 @@ public class DefaultValidator extends AbstractValidator {
 	@Override
 	public Validator add(Message message) {
 		message.setBundle(bundle);
-		errors.add(message);
+		messages.add(message);
 		return this;
 	}
 
@@ -141,17 +142,17 @@ public class DefaultValidator extends AbstractValidator {
 		result.include("errors", getErrors());
 		outjector.outjectRequestMap();
 		
-		logger.debug("there are errors on result: {}", errors);
-		return viewsFactory.instanceFor(view, errors);
+		logger.debug("there are errors on result: {}", getErrors());
+		return viewsFactory.instanceFor(view, getErrors());
 	}
 
 	@Override
 	public boolean hasErrors() {
-		return !errors.isEmpty();
+		return !getErrors().isEmpty();
 	}
 
 	@Override
 	public List<Message> getErrors() {
-		return new ErrorList(errors);
+		return messages.getErrors();
 	}
 }

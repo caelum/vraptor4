@@ -10,7 +10,9 @@ Para registrar objetos a serem acessados na view, usamos o método include:
 #!java
 @Controller
 class ClientController {
-	@Inject private Result result;
+
+	@Inject
+	private Result result;
 
 	public void busca(int id) {
 		result.include("mensagem", "Alguma mensagem");
@@ -26,7 +28,9 @@ Agora as variáveis `mensagem` e `cliente` estão disponíveis para uso em seu t
 #!java
 @Controller
 class ClientController {
-	@Inject private Result result;
+
+	@Inject
+	private Result result;
 
 	public void busca(int id) {
 		result.include("Alguma mensagem").include(new Cliente(id));
@@ -43,8 +47,8 @@ Por padrão, para renderizar suas views, o VRaptor segue a convenção:
 ~~~ 
 #!java
 public class ClientsController {
-	public void list() {
-		//...
+	public void list() { 
+		//... 
 	}
 }
 ~~~ 
@@ -76,9 +80,10 @@ Se você quiser mudar a view de alguma lógica específica, você pode usar o ob
 @Controller
 public class ClientsController {
 
-	@Inject private Result result;
+	@Inject
+	private Result result;
 
-	public void list() {}
+	public void list() { ... }
 
 	public void save(Client client) {
 		//...
@@ -176,8 +181,11 @@ E na lógica:
 @Controller
 public class ClientsController {
 
-	@Inject private Result result;
-	@Inject private ClientDao dao;
+	@Inject
+	private Result result;
+
+	@Inject
+	private ClientDao dao;
 
 	public void load(Client client) {
 		result.include("client", dao.load(client));
@@ -195,8 +203,11 @@ import static br.com.caelum.vraptor.view.Results.*;
 @Controller
 public class ClientsController {
 
-	@Inject private Result result;
-	@Inject private ClientDao dao;
+	@Inject
+	private Result result;
+
+	@Inject
+	private ClientDao dao;
 
 	public void loadJson(Cliente cliente) {
 		result.use(json()).from(cliente).serialize();

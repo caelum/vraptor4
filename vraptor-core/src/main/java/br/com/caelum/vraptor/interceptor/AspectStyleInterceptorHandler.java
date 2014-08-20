@@ -23,8 +23,6 @@ import java.util.List;
 
 import javax.enterprise.inject.Vetoed;
 
-import net.vidageek.mirror.list.dsl.MirrorList;
-
 import org.slf4j.Logger;
 
 import br.com.caelum.vraptor.Accepts;
@@ -67,7 +65,7 @@ public class AspectStyleInterceptorHandler implements InterceptorHandler {
 	}
 
 	private void extractAllInterceptorMethods() {
-		MirrorList<Method> methods = stepInvoker.findAllMethods(interceptorClass);
+		List<Method> methods = stepInvoker.findAllMethods(interceptorClass);
 		this.afterMethod = findMethodWith(AfterCall.class, methods);
 		this.aroundMethod = findMethodWith(AroundCall.class, methods);
 		this.beforeMethod = findMethodWith(BeforeCall.class, methods);
@@ -91,7 +89,7 @@ public class AspectStyleInterceptorHandler implements InterceptorHandler {
 		}
 	}
 
-	private Method findMethodWith(Class<? extends Annotation> step, MirrorList<Method> methods) {
+	private Method findMethodWith(Class<? extends Annotation> step, List<Method> methods) {
 		return stepInvoker.findMethod(methods, step, interceptorClass);
 	}
 

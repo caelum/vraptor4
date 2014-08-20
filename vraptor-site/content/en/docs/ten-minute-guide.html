@@ -21,6 +21,7 @@ public class Product {
 	private Double price;
 
 	// getter and setters and other necessary business methods
+
 }
 ~~~
 
@@ -28,8 +29,7 @@ We also need a class that will manage product registration, dealing with web req
 
 ~~~
 #!java
-public class ProductsController {
-}
+public class ProductsController { ... }
 ~~~
 
 The `ProductsController` class will expose URIs that can be accessed through the web, i.e., it will expose your application resources. This type of classes have to annotated with `@Controller`:
@@ -37,8 +37,7 @@ The `ProductsController` class will expose URIs that can be accessed through the
 ~~~
 #!java
 @Controller
-public class ProductsController {
-}
+public class ProductsController { ... }
 ~~~
 
 Whenever you annotate a class with `@Controller` all its public methods are accessible through the web. Take the list method as an example:
@@ -89,6 +88,7 @@ And, we can use the DAO on the `ProductsController` to list products:
 @Controller
 public class ProductsController {
 
+	@Inject
 	private ProductDAO dao;
 
 	public List<Product> list() {
@@ -102,7 +102,7 @@ We can instantiate `ProductDAO` from the controller, but that can be complicated
 ~~~
 #!java
 @RequestScoped
-public class ProductDAO {
+public class ProductDAO { 
 	//...
 }
 
@@ -126,9 +126,10 @@ We already have the product lists, but we can't register them yet. We will creat
 #!java
 @Controller
 public class ProductsController {
+	
 	//...
-	public void form() {
-	}
+
+	public void form() { ... }
 }
 ~~~
 
@@ -154,9 +155,9 @@ The form, as we designed it, will save the product through the URI `/products/ad
 #!java
 @Controller
 public class ProductsController {
+
 	//...
-	public void add() {
-	}
+	public void add() { ... }
 }
 ~~~
 
@@ -168,6 +169,7 @@ Then, by using the correct names on the form inputs, all you need to do is to ma
 #!java
 @Controller
 public class ProductsController {
+	
 	//...
 	public void add(Product product) {
 		dao.add(product);
@@ -184,6 +186,7 @@ public class ProductsController {
 
 	@Inject
 	private ProductDAO dao;
+
 	@Inject
 	private Result result;
 

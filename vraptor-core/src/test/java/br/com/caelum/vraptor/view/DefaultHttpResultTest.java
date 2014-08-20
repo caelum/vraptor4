@@ -40,6 +40,8 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import br.com.caelum.vraptor.Controller;
+
 public class DefaultHttpResultTest {
 
 	private @Mock HttpServletResponse response;
@@ -53,6 +55,7 @@ public class DefaultHttpResultTest {
 		httpResult = new DefaultHttpResult(response, status);
 	}
 
+	@Controller
 	public static class RandomController {
 		public void method() {
 		}

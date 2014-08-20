@@ -18,9 +18,7 @@ public class ClientsController {
 	@Inject
 	private ClientDao dao;
 
-	public void form() {
-		// code that loads data for checkboxes, selects, etc
-	}
+	public void form() { ... }
 
 	public void add(Client custom) {
 		dao.save(custom);
@@ -36,6 +34,8 @@ public class ClientsController {
 }
 ~~~
 
+Into the `form()` method you can put the code that loads data for checkboxes, selects, etc.
+
 Use the `@Controller` annotation and your public methods will be available for web requests.
 
 You can inject your class' dependencies using the `@Inject` annotation. Then CDI and VRaptor will create or locate such instances for you. As an alternative, annotate the contructor with `@Inject`, but you would also need to have a default constructor for that approach to work, i.e:
@@ -47,16 +47,16 @@ public class ClientsController {
 
 	private final ClientDao dao;
 
-	@Inject
-	public ClientsController(ClientDao dao){
-		this.dao = dao;
-	}
-
 	/**
 	 * @deprecated CDI eyes only
 	 */
-	public ClientsController(){
+	protected ClientsController(){
 		this(null);
+	}
+
+	@Inject
+	public ClientsController(ClientDao dao){
+		this.dao = dao;
 	}
 
 	// controller methods

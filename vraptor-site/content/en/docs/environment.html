@@ -49,11 +49,20 @@ environment.controller = true
 #!java
 @Controller
 public class MyController {
+
 	private final Environment environment;
+
 	private final MailSender sender;
 
+	/**
+	 * @deprecated CDI eyes only
+	 */
+	protected MyController(){
+		this(null, null);
+	}
+
 	@Inject
-	public MeuController(Environment environment, MailSender sender) {
+	public MyController(Environment environment, MailSender sender) {
 		this.environment = environment;
 		this.sender = sender;
 	}
@@ -100,7 +109,9 @@ You can also inject your settings programmatically using `@Property` annotation,
 @Controller
 public class MyController {
 
-	@Inject @Property("test_email") private String email;
+	@Inject
+	@Property("test_email")
+	private String email;
 
 	public void sendMail(String email) {
 		sender.sendMailTo(email);
@@ -117,7 +128,9 @@ And if the field name is the same from the key, you can use only the `@Property`
 @Controller
 public class MyController {
 
-	@Inject @Property private String email;
+	@Inject
+	@Property
+	private String email;
 
 	public void sendMail(String email) {
 		sender.sendMailTo(email);
@@ -129,6 +142,7 @@ You can also set a default value for this property:
 
 ~~~
 #!java
-@Inject @Property(defaultValue = "config.properties") 
+@Inject
+@Property(defaultValue = "config.properties")
 private String fileName;
 ~~~

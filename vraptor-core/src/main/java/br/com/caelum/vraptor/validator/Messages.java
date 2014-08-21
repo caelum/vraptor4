@@ -36,7 +36,7 @@ import javax.inject.Named;
  * @since 4.1
  * @author Otávio S Garcia
  */
-@Named
+@Named("vmessages")
 @RequestScoped
 public class Messages {
 
@@ -71,7 +71,7 @@ public class Messages {
 	}
 
 	public List<Message> getAll() {
-		List<Message> allMessages = new ArrayList();
+		List<Message> allMessages = createMessageList();
 		allMessages.addAll(get(Severity.ERROR));
 		allMessages.addAll(get(Severity.WARN));
 		allMessages.addAll(get(Severity.INFO));

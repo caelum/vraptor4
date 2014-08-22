@@ -20,7 +20,10 @@ import static com.google.common.base.Strings.isNullOrEmpty;
 
 import java.math.BigInteger;
 
+import javax.annotation.Priority;
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.Alternative;
+import javax.interceptor.Interceptor;
 
 import br.com.caelum.vraptor.Convert;
 
@@ -31,6 +34,8 @@ import br.com.caelum.vraptor.Convert;
  */
 @Convert(BigInteger.class)
 @ApplicationScoped
+@Alternative
+@Priority(Interceptor.Priority.LIBRARY_BEFORE)
 public class BigIntegerConverter implements Converter<BigInteger> {
 
 	@Override

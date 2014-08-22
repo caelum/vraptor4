@@ -15,7 +15,10 @@
  */
 package br.com.caelum.vraptor.converter;
 
+import javax.annotation.Priority;
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.Alternative;
+import javax.interceptor.Interceptor;
 
 import br.com.caelum.vraptor.Convert;
 
@@ -28,6 +31,8 @@ import br.com.caelum.vraptor.Convert;
  */
 @Convert(String.class)
 @ApplicationScoped
+@Alternative
+@Priority(Interceptor.Priority.LIBRARY_BEFORE)
 public class StringConverter implements Converter<String> {
 
 	@Override

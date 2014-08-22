@@ -22,7 +22,10 @@ import static com.google.common.collect.Sets.newHashSet;
 
 import java.util.Set;
 
+import javax.annotation.Priority;
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.Alternative;
+import javax.interceptor.Interceptor;
 
 import br.com.caelum.vraptor.Convert;
 
@@ -36,6 +39,8 @@ import br.com.caelum.vraptor.Convert;
  */
 @Convert(Boolean.class)
 @ApplicationScoped
+@Alternative
+@Priority(Interceptor.Priority.LIBRARY_BEFORE)
 public class BooleanConverter implements Converter<Boolean> {
 	private static final Set<String> IS_TRUE  = newHashSet("TRUE", "1", "YES", "Y", "ON");
 	private static final Set<String> IS_FALSE = newHashSet("FALSE", "0", "NO", "N", "OFF");

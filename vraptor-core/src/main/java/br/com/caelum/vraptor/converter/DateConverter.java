@@ -23,8 +23,10 @@ import java.text.ParseException;
 import java.util.Date;
 import java.util.Locale;
 
-import javax.enterprise.context.RequestScoped;
+import javax.annotation.Priority;
+import javax.enterprise.inject.Alternative;
 import javax.inject.Inject;
+import javax.interceptor.Interceptor;
 
 import br.com.caelum.vraptor.Convert;
 
@@ -34,7 +36,8 @@ import br.com.caelum.vraptor.Convert;
  * @author Guilherme Silveira
  */
 @Convert(Date.class)
-@RequestScoped
+@Alternative
+@Priority(Interceptor.Priority.LIBRARY_BEFORE)
 public class DateConverter implements Converter<Date> {
 
 	private final Locale locale;

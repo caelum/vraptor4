@@ -24,8 +24,11 @@ import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.Locale;
 
+import javax.annotation.Priority;
 import javax.enterprise.context.RequestScoped;
+import javax.enterprise.inject.Alternative;
 import javax.inject.Inject;
+import javax.interceptor.Interceptor;
 
 import br.com.caelum.vraptor.Convert;
 
@@ -39,6 +42,8 @@ import br.com.caelum.vraptor.Convert;
  */
 @Convert(double.class)
 @RequestScoped
+@Alternative
+@Priority(Interceptor.Priority.LIBRARY_BEFORE)
 public class PrimitiveDoubleConverter implements Converter<Double> {
 
 	private final Locale locale;

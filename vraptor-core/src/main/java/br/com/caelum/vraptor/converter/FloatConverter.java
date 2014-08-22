@@ -24,8 +24,10 @@ import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.Locale;
 
-import javax.enterprise.context.RequestScoped;
+import javax.annotation.Priority;
+import javax.enterprise.inject.Alternative;
 import javax.inject.Inject;
+import javax.interceptor.Interceptor;
 
 import br.com.caelum.vraptor.Convert;
 
@@ -37,7 +39,8 @@ import br.com.caelum.vraptor.Convert;
  * @since 3.1.2
  */
 @Convert(Float.class)
-@RequestScoped
+@Alternative
+@Priority(Interceptor.Priority.LIBRARY_BEFORE)
 public class FloatConverter implements Converter<Float> {
 
 	private final Locale locale;

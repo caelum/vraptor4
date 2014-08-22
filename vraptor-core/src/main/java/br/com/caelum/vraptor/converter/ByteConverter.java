@@ -19,7 +19,10 @@ package br.com.caelum.vraptor.converter;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
 
+import javax.annotation.Priority;
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.Alternative;
+import javax.interceptor.Interceptor;
 
 import br.com.caelum.vraptor.Convert;
 
@@ -30,6 +33,8 @@ import br.com.caelum.vraptor.Convert;
  */
 @Convert(Byte.class)
 @ApplicationScoped
+@Alternative
+@Priority(Interceptor.Priority.LIBRARY_BEFORE)
 public class ByteConverter implements Converter<Byte> {
 
 	@Override

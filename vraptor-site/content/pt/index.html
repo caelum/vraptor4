@@ -25,12 +25,12 @@ Sua lógica no `PrimeiroController.java`:
 @Controller
 public class PrimeiroController {
 
-  @Inject private Result result;
+	@Inject private Result result;
 
-  @Get("/home")
-  public void home() {
-    result.include("mensagem", "Olá, VRaptor 4!");
-  }
+	@Get("/home")
+	public void home() {
+		result.include("mensagem", "Olá, VRaptor 4!");
+	}
 }
 ~~~
   </div>
@@ -43,12 +43,12 @@ E o HTML em `WEB-INF/jsp/primeiro/home.jsp`:
 <!DOCTYPE html>
 
 <html>
-  <head>
-    <title>Página inicial</title>
-  </head>
-  <body>
-    ${mensagem}
-  </body>
+	<head>
+		<title>Página inicial</title>
+	</head>
+	<body>
+		${mensagem}
+	</body>
 </html>
 ~~~
   </div>

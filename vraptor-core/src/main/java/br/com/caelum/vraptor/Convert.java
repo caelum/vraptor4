@@ -20,24 +20,16 @@ package br.com.caelum.vraptor;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
-import javax.annotation.Priority;
 import javax.enterprise.context.RequestScoped;
-import javax.enterprise.inject.Alternative;
 import javax.enterprise.inject.Stereotype;
-import javax.interceptor.Interceptor;
 
 /**
  * Registers a class as a converter.
- * <p>
- * Note: since 4.1 version all {@link Convert} became a CDI 
- * {@link Alternative} with LIBRARY_BEFORE {@link Priority}.
  *
  * @author Guilherme Silveira
  */
 @RequestScoped
 @Retention(RetentionPolicy.RUNTIME)
-@Alternative
-@Priority(Interceptor.Priority.LIBRARY_BEFORE)
 @Stereotype
 public @interface Convert {
 

@@ -39,8 +39,8 @@ import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.View;
 import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
 import br.com.caelum.vraptor.ioc.Container;
-import br.com.caelum.vraptor.validator.Validator;
 import br.com.caelum.vraptor.proxy.WeldProxifier;
+import br.com.caelum.vraptor.validator.Messages;
 import br.com.caelum.vraptor.view.DefaultHttpResultTest.RandomController;
 import br.com.caelum.vraptor.view.LogicResult;
 import br.com.caelum.vraptor.view.PageResult;
@@ -52,7 +52,7 @@ public class DefaultResultTest {
 	@Mock private HttpServletRequest request;
 	@Mock private Container container;
 	@Mock private TypeNameExtractor extractor;
-	@Mock private Validator validator;
+	@Mock private Messages messages;
 
 	private Result result;
 	private WeldProxifier weldProxifier;
@@ -60,7 +60,7 @@ public class DefaultResultTest {
 	@Before
 	public void setup() {
 		MockitoAnnotations.initMocks(this);
-		result = new DefaultResult(request, container, null, extractor, validator);
+		result = new DefaultResult(request, container, null, extractor, messages);
 		weldProxifier = new WeldProxifier();
 	}
 
@@ -87,28 +87,28 @@ public class DefaultResultTest {
 
 	@Test(expected=IllegalStateException.class)
 	public void shouldThrowExceptionIfHasValidatorErrorsWhenForward() throws Exception {
-		when(validator.hasErrors()).thenReturn(true);
+		when(messages.hasUnhandledErrors()).thenReturn(true);
 		
 		result.forwardTo("/any/uri");
 	}
 
 	@Test(expected=IllegalStateException.class)
 	public void shouldThrowExceptionIfHasValidatorErrorsWhenRedirect() throws Exception {
-		when(validator.hasErrors()).thenReturn(true);
+		when(messages.hasUnhandledErrors()).thenReturn(true);
 		
 		result.redirectTo("/any/uri");
 	}
 
 	@Test(expected=IllegalStateException.class)
 	public void shouldThrowExceptionIfHasValidatorErrorsWhenUsingJSON() throws Exception {
-		when(validator.hasErrors()).thenReturn(true);
+		when(messages.hasUnhandledErrors()).thenReturn(true);
 		
 		result.use(Results.json()).from("Blah").serialize();
 	}
 
 	@Test(expected=IllegalStateException.class)
 	public void shouldThrowExceptionIfHasValidatorErrorsWhenUsingXML() throws Exception {
-		when(validator.hasErrors()).thenReturn(true);
+		when(messages.hasUnhandledErrors()).thenReturn(true);
 		
 		result.use(Results.xml()).from("Blah").serialize();
 	}

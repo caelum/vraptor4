@@ -41,9 +41,11 @@ import javax.inject.Named;
 public class Messages {
 
 	private Map<Severity, List<Message>> messages = new HashMap<>();
+	private boolean unhandledErros = false;
 
 	public Messages add(Message message) {
 		get(message.getSeverity()).add(message);
+		unhandledErros = false;
 		return this;
 	}
 
@@ -83,4 +85,14 @@ public class Messages {
 	private MessageList createMessageList() {
 		return new MessageList(new ArrayList<Message>());
 	}
+	
+	public List<Message> handleErrors() {
+		unhandledErros = true;
+		return getErrors();
+	}
+	
+	public boolean hasUnhandledErrors() {
+		return unhandledErros;
+	}
+	
 }

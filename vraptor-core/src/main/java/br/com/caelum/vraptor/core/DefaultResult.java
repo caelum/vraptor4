@@ -34,7 +34,7 @@ import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.View;
 import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
 import br.com.caelum.vraptor.ioc.Container;
-import br.com.caelum.vraptor.validator.Validator;
+import br.com.caelum.vraptor.validator.Messages;
 
 /**
  * A basic implementation of a Result
@@ -49,7 +49,7 @@ public class DefaultResult extends AbstractResult {
 	private final Container container;
 	private final ExceptionMapper exceptions;
 	private final TypeNameExtractor extractor;
-	private Validator validator;
+	private Messages messages;
 	
 	private Map<String, Object> includedAttributes;
 	private boolean responseCommitted = false;
@@ -64,13 +64,13 @@ public class DefaultResult extends AbstractResult {
 
 	@Inject
 	public DefaultResult(HttpServletRequest request, Container container, ExceptionMapper exceptions, TypeNameExtractor extractor,
-			Validator validator) {
+			Messages messages) {
 		this.request = request;
 		this.container = container;
 		this.extractor = extractor;
 		this.includedAttributes = new HashMap<>();
 		this.exceptions = exceptions;
-		this.validator = validator;
+		this.messages = messages;
 	}
 	
 	@Override
@@ -116,7 +116,7 @@ public class DefaultResult extends AbstractResult {
 	}
 	
 	private void throwExceptionIfValidatorHasErrors() {
-		if(validator.hasErrors()) {
+		if(messages.hasUnhandledErrors()) {
 			throw new IllegalStateException(
 					"There are validation errors and you forgot to specify where to go. Please add in your method "
 							+ "something like:\n"

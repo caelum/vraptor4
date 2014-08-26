@@ -45,7 +45,7 @@ public class Messages {
 
 	public Messages add(Message message) {
 		get(message.getSeverity()).add(message);
-		unhandledErros = false;
+		unhandledErros = true;
 		return this;
 	}
 
@@ -87,7 +87,7 @@ public class Messages {
 	}
 	
 	public List<Message> handleErrors() {
-		unhandledErros = true;
+		unhandledErros = false;
 		return getErrors();
 	}
 	

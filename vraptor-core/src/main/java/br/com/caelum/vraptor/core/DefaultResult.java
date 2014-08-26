@@ -49,7 +49,7 @@ public class DefaultResult extends AbstractResult {
 	private final Container container;
 	private final ExceptionMapper exceptions;
 	private final TypeNameExtractor extractor;
-	private Messages messages;
+	private final Messages messages;
 	
 	private Map<String, Object> includedAttributes;
 	private boolean responseCommitted = false;

@@ -73,7 +73,6 @@ public class Exclusions implements ExclusionStrategy {
 
 	@Override
 	public boolean shouldSkipClass(Class<?> clazz) {
-		GsonOmitField annotation = clazz.getAnnotation(GsonOmitField.class);
-		return (annotation != null);
+		return clazz.isAnnotationPresent(GsonOmitField.class);
 	}
 }

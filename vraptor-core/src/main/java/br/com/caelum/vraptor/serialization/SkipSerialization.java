@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package br.com.caelum.vraptor.serialization.gson;
+package br.com.caelum.vraptor.serialization;
 
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
@@ -27,6 +27,6 @@ import java.lang.annotation.Target;
  */
 @Target({ElementType.FIELD, ElementType.TYPE})
 @Retention(RUNTIME)
-public @interface GsonOmitField {
+public @interface SkipSerialization {
 
 }

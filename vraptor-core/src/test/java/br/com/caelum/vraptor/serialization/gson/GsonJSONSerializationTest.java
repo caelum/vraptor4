@@ -42,6 +42,7 @@ import org.junit.Test;
 
 import br.com.caelum.vraptor.environment.Environment;
 import br.com.caelum.vraptor.interceptor.DefaultTypeNameExtractor;
+import br.com.caelum.vraptor.serialization.SkipSerialization;
 import br.com.caelum.vraptor.serialization.JSONPSerialization;
 import br.com.caelum.vraptor.util.test.MockInstanceImpl;
 
@@ -87,7 +88,7 @@ public class GsonJSONSerializationTest {
 		serialization = new GsonJSONSerialization(response, extractor, builder, environment);
 	}
 	
-	@GsonOmitField
+	@SkipSerialization
 	public static class UserPrivateInfo {
 		String cpf;
 		
@@ -102,7 +103,7 @@ public class GsonJSONSerializationTest {
 	public static class User {
 		String login;
 		
-		@GsonOmitField
+		@SkipSerialization
 		String password;
 		
 		UserPrivateInfo info;

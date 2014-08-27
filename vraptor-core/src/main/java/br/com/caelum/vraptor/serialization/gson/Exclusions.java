@@ -22,6 +22,7 @@ import java.util.Map.Entry;
 import javax.enterprise.inject.Vetoed;
 
 import net.vidageek.mirror.dsl.Mirror;
+import br.com.caelum.vraptor.serialization.SkipSerialization;
 import br.com.caelum.vraptor.serialization.Serializee;
 
 import com.google.gson.ExclusionStrategy;
@@ -44,7 +45,7 @@ public class Exclusions implements ExclusionStrategy {
 
 	@Override
 	public boolean shouldSkipField(FieldAttributes f) {
-		GsonOmitField annotation = f.getAnnotation(GsonOmitField.class);
+		SkipSerialization annotation = f.getAnnotation(SkipSerialization.class);
 		if (annotation != null)
 			return true;
 		
@@ -73,6 +74,6 @@ public class Exclusions implements ExclusionStrategy {
 
 	@Override
 	public boolean shouldSkipClass(Class<?> clazz) {
-		return clazz.isAnnotationPresent(GsonOmitField.class);
+		return clazz.isAnnotationPresent(SkipSerialization.class);
 	}
 }

@@ -31,6 +31,7 @@ import com.google.gson.FieldAttributes;
  * 
  * @author Renan Reis
  * @author Guilherme Mangabeira
+ * @author Renato R. R. de Oliveira
  */
 @Vetoed
 public class Exclusions implements ExclusionStrategy {
@@ -43,6 +44,10 @@ public class Exclusions implements ExclusionStrategy {
 
 	@Override
 	public boolean shouldSkipField(FieldAttributes f) {
+		GsonOmitField annotation = f.getAnnotation(GsonOmitField.class);
+		if (annotation != null)
+			return true;
+		
 		String fieldName = f.getName();
 		Class<?> definedIn = f.getDeclaringClass();
 
@@ -68,6 +73,7 @@ public class Exclusions implements ExclusionStrategy {
 
 	@Override
 	public boolean shouldSkipClass(Class<?> clazz) {
-		return false;
+		GsonOmitField annotation = clazz.getAnnotation(GsonOmitField.class);
+		return (annotation != null);
 	}
 }

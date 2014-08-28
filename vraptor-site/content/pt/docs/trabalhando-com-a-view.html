@@ -299,6 +299,44 @@ public class CustomXStreamBuilder extends XStreamBuilderImpl {
 
 Para configurar a serialização com JSON você pode criar uma classe que estenda de 'GsonJSONSerialization' e sobrescrever o método 'getSerializer()' com as suas configurações.
 
+Na serialização JSON você pode utilizar a anotação 'SkipSerialization' para omitir a serialização de um campo ou de uma classe.
+
+~~~ 
+#!java
+@SkipSerialization
+public class UserPrivateInfo {
+	String cpf;
+	String telefone;
+	String endereco;
+}
+
+public class User {
+	String nome;
+	String login;
+	@SkipSerialization
+	String senha;
+	UserPrivateInfo info;
+}
+~~~ 
+
+Realizando a seguinte chamada:
+
+~~~ 
+#!java
+User user = ...;
+result.use(json()).withoutRoot().from(user).recursive().serialize();
+~~~ 
+
+O resultado obtido é semelhante à:
+
+~~~ 
+#!javascript
+{
+	"nome": "Joao",
+	"login": "joao"
+}
+~~~ 
+
 ##Serializando Collections##
 
 Ao serializar coleções, o padrão é colocar a tag `list` em volta dos elementos:

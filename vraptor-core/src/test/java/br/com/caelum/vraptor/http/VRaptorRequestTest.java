@@ -85,6 +85,20 @@ public class VRaptorRequestTest {
 	}
 
 	@Test
+	public void strippsContextPath() {
+		when(request.getContextPath()).thenReturn("/myapp");
+		when(request.getRequestURI()).thenReturn("/myapp/somepage");
+		assertThat(vraptor.getRequestedUri(), is(equalTo("/somepage")));
+	}
+
+	@Test
+	public void strippsRootContextPath() {
+		when(request.getContextPath()).thenReturn("/");
+		when(request.getRequestURI()).thenReturn("/somepage");
+		assertThat(vraptor.getRequestedUri(), is(equalTo("/somepage")));
+	}
+
+	@Test
 	public void returnsAllNamesOnlyOnce() {
 		vraptor.setParameter("name", "silveira");
 		vraptor.setParameter("size", "m");

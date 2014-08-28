@@ -31,6 +31,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import br.com.caelum.vraptor.http.VRaptorRequest;
+
 /**
  * Handles default content if the request corresponds to static content.
  *
@@ -63,10 +65,10 @@ public class DefaultStaticContentHandler implements StaticContentHandler {
 	}
 
 	private String uriRelativeToContextRoot(HttpServletRequest request) {
-		String uri = request.getRequestURI().substring(request.getContextPath().length());
+		String uri = VRaptorRequest.getRelativeRequestURI(request);
 		return removeQueryStringAndJSessionId(uri);
 	}
-	
+
 	private String removeQueryStringAndJSessionId(String uri) {
 		if (uri.contains("?") || uri.contains(";")) {
 			return uri.replaceAll("[\\?;].+", "");

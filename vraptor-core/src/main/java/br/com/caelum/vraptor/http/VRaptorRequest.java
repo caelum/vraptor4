@@ -88,8 +88,15 @@ public class VRaptorRequest extends HttpServletRequestWrapper implements Mutable
 		if (getAttribute(INCLUDE_REQUEST_URI) != null) {
 			return (String) getAttribute(INCLUDE_REQUEST_URI);
 		}
-		String uri = getRequestURI().substring(getContextPath().length());
+		String uri = getRelativeRequestURI(this);
 		return uri.replaceFirst("(?i);jsessionid=.*$", "");
+	}
+
+	public static String getRelativeRequestURI(HttpServletRequest request) {
+		if ("/".equals(request.getContextPath())) {
+			return request.getRequestURI();
+		}
+		return request.getRequestURI().substring(request.getContextPath().length());
 	}
 
 	@Override

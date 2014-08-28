@@ -65,7 +65,7 @@ public class DefaultStaticContentHandler implements StaticContentHandler {
 	}
 
 	private String uriRelativeToContextRoot(HttpServletRequest request) {
-		String uri = VRaptorRequest.stripContextPath(request.getContextPath(), request.getRequestURI());
+		String uri = VRaptorRequest.getRelativeRequestURI(request);
 		return removeQueryStringAndJSessionId(uri);
 	}
 

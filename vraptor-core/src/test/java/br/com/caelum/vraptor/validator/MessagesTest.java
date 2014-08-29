@@ -3,17 +3,13 @@ package br.com.caelum.vraptor.validator;
 import org.junit.Before;
 import org.junit.Test;
 
-import br.com.caelum.vraptor.util.test.MockValidator;
-
 public class MessagesTest {
 
 	private Messages messages;
-	private MockValidator validator;
 	
 	@Before
 	public void setUp() {
-		validator = new MockValidator();
-		messages = new Messages(validator);
+		messages = new Messages();
 	}
 	
 	@Test(expected=IllegalStateException.class)

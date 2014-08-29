@@ -44,6 +44,7 @@ import br.com.caelum.vraptor.validator.Messages;
 import br.com.caelum.vraptor.view.DefaultHttpResultTest.RandomController;
 import br.com.caelum.vraptor.view.LogicResult;
 import br.com.caelum.vraptor.view.PageResult;
+import br.com.caelum.vraptor.view.Results;
 import br.com.caelum.vraptor.view.Status;
 
 public class DefaultResultTest {
@@ -74,7 +75,6 @@ public class DefaultResultTest {
 
 		MyView view = result.use(MyView.class);
 		assertThat(view, is(expectedView));
-		verify(messages).assertAbsenceOfErrors();
 	}
 
 	@Test
@@ -93,7 +93,6 @@ public class DefaultResultTest {
 		result.forwardTo("/any/uri");
 
 		verify(pageResult).forwardTo("/any/uri");
-		verify(messages).assertAbsenceOfErrors();
 	}
 
 	@Test
@@ -104,7 +103,6 @@ public class DefaultResultTest {
 		result.redirectTo("/any/uri");
 
 		verify(pageResult).redirectTo("/any/uri");
-		verify(messages).assertAbsenceOfErrors();
 	}
 
 	private <T extends View> T mockResult(Class<T> view) {
@@ -122,7 +120,6 @@ public class DefaultResultTest {
 		result.of(RandomController.class);
 
 		verify(pageResult).of(RandomController.class);
-		verify(messages).assertAbsenceOfErrors();
 	}
 	@Test
 	public void shouldDelegateToLogicResultOnForwardToLogic() throws Exception {
@@ -132,8 +129,8 @@ public class DefaultResultTest {
 		result.forwardTo(RandomController.class);
 
 		verify(logicResult).forwardTo(RandomController.class);
-
 	}
+	
 	@Test
 	public void shouldDelegateToLogicResultOnRedirectToLogic() throws Exception {
 
@@ -142,8 +139,8 @@ public class DefaultResultTest {
 		result.redirectTo(RandomController.class);
 
 		verify(logicResult).redirectTo(RandomController.class);
-		verify(messages).assertAbsenceOfErrors();
 	}
+	
 	@Test
 	public void shouldDelegateToLogicResultOnRedirectToLogicWithInstance() throws Exception {
 
@@ -152,7 +149,6 @@ public class DefaultResultTest {
 		result.redirectTo(new RandomController());
 
 		verify(logicResult).redirectTo(RandomController.class);
-		verify(messages).assertAbsenceOfErrors();
 	}
 
 	@Test
@@ -163,7 +159,6 @@ public class DefaultResultTest {
 		result.forwardTo(new RandomController());
 
 		verify(logicResult).forwardTo(RandomController.class);
-		verify(messages).assertAbsenceOfErrors();
 	}
 	
 	@Test
@@ -174,7 +169,6 @@ public class DefaultResultTest {
 		result.of(new RandomController());
 
 		verify(pageResult).of(RandomController.class);
-		verify(messages).assertAbsenceOfErrors();
 	}
 
 	@Test
@@ -184,7 +178,6 @@ public class DefaultResultTest {
 		assertThat(randomProxy, instanceOf(ProxyObject.class));
 		result.redirectTo(randomProxy);
 		verify(logicResult).redirectTo(RandomController.class);
-		verify(messages).assertAbsenceOfErrors();
 	}
 
 	@Test
@@ -194,7 +187,6 @@ public class DefaultResultTest {
 		assertThat(randomProxy, instanceOf(ProxyObject.class));
 		result.forwardTo(randomProxy);
 		verify(logicResult).forwardTo(RandomController.class);
-		verify(messages).assertAbsenceOfErrors();
 	}
 	
 	@Test
@@ -204,7 +196,6 @@ public class DefaultResultTest {
 		assertThat(randomProxy, instanceOf(ProxyObject.class));
 		result.of(randomProxy);
 		verify(logicResult).of(RandomController.class);
-		verify(messages).assertAbsenceOfErrors();
 	}
 	
 	@Test
@@ -215,7 +206,6 @@ public class DefaultResultTest {
 		result.notFound();
 
 		verify(status).notFound();
-		verify(messages).assertAbsenceOfErrors();
 	}
 
 	@Test
@@ -226,7 +216,6 @@ public class DefaultResultTest {
 		result.permanentlyRedirectTo("url");
 
 		verify(status).movedPermanentlyTo("url");
-		verify(messages).assertAbsenceOfErrors();
 	}
 
 	@Test
@@ -237,7 +226,6 @@ public class DefaultResultTest {
 		result.permanentlyRedirectTo(RandomController.class);
 
 		verify(status).movedPermanentlyTo(RandomController.class);
-		verify(messages).assertAbsenceOfErrors();
 	}
 
 	@Test
@@ -248,6 +236,11 @@ public class DefaultResultTest {
 		result.permanentlyRedirectTo(new RandomController());
 
 		verify(status).movedPermanentlyTo(RandomController.class);
+	}
+	
+	@Test
+	public void shouldCallAssertAbsenceOfErrorsMethodFromMessages() throws Exception {
+		result.use(Results.json());
 		verify(messages).assertAbsenceOfErrors();
 	}
 

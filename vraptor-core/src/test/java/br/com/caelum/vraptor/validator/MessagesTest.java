@@ -24,6 +24,14 @@ public class MessagesTest {
 		messages.handleErrors();
 		messages.assertAbsenceOfErrors();
 	}
+	
+	@Test
+	public void shouldNotThrowExceptionIfMessagesHasNoErrorsAndHasOtherSeverityMessages() {
+		messages.add(new SimpleMessage("Test", "Test warn message", Severity.WARN));
+		messages.add(new SimpleMessage("Test", "Test info message", Severity.INFO));
+		messages.add(new SimpleMessage("Test", "Test success message", Severity.SUCCESS));
+		messages.assertAbsenceOfErrors();
+	}
 
 	@Test
 	public void shouldNotThrowExceptionIfMessagesHasNoErrors() {

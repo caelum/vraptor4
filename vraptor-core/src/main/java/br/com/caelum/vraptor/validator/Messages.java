@@ -15,13 +15,19 @@
  */
 package br.com.caelum.vraptor.validator;
 
+import static br.com.caelum.vraptor.view.Results.nothing;
+import static org.slf4j.LoggerFactory.getLogger;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.enterprise.context.RequestScoped;
+import javax.inject.Inject;
 import javax.inject.Named;
+
+import org.slf4j.Logger;
 
 /**
  * Managed class that stores all application messages like errors, warnings and info. This
@@ -40,9 +46,24 @@ import javax.inject.Named;
 @RequestScoped
 public class Messages {
 
+	private final static Logger log = getLogger(Messages.class);
+	
 	private Map<Severity, List<Message>> messages = new HashMap<>();
 	private boolean unhandledErrors = false;
+	private final Validator validator;
 
+	/**
+	 * @deprecated CDI eyes only.
+	 */
+	protected Messages() {
+		this(null);
+	}
+	
+	@Inject
+	public Messages(Validator validator) {
+		this.validator = validator;
+	}
+	
 	public Messages add(Message message) {
 		get(message.getSeverity()).add(message);
 		if(Severity.ERROR.equals(message.getSeverity())) {
@@ -95,6 +116,24 @@ public class Messages {
 	
 	public boolean hasUnhandledErrors() {
 		return unhandledErrors;
+	}
+	
+	public void assertAbsenceOfErrors() {
+		if (hasUnhandledErrors()) {
+			if (log.isDebugEnabled()) {
+				try {
+					validator.onErrorUse(nothing());
+				} catch (ValidationException e) {
+					log.debug("Some validation errors occured: {}", e.getErrors());
+				}
+			}
+			throw new IllegalStateException(
+				"There are validation errors and you forgot to specify where to go. Please add in your method "
+				+ "something like:\n"
+				+ "validator.onErrorUse(page()).of(AnyController.class).anyMethod();\n"
+				+ "or any view that you like.\n"
+				+ "If you didn't add any validation error, it is possible that a conversion error had happened.");
+		}
 	}
 	
 }

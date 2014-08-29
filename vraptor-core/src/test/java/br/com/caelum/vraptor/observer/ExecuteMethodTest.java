@@ -27,8 +27,10 @@ import br.com.caelum.vraptor.events.MethodReady;
 import br.com.caelum.vraptor.interceptor.ApplicationLogicException;
 import br.com.caelum.vraptor.interceptor.DogAlike;
 import br.com.caelum.vraptor.validator.Message;
+import br.com.caelum.vraptor.validator.Messages;
 import br.com.caelum.vraptor.validator.ValidationException;
 import br.com.caelum.vraptor.validator.Validator;
+
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -37,6 +39,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import javax.enterprise.event.Event;
+
 import java.lang.reflect.Method;
 import java.util.Collections;
 
@@ -48,6 +51,7 @@ import static org.mockito.Mockito.*;
 public class ExecuteMethodTest {
 
 	@Mock private MethodInfo methodInfo;
+	@Mock private Messages messages;
 	@Mock private Validator validator;
 	@Mock private Event<MethodExecuted> methodEvecutedEvent;
 	@Mock private Event<MethodReady> readyToExecuteMethodEvent;
@@ -57,7 +61,7 @@ public class ExecuteMethodTest {
 	@Before
 	public void setup() throws NoSuchMethodException {
 		MockitoAnnotations.initMocks(this);
-		observer = new ExecuteMethod(methodInfo, validator, methodEvecutedEvent, readyToExecuteMethodEvent);
+		observer = new ExecuteMethod(methodInfo, messages, methodEvecutedEvent, readyToExecuteMethodEvent);
 	}
 
 	@Test
@@ -67,6 +71,7 @@ public class ExecuteMethodTest {
 		when(methodInfo.getParametersValues()).thenReturn(new Object[0]);
 		observer.execute(new InterceptorsExecuted(method, auau));
 		verify(auau).bark();
+		verify(messages).assertAbsenceOfErrors();
 	}
 
 	@Test
@@ -76,6 +81,7 @@ public class ExecuteMethodTest {
 		when(methodInfo.getParametersValues()).thenReturn(new Object[] { 3 });
 		observer.execute(new InterceptorsExecuted(method, auau));
 		verify(auau).bark(3);
+		verify(messages).assertAbsenceOfErrors();
 	}
 
 	public static class XController {
@@ -92,6 +98,7 @@ public class ExecuteMethodTest {
 		final XController controller = new XController();
 		when(methodInfo.getParametersValues()).thenReturn(new Object[] { "string" });
 		observer.execute(new InterceptorsExecuted(method, controller));
+		verify(messages).assertAbsenceOfErrors();
 	}
 
 	@Test
@@ -101,6 +108,7 @@ public class ExecuteMethodTest {
 		when(methodInfo.getParametersValues()).thenReturn(new Object[] { null });
 		observer.execute(new InterceptorsExecuted(method, controller));
 		verify(methodInfo).setResult(null);
+		verify(messages).assertAbsenceOfErrors();
 	}
 
 	@Test
@@ -110,7 +118,6 @@ public class ExecuteMethodTest {
 		AnyController controller = new AnyController(validator);
 		when(methodInfo.getParametersValues()).thenReturn(new Object[0]);
 		doThrow(new ValidationException(Collections.<Message> emptyList())).when(validator).onErrorUse(nothing());
-		when(validator.hasErrors()).thenReturn(true);
 		observer.execute(new InterceptorsExecuted(method, controller));
 	}
 
@@ -119,8 +126,8 @@ public class ExecuteMethodTest {
 		Method didntSpecifyWhereToGo = AnyController.class.getMethod("didntSpecifyWhereToGo");
 		final ControllerMethod method = DefaultControllerMethod.instanceFor(AnyController.class, didntSpecifyWhereToGo);
 		final AnyController controller = new AnyController(validator);
+		doThrow(new IllegalStateException()).when(messages).assertAbsenceOfErrors();
 		when(methodInfo.getParametersValues()).thenReturn(new Object[0]);
-		when(validator.hasErrors()).thenReturn(true);
 		observer.execute(new InterceptorsExecuted(method, controller));
 	}
 
@@ -133,6 +140,7 @@ public class ExecuteMethodTest {
 		expected.expect(ApplicationLogicException.class);
 		expected.expectCause(any(TestException.class));
 		observer.execute(new InterceptorsExecuted(controllerMethod, controller));
+		verify(messages).assertAbsenceOfErrors();
 	}
 	
 

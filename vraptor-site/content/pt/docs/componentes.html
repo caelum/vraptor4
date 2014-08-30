@@ -143,6 +143,92 @@ public class ClienteController {
 }
 ~~~ 
 
+##Injetando recursos Java EE
+
+A injeção de dependências também funciona para todos os recursos Java EE 
+se você estiver rodando sua aplicação em um Servidor de Aplicações. As 
+anotações `@Resource`, `@EJB`, `@PersistenceContext`, `@PersistenceUnit` 
+e `@WebServiceRef` funcionam corretamente se você usa injeção via field.
+
+No código abaixo você pode ver que estamos injetando um EJB e um 
+`SessionContext` em nosso controller:
+
+~~~ 
+#!java
+@Controller
+public class ClienteController {
+
+	@EJB
+	private ClienteBean clienteBean;
+
+	@Resource
+	private SessionContext context;
+
+}
+~~~ 
+
+Porém se você usa a injeção de dependências via construtor, somente EJBs 
+estão disponível para injeção usando a anotação `@Inject`. Recursos anotados 
+com `@Resource`, e os outros já citados acima, precisam de um producer. No 
+exemplo abaixo criaremos um producer para deixar o recurso `SessionContext` 
+disponível para injeção de dependências via construtor:
+
+~~~ 
+#!java
+@Dependent
+public class Resources {
+ 
+	@Produces
+	@Resource(mappedName = "java:comp/EJBContext")
+	protected SessionContext sessionContext;
+} 
+~~~ 
+
+E agora é possível injetar o `SessionContext` no seu controller pelo construtor. 
+Veja o código abaixo:
+
+~~~ 
+#!java
+@Controller
+public class ClienteController {
+
+	private ClienteBean clienteBean;
+	private SessionContext context;
+
+	/**
+	 * @deprecated CDI eyes only
+	 */
+	protected ClienteController() {
+		this(null, null);
+	}
+
+	@Inject
+	public ClienteController(ClienteBean clienteBean, SessionContext context) {
+		this.clienteBean = clienteBean;
+		this.context = context;
+	}
+
+}
+~~~ 
+
+Se você não está usando nosso plugin <a href="/pt/docs/plugins/#vraptor-jpa">vraptor-jpa</a>, e você quer usar o `EntityManager` 
+disponibilizado pelo Servidor de Aplicações, você precisa também criar um producer 
+para injetá-lo via construtor. No exemplo abaixo adicionamos em nossa classe 
+`Resources` um producer para o `EntityManager`:
+
+~~~ 
+#!java
+@Dependent
+public class Resources {
+
+	// outros producers
+
+	@Produces
+	@PersistenceContext
+	protected EntityManager em;
+}
+~~~ 
+
 ## Disparando eventos
 
 Para disparar eventos você pode usar a anotação `@Observes`, que é usada quando um evento inicia.

@@ -64,6 +64,8 @@ public Download picture(Profile profile) {
 
 To activate upload support it's necessary to add `commons-upload` and `commons-io` artifacts in your classpath. You can see more info [here](/en/docs/dependencies-and-prerequisites#commons-fileupload).
 
+**Note: ** Upload only works with methods annotated with `@Post`. `@Get`, `@Put` and others are not supported.
+
 #One minute example: upload
 
 To receive an uploaded file in your controller, you need to use a parameter as `UploadedFile`. The `UploadedFile` class 

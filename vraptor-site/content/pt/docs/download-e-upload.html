@@ -65,6 +65,8 @@ public Download foto(Perfil perfil) {
 
 Para ativar o suporte a upload é necessário adicionar as bibliotecas `commons-upload` e `commons-io` em seu classpath. Veja mais informações [aqui](/pt/docs/dependencias-e-pre-requisitos/#commons-fileupload).
 
+**Nota: ** O upload funciona apenas com métodos do seu controller anotados com `@Post`. `@Get`, `@Put` e demais verbos não são suportados.
+
 #Exemplo de 1 minuto: upload
 
 Para receber um upload você precisa receber um `UploadedFile` em seu método conforme o exemplo abaixo. O `UploadedFile` 

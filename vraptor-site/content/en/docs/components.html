@@ -199,6 +199,88 @@ public class CustomerController {
 }
 ~~~ 
 
+##Injecting Java EE resources
+
+Injection also works for all Java EE components if you are deploying your 
+application in an Application Server. All annotations like `@Resource`, 
+`@EJB`, `@PersistenceContext`, `@PersistenceUnit` and `@WebServiceRef` 
+works fine when you using injection by field.
+
+In the code below we are injecting an EJB and an `SessionContext` in your controller:
+
+~~~ 
+#!java
+@Controller
+public class CustomerController {
+
+	@EJB
+	private CustomerBean customerBean;
+
+	@Resource
+	private SessionContext context;
+
+}
+~~~ 
+
+But if you want to use constructor injection, only EJB resources are available to injection 
+using `@Inject` annotation. All resources annotated with `@Resource` and others needs a 
+producer. In the example below we create a producer to make `SessionContext` 
+available to use with constructor injection:
+
+~~~ 
+#!java
+@Dependent
+public class Resources {
+ 
+	@Produces
+	@Resource(mappedName = "java:comp/EJBContext")
+	protected SessionContext sessionContext;
+} 
+~~~ 
+
+And now we can inject the `SessionContext` in our controller. See the code below:
+
+~~~ 
+#!java
+@Controller
+public class CustomerController {
+
+	private CustomerBean customerBean;
+	private SessionContext context;
+
+	/**
+	 * @deprecated CDI eyes only
+	 */
+	protected CustomerController() {
+		this(null);
+	}
+
+	@Inject
+	public CustomerController(CustomerBean customerBean, SessionContext context) {
+		this.customerBean = customerBean;
+		this.context = context;
+	}
+
+}
+~~~ 
+
+If you are not using our JPA plugin, and you want to use Entity Manager provided by
+the Appplication Server, you need to create a producer for `EntityManager` like 
+this example:
+
+~~~ 
+#!java
+@Dependent
+public class Resources {
+
+	// your other producers
+
+	@Produces
+	@PersistenceContext
+	protected EntityManager em;
+}
+~~~ 
+
 ## Observing and firing events
 
 You can fire events and handle them with the `@Observes` annotation.

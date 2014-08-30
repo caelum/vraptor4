@@ -17,6 +17,20 @@
 
 package br.com.caelum.vraptor.observer;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
+import java.lang.reflect.Method;
+
+import javax.enterprise.context.Dependent;
+import javax.enterprise.event.Event;
+import javax.enterprise.event.Observes;
+import javax.inject.Inject;
+
+import net.vidageek.mirror.dsl.Mirror;
+import net.vidageek.mirror.exception.ReflectionProviderException;
+
+import org.slf4j.Logger;
+
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.core.MethodInfo;
@@ -24,20 +38,8 @@ import br.com.caelum.vraptor.events.InterceptorsExecuted;
 import br.com.caelum.vraptor.events.MethodExecuted;
 import br.com.caelum.vraptor.events.MethodReady;
 import br.com.caelum.vraptor.interceptor.ApplicationLogicException;
+import br.com.caelum.vraptor.validator.Messages;
 import br.com.caelum.vraptor.validator.ValidationException;
-import br.com.caelum.vraptor.validator.Validator;
-import net.vidageek.mirror.dsl.Mirror;
-import net.vidageek.mirror.exception.ReflectionProviderException;
-import org.slf4j.Logger;
-
-import javax.enterprise.context.Dependent;
-import javax.enterprise.event.Event;
-import javax.enterprise.event.Observes;
-import javax.inject.Inject;
-import java.lang.reflect.Method;
-
-import static br.com.caelum.vraptor.view.Results.nothing;
-import static org.slf4j.LoggerFactory.getLogger;
 
 /**
  * Interceptor that executes the logic method.
@@ -52,7 +54,7 @@ public class ExecuteMethod {
 	private final static Logger log = getLogger(ExecuteMethod.class);
 
 	private final MethodInfo methodInfo;
-	private final Validator validator;
+	private final Messages messages;
 
 	private Event<MethodExecuted> methodExecutedEvent;
 	private Event<MethodReady> methodReady;
@@ -65,10 +67,10 @@ public class ExecuteMethod {
 	}
 
 	@Inject
-	public ExecuteMethod(MethodInfo methodInfo, Validator validator, 
+	public ExecuteMethod(MethodInfo methodInfo, Messages messages, 
 			Event<MethodExecuted> methodExecutedEvent, Event<MethodReady> methodReady) {
 		this.methodInfo = methodInfo;
-		this.validator = validator;
+		this.messages = messages;
 		this.methodExecutedEvent = methodExecutedEvent;
 		this.methodReady = methodReady;
 	}
@@ -84,22 +86,8 @@ public class ExecuteMethod {
 			Object instance = event.getControllerInstance();
 			Object result = new Mirror().on(instance).invoke().method(reflectionMethod).withArgs(parameters);
 
-			if (validator.hasErrors()) { // method should have thrown
-											// ValidationException
-				if (log.isDebugEnabled()) {
-					try {
-						validator.onErrorUse(nothing());
-					} catch (ValidationException e) {
-						log.debug("Some validation errors occured: {}", e.getErrors());
-					}
-				}
-				throw new InterceptionException(
-						"There are validation errors and you forgot to specify where to go. Please add in your method "
-								+ "something like:\n"
-								+ "validator.onErrorUse(page()).of(AnyController.class).anyMethod();\n"
-								+ "or any view that you like.\n"
-								+ "If you didn't add any validation error, it is possible that a conversion error had happened.");
-			}
+			messages.assertAbsenceOfErrors();
+			
 			this.methodInfo.setResult(result);
 			methodExecutedEvent.fire(new MethodExecuted(method, methodInfo));
 		} catch (IllegalArgumentException e) {

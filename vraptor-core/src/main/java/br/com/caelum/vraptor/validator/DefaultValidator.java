@@ -143,7 +143,7 @@ public class DefaultValidator extends AbstractValidator {
 		outjector.outjectRequestMap();
 		
 		logger.debug("there are errors on result: {}", getErrors());
-		return viewsFactory.instanceFor(view, getErrors());
+		return viewsFactory.instanceFor(view, messages.handleErrors());
 	}
 
 	@Override

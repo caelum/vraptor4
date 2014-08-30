@@ -40,9 +40,11 @@ import br.com.caelum.vraptor.View;
 import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.proxy.WeldProxifier;
+import br.com.caelum.vraptor.validator.Messages;
 import br.com.caelum.vraptor.view.DefaultHttpResultTest.RandomController;
 import br.com.caelum.vraptor.view.LogicResult;
 import br.com.caelum.vraptor.view.PageResult;
+import br.com.caelum.vraptor.view.Results;
 import br.com.caelum.vraptor.view.Status;
 
 public class DefaultResultTest {
@@ -50,6 +52,7 @@ public class DefaultResultTest {
 	@Mock private HttpServletRequest request;
 	@Mock private Container container;
 	@Mock private TypeNameExtractor extractor;
+	@Mock private Messages messages;
 
 	private Result result;
 	private WeldProxifier weldProxifier;
@@ -57,14 +60,14 @@ public class DefaultResultTest {
 	@Before
 	public void setup() {
 		MockitoAnnotations.initMocks(this);
-		result = new DefaultResult(request, container, null, extractor);
+		result = new DefaultResult(request, container, null, extractor, messages);
 		weldProxifier = new WeldProxifier();
 	}
 
 	public static class MyView implements View {
 
 	}
-
+	
 	@Test
 	public void shouldUseContainerForNewView() {
 		final MyView expectedView = new MyView();
@@ -126,8 +129,8 @@ public class DefaultResultTest {
 		result.forwardTo(RandomController.class);
 
 		verify(logicResult).forwardTo(RandomController.class);
-
 	}
+	
 	@Test
 	public void shouldDelegateToLogicResultOnRedirectToLogic() throws Exception {
 
@@ -136,8 +139,8 @@ public class DefaultResultTest {
 		result.redirectTo(RandomController.class);
 
 		verify(logicResult).redirectTo(RandomController.class);
-
 	}
+	
 	@Test
 	public void shouldDelegateToLogicResultOnRedirectToLogicWithInstance() throws Exception {
 
@@ -146,7 +149,6 @@ public class DefaultResultTest {
 		result.redirectTo(new RandomController());
 
 		verify(logicResult).redirectTo(RandomController.class);
-
 	}
 
 	@Test
@@ -157,8 +159,8 @@ public class DefaultResultTest {
 		result.forwardTo(new RandomController());
 
 		verify(logicResult).forwardTo(RandomController.class);
-
 	}
+	
 	@Test
 	public void shouldDelegateToPageResultOnPageOfWithInstance() throws Exception {
 
@@ -167,7 +169,6 @@ public class DefaultResultTest {
 		result.of(new RandomController());
 
 		verify(pageResult).of(RandomController.class);
-
 	}
 
 	@Test
@@ -205,7 +206,6 @@ public class DefaultResultTest {
 		result.notFound();
 
 		verify(status).notFound();
-
 	}
 
 	@Test
@@ -216,7 +216,6 @@ public class DefaultResultTest {
 		result.permanentlyRedirectTo("url");
 
 		verify(status).movedPermanentlyTo("url");
-
 	}
 
 	@Test
@@ -227,7 +226,6 @@ public class DefaultResultTest {
 		result.permanentlyRedirectTo(RandomController.class);
 
 		verify(status).movedPermanentlyTo(RandomController.class);
-
 	}
 
 	@Test
@@ -238,7 +236,12 @@ public class DefaultResultTest {
 		result.permanentlyRedirectTo(new RandomController());
 
 		verify(status).movedPermanentlyTo(RandomController.class);
-
+	}
+	
+	@Test
+	public void shouldCallAssertAbsenceOfErrorsMethodFromMessages() throws Exception {
+		result.use(Results.json());
+		verify(messages).assertAbsenceOfErrors();
 	}
 
 

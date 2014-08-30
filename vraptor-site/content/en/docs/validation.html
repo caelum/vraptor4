@@ -21,9 +21,27 @@ And in your controller:
 
 ~~~
 #!java
-public void store(@NotNull @Valid Client client) {
-	// if client is not valid, redirect to form page
-	validation.onErrorForwardTo(this).form();
+public class ClientController {
+
+	private final Validator validation;
+
+	/** 
+	 * @deprecated CDI eyes only
+	 */
+	protected ClientController() {
+		this(null);
+	}
+
+	@Inject
+	public ClientController(Validator validation) {
+		this.validation = validation;
+	}
+
+	public void store(@NotNull @Valid Client client) {
+		// if client is not valid, redirect to form page
+		validation.onErrorForwardTo(this).form();
+	}
+
 }
 ~~~
 

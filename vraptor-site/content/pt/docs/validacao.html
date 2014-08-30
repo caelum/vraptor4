@@ -21,9 +21,27 @@ Em seu controller:
 
 ~~~
 #!java
-public void cadastrar(@NotNull @Valid Cliente cliente) {
-	// em caso de erros irá redirecionar para a página de formulário
-	validation.onErrorForwardTo(this).formulario();
+public class ClienteController {
+
+	private final Validator validation;
+
+	/** 
+	 * @deprecated CDI eyes only
+	 */
+	protected ClienteController() {
+		this(null);
+	}
+
+	@Inject
+	public ClienteController(Validator validation) {
+		this.validation = validation;
+	}
+
+	public void cadastrar(@NotNull @Valid Cliente cliente) {
+		// em caso de erros irá redirecionar para a página de formulário
+		validation.onErrorForwardTo(this).formulario();
+	}
+
 }
 ~~~
 

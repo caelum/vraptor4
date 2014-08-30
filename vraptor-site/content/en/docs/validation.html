@@ -37,6 +37,9 @@ public class ClientController {
 		this.validation = validation;
 	}
 
+	public void form() {
+	}
+
 	public void store(@NotNull @Valid Client client) {
 		// if client is not valid, redirect to form page
 		validation.onErrorForwardTo(this).form();

@@ -37,6 +37,9 @@ public class ClienteController {
 		this.validation = validation;
 	}
 
+	public void formulario() {
+	}
+
 	public void cadastrar(@NotNull @Valid Cliente cliente) {
 		// em caso de erros irá redirecionar para a página de formulário
 		validation.onErrorForwardTo(this).formulario();

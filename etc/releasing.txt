@@ -10,7 +10,7 @@ bintray.com/caelum/VRaptor4/br.com.caelum.vraptor
 
 * Update and release the most frequently used plugins:
 
-	vraptor-time-converters
+	vraptor-java8
 	vraptor-simplemail
 	vraptor-errorcontrol
 	vraptor-brutauth

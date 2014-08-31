@@ -16,13 +16,13 @@ import org.junit.Test;
 public class MessagesTest {
 
 	private Messages messages;
-	
+
 	@Before
 	public void setUp() {
 		messages = new Messages();
 	}
-	
-	@Test(expected=IllegalStateException.class)
+
+	@Test(expected = IllegalStateException.class)
 	public void shouldThrowExceptionIfMessagesHasUnhandledErrors() {
 		messages.add(new SimpleMessage("Test", "Test message"));
 		messages.assertAbsenceOfErrors();
@@ -34,7 +34,7 @@ public class MessagesTest {
 		messages.handleErrors();
 		messages.assertAbsenceOfErrors();
 	}
-	
+
 	@Test
 	public void shouldNotThrowExceptionIfMessagesHasNoErrorsAndHasOtherSeverityMessages() {
 		messages.add(new SimpleMessage("Test", "Test warn message", Severity.WARN));
@@ -77,10 +77,10 @@ public class MessagesTest {
 		Message message2 = new SimpleMessage("client.email", "is valid", Severity.INFO);
 		Message message3 = new SimpleMessage("client.email", "was not checked", Severity.WARN);
 
-		messages.add(new SimpleMessage("client.id", "not null", Severity.ERROR));
-		messages.add(new SimpleMessage("client.name", "not null", Severity.ERROR));
-		messages.add(new SimpleMessage("client.email", "is valid", Severity.INFO));
-		messages.add(new SimpleMessage("client.email", "was not checked", Severity.WARN));
+		messages.add(message0);
+		messages.add(message1);
+		messages.add(message2);
+		messages.add(message3);
 
 		assertThat(messages.getErrors(), contains(message0, message1));
 		assertThat(messages.getInfo(), contains(message2));

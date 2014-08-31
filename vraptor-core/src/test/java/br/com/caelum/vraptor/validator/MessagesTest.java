@@ -5,10 +5,14 @@ import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.isEmptyString;
 import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertThat;
 
 import java.util.Collection;
+
+import javax.el.ELProcessor;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -86,5 +90,27 @@ public class MessagesTest {
 		assertThat(messages.getInfo(), contains(message2));
 		assertThat(messages.getWarnings(), contains(message3));
 		assertThat(messages.getSuccess(), empty());
+	}
+
+	@Test
+	public void testElExpressionGettingMessagesByCaegory() {
+		messages.add(new SimpleMessage("client.id", "will generated", Severity.INFO));
+		messages.add(new SimpleMessage("client.name", "not null"));
+		messages.add(new SimpleMessage("client.name", "not empty"));
+
+		ELProcessor el = new ELProcessor();
+		el.defineBean("messages", messages);
+
+		String result = el.eval("messages.errors.from('client.name')").toString();
+		assertThat(result, is("not null, not empty"));
+
+		result = el.eval("messages.errors.from('client.name').join(' - ')").toString();
+		assertThat(result, is("not null - not empty"));
+
+		result = el.eval("messages.errors.from('client.id')").toString();
+		assertThat(result, isEmptyString());
+
+		result = el.eval("messages.info.from('client.id')").toString();
+		assertThat(result, is("will generated"));
 	}
 }

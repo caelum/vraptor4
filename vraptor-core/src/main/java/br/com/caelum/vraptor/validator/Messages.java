@@ -51,9 +51,8 @@ public class Messages {
 
 	public Messages add(Message message) {
 		get(message.getSeverity()).add(message);
-		if(Severity.ERROR.equals(message.getSeverity())) {
-			unhandledErrors = true;
-		}
+		unhandledErrors = unhandledErrors || Severity.ERROR.equals(message.getSeverity());
+
 		return this;
 	}
 

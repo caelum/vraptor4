@@ -150,14 +150,15 @@ public class PaisConverter implements Converter<Pais> {
 
 ##Sobrescrevendo o comportamento dos conversores existentes
 
-Você pode sobrescrever qualquer converter já existente no VRaptor. Para isso basta estender a classe anotando-a com `@Specializes`. Um bom exemplo para isso é sobrescrever o conversor `LocaleBasedBigDecimalConverter` para alterar o formato do valor.
+Você pode sobrescrever qualquer converter já existente no VRaptor. Para isso basta estender a classe anotando-a com `@Specializes` e também adicionando a anotação `@Convert` com o tipo que será especializado. Um bom exemplo para isso é sobrescrever o conversor `LocaleBasedBigDecimalConverter` para alterar o formato do valor.
 
 ~~~ 
 #!java
 @Specializes
+@Convert(BigDecimal.class)
 public class MeuBigDecimalConverter extends LocaleBasedBigDecimalConverter {
 	protected NumberFormat getNumberFormat() { }
 }
 ~~~ 
 
-E no método `getNumberFormat` você pode implementar a conversão que precisa para esse formato
+E no método `getNumberFormat` você pode implementar a conversão que precisa para esse formato.

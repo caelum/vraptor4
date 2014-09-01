@@ -156,11 +156,12 @@ public class CountryConverter implements Converter<Country> {
 
 ##Overriding core converters 
 
-You can also overrise any existing converters. You only need extends the core converter and after to add `@Specializes` annotation. Below you can see an example how to override a converter `LocaleBasedBigDecimalConverter`:
+You can also overrise any existing converters. You only need extends the core converter, after to add `@Specializes` annotation and `@Convert` with the specialized type. Below you can see an example how to override a converter `LocaleBasedBigDecimalConverter`:
 
 ~~~ 
 #!java
 @Specializes
+@Convert(BigDecimal.class)
 public class MyCustomBigDecimalConverter extends LocaleBasedBigDecimalConverter {
 	protected NumberFormat getNumberFormat() {
 		// your code here

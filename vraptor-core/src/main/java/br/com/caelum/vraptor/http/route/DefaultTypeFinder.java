@@ -16,6 +16,8 @@
  */
 package br.com.caelum.vraptor.http.route;
 
+import static br.com.caelum.vraptor.util.StringUtils.capitalize;
+
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -51,7 +53,7 @@ public class DefaultTypeFinder implements TypeFinder {
 	
 	@Override
 	public Map<String, Class<?>> getParameterTypes(Method method, String[] parameterPaths) {
-		Map<String,Class<?>> result = new HashMap<>();
+		Map<String,Class<?>> types = new HashMap<>();
 		Parameter[] parametersFor = provider.parametersFor(method);
 		for (String path : parameterPaths) {
 			for (Parameter parameter: parametersFor) {
@@ -61,19 +63,15 @@ public class DefaultTypeFinder implements TypeFinder {
 					for (int j = 1; j < items.length; j++) {
 						String item = items[j];
 						try {
-							type = new Mirror().on(type).reflect().method("get" + upperFirst(item)).withoutArgs().getReturnType();
+							type = new Mirror().on(type).reflect().method("get" + capitalize(item)).withoutArgs().getReturnType();
 						} catch (Exception e) {
 							throw new IllegalArgumentException("Parameters paths are invalid: " + Arrays.toString(parameterPaths) + " for method " + method, e);
 						}
 					}
-					result.put(path, type);
+					types.put(path, type);
 				}
 			}
 		}
-		return result;
+		return types;
 	}
-	private String upperFirst(String item) {
-		return item.substring(0, 1).toUpperCase() + item.substring(1);
-	}
-
 }

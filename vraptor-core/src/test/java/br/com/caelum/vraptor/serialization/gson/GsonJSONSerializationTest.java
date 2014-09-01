@@ -43,6 +43,7 @@ import org.junit.Test;
 import br.com.caelum.vraptor.environment.Environment;
 import br.com.caelum.vraptor.interceptor.DefaultTypeNameExtractor;
 import br.com.caelum.vraptor.serialization.JSONPSerialization;
+import br.com.caelum.vraptor.serialization.Serializee;
 import br.com.caelum.vraptor.util.test.MockInstanceImpl;
 
 import com.google.common.collect.ForwardingCollection;
@@ -83,7 +84,7 @@ public class GsonJSONSerializationTest {
 		jsonSerializers.add(new CollectionSerializer());
 		jsonSerializers.add(new EnumSerializer());
 
-		builder = new GsonBuilderWrapper(new MockInstanceImpl<>(jsonSerializers), new MockInstanceImpl<>(jsonDeserializers));
+		builder = new GsonBuilderWrapper(new MockInstanceImpl<>(jsonSerializers), new MockInstanceImpl<>(jsonDeserializers), new MockInstanceImpl<>(new Serializee()));
 		serialization = new GsonJSONSerialization(response, extractor, builder, environment);
 	}
 

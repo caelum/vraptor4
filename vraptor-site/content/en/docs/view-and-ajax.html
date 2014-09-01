@@ -302,21 +302,33 @@ To configure the JSON serialization you can create a class that extends `GsonJSO
 
 When serialiazing to JSON you can use the annotation 'SkipSerialization' to omit the serialization of a field or class.
 
+The following class was annotated with SkipSerialization, thus it's fields will never be serialized to JSON:
+
 ~~~ 
 #!java
 @SkipSerialization
 public class UserPrivateInfo {
-	String document;
-	String phone;
-	String address;
+	private String document;
+	private String phone;
+	private String address;
+	
+	// Getters and setters for all fields...
 }
+~~~ 
 
+In this another class, the field password will not be serialized. The info field will not be serialized either due to the UserPrivateInfo class was annotated with SkipSerialization:
+
+~~~ 
 public class User {
-	String name;
-	String login;
+	private String name;
+	private String login;
+	
 	@SkipSerialization
-	String password;
-	UserPrivateInfo info;
+	private String password;
+	
+	private UserPrivateInfo info;
+	
+	// Getters and setters for all fields...
 }
 ~~~ 
 
@@ -337,6 +349,8 @@ The obtained result is similar to:
 	"login": "john"
 }
 ~~~ 
+
+Note that the password field and the entire UserPrivateInfo wasn't serialized.
 
 
 ##Serializing Collections##

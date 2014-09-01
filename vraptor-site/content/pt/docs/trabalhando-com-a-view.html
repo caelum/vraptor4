@@ -301,21 +301,34 @@ Para configurar a serialização com JSON você pode criar uma classe que estend
 
 Na serialização JSON você pode utilizar a anotação 'SkipSerialization' para omitir a serialização de um campo ou de uma classe.
 
+A classe abaixo foi anotada com SkipSerialization, portanto os seus campos nunca serão serializados para JSON:
+
 ~~~ 
 #!java
 @SkipSerialization
 public class UserPrivateInfo {
-	String cpf;
-	String telefone;
-	String endereco;
+	private String cpf;
+	private String telefone;
+	private String endereco;
+	
+	// Getters e setters para os campos...
 }
+~~~ 
 
+Nesta outra classe, o campo senha não será serializado. O campo info também não será serializado pois a classe UserPrivateInfo foi anotado com SkipSerialization:
+
+~~~ 
+#!java
 public class User {
-	String nome;
-	String login;
+	private String nome;
+	private String login;
+	
 	@SkipSerialization
-	String senha;
-	UserPrivateInfo info;
+	private String senha;
+	
+	private UserPrivateInfo info;
+	
+	// Getters e setters para os campos...
 }
 ~~~ 
 
@@ -336,6 +349,8 @@ O resultado obtido é semelhante à:
 	"login": "joao"
 }
 ~~~ 
+
+Perceba que o campo senha e todo o UserPrivateInfo não foram serializados.
 
 ##Serializando Collections##
 

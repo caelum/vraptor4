@@ -65,13 +65,13 @@ public class MessageList extends ForwardingList<Message> {
 	 * Return all messages by category. This method can useful if you want to get messages from a specific
 	 * category.
 	 */
-	public ErrorListItem from(final String category) {
+	public MessageListItem from(final String category) {
 		List<String> messages = FluentIterable.from(delegate)
 			.filter(byCategory(category))
 			.transform(toMessageString())
 			.toList();
 
-		return new ErrorListItem(messages);
+		return new MessageListItem(messages);
 	}
 
 	private Predicate<Message> byCategory(final String category) {
@@ -97,10 +97,10 @@ public class MessageList extends ForwardingList<Message> {
 		return delegate;
 	}
 
-	public class ErrorListItem extends ForwardingList<String> {
+	public class MessageListItem extends ForwardingList<String> {
 		private final List<String> delegate;
 
-		public ErrorListItem(List<String> delegate) {
+		public MessageListItem(List<String> delegate) {
 			this.delegate = delegate;
 		}
 

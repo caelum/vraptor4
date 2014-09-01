@@ -19,8 +19,6 @@ package br.com.caelum.vraptor.validator;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.empty;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
@@ -33,7 +31,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -217,28 +214,6 @@ public class DefaultValidatorTest {
 		assertThat(validator.getErrors().get(0).getMessage(), containsString("not null"));
 	}
 
-	@Test
-	public void shouldGroupMessagesFromSameCategory() {
-		validator.add(new SimpleMessage("client.name", "not null"));
-		validator.add(new SimpleMessage("client.name", "not empty"));
-		validator.add(new SimpleMessage("client.email", "is not valid e-mail"));
-
-		Collection<String> errors = ((MessageList) validator.getErrors()).from("client.name");
-		assertThat(errors, hasSize(2));
-		assertThat(errors, hasItem("not null"));
-		assertThat(errors, hasItem("not empty"));
-		assertThat(errors, not(hasItem("is not valid e-mail")));
-	}
-
-	@Test
-	public void shouldDisplayMessagesJoiningWithCommas() {
-		validator.add(new SimpleMessage("client.name", "not null"));
-		validator.add(new SimpleMessage("client.name", "not empty"));
-
-		Collection<String> errors = ((MessageList) validator.getErrors()).from("client.name");
-		assertThat(errors.toString(), equalTo("not null, not empty"));
-	}
-	
 	@Test
 	public void shouldReturnEmptyCollectionIfBeanIsNull() {
 		validator.validate(null);

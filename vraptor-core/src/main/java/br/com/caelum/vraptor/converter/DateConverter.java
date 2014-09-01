@@ -37,6 +37,8 @@ import br.com.caelum.vraptor.Convert;
 @RequestScoped
 public class DateConverter implements Converter<Date> {
 
+	public static final String INVALID_MESSAGE_KEY = "is_not_a_valid_date";
+
 	private final Locale locale;
 
 	/** 
@@ -61,7 +63,7 @@ public class DateConverter implements Converter<Date> {
 			return getDateFormat().parse(value);
 
 		} catch (ParseException pe) {
-			throw new ConversionException(new ConversionMessage("is_not_a_valid_date", value));
+			throw new ConversionException(new ConversionMessage(INVALID_MESSAGE_KEY, value));
 		}
 	}
 

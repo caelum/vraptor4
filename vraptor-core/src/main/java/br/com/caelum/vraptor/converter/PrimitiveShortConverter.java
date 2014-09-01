@@ -32,6 +32,8 @@ import br.com.caelum.vraptor.Convert;
 @ApplicationScoped
 public class PrimitiveShortConverter implements Converter<Short> {
 	
+	public static final String INVALID_MESSAGE_KEY = "is_not_a_valid_integer";
+
 	@Override
 	public Short convert(String value, Class<? extends Short> type) {
 		if (isNullOrEmpty(value)) {
@@ -41,7 +43,7 @@ public class PrimitiveShortConverter implements Converter<Short> {
 		try {
 			return Short.parseShort(value);
 		} catch (NumberFormatException e) {
-			throw new ConversionException(new ConversionMessage("is_not_a_valid_integer", value));
+			throw new ConversionException(new ConversionMessage(INVALID_MESSAGE_KEY, value));
 		}
 	}
 

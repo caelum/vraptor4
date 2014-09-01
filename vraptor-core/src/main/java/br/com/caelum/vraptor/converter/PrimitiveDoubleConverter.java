@@ -41,6 +41,8 @@ import br.com.caelum.vraptor.Convert;
 @RequestScoped
 public class PrimitiveDoubleConverter implements Converter<Double> {
 
+	public static final String INVALID_MESSAGE_KEY = "is_not_a_valid_number";
+
 	private final Locale locale;
 
 	/** 
@@ -65,7 +67,7 @@ public class PrimitiveDoubleConverter implements Converter<Double> {
 		try {
 			return getNumberFormat().parse(value).doubleValue();
 		} catch (ParseException e) {
-			throw new ConversionException(new ConversionMessage("is_not_a_valid_number", value));
+			throw new ConversionException(new ConversionMessage(INVALID_MESSAGE_KEY, value));
 		}
 	}
 	

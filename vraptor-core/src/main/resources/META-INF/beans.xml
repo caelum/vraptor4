@@ -5,10 +5,6 @@
 	version="1.1" bean-discovery-mode="all">
 
 	<scan>
-		<exclude name="br.com.caelum.vraptor.converter.jodatime.*">
-			<if-class-not-available name="org.joda.time.LocalDate"/>
-		</exclude>
-
 		<exclude name="br.com.caelum.vraptor.observer.upload.CommonsUploadMultipartObserver">
 			<if-class-not-available name="org.apache.commons.fileupload.FileItem"/>
 		</exclude>

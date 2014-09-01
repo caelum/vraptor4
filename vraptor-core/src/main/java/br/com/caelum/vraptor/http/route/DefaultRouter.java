@@ -26,7 +26,6 @@ import java.util.Collections;
 import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.concurrent.Callable;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -44,6 +43,7 @@ import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.proxy.Proxifier;
 
 import com.google.common.base.Predicate;
+import com.google.common.base.Supplier;
 import com.google.common.collect.FluentIterable;
 
 /**
@@ -162,9 +162,9 @@ public class DefaultRouter implements Router {
 		final Class<?> rawtype = proxifier.isProxyType(type) ? type.getSuperclass() : type;
 		final Invocation invocation = new Invocation(rawtype, method);
 
-		Route route = cache.fetch(invocation, new Callable<Route>() {
+		Route route = cache.fetch(invocation, new Supplier<Route>() {
 			@Override
-			public Route call() throws Exception {
+			public Route get() {
 				return FluentIterable.from(routes).filter(canHandle(rawtype, method))
 					.first().or(NULL);
 			}

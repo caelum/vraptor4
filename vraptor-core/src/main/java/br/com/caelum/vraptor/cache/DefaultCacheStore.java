@@ -17,12 +17,13 @@ package br.com.caelum.vraptor.cache;
 
 import static com.google.common.base.Throwables.propagateIfPossible;
 
-import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 import javax.enterprise.context.Dependent;
 import javax.enterprise.inject.Default;
+
+import com.google.common.base.Supplier;
 
 @Default
 @Dependent
@@ -31,10 +32,10 @@ public class DefaultCacheStore<K,V> implements CacheStore<K,V> {
 	private final ConcurrentMap<K,V> cache = new ConcurrentHashMap<>();
 
 	@Override
-	public V fetch(K key, Callable<V> valueProvider) {
+	public V fetch(K key, Supplier<V> valueProvider) {
 		if (!cache.containsKey(key)){
 			try {
-				V value = valueProvider.call();
+				V value = valueProvider.get();
 				cache.put(key, value);
 				return value;
 			} catch (Exception e) {

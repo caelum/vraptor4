@@ -15,8 +15,6 @@
  */
 package br.com.caelum.vraptor.core;
 
-import java.util.concurrent.Callable;
-
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
@@ -29,6 +27,8 @@ import br.com.caelum.vraptor.interceptor.InterceptorAcceptsExecutor;
 import br.com.caelum.vraptor.interceptor.InterceptorExecutor;
 import br.com.caelum.vraptor.interceptor.StepInvoker;
 import br.com.caelum.vraptor.ioc.Container;
+
+import com.google.common.base.Supplier;
 
 /**
  * @author Lucas Cavalcanti
@@ -67,9 +67,9 @@ public class DefaultInterceptorHandlerFactory implements InterceptorHandlerFacto
 
 	@Override
 	public InterceptorHandler handlerFor(final Class<?> type) {
-		return cachedHandlers.fetch(type, new Callable<InterceptorHandler>() {
+		return cachedHandlers.fetch(type, new Supplier<InterceptorHandler>() {
 			@Override
-			public InterceptorHandler call() throws Exception {
+			public InterceptorHandler get() {
 				if(type.isAnnotationPresent(Intercepts.class) && !Interceptor.class.isAssignableFrom(type)){
 					return new AspectStyleInterceptorHandler(type, stepInvoker, container, customAcceptsExecutor,
 							acceptsExecutor, interceptorExecutor);

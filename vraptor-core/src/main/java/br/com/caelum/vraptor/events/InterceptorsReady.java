@@ -15,6 +15,8 @@
  */
 package br.com.caelum.vraptor.events;
 
+import javax.enterprise.inject.Vetoed;
+
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.observer.RequestHandlerObserver;
@@ -26,6 +28,7 @@ import br.com.caelum.vraptor.observer.RequestHandlerObserver;
  * @author Rodrigo Turini
  * @author Victor Kendy Harada
  */
+@Vetoed
 public class InterceptorsReady {
 
 	private ControllerMethod method;

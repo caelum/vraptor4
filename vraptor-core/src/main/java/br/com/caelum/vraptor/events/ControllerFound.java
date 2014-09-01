@@ -15,9 +15,12 @@
  */
 package br.com.caelum.vraptor.events;
 
+import javax.enterprise.inject.Vetoed;
+
 import br.com.caelum.vraptor.controller.BeanClass;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 
+@Vetoed
 public class ControllerFound {
 
 	private final ControllerMethod method;

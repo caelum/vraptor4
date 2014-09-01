@@ -15,6 +15,8 @@
  */
 package br.com.caelum.vraptor.events;
 
+import javax.enterprise.inject.Vetoed;
+
 import br.com.caelum.vraptor.controller.DefaultControllerNotFoundHandler;
 
 /**
@@ -23,6 +25,7 @@ import br.com.caelum.vraptor.controller.DefaultControllerNotFoundHandler;
  * 
  * @author Chico Sokol
  */
+@Vetoed
 public class ControllerNotFound {
 
 }

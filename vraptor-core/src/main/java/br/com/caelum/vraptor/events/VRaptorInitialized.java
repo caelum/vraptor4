@@ -15,8 +15,10 @@
  */
 package br.com.caelum.vraptor.events;
 
+import javax.enterprise.inject.Vetoed;
 import javax.servlet.ServletContext;
 
+@Vetoed
 public class VRaptorInitialized {
 
 	private final ServletContext servletContext;

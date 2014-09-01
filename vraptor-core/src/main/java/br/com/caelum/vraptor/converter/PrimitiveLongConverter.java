@@ -33,6 +33,8 @@ import br.com.caelum.vraptor.Convert;
 @ApplicationScoped
 public class PrimitiveLongConverter implements Converter<Long> {
 
+	public static final String INVALID_MESSAGE_KEY = "is_not_a_valid_number";
+
 	@Override
 	public Long convert(String value, Class<? extends Long> type) {
 		if (isNullOrEmpty(value)) {
@@ -42,7 +44,7 @@ public class PrimitiveLongConverter implements Converter<Long> {
 		try {
 			return Long.parseLong(value);
 		} catch (NumberFormatException e) {
-			throw new ConversionException(new ConversionMessage("is_not_a_valid_integer", value));
+			throw new ConversionException(new ConversionMessage(INVALID_MESSAGE_KEY, value));
 		}
 	}
 

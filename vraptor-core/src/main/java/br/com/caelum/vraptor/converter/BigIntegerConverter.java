@@ -33,6 +33,8 @@ import br.com.caelum.vraptor.Convert;
 @ApplicationScoped
 public class BigIntegerConverter implements Converter<BigInteger> {
 
+	public static final String INVALID_MESSAGE_KEY = "is_not_a_valid_number";
+
 	@Override
 	public BigInteger convert(String value, Class<? extends BigInteger> type) {
 		if (isNullOrEmpty(value)) {
@@ -42,7 +44,7 @@ public class BigIntegerConverter implements Converter<BigInteger> {
 		try {
 			return new BigInteger(value);
 		} catch (NumberFormatException e) {
-			throw new ConversionException(new ConversionMessage("is_not_a_valid_integer", value));
+			throw new ConversionException(new ConversionMessage(INVALID_MESSAGE_KEY, value));
 		}
 
 	}

@@ -32,6 +32,8 @@ import br.com.caelum.vraptor.Convert;
 @ApplicationScoped
 public class ByteConverter implements Converter<Byte> {
 
+	public static final String INVALID_MESSAGE_KEY = "is_not_a_valid_number";
+
 	@Override
 	public Byte convert(String value, Class<? extends Byte> type) {
 		if (isNullOrEmpty(value)) {
@@ -41,7 +43,7 @@ public class ByteConverter implements Converter<Byte> {
 		try {
 			return Byte.valueOf(value);
 		} catch (NumberFormatException e) {
-			throw new ConversionException(new ConversionMessage("is_not_a_valid_integer", value));
+			throw new ConversionException(new ConversionMessage(INVALID_MESSAGE_KEY, value));
 		}
 	}
 

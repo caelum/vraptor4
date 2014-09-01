@@ -48,7 +48,7 @@ public class PrimitiveShortConverterTest {
 			converter.convert("---", short.class);
 			fail("should throw an exception");
 		} catch (ConversionException e) {
-			assertThat(e.getValidationMessage(), VRaptorMatchers.hasMessage("--- is not a valid integer."));
+			assertThat(e.getValidationMessage(), VRaptorMatchers.hasMessage("--- is not a valid number."));
 		}
 	}
 

@@ -37,6 +37,9 @@ import br.com.caelum.vraptor.Convert;
 @Convert(Boolean.class)
 @ApplicationScoped
 public class BooleanConverter implements Converter<Boolean> {
+
+	private static final String INVALID_MESSAGE_KEY = "is_not_a_valid_boolean";
+
 	private static final Set<String> IS_TRUE  = newHashSet("TRUE", "1", "YES", "Y", "ON");
 	private static final Set<String> IS_FALSE = newHashSet("FALSE", "0", "NO", "N", "OFF");
 
@@ -54,7 +57,7 @@ public class BooleanConverter implements Converter<Boolean> {
 			return false;
 		}
 
-		throw new ConversionException(new ConversionMessage("is_not_a_valid_boolean", value));
+		throw new ConversionException(new ConversionMessage(INVALID_MESSAGE_KEY, value));
 	}
 
 	private boolean matches(Set<String> words, String value) {

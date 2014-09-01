@@ -184,7 +184,7 @@ public class IogiParametersProviderTest extends ParametersProviderTest {
 		getParameters(setId);
 
 		assertThat(errors, hasSize(1));
-		assertThat(errors.get(0), hasMessage("asdf is not a valid integer."));
+		assertThat(errors.get(0), hasMessage("asdf is not a valid number."));
 		assertThat(errors.get(0).getCategory(), is("xyz"));
 	}
 

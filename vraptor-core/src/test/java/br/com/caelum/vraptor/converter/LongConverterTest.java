@@ -48,7 +48,7 @@ public class LongConverterTest {
 			converter.convert("---", long.class);
 			fail("should throw an exception");
 		} catch (ConversionException e) {
-			assertThat(e.getValidationMessage(), hasMessage("--- is not a valid integer."));
+			assertThat(e.getValidationMessage(), hasMessage("--- is not a valid number."));
 		}
 	}
 

@@ -40,6 +40,8 @@ import br.com.caelum.vraptor.Convert;
 @RequestScoped
 public class FloatConverter implements Converter<Float> {
 
+	public static final String INVALID_MESSAGE_KEY = "is_not_a_valid_number";
+
 	private final Locale locale;
 
 	/** 
@@ -63,7 +65,7 @@ public class FloatConverter implements Converter<Float> {
 		try {
 			return getNumberFormat().parse(value).floatValue();
 		} catch (ParseException e) {
-			throw new ConversionException(new ConversionMessage("is_not_a_valid_number", value));
+			throw new ConversionException(new ConversionMessage(INVALID_MESSAGE_KEY, value));
 		}
 	}
 	

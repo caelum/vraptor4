@@ -38,6 +38,8 @@ import br.com.caelum.vraptor.Convert;
 @RequestScoped
 public class CalendarConverter implements Converter<Calendar> {
 
+	public static final String INVALID_MESSAGE_KEY = "is_not_a_valid_date";
+
 	private final Locale locale;
 
 	/** 
@@ -64,7 +66,7 @@ public class CalendarConverter implements Converter<Calendar> {
 			calendar.setTime(date);
 			return calendar;
 		} catch (ParseException e) {
-			throw new ConversionException(new ConversionMessage("is_not_a_valid_date", value));
+			throw new ConversionException(new ConversionMessage(INVALID_MESSAGE_KEY, value));
 		}
 	}
 

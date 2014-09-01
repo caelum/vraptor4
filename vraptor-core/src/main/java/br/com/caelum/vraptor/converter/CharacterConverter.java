@@ -32,6 +32,8 @@ import br.com.caelum.vraptor.Convert;
 @ApplicationScoped
 public class CharacterConverter implements Converter<Character> {
 
+	public static final String INVALID_MESSAGE_KEY = "is_not_a_valid_character";
+
 	@Override
 	public Character convert(String value, Class<? extends Character> type) {
 		if (isNullOrEmpty(value)) {
@@ -39,7 +41,7 @@ public class CharacterConverter implements Converter<Character> {
 		}
 
 		if (value.length() != 1) {
-			throw new ConversionException(new ConversionMessage("is_not_a_valid_character", value));
+			throw new ConversionException(new ConversionMessage(INVALID_MESSAGE_KEY, value));
 		}
 
 		return value.charAt(0);

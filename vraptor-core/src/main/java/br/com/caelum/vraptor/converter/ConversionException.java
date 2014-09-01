@@ -17,6 +17,8 @@
 
 package br.com.caelum.vraptor.converter;
 
+import javax.enterprise.inject.Vetoed;
+
 import br.com.caelum.vraptor.validator.Message;
 
 /**
@@ -24,6 +26,7 @@ import br.com.caelum.vraptor.validator.Message;
  *
  * @author guilherme silveira
  */
+@Vetoed
 public class ConversionException extends IllegalArgumentException {
 
 	private static final long serialVersionUID = 8817715363221616696L;

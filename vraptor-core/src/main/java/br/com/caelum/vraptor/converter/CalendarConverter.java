@@ -24,8 +24,10 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-import javax.enterprise.context.RequestScoped;
+import javax.annotation.Priority;
+import javax.enterprise.inject.Alternative;
 import javax.inject.Inject;
+import javax.interceptor.Interceptor;
 
 import br.com.caelum.vraptor.Convert;
 
@@ -35,7 +37,8 @@ import br.com.caelum.vraptor.Convert;
  * @author Guilherme Silveira
  */
 @Convert(Calendar.class)
-@RequestScoped
+@Alternative
+@Priority(Interceptor.Priority.LIBRARY_BEFORE)
 public class CalendarConverter implements Converter<Calendar> {
 
 	public static final String INVALID_MESSAGE_KEY = "is_not_a_valid_date";

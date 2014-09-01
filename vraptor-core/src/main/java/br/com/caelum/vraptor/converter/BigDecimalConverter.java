@@ -24,8 +24,10 @@ import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.Locale;
 
-import javax.enterprise.context.RequestScoped;
+import javax.annotation.Priority;
+import javax.enterprise.inject.Alternative;
 import javax.inject.Inject;
+import javax.interceptor.Interceptor;
 
 import br.com.caelum.vraptor.Convert;
 
@@ -36,8 +38,9 @@ import br.com.caelum.vraptor.Convert;
  * @author Otávio Scherer Garcia
  * @since 3.1.2
  */
+@Alternative
+@Priority(Interceptor.Priority.LIBRARY_BEFORE)
 @Convert(BigDecimal.class)
-@RequestScoped
 public class BigDecimalConverter implements Converter<BigDecimal> {
 
 	private static final String INVALID_MESSAGE_KEY = "is_not_a_valid_number";

@@ -36,6 +36,7 @@ import br.com.caelum.vraptor.serialization.DefaultRepresentationResult;
 import br.com.caelum.vraptor.serialization.JSONSerialization;
 import br.com.caelum.vraptor.serialization.RepresentationResult;
 import br.com.caelum.vraptor.serialization.Serialization;
+import br.com.caelum.vraptor.serialization.Serializee;
 import br.com.caelum.vraptor.serialization.XMLSerialization;
 import br.com.caelum.vraptor.serialization.gson.GsonBuilderWrapper;
 import br.com.caelum.vraptor.serialization.gson.GsonJSONSerialization;
@@ -86,7 +87,7 @@ public class MockSerializationResult extends MockResult {
 	public MockSerializationResult() {
 		this(new JavassistProxifier(), XStreamBuilderImpl.cleanInstance(),
 				new GsonBuilderWrapper(new MockInstanceImpl<>(new ArrayList<JsonSerializer<?>>()), 
-						new MockInstanceImpl<>(new ArrayList<JsonDeserializer<?>>()))
+						new MockInstanceImpl<>(new ArrayList<JsonDeserializer<?>>()), new MockInstanceImpl<>(new Serializee()))
 		);
 	}
 	

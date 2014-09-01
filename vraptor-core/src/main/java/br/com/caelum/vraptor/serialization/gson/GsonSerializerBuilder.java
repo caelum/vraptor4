@@ -20,6 +20,7 @@ import br.com.caelum.vraptor.serialization.Serializee;
 import com.google.gson.ExclusionStrategy;
 
 public interface GsonSerializerBuilder extends GsonInterfaceBuilder {
+	
 	Serializee getSerializee();
 
 	boolean isWithoutRoot();

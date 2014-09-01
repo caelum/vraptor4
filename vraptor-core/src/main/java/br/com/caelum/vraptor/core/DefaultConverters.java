@@ -20,7 +20,6 @@ package br.com.caelum.vraptor.core;
 import static com.google.common.base.Preconditions.checkState;
 
 import java.util.LinkedList;
-import java.util.concurrent.Callable;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -36,6 +35,7 @@ import br.com.caelum.vraptor.converter.Converter;
 import br.com.caelum.vraptor.ioc.Container;
 
 import com.google.common.base.Predicate;
+import com.google.common.base.Supplier;
 import com.google.common.collect.FluentIterable;
 
 @ApplicationScoped
@@ -81,9 +81,9 @@ public class DefaultConverters implements Converters {
 	}
 
 	private Class<? extends Converter<?>> findConverterType(final Class<?> clazz) {
-		return cache.fetch(clazz, new Callable<Class<? extends Converter<?>>>() {
+		return cache.fetch(clazz, new Supplier<Class<? extends Converter<?>>>() {
 			@Override
-			public Class<? extends Converter<?>> call() throws Exception {
+			public Class<? extends Converter<?>> get() {
 				return FluentIterable.from(classes).filter(matchConverter(clazz))
 						.first().or(NullConverter.class);
 			}

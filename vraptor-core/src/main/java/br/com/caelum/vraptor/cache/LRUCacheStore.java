@@ -20,9 +20,10 @@ import static com.google.common.base.Throwables.propagateIfPossible;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.concurrent.Callable;
 
 import javax.enterprise.inject.Vetoed;
+
+import com.google.common.base.Supplier;
 
 /**
  * A LRU cache based on LinkedHashMap.
@@ -47,10 +48,10 @@ public class LRUCacheStore<K, V> extends LinkedHashMap<K, V> implements CacheSto
 	}
 
 	@Override
-	public V fetch(K key, Callable<V> valueProvider) {
+	public V fetch(K key, Supplier<V> valueProvider) {
 		if (!this.containsKey(key)){
 			try {
-				V value = valueProvider.call();
+				V value = valueProvider.get();
 				put(key, value);
 				return value;
 			} catch (Exception e) {

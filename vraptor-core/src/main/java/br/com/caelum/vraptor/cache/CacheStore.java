@@ -15,7 +15,7 @@
  */
 package br.com.caelum.vraptor.cache;
 
-import java.util.concurrent.Callable;
+import com.google.common.base.Supplier;
 
 /**
  *
@@ -51,6 +51,6 @@ public interface CacheStore<K,V> {
 	 * @param valueProvider
 	 * @return the stored or the new value for the provided key.
 	 */
-	public V fetch(K key, Callable<V> valueProvider);
+	public V fetch(K key, Supplier<V> valueProvider);
 
 }

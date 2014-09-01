@@ -19,7 +19,6 @@ package br.com.caelum.vraptor.view;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -31,6 +30,7 @@ import br.com.caelum.vraptor.cache.CacheStore;
 import br.com.caelum.vraptor.cache.LRU;
 
 import com.google.common.base.Function;
+import com.google.common.base.Supplier;
 import com.google.common.collect.FluentIterable;
 
 /**
@@ -78,9 +78,9 @@ public class DefaultAcceptHeaderToFormat implements AcceptHeaderToFormat {
 			return DEFAULT_FORMAT;
 		}
 
-		return acceptToFormatCache.fetch(acceptHeader, new Callable<String>() {
+		return acceptToFormatCache.fetch(acceptHeader, new Supplier<String>() {
 			@Override
-			public String call() throws Exception {
+			public String get() {
 				return chooseMimeType(acceptHeader);
 			}
 		});

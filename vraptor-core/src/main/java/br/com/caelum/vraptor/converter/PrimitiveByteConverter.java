@@ -33,7 +33,7 @@ import br.com.caelum.vraptor.Convert;
 @ApplicationScoped
 public class PrimitiveByteConverter implements Converter<Byte> {
 
-	public static final String INVALID_MESSAGE_KEY = "is_not_a_valid_integer";
+	public static final String INVALID_MESSAGE_KEY = "is_not_a_valid_number";
 
 	@Override
 	public Byte convert(String value, Class<? extends Byte> type) {

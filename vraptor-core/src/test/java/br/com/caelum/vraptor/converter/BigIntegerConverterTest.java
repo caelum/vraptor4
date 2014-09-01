@@ -54,7 +54,7 @@ public class BigIntegerConverterTest {
 		try {
 			converter.convert("2.3", BigInteger.class);
 		} catch (ConversionException e) {
-			assertThat(e.getValidationMessage(), hasMessage("2.3 is not a valid integer."));
+			assertThat(e.getValidationMessage(), hasMessage("2.3 is not a valid number."));
 		}
 	}
 
@@ -64,7 +64,7 @@ public class BigIntegerConverterTest {
 			converter.convert("---", BigInteger.class);
 			fail("should throw an exception");
 		} catch (ConversionException e) {
-			assertThat(e.getValidationMessage(), hasMessage("--- is not a valid integer."));
+			assertThat(e.getValidationMessage(), hasMessage("--- is not a valid number."));
 		}
 	}
 

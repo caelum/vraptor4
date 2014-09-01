@@ -32,7 +32,7 @@ import br.com.caelum.vraptor.Convert;
 @ApplicationScoped
 public class PrimitiveShortConverter implements Converter<Short> {
 	
-	public static final String INVALID_MESSAGE_KEY = "is_not_a_valid_integer";
+	public static final String INVALID_MESSAGE_KEY = "is_not_a_valid_number";
 
 	@Override
 	public Short convert(String value, Class<? extends Short> type) {

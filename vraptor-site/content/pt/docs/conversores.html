@@ -150,14 +150,37 @@ public class PaisConverter implements Converter<Pais> {
 
 ##Sobrescrevendo o comportamento dos conversores existentes
 
-Você pode sobrescrever qualquer converter já existente no VRaptor. Para isso basta estender a classe anotando-a com `@Specializes`. Um bom exemplo para isso é sobrescrever o conversor `LocaleBasedBigDecimalConverter` para alterar o formato do valor.
+Você pode sobrescrever qualquer converter já existente no VRaptor. Para isso basta estender a classe anotando-a com `@Specializes` e também adicionando a anotação `@Convert` com o tipo que será especializado. Um bom exemplo para isso é sobrescrever o conversor `BigDecimalConverter` para alterar o formato do valor.
 
 ~~~ 
 #!java
 @Specializes
-public class MeuBigDecimalConverter extends LocaleBasedBigDecimalConverter {
-	protected NumberFormat getNumberFormat() { }
+@Convert(BigDecimal.class)
+public class MeuBigDecimalConverter extends BigDecimalConverter {
+
+	@Override
+	public BigDecimal convert(String value, Class<? extends BigDecimal> type) {
+		// seu código aqui
+		return super.convert(value, type);
+	}
+
 }
 ~~~ 
 
-E no método `getNumberFormat` você pode implementar a conversão que precisa para esse formato
+Você pode utilizar o `@Specializes` sempre que quiser reaproveitar a implementação da `superclasse`, caso contrário poderá criar um `@Alternative` com prioridade maior que a implementação do VRaptor. Como por exemplo:
+
+~~~ 
+#!java
+@Alternative
+@Priority(Interceptor.Priority.APPLICATION)
+@Convert(BigDecimal.class)
+public class MeuBigDecimalConverter implements Converter<BigDecimal>{
+
+	@Override
+	public BigDecimal convert(String value, Class<? extends BigDecimal> type) {
+		return // seu código aqui
+	}
+}
+~~~ 
+
+Por padrão todo `Converter` do VRaptor tem prioridade `LIBRARY_BEFORE`.

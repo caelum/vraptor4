@@ -108,7 +108,7 @@ public class LongConverter implements Converter<Long> {
 }
 ~~~ 
 
-In the following lines, you can see a LongConverter implementation, showing how simple it is to assemble all the information mentioned above:
+In the following lines, you can see a `LongConverter` implementation, showing how simple it is to assemble all the information mentioned above:
 
 ~~~ 
 #!java
@@ -154,16 +154,38 @@ public class CountryConverter implements Converter<Country> {
 ~~~ 
 
 
-##Overriding core converters
+##Overriding core converters 
 
-You can also overrise any existing converters. You only need extends the core converter and after to add `@Specializes` annotation. Below you can see an example how to override a converter `LocaleBasedBigDecimalConverter`:
+You can also overrise any existing converters. You only need extends the core converter, after to add `@Specializes` annotation and `@Convert` with the specialized type. Below you can see an example how to override a converter `BigDecimalConverter`:
 
 ~~~ 
 #!java
 @Specializes
-public class MyCustomBigDecimalConverter extends LocaleBasedBigDecimalConverter {
-	protected NumberFormat getNumberFormat() {
+@Convert(BigDecimal.class)
+public class CustomBigDecimalConverter extends BigDecimalConverter {
+	
+	@Override
+	public BigDecimal convert(String value, Class<? extends BigDecimal> type) {
 		// your code here
+		return super.convert(value, type);
 	}
 }
 ~~~ 
+
+You can use CDI's `@Specializes` always you desire to reuse the `superclasse` behavior, otherwise you can create an `@Alternative` with higher priority than VRaptor implementation, i.e:
+
+~~~ 
+#!java
+@Alternative
+@Priority(Interceptor.Priority.APPLICATION)
+@Convert(BigDecimal.class)
+public class CustomDecimalConverter implements Converter<BigDecimal>{
+
+	@Override
+	public BigDecimal convert(String value, Class<? extends BigDecimal> type) {
+		return // your code here
+	}
+}
+~~~ 
+
+All of VRaptor's `Converter`s have `LIBRARY_BEFORE` priority. 

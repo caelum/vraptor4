@@ -21,7 +21,6 @@
 				<include>src/</include>
 				<include>README*</include>
 				<include>LICENSE*</include>
-				<include>pom.xml</include>
 			</includes>
 		</fileSet>
 	</fileSets>

@@ -17,6 +17,8 @@ package br.com.caelum.vraptor.events;
 
 import java.lang.reflect.Type;
 
+import javax.enterprise.inject.Vetoed;
+
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.observer.ExecuteMethod;
@@ -28,6 +30,7 @@ import br.com.caelum.vraptor.observer.ExecuteMethod;
  * @author Rodrigo Turini
  * @since 4.0
  */
+@Vetoed
 public class MethodExecuted {
 
 	private final ControllerMethod controllerMethod;

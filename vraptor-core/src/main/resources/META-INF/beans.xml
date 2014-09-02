@@ -29,8 +29,5 @@
 			<if-class-not-available name="com.thoughtworks.paranamer.Paranamer"/>
 		</exclude>
 
-		<exclude name="br.com.caelum.vraptor.util.**" />
-
-		<exclude name="br.com.caelum.vraptor.events.*" />
 	</scan>
 </beans>

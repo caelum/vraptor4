@@ -19,6 +19,8 @@ import java.util.Collections;
 import java.util.Enumeration;
 import java.util.ResourceBundle;
 
+import javax.enterprise.inject.Vetoed;
+
 /**
  * Mocked resource bundle that only returns the own key. Can be useful if you need to test without load a
  * resource bundle.
@@ -26,6 +28,7 @@ import java.util.ResourceBundle;
  * @author Otávio Scherer Garcia
  * @since 4.0.0
  */
+@Vetoed
 public class MockResourceBundle extends ResourceBundle {
 
 	/**

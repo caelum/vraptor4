@@ -17,6 +17,7 @@
 
 package br.com.caelum.vraptor.events;
 
+import javax.enterprise.inject.Vetoed;
 import javax.servlet.FilterChain;
 
 import br.com.caelum.vraptor.http.MutableRequest;
@@ -29,6 +30,7 @@ import br.com.caelum.vraptor.http.MutableResponse;
  * @author Guilherme Silveira
  * @author Erich Egert
  */
+@Vetoed
 public interface RequestStarted {
 
 	public FilterChain getChain();

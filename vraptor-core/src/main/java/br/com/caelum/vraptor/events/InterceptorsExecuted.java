@@ -15,6 +15,8 @@
  */
 package br.com.caelum.vraptor.events;
 
+import javax.enterprise.inject.Vetoed;
+
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.core.InterceptorStack;
 
@@ -24,6 +26,7 @@ import br.com.caelum.vraptor.core.InterceptorStack;
  * @author Rodrigo Turini
  * @author Victor Harada
  */
+@Vetoed
 public class InterceptorsExecuted {
 
 	private ControllerMethod controllerMethod;

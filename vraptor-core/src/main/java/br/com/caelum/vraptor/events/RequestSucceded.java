@@ -15,9 +15,12 @@
  */
 package br.com.caelum.vraptor.events;
 
+import javax.enterprise.inject.Vetoed;
+
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.http.MutableResponse;
 
+@Vetoed
 public class RequestSucceded {
 
 	private final MutableRequest request;

@@ -43,11 +43,11 @@ import com.google.gson.JsonSerializer;
 public class GsonBuilderWrapper implements GsonSerializerBuilder, GsonDeserializerBuilder {
 	
 	private GsonBuilder builder = new GsonBuilder();
-	private Serializee serializee;
 	private boolean withoutRoot;
 	private String alias;
 	private List<ExclusionStrategy> exclusions;
 	
+	private final Serializee serializee;
 	private final Iterable<JsonSerializer<?>> jsonSerializers;
 	private final Iterable<JsonDeserializer<?>> jsonDeserializers;
 	

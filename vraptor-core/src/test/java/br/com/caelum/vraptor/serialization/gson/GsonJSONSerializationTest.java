@@ -42,6 +42,7 @@ import org.junit.Test;
 
 import br.com.caelum.vraptor.environment.Environment;
 import br.com.caelum.vraptor.interceptor.DefaultTypeNameExtractor;
+import br.com.caelum.vraptor.serialization.SkipSerialization;
 import br.com.caelum.vraptor.serialization.JSONPSerialization;
 import br.com.caelum.vraptor.util.test.MockInstanceImpl;
 
@@ -85,6 +86,33 @@ public class GsonJSONSerializationTest {
 
 		builder = new GsonBuilderWrapper(new MockInstanceImpl<>(jsonSerializers), new MockInstanceImpl<>(jsonDeserializers));
 		serialization = new GsonJSONSerialization(response, extractor, builder, environment);
+	}
+	
+	@SkipSerialization
+	public static class UserPrivateInfo {
+		String cpf;
+		
+		String phone;
+		
+		public UserPrivateInfo(String cpf, String phone) {
+			this.cpf = cpf;
+			this.phone = phone;
+		}
+	}
+	
+	public static class User {
+		String login;
+		
+		@SkipSerialization
+		String password;
+		
+		UserPrivateInfo info;
+		
+		public User(String login, String password, UserPrivateInfo info) {
+			this.login = login;
+			this.password = password;
+			this.info = info;
+		}
 	}
 
 	public static class Address {
@@ -303,6 +331,29 @@ public class GsonJSONSerializationTest {
 		assertThat(result(), not(containsString("\"price\"")));
 		assertThat(result(), not(containsString("12.99")));
 		assertThat(result(), not(containsString("15.0")));
+	}
+
+	@Test
+	public void shouldExcludeOnlyOmmitedFields() {
+		User user = new User("caelum", "pwd12345",
+			new UserPrivateInfo("123.456.789-00", "+55 (11) 1111-1111"));
+		serialization.from(user).recursive().serialize();
+
+		assertThat(result(), not(containsString("\"pwd12345\"")));
+		assertThat(result(), not(containsString("password")));
+		assertThat(result(), containsString("\"caelum\""));
+		assertThat(result(), containsString("login"));
+	}
+	
+	@Test
+	public void shouldExcludeOmmitedClasses() {
+		User user = new User("caelum", "pwd12345",
+			new UserPrivateInfo("123.456.789-00", "+55 (11) 1111-1111"));
+		serialization.from(user).recursive().serialize();
+
+		assertThat(result(), not(containsString("info")));
+		assertThat(result(), not(containsString("cpf")));
+		assertThat(result(), not(containsString("phone")));
 	}
 
 	static class WithAdvanced {

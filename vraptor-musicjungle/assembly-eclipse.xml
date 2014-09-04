@@ -48,8 +48,6 @@
 	<fileSets>
 		<fileSet>
 			<includes>
-				<include>.project</include>
-				<include>.classpath</include>
 				<include>LICENSE*</include>
 			</includes>
 		</fileSet>

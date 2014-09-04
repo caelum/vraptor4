@@ -6,17 +6,22 @@
 		<format>zip</format>
 	</formats>
 
+	<files>
+		<file>
+			<source>${project.build.directory}/pom-dist.xml</source>
+			<outputDirectory>/</outputDirectory>
+			<destName>pom.xml</destName>
+			<filtered>true</filtered>
+		</file>
+	</files>
+
 	<fileSets>
 		<fileSet>
 			<includes>
-				<include>.classpath</include>
-				<include>.project</include>
 				<include>src/</include>
 				<include>README*</include>
 				<include>LICENSE*</include>
-				<include>pom.xml</include>
 			</includes>
 		</fileSet>
 	</fileSets>
 </assembly>
-

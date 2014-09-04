@@ -1,9 +1,9 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>br.com.caelum</groupId>
+	<groupId>your.groupid</groupId>
 	<artifactId>vraptor-musicjungle</artifactId>
-	<version>4.1.0-RC1-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<packaging>war</packaging>
 
 	<description>Example application to use with VRaptor 4</description>
@@ -17,7 +17,7 @@
 		<dependency>
 			<groupId>br.com.caelum</groupId>
 			<artifactId>vraptor</artifactId>
-			<version>${project.version}</version>
+			<version>VRAPTOR_VERSION_HERE</version>
 		</dependency>
 
 		<dependency>
@@ -126,9 +126,7 @@
 			<artifactId>mockito-core</artifactId>
 			<version>1.9.5</version>
 			<scope>test</scope>
-	</dependency>
-			
-		
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -144,119 +142,14 @@
 					<target>1.7</target>
 				</configuration>
 			</plugin>
-			
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-war-plugin</artifactId>
-				<version>2.4</version>
-			</plugin>
-			
 			<plugin>
 				<groupId>org.apache.tomcat.maven</groupId>
 				<artifactId>tomcat7-maven-plugin</artifactId>
-				<version>2.2</version>
+				<version>2.1</version>
 				<configuration>
-					<path>/${project.build.finalName}</path>
-				</configuration>
-			</plugin>
-
-			<plugin>
-				<groupId>org.eclipse.jetty</groupId>
-				<artifactId>jetty-maven-plugin</artifactId>
-				<version>9.1.1.v20140108</version>
-				<configuration>
-					<webApp>
-						<contextPath>/${project.build.finalName}</contextPath>
-						<jettyEnvXml>${basedir}/src/main/webapp/WEB-INF/jetty-env.xml</jettyEnvXml>
-					</webApp>
-				</configuration>
-			</plugin>
-
-			<plugin>
-				<artifactId>maven-eclipse-plugin</artifactId>
-				<version>2.9</version>
-				<configuration>
-					<downloadSources>true</downloadSources>
-					<downloadJavadocs>true</downloadJavadocs>
-					<wtpversion>2.0</wtpversion>
-					<ajdtVersion>none</ajdtVersion>
-				</configuration>
-			</plugin>
-
-			<plugin>
-				<artifactId>maven-antrun-plugin</artifactId>
-				<version>1.7</version>
-				<executions>
-					<execution>
-						<phase>prepare-package</phase>
-						<configuration>
-							<target>
-								<copy file="${basedir}/pom-dist.xml" todir="${project.build.directory}" />
-								<replace file="${project.build.directory}/pom-dist.xml" token="VRAPTOR_VERSION_HERE" value="${project.version}" />
-							</target>
-						</configuration>
-						<goals>
-							<goal>run</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-
-			<plugin>
-				<artifactId>maven-assembly-plugin</artifactId>
-				<version>2.3</version>
-				<executions>
-					<execution>
-						<id>distribution</id>
-						<phase>package</phase>
-						<configuration>
-							<descriptors>
-								<descriptor>assembly.xml</descriptor>
-							</descriptors>
-						</configuration>
-						<goals>
-							<goal>assembly</goal>
-						</goals>
-					</execution>
-					<execution>
-						<id>distribution-eclipse</id>
-						<phase>package</phase>
-						<configuration>
-							<descriptors>
-								<descriptor>assembly-eclipse.xml</descriptor>
-							</descriptors>
-						</configuration>
-						<goals>
-							<goal>assembly</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-deploy-plugin</artifactId>
-				<version>2.8</version>
-				<configuration>
-					<skip>true</skip>
+					<path>/</path>
 				</configuration>
 			</plugin>
 		</plugins>
 	</build>
-	
-	<profiles>
-
-		<profile>
-			<id>wildfly</id>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.wildfly.plugins</groupId>
-						<artifactId>wildfly-maven-plugin</artifactId>
-						<version>1.0.2.Final</version>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-	</profiles>
 </project>

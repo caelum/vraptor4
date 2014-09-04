@@ -43,7 +43,7 @@ import com.google.gson.JsonSerializer;
 public class GsonBuilderWrapper implements GsonSerializerBuilder, GsonDeserializerBuilder {
 	
 	private GsonBuilder builder = new GsonBuilder();
-	private Instance<Serializee> serializeeInstance;
+	private Serializee serializee;
 	private boolean withoutRoot;
 	private String alias;
 	private List<ExclusionStrategy> exclusions;
@@ -54,11 +54,11 @@ public class GsonBuilderWrapper implements GsonSerializerBuilder, GsonDeserializ
 	@Inject
 	public GsonBuilderWrapper(@Any Instance<JsonSerializer<?>> jsonSerializers, 
 			@Any Instance<JsonDeserializer<?>> jsonDeserializers,
-			Instance<Serializee> serializeeInstance) {
+			Serializee serializee) {
 		this.jsonSerializers = jsonSerializers;
 		this.jsonDeserializers = jsonDeserializers;
-		this.serializeeInstance = serializeeInstance;
-		ExclusionStrategy exclusion = new Exclusions(serializeeInstance.get());
+		this.serializee = serializee;
+		ExclusionStrategy exclusion = new Exclusions(serializee);
 		exclusions = singletonList(exclusion);
 	}
 
@@ -108,7 +108,7 @@ public class GsonBuilderWrapper implements GsonSerializerBuilder, GsonDeserializ
 
 	@Override
 	public Serializee getSerializee() {
-		return serializeeInstance.get();
+		return serializee;
 	}
 
 	@Override

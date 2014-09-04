@@ -98,7 +98,7 @@ public class GsonDeserializerTest {
 		jsonDeserializers.add(new CalendarGsonConverter());
 		jsonDeserializers.add(new DateGsonConverter());
 
-		builder = new GsonBuilderWrapper(new MockInstanceImpl<>(jsonSerializers), new MockInstanceImpl<>(jsonDeserializers), new MockInstanceImpl<>(new Serializee()));
+		builder = new GsonBuilderWrapper(new MockInstanceImpl<>(jsonSerializers), new MockInstanceImpl<>(jsonDeserializers), new Serializee());
 		deserializer = new GsonDeserialization(builder, provider, request, container, deserializeeInstance);
 		BeanClass controllerClass = new DefaultBeanClass(DogController.class);
 
@@ -253,7 +253,7 @@ public class GsonDeserializerTest {
 		List<JsonSerializer<?>> serializers = new ArrayList<>();
 		deserializers.add(new DogDeserializer());
 
-		builder = new GsonBuilderWrapper(new MockInstanceImpl<>(serializers), new MockInstanceImpl<>(deserializers), new MockInstanceImpl<>(new Serializee()));
+		builder = new GsonBuilderWrapper(new MockInstanceImpl<>(serializers), new MockInstanceImpl<>(deserializers), new Serializee());
 		deserializer = new GsonDeserialization(builder, provider, request, container, deserializeeInstance);
 
 		InputStream stream = asStream("{'dog':{'name':'Renan Reis','age':'0'}}");

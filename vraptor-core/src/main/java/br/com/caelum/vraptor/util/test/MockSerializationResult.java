@@ -22,9 +22,6 @@ import java.util.ArrayList;
 
 import javax.enterprise.inject.Vetoed;
 
-import com.google.gson.JsonDeserializer;
-import com.google.gson.JsonSerializer;
-
 import br.com.caelum.vraptor.View;
 import br.com.caelum.vraptor.environment.Environment;
 import br.com.caelum.vraptor.environment.NullEnvironment;
@@ -45,6 +42,9 @@ import br.com.caelum.vraptor.serialization.xstream.XStreamBuilder;
 import br.com.caelum.vraptor.serialization.xstream.XStreamBuilderImpl;
 import br.com.caelum.vraptor.serialization.xstream.XStreamXMLSerialization;
 import br.com.caelum.vraptor.view.EmptyResult;
+
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonSerializer;
 
 /**
  *
@@ -87,7 +87,7 @@ public class MockSerializationResult extends MockResult {
 	public MockSerializationResult() {
 		this(new JavassistProxifier(), XStreamBuilderImpl.cleanInstance(),
 				new GsonBuilderWrapper(new MockInstanceImpl<>(new ArrayList<JsonSerializer<?>>()), 
-						new MockInstanceImpl<>(new ArrayList<JsonDeserializer<?>>()), new MockInstanceImpl<>(new Serializee()))
+						new MockInstanceImpl<>(new ArrayList<JsonDeserializer<?>>()), new Serializee())
 		);
 	}
 	

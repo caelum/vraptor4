@@ -84,7 +84,7 @@ public class GsonJSONSerializationTest {
 		jsonSerializers.add(new CollectionSerializer());
 		jsonSerializers.add(new EnumSerializer());
 
-		builder = new GsonBuilderWrapper(new MockInstanceImpl<>(jsonSerializers), new MockInstanceImpl<>(jsonDeserializers), new MockInstanceImpl<>(new Serializee()));
+		builder = new GsonBuilderWrapper(new MockInstanceImpl<>(jsonSerializers), new MockInstanceImpl<>(jsonDeserializers), new Serializee());
 		serialization = new GsonJSONSerialization(response, extractor, builder, environment);
 	}
 

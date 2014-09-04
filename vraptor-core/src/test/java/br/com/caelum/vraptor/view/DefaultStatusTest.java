@@ -208,7 +208,7 @@ public class DefaultStatusTest {
 		List<JsonDeserializer<?>> gsonDeserializers = new ArrayList<>();
 		gsonSerializers.add(new MessageGsonConverter());
 
-		GsonSerializerBuilder gsonBuilder = new GsonBuilderWrapper(new MockInstanceImpl<>(gsonSerializers), new MockInstanceImpl<>(gsonDeserializers), new MockInstanceImpl<>(new Serializee()));
+		GsonSerializerBuilder gsonBuilder = new GsonBuilderWrapper(new MockInstanceImpl<>(gsonSerializers), new MockInstanceImpl<>(gsonDeserializers), new Serializee());
 		MockSerializationResult result = new MockSerializationResult(null, null, gsonBuilder) {
 			@Override
 			public <T extends View> T use(Class<T> view) {

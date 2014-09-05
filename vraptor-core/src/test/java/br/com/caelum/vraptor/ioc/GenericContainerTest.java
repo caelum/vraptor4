@@ -80,8 +80,6 @@ public abstract class GenericContainerTest {
 
 	private Container currentContainer;
 
-	protected abstract <T> T executeInsideRequest(WhatToDo<T> execution);
-
 	@Before
 	public void setup() throws Exception {
 		currentContainer = getCurrentContainer();
@@ -113,15 +111,9 @@ public abstract class GenericContainerTest {
 
 	@Test
 	public void shoudRegisterConvertersInConverters() {
-		executeInsideRequest(new WhatToDo<Converters>() {
-			@Override
-			public Converters execute(final int counter) {
-				Converters converters = currentContainer.instanceFor(Converters.class);
-				Converter<?> converter = converters.to(Void.class);
-				assertThat(converter, is(instanceOf(ConverterInTheClasspath.class)));
-				return null;
-			}
-		});
+		Converters converters = currentContainer.instanceFor(Converters.class);
+		Converter<?> converter = converters.to(Void.class);
+		assertThat(converter, is(instanceOf(ConverterInTheClasspath.class)));
 	}
 
 	/**
@@ -130,61 +122,46 @@ public abstract class GenericContainerTest {
 	@Test
 	public void shouldReturnAllDefaultDeserializers() {
 
-		executeInsideRequest(new WhatToDo<Void>(){
+		Deserializers deserializers = currentContainer.instanceFor(Deserializers.class);
+		List<String> types = asList("application/json", "json", "application/xml",
+			"xml", "text/xml", "application/x-www-form-urlencoded");
 
-			@Override
-			public Void execute(int counter) {
-
-				Deserializers deserializers = currentContainer.instanceFor(Deserializers.class);
-				List<String> types = asList("application/json", "json", "application/xml",
-					"xml", "text/xml", "application/x-www-form-urlencoded");
-
-				for (String type : types) {
-					assertThat("deserializer not found: " + type,
-							deserializers.deserializerFor(type, currentContainer), is(notNullValue()));
-				}
-				return null;
-			}
-		});
+		for (String type : types) {
+			assertThat("deserializer not found: " + type,
+					deserializers.deserializerFor(type, currentContainer), is(notNullValue()));
+		}
 	}
 
 	@Test
 	public void shouldReturnAllDefaultConverters() {
-		executeInsideRequest(new WhatToDo<Void>(){
-			@Override
-			public Void execute(int counter) {
-				Converters converters = currentContainer.instanceFor(Converters.class);
-
-				final HashMap<Class<?>, Class<?>> EXPECTED_CONVERTERS = new HashMap<Class<?>, Class<?>>() {
-					{
-						put(int.class, PrimitiveIntConverter.class);
-						put(long.class, PrimitiveLongConverter.class);
-						put(short.class, PrimitiveShortConverter.class);
-						put(byte.class, PrimitiveByteConverter.class);
-						put(double.class, PrimitiveDoubleConverter.class);
-						put(float.class, PrimitiveFloatConverter.class);
-						put(boolean.class, PrimitiveBooleanConverter.class);
-						put(Integer.class, IntegerConverter.class);
-						put(Long.class, LongConverter.class);
-						put(Short.class, ShortConverter.class);
-						put(Byte.class, ByteConverter.class);
-						put(Double.class, DoubleConverter.class);
-						put(Float.class, FloatConverter.class);
-						put(Boolean.class, BooleanConverter.class);
-						put(Calendar.class, CalendarConverter.class);
-						put(Date.class, DateConverter.class);
-						put(Enum.class, EnumConverter.class);
-					}
-					private static final long serialVersionUID = 8559316558416038474L;
-				};
-
-				for (Entry<Class<?>, Class<?>> entry : EXPECTED_CONVERTERS.entrySet()) {
-					Converter<?> converter = converters.to((Class<?>) entry.getKey());
-					assertThat(converter, is(instanceOf(entry.getValue())));
-				}
-				return null;
+		Converters converters = currentContainer.instanceFor(Converters.class);
+		final HashMap<Class<?>, Class<?>> EXPECTED_CONVERTERS = new HashMap<Class<?>, Class<?>>() {
+			{
+				put(int.class, PrimitiveIntConverter.class);
+				put(long.class, PrimitiveLongConverter.class);
+				put(short.class, PrimitiveShortConverter.class);
+				put(byte.class, PrimitiveByteConverter.class);
+				put(double.class, PrimitiveDoubleConverter.class);
+				put(float.class, PrimitiveFloatConverter.class);
+				put(boolean.class, PrimitiveBooleanConverter.class);
+				put(Integer.class, IntegerConverter.class);
+				put(Long.class, LongConverter.class);
+				put(Short.class, ShortConverter.class);
+				put(Byte.class, ByteConverter.class);
+				put(Double.class, DoubleConverter.class);
+				put(Float.class, FloatConverter.class);
+				put(Boolean.class, BooleanConverter.class);
+				put(Calendar.class, CalendarConverter.class);
+				put(Date.class, DateConverter.class);
+				put(Enum.class, EnumConverter.class);
 			}
-		});
+			private static final long serialVersionUID = 8559316558416038474L;
+		};
+
+		for (Entry<Class<?>, Class<?>> entry : EXPECTED_CONVERTERS.entrySet()) {
+			Converter<?> converter = converters.to((Class<?>) entry.getKey());
+			assertThat(converter, is(instanceOf(entry.getValue())));
+		}
 	}
 
 	@Test

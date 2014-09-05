@@ -64,7 +64,7 @@ public class DefaultControllerMethod implements ControllerMethod {
 	}
 
 	@Override
-    public <T extends Annotation> T getAnnotation(Class<T> annotationClass) {
+	public <T extends Annotation> T getAnnotation(Class<T> annotationClass) {
 		return method.getAnnotation(annotationClass);
 	}
 

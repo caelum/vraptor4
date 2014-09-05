@@ -21,6 +21,9 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.Objects;
 
+import javax.enterprise.inject.Vetoed;
+
+@Vetoed
 public class DefaultControllerMethod implements ControllerMethod {
 
 	private final BeanClass controller;

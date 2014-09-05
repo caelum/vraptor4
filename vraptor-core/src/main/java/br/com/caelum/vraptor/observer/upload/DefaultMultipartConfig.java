@@ -44,16 +44,18 @@ import org.slf4j.LoggerFactory;
 public class DefaultMultipartConfig implements MultipartConfig {
 
 	private final Logger logger = LoggerFactory.getLogger(DefaultMultipartConfig.class);
+
+	private static final int DEFAULT_SIZE_LIMIT = 2 * 1024 * 1024;
 	private Path tmpdir;
 
 	@Override
 	public long getSizeLimit() {
-		return 2 * 1024 * 1024;
+		return DEFAULT_SIZE_LIMIT;
 	}
 
 	@Override
 	public long getFileSizeLimit() {
-		return 2 * 1024 * 1024;
+		return DEFAULT_SIZE_LIMIT;
 	}
 
 	@Override

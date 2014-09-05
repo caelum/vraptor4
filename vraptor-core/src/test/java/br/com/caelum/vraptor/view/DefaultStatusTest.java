@@ -47,6 +47,7 @@ import br.com.caelum.vraptor.proxy.JavassistProxifier;
 import br.com.caelum.vraptor.serialization.DefaultRepresentationResult;
 import br.com.caelum.vraptor.serialization.JSONSerialization;
 import br.com.caelum.vraptor.serialization.Serialization;
+import br.com.caelum.vraptor.serialization.Serializee;
 import br.com.caelum.vraptor.serialization.gson.GsonBuilderWrapper;
 import br.com.caelum.vraptor.serialization.gson.GsonSerializerBuilder;
 import br.com.caelum.vraptor.serialization.gson.MessageGsonConverter;
@@ -207,7 +208,7 @@ public class DefaultStatusTest {
 		List<JsonDeserializer<?>> gsonDeserializers = new ArrayList<>();
 		gsonSerializers.add(new MessageGsonConverter());
 
-		GsonSerializerBuilder gsonBuilder = new GsonBuilderWrapper(new MockInstanceImpl<>(gsonSerializers), new MockInstanceImpl<>(gsonDeserializers));
+		GsonSerializerBuilder gsonBuilder = new GsonBuilderWrapper(new MockInstanceImpl<>(gsonSerializers), new MockInstanceImpl<>(gsonDeserializers), new Serializee());
 		MockSerializationResult result = new MockSerializationResult(null, null, gsonBuilder) {
 			@Override
 			public <T extends View> T use(Class<T> view) {

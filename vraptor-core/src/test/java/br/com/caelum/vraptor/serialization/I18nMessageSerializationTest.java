@@ -73,7 +73,7 @@ public class I18nMessageSerializationTest {
 		jsonSerializers.add(new CalendarGsonConverter());
 		jsonSerializers.add(new MessageGsonConverter());
 
-		GsonSerializerBuilder gsonBuilder =  new GsonBuilderWrapper(new MockInstanceImpl<>(jsonSerializers), new MockInstanceImpl<>(jsonDeserializers));
+		GsonSerializerBuilder gsonBuilder =  new GsonBuilderWrapper(new MockInstanceImpl<>(jsonSerializers), new MockInstanceImpl<>(jsonDeserializers), new Serializee());
 		GsonJSONSerialization jsonSerialization = new GsonJSONSerialization(response, extractor, gsonBuilder, environment);
 
 		Container container = mock(Container.class);

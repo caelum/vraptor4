@@ -26,15 +26,16 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import javax.enterprise.inject.Vetoed;
+import javax.enterprise.context.Dependent;
 
 import net.vidageek.mirror.dsl.Mirror;
 
 import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.Multimap;
 
-@Vetoed
+@Dependent
 public class Serializee {
+	
 	private Object root;
 	private Class<?> rootClass;
 	private Multimap<String, Class<?>> includes;

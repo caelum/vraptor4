@@ -45,7 +45,6 @@ public class DefaultMultipartConfig implements MultipartConfig {
 
 	private final Logger logger = LoggerFactory.getLogger(DefaultMultipartConfig.class);
 
-	private static final int DEFAULT_SIZE_LIMIT = 2 * 1024 * 1024;
 	private Path tmpdir;
 
 	@Override

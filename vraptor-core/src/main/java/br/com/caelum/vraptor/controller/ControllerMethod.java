@@ -36,4 +36,6 @@ public interface ControllerMethod {
 	boolean containsAnnotation(Class<? extends Annotation> annotation);
 
 	Annotation[] getAnnotations();
+
+	<T extends Annotation> T getAnnotation(Class<T> annotationClass);
 }

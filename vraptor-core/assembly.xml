@@ -33,6 +33,24 @@
 				<include>javax.interceptor:javax.interceptor-api</include>
 				<include>javax.enterprise:cdi-api</include>
 				<include>javax.ejb:javax.ejb-api</include>
+				<include>javax.servlet:jstl</include>
+			</includes>
+		</dependencySet>
+		
+		<dependencySet>
+			<unpack>false</unpack>
+			<outputDirectory>lib/weld</outputDirectory>
+			<scope>test</scope>
+			<includes>
+				<include>org.jboss.weld.se:weld-se-core</include>
+				<include>org.jboss.weld:weld-spi</include>
+				<include>org.jboss.weld:weld-api</include>
+				<include>org.jboss.weld:weld-core-impl</include>
+				<include>org.jboss.weld.servlet:weld-servlet-core</include>
+				<include>org.jboss.classfilewriter:jboss-classfilewriter</include>
+				<include>org.jboss.spec.javax.el:jboss-el-api_3.0_spec</include>
+				<include>org.jboss.spec.javax.interceptor:jboss-interceptors-api_1.2_spec</include>
+				<include>org.jboss.spec.javax.annotation:jboss-annotations-api_1.2_spec</include>
 			</includes>
 		</dependencySet>
 
@@ -54,6 +72,7 @@
 			<includes>
 				<include>javax.validation:validation-api</include>
 				<include>org.hibernate:hibernate-validator</include>
+				<include>org.hibernate:hibernate-validator-cdi</include>
 				<include>org.jboss.logging:jboss-logging</include>
 				<include>com.fasterxml:classmate</include>
 			</includes>

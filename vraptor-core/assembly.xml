@@ -33,6 +33,7 @@
 				<include>javax.interceptor:javax.interceptor-api</include>
 				<include>javax.enterprise:cdi-api</include>
 				<include>javax.ejb:javax.ejb-api</include>
+				<include>javax.servlet:jstl</include>
 			</includes>
 		</dependencySet>
 		

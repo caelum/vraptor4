@@ -17,6 +17,7 @@
 package br.com.caelum.vraptor.observer.upload;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
+import static org.apache.commons.fileupload.disk.DiskFileItemFactory.DEFAULT_SIZE_THRESHOLD;
 import static org.slf4j.LoggerFactory.getLogger;
 
 import java.io.IOException;
@@ -30,6 +31,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileItemFactory;
 import org.apache.commons.fileupload.FileUploadBase.SizeLimitExceededException;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
@@ -113,7 +115,7 @@ public class CommonsUploadMultipartObserver {
 	}
 
 	private boolean isNotEmpty(FileItem item) {
-		return item.getName().length() > 0;
+		return !item.getName().isEmpty();
 	}
 
 	/**
@@ -144,10 +146,8 @@ public class CommonsUploadMultipartObserver {
 	}
 
 	protected ServletFileUpload createServletFileUpload(MultipartConfig config) {
-		DiskFileItemFactory factory = new DiskFileItemFactory();
-		factory.setRepository(config.getDirectory());
-
-		logger.debug("Using repository {} for file upload", factory.getRepository());
+		FileItemFactory factory = new DiskFileItemFactory(DEFAULT_SIZE_THRESHOLD, config.getDirectory());
+		logger.debug("Using repository {} for file upload", config.getDirectory());
 
 		return new ServletFileUpload(factory);
 	}

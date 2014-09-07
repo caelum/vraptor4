@@ -15,11 +15,11 @@
  */
 package br.com.caelum.vraptor.core;
 
+import static br.com.caelum.vraptor.proxy.CDIProxies.extractRawTypeIfPossible;
 import static br.com.caelum.vraptor.view.Results.logic;
 import static br.com.caelum.vraptor.view.Results.page;
 import static br.com.caelum.vraptor.view.Results.status;
 import br.com.caelum.vraptor.Result;
-import br.com.caelum.vraptor.proxy.CDIProxies;
 import br.com.caelum.vraptor.view.Results;
 
 /**
@@ -59,19 +59,19 @@ public abstract class AbstractResult implements Result {
 	@Override
 	@SuppressWarnings("unchecked")
 	public <T> T redirectTo(T controller) {
-		return (T) redirectTo(CDIProxies.extractRawTypeIfPossible(controller.getClass()));
+		return (T) redirectTo((Class<T>) extractRawTypeIfPossible(controller.getClass()));
 	}
 
 	@Override
 	@SuppressWarnings("unchecked")
 	public <T> T forwardTo(T controller) {
-		return (T) forwardTo(CDIProxies.extractRawTypeIfPossible(controller.getClass()));
+		return (T) forwardTo((Class<T>) extractRawTypeIfPossible(controller.getClass()));
 	}
 
 	@Override
 	@SuppressWarnings("unchecked")
 	public <T> T of(T controller) {
-		return (T) of(CDIProxies.extractRawTypeIfPossible(controller.getClass()));
+		return (T) of((Class<T>) extractRawTypeIfPossible(controller.getClass()));
 	}
 
 	@Override

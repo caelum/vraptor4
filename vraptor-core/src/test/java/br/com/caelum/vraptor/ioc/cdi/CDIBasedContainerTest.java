@@ -38,9 +38,9 @@ public class CDIBasedContainerTest extends GenericContainerTest {
 
 	@Override
 	public void setup() throws Exception {
-		contexts.startRequestScope();
-		contexts.startSessionScope();
 		contexts.startApplicationScope();
+		contexts.startSessionScope();
+		contexts.startRequestScope();
 		initEvent.fire(new VRaptorInitialized(null));
 		super.setup();
 	}

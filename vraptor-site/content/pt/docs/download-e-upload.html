@@ -85,10 +85,11 @@ public void atualizaFoto(Perfil perfil, UploadedFile foto) {
 
 ##Sobrescrevendo as configurações de upload
 
-Você pode alterar as configurações de upload sobrescrevendo a classe `MultipartConfig`. O valor padrão para upload de arquivos é limitado a 2MB, 
-mas você pode facilmente alterar estes valores.
+Há duas formas para alterar as configurações de upload. 
 
-No exemplo abaixo é alterado o tamanho total permitido no upload (soma de todos os arquivos).
+A primeira forma é estendendo a classe `DefaultMultipartConfig`. Isto é útil quando você precisa alterar o diretório temporário de arquivos ou o tamanho máximo do upload de forma global.
+
+O valor padrão para o upload é de 2MB para cada arquivo, e o mesmo valor para a soma de todos os arquivos. Mas estes valores podem ser facilmente alterados como você pode ver no exemplo abaixo:
 
 ~~~
 #!java
@@ -96,27 +97,29 @@ No exemplo abaixo é alterado o tamanho total permitido no upload (soma de todos
 @ApplicationScoped
 public class CustomMultipartConfig extends DefaultMultipartConfig {
 
+	// alteramos o tamanho total do upload para 50MB
 	public long getSizeLimit() {
-		return 50 * 1024 * 1024; // 50MB
+		return 50 * 1024 * 1024;
 	}
 
+	// alteramos o tamanho do upload de cada arquivo para 20MB
+	public long getFileSizeLimit() {
+		return 20 * 1024 * 1024;
+	}
 }
 ~~~
 
-No exemplo a seguir podemos alterar o tamanho máximo permitido para cada arquivo:
+A segunda forma é usando a anotação `UploadSizeLimit`, que permite alterar a configuração do upload para um único método. No exemplo abaixo alteramos a configuração para permitir que cada arquivo tenha no máximo 10MB e o upload total tenha no máximo 40MB:
 
 ~~~
 #!java
-@Specializes
-@ApplicationScoped
-public class CustomMultipartConfig extends DefaultMultipartConfig {
-
-	public long getFileSizeLimit() {
-		return 50 * 1024 * 1024; // 50MB
-	}
-
+@UploadSizeLimit(sizeLimit=40 * 1024 * 1024, fileSizeLimit=10 * 1024 * 1024)
+public void atualizaFoto(Perfil perfil, UploadedFile foto) {
+	[...]
 }
 ~~~
+
+A configuração pela anotação tem maior prioridade em relação a configuração global. Você pode usar as duas, porém se um método possuir a anotação `UploadSizeLimit`, estes valores serão usados para validar o tamanho do upload, ignorando a configuração global.
 
 ##Alterando o formulário de envio
 

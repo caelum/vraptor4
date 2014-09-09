@@ -12,6 +12,7 @@ import javax.enterprise.context.RequestScoped;
 import javax.enterprise.inject.spi.CDI;
 import javax.inject.Inject;
 
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,12 +25,12 @@ public class CDIProxiesTest {
 
 	@Inject private AnyProxiableBean proxiable;
 	@Inject private NonProxiableBean nonProxiable;
+	private static Contexts contexts;
 	
 	@BeforeClass
 	public static void setUp() {
-		CDI.current()
-			.select(Contexts.class).get()
-			.startRequestScope();
+		contexts = CDI.current().select(Contexts.class).get();
+		contexts.startRequestScope();
 	}
 	
 	@Test
@@ -49,9 +50,12 @@ public class CDIProxiesTest {
 		NonProxiableBean bean = unproxifyIfPossible(nonProxiable);
 		assertThat(bean, equalTo(nonProxiable));
 	}
-
+	
+	@AfterClass
+	public static void afterClass() {
+		contexts.stopRequestScope();
+	}
 }
 
 @RequestScoped class AnyProxiableBean {}
-
 @Dependent class NonProxiableBean {}

@@ -84,10 +84,11 @@ public void updatePhoto(Profile profile, UploadedFile photo) {
 
 ##Overriding upload settings
 
-You can also change the default upload settings overriding the class `MultipartConfig`. As example, the default value for an 
-uploaded file is 2MB. But you can easily change this settings.
+If you want to change default upload settings, you can do using two ways. 
 
-In example below, we can change total allowable upload size (sum of all files).
+The first way is extending `DefaultMultipartConfig` class. This is useful if you want to change default temporary directory or max upload size.
+
+The default value for an uploaded file is 2MB. But you can easily change this settings as you can see below. In example below, we can change total allowable upload size for all files and for each file too:
 
 ~~~
 #!java
@@ -95,27 +96,28 @@ In example below, we can change total allowable upload size (sum of all files).
 @ApplicationScoped
 public class CustomMultipartConfig extends DefaultMultipartConfig {
 
+	// validates sum of all files
 	public long getSizeLimit() {
 		return 50 * 1024 * 1024; // 50MB
 	}
 
-}
-~~~
-
-In the following example we can change the maximum size allowed for each file:
-
-~~~
-#!java
-@Specializes
-@ApplicationScoped
-public class CustomMultipartConfig extends DefaultMultipartConfig {
-
+	// validates each size
 	public long getFileSizeLimit() {
 		return 50 * 1024 * 1024; // 50MB
 	}
 
 }
 ~~~
+
+The second way is using `UploadSizeLimit` annotation. This way allow you to change settings for only one method. In the example below we are configuring upload to allow only files less than 10MB and the total upload should less than 50MB:
+
+~~~ 
+#!java
+@UploadSizeLimit(sizeLimit=50 * 1024 * 1024, fileSizeLimit=10 * 1024 * 1024)
+public void updatePhoto(Profile profile, UploadedFile photo) {
+	[...]
+}
+~~~ 
 
 ##Changes in form
 

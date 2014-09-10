@@ -76,8 +76,11 @@ public class CommonsUploadMultipartObserver {
 		final Multimap<String, String> params = LinkedListMultimap.create();
 
 		ServletFileUpload uploader = createServletFileUpload(config);
-		uploader.setSizeMax(config.getSizeLimit());
-		uploader.setFileSizeMax(config.getFileSizeLimit());
+
+		UploadSizeLimit uploadSizeLimit = event.getMethod().getMethod().getAnnotation(UploadSizeLimit.class);
+		uploader.setSizeMax(uploadSizeLimit != null ? uploadSizeLimit.sizeLimit() : config.getSizeLimit());
+		uploader.setFileSizeMax(uploadSizeLimit != null ? uploadSizeLimit.fileSizeLimit() : config.getFileSizeLimit());
+		logger.debug("Setting file sizes: total={}, file={}", uploader.getSizeMax(), uploader.getFileSizeMax());
 
 		try {
 			final List<FileItem> items = uploader.parseRequest(request);

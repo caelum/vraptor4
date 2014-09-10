@@ -84,10 +84,11 @@ public void updatePhoto(Profile profile, UploadedFile photo) {
 
 ##Overriding upload settings
 
-You can also change the default upload settings overriding the class `MultipartConfig`. As example, the default value for an 
-uploaded file is 2MB. But you can easily change this settings.
+If you want to change default upload settings, you can do using two ways. 
 
-In example below, we can change total allowable upload size (sum of all files).
+The first way is extending `DefaultMultipartConfig` class. This is useful if you want to change default temporary directory or max upload size.
+
+The default value for an uploaded file is 2MB, and the same value for sum of all uploaded files. But you can easily change this settings as you can see below.
 
 ~~~
 #!java
@@ -95,27 +96,30 @@ In example below, we can change total allowable upload size (sum of all files).
 @ApplicationScoped
 public class CustomMultipartConfig extends DefaultMultipartConfig {
 
+	// validates sum of all files up to 50MB
 	public long getSizeLimit() {
-		return 50 * 1024 * 1024; // 50MB
+		return 50 * 1024 * 1024;
 	}
 
-}
-~~~
-
-In the following example we can change the maximum size allowed for each file:
-
-~~~
-#!java
-@Specializes
-@ApplicationScoped
-public class CustomMultipartConfig extends DefaultMultipartConfig {
-
+	// validates each file up to 20MB
 	public long getFileSizeLimit() {
-		return 50 * 1024 * 1024; // 50MB
+		return 20 * 1024 * 1024;
 	}
 
 }
 ~~~
+
+The second way is using `UploadSizeLimit` annotation. This way allow you to change settings for only one method. In the example below we are configuring upload to allow only files less than 10MB and the total upload should less than 40MB:
+
+~~~ 
+#!java
+@UploadSizeLimit(sizeLimit=40 * 1024 * 1024, fileSizeLimit=10 * 1024 * 1024)
+public void updatePhoto(Profile profile, UploadedFile photo) {
+	[...]
+}
+~~~ 
+
+The `UploadSizeLimit` have more priority than global configuration. You can use both, but if a method is annotated with this annotation, global values will ignored.
 
 ##Changes in form
 

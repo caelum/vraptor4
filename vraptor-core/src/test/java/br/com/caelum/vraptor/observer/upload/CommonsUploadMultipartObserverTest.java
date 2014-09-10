@@ -30,6 +30,7 @@ import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,6 +44,8 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import br.com.caelum.vraptor.controller.ControllerMethod;
+import br.com.caelum.vraptor.controller.DefaultControllerMethod;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.events.ControllerFound;
 import br.com.caelum.vraptor.http.InvalidParameterException;
@@ -62,16 +65,26 @@ public class CommonsUploadMultipartObserverTest {
 	@Mock private MutableRequest request;
 	@Mock private Validator validator;
 	@Mock private ServletFileUpload servletFileUpload;
+
 	private MultipartConfig config;
 	private CommonsUploadMultipartObserver observer;
 
+	private ControllerMethod uploadMethodController;
+	private ControllerMethod uploadMethodControllerWithAnnotation;
+
 	@Before
-	public void setup() {
+	public void setup() throws Exception {
 		MockitoAnnotations.initMocks(this);
 		config = new DefaultMultipartConfig();
 		when(request.getContentType()).thenReturn("multipart/form-data");
 		when(request.getMethod()).thenReturn("POST");
 		observer = spy(new CommonsUploadMultipartObserver());
+
+		Method uploadMethod = getClass().getDeclaredMethod("uploadMethod", UploadedFile.class);
+		Method uploadMethodWthAnnotation = getClass().getDeclaredMethod("uploadMethodWthAnnotation", UploadedFile.class);
+
+		uploadMethodController = DefaultControllerMethod.instanceFor(getClass(), uploadMethod);
+		uploadMethodControllerWithAnnotation = DefaultControllerMethod.instanceFor(getClass(), uploadMethodWthAnnotation);
 	}
 
 	@Test
@@ -87,6 +100,8 @@ public class CommonsUploadMultipartObserverTest {
 
 	@Test
 	public void withFieldsOnly() throws Exception {
+		when(event.getMethod()).thenReturn(uploadMethodController);
+
 		final List<FileItem> elements = new ArrayList<>();
 		elements.add(new MockFileItem("foo", "blah"));
 		elements.add(new MockFileItem("bar", "blah blah"));
@@ -102,6 +117,8 @@ public class CommonsUploadMultipartObserverTest {
 
 	@Test
 	public void withFieldsOnlyWithInvalidCharset() throws Exception {
+		when(event.getMethod()).thenReturn(uploadMethodController);
+
 		final List<FileItem> elements = new ArrayList<>();
 		elements.add(new MockFileItem("foo", "blah"));
 		elements.add(new MockFileItem("bar", "blah blah"));
@@ -117,6 +134,8 @@ public class CommonsUploadMultipartObserverTest {
 
 	@Test
 	public void withFilesAndFields() throws Exception {
+		when(event.getMethod()).thenReturn(uploadMethodController);
+
 		final List<FileItem> elements = new ArrayList<>();
 		elements.add(new MockFileItem("foo", "blah"));
 		elements.add(new MockFileItem("bar", "blah blah"));
@@ -140,6 +159,8 @@ public class CommonsUploadMultipartObserverTest {
 
 	@Test
 	public void emptyFiles() throws Exception {
+		when(event.getMethod()).thenReturn(uploadMethodController);
+
 		final List<FileItem> elements = new ArrayList<>();
 		elements.add(new MockFileItem("thefile0", "", new byte[0]));
 
@@ -151,6 +172,8 @@ public class CommonsUploadMultipartObserverTest {
 
 	@Test(expected = InvalidParameterException.class)
 	public void throwsInvalidParameterExceptionIfIOExceptionOccurs() throws Exception {
+		when(event.getMethod()).thenReturn(uploadMethodController);
+
 		FileItem item = new MockFileItem("thefile0", "file.txt", new byte[0]);
 		item = spy(item);
 
@@ -164,6 +187,8 @@ public class CommonsUploadMultipartObserverTest {
 
 	@Test
 	public void fieldsWithSameName() throws Exception {
+		when(event.getMethod()).thenReturn(uploadMethodController);
+
 		final List<FileItem> elements = new ArrayList<>();
 		elements.add(new MockFileItem("myfile0", "foo.txt", "foo".getBytes()));
 		elements.add(new MockFileItem("myfile1", "foo.txt", "bar".getBytes()));
@@ -182,6 +207,8 @@ public class CommonsUploadMultipartObserverTest {
 
 	@Test
 	public void multipleUpload() throws Exception {
+		when(event.getMethod()).thenReturn(uploadMethodController);
+
 		final List<FileItem> elements = new ArrayList<>();
 		elements.add(new MockFileItem("myfile0[]", "foo.txt", "foo".getBytes()));
 		elements.add(new MockFileItem("myfile0[]", "foo.txt", "bar".getBytes()));
@@ -200,6 +227,7 @@ public class CommonsUploadMultipartObserverTest {
 
 	@Test
 	public void doNothingWhenFileUploadExceptionOccurs() throws Exception {
+		when(event.getMethod()).thenReturn(uploadMethodController);
 
 		when(observer.createServletFileUpload(config)).thenReturn(servletFileUpload);
 		when(servletFileUpload.parseRequest(request)).thenThrow(new FileUploadException());
@@ -209,6 +237,8 @@ public class CommonsUploadMultipartObserverTest {
 
 	@Test
 	public void shouldValidateWhenSizeLimitExceededExceptionOccurs() throws Exception {
+		when(event.getMethod()).thenReturn(uploadMethodController);
+
 		when(observer.createServletFileUpload(config)).thenReturn(servletFileUpload);
 		when(servletFileUpload.parseRequest(request)).thenThrow(new FileUploadBase.SizeLimitExceededException("", 3L, 2L));
 
@@ -219,6 +249,8 @@ public class CommonsUploadMultipartObserverTest {
 
 	@Test
 	public void handleValidatorMessageWhenFileUploadExceptionOccurs() throws Exception {
+		when(event.getMethod()).thenReturn(uploadMethodController);
+
 		when(observer.createServletFileUpload(config)).thenReturn(servletFileUpload);
 		when(servletFileUpload.parseRequest(request)).thenThrow(new FileUploadException());
 		
@@ -228,7 +260,22 @@ public class CommonsUploadMultipartObserverTest {
 	}
 
 	@Test
+	public void shouldValidateWhenSizeLimitExceededExceptionOccursFromAnnotation() throws Exception {
+		when(event.getMethod()).thenReturn(uploadMethodControllerWithAnnotation);
+
+		when(observer.createServletFileUpload(config)).thenReturn(servletFileUpload);
+		when(servletFileUpload.parseRequest(request)).thenThrow(new FileUploadBase.SizeLimitExceededException("", 3L, 2L));
+
+		observer.upload(event, request, config, validator);
+
+		verify(servletFileUpload).setFileSizeMax(10);
+		verify(servletFileUpload).setSizeMax(20);
+	}
+
+	@Test
 	public void shouldCreateDirInsideAppIfTempDirAreNotAvailable() throws Exception {
+		when(event.getMethod()).thenReturn(uploadMethodController);
+
 		DefaultMultipartConfig configSpy = (DefaultMultipartConfig) spy(config);
 		doReturn(null).when(configSpy).getTemporaryDirectory();
 
@@ -245,6 +292,8 @@ public class CommonsUploadMultipartObserverTest {
 
 	@Test
 	public void checkIfFileHasBeenUploaded() throws Exception {
+		when(event.getMethod()).thenReturn(uploadMethodController);
+
 		final List<FileItem> elements = new ArrayList<>();
 		byte[] content = "foo".getBytes();
 		elements.add(new MockFileItem("thefile0", "text/plain", "file.txt", content));
@@ -265,6 +314,8 @@ public class CommonsUploadMultipartObserverTest {
 
 	@Test
 	public void mustConvertUnixPathToFileName() throws Exception {
+		when(event.getMethod()).thenReturn(uploadMethodController);
+
 		List<FileItem> elements = new ArrayList<>();
 		elements.add(new MockFileItem("thefile0", "text/plain", "/unix/path/file0.txt", new byte[0]));
 
@@ -281,6 +332,8 @@ public class CommonsUploadMultipartObserverTest {
 
 	@Test
 	public void mustConvertWindowsPathToFileName() throws Exception {
+		when(event.getMethod()).thenReturn(uploadMethodController);
+
 		List<FileItem> elements = new ArrayList<>();
 		elements.add(new MockFileItem("thefile0", "text/plain", "c:/windows/path/file0.txt", new byte[0]));
 
@@ -293,5 +346,12 @@ public class CommonsUploadMultipartObserverTest {
 		verify(request).setAttribute(anyString(), argument.capture());
 
 		assertThat(argument.getValue().getFileName(), is("file0.txt"));
+	}
+
+	public void uploadMethod(UploadedFile file) {
+	}
+
+	@UploadSizeLimit(fileSizeLimit = 10, sizeLimit = 20)
+	public void uploadMethodWthAnnotation(UploadedFile file) {
 	}
 }

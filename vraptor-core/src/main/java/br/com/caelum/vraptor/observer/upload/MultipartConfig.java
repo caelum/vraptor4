@@ -26,6 +26,8 @@ import java.io.File;
  */
 public interface MultipartConfig {
 
+	int DEFAULT_SIZE_LIMIT = 2 * 1024 * 1024;
+
 	/**
 	 * The max size of uploaded files (in bytes).
 	 * 

@@ -24,6 +24,7 @@ import java.util.Set;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
+import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import javax.validation.ConstraintViolation;
 import javax.validation.MessageInterpolator;
@@ -55,7 +56,7 @@ public class MethodValidator {
 
 	private static final Logger logger = getLogger(MethodValidator.class);
 
-	private final Locale locale;
+	private final Instance<Locale> locale;
 	private final MessageInterpolator interpolator;
 	private final javax.validation.Validator bvalidator;
 
@@ -67,7 +68,7 @@ public class MethodValidator {
 	}
 
 	@Inject
-	public MethodValidator(Locale locale, MessageInterpolator interpolator, javax.validation.Validator bvalidator) {
+	public MethodValidator(Instance<Locale> locale, MessageInterpolator interpolator, javax.validation.Validator bvalidator) {
 		this.locale = locale;
 		this.interpolator = interpolator;
 		this.bvalidator = bvalidator;
@@ -132,6 +133,6 @@ public class MethodValidator {
 	 * Returns the internacionalized message for this constraint violation.
 	 */
 	protected String extractInternacionalizedMessage(ConstraintViolation<Object> v) {
-		return interpolator.interpolate(v.getMessageTemplate(), new BeanValidatorContext(v), locale);
+		return interpolator.interpolate(v.getMessageTemplate(), new BeanValidatorContext(v), locale.get());
 	}
 }

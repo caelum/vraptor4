@@ -16,12 +16,9 @@
 package br.com.caelum.vraptor.validator;
 
 import static br.com.caelum.vraptor.controller.DefaultControllerMethod.instanceFor;
-
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.hasSize;
-
 import static org.junit.Assert.assertThat;
-
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
@@ -43,6 +40,7 @@ import br.com.caelum.vraptor.controller.DefaultControllerInstance;
 import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.events.MethodReady;
 import br.com.caelum.vraptor.http.ParanamerNameProvider;
+import br.com.caelum.vraptor.util.test.MockInstanceImpl;
 import br.com.caelum.vraptor.util.test.MockValidator;
 import br.com.caelum.vraptor.validator.beanvalidation.MessageInterpolatorFactory;
 import br.com.caelum.vraptor.validator.beanvalidation.MethodValidator;
@@ -121,7 +119,7 @@ public class MethodValidatorTest {
 	}
 
 	private MethodValidator getMethodValidator() {
-		return new MethodValidator(new Locale("pt", "br"), interpolator, validatorFactory.getValidator());
+		return new MethodValidator(new MockInstanceImpl<Locale>(new Locale("pt", "br")), interpolator, validatorFactory.getValidator());
 	}
 	
 	public class Example {

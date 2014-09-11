@@ -61,66 +61,50 @@ public final class DownloadBuilder {
 		return new ByteArrayDownloadBuilder(input);
 	}
 
-	public static class FileDownloadBuilder {
+	public static abstract class AbstractDownloadBuilder<T> {
+		protected String fileName;
+		protected String contentType;
+		protected boolean doDownload;
+
+		public T withFileName(String fileName) {
+			this.fileName = fileName;
+			return (T) this;
+		}
+
+		public T withContentType(String contentType) {
+			this.contentType = contentType;
+			return (T) this;
+		}
+
+		public T downloadable() {
+			this.doDownload = true;
+			return (T) this;
+		}
+	}
+
+	public static class FileDownloadBuilder extends AbstractDownloadBuilder<FileDownloadBuilder> {
 		private final File file;
-		private String fileName;
-		private String contentType;
-		private boolean doDownload;
 
 		public FileDownloadBuilder(File file) {
 			this.file = requireNonNull(file, "File can't be null");
 		}
 
-		public FileDownloadBuilder withFileName(String fileName) {
-			this.fileName = fileName;
-			return this;
-		}
-
-		public FileDownloadBuilder withContentType(String contentType) {
-			this.contentType = contentType;
-			return this;
-		}
-
-		public FileDownloadBuilder downloadable() {
-			this.doDownload = true;
-			return this;
-		}
-
-		public FileDownload build()
-			throws FileNotFoundException {
+		public FileDownload build() throws FileNotFoundException {
 			fileName = firstNonNull(fileName, file.getName());
 			return new FileDownload(file, contentType, fileName, doDownload);
 		}
 	}
 
-	public static class InputStreamDownloadBuilder {
+	public static class InputStreamDownloadBuilder extends AbstractDownloadBuilder<InputStreamDownloadBuilder> {
 		private final InputStream input;
-		private String fileName;
-		private String contentType;
 		private long size;
-		private boolean doDownload;
 
 		public InputStreamDownloadBuilder(InputStream input) {
 			this.input = requireNonNull(input, "InputStream can't be null");
 		}
 
-		public InputStreamDownloadBuilder withFileName(String fileName) {
-			this.fileName = fileName;
-			return this;
-		}
-
-		public InputStreamDownloadBuilder withContentType(String contentType) {
-			this.contentType = contentType;
-			return this;
-		}
-
 		public InputStreamDownloadBuilder withSize(long size) {
 			this.size = size;
-			return this;
-		}
-
-		public InputStreamDownloadBuilder downloadable() {
-			this.doDownload = true;
 			return this;
 		}
 
@@ -129,29 +113,11 @@ public final class DownloadBuilder {
 		}
 	}
 
-	public static class ByteArrayDownloadBuilder {
+	public static class ByteArrayDownloadBuilder extends AbstractDownloadBuilder<ByteArrayDownloadBuilder> {
 		private final byte[] buff;
-		private String fileName;
-		private String contentType;
-		private boolean doDownload;
 
 		public ByteArrayDownloadBuilder(byte[] buff) {
 			this.buff = requireNonNull(buff, "byte[] can't be null");
-		}
-
-		public ByteArrayDownloadBuilder withFileName(String fileName) {
-			this.fileName = fileName;
-			return this;
-		}
-
-		public ByteArrayDownloadBuilder withContentType(String contentType) {
-			this.contentType = contentType;
-			return this;
-		}
-
-		public ByteArrayDownloadBuilder downloadable() {
-			this.doDownload = true;
-			return this;
 		}
 
 		public ByteArrayDownload build() {

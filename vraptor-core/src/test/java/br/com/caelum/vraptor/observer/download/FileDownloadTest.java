@@ -105,9 +105,9 @@ public class FileDownloadTest {
 	@Test
 	public void builderShouldThrowsExceptionIfFileDoesntExists() throws Exception {
 		thrown.expect(FileNotFoundException.class);
-		thrown.expectMessage("File exists doesn't exists");
+		thrown.expectMessage("File picture.jpg doesn't exists");
 
-		DownloadBuilder.of(new File("/path/that/doesnt/exists")).build();
+		DownloadBuilder.of(new File("/path/that/doesnt/exists/picture.jpg")).build();
 	}
 
 	@Test

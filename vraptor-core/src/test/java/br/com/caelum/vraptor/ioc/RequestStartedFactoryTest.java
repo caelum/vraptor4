@@ -32,7 +32,6 @@ import org.junit.runner.RunWith;
 import br.com.caelum.vraptor.MockStaticContentHandler;
 import br.com.caelum.vraptor.VRaptor;
 import br.com.caelum.vraptor.WeldJunitRunner;
-import br.com.caelum.vraptor.ioc.cdi.Contexts;
 
 @RunWith(WeldJunitRunner.class)
 public class RequestStartedFactoryTest {
@@ -40,7 +39,6 @@ public class RequestStartedFactoryTest {
 	@Inject private MockStaticContentHandler handler;
 	@Inject private VRaptor vRaptor;
 	@Inject private MockRequestHandlerObserver requestHandler;
-	@Inject private Contexts contexts;
 
 	private HttpServletRequest request;
 	private HttpServletResponse response;
@@ -52,7 +50,6 @@ public class RequestStartedFactoryTest {
 		response = mock(HttpServletResponse.class);
 		chain = mock(FilterChain.class);
 		handler.setRequestingStaticFile(false);
-		contexts.startRequestScope();
 	}
 
 	@Test

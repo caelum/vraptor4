@@ -18,8 +18,12 @@ package br.com.caelum.vraptor;
 
 import org.jboss.weld.environment.se.Weld;
 import org.jboss.weld.environment.se.WeldContainer;
+import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.BlockJUnit4ClassRunner;
+import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.InitializationError;
+
+import br.com.caelum.vraptor.ioc.cdi.Contexts;
 
 /**
  * Simple Junit class runner that initialize weld container
@@ -44,5 +48,13 @@ public class WeldJunitRunner extends BlockJUnit4ClassRunner {
 	@Override
 	protected Object createTest() throws Exception {
 		return weldContainer.instance().select(clazz).get();
+	}
+	
+	@Override
+	protected void runChild(FrameworkMethod method, RunNotifier notifier) {
+		Contexts contexts = weldContainer.instance().select(Contexts.class).get();
+		contexts.startRequestScope();
+		super.runChild(method, notifier);
+		contexts.stopRequestScope();
 	}
 }

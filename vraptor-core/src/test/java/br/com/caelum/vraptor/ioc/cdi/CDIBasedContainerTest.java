@@ -40,15 +40,12 @@ public class CDIBasedContainerTest extends GenericContainerTest {
 	public void setup() throws Exception {
 		contexts.startApplicationScope();
 		contexts.startSessionScope();
-		contexts.startRequestScope();
 		initEvent.fire(new VRaptorInitialized(null));
 		super.setup();
 	}
 	
 	@After
 	public void tearDown() {
-		contexts.stopRequestScope();
-		contexts.stopConversationScope();
 		contexts.stopSessionScope();
 		contexts.stopApplicationScope();
 	}

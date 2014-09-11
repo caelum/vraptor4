@@ -27,9 +27,10 @@ public final class DownloadBuilder {
 	 * 			.withContentType("text/plain") // optional, null will sent as octet/stream
 	 * 			.downloadable() // optional, default is inline content
 	 * 			.build();
+	 * </code>
+	 * 
 	 * @param file The input file.
 	 * @throws NullPointerException If the {@code file} argument is {@code null}
-	 * </code>
 	 */
 	public static FileDownloadBuilder of(File file) {
 		return new FileDownloadBuilder(file);
@@ -46,6 +47,7 @@ public final class DownloadBuilder {
 	 * 			.withSize(100L) // optional 
 	 * 			.build();
 	 * </code>
+	 * 
 	 * @param file The input InputStream to process.
 	 * @throws NullPointerException If the {@code input} argument is {@code null}
 	 */
@@ -63,6 +65,7 @@ public final class DownloadBuilder {
 	 * 			.downloadable() // optional, default is inline content
 	 * 			.build();
 	 * </code>
+	 * 
 	 * @param file The input byte array.
 	 * @throws NullPointerException If the {@code input} argument is {@code null}
 	 */

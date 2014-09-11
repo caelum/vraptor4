@@ -47,14 +47,17 @@ public class WeldJunitRunner extends BlockJUnit4ClassRunner {
 	 */
 	@Override
 	protected Object createTest() throws Exception {
-		return weldContainer.instance().select(clazz).get();
+		return currentInstance(clazz);
 	}
 	
 	@Override
 	protected void runChild(FrameworkMethod method, RunNotifier notifier) {
-		Contexts contexts = weldContainer.instance().select(Contexts.class).get();
-		contexts.startRequestScope();
+		currentInstance(Contexts.class).startRequestScope();
 		super.runChild(method, notifier);
-		contexts.stopRequestScope();
+		currentInstance(Contexts.class).stopRequestScope();
+	}
+
+	private <T> T currentInstance(Class<T> clazz) {
+		return weldContainer.instance().select(clazz).get();
 	}
 }

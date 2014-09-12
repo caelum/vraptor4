@@ -59,6 +59,18 @@ public Download picture(Profile profile) {
 }
 ~~~
 
+##Using DownloadBuilder
+
+`DownloadBuilder` is a class to help you to create instances for `Download`, using a fluent interface. To create a `FileDownload` you can write this code:
+
+~~~ 
+#!java
+FileDownload download = DownloadBuilder.of(myFile)
+	.withFileName("resume.txt") // optional, default is File.getName()
+	.withContentType("text/plain") // optional, null will not sent
+	.downloadable() // optional, default is inline content
+	.build();
+~~~
 
 ##Upload
 

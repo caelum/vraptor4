@@ -60,6 +60,18 @@ public Download foto(Perfil perfil) {
 }
 ~~~
 
+##Using DownloadBuilder
+
+`DownloadBuilder` é uma classe útil para ajudar você a criar instâncias da classe `Download`, usando uma interface fluente. Para criar uma instância de um `FileDownload` você pode escrever o seguinte código:
+
+~~~ 
+#!java
+FileDownload download = DownloadBuilder.of(meuArquivo)
+	.withFileName("curriculo.txt") // opcional, o padrão é File.getName()
+	.withContentType("text/plain") // optional, não será enviado se nulo
+	.downloadable() // opcional, o padrão é inline content
+	.build();
+~~~
 
 ##Upload
 

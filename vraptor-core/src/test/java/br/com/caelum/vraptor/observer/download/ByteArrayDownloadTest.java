@@ -20,6 +20,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
@@ -28,13 +29,16 @@ import javax.servlet.WriteListener;
 import javax.servlet.http.HttpServletResponse;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import br.com.caelum.vraptor.observer.download.ByteArrayDownload;
-
 public class ByteArrayDownloadTest {
+
+	@Rule
+	public ExpectedException thrown = ExpectedException.none();
 
 	private byte[] bytes;
 	private @Mock HttpServletResponse response;
@@ -45,7 +49,7 @@ public class ByteArrayDownloadTest {
 	public void setUp() throws Exception {
 		MockitoAnnotations.initMocks(this);
 
-		bytes = new byte[] { (byte) 0 };
+		bytes = new byte[] { (byte) 0x0 };
 		this.outputStream = new ByteArrayOutputStream();
 
 		this.socketStream = new ServletOutputStream() {
@@ -82,5 +86,22 @@ public class ByteArrayDownloadTest {
 
 		verify(response, times(1)).setHeader("Content-type", "type");
 		assertArrayEquals(bytes, outputStream.toByteArray());
+	}
+
+	@Test
+	public void builderShouldThrowsExceptionIfInputDataIsNull() throws Exception {
+		thrown.expect(NullPointerException.class);
+
+		DownloadBuilder.of((byte[]) null).build();
+	}
+
+	@Test
+	public void testConstructWithDownloadBuilder() throws Exception {
+		Download fd = DownloadBuilder.of(bytes).withFileName("file.txt")
+				.withContentType("text/plain").downloadable().build();
+		fd.write(response);
+
+		verify(response).setHeader("Content-Length", String.valueOf(bytes.length));
+		verify(response).setHeader("Content-disposition", "attachment; filename=file.txt");
 	}
 }

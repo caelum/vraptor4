@@ -29,13 +29,18 @@ import javax.servlet.WriteListener;
 import javax.servlet.http.HttpServletResponse;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor.observer.download.InputStreamDownload;
 
 public class InputStreamDownloadTest {
+
+	@Rule
+	public ExpectedException thrown = ExpectedException.none();
 
 	private InputStream inputStream;
 	private byte[] bytes;
@@ -87,4 +92,21 @@ public class InputStreamDownloadTest {
 		assertArrayEquals(bytes, outputStream.toByteArray());
 	}
 
+	@Test
+	public void builderShouldThrowsExceptionIfInputStreamIsNull() throws Exception {
+		thrown.expect(NullPointerException.class);
+
+		DownloadBuilder.of((InputStream) null).build();
+	}
+
+	@Test
+	public void testConstructWithDownloadBuilder() throws Exception {
+		Download fd = DownloadBuilder.of(inputStream).withFileName("file.txt")
+				.withSize(bytes.length)
+				.withContentType("text/plain").downloadable().build();
+		fd.write(response);
+
+		verify(response).setHeader("Content-Length", String.valueOf(bytes.length));
+		verify(response).setHeader("Content-disposition", "attachment; filename=file.txt");
+	}
 }

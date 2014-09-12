@@ -67,7 +67,7 @@ public class FileDownload implements Download {
 	
 	private File checkFile(File file) throws FileNotFoundException {
 		if (!file.exists()) {
-			throw new FileNotFoundException("File " + file.getName() + "doesn't exists");
+			throw new FileNotFoundException("File " + file.getName() + " doesn't exists");
 		}
 		
 		return file;

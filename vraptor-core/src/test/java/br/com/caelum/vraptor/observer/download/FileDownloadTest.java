@@ -22,6 +22,7 @@ import static org.mockito.Mockito.when;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
@@ -29,15 +30,21 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.WriteListener;
 import javax.servlet.http.HttpServletResponse;
 
-import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
+import org.junit.rules.TemporaryFolder;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import br.com.caelum.vraptor.observer.download.FileDownload;
-
 public class FileDownloadTest {
+
+	@Rule
+	public ExpectedException thrown = ExpectedException.none();
+
+	@Rule
+	public TemporaryFolder folder = new TemporaryFolder();
 
 	private File file;
 	private byte[] bytes;
@@ -52,7 +59,7 @@ public class FileDownloadTest {
 		bytes = new byte[] { (byte) 0 };
 		outputStream = new ByteArrayOutputStream();
 
-		file = File.createTempFile("test", "vraptor");
+		file = folder.newFile();
 		
 		try (FileOutputStream fileStream = new FileOutputStream(file)) {
 			fileStream.write(bytes);
@@ -77,11 +84,6 @@ public class FileDownloadTest {
 		when(response.getOutputStream()).thenReturn(socketStream);
 	}
 
-	@After
-	public void tearDown() {
-		file.delete();
-	}
-
 	@Test
 	public void shouldFlushWholeFileToHttpResponse() throws IOException {
 		FileDownload fd = new FileDownload(file, "type");
@@ -98,5 +100,32 @@ public class FileDownloadTest {
 		verify(response, times(1)).setHeader("Content-type", "type");
 		verify(response, times(1)).setHeader("Content-disposition", "inline; filename=x.txt");
 		assertArrayEquals(bytes, outputStream.toByteArray());
+	}
+
+	@Test
+	public void builderShouldThrowsExceptionIfFileDoesntExists() throws Exception {
+		thrown.expect(FileNotFoundException.class);
+		thrown.expectMessage("File picture.jpg doesn't exists");
+
+		DownloadBuilder.of(new File("/path/that/doesnt/exists/picture.jpg")).build();
+	}
+
+	@Test
+	public void builderShouldUseNameArgument() throws Exception {
+		Download fd = DownloadBuilder.of(file).withFileName("file.txt")
+				.withContentType("text/plain").downloadable().build();
+		fd.write(response);
+
+		verify(response).setHeader("Content-Length", String.valueOf(file.length()));
+		verify(response).setHeader("Content-disposition", "attachment; filename=file.txt");
+	}
+
+	@Test
+	public void builderShouldUseFileNameWhenNameNotPresent() throws Exception {
+		Download fd = DownloadBuilder.of(file).withContentType("text/plain").build();
+		fd.write(response);
+
+		verify(response).setHeader("Content-Length", String.valueOf(file.length()));
+		verify(response).setHeader("Content-disposition", "inline; filename=" + file.getName());
 	}
 }

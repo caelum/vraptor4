@@ -92,7 +92,7 @@ public class ByteArrayDownloadTest {
 	public void builderShouldThrowsExceptionIfInputDataIsNull() throws Exception {
 		thrown.expect(NullPointerException.class);
 
-		DownloadBuilder.of((ByteArrayInputStream) null).build();
+		DownloadBuilder.of((byte[]) null).build();
 	}
 
 	@Test

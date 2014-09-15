@@ -18,6 +18,8 @@ package br.com.caelum.vraptor.musicjungle.interceptor;
 
 import static java.util.Arrays.asList;
 
+import java.util.ResourceBundle;
+
 import javax.inject.Inject;
 
 import br.com.caelum.vraptor.Accepts;
@@ -29,7 +31,7 @@ import br.com.caelum.vraptor.interceptor.SimpleInterceptorStack;
 import br.com.caelum.vraptor.musicjungle.controller.HomeController;
 import br.com.caelum.vraptor.musicjungle.dao.UserDao;
 import br.com.caelum.vraptor.musicjungle.model.User;
-import br.com.caelum.vraptor.validator.SimpleMessage;
+import br.com.caelum.vraptor.validator.I18nMessage;
 
 /**
  * Interceptor to check if the user is in the session.
@@ -37,14 +39,26 @@ import br.com.caelum.vraptor.validator.SimpleMessage;
 @Intercepts
 public class AuthorizationInterceptor {
 
-	@Inject
-	private UserInfo info;
+	private final UserInfo info;
+	private final UserDao dao;
+	private final Result result;
+	private final ResourceBundle bundle;
 
 	@Inject
-	private UserDao dao;
-
-	@Inject
-	private Result result;
+	public AuthorizationInterceptor(UserInfo info, UserDao dao, 
+			Result result, ResourceBundle bundle) {
+		this.info = info;
+		this.dao = dao;
+		this.result = result;
+		this.bundle = bundle;
+	}
+	
+	/**
+	 * @deprecated CDI eyes only
+	 */
+	public AuthorizationInterceptor() {
+		this(null, null, null, null);
+	}
 
 	@Accepts
 	public boolean accepts(ControllerMethod method) {
@@ -70,7 +84,9 @@ public class AuthorizationInterceptor {
 		 */
 		if (current == null) {
 			// remember added parameters will survive one more request, when there is a redirect
-			result.include("errors", asList(new SimpleMessage("user", "user is not logged in")));
+			I18nMessage msg = new I18nMessage("user", "not_logged_user");
+			msg.setBundle(bundle);
+			result.include("errors", asList(msg));
 			result.redirectTo(HomeController.class).login();
 			return;
 		}

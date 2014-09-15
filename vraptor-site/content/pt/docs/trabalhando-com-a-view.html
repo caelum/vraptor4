@@ -297,29 +297,31 @@ public class CustomXStreamBuilder extends XStreamBuilderImpl {
 }
 ~~~ 
 
-Para configurar a serialização com JSON você pode criar uma classe que estenda de 'GsonJSONSerialization' e sobrescrever o método 'getSerializer()' com as suas configurações.
+Para configurar a serialização com JSON você pode criar uma classe que estenda de `GsonJSONSerialization` e sobrescrever o método `getSerializer()` com as suas configurações.
 
-Na serialização JSON você pode utilizar a anotação 'SkipSerialization' para omitir a serialização de um campo ou de uma classe.
+Na serialização JSON você pode utilizar a anotação `SkipSerialization` para omitir a serialização de um campo ou de uma classe.
 
-A classe abaixo foi anotada com SkipSerialization, portanto os seus campos nunca serão serializados para JSON:
+A classe abaixo foi anotada com `SkipSerialization`, portanto os seus campos nunca serão serializados para JSON:
 
 ~~~ 
 #!java
 @SkipSerialization
 public class UserPrivateInfo {
+
 	private String cpf;
 	private String telefone;
 	private String endereco;
 	
-	// Getters e setters para os campos...
+	// getters e setters
 }
 ~~~ 
 
-Nesta outra classe, o campo senha não será serializado. O campo info também não será serializado pois a classe UserPrivateInfo foi anotado com SkipSerialization:
+Nesta outra classe, o campo senha não será serializado. O campo info também não será serializado pois a classe `UserPrivateInfo` foi anotado com `SkipSerialization`:
 
 ~~~ 
 #!java
 public class User {
+
 	private String nome;
 	private String login;
 	
@@ -328,7 +330,7 @@ public class User {
 	
 	private UserPrivateInfo info;
 	
-	// Getters e setters para os campos...
+	// getters e setters
 }
 ~~~ 
 
@@ -350,7 +352,7 @@ O resultado obtido é semelhante à:
 }
 ~~~ 
 
-Perceba que o campo senha e todo o UserPrivateInfo não foram serializados.
+Perceba que o campo senha e todo o `UserPrivateInfo` não foram serializados.
 
 ##Serializando Collections##
 

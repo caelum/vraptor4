@@ -300,26 +300,30 @@ public class CustomXStreamBuilder extends XStreamBuilderImpl {
 To configure the JSON serialization you can create a class that extends `GsonJSONSerialization` and overwrite the method `getSerializer()`.
 
 
-When serialiazing to JSON you can use the annotation 'SkipSerialization' to omit the serialization of a field or class.
+When serialiazing to JSON you can use the annotation `SkipSerialization` to omit the serialization of a field or class.
 
-The following class was annotated with SkipSerialization, thus it's fields will never be serialized to JSON:
+The following class was annotated with `SkipSerialization`, thus it's fields will never be serialized to JSON:
 
 ~~~ 
 #!java
 @SkipSerialization
 public class UserPrivateInfo {
+
 	private String document;
 	private String phone;
 	private String address;
 	
-	// Getters and setters for all fields...
+	// getters and setters
 }
 ~~~ 
 
-In this another class, the field password will not be serialized. The info field will not be serialized either due to the UserPrivateInfo class was annotated with SkipSerialization:
+In this another class, the field password will not be serialized. The info field will not be serialized either due to the `UserPrivateInfo` class was annotated with `SkipSerialization`
+:
 
 ~~~ 
+#!java
 public class User {
+
 	private String name;
 	private String login;
 	
@@ -328,7 +332,7 @@ public class User {
 	
 	private UserPrivateInfo info;
 	
-	// Getters and setters for all fields...
+	// getters and setters
 }
 ~~~ 
 
@@ -350,7 +354,7 @@ The obtained result is similar to:
 }
 ~~~ 
 
-Note that the password field and the entire UserPrivateInfo wasn't serialized.
+Note that the password field and the entire `UserPrivateInfo` wasn't serialized.
 
 
 ##Serializing Collections##

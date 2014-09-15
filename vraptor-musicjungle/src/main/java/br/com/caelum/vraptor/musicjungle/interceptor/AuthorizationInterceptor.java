@@ -39,18 +39,27 @@ import br.com.caelum.vraptor.validator.I18nMessage;
 @Intercepts
 public class AuthorizationInterceptor {
 
-	@Inject
-	private UserInfo info;
+	private final UserInfo info;
+	private final UserDao dao;
+	private final Result result;
+	private final ResourceBundle bundle;
 
 	@Inject
-	private UserDao dao;
-
-	@Inject
-	private Result result;
-
-	@Inject
-	private ResourceBundle bundle;
+	public AuthorizationInterceptor(UserInfo info, UserDao dao, 
+			Result result, ResourceBundle bundle) {
+		this.info = info;
+		this.dao = dao;
+		this.result = result;
+		this.bundle = bundle;
+	}
 	
+	/**
+	 * @deprecated CDI eyes only
+	 */
+	public AuthorizationInterceptor() {
+		this(null, null, null, null);
+	}
+
 	@Accepts
 	public boolean accepts(ControllerMethod method) {
 		return !method.containsAnnotation(Public.class);

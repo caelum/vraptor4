@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.Map;
 
 import javax.enterprise.context.RequestScoped;
-import javax.inject.Named;
 
 import org.slf4j.Logger;
 
@@ -40,9 +39,10 @@ import org.slf4j.Logger;
  * @since 4.1
  * @author Otávio S Garcia
  */
-@Named("vmessages")
 @RequestScoped
 public class Messages {
+
+	public static final String ATTRIBUTE_KEY = "vmessages";
 
 	private final static Logger log = getLogger(Messages.class);
 	

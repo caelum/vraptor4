@@ -48,7 +48,7 @@ public final class DownloadBuilder {
 	 * 			.build();
 	 * </code>
 	 * 
-	 * @param file The input InputStream to process.
+	 * @param input The input InputStream to process.
 	 * @throws NullPointerException If the {@code input} argument is {@code null}
 	 */
 	public static InputStreamDownloadBuilder of(InputStream input) {
@@ -66,14 +66,14 @@ public final class DownloadBuilder {
 	 * 			.build();
 	 * </code>
 	 * 
-	 * @param file The input byte array.
+	 * @param input The input byte array.
 	 * @throws NullPointerException If the {@code input} argument is {@code null}
 	 */
 	public static ByteArrayDownloadBuilder of(byte[] input) {
 		return new ByteArrayDownloadBuilder(input);
 	}
 
-	public static abstract class AbstractDownloadBuilder<T> {
+	static abstract class AbstractDownloadBuilder<T> {
 		protected String fileName;
 		protected String contentType;
 		protected boolean doDownload;
@@ -97,7 +97,7 @@ public final class DownloadBuilder {
 	public static class FileDownloadBuilder extends AbstractDownloadBuilder<FileDownloadBuilder> {
 		private final File file;
 
-		public FileDownloadBuilder(File file) {
+		FileDownloadBuilder(File file) {
 			this.file = requireNonNull(file, "File can't be null");
 		}
 
@@ -111,7 +111,7 @@ public final class DownloadBuilder {
 		private final InputStream input;
 		private long size;
 
-		public InputStreamDownloadBuilder(InputStream input) {
+		InputStreamDownloadBuilder(InputStream input) {
 			this.input = requireNonNull(input, "InputStream can't be null");
 		}
 
@@ -128,7 +128,7 @@ public final class DownloadBuilder {
 	public static class ByteArrayDownloadBuilder extends AbstractDownloadBuilder<ByteArrayDownloadBuilder> {
 		private final byte[] buff;
 
-		public ByteArrayDownloadBuilder(byte[] buff) {
+		ByteArrayDownloadBuilder(byte[] buff) {
 			this.buff = requireNonNull(buff, "byte[] can't be null");
 		}
 

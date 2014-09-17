@@ -22,13 +22,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.PostConstruct;
-import javax.enterprise.context.RequestScoped;
-import javax.inject.Inject;
+import javax.enterprise.inject.Vetoed;
 
 import org.slf4j.Logger;
-
-import br.com.caelum.vraptor.Result;
 
 /**
  * Managed class that stores all application messages like errors, warnings and info. This
@@ -43,36 +39,13 @@ import br.com.caelum.vraptor.Result;
  * @since 4.1
  * @author Otávio S Garcia
  */
-@RequestScoped
+@Vetoed
 public class Messages {
-
-	public static final String ATTRIBUTE_KEY = "vmessages";
 
 	private final static Logger log = getLogger(Messages.class);
 	
 	private Map<Severity, List<Message>> messages = new HashMap<>();
 	private boolean unhandledErrors = false;
-
-	private final Result result;
-
-	/**
-	 * @deprecated CDI eyes only
-	 */
-	protected Messages() {
-		this(null);
-	}
-	
-	@Inject
-	public Messages(Result result) {
-		this.result = result;
-	}
-	
-	@PostConstruct
-	protected void init() {
-		if(!result.included().containsKey(ATTRIBUTE_KEY)){
-			result.include(ATTRIBUTE_KEY, this);
-		}
-	}
 
 	public Messages add(Message message) {
 		get(message.getSeverity()).add(message);

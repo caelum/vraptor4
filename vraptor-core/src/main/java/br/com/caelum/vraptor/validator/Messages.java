@@ -22,8 +22,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
-import javax.inject.Named;
+import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 
@@ -40,14 +42,38 @@ import org.slf4j.Logger;
  * @since 4.1
  * @author Otávio S Garcia
  */
-@Named("vmessages")
 @RequestScoped
 public class Messages {
+
+	public static final String ATTRIBUTE_KEY = "vmessages";
 
 	private final static Logger log = getLogger(Messages.class);
 	
 	private Map<Severity, List<Message>> messages = new HashMap<>();
 	private boolean unhandledErrors = false;
+
+	private final HttpServletRequest request;
+
+	/**
+	 * @deprecated CDI eyes only
+	 */
+	protected Messages() {
+		this(null);
+	}
+
+	@Inject
+	public Messages(HttpServletRequest request) {
+		this.request = request;
+	}
+
+	/**
+	 * Put this instance into request attributes to allow this instance survive between requests using flash
+	 * scope.
+	 */
+	@PostConstruct
+	public void init() {
+		request.setAttribute(ATTRIBUTE_KEY, this);
+	}
 
 	public Messages add(Message message) {
 		get(message.getSeverity()).add(message);

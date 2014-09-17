@@ -140,7 +140,6 @@ public class DefaultValidator extends AbstractValidator {
 		}
 
 		result.include("errors", getErrors());
-		result.include(Messages.ATTRIBUTE_KEY, messages);
 		outjector.outjectRequestMap();
 		
 		logger.debug("there are errors on result: {}", getErrors());

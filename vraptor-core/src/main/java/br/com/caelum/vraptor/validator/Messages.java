@@ -25,9 +25,10 @@ import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
+
+import br.com.caelum.vraptor.Result;
 
 /**
  * Managed class that stores all application messages like errors, warnings and info. This
@@ -52,7 +53,7 @@ public class Messages {
 	private Map<Severity, List<Message>> messages = new HashMap<>();
 	private boolean unhandledErrors = false;
 
-	private final HttpServletRequest request;
+	private final Result result;
 
 	/**
 	 * @deprecated CDI eyes only
@@ -60,19 +61,17 @@ public class Messages {
 	protected Messages() {
 		this(null);
 	}
-
+	
 	@Inject
-	public Messages(HttpServletRequest request) {
-		this.request = request;
+	public Messages(Result result) {
+		this.result = result;
 	}
-
-	/**
-	 * Put this instance into request attributes to allow this instance survive between requests using flash
-	 * scope.
-	 */
+	
 	@PostConstruct
-	public void init() {
-		request.setAttribute(ATTRIBUTE_KEY, this);
+	protected void init() {
+		if(!result.included().containsKey(ATTRIBUTE_KEY)){
+			result.include(ATTRIBUTE_KEY, this);
+		}
 	}
 
 	public Messages add(Message message) {

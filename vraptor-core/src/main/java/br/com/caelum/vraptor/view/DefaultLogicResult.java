@@ -34,6 +34,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.Get;
+import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.controller.DefaultControllerMethod;
 import br.com.caelum.vraptor.controller.HttpMethod;
@@ -68,17 +69,20 @@ public class DefaultLogicResult implements LogicResult {
 	private final FlashScope flash;
 	private final MethodInfo methodInfo;
 
+	private Result result;
+
 	/** 
 	 * @deprecated CDI eyes only
 	 */
 	protected DefaultLogicResult() {
-		this(null, null, null, null, null, null, null, null, null);
+		this(null, null, null, null, null, null, null, null, null, null);
 	}
 
 	@Inject
 	public DefaultLogicResult(Proxifier proxifier, Router router, MutableRequest request, HttpServletResponse response,
-			Container container, PathResolver resolver, TypeNameExtractor extractor, FlashScope flash, MethodInfo methodInfo) {
+			Container container, PathResolver resolver, TypeNameExtractor extractor, FlashScope flash, MethodInfo methodInfo, Result result) {
 		this.proxifier = proxifier;
+		this.result = result;
 		this.response = unproxifyIfPossible(response);
 		this.request = unproxifyIfPossible(request);
 		this.router = router;
@@ -97,24 +101,26 @@ public class DefaultLogicResult implements LogicResult {
 	@Override
 	public <T> T forwardTo(final Class<T> type) {
 		return proxifier.proxify(type, new MethodInvocation<T>() {
+
 			@Override
 			public Object intercept(T proxy, Method method, Object[] args, SuperMethod superMethod) {
 				try {
 					logger.debug("Executing {}", method);
 					ControllerMethod old = methodInfo.getControllerMethod();
 					methodInfo.setControllerMethod(DefaultControllerMethod.instanceFor(type, method));
-					Object result = method.invoke(container.instanceFor(type), args);
+					Object methodResult = method.invoke(container.instanceFor(type), args);
 					methodInfo.setControllerMethod(old);
 
 					Type returnType = method.getGenericReturnType();
 					if (!(returnType == void.class)) {
-						request.setAttribute(extractor.nameFor(returnType), result);
+						request.setAttribute(extractor.nameFor(returnType), methodResult);
 					}
-					if (!response.isCommitted()) {
-						String path = resolver.pathFor(DefaultControllerMethod.instanceFor(type, method));
-						logger.debug("Forwarding to {}", path);
-						request.getRequestDispatcher(path).forward(request, response);
+					if (response.isCommitted() || result.used()) {
+						return null;
 					}
+					String path = resolver.pathFor(DefaultControllerMethod.instanceFor(type, method));
+					logger.debug("Forwarding to {}", path);
+					request.getRequestDispatcher(path).forward(request, response);
 					return null;
 				} catch (InvocationTargetException e) {
 					propagateIfPossible(e.getCause());

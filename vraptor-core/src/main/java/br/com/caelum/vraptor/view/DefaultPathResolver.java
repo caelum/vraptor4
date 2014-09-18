@@ -55,6 +55,7 @@ public class DefaultPathResolver implements PathResolver {
 	@Override
 	public String pathFor(ControllerMethod method) {
 		logger.debug("Resolving path for {}", method);
+		
 		String format = resolver.getAcceptFormat();
 
 		String suffix = "";

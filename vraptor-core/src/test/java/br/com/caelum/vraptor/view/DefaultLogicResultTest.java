@@ -19,6 +19,7 @@ package br.com.caelum.vraptor.view;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
@@ -35,6 +36,8 @@ import java.lang.reflect.Method;
 import java.util.Collections;
 
 import javax.servlet.RequestDispatcher;
+
+import net.vidageek.mirror.dsl.Mirror;
 
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
@@ -218,6 +221,26 @@ public class DefaultLogicResultTest {
 		} catch (IllegalArgumentException e) {
 			verify(response, never()).sendRedirect(any(String.class));
 		}
+	}
+	
+	@Test
+	public void shouldUpdateMethodInfoWhenForwardRequest() throws NoSuchMethodException, SecurityException {
+	    givenDispatcherWillBeReturnedWhenRequested();
+
+	    logicResult.forwardTo(MyComponent.class).annotated();
+	    
+	    ControllerMethod controllerMethod = DefaultControllerMethod.instanceFor(MyComponent.class, new Mirror().on(MyComponent.class).reflect().method("annotated").withoutArgs());
+	    assertTrue(methodInfo.getControllerMethod().equals(controllerMethod));
+	}
+	
+	@Test
+	public void shouldUpdateMethodInfoWhenRedirectRequest() throws NoSuchMethodException, SecurityException {
+	    givenDispatcherWillBeReturnedWhenRequested();
+
+	    logicResult.redirectTo(MyComponent.class).base();
+	    
+	    ControllerMethod controllerMethod = DefaultControllerMethod.instanceFor(MyComponent.class, new Mirror().on(MyComponent.class).reflect().method("base").withoutArgs());
+	    assertTrue(methodInfo.getControllerMethod().equals(controllerMethod));
 	}
 
 	@Test(expected=ValidationException.class)

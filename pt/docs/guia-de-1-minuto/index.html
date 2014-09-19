@@ -4,9 +4,7 @@
     <span class="nd">@Inject</span>
     <span class="kd">private</span> <span class="n">ClientDao</span> <span class="n">dao</span><span class="o">;</span>
 
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">form</span><span class="o">()</span> <span class="o">{</span>
-        <span class="c1">// código que carrega dados para checkboxes, selects, etc</span>
-    <span class="o">}</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">form</span><span class="o">()</span> <span class="o">{</span> <span class="o">...</span> <span class="o">}</span>
 
     <span class="kd">public</span> <span class="kt">void</span> <span class="nf">add</span><span class="o">(</span><span class="n">Client</span> <span class="n">custom</span><span class="o">)</span> <span class="o">{</span>
         <span class="n">dao</span><span class="o">.</span><span class="na">save</span><span class="o">(</span><span class="n">custom</span><span class="o">);</span>
@@ -19,21 +17,21 @@
     <span class="kd">public</span> <span class="n">Client</span> <span class="nf">view</span><span class="o">(</span><span class="n">Long</span> <span class="n">id</span><span class="o">)</span> <span class="o">{</span>
         <span class="k">return</span> <span class="n">dao</span><span class="o">.</span><span class="na">load</span><span class="o">(</span><span class="n">id</span><span class="o">);</span>
     <span class="o">}</span>
-<span class="o">}</span></code></pre> <p>Anotando seu controller com <code>@Controller</code>, seus métodos públicos ficarão disponíveis para receber requisições web.</p> <p>Você pode injetar as dependências da sua classe adicionando a anotação <code>@Inject</code>, e o VRaptor com CDI vai se encarregar de criar ou localizar essas dependências pra você. Outra alternativa é adicionar o <code>@Inject</code> no construtor de sua classe, para que isso funcione você precisará adicionar também um construtor default, por exemplo:</p> <pre><code class="language-java"><span class="nd">@Controller</span>
+<span class="o">}</span></code></pre> <p>Dentro do método <code>form()</code> podemos inserir os códigos que carregam os dados para checkboxes, selects, etc</p> <p>Anotando seu controller com <code>@Controller</code>, seus métodos públicos ficarão disponíveis para receber requisições web.</p> <p>Você pode injetar as dependências da sua classe adicionando a anotação <code>@Inject</code>, e o VRaptor com CDI vai se encarregar de criar ou localizar essas dependências pra você. Outra alternativa é adicionar o <code>@Inject</code> no construtor de sua classe, para que isso funcione você precisará adicionar também um construtor default, por exemplo:</p> <pre><code class="language-java"><span class="nd">@Controller</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">ClientsController</span> <span class="o">{</span>
 
     <span class="kd">private</span> <span class="kd">final</span> <span class="n">ClientDao</span> <span class="n">dao</span><span class="o">;</span>
 
-    <span class="nd">@Inject</span>
-    <span class="kd">public</span> <span class="nf">ClientsController</span><span class="o">(</span><span class="n">ClientDao</span> <span class="n">dao</span><span class="o">){</span>
-        <span class="k">this</span><span class="o">.</span><span class="na">dao</span> <span class="o">=</span> <span class="n">dao</span><span class="o">;</span>
-    <span class="o">}</span>
-
     <span class="cm">/**</span>
 <span class="cm">     * @deprecated CDI eyes only</span>
 <span class="cm">     */</span>
-    <span class="kd">public</span> <span class="nf">ClientsController</span><span class="o">(){</span>
+    <span class="kd">protected</span> <span class="nf">ClientsController</span><span class="o">(){</span>
         <span class="k">this</span><span class="o">(</span><span class="kc">null</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Inject</span>
+    <span class="kd">public</span> <span class="nf">ClientsController</span><span class="o">(</span><span class="n">ClientDao</span> <span class="n">dao</span><span class="o">){</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">dao</span> <span class="o">=</span> <span class="n">dao</span><span class="o">;</span>
     <span class="o">}</span>
 
     <span class="c1">// métodos do controller</span>

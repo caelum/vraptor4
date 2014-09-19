@@ -2,7 +2,9 @@
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">MeuController</span> <span class="o">{</span>
     <span class="kd">private</span> <span class="kd">final</span> <span class="n">MeuComponente</span> <span class="n">meuComponente</span><span class="o">;</span>
 
-    <span class="cm">/** @deprecated Construtor usado apenas para o CDI */</span>
+    <span class="cm">/**</span>
+<span class="cm">     * @deprecated CDI eyes only</span>
+<span class="cm">     */</span>
     <span class="kd">protected</span> <span class="nf">MeuController</span><span class="o">()</span> <span class="o">{</span>
         <span class="k">this</span><span class="o">(</span><span class="kc">null</span><span class="o">);</span>
     <span class="o">}</span>
@@ -23,6 +25,9 @@
 <span class="nd">@javax.enterprise.context.ConversationScoped</span>
 <span class="nd">@javax.enterprise.context.Dependent</span></code></pre> <p>Uma alternativa simples para migrar os escopos é fazer um replace de <code>br.com.caelum.vraptor.ioc</code> para <code>javax.enterprise.context</code> nos imports.</p> <h2 id="fabricando-de-componentes">Fabricando de componentes</h2> <p>A interface <code>ComponentFactory</code> não existe mais. Desta forma você deve usar o <code>@Produces</code> do CDI. Veja mais no capítulo de componentes.</p> <h2 id="sobrescrevendo-componentes">Sobrescrevendo componentes</h2> <p>No VRaptor3 para sobrescrever os componentes era necessario apenas implementar ou estender a interface ou classe do componente. Por limitações no CDI é necessário agora anotar a sua classe com <code>@Specializes</code>.</p> <h2 id="resource-substitudo-pelo-controller">@Resource substituído pelo @Controller</h2> <p>A anotação <code>@Resource</code> foi substituída pela anotação <code>@Controller</code> e possui o mesmo efeito.</p> <h2 id="no-existe-mais-a-interface-localization">Não existe mais a interface Localization</h2> <p>No lugar de receber a <code>Localization</code> e chamar os métodos <code>.getLocale()</code> ou <code>.getBundle()</code>, agora você pode injetar diretamente esses elementos, algo como:</p> <pre><code class="language-java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">MinhaClasse</span> <span class="o">{</span>
 
-    <span class="nd">@Inject</span> <span class="kd">private</span> <span class="n">Locale</span> <span class="n">locale</span><span class="o">;</span>
-    <span class="nd">@Inject</span> <span class="kd">private</span> <span class="n">ResourceBundle</span> <span class="n">bundle</span><span class="o">;</span>
+    <span class="nd">@Inject</span>
+    <span class="kd">private</span> <span class="n">Locale</span> <span class="n">locale</span><span class="o">;</span>
+
+    <span class="nd">@Inject</span>
+    <span class="kd">private</span> <span class="n">ResourceBundle</span> <span class="n">bundle</span><span class="o">;</span>
 <span class="o">}</span></code></pre> <p>A maior diferença é que onde você fazia: </p> <pre><code class="language-java"><span class="n">localization</span><span class="o">.</span><span class="na">getBundle</span><span class="o">().</span><span class="na">getMessage</span><span class="o">(</span><span class="s">"key"</span><span class="o">);</span></code></pre> <p>Você vai chamar diretamente o <code>getString</code> do bundle:</p> <pre><code class="language-java"><span class="n">bundle</span><span class="o">.</span><span class="na">getString</span><span class="o">(</span><span class="s">"key"</span><span class="o">);</span></code></pre> <h2 id="linkto">LinkTo</h2> <p>A funcionalidade LinkTo foi atualizada e agora suporta o uso de métodos nas chamadas. Sendo assim você deve converter todas as chamadas de <code>${linkTo[Controller].metodo[0, 1]}</code> para <code>${linkTo[Controller].metodo(0, 1)}</code>. Veja mais informações no capítulo sobre Views.</p> <p>Pra facilitar a migração deixamos um <code>.sh</code> <a href="https://gist.github.com/rponte/7546377">aqui</a>, que você pode baixar e executar um sed de atualização da sintaxe (para linux e mac, em breve faremos algo pra windows).</p> <h2 id="serializao-e-deserializao">Serialização e deserialização</h2> <p>Para seguir com a especificação do HTML5, todas as datas usadas na serialização e deserialização usam o formato ISO8601.</p> <h2 id="restfulie">Restfulie</h2> <p>Não é suportado mais no core do VRaptor, mas sim como plugin.</p> </main> <script src="/js/headers.min.js"></script> </body> </html>

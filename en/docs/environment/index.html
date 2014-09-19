@@ -7,11 +7,20 @@
 <span class="na">test_email</span> <span class="o">=</span> <span class="s">test.mail@mail.com</span>
 <span class="na">environment.controller</span> <span class="o">=</span> <span class="s">true</span></code></pre> <h2 id="getting-environment-properties-in-your-code">Getting environment properties in your code</h2> <pre><code class="language-java"><span class="nd">@Controller</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyController</span> <span class="o">{</span>
+
     <span class="kd">private</span> <span class="kd">final</span> <span class="n">Environment</span> <span class="n">environment</span><span class="o">;</span>
+
     <span class="kd">private</span> <span class="kd">final</span> <span class="n">MailSender</span> <span class="n">sender</span><span class="o">;</span>
 
+    <span class="cm">/**</span>
+<span class="cm">     * @deprecated CDI eyes only</span>
+<span class="cm">     */</span>
+    <span class="kd">protected</span> <span class="nf">MyController</span><span class="o">(){</span>
+        <span class="k">this</span><span class="o">(</span><span class="kc">null</span><span class="o">,</span> <span class="kc">null</span><span class="o">);</span>
+    <span class="o">}</span>
+
     <span class="nd">@Inject</span>
-    <span class="kd">public</span> <span class="nf">MeuController</span><span class="o">(</span><span class="n">Environment</span> <span class="n">environment</span><span class="o">,</span> <span class="n">MailSender</span> <span class="n">sender</span><span class="o">)</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="nf">MyController</span><span class="o">(</span><span class="n">Environment</span> <span class="n">environment</span><span class="o">,</span> <span class="n">MailSender</span> <span class="n">sender</span><span class="o">)</span> <span class="o">{</span>
         <span class="k">this</span><span class="o">.</span><span class="na">environment</span> <span class="o">=</span> <span class="n">environment</span><span class="o">;</span>
         <span class="k">this</span><span class="o">.</span><span class="na">sender</span> <span class="o">=</span> <span class="n">sender</span><span class="o">;</span>
     <span class="o">}</span>
@@ -31,7 +40,9 @@ Send an e-mail to: ${environment.get('test_email')}</code></pre> <h2 id="accessi
 <span class="n">cfg</span><span class="o">.</span><span class="na">configure</span><span class="o">(</span><span class="n">environment</span><span class="o">.</span><span class="na">getResource</span><span class="o">(</span><span class="s">"/hibernate.cfg.xml"</span><span class="o">));</span></code></pre> <p>To keep compatibility with applications that don’t not environment, if the file isn’t found in the directory with the name of the environment, it will be loaded from classpath.</p> <h2 id="injecting-the-value-of-your-configuration-programmatically">Injecting the value of your configuration programmatically</h2> <p>You can also inject your settings programmatically using <code>@Property</code> annotation, like:</p> <pre><code class="language-java"><span class="nd">@Controller</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyController</span> <span class="o">{</span>
 
-    <span class="nd">@Inject</span> <span class="nd">@Property</span><span class="o">(</span><span class="s">"test_email"</span><span class="o">)</span> <span class="kd">private</span> <span class="n">String</span> <span class="n">email</span><span class="o">;</span>
+    <span class="nd">@Inject</span>
+    <span class="nd">@Property</span><span class="o">(</span><span class="s">"test_email"</span><span class="o">)</span>
+    <span class="kd">private</span> <span class="n">String</span> <span class="n">email</span><span class="o">;</span>
 
     <span class="kd">public</span> <span class="kt">void</span> <span class="nf">sendMail</span><span class="o">(</span><span class="n">String</span> <span class="n">email</span><span class="o">)</span> <span class="o">{</span>
         <span class="n">sender</span><span class="o">.</span><span class="na">sendMailTo</span><span class="o">(</span><span class="n">email</span><span class="o">);</span>
@@ -39,10 +50,13 @@ Send an e-mail to: ${environment.get('test_email')}</code></pre> <h2 id="accessi
 <span class="o">}</span></code></pre> <p>If your environment is <code>DEVELOPMENT</code>, the value for key <code>test_email</code> will be loaded using <code>development.properties</code>. And if your environment is <code>PRODUCTION</code> the value will be loaded from <code>production.properties</code>. This feature allow you to keep away from conditional statements like: <code>if (environment.isDevelopment ()) {...}</code> in your code.</p> <p>And if the field name is the same from the key, you can use only the <code>@Property</code> annotation without define a value, like this:</p> <pre><code class="language-java"><span class="nd">@Controller</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyController</span> <span class="o">{</span>
 
-    <span class="nd">@Inject</span> <span class="nd">@Property</span> <span class="kd">private</span> <span class="n">String</span> <span class="n">email</span><span class="o">;</span>
+    <span class="nd">@Inject</span>
+    <span class="nd">@Property</span>
+    <span class="kd">private</span> <span class="n">String</span> <span class="n">email</span><span class="o">;</span>
 
     <span class="kd">public</span> <span class="kt">void</span> <span class="nf">sendMail</span><span class="o">(</span><span class="n">String</span> <span class="n">email</span><span class="o">)</span> <span class="o">{</span>
         <span class="n">sender</span><span class="o">.</span><span class="na">sendMailTo</span><span class="o">(</span><span class="n">email</span><span class="o">);</span>
     <span class="o">}</span>
-<span class="o">}</span></code></pre> <p>You can also set a default value for this property:</p> <pre><code class="language-java"><span class="nd">@Inject</span> <span class="nd">@Property</span><span class="o">(</span><span class="n">defaultValue</span> <span class="o">=</span> <span class="s">"config.properties"</span><span class="o">)</span> 
+<span class="o">}</span></code></pre> <p>You can also set a default value for this property:</p> <pre><code class="language-java"><span class="nd">@Inject</span>
+<span class="nd">@Property</span><span class="o">(</span><span class="n">defaultValue</span> <span class="o">=</span> <span class="s">"config.properties"</span><span class="o">)</span>
 <span class="kd">private</span> <span class="n">String</span> <span class="n">fileName</span><span class="o">;</span></code></pre> </main> <script src="/js/headers.min.js"></script> </body> </html>

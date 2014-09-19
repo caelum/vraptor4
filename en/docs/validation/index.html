@@ -4,9 +4,30 @@
 
     <span class="c1">// validates if birth date is past</span>
     <span class="nd">@Past</span> <span class="kd">private</span> <span class="n">Date</span> <span class="n">birth</span><span class="o">;</span>
-<span class="o">}</span></code></pre> <p>And in your controller:</p> <pre><code class="language-java"><span class="kd">public</span> <span class="kt">void</span> <span class="nf">store</span><span class="o">(</span><span class="nd">@NotNull</span> <span class="nd">@Valid</span> <span class="n">Client</span> <span class="n">client</span><span class="o">)</span> <span class="o">{</span>
-    <span class="c1">// if client is not valid, redirect to form page</span>
-    <span class="n">validation</span><span class="o">.</span><span class="na">onErrorForwardTo</span><span class="o">(</span><span class="k">this</span><span class="o">).</span><span class="na">form</span><span class="o">();</span>
+<span class="o">}</span></code></pre> <p>And in your controller:</p> <pre><code class="language-java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">ClientController</span> <span class="o">{</span>
+
+    <span class="kd">private</span> <span class="kd">final</span> <span class="n">Validator</span> <span class="n">validation</span><span class="o">;</span>
+
+    <span class="cm">/** </span>
+<span class="cm">     * @deprecated CDI eyes only</span>
+<span class="cm">     */</span>
+    <span class="kd">protected</span> <span class="nf">ClientController</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">(</span><span class="kc">null</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Inject</span>
+    <span class="kd">public</span> <span class="nf">ClientController</span><span class="o">(</span><span class="n">Validator</span> <span class="n">validation</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">validation</span> <span class="o">=</span> <span class="n">validation</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">form</span><span class="o">()</span> <span class="o">{</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">store</span><span class="o">(</span><span class="nd">@NotNull</span> <span class="nd">@Valid</span> <span class="n">Client</span> <span class="n">client</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// if client is not valid, redirect to form page</span>
+        <span class="n">validation</span><span class="o">.</span><span class="na">onErrorForwardTo</span><span class="o">(</span><span class="k">this</span><span class="o">).</span><span class="na">form</span><span class="o">();</span>
+    <span class="o">}</span>
+
 <span class="o">}</span></code></pre> <p><strong>Note</strong>: If your application uses Hibernate or JPA and you have your entities annotated with Bean Validation constraints, you need to call <code>Session.flush()</code> or <code>EntityManager.flush()</code> to validate your model before redirect or forward. The method <code>flush</code> synchronizes state from your objects to database. So Bean Validation constraint will only validate when <code>flush</code> is triggered.</p> <h2 id="creating-your-custom-constraints">Creating your custom constraints</h2> <p>With Bean validation you can create your own custom validations. If you want to validate if phone number is in <code>(00) 0000-0000</code> pattern, you can do something like this:</p> <pre><code class="language-java"><span class="nd">@Documented</span>
 <span class="nd">@Constraint</span><span class="o">(</span><span class="n">validatedBy</span> <span class="o">=</span> <span class="o">{})</span>
 <span class="nd">@Target</span><span class="o">({</span> <span class="n">METHOD</span><span class="o">,</span> <span class="n">FIELD</span><span class="o">,</span> <span class="n">ANNOTATION_TYPE</span><span class="o">,</span> <span class="n">CONSTRUCTOR</span><span class="o">,</span> <span class="n">PARAMETER</span> <span class="o">})</span>
@@ -14,13 +35,13 @@
 <span class="nd">@ReportAsSingleViolation</span>
 <span class="nd">@Pattern</span><span class="o">(</span><span class="n">regexp</span> <span class="o">=</span> <span class="s">"\\((\\d{2})\\) (\\d{4})-(\\d{4})"</span><span class="o">)</span>
 <span class="kd">public</span> <span class="nd">@interface</span> <span class="n">PhoneNumber</span> <span class="o">{</span>
-    <span class="c1">// you can put a fixed message like "Invalid number" or a message from ResourceBundle with {}</span>
+    
     <span class="n">String</span> <span class="nf">message</span><span class="o">()</span> <span class="k">default</span> <span class="s">"{br.com.vraptor.validations.phonenumber.message}"</span><span class="o">;</span>
 
     <span class="n">Class</span><span class="o">&lt;?&gt;[]</span> <span class="n">groups</span><span class="o">()</span> <span class="k">default</span> <span class="o">{};</span>
 
     <span class="n">Class</span><span class="o">&lt;?</span> <span class="kd">extends</span> <span class="n">Payload</span><span class="o">&gt;[]</span> <span class="n">payload</span><span class="o">()</span> <span class="k">default</span> <span class="o">{};</span>
-<span class="o">}</span></code></pre> <p>You can create complex constraints that access database or uses any managed component. If you want, as example, check if the user already exists in the database, ou can write a code like this:</p> <pre><code class="language-java"><span class="nd">@Target</span><span class="o">({</span> <span class="n">ElementType</span><span class="o">.</span><span class="na">PARAMETER</span> <span class="o">})</span>
+<span class="o">}</span></code></pre> <p>The message’s value with <code>{}</code> will be fetched from <code>ResourceBundle</code>. </p> <p>Or you can put a fixed message, just like this: </p> <pre><code class="language-java"><span class="n">String</span> <span class="nf">message</span><span class="o">()</span> <span class="k">default</span>  <span class="s">"Invalid number"</span><span class="o">;</span></code></pre> <p>You can create complex constraints that access database or uses any managed component. If you want, as example, check if the user already exists in the database, ou can write a code like this:</p> <pre><code class="language-java"><span class="nd">@Target</span><span class="o">({</span> <span class="n">ElementType</span><span class="o">.</span><span class="na">PARAMETER</span> <span class="o">})</span>
 <span class="nd">@Retention</span><span class="o">(</span><span class="n">RetentionPolicy</span><span class="o">.</span><span class="na">RUNTIME</span><span class="o">)</span>
 <span class="nd">@Constraint</span><span class="o">(</span><span class="n">validatedBy</span> <span class="o">=</span> <span class="o">{</span> <span class="n">LoginAvailableValidator</span><span class="o">.</span><span class="na">class</span> <span class="o">})</span>
 <span class="nd">@Documented</span>
@@ -33,7 +54,8 @@
     <span class="n">Class</span><span class="o">&lt;?</span> <span class="kd">extends</span> <span class="n">Payload</span><span class="o">&gt;[]</span> <span class="n">payload</span><span class="o">()</span> <span class="k">default</span> <span class="o">{};</span>
 <span class="o">}</span></code></pre> <p>And <code>LoginAvailableValidator</code> that checks the constraint:</p> <pre><code class="language-java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">LoginAvailableValidator</span> <span class="kd">implements</span> <span class="n">ConstraintValidator</span><span class="o">&lt;</span><span class="n">LoginAvailable</span><span class="o">,</span> <span class="n">User</span><span class="o">&gt;</span> <span class="o">{</span>
 
-    <span class="nd">@Inject</span> <span class="kd">private</span> <span class="n">UserDao</span> <span class="n">userDao</span><span class="o">;</span>
+    <span class="nd">@Inject</span>
+    <span class="kd">private</span> <span class="n">UserDao</span> <span class="n">userDao</span><span class="o">;</span>
 
     <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">isValid</span><span class="o">(</span><span class="n">User</span> <span class="n">user</span><span class="o">,</span> <span class="n">ConstraintValidatorContext</span> <span class="n">context</span><span class="o">)</span> <span class="o">{</span>
         <span class="k">return</span> <span class="o">!</span><span class="n">userDao</span><span class="o">.</span><span class="na">containsUserWithLogin</span><span class="o">(</span><span class="n">user</span><span class="o">.</span><span class="na">getLogin</span><span class="o">());</span>
@@ -54,13 +76,13 @@
 // prints: 'may not be empty - size must be between 10 and 50'</code></pre> <h2 id="using-custom-messages">Using custom messages</h2> <p>If you prefer, you can use custom messages with Bean Validation. For this you need to add the file <code>ValidationMessages.properties</code> in your <em>classpath</em>. In a Mavem project, the location is <code>/src/main/resources</code>.</p> <p>Considering the previous example, the file might have the following content to customize the default messages:</p> <pre><code class="language-properties"><span class="na">client.name.empty</span> <span class="o">=</span> <span class="s">The client name may not be empty</span>
 <span class="na">client.name.size</span> <span class="o">=</span> <span class="s">The client name size must be between 10 and 50</span>
 <span class="na">client.birth.past</span> <span class="o">=</span> <span class="s">The birth must be in the future</span></code></pre> <p>And the class:</p> <pre><code class="language-java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Cliente</span> <span class="o">{</span>
-    <span class="nd">@NotNull</span><span class="o">(</span><span class="n">message</span><span class="o">=</span><span class="s">"{client.name.empty}"</span><span class="o">)</span> <span class="c1">// the value {} indicates that the message comes from the ResourceBundle</span>
+    <span class="nd">@NotNull</span><span class="o">(</span><span class="n">message</span><span class="o">=</span><span class="s">"{client.name.empty}"</span><span class="o">)</span>
     <span class="nd">@Size</span><span class="o">(</span><span class="n">min</span><span class="o">=</span><span class="mi">10</span><span class="o">,</span> <span class="n">max</span><span class="o">=</span><span class="mi">50</span><span class="o">,</span> <span class="n">message</span><span class="o">=</span><span class="s">"{client.name.size}"</span><span class="o">)</span>
     <span class="kd">private</span> <span class="n">String</span> <span class="n">name</span><span class="o">;</span>
 
     <span class="nd">@Past</span><span class="o">(</span><span class="n">message</span><span class="o">=</span><span class="s">"{client.birth.past}"</span><span class="o">)</span>
     <span class="kd">private</span> <span class="n">Date</span> <span class="n">birth</span><span class="o">;</span>
-<span class="o">}</span></code></pre> <p>See that was added parameters in order to let our most dynamic and reusable messages. The possibilities are currently:</p> <ul> <li>attribute values ​​of the restriction mapped with the attribute names, like <code>{min}</code> and <code>{max}</code> for <code>@Size</code> </li> <li>the current value to be validated with the name <code>${validatedValue}</code> </li> <li>a ternary operation like: <code>${value &gt; 1 ? 's' : ''}</code> </li> <li>a bean mapped with the name <code>formatter</code> exposing a var-arg method <code>format(String format, Object... args)</code> which behaves like <code>java.util.Formatter.format(String format, Object... args)</code>. Example: <code>${formatter.format('%1$.2f', validatedValue)}</code> </li> </ul> <h2 id="validation-using-validator-class-methods">Validation using Validator class methods</h2> <p>If you don’t want to use Bean Validation, you can use other methods located at <code>Validator</code> class. Below an example with <code>add</code> method:</p> <pre><code class="language-java"><span class="k">if</span> <span class="o">(</span><span class="n">client</span><span class="o">.</span><span class="na">getName</span><span class="o">()</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+<span class="o">}</span></code></pre> <p>The value <code>{}</code> present in annotations indicates that the message comes from the <code>ResourceBundle</code>.</p> <p>See that was added parameters in order to let our most dynamic and reusable messages. The possibilities are currently:</p> <ul> <li>attribute values ​​of the restriction mapped with the attribute names, like <code>{min}</code> and <code>{max}</code> for <code>@Size</code> </li> <li>the current value to be validated with the name <code>${validatedValue}</code> </li> <li>a ternary operation like: <code>${value &gt; 1 ? 's' : ''}</code> </li> <li>a bean mapped with the name <code>formatter</code> exposing a var-arg method <code>format(String format, Object... args)</code> which behaves like <code>java.util.Formatter.format(String format, Object... args)</code>. Example: <code>${formatter.format('%1$.2f', validatedValue)}</code> </li> </ul> <h2 id="validation-using-validator-class-methods">Validation using Validator class methods</h2> <p>If you don’t want to use Bean Validation, you can use other methods located at <code>Validator</code> class. Below an example with <code>add</code> method:</p> <pre><code class="language-java"><span class="k">if</span> <span class="o">(</span><span class="n">client</span><span class="o">.</span><span class="na">getName</span><span class="o">()</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
   <span class="c1">//an hard-coded message</span>
   <span class="n">validator</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="n">SimpleMessage</span><span class="o">(</span><span class="s">"name"</span><span class="o">,</span> <span class="s">"The name is mandatory"</span><span class="o">));</span>
 

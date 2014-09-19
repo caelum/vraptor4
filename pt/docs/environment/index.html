@@ -7,8 +7,17 @@
 <span class="na">email_de_teste</span> <span class="o">=</span> <span class="s">test.mail@mail.com</span>
 <span class="na">environment.controller</span> <span class="o">=</span> <span class="s">true</span></code></pre> <h2 id="acessando-propriedades-de-ambiente-no-seu-cdigo">Acessando propriedades de ambiente no seu código</h2> <pre><code class="language-java"><span class="nd">@Controller</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">MeuController</span> <span class="o">{</span>
+
     <span class="kd">private</span> <span class="kd">final</span> <span class="n">Environment</span> <span class="n">environment</span><span class="o">;</span>
+
     <span class="kd">private</span> <span class="kd">final</span> <span class="n">MailSender</span> <span class="n">sender</span><span class="o">;</span>
+
+    <span class="cm">/**</span>
+<span class="cm">     * @deprecated CDI eyes only</span>
+<span class="cm">     */</span>
+    <span class="kd">protected</span> <span class="nf">MeuController</span><span class="o">(){</span>
+        <span class="k">this</span><span class="o">(</span><span class="kc">null</span><span class="o">,</span> <span class="kc">null</span><span class="o">);</span>
+    <span class="o">}</span>
 
     <span class="nd">@Inject</span>
     <span class="kd">public</span> <span class="nf">MeuController</span><span class="o">(</span><span class="n">Environment</span> <span class="n">environment</span><span class="o">,</span> <span class="n">MailSender</span> <span class="n">sender</span><span class="o">)</span> <span class="o">{</span>
@@ -31,7 +40,9 @@ Enviando e-mail para: ${environment.get('email_de_teste')}</code></pre> <h2 id="
 <span class="n">cfg</span><span class="o">.</span><span class="na">configure</span><span class="o">(</span><span class="n">environment</span><span class="o">.</span><span class="na">getResource</span><span class="o">(</span><span class="s">"/hibernate.cfg.xml"</span><span class="o">));</span></code></pre> <p>Para manter compatibilidade com quem não utilizava o environment, caso o arquivo não seja encontrado no diretório com o nome do ambiente, ele será carregado no diretório root (do classpath).</p> <h2 id="injetando-o-valor-de-suas-configurao-programaticamente">Injetando o valor de suas configuração programaticamente</h2> <p>Você também consegue injetar suas configurações programaticamente usando o <code>@Property</code>, por exemplo:</p> <pre><code class="language-java"><span class="nd">@Controller</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">MeuController</span> <span class="o">{</span>
 
-    <span class="nd">@Inject</span> <span class="nd">@Property</span><span class="o">(</span><span class="s">"email"</span><span class="o">)</span> <span class="kd">private</span> <span class="n">String</span> <span class="n">email</span><span class="o">;</span>
+    <span class="nd">@Inject</span>
+    <span class="nd">@Property</span><span class="o">(</span><span class="s">"email"</span><span class="o">)</span>
+    <span class="kd">private</span> <span class="n">String</span> <span class="n">email</span><span class="o">;</span>
 
     <span class="kd">public</span> <span class="kt">void</span> <span class="nf">sendMail</span><span class="o">(</span><span class="n">String</span> <span class="n">email</span><span class="o">)</span> <span class="o">{</span>
         <span class="n">sender</span><span class="o">.</span><span class="na">sendMailTo</span><span class="o">(</span><span class="n">email</span><span class="o">);</span>
@@ -39,10 +50,13 @@ Enviando e-mail para: ${environment.get('email_de_teste')}</code></pre> <h2 id="
 <span class="o">}</span></code></pre> <p>Neste caso, se o seu environment estiver com valor <code>DEVELOPMENT</code>, vai injetar o valor que corresponde a chave <em>email</em> do arquivo <code>development.properties</code>, se estiver com <code>PRODUCTION</code> do <code>production.properties</code> e assim por diante. Dessa forma você não precisa dos ifs como: <code>if(environment.isDevelopment()) {...}</code> em seu código.</p> <p>Outra facilidade, é que se o nome da chave for o mesmo nome do field injetado, como em nosso caso com a chave <em>email</em>, você pode deixar apenas o <code>@Property</code> que o nome será inferido. Seu controller ficaria assim:</p> <pre><code class="language-java"><span class="nd">@Controller</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">MeuController</span> <span class="o">{</span>
 
-    <span class="nd">@Inject</span> <span class="nd">@Property</span> <span class="kd">private</span> <span class="n">String</span> <span class="n">email</span><span class="o">;</span>
+    <span class="nd">@Inject</span>
+    <span class="nd">@Property</span>
+    <span class="kd">private</span> <span class="n">String</span> <span class="n">email</span><span class="o">;</span>
 
     <span class="kd">public</span> <span class="kt">void</span> <span class="nf">sendMail</span><span class="o">(</span><span class="n">String</span> <span class="n">email</span><span class="o">)</span> <span class="o">{</span>
         <span class="n">sender</span><span class="o">.</span><span class="na">sendMailTo</span><span class="o">(</span><span class="n">email</span><span class="o">);</span>
     <span class="o">}</span>
-<span class="o">}</span></code></pre> <p>Você também pode definir um valor default para essa propriedade:</p> <pre><code class="language-java"><span class="nd">@Inject</span> <span class="nd">@Property</span><span class="o">(</span><span class="n">defaultValue</span> <span class="o">=</span> <span class="s">"config.properties"</span><span class="o">)</span> 
+<span class="o">}</span></code></pre> <p>Você também pode definir um valor default para essa propriedade:</p> <pre><code class="language-java"><span class="nd">@Inject</span>
+<span class="nd">@Property</span><span class="o">(</span><span class="n">defaultValue</span> <span class="o">=</span> <span class="s">"config.properties"</span><span class="o">)</span>
 <span class="kd">private</span> <span class="n">String</span> <span class="n">fileName</span><span class="o">;</span></code></pre> </main> <script src="/js/headers.min.js"></script> </body> </html>

@@ -9,10 +9,9 @@
     <span class="kd">private</span> <span class="n">Double</span> <span class="n">price</span><span class="o">;</span>
 
     <span class="c1">// getter and setters and other necessary business methods</span>
-<span class="o">}</span></code></pre> <p>We also need a class that will manage product registration, dealing with web requests. This class will be the products Controller:</p> <pre><code class="language-java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">ProductsController</span> <span class="o">{</span>
-<span class="o">}</span></code></pre> <p>The <code>ProductsController</code> class will expose URIs that can be accessed through the web, i.e., it will expose your application resources. This type of classes have to annotated with <code>@Controller</code>:</p> <pre><code class="language-java"><span class="nd">@Controller</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">ProductsController</span> <span class="o">{</span>
-<span class="o">}</span></code></pre> <p>Whenever you annotate a class with <code>@Controller</code> all its public methods are accessible through the web. Take the list method as an example:</p> <pre><code class="language-java"><span class="nd">@Controller</span>
+
+<span class="o">}</span></code></pre> <p>We also need a class that will manage product registration, dealing with web requests. This class will be the products Controller:</p> <pre><code class="language-java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">ProductsController</span> <span class="o">{</span> <span class="o">...</span> <span class="o">}</span></code></pre> <p>The <code>ProductsController</code> class will expose URIs that can be accessed through the web, i.e., it will expose your application resources. This type of classes have to annotated with <code>@Controller</code>:</p> <pre><code class="language-java"><span class="nd">@Controller</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">ProductsController</span> <span class="o">{</span> <span class="o">...</span> <span class="o">}</span></code></pre> <p>Whenever you annotate a class with <code>@Controller</code> all its public methods are accessible through the web. Take the list method as an example:</p> <pre><code class="language-java"><span class="nd">@Controller</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">ProductsController</span> <span class="o">{</span>
     <span class="kd">public</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">Product</span><span class="o">&gt;</span> <span class="nf">list</span><span class="o">()</span> <span class="o">{</span>
         <span class="k">return</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">Product</span><span class="o">&gt;();</span>
@@ -29,13 +28,14 @@
 <span class="o">}</span></code></pre> <p>And, we can use the DAO on the <code>ProductsController</code> to list products:</p> <pre><code class="language-java"><span class="nd">@Controller</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">ProductsController</span> <span class="o">{</span>
 
+    <span class="nd">@Inject</span>
     <span class="kd">private</span> <span class="n">ProductDAO</span> <span class="n">dao</span><span class="o">;</span>
 
     <span class="kd">public</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">Product</span><span class="o">&gt;</span> <span class="nf">list</span><span class="o">()</span> <span class="o">{</span>
         <span class="k">return</span> <span class="n">dao</span><span class="o">.</span><span class="na">listAll</span><span class="o">();</span>
     <span class="o">}</span>
 <span class="o">}</span></code></pre> <p>We can instantiate <code>ProductDAO</code> from the controller, but that can be complicated, specially if the DAO itself has its own dependencies. It would be much more interesting to take advantage from VRaptor’s dependency management. By annotating the DAO with <code>@RequestScoped</code>, and the controller attribute with <code>@Inject</code> we indicate the DAO should be injected to the Controller.</p> <pre><code class="language-java"><span class="nd">@RequestScoped</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">ProductDAO</span> <span class="o">{</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">ProductDAO</span> <span class="o">{</span> 
     <span class="c1">//...</span>
 <span class="o">}</span>
 
@@ -50,9 +50,10 @@
     <span class="o">}</span>
 <span class="o">}</span></code></pre> <h2 id="create-form-redirecting">Create form: redirecting</h2> <p>We already have the product lists, but we can’t register them yet. We will create a form to add products. In order to avoid accessing the JSP directly, we will create an empty logic that will only redirect to the JSP:</p> <pre><code class="language-java"><span class="nd">@Controller</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">ProductsController</span> <span class="o">{</span>
+    
     <span class="c1">//...</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">form</span><span class="o">()</span> <span class="o">{</span>
-    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">form</span><span class="o">()</span> <span class="o">{</span> <span class="o">...</span> <span class="o">}</span>
 <span class="o">}</span></code></pre> <p>The form jsp will be placed at <code>/WEB-INF/jsp/products/form.jsp</code>, and can be accessed through the URI <code>/produtos/form</code>:</p> <pre><code class="language-jsp"><span class="nt">&lt;form</span> <span class="na">action=</span><span class="s">"&lt;c:url value='/products/add'/&gt;"</span><span class="nt">&gt;</span>
     Name:
     <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"text"</span> <span class="na">name=</span><span class="s">"product.name"</span><span class="nt">/&gt;&lt;br/&gt;</span>
@@ -64,11 +65,12 @@
     <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"submit"</span> <span class="na">value=</span><span class="s">"Save"</span> <span class="nt">/&gt;</span>
 <span class="nt">&lt;/form&gt;</span></code></pre> <p>The form, as we designed it, will save the product through the URI <code>/products/add</code>, threfore we need to create that method on the controller:</p> <pre><code class="language-java"><span class="nd">@Controller</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">ProductsController</span> <span class="o">{</span>
+
     <span class="c1">//...</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">add</span><span class="o">()</span> <span class="o">{</span>
-    <span class="o">}</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">add</span><span class="o">()</span> <span class="o">{</span> <span class="o">...</span> <span class="o">}</span>
 <span class="o">}</span></code></pre> <p>Note the input names: <code>product.name</code>, <code>product.description</code>, and <code>product.price</code>. If we get a <code>Product</code> called <code>product</code> as an <code>add</code> method parameter, VRaptor will populate its <code>name</code>, <code>description</code> and <code>price</code> fields using values from the inputs on the product’s setters. Even the <code>price</code> field will be converted to a <code>Double</code> before being set to the product. Learn more about this on the <a href="../converters">converters</a> chapter.</p> <p>Then, by using the correct names on the form inputs, all you need to do is to make the <code>add</code> method receive a <code>Product</code> for parameter:</p> <pre><code class="language-java"><span class="nd">@Controller</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">ProductsController</span> <span class="o">{</span>
+    
     <span class="c1">//...</span>
     <span class="kd">public</span> <span class="kt">void</span> <span class="nf">add</span><span class="o">(</span><span class="n">Product</span> <span class="n">product</span><span class="o">)</span> <span class="o">{</span>
         <span class="n">dao</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">product</span><span class="o">);</span>
@@ -78,6 +80,7 @@
 
     <span class="nd">@Inject</span>
     <span class="kd">private</span> <span class="n">ProductDAO</span> <span class="n">dao</span><span class="o">;</span>
+
     <span class="nd">@Inject</span>
     <span class="kd">private</span> <span class="n">Result</span> <span class="n">result</span><span class="o">;</span>
 

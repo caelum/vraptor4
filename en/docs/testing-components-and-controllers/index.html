@@ -2,13 +2,8 @@
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">PersonController</span> <span class="o">{</span>
 
     <span class="kd">private</span> <span class="kd">final</span> <span class="n">Result</span> <span class="n">result</span><span class="o">;</span>
-    <span class="kd">private</span> <span class="kd">final</span> <span class="n">Validator</span> <span class="n">validator</span><span class="o">;</span>
 
-    <span class="nd">@Inject</span>
-    <span class="kd">public</span> <span class="nf">PersonController</span><span class="o">(</span><span class="n">Result</span> <span class="n">result</span><span class="o">,</span> <span class="n">Validator</span> <span class="n">validator</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">this</span><span class="o">.</span><span class="na">result</span> <span class="o">=</span> <span class="n">result</span><span class="o">;</span>
-        <span class="k">this</span><span class="o">.</span><span class="na">validator</span> <span class="o">=</span> <span class="n">validator</span><span class="o">;</span>
-    <span class="o">}</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="n">Validator</span> <span class="n">validator</span><span class="o">;</span>
 
     <span class="cm">/**</span>
 <span class="cm">     * @deprecated CDI eyes only</span>
@@ -16,7 +11,13 @@
     <span class="kd">protected</span> <span class="nf">PersonController</span><span class="o">()</span> <span class="o">{</span>
         <span class="k">this</span><span class="o">(</span><span class="kc">null</span><span class="o">,</span> <span class="kc">null</span><span class="o">);</span>
     <span class="o">}</span>
-    
+
+    <span class="nd">@Inject</span>
+    <span class="kd">public</span> <span class="nf">PersonController</span><span class="o">(</span><span class="n">Result</span> <span class="n">result</span><span class="o">,</span> <span class="n">Validator</span> <span class="n">validator</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">result</span> <span class="o">=</span> <span class="n">result</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">validator</span> <span class="o">=</span> <span class="n">validator</span><span class="o">;</span>
+    <span class="o">}</span>
+
 <span class="o">}</span></code></pre> <p><code>MockResult</code> and <code>MockValidator</code> classes will help you to test your VRaptor’s Controller:</p> <pre><code class="language-java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">PersonControllerTest</span> <span class="o">{</span>
 
     <span class="kd">private</span> <span class="n">MockResult</span> <span class="n">result</span><span class="o">;</span>

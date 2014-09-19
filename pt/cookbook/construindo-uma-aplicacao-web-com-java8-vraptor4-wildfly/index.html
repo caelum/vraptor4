@@ -72,8 +72,7 @@
 
     <span class="kd">private</span> <span class="n">String</span> <span class="n">description</span><span class="o">;</span>
 
-    <span class="kd">public</span> <span class="nf">Event</span><span class="o">()</span> <span class="o">{</span>
-    <span class="o">}</span>
+    <span class="kd">public</span> <span class="nf">Event</span><span class="o">()</span> <span class="o">{</span> <span class="o">}</span>
 
     <span class="kd">public</span> <span class="nf">Event</span><span class="o">(</span><span class="n">String</span> <span class="n">description</span><span class="o">,</span> <span class="n">LocalDate</span> <span class="n">date</span><span class="o">)</span> <span class="o">{</span>
         <span class="k">this</span><span class="o">.</span><span class="na">description</span> <span class="o">=</span> <span class="n">description</span><span class="o">;</span>
@@ -118,8 +117,11 @@
 <span class="o">}</span></code></pre> <p>Agora usaremos o CDI para injetar o service no controller do VRaptor.</p> <pre><code class="language-java"><span class="nd">@Controller</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">EventController</span> <span class="kd">implements</span> <span class="n">Serializable</span> <span class="o">{</span>
 
-    <span class="nd">@Inject</span> <span class="kd">private</span> <span class="n">EventService</span> <span class="n">service</span><span class="o">;</span>
-    <span class="nd">@Inject</span> <span class="kd">private</span> <span class="n">Result</span> <span class="n">result</span><span class="o">;</span>
+    <span class="nd">@Inject</span>
+    <span class="kd">private</span> <span class="n">EventService</span> <span class="n">service</span><span class="o">;</span>
+
+    <span class="nd">@Inject</span>
+    <span class="kd">private</span> <span class="n">Result</span> <span class="n">result</span><span class="o">;</span>
 
     <span class="nd">@Get</span><span class="o">(</span><span class="s">"/events"</span><span class="o">)</span>
     <span class="kd">public</span> <span class="kt">void</span> <span class="nf">event</span><span class="o">()</span> <span class="o">{</span>

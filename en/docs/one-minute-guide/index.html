@@ -4,9 +4,7 @@
     <span class="nd">@Inject</span>
     <span class="kd">private</span> <span class="n">ClientDao</span> <span class="n">dao</span><span class="o">;</span>
 
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">form</span><span class="o">()</span> <span class="o">{</span>
-        <span class="c1">// code that loads data for checkboxes, selects, etc</span>
-    <span class="o">}</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">form</span><span class="o">()</span> <span class="o">{</span> <span class="o">...</span> <span class="o">}</span>
 
     <span class="kd">public</span> <span class="kt">void</span> <span class="nf">add</span><span class="o">(</span><span class="n">Client</span> <span class="n">custom</span><span class="o">)</span> <span class="o">{</span>
         <span class="n">dao</span><span class="o">.</span><span class="na">save</span><span class="o">(</span><span class="n">custom</span><span class="o">);</span>
@@ -19,21 +17,21 @@
     <span class="kd">public</span> <span class="n">Client</span> <span class="nf">view</span><span class="o">(</span><span class="n">Long</span> <span class="n">id</span><span class="o">)</span> <span class="o">{</span>
         <span class="k">return</span> <span class="n">dao</span><span class="o">.</span><span class="na">load</span><span class="o">(</span><span class="n">id</span><span class="o">);</span>
     <span class="o">}</span>
-<span class="o">}</span></code></pre> <p>Use the <code>@Controller</code> annotation and your public methods will be available for web requests.</p> <p>You can inject your class’ dependencies using the <code>@Inject</code> annotation. Then CDI and VRaptor will create or locate such instances for you. As an alternative, annotate the contructor with <code>@Inject</code>, but you would also need to have a default constructor for that approach to work, i.e:</p> <pre><code class="language-java"><span class="nd">@Controller</span>
+<span class="o">}</span></code></pre> <p>Into the <code>form()</code> method you can put the code that loads data for checkboxes, selects, etc.</p> <p>Use the <code>@Controller</code> annotation and your public methods will be available for web requests.</p> <p>You can inject your class’ dependencies using the <code>@Inject</code> annotation. Then CDI and VRaptor will create or locate such instances for you. As an alternative, annotate the contructor with <code>@Inject</code>, but you would also need to have a default constructor for that approach to work, i.e:</p> <pre><code class="language-java"><span class="nd">@Controller</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">ClientsController</span> <span class="o">{</span>
 
     <span class="kd">private</span> <span class="kd">final</span> <span class="n">ClientDao</span> <span class="n">dao</span><span class="o">;</span>
 
-    <span class="nd">@Inject</span>
-    <span class="kd">public</span> <span class="nf">ClientsController</span><span class="o">(</span><span class="n">ClientDao</span> <span class="n">dao</span><span class="o">){</span>
-        <span class="k">this</span><span class="o">.</span><span class="na">dao</span> <span class="o">=</span> <span class="n">dao</span><span class="o">;</span>
-    <span class="o">}</span>
-
     <span class="cm">/**</span>
 <span class="cm">     * @deprecated CDI eyes only</span>
 <span class="cm">     */</span>
-    <span class="kd">public</span> <span class="nf">ClientsController</span><span class="o">(){</span>
+    <span class="kd">protected</span> <span class="nf">ClientsController</span><span class="o">(){</span>
         <span class="k">this</span><span class="o">(</span><span class="kc">null</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Inject</span>
+    <span class="kd">public</span> <span class="nf">ClientsController</span><span class="o">(</span><span class="n">ClientDao</span> <span class="n">dao</span><span class="o">){</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">dao</span> <span class="o">=</span> <span class="n">dao</span><span class="o">;</span>
     <span class="o">}</span>
 
     <span class="c1">// controller methods</span>

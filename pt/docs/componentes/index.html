@@ -3,8 +3,11 @@
 
     <span class="kd">private</span> <span class="n">Session</span> <span class="n">session</span><span class="o">;</span>
 
-    <span class="c1">// o CDI obriga que você tenha o construtor padrão</span>
+    <span class="cm">/**</span>
+<span class="cm">     * @deprecated CDI eyes only</span>
+<span class="cm">     */</span>
     <span class="kd">protected</span> <span class="nf">ClienteDao</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">(</span><span class="kc">null</span><span class="o">);</span>
     <span class="o">}</span>
 
     <span class="nd">@Inject</span>
@@ -15,7 +18,7 @@
     <span class="kd">public</span> <span class="kt">void</span> <span class="nf">adiciona</span><span class="o">(</span><span class="n">Cliente</span> <span class="n">cliente</span><span class="o">)</span> <span class="o">{</span>
         <span class="n">session</span><span class="o">.</span><span class="na">save</span><span class="o">(</span><span class="n">cliente</span><span class="o">);</span>
     <span class="o">}</span>
-<span class="o">}</span></code></pre> <p>Todos os componentes do VRaptor são gerenciados pelo CDI (Context Dependency Injection) do Java EE 7. Desta forma todas as funcionalidades presentes no CDI estão presentes no VRaptor. </p> <p>Nos links abaixo você pode obter mais informações sobre o CDI:</p> <ul> <li><a href="http://blog.caelum.com.br/use-cdi-no-seu-proximo-projeto-java/">Use CDI no seu próximo projeto Java</a></li> <li><a href="http://blog.caelum.com.br/customizando-a-producao-de-dependencias-no-cdi/">Customizando a produção de dependências no CDI</a></li> <li><a href="http://blog.caelum.com.br/4-recursos-novos-do-cdi-1-1/">4 recursos novos do CDI 1.1</a></li> </ul> <h2 id="escopos">Escopos</h2> <p>Assim como os controllers, os componentes vivem em um escopo específico mas seguem regras diferentes por padrão. Um controller pertence ao escopo de requisicão, isto é, a cada nova requisição seu componente será novamente instanciado. Já um componente do VRaptor, por padrão, é construído sempre que necessário, para cada ponto de injeção (o escopo dependent que veremos mais adiante).</p> <p>O exemplo a seguir mostra o fornecedor de conexões com o banco baseado no Hibernate. Esse fornecedor está no escopo de aplicacação, portanto será instanciado somente uma vez por contexto:</p> <pre><code class="language-java"><span class="nd">@ApplicationScoped</span>
+<span class="o">}</span></code></pre> <p>O construtor padrão é necessário para que o CDI consiga gerenciar esta classe.</p> <p>Todos os componentes do VRaptor são gerenciados pelo CDI (Context Dependency Injection) do Java EE 7. Desta forma todas as funcionalidades presentes no CDI estão presentes no VRaptor. </p> <p>Nos links abaixo você pode obter mais informações sobre o CDI:</p> <ul> <li><a href="http://blog.caelum.com.br/use-cdi-no-seu-proximo-projeto-java/">Use CDI no seu próximo projeto Java</a></li> <li><a href="http://blog.caelum.com.br/customizando-a-producao-de-dependencias-no-cdi/">Customizando a produção de dependências no CDI</a></li> <li><a href="http://blog.caelum.com.br/4-recursos-novos-do-cdi-1-1/">4 recursos novos do CDI 1.1</a></li> </ul> <h2 id="escopos">Escopos</h2> <p>Assim como os controllers, os componentes vivem em um escopo específico mas seguem regras diferentes por padrão. Um controller pertence ao escopo de requisicão, isto é, a cada nova requisição seu componente será novamente instanciado. Já um componente do VRaptor, por padrão, é construído sempre que necessário, para cada ponto de injeção (o escopo dependent que veremos mais adiante).</p> <p>O exemplo a seguir mostra o fornecedor de conexões com o banco baseado no Hibernate. Esse fornecedor está no escopo de aplicacação, portanto será instanciado somente uma vez por contexto:</p> <pre><code class="language-java"><span class="nd">@ApplicationScoped</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">HibernateControl</span> <span class="o">{</span>
 
     <span class="kd">private</span> <span class="kd">final</span> <span class="n">SessionFactory</span> <span class="n">factory</span><span class="o">;</span>
@@ -27,15 +30,11 @@
     <span class="kd">public</span> <span class="n">Session</span> <span class="nf">getSession</span><span class="o">()</span> <span class="o">{</span>
         <span class="k">return</span> <span class="n">factory</span><span class="o">.</span><span class="na">openSession</span><span class="o">();</span>
     <span class="o">}</span>
-<span class="o">}</span></code></pre> <p>Os escopos implementados são:</p> <pre><code>* @ApplicationScoped - component é um singleton, apenas um por aplicação.
-* @SessionScoped - o componente é o mesmo durante uma http session.
-* @ConversationScoped - a instância do componente é mantida durante uma conversation.
-* @RequestScoped - o componente é o mesmo durante uma requisição.
-* @Dependent - component é instanciado sempre que requisitado.
-</code></pre> <p>Você pode pesquisar mais sobre os escopos <a href="http://docs.oracle.com/javaee/7/tutorial/doc/cdi-basic008.htm">na documentação do Java EE 7</a>.</p> <h2 id="fabricando-componentes">Fabricando componentes</h2> <p>Muitas vezes você quer receber como dependência da sua classe alguma classe que não é do seu projeto, como por exemplo uma Session do Hibernate ou um EntityManager da JPA.</p> <p>Para poder fazer isto, basta criar um <code>Produces</code>:</p> <pre><code class="language-java"><span class="nd">@RequestScoped</span>
+<span class="o">}</span></code></pre> <p>Os escopos implementados são:</p> <table class="content-table"> <tbody> <tr> <td>@ApplicationScoped</td> <td>component é um singleton, apenas um por aplicação.</td> </tr> <tr> <td>@SessionScoped</td> <td>o componente é o mesmo durante uma http session.</td> </tr> <tr> <td>@ConversationScoped</td> <td>a instância do componente é mantida durante uma conversation.</td> </tr> <tr> <td>@RequestScoped</td> <td>o componente é o mesmo durante uma requisição.</td> </tr> <tr> <td>@Dependent</td> <td>component é instanciado sempre que requisitado.</td> </tr> </tbody> </table> <p>Você pode pesquisar mais sobre os escopos <a href="http://docs.oracle.com/javaee/7/tutorial/doc/cdi-basic008.htm">na documentação do Java EE 7</a>.</p> <h2 id="fabricando-componentes">Fabricando componentes</h2> <p>Muitas vezes você quer receber como dependência da sua classe alguma classe que não é do seu projeto, como por exemplo uma Session do Hibernate ou um EntityManager da JPA.</p> <p>Para poder fazer isto, basta criar um <code>Produces</code>:</p> <pre><code class="language-java"><span class="nd">@RequestScoped</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">SessionCreator</span> <span class="o">{</span>
 
-    <span class="nd">@Inject</span> <span class="kd">private</span> <span class="n">SessionFactory</span> <span class="n">sessionFactory</span><span class="o">;</span>
+    <span class="nd">@Inject</span>
+    <span class="kd">private</span> <span class="n">SessionFactory</span> <span class="n">sessionFactory</span><span class="o">;</span>
 
     <span class="nd">@Produces</span> <span class="nd">@RequestScoped</span>
     <span class="kd">public</span> <span class="n">Session</span> <span class="nf">getSession</span><span class="o">()</span> <span class="o">{</span>
@@ -49,12 +48,8 @@
     <span class="o">}</span>
 <span class="o">}</span></code></pre> <p>Você pode também adicionar os listeners <code>@PostConstruct</code>, <code>@PreDestroy</code> e <code>@Disposes</code> para controlar a criação e destruição dos recursos que você usa. Isso funciona para qualquer componente que você registrar no VRaptor.</p> <h2 id="injeo-de-dependncias">Injeção de dependências</h2> <p>O VRaptor utiliza o CDI para controlar o que é necessário para instanciar cada um de seus componentes e recursos. Sendo assim, os dois exemplos anteriores permitem que quaisquer um dos seus recursos ou componentes recebam um <code>ClienteDao</code> em seu construtor, para isso o CDI nos obriga a termos o construtor padrão, por exemplo:</p> <pre><code class="language-java"><span class="nd">@Controller</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">ClienteController</span> <span class="o">{</span>
-    <span class="kd">private</span> <span class="n">ClienteDao</span> <span class="n">dao</span><span class="o">;</span>
 
-    <span class="nd">@Inject</span>
-    <span class="kd">public</span> <span class="nf">ClienteController</span><span class="o">(</span><span class="n">ClienteDao</span> <span class="n">dao</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">this</span><span class="o">.</span><span class="na">dao</span> <span class="o">=</span> <span class="n">dao</span><span class="o">;</span>
-    <span class="o">}</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="n">ClienteDao</span> <span class="n">dao</span><span class="o">;</span>
 
     <span class="cm">/**</span>
 <span class="cm">     * @deprecated CDI eyes only</span>
@@ -63,16 +58,64 @@
         <span class="k">this</span><span class="o">(</span><span class="kc">null</span><span class="o">);</span>
     <span class="o">}</span>
 
+    <span class="nd">@Inject</span>
+    <span class="kd">public</span> <span class="nf">ClienteController</span><span class="o">(</span><span class="n">ClienteDao</span> <span class="n">dao</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">dao</span> <span class="o">=</span> <span class="n">dao</span><span class="o">;</span>
+    <span class="o">}</span>
+
     <span class="nd">@Post</span>
     <span class="kd">public</span> <span class="kt">void</span> <span class="nf">adiciona</span><span class="o">(</span><span class="n">Cliente</span> <span class="n">cliente</span><span class="o">)</span> <span class="o">{</span>
         <span class="k">this</span><span class="o">.</span><span class="na">dao</span><span class="o">.</span><span class="na">adiciona</span><span class="o">(</span><span class="n">cliente</span><span class="o">);</span>
     <span class="o">}</span>
+<span class="o">}</span></code></pre> <h2 id="injetando-recursos-java-ee">Injetando recursos Java EE</h2> <p>A injeção de dependências também funciona para todos os recursos Java EE se você estiver rodando sua aplicação em um Servidor de Aplicações. As anotações <code>@Resource</code>, <code>@EJB</code>, <code>@PersistenceContext</code>, <code>@PersistenceUnit</code> e <code>@WebServiceRef</code> funcionam corretamente se você usa injeção via field.</p> <p>No código abaixo você pode ver que estamos injetando um EJB e um <code>SessionContext</code> em nosso controller:</p> <pre><code class="language-java"><span class="nd">@Controller</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">ClienteController</span> <span class="o">{</span>
+
+    <span class="nd">@EJB</span>
+    <span class="kd">private</span> <span class="n">ClienteBean</span> <span class="n">clienteBean</span><span class="o">;</span>
+
+    <span class="nd">@Resource</span>
+    <span class="kd">private</span> <span class="n">SessionContext</span> <span class="n">context</span><span class="o">;</span>
+
+<span class="o">}</span></code></pre> <p>Porém se você usa a injeção de dependências via construtor, somente EJBs estão disponível para injeção usando a anotação <code>@Inject</code>. Recursos anotados com <code>@Resource</code>, e os outros já citados acima, precisam de um producer. No exemplo abaixo criaremos um producer para deixar o recurso <code>SessionContext</code> disponível para injeção de dependências via construtor:</p> <pre><code class="language-java"><span class="nd">@Dependent</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Resources</span> <span class="o">{</span>
+ 
+    <span class="nd">@Produces</span>
+    <span class="nd">@Resource</span><span class="o">(</span><span class="n">mappedName</span> <span class="o">=</span> <span class="s">"java:comp/EJBContext"</span><span class="o">)</span>
+    <span class="kd">protected</span> <span class="n">SessionContext</span> <span class="n">sessionContext</span><span class="o">;</span>
+<span class="o">}</span></code></pre> <p>E agora é possível injetar o <code>SessionContext</code> no seu controller pelo construtor. Veja o código abaixo:</p> <pre><code class="language-java"><span class="nd">@Controller</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">ClienteController</span> <span class="o">{</span>
+
+    <span class="kd">private</span> <span class="n">ClienteBean</span> <span class="n">clienteBean</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="n">SessionContext</span> <span class="n">context</span><span class="o">;</span>
+
+    <span class="cm">/**</span>
+<span class="cm">     * @deprecated CDI eyes only</span>
+<span class="cm">     */</span>
+    <span class="kd">protected</span> <span class="nf">ClienteController</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">(</span><span class="kc">null</span><span class="o">,</span> <span class="kc">null</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Inject</span>
+    <span class="kd">public</span> <span class="nf">ClienteController</span><span class="o">(</span><span class="n">ClienteBean</span> <span class="n">clienteBean</span><span class="o">,</span> <span class="n">SessionContext</span> <span class="n">context</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">clienteBean</span> <span class="o">=</span> <span class="n">clienteBean</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">context</span> <span class="o">=</span> <span class="n">context</span><span class="o">;</span>
+    <span class="o">}</span>
+
+<span class="o">}</span></code></pre> <p>Se você não está usando nosso plugin <a href="../plugins/#vraptor-jpa">vraptor-jpa</a>, e você quer usar o <code>EntityManager</code> disponibilizado pelo Servidor de Aplicações, você precisa também criar um producer para injetá-lo via construtor. No exemplo abaixo adicionamos em nossa classe <code>Resources</code> um producer para o <code>EntityManager</code>:</p> <pre><code class="language-java"><span class="nd">@Dependent</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Resources</span> <span class="o">{</span>
+
+    <span class="c1">// outros producers</span>
+
+    <span class="nd">@Produces</span>
+    <span class="nd">@PersistenceContext</span>
+    <span class="kd">protected</span> <span class="n">EntityManager</span> <span class="n">em</span><span class="o">;</span>
 <span class="o">}</span></code></pre> <h2 id="disparando-eventos">Disparando eventos</h2> <p>Para disparar eventos você pode usar a anotação <code>@Observes</code>, que é usada quando um evento inicia.</p> <p>Se você quiser, por exemplo, imprimir uma mensagem na inicialização da aplicação, você pode fazer o seguinte código:</p> <pre><code class="language-java"><span class="nd">@ApplicationScoped</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">PrintLog</span> <span class="o">{</span>
 
     <span class="kd">public</span> <span class="kt">void</span> <span class="nf">observesContext</span><span class="o">(</span><span class="nd">@Observes</span> <span class="n">ServletContext</span> <span class="n">context</span><span class="o">)</span> <span class="o">{</span>
         <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"My application is UP"</span><span class="o">);</span>
-    <span class="o">}</span></code></pre> <h2 id="sobrescrevendo-componentes">Sobrescrevendo componentes</h2> <p>A maioria dos comportamentos e convenções do VRaptor são personalizáveis. E a forma de personalizar é bem fácil: criar um componente que estende uma das classes internas do VRaptor e anotá-las com <code>@Specializes</code>. Ao fazer isso, o VRaptor vai usar a implementação personalizada ao invés da padrão.</p> <p>Caso você quiser implementar alguma interface basta você usar a anotação: </p> <pre><code class="language-java"><span class="nd">@Priority</span><span class="o">(</span><span class="n">Interceptor</span><span class="o">.</span><span class="na">Priority</span><span class="o">.</span><span class="na">LIBRARY_BEFORE</span> <span class="o">+</span> <span class="mi">10</span><span class="o">)</span></code></pre> <h2 id="mudando-a-view-renderizada-por-padro">Mudando a view renderizada por padrão</h2> <p>Se você precisa mudar a view renderizada por padrão, ou mudar o local em que ela é procurada, basta criar a seguinte classe:</p> <pre><code class="language-java"><span class="nd">@Specializes</span>
+    <span class="o">}</span>
+<span class="o">}</span></code></pre> <h2 id="sobrescrevendo-componentes">Sobrescrevendo componentes</h2> <p>A maioria dos comportamentos e convenções do VRaptor são personalizáveis. E a forma de personalizar é bem fácil: criar um componente que estende uma das classes internas do VRaptor e anotá-las com <code>@Specializes</code>. Ao fazer isso, o VRaptor vai usar a implementação personalizada ao invés da padrão.</p> <p>Caso você quiser implementar alguma interface basta você usar a anotação: </p> <pre><code class="language-java"><span class="nd">@Priority</span><span class="o">(</span><span class="n">Interceptor</span><span class="o">.</span><span class="na">Priority</span><span class="o">.</span><span class="na">LIBRARY_BEFORE</span> <span class="o">+</span> <span class="mi">10</span><span class="o">)</span></code></pre> <h2 id="mudando-a-view-renderizada-por-padro">Mudando a view renderizada por padrão</h2> <p>Se você precisa mudar a view renderizada por padrão, ou mudar o local em que ela é procurada, basta criar a seguinte classe:</p> <pre><code class="language-java"><span class="nd">@Specializes</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">CustomPathResolver</span> <span class="kd">extends</span> <span class="n">DefaultPathResolver</span> <span class="o">{</span>
 
     <span class="nd">@Override</span>
@@ -87,15 +130,12 @@
 
     <span class="nd">@Override</span>
     <span class="kd">protected</span> <span class="n">String</span> <span class="nf">extractControllerFromName</span><span class="o">(</span><span class="n">String</span> <span class="n">baseName</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="c1">//sua convenção aqui</span>
-            <span class="c1">//ex.: Em vez de redirecionar UserController para 'user'</span>
-            <span class="c1">//você quer redirecionar para 'userResource'</span>
-            <span class="c1">//ex.2: Se você sobrescreveu a conveção para nome dos Controllers para XXXResource</span>
-            <span class="c1">//e quer continuar redirecionando para 'user' e não para 'userResource'</span>
+        <span class="k">return</span> <span class="c1">//Insira sua convenção aqui.</span>
     <span class="o">}</span>
-<span class="o">}</span></code></pre> <p>Se você precisa mudar mais ainda a convenção basta implementar a interface <code>PathResolver</code>.</p> <h2 id="mudando-a-uri-padro">Mudando a URI padrão</h2> <p>Por padrão, a URI para o método <code>ClientesController.lista()</code> é <code>/clientes/lista</code>, ou seja, <code>nome_do_controller/nome_do_metodo</code>. Para sobrescrever essa convenção, basta criar a classe:</p> <pre><code class="language-java"><span class="nd">@Specializes</span> <span class="nd">@ApplicationScoped</span>
+<span class="o">}</span></code></pre> <p>Podemos ter os seguintes exeplos de convenção, como descrito abaixo:</p> <p>Exemplo 01: Em vez de redirecionar <code>UserController</code> para <code>user</code> você quer redirecionar para <code>userResource</code>; Exemplo 02: Se você sobrescreveu a conveção para nome dos Controllers para <code>XXXResource</code> e quer continuar redirecionando para <code>user</code> e não para <code>userResource</code>;</p> <p>Caso precise mudar mais ainda a convenção basta implementar a interface <code>PathResolver</code>.</p> <h2 id="mudando-a-uri-padro">Mudando a URI padrão</h2> <p>Por padrão, a URI para o método <code>ClientesController.lista()</code> é <code>/clientes/lista</code>, ou seja, <code>nome_do_controller/nome_do_metodo</code>. Para sobrescrever essa convenção, basta criar a classe:</p> <pre><code class="language-java"><span class="nd">@Specializes</span> <span class="nd">@ApplicationScoped</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">MeuRoutesParser</span> <span class="kd">extends</span> <span class="n">PathAnnotationRoutesParser</span> <span class="o">{</span>
     <span class="c1">//delegate constructor</span>
+
     <span class="kd">protected</span> <span class="n">String</span> <span class="nf">extractControllerNameFrom</span><span class="o">(</span><span class="n">Class</span><span class="o">&lt;?&gt;</span> <span class="n">type</span><span class="o">)</span> <span class="o">{</span>
         <span class="k">return</span> <span class="c1">//sua convenção aqui</span>
     <span class="o">}</span>
@@ -105,6 +145,7 @@
     <span class="o">}</span>
 <span class="o">}</span></code></pre> <p>Se você deseja mudar a convenção para ambos os casos da URI ser padrão ou anotada, você pode criar uma classe sobrescrevendo essa convenção. O exemplo abaixo fará com que todas as URIs precisem ser acessadas usando o prefixo <code>/prefixo</code>.</p> <p>Portanto, se a rota é <code>/index</code>, a URI será <code>/prefix/index</code>.</p> <pre><code class="language-java"><span class="nd">@Specializes</span> <span class="nd">@ApplicationScoped</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">PrefixedRoutesParser</span> <span class="kd">extends</span> <span class="n">PathAnnotationRoutesParser</span> <span class="o">{</span>
+
     <span class="c1">//delegated constructors </span>
 
     <span class="nd">@Override</span>
@@ -121,7 +162,7 @@
 <span class="nt">&lt;/context-param&gt;</span></code></pre> <p>Assim, todas as suas páginas e dados passados para formulário usarão o encoding UTF-8, evitando problemas de acentuação.</p> <h2 id="instanciando-apenas-parmetros-presentes-no-request">Instanciando apenas parâmetros presentes no request</h2> <p>Por padrão todos os objetos que você pedir nos métodos de seu controller serão instanciados, mesmo que esses parâmetros não estejam presentes no request. Você pode modificar esse comportamento de uma forma bem simples, sobrescrevendo a classe <code>VRaptorInstantiator</code>:</p> <pre><code class="language-java"><span class="nd">@Specializes</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">NullVRaptorInstantiator</span> <span class="kd">extends</span> <span class="n">VRaptorInstantiator</span> <span class="o">{</span>
 
-    <span class="c1">//delegate constructor</span>
+    <span class="c1">//delegated constructors </span>
 
     <span class="nd">@Override</span>
     <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">useNullForMissingParameters</span><span class="o">()</span> <span class="o">{</span>

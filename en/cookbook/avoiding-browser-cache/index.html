@@ -3,16 +3,16 @@
 
     <span class="kd">private</span> <span class="kd">final</span> <span class="n">HttpServletResponse</span> <span class="n">response</span><span class="o">;</span>
 
-    <span class="nd">@Inject</span>
-    <span class="kd">public</span> <span class="nf">NoCacheInterceptor</span><span class="o">(</span><span class="n">HttpServletResponse</span> <span class="n">response</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">this</span><span class="o">.</span><span class="na">response</span> <span class="o">=</span> <span class="n">response</span><span class="o">;</span>
-    <span class="o">}</span>
-
     <span class="cm">/**</span>
 <span class="cm">     * @deprecated CDI eyes only</span>
 <span class="cm">     */</span>
     <span class="kd">protected</span> <span class="nf">NoCacheInterceptor</span><span class="o">(){</span>
         <span class="k">this</span><span class="o">(</span><span class="kc">null</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Inject</span>
+    <span class="kd">public</span> <span class="nf">NoCacheInterceptor</span><span class="o">(</span><span class="n">HttpServletResponse</span> <span class="n">response</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">response</span> <span class="o">=</span> <span class="n">response</span><span class="o">;</span>
     <span class="o">}</span>
 
     <span class="nd">@BeforeCall</span>

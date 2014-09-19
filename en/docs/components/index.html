@@ -3,7 +3,9 @@
 
     <span class="kd">private</span> <span class="kd">final</span> <span class="n">Session</span> <span class="n">session</span><span class="o">;</span>
 
-    <span class="c1">// CDI forces the existence of this default constructor</span>
+    <span class="cm">/**</span>
+<span class="cm">     * @deprecated CDI eyes only</span>
+<span class="cm">     */</span>
     <span class="kd">protected</span> <span class="nf">CustomerDao</span><span class="o">()</span> <span class="o">{</span>
         <span class="k">this</span><span class="o">(</span><span class="kc">null</span><span class="o">);</span>
     <span class="o">}</span>
@@ -25,6 +27,7 @@
     <span class="kd">public</span> <span class="n">Session</span> <span class="nf">getHost</span><span class="o">()</span> <span class="o">{</span>
         <span class="k">return</span> <span class="n">host</span><span class="o">;</span>
     <span class="o">}</span>
+
     <span class="kd">public</span> <span class="n">Session</span> <span class="nf">getUser</span><span class="o">()</span> <span class="o">{</span>
         <span class="k">return</span> <span class="n">user</span><span class="o">;</span>
     <span class="o">}</span>
@@ -33,12 +36,14 @@
         <span class="k">return</span> <span class="n">password</span><span class="o">;</span>
     <span class="o">}</span>
 
-<span class="o">}</span></code></pre> <p>The implemented scopes are:</p> <ul> <li> <code>@ApplicationScoped</code> - the component is a singleton, just one for the entire application.</li> <li> <code>@SessionScoped</code> - the component is the same during the http session of the container.</li> <li> <code>@ConversationScoped</code> - the component instance is kept during a conversation.</li> <li> <code>@RequestScoped</code> - the component is the same during a request.</li> <li> <code>@Dependent</code> - the component is instanciated whenever it is requested.</li> </ul> <p>For more information about scopes, check <a href="http://docs.oracle.com/javaee/7/tutorial/doc/cdi-basic008.htm#GJBBK">the Java EE 7 documentation</a> about scopes.</p> <h2 id="building-components">Building components</h2> <p>Sometimes you need to inject a dependency that isn’t from your application, for example a Hibernate Session or a JPA EnitityManager.</p> <p>To do this, you need to create a method annotated with <code>@Produces</code>:</p> <pre><code class="language-java"><span class="nd">@RequestScoped</span>
+<span class="o">}</span></code></pre> <p>The implemented scopes are:</p> <table class="content-table"> <tbody> <tr> <td>@ApplicationScoped</td> <td>the component is a singleton, just one for the entire application.</td> </tr> <tr> <td>@SessionScoped</td> <td>the component is the same during the http session of the container.</td> </tr> <tr> <td>@ConversationScoped</td> <td>the component instance is kept during a conversation.</td> </tr> <tr> <td>@RequestScoped</td> <td>the component is the same during a request.</td> </tr> <tr> <td>@Dependent</td> <td>the component is instanciated whenever it is requested.</td> </tr> </tbody> </table> <p>For more information about scopes, check <a href="http://docs.oracle.com/javaee/7/tutorial/doc/cdi-basic008.htm#GJBBK">the Java EE 7 documentation</a> about scopes.</p> <h2 id="building-components">Building components</h2> <p>Sometimes you need to inject a dependency that isn’t from your application, for example a Hibernate Session or a JPA EnitityManager.</p> <p>To do this, you need to create a method annotated with <code>@Produces</code>:</p> <pre><code class="language-java"><span class="nd">@RequestScoped</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">SessionCreator</span> <span class="o">{</span>
 
-    <span class="nd">@Inject</span> <span class="kd">private</span> <span class="n">SessionFactory</span> <span class="n">sessionFactory</span><span class="o">;</span>
+    <span class="nd">@Inject</span>
+    <span class="kd">private</span> <span class="n">SessionFactory</span> <span class="n">sessionFactory</span><span class="o">;</span>
 
-    <span class="nd">@Produces</span> <span class="nd">@RequestScoped</span>
+    <span class="nd">@Produces</span>
+    <span class="nd">@RequestScoped</span>
     <span class="kd">public</span> <span class="n">Session</span> <span class="nf">getSession</span><span class="o">()</span> <span class="o">{</span>
         <span class="k">return</span> <span class="n">sessionFactory</span><span class="o">.</span><span class="na">openSession</span><span class="o">();</span>
     <span class="o">}</span>
@@ -51,7 +56,7 @@
 <span class="o">}</span></code></pre> <p>See that we are injecting and <code>SessionFactory</code>, so we would also need a producer of SessionFactory:</p> <pre><code class="language-java"><span class="nd">@ApplicationScoped</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">SessionFactoryCreator</span> <span class="o">{</span>
 
-    <span class="kd">private</span> <span class="kd">final</span> <span class="n">SessionFactory</span> <span class="n">factory</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="n">SessionFactory</span> <span class="n">factory</span><span class="o">;</span>
 
     <span class="nd">@PostConstruct</span>
     <span class="kd">public</span> <span class="kt">void</span> <span class="nf">init</span><span class="o">()</span> <span class="o">{</span>
@@ -71,12 +76,8 @@
     <span class="o">}</span>
 <span class="o">}</span></code></pre> <p>You can use the listeners <code>@PostConstruct</code>, <code>@PreDestroy</code> and <code>@Disposes</code> to get notified about the lifecycle of the component and control the allocation and deallocation of resources.</p> <p>In the previous example, we annotated the method <code>init()</code> that will be executed right after the instatiation of the class. The method <code>close()</code> will be invoked before the DI container dispose this object.</p> <p>You can annotate the methods of your VRaptor’s components with all of the mentioned annotations.</p> <h2 id="dependency-injection">Dependency Injection</h2> <p>VRaptor uses CDI to instantiate components and controllers. Thus, the previous examples (<code>CustomerDao</code> and <code>SessionCreator</code>) enable that any controller or component receive a <code>CustomerDao</code> injected in its constructor. To do so, CDI forces us to implement a default constructor, for example:</p> <pre><code class="language-java"><span class="nd">@Controller</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">CustomerController</span> <span class="o">{</span>
-    <span class="kd">private</span> <span class="kd">final</span> <span class="n">CustomerDao</span> <span class="n">dao</span><span class="o">;</span>
 
-    <span class="nd">@Inject</span>
-    <span class="kd">public</span> <span class="nf">CustomerController</span><span class="o">(</span><span class="n">CustomerDao</span> <span class="n">dao</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">this</span><span class="o">.</span><span class="na">dao</span> <span class="o">=</span> <span class="n">dao</span><span class="o">;</span>
-    <span class="o">}</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="n">CustomerDao</span> <span class="n">dao</span><span class="o">;</span>
 
     <span class="cm">/**</span>
 <span class="cm">     * @deprecated CDI eyes only</span>
@@ -85,21 +86,69 @@
         <span class="k">this</span><span class="o">(</span><span class="kc">null</span><span class="o">);</span>
     <span class="o">}</span>
 
+    <span class="nd">@Inject</span>
+    <span class="kd">public</span> <span class="nf">CustomerController</span><span class="o">(</span><span class="n">CustomerDao</span> <span class="n">dao</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">dao</span> <span class="o">=</span> <span class="n">dao</span><span class="o">;</span>
+    <span class="o">}</span>
+
     <span class="nd">@Post</span>
     <span class="kd">public</span> <span class="kt">void</span> <span class="nf">add</span><span class="o">(</span><span class="n">Customer</span> <span class="n">customer</span><span class="o">)</span> <span class="o">{</span>
         <span class="k">this</span><span class="o">.</span><span class="na">dao</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">customer</span><span class="o">);</span>
     <span class="o">}</span>
+<span class="o">}</span></code></pre> <h2 id="injecting-java-ee-resources">Injecting Java EE resources</h2> <p>Injection also works for all Java EE components if you are deploying your application in an Application Server. All annotations like <code>@Resource</code>, <code>@EJB</code>, <code>@PersistenceContext</code>, <code>@PersistenceUnit</code> and <code>@WebServiceRef</code> works fine when you using injection by field.</p> <p>In the code below we are injecting an EJB and an <code>SessionContext</code> in your controller:</p> <pre><code class="language-java"><span class="nd">@Controller</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">CustomerController</span> <span class="o">{</span>
+
+    <span class="nd">@EJB</span>
+    <span class="kd">private</span> <span class="n">CustomerBean</span> <span class="n">customerBean</span><span class="o">;</span>
+
+    <span class="nd">@Resource</span>
+    <span class="kd">private</span> <span class="n">SessionContext</span> <span class="n">context</span><span class="o">;</span>
+
+<span class="o">}</span></code></pre> <p>But if you want to use constructor injection, only EJB resources are available to injection using <code>@Inject</code> annotation. All resources annotated with <code>@Resource</code> and others needs a producer. In the example below we create a producer to make <code>SessionContext</code> available to use with constructor injection:</p> <pre><code class="language-java"><span class="nd">@Dependent</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Resources</span> <span class="o">{</span>
+ 
+    <span class="nd">@Produces</span>
+    <span class="nd">@Resource</span><span class="o">(</span><span class="n">mappedName</span> <span class="o">=</span> <span class="s">"java:comp/EJBContext"</span><span class="o">)</span>
+    <span class="kd">protected</span> <span class="n">SessionContext</span> <span class="n">sessionContext</span><span class="o">;</span>
+<span class="o">}</span></code></pre> <p>And now we can inject the <code>SessionContext</code> in our controller. See the code below:</p> <pre><code class="language-java"><span class="nd">@Controller</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">CustomerController</span> <span class="o">{</span>
+
+    <span class="kd">private</span> <span class="n">CustomerBean</span> <span class="n">customerBean</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="n">SessionContext</span> <span class="n">context</span><span class="o">;</span>
+
+    <span class="cm">/**</span>
+<span class="cm">     * @deprecated CDI eyes only</span>
+<span class="cm">     */</span>
+    <span class="kd">protected</span> <span class="nf">CustomerController</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">(</span><span class="kc">null</span><span class="o">,</span> <span class="kc">null</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Inject</span>
+    <span class="kd">public</span> <span class="nf">CustomerController</span><span class="o">(</span><span class="n">CustomerBean</span> <span class="n">customerBean</span><span class="o">,</span> <span class="n">SessionContext</span> <span class="n">context</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">customerBean</span> <span class="o">=</span> <span class="n">customerBean</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">context</span> <span class="o">=</span> <span class="n">context</span><span class="o">;</span>
+    <span class="o">}</span>
+
+<span class="o">}</span></code></pre> <p>If you are not using our <a href="../plugins/#vraptor-jpa">vraptor-jpa</a> plugin, and you want to use <code>EntityManager</code> provided by the Appplication Server, you need to create a producer for <code>EntityManager</code> like this example:</p> <pre><code class="language-java"><span class="nd">@Dependent</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Resources</span> <span class="o">{</span>
+
+    <span class="c1">// your other producers</span>
+
+    <span class="nd">@Produces</span>
+    <span class="nd">@PersistenceContext</span>
+    <span class="kd">protected</span> <span class="n">EntityManager</span> <span class="n">em</span><span class="o">;</span>
 <span class="o">}</span></code></pre> <h2 id="observing-and-firing-events">Observing and firing events</h2> <p>You can fire events and handle them with the <code>@Observes</code> annotation.</p> <p>If you need, for example, log an message during the bootstrap of your application, you can observe the <code>VRaptorInitialized</code> event, like this:</p> <pre><code class="language-java"><span class="nd">@ApplicationScoped</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">PrintLog</span> <span class="o">{</span>
 
     <span class="kd">public</span> <span class="kt">void</span> <span class="nf">observesBootstrap</span><span class="o">(</span><span class="nd">@Observes</span> <span class="n">VRaptorInitialized</span> <span class="n">event</span><span class="o">)</span> <span class="o">{</span>
         <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"My application is UP"</span><span class="o">);</span>
-    <span class="o">}</span></code></pre> <p>See the <a href="../events/">events documentation page</a> for more information about VRaptor’s events.</p> <h2 id="overriding-components">Overriding components</h2> <p>Most of VRaptor’s conventions and behaviors can be customized. It’s simple to customize something: all you need to do is extend an internal class from VRaptor and annotate it with <code>@Specializes</code>. After doing this, the framework will use the custom implementation instead of the default one.</p> <p>In case you need to implement an internal interface, you need to annotate the implementation with <code>@Priority</code>, so VRaptor will use your implementation instead of its own:</p> <pre><code class="language-java"><span class="nd">@Priority</span><span class="o">(</span><span class="n">Interceptor</span><span class="o">.</span><span class="na">Priority</span><span class="o">.</span><span class="na">LIBRARY_BEFORE</span> <span class="o">+</span> <span class="mi">10</span><span class="o">)</span></code></pre> <h2 id="customizing-vraptor">Customizing VRaptor</h2> <p>Let’s see how we can customize some of the default behaviors of VRaptor.</p> <h3 id="customizing-the-default-view">Customizing the default view</h3> <p>If you need to change the default rendered view, or change the place where it’ll be look for, you’ll only need to create the following class:</p> <pre><code class="language-java"><span class="nd">@Specializes</span>
+    <span class="o">}</span>
+<span class="o">}</span></code></pre> <p>See the <a href="../events/">events documentation page</a> for more information about VRaptor’s events.</p> <h2 id="overriding-components">Overriding components</h2> <p>Most of VRaptor’s conventions and behaviors can be customized. It’s simple to customize something: all you need to do is extend an internal class from VRaptor and annotate it with <code>@Specializes</code>. After doing this, the framework will use the custom implementation instead of the default one.</p> <p>In case you need to implement an internal interface, you need to annotate the implementation with <code>@Priority</code>, so VRaptor will use your implementation instead of its own:</p> <pre><code class="language-java"><span class="nd">@Priority</span><span class="o">(</span><span class="n">Interceptor</span><span class="o">.</span><span class="na">Priority</span><span class="o">.</span><span class="na">LIBRARY_BEFORE</span> <span class="o">+</span> <span class="mi">10</span><span class="o">)</span></code></pre> <h2 id="customizing-vraptor">Customizing VRaptor</h2> <p>Let’s see how we can customize some of the default behaviors of VRaptor.</p> <h3 id="customizing-the-default-view">Customizing the default view</h3> <p>If you need to change the default rendered view, or change the place where it’ll be look for, you’ll only need to create the following class:</p> <pre><code class="language-java"><span class="nd">@Specializes</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">CustomPathResolver</span> <span class="kd">extends</span> <span class="n">DefaultPathResolver</span> <span class="o">{</span>
 
     <span class="cm">/**</span>
-<span class="cm">    * @deprecated CDI eyes only</span>
-<span class="cm">    */</span>
+<span class="cm">     * @deprecated CDI eyes only</span>
+<span class="cm">     */</span>
     <span class="kd">protected</span> <span class="nf">CustomPathResolver</span><span class="o">()</span> <span class="o">{</span>
         <span class="k">this</span><span class="o">(</span><span class="kc">null</span><span class="o">);</span>
     <span class="o">}</span>
@@ -122,11 +171,9 @@
     <span class="nd">@Override</span>
     <span class="kd">protected</span> <span class="n">String</span> <span class="nf">extractControllerFromName</span><span class="o">(</span><span class="n">String</span> <span class="n">baseName</span><span class="o">)</span> <span class="o">{</span>
         <span class="k">return</span> <span class="c1">//your convention here</span>
-               <span class="c1">//ex.: If you want to redirect UserController to 'userResource' instead of 'user'</span>
-               <span class="c1">//ex.2: If you override the convention for Controllers name to XXXResource</span>
-               <span class="c1">//and still want to redirect to 'user' and not to 'userResource'</span>
+               
     <span class="o">}</span>
-<span class="o">}</span></code></pre> <p>If you need a more complex convention, just implement the <code>PathResolver</code> interface.</p> <h3 id="changing-default-uri">Changing default URI</h3> <p>The default URI for <code>CustomerController.list()</code> is <code>/customer/list</code>, i.e, <code>controller_name/method_name</code>. If you want to override this convention, you can create a class like:</p> <pre><code class="language-java"><span class="nd">@Specializes</span> <span class="nd">@ApplicationScoped</span>
+<span class="o">}</span></code></pre> <p>You can implement your own convention, for instance:</p> <p>ex.: If you want to redirect <code>UserController</code> to <code>userResource</code> instead of <code>user</code> ex.2: If you override the convention for <code>Controllers</code> name to <code>XXXResource</code> and still want to redirect to <code>user</code> and not to <code>userResource</code></p> <p>If you need a more complex convention, just implement the <code>PathResolver</code> interface.</p> <h3 id="changing-default-uri">Changing default URI</h3> <p>The default URI for <code>CustomerController.list()</code> is <code>/customer/list</code>, i.e, <code>controller_name/method_name</code>. If you want to override this convention, you can create a class like:</p> <pre><code class="language-java"><span class="nd">@Specializes</span> <span class="nd">@ApplicationScoped</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyRoutesParser</span> <span class="kd">extends</span> <span class="n">PathAnnotationRoutesParser</span> <span class="o">{</span>
     <span class="c1">//delegated constructors </span>
     <span class="kd">protected</span> <span class="n">String</span> <span class="nf">extractControllerNameFrom</span><span class="o">(</span><span class="n">Class</span><span class="o">&lt;?&gt;</span> <span class="n">type</span><span class="o">)</span> <span class="o">{</span>

@@ -19,20 +19,21 @@
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">Error404</span> <span class="kd">extends</span> <span class="n">DefaultControllerNotFoundHandler</span> <span class="o">{</span>
 
     <span class="kd">private</span> <span class="kd">final</span> <span class="n">Router</span> <span class="n">router</span><span class="o">;</span>
+
     <span class="kd">private</span> <span class="kd">final</span> <span class="n">Result</span> <span class="n">result</span><span class="o">;</span>
+
+    <span class="cm">/**</span>
+<span class="cm">     * @deprecated CDI eyes only</span>
+<span class="cm">     */</span>
+    <span class="kd">protected</span> <span class="nf">Error404</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">(</span><span class="kc">null</span><span class="o">,</span> <span class="kc">null</span><span class="o">,</span> <span class="kc">null</span><span class="o">);</span>
+    <span class="o">}</span>
 
     <span class="nd">@Inject</span>
     <span class="kd">public</span> <span class="nf">Error404</span><span class="o">(</span><span class="n">Router</span> <span class="n">router</span><span class="o">,</span> <span class="n">Result</span> <span class="n">result</span><span class="o">,</span> <span class="n">Event</span><span class="o">&lt;</span><span class="n">ControllerNotFound</span><span class="o">&gt;</span> <span class="n">event</span><span class="o">)</span> <span class="o">{</span>
         <span class="kd">super</span><span class="o">(</span><span class="n">event</span><span class="o">);</span>
         <span class="k">this</span><span class="o">.</span><span class="na">router</span> <span class="o">=</span> <span class="n">router</span><span class="o">;</span>
         <span class="k">this</span><span class="o">.</span><span class="na">result</span> <span class="o">=</span> <span class="n">result</span><span class="o">;</span>
-    <span class="o">}</span>
-    
-    <span class="cm">/**</span>
-<span class="cm">    * @deprecated CDI eyes only</span>
-<span class="cm">    */</span>
-    <span class="kd">public</span> <span class="nf">Error404</span><span class="o">()</span> <span class="o">{</span>
-        <span class="k">this</span><span class="o">(</span><span class="kc">null</span><span class="o">,</span> <span class="kc">null</span><span class="o">,</span> <span class="kc">null</span><span class="o">);</span>
     <span class="o">}</span>
     
     <span class="nd">@Override</span>

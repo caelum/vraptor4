@@ -1,6 +1,8 @@
 <!DOCTYPE HTML> <html lang="pt"> <head> <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> <meta charset="utf-8"> <meta name="viewport" content="width=device-width"> <title>VRaptor 4 - Trabalhando com a View</title> <link rel="shortcut icon" href="../../../img/favicon.png"> <link rel="stylesheet" href="/css/style.min.css"/> <meta name="generator" content="nanoc 3.6.7"> </head> <body> <header class="container"> <h1 class="logo"><a class="logo-link" href="../.."> <img src="../../../img/logo.png" alt="VRaptor"> </a></h1> <ul class="community"> <li><a href="https://groups.google.com/forum/#!forum/caelum-vraptor" target="_blank">Google Groups</a></li> <li><a href="https://github.com/caelum/vraptor4/" target="_blank">GitHub</a></li> <li><a href="http://www.guj.com.br/tag/vraptor" target="_blank">GUJ Respostas</a></li> </ul> <ul class="site-languages"> <li> <a class="site-language flag flag-en not-selected" title="en" href="../../../en"> EN </a> </li> <li> <a class="site-language flag flag-pt " title="pt" href="../.."> PT </a> </li> </ul> </header> <input type="checkbox" id="nav-visibility"> <label for="nav-visibility" class="nav-toggle">Menu</label> <nav class="main-nav"> <ul> <li><a href="../../download">Download</a></li> <li><a href="../guia-de-1-minuto/">Documentação</a></li> <li><a href="../../cookbook/aceitando-urls-com-ou-sem-barra-no-final">Cookbook</a></li> <li><a href="https://github.com/caelum/vraptor4/releases" target="_blank">Changelog</a></li> <li><a href="https://github.com/caelum/vraptor4/milestones" target="_blank">Roadmap</a></li> <li><a href="../../../javadoc">Javadoc</a></li> </ul> </nav> <nav class="doc-nav container"> <h1>Documentação</h1> <ul> <li><a href="../guia-de-1-minuto">Guia inicial de 1 minuto</a></li> <li><a href="../guia-de-10-minutos">Guia inicial de 10 minutos</a></li> <li><a href="../controllers-rest">Controllers Rest</a></li> <li><a href="../componentes">Componentes</a></li> <li><a href="../conversores">Conversores</a></li> <li><a href="../validacao">Validação</a></li> <li><a href="../interceptadores">Interceptadores</a></li> <li><a href="../eventos">Eventos</a></li> <li><a href=".">Trabalhando com a View</a></li> <li><a href="../download-e-upload">Download e Upload</a></li> <li><a href="../environment">Environment</a></li> <li><a href="../plugins">Plugins</a></li> <li><a href="../dependencias-e-pre-requisitos">Dependências e pré requisitos</a></li> <li><a href="../testando-componentes-e-controllers">Testando Componentes e Controllers</a></li> <li><a href="../migrando-de-um-projeto-com-vraptor3">Migrando de um projeto com VRaptor 3</a></li> <li><a href="../contribuindo-com-o-vraptor">Contribuindo com o VRaptor</a></li> </ul> </nav> <main class="container doc-container"> <h1 id="compartilhando-objetos-com-a-view">Compartilhando objetos com a view</h1> <p>Para registrar objetos a serem acessados na view, usamos o método include:</p> <pre><code class="language-java"><span class="nd">@Controller</span>
 <span class="kd">class</span> <span class="nc">ClientController</span> <span class="o">{</span>
-    <span class="nd">@Inject</span> <span class="kd">private</span> <span class="n">Result</span> <span class="n">result</span><span class="o">;</span>
+
+    <span class="nd">@Inject</span>
+    <span class="kd">private</span> <span class="n">Result</span> <span class="n">result</span><span class="o">;</span>
 
     <span class="kd">public</span> <span class="kt">void</span> <span class="nf">busca</span><span class="o">(</span><span class="kt">int</span> <span class="n">id</span><span class="o">)</span> <span class="o">{</span>
         <span class="n">result</span><span class="o">.</span><span class="na">include</span><span class="o">(</span><span class="s">"mensagem"</span><span class="o">,</span> <span class="s">"Alguma mensagem"</span><span class="o">);</span>
@@ -8,14 +10,16 @@
     <span class="o">}</span>
 <span class="o">}</span></code></pre> <p>Agora as variáveis <code>mensagem</code> e <code>cliente</code> estão disponíveis para uso em seu template engine. É possível registrar o objeto por meio da invocação do método include com um único argumento:</p> <pre><code class="language-java"><span class="nd">@Controller</span>
 <span class="kd">class</span> <span class="nc">ClientController</span> <span class="o">{</span>
-    <span class="nd">@Inject</span> <span class="kd">private</span> <span class="n">Result</span> <span class="n">result</span><span class="o">;</span>
+
+    <span class="nd">@Inject</span>
+    <span class="kd">private</span> <span class="n">Result</span> <span class="n">result</span><span class="o">;</span>
 
     <span class="kd">public</span> <span class="kt">void</span> <span class="nf">busca</span><span class="o">(</span><span class="kt">int</span> <span class="n">id</span><span class="o">)</span> <span class="o">{</span>
         <span class="n">result</span><span class="o">.</span><span class="na">include</span><span class="o">(</span><span class="s">"Alguma mensagem"</span><span class="o">).</span><span class="na">include</span><span class="o">(</span><span class="k">new</span> <span class="n">Cliente</span><span class="o">(</span><span class="n">id</span><span class="o">));</span>
     <span class="o">}</span>
 <span class="o">}</span></code></pre> <p>Nesse caso, a primeira invocação registra a chave <code>string</code> e a segunda, a chave <code>cliente</code>. Você pode alterar o comportamento de convenção de chaves no seu próprio <code>TypeNameExtractor</code>.</p> <h2 id="custom-pathresolver">Custom PathResolver</h2> <p>Por padrão, para renderizar suas views, o VRaptor segue a convenção:</p> <pre><code class="language-java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">ClientsController</span> <span class="o">{</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">list</span><span class="o">()</span> <span class="o">{</span>
-        <span class="c1">//...</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">list</span><span class="o">()</span> <span class="o">{</span> 
+        <span class="c1">//... </span>
     <span class="o">}</span>
 <span class="o">}</span></code></pre> <p>Este método acima renderizará a view <code>/WEB-INF/jsp/clients/list.jsp</code>. No entanto, nem sempre queremos esse comportamento, e precisamos usar algum template engine, como por exemplo, Freemarker ou Velocity, e precisamos mudar essa convenção. Um jeito fácil de mudar essa convenção é estendendo a classe <code>DefaultPathResolver</code>:</p> <pre><code class="language-java"><span class="nd">@Specializes</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">FreemarkerPathResolver</span> <span class="kd">extends</span> <span class="n">DefaultPathResolver</span> <span class="o">{</span>
@@ -29,9 +33,10 @@
 <span class="o">}</span></code></pre> <p>Desse jeito, a lógica irá renderizar a view <code>/WEB-INF/freemarker/clients/list.ftl</code>. Se, ainda assim, isso não for o suficiente, você pode implementar a interface <code>PathResolver</code> e fazer qualquer convenção que você queira, não esquecendo de anotar a classe com <code>@Specializes</code>.</p> <h2 id="view">View</h2> <p>Se você quiser mudar a view de alguma lógica específica, você pode usar o objeto <code>Result</code>:</p> <pre><code class="language-java"><span class="nd">@Controller</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">ClientsController</span> <span class="o">{</span>
 
-    <span class="nd">@Inject</span> <span class="kd">private</span> <span class="n">Result</span> <span class="n">result</span><span class="o">;</span>
+    <span class="nd">@Inject</span>
+    <span class="kd">private</span> <span class="n">Result</span> <span class="n">result</span><span class="o">;</span>
 
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">list</span><span class="o">()</span> <span class="o">{}</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">list</span><span class="o">()</span> <span class="o">{</span> <span class="o">...</span> <span class="o">}</span>
 
     <span class="kd">public</span> <span class="kt">void</span> <span class="nf">save</span><span class="o">(</span><span class="n">Client</span> <span class="n">client</span><span class="o">)</span> <span class="o">{</span>
         <span class="c1">//...</span>
@@ -46,8 +51,11 @@
 <span class="nt">&lt;/div&gt;</span></code></pre> <h2 id="accepts-e-o-parmetro-format">Accepts e o parâmetro _format</h2> <p>Muitas vezes, precisamos renderizar formatos diferentes para uma mesma lógica. Por exemplo queremos retornar um JSON, em vez de um HTML. Para fazer isso, podemos definir o Header Accepts da requisição para que aceite o tipo desejado, ou colocar um parâmetro <code>_format</code> na requisição.</p> <p>Se o formato for JSON, a view renderizada por padrão será: <code>/WEB-INF/jsp/{controller}/{logic}.json.jsp</code>, ou seja, em geral será renderizada a view: <code>/WEB-INF/jsp/{controller}/{logic}.{formato}.jsp</code>. Se o formato for HTML você não precisa colocá-lo no nome do arquivo. O parâmetro <code>_format</code> tem prioridade sobre o header Accepts.</p> <h2 id="ajax-construindo-na-view">Ajax: construindo na view</h2> <p>Para devolver um JSON na sua view, basta que sua lógica disponibilize o objeto para a view, e dentro da view você forme o JSON como desejar. Como no exemplo, o seu <code>/WEB-INF/jsp/clients/load.json.jsp</code>:</p> <pre><code class="language-javascript"><span class="p">{</span> <span class="nx">nome</span><span class="o">:</span> <span class="s1">'${client.name}'</span><span class="p">,</span> <span class="nx">id</span><span class="o">:</span> <span class="s1">'${client.id}'</span> <span class="p">}</span></code></pre> <p>E na lógica:</p> <pre><code class="language-java"><span class="nd">@Controller</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">ClientsController</span> <span class="o">{</span>
 
-    <span class="nd">@Inject</span> <span class="kd">private</span> <span class="n">Result</span> <span class="n">result</span><span class="o">;</span>
-    <span class="nd">@Inject</span> <span class="kd">private</span> <span class="n">ClientDao</span> <span class="n">dao</span><span class="o">;</span>
+    <span class="nd">@Inject</span>
+    <span class="kd">private</span> <span class="n">Result</span> <span class="n">result</span><span class="o">;</span>
+
+    <span class="nd">@Inject</span>
+    <span class="kd">private</span> <span class="n">ClientDao</span> <span class="n">dao</span><span class="o">;</span>
 
     <span class="kd">public</span> <span class="kt">void</span> <span class="nf">load</span><span class="o">(</span><span class="n">Client</span> <span class="n">client</span><span class="o">)</span> <span class="o">{</span>
         <span class="n">result</span><span class="o">.</span><span class="na">include</span><span class="o">(</span><span class="s">"client"</span><span class="o">,</span> <span class="n">dao</span><span class="o">.</span><span class="na">load</span><span class="o">(</span><span class="n">client</span><span class="o">));</span>
@@ -56,8 +64,11 @@
 <span class="nd">@Controller</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">ClientsController</span> <span class="o">{</span>
 
-    <span class="nd">@Inject</span> <span class="kd">private</span> <span class="n">Result</span> <span class="n">result</span><span class="o">;</span>
-    <span class="nd">@Inject</span> <span class="kd">private</span> <span class="n">ClientDao</span> <span class="n">dao</span><span class="o">;</span>
+    <span class="nd">@Inject</span>
+    <span class="kd">private</span> <span class="n">Result</span> <span class="n">result</span><span class="o">;</span>
+
+    <span class="nd">@Inject</span>
+    <span class="kd">private</span> <span class="n">ClientDao</span> <span class="n">dao</span><span class="o">;</span>
 
     <span class="kd">public</span> <span class="kt">void</span> <span class="nf">loadJson</span><span class="o">(</span><span class="n">Cliente</span> <span class="n">cliente</span><span class="o">)</span> <span class="o">{</span>
         <span class="n">result</span><span class="o">.</span><span class="na">use</span><span class="o">(</span><span class="n">json</span><span class="o">()).</span><span class="na">from</span><span class="o">(</span><span class="n">cliente</span><span class="o">).</span><span class="na">serialize</span><span class="o">();</span>
@@ -88,7 +99,30 @@
         <span class="c1">//suas configurações ao XStream aqui</span>
         <span class="k">return</span> <span class="n">xStream</span><span class="o">;</span>
     <span class="o">}</span>
-<span class="o">}</span></code></pre> <p>Para configurar a serialização com JSON você pode criar uma classe que estenda de ‘GsonJSONSerialization’ e sobrescrever o método ‘getSerializer()’ com as suas configurações.</p> <h2 id="serializando-collections">Serializando Collections</h2> <p>Ao serializar coleções, o padrão é colocar a tag <code>list</code> em volta dos elementos:</p> <pre><code class="language-java"><span class="n">List</span><span class="o">&lt;</span><span class="n">Cliente</span><span class="o">&gt;</span> <span class="n">clientes</span> <span class="o">=</span> <span class="o">...;</span>
+<span class="o">}</span></code></pre> <p>Para configurar a serialização com JSON você pode criar uma classe que estenda de <code>GsonJSONSerialization</code> e sobrescrever o método <code>getSerializer()</code> com as suas configurações.</p> <p>Na serialização JSON você pode utilizar a anotação <code>SkipSerialization</code> para omitir a serialização de um campo ou de uma classe.</p> <p>A classe abaixo foi anotada com <code>SkipSerialization</code>, portanto os seus campos nunca serão serializados para JSON:</p> <pre><code class="language-java"><span class="nd">@SkipSerialization</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">UserPrivateInfo</span> <span class="o">{</span>
+
+    <span class="kd">private</span> <span class="n">String</span> <span class="n">cpf</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="n">String</span> <span class="n">telefone</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="n">String</span> <span class="n">endereco</span><span class="o">;</span>
+    
+    <span class="c1">// getters e setters</span>
+<span class="o">}</span></code></pre> <p>Nesta outra classe, o campo senha não será serializado. O campo info também não será serializado pois a classe <code>UserPrivateInfo</code> foi anotado com <code>SkipSerialization</code>:</p> <pre><code class="language-java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">User</span> <span class="o">{</span>
+
+    <span class="kd">private</span> <span class="n">String</span> <span class="n">nome</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="n">String</span> <span class="n">login</span><span class="o">;</span>
+    
+    <span class="nd">@SkipSerialization</span>
+    <span class="kd">private</span> <span class="n">String</span> <span class="n">senha</span><span class="o">;</span>
+    
+    <span class="kd">private</span> <span class="n">UserPrivateInfo</span> <span class="n">info</span><span class="o">;</span>
+    
+    <span class="c1">// getters e setters</span>
+<span class="o">}</span></code></pre> <p>Realizando a seguinte chamada:</p> <pre><code class="language-java"><span class="n">User</span> <span class="n">user</span> <span class="o">=</span> <span class="o">...;</span>
+<span class="n">result</span><span class="o">.</span><span class="na">use</span><span class="o">(</span><span class="n">json</span><span class="o">()).</span><span class="na">withoutRoot</span><span class="o">().</span><span class="na">from</span><span class="o">(</span><span class="n">user</span><span class="o">).</span><span class="na">recursive</span><span class="o">().</span><span class="na">serialize</span><span class="o">();</span></code></pre> <p>O resultado obtido é semelhante à:</p> <pre><code class="language-javascript"><span class="p">{</span>
+    <span class="s2">"nome"</span><span class="o">:</span> <span class="s2">"Joao"</span><span class="p">,</span>
+    <span class="s2">"login"</span><span class="o">:</span> <span class="s2">"joao"</span>
+<span class="p">}</span></code></pre> <p>Perceba que o campo senha e todo o <code>UserPrivateInfo</code> não foram serializados.</p> <h2 id="serializando-collections">Serializando Collections</h2> <p>Ao serializar coleções, o padrão é colocar a tag <code>list</code> em volta dos elementos:</p> <pre><code class="language-java"><span class="n">List</span><span class="o">&lt;</span><span class="n">Cliente</span><span class="o">&gt;</span> <span class="n">clientes</span> <span class="o">=</span> <span class="o">...;</span>
 <span class="n">result</span><span class="o">.</span><span class="na">use</span><span class="o">(</span><span class="n">json</span><span class="o">()).</span><span class="na">from</span><span class="o">(</span><span class="n">clientes</span><span class="o">).</span><span class="na">serialize</span><span class="o">();</span>
 <span class="c1">//ou</span>
 <span class="n">result</span><span class="o">.</span><span class="na">use</span><span class="o">(</span><span class="n">xml</span><span class="o">()).</span><span class="na">from</span><span class="o">(</span><span class="n">clientes</span><span class="o">).</span><span class="na">serialize</span><span class="o">();</span></code></pre> <p>Vai resultar em algo como:</p> <pre><code class="language-javascript"><span class="p">{</span><span class="s2">"list"</span><span class="o">:</span> <span class="p">[</span>

@@ -23,7 +23,7 @@
 <span class="nd">@ApplicationScoped</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">LongConverter</span> <span class="kd">implements</span> <span class="n">Converter</span><span class="o">&lt;</span><span class="n">Long</span><span class="o">&gt;</span> <span class="o">{</span>
     <span class="c1">// your code here</span>
-<span class="o">}</span></code></pre> <p>In the following lines, you can see a LongConverter implementation, showing how simple it is to assemble all the information mentioned above:</p> <pre><code class="language-java"><span class="nd">@Convert</span><span class="o">(</span><span class="n">Long</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
+<span class="o">}</span></code></pre> <p>In the following lines, you can see a <code>LongConverter</code> implementation, showing how simple it is to assemble all the information mentioned above:</p> <pre><code class="language-java"><span class="nd">@Convert</span><span class="o">(</span><span class="n">Long</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
 <span class="nd">@ApplicationScoped</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">LongConverter</span> <span class="kd">implements</span> <span class="n">Converter</span><span class="o">&lt;</span><span class="n">Long</span><span class="o">&gt;</span> <span class="o">{</span>
 
@@ -50,9 +50,22 @@
 
         <span class="k">return</span> <span class="n">country</span><span class="o">;</span>
     <span class="o">}</span>
-<span class="o">}</span></code></pre> <h2 id="overriding-core-converters">Overriding core converters</h2> <p>You can also overrise any existing converters. You only need extends the core converter and after to add <code>@Specializes</code> annotation. Below you can see an example how to override a converter <code>LocaleBasedBigDecimalConverter</code>:</p> <pre><code class="language-java"><span class="nd">@Specializes</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyCustomBigDecimalConverter</span> <span class="kd">extends</span> <span class="n">LocaleBasedBigDecimalConverter</span> <span class="o">{</span>
-    <span class="kd">protected</span> <span class="n">NumberFormat</span> <span class="nf">getNumberFormat</span><span class="o">()</span> <span class="o">{</span>
+<span class="o">}</span></code></pre> <h2 id="overriding-core-converters">Overriding core converters</h2> <p>You can also overrise any existing converters. You only need extends the core converter, after to add <code>@Specializes</code> annotation and <code>@Convert</code> with the specialized type. Below you can see an example how to override a converter <code>BigDecimalConverter</code>:</p> <pre><code class="language-java"><span class="nd">@Specializes</span>
+<span class="nd">@Convert</span><span class="o">(</span><span class="n">BigDecimal</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">CustomBigDecimalConverter</span> <span class="kd">extends</span> <span class="n">BigDecimalConverter</span> <span class="o">{</span>
+    
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="n">BigDecimal</span> <span class="nf">convert</span><span class="o">(</span><span class="n">String</span> <span class="n">value</span><span class="o">,</span> <span class="n">Class</span><span class="o">&lt;?</span> <span class="kd">extends</span> <span class="n">BigDecimal</span><span class="o">&gt;</span> <span class="n">type</span><span class="o">)</span> <span class="o">{</span>
         <span class="c1">// your code here</span>
+        <span class="k">return</span> <span class="kd">super</span><span class="o">.</span><span class="na">convert</span><span class="o">(</span><span class="n">value</span><span class="o">,</span> <span class="n">type</span><span class="o">);</span>
     <span class="o">}</span>
-<span class="o">}</span></code></pre> </main> <script src="/js/headers.min.js"></script> </body> </html>
+<span class="o">}</span></code></pre> <p>You can use CDI’s <code>@Specializes</code> always you desire to reuse the <code>superclasse</code> behavior, otherwise you can create an <code>@Alternative</code> with higher priority than VRaptor implementation, i.e:</p> <pre><code class="language-java"><span class="nd">@Alternative</span>
+<span class="nd">@Priority</span><span class="o">(</span><span class="n">Interceptor</span><span class="o">.</span><span class="na">Priority</span><span class="o">.</span><span class="na">APPLICATION</span><span class="o">)</span>
+<span class="nd">@Convert</span><span class="o">(</span><span class="n">BigDecimal</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">CustomDecimalConverter</span> <span class="kd">implements</span> <span class="n">Converter</span><span class="o">&lt;</span><span class="n">BigDecimal</span><span class="o">&gt;{</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="n">BigDecimal</span> <span class="nf">convert</span><span class="o">(</span><span class="n">String</span> <span class="n">value</span><span class="o">,</span> <span class="n">Class</span><span class="o">&lt;?</span> <span class="kd">extends</span> <span class="n">BigDecimal</span><span class="o">&gt;</span> <span class="n">type</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="c1">// your code here</span>
+    <span class="o">}</span>
+<span class="o">}</span></code></pre> <p>All of VRaptor’s <code>Converter</code>s have <code>LIBRARY_BEFORE</code> priority.</p> </main> <script src="/js/headers.min.js"></script> </body> </html>

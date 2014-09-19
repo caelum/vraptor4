@@ -8,11 +8,9 @@
     <span class="kd">private</span> <span class="n">String</span> <span class="n">descricao</span><span class="o">;</span>
     <span class="kd">private</span> <span class="n">Double</span> <span class="n">preco</span><span class="o">;</span>
 
-    <span class="c1">// getter e setters e métodos de negócio que julgar necessário</span>
-<span class="o">}</span></code></pre> <p>Precisamos também de uma classe que vai controlar o cadastro de produtos, tratando requisições web. Essa classe vai ser o Controller de produtos:</p> <pre><code class="language-java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">ProdutosController</span> <span class="o">{</span>
-<span class="o">}</span></code></pre> <p>A classe <code>ProdutosController</code> vai expor URIs para serem acessadas via web, ou seja, vai expor recursos da sua aplicação. E, para indicar isso, você precisa anotá-la com com <code>@Controller</code>:</p> <pre><code class="language-java"><span class="nd">@Controller</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">ProdutosController</span> <span class="o">{</span>
-<span class="o">}</span></code></pre> <p>Ao colocar essa anotação na classe, todos os métodos públicos dela serão acessíveis pela web. Por exemplo, se tivermos um método lista na classe:</p> <pre><code class="language-java"><span class="nd">@Controller</span>
+    <span class="c1">//getter e setters e métodos de negócio que julgar necessário</span>
+<span class="o">}</span></code></pre> <p>Precisamos também de uma classe que vai controlar o cadastro de produtos, tratando requisições web. Essa classe vai ser o Controller de produtos:</p> <pre><code class="language-java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">ProdutosController</span> <span class="o">{}</span></code></pre> <p>A classe <code>ProdutosController</code> vai expor URIs para serem acessadas via web, ou seja, vai expor recursos da sua aplicação. E, para indicar isso, você precisa anotá-la com com <code>@Controller</code>:</p> <pre><code class="language-java"><span class="nd">@Controller</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">ProdutosController</span> <span class="o">{}</span></code></pre> <p>Ao colocar essa anotação na classe, todos os métodos públicos dela serão acessíveis pela web. Por exemplo, se tivermos um método lista na classe:</p> <pre><code class="language-java"><span class="nd">@Controller</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">ProdutosController</span> <span class="o">{</span>
     <span class="kd">public</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">Produto</span><span class="o">&gt;</span> <span class="nf">lista</span><span class="o">()</span> <span class="o">{</span>
         <span class="k">return</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">Produto</span><span class="o">&gt;();</span>
@@ -29,6 +27,7 @@
 <span class="o">}</span></code></pre> <p>E no nosso <code>ProdutosController</code> podemos usar o dao pra fazer a listagem de produtos:</p> <pre><code class="language-java"><span class="nd">@Controller</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">ProdutosController</span> <span class="o">{</span>
 
+    <span class="nd">@Inject</span>
     <span class="kd">private</span> <span class="n">ProdutoDao</span> <span class="n">dao</span><span class="o">;</span>
 
     <span class="kd">public</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">Produto</span><span class="o">&gt;</span> <span class="nf">lista</span><span class="o">()</span> <span class="o">{</span>
@@ -41,6 +40,7 @@
 
 <span class="nd">@Controller</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">ProdutosController</span> <span class="o">{</span>
+    <span class="c1">//...</span>
 
     <span class="nd">@Inject</span>
     <span class="kd">private</span> <span class="n">ProdutoDao</span> <span class="n">dao</span><span class="o">;</span>
@@ -51,8 +51,7 @@
 <span class="o">}</span></code></pre> <h2 id="formulrio-de-adio-redirecionamento">Formulário de adição: redirecionamento</h2> <p>Temos uma listagem de produtos, mas ainda não temos como cadastrá-los. Vamos então criar um formulário de adição de produtos. Para não ter que acessar o JSP diretamente, vamos criar uma lógica vazia que só redireciona para o JSP:</p> <pre><code class="language-java"><span class="nd">@Controller</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">ProdutosController</span> <span class="o">{</span>
     <span class="c1">//...</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">form</span><span class="o">()</span> <span class="o">{</span>
-    <span class="o">}</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">form</span><span class="o">()</span> <span class="o">{</span> <span class="o">...</span> <span class="o">}</span>
 <span class="o">}</span></code></pre> <p>Podemos acessar o formulário, que estará em <code>/WEB-INF/jsp/produtos/form.jsp</code>, pela URI <code>/produtos/form</code>:</p> <pre><code class="language-jsp"><span class="nt">&lt;form</span> <span class="na">action=</span><span class="s">"&lt;c:url value='/produtos/adiciona'/&gt;"</span><span class="nt">&gt;</span>
     Nome:
     <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"text"</span> <span class="na">name=</span><span class="s">"produto.nome"</span><span class="nt">/&gt;&lt;br/&gt;</span>
@@ -64,11 +63,12 @@
     <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"submit"</span> <span class="na">value=</span><span class="s">"Salvar"</span> <span class="nt">/&gt;</span>
 <span class="nt">&lt;/form&gt;</span></code></pre> <p>Como o formulário vai salvar o produto pela URI <code>/produtos/adiciona</code>, precisamos criar esse método no nosso controller:</p> <pre><code class="language-java"><span class="nd">@Controller</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">ProdutosController</span> <span class="o">{</span>
+    
     <span class="c1">//...</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">adiciona</span><span class="o">()</span> <span class="o">{</span>
-    <span class="o">}</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">adiciona</span><span class="o">()</span> <span class="o">{</span> <span class="o">...</span> <span class="o">}</span>
 <span class="o">}</span></code></pre> <p>Repare nos nomes dos nossos inputs: <code>produto.nome</code>, <code>produto.descricao</code> e <code>produto.preco</code>. Se recebermos um <code>Produto</code> no método adiciona com o nome <code>produto</code>, o VRaptor vai popular os seus campos <code>nome</code>, <code>descricao</code> e <code>preco</code>, usando os seus setters no <code>Produto</code>, com os valores digitados nos inputs. Inclusive o campo <code>preco</code>, vai ser convertido para <code>Double</code> antes de ser setado no produto. Veja mais sobre isso no capítulo de <a href="../conversores">converters</a>.</p> <p>Então, usando os nomes corretamente nos inputs do form, basta criar seu método adiciona:</p> <pre><code class="language-java"><span class="nd">@Controller</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">ProdutosController</span> <span class="o">{</span>
+    
     <span class="c1">//...</span>
     <span class="kd">public</span> <span class="kt">void</span> <span class="nf">adiciona</span><span class="o">(</span><span class="n">Produto</span> <span class="n">produto</span><span class="o">)</span> <span class="o">{</span>
         <span class="n">dao</span><span class="o">.</span><span class="na">adiciona</span><span class="o">(</span><span class="n">produto</span><span class="o">);</span>
@@ -78,9 +78,11 @@
 
     <span class="nd">@Inject</span>
     <span class="kd">private</span> <span class="n">ProdutoDao</span> <span class="n">dao</span><span class="o">;</span>
+
     <span class="nd">@Inject</span>
     <span class="kd">private</span> <span class="n">Result</span> <span class="n">result</span><span class="o">;</span>
 
+    <span class="c1">//...</span>
 <span class="o">}</span></code></pre> <p>E para redirecionar para a listagem basta usar o <code>result</code>:</p> <pre><code class="language-java"><span class="n">result</span><span class="o">.</span><span class="na">redirectTo</span><span class="o">(</span><span class="n">ProdutosController</span><span class="o">.</span><span class="na">class</span><span class="o">).</span><span class="na">lista</span><span class="o">();</span></code></pre> <p>Podemos ler esse código como: Como resultado, redirecione para o método <code>lista</code> do <code>ProdutosController</code>. A configuração de redirecionamento é 100% java, sem strings envolvidas! Fica explícito no seu código que o resultado da sua lógica não é o padrão e qual resultado você está usando! Você não precisa ficar se preocupando com arquivos de configuração. Mais ainda, se eu quiser mudar o nome do método <code>lista</code>, eu não preciso ficar rodando o sistema inteiro procurando onde estão redirecionando pra esse método, basta usar o refactor do eclipse, por exemplo, e tudo continua funcionando!</p> <p>Então nosso método adiciona ficaria:</p> <pre><code class="language-java"><span class="kd">public</span> <span class="kt">void</span> <span class="nf">adiciona</span><span class="o">(</span><span class="n">Produto</span> <span class="n">produto</span><span class="o">)</span> <span class="o">{</span>
     <span class="n">dao</span><span class="o">.</span><span class="na">adiciona</span><span class="o">(</span><span class="n">produto</span><span class="o">);</span>
     <span class="n">result</span><span class="o">.</span><span class="na">redirectTo</span><span class="o">(</span><span class="n">ProdutosController</span><span class="o">.</span><span class="na">class</span><span class="o">).</span><span class="na">lista</span><span class="o">();</span>
@@ -120,20 +122,21 @@
 <span class="o">}</span></code></pre> <p>Além do escopo de sessão existe o escopo de Aplicação com a anotação <code>@ApplicationScoped</code>. Os componentes anotados com <code>@ApplicationScoped</code> serão criados apenas uma vez em toda a aplicação.</p> <h2 id="um-pouco-de-rest">Um pouco de REST</h2> <p>Seguindo a idéia REST de que URIs devem identificar recursos na rede para então podermos fazer valer as diversas vantagens estruturais que o protocolo HTTP nos proporciona, note o quão simples fica mapear os diversos métodos HTTP para a mesma URI, e com isso invocar diferentes métodos. Por exemplo, queremos usar as seguintes URIs para o cadastro de produtos:</p> <table class="content-table"> <tbody> <tr> <td>GET</td> <td>/produtos</td> <td>lista todos os produtos</td> </tr> <tr> <td>POST</td> <td>/produtos</td> <td>adiciona um produto</td> </tr> <tr> <td>GET</td> <td>/produtos/{id}</td> <td>visualiza o produto com o id passado</td> </tr> <tr> <td>PUT</td> <td>/produtos/{id}</td> <td>atualiza as informações do produto com o id passado</td> </tr> <tr> <td>DELETE</td> <td>/produtos/{id}</td> <td>remove o produto com o id passado</td> </tr> </tbody> </table> <p>Para criar esse comportamento REST no VRaptor, podemos usar as anotações <code>@Path</code> - que muda qual é a URI que vai acessar o determinado método, e as anotações com os nomes dos métodos HTTP <code>@Get</code>, <code>@Post</code>, <code>@Delete</code>, <code>@Put</code>, que indicam que o método anotado só pode ser acessado se a requisição estiver com o método HTTP indicado. Então, uma versão REST do nosso <code>ProdutosController</code> seria:</p> <pre><code class="language-java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">ProdutosController</span> <span class="o">{</span>
     <span class="c1">//...</span>
 
-    <span class="nd">@Get</span> <span class="nd">@Path</span><span class="o">(</span><span class="s">"/produtos"</span><span class="o">)</span>
-    <span class="kd">public</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">Produto</span><span class="o">&gt;</span> <span class="nf">lista</span><span class="o">()</span> <span class="o">{...}</span>
+    <span class="nd">@Get</span>
+    <span class="nd">@Path</span><span class="o">(</span><span class="s">"/produtos"</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">Produto</span><span class="o">&gt;</span> <span class="nf">lista</span><span class="o">()</span> <span class="o">{</span> <span class="o">...</span> <span class="o">}</span>
 
     <span class="nd">@Post</span><span class="o">(</span><span class="s">"/produtos"</span><span class="o">)</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">adiciona</span><span class="o">(</span><span class="n">Produto</span> <span class="n">produto</span><span class="o">)</span> <span class="o">{...}</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">adiciona</span><span class="o">(</span><span class="n">Produto</span> <span class="n">produto</span><span class="o">)</span> <span class="o">{</span> <span class="o">...</span> <span class="o">}</span>
 
     <span class="nd">@Get</span><span class="o">(</span><span class="s">"/produtos/{produto.id}"</span><span class="o">)</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">visualiza</span><span class="o">(</span><span class="n">Produto</span> <span class="n">produto</span><span class="o">)</span> <span class="o">{...}</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">visualiza</span><span class="o">(</span><span class="n">Produto</span> <span class="n">produto</span><span class="o">)</span> <span class="o">{</span> <span class="o">...</span> <span class="o">}</span>
 
     <span class="nd">@Put</span><span class="o">(</span><span class="s">"/produtos/{produto.id}"</span><span class="o">)</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">atualiza</span><span class="o">(</span><span class="n">Produto</span> <span class="n">produto</span><span class="o">)</span> <span class="o">{...}</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">atualiza</span><span class="o">(</span><span class="n">Produto</span> <span class="n">produto</span><span class="o">)</span> <span class="o">{</span> <span class="o">...</span> <span class="o">}</span>
 
     <span class="nd">@Delete</span><span class="o">(</span><span class="s">"/produtos/{produto.id}"</span><span class="o">)</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">remove</span><span class="o">(</span><span class="n">Produto</span> <span class="n">produto</span><span class="o">)</span> <span class="o">{...}</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">remove</span><span class="o">(</span><span class="n">Produto</span> <span class="n">produto</span><span class="o">)</span> <span class="o">{</span> <span class="o">...</span> <span class="o">}</span>
 <span class="o">}</span></code></pre> <p>Note que podemos receber parâmetros nas URIs. Por exemplo, se chamarmos a URI <code>GET /produtos/5</code>, o método <code>visualiza</code> será invocado, e o parâmetro <code>produto</code> vai ter o <code>id</code> populado com <code>5</code>.</p> <p>Mais informações sobre isso no capítulo de <a href="../controllers-rest">Controllers-REST</a>.</p> <h2 id="arquivo-de-mensagens">Arquivo de mensagens</h2> <p>Internacionalização (i18n) é um recurso poderoso, e que está presente em quase todos os frameworks Web hoje em dia. E não é diferente no VRaptor. Com i18n podemos fazer com que nossa aplicação suporte várias línguas (francês, português, espanhol, inglês etc) de uma maneira que não nos cause muito esforço, bastando apenas fazermos a tradução das mensagens da nossa aplicação.</p> <p>Para isso, é só criarmos um arquivo chamado <code>messages.properties</code> e disponibilizá-lo no classpath da nossa aplicação (<code>WEB-INF/classes</code>). Esse arquivo conterá várias linhas compostas por um conjunto de chave/valor, como por exemplo:</p> <pre><code class="language-jsp">campo.nomeUsuario = Nome de Usuário
 campo.senha = Senha</code></pre> <p>Até então está fácil, mas e se quisermos criar esses arquivos para várias línguas, como por exemplo, inglês? Simples, basta criarmos um outro arquivo properties chamado <code>messages_en.properties</code>. Repare no sufixo <code>_en</code> no nome do arquivo. Isso indica que quando o usuário acessar sua aplicação em uma máquina configurada com locale em inglês as mensagens desse arquivo serão utilizadas. O conteúdo desse arquivo então ficaria:</p> <pre><code class="language-jsp">campo.nomeUsuario = Username
 campo.senha = Password</code></pre> <p>Repare que as chaves são mantidas, mudando apenas o valor para a língua escolhida. Para usar essas mensagens em seus arquivos JSP, você pode utilizar a JSTL.</p> <p>Dessa forma, o código ficaria:</p> <pre><code class="language-jsp"><span class="cp">&lt;!%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %&gt;</span>

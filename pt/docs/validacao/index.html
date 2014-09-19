@@ -4,9 +4,30 @@
 
     <span class="c1">// valida se a data de nascimento está no passado</span>
     <span class="nd">@Past</span> <span class="kd">private</span> <span class="n">Date</span> <span class="n">nascimento</span><span class="o">;</span>
-<span class="o">}</span></code></pre> <p>Em seu controller:</p> <pre><code class="language-java"><span class="kd">public</span> <span class="kt">void</span> <span class="nf">cadastrar</span><span class="o">(</span><span class="nd">@NotNull</span> <span class="nd">@Valid</span> <span class="n">Cliente</span> <span class="n">cliente</span><span class="o">)</span> <span class="o">{</span>
-    <span class="c1">// em caso de erros irá redirecionar para a página de formulário</span>
-    <span class="n">validation</span><span class="o">.</span><span class="na">onErrorForwardTo</span><span class="o">(</span><span class="k">this</span><span class="o">).</span><span class="na">formulario</span><span class="o">();</span>
+<span class="o">}</span></code></pre> <p>Em seu controller:</p> <pre><code class="language-java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">ClienteController</span> <span class="o">{</span>
+
+    <span class="kd">private</span> <span class="kd">final</span> <span class="n">Validator</span> <span class="n">validation</span><span class="o">;</span>
+
+    <span class="cm">/** </span>
+<span class="cm">     * @deprecated CDI eyes only</span>
+<span class="cm">     */</span>
+    <span class="kd">protected</span> <span class="nf">ClienteController</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">(</span><span class="kc">null</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Inject</span>
+    <span class="kd">public</span> <span class="nf">ClienteController</span><span class="o">(</span><span class="n">Validator</span> <span class="n">validation</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">validation</span> <span class="o">=</span> <span class="n">validation</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">formulario</span><span class="o">()</span> <span class="o">{</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">cadastrar</span><span class="o">(</span><span class="nd">@NotNull</span> <span class="nd">@Valid</span> <span class="n">Cliente</span> <span class="n">cliente</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// em caso de erros irá redirecionar para a página de formulário</span>
+        <span class="n">validation</span><span class="o">.</span><span class="na">onErrorForwardTo</span><span class="o">(</span><span class="k">this</span><span class="o">).</span><span class="na">formulario</span><span class="o">();</span>
+    <span class="o">}</span>
+
 <span class="o">}</span></code></pre> <p><strong>Nota</strong>: Se sua aplicação usa Hibernate ou JPA e você tem seu modelo anotado com as anotações do Bean Validation, você precisará chamar os métodos <code>Session.flush()</code> ou <code>EntityManager.flush()</code> para disparar a validação do Bean Validation antes de fazer qualquer <code>redirect</code> ou <code>forward</code>. O método <code>flush()</code> é responsável por sincronizar as alterações no estado dos objetos com o banco de dados. Sendo assim as validações do Bean Validation em entidates só serão executadas no <code>flush()</code>.</p> <h2 id="criando-validaes-customizadas">Criando validações customizadas</h2> <p>Com o Bean Validator você pode criar anotações com suas validações customizadas. Se você quer, por exemplo, validar se o telefone está no formato <code>(00) 0000-0000</code>, você pode criar uma anotação assim:</p> <pre><code class="language-java"><span class="nd">@Documented</span>
 <span class="nd">@Constraint</span><span class="o">(</span><span class="n">validatedBy</span> <span class="o">=</span> <span class="o">{})</span>
 <span class="nd">@Target</span><span class="o">({</span> <span class="n">METHOD</span><span class="o">,</span> <span class="n">FIELD</span><span class="o">,</span> <span class="n">ANNOTATION_TYPE</span><span class="o">,</span> <span class="n">CONSTRUCTOR</span><span class="o">,</span> <span class="n">PARAMETER</span> <span class="o">})</span>
@@ -14,14 +35,13 @@
 <span class="nd">@ReportAsSingleViolation</span>
 <span class="nd">@Pattern</span><span class="o">(</span><span class="n">regexp</span> <span class="o">=</span> <span class="s">"\\((\\d{2})\\) (\\d{4})-(\\d{4})"</span><span class="o">)</span>
 <span class="kd">public</span> <span class="nd">@interface</span> <span class="n">PhoneNumber</span> <span class="o">{</span>
-    <span class="c1">// você pode colocar uma mensagem fixa, por exemplo, "Telefone inválido" ou</span>
-    <span class="c1">// usar uma mensagem de um ResourceBundle, bastando então colocar entre {}</span>
+    
     <span class="n">String</span> <span class="nf">message</span><span class="o">()</span> <span class="k">default</span> <span class="s">"{br.com.vraptor.validations.phonenumber.message}"</span><span class="o">;</span>
 
     <span class="n">Class</span><span class="o">&lt;?&gt;[]</span> <span class="n">groups</span><span class="o">()</span> <span class="k">default</span> <span class="o">{};</span>
 
     <span class="n">Class</span><span class="o">&lt;?</span> <span class="kd">extends</span> <span class="n">Payload</span><span class="o">&gt;[]</span> <span class="n">payload</span><span class="o">()</span> <span class="k">default</span> <span class="o">{};</span>
-<span class="o">}</span></code></pre> <p>Você pode também criar validações mais complexas que fazem acesso ao banco de dados, ou algum componente existente. Se você quiser validar se o login de um usuário já está em uso, basta criar o código abaixo:</p> <pre><code class="language-java"><span class="nd">@Target</span><span class="o">({</span> <span class="n">ElementType</span><span class="o">.</span><span class="na">PARAMETER</span> <span class="o">})</span>
+<span class="o">}</span></code></pre> <p>O valor da mensagem com <code>{}</code> será buscado do <code>ResourceBundle</code>.</p> <p>Ou você pode colocar uma mensagem fixa, como por exemplo:</p> <pre><code class="language-java"><span class="n">String</span> <span class="nf">message</span><span class="o">()</span> <span class="k">default</span>  <span class="s">"Invalid number"</span><span class="o">;</span></code></pre> <p>Você pode também criar validações mais complexas que fazem acesso ao banco de dados, ou algum componente existente. Se você quiser validar se o login de um usuário já está em uso, basta criar o código abaixo:</p> <pre><code class="language-java"><span class="nd">@Target</span><span class="o">({</span> <span class="n">ElementType</span><span class="o">.</span><span class="na">PARAMETER</span> <span class="o">})</span>
 <span class="nd">@Retention</span><span class="o">(</span><span class="n">RetentionPolicy</span><span class="o">.</span><span class="na">RUNTIME</span><span class="o">)</span>
 <span class="nd">@Constraint</span><span class="o">(</span><span class="n">validatedBy</span> <span class="o">=</span> <span class="o">{</span> <span class="n">LoginAvailableValidator</span><span class="o">.</span><span class="na">class</span> <span class="o">})</span>
 <span class="nd">@Documented</span>
@@ -55,13 +75,13 @@
 // retorna: 'não pode ser nulo - não pode ser menor que 50'</code></pre> <h2 id="customizando-as-mensagens">Customizando as Mensagens</h2> <p>Se você preferir é possível customizar as mensagens do Bean Validation. Para isso, basta adicionar o arquivo <code>ValidationMessages.properties</code> no seu classpath. Se você usa Maven o local é <code>/src/main/resources</code>.</p> <p>Considerando o exemplo anterior, o arquivo poderia ter a seguinte estrutura para customizar as mensagens padrões:</p> <pre><code class="language-properties"><span class="na">cliente.nome.vazio</span> <span class="o">=</span> <span class="s">O nome do cliente não pode ser vazio</span>
 <span class="na">cliente.nome.tamanho</span> <span class="o">=</span> <span class="s">O nome do cliente deve possuir entre {min} e {max} caracteres</span>
 <span class="na">cliente.nascimento.data</span> <span class="o">=</span> <span class="s">A data de nascimento ${validatedValue} informada deve ser no passado</span></code></pre> <p>E a classe teria que ser alterada para incluir essas chaves</p> <pre><code class="language-java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Cliente</span> <span class="o">{</span>
-    <span class="nd">@NotNull</span><span class="o">(</span><span class="n">message</span><span class="o">=</span><span class="s">"{cliente.nome.vazio}"</span><span class="o">)</span> <span class="c1">// o valor entre {} indica que a mensagem vem do ResourceBundle</span>
+    <span class="nd">@NotNull</span><span class="o">(</span><span class="n">message</span><span class="o">=</span><span class="s">"{cliente.nome.vazio}"</span><span class="o">)</span>
     <span class="nd">@Size</span><span class="o">(</span><span class="n">min</span><span class="o">=</span><span class="mi">10</span><span class="o">,</span> <span class="n">max</span><span class="o">=</span><span class="mi">50</span><span class="o">,</span> <span class="n">message</span><span class="o">=</span><span class="s">"{cliente.nome.tamanho}"</span><span class="o">)</span>
     <span class="kd">private</span> <span class="n">String</span> <span class="n">nome</span><span class="o">;</span>
 
     <span class="nd">@Past</span><span class="o">(</span><span class="n">message</span><span class="o">=</span><span class="s">"{cliente.nascimento.data}"</span><span class="o">)</span>
     <span class="kd">private</span> <span class="n">Date</span> <span class="n">nascimento</span><span class="o">;</span>
-<span class="o">}</span></code></pre> <p>Veja que foi adicionado parâmetros afim de deixar nossas mensagens mais dinâmicas e reaproveitáveis. As possibilidades atualmente são:</p> <ul> <li>os valores dos atributos da restrição mapeados com os nomes de atributo. Ex. <code>{min}</code> e <code>{max}</code> no caso de <code>@Size</code> </li> <li>o atual valor a ser validado sob o nome de <code>${validatedValue}</code> </li> <li>uso de if-else curto, como por exemplo: <code>${value &gt; 1 ? 's' : ''}</code> </li> <li>um bean mapeado com o nome de <code>formatter</code> expondo método var-arg <code>format(String format, Object... args)</code> o qual se comporta como <code>java.util.Formatter.format(String format, Object... args)</code>. Ex.: <code>${formatter.format('%1$.2f', validatedValue)}</code> </li> </ul> <h2 id="validao-usando-o-validator">Validação usando o Validator</h2> <p>Caso você não queira usar o Bean Validation, você pode usar os métodos de validação do próprio <code>Validator</code> do VRaptor. O método mais simples é o <code>add</code>:</p> <pre><code class="language-java"><span class="k">if</span> <span class="o">(</span><span class="n">cliente</span><span class="o">.</span><span class="na">getNome</span><span class="o">()</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+<span class="o">}</span></code></pre> <p>Observe que o Valor contido em <code>message={}</code>, nas anotações indica que a mensagem vem do <code>ResourceBundle</code>.</p> <p>Veja que foi adicionado parâmetros afim de deixar nossas mensagens mais dinâmicas e reaproveitáveis. As possibilidades atualmente são:</p> <ul> <li>os valores dos atributos da restrição mapeados com os nomes de atributo. Ex. <code>{min}</code> e <code>{max}</code> no caso de <code>@Size</code> </li> <li>o atual valor a ser validado sob o nome de <code>${validatedValue}</code> </li> <li>uso de if-else curto, como por exemplo: <code>${value &gt; 1 ? 's' : ''}</code> </li> <li>um bean mapeado com o nome de <code>formatter</code> expondo método var-arg <code>format(String format, Object... args)</code> o qual se comporta como <code>java.util.Formatter.format(String format, Object... args)</code>. Ex.: <code>${formatter.format('%1$.2f', validatedValue)}</code> </li> </ul> <h2 id="validao-usando-o-validator">Validação usando o Validator</h2> <p>Caso você não queira usar o Bean Validation, você pode usar os métodos de validação do próprio <code>Validator</code> do VRaptor. O método mais simples é o <code>add</code>:</p> <pre><code class="language-java"><span class="k">if</span> <span class="o">(</span><span class="n">cliente</span><span class="o">.</span><span class="na">getNome</span><span class="o">()</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
   <span class="c1">//mensagem simples</span>
   <span class="n">validator</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="n">SimpleMessage</span><span class="o">(</span><span class="s">"nome"</span><span class="o">,</span> <span class="s">"O nome deve ser preenchido"</span><span class="o">));</span>
 

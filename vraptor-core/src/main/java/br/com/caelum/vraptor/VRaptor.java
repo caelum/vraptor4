@@ -55,7 +55,7 @@ import br.com.caelum.vraptor.ioc.cdi.CDIRequestFactories;
  * @author Guilherme Silveira
  * @author Fabio Kung
  */
-@WebFilter(filterName="vraptor", urlPatterns="/*", dispatcherTypes={DispatcherType.FORWARD, DispatcherType.REQUEST})
+@WebFilter(filterName="vraptor", urlPatterns="/*", dispatcherTypes={DispatcherType.FORWARD, DispatcherType.REQUEST}, asyncSupported=true)
 public class VRaptor implements Filter {
 
 	public static final String VERSION = "4.1.0-RC4-SNAPSHOT";

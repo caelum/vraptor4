@@ -22,5 +22,22 @@
 			<property name="hibernate.hbm2ddl.auto" value="update" />
 		</properties>
 	</persistence-unit>
+	<persistence-unit name="mysql">
+	
+		<class>br.com.caelum.vraptor.musicjungle.model.Music</class>
+		<class>br.com.caelum.vraptor.musicjungle.model.User</class>
+	
+		<properties>
+			<property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" />
+			<property name="javax.persistence.jdbc.url" value="jdbc:mysql://MYSQL_SERVER/musicjungle?autoReconnect=true&amp;createDatabaseIfNotExist=true" />
+			<property name="javax.persistence.jdbc.user" value="MYSQL_USER" />
+			<property name="javax.persistence.jdbc.password" value="MYSQL_PASSWORD" />
+			
+			<property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5InnoDBDialect"/>
+			<property name="hibernate.show_sql" value="false" />
+			<property name="hibernate.format_sql" value="false" />
+			<property name="hibernate.hbm2ddl.auto" value="update" />
+		</properties>
+	</persistence-unit>
 	
 </persistence>

@@ -20,7 +20,6 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
@@ -50,9 +49,9 @@ public class ByteArrayDownloadTest {
 		MockitoAnnotations.initMocks(this);
 
 		bytes = new byte[] { (byte) 0x0 };
-		this.outputStream = new ByteArrayOutputStream();
+		outputStream = new ByteArrayOutputStream();
 
-		this.socketStream = new ServletOutputStream() {
+		socketStream = new ServletOutputStream() {
 			@Override
 			public void write(int b) throws IOException {
 				outputStream.write(b);

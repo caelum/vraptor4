@@ -23,8 +23,8 @@ import static org.mockito.Mockito.when;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.WriteListener;
@@ -56,15 +56,12 @@ public class FileDownloadTest {
 	public void setUp() throws Exception {
 		MockitoAnnotations.initMocks(this);
 
-		bytes = new byte[] { (byte) 0 };
+		bytes = new byte[] { (byte) 0x0 };
 		outputStream = new ByteArrayOutputStream();
 
 		file = folder.newFile();
+		Files.write(file.toPath(), bytes);
 		
-		try (FileOutputStream fileStream = new FileOutputStream(file)) {
-			fileStream.write(bytes);
-		}
-
 		socketStream = new ServletOutputStream() {
 			@Override
 			public void write(int b) throws IOException {

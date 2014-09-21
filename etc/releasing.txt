@@ -1,3 +1,7 @@
+Before release we should:
+
+* Replace all occurencies of REPLACE_ME_ON_NEXT_RELEASE to next release version number.
+
 After release a new version of VRaptor, we should:
 
 * Upload core, blank-project and musicjungle zips to bintray:

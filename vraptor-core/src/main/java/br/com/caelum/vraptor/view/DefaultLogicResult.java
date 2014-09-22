@@ -116,6 +116,7 @@ public class DefaultLogicResult implements LogicResult {
 						request.setAttribute(extractor.nameFor(returnType), methodResult);
 					}
 					if (response.isCommitted() || result.used()) {
+						logger.debug("Response already commited, not forwarding.");
 						return null;
 					}
 					String path = resolver.pathFor(DefaultControllerMethod.instanceFor(type, method));

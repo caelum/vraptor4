@@ -170,6 +170,15 @@ public class DefaultLogicResultTest {
 	}
 
 	@Test
+	public void shouldNotForwardToMethodsDefaultViewWhenResultIsUsed() throws Exception {
+		givenDispatcherWillBeReturnedWhenRequested();
+		when(response.isCommitted()).thenReturn(false);
+		when(result.used()).thenReturn(true);
+		logicResult.forwardTo(MyComponent.class).base();
+		verify(dispatcher, never()).forward(request, response);
+	}
+	
+	@Test
 	public void shouldPutParametersOnFlashScopeOnRedirect() throws Exception {
 
 		logicResult.redirectTo(MyComponent.class).withParameter("a");

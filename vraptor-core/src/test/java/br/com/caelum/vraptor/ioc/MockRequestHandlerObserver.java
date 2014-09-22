@@ -15,6 +15,7 @@
  */
 package br.com.caelum.vraptor.ioc;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Event;
 import javax.enterprise.event.Observes;
 import javax.enterprise.inject.Specializes;
@@ -30,7 +31,7 @@ import br.com.caelum.vraptor.events.VRaptorRequestStarted;
 import br.com.caelum.vraptor.http.UrlToControllerTranslator;
 import br.com.caelum.vraptor.observer.RequestHandlerObserver;
 
-@Specializes
+@Specializes @ApplicationScoped
 class MockRequestHandlerObserver extends RequestHandlerObserver{
 	private boolean vraptorStackCalled;
 

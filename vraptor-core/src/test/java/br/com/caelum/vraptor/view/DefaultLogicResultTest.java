@@ -72,10 +72,12 @@ public class DefaultLogicResultTest {
 	private @Mock TypeNameExtractor extractor;
 	private @Mock RequestDispatcher dispatcher;
 	private @Mock FlashScope flash;
+	private @Mock Result result;
 
 	private Proxifier proxifier;
 
 	private MethodInfo methodInfo;
+
 
 	public static class MyComponent {
 		int calls = 0;
@@ -114,7 +116,7 @@ public class DefaultLogicResultTest {
 		proxifier = new JavassistProxifier();
 		methodInfo = new MethodInfo(new ParanamerNameProvider());
 		this.logicResult = new DefaultLogicResult(proxifier, router, request, response, container,
-				resolver, extractor, flash, methodInfo);
+				resolver, extractor, flash, methodInfo, result);
 	}
 
 	@Test
@@ -167,6 +169,15 @@ public class DefaultLogicResultTest {
 		verify(dispatcher, never()).forward(request, response);
 	}
 
+	@Test
+	public void shouldNotForwardToMethodsDefaultViewWhenResultIsUsed() throws Exception {
+		givenDispatcherWillBeReturnedWhenRequested();
+		when(response.isCommitted()).thenReturn(false);
+		when(result.used()).thenReturn(true);
+		logicResult.forwardTo(MyComponent.class).base();
+		verify(dispatcher, never()).forward(request, response);
+	}
+	
 	@Test
 	public void shouldPutParametersOnFlashScopeOnRedirect() throws Exception {
 

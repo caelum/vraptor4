@@ -16,8 +16,9 @@
  */
 package br.com.caelum.vraptor;
 
+import javax.enterprise.inject.spi.CDI;
+
 import org.jboss.weld.environment.se.Weld;
-import org.jboss.weld.environment.se.WeldContainer;
 import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.BlockJUnit4ClassRunner;
 import org.junit.runners.model.FrameworkMethod;
@@ -31,14 +32,10 @@ import br.com.caelum.vraptor.ioc.cdi.Contexts;
 public class WeldJunitRunner extends BlockJUnit4ClassRunner {
 
 	private Class<?> clazz;
-	private static WeldContainer weldContainer;
 	
-	static {
-		weldContainer = new Weld().initialize();
-	}
-
 	public WeldJunitRunner(Class<?> testClass) throws InitializationError {
 		super(testClass);
+		new Weld().initialize();
 		this.clazz = testClass;
 	}
 
@@ -47,17 +44,14 @@ public class WeldJunitRunner extends BlockJUnit4ClassRunner {
 	 */
 	@Override
 	protected Object createTest() throws Exception {
-		return currentInstance(clazz);
+		return CDI.current().select(clazz).get();
 	}
 	
 	@Override
 	protected void runChild(FrameworkMethod method, RunNotifier notifier) {
-		currentInstance(Contexts.class).startRequestScope();
+		Contexts contexts = CDI.current().select(Contexts.class).get();
+		contexts.startRequestScope();
 		super.runChild(method, notifier);
-		currentInstance(Contexts.class).stopRequestScope();
-	}
-
-	private <T> T currentInstance(Class<T> clazz) {
-		return weldContainer.instance().select(clazz).get();
+		contexts.stopRequestScope();
 	}
 }

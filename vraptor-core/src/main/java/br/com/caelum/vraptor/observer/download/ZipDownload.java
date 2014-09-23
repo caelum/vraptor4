@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletResponse;
  * Supports multiple files download as a zip file.
  * 
  * @author Otávio Scherer Garcia
- * @since REPLACE_ME_ON_NEXT_RELEASE
+ * @since 4.1
  */
 public class ZipDownload implements Download {
 

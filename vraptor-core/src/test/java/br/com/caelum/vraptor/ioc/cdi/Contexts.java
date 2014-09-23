@@ -18,6 +18,7 @@ package br.com.caelum.vraptor.ioc.cdi;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
 import org.jboss.weld.context.AbstractSharedContext;
@@ -27,6 +28,7 @@ import org.jboss.weld.context.bound.BoundRequestContext;
 import org.jboss.weld.context.bound.BoundSessionContext;
 import org.jboss.weld.context.bound.MutableBoundRequest;
 
+@ApplicationScoped
 public class Contexts {
 
 	@Inject

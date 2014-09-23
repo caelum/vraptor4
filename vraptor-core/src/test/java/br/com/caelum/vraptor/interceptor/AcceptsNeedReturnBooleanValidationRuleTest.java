@@ -21,13 +21,18 @@ import java.util.List;
 import javax.enterprise.inject.Vetoed;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import br.com.caelum.vraptor.Accepts;
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.Intercepts;
 
 public class AcceptsNeedReturnBooleanValidationRuleTest {
+
+	@Rule
+	public ExpectedException exception = ExpectedException.none();
 
 	private AcceptsNeedReturnBooleanValidationRule validationRule;
 	private StepInvoker stepInvoker;

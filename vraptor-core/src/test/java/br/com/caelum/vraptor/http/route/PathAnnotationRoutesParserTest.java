@@ -33,7 +33,9 @@ import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
@@ -57,6 +59,9 @@ import br.com.caelum.vraptor.proxy.JavassistProxifier;
 import br.com.caelum.vraptor.proxy.Proxifier;
 
 public class PathAnnotationRoutesParserTest {
+
+	@Rule
+	public ExpectedException exception = ExpectedException.none();
 
 	private Proxifier proxifier;
 	private @Mock Converters converters;

@@ -1,5 +1,6 @@
 package br.com.caelum.vraptor.validator;
 
+import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.equalTo;
@@ -15,9 +16,14 @@ import java.util.Collection;
 import javax.el.ELProcessor;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 public class MessagesTest {
+
+	@Rule
+	public ExpectedException exception = ExpectedException.none();
 
 	private Messages messages;
 
@@ -26,8 +32,11 @@ public class MessagesTest {
 		messages = new Messages();
 	}
 
-	@Test(expected = IllegalStateException.class)
+	@Test
 	public void shouldThrowExceptionIfMessagesHasUnhandledErrors() {
+		exception.expect(IllegalStateException.class);
+		exception.expectMessage(containsString("There are validation errors and you forgot to specify where to go."));
+
 		messages.add(new SimpleMessage("Test", "Test message"));
 		messages.assertAbsenceOfErrors();
 	}

@@ -43,7 +43,9 @@ import javax.servlet.http.HttpServletRequest;
 import net.vidageek.mirror.dsl.Mirror;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
@@ -67,6 +69,9 @@ import com.google.gson.JsonParseException;
 import com.google.gson.JsonSerializer;
 
 public class GsonDeserializerTest {
+
+	@Rule
+	public ExpectedException exception = ExpectedException.none();
 
 	private GsonDeserializerBuilder builder;
 	private GsonDeserialization deserializer;
@@ -203,8 +208,11 @@ public class GsonDeserializerTest {
 		assertThat(dog.age, is(1));
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test
 	public void shouldNotAcceptMethodsWithoutArguments() throws Exception {
+		exception.expect(IllegalArgumentException.class);
+		exception.expectMessage("Methods that consumes representations must receive just one argument");
+
 		deserializer.deserialize(emptyStream(), noParameter);
 	}
 

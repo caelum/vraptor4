@@ -20,7 +20,9 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
@@ -32,6 +34,8 @@ import br.com.caelum.vraptor.serialization.Deserializes;
 
 public class DefaultDeserializersTest {
 
+	@Rule
+	public ExpectedException exception = ExpectedException.none();
 
 	private Deserializers deserializers;
 	@Mock private Container container;

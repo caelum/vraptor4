@@ -20,7 +20,9 @@ package br.com.caelum.vraptor.http.route;
 import static org.mockito.Mockito.when;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
@@ -28,6 +30,9 @@ import br.com.caelum.vraptor.http.EncodingHandler;
 import br.com.caelum.vraptor.proxy.Proxifier;
 
 public class RulesTest {
+
+	@Rule
+	public ExpectedException exception = ExpectedException.none();
 
 	private @Mock Router router;
 	private @Mock Proxifier proxifier;
@@ -42,8 +47,10 @@ public class RulesTest {
 		when(router.builderFor("")).thenReturn(routeBuilder);
 	}
 
-	@Test(expected=IllegalRouteException.class)
+	@Test
 	public void allowsAdditionOfRouteBuildersByDefaultWithNoStrategy() {
+		exception.expect(IllegalRouteException.class);
+
 		new Rules(router) {
 			@Override
 			public void routes() {

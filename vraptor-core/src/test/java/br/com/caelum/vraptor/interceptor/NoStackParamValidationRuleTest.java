@@ -16,7 +16,9 @@
 package br.com.caelum.vraptor.interceptor;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import br.com.caelum.vraptor.Accepts;
 import br.com.caelum.vraptor.AroundCall;
@@ -26,6 +28,9 @@ import br.com.caelum.vraptor.core.InterceptorStack;
 
 
 public class NoStackParamValidationRuleTest {
+
+	@Rule
+	public ExpectedException exception = ExpectedException.none();
 
 	private NoStackParamValidationRule validationRule;
 	private StepInvoker invoker;

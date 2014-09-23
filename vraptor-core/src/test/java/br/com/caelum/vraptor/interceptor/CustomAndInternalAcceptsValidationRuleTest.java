@@ -19,12 +19,17 @@ import java.lang.reflect.Method;
 import java.util.List;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import br.com.caelum.vraptor.Accepts;
 import br.com.caelum.vraptor.interceptor.example.NotLogged;
 
 public class CustomAndInternalAcceptsValidationRuleTest {
+
+	@Rule
+	public ExpectedException exception = ExpectedException.none();
 
 	private CustomAndInternalAcceptsValidationRule validationRule;
 	private StepInvoker stepInvoker;

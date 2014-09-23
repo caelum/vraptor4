@@ -23,11 +23,16 @@ import java.util.List;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import br.com.caelum.vraptor.Intercepts;
 
 public class TopologicalSortedInterceptorRegistryTest {
+
+	@Rule
+	public ExpectedException exception = ExpectedException.none();
 
 	@Intercepts
 	static interface A {}

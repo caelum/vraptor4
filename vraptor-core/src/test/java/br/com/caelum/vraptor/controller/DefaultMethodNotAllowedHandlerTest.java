@@ -28,13 +28,18 @@ import java.util.EnumSet;
 import javax.servlet.http.HttpServletResponse;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.http.MutableResponse;
 
 public class DefaultMethodNotAllowedHandlerTest {
+
+	@Rule
+	public ExpectedException exception = ExpectedException.none();
 
 	private DefaultMethodNotAllowedHandler handler;
 	private MutableResponse response;
@@ -71,10 +76,11 @@ public class DefaultMethodNotAllowedHandlerTest {
 		verify(response, never()).sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
 	}
 	
-	@Test(expected=InterceptionException.class)
+	@Test
 	public void shouldThrowInterceptionExceptionIfAnIOExceptionOccurs() throws Exception {
-		doThrow(new IOException()).when(response).sendError(anyInt());
+		exception.expect(InterceptionException.class);
 
+		doThrow(new IOException()).when(response).sendError(anyInt());
 		this.handler.deny(request, response, EnumSet.of(HttpMethod.GET, HttpMethod.POST));
 	}
 }

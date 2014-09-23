@@ -16,6 +16,7 @@
  */
 package br.com.caelum.vraptor.core;
 
+import static org.hamcrest.CoreMatchers.containsString;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -23,7 +24,9 @@ import static org.mockito.Mockito.when;
 import java.io.IOException;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
@@ -33,6 +36,9 @@ import br.com.caelum.vraptor.interceptor.Interceptor;
 import br.com.caelum.vraptor.ioc.Container;
 
 public class ToInstantiateInterceptorHandlerTest {
+
+	@Rule
+	public ExpectedException exception = ExpectedException.none();
 
 	private @Mock Container container;
 	private @Mock Interceptor interceptor;
@@ -63,10 +69,13 @@ public class ToInstantiateInterceptorHandlerTest {
 
 	}
 
-	@Test(expected = InterceptionException.class)
+	@Test
 	public void shouldComplainWhenUnableToInstantiateAnInterceptor() throws InterceptionException, IOException {
+		exception.expect(InterceptionException.class);
+		exception.expectMessage(containsString("Unable to instantiate interceptor for"));
+
 		when(container.instanceFor(MyWeirdInterceptor.class)).thenReturn(null);
-		
+
 		ToInstantiateInterceptorHandler handler = new ToInstantiateInterceptorHandler(container,
 				MyWeirdInterceptor.class);
 		handler.execute(null, null, null);

@@ -28,17 +28,24 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 
 @RunWith(WeldJunitRunner.class)
 public class VRaptorTest {
 
+	@Rule
+	public ExpectedException exception = ExpectedException.none();
+
 	@Inject private VRaptor vRaptor;
 	@Inject private MockStaticContentHandler handler;
 
-	@Test(expected = ServletException.class)
+	@Test
 	public void shoudlComplainIfNotInAServletEnviroment() throws Exception {
+		exception.expect(ServletException.class);
+
 		ServletRequest request = mock(ServletRequest.class);
 		ServletResponse response = mock(ServletResponse.class);
 		vRaptor.doFilter(request, response, null);

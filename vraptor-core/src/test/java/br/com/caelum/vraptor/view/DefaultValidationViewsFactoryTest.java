@@ -26,7 +26,9 @@ import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
@@ -42,6 +44,8 @@ import br.com.caelum.vraptor.validator.ValidationException;
 
 public class DefaultValidationViewsFactoryTest {
 
+	@Rule
+	public ExpectedException exception = ExpectedException.none();
 
 	private Result result;
 	private Proxifier proxifier;

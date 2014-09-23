@@ -50,6 +50,9 @@ import static org.mockito.Mockito.*;
 
 public class ExecuteMethodTest {
 
+	@Rule
+	public ExpectedException exception = ExpectedException.none();
+
 	@Mock private MethodInfo methodInfo;
 	@Mock private Messages messages;
 	@Mock private Validator validator;

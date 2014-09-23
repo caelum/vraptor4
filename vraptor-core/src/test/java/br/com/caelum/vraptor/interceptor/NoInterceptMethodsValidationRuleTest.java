@@ -19,13 +19,18 @@ import java.lang.reflect.Method;
 import java.util.List;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import br.com.caelum.vraptor.AfterCall;
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.Intercepts;
 
 public class NoInterceptMethodsValidationRuleTest {
+
+	@Rule
+	public ExpectedException exception = ExpectedException.none();
 
 	private StepInvoker stepInvoker;
 

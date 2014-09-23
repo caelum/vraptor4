@@ -41,7 +41,9 @@ import java.util.TimeZone;
 import javax.servlet.http.HttpServletResponse;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import br.com.caelum.vraptor.environment.Environment;
 
@@ -49,6 +51,9 @@ import com.google.common.collect.Lists;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 public class XStreamXMLSerializationTest {
+
+	@Rule
+	public ExpectedException exception = ExpectedException.none();
 
 	protected XStreamXMLSerialization serialization;
 	protected ByteArrayOutputStream stream;

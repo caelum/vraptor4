@@ -26,10 +26,14 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.when;
 
+import java.util.EnumSet;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
@@ -39,6 +43,9 @@ import br.com.caelum.vraptor.http.route.MethodNotAllowedException;
 import br.com.caelum.vraptor.http.route.Router;
 
 public class DefaultControllerTranslatorTest {
+
+	@Rule
+	public ExpectedException exception = ExpectedException.none();
 
 	private @Mock Router router;
 	private @Mock HttpServletRequest request;
@@ -104,11 +111,15 @@ public class DefaultControllerTranslatorTest {
 	}
 
 
-	@Test(expected=MethodNotAllowedException.class)
+	@Test
 	public void shouldThrowExceptionWhenRequestANotKnownMethod() {
+		exception.expect(MethodNotAllowedException.class);
+		exception.expectMessage("Method COOK is not allowed for requested URI. Allowed Methods are [GET, POST]");
+		
 		when(request.getRequestURI()).thenReturn("/url");
 		when(request.getMethod()).thenReturn("COOK");
 		when(router.parse(anyString(), any(HttpMethod.class), any(MutableRequest.class))).thenReturn(method);
+		when(router.allowedMethodsFor("/url")).thenReturn(EnumSet.of(HttpMethod.GET, HttpMethod.POST));
 
 		translator.translate(webRequest);
 	}

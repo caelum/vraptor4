@@ -23,7 +23,9 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.List;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import br.com.caelum.vraptor.AroundCall;
 import br.com.caelum.vraptor.BeforeCall;
@@ -32,6 +34,9 @@ import br.com.caelum.vraptor.interceptor.example.InterceptorWithInheritance;
 import br.com.caelum.vraptor.interceptor.example.WeldProxy$$$StyleInterceptor;
 
 public class StepInvokerTest {
+
+	@Rule
+	public ExpectedException exception = ExpectedException.none();
 
 	private StepInvoker stepInvoker = new StepInvoker();
 	

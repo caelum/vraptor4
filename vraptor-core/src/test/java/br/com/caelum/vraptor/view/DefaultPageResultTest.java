@@ -31,7 +31,9 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
@@ -47,6 +49,9 @@ import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.proxy.ProxyInvocationException;
 
 public class DefaultPageResultTest {
+
+	@Rule
+	public ExpectedException exception = ExpectedException.none();
 
 	private @Mock MutableRequest request;
 	private @Mock MutableResponse response;

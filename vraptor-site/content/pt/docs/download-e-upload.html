@@ -27,7 +27,7 @@ Se você quiser adicionar mais informações ao download você pode retornar um 
 @Controller
 public class PerfilController {
 	public Download foto(Perfil perfil) {
-		File file = new File("/path/para/a/foto." + perfil.getId()+ ".jpg");
+		File file = new File("/caminho/para/a/foto." + perfil.getId()+ ".jpg");
 		String contentType = "image/jpg";
 		String filename = perfil.getNome() + ".jpg";
 
@@ -59,6 +59,19 @@ public Download foto(Perfil perfil) {
 	return new ByteArrayDownload(conteudoFoto, contentType, filename);
 }
 ~~~
+
+Você também pode enviar uma lista de arquivos para download, e desta forma eles serão enviados ao browser 
+comprimidos em um arquivo Zip.
+
+~~~ 
+#!java
+public Download fotos() {
+	Path foto01 = new File("/caminho/para/a/foto01.jpg").toPath();
+	Path foto02 = new File("/caminho/para/a/foto02.jpg").toPath();
+	return new ZipDownload("fotos.zip", foto01, foto02);
+}
+~~~
+
 
 ##Using DownloadBuilder
 

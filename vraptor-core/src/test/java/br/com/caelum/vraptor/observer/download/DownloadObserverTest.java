@@ -43,7 +43,9 @@ import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
@@ -54,6 +56,9 @@ import br.com.caelum.vraptor.events.MethodExecuted;
 
 public class DownloadObserverTest {
 
+	@Rule
+	public TemporaryFolder tmpdir = new TemporaryFolder();
+	
 	private DownloadObserver downloadObserver;
 
 	@Mock private MethodInfo methodInfo;
@@ -100,7 +105,7 @@ public class DownloadObserverTest {
 	@Test
 	public void whenResultIsAFileShouldCreateAFileDownload() throws Exception {
 		when(controllerMethod.getMethod()).thenReturn(getMethod("file"));
-		File tmp = File.createTempFile("test", "test");
+		File tmp = tmpdir.newFile();
 		Files.write(tmp.toPath(), "abc".getBytes());
 		when(methodInfo.getResult()).thenReturn(tmp);
 		downloadObserver.download(new MethodExecuted(controllerMethod, methodInfo), result);
@@ -131,7 +136,7 @@ public class DownloadObserverTest {
 
 	@Test
 	public void shouldAcceptFile() throws Exception {
-		File file = File.createTempFile("test", "test");
+		File file = tmpdir.newFile();
 		assertThat(downloadObserver.resolveDownload(file), instanceOf(FileDownload.class));
 	}
 

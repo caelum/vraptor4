@@ -28,11 +28,16 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 public class DefaultStaticContentHandlerTest {
+
+	@Rule
+	public TemporaryFolder tmpdir = new TemporaryFolder();
 
 	@Mock private HttpServletRequest request;
 	@Mock private ServletContext context;
@@ -41,12 +46,7 @@ public class DefaultStaticContentHandlerTest {
 	@Before
 	public void setup() throws Exception {
 		MockitoAnnotations.initMocks(this);
-		file = File.createTempFile("_test", ".xml");
-	}
-	
-	@After
-	public void tearDown() {
-		file.delete();
+		file = tmpdir.newFile();
 	}
 
 	@Test

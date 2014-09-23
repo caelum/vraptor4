@@ -92,6 +92,7 @@ public class VRaptorInstantiator implements InstantiatorWithErrors, Instantiator
 				new ArrayAdapter(new ArrayInstantiator(this)),
 				new NullDecorator(new ListInstantiator(this)),
 				new NullDecorator(new SetInstantiator(this)),
+				new MapInstantiator(this),
 				new DependencyInstantiator(),
 				objectInstantiator);
 		multiInstantiator = new MultiInstantiator(instantiatorList);

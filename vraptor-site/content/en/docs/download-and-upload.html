@@ -59,6 +59,18 @@ public Download picture(Profile profile) {
 }
 ~~~
 
+You can also put a list of files to download, so will sent to the browser compressed as Zip archive.
+
+~~~ 
+#!java
+public Download pictures() {
+	Path pic01 = new File("/path/to/the/pic01.jpg").toPath();
+	Path pic02 = new File("/path/to/the/pic02.jpg").toPath();
+	return new ZipDownload("pics.zip", pic01, pic02);
+}
+~~~
+
+
 ##Using DownloadBuilder
 
 `DownloadBuilder` is a class to help you to create instances for `Download`, using a fluent interface. To create a `FileDownload` you can write this code:

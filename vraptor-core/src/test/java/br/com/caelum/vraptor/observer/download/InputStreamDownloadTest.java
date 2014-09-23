@@ -52,11 +52,11 @@ public class InputStreamDownloadTest {
 	public void setUp() throws Exception {
 		MockitoAnnotations.initMocks(this);
 		
-		bytes = new byte[] { (byte) 0 };
-		this.inputStream = new ByteArrayInputStream(bytes);
-		this.outputStream = new ByteArrayOutputStream();
+		bytes = new byte[] { (byte) 0x0 };
+		inputStream = new ByteArrayInputStream(bytes);
+		outputStream = new ByteArrayOutputStream();
 
-		this.socketStream = new ServletOutputStream() {
+		socketStream = new ServletOutputStream() {
 			@Override
 			public void write(int b) throws IOException {
 				outputStream.write(b);

@@ -6,6 +6,8 @@ import static java.util.Objects.requireNonNull;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.nio.file.Path;
+import java.util.List;
 
 import javax.enterprise.inject.Vetoed;
 
@@ -73,6 +75,23 @@ public final class DownloadBuilder {
 		return new ByteArrayDownloadBuilder(input);
 	}
 
+	/**
+	 * Creates an instance for build a {@link ZipDownload}.<br>
+	 * 
+	 * <code>
+	 * 		List<Path> listOfFiles = [...];
+	 * 		Download download = DownloadBuilder.of(listOfFiles)
+	 * 			.withFileName("resume.zip")
+	 * 			.build();
+	 * </code>
+	 * 
+	 * @param files List of input files
+	 * @throws NullPointerException If the {@code input} argument is {@code null}
+	 */
+	public static ZipDownloadBuilder of(List<Path> files) {
+		return new ZipDownloadBuilder(files);
+	}
+
 	static abstract class AbstractDownloadBuilder<T> {
 		protected String fileName;
 		protected String contentType;
@@ -134,6 +153,18 @@ public final class DownloadBuilder {
 
 		public ByteArrayDownload build() {
 			return new ByteArrayDownload(buff, contentType, fileName, doDownload);
+		}
+	}
+
+	public static class ZipDownloadBuilder extends AbstractDownloadBuilder<ZipDownloadBuilder> {
+		private final List<Path> files;
+
+		ZipDownloadBuilder(List<Path> files) {
+			this.files = requireNonNull(files, "files can't be null");
+		}
+
+		public ZipDownload build() {
+			return new ZipDownload(fileName, files);
 		}
 	}
 }

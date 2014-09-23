@@ -17,11 +17,10 @@
 
 package br.com.caelum.vraptor.converter;
 
-import static br.com.caelum.vraptor.VRaptorMatchers.hasMessage;
+import static br.com.caelum.vraptor.VRaptorMatchers.hasConversionException;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.fail;
 import static org.mockito.Mockito.when;
 
 import java.util.Locale;
@@ -30,15 +29,18 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import br.com.caelum.vraptor.converter.ConversionException;
-import br.com.caelum.vraptor.converter.PrimitiveDoubleConverter;
 import br.com.caelum.vraptor.http.MutableRequest;
 
 public class PrimitiveDoubleConverterTest {
+
+	@Rule
+	public ExpectedException exception = ExpectedException.none();
 
 	static final String LOCALE_KEY = "javax.servlet.jsp.jstl.fmt.locale";
 
@@ -81,11 +83,7 @@ public class PrimitiveDoubleConverterTest {
 
 	@Test
 	public void shouldThrowExceptionWhenUnableToParse() {
-		try {
-			converter.convert("vr3.9", double.class);
-			fail("Should throw exception");
-		} catch (ConversionException e) {
-			assertThat(e.getValidationMessage(), hasMessage("vr3.9 is not a valid number."));
-		}
+		exception.expect(hasConversionException("vr3.9 is not a valid number."));
+		converter.convert("vr3.9", double.class);
 	}
 }

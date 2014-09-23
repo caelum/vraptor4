@@ -17,12 +17,11 @@
 
 package br.com.caelum.vraptor.converter;
 
-import static br.com.caelum.vraptor.VRaptorMatchers.hasMessage;
+import static br.com.caelum.vraptor.VRaptorMatchers.hasConversionException;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
-import static org.junit.Assert.fail;
 import static org.mockito.Mockito.when;
 
 import java.util.Calendar;
@@ -32,13 +31,18 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor.http.MutableRequest;
 
 public class CalendarConverterTest {
+
+	@Rule
+	public ExpectedException exception = ExpectedException.none();
 
 	static final String LOCALE_KEY = "javax.servlet.jsp.jstl.fmt.locale";
 
@@ -78,11 +82,7 @@ public class CalendarConverterTest {
 
 	@Test
 	public void shouldThrowExceptionWhenUnableToParse() {
-		try {
-			converter.convert("a,10/06/2008/a/b/c", Calendar.class);
-			fail("should throw an exception");
-		} catch (ConversionException e) {
-			assertThat(e.getValidationMessage(), hasMessage("a,10/06/2008/a/b/c is not a valid date."));
-		}
+		exception.expect(hasConversionException("a,10/06/2008/a/b/c is not a valid date."));
+		converter.convert("a,10/06/2008/a/b/c", Calendar.class);
 	}
 }

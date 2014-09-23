@@ -17,18 +17,18 @@
 
 package br.com.caelum.vraptor.converter;
 
-import static br.com.caelum.vraptor.VRaptorMatchers.hasMessage;
+import static br.com.caelum.vraptor.VRaptorMatchers.hasConversionException;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
-import static org.junit.Assert.fail;
 
 import java.math.BigInteger;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
-
+import org.junit.rules.ExpectedException;
 
 /**
  * VRaptor's BigInteger converter test.
@@ -36,6 +36,9 @@ import org.junit.Test;
  * @author Cecilia Fernandes
  */
 public class BigIntegerConverterTest {
+
+	@Rule
+	public ExpectedException exception = ExpectedException.none();
 
 	private BigIntegerConverter converter;
 
@@ -51,21 +54,14 @@ public class BigIntegerConverterTest {
 
 	@Test
 	public void shouldComplainAboutNonIntegerNumbers() {
-		try {
-			converter.convert("2.3", BigInteger.class);
-		} catch (ConversionException e) {
-			assertThat(e.getValidationMessage(), hasMessage("2.3 is not a valid number."));
-		}
+		exception.expect(hasConversionException("2.3 is not a valid number."));
+		converter.convert("2.3", BigInteger.class);
 	}
 
 	@Test
 	public void shouldComplainAboutInvalidNumber() {
-		try {
-			converter.convert("---", BigInteger.class);
-			fail("should throw an exception");
-		} catch (ConversionException e) {
-			assertThat(e.getValidationMessage(), hasMessage("--- is not a valid number."));
-		}
+		exception.expect(hasConversionException("--- is not a valid number."));
+		converter.convert("---", BigInteger.class);
 	}
 
 	@Test

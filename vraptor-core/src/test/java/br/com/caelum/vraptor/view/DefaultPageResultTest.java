@@ -100,10 +100,11 @@ public class DefaultPageResultTest {
 		verify(response, only()).sendRedirect("http://vraptor.caelum.com.br");
 	}
 
-	@Test(expected=ResultException.class)
+	@Test
 	public void shouldThrowResultExceptionIfIOExceptionOccursWhileRedirect() throws Exception {
-		doThrow(new IOException()).when(response).sendRedirect(anyString());
+		exception.expect(ResultException.class);
 
+		doThrow(new IOException()).when(response).sendRedirect(anyString());
 		view.redirectTo("/any/url");
 	}
 
@@ -116,16 +117,20 @@ public class DefaultPageResultTest {
 	}
 
 
-	@Test(expected=ResultException.class)
+	@Test
 	public void shouldThrowResultExceptionIfServletExceptionOccursWhileForwarding() throws Exception {
+		exception.expect(ResultException.class);
+
 		when(request.getRequestDispatcher(anyString())).thenReturn(dispatcher);
 		doThrow(new ServletException()).when(dispatcher).forward(request, response);
 
 		view.forwardTo("/any/url");
 	}
 
-	@Test(expected=ResultException.class)
+	@Test
 	public void shouldThrowResultExceptionIfIOExceptionOccursWhileForwarding() throws Exception {
+		exception.expect(ResultException.class);
+
 		when(request.getRequestDispatcher(anyString())).thenReturn(dispatcher);
 		doThrow(new IOException()).when(dispatcher).forward(request, response);
 
@@ -141,16 +146,20 @@ public class DefaultPageResultTest {
 		verify(dispatcher, only()).forward(request, response);
 	}
 
-	@Test(expected=ApplicationLogicException.class)
-	public void shouldThrowResultExceptionIfServletExceptionOccursWhileForwardingView() throws Exception {
+	@Test
+	public void shouldThrowApplicationLogicExceptionIfServletExceptionOccursWhileForwardingView() throws Exception {
+		exception.expect(ApplicationLogicException.class);
+
 		when(request.getRequestDispatcher(anyString())).thenReturn(dispatcher);
 		doThrow(new ServletException()).when(dispatcher).forward(request, response);
 
 		view.defaultView();
 	}
 
-	@Test(expected=ResultException.class)
+	@Test
 	public void shouldThrowResultExceptionIfIOExceptionOccursWhileForwardingView() throws Exception {
+		exception.expect(ResultException.class);
+
 		when(request.getRequestDispatcher(anyString())).thenReturn(dispatcher);
 		doThrow(new IOException()).when(dispatcher).forward(request, response);
 
@@ -166,16 +175,20 @@ public class DefaultPageResultTest {
 		verify(dispatcher, only()).include(request, response);
 	}
 
-	@Test(expected=ResultException.class)
+	@Test
 	public void shouldThrowResultExceptionIfServletExceptionOccursWhileIncluding() throws Exception {
+		exception.expect(ResultException.class);
+
 		when(request.getRequestDispatcher(anyString())).thenReturn(dispatcher);
 		doThrow(new ServletException()).when(dispatcher).include(request, response);
 
 		view.include();
 	}
 
-	@Test(expected=ResultException.class)
+	@Test
 	public void shouldThrowResultExceptionIfIOExceptionOccursWhileIncluding() throws Exception {
+		exception.expect(ResultException.class);
+
 		when(request.getRequestDispatcher(anyString())).thenReturn(dispatcher);
 		doThrow(new IOException()).when(dispatcher).include(request, response);
 
@@ -192,8 +205,10 @@ public class DefaultPageResultTest {
 		}
 	}
 
-	@Test(expected = ProxyInvocationException.class)
+	@Test
 	public void shoudThrowProxyInvocationExceptionIfAndExceptionOccursWhenUsingResultOf() {
+		exception.expect(ProxyInvocationException.class);
+
 		doThrow(new NullPointerException()).when(request).getRequestDispatcher(anyString());
 		view.of(SimpleController.class).notAllowedMethod();
 	}

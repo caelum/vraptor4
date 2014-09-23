@@ -27,10 +27,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor.ioc.Container;
-import br.com.caelum.vraptor.serialization.DefaultDeserializers;
-import br.com.caelum.vraptor.serialization.Deserializer;
-import br.com.caelum.vraptor.serialization.Deserializers;
-import br.com.caelum.vraptor.serialization.Deserializes;
 
 public class DefaultDeserializersTest {
 
@@ -53,8 +49,11 @@ public class DefaultDeserializersTest {
 
 	static interface NotAnnotatedDeserializer extends Deserializer {}
 
-	@Test(expected=IllegalArgumentException.class)
+	@Test
 	public void allDeserializersMustBeAnnotatedWithDeserializes() throws Exception {
+		exception.expect(IllegalArgumentException.class);
+		exception.expectMessage("You must annotate your deserializers with @Deserializes");
+
 		deserializers.register(NotAnnotatedDeserializer.class);
 	}
 

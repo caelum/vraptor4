@@ -15,6 +15,7 @@
  */
 package br.com.caelum.vraptor.interceptor;
 
+import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.Matchers.hasItems;
 import static org.junit.Assert.assertThat;
 
@@ -91,8 +92,11 @@ public class TopologicalSortedInterceptorRegistryTest {
 
 	}
 
-	@Test(expected=IllegalStateException.class)
+	@Test
 	public void failsOnCycles() throws Exception {
+		exception.expect(IllegalStateException.class);
+		exception.expectMessage(containsString("There is a cycle on the interceptor sequence"));
+
 		TopologicalSortedInterceptorRegistry set = new TopologicalSortedInterceptorRegistry();
 		set.register(A.class);
 		set.register(C.class);

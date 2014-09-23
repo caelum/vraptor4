@@ -41,21 +41,30 @@ public class NoStackParamValidationRuleTest {
 		validationRule = new NoStackParamValidationRule(invoker);
 	}
 
-	@Test(expected = IllegalStateException.class)
+	@Test
 	public void mustReceiveStackAsParameterForAroundCall() {
+		exception.expect(IllegalStateException.class);
+		exception.expectMessage("@AroundCall method must receive br.com.caelum.vraptor.core.InterceptorStack or br.com.caelum.vraptor.interceptor.SimpleInterceptorStack");
+
 		Class<?> type = AroundInterceptorWithoutSimpleStackParameter.class;
 		validationRule.validate(type, invoker.findAllMethods(type));
 	}
 
-	@Test(expected = IllegalStateException.class)
+	@Test
 	public void mustNotReceiveStackAsParameterForAcceptsCall() {
+		exception.expect(IllegalStateException.class);
+		exception.expectMessage("Non @AroundCall method must not receive br.com.caelum.vraptor.core.InterceptorStack or br.com.caelum.vraptor.interceptor.SimpleInterceptorStack");
+
 		Class<?> type = AcceptsInterceptorWithStackAsParameter.class;
 		validationRule.validate(type, invoker.findAllMethods(type));
 
 	}
 
-	@Test(expected = IllegalStateException.class)
+	@Test
 	public void mustNotReceiveStackAsParameterForBeforeAfterCall() {
+		exception.expect(IllegalStateException.class);
+		exception.expectMessage("Non @AroundCall method must not receive br.com.caelum.vraptor.core.InterceptorStack or br.com.caelum.vraptor.interceptor.SimpleInterceptorStack");
+
 		Class<?> type = BeforeAfterInterceptorWithStackAsParameter.class;
 		validationRule.validate(type, invoker.findAllMethods(type));
 	}

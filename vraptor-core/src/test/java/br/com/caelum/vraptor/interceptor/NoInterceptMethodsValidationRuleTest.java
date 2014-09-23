@@ -49,8 +49,11 @@ public class NoInterceptMethodsValidationRuleTest {
 		this.stepInvoker = new StepInvoker();
 	}
 
-	@Test(expected=InterceptionException.class)
+	@Test
 	public void shoulThrowExceptionIfInterceptorDontHaveAnyCallableMethod() {
+		exception.expect(InterceptionException.class);
+		exception.expectMessage("Interceptor " + SimpleInterceptor.class.getCanonicalName() +" must declare at least one method whith @AfterCall, @AroundCall or @BeforeCall annotation");
+		
 		Class<?> type = SimpleInterceptor.class;
 		List<Method> allMethods = stepInvoker.findAllMethods(type);
 		new NoInterceptMethodsValidationRule(stepInvoker).validate(type, allMethods);

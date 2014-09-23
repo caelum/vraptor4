@@ -47,8 +47,11 @@ public class StepInvokerTest {
 		assertEquals(method, interceptorClass.getDeclaredMethod("begin"));
 	}
 
-	@Test(expected=IllegalStateException.class)
+	@Test
 	public void shouldThrowsExceptionWhenInterceptorHasMoreThanOneAnnotatedMethod() {
+		exception.expect(IllegalStateException.class);
+		exception.expectMessage(InterceptorWithMoreThanOneBeforeCallMethod.class.getName() + " - You should not have more than one @BeforeCall annotated method");
+
 		Class<?> interceptorClass = InterceptorWithMoreThanOneBeforeCallMethod.class;
 		findMethod(interceptorClass, BeforeCall.class);
 	}

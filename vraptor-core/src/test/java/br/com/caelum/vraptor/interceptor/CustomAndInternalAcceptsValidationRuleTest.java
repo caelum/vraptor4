@@ -40,8 +40,11 @@ public class CustomAndInternalAcceptsValidationRuleTest {
 		validationRule = new CustomAndInternalAcceptsValidationRule(stepInvoker);
 	}
 
-	@Test(expected = IllegalStateException.class)
+	@Test
 	public void mustNotUseInternalAcceptsAndCustomAccepts(){
+		exception.expect(IllegalStateException.class);
+		exception.expectMessage("Interceptor class " + InternalAndCustomAcceptsInterceptor.class.getName() + " must declare internal accepts or custom, not both");
+		
 		Class<?> type = InternalAndCustomAcceptsInterceptor.class;
 		List<Method> methods = stepInvoker.findAllMethods(type);
 		validationRule.validate(type, methods);

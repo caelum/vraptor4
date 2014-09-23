@@ -43,15 +43,21 @@ public class AcceptsNeedReturnBooleanValidationRuleTest {
 		validationRule = new AcceptsNeedReturnBooleanValidationRule(stepInvoker);
 	}
 
-	@Test(expected = InterceptionException.class)
+	@Test
 	public void shouldVerifyIfAcceptsMethodReturnsVoid() {
+		exception.expect(InterceptionException.class);
+		exception.expectMessage("@Accepts method must return boolean");
+
 		Class<VoidAcceptsInterceptor> type = VoidAcceptsInterceptor.class;
 		List<Method> allMethods = stepInvoker.findAllMethods(type);
 		validationRule.validate(type, allMethods);
 	}
 
-	@Test(expected = InterceptionException.class)
+	@Test
 	public void shouldVerifyIfAcceptsMethodReturnsNonBooleanType() {
+		exception.expect(InterceptionException.class);
+		exception.expectMessage("@Accepts method must return boolean");
+
 		Class<NonBooleanAcceptsInterceptor> type = NonBooleanAcceptsInterceptor.class;
 		List<Method> allMethods = stepInvoker.findAllMethods(type);
 		validationRule.validate(type, allMethods);

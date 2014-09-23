@@ -4,7 +4,7 @@ Before release we should:
 
 After release a new version of VRaptor, we should:
 
-* Upload core, blank-project and musicjungle zips to bintray:
+* Upload core, blank-project (dist + eclipse dist files) and musicjungle zips to bintray:
 
 bintray.com/caelum/VRaptor4/br.com.caelum.vraptor
 

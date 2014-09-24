@@ -65,7 +65,7 @@ Com o Bean Validator você pode criar anotações com suas validações customiz
 @Pattern(regexp = "\\((\\d{2})\\) (\\d{4})-(\\d{4})")
 public @interface PhoneNumber {
 	
-	String message() default "{br.com.vraptor.validations.phonenumber.message}";
+	String message() default "{br.com.caelum.vraptor.validations.phonenumber.message}";
 
 	Class<?>[] groups() default {};
 

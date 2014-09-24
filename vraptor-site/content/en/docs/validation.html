@@ -64,7 +64,7 @@ With Bean validation you can create your own custom validations. If you want to 
 @Pattern(regexp = "\\((\\d{2})\\) (\\d{4})-(\\d{4})")
 public @interface PhoneNumber {
 	
-	String message() default "{br.com.vraptor.validations.phonenumber.message}";
+	String message() default "{br.com.caelum.vraptor.validations.phonenumber.message}";
 
 	Class<?>[] groups() default {};
 

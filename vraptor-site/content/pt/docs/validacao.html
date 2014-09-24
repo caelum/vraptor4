@@ -65,7 +65,7 @@ Com o Bean Validator você pode criar anotações com suas validações customiz
 @Pattern(regexp = "\\((\\d{2})\\) (\\d{4})-(\\d{4})")
 public @interface PhoneNumber {
 	
-	String message() default "{br.com.vraptor.validations.phonenumber.message}";
+	String message() default "{br.com.caelum.vraptor.validations.phonenumber.message}";
 
 	Class<?>[] groups() default {};
 
@@ -116,6 +116,68 @@ public class LoginAvailableValidator implements ConstraintValidator<LoginAvailab
 
 Note no código que é possível injetar qualquer componente gerenciável pelo CDI, que pode ser uma DAO ou qualquer outro componente.
 
+
+##Customizando as Mensagens
+
+Se você preferir é possível customizar as mensagens do Bean Validation. Para isso, basta adicionar o arquivo `ValidationMessages.properties` no seu classpath. Se você usa Maven o local é `/src/main/resources`.
+
+Considerando o exemplo anterior, o arquivo poderia ter a seguinte estrutura para customizar as mensagens padrões:
+
+~~~
+#!properties
+cliente.nome.vazio = O nome do cliente não pode ser vazio
+cliente.nome.tamanho = O nome do cliente deve possuir entre {min} e {max} caracteres
+cliente.nascimento.data = A data de nascimento ${validatedValue} informada deve ser no passado
+~~~
+
+E a classe teria que ser alterada para incluir essas chaves
+
+~~~
+#!java
+public class Cliente {
+	@NotNull(message="{cliente.nome.vazio}")
+	@Size(min=10, max=50, message="{cliente.nome.tamanho}")
+	private String nome;
+
+	@Past(message="{cliente.nascimento.data}")
+	private Date nascimento;
+}
+~~~
+
+Observe que o valor contido em `message={}`, nas anotações indica que a mensagem vem do `ResourceBundle`.
+
+Veja que foi adicionado parâmetros afim de deixar nossas mensagens mais dinâmicas e reaproveitáveis. As possibilidades atualmente são:
+
+* os valores dos atributos da restrição mapeados com os nomes de atributo. Ex. `{min}` e `{max}` no caso de `@Size`
+* o atual valor a ser validado sob o nome de `${validatedValue}`
+* uso de if-else curto, como por exemplo: `${value > 1 ? 's' : ''}`
+* um bean mapeado com o nome de `formatter` expondo método var-arg `format(String format, Object... args)` o qual se comporta como `java.util.Formatter.format(String format, Object... args)`. Ex.: `${formatter.format('%1$.2f', validatedValue)}`
+
+
+## Validação usando o Validator
+
+Caso você não queira usar o Bean Validation, você pode usar os métodos de validação do próprio `Validator` do VRaptor. O método mais simples é o `add`:
+
+~~~
+#!java
+if (cliente.getNome() == null) {
+  //mensagem simples
+  validator.add(new SimpleMessage("nome", "O nome deve ser preenchido"));
+
+  //mensagem internacionalizada
+  validator.add(new I18nMessage("nome", "nome.deve.ser.preenchido"));
+}
+~~~
+
+Podemos também usar os métodos `addIf` que adiciona a mensagem se a condição for verdadeira e o `ensure` que adiciona se a condição for falsa:
+
+~~~
+#!java
+validator.addIf(cliente.getNome() == null, new SimpleMessage("nome", "O nome deve ser preenchido"));
+
+validator.ensure(cliente.getNome() != null, new SimpleMessage("nome", "O nome deve ser preenchido"));
+~~~
+
 ##Redirecionando em caso de erro
 
 Quando ocorre um erro de validação, você pode redirecionar o usuário para qualquer outra tela. Abaixo alguns exemplos:
@@ -141,13 +203,13 @@ validator.onErrorUsePageOf(this).list() ==> validator.onErrorUse(page()).of(this
 
 Quando existem erros de validação, o VRaptor coloca um atributo na requisição chamado `errors` contendo a lista de erros. Essa lista é representada por items chave-valor, onde temos:
 
-- <code>category</code>: representa o caminho do atributo que originou o erro, cujo valor é uma convenção para `objeto.atributo`
-- <code>message</code>: representa a mensagem padrão da API do Bean Validation, normalmente um sufixo como: "deve estar no futuro", "não pode ser nulo", etc.
+- `category`: representa o caminho do atributo que originou o erro, cujo valor é uma convenção para `objeto.atributo`
+- `message`: representa a mensagem padrão da API do Bean Validation, normalmente um sufixo como: "deve estar no futuro", "não pode ser nulo", etc.
 
 E na view você pode imprimir:
 
 ~~~
-#!xml
+#!jsp
 <c:forEach var="error" items="${errors}">
 	${error.category} - ${error.message}<br />
 </c:forEach>
@@ -156,74 +218,35 @@ E na view você pode imprimir:
 Você também pode buscar por um erro somente de uma determinada categoria, que é muito útil para quando você quer exibir os erros de validação ao lado de cada campo.
 
 ~~~
-#!xml
+#!jsp
 <input type="text" name="cliente.nome" />
-
 <span class="error">${errors.from('cliente.nome')}</span> 
-// retorna: 'não pode ser nulo, não pode ser menor que 50'
+~~~
 
+O código acima irá imprimir "não pode ser nulo, não pode ser menor que 50". Você também pode usar o método `join` caso preferir exibir as mensagens usando outro separador, como o exemplo abaixo:
+
+~~~
+#!jsp
 <span class="error">${errors.from('cliente.nome').join(' - ')}</span> 
-// retorna: 'não pode ser nulo - não pode ser menor que 50'
 ~~~
 
-﻿##Customizando as Mensagens
+Que irá imprimir: "não pode ser nulo - não pode ser menor que 50".
 
-Se você preferir é possível customizar as mensagens do Bean Validation. Para isso, basta adicionar o arquivo <code>ValidationMessages.properties</code> no seu classpath. Se você usa Maven o local é <code>/src/main/resources</code>.
+##Adicionando outras mensagens
 
-Considerando o exemplo anterior, o arquivo poderia ter a seguinte estrutura para customizar as mensagens padrões:
-
-~~~
-#!properties
-cliente.nome.vazio = O nome do cliente não pode ser vazio
-cliente.nome.tamanho = O nome do cliente deve possuir entre {min} e {max} caracteres
-cliente.nascimento.data = A data de nascimento ${validatedValue} informada deve ser no passado
-~~~
-
-E a classe teria que ser alterada para incluir essas chaves
+Quando você adiciona uma mensagem, por padrão o VRaptor adiciona a mensagem como um erro. É possível também que você adicione mensagem de sucesso, avisos e informações. Para isso basta criar sua mensagem usando os valores disponíveis no enum `Severity`, conforme os exemplos abaixo:
 
 ~~~
 #!java
-public class Cliente {
-	@NotNull(message="{cliente.nome.vazio}")
-	@Size(min=10, max=50, message="{cliente.nome.tamanho}")
-	private String nome;
-
-	@Past(message="{cliente.nascimento.data}")
-	private Date nascimento;
-}
+validator.add(new SimpleMessage("cliente.nome", "nome do cliente possui acentuação", Severity.WARN));
 ~~~
 
-Observe que o Valor contido em `message={}`, nas anotações indica que a mensagem vem do `ResourceBundle`.
-
-Veja que foi adicionado parâmetros afim de deixar nossas mensagens mais dinâmicas e reaproveitáveis. As possibilidades atualmente são:
-
-* os valores dos atributos da restrição mapeados com os nomes de atributo. Ex. <code>{min}</code> e <code>{max}</code> no caso de <code>@Size</code>
-* o atual valor a ser validado sob o nome de <code>${validatedValue}</code>
-* uso de if-else curto, como por exemplo: <code>${value > 1 ? 's' : ''}</code>
-* um bean mapeado com o nome de <code>formatter</code> expondo método var-arg <code>format(String format, Object... args)</code> o qual se comporta como <code>java.util.Formatter.format(String format, Object... args)</code>. Ex.: <code>${formatter.format('%1$.2f', validatedValue)}</code>
-
-
-## Validação usando o Validator
-
-Caso você não queira usar o Bean Validation, você pode usar os métodos de validação do próprio <code>Validator</code> do VRaptor. O método mais simples é o <code>add</code>:
+E no JSP basta usar o atributo `vmessages`:
 
 ~~~
-#!java
-if (cliente.getNome() == null) {
-  //mensagem simples
-  validator.add(new SimpleMessage("nome", "O nome deve ser preenchido"));
-
-  //mensagem internacionalizada
-  validator.add(new I18nMessage("nome", "nome.deve.ser.preenchido"));
-}
+#!jsp
+<input type="text" name="cliente.nome" />
+<span class="warn">${vmessages.warnings.from('cliente.nome')}</span> 
 ~~~
 
-Podemos também usar os métodos <code>addIf</code> que adiciona a mensagem se a condição for verdadeira e o <code>ensure</code> que adiciona se a condição for falsa:
-
-~~~
-#!java
-validator.addIf(cliente.getNome() == null, new SimpleMessage("nome", "O nome deve ser preenchido"));
-
-validator.ensure(cliente.getNome() != null, new SimpleMessage("nome", "O nome deve ser preenchido"));
-~~~
-
+Que irá imprimir "nome do cliente possui acentuação".

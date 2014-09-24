@@ -116,7 +116,7 @@ public class LoginAvailableValidator implements ConstraintValidator<LoginAvailab
 
 ##Using custom messages
 
-If you prefer, you can use custom messages with Bean Validation. For this you need to add the file <code>ValidationMessages.properties</code> in your _classpath_. In a Mavem project, the location is <code>/src/main/resources</code>.
+If you prefer, you can use custom messages with Bean Validation. For this you need to add the file `ValidationMessages.properties` in your _classpath_. In a Mavem project, the location is `/src/main/resources`.
 
 Considering the previous example, the file might have the following content to customize the default messages:
 
@@ -145,11 +145,11 @@ The value `{}` present in annotations indicates that the message comes from the 
 
 See that was added parameters in order to let our most dynamic and reusable messages. The possibilities are currently:
 
-* attribute values ​​of the restriction mapped with the attribute names, like <code>{min}</code> and <code>{max}</code> for <code>@Size</code>
-* the current value to be validated with the name <code>${validatedValue}</code>
-* a ternary operation like: <code>${value > 1 ? 's' : ''}</code>
-* a bean mapped with the name <code>formatter</code> exposing a var-arg method <code>format(String format, Object... args)</code> 
-which behaves like <code>java.util.Formatter.format(String format, Object... args)</code>. Example: <code>${formatter.format('%1$.2f', validatedValue)}</code>
+* attribute values ​​of the restriction mapped with the attribute names, like `{min}` and `{max}` for `@Size`
+* the current value to be validated with the name `${validatedValue}`
+* a ternary operation like: `${value > 1 ? 's' : ''}`
+* a bean mapped with the name `formatter` exposing a var-arg method `format(String format, Object... args)` 
+which behaves like `java.util.Formatter.format(String format, Object... args)`. Example: `${formatter.format('%1$.2f', validatedValue)}`
 
 
 ## Validation using Validator class methods
@@ -167,7 +167,7 @@ if (client.getName() == null) {
 }
 ~~~
 
-You can use another methods like <code>addIf</code>, that only adds the message if a precondition is `true`, and <code>ensure</code> that only adds the message if the precondition is `false`:
+You can use another methods like `addIf`, that only adds the message if a precondition is `true`, and `ensure` that only adds the message if the precondition is `false`:
 
 ~~~
 #!java
@@ -179,7 +179,7 @@ validator.ensure(client.getName() != null, new SimpleMessage("name", "The name i
 
 ##Redirecting when a constraint error occurs
 
-When a constraint error occurs, you can redirect or forward the user to another page. Below the possible actions:
+When a constraint error occurs, you can redirect or forward the user to another page. You can see below some of the possible actions:
 
 ~~~
 #!java
@@ -202,13 +202,13 @@ validator.onErrorUsePageOf(this).list() ==> validator.onErrorUse(page()).of(this
 
 When an error exists, VRaptor puts an attribute named `errors` in the request scope, that contains a list with all constraint errors. This list contains a key-value object that represents:
 
-- <code>category</code>: represents the full path of the attribute like `object.attribute`
-- <code>message</code>: represents the error message like: "must be in the future", "may not be empty", and so on.
+- `category`: represents the full path of the attribute like `object.attribute`
+- `message`: represents the error message like: "must be in the future", "may not be empty", and so on.
 
 In the view you can do something like this:
 
 ~~~
-#!xml
+#!jsp
 <c:forEach var="error" items="${errors}">
 	${error.category} - ${error.message}<br />
 </c:forEach>
@@ -217,17 +217,20 @@ In the view you can do something like this:
 You can search for an error for a specific category, that can be useful to display constraint the messages beside the field.
 
 ~~~
-#!xml
+#!jsp
 <input type="text" name="client.name" />
-
 <span class="error">${errors.from('client.name')}</span>
-// prints: 'may not be empty, size must be between 10 and 50'
-
-<span class="error">${errors.from('client.name').join(' - ')}</span>
-// prints: 'may not be empty - size must be between 10 and 50'
 ~~~
 
-﻿
+It will print "may not be empty, size must be between 10 and 50". You can also use the join method if you want to use another separator, just like this:
+
+~~~
+#!jsp
+<span class="error">${errors.from('client.name').join(' - ')}</span>
+~~~
+
+That will print "may not be empty - size must be between 10 and 50".
+
 ##Adding more messages
 
 When you add a message, the framework will add as an error. But its possible 
@@ -242,9 +245,9 @@ validator.add(new SimpleMessage("client.name", "name field have accents", Severi
 And in the view you can use `vmessages` attribute:
 
 ~~~
-#!xml
+#!jsp
 <input type="text" name="client.name" />
-
 <span class="error">${vmessages.warnings.from('client.name')}</span> 
-// prints: 'name field have accents'
 ~~~
+
+This code will print "name field have accents" beside the input text.

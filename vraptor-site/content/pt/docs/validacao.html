@@ -144,7 +144,7 @@ public class Cliente {
 }
 ~~~
 
-Observe que o Valor contido em `message={}`, nas anotações indica que a mensagem vem do `ResourceBundle`.
+Observe que o valor contido em `message={}`, nas anotações indica que a mensagem vem do `ResourceBundle`.
 
 Veja que foi adicionado parâmetros afim de deixar nossas mensagens mais dinâmicas e reaproveitáveis. As possibilidades atualmente são:
 
@@ -209,7 +209,7 @@ Quando existem erros de validação, o VRaptor coloca um atributo na requisiçã
 E na view você pode imprimir:
 
 ~~~
-#!xml
+#!jsp
 <c:forEach var="error" items="${errors}">
 	${error.category} - ${error.message}<br />
 </c:forEach>
@@ -218,17 +218,20 @@ E na view você pode imprimir:
 Você também pode buscar por um erro somente de uma determinada categoria, que é muito útil para quando você quer exibir os erros de validação ao lado de cada campo.
 
 ~~~
-#!xml
+#!jsp
 <input type="text" name="cliente.nome" />
-
 <span class="error">${errors.from('cliente.nome')}</span> 
-// retorna: 'não pode ser nulo, não pode ser menor que 50'
-
-<span class="error">${errors.from('cliente.nome').join(' - ')}</span> 
-// retorna: 'não pode ser nulo - não pode ser menor que 50'
 ~~~
 
-﻿
+O código acima irá imprimir "não pode ser nulo, não pode ser menor que 50". Você também pode usar o método `join` caso preferir exibir as mensagens usando outro separador, como o exemplo abaixo:
+
+~~~
+#!jsp
+<span class="error">${errors.from('cliente.nome').join(' - ')}</span> 
+~~~
+
+Que irá imprimir: "não pode ser nulo - não pode ser menor que 50".
+
 ##Adicionando outras mensagens
 
 Quando você adiciona uma mensagem, por padrão o VRaptor adiciona a mensagem como um erro. É possível também que você adicione mensagem de sucesso, avisos e informações. Para isso basta criar sua mensagem usando os valores disponíveis no enum `Severity`, conforme os exemplos abaixo:
@@ -241,12 +244,9 @@ validator.add(new SimpleMessage("cliente.nome", "nome do cliente possui acentua�
 E no JSP basta usar o atributo `vmessages`:
 
 ~~~
-#!xml
+#!jsp
 <input type="text" name="cliente.nome" />
-
-<span class="error">${vmessages.warnings.from('cliente.nome')}</span> 
-// retorna: 'nome do cliente possui acentuação'
+<span class="warn">${vmessages.warnings.from('cliente.nome')}</span> 
 ~~~
 
-
-
+Que irá imprimir "nome do cliente possui acentuação".

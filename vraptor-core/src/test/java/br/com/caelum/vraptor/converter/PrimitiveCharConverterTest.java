@@ -27,7 +27,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-
 public class PrimitiveCharConverterTest {
 
 	@Rule
@@ -60,5 +59,4 @@ public class PrimitiveCharConverterTest {
 	public void shouldConvertToZeroWhenEmpty() {
 		assertThat(converter.convert("", char.class), is(equalTo('\u0000')));
 	}
-
 }

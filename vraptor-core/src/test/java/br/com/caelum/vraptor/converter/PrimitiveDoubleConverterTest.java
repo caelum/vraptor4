@@ -52,7 +52,6 @@ public class PrimitiveDoubleConverterTest {
 	@Before
 	public void setup() {
 		MockitoAnnotations.initMocks(this);
-
 		when(request.getServletContext()).thenReturn(context);
 
 		converter = new PrimitiveDoubleConverter(new Locale("pt", "BR"));
@@ -71,15 +70,15 @@ public class PrimitiveDoubleConverterTest {
 		assertThat(converter.convert("10.01", double.class), is(equalTo(Double.parseDouble("10.01"))));
 	}
 
-	 @Test
-	 public void shouldBeAbleToConvertEmpty() {
-		 assertThat(converter.convert("", double.class), is(equalTo(0d)));
-	 }
+	@Test
+	public void shouldBeAbleToConvertEmpty() {
+		assertThat(converter.convert("", double.class), is(equalTo(0d)));
+	}
 
-	 @Test
-	 public void shouldBeAbleToConvertNull() {
-		 assertThat(converter.convert(null, double.class), is(equalTo(0d)));
-	 }
+	@Test
+	public void shouldBeAbleToConvertNull() {
+		assertThat(converter.convert(null, double.class), is(equalTo(0d)));
+	}
 
 	@Test
 	public void shouldThrowExceptionWhenUnableToParse() {

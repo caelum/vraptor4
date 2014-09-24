@@ -27,7 +27,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-
 public class PrimitiveLongConverterTest {
 
 	@Rule
@@ -60,5 +59,4 @@ public class PrimitiveLongConverterTest {
 	public void shouldConvertToZeroWhenEmpty() {
 		assertThat(converter.convert("", long.class), is(equalTo(0L)));
 	}
-
 }

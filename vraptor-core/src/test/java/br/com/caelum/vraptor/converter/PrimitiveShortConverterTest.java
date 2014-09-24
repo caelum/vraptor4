@@ -27,7 +27,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-
 public class PrimitiveShortConverterTest {
 
 	@Rule
@@ -60,5 +59,4 @@ public class PrimitiveShortConverterTest {
 	public void shouldConvertToZeroWhenEmpty() {
 		assertThat(converter.convert("", short.class), is(equalTo((short) 0)));
 	}
-
 }

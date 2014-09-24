@@ -28,7 +28,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-
 public class ShortConverterTest {
 
 	@Rule
@@ -61,5 +60,4 @@ public class ShortConverterTest {
 	public void shouldComplainAboutEmpty() {
 		assertThat(converter.convert("", Short.class), is(nullValue()));
 	}
-
 }

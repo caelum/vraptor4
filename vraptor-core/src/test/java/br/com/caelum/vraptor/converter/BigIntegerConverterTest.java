@@ -73,5 +73,4 @@ public class BigIntegerConverterTest {
 	public void shouldNotComplainAboutEmpty() {
 		assertThat(converter.convert("", BigInteger.class), is(nullValue()));
 	}
-
 }

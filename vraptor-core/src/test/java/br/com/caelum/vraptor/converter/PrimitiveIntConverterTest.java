@@ -59,5 +59,4 @@ public class PrimitiveIntConverterTest {
 	public void shouldConvertToZeroWhenEmpty() {
 		assertThat(converter.convert("", int.class), is(equalTo(0)));
 	}
-
 }

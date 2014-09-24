@@ -56,7 +56,6 @@ public class DateConverterTest {
 	@Before
 	public void setup() {
 		MockitoAnnotations.initMocks(this);
-
 		when(request.getServletContext()).thenReturn(context);
 
 		converter = new DateConverter(new Locale("pt", "BR"));

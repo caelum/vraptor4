@@ -28,7 +28,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-
 public class LongConverterTest {
 
 	@Rule
@@ -61,5 +60,4 @@ public class LongConverterTest {
 	public void shouldNotComplainAboutEmpty() {
 		assertThat(converter.convert("", long.class), is(nullValue()));
 	}
-
 }

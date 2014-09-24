@@ -49,7 +49,6 @@ public class EnumConverterTest {
 
 	@Test
 	public void shouldBeAbleToConvertByName() {
-
 		Enum value = converter.convert("FIRST", MyCustomEnum.class);
 		MyCustomEnum first = MyCustomEnum.FIRST;
 		assertEquals(value, first);

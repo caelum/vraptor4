@@ -60,5 +60,4 @@ public class ByteConverterTest {
 	public void shouldNotComplainAboutEmpty() {
 		assertThat(converter.convert("", Byte.class), is(nullValue()));
 	}
-
 }

@@ -53,7 +53,6 @@ public class FloatConverterTest {
 	@Before
 	public void setup() {
 		MockitoAnnotations.initMocks(this);
-
 		when(request.getServletContext()).thenReturn(context);
 
 		converter = new FloatConverter(new Locale("pt", "BR"));

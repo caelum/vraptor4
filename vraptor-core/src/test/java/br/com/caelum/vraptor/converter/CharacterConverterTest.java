@@ -56,5 +56,4 @@ public class CharacterConverterTest {
 		assertThat(converter.convert(null, Character.class), is(nullValue()));
 		assertThat(converter.convert("", Character.class), is(nullValue()));
 	}
-
 }

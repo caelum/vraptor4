@@ -54,7 +54,6 @@ public class BigDecimalConverterTest {
 	@Before
 	public void setup() {
 		MockitoAnnotations.initMocks(this);
-
 		when(request.getServletContext()).thenReturn(context);
 
 		converter = new BigDecimalConverter(new Locale("pt", "BR"));

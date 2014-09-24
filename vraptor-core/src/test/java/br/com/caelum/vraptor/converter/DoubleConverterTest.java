@@ -53,7 +53,6 @@ public class DoubleConverterTest {
 	@Before
 	public void setup() {
 		MockitoAnnotations.initMocks(this);
-
 		when(request.getServletContext()).thenReturn(context);
 
 		converter = new DoubleConverter(new Locale("pt", "BR"));
@@ -72,15 +71,15 @@ public class DoubleConverterTest {
 		assertThat(converter.convert("10.01", Double.class), is(equalTo(new Double("10.01"))));
 	}
 
-	 @Test
-	 public void shouldBeAbleToConvertEmpty() {
-		 assertThat(converter.convert("", Double.class), is(nullValue()));
-	 }
+	@Test
+	public void shouldBeAbleToConvertEmpty() {
+		assertThat(converter.convert("", Double.class), is(nullValue()));
+	}
 
-	 @Test
-	 public void shouldBeAbleToConvertNull() {
-		 assertThat(converter.convert(null, Double.class), is(nullValue()));
-	 }
+	@Test
+	public void shouldBeAbleToConvertNull() {
+		assertThat(converter.convert(null, Double.class), is(nullValue()));
+	}
 
 	@Test
 	public void shouldThrowExceptionWhenUnableToParse() {

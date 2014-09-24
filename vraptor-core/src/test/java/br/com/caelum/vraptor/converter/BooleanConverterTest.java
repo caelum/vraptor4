@@ -61,11 +61,13 @@ public class BooleanConverterTest {
 		assertThat(converter.convert("yes", Boolean.class), is(equalTo(true)));
 		assertThat(converter.convert("no", Boolean.class), is(equalTo(false)));
 	}
+
 	@Test
 	public void shouldConvertYN() {
 		assertThat(converter.convert("y", Boolean.class), is(equalTo(true)));
 		assertThat(converter.convert("n", Boolean.class), is(equalTo(false)));
 	}
+
 	@Test
 	public void shouldConvertOnOff() {
 		assertThat(converter.convert("on", Boolean.class), is(equalTo(true)));

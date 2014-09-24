@@ -54,7 +54,6 @@ public class CalendarConverterTest {
 	@Before
 	public void setup() {
 		MockitoAnnotations.initMocks(this);
-
 		when(request.getServletContext()).thenReturn(context);
 
 		converter = new CalendarConverter(new Locale("pt", "BR"));

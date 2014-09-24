@@ -49,7 +49,6 @@ public class PrimitiveFloatConverterTest {
 	@Before
 	public void setup() {
 		MockitoAnnotations.initMocks(this);
-
 		when(request.getServletContext()).thenReturn(context);
 
 		converter = new PrimitiveFloatConverter(new Locale("pt", "BR"));
@@ -68,15 +67,15 @@ public class PrimitiveFloatConverterTest {
 		assertThat(converter.convert("10.01", float.class), is(equalTo(Float.parseFloat("10.01"))));
 	}
 
-	 @Test
-	 public void shouldBeAbleToConvertEmpty() {
-		 assertThat(converter.convert("", float.class), is(equalTo(0f)));
-	 }
+	@Test
+	public void shouldBeAbleToConvertEmpty() {
+		assertThat(converter.convert("", float.class), is(equalTo(0f)));
+	}
 
-	 @Test
-	 public void shouldBeAbleToConvertNull() {
-		 assertThat(converter.convert(null, float.class), is(equalTo(0f)));
-	 }
+	@Test
+	public void shouldBeAbleToConvertNull() {
+		assertThat(converter.convert(null, float.class), is(equalTo(0f)));
+	}
 
 	@Test
 	public void shouldThrowExceptionWhenUnableToParse() {

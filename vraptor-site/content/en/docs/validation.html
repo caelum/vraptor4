@@ -114,57 +114,7 @@ public class LoginAvailableValidator implements ConstraintValidator<LoginAvailab
 }
 ~~~
 
-##Redirecting when a constraint error occurs
-
-When a constraint error occurs, you can redirect or forward the user to another page. Below the possible actions:
-
-~~~
-#!java
-validator.onErrorForwardTo(MusicController.class).list() ==> validator.onErrorUse(logic()).forwardTo(MusicController.class).list();
-validator.onErrorRedirectTo(MusicController.class).list() ==> validator.onErrorUse(logic()).redirectTo(MusicController.class).list();
-validator.onErrorUsePageOf(MusicController.class).list() ==> validator.onErrorUse(page()).of(MusicController.class).list();
-validator.onErrorSendBadRequest() ==> validator.onErrorUse(status()).badRequest(errors);
-~~~
-
-If you want to redirect to the same controller, you can use:
-
-~~~
-#!java
-validator.onErrorForwardTo(this).list() ==> validator.onErrorUse(logic()).forwardTo(this.getClass()).list();
-validator.onErrorRedirectTo(this).list() ==> validator.onErrorUse(logic()).redirectTo(this.getClass()).list();
-validator.onErrorUsePageOf(this).list() ==> validator.onErrorUse(page()).of(this.getClass()).list();
-~~~
-
-##Print the errors in the view
-
-When an error exists, VRaptor puts an attribute named `errors` in the request scope, that contains a list with all constraint errors. This list contains a key-value object that represents:
-
-- <code>category</code>: represents the full path of the attribute like `object.attribute`
-- <code>message</code>: represents the error message like: "must be in the future", "may not be empty", and so on.
-
-In the view you can do something like this:
-
-~~~
-#!xml
-<c:forEach var="error" items="${errors}">
-	${error.category} - ${error.message}<br />
-</c:forEach>
-~~~
-
-You can search for an error for a specific category, that can be useful to display constraint the messages beside the field.
-
-~~~
-#!xml
-<input type="text" name="client.name" />
-
-<span class="error">${errors.from('client.name')}</span>
-// prints: 'may not be empty, size must be between 10 and 50'
-
-<span class="error">${errors.from('client.name').join(' - ')}</span>
-// prints: 'may not be empty - size must be between 10 and 50'
-~~~
-
-﻿##Using custom messages
+##Using custom messages
 
 If you prefer, you can use custom messages with Bean Validation. For this you need to add the file <code>ValidationMessages.properties</code> in your _classpath_. In a Mavem project, the location is <code>/src/main/resources</code>.
 
@@ -226,3 +176,55 @@ validator.addIf(client.getName() == null, new SimpleMessage("name", "The name is
 validator.ensure(client.getName() != null, new SimpleMessage("name", "The name is mandatory"));
 ~~~
 
+
+##Redirecting when a constraint error occurs
+
+When a constraint error occurs, you can redirect or forward the user to another page. Below the possible actions:
+
+~~~
+#!java
+validator.onErrorForwardTo(MusicController.class).list() ==> validator.onErrorUse(logic()).forwardTo(MusicController.class).list();
+validator.onErrorRedirectTo(MusicController.class).list() ==> validator.onErrorUse(logic()).redirectTo(MusicController.class).list();
+validator.onErrorUsePageOf(MusicController.class).list() ==> validator.onErrorUse(page()).of(MusicController.class).list();
+validator.onErrorSendBadRequest() ==> validator.onErrorUse(status()).badRequest(errors);
+~~~
+
+If you want to redirect to the same controller, you can use:
+
+~~~
+#!java
+validator.onErrorForwardTo(this).list() ==> validator.onErrorUse(logic()).forwardTo(this.getClass()).list();
+validator.onErrorRedirectTo(this).list() ==> validator.onErrorUse(logic()).redirectTo(this.getClass()).list();
+validator.onErrorUsePageOf(this).list() ==> validator.onErrorUse(page()).of(this.getClass()).list();
+~~~
+
+##Print the errors in the view
+
+When an error exists, VRaptor puts an attribute named `errors` in the request scope, that contains a list with all constraint errors. This list contains a key-value object that represents:
+
+- <code>category</code>: represents the full path of the attribute like `object.attribute`
+- <code>message</code>: represents the error message like: "must be in the future", "may not be empty", and so on.
+
+In the view you can do something like this:
+
+~~~
+#!xml
+<c:forEach var="error" items="${errors}">
+	${error.category} - ${error.message}<br />
+</c:forEach>
+~~~
+
+You can search for an error for a specific category, that can be useful to display constraint the messages beside the field.
+
+~~~
+#!xml
+<input type="text" name="client.name" />
+
+<span class="error">${errors.from('client.name')}</span>
+// prints: 'may not be empty, size must be between 10 and 50'
+
+<span class="error">${errors.from('client.name').join(' - ')}</span>
+// prints: 'may not be empty - size must be between 10 and 50'
+~~~
+
+﻿

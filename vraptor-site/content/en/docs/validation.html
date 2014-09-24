@@ -131,7 +131,7 @@ And the class:
 
 ~~~
 #!java
-public class Cliente {
+public class Client {
 	@NotNull(message="{client.name.empty}")
 	@Size(min=10, max=50, message="{client.name.size}")
 	private String name;
@@ -236,18 +236,15 @@ use available attributes from `Severity` enum as you can see below:
 
 ~~~
 #!java
-validator.add(new SimpleMessage("customer.name", "name field have accents", Severity.WARN));
+validator.add(new SimpleMessage("client.name", "name field have accents", Severity.WARN));
 ~~~
 
 And in the view you can use `vmessages` attribute:
 
 ~~~
 #!xml
-<input type="text" name="customer.name" />
+<input type="text" name="client.name" />
 
-<span class="error">${vmessages.warnings.from('customer.name')}</span> 
+<span class="error">${vmessages.warnings.from('client.name')}</span> 
 // prints: 'name field have accents'
 ~~~
-
-
-

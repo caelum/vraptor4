@@ -23,7 +23,9 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
@@ -35,6 +37,9 @@ import br.com.caelum.vraptor.ioc.Container;
 
 public class DefaultConvertersTest {
 
+	@Rule
+	public ExpectedException exception = ExpectedException.none();
+
 	@Mock private Container container;
 	private DefaultConverters converters;
 
@@ -45,13 +50,19 @@ public class DefaultConvertersTest {
 		this.converters = new DefaultConverters(container, cache);
 	}
 
-	@Test(expected = IllegalStateException.class)
+	@Test
 	public void complainsIfNoConverterFound() {
+		exception.expect(IllegalStateException.class);
+		exception.expectMessage("Unable to find converter for " + getClass().getName());
+		
 		converters.to(DefaultConvertersTest.class);
 	}
 
-	@Test(expected = IllegalStateException.class)
+	@Test
 	public void convertingANonAnnotatedConverterEndsUpComplaining() {
+		exception.expect(IllegalStateException.class);
+		exception.expectMessage("The converter type " + WrongConverter.class.getName() + " should have the Convert annotation");
+
 		converters.register(WrongConverter.class);
 	}
 

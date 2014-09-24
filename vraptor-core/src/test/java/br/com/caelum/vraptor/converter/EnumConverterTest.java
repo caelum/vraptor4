@@ -17,17 +17,21 @@
 
 package br.com.caelum.vraptor.converter;
 
-import static br.com.caelum.vraptor.VRaptorMatchers.hasMessage;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static br.com.caelum.vraptor.VRaptorMatchers.hasConversionException;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 public class EnumConverterTest {
+
+	@Rule
+	public ExpectedException exception = ExpectedException.none();
 
 	private Converter<Enum> converter;
 
@@ -45,7 +49,6 @@ public class EnumConverterTest {
 
 	@Test
 	public void shouldBeAbleToConvertByName() {
-
 		Enum value = converter.convert("FIRST", MyCustomEnum.class);
 		MyCustomEnum first = MyCustomEnum.FIRST;
 		assertEquals(value, first);
@@ -58,32 +61,20 @@ public class EnumConverterTest {
 
 	@Test
 	public void shouldComplainAboutInvalidIndex() {
-		try {
-			converter.convert("3200", MyCustomEnum.class);
-			fail("should throw an exception");
-		} catch (ConversionException e) {
-			assertThat(e.getValidationMessage(), hasMessage("3200 is not a valid option."));
-		}
+		exception.expect(hasConversionException("3200 is not a valid option."));
+		converter.convert("3200", MyCustomEnum.class);
 	}
 
 	@Test
 	public void shouldComplainAboutInvalidNumber() {
-		try {
-			converter.convert("32a00", MyCustomEnum.class);
-			fail("should throw an exception");
-		} catch (ConversionException e) {
-			assertThat(e.getValidationMessage(), hasMessage("32a00 is not a valid option."));
-		}
+		exception.expect(hasConversionException("32a00 is not a valid option."));
+		converter.convert("32a00", MyCustomEnum.class);
 	}
 
 	@Test
 	public void shouldComplainAboutInvalidOrdinal() {
-		try {
-			converter.convert("THIRD", MyCustomEnum.class);
-			fail("should throw an exception");
-		} catch (ConversionException e) {
-			assertThat(e.getValidationMessage(), hasMessage("THIRD is not a valid option."));
-		}
+		exception.expect(hasConversionException("THIRD is not a valid option."));
+		converter.convert("THIRD", MyCustomEnum.class);
 	}
 
 	@Test

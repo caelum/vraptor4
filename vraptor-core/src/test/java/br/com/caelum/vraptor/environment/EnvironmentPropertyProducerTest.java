@@ -22,13 +22,18 @@ import java.util.NoSuchElementException;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 
 import br.com.caelum.vraptor.WeldJunitRunner;
 
 @RunWith(WeldJunitRunner.class)
 public class EnvironmentPropertyProducerTest {
+
+	@Rule
+	public ExpectedException exception = ExpectedException.none();
 
 	@Inject @Property("email.server.host") 
 	private String mailHost;
@@ -54,8 +59,9 @@ public class EnvironmentPropertyProducerTest {
 		assertEquals(itWorks, "It Works!");
 	}
 	
-	@Test(expected=NoSuchElementException.class)
+	@Test
 	public void shouldNotResolveUnexistentKeys() throws Exception {
+		exception.expect(NoSuchElementException.class);
 		nonExistent.get();
 	}
 	

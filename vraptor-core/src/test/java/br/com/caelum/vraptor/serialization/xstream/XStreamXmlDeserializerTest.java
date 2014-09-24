@@ -27,7 +27,9 @@ import java.util.GregorianCalendar;
 import java.util.TimeZone;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import br.com.caelum.vraptor.controller.BeanClass;
 import br.com.caelum.vraptor.controller.ControllerMethod;
@@ -39,6 +41,9 @@ import br.com.caelum.vraptor.http.ParanamerNameProvider;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 public class XStreamXmlDeserializerTest {
+
+	@Rule
+	public ExpectedException exception = ExpectedException.none();
 
 	private XStreamXMLDeserializer deserializer;
 	private ControllerMethod bark;
@@ -107,10 +112,14 @@ public class XStreamXmlDeserializerTest {
 
 	}
 
-	@Test(expected=IllegalArgumentException.class)
+	@Test
 	public void shouldNotAcceptMethodsWithoutArguments() throws Exception {
+		exception.expect(IllegalArgumentException.class);
+		exception.expectMessage("Methods that consumes xml must receive just one argument");
+
 		deserializer.deserialize(new ByteArrayInputStream(new byte[0]), woof);
 	}
+
 	@Test
 	public void shouldBeAbleToDeserializeADog() throws Exception {
 		InputStream stream = new ByteArrayInputStream("<dog><name>Brutus</name><age>7</age></dog>".getBytes());

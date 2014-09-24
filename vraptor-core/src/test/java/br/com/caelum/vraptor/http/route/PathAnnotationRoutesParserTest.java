@@ -17,6 +17,7 @@
 
 package br.com.caelum.vraptor.http.route;
 
+import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
@@ -33,7 +34,9 @@ import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
@@ -57,6 +60,9 @@ import br.com.caelum.vraptor.proxy.JavassistProxifier;
 import br.com.caelum.vraptor.proxy.Proxifier;
 
 public class PathAnnotationRoutesParserTest {
+
+	@Rule
+	public ExpectedException exception = ExpectedException.none();
 
 	private Proxifier proxifier;
 	private @Mock Converters converters;
@@ -159,8 +165,11 @@ public class PathAnnotationRoutesParserTest {
 		}
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test
 	public void addsAPrefixToMethodsWhenTheControllerHasMoreThanOneAnnotatedPath() throws Exception {
+		exception.expect(IllegalArgumentException.class);
+		exception.expectMessage("You must specify exactly one path on @Path at class " + MoreThanOnePathAnnotatedController.class.getName());
+		
 		parser.rulesFor(new DefaultBeanClass(MoreThanOnePathAnnotatedController.class));
 	}
 
@@ -345,9 +354,12 @@ public class PathAnnotationRoutesParserTest {
 		}
 	}
 
-	@Test(expected=IllegalArgumentException.class)
+	@Test
 	public void shouldThrowExceptionIfPathAnnotationHasEmptyArray()
 			throws Exception {
+		exception.expect(IllegalArgumentException.class);
+		exception.expectMessage(containsString("You must specify at least one path on @Path at"));
+
 		parser.rulesFor(new DefaultBeanClass(NoPath.class));
 	}
 
@@ -539,8 +551,11 @@ public class PathAnnotationRoutesParserTest {
 		assertThat(route, canHandle(GetAnnotatedController.class, "withoutPath"));
 	}
 
-	@Test(expected=IllegalArgumentException.class)
+	@Test
 	public void throwsExceptionWhenTheGetControllerHasAmbiguousDeclaration() throws Exception {
+		exception.expect(IllegalArgumentException.class);
+		exception.expectMessage("You should specify paths either in @Path(\"/path\") or @Get(\"/path\") (or @Post, @Put, @Delete), not both at");
+
 		parser.rulesFor(new DefaultBeanClass(WrongGetAnnotatedController.class));
 	}
 

@@ -17,17 +17,20 @@
 
 package br.com.caelum.vraptor.converter;
 
-import static br.com.caelum.vraptor.VRaptorMatchers.hasMessage;
+import static br.com.caelum.vraptor.VRaptorMatchers.hasConversionException;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.fail;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
-
+import org.junit.rules.ExpectedException;
 
 public class PrimitiveByteConverterTest {
+
+	@Rule
+	public ExpectedException exception = ExpectedException.none();
 
 	private PrimitiveByteConverter converter;
 
@@ -43,12 +46,8 @@ public class PrimitiveByteConverterTest {
 
 	@Test
 	public void shouldComplainAboutInvalidNumber() {
-		try {
-			converter.convert("---", byte.class);
-			fail("should throw an exception");
-		} catch (ConversionException e) {
-			assertThat(e.getValidationMessage(), hasMessage("--- is not a valid number."));
-		}
+		exception.expect(hasConversionException("--- is not a valid number."));
+		converter.convert("---", byte.class);
 	}
 
 	@Test
@@ -60,5 +59,4 @@ public class PrimitiveByteConverterTest {
 	public void shouldConvertToZeroWhenEmpty() {
 		assertThat(converter.convert("", byte.class), is(equalTo((byte) 0)));
 	}
-
 }

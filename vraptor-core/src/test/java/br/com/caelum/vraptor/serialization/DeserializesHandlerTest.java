@@ -15,18 +15,21 @@
  */
 package br.com.caelum.vraptor.serialization;
 
+import static org.hamcrest.CoreMatchers.containsString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import br.com.caelum.vraptor.controller.DefaultBeanClass;
-import br.com.caelum.vraptor.serialization.Deserializer;
-import br.com.caelum.vraptor.serialization.Deserializers;
-import br.com.caelum.vraptor.serialization.DeserializesHandler;
 
 public class DeserializesHandlerTest {
+
+	@Rule
+	public ExpectedException exception = ExpectedException.none();
 
 	private DeserializesHandler handler;
 	private Deserializers deserializers;
@@ -40,8 +43,10 @@ public class DeserializesHandlerTest {
 	static interface MyDeserializer extends Deserializer{}
 	static interface NotADeserializer{}
 
-	@Test(expected=IllegalArgumentException.class)
+	@Test
 	public void shouldThrowExceptionWhenTypeIsNotADeserializer() throws Exception {
+		exception.expect(IllegalArgumentException.class);
+		exception.expectMessage(containsString("must implement Deserializer"));
 		handler.handle(new DefaultBeanClass(NotADeserializer.class));
 	}
 

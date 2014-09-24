@@ -21,8 +21,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 
-import java.io.IOException;
-
 import javax.servlet.http.HttpServletRequest;
 
 import org.junit.Before;
@@ -43,7 +41,6 @@ import br.com.caelum.vraptor.view.Status;
 
 
 public class DeserializingObserverTest {
-
 	private DeserializingObserver observer;
 	private ControllerMethod consumeXml;
 	private ControllerMethod doesntConsume;
@@ -168,15 +165,5 @@ public class DeserializingObserverTest {
 
 		assertEquals(methodInfo.getValuedParameters()[0].getValue(), "original1");
 		assertEquals(methodInfo.getValuedParameters()[1].getValue(), "deserialized");
-	}
-
-	@Test(expected = IOException.class)
-	public void shouldThrowInterceptionExceptionIfAnIOExceptionOccurs() throws Exception {
-		when(request.getInputStream()).thenThrow(new IOException());
-		when(request.getContentType()).thenReturn("application/xml");
-
-		final Deserializer deserializer = mock(Deserializer.class);
-		when(deserializers.deserializerFor("application/xml", container)).thenReturn(deserializer);
-		observer.deserializes(new InterceptorsReady(consumeXml), request, methodInfo, status);
 	}
 }

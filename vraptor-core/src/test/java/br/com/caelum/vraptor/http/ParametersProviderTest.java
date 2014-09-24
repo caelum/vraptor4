@@ -15,6 +15,7 @@
  */
 package br.com.caelum.vraptor.http;
 
+import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.arrayContaining;
 import static org.hamcrest.Matchers.containsInAnyOrder;
@@ -40,7 +41,9 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
@@ -60,6 +63,8 @@ import com.google.common.collect.ImmutableMap;
 
 public abstract class ParametersProviderTest {
 
+	@Rule
+	public ExpectedException exception = ExpectedException.none();
 
 	protected @Mock Converters converters;
 	protected ParameterNameProvider nameProvider;
@@ -264,8 +269,11 @@ public abstract class ParametersProviderTest {
 		assertThat(errors.size(), is(greaterThan(0)));
 	}
 
-	@Test(expected=InvalidParameterException.class)
+	@Test
 	public void throwsExceptionWhenSetterFailsWithOtherException() throws Exception {
+		exception.expect(InvalidParameterException.class);
+		exception.expectMessage(containsString("Exception when trying to instantiate"));
+
 		requestParameterIs(error, "wrongCat.id", "guilherme");
 
 		getParameters(error);

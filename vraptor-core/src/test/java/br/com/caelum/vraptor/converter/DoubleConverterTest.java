@@ -17,12 +17,11 @@
 
 package br.com.caelum.vraptor.converter;
 
-import static br.com.caelum.vraptor.VRaptorMatchers.hasMessage;
+import static br.com.caelum.vraptor.VRaptorMatchers.hasConversionException;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
-import static org.junit.Assert.fail;
 import static org.mockito.Mockito.when;
 
 import java.util.Locale;
@@ -31,17 +30,18 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import br.com.caelum.vraptor.converter.ConversionException;
-import br.com.caelum.vraptor.converter.DoubleConverter;
 import br.com.caelum.vraptor.http.MutableRequest;
 
 public class DoubleConverterTest {
 
-	static final String LOCALE_KEY = "javax.servlet.jsp.jstl.fmt.locale";
+	@Rule
+	public ExpectedException exception = ExpectedException.none();
 
 	private DoubleConverter converter;
 	private @Mock MutableRequest request;
@@ -51,7 +51,6 @@ public class DoubleConverterTest {
 	@Before
 	public void setup() {
 		MockitoAnnotations.initMocks(this);
-
 		when(request.getServletContext()).thenReturn(context);
 
 		converter = new DoubleConverter(new Locale("pt", "BR"));
@@ -70,23 +69,19 @@ public class DoubleConverterTest {
 		assertThat(converter.convert("10.01", Double.class), is(equalTo(new Double("10.01"))));
 	}
 
-	 @Test
-	 public void shouldBeAbleToConvertEmpty() {
-		 assertThat(converter.convert("", Double.class), is(nullValue()));
-	 }
+	@Test
+	public void shouldBeAbleToConvertEmpty() {
+		assertThat(converter.convert("", Double.class), is(nullValue()));
+	}
 
-	 @Test
-	 public void shouldBeAbleToConvertNull() {
-		 assertThat(converter.convert(null, Double.class), is(nullValue()));
-	 }
+	@Test
+	public void shouldBeAbleToConvertNull() {
+		assertThat(converter.convert(null, Double.class), is(nullValue()));
+	}
 
 	@Test
 	public void shouldThrowExceptionWhenUnableToParse() {
-		try {
-			converter.convert("vr3.9", Double.class);
-			fail("Should throw exception");
-		} catch (ConversionException e) {
-			assertThat(e.getValidationMessage(), hasMessage("vr3.9 is not a valid number."));
-		}
+		exception.expect(hasConversionException("vr3.9 is not a valid number."));
+		converter.convert("vr3.9", Double.class);
 	}
 }

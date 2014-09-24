@@ -26,7 +26,9 @@ import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
@@ -42,6 +44,8 @@ import br.com.caelum.vraptor.validator.ValidationException;
 
 public class DefaultValidationViewsFactoryTest {
 
+	@Rule
+	public ExpectedException exception = ExpectedException.none();
 
 	private Result result;
 	private Proxifier proxifier;
@@ -65,13 +69,15 @@ public class DefaultValidationViewsFactoryTest {
 
 		}
 	}
-	@Test(expected=ValidationException.class)
+
+	@Test
 	public void shouldUseValidationVersionOfLogicResult() throws Exception {
+		exception.expect(ValidationException.class);
 
 		when(result.use(LogicResult.class)).thenReturn(new MockedLogic());
-
 		factory.instanceFor(LogicResult.class, errors).forwardTo(RandomComponent.class).random();
 	}
+
 	@Test
 	public void shouldThrowExceptionOnlyAtTheEndOfValidationCall() throws Exception {
 
@@ -83,16 +89,20 @@ public class DefaultValidationViewsFactoryTest {
 		factory.instanceFor(PageResult.class, errors);
 		factory.instanceFor(PageResult.class, errors).of(RandomComponent.class);
 	}
-	@Test(expected=ValidationException.class)
-	public void shouldUseValidationVersionOfPageResult() throws Exception {
-		when(result.use(PageResult.class)).thenReturn(new MockedPage());
 
+	@Test
+	public void shouldUseValidationVersionOfPageResult() throws Exception {
+		exception.expect(ValidationException.class);
+
+		when(result.use(PageResult.class)).thenReturn(new MockedPage());
 		factory.instanceFor(PageResult.class, errors).forwardTo("any uri");
 	}
-	@Test(expected=ValidationException.class)
-	public void shouldUseValidationVersionOfEmptyResult() throws Exception {
-		when(result.use(EmptyResult.class)).thenReturn(new EmptyResult());
 
+	@Test
+	public void shouldUseValidationVersionOfEmptyResult() throws Exception {
+		exception.expect(ValidationException.class);
+
+		when(result.use(EmptyResult.class)).thenReturn(new EmptyResult());
 		factory.instanceFor(EmptyResult.class, errors);
 	}
 
@@ -109,30 +119,36 @@ public class DefaultValidationViewsFactoryTest {
 		factory.instanceFor(HttpResult.class, errors).addIntHeader("jkl", 456);
 	}
 
-	@Test(expected=ValidationException.class)
+	@Test
 	public void onHttpResultShouldThrowExceptionsOnSendError() throws Exception {
-		HttpResult httpResult = mock(HttpResult.class);
+		exception.expect(ValidationException.class);
 
+		HttpResult httpResult = mock(HttpResult.class);
 		when(result.use(HttpResult.class)).thenReturn(httpResult);
 
 		factory.instanceFor(HttpResult.class, errors).sendError(404);
 	}
-	@Test(expected=ValidationException.class)
-	public void onHttpResultShouldThrowExceptionsOnSendErrorWithMessage() throws Exception {
-		HttpResult httpResult = mock(HttpResult.class);
 
+	@Test
+	public void onHttpResultShouldThrowExceptionsOnSendErrorWithMessage() throws Exception {
+		exception.expect(ValidationException.class);
+
+		HttpResult httpResult = mock(HttpResult.class);
 		when(result.use(HttpResult.class)).thenReturn(httpResult);
 
 		factory.instanceFor(HttpResult.class, errors).sendError(404, "Not Found");
 	}
-	@Test(expected=ValidationException.class)
-	public void onHttpResultShouldThrowExceptionsOnSetStatus() throws Exception {
-		HttpResult httpResult = mock(HttpResult.class);
 
+	@Test
+	public void onHttpResultShouldThrowExceptionsOnSetStatus() throws Exception {
+		exception.expect(ValidationException.class);
+
+		HttpResult httpResult = mock(HttpResult.class);
 		when(result.use(HttpResult.class)).thenReturn(httpResult);
 
 		factory.instanceFor(HttpResult.class, errors).setStatusCode(200);
 	}
+
 	@Test
 	public void shouldBeAbleToChainMethodsOnHttpResult() throws Exception {
 		HttpResult httpResult = mock(HttpResult.class);
@@ -142,10 +158,11 @@ public class DefaultValidationViewsFactoryTest {
 		factory.instanceFor(HttpResult.class, errors).addDateHeader("abc", 123l).addHeader("def", "ghi").addIntHeader("jkl", 234);
 	}
 
-	@Test(expected=ValidationException.class)
+	@Test
 	public void onStatusResultShouldThrowExceptionsOnMoved() throws Exception {
-		Status status = mock(Status.class);
+		exception.expect(ValidationException.class);
 
+		Status status = mock(Status.class);
 		when(result.use(Status.class)).thenReturn(status);
 		when(status.movedPermanentlyTo(RandomComponent.class)).thenReturn(new RandomComponent());
 
@@ -157,103 +174,121 @@ public class DefaultValidationViewsFactoryTest {
 		factory.instanceFor(Status.class, errors).movedPermanentlyTo(RandomComponent.class).random();
 	}
 
-	@Test(expected=ValidationException.class)
+	@Test
 	public void onStatusResultShouldThrowExceptionsOnMovedToLogic() throws Exception {
-		Status status = mock(Status.class);
+		exception.expect(ValidationException.class);
 
+		Status status = mock(Status.class);
 		when(result.use(Status.class)).thenReturn(status);
 
 		factory.instanceFor(Status.class, errors).movedPermanentlyTo("anywhere");
 	}
 
-	@Test(expected=ValidationException.class)
+	@Test
 	public void onRefererResultShouldThrowExceptionsOnForward() throws Exception {
-		RefererResult referer = mock(RefererResult.class);
+		exception.expect(ValidationException.class);
 
+		RefererResult referer = mock(RefererResult.class);
 		when(result.use(RefererResult.class)).thenReturn(referer);
 
 		factory.instanceFor(RefererResult.class, errors).forward();
 	}
 
-	@Test(expected=ValidationException.class)
+	@Test
 	public void onRefererResultShouldThrowExceptionsOnRedirect() throws Exception {
-		RefererResult referer = mock(RefererResult.class);
+		exception.expect(ValidationException.class);
 
+		RefererResult referer = mock(RefererResult.class);
 		when(result.use(RefererResult.class)).thenReturn(referer);
 
 		factory.instanceFor(RefererResult.class, errors).redirect();
 	}
 
-	@Test(expected=ValidationException.class)
+	@Test
 	public void onStatusResultShouldThrowExceptionsOnNotFound() throws Exception {
-		Status status = mock(Status.class);
+		exception.expect(ValidationException.class);
 
+		Status status = mock(Status.class);
 		when(result.use(Status.class)).thenReturn(status);
 
 		factory.instanceFor(Status.class, errors).notFound();
 
 	}
-	@Test(expected=ValidationException.class)
-	public void onStatusResultShouldThrowExceptionsOnHeader() throws Exception {
-		Status status = mock(Status.class);
 
+	@Test
+	public void onStatusResultShouldThrowExceptionsOnHeader() throws Exception {
+		exception.expect(ValidationException.class);
+
+		Status status = mock(Status.class);
 		when(result.use(Status.class)).thenReturn(status);
 
 		factory.instanceFor(Status.class, errors).header("abc", "def");
 	}
 
-	@Test(expected=ValidationException.class)
+	@Test
 	public void onStatusResultShouldThrowExceptionsOnCreated() throws Exception {
-		Status status = mock(Status.class);
+		exception.expect(ValidationException.class);
 
+		Status status = mock(Status.class);
 		when(result.use(Status.class)).thenReturn(status);
 
 		factory.instanceFor(Status.class, errors).created();
 	}
-	@Test(expected=ValidationException.class)
-	public void onStatusResultShouldThrowExceptionsOnCreatedWithLocation() throws Exception {
-		Status status = mock(Status.class);
 
+	@Test
+	public void onStatusResultShouldThrowExceptionsOnCreatedWithLocation() throws Exception {
+		exception.expect(ValidationException.class);
+
+		Status status = mock(Status.class);
 		when(result.use(Status.class)).thenReturn(status);
 
 		factory.instanceFor(Status.class, errors).created("/newLocation");
 	}
 
-	@Test(expected=ValidationException.class)
+	@Test
 	public void onStatusResultShouldThrowExceptionsOnOk() throws Exception {
-		Status status = mock(Status.class);
+		exception.expect(ValidationException.class);
 
+		Status status = mock(Status.class);
 		when(result.use(Status.class)).thenReturn(status);
 
 		factory.instanceFor(Status.class, errors).ok();
 	}
 
-	@Test(expected=ValidationException.class)
+	@Test
 	public void onStatusResultShouldThrowExceptionsOnConflict() throws Exception {
-		Status status = mock(Status.class);
+		exception.expect(ValidationException.class);
 
+		Status status = mock(Status.class);
 		when(result.use(Status.class)).thenReturn(status);
 
 		factory.instanceFor(Status.class, errors).conflict();
 	}
-	@Test(expected=ValidationException.class)
-	public void onStatusResultShouldThrowExceptionsOnMethodNotAllowed() throws Exception {
-		Status status = mock(Status.class);
 
+	@Test
+	public void onStatusResultShouldThrowExceptionsOnMethodNotAllowed() throws Exception {
+		exception.expect(ValidationException.class);
+
+		Status status = mock(Status.class);
 		when(result.use(Status.class)).thenReturn(status);
 
 		factory.instanceFor(Status.class, errors).methodNotAllowed(EnumSet.allOf(HttpMethod.class));
 	}
-	@Test(expected=ValidationException.class)
-	public void onStatusResultShouldThrowExceptionsOnMovedPermanentlyTo() throws Exception {
-		Status status = mock(Status.class);
 
+	@Test
+	public void onStatusResultShouldThrowExceptionsOnMovedPermanentlyTo() throws Exception {
+		exception.expect(ValidationException.class);
+
+		Status status = mock(Status.class);
 		when(result.use(Status.class)).thenReturn(status);
 
 		factory.instanceFor(Status.class, errors).movedPermanentlyTo("/newUri");
 	}
-	@Test(expected=ValidationException.class)
+
+	@Test
 	public void onStatusResultShouldThrowExceptionsOnMovedPermanentlyToLogic() throws Exception {
+		exception.expect(ValidationException.class);
+
 		Status status = mock(Status.class);
 
 		when(result.use(Status.class)).thenReturn(status);
@@ -266,8 +301,11 @@ public class DefaultValidationViewsFactoryTest {
 		}
 		factory.instanceFor(Status.class, errors).movedPermanentlyTo(RandomComponent.class).random();
 	}
-	@Test(expected=ValidationException.class)
+
+	@Test
 	public void onXMLSerializationResultShouldThrowExceptionOnlyOnSerializeMethod() throws Exception {
+		exception.expect(ValidationException.class);
+
 		JSONSerialization serialization = mock(JSONSerialization.class);
 
 		serializerBuilder = mock(SerializerBuilder.class, new Answer<SerializerBuilder>() {
@@ -325,11 +363,12 @@ public class DefaultValidationViewsFactoryTest {
 		@Override
 		public void serialize() {
 		}
-
 	}
 
-	@Test(expected=ValidationException.class)
+	@Test
 	public void onSerializerResultsShouldBeAbleToCreateValidationInstancesEvenIfChildClassesUsesCovariantType() throws Exception {
+		exception.expect(ValidationException.class);
+
 		JSONSerialization serialization = mock(JSONSerialization.class);
 
 		serializerBuilder = new RandomSerializer();

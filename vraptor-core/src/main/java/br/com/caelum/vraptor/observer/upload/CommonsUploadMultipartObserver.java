@@ -144,7 +144,7 @@ public class CommonsUploadMultipartObserver {
 
 			logger.debug("Uploaded file: {} with {}", name, upload);
 		} catch (IOException e) {
-			throw new InvalidParameterException("Cant parse uploaded file " + item.getName(), e);
+			throw new InvalidParameterException("Can't parse uploaded file " + item.getName(), e);
 		}
 	}
 

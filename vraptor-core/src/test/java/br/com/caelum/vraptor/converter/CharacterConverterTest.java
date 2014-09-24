@@ -17,18 +17,21 @@
 
 package br.com.caelum.vraptor.converter;
 
-import static br.com.caelum.vraptor.VRaptorMatchers.hasMessage;
+import static br.com.caelum.vraptor.VRaptorMatchers.hasConversionException;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
-import static org.junit.Assert.fail;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
-
+import org.junit.rules.ExpectedException;
 
 public class CharacterConverterTest {
+
+	@Rule
+	public ExpectedException exception = ExpectedException.none();
 
 	private CharacterConverter converter;
 
@@ -44,12 +47,8 @@ public class CharacterConverterTest {
 
 	@Test
 	public void shouldComplainAboutStringTooBig() {
-		try {
-			converter.convert("---", Character.class);
-			fail("should throw an exception");
-		} catch (ConversionException e) {
-			assertThat(e.getValidationMessage(), hasMessage("--- is not a valid character."));
-		}
+		exception.expect(hasConversionException("--- is not a valid character."));
+		converter.convert("---", Character.class);
 	}
 
 	@Test
@@ -57,5 +56,4 @@ public class CharacterConverterTest {
 		assertThat(converter.convert(null, Character.class), is(nullValue()));
 		assertThat(converter.convert("", Character.class), is(nullValue()));
 	}
-
 }

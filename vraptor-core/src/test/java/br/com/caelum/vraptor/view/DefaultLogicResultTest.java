@@ -39,7 +39,9 @@ import javax.servlet.RequestDispatcher;
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
@@ -61,6 +63,9 @@ import br.com.caelum.vraptor.validator.Message;
 import br.com.caelum.vraptor.validator.ValidationException;
 
 public class DefaultLogicResultTest {
+
+	@Rule
+	public ExpectedException exception = ExpectedException.none();
 
 	private LogicResult logicResult;
 
@@ -231,8 +236,10 @@ public class DefaultLogicResultTest {
 		}
 	}
 
-	@Test(expected=ValidationException.class)
+	@Test
 	public void shouldNotWrapValidationExceptionWhenForwarding() throws Exception {
+		exception.expect(ValidationException.class);
+
 		givenDispatcherWillBeReturnedWhenRequested();
 
 		when(response.isCommitted()).thenReturn(true);

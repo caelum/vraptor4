@@ -39,7 +39,9 @@ import org.apache.commons.fileupload.FileUploadBase;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -59,6 +61,9 @@ import br.com.caelum.vraptor.validator.Validator;
  * @author Otávio Scherer Garcia
  */
 public class CommonsUploadMultipartObserverTest {
+
+	@Rule
+	public ExpectedException exception = ExpectedException.none();
 
 	@Mock private InterceptorStack stack;
 	@Mock private ControllerFound event;
@@ -170,11 +175,14 @@ public class CommonsUploadMultipartObserverTest {
 		observer.upload(event, request, config, validator);
 	}
 
-	@Test(expected = InvalidParameterException.class)
+	@Test
 	public void throwsInvalidParameterExceptionIfIOExceptionOccurs() throws Exception {
+		exception.expect(InvalidParameterException.class);
+		exception.expectMessage("Can't parse uploaded file myfile.txt");
+
 		when(event.getMethod()).thenReturn(uploadMethodController);
 
-		FileItem item = new MockFileItem("thefile0", "file.txt", new byte[0]);
+		FileItem item = new MockFileItem("thefile0", "myfile.txt", new byte[0]);
 		item = spy(item);
 
 		doThrow(new IOException()).when(item).getInputStream();

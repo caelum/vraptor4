@@ -19,13 +19,18 @@ import java.lang.reflect.Method;
 import java.util.List;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import br.com.caelum.vraptor.AfterCall;
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.Intercepts;
 
 public class NoInterceptMethodsValidationRuleTest {
+
+	@Rule
+	public ExpectedException exception = ExpectedException.none();
 
 	private StepInvoker stepInvoker;
 
@@ -44,8 +49,11 @@ public class NoInterceptMethodsValidationRuleTest {
 		this.stepInvoker = new StepInvoker();
 	}
 
-	@Test(expected=InterceptionException.class)
+	@Test
 	public void shoulThrowExceptionIfInterceptorDontHaveAnyCallableMethod() {
+		exception.expect(InterceptionException.class);
+		exception.expectMessage("Interceptor " + SimpleInterceptor.class.getCanonicalName() +" must declare at least one method whith @AfterCall, @AroundCall or @BeforeCall annotation");
+		
 		Class<?> type = SimpleInterceptor.class;
 		List<Method> allMethods = stepInvoker.findAllMethods(type);
 		new NoInterceptMethodsValidationRule(stepInvoker).validate(type, allMethods);

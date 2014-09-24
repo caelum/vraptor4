@@ -15,18 +15,24 @@
  */
 package br.com.caelum.vraptor.controller;
 
+import static org.hamcrest.CoreMatchers.containsString;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 
 public class HttpMethodTest {
+
+	@Rule
+	public ExpectedException exception = ExpectedException.none();
 
 	private @Mock HttpServletRequest request;
 
@@ -39,20 +45,25 @@ public class HttpMethodTest {
 	public void shouldConvertGETStringToGetMethodForRequestParameter() throws Exception {
 		when(request.getParameter("_method")).thenReturn("gEt");
 		when(request.getMethod()).thenReturn("POST");
-		
+
 		assertEquals(HttpMethod.GET, HttpMethod.of(request));
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test
 	public void shouldThrowExceptionForNotKnowHttpMethodsForRequestParameter() throws Exception {
+		exception.expect(IllegalArgumentException.class);
+		exception.expectMessage(containsString("HTTP Method not known"));
+
 		when(request.getParameter("_method")).thenReturn("JUMP!");
 		when(request.getMethod()).thenReturn("POST");
 				
 		HttpMethod.of(request);
 	}
-	
-	@Test(expected = InvalidInputException.class)
+
+	@Test
 	public void shouldThrowInvalidInputExceptionIf_methodIsUsedInGETRequests() throws Exception {
+		exception.expect(InvalidInputException.class);
+
 		when(request.getParameter("_method")).thenReturn("DELETE");
 		when(request.getMethod()).thenReturn("GET");
 		HttpMethod.of(request);
@@ -66,8 +77,11 @@ public class HttpMethodTest {
 		assertEquals(HttpMethod.GET, HttpMethod.of(request));
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test
 	public void shouldThrowExceptionForNotKnowHttpMethods() throws Exception {
+		exception.expect(IllegalArgumentException.class);
+		exception.expectMessage(containsString("HTTP Method not known"));
+
 		when(request.getParameter("_method")).thenReturn(null);
 		when(request.getMethod()).thenReturn("JUMP!");
 		

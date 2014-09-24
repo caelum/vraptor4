@@ -41,7 +41,9 @@ import java.util.TimeZone;
 import javax.servlet.http.HttpServletResponse;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import br.com.caelum.vraptor.environment.Environment;
 
@@ -49,6 +51,9 @@ import com.google.common.collect.Lists;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 public class XStreamXMLSerializationTest {
+
+	@Rule
+	public ExpectedException exception = ExpectedException.none();
 
 	protected XStreamXMLSerialization serialization;
 	protected ByteArrayOutputStream stream;
@@ -307,22 +312,31 @@ public class XStreamXMLSerializationTest {
 		assertThat(result(), not(containsString("<price>")));
 	}
 
-	@Test(expected=IllegalArgumentException.class)
+	@Test
 	public void shouldThrowAnExceptionWhenYouIncludeANonExistantField() {
+		exception.expect(IllegalArgumentException.class);
+		exception.expectMessage("Field path 'wrongFieldName' doesn't exists in class");
+
 		Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please",
 				new Item("name", 12.99));
 		serialization.from(order).include("wrongFieldName").serialize();
 	}
 
-	@Test(expected=IllegalArgumentException.class)
+	@Test
 	public void shouldThrowAnExceptionWhenYouIncludeANonExistantFieldInsideOther() {
+		exception.expect(IllegalArgumentException.class);
+		exception.expectMessage("Field path 'wrongFieldName.client' doesn't exists in class");
+
 		Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please",
 				new Item("name", 12.99));
 		serialization.from(order).include("wrongFieldName.client").serialize();
 	}
 
-	@Test(expected=IllegalArgumentException.class)
+	@Test
 	public void shouldThrowAnExceptionWhenYouIncludeANonExistantFieldInsideOtherNonExistantField() {
+		exception.expect(IllegalArgumentException.class);
+		exception.expectMessage("Field path 'wrongFieldName.another' doesn't exists in class");
+
 		Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please",
 				new Item("name", 12.99));
 		serialization.from(order).include("wrongFieldName.another").serialize();

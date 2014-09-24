@@ -28,9 +28,14 @@ import java.util.NoSuchElementException;
 
 import javax.servlet.ServletContext;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 public class ServletBasedEnvironmentTest {
+
+	@Rule
+	public ExpectedException exception = ExpectedException.none();
 
 	@Test
 	public void shouldUseTheCurrentEnvironmentFileIfFound() throws IOException {
@@ -60,8 +65,10 @@ public class ServletBasedEnvironmentTest {
 		assertFalse(env.has("unexistant_key"));
 	}
 
-	@Test(expected = NoSuchElementException.class)
+	@Test
 	public void shouldThrowExceptionIfKeyDoesNotExist() throws Exception {
+		exception.expect(NoSuchElementException.class);
+
 		ServletContext context = mock(ServletContext.class);
 		ServletBasedEnvironment env = new ServletBasedEnvironment(context);
 		env.get("key_that_doesnt_exist");

@@ -21,13 +21,18 @@ import java.util.List;
 import javax.enterprise.inject.Vetoed;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import br.com.caelum.vraptor.Accepts;
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.Intercepts;
 
 public class AcceptsNeedReturnBooleanValidationRuleTest {
+
+	@Rule
+	public ExpectedException exception = ExpectedException.none();
 
 	private AcceptsNeedReturnBooleanValidationRule validationRule;
 	private StepInvoker stepInvoker;
@@ -38,15 +43,21 @@ public class AcceptsNeedReturnBooleanValidationRuleTest {
 		validationRule = new AcceptsNeedReturnBooleanValidationRule(stepInvoker);
 	}
 
-	@Test(expected = InterceptionException.class)
+	@Test
 	public void shouldVerifyIfAcceptsMethodReturnsVoid() {
+		exception.expect(InterceptionException.class);
+		exception.expectMessage("@Accepts method must return boolean");
+
 		Class<VoidAcceptsInterceptor> type = VoidAcceptsInterceptor.class;
 		List<Method> allMethods = stepInvoker.findAllMethods(type);
 		validationRule.validate(type, allMethods);
 	}
 
-	@Test(expected = InterceptionException.class)
+	@Test
 	public void shouldVerifyIfAcceptsMethodReturnsNonBooleanType() {
+		exception.expect(InterceptionException.class);
+		exception.expectMessage("@Accepts method must return boolean");
+
 		Class<NonBooleanAcceptsInterceptor> type = NonBooleanAcceptsInterceptor.class;
 		List<Method> allMethods = stepInvoker.findAllMethods(type);
 		validationRule.validate(type, allMethods);

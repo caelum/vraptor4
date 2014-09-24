@@ -27,7 +27,9 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
@@ -37,6 +39,9 @@ import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.http.MutableResponse;
 
 public class ControllerNotFoundHandlerTest {
+
+	@Rule
+	public ExpectedException exception = ExpectedException.none();
 
 	private ControllerNotFoundHandler notFoundHandler;
 	private @Mock MutableRequest webRequest;
@@ -56,16 +61,17 @@ public class ControllerNotFoundHandlerTest {
 		verify(chain, only()).doFilter(webRequest, webResponse);
 	}
 	
-	@Test(expected=InterceptionException.class)
+	@Test
 	public void shouldThrowInterceptionExceptionIfIOExceptionOccurs() throws Exception {
+		exception.expect(InterceptionException.class);
 		doThrow(new IOException()).when(chain).doFilter(webRequest, webResponse);
 		notFoundHandler.couldntFind(chain, webRequest, webResponse);
 	}
 	
-	@Test(expected=InterceptionException.class)
+	@Test
 	public void shouldThrowInterceptionExceptionIfServletExceptionOccurs() throws Exception {
+		exception.expect(InterceptionException.class);
 		doThrow(new ServletException()).when(chain).doFilter(webRequest, webResponse);
 		notFoundHandler.couldntFind(chain, webRequest, webResponse);
 	}
-	
 }

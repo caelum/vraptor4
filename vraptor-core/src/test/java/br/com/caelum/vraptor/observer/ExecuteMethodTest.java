@@ -50,6 +50,9 @@ import static org.mockito.Mockito.*;
 
 public class ExecuteMethodTest {
 
+	@Rule
+	public ExpectedException exception = ExpectedException.none();
+
 	@Mock private MethodInfo methodInfo;
 	@Mock private Messages messages;
 	@Mock private Validator validator;
@@ -121,13 +124,16 @@ public class ExecuteMethodTest {
 		observer.execute(new InterceptorsExecuted(method, controller));
 	}
 
-	@Test(expected=InterceptionException.class)
+	@Test
 	public void shouldThrowExceptionIfYouHaventSpecifiedWhereToGoOnValidationError() throws Exception {
+		exception.expect(InterceptionException.class);
+
 		Method didntSpecifyWhereToGo = AnyController.class.getMethod("didntSpecifyWhereToGo");
 		final ControllerMethod method = DefaultControllerMethod.instanceFor(AnyController.class, didntSpecifyWhereToGo);
 		final AnyController controller = new AnyController(validator);
 		doThrow(new IllegalStateException()).when(messages).assertAbsenceOfErrors();
 		when(methodInfo.getParametersValues()).thenReturn(new Object[0]);
+
 		observer.execute(new InterceptorsExecuted(method, controller));
 	}
 

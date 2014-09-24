@@ -34,7 +34,9 @@ import java.util.ResourceBundle;
 import net.vidageek.mirror.dsl.Mirror;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
@@ -54,6 +56,9 @@ import br.com.caelum.vraptor.validator.Validator;
 import br.com.caelum.vraptor.view.FlashScope;
 
 public class ParametersInstantiatorTest {
+
+	@Rule
+	public ExpectedException exception = ExpectedException.none();
 
 	private MethodInfo methodInfo = new MethodInfo(new ParanamerNameProvider());
 	private @Mock ParametersProvider parametersProvider;
@@ -132,8 +137,10 @@ public class ParametersInstantiatorTest {
 	/**
 	 * Bug related
 	 */
-	@Test(expected=IllegalArgumentException.class)
+	@Test
 	public void shouldThrowExceptionWhenThereIsAParameterContainingDotClass() throws Exception {
+		exception.expect(IllegalArgumentException.class);
+
 		methodInfo.setControllerMethod(otherMethod);
 
 		when(request.getParameterNames()).thenReturn(enumeration(asList("someParam.class.id", "unrelatedParam")));

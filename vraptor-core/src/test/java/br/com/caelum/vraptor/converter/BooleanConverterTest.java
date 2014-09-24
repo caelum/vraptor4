@@ -17,18 +17,21 @@
 
 package br.com.caelum.vraptor.converter;
 
-import static br.com.caelum.vraptor.VRaptorMatchers.hasMessage;
+import static br.com.caelum.vraptor.VRaptorMatchers.hasConversionException;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
-import static org.junit.Assert.fail;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
-
+import org.junit.rules.ExpectedException;
 
 public class BooleanConverterTest {
+
+	@Rule
+	public ExpectedException exception = ExpectedException.none();
 
 	private BooleanConverter converter;
 
@@ -58,11 +61,13 @@ public class BooleanConverterTest {
 		assertThat(converter.convert("yes", Boolean.class), is(equalTo(true)));
 		assertThat(converter.convert("no", Boolean.class), is(equalTo(false)));
 	}
+
 	@Test
 	public void shouldConvertYN() {
 		assertThat(converter.convert("y", Boolean.class), is(equalTo(true)));
 		assertThat(converter.convert("n", Boolean.class), is(equalTo(false)));
 	}
+
 	@Test
 	public void shouldConvertOnOff() {
 		assertThat(converter.convert("on", Boolean.class), is(equalTo(true)));
@@ -79,11 +84,7 @@ public class BooleanConverterTest {
 
 	@Test
 	public void shouldThrowExceptionForInvalidString() {
-		try {
-			converter.convert("not a boolean!", Boolean.class);
-			fail("should throw an exception");
-		} catch(ConversionException e) {
-			assertThat(e.getValidationMessage(), hasMessage("NOT A BOOLEAN! is not a valid boolean. Please use true/false, yes/no, y/n or on/off"));
-		}
+		exception.expect(hasConversionException("NOT A BOOLEAN! is not a valid boolean. Please use true/false, yes/no, y/n or on/off"));
+		converter.convert("not a boolean!", Boolean.class);
 	}
 }

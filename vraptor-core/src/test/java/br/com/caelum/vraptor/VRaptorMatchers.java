@@ -27,6 +27,8 @@ import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 
+import br.com.caelum.vraptor.converter.ConversionException;
+import br.com.caelum.vraptor.converter.ConversionMessage;
 import br.com.caelum.vraptor.http.route.Route;
 import br.com.caelum.vraptor.validator.Message;
 
@@ -89,6 +91,27 @@ public class VRaptorMatchers {
 			protected boolean matchesSafely(Message message) {
 				message.setBundle(ResourceBundle.getBundle("messages"));
 				return delegate.matches(message.getMessage());
+			}
+		};
+	}
+
+	public static TypeSafeMatcher<Exception> hasConversionException(String message) {
+		final Matcher<? extends String> delegate = equalTo(message);
+		return new TypeSafeMatcher<Exception>() {
+			@Override
+			protected boolean matchesSafely(Exception item) {
+				if (item instanceof ConversionException) {
+					ConversionMessage message = ((ConversionException) item).getValidationMessage();
+					message.setBundle(ResourceBundle.getBundle("messages"));
+					return delegate.matches(message.getMessage());
+				}
+
+				return false;
+			}
+
+			@Override
+			public void describeTo(Description description) {
+				delegate.describeTo(description);
 			}
 		};
 	}

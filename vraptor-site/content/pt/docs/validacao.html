@@ -119,7 +119,7 @@ Note no código que é possível injetar qualquer componente gerenciável pelo C
 
 ##Customizando as Mensagens
 
-Se você preferir é possível customizar as mensagens do Bean Validation. Para isso, basta adicionar o arquivo <code>ValidationMessages.properties</code> no seu classpath. Se você usa Maven o local é <code>/src/main/resources</code>.
+Se você preferir é possível customizar as mensagens do Bean Validation. Para isso, basta adicionar o arquivo `ValidationMessages.properties` no seu classpath. Se você usa Maven o local é `/src/main/resources`.
 
 Considerando o exemplo anterior, o arquivo poderia ter a seguinte estrutura para customizar as mensagens padrões:
 
@@ -148,15 +148,15 @@ Observe que o Valor contido em `message={}`, nas anotações indica que a mensag
 
 Veja que foi adicionado parâmetros afim de deixar nossas mensagens mais dinâmicas e reaproveitáveis. As possibilidades atualmente são:
 
-* os valores dos atributos da restrição mapeados com os nomes de atributo. Ex. <code>{min}</code> e <code>{max}</code> no caso de <code>@Size</code>
-* o atual valor a ser validado sob o nome de <code>${validatedValue}</code>
-* uso de if-else curto, como por exemplo: <code>${value > 1 ? 's' : ''}</code>
-* um bean mapeado com o nome de <code>formatter</code> expondo método var-arg <code>format(String format, Object... args)</code> o qual se comporta como <code>java.util.Formatter.format(String format, Object... args)</code>. Ex.: <code>${formatter.format('%1$.2f', validatedValue)}</code>
+* os valores dos atributos da restrição mapeados com os nomes de atributo. Ex. `{min}` e `{max}` no caso de `@Size`
+* o atual valor a ser validado sob o nome de `${validatedValue}`
+* uso de if-else curto, como por exemplo: `${value > 1 ? 's' : ''}`
+* um bean mapeado com o nome de `formatter` expondo método var-arg `format(String format, Object... args)` o qual se comporta como `java.util.Formatter.format(String format, Object... args)`. Ex.: `${formatter.format('%1$.2f', validatedValue)}`
 
 
 ## Validação usando o Validator
 
-Caso você não queira usar o Bean Validation, você pode usar os métodos de validação do próprio <code>Validator</code> do VRaptor. O método mais simples é o <code>add</code>:
+Caso você não queira usar o Bean Validation, você pode usar os métodos de validação do próprio `Validator` do VRaptor. O método mais simples é o `add`:
 
 ~~~
 #!java
@@ -169,7 +169,7 @@ if (cliente.getNome() == null) {
 }
 ~~~
 
-Podemos também usar os métodos <code>addIf</code> que adiciona a mensagem se a condição for verdadeira e o <code>ensure</code> que adiciona se a condição for falsa:
+Podemos também usar os métodos `addIf` que adiciona a mensagem se a condição for verdadeira e o `ensure` que adiciona se a condição for falsa:
 
 ~~~
 #!java
@@ -203,8 +203,8 @@ validator.onErrorUsePageOf(this).list() ==> validator.onErrorUse(page()).of(this
 
 Quando existem erros de validação, o VRaptor coloca um atributo na requisição chamado `errors` contendo a lista de erros. Essa lista é representada por items chave-valor, onde temos:
 
-- <code>category</code>: representa o caminho do atributo que originou o erro, cujo valor é uma convenção para `objeto.atributo`
-- <code>message</code>: representa a mensagem padrão da API do Bean Validation, normalmente um sufixo como: "deve estar no futuro", "não pode ser nulo", etc.
+- `category`: representa o caminho do atributo que originou o erro, cujo valor é uma convenção para `objeto.atributo`
+- `message`: representa a mensagem padrão da API do Bean Validation, normalmente um sufixo como: "deve estar no futuro", "não pode ser nulo", etc.
 
 E na view você pode imprimir:
 

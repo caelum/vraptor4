@@ -229,3 +229,24 @@ Você também pode buscar por um erro somente de uma determinada categoria, que 
 ~~~
 
 ﻿
+##Adicionando outras mensagens
+
+Quando você adiciona uma mensagem, por padrão o VRaptor adiciona a mensagem como um erro. É possível também que você adicione mensagem de sucesso, avisos e informações. Para isso basta criar sua mensagem usando os valores disponíveis no enum `Severity`, conforme os exemplos abaixo:
+
+~~~
+#!java
+validator.add(new SimpleMessage("cliente.nome", "nome do cliente possui acentuação", Severity.WARN));
+~~~
+
+E no JSP basta usar o atributo `vmessages`:
+
+~~~
+#!xml
+<input type="text" name="cliente.nome" />
+
+<span class="error">${vmessages.warnings.from('cliente.nome')}</span> 
+// retorna: 'nome do cliente possui acentuação'
+~~~
+
+
+

@@ -228,3 +228,26 @@ You can search for an error for a specific category, that can be useful to displ
 ~~~
 
 ﻿
+##Adding more messages
+
+When you add a message, the framework will add as an error. But its possible 
+to add the message as success, info or warning. In this case you can simple 
+use available attributes from `Severity` enum as you can see below:
+
+~~~
+#!java
+validator.add(new SimpleMessage("customer.name", "name field have accents", Severity.WARN));
+~~~
+
+And in the view you can use `vmessages` attribute:
+
+~~~
+#!xml
+<input type="text" name="customer.name" />
+
+<span class="error">${vmessages.warnings.from('customer.name')}</span> 
+// prints: 'name field have accents'
+~~~
+
+
+

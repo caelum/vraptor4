@@ -42,8 +42,6 @@ public class PrimitiveDoubleConverterTest {
 	@Rule
 	public ExpectedException exception = ExpectedException.none();
 
-	static final String LOCALE_KEY = "javax.servlet.jsp.jstl.fmt.locale";
-
 	private PrimitiveDoubleConverter converter;
 	private @Mock MutableRequest request;
 	private @Mock HttpSession session;

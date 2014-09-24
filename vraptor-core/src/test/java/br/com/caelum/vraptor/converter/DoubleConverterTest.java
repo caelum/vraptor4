@@ -43,8 +43,6 @@ public class DoubleConverterTest {
 	@Rule
 	public ExpectedException exception = ExpectedException.none();
 
-	static final String LOCALE_KEY = "javax.servlet.jsp.jstl.fmt.locale";
-
 	private DoubleConverter converter;
 	private @Mock MutableRequest request;
 	private @Mock HttpSession session;

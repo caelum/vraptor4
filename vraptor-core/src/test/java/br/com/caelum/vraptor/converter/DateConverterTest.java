@@ -46,8 +46,6 @@ public class DateConverterTest {
 	@Rule
 	public ExpectedException exception = ExpectedException.none();
 
-	static final String LOCALE_KEY = "javax.servlet.jsp.jstl.fmt.locale";
-
 	private DateConverter converter;
 	private @Mock MutableRequest request;
 	private @Mock HttpSession session;

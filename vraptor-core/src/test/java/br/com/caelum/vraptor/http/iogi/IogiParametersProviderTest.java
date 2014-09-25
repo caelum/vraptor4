@@ -28,7 +28,6 @@
 package br.com.caelum.vraptor.http.iogi;
 
 import static br.com.caelum.vraptor.VRaptorMatchers.hasMessage;
-import static br.com.caelum.vraptor.controller.DefaultControllerMethod.instanceFor;
 import static java.util.Collections.singletonMap;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.allOf;
@@ -102,28 +101,13 @@ public class IogiParametersProviderTest {
 	private @Mock Container container;
 
 	private ArrayList<Message> errors;
-	private ParametersProvider provider;
-	private ControllerMethod buyA;
-	private ControllerMethod kick;
-	private ControllerMethod error;
-	private ControllerMethod array;
-	private ControllerMethod simple;
-
-	private ControllerMethod list;
-	private ControllerMethod listOfObject;
-	private ControllerMethod abc;
-	private ControllerMethod string;
-	private ControllerMethod generic;
-	private ControllerMethod primitive;
-	private ControllerMethod stringArray;
-	private ControllerMethod dependency;
-	private ControllerMethod doNothing;
+	private ParametersProvider iogi;
 
 	@Before
 	public void setup() throws Exception {
 		MockitoAnnotations.initMocks(this);
 		nameProvider = new ParanamerNameProvider();
-		provider = getProvider();
+		iogi = createIogiInstance();
 		errors = new ArrayList<>();
 		
 		when(converters.existsFor(Long.class)).thenReturn(true);
@@ -132,54 +116,38 @@ public class IogiParametersProviderTest {
 		when(converters.to(Long.class)).thenReturn(new LongConverter());
 		when(converters.to(long.class)).thenReturn(new PrimitiveLongConverter());
 		when(converters.to(String.class)).thenReturn(new StringConverter());
-
-		buyA 		= method("buyA", House.class);
-		kick 		= method("kick", AngryCat.class);
-		error 		= method("error", WrongCat.class);
-		array 		= method("array", Long[].class);
-		list 		= method("list", List.class);
-		listOfObject= method("listOfObject", List.class);
-		abc 		= method("abc", ABC.class);
-		simple 		= method("simple", Long.class);
-		string 		= method("string", String.class);
-		stringArray = method("stringArray", String[].class);
-		dependency 	= method("dependency", Result.class);
-		primitive 	= method("primitive", long.class);
-		doNothing 	= method("doNothing");
-		generic 	= DefaultControllerMethod.instanceFor(Specific.class, Generic.class.getDeclaredMethod("generic", Object.class));
 	}
 
 	@Test
 	public void isCapableOfDealingWithStrings() throws Exception {
-		requestParameterIs(string, "abc", "eureka");
-
-		String abc = getFirstParameterFor(string);
+		requestParameterIs("abc", "eureka");
+		String abc = getFirstParameterFor(method("string", String.class));
 
 		assertThat(abc, is("eureka"));
 	}
 
 	@Test
 	public void isCapableOfDealingWithStringArrays() throws Exception {
-		requestParameterIs(stringArray, "abc", "eureka");
-
-		String[] abc = getFirstParameterFor(stringArray);
+		requestParameterIs("abc", "eureka");
+		String[] abc = getFirstParameterFor(method("stringArray", String[].class));
 
 		assertThat(abc, is(new String[] {"eureka"}));
 	}
 
 	@Test
 	public void isCapableOfDealingWithIndexedStringArrays() throws Exception {
-		requestParameterIs(stringArray, "abc[0]", "eureka");
-
-		String[] abc = getFirstParameterFor(stringArray);
+		requestParameterIs("abc[0]", "eureka");
+		String[] abc = getFirstParameterFor(method("stringArray", String[].class));
 
 		assertThat(abc, is(new String[] {"eureka"}));
 	}
 
 	@Test
 	public void isCapableOfDealingWithGenerics() throws Exception {
-		requestParameterIs(generic, "t.x", "123");
-		
+		requestParameterIs("t.x", "123");
+
+		ControllerMethod generic = DefaultControllerMethod.instanceFor(Specific.class,
+				Generic.class.getDeclaredMethod("generic", Object.class));
 		ABC abc = getFirstParameterFor(generic);
 
 		assertThat(abc.x, is(123l));
@@ -187,9 +155,8 @@ public class IogiParametersProviderTest {
 
 	@Test
 	public void isCapableOfDealingWithIndexedLists() throws Exception {
-		requestParameterIs(list, "abc[2]", "1");
-
-		List<Long> abc = getFirstParameterFor(list);
+		requestParameterIs("abc[2]", "1");
+		List<Long> abc = getFirstParameterFor(method("list", List.class));
 
 		assertThat(abc, hasSize(1));
 		assertThat(abc, hasItem(1l));
@@ -197,9 +164,8 @@ public class IogiParametersProviderTest {
 
 	@Test
 	public void isCapableOfDealingWithIndexedListsOfObjects() throws Exception {
-		requestParameterIs(listOfObject, "abc[2].x", "1");
-
-		List<ABC> abc = getFirstParameterFor(listOfObject);
+		requestParameterIs("abc[2].x", "1");
+		List<ABC> abc = getFirstParameterFor(method("listOfObject", List.class));
 
 		assertThat(abc, hasSize(1));
 		assertThat(abc.get(0).x, is(1l));
@@ -207,9 +173,8 @@ public class IogiParametersProviderTest {
 
 	@Test
 	public void isCapableOfDealingWithLists() throws Exception {
-		requestParameterIs(list, "abc", "1");
-
-		List<Long> abc = getFirstParameterFor(list);
+		requestParameterIs("abc", "1");
+		List<Long> abc = getFirstParameterFor(method("list", List.class));
 
 		assertThat(abc, hasSize(1));
 		assertThat(abc, hasItem(1l));
@@ -217,45 +182,40 @@ public class IogiParametersProviderTest {
 
 	@Test
 	public void isCapableOfDealingIndexedArraysWithOneElement() throws Exception {
-		requestParameterIs(array, "abc[2]", "1");
-
-		Long[] abc = getFirstParameterFor(array);
+		requestParameterIs("abc[2]", "1");
+		Long[] abc = getFirstParameterFor(method("array", Long[].class));
 
 		assertThat(abc, is(arrayContaining(1l)));
 	}
 
 	@Test
 	public void isCapableOfDealingArraysWithOneElement() throws Exception {
-		requestParameterIs(array, "abc", "1");
-
-		Long[] abc = getFirstParameterFor(array);
+		requestParameterIs("abc", "1");
+		Long[] abc = getFirstParameterFor(method("array", Long[].class));
 
 		assertThat(abc, is(arrayContaining(1l)));
 	}
 
 	@Test
 	public void isCapableOfDealingArraysWithSeveralElements() throws Exception {
-		requestParameterIs(array, "abc", "1", "2", "3");
-
-		Long[] abc = getFirstParameterFor(array);
+		requestParameterIs("abc", "1", "2", "3");
+		Long[] abc = getFirstParameterFor(method("array", Long[].class));
 
 		assertThat(abc, is(arrayContaining(1l, 2l, 3l)));
 	}
 
 	@Test
 	public void isCapableOfDealingWithEmptyParameterForInternalWrapperValue() throws Exception {
-		requestParameterIs(buyA, "house.cat.id", "guilherme");
-
-		House house = getFirstParameterFor(buyA);
+		requestParameterIs("house.cat.id", "guilherme");
+		House house = getFirstParameterFor(method("buyA", House.class));
 
 		assertThat(house.cat.id, is(equalTo("guilherme")));
 	}
 
 	@Test
 	public void removeFromTheCollectionIfAnElementIsCreatedWithinACollectionButNoFieldIsSet() throws Exception {
-		requestParameterIs(buyA, "house.extraCats[1].id", "guilherme");
-
-		House house = getFirstParameterFor(buyA);
+		requestParameterIs("house.extraCats[1].id", "guilherme");
+		House house = getFirstParameterFor(method("buyA", House.class));
 
 		assertThat(house.extraCats, hasSize(1));
 		assertThat(house.extraCats.get(0).id, is(equalTo("guilherme")));
@@ -263,9 +223,8 @@ public class IogiParametersProviderTest {
 
 	@Test
 	public void removeFromTheCollectionIfAnElementIsCreatedWithinAnArrayButNoFieldIsSet() throws Exception {
-		requestParameterIs(buyA, "house.ids[1]", "3");
-
-		House house = getFirstParameterFor(buyA);
+		requestParameterIs("house.ids[1]", "3");
+		House house = getFirstParameterFor(method("buyA", House.class));
 
 		assertThat(house.ids.length, is(equalTo(1)));
 		assertThat(house.ids[0], is(equalTo(3L)));
@@ -274,9 +233,8 @@ public class IogiParametersProviderTest {
 	@Test
 	public void removeFromTheCollectionIfAnElementIsCreatedWithinACollectionButNoFieldIsSetAppartFromTheValueItselfNotAChild()
 			throws Exception {
-		requestParameterIs(buyA, "house.owners[1]", "guilherme");
-
-		House house = getFirstParameterFor(buyA);
+		requestParameterIs("house.owners[1]", "guilherme");
+		House house = getFirstParameterFor(method("buyA", House.class));
 
 		assertThat(house.owners, hasSize(1));
 		assertThat(house.owners.get(0), is(equalTo("guilherme")));
@@ -284,9 +242,8 @@ public class IogiParametersProviderTest {
 
 	@Test
 	public void addsValidationMessageWhenSetterFailsWithAValidationException() throws Exception {
-		requestParameterIs(kick, "angryCat.id", "guilherme");
-
-		getFirstParameterFor(kick);
+		requestParameterIs("angryCat.id", "guilherme");
+		getFirstParameterFor(method("kick", AngryCat.class));
 
 		assertThat(errors.size(), is(greaterThan(0)));
 	}
@@ -296,33 +253,32 @@ public class IogiParametersProviderTest {
 		exception.expect(InvalidParameterException.class);
 		exception.expectMessage(containsString("Exception when trying to instantiate"));
 
-		requestParameterIs(error, "wrongCat.id", "guilherme");
-
-		getFirstParameterFor(error);
+		requestParameterIs("wrongCat.id", "guilherme");
+		getFirstParameterFor(method("error", WrongCat.class));
 	}
 
 	@Test
 	public void returnsASimpleValue() throws Exception {
-		requestParameterIs(simple, "xyz", "42");
+		requestParameterIs("xyz", "42");
+		Long xyz = getFirstParameterFor(method("simple", Long.class));
 
-		Long xyz = getFirstParameterFor(simple);
 		assertThat(xyz, is(42l));
 	}
 
 	@Test
 	public void addsValidationErrorsOnConvertionErrors() throws Exception {
-		requestParameterIs(simple, "xyz", "4s2");
+		requestParameterIs("xyz", "4s2");
+		getFirstParameterFor(method("simple", Long.class));
 
-		getFirstParameterFor(simple);
 		assertThat(errors, hasSize(1));
 	}
 
 	@Test
 	public void returnsNullWhenThereAreNoParameters() throws Exception {
 		thereAreNoParameters();
+		Long xyz = getFirstParameterFor(method("simple", Long.class));
 
-		Long xyz = getFirstParameterFor(simple);
-		assertThat(xyz, is(nullValue()));
+		assertThat(xyz, nullValue());
 	}
 
 	@Test
@@ -332,8 +288,8 @@ public class IogiParametersProviderTest {
 
 		when(container.canProvide(Result.class)).thenReturn(true);
 		when(container.instanceFor(Result.class)).thenReturn(result);
-		
-		Result returned = getFirstParameterFor(dependency);
+
+		Result returned = getFirstParameterFor(method("dependency", Result.class));
 		assertThat(returned, is(result));
 	}
 
@@ -344,19 +300,19 @@ public class IogiParametersProviderTest {
 
 		when(request.getAttribute("result")).thenReturn(result);
 
-		Result returned = getFirstParameterFor(dependency);
+		Result returned = getFirstParameterFor(method("dependency", Result.class));
 		assertThat(returned, is(result));
 	}
 
 	@Test
 	public void ignoresPopulationIfIfRequestCanProvide() throws Exception {
-		requestParameterIs(abc, "abc.x", "1");
+		requestParameterIs("abc.x", "1");
 		ABC expected = new ABC();
 		expected.setX(2l);
 
 		when(request.getAttribute("abc")).thenReturn(expected);
 
-		ABC returned = getFirstParameterFor(abc);
+		ABC returned = getFirstParameterFor(method("abc", ABC.class));
 		assertThat(returned.getX(), is(2l));
 	}
 
@@ -367,23 +323,23 @@ public class IogiParametersProviderTest {
 		when(container.canProvide(ABC.class)).thenReturn(true);
 		when(container.instanceFor(ABC.class)).thenReturn(result);
 
-		ABC returned = getFirstParameterFor(abc);
+		ABC returned = getFirstParameterFor(method("abc", ABC.class));
 		assertThat(returned, is(not(result)));
 	}
 
 	@Test
 	public void returnsZeroForAPrimitiveWhenThereAreNoParameters() throws Exception {
 		thereAreNoParameters();
-		
-		Long xyz = getFirstParameterFor(primitive);
+
+		Long xyz = getFirstParameterFor(method("primitive", long.class));
 		assertThat(xyz, is(0l));
 	}
 
 	@Test
 	public void continuesToFillObjectIfItIsConvertable() throws Exception {
-		ImmutableMap<String, String[]> params = ImmutableMap.of("abc", new String[] {""}, "abc.x", new String[] {"3"});
+		ImmutableMap<String, String[]> params = ImmutableMap.of("abc", new String[] { "" }, "abc.x", new String[] { "3" });
 		when(request.getParameterMap()).thenReturn(params);
-		
+
 		when(converters.existsFor(ABC.class)).thenReturn(true);
 		when(converters.to(ABC.class)).thenReturn(new Converter<ABC>() {
 			@Override
@@ -392,15 +348,15 @@ public class IogiParametersProviderTest {
 			}
 		});
 
-		ABC returned = getFirstParameterFor(abc);
+		ABC returned = getFirstParameterFor(method("abc", ABC.class));
 		assertThat(returned.x, is(3l));
 	}
 
 	@Test
 	public void continuesToFillObjectWithListIfItIsConvertable() throws Exception {
-		ImmutableMap<String, String[]> params = ImmutableMap.of("abc", new String[] {""}, "abc.person[0].name", new String[] {"bird"}, "abc.person[1].name", new String[] {"bird 2"});
+		ImmutableMap<String, String[]> params = ImmutableMap.of("abc", new String[] { "" }, "abc.person[0].name", new String[] { "bird" }, "abc.person[1].name", new String[] { "bird 2" });
 		when(request.getParameterMap()).thenReturn(params);
-		
+
 		when(converters.existsFor(ABC.class)).thenReturn(true);
 		when(converters.to(ABC.class)).thenReturn(new Converter<ABC>() {
 			@Override
@@ -408,17 +364,17 @@ public class IogiParametersProviderTest {
 				return new ABC();
 			}
 		});
-		
-		ABC returned = getFirstParameterFor(abc);
+
+		ABC returned = getFirstParameterFor(method("abc", ABC.class));
 		assertThat(returned.getPerson().get(0).getName(), is("bird"));
 		assertThat(returned.getPerson().get(1).getName(), is("bird 2"));
 	}
 
 	@Test
 	public void continuesToFillObjectWithSetIfItIsConvertable() throws Exception {
-		ImmutableMap<String, String[]> params = ImmutableMap.of("abc", new String[] {""}, "abc.addresses[0].street", new String[] {"Some Street"}, "abc.addresses[1].street", new String[] {"Some Street 2"});
+		ImmutableMap<String, String[]> params = ImmutableMap.of("abc", new String[] { "" }, "abc.addresses[0].street", new String[] { "Some Street" }, "abc.addresses[1].street", new String[] { "Some Street 2" });
 		when(request.getParameterMap()).thenReturn(params);
-		
+
 		when(converters.existsFor(ABC.class)).thenReturn(true);
 		when(converters.to(ABC.class)).thenReturn(new Converter<ABC>() {
 			@Override
@@ -426,12 +382,12 @@ public class IogiParametersProviderTest {
 				return new ABC();
 			}
 		});
-		
-		ABC returned = getFirstParameterFor(abc);
-		
+
+		ABC returned = getFirstParameterFor(method("abc", ABC.class));
+
 		Address[] address = (Address[]) returned.getAddresses().toArray(new Address[2]);
 		List<String> streets = Arrays.asList(address[0].getStreet(), address[1].getStreet());
-		
+
 		assertThat(streets, containsInAnyOrder("Some Street", "Some Street 2"));
 	}
 
@@ -439,7 +395,7 @@ public class IogiParametersProviderTest {
 	public void returnsAnEmptyObjectArrayForZeroArityMethods() throws Exception {
 		thereAreNoParameters();
 
-		Object[] params = provider.getParametersFor(doNothing, errors);
+		Object[] params = iogi.getParametersFor(method("doNothing"), errors);
 
 		assertThat(params, emptyArray());
 	}
@@ -447,8 +403,7 @@ public class IogiParametersProviderTest {
 	@Test
 	public void returnsNullWhenInstantiatingAListForWhichThereAreNoParameters() throws Exception {
 		thereAreNoParameters();
-
-		Object[] params = provider.getParametersFor(list, errors);
+		Object[] params = iogi.getParametersFor(method("list", List.class), errors);
 
 		assertArrayEquals(new Object[] {null}, params);
 	}
@@ -457,9 +412,10 @@ public class IogiParametersProviderTest {
 	public void shouldInstantiateTheObjectEvenWhenThereAreNoParameters() throws Exception {
 		thereAreNoParameters();
 		Method setCat = House.class.getMethod("setCat", Cat.class);
-		ControllerMethod method = instanceFor(House.class, setCat);
-		Object[] params = provider.getParametersFor(method, errors);
-		assertThat(params[0], is(notNullValue()));
+		ControllerMethod method = DefaultControllerMethod.instanceFor(House.class, setCat);
+		Object[] params = iogi.getParametersFor(method, errors);
+
+		assertThat(params[0], notNullValue());
 		assertThat(params[0], instanceOf(Cat.class));
 	}
 
@@ -468,15 +424,15 @@ public class IogiParametersProviderTest {
 		VRaptorInstantiator instantiator = new NullVRaptorInstantiator(converters, 
 				new VRaptorDependencyProvider(container), 
 				new VRaptorParameterNamesProvider(nameProvider), request);
-		
+
 		instantiator.createInstantiator();
 		IogiParametersProvider provider = new IogiParametersProvider(nameProvider, request, instantiator);
-		
+
 		thereAreNoParameters();
 		Method setCat = House.class.getMethod("setCat", Cat.class);
-		ControllerMethod method = instanceFor(House.class, setCat);
+		ControllerMethod method = DefaultControllerMethod.instanceFor(House.class, setCat);
 		Object[] params = provider.getParametersFor(method, errors);
-		assertThat(params[0], is(nullValue()));
+		assertThat(params[0], nullValue());
 	}
 
 	static class NullVRaptorInstantiator extends VRaptorInstantiator {
@@ -497,9 +453,7 @@ public class IogiParametersProviderTest {
 	@Test
 	public void returnsNullWhenInstantiatingAStringForWhichThereAreNoParameters() throws Exception {
 		thereAreNoParameters();
-		final ControllerMethod method = string;
-
-		Object[] params = provider.getParametersFor(method, errors);
+		Object[] params = iogi.getParametersFor(method("string", String.class), errors);
 
 		assertArrayEquals(new Object[] {null}, params);
 	}
@@ -513,47 +467,43 @@ public class IogiParametersProviderTest {
 
 		when(container.canProvide(MyResource.class)).thenReturn(true);
 		when(container.instanceFor(MyResource.class)).thenReturn(providedInstance);
-		
-		Object[] params = provider.getParametersFor(controllerMethod, errors);
-		assertThat(((NeedsMyResource)params[0]).getMyResource(), is(sameInstance(providedInstance)));
+
+		Object[] params = iogi.getParametersFor(controllerMethod, errors);
+		assertThat(((NeedsMyResource) params[0]).getMyResource(), is(sameInstance(providedInstance)));
 	}
 
 	//---------- The Following tests mock iogi to unit test the ParametersProvider impl.
 	@Test
 	public void willCreateAnIogiParameterForEachRequestParameterValue() throws Exception {
-		ControllerMethod anyMethod = buyA;
-		requestParameterIs(anyMethod, "name", "a", "b");
+		requestParameterIs("name", "a", "b");
 
 		final InstantiatorWithErrors mockInstantiator = mock(InstantiatorWithErrors.class);
 		final Parameters expectedParamters = new Parameters(new Parameter("name", "a"), new Parameter("name", "b"));
 
 		IogiParametersProvider iogiProvider = new IogiParametersProvider(nameProvider, request, mockInstantiator);
 
-		iogiProvider.getParametersFor(anyMethod, errors);
+		iogiProvider.getParametersFor(method("buyA", House.class), errors);
 
 		verify(mockInstantiator).instantiate(any(Target.class), eq(expectedParamters), eq(errors));
 	}
 
 	@Test
 	public void willCreateATargerForEachFormalParameterDeclaredByTheMethod() throws Exception {
-		final ControllerMethod buyAHouse = buyA;
-		requestParameterIs(buyAHouse, "house", "");
+		requestParameterIs("house", "");
 
 		final InstantiatorWithErrors mockInstantiator = mock(InstantiatorWithErrors.class);
 		IogiParametersProvider iogiProvider = new IogiParametersProvider(nameProvider, request, mockInstantiator);
 		final Target<House> expectedTarget = Target.create(House.class, "house");
 
-		iogiProvider.getParametersFor(buyAHouse, errors);
+		iogiProvider.getParametersFor(method("buyA", House.class), errors);
 
 		verify(mockInstantiator).instantiate(eq(expectedTarget), any(Parameters.class), eq(errors));
 	}
 
 	@Test
 	public void willAddValidationMessagesForConversionErrors() throws Exception {
-		ControllerMethod setId = simple;
-		requestParameterIs(setId, "xyz", "asdf");
-		
-		getFirstParameterFor(setId);
+		requestParameterIs("xyz", "asdf");
+		getFirstParameterFor(method("simple", Long.class));
 
 		assertThat(errors, hasSize(1));
 		assertThat(errors.get(0), hasMessage("asdf is not a valid number."));
@@ -563,20 +513,17 @@ public class IogiParametersProviderTest {
 	@Test
 	public void inCaseOfConversionErrorsOnlyNullifyTheProblematicParameter() throws Exception {
 		ControllerMethod setId = DefaultControllerMethod.instanceFor(House.class, House.class.getMethod("setCat", Cat.class));
-		requestParameterIs(setId, "cat.lols", "sad kitten");
+		requestParameterIs("cat.lols", "sad kitten");
 
 		Cat cat = getFirstParameterFor(setId);
-		assertThat(cat, is(notNullValue()));
-		assertThat(cat.getLols(), is(nullValue()));
+		assertThat(cat, notNullValue());
+		assertThat(cat.getLols(), nullValue());
 	}
 
 	@Test
 	public void isCapableOfDealingWithSets() throws Exception {
-		ControllerMethod set = method("set", Set.class);
-
-		requestParameterIs(set, "abc", "1", "2");
-
-		Set<Long> abc = getFirstParameterFor(set);
+		requestParameterIs("abc", "1", "2");
+		Set<Long> abc = getFirstParameterFor(method("set", Set.class));
 
 		assertThat(abc, hasSize(2));
 		assertThat(abc, allOf(hasItem(1l), hasItem(2l)));
@@ -584,11 +531,8 @@ public class IogiParametersProviderTest {
 
 	@Test
 	public void isCapableOfDealingWithSetsOfObjects() throws Exception {
-		ControllerMethod set = method("setOfObject", Set.class);
-
-		requestParameterIs(set, "abc.x", "1");
-
-		Set<ABC> abc = getFirstParameterFor(set);
+		requestParameterIs("abc.x", "1");
+		Set<ABC> abc = getFirstParameterFor(method("setOfObject", Set.class));
 
 		assertThat(abc, hasSize(1));
 		assertThat(abc.iterator().next().getX(), is(1l));
@@ -603,7 +547,7 @@ public class IogiParametersProviderTest {
 		ControllerMethod method = DefaultControllerMethod.instanceFor(OtherResource.class, 
 				OtherResource.class.getDeclaredMethod("logic", String.class));
 
-		Object[] out = provider.getParametersFor(method, errors);
+		Object[] out = iogi.getParametersFor(method, errors);
 
 		assertThat(out[0], is(not((Object) result)));
 		assertThat(out[0], is((Object) "buggy"));
@@ -611,14 +555,11 @@ public class IogiParametersProviderTest {
 	
 	@Test
 	public void isCapableOfClassesThatHaveConverters() throws Exception {
-		ControllerMethod abcMethod = method("abc", ABC.class);
-		
 		when(converters.existsFor(ABC.class)).thenReturn(true);
 		when(converters.to(ABC.class)).thenReturn(new ABCConverter());
 
-		requestParametersAre(abcMethod, ImmutableMap.of("abc.x", new String[]{ "1" }, "abc.y", new String[]{ "2" }));
-		
-		ABC abc = getFirstParameterFor(abcMethod);
+		requestParametersAre(ImmutableMap.of("abc.x", new String[]{ "1" }, "abc.y", new String[]{ "2" }));
+		ABC abc = getFirstParameterFor(method("abc", ABC.class));
 
 		assertThat(abc.getX(), is(1l));
 		assertThat(abc.getY(), is(2l));
@@ -628,20 +569,20 @@ public class IogiParametersProviderTest {
 		when(request.getParameterMap()).thenReturn(Collections.<String, String[]> emptyMap());
 	}
 
-	private void requestParametersAre(ControllerMethod method, Map<String, String[]> map) {
+	private void requestParametersAre(Map<String, String[]> map) {
 		when(request.getParameterMap()).thenReturn(map);
 	}
 
-	private void requestParameterIs(ControllerMethod method, String paramName, String... values) {
-		requestParametersAre(method, ImmutableMap.of(paramName, values));
+	private void requestParameterIs(String paramName, String... values) {
+		requestParametersAre(ImmutableMap.of(paramName, values));
 	}
 
 	@SuppressWarnings("unchecked")
 	private <T> T getFirstParameterFor(ControllerMethod method) {
-		return (T) provider.getParametersFor(method, errors)[0];
+		return (T) iogi.getParametersFor(method, errors)[0];
 	}
 
-	private ParametersProvider getProvider() {
+	private ParametersProvider createIogiInstance() {
 		VRaptorInstantiator instantiator = new VRaptorInstantiator(converters, new VRaptorDependencyProvider(container),
 				new VRaptorParameterNamesProvider(nameProvider), request);
 		instantiator.createInstantiator();

@@ -23,14 +23,6 @@ public final class DownloadBuilder {
 	/**
 	 * Creates an instance for build a {@link FileDownload}.<br>
 	 * 
-	 * <code>
-	 * 		Download download = DownloadBuilder.of(myFile)
-	 * 			.withFileName("resume.txt") // optional, default is file.getName()
-	 * 			.withContentType("text/plain") // optional, null will sent as octet/stream
-	 * 			.downloadable() // optional, default is inline content
-	 * 			.build();
-	 * </code>
-	 * 
 	 * @param file The input file.
 	 * @throws NullPointerException If the {@code file} argument is {@code null}
 	 */
@@ -40,15 +32,6 @@ public final class DownloadBuilder {
 
 	/**
 	 * Creates an instance for build a {@link InputStreamDownload}.<br>
-	 * 
-	 * <code>
-	 * 		Download download = DownloadBuilder.of(myInputStream)
-	 * 			.withFileName("resume.txt") // optional
-	 * 			.withContentType("text/plain") // optional, null will sent as octet/stream
-	 * 			.downloadable() // optional, default is inline content
-	 * 			.withSize(100L) // optional 
-	 * 			.build();
-	 * </code>
 	 * 
 	 * @param input The input InputStream to process.
 	 * @throws NullPointerException If the {@code input} argument is {@code null}
@@ -60,14 +43,6 @@ public final class DownloadBuilder {
 	/**
 	 * Creates an instance for build a {@link ByteArrayDownload}.<br>
 	 * 
-	 * <code>
-	 * 		Download download = DownloadBuilder.of(myFile)
-	 * 			.withFileName("resume.txt") // optional
-	 * 			.withContentType("text/plain") // optional, null will sent as octet/stream
-	 * 			.downloadable() // optional, default is inline content
-	 * 			.build();
-	 * </code>
-	 * 
 	 * @param input The input byte array.
 	 * @throws NullPointerException If the {@code input} argument is {@code null}
 	 */
@@ -77,13 +52,6 @@ public final class DownloadBuilder {
 
 	/**
 	 * Creates an instance for build a {@link ZipDownload}.<br>
-	 * 
-	 * <code>
-	 * 		List<Path> listOfFiles = [...];
-	 * 		Download download = DownloadBuilder.of(listOfFiles)
-	 * 			.withFileName("resume.zip")
-	 * 			.build();
-	 * </code>
 	 * 
 	 * @param files List of input files
 	 * @throws NullPointerException If the {@code input} argument is {@code null}

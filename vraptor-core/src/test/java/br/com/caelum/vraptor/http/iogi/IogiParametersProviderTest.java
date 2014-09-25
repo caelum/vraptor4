@@ -30,14 +30,13 @@ package br.com.caelum.vraptor.http.iogi;
 import static br.com.caelum.vraptor.VRaptorMatchers.hasMessage;
 import static java.util.Collections.singletonMap;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.arrayContaining;
+import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.emptyArray;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThan;
-import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
@@ -158,8 +157,7 @@ public class IogiParametersProviderTest {
 		requestParameterIs("abc[2]", "1");
 		List<Long> abc = getFirstParameterFor(method("list", List.class));
 
-		assertThat(abc, hasSize(1));
-		assertThat(abc, hasItem(1l));
+		assertThat(abc, contains(1l));
 	}
 
 	@Test
@@ -176,8 +174,7 @@ public class IogiParametersProviderTest {
 		requestParameterIs("abc", "1");
 		List<Long> abc = getFirstParameterFor(method("list", List.class));
 
-		assertThat(abc, hasSize(1));
-		assertThat(abc, hasItem(1l));
+		assertThat(abc, contains(1l));
 	}
 
 	@Test
@@ -185,7 +182,7 @@ public class IogiParametersProviderTest {
 		requestParameterIs("abc[2]", "1");
 		Long[] abc = getFirstParameterFor(method("array", Long[].class));
 
-		assertThat(abc, is(arrayContaining(1l)));
+		assertThat(abc, arrayContaining(1l));
 	}
 
 	@Test
@@ -193,7 +190,7 @@ public class IogiParametersProviderTest {
 		requestParameterIs("abc", "1");
 		Long[] abc = getFirstParameterFor(method("array", Long[].class));
 
-		assertThat(abc, is(arrayContaining(1l)));
+		assertThat(abc, arrayContaining(1l));
 	}
 
 	@Test
@@ -201,7 +198,7 @@ public class IogiParametersProviderTest {
 		requestParameterIs("abc", "1", "2", "3");
 		Long[] abc = getFirstParameterFor(method("array", Long[].class));
 
-		assertThat(abc, is(arrayContaining(1l, 2l, 3l)));
+		assertThat(abc, arrayContaining(1l, 2l, 3l));
 	}
 
 	@Test
@@ -226,8 +223,7 @@ public class IogiParametersProviderTest {
 		requestParameterIs("house.ids[1]", "3");
 		House house = getFirstParameterFor(method("buyA", House.class));
 
-		assertThat(house.ids.length, is(equalTo(1)));
-		assertThat(house.ids[0], is(equalTo(3L)));
+		assertThat(house.ids, arrayContaining(3L));
 	}
 
 	@Test
@@ -525,8 +521,7 @@ public class IogiParametersProviderTest {
 		requestParameterIs("abc", "1", "2");
 		Set<Long> abc = getFirstParameterFor(method("set", Set.class));
 
-		assertThat(abc, hasSize(2));
-		assertThat(abc, allOf(hasItem(1l), hasItem(2l)));
+		assertThat(abc, contains(1l, 2l));
 	}
 
 	@Test
@@ -590,49 +585,36 @@ public class IogiParametersProviderTest {
 	}
 
 	private ControllerMethod method(String methodName, Class<?>... argTypes) throws NoSuchMethodException {
-		return DefaultControllerMethod.instanceFor(MyResource.class, MyResource.class.getDeclaredMethod(methodName, argTypes));
+		return method(MyResource.class, methodName, argTypes);
+	}
+
+	private ControllerMethod method(Class<?> resource, String methodName, Class<?>... argTypes) throws NoSuchMethodException {
+		return DefaultControllerMethod.instanceFor(resource, resource.getDeclaredMethod(methodName, argTypes));
 	}
 
 	//----------
 
 	protected static class MyResource {
-		public MyResource() {
-		}
-		void buyA(House house) {
-		}
-		void kick(AngryCat angryCat) {
-		}
-		void error(WrongCat wrongCat) {
-		}
-		void array(Long[] abc) {
-		}
-		void list(List<Long> abc) {
-		}
-		void listOfObject(List<ABC> abc) {
-		}
-		void set(Set<Long> abc) {
-		}
-		void setOfObject(Set<ABC> abc) {
-		}
-		void abc(ABC abc) {
-		}
-		void simple(Long xyz) {
-		}
-		void string(String abc) {
-		}
-		void stringArray(String[] abc) {
-		}
-		void primitive(long xyz) {
-		}
-		void dependency(Result result) {
-		}
-		void doNothing() {
-		}
+		public MyResource() { }
+		void buyA(House house) { }
+		void kick(AngryCat angryCat) { }
+		void error(WrongCat wrongCat) { }
+		void array(Long[] abc) { }
+		void list(List<Long> abc) { }
+		void listOfObject(List<ABC> abc) { }
+		void set(Set<Long> abc) { }
+		void setOfObject(Set<ABC> abc) { }
+		void abc(ABC abc) { }
+		void simple(Long xyz) { }
+		void string(String abc) { }
+		void stringArray(String[] abc) { }
+		void primitive(long xyz) { }
+		void dependency(Result result) { }
+		void doNothing() { }
 	}
 
 	static class Generic<T> {
-		void generic(T t) {
-		}
+		void generic(T t) { }
 	}
 
 	static class Specific extends Generic<ABC> {
@@ -788,10 +770,8 @@ public class IogiParametersProviderTest {
 	}
 
 	class OtherResource {
-		void logic(NeedsMyResource param) {
-		}
-		void logic(String result) {
-		}
+		void logic(NeedsMyResource param) { }
+		void logic(String result) { }
 	}
 
 	static class NeedsMyResource {

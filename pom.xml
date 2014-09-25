@@ -3,7 +3,7 @@
 
 	<groupId>br.com.caelum</groupId>
 	<artifactId>vraptor-parent</artifactId>
-	<version>4.1.1.Final-SNAPSHOT</version>
+	<version>4.1.0.Final-SNAPSHOT</version>
 	<name>VRaptor4</name>
 	<packaging>pom</packaging>
 

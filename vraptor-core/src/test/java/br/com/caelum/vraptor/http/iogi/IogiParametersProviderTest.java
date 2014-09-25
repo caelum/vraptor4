@@ -51,7 +51,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -95,10 +94,10 @@ public class IogiParametersProviderTest {
 	public ExpectedException exception = ExpectedException.none();
 
 	private @Mock Converters converters;
-	private ParameterNameProvider nameProvider;
 	private @Mock HttpServletRequest request;
 	private @Mock Container container;
 
+	private ParameterNameProvider nameProvider;
 	private ArrayList<Message> errors;
 	private ParametersProvider iogi;
 
@@ -106,8 +105,8 @@ public class IogiParametersProviderTest {
 	public void setup() throws Exception {
 		MockitoAnnotations.initMocks(this);
 		nameProvider = new ParanamerNameProvider();
-		iogi = createIogiInstance();
 		errors = new ArrayList<>();
+		iogi = createIogiInstance();
 		
 		when(converters.existsFor(Long.class)).thenReturn(true);
 		when(converters.existsFor(long.class)).thenReturn(true);
@@ -145,8 +144,7 @@ public class IogiParametersProviderTest {
 	public void isCapableOfDealingWithGenerics() throws Exception {
 		requestParameterIs("t.x", "123");
 
-		ControllerMethod generic = DefaultControllerMethod.instanceFor(Specific.class,
-				Generic.class.getDeclaredMethod("generic", Object.class));
+		ControllerMethod generic = method(Specific.class, Generic.class, "generic", Object.class);
 		ABC abc = getFirstParameterFor(generic);
 
 		assertThat(abc.x, is(123l));
@@ -390,7 +388,6 @@ public class IogiParametersProviderTest {
 	@Test
 	public void returnsAnEmptyObjectArrayForZeroArityMethods() throws Exception {
 		thereAreNoParameters();
-
 		Object[] params = iogi.getParametersFor(method("doNothing"), errors);
 
 		assertThat(params, emptyArray());
@@ -407,8 +404,7 @@ public class IogiParametersProviderTest {
 	@Test
 	public void shouldInstantiateTheObjectEvenWhenThereAreNoParameters() throws Exception {
 		thereAreNoParameters();
-		Method setCat = House.class.getMethod("setCat", Cat.class);
-		ControllerMethod method = DefaultControllerMethod.instanceFor(House.class, setCat);
+		ControllerMethod method = method(House.class, House.class, "setCat", Cat.class);
 		Object[] params = iogi.getParametersFor(method, errors);
 
 		assertThat(params[0], notNullValue());
@@ -425,8 +421,7 @@ public class IogiParametersProviderTest {
 		IogiParametersProvider provider = new IogiParametersProvider(nameProvider, request, instantiator);
 
 		thereAreNoParameters();
-		Method setCat = House.class.getMethod("setCat", Cat.class);
-		ControllerMethod method = DefaultControllerMethod.instanceFor(House.class, setCat);
+		ControllerMethod method = method(House.class, House.class, "setCat", Cat.class);
 		Object[] params = provider.getParametersFor(method, errors);
 		assertThat(params[0], nullValue());
 	}
@@ -458,7 +453,7 @@ public class IogiParametersProviderTest {
 	public void canInjectADependencyProvidedByVraptor() throws Exception {
 		thereAreNoParameters();
 
-		ControllerMethod controllerMethod = DefaultControllerMethod.instanceFor(OtherResource.class, OtherResource.class.getDeclaredMethod("logic", NeedsMyResource.class));
+		ControllerMethod controllerMethod = method(OtherResource.class, OtherResource.class, "logic", NeedsMyResource.class);
 		final MyResource providedInstance = new MyResource();
 
 		when(container.canProvide(MyResource.class)).thenReturn(true);
@@ -508,7 +503,7 @@ public class IogiParametersProviderTest {
 
 	@Test
 	public void inCaseOfConversionErrorsOnlyNullifyTheProblematicParameter() throws Exception {
-		ControllerMethod setId = DefaultControllerMethod.instanceFor(House.class, House.class.getMethod("setCat", Cat.class));
+		ControllerMethod setId = method(House.class, House.class, "setCat", Cat.class);
 		requestParameterIs("cat.lols", "sad kitten");
 
 		Cat cat = getFirstParameterFor(setId);
@@ -539,8 +534,7 @@ public class IogiParametersProviderTest {
 		when(request.getAttribute("result")).thenReturn(result);
 		when(request.getParameterMap()).thenReturn(singletonMap("result", new String[] { "buggy" }));
 
-		ControllerMethod method = DefaultControllerMethod.instanceFor(OtherResource.class, 
-				OtherResource.class.getDeclaredMethod("logic", String.class));
+		ControllerMethod method = method(OtherResource.class, OtherResource.class, "logic", String.class);
 
 		Object[] out = iogi.getParametersFor(method, errors);
 
@@ -585,11 +579,11 @@ public class IogiParametersProviderTest {
 	}
 
 	private ControllerMethod method(String methodName, Class<?>... argTypes) throws NoSuchMethodException {
-		return method(MyResource.class, methodName, argTypes);
+		return method(MyResource.class, MyResource.class, methodName, argTypes);
 	}
 
-	private ControllerMethod method(Class<?> resource, String methodName, Class<?>... argTypes) throws NoSuchMethodException {
-		return DefaultControllerMethod.instanceFor(resource, resource.getDeclaredMethod(methodName, argTypes));
+	private ControllerMethod method(Class<?> resource, Class<?> methodClass, String methodName, Class<?>... argTypes) throws NoSuchMethodException {
+		return DefaultControllerMethod.instanceFor(resource, methodClass.getDeclaredMethod(methodName, argTypes));
 	}
 
 	//----------

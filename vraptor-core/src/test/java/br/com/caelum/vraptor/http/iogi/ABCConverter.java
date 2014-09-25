@@ -1,7 +1,7 @@
 package br.com.caelum.vraptor.http.iogi;
 
 import br.com.caelum.vraptor.converter.Converter;
-import br.com.caelum.vraptor.http.ParametersProviderTest.ABC;
+import br.com.caelum.vraptor.http.iogi.IogiParametersProviderTest.ABC;
 
 public class ABCConverter implements Converter<ABC> {
 

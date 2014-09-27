@@ -18,7 +18,6 @@ package br.com.caelum.vraptor.environment;
 import static br.com.caelum.vraptor.environment.EnvironmentType.DEVELOPMENT;
 import static br.com.caelum.vraptor.environment.EnvironmentType.PRODUCTION;
 import static br.com.caelum.vraptor.environment.EnvironmentType.TEST;
-import static com.google.common.base.Objects.firstNonNull;
 import static com.google.common.base.Strings.isNullOrEmpty;
 import static java.security.AccessController.doPrivileged;
 
@@ -76,15 +75,19 @@ public class DefaultEnvironment implements Environment {
 	protected void init() {
 		properties = new Properties();
 		environmentType = new EnvironmentType(findEnvironmentName(context));
+
 		loadAndPut(BASE_ENVIRONMENT_FILE);
 		loadAndPut(environmentType.getName());
+
+		LOG.debug("Environment is up with properties {}", properties);
 	}
 
 	private void loadAndPut(String environment) {
 		try (InputStream resource = getClass().getResourceAsStream("/" + environment + ".properties")) {
 			properties.load(resource);
+			LOG.debug("File {}.properties loaded", environment);
 		} catch (NullPointerException | IOException whenNotFound) {
-			LOG.warn("Could not find the file '{}.properties' to load.", environment);
+			LOG.warn("Could not find the file " + environment + ".properties to load.", whenNotFound);
 		}
 	}
 
@@ -94,16 +97,24 @@ public class DefaultEnvironment implements Environment {
 			public String run() {
 				String name = fromSystemEnv();
 				if (name != null) {
+					LOG.debug("Environment {} loaded by system env", name);
 					return name;
 				}
-		
+
 				name = fromSystemProperty();
 				if (name != null) {
+					LOG.debug("Environment {} loaded by system property", name);
 					return name;
 				}
-		
+
 				name = fromApplicationContext();
-				return firstNonNull(name, "development");
+				if (name != null) {
+					LOG.debug("Environment {} loaded by web.xml", name);
+					return name;
+				}
+
+				LOG.debug("No enviroment was found, using development as default");
+				return "development";
 			}
 		});
 	}
@@ -193,10 +204,12 @@ public class DefaultEnvironment implements Environment {
 
 	@Override
 	public URL getResource(String name) {
-		URL resource = getClass().getResource("/" + getName() + name);
+		URL resource = getClass().getResource("/" + environmentType.getName() + name);
 		if (resource != null) {
+			LOG.debug("Loading resource {} from environment {}", name, environmentType.getName());
 			return resource;
 		}
+
 		return getClass().getResource(name);
 	}
 

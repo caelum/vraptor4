@@ -10,9 +10,24 @@ Você pode, por exemplo, desativar o envio de e-mails no ambiente de desenvolvim
 
 ## Configuração
 
-O VRaptor busca o nome do ambiente usando a seguinte ordem: nas variáveis de ambiente do sistema operacional, nas propriedades da JVM, ou por último, no `web.xml` da aplicação. Caso o nome do ambiente não for encontrado em nenhum destes locais, o ambiente `DEVELOPMENT` será usado como padrão.
+Há várias formas de configurar o environment. A primeira opção é adicionando as linhas abaixo no seu `web.xml` para, por exemplo, configurar o nome do environment para PRODUCTION:
 
-Para configurar o nome do ambiente no sistema operacional para `PRODUCTION`, por exemplo, basta adicionar a variável de ambiente `VRAPTOR_ENV`.
+~~~
+#!xml
+<context-param>
+	<param-name>br.com.caelum.vraptor.environment</param-name>
+	<param-value>PRODUCTION</param-value>
+</context-param>
+~~~ 
+
+A segunda opção é configurar uma propriedade na JVM. Para isso, basta iniciar a instância do seu Servlet Container ou Application Server com o seguinte parâmetro:
+
+~~~
+-Dbr.com.caelum.vraptor.environment=PRODUCTION
+~~~
+
+A terceira opção permite configurarmos o nome do environment usando as variáveis de ambiente do sistema operacional, bastando adicionar a variável `VRAPTOR_ENV`.
+
 
 Exemplo no windows:
 
@@ -26,22 +41,7 @@ Exemplo no unix:
 export VRAPTOR_ENV=PRODUCTION
 ~~~ 
 
-A segunda opção é configurar uma propriedade na JVM. Para isso, basta iniciar a instância do seu Servlet Container ou Application Server com o seguinte parâmetro:
-
-~~~
--Dbr.com.caelum.vraptor.environment=PRODUCTION
-~~~
-
-Você pode também preferir configurar na sua aplicação. Sendo assim basta adicionar as seguintes linhas no seu `web.xml`:
-
-~~~
-#!xml
-<context-param>
-	<param-name>br.com.caelum.vraptor.environment</param-name>
-	<param-value>PRODUCTION</param-value>
-</context-param>
-~~~ 
-
+**Nota:** A configuração usando variáveis do sistema operacional possui maior prioridade sobre a configuração de propriedades da JVM, que possui maior prioridade sobre a configuração no `web.xml`.
 
 ## Definindo as propriedades de um ambiente
 

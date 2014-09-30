@@ -10,7 +10,7 @@ You can, for example, deactivate the e-mail service in the development environme
 
 ## How to configure
 
-There are several ways to configure your environment. The first way is adding the lines below in your `web.xml`. As example, you can configure the environment name as `PRODUCTION`:
+There are 3 ways to configure your environment. The first way is adding the lines below in your `web.xml`. As example, you can configure the environment name as `PRODUCTION`:
 
 ~~~
 #!xml
@@ -20,9 +20,10 @@ There are several ways to configure your environment. The first way is adding th
 </context-param>
 ~~~ 
 
-The second way is adding a JVM property. For this you can start your Application Server os Servlet Container with this JVM parameter:
+The second way is adding a JVM property. For this you can start your Application Server or Servlet Container with this JVM parameter:
 
 ~~~
+#!properties
 -Dbr.com.caelum.vraptor.environment=PRODUCTION
 ~~~
 
@@ -91,7 +92,7 @@ public class MyController {
 ## Getting environment properties in your JSP
 
 ~~~ 
-#!xml
+#!jsp
 <c:if test="${environment.isTest()}">
     <p>You are now in the test environment. Your actions here will not affect the system.</p>
 </c:if>

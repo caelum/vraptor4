@@ -10,9 +10,23 @@ You can, for example, deactivate the e-mail service in the development environme
 
 ## How to configure
 
-Environment is searched using the following order: in the system environment, in the JVM propertues, and by the last option, in the `web.xml`. If the environment name isn't found in neither locations, the `DEVELOPMENT` will used.
+There are several ways to configure your environment. The first way is adding the lines below in your `web.xml`. As example, you can configure the environment name as `PRODUCTION`:
 
-To configure the environment in your operational system, you need to add a environment variable called `VRAPTOR_ENV`.
+~~~
+#!xml
+<context-param>
+	<param-name>br.com.caelum.vraptor.environment</param-name>
+	<param-value>PRODUCTION</param-value>
+</context-param>
+~~~ 
+
+The second way is adding a JVM property. For this you can start your Application Server os Servlet Container with this JVM parameter:
+
+~~~
+-Dbr.com.caelum.vraptor.environment=PRODUCTION
+~~~
+
+And the third option is setting an environment variable under your Operating System, simple adding the `VRAPTOR_ENV` variable.
 
 Windows example:
 
@@ -26,21 +40,7 @@ Unix example:
 export VRAPTOR_ENV=PRODUCTION
 ~~~ 
 
-The second option is configure a JVM property. For this, you only need to start your Application Servlet or Servlet Container adding the parameter as:
-
-~~~
--Dbr.com.caelum.vraptor.environment=PRODUCTION
-~~~
-
-And if you prefer to configure the environment name in your application, you only need to add this lines in yor `web.xml`:
-
-~~~ 
-#!xml
-<context-param>
-	<param-name>br.com.caelum.vraptor.environment</param-name>
-	<param-value>PRODUCTION</param-value>
-</context-param>
-~~~ 
+**Note:** The environment variable of Operating System have more priority than JVM properties, that have more priority than `web.xml` configuration. So, as example, if your application uses both `web.xml` and JVM properties, the configuration over `web.xml` will ignored.
 
 ## Setting an environment properties
 

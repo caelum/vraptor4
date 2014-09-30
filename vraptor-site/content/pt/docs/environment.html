@@ -4,21 +4,15 @@ title: Environment
 
 # Trabalhando com diferentes ambientes
 
-Environment é uma funcionalidade do VRaptor que permite que você pode definir componentes diferentes conforme o ambiente que você está: produção, testes, desenvolvimento, etc.
+Environment é uma funcionalidade do VRaptor que permite que você pode definir componentes e configurações diferentes conforme o ambiente que você está: produção, testes, desenvolvimento, etc.
+
+Você pode, por exemplo, desativar o envio de e-mails no ambiente de desenvolvimento, porém habilitar quando estiver em produção.
 
 ## Configuração
 
-Em seu `web.xml`, adicione:
+O VRaptor busca o nome do ambiente usando a seguinte ordem: nas variáveis de ambiente do sistema operacional, nas propriedades da JVM, ou por último, no `web.xml` da aplicação. Caso o nome do ambiente não for encontrado em nenhum destes locais, o ambiente `DEVELOPMENT` será usado como padrão.
 
-~~~ 
-#!xml
-<context-param>
-	<param-name>br.com.caelum.vraptor.environment</param-name>
-	<param-value>nome_do_ambiente</param-value>
-</context-param>
-~~~ 
-        
-Onde `nome_do_ambiente` é o ambiente atual (`PRODUCTION` ou `DEVELOPMENT`, por exemplo). Ou se preferir, você também pode criar uma variável de ambiente conforme seu sistema operacional, chamada `VRAPTOR_ENV`.
+Para configurar o nome do ambiente no sistema operacional para `PRODUCTION`, por exemplo, basta adicionar a variável de ambiente `VRAPTOR_ENV`.
 
 Exemplo no windows:
 
@@ -32,16 +26,35 @@ Exemplo no unix:
 export VRAPTOR_ENV=PRODUCTION
 ~~~ 
 
+A segunda opção é configurar uma propriedade na JVM. Para isso, basta iniciar a instância do seu Servlet Container ou Application Server com o seguinte parâmetro:
+
+~~~
+-Dbr.com.caelum.vraptor.environment=PRODUCTION
+~~~
+
+Você pode também preferir configurar na sua aplicação. Sendo assim basta adicionar as seguintes linhas no seu `web.xml`:
+
+~~~
+#!xml
+<context-param>
+	<param-name>br.com.caelum.vraptor.environment</param-name>
+	<param-value>PRODUCTION</param-value>
+</context-param>
+~~~ 
+
+
 ## Definindo as propriedades de um ambiente
 
-O arquivo `nome_do_ambiente.properties` deve ser criado em `src/main/resources`. Exemplo de um arquivo `development.properties`:
+Basta criar um arquivo de propriedades no classpath da aplicação com o nome do seu ambiente. Por exemplo, para definir as propriedades de produção, devemos criar um arquivo `production.properties`:
 
 ~~~ 
 #!properties
-ambiente_de_teste = true
-email_de_teste = test.mail@mail.com
-environment.controller = true
+ambiente_de_teste=false
+email=production.mail@mail.com
 ~~~ 
+
+Dica: se você tem propriedades que são comuns a outros ambientes, você pode criar um arquivo chamado `environment.properties` com as propriedades comuns. Quando você precisar usar alguma propriedade, o `Environment` irá procurar primeiro no arquivo do ambiente, e caso não encontrar, irá procurar o `environment.properties`.
+
 
 ## Acessando propriedades de ambiente no seu código
 
@@ -69,7 +82,7 @@ public class MeuController {
 
     public void sendMail(String email) {
         if(environment.isDevelopment()) {
-            sender.sendMailTo(environment.get("email_de_teste"));
+            sender.sendMailTo(environment.get("email"));
             return;
         }
         sender.sendMailTo(email);
@@ -85,7 +98,7 @@ public class MeuController {
 	<p>Você está no ambiente de teste. Suas ações aqui não afetarão o sistema.</p>
 </c:if>
 
-Enviando e-mail para: ${environment.get('email_de_teste')}
+Enviando e-mail para: ${environment.get('email')}
 ~~~ 
         
 ## Acessando arquivos de configuração de acordo com o environment
@@ -147,3 +160,4 @@ Você também pode definir um valor default para essa propriedade:
 @Property(defaultValue = "config.properties")
 private String fileName;
 ~~~
+

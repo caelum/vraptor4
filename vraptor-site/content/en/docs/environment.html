@@ -4,21 +4,15 @@ title: Environment
 
 # Working with environments
 
-Environment is a VRaptor's feature that allow you to define different components depending on the environment like: production, testing, development, and so on..
+Environment is a VRaptor's feature that allow you to define different components and settings based on the environment like: production, testing, development, and so on.
+
+You can, for example, deactivate the e-mail service in the development environment and enable only in production.
 
 ## How to configure
 
-In your `web.xml`, you need to add:
+Environment is searched using the following order: in the system environment, in the JVM propertues, and by the last option, in the `web.xml`. If the environment name isn't found in neither locations, the `DEVELOPMENT` will used.
 
-~~~ 
-#!xml
-<context-param>
-	<param-name>br.com.caelum.vraptor.environment</param-name>
-	<param-value>your_environment_name</param-value>
-</context-param>
-~~~ 
-
-In `param-value` tag, replace `your_environment_name` to your current environment (`PRODUCTION` or `DEVELOPMENT`, as example). Or if you prefer you can create a system environment called `VRAPTOR_ENV`.
+To configure the environment in your operational system, you need to add a environment variable called `VRAPTOR_ENV`.
 
 Windows example:
 
@@ -32,16 +26,33 @@ Unix example:
 export VRAPTOR_ENV=PRODUCTION
 ~~~ 
 
+The second option is configure a JVM property. For this, you only need to start your Application Servlet or Servlet Container adding the parameter as:
+
+~~~
+-Dbr.com.caelum.vraptor.environment=PRODUCTION
+~~~
+
+And if you prefer to configure the environment name in your application, you only need to add this lines in yor `web.xml`:
+
+~~~ 
+#!xml
+<context-param>
+	<param-name>br.com.caelum.vraptor.environment</param-name>
+	<param-value>PRODUCTION</param-value>
+</context-param>
+~~~ 
+
 ## Setting an environment properties
 
-The `your_environment_name.properties` file must be created in `src/main/resources` location. Below an example for `development.properties`:
+You only need to create a properties file with the name of your environment in your classpath. As example, to set the properties for `PRODUCTION` environment you only need to create a file called `production.properties` like this:
 
 ~~~ 
 #!properties
-test_environment = true
-test_email = test.mail@mail.com
-environment.controller = true
+test_environment=false
+email=production.mail@mail.com
 ~~~ 
+
+Tip: if you have a common properties for other environments you can create a file called `environment.properties` with these common properties. So VRaptor will ask for properties first in the environment file, and if not found, will ask in the `environment.properties` file.
 
 ## Getting environment properties in your code
 
@@ -69,7 +80,7 @@ public class MyController {
 
 	public void sendMail(String email) {
 		if(environment.isDevelopment()) {
-			sender.sendMailTo(environment.get("test_email"));
+			sender.sendMailTo(environment.get("email"));
 			return;
 		}
 		sender.sendMailTo(email);
@@ -85,7 +96,7 @@ public class MyController {
     <p>You are now in the test environment. Your actions here will not affect the system.</p>
 </c:if>
 
-Send an e-mail to: ${environment.get('test_email')}
+Send an e-mail to: ${environment.get('email')}
 ~~~ 
         
 ## Accessing configuration files according to the environment
@@ -110,7 +121,7 @@ You can also inject your settings programmatically using `@Property` annotation,
 public class MyController {
 
 	@Inject
-	@Property("test_email")
+	@Property("email")
 	private String email;
 
 	public void sendMail(String email) {
@@ -119,7 +130,7 @@ public class MyController {
 }
 ~~~ 
 
-If your environment is `DEVELOPMENT`, the value for key `test_email` will be loaded using `development.properties`. And if your environment is `PRODUCTION` the value will be loaded from `production.properties`. This feature allow you to keep away from conditional statements like: `if (environment.isDevelopment ()) {...}` in your code.
+If your environment is `DEVELOPMENT`, the value for key `email` will be loaded using `development.properties`. And if your environment is `PRODUCTION` the value will be loaded from `production.properties`. This feature allow you to keep away from conditional statements like: `if (environment.isDevelopment ()) {...}` in your code.
 
 And if the field name is the same from the key, you can use only the `@Property` annotation without define a value, like this:
 

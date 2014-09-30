@@ -4,7 +4,7 @@ title: Environment
 
 # Trabalhando com diferentes ambientes
 
-Environment é uma funcionalidade do VRaptor que permite que você pode definir componentes e configurações diferentes conforme o ambiente que você está: produção, testes, desenvolvimento, etc.
+Environment é uma funcionalidade do VRaptor que nos permite definir componentes e configurações diferentes conforme o ambiente que você está: produção, testes, desenvolvimento, etc.
 
 Você pode, por exemplo, desativar o envio de e-mails no ambiente de desenvolvimento, porém habilitar quando estiver em produção.
 
@@ -58,6 +58,8 @@ Dica: se você tem propriedades que são comuns a outros ambientes, você pode c
 
 ## Acessando propriedades de ambiente no seu código
 
+Há dois métodos para acessar as propriedades de ambiente via código: `get` and `getOrDefault`. O método `get` returna o valor da propriedade ou uma `MissingResourceException` se a propriedade não for encontrada. Já o método `getOrDefault` retorna o valor da propriedade, ou um valor padrão caso não encontrada.
+
 ~~~ 
 #!java
 @Controller
@@ -85,6 +87,19 @@ public class MeuController {
             sender.sendMailTo(environment.get("email"));
             return;
         }
+        sender.sendMailTo(email);
+    }
+}
+~~~ 
+
+No código acima, `environment.get("email")` irá retornar o valor da propriedade `email`. Porém caso a propriedade não existir em todos os ambientes, você pode usar o método `getOrDefault` para retornar um valor padrão.
+
+~~~
+#!java
+public void sendMail(String email) {
+    if(environment.isDevelopment()) {
+        sender.sendMailTo(environment.getOrDefault("email"), "noreply@vraptor.org");
+    } else {
         sender.sendMailTo(email);
     }
 }

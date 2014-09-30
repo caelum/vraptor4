@@ -57,6 +57,8 @@ Tip: if you have a common properties for other environments you can create a fil
 
 ## Getting environment properties in your code
 
+There are two methods to get the properties: `get` and `getOrDefault`. The first method returns the property value if the value exists, or an `MissingResourceException` if not found. And with `getOrDefault` you can return a default value if the key is not found. Take a look in the code below:
+
 ~~~ 
 #!java
 @Controller
@@ -82,12 +84,26 @@ public class MyController {
 	public void sendMail(String email) {
 		if(environment.isDevelopment()) {
 			sender.sendMailTo(environment.get("email"));
-			return;
+		} else {
+			sender.sendMailTo(email);
 		}
-		sender.sendMailTo(email);
 	}
 }
 ~~~ 
+
+In the code above, `environment.get("email")` we will get the property `email`. But if this property is not always present, we can use the `getOrDefault` method to return a default value.
+
+~~~ 
+#!java
+public void sendMail(String email) {
+		if(environment.isDevelopment()) {
+			sender.sendMailTo(environment.getOrDefault("email"), "noreply@vraptor.org");
+		} else {
+			sender.sendMailTo(email);
+		}
+}
+~~~ 
+
 
 ## Getting environment properties in your JSP
 

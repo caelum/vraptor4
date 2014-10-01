@@ -76,20 +76,23 @@ public class DefaultEnvironment implements Environment {
 	}
 
 	private Properties getProperties() {
-		if (environmentType == null) {
-			environmentType = new EnvironmentType(findEnvironmentName(context));
-		}
-
 		if (properties == null) {
 			properties = new Properties();
 
 			loadAndPut(BASE_ENVIRONMENT_FILE);
-			loadAndPut(environmentType.getName());
+			loadAndPut(getEnvironmentType().getName());
 
 			LOG.debug("Environment is up with properties {}", properties);
 		}
 
 		return properties;
+	}
+
+	private EnvironmentType getEnvironmentType() {
+		if (environmentType == null) {
+			environmentType = new EnvironmentType(findEnvironmentName(context));
+		}
+		return environmentType;
 	}
 
 	private void loadAndPut(String environment) {
@@ -199,24 +202,24 @@ public class DefaultEnvironment implements Environment {
 
 	@Override
 	public boolean isProduction() {
-		return PRODUCTION.equals(environmentType);
+		return PRODUCTION.equals(getEnvironmentType());
 	}
 
 	@Override
 	public boolean isDevelopment() {
-		return DEVELOPMENT.equals(environmentType);
+		return DEVELOPMENT.equals(getEnvironmentType());
 	}
 
 	@Override
 	public boolean isTest() {
-		return TEST.equals(environmentType);
+		return TEST.equals(getEnvironmentType());
 	}
 
 	@Override
 	public URL getResource(String name) {
-		URL resource = getClass().getResource("/" + environmentType.getName() + name);
+		URL resource = getClass().getResource("/" + getEnvironmentType().getName() + name);
 		if (resource != null) {
-			LOG.debug("Loading resource {} from environment {}", name, environmentType.getName());
+			LOG.debug("Loading resource {} from environment {}", name, getEnvironmentType().getName());
 			return resource;
 		}
 

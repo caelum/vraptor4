@@ -66,30 +66,30 @@ Há dois métodos para acessar as propriedades de ambiente via código: `get` e 
 @Controller
 public class MeuController {
 
-    private final Environment environment;
+	private final Environment environment;
 
-    private final MailSender sender;
+	private final MailSender sender;
 
-    /**
-     * @deprecated CDI eyes only
-     */
-    protected MeuController(){
-        this(null, null);
-    }
+	/**
+	 * @deprecated CDI eyes only
+	 */
+	protected MeuController(){
+		this(null, null);
+	}
 
-    @Inject
-    public MeuController(Environment environment, MailSender sender) {
-        this.environment = environment;
-        this.sender = sender;
-    }
+	@Inject
+	public MeuController(Environment environment, MailSender sender) {
+		this.environment = environment;
+		this.sender = sender;
+	}
 
-    public void sendMail(String email) {
-        if(environment.isDevelopment()) {
-            sender.sendMailTo(environment.get("email"));
-            return;
-        }
-        sender.sendMailTo(email);
-    }
+	public void sendMail(String email) {
+		if(environment.isDevelopment()) {
+			sender.sendMailTo(environment.get("email"));
+			return;
+		}
+		sender.sendMailTo(email);
+	}
 }
 ~~~ 
 
@@ -98,11 +98,11 @@ No código acima, `environment.get("email")` irá retornar o valor da propriedad
 ~~~
 #!java
 public void sendMail(String email) {
-    if(environment.isDevelopment()) {
-        sender.sendMailTo(environment.getOrDefault("email"), "noreply@vraptor.org");
-    } else {
-        sender.sendMailTo(email);
-    }
+	if(environment.isDevelopment()) {
+		sender.sendMailTo(environment.getOrDefault("email"), "noreply@vraptor.org");
+	} else {
+		sender.sendMailTo(email);
+	}
 }
 ~~~ 
 

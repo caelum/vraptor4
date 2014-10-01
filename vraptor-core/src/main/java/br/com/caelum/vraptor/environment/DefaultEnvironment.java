@@ -28,7 +28,6 @@ import java.security.PrivilegedAction;
 import java.util.NoSuchElementException;
 import java.util.Properties;
 
-import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -63,7 +62,7 @@ public class DefaultEnvironment implements Environment {
 	 * @deprecated CDI eyes only
 	 */
 	protected DefaultEnvironment() {
-		this(null);
+		this((ServletContext) null);
 	}
 
 	@Inject
@@ -71,15 +70,26 @@ public class DefaultEnvironment implements Environment {
 		this.context = context;
 	}
 
-	@PostConstruct
-	protected void init() {
-		properties = new Properties();
-		environmentType = new EnvironmentType(findEnvironmentName(context));
+	public DefaultEnvironment(EnvironmentType environmentType) {
+		this((ServletContext) null);
+		this.environmentType = environmentType;
+	}
 
-		loadAndPut(BASE_ENVIRONMENT_FILE);
-		loadAndPut(environmentType.getName());
+	private Properties getProperties() {
+		if (environmentType == null) {
+			environmentType = new EnvironmentType(findEnvironmentName(context));
+		}
 
-		LOG.debug("Environment is up with properties {}", properties);
+		if (properties == null) {
+			properties = new Properties();
+
+			loadAndPut(BASE_ENVIRONMENT_FILE);
+			loadAndPut(environmentType.getName());
+
+			LOG.debug("Environment is up with properties {}", properties);
+		}
+
+		return properties;
 	}
 
 	private void loadAndPut(String environment) {
@@ -152,7 +162,7 @@ public class DefaultEnvironment implements Environment {
 
 	@Override
 	public boolean has(String key) {
-		return properties.containsKey(key);
+		return getProperties().containsKey(key);
 	}
 
 	@Override
@@ -160,12 +170,12 @@ public class DefaultEnvironment implements Environment {
 		if (!has(key)) {
 			throw new NoSuchElementException(String.format("Key %s not found in environment %s", key, getName()));
 		}
-		
+
 		String systemProperty = System.getProperty(key);
-		if(!isNullOrEmpty(systemProperty)) {
+		if (!isNullOrEmpty(systemProperty)) {
 			return systemProperty;
 		} else {
-			return properties.getProperty(key);
+			return getProperties().getProperty(key);
 		}
 	}
 
@@ -179,12 +189,12 @@ public class DefaultEnvironment implements Environment {
 
 	@Override
 	public void set(String key, String value) {
-		properties.setProperty(key, value);
+		getProperties().setProperty(key, value);
 	}
 
 	@Override
 	public Iterable<String> getKeys() {
-		return properties.stringPropertyNames();
+		return getProperties().stringPropertyNames();
 	}
 
 	@Override

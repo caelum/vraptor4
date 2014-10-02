@@ -19,6 +19,8 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.endsWith;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.io.IOException;
@@ -107,6 +109,24 @@ public class DefaultEnvironmentTest {
 	}
 
 	@Test
+	public void shouldUseContextInitParameterWhenSystemPropertiesHaveNoEnvironment() {
+		DefaultEnvironment env = new DefaultEnvironment(context);
+		when(context.getInitParameter(DefaultEnvironment.ENVIRONMENT_PROPERTY)).thenReturn("acceptance");
+		
+		assertThat(env.getName(), is("acceptance"));
+	}
+	
+	@Test
+	public void shouldUseSystemPropertiesWhenSysenvHaveNoEnvironment() {
+		DefaultEnvironment env = new DefaultEnvironment(context);
+		System.getProperties().setProperty(DefaultEnvironment.ENVIRONMENT_PROPERTY, "acceptance");
+
+		verify(context, never()).getInitParameter(DefaultEnvironment.ENVIRONMENT_PROPERTY);
+
+		assertThat(env.getName(), is("acceptance"));
+		System.getProperties().remove(DefaultEnvironment.ENVIRONMENT_PROPERTY);
+	}
+	
 	public void shouldGetOverridedSystemPropertyValueIfIsSet() throws IOException {
 		DefaultEnvironment defaultEnvironment = new DefaultEnvironment(EnvironmentType.DEVELOPMENT);
 		System.setProperty("env_name", "customEnv");

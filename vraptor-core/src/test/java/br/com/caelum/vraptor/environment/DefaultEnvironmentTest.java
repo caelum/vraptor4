@@ -15,10 +15,9 @@
  */
 package br.com.caelum.vraptor.environment;
 
-import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import static org.hamcrest.Matchers.endsWith;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.when;
 
@@ -39,85 +38,81 @@ public class DefaultEnvironmentTest {
 	@Rule
 	public ExpectedException exception = ExpectedException.none();
 
-	private DefaultEnvironment env;
 	private ServletContext context;
 
 	@Before
 	public void setup() {
 		context = Mockito.mock(ServletContext.class);
-		env = new DefaultEnvironment(context);
 	}
 
 	@Test
-	public void shouldUseTheCurrentEnvironmentFileIfFound() throws IOException {
-		URL resource = env.getResource("/hibernate.cfg.xml");
-		assertThat(resource, is(equalTo(DefaultEnvironment.class.getResource("/development/hibernate.cfg.xml"))));
+	public void shouldUseEnvironmentBasedFileIfFoundUnderEnvironmentFolder() throws IOException {
+		DefaultEnvironment env = new DefaultEnvironment(EnvironmentType.DEVELOPMENT);
+		URL resource = env.getResource("/rules.txt");
+
+		assertThat(resource, notNullValue());
+		assertThat(resource, is(getClass().getResource("/development/rules.txt")));
+	}
+
+	@Test
+	public void shouldUseRootBasedFileIfNotFoundUnderEnvironmentFolder() throws IOException {
+		DefaultEnvironment env = new DefaultEnvironment(EnvironmentType.PRODUCTION);
+		URL resource = env.getResource("/rules.txt");
+
+		assertThat(resource, notNullValue());
+		assertThat(resource.toString(), endsWith("/rules.txt"));
 	}
 
 	@Test
 	public void shouldLoadConfigurationInDefaultFileEnvironment() throws IOException {
+		DefaultEnvironment env = new DefaultEnvironment(context);
 		when(context.getInitParameter(DefaultEnvironment.ENVIRONMENT_PROPERTY)).thenReturn("production");
 		
-		assertThat(env.get("env_name"), is(equalTo("production")));
-		assertEquals("only_in_default_file", env.get("only_in_default_file"));
-	}
-
-	@Test
-	public void shouldUseTheDefaultFileIfEnvironmentIsNotFound() throws IOException {
-		when(context.getInitParameter("br.com.caelum.vraptor.environment")).thenReturn("production");
-		URL resource = env.getResource("/hibernate.cfg.xml");
-		
-		assertThat(resource, is(equalTo(DefaultEnvironment.class.getResource("/hibernate.cfg.xml"))));
-		assertThat(env.get("env_name"), is(equalTo("production")));
+		assertThat(env.get("env_name"), is("production"));
+		assertThat(env.get("only_in_default_file"), is("only_in_default_file"));
 	}
 
 	@Test
 	public void shouldUseFalseIfFeatureIsNotPresent() throws IOException {
-		assertThat(env.supports("feature_that_doesnt_exists"), equalTo(false));
+		DefaultEnvironment env = new DefaultEnvironment(context);
+		assertThat(env.supports("feature_that_doesnt_exists"), is(false));
+	}
+
+	@Test
+	public void shouldTrimValueWhenEvaluatingSupports() throws Exception {
+		DefaultEnvironment env = new DefaultEnvironment(context);
+		assertThat(env.supports("untrimmed_boolean"), is(true));
 	}
 
 	@Test
 	public void shouldThrowExceptionIfKeyDoesNotExist() throws Exception {
 		exception.expect(NoSuchElementException.class);
 
+		DefaultEnvironment env = new DefaultEnvironment(context);
 		env.get("key_that_doesnt_exist");
 	}
 
 	@Test
 	public void shouldGetDefaultValueIfTheValueIsntSet() throws Exception {
+		DefaultEnvironment env = new DefaultEnvironment(context);
 		String value = env.get("inexistent", "fallback");
-		assertEquals("fallback", value);
+		assertThat(value, is("fallback"));
 	}
 
 	@Test
 	public void shouldGetValueIfIsSetInProperties() throws Exception {
+		DefaultEnvironment env = new DefaultEnvironment(context);
 		String value = env.get("env_name", "fallback");
-		assertEquals("development", value);
+		assertThat(value, is("development"));
 	}
 
 	@Test
 	public void shouldGetOverridedSystemPropertyValueIfIsSet() throws IOException {
-		env.init();
-		when(context.getInitParameter("br.com.caelum.vraptor.environment")).thenReturn("development");
-
+		DefaultEnvironment defaultEnvironment = new DefaultEnvironment(EnvironmentType.DEVELOPMENT);
 		System.setProperty("env_name", "customEnv");
-		String value = env.get("env_name");
-		assertEquals("customEnv", value);
+		String value = defaultEnvironment.get("env_name");
+		assertThat("customEnv", is(value));
 		//unset property to not break other tests
 		System.setProperty("env_name", "");
-	}
-	
-	@Test
-	public void shouldTrimValueWhenEvaluatingSupport() throws Exception {
-		assertThat(env.supports("untrimmed_boolean"), is(true));
-	}
-
-	@Test
-	public void shouldNotUseAnyPropertiesIfItDoesntExist() throws IOException {
-		when(context.getInitParameter("br.com.caelum.vraptor.environment")).thenReturn("test");
-		URL resource = env.getResource("/hibernate.cfg.xml");
-
-		assertThat(resource, is(equalTo(DefaultEnvironment.class.getResource("/hibernate.cfg.xml"))));
-		assertFalse(env.has("unexistant_key"));
 	}
 }

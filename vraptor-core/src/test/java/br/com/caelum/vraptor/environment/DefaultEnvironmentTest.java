@@ -16,7 +16,6 @@
 package br.com.caelum.vraptor.environment;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.Matchers.endsWith;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.never;
@@ -75,7 +74,7 @@ public class DefaultEnvironmentTest {
 	}
 
 	@Test
-	public void shouldUseFalseIfFeatureIsNotPresent() throws IOException {
+	public void shouldUseFalseWhenFeatureIsNotPresent() throws IOException {
 		DefaultEnvironment env = new DefaultEnvironment(context);
 		assertThat(env.supports("feature_that_doesnt_exists"), is(false));
 	}
@@ -95,29 +94,39 @@ public class DefaultEnvironmentTest {
 	}
 
 	@Test
-	public void shouldGetDefaultValueIfTheValueIsntSet() throws Exception {
-		DefaultEnvironment env = new DefaultEnvironment(context);
-		String value = env.get("inexistent", "fallback");
-		assertThat(value, is("fallback"));
-	}
-
-	@Test
-	public void shouldGetValueIfIsSetInProperties() throws Exception {
+	public void shouldGetValueWhenIsPresent() throws Exception {
 		DefaultEnvironment env = new DefaultEnvironment(context);
 		String value = env.get("env_name", "fallback");
 		assertThat(value, is("development"));
 	}
 
 	@Test
-	public void shouldUseContextInitParameterWhenSystemPropertiesHaveNoEnvironment() {
+	public void shouldGetDefaultValueWhenIsntPresent() throws Exception {
+		DefaultEnvironment env = new DefaultEnvironment(context);
+		String value = env.get("inexistent", "fallback");
+		assertThat(value, is("fallback"));
+	}
+
+	@Test
+	public void shouldAllowApplicationToOverrideProperties() throws Exception {
+		DefaultEnvironment env = new DefaultEnvironment(context);
+
+		assertThat(env.get("itWorks"), is("It Works!"));
+
+		env.set("itWorks", "Yep, works fine.");
+		assertThat(env.get("itWorks"), is("Yep, works fine."));
+	}
+
+	@Test
+	public void shouldUseContextInitParameterWhenSystemPropertiesIsntPresent() {
 		DefaultEnvironment env = new DefaultEnvironment(context);
 		when(context.getInitParameter(DefaultEnvironment.ENVIRONMENT_PROPERTY)).thenReturn("acceptance");
 		
 		assertThat(env.getName(), is("acceptance"));
 	}
-	
+
 	@Test
-	public void shouldUseSystemPropertiesWhenSysenvHaveNoEnvironment() {
+	public void shouldUseSystemPropertiesWhenSysenvIsntPresent() {
 		DefaultEnvironment env = new DefaultEnvironment(context);
 		System.getProperties().setProperty(DefaultEnvironment.ENVIRONMENT_PROPERTY, "acceptance");
 

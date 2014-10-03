@@ -62,7 +62,7 @@ public class DefaultEnvironmentTest {
 		URL resource = env.getResource("/rules.txt");
 
 		assertThat(resource, notNullValue());
-		assertThat(resource.toString(), endsWith("/rules.txt"));
+		assertThat(resource, is(getClass().getResource("/rules.txt")));
 	}
 
 	@Test

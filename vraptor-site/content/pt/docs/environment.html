@@ -4,21 +4,31 @@ title: Environment
 
 # Trabalhando com diferentes ambientes
 
-Environment é uma funcionalidade do VRaptor que permite que você pode definir componentes diferentes conforme o ambiente que você está: produção, testes, desenvolvimento, etc.
+Environment é uma funcionalidade do VRaptor que nos permite definir componentes e configurações diferentes conforme o ambiente que você está: produção, testes, desenvolvimento, etc.
+
+Você pode, por exemplo, desativar o envio de e-mails no ambiente de desenvolvimento, porém habilitar quando estiver em produção.
 
 ## Configuração
 
-Em seu `web.xml`, adicione:
+Há várias formas de configurar o environment. A primeira opção é adicionando as linhas abaixo no seu `web.xml` para, por exemplo, configurar o nome do environment para PRODUCTION:
 
-~~~ 
+~~~
 #!xml
 <context-param>
 	<param-name>br.com.caelum.vraptor.environment</param-name>
-	<param-value>nome_do_ambiente</param-value>
+	<param-value>PRODUCTION</param-value>
 </context-param>
 ~~~ 
-        
-Onde `nome_do_ambiente` é o ambiente atual (`PRODUCTION` ou `DEVELOPMENT`, por exemplo). Ou se preferir, você também pode criar uma variável de ambiente conforme seu sistema operacional, chamada `VRAPTOR_ENV`.
+
+A segunda opção é configurar uma propriedade na JVM. Para isso, basta iniciar a instância do seu Servlet Container ou Application Server com o seguinte parâmetro:
+
+~~~
+#!properties
+-Dbr.com.caelum.vraptor.environment=PRODUCTION
+~~~
+
+A terceira opção permite configurarmos o nome do environment usando as variáveis de ambiente do sistema operacional, bastando adicionar a variável `VRAPTOR_ENV`.
+
 
 Exemplo no windows:
 
@@ -32,48 +42,67 @@ Exemplo no unix:
 export VRAPTOR_ENV=PRODUCTION
 ~~~ 
 
+**Nota:** A configuração usando variáveis do sistema operacional possui maior prioridade sobre a configuração de propriedades da JVM, que possui maior prioridade sobre a configuração no `web.xml`.
+
 ## Definindo as propriedades de um ambiente
 
-O arquivo `nome_do_ambiente.properties` deve ser criado em `src/main/resources`. Exemplo de um arquivo `development.properties`:
+Basta criar um arquivo de propriedades no classpath da aplicação com o nome do seu ambiente. Por exemplo, para definir as propriedades de produção, devemos criar um arquivo `production.properties`:
 
 ~~~ 
 #!properties
-ambiente_de_teste = true
-email_de_teste = test.mail@mail.com
-environment.controller = true
+ambiente_de_teste=false
+email=production.mail@mail.com
 ~~~ 
 
+Dica: se você tem propriedades que são comuns a outros ambientes, você pode criar um arquivo chamado `environment.properties` com as propriedades comuns. Quando você precisar usar alguma propriedade, o `Environment` irá procurar primeiro no arquivo do ambiente, e caso não encontrar, irá procurar o `environment.properties`.
+
+
 ## Acessando propriedades de ambiente no seu código
+
+Há dois métodos para acessar as propriedades de ambiente via código: `get` e `getOrDefault`. O método `get` retorna o valor da propriedade ou uma `MissingResourceException` se a propriedade não for encontrada. Já o método `getOrDefault` retorna o valor da propriedade, ou um valor padrão caso não encontrada.
 
 ~~~ 
 #!java
 @Controller
 public class MeuController {
 
-    private final Environment environment;
+	private final Environment environment;
 
-    private final MailSender sender;
+	private final MailSender sender;
 
-    /**
-     * @deprecated CDI eyes only
-     */
-    protected MeuController(){
-        this(null, null);
-    }
+	/**
+	 * @deprecated CDI eyes only
+	 */
+	protected MeuController(){
+		this(null, null);
+	}
 
-    @Inject
-    public MeuController(Environment environment, MailSender sender) {
-        this.environment = environment;
-        this.sender = sender;
-    }
+	@Inject
+	public MeuController(Environment environment, MailSender sender) {
+		this.environment = environment;
+		this.sender = sender;
+	}
 
-    public void sendMail(String email) {
-        if(environment.isDevelopment()) {
-            sender.sendMailTo(environment.get("email_de_teste"));
-            return;
-        }
-        sender.sendMailTo(email);
-    }
+	public void sendMail(String email) {
+		if(environment.isDevelopment()) {
+			sender.sendMailTo(environment.get("email"));
+			return;
+		}
+		sender.sendMailTo(email);
+	}
+}
+~~~ 
+
+No código acima, `environment.get("email")` irá retornar o valor da propriedade `email`. Porém caso a propriedade não existir em todos os ambientes, você pode usar o método `getOrDefault` para retornar um valor padrão.
+
+~~~
+#!java
+public void sendMail(String email) {
+	if(environment.isDevelopment()) {
+		sender.sendMailTo(environment.getOrDefault("email"), "noreply@vraptor.org");
+	} else {
+		sender.sendMailTo(email);
+	}
 }
 ~~~ 
 
@@ -85,7 +114,7 @@ public class MeuController {
 	<p>Você está no ambiente de teste. Suas ações aqui não afetarão o sistema.</p>
 </c:if>
 
-Enviando e-mail para: ${environment.get('email_de_teste')}
+Enviando e-mail para: ${environment.get('email')}
 ~~~ 
         
 ## Acessando arquivos de configuração de acordo com o environment
@@ -139,7 +168,7 @@ public class MeuController {
 }
 ~~~ 
 
-Você também pode definir um valor default para essa propriedade:
+Você também pode definir um valor padrão para essa propriedade:
 
 ~~~
 #!java
@@ -147,3 +176,4 @@ Você também pode definir um valor default para essa propriedade:
 @Property(defaultValue = "config.properties")
 private String fileName;
 ~~~
+

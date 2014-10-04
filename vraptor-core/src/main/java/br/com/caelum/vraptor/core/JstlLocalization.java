@@ -77,14 +77,15 @@ public class JstlLocalization {
 			try {
 				return ResourceBundle.getBundle(baseName, locale);
 			} catch (MissingResourceException e) {
-				logger.debug("couldn't find message bundle, creating an empty one");
+				logger.warn("couldn't find message bundle, creating an empty one", e);
 				return new EmptyBundle();
 			}
-
 		}
+
 		if (bundle instanceof LocalizationContext) {
 			return ((LocalizationContext) bundle).getResourceBundle();
 		}
+
 		logger.warn("Can't handle bundle {}. Please report this bug. Using an empty bundle", bundle);
 		return new EmptyBundle();
 	}

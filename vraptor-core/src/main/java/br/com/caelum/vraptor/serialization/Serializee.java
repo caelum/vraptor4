@@ -15,7 +15,7 @@
  */
 package br.com.caelum.vraptor.serialization;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import static java.util.Objects.requireNonNull;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
@@ -156,7 +156,7 @@ public class Serializee {
 	private Field reflectField(String path, Class<?> type) {
 		Field field = new Mirror().on(type).reflect().field(path.replaceAll("\\?", ""));
 		if (!path.startsWith("?"))
-			checkNotNull(field);
+			requireNonNull(field);
 		return field;
 	}
 

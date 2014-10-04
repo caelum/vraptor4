@@ -42,7 +42,7 @@ import org.junit.Test;
  */
 public class JstlLocalizationTest {
 
-	static final Locale PT_BR = new Locale("pt", "BR");
+	private static final Locale PORTUGUESE_BRAZIL = new Locale("pt", "BR");
 
 	private JstlLocalization localization;
 
@@ -76,26 +76,26 @@ public class JstlLocalizationTest {
 
 	@Test
 	public void findLocaleFromRequest() {
-		when(request.getAttribute(FMT_LOCALE + ".request")).thenReturn(PT_BR);
-		assertThat(localization.getLocale(), equalTo(PT_BR));
+		when(request.getAttribute(FMT_LOCALE + ".request")).thenReturn(PORTUGUESE_BRAZIL);
+		assertThat(localization.getLocale(), equalTo(PORTUGUESE_BRAZIL));
 	}
 
 	@Test
 	public void findLocaleFromSession() {
-		when(session.getAttribute(FMT_LOCALE + ".session")).thenReturn(PT_BR);
-		assertThat(localization.getLocale(), equalTo(PT_BR));
+		when(session.getAttribute(FMT_LOCALE + ".session")).thenReturn(PORTUGUESE_BRAZIL);
+		assertThat(localization.getLocale(), equalTo(PORTUGUESE_BRAZIL));
 	}
 
 	@Test
 	public void findLocaleFromServletContext() {
-		when(servletContext.getInitParameter(FMT_LOCALE)).thenReturn(PT_BR.toString());
-		assertThat(localization.getLocale(), equalTo(PT_BR));
+		when(servletContext.getInitParameter(FMT_LOCALE)).thenReturn(PORTUGUESE_BRAZIL.toString());
+		assertThat(localization.getLocale(), equalTo(PORTUGUESE_BRAZIL));
 	}
 
 	@Test
 	public void findLocaleFromRequestLocale() {
-		when(request.getLocale()).thenReturn(PT_BR);
-		assertThat(localization.getLocale(), equalTo(PT_BR));
+		when(request.getLocale()).thenReturn(PORTUGUESE_BRAZIL);
+		assertThat(localization.getLocale(), equalTo(PORTUGUESE_BRAZIL));
 	}
 
 	@Test
@@ -105,9 +105,9 @@ public class JstlLocalizationTest {
 
 	@Test
 	public void testLocaleWithSessionNotRequest() {
-		when(request.getAttribute(FMT_LOCALE + ".request")).thenReturn(PT_BR);
+		when(request.getAttribute(FMT_LOCALE + ".request")).thenReturn(PORTUGUESE_BRAZIL);
 		when(session.getAttribute(FMT_LOCALE + ".session")).thenReturn(Locale.ENGLISH);
-		assertThat(localization.getLocale(), equalTo(PT_BR));
+		assertThat(localization.getLocale(), equalTo(PORTUGUESE_BRAZIL));
 	}
 
 	@Test
@@ -125,9 +125,9 @@ public class JstlLocalizationTest {
 
 	@Test
 	public void parseLocaleWithLanguageAndCountryAndVariant() {
-		when(servletContext.getInitParameter(Config.FMT_LOCALE)).thenReturn("pt_BR_XYZ");
+		when(servletContext.getInitParameter(Config.FMT_LOCALE)).thenReturn("pt_BR_POSIX");
 		assertThat(localization.getLocale().getLanguage(), equalTo("pt"));
 		assertThat(localization.getLocale().getCountry(), equalTo("BR"));
-		assertThat(localization.getLocale().getVariant(), equalTo("XYZ"));
+		assertThat(localization.getLocale().getVariant(), equalTo("POSIX"));
 	}
 }

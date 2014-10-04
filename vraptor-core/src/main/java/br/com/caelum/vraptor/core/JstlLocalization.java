@@ -64,19 +64,18 @@ public class JstlLocalization {
 	}
 
 	@Produces
-	public ResourceBundle getBundle() {
+	public ResourceBundle getBundle(Locale locale) {
 		Object bundle = findByKey(Config.FMT_LOCALIZATION_CONTEXT);
-		ResourceBundle unsafe = extractUnsafeBundle(bundle);
-
+		ResourceBundle unsafe = extractUnsafeBundle(bundle, locale);
 		return new SafeResourceBundle(unsafe);
 	}
 
-	private ResourceBundle extractUnsafeBundle(Object bundle) {
+	private ResourceBundle extractUnsafeBundle(Object bundle, Locale locale) {
 		if (bundle instanceof String || bundle == null) {
 			String baseName = (bundle == null) ? DEFAULT_BUNDLE_NAME : bundle.toString();
 
 			try {
-				return ResourceBundle.getBundle(baseName, getLocale());
+				return ResourceBundle.getBundle(baseName, locale);
 			} catch (MissingResourceException e) {
 				logger.debug("couldn't find message bundle, creating an empty one");
 				return new EmptyBundle();

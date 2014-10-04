@@ -45,6 +45,34 @@ VRaptor.
 For more information about CDI, check the [Java EE 7
 docs](http://docs.oracle.com/javaee/7/tutorial/doc/partcdi.htm#GJBNR).
 
+To make your components available in the view you can use the `@Named` annotation. 
+In the next example you can see how to make the class `User` available in the view:
+
+~~~ 
+#!java
+@SessionScoped
+@Named("user")
+public class User {
+	private final String name;
+
+	private String getName() {
+		return name;
+	}
+
+	private void setName(String name) {
+		this.name = name;
+	}
+}
+~~~ 
+
+And in the view the object will be available as `user` variable:
+
+~~~ 
+#!jsp
+<p>Welcome, ${user.name}.</p>
+~~~ 
+
+
 ##Scopes
 
 It's important to notice that components has its own lifecycle. The default

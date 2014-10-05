@@ -100,8 +100,8 @@ public class JstlLocalization {
 		Object localeValue = findByKey(key);
 
 		if (localeValue instanceof String) {
-			String posixLanguageTag = localeValue.toString().replace("_", "-");
-			return Locale.forLanguageTag(posixLanguageTag);
+			String languageTag = localeValue.toString().replace("_", "-");
+			return Locale.forLanguageTag(languageTag);
 		} else if (localeValue instanceof Locale) {
 			return (Locale) localeValue;
 		}

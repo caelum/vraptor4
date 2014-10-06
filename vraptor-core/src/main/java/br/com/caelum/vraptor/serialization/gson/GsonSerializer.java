@@ -15,9 +15,9 @@
  */
 package br.com.caelum.vraptor.serialization.gson;
 
-import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.io.Flushables.flushQuietly;
 import static java.util.Collections.singletonMap;
+import static java.util.Objects.requireNonNull;
 
 import java.io.Writer;
 import java.util.Calendar;
@@ -67,7 +67,7 @@ public class GsonSerializer implements SerializerBuilder {
 	}
 
 	private void preConfigure(Object obj, String alias) {
-		checkNotNull(obj, "You can't serialize null objects");
+		requireNonNull(obj, "You can't serialize null objects");
 
 		builder.getSerializee().setRootClass(obj.getClass());
 

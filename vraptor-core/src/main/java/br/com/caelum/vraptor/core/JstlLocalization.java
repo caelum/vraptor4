@@ -16,7 +16,7 @@
  */
 package br.com.caelum.vraptor.core;
 
-import static com.google.common.base.Strings.isNullOrEmpty;
+import static com.google.common.base.Objects.firstNonNull;
 
 import java.util.Locale;
 import java.util.MissingResourceException;
@@ -64,47 +64,44 @@ public class JstlLocalization {
 	}
 
 	@Produces
-	public ResourceBundle getBundle() {
+	public ResourceBundle getBundle(Locale locale) {
 		Object bundle = findByKey(Config.FMT_LOCALIZATION_CONTEXT);
-		ResourceBundle unsafe = extractUnsafeBundle(bundle);
-
+		ResourceBundle unsafe = extractUnsafeBundle(bundle, locale);
 		return new SafeResourceBundle(unsafe);
 	}
 
-	private ResourceBundle extractUnsafeBundle(Object bundle) {
+	private ResourceBundle extractUnsafeBundle(Object bundle, Locale locale) {
 		if (bundle instanceof String || bundle == null) {
-			String baseName = (bundle == null) ? DEFAULT_BUNDLE_NAME : bundle.toString();
+			String baseName = firstNonNull((String) bundle, DEFAULT_BUNDLE_NAME);
 
 			try {
-				return ResourceBundle.getBundle(baseName, getLocale());
+				return ResourceBundle.getBundle(baseName, locale);
 			} catch (MissingResourceException e) {
-				logger.debug("couldn't find message bundle, creating an empty one");
+				logger.warn("couldn't find message bundle, creating an empty one", e);
 				return new EmptyBundle();
 			}
-
 		}
+
 		if (bundle instanceof LocalizationContext) {
 			return ((LocalizationContext) bundle).getResourceBundle();
 		}
+
 		logger.warn("Can't handle bundle {}. Please report this bug. Using an empty bundle", bundle);
 		return new EmptyBundle();
 	}
 
 	@Produces
 	public Locale getLocale() {
-		Locale locale = localeFor(Config.FMT_LOCALE);
-		if (locale == null) {
-			return Locale.getDefault();
-		}
-
-		return locale;
+		Locale localeFromConfig = localeFor(Config.FMT_LOCALE);
+		return firstNonNull(localeFromConfig, Locale.getDefault());
 	}
 
 	private Locale localeFor(String key) {
 		Object localeValue = findByKey(key);
 
 		if (localeValue instanceof String) {
-			return findLocalefromString((String) localeValue);
+			String languageTag = localeValue.toString().replace("_", "-");
+			return Locale.forLanguageTag(languageTag);
 		} else if (localeValue instanceof Locale) {
 			return (Locale) localeValue;
 		}
@@ -115,9 +112,6 @@ public class JstlLocalization {
 	/**
 	 * Looks up a configuration variable in the request, session and application scopes. If none is found, return by
 	 * {@link ServletContext#getInitParameter(String)} method.
-	 *
-	 * @param key
-	 * @return
 	 */
 	private Object findByKey(String key) {
 		Object value = Config.get(request, key);
@@ -136,27 +130,5 @@ public class JstlLocalization {
 		}
 
 		return request.getServletContext().getInitParameter(key);
-	}
-
-	/**
-	 * Converts a locale string to {@link Locale}. If the input string is null or empty, return an empty {@link Locale}.
-	 *
-	 * @param str
-	 * @return
-	 */
-	private Locale findLocalefromString(String str) {
-		if (!isNullOrEmpty(str)) {
-			String[] arr = str.split("_");
-			if (arr.length == 1) {
-				return new Locale(arr[0]);
-			} else if (arr.length == 2) {
-				return new Locale(arr[0], arr[1]);
-
-			} else {
-				return new Locale(arr[0], arr[1], arr[2]);
-			}
-		}
-
-		return null;
 	}
 }

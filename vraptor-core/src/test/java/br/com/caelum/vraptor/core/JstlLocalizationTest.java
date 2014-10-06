@@ -44,7 +44,7 @@ import org.junit.Test;
  */
 public class JstlLocalizationTest {
 
-	private static final Locale PORTUGUESE_BRAZIL = new Locale("pt", "BR");
+	private static final Locale PT_BR = new Locale("pt", "BR");
 
 	private JstlLocalization localization;
 
@@ -76,52 +76,52 @@ public class JstlLocalizationTest {
 
 	@Test
 	public void shouldGetLocaleFromRequestFirst() {
-		when(request.getAttribute(FMT_LOCALE + ".request")).thenReturn(PORTUGUESE_BRAZIL);
+		when(request.getAttribute(FMT_LOCALE + ".request")).thenReturn(PT_BR);
 		when(session.getAttribute(FMT_LOCALE + ".session")).thenReturn(Locale.ENGLISH);
 		when(servletContext.getAttribute(FMT_LOCALE + ".application")).thenReturn(Locale.ENGLISH);
 		when(servletContext.getInitParameter(Config.FMT_LOCALE)).thenReturn(Locale.ENGLISH.toString());
 		when(request.getLocale()).thenReturn(Locale.ENGLISH);
 		assumeThat(Locale.getDefault(), is(Locale.ENGLISH));
 
-		assertThat(localization.getLocale(), equalTo(PORTUGUESE_BRAZIL));
+		assertThat(localization.getLocale(), equalTo(PT_BR));
 	}
 
 	@Test
 	public void shouldGetLocaleFromSessionWhenNotFoundInRequest() {
-		when(session.getAttribute(FMT_LOCALE + ".session")).thenReturn(PORTUGUESE_BRAZIL);
+		when(session.getAttribute(FMT_LOCALE + ".session")).thenReturn(PT_BR);
 		when(servletContext.getAttribute(FMT_LOCALE + ".application")).thenReturn(Locale.ENGLISH);
 		when(servletContext.getInitParameter(Config.FMT_LOCALE)).thenReturn(Locale.ENGLISH.toString());
 		when(request.getLocale()).thenReturn(Locale.ENGLISH);
 		assumeThat(Locale.getDefault(), is(Locale.ENGLISH));
 
-		assertThat(localization.getLocale(), equalTo(PORTUGUESE_BRAZIL));
+		assertThat(localization.getLocale(), equalTo(PT_BR));
 	}
 
 	@Test
 	public void shouldGetLocaleFromServletContextWhenNotFoundInSession() {
-		when(servletContext.getAttribute(FMT_LOCALE + ".application")).thenReturn(PORTUGUESE_BRAZIL);
+		when(servletContext.getAttribute(FMT_LOCALE + ".application")).thenReturn(PT_BR);
 		when(servletContext.getInitParameter(Config.FMT_LOCALE)).thenReturn(Locale.ENGLISH.toString());
 		when(request.getLocale()).thenReturn(Locale.ENGLISH);
 		assumeThat(Locale.getDefault(), is(Locale.ENGLISH));
 
-		assertThat(localization.getLocale(), equalTo(PORTUGUESE_BRAZIL));
+		assertThat(localization.getLocale(), equalTo(PT_BR));
 	}
 
 	@Test
 	public void shouldGetLocaleFromInitParameterWhenNotFoundInServletContext() {
-		when(servletContext.getInitParameter(Config.FMT_LOCALE)).thenReturn(PORTUGUESE_BRAZIL.toString());
+		when(servletContext.getInitParameter(Config.FMT_LOCALE)).thenReturn(PT_BR.toString());
 		when(request.getLocale()).thenReturn(Locale.ENGLISH);
 		assumeThat(Locale.getDefault(), is(Locale.ENGLISH));
 
-		assertThat(localization.getLocale(), equalTo(PORTUGUESE_BRAZIL));
+		assertThat(localization.getLocale(), equalTo(PT_BR));
 	}
 
 	@Test
 	public void shouldGetLocaleFromRequestLocaleWhenNotFoundUnderAnyOtherScope() {
-		when(request.getLocale()).thenReturn(PORTUGUESE_BRAZIL);
+		when(request.getLocale()).thenReturn(PT_BR);
 		assumeThat(Locale.getDefault(), is(Locale.ENGLISH));
 
-		assertThat(localization.getLocale(), equalTo(PORTUGUESE_BRAZIL));
+		assertThat(localization.getLocale(), equalTo(PT_BR));
 	}
 
 	@Test

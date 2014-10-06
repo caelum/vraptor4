@@ -58,7 +58,7 @@ import br.com.caelum.vraptor.ioc.cdi.CDIRequestFactories;
 @WebFilter(filterName="vraptor", urlPatterns="/*", dispatcherTypes={DispatcherType.FORWARD, DispatcherType.REQUEST})
 public class VRaptor implements Filter {
 
-	public static final String VERSION = "4.1.1.Final-SNAPSHOT";
+	public static final String VERSION = "4.1.1-SNAPSHOT";
 
 	private final Logger logger = getLogger(VRaptor.class);
 

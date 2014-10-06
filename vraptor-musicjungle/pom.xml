@@ -3,7 +3,7 @@
 
 	<groupId>br.com.caelum</groupId>
 	<artifactId>vraptor-musicjungle</artifactId>
-	<version>4.1.1.Final-SNAPSHOT</version>
+	<version>4.1.1-SNAPSHOT</version>
 	<packaging>war</packaging>
 
 	<description>Example application to use with VRaptor 4</description>

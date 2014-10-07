@@ -45,6 +45,34 @@ Nos links abaixo você pode obter mais informações sobre o CDI:
 - <a href="http://blog.caelum.com.br/customizando-a-producao-de-dependencias-no-cdi/">Customizando a produção de dependências no CDI</a>
 - <a href="http://blog.caelum.com.br/4-recursos-novos-do-cdi-1-1/">4 recursos novos do CDI 1.1</a>
 
+Para disponibilizar seus componentes na view, você precisa anotá-los com `@Named`. 
+No exemplo abaixo disponibilizamos a classe `Usuario` para a view:
+
+~~~ 
+#!java
+@SessionScoped
+@Named("usuario")
+public class Usuario {
+	private final String nome;
+
+	private String getNome() {
+		return nome;
+	}
+
+	private void setNome(String nome) {
+		this.nome = nome;
+	}
+}
+~~~ 
+
+E na view o objeto estará disponível com o nome `usuario`:
+
+~~~ 
+#!jsp
+<p>Seja bem vindo, ${usuario.nome}.</p>
+~~~ 
+
+
 ##Escopos
 
 Assim como os controllers, os componentes vivem em um escopo específico mas

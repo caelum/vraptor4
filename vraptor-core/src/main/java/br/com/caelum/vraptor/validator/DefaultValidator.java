@@ -141,7 +141,7 @@ public class DefaultValidator extends AbstractValidator {
 			String msg = interpolator.interpolate(v.getMessageTemplate(), new BeanValidatorContext(v), locale);
 			String category = v.getPropertyPath().toString();
 			if (!isNullOrEmpty(alias)) {
-				category = alias + "." + alias;
+				category = alias + "." + category;
 			}
 
 			add(new SimpleMessage(category, msg));

@@ -123,6 +123,7 @@ public class DefaultValidator extends AbstractValidator {
 		return this;
 	}
 
+	@Override
 	public <T> Validator addAll(Set<ConstraintViolation<T>>  errors) {
 		for (ConstraintViolation<T> v : errors) {
 			String msg = interpolator.interpolate(v.getMessageTemplate(), new BeanValidatorContext(v), locale);

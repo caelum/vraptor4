@@ -102,7 +102,7 @@ public interface Validator {
 	/**
 	 * Add messages from bean validation translating to vraptor {@link Message}. When translating the
 	 * {@code ConstraintViolation} to {@code Message}, the category name will appended with alias, if the
-	 * alias values is not null. alias value.
+	 * alias is not null.
 	 * 
 	 * @param alias value to prepend in category
 	 * @param errors

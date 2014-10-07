@@ -41,7 +41,7 @@ public interface Validator {
 	 * @return the same validator
 	 */
 	Validator ensure(boolean expression, Message message);
-	
+
 	/**
 	 * alias to ensure
 	 * @since 4.0.0
@@ -60,7 +60,7 @@ public interface Validator {
 	 * @return the same validator
 	 */
 	Validator addIf(boolean expression, Message message);
-	
+
 	/**
 	 * Validate an object instance using bean validation.
 	 * 
@@ -69,6 +69,17 @@ public interface Validator {
 	 * @return
 	 */
 	Validator validate(Object object, Class<?>... groups);
+
+	/**
+	 * Validate an object instance using bean validation. If the bean have constraint violations, the category
+	 * name will appended with alias value.
+	 *
+	 * @param alias value to prepend in category
+	 * @param object object to validate.
+	 * @param groups if you want to validate a group of properties.
+	 * @return
+	 */
+	Validator validate(String alias, Object object, Class<?>... groups);
 
 	/**
 	 * Adds the message and return the same validator instance.
@@ -87,6 +98,16 @@ public interface Validator {
 	 * @param errors
 	 */
 	<T> Validator addAll(Set<ConstraintViolation<T>> errors);
+
+	/**
+	 * Add messages from bean validation translating to vraptor {@link Message}. When translating the
+	 * {@code ConstraintViolation} to {@code Message}, the category name will appended with alias, if the
+	 * alias is not null.
+	 * 
+	 * @param alias value to prepend in category
+	 * @param errors
+	 */
+	<T> Validator addAll(String alias, Set<ConstraintViolation<T>> errors);
 
 	/**
 	 * Returns a list of errors.

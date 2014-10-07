@@ -17,6 +17,8 @@
 
 package br.com.caelum.vraptor.validator;
 
+import static com.google.common.base.Strings.isNullOrEmpty;
+
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
@@ -102,9 +104,21 @@ public class DefaultValidator extends AbstractValidator {
 
 	@Override
 	public Validator validate(Object object, Class<?>... groups) {
+		return validate((String) null, object, groups);
+	}
+
+	@Override
+	public Validator validate(String alias, Object object, Class<?>... groups) {
 		if (object != null) {
-			addAll(bvalidator.validate(object, groups));
+			addAll(alias, bvalidator.validate(object, groups));
 		}
+		return this;
+	}
+
+	@Override
+	public Validator add(Message message) {
+		message.setBundle(bundle);
+		messages.add(message);
 		return this;
 	}
 
@@ -117,16 +131,19 @@ public class DefaultValidator extends AbstractValidator {
 	}
 
 	@Override
-	public Validator add(Message message) {
-		message.setBundle(bundle);
-		messages.add(message);
-		return this;
+	public <T> Validator addAll(Set<ConstraintViolation<T>>  errors) {
+		return addAll((String) null, errors);
 	}
 
-	public <T> Validator addAll(Set<ConstraintViolation<T>>  errors) {
+	@Override
+	public <T> Validator addAll(String alias, Set<ConstraintViolation<T>> errors) {
 		for (ConstraintViolation<T> v : errors) {
 			String msg = interpolator.interpolate(v.getMessageTemplate(), new BeanValidatorContext(v), locale);
 			String category = v.getPropertyPath().toString();
+			if (!isNullOrEmpty(alias)) {
+				category = alias + "." + category;
+			}
+
 			add(new SimpleMessage(category, msg));
 			logger.debug("added message {}={} for contraint violation", category, msg);
 		}

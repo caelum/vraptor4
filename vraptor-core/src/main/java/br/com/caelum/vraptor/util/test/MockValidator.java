@@ -17,6 +17,8 @@
 
 package br.com.caelum.vraptor.util.test;
 
+import static com.google.common.base.Strings.isNullOrEmpty;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -83,11 +85,26 @@ public class MockValidator extends AbstractValidator {
 	}
 
 	@Override
-	public <T> Validator addAll(Set<ConstraintViolation<T>> errors) {
+	public Validator validate(String alias, Object object, Class<?>... groups) {
+		return this;
+	}
+
+	@Override
+	public <T> Validator addAll(String alias, Set<ConstraintViolation<T>> errors) {
 		for (ConstraintViolation<T> v : errors) {
-			add(new SimpleMessage(v.getPropertyPath().toString(), v.getMessage()));
+			String category = v.getPropertyPath().toString();
+			if (isNullOrEmpty(alias)) {
+				category = alias + "." + category;
+			}
+
+			add(new SimpleMessage(category, v.getMessage()));
 		}
 		return this;
+	}
+
+	@Override
+	public <T> Validator addAll(Set<ConstraintViolation<T>> errors) {
+		return addAll((String) null, errors);
 	}
 
 	@Override

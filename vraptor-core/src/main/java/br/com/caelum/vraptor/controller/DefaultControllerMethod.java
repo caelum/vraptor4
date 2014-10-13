@@ -17,6 +17,8 @@
 
 package br.com.caelum.vraptor.controller;
 
+import br.com.caelum.vraptor.proxy.CDIProxies;
+
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.Objects;
@@ -35,6 +37,7 @@ public class DefaultControllerMethod implements ControllerMethod {
 	}
 
 	public static ControllerMethod instanceFor(Class<?> type, Method method) {
+        CDIProxies.extractRawTypeIfPossible(type);
 		return new DefaultControllerMethod(new DefaultBeanClass(type), method);
 	}
 

@@ -150,6 +150,18 @@ public class DeserializingObserverTest {
 	}
 
 	@Test
+	public void shouldNotDeserializeIfHasNoContentType() throws Exception {
+		final ControllerMethod consumesAnything = new DefaultControllerMethod(null, DummyResource.class.getDeclaredMethod("consumesAnything", String.class, String.class));
+
+		when(request.getContentType()).thenReturn(null);
+		methodInfo.setControllerMethod(consumesAnything);
+		observer.deserializes(new InterceptorsReady(consumesAnything), request, methodInfo, status);
+
+		assertEquals(methodInfo.getValuedParameters()[0].getValue(), null);
+		assertEquals(methodInfo.getValuedParameters()[1].getValue(), null);
+	}
+
+	@Test
 	public void willSetOnlyNonNullParameters() throws Exception {
 		final Deserializer deserializer = mock(Deserializer.class);
 

@@ -17,11 +17,12 @@
 
 package br.com.caelum.vraptor.controller;
 
+import javax.enterprise.inject.Vetoed;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.Objects;
 
-import javax.enterprise.inject.Vetoed;
+import static br.com.caelum.vraptor.proxy.CDIProxies.extractRawTypeIfPossible;
 
 @Vetoed
 public class DefaultControllerMethod implements ControllerMethod {
@@ -35,6 +36,7 @@ public class DefaultControllerMethod implements ControllerMethod {
 	}
 
 	public static ControllerMethod instanceFor(Class<?> type, Method method) {
+		type = extractRawTypeIfPossible(type);
 		return new DefaultControllerMethod(new DefaultBeanClass(type), method);
 	}
 
@@ -57,9 +59,9 @@ public class DefaultControllerMethod implements ControllerMethod {
 	public boolean containsAnnotation(Class<? extends Annotation> annotation) {
 		return method.isAnnotationPresent(annotation);
 	}
-	
+
 	@Override
-	public Annotation[] getAnnotations(){
+	public Annotation[] getAnnotations() {
 		return method.getAnnotations();
 	}
 
@@ -75,11 +77,13 @@ public class DefaultControllerMethod implements ControllerMethod {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null || getClass() != obj.getClass())
+		}
+		if (obj == null || getClass() != obj.getClass()) {
 			return false;
-		
+		}
+
 		DefaultControllerMethod other = (DefaultControllerMethod) obj;
 		return Objects.equals(method, other.method) && Objects.equals(controller, other.controller);
 	}

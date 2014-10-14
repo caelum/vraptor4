@@ -76,6 +76,11 @@ public class DeserializingObserver {
 
 		List<String> supported =  asList(method.getMethod().getAnnotation(Consumes.class).value());
 
+		if(request.getContentType() == null) {
+			logger.warn("Request does not have Content-Type and parameters will be not deserialized");
+			return;
+		}
+		
 		String contentType = mime(request.getContentType());
 		if (!supported.isEmpty() && !supported.contains(contentType)) {
 			unsupported("Request with media type [%s]. Expecting one of %s.", status, contentType, supported);

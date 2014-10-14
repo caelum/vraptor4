@@ -37,7 +37,7 @@ public class DefaultControllerMethod implements ControllerMethod {
 	}
 
 	public static ControllerMethod instanceFor(Class<?> type, Method method) {
-        CDIProxies.extractRawTypeIfPossible(type);
+        type = CDIProxies.extractRawTypeIfPossible(type);
 		return new DefaultControllerMethod(new DefaultBeanClass(type), method);
 	}
 

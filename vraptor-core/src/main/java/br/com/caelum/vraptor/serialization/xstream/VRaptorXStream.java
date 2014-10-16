@@ -18,6 +18,7 @@ package br.com.caelum.vraptor.serialization.xstream;
 import javax.enterprise.inject.Vetoed;
 
 import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
+import br.com.caelum.vraptor.serialization.Serializee;
 
 import com.google.common.base.Supplier;
 import com.thoughtworks.xstream.XStream;
@@ -28,18 +29,21 @@ import com.thoughtworks.xstream.mapper.MapperWrapper;
 @Vetoed
 public  class VRaptorXStream extends XStream {
 	private final TypeNameExtractor extractor;
+	private final Serializee serializee;
 	private VRaptorClassMapper vraptorMapper;
 
 	{setMode(NO_REFERENCES);}
 
-	public VRaptorXStream(TypeNameExtractor extractor) {
+	public VRaptorXStream(TypeNameExtractor extractor, Serializee serializee) {
 		super(new PureJavaReflectionProvider());
 		this.extractor = extractor;
+		this.serializee = serializee;
 	}
 	
-	public VRaptorXStream(TypeNameExtractor extractor, HierarchicalStreamDriver hierarchicalStreamDriver) {
+	public VRaptorXStream(TypeNameExtractor extractor, HierarchicalStreamDriver hierarchicalStreamDriver, Serializee serializee) {
 		super(new PureJavaReflectionProvider(),hierarchicalStreamDriver);
 		this.extractor = extractor;
+		this.serializee = serializee;
 	}
 
 	@Override
@@ -52,6 +56,12 @@ public  class VRaptorXStream extends XStream {
 			@Override
 			public TypeNameExtractor get() {
 				return extractor;
+			}
+		}, 
+		new Supplier<Serializee>() {
+			@Override
+			public Serializee get() {
+				return serializee;
 			}
 		});
 		return vraptorMapper;

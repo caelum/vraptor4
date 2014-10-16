@@ -185,7 +185,7 @@ public class DefaultStatusTest {
 		i18ned.setBundle(new SingletonResourceBundle("message", "Something else"));
 
 		XStreamBuilder xstreamBuilder = cleanInstance(new MessageConverter());
-		MockSerializationResult result = new MockSerializationResult(null, xstreamBuilder, null);
+		MockSerializationResult result = new MockSerializationResult(null, xstreamBuilder, null, null);
 		DefaultStatus status = new DefaultStatus(response, result, config, new JavassistProxifier(), router);
 
 		status.badRequest(Arrays.asList(normal, i18ned));

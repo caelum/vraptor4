@@ -21,6 +21,7 @@ import javax.inject.Inject;
 
 import br.com.caelum.vraptor.interceptor.DefaultTypeNameExtractor;
 import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
+import br.com.caelum.vraptor.serialization.Serializee;
 import br.com.caelum.vraptor.util.test.MockInstanceImpl;
 
 import com.thoughtworks.xstream.XStream;
@@ -38,6 +39,7 @@ public class XStreamBuilderImpl implements XStreamBuilder {
 
 	private final XStreamConverters converters;
 	private final TypeNameExtractor extractor;
+	private final Serializee serializee;
 	private boolean indented = false;
 	private boolean recursive = false;
 	
@@ -45,26 +47,27 @@ public class XStreamBuilderImpl implements XStreamBuilder {
 	 * @deprecated CDI eyes only
 	 */
 	protected XStreamBuilderImpl() {
-		this(null, null);
+		this(null, null, null);
 	}
 
 	@Inject
-	public XStreamBuilderImpl(XStreamConverters converters, TypeNameExtractor extractor) {
+	public XStreamBuilderImpl(XStreamConverters converters, TypeNameExtractor extractor, Serializee serializee) {
 		this.converters = converters;
 		this.extractor = extractor;
+		this.serializee = serializee;
 	}
 
 	public static XStreamBuilder cleanInstance(Converter...converters) {
 		Instance<Converter> convertersInst = new MockInstanceImpl<>(converters);
 		Instance<SingleValueConverter> singleValueConverters = new MockInstanceImpl<>();
 		XStreamConverters xStreamConverters = new XStreamConverters(convertersInst, singleValueConverters);
-		return new XStreamBuilderImpl(xStreamConverters, new DefaultTypeNameExtractor());
+		return new XStreamBuilderImpl(xStreamConverters, new DefaultTypeNameExtractor(), new Serializee());
 	}
 	
 	@Override
 	public XStream xmlInstance() {
-		VRaptorXStream xstream = new VRaptorXStream(extractor);
-		xstream.getVRaptorMapper().getSerializee().setRecursive(recursive);
+		VRaptorXStream xstream = new VRaptorXStream(extractor, serializee);
+		serializee.setRecursive(recursive);
 		return configure(xstream);
 	}
 

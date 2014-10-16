@@ -36,11 +36,12 @@ import com.thoughtworks.xstream.mapper.MapperWrapper;
 public class VRaptorClassMapper extends MapperWrapper {
 
 	private final Supplier<TypeNameExtractor> extractor;
-	private final Serializee serializee = new Serializee();
+	private final Supplier<Serializee> serializee;
 
-	public VRaptorClassMapper(Mapper wrapped, Supplier<TypeNameExtractor> supplier) {
+	public VRaptorClassMapper(Mapper wrapped, Supplier<TypeNameExtractor> supplier, Supplier<Serializee> serializee) {
 		super(wrapped);
 		this.extractor = supplier;
+		this.serializee = serializee;
 	}
 
 	static boolean isPrimitive(Class<?> type) {
@@ -56,19 +57,19 @@ public class VRaptorClassMapper extends MapperWrapper {
 
 	@Override
 	public boolean shouldSerializeMember(Class definedIn, String fieldName) {
-		for (Entry<String, Class<?>> include : serializee.getIncludes().entries()) {
+		for (Entry<String, Class<?>> include : getSerializee().getIncludes().entries()) {
 			if (isCompatiblePath(include, definedIn, fieldName)) {
 				return true;
 			}
 		}
-		for (Entry<String, Class<?>> exclude : serializee.getExcludes().entries()) {
+		for (Entry<String, Class<?>> exclude : getSerializee().getExcludes().entries()) {
 			if (isCompatiblePath(exclude, definedIn, fieldName)) {
 				return false;
 			}
 		}
 
 		boolean should = super.shouldSerializeMember(definedIn, fieldName);
-		if (!serializee.isRecursive())
+		if (!getSerializee().isRecursive())
 			should = should && isPrimitive(new Mirror().on(definedIn).reflect().field(fieldName).getType());
 		return should;
 	}
@@ -91,6 +92,6 @@ public class VRaptorClassMapper extends MapperWrapper {
 	}
 	
 	public Serializee getSerializee() {
-		return serializee;
+		return serializee.get();
 	}
 }

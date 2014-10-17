@@ -82,7 +82,7 @@ Esta é a dependência mais importante do VRaptor 4. Se você usa um Application
 </dependency>
 ~~~
 
-E se você utiliza um Servler Container (como o Tomcat ou Jetty) você precisa adicionar a implementação de referência do CDI: o Weld.
+E se você utiliza um Servlet Container (como o Tomcat ou Jetty) você precisa remover a linha "<scope>provided</scope>" da dependencia anteior (javax.inject) e adicionar a implementação de referência do CDI: o Weld.
 
 ~~~
 #!xml

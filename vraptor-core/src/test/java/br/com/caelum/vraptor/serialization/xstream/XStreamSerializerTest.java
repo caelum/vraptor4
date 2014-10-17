@@ -30,6 +30,7 @@ import org.junit.Before;
 
 import br.com.caelum.vraptor.environment.Environment;
 import br.com.caelum.vraptor.interceptor.DefaultTypeNameExtractor;
+import br.com.caelum.vraptor.serialization.Serializee;
 import br.com.caelum.vraptor.util.test.MockInstanceImpl;
 
 import com.thoughtworks.xstream.XStream;
@@ -61,6 +62,6 @@ public class XStreamSerializerTest extends XStreamXMLSerializationTest {
 		Instance<Converter> convertersInst = new MockInstanceImpl<>(converters);
 		Instance<SingleValueConverter> singleValueConverters = new MockInstanceImpl<>();
 		XStreamConverters xStreamConverters = new XStreamConverters(convertersInst, singleValueConverters);
-		serialization = new XStreamXMLSerialization(response, new XStreamBuilderImpl(xStreamConverters, extractor), environment);
+		serialization = new XStreamXMLSerialization(response, new XStreamBuilderImpl(xStreamConverters, extractor, new Serializee()), environment);
 	}
 }

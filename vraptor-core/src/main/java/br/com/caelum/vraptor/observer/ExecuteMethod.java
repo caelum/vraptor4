@@ -26,7 +26,6 @@ import javax.enterprise.event.Event;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 
-import net.vidageek.mirror.dsl.Mirror;
 import net.vidageek.mirror.exception.ReflectionProviderException;
 
 import org.slf4j.Logger;
@@ -34,6 +33,7 @@ import org.slf4j.Logger;
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.core.MethodInfo;
+import br.com.caelum.vraptor.core.ReflectionProvider;
 import br.com.caelum.vraptor.events.InterceptorsExecuted;
 import br.com.caelum.vraptor.events.MethodExecuted;
 import br.com.caelum.vraptor.events.MethodReady;
@@ -84,7 +84,7 @@ public class ExecuteMethod {
 
 			log.debug("Invoking {}", reflectionMethod);
 			Object instance = event.getControllerInstance();
-			Object result = new Mirror().on(instance).invoke().method(reflectionMethod).withArgs(parameters);
+			Object result = ReflectionProvider.invoke(instance, reflectionMethod, parameters);
 
 			messages.assertAbsenceOfErrors();
 			

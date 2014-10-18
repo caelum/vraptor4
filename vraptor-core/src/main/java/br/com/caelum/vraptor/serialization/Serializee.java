@@ -28,7 +28,7 @@ import java.util.Set;
 
 import javax.enterprise.context.Dependent;
 
-import net.vidageek.mirror.dsl.Mirror;
+import br.com.caelum.vraptor.core.ReflectionProvider;
 
 import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.Multimap;
@@ -107,7 +107,7 @@ public class Serializee {
 		}
 		
 		for (Class<?> type : types) {
-			for (Field field : new Mirror().on(type).reflectAll().fields()) {
+			for (Field field : ReflectionProvider.getFieldsFor(type)) {
 				getExcludes().putAll(field.getName(), getParentTypes(field.getName(), type)); 
 			}
 		}	
@@ -154,7 +154,7 @@ public class Serializee {
 	}
 	
 	private Field reflectField(String path, Class<?> type) {
-		Field field = new Mirror().on(type).reflect().field(path.replaceAll("\\?", ""));
+		Field field = ReflectionProvider.getField(type, path.replaceAll("\\?", ""));
 		if (!path.startsWith("?"))
 			requireNonNull(field);
 		return field;

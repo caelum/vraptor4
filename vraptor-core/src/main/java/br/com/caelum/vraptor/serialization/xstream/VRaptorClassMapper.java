@@ -23,7 +23,7 @@ import java.util.Map.Entry;
 
 import javax.enterprise.inject.Vetoed;
 
-import net.vidageek.mirror.dsl.Mirror;
+import br.com.caelum.vraptor.core.ReflectionProvider;
 import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
 import br.com.caelum.vraptor.serialization.Serializee;
 import br.com.caelum.vraptor.validator.Message;
@@ -67,10 +67,10 @@ public class VRaptorClassMapper extends MapperWrapper {
 				return false;
 			}
 		}
-
+		
 		boolean should = super.shouldSerializeMember(definedIn, fieldName);
 		if (!getSerializee().isRecursive())
-			should = should && isPrimitive(new Mirror().on(definedIn).reflect().field(fieldName).getType());
+			should = should && isPrimitive(ReflectionProvider.getField(definedIn, fieldName).getType());
 		return should;
 	}
 

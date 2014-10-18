@@ -22,9 +22,9 @@ import java.util.List;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 
-import net.vidageek.mirror.dsl.Mirror;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.View;
+import br.com.caelum.vraptor.core.ReflectionProvider;
 import br.com.caelum.vraptor.proxy.MethodInvocation;
 import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.proxy.SuperMethod;
@@ -85,7 +85,8 @@ public class DefaultValidationViewsFactory implements ValidationViewsFactory {
 		return new MethodInvocation<T>() {
 			@Override
 			public Object intercept(T proxy, Method method, Object[] args, SuperMethod superMethod) {
-				final Object instance = new Mirror().on(viewInstance).invoke().method(method).withArgs(args);
+				final Object instance = ReflectionProvider.invoke(viewInstance, method, args);
+				
 				Class type = method.getReturnType();
 				if (type == void.class) {
 					throw new ValidationException(errors);
@@ -116,8 +117,7 @@ public class DefaultValidationViewsFactory implements ValidationViewsFactory {
 		return new MethodInvocation<T>() {
 			@Override
 			public Object intercept(Object proxy, Method method, Object[] args, SuperMethod superMethod) {
-				new Mirror().on(instance).invoke().method(method).withArgs(args);
-
+				ReflectionProvider.invoke(instance, method, args);
 				throw new ValidationException(errors);
 			}
 		};

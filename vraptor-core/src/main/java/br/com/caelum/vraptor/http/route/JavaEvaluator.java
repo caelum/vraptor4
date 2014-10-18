@@ -22,8 +22,8 @@ import java.util.Collection;
 
 import javax.enterprise.context.ApplicationScoped;
 
-import net.vidageek.mirror.dsl.Mirror;
 import br.com.caelum.vraptor.VRaptorException;
+import br.com.caelum.vraptor.core.ReflectionProvider;
 
 import com.google.common.collect.Iterables;
 
@@ -63,7 +63,7 @@ public class JavaEvaluator implements Evaluator {
 			position = Integer.parseInt(path.substring(index + 1));
 			path = path.substring(0, index);
 		}
-		Object instance = new Mirror().on(current).invoke().getterFor(path);
+		Object instance = ReflectionProvider.invokeGetter(current, path);
 		if (index != -1) {
 			instance = access(instance, position);
 		}

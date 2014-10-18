@@ -48,12 +48,11 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.ServletContext;
 
-import net.vidageek.mirror.dsl.Mirror;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.controller.BeanClass;
+import br.com.caelum.vraptor.core.ReflectionProvider;
 import br.com.caelum.vraptor.http.route.Router;
 import br.com.caelum.vraptor.proxy.MethodInvocation;
 import br.com.caelum.vraptor.proxy.Proxifier;
@@ -201,7 +200,7 @@ public class LinkToHandler extends ForwardingMap<Class<?>, Object> {
 	private List<Method> getMethods(Class<?> controller) {
 		List<Method> methods = new ArrayList<>();
 		
-		for (Method method : new Mirror().on(controller).reflectAll().methods()) {
+		for (Method method : ReflectionProvider.getMethodsFor(controller)) {
 			if (!method.getDeclaringClass().equals(Object.class)) {
 				methods.add(method);
 			}

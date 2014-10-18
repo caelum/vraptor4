@@ -15,18 +15,20 @@
  */
 package br.com.caelum.vraptor.interceptor;
 
+import static java.util.Arrays.asList;
+
 import java.lang.annotation.Annotation;
-import java.lang.reflect.AnnotatedElement;
 import java.util.List;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
-import net.vidageek.mirror.dsl.Mirror;
-import net.vidageek.mirror.list.dsl.Matcher;
 import br.com.caelum.vraptor.controller.ControllerInstance;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.ioc.Container;
+
+import com.google.common.base.Predicate;
+import com.google.common.collect.FluentIterable;
 
 @ApplicationScoped
 public class CustomAcceptsVerifier {
@@ -61,17 +63,18 @@ public class CustomAcceptsVerifier {
 		return true;
 	}
 
-	private static Matcher<Annotation> acceptsConstraintMatcher() {
-		return new Matcher<Annotation>() {
+	public static List<Annotation> getCustomAcceptsAnnotations(Class<?> clazz){
+		return FluentIterable.from(asList(clazz.getAnnotations()))
+			.filter(acceptsConstraintMatcher())
+			.toList();
+	}
+
+	private static Predicate<Annotation> acceptsConstraintMatcher() {
+		return new Predicate<Annotation>() {
 			@Override
-			public boolean accepts(Annotation element) {
+			public boolean apply(Annotation element) {
 				return element.annotationType().isAnnotationPresent(AcceptsConstraint.class);
 			}
 		};
-	}
-
-	public static List<Annotation> getCustomAcceptsAnnotations(Class<?> clazz){
-		return new Mirror().on((AnnotatedElement) clazz).reflectAll()
-				.annotations().matching(acceptsConstraintMatcher());
 	}
 }

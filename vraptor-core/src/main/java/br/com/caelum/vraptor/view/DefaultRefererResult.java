@@ -26,10 +26,10 @@ import java.util.ArrayList;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 
-import net.vidageek.mirror.dsl.Mirror;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.controller.HttpMethod;
+import br.com.caelum.vraptor.core.ReflectionProvider;
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.http.ParametersProvider;
 import br.com.caelum.vraptor.http.route.ControllerNotFoundException;
@@ -73,8 +73,8 @@ public class DefaultRefererResult implements RefererResult {
 	}
 
 	private void executeMethod(ControllerMethod method, Object instance) {
-		new Mirror().on(instance).invoke().method(method.getMethod())
-			.withArgs(provider.getParametersFor(method, new ArrayList<Message>()));
+		Object[] args = provider.getParametersFor(method, new ArrayList<Message>());
+		ReflectionProvider.invoke(instance, method.getMethod(), args);
 	}
 
 	@Override

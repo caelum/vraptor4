@@ -23,7 +23,7 @@ import java.util.List;
 import javax.enterprise.inject.Vetoed;
 import javax.servlet.ServletContext;
 
-import net.vidageek.mirror.dsl.Mirror;
+import br.com.caelum.vraptor.core.ReflectionProvider;
 import br.com.caelum.vraptor.http.route.Router;
 
 @Vetoed
@@ -56,7 +56,7 @@ public class Linker {
 		Method method = null;
 
 		if (countMethodsWithSameName() > 1) {
-			method = new Mirror().on(controller).reflect().method(methodName).withArgs(getClasses(args));
+			method = ReflectionProvider.getMethod(controller, methodName, getClasses(args));
 			if (method == null && args.isEmpty()) {
 				throw new IllegalArgumentException("Ambiguous method '" + methodName + "' on " + controller + ". Try to add some parameters to resolve ambiguity, or use different method names.");
 			}

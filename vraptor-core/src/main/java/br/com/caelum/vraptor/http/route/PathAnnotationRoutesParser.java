@@ -34,7 +34,6 @@ import java.util.List;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
-import net.vidageek.mirror.dsl.Mirror;
 import br.com.caelum.vraptor.Delete;
 import br.com.caelum.vraptor.Get;
 import br.com.caelum.vraptor.Options;
@@ -44,6 +43,7 @@ import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.Put;
 import br.com.caelum.vraptor.controller.BeanClass;
 import br.com.caelum.vraptor.controller.HttpMethod;
+import br.com.caelum.vraptor.core.ReflectionProvider;
 import br.com.caelum.vraptor.util.StringUtils;
 
 import com.google.common.base.Predicate;
@@ -170,7 +170,7 @@ public class PathAnnotationRoutesParser implements RoutesParser {
 		if (method == null) {
 			return new String[0];
 		}
-		return (String[]) new Mirror().on(method).invoke().method("value").withoutArgs();
+		return (String[]) ReflectionProvider.invoke(method, "value");
 	}
 
 	protected void fixURIs(Class<?> type, String[] uris) {

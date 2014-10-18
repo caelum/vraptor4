@@ -21,9 +21,9 @@ import java.util.Map.Entry;
 
 import javax.enterprise.inject.Vetoed;
 
-import net.vidageek.mirror.dsl.Mirror;
-import br.com.caelum.vraptor.serialization.SkipSerialization;
+import br.com.caelum.vraptor.core.ReflectionProvider;
 import br.com.caelum.vraptor.serialization.Serializee;
+import br.com.caelum.vraptor.serialization.SkipSerialization;
 
 import com.google.gson.ExclusionStrategy;
 import com.google.gson.FieldAttributes;
@@ -64,7 +64,7 @@ public class Exclusions implements ExclusionStrategy {
 		}
 
 		return !serializee.isRecursive() 
-				&& !shouldSerializeField(new Mirror().on(definedIn).reflect().field(fieldName).getType());
+				&& !shouldSerializeField(ReflectionProvider.getField(definedIn, fieldName).getType());
 	}
 
 	private boolean isCompatiblePath(Entry<String, Class<?>> path, Class<?> definedIn, String fieldName) {

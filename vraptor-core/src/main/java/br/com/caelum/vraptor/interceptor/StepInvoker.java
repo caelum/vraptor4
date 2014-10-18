@@ -24,8 +24,8 @@ import java.util.List;
 
 import javax.enterprise.context.ApplicationScoped;
 
-import net.vidageek.mirror.dsl.Mirror;
 import br.com.caelum.vraptor.InterceptionException;
+import br.com.caelum.vraptor.core.ReflectionProvider;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
@@ -46,7 +46,7 @@ public class StepInvoker {
 
 	private Object invokeMethod(Object interceptor, Method stepMethod, Object... params) {
 		try {
-			return new Mirror().on(interceptor).invoke().method(stepMethod).withArgs(params);
+			return ReflectionProvider.invoke(interceptor, stepMethod, params);
 		} catch (Exception e) {
 			// we dont wanna wrap it if it is a simple controller business logic
 			// exception
@@ -56,7 +56,7 @@ public class StepInvoker {
 	}
 
 	public List<Method> findAllMethods(Class<?> interceptorClass) {
-		return new Mirror().on(interceptorClass).reflectAll().methods();
+		return ReflectionProvider.getMethodsFor(interceptorClass);
 	}
 
 	public Method findMethod(List<Method> interceptorMethods, Class<? extends Annotation> step, Class<?> interceptorClass) {

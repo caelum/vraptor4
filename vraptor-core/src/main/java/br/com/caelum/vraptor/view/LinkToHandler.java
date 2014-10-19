@@ -78,6 +78,7 @@ public class LinkToHandler extends ForwardingMap<Class<?>, Object> {
 	private final ServletContext context;
 	private final Router router;
 	private final Proxifier proxifier;
+	private final ReflectionProvider reflectionProvider;
 
 	private ConcurrentMap<Class<?>, Class<?>> interfaces = new ConcurrentHashMap<>();
 
@@ -85,14 +86,15 @@ public class LinkToHandler extends ForwardingMap<Class<?>, Object> {
 	 * @deprecated CDI eyes only
 	 */
 	protected LinkToHandler() {
-		this(null, null, null);
+		this(null, null, null, null);
 	}
 
 	@Inject
-	public LinkToHandler(ServletContext context, Router router, Proxifier proxifier) {
+	public LinkToHandler(ServletContext context, Router router, Proxifier proxifier, ReflectionProvider reflectionProvider) {
 		this.context = context;
 		this.router = router;
 		this.proxifier = proxifier;
+		this.reflectionProvider = reflectionProvider;
 	}
 
 	@PostConstruct
@@ -146,7 +148,7 @@ public class LinkToHandler extends ForwardingMap<Class<?>, Object> {
 
 	protected Linker linker(final Class<?> controller,
 			String methodName, List<Object> params) {
-		return new Linker(context, router, controller, methodName, params);
+		return new Linker(context, router, controller, methodName, params, reflectionProvider);
 	}
 	
 	private Class<?> createLinkToInterface(final Class<?> controller, String interfaceName) {
@@ -200,7 +202,7 @@ public class LinkToHandler extends ForwardingMap<Class<?>, Object> {
 	private List<Method> getMethods(Class<?> controller) {
 		List<Method> methods = new ArrayList<>();
 		
-		for (Method method : ReflectionProvider.getMethodsFor(controller)) {
+		for (Method method : reflectionProvider.getMethodsFor(controller)) {
 			if (!method.getDeclaringClass().equals(Object.class)) {
 				methods.add(method);
 			}

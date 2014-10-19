@@ -44,20 +44,23 @@ public class DefaultRefererResult implements RefererResult {
 	private final Result result;
 	private final Router router;
 	private final ParametersProvider provider;
+	private ReflectionProvider reflectionProvider;
 
 	/** 
 	 * @deprecated CDI eyes only
 	 */
 	protected DefaultRefererResult() {
-		this(null, null, null, null);
+		this(null, null, null, null, null);
 	}
 
 	@Inject
-	public DefaultRefererResult(Result result, MutableRequest request, Router router, ParametersProvider provider) {
+	public DefaultRefererResult(Result result, MutableRequest request, Router router, ParametersProvider provider,
+			ReflectionProvider reflectionProvider) {
 		this.result = result;
 		this.request = request;
 		this.router = router;
 		this.provider = provider;
+		this.reflectionProvider = reflectionProvider;
 	}
 
 	@Override
@@ -74,7 +77,7 @@ public class DefaultRefererResult implements RefererResult {
 
 	private void executeMethod(ControllerMethod method, Object instance) {
 		Object[] args = provider.getParametersFor(method, new ArrayList<Message>());
-		ReflectionProvider.invoke(instance, method.getMethod(), args);
+		reflectionProvider.invoke(instance, method.getMethod(), args);
 	}
 
 	@Override

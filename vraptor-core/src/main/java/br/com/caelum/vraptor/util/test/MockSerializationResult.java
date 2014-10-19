@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import javax.enterprise.inject.Vetoed;
 
 import br.com.caelum.vraptor.View;
+import br.com.caelum.vraptor.core.ReflectionProvider;
 import br.com.caelum.vraptor.environment.Environment;
 import br.com.caelum.vraptor.environment.NullEnvironment;
 import br.com.caelum.vraptor.http.FormatResolver;
@@ -64,20 +65,22 @@ public class MockSerializationResult extends MockResult {
 	private XStreamBuilder xstreambuilder;
 	private GsonSerializerBuilder gsonBuilder;
 	private Environment environment;
+	private ReflectionProvider reflectionProvider;
 
 
 	/**
 	 * @deprecated Prefer using {@link MockSerializationResult#MockSerializationResult(Proxifier, XStreamBuilder, GsonSerializerBuilder, Environment)}
 	 * that provides a {@link Environment}.
 	 */
-	public MockSerializationResult(Proxifier proxifier, XStreamBuilder xstreambuilder, GsonSerializerBuilder gsonBuilder) {
-		this(proxifier, xstreambuilder, gsonBuilder, new NullEnvironment());
+	public MockSerializationResult(Proxifier proxifier, XStreamBuilder xstreambuilder, GsonSerializerBuilder gsonBuilder, ReflectionProvider reflectionProvider) {
+		this(proxifier, xstreambuilder, gsonBuilder, new NullEnvironment(), reflectionProvider);
 	}
 
 	public MockSerializationResult(Proxifier proxifier, XStreamBuilder xstreambuilder, GsonSerializerBuilder gsonBuilder,
-			Environment environment) {
+			Environment environment, ReflectionProvider reflectionProvider) {
 		super(proxifier);
 		this.environment = environment;
+		this.reflectionProvider = reflectionProvider;
 		this.response = new MockHttpServletResponse();
 		this.extractor = new DefaultTypeNameExtractor();
 		this.xstreambuilder = xstreambuilder;
@@ -87,8 +90,9 @@ public class MockSerializationResult extends MockResult {
 	public MockSerializationResult() {
 		this(new JavassistProxifier(), XStreamBuilderImpl.cleanInstance(),
 				new GsonBuilderWrapper(new MockInstanceImpl<>(new ArrayList<JsonSerializer<?>>()), 
-						new MockInstanceImpl<>(new ArrayList<JsonDeserializer<?>>()), new Serializee())
-		);
+						new MockInstanceImpl<>(new ArrayList<JsonDeserializer<?>>()), 
+						new Serializee(new ReflectionProvider()) , new ReflectionProvider()),
+						new ReflectionProvider());
 	}
 	
 	@Override
@@ -102,7 +106,7 @@ public class MockSerializationResult extends MockResult {
 
 	private <T extends View> T instanceView(Class<T> view){
 		if (view.isAssignableFrom(JSONSerialization.class)){
-			serialization = new GsonJSONSerialization(response, extractor, gsonBuilder, environment);
+			serialization = new GsonJSONSerialization(response, extractor, gsonBuilder, environment, reflectionProvider);
 			return view.cast(serialization);
 		}
 

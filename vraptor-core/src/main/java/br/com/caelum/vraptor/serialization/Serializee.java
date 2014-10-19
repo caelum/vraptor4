@@ -27,6 +27,7 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.enterprise.context.Dependent;
+import javax.inject.Inject;
 
 import br.com.caelum.vraptor.core.ReflectionProvider;
 
@@ -35,13 +36,23 @@ import com.google.common.collect.Multimap;
 
 @Dependent
 public class Serializee {
-	
+
+	private ReflectionProvider reflectionProvider;
+
 	private Object root;
 	private Class<?> rootClass;
 	private Multimap<String, Class<?>> includes;
 	private Multimap<String, Class<?>> excludes;
 	private Set<Class<?>> elementTypes;
 	private boolean recursive;
+
+	protected Serializee() {
+	}
+
+	@Inject
+	public Serializee(ReflectionProvider reflectionProvider) {
+		this.reflectionProvider = reflectionProvider;
+	}
 
 	public Object getRoot() {
 		return root;
@@ -107,7 +118,7 @@ public class Serializee {
 		}
 		
 		for (Class<?> type : types) {
-			for (Field field : ReflectionProvider.getFieldsFor(type)) {
+			for (Field field : reflectionProvider.getFieldsFor(type)) {
 				getExcludes().putAll(field.getName(), getParentTypes(field.getName(), type)); 
 			}
 		}	
@@ -154,7 +165,7 @@ public class Serializee {
 	}
 	
 	private Field reflectField(String path, Class<?> type) {
-		Field field = ReflectionProvider.getField(type, path.replaceAll("\\?", ""));
+		Field field = reflectionProvider.getField(type, path.replaceAll("\\?", ""));
 		if (!path.startsWith("?"))
 			requireNonNull(field);
 		return field;

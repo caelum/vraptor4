@@ -33,6 +33,19 @@ import com.google.common.collect.FluentIterable;
 @ApplicationScoped
 public class StepInvoker {
 
+	private final ReflectionProvider reflectionProvider;
+
+	/**
+	 * @deprecated CDI eyes only
+	 */
+	protected StepInvoker() {
+		this(null);
+	}
+
+	public StepInvoker(ReflectionProvider reflectionProvider) {
+		this.reflectionProvider = reflectionProvider;
+	}
+
 	public Object tryToInvoke(Object interceptor, Method stepMethod, Object... params) {
 		if (stepMethod == null) {
 			return null;
@@ -46,7 +59,7 @@ public class StepInvoker {
 
 	private Object invokeMethod(Object interceptor, Method stepMethod, Object... params) {
 		try {
-			return ReflectionProvider.invoke(interceptor, stepMethod, params);
+			return reflectionProvider.invoke(interceptor, stepMethod, params);
 		} catch (Exception e) {
 			// we dont wanna wrap it if it is a simple controller business logic
 			// exception
@@ -56,7 +69,7 @@ public class StepInvoker {
 	}
 
 	public List<Method> findAllMethods(Class<?> interceptorClass) {
-		return ReflectionProvider.getMethodsFor(interceptorClass);
+		return reflectionProvider.getMethodsFor(interceptorClass);
 	}
 
 	public Method findMethod(List<Method> interceptorMethods, Class<? extends Annotation> step, Class<?> interceptorClass) {

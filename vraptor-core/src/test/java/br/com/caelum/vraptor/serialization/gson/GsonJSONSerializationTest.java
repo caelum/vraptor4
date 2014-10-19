@@ -40,6 +40,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.junit.Before;
 import org.junit.Test;
 
+import br.com.caelum.vraptor.core.ReflectionProvider;
 import br.com.caelum.vraptor.environment.Environment;
 import br.com.caelum.vraptor.interceptor.DefaultTypeNameExtractor;
 import br.com.caelum.vraptor.serialization.SkipSerialization;
@@ -85,8 +86,9 @@ public class GsonJSONSerializationTest {
 		jsonSerializers.add(new CollectionSerializer());
 		jsonSerializers.add(new EnumSerializer());
 
-		builder = new GsonBuilderWrapper(new MockInstanceImpl<>(jsonSerializers), new MockInstanceImpl<>(jsonDeserializers), new Serializee());
-		serialization = new GsonJSONSerialization(response, extractor, builder, environment);
+		builder = new GsonBuilderWrapper(new MockInstanceImpl<>(jsonSerializers), new MockInstanceImpl<>(jsonDeserializers), 
+				new Serializee(new ReflectionProvider()), new ReflectionProvider());
+		serialization = new GsonJSONSerialization(response, extractor, builder, environment, new ReflectionProvider());
 	}
 	
 	@SkipSerialization
@@ -565,7 +567,8 @@ public class GsonJSONSerializationTest {
 
 	@Test
 	public void shouldSerializeWithCallback() {
-		JSONPSerialization serialization = new GsonJSONPSerialization(response, extractor, builder, environment);
+		JSONPSerialization serialization = new GsonJSONPSerialization(response, extractor, builder, environment,
+				new ReflectionProvider());
 
 		String expectedResult = "calculate({\"order\":{\"price\":15.0}})";
 		Order order = new Order(new Client("nykolas lima"), 15.0, "gift bags, please");

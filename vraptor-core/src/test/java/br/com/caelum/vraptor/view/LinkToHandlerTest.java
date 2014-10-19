@@ -38,6 +38,7 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor.controller.DefaultBeanClass;
+import br.com.caelum.vraptor.core.ReflectionProvider;
 import br.com.caelum.vraptor.http.route.Router;
 import br.com.caelum.vraptor.proxy.JavassistProxifier;
 
@@ -52,7 +53,7 @@ public class LinkToHandlerTest {
 	@Before
 	public void setUp() throws Exception {
 		MockitoAnnotations.initMocks(this);
-		this.handler = new LinkToHandler(context, router, new JavassistProxifier());
+		this.handler = new LinkToHandler(context, router, new JavassistProxifier(), new ReflectionProvider());
 		when(context.getContextPath()).thenReturn("/path");
 
 		this.method2params = new Mirror().on(TestController.class).reflect().method("method").withArgs(String.class, int.class);
@@ -169,8 +170,8 @@ public class LinkToHandlerTest {
 		when(context0.getContextPath()).thenReturn("");
 		when(context1.getContextPath()).thenReturn("/another");
 
-		LinkToHandler handler0 = new LinkToHandler(context0, router, new JavassistProxifier());
-		LinkToHandler handler1 = new LinkToHandler(context1, router, new JavassistProxifier());
+		LinkToHandler handler0 = new LinkToHandler(context0, router, new JavassistProxifier(), new ReflectionProvider());
+		LinkToHandler handler1 = new LinkToHandler(context1, router, new JavassistProxifier(), new ReflectionProvider());
 
 		Object object0 = handler0.get(new DefaultBeanClass(TestController.class));
 		assertThat(object0.getClass().getName(), containsString("$linkTo_$$"));

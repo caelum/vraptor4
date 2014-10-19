@@ -38,9 +38,11 @@ import com.google.gson.FieldAttributes;
 public class Exclusions implements ExclusionStrategy {
 
 	private Serializee serializee;
+	private ReflectionProvider reflectionProvider;
 
-	public Exclusions(Serializee serializee) {
+	public Exclusions(Serializee serializee, ReflectionProvider reflectionProvider) {
 		this.serializee = serializee;
+		this.reflectionProvider = reflectionProvider;
 	}
 
 	@Override
@@ -64,7 +66,7 @@ public class Exclusions implements ExclusionStrategy {
 		}
 
 		return !serializee.isRecursive() 
-				&& !shouldSerializeField(ReflectionProvider.getField(definedIn, fieldName).getType());
+				&& !shouldSerializeField(reflectionProvider.getField(definedIn, fieldName).getType());
 	}
 
 	private boolean isCompatiblePath(Entry<String, Class<?>> path, Class<?> definedIn, String fieldName) {

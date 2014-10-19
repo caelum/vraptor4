@@ -26,6 +26,7 @@ import javax.enterprise.inject.Any;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 
+import br.com.caelum.vraptor.core.ReflectionProvider;
 import br.com.caelum.vraptor.serialization.Serializee;
 
 import com.google.gson.ExclusionStrategy;
@@ -50,24 +51,25 @@ public class GsonBuilderWrapper implements GsonSerializerBuilder, GsonDeserializ
 	private final Serializee serializee;
 	private final Iterable<JsonSerializer<?>> jsonSerializers;
 	private final Iterable<JsonDeserializer<?>> jsonDeserializers;
-	
-	@Inject
-	public GsonBuilderWrapper(@Any Instance<JsonSerializer<?>> jsonSerializers, 
-			@Any Instance<JsonDeserializer<?>> jsonDeserializers,
-			Serializee serializee) {
-		this.jsonSerializers = jsonSerializers;
-		this.jsonDeserializers = jsonDeserializers;
-		this.serializee = serializee;
-		ExclusionStrategy exclusion = new Exclusions(serializee);
-		exclusions = singletonList(exclusion);
-	}
 
 	/**
 	 * @deprecated CDI eyes only
 	 */
 	protected GsonBuilderWrapper() {
-		this(null, null, null);
+		this(null, null, null, null);
 	}
+
+	@Inject
+	public GsonBuilderWrapper(@Any Instance<JsonSerializer<?>> jsonSerializers, 
+			@Any Instance<JsonDeserializer<?>> jsonDeserializers,
+			Serializee serializee, ReflectionProvider reflectionProvider) {
+		this.jsonSerializers = jsonSerializers;
+		this.jsonDeserializers = jsonDeserializers;
+		this.serializee = serializee;
+		ExclusionStrategy exclusion = new Exclusions(serializee, reflectionProvider);
+		exclusions = singletonList(exclusion);
+	}
+
 	@Override
 	public Gson create() {
 		for (JsonSerializer<?> adapter : jsonSerializers) {

@@ -19,6 +19,7 @@ import javax.enterprise.context.Dependent;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 
+import br.com.caelum.vraptor.core.ReflectionProvider;
 import br.com.caelum.vraptor.interceptor.DefaultTypeNameExtractor;
 import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
 import br.com.caelum.vraptor.serialization.Serializee;
@@ -40,6 +41,8 @@ public class XStreamBuilderImpl implements XStreamBuilder {
 	private final XStreamConverters converters;
 	private final TypeNameExtractor extractor;
 	private final Serializee serializee;
+	private final ReflectionProvider reflectionProvider;
+
 	private boolean indented = false;
 	private boolean recursive = false;
 	
@@ -47,26 +50,30 @@ public class XStreamBuilderImpl implements XStreamBuilder {
 	 * @deprecated CDI eyes only
 	 */
 	protected XStreamBuilderImpl() {
-		this(null, null, null);
+		this(null, null, null, null);
 	}
 
 	@Inject
-	public XStreamBuilderImpl(XStreamConverters converters, TypeNameExtractor extractor, Serializee serializee) {
+	public XStreamBuilderImpl(XStreamConverters converters, TypeNameExtractor extractor, Serializee serializee,
+			ReflectionProvider reflectionProvider) {
 		this.converters = converters;
 		this.extractor = extractor;
 		this.serializee = serializee;
+		this.reflectionProvider = reflectionProvider;
 	}
 
 	public static XStreamBuilder cleanInstance(Converter...converters) {
 		Instance<Converter> convertersInst = new MockInstanceImpl<>(converters);
 		Instance<SingleValueConverter> singleValueConverters = new MockInstanceImpl<>();
 		XStreamConverters xStreamConverters = new XStreamConverters(convertersInst, singleValueConverters);
-		return new XStreamBuilderImpl(xStreamConverters, new DefaultTypeNameExtractor(), new Serializee());
+		ReflectionProvider reflectionProvider = new ReflectionProvider();
+		return new XStreamBuilderImpl(xStreamConverters, new DefaultTypeNameExtractor(), 
+				new Serializee(reflectionProvider), reflectionProvider);
 	}
 	
 	@Override
 	public XStream xmlInstance() {
-		VRaptorXStream xstream = new VRaptorXStream(extractor, serializee);
+		VRaptorXStream xstream = new VRaptorXStream(extractor, serializee, reflectionProvider);
 		serializee.setRecursive(recursive);
 		return configure(xstream);
 	}

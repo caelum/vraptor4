@@ -56,18 +56,20 @@ public class DefaultValidationViewsFactory implements ValidationViewsFactory {
 
 	private final Result result;
 	private final Proxifier proxifier;
+	private final ReflectionProvider reflectionProvider;
 
 	/** 
 	 * @deprecated CDI eyes only
 	 */
 	protected DefaultValidationViewsFactory() {
-		this(null, null);
+		this(null, null, null);
 	}
 
 	@Inject
-	public DefaultValidationViewsFactory(Result result, Proxifier proxifier) {
+	public DefaultValidationViewsFactory(Result result, Proxifier proxifier, ReflectionProvider reflectionProvider) {
 		this.result = result;
 		this.proxifier = proxifier;
+		this.reflectionProvider = reflectionProvider;
 	}
 
 	@Override
@@ -85,7 +87,7 @@ public class DefaultValidationViewsFactory implements ValidationViewsFactory {
 		return new MethodInvocation<T>() {
 			@Override
 			public Object intercept(T proxy, Method method, Object[] args, SuperMethod superMethod) {
-				final Object instance = ReflectionProvider.invoke(viewInstance, method, args);
+				final Object instance = reflectionProvider.invoke(viewInstance, method, args);
 				
 				Class type = method.getReturnType();
 				if (type == void.class) {
@@ -117,7 +119,7 @@ public class DefaultValidationViewsFactory implements ValidationViewsFactory {
 		return new MethodInvocation<T>() {
 			@Override
 			public Object intercept(Object proxy, Method method, Object[] args, SuperMethod superMethod) {
-				ReflectionProvider.invoke(instance, method, args);
+				reflectionProvider.invoke(instance, method, args);
 				throw new ValidationException(errors);
 			}
 		};

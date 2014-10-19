@@ -54,6 +54,7 @@ import br.com.caelum.vraptor.controller.BeanClass;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.controller.DefaultBeanClass;
 import br.com.caelum.vraptor.controller.DefaultControllerMethod;
+import br.com.caelum.vraptor.core.ReflectionProvider;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.http.ParanamerNameProvider;
 import br.com.caelum.vraptor.ioc.Container;
@@ -103,7 +104,8 @@ public class GsonDeserializerTest {
 		jsonDeserializers.add(new CalendarGsonConverter());
 		jsonDeserializers.add(new DateGsonConverter());
 
-		builder = new GsonBuilderWrapper(new MockInstanceImpl<>(jsonSerializers), new MockInstanceImpl<>(jsonDeserializers), new Serializee());
+		builder = new GsonBuilderWrapper(new MockInstanceImpl<>(jsonSerializers), new MockInstanceImpl<>(jsonDeserializers), 
+				new Serializee(new ReflectionProvider()), new ReflectionProvider());
 		deserializer = new GsonDeserialization(builder, provider, request, container, deserializeeInstance);
 		BeanClass controllerClass = new DefaultBeanClass(DogController.class);
 
@@ -261,7 +263,8 @@ public class GsonDeserializerTest {
 		List<JsonSerializer<?>> serializers = new ArrayList<>();
 		deserializers.add(new DogDeserializer());
 
-		builder = new GsonBuilderWrapper(new MockInstanceImpl<>(serializers), new MockInstanceImpl<>(deserializers), new Serializee());
+		builder = new GsonBuilderWrapper(new MockInstanceImpl<>(serializers), new MockInstanceImpl<>(deserializers), 
+				new Serializee(new ReflectionProvider()), new ReflectionProvider());
 		deserializer = new GsonDeserialization(builder, provider, request, container, deserializeeInstance);
 
 		InputStream stream = asStream("{'dog':{'name':'Renan Reis','age':'0'}}");

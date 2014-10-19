@@ -55,24 +55,26 @@ public class ExecuteMethod {
 
 	private final MethodInfo methodInfo;
 	private final Messages messages;
+	private final ReflectionProvider reflectionProvider;
 
-	private Event<MethodExecuted> methodExecutedEvent;
-	private Event<MethodReady> methodReady;
+	private final Event<MethodExecuted> methodExecutedEvent;
+	private final Event<MethodReady> methodReady;
 
 	/**
 	 * @deprecated CDI eyes only
 	 */
 	protected ExecuteMethod() {
-		this(null, null, null, null);
+		this(null, null, null, null, null);
 	}
 
 	@Inject
-	public ExecuteMethod(MethodInfo methodInfo, Messages messages, 
-			Event<MethodExecuted> methodExecutedEvent, Event<MethodReady> methodReady) {
+	public ExecuteMethod(MethodInfo methodInfo, Messages messages, Event<MethodExecuted> methodExecutedEvent, 
+			Event<MethodReady> methodReady, ReflectionProvider reflectionProvider) {
 		this.methodInfo = methodInfo;
 		this.messages = messages;
 		this.methodExecutedEvent = methodExecutedEvent;
 		this.methodReady = methodReady;
+		this.reflectionProvider = reflectionProvider;
 	}
 
 	public void execute(@Observes InterceptorsExecuted event) {
@@ -84,7 +86,7 @@ public class ExecuteMethod {
 
 			log.debug("Invoking {}", reflectionMethod);
 			Object instance = event.getControllerInstance();
-			Object result = ReflectionProvider.invoke(instance, reflectionMethod, parameters);
+			Object result = reflectionProvider.invoke(instance, reflectionMethod, parameters);
 
 			messages.assertAbsenceOfErrors();
 			

@@ -71,18 +71,20 @@ import com.google.common.collect.FluentIterable;
 public class PathAnnotationRoutesParser implements RoutesParser {
 
 	private final Router router;
+	private ReflectionProvider reflectionProvider;
 
 	/** 
 	 * @deprecated CDI eyes only
 	 */
 
 	protected PathAnnotationRoutesParser() {
-		this(null);
+		this(null, null);
 	}
 
 	@Inject
-	public PathAnnotationRoutesParser(Router router) {
+	public PathAnnotationRoutesParser(Router router, ReflectionProvider reflectionProvider) {
 		this.router = router;
+		this.reflectionProvider = reflectionProvider;
 	}
 
 	@Override
@@ -170,7 +172,7 @@ public class PathAnnotationRoutesParser implements RoutesParser {
 		if (method == null) {
 			return new String[0];
 		}
-		return (String[]) ReflectionProvider.invoke(method, "value");
+		return (String[]) reflectionProvider.invoke(method, "value");
 	}
 
 	protected void fixURIs(Class<?> type, String[] uris) {

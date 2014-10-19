@@ -34,6 +34,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.junit.Before;
 import org.junit.Test;
 
+import br.com.caelum.vraptor.core.ReflectionProvider;
 import br.com.caelum.vraptor.environment.Environment;
 import br.com.caelum.vraptor.interceptor.DefaultTypeNameExtractor;
 import br.com.caelum.vraptor.ioc.Container;
@@ -73,8 +74,10 @@ public class I18nMessageSerializationTest {
 		jsonSerializers.add(new CalendarGsonConverter());
 		jsonSerializers.add(new MessageGsonConverter());
 
-		GsonSerializerBuilder gsonBuilder =  new GsonBuilderWrapper(new MockInstanceImpl<>(jsonSerializers), new MockInstanceImpl<>(jsonDeserializers), new Serializee());
-		GsonJSONSerialization jsonSerialization = new GsonJSONSerialization(response, extractor, gsonBuilder, environment);
+		GsonSerializerBuilder gsonBuilder =  new GsonBuilderWrapper(new MockInstanceImpl<>(jsonSerializers), 
+				new MockInstanceImpl<>(jsonDeserializers), new Serializee(), new ReflectionProvider());
+		GsonJSONSerialization jsonSerialization = new GsonJSONSerialization(response, extractor, gsonBuilder, environment,
+				new ReflectionProvider());
 
 		Container container = mock(Container.class);
 		when(container.instanceFor(JSONSerialization.class)).thenReturn(jsonSerialization);

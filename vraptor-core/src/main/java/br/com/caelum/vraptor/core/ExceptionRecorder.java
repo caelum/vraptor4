@@ -42,9 +42,11 @@ public class ExceptionRecorder<T> implements MethodInvocation<T> {
 
 	private final List<ExceptionRecorderParameter> parameters = new ArrayList<>();
 	private final Proxifier proxifier;
+	private final ReflectionProvider reflectionProvider;
 
-	public ExceptionRecorder(Proxifier proxifier) {
+	public ExceptionRecorder(Proxifier proxifier, ReflectionProvider reflectionProvider) {
 		this.proxifier = proxifier;
+		this.reflectionProvider = reflectionProvider;
 	}
 
 	@Override
@@ -73,7 +75,7 @@ public class ExceptionRecorder<T> implements MethodInvocation<T> {
 	public void replay(Result result) {
 		Object current = result;
 		for (ExceptionRecorderParameter p : parameters) {
-			current = ReflectionProvider.invoke(current, p.getMethod(), p.getArgs());
+			current = reflectionProvider.invoke(current, p.getMethod(), p.getArgs());
 		}
 	}
 }

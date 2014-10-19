@@ -21,6 +21,7 @@ import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.controller.DefaultControllerMethod;
 import br.com.caelum.vraptor.core.MethodInfo;
+import br.com.caelum.vraptor.core.ReflectionProvider;
 import br.com.caelum.vraptor.events.InterceptorsExecuted;
 import br.com.caelum.vraptor.events.MethodExecuted;
 import br.com.caelum.vraptor.events.MethodReady;
@@ -64,7 +65,7 @@ public class ExecuteMethodTest {
 	@Before
 	public void setup() throws NoSuchMethodException {
 		MockitoAnnotations.initMocks(this);
-		observer = new ExecuteMethod(methodInfo, messages, methodEvecutedEvent, readyToExecuteMethodEvent);
+		observer = new ExecuteMethod(methodInfo, messages, methodEvecutedEvent, readyToExecuteMethodEvent, new ReflectionProvider());
 	}
 
 	@Test

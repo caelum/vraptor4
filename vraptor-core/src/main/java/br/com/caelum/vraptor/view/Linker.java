@@ -34,13 +34,16 @@ public class Linker {
 	private final List<Object> args;
 	private final String methodName;
 	private final Class<?> controller;
+	private final ReflectionProvider reflectionProvider;
 
-	public Linker(ServletContext context, Router router, Class<?> controller, String methodName, List<Object> args) {
+	public Linker(ServletContext context, Router router, Class<?> controller, String methodName, List<Object> args,
+			ReflectionProvider reflectionProvider) {
 		this.router = router;
 		this.context = context;
 		this.controller = controller;
 		this.methodName = methodName;
 		this.args = args;
+		this.reflectionProvider = reflectionProvider;
 	}
 
 	protected String getLink() {
@@ -56,7 +59,7 @@ public class Linker {
 		Method method = null;
 
 		if (countMethodsWithSameName() > 1) {
-			method = ReflectionProvider.getMethod(controller, methodName, getClasses(args));
+			method = reflectionProvider.getMethod(controller, methodName, getClasses(args));
 			if (method == null && args.isEmpty()) {
 				throw new IllegalArgumentException("Ambiguous method '" + methodName + "' on " + controller + ". Try to add some parameters to resolve ambiguity, or use different method names.");
 			}

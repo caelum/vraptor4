@@ -21,6 +21,7 @@ import java.lang.reflect.Array;
 import java.util.Collection;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 
 import br.com.caelum.vraptor.VRaptorException;
 import br.com.caelum.vraptor.core.ReflectionProvider;
@@ -35,6 +36,20 @@ import com.google.common.collect.Iterables;
  */
 @ApplicationScoped
 public class JavaEvaluator implements Evaluator {
+
+	private final ReflectionProvider reflectionProvider;
+
+	/**
+	 * @deprecated CDI eyes only
+	 */
+	protected JavaEvaluator() {
+		this(null);
+	}
+
+	@Inject
+	public JavaEvaluator(ReflectionProvider reflectionProvider) {
+		this.reflectionProvider = reflectionProvider;
+	}
 
 	@Override
 	public Object get(Object root, String path) {
@@ -63,7 +78,7 @@ public class JavaEvaluator implements Evaluator {
 			position = Integer.parseInt(path.substring(index + 1));
 			path = path.substring(0, index);
 		}
-		Object instance = ReflectionProvider.invokeGetter(current, path);
+		Object instance = reflectionProvider.invokeGetter(current, path);
 		if (index != -1) {
 			instance = access(instance, position);
 		}

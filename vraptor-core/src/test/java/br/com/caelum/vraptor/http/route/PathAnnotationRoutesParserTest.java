@@ -53,6 +53,7 @@ import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.controller.DefaultBeanClass;
 import br.com.caelum.vraptor.controller.HttpMethod;
 import br.com.caelum.vraptor.core.Converters;
+import br.com.caelum.vraptor.core.ReflectionProvider;
 import br.com.caelum.vraptor.http.EncodingHandler;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.http.ParanamerNameProvider;
@@ -89,7 +90,7 @@ public class PathAnnotationRoutesParserTest {
 			}
 		});
 
-		parser = new PathAnnotationRoutesParser(router);
+		parser = new PathAnnotationRoutesParser(router, new ReflectionProvider());
 	}
 
 	@Controller

@@ -26,6 +26,7 @@ import net.vidageek.mirror.dsl.Mirror;
 import org.junit.Before;
 import org.junit.Test;
 
+import br.com.caelum.vraptor.core.ReflectionProvider;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.http.ParanamerNameProvider;
 
@@ -67,7 +68,7 @@ public class DefaultTypeFinderTest {
 
 		final Method method = new Mirror().on(AController.class).reflect().method("aMethod").withArgs(Bean.class, String.class);
 		
-		DefaultTypeFinder finder = new DefaultTypeFinder(provider);
+		DefaultTypeFinder finder = new DefaultTypeFinder(provider, new ReflectionProvider());
 		Map<String, Class<?>> types = finder.getParameterTypes(method, new String[] {"bean.bean2.id", "path"});
 
 		assertEquals(Integer.class, types.get("bean.bean2.id"));
@@ -77,7 +78,7 @@ public class DefaultTypeFinderTest {
 	public void shouldGetTypesCorrectlyOnInheritance() throws Exception {
 		final Method method = new Mirror().on(AController.class).reflect().method("otherMethod").withArgs(BeanExtended.class);
 		
-		DefaultTypeFinder finder = new DefaultTypeFinder(provider);
+		DefaultTypeFinder finder = new DefaultTypeFinder(provider, new ReflectionProvider());
 		Map<String, Class<?>> types = finder.getParameterTypes(method, new String[] {"extended.id"});
 
 		assertEquals(Integer.class, types.get("extended.id"));

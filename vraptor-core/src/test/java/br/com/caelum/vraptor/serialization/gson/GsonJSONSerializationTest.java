@@ -32,7 +32,9 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.TimeZone;
 
 import javax.servlet.http.HttpServletResponse;
@@ -42,9 +44,9 @@ import org.junit.Test;
 
 import br.com.caelum.vraptor.environment.Environment;
 import br.com.caelum.vraptor.interceptor.DefaultTypeNameExtractor;
-import br.com.caelum.vraptor.serialization.SkipSerialization;
 import br.com.caelum.vraptor.serialization.JSONPSerialization;
 import br.com.caelum.vraptor.serialization.Serializee;
+import br.com.caelum.vraptor.serialization.SkipSerialization;
 import br.com.caelum.vraptor.util.test.MockInstanceImpl;
 
 import com.google.common.collect.ForwardingCollection;
@@ -570,6 +572,62 @@ public class GsonJSONSerializationTest {
 		String expectedResult = "calculate({\"order\":{\"price\":15.0}})";
 		Order order = new Order(new Client("nykolas lima"), 15.0, "gift bags, please");
 		serialization.withCallback("calculate").from(order).excludeAll().include("price").serialize();
+		assertThat(result(), is(equalTo(expectedResult)));
+	}
+	
+	@Test
+	public void shouldSerializeFromMap() {
+		String expectedResult = "{\"order\":{\"price\":15.0,\"comments\":\"pack it nicely, please\"},\"success\":true}";
+		
+		Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please");
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("success", true);
+		map.put("order", order);
+		
+		serialization.withoutRoot().from(map).serialize();
+		assertThat(result(), is(equalTo(expectedResult)));
+	}
+	
+	@Test
+	public void shouldRecursiveSerializeFromMap() {
+		String expectedResult = "{\"order\":{\"client\":{\"name\":\"guilherme silveira\"},\"price\":15.0,\"comments\":\"pack it nicely, please\",\"items\":[]},\"success\":true}";
+		
+		Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please");
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("success", true);
+		map.put("order", order);
+		
+		serialization.withoutRoot().from(map).recursive().serialize();
+		assertThat(result(), is(equalTo(expectedResult)));
+	}
+	
+	@Test
+	public void shouldOptionallyIncludeFieldsFromMap() {
+		String expectedResult = "{\"order\":{\"client\":{\"name\":\"guilherme silveira\"},\"price\":15.0,\"comments\":\"pack it nicely, please\"},\"success\":true}";
+		
+		Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please");
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("success", true);
+		map.put("order", order);
+		
+		serialization.withoutRoot().from(map).include("order.client").serialize();
+		assertThat(result(), is(equalTo(expectedResult)));
+	}
+	
+	@Test
+	public void shouldOptionallyExcludeFieldsFromMap() {
+		String expectedResult = "{\"order\":{\"comments\":\"pack it nicely, please\"},\"success\":true}";
+		
+		Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please");
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("success", true);
+		map.put("order", order);
+		
+		serialization.withoutRoot().from(map).exclude("order.price").serialize();
 		assertThat(result(), is(equalTo(expectedResult)));
 	}
 }

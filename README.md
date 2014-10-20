@@ -23,6 +23,7 @@ More detailed prerequisites and dependencies can be found [here](http://www.vrap
 ##Documentation
 [More detailed documentation](http://www.vraptor.org/en/docs/one-minute-guide/) and [Javadoc](http://www.vraptor.org/javadoc/) are also available at [VRaptor's website](http://www.vraptor.org/en/).
 
+Looking for more? Take a look at our [articles and presentations' page](http://www.vraptor.org/en/docs/articles-and-presentations).
 
 ##Building in your machine
 

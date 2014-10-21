@@ -18,7 +18,8 @@ package br.com.caelum.vraptor.environment;
 import java.io.IOException;
 
 import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.Alternative;
+import javax.inject.Inject;
+import javax.inject.Named;
 import javax.servlet.ServletContext;
 
 /**
@@ -30,16 +31,17 @@ import javax.servlet.ServletContext;
  * @author Andrew Kurauchi
  * @author Guilherme Silveira
  * @author Rodrigo Turini
- * @deprecated Prefer using {@link DefaultEnvironment}.
+ * @deprecated Prefer using {@link DefaultEnvironment}. It will dropped in 4.2 release.
  */
 @ApplicationScoped
-@Alternative
+@Named("environment")
 public class ServletBasedEnvironment extends DefaultEnvironment {
 
 	protected ServletBasedEnvironment() throws IOException {
 		super();
 	}
 
+	@Inject
 	public ServletBasedEnvironment(ServletContext context) throws IOException {
 		super(context);
 	}

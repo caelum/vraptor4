@@ -17,6 +17,7 @@ package br.com.caelum.vraptor.serialization.gson;
 
 import static br.com.caelum.vraptor.serialization.gson.GsonSerializer.shouldSerializeField;
 
+import java.lang.reflect.Field;
 import java.util.Map.Entry;
 
 import javax.enterprise.inject.Vetoed;
@@ -64,9 +65,9 @@ public class Exclusions implements ExclusionStrategy {
 				return true;
 			}
 		}
-
-		return !serializee.isRecursive() 
-				&& !shouldSerializeField(reflectionProvider.getField(definedIn, fieldName).getType());
+		
+		Field field = reflectionProvider.getField(definedIn, fieldName);
+		return !serializee.isRecursive() && !shouldSerializeField(field.getType());
 	}
 
 	private boolean isCompatiblePath(Entry<String, Class<?>> path, Class<?> definedIn, String fieldName) {

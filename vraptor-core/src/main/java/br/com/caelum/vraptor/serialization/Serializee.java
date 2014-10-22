@@ -37,7 +37,7 @@ import com.google.common.collect.Multimap;
 @Dependent
 public class Serializee {
 
-	private ReflectionProvider reflectionProvider;
+	private final ReflectionProvider reflectionProvider;
 
 	private Object root;
 	private Class<?> rootClass;
@@ -46,7 +46,11 @@ public class Serializee {
 	private Set<Class<?>> elementTypes;
 	private boolean recursive;
 
+	/** 
+	 * @deprecated CDI eyes only
+	 */
 	protected Serializee() {
+		this(null);
 	}
 
 	@Inject

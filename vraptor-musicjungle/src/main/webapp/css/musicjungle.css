@@ -66,3 +66,8 @@ span.logo-message {
 	margin-left: 200px;
 }
 
+span.no-emphasis {
+	color: gray;
+	float: right;
+}
+

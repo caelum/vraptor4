@@ -29,7 +29,7 @@ import org.junit.rules.ExpectedException;
 
 import br.com.caelum.vraptor.AroundCall;
 import br.com.caelum.vraptor.BeforeCall;
-import br.com.caelum.vraptor.core.ReflectionProvider;
+import br.com.caelum.vraptor.core.DefaultReflectionProvider;
 import br.com.caelum.vraptor.interceptor.example.ExampleOfSimpleStackInterceptor;
 import br.com.caelum.vraptor.interceptor.example.InterceptorWithInheritance;
 import br.com.caelum.vraptor.interceptor.example.WeldProxy$$$StyleInterceptor;
@@ -39,7 +39,7 @@ public class StepInvokerTest {
 	@Rule
 	public ExpectedException exception = ExpectedException.none();
 
-	private StepInvoker stepInvoker = new StepInvoker(new ReflectionProvider());
+	private StepInvoker stepInvoker = new StepInvoker(new DefaultReflectionProvider());
 	
 	@Test
 	public void shouldNotReadInheritedMethods() throws Exception {

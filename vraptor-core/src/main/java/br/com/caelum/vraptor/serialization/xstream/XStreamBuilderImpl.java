@@ -19,6 +19,7 @@ import javax.enterprise.context.Dependent;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 
+import br.com.caelum.vraptor.core.DefaultReflectionProvider;
 import br.com.caelum.vraptor.core.ReflectionProvider;
 import br.com.caelum.vraptor.interceptor.DefaultTypeNameExtractor;
 import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
@@ -66,9 +67,8 @@ public class XStreamBuilderImpl implements XStreamBuilder {
 		Instance<Converter> convertersInst = new MockInstanceImpl<>(converters);
 		Instance<SingleValueConverter> singleValueConverters = new MockInstanceImpl<>();
 		XStreamConverters xStreamConverters = new XStreamConverters(convertersInst, singleValueConverters);
-		ReflectionProvider reflectionProvider = new ReflectionProvider();
 		return new XStreamBuilderImpl(xStreamConverters, new DefaultTypeNameExtractor(), 
-				new Serializee(reflectionProvider), reflectionProvider);
+				new Serializee(new DefaultReflectionProvider()), new DefaultReflectionProvider());
 	}
 	
 	@Override

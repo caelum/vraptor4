@@ -40,12 +40,12 @@ import javax.servlet.http.HttpServletResponse;
 import org.junit.Before;
 import org.junit.Test;
 
-import br.com.caelum.vraptor.core.ReflectionProvider;
+import br.com.caelum.vraptor.core.DefaultReflectionProvider;
 import br.com.caelum.vraptor.environment.Environment;
 import br.com.caelum.vraptor.interceptor.DefaultTypeNameExtractor;
-import br.com.caelum.vraptor.serialization.SkipSerialization;
 import br.com.caelum.vraptor.serialization.JSONPSerialization;
 import br.com.caelum.vraptor.serialization.Serializee;
+import br.com.caelum.vraptor.serialization.SkipSerialization;
 import br.com.caelum.vraptor.util.test.MockInstanceImpl;
 
 import com.google.common.collect.ForwardingCollection;
@@ -87,8 +87,8 @@ public class GsonJSONSerializationTest {
 		jsonSerializers.add(new EnumSerializer());
 
 		builder = new GsonBuilderWrapper(new MockInstanceImpl<>(jsonSerializers), new MockInstanceImpl<>(jsonDeserializers), 
-				new Serializee(new ReflectionProvider()), new ReflectionProvider());
-		serialization = new GsonJSONSerialization(response, extractor, builder, environment, new ReflectionProvider());
+				new Serializee(new DefaultReflectionProvider()), new DefaultReflectionProvider());
+		serialization = new GsonJSONSerialization(response, extractor, builder, environment, new DefaultReflectionProvider());
 	}
 	
 	@SkipSerialization
@@ -568,7 +568,7 @@ public class GsonJSONSerializationTest {
 	@Test
 	public void shouldSerializeWithCallback() {
 		JSONPSerialization serialization = new GsonJSONPSerialization(response, extractor, builder, environment,
-				new ReflectionProvider());
+				new DefaultReflectionProvider());
 
 		String expectedResult = "calculate({\"order\":{\"price\":15.0}})";
 		Order order = new Order(new Client("nykolas lima"), 15.0, "gift bags, please");

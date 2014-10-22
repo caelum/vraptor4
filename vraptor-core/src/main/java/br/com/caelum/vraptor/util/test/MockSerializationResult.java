@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import javax.enterprise.inject.Vetoed;
 
 import br.com.caelum.vraptor.View;
+import br.com.caelum.vraptor.core.DefaultReflectionProvider;
 import br.com.caelum.vraptor.core.ReflectionProvider;
 import br.com.caelum.vraptor.environment.Environment;
 import br.com.caelum.vraptor.environment.NullEnvironment;
@@ -91,8 +92,8 @@ public class MockSerializationResult extends MockResult {
 		this(new JavassistProxifier(), XStreamBuilderImpl.cleanInstance(),
 				new GsonBuilderWrapper(new MockInstanceImpl<>(new ArrayList<JsonSerializer<?>>()), 
 						new MockInstanceImpl<>(new ArrayList<JsonDeserializer<?>>()), 
-						new Serializee(new ReflectionProvider()) , new ReflectionProvider()),
-						new ReflectionProvider());
+						new Serializee(new DefaultReflectionProvider()) , new DefaultReflectionProvider()),
+						new DefaultReflectionProvider());
 	}
 	
 	@Override

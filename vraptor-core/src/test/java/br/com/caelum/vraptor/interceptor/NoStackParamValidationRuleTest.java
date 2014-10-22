@@ -24,8 +24,8 @@ import br.com.caelum.vraptor.Accepts;
 import br.com.caelum.vraptor.AroundCall;
 import br.com.caelum.vraptor.BeforeCall;
 import br.com.caelum.vraptor.Intercepts;
+import br.com.caelum.vraptor.core.DefaultReflectionProvider;
 import br.com.caelum.vraptor.core.InterceptorStack;
-import br.com.caelum.vraptor.core.ReflectionProvider;
 
 
 public class NoStackParamValidationRuleTest {
@@ -38,7 +38,7 @@ public class NoStackParamValidationRuleTest {
 
 	@Before
 	public void setUp() {
-		invoker = new StepInvoker(new ReflectionProvider());
+		invoker = new StepInvoker(new DefaultReflectionProvider());
 		validationRule = new NoStackParamValidationRule(invoker);
 	}
 

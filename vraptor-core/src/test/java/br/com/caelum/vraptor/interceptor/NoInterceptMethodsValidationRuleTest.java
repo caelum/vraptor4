@@ -26,7 +26,7 @@ import org.junit.rules.ExpectedException;
 import br.com.caelum.vraptor.AfterCall;
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.Intercepts;
-import br.com.caelum.vraptor.core.ReflectionProvider;
+import br.com.caelum.vraptor.core.DefaultReflectionProvider;
 
 public class NoInterceptMethodsValidationRuleTest {
 
@@ -47,7 +47,7 @@ public class NoInterceptMethodsValidationRuleTest {
 
 	@Before
 	public void setUp() {
-		this.stepInvoker = new StepInvoker(new ReflectionProvider());
+		this.stepInvoker = new StepInvoker(new DefaultReflectionProvider());
 	}
 
 	@Test

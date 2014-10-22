@@ -41,7 +41,7 @@ public class ExceptionRecorderTest {
 	public void setUp() {
 		MockitoAnnotations.initMocks(this);
 		Proxifier proxifier = new JavassistProxifier();
-		mapper = new DefaultExceptionMapper(proxifier, new ReflectionProvider());
+		mapper = new DefaultExceptionMapper(proxifier, new DefaultReflectionProvider());
 	}
 
 	@Test

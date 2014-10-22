@@ -35,7 +35,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor.Result;
-import br.com.caelum.vraptor.core.ReflectionProvider;
+import br.com.caelum.vraptor.core.DefaultReflectionProvider;
 import br.com.caelum.vraptor.http.FormatResolver;
 import br.com.caelum.vraptor.other.pack4ge.DumbSerialization;
 import br.com.caelum.vraptor.serialization.gson.GsonJSONSerialization;
@@ -139,7 +139,7 @@ public class DefaultRepresentationResultTest {
 
 		serializers.add(new DumbSerialization());
 		serializers.add(new XStreamXMLSerialization(null, null, null));
-		serializers.add(new GsonJSONSerialization(null, null, null, null, new ReflectionProvider()));
+		serializers.add(new GsonJSONSerialization(null, null, null, null, new DefaultReflectionProvider()));
 		serializers.add(new HTMLSerialization(null, null));
 
 		sort(serializers, new DefaultRepresentationResult.ApplicationPackageFirst());
@@ -153,7 +153,7 @@ public class DefaultRepresentationResultTest {
 		List<Serialization> serializers = new ArrayList<>();
 
 		serializers.add(new XStreamXMLSerialization(null, null, null));
-		serializers.add(new GsonJSONSerialization(null, null, null, null, new ReflectionProvider()));
+		serializers.add(new GsonJSONSerialization(null, null, null, null, new DefaultReflectionProvider()));
 		serializers.add(new HTMLSerialization(null, null));
 		serializers.add(new DumbSerialization());
 

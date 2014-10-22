@@ -29,6 +29,7 @@ import java.util.NoSuchElementException;
 import java.util.Properties;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.ServletContext;
 
@@ -64,6 +65,7 @@ public class DefaultEnvironment implements Environment {
 		this((ServletContext) null);
 	}
 
+	@Inject
 	public DefaultEnvironment(ServletContext context) {
 		this.context = context;
 	}

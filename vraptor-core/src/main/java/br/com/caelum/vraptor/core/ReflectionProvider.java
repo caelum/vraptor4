@@ -14,7 +14,7 @@ public interface ReflectionProvider {
 
 	List<Method> getMethodsFor(Class<?> clazz);
 
-	Method getMethod(Class<?> clazz, String method, Class<?>... args);
+	Method getMethod(Class<?> clazz, String methodName, Class<?>... parameterTypes);
 
 	Object invoke(Object instance, Method method, Object... args);
 
@@ -22,7 +22,7 @@ public interface ReflectionProvider {
 
 	Object invokeGetter(Object instance, String fieldName);
 
-	List<Field> getFieldsFor(Class<?> type);
+	List<Field> getFieldsFor(Class<?> clazz);
 
-	Field getField(Class<?> type, String fieldName);
+	Field getField(Class<?> clazz, String fieldName);
 }

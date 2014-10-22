@@ -21,8 +21,8 @@ public class DefaultReflectionProvider implements ReflectionProvider {
 		return new Mirror().on(clazz).reflectAll().methods();
 	}
 
-	public Method getMethod(Class<?> clazz, String method, Class<?>... args) {
-		return new Mirror().on(clazz).reflect().method(method).withArgs(args);
+	public Method getMethod(Class<?> clazz, String methodName, Class<?>... parameterTypes) {
+		return new Mirror().on(clazz).reflect().method(methodName).withArgs(parameterTypes);
 	}
 
 	public Object invoke(Object instance, Method method, Object... args) {
@@ -37,11 +37,11 @@ public class DefaultReflectionProvider implements ReflectionProvider {
 		return new Mirror().on(instance).invoke().getterFor(fieldName);
 	}
 
-	public List<Field> getFieldsFor(Class<?> type) {
-		return new Mirror().on(type).reflectAll().fields();
+	public List<Field> getFieldsFor(Class<?> clazz) {
+		return new Mirror().on(clazz).reflectAll().fields();
 	}
 
-	public Field getField(Class<?> type, String fieldName) {
-		return new Mirror().on(type).reflect().field(fieldName);
+	public Field getField(Class<?> clazz, String fieldName) {
+		return new Mirror().on(clazz).reflect().field(fieldName);
 	}
 }

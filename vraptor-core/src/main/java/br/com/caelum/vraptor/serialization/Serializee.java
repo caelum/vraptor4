@@ -46,13 +46,6 @@ public class Serializee {
 	private Set<Class<?>> elementTypes;
 	private boolean recursive;
 
-	/** 
-	 * @deprecated CDI eyes only
-	 */
-	protected Serializee() {
-		this(null);
-	}
-
 	@Inject
 	public Serializee(ReflectionProvider reflectionProvider) {
 		this.reflectionProvider = reflectionProvider;

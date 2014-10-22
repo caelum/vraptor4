@@ -52,13 +52,6 @@ public class GsonBuilderWrapper implements GsonSerializerBuilder, GsonDeserializ
 	private final Iterable<JsonSerializer<?>> jsonSerializers;
 	private final Iterable<JsonDeserializer<?>> jsonDeserializers;
 
-	/**
-	 * @deprecated CDI eyes only
-	 */
-	protected GsonBuilderWrapper() {
-		this(null, null, null, null);
-	}
-
 	@Inject
 	public GsonBuilderWrapper(@Any Instance<JsonSerializer<?>> jsonSerializers, 
 			@Any Instance<JsonDeserializer<?>> jsonDeserializers,

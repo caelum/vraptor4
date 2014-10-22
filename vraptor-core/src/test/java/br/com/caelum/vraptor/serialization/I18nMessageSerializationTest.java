@@ -75,7 +75,7 @@ public class I18nMessageSerializationTest {
 		jsonSerializers.add(new MessageGsonConverter());
 
 		GsonSerializerBuilder gsonBuilder =  new GsonBuilderWrapper(new MockInstanceImpl<>(jsonSerializers), 
-				new MockInstanceImpl<>(jsonDeserializers), new Serializee(), new DefaultReflectionProvider());
+				new MockInstanceImpl<>(jsonDeserializers), new Serializee(new DefaultReflectionProvider()), new DefaultReflectionProvider());
 		GsonJSONSerialization jsonSerialization = new GsonJSONSerialization(response, extractor, gsonBuilder, environment,
 				new DefaultReflectionProvider());
 

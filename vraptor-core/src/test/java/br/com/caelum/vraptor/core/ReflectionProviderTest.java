@@ -81,12 +81,12 @@ public class ReflectionProviderTest {
 		Method getName = reflectionProvider.getMethod(Dog.class, "getName");
 		assertThat(getName.getName(), equalTo("getName"));
 		assertThat(getName.getReturnType().getName(), equalTo(String.class.getName()));
-		assertThat(getName.getParameterCount(), equalTo(0));
+		assertThat(getName.getParameterTypes().length, equalTo(0));
 
 		Method setName = reflectionProvider.getMethod(Dog.class, "setName", String.class);
 		assertThat(setName.getName(), equalTo("setName"));
 		assertThat(setName.getReturnType().getName(), equalTo(void.class.getName()));
-		assertThat(setName.getParameterCount(), equalTo(1));
+		assertThat(setName.getParameterTypes().length, equalTo(1));
 	}
 
 	@Test
@@ -94,12 +94,12 @@ public class ReflectionProviderTest {
 		Method getName = reflectionProvider.getMethod(DomesticDog.class, "getName");
 		assertThat(getName.getName(), equalTo("getName"));
 		assertThat(getName.getReturnType().getName(), equalTo(String.class.getName()));
-		assertThat(getName.getParameterCount(), equalTo(0));
+		assertThat(getName.getParameterTypes().length, equalTo(0));
 
 		Method setBreed = reflectionProvider.getMethod(DomesticDog.class, "setBreed", String.class);
 		assertThat(setBreed.getName(), equalTo("setBreed"));
 		assertThat(setBreed.getReturnType().getName(), equalTo(void.class.getName()));
-		assertThat(setBreed.getParameterCount(), equalTo(1));
+		assertThat(setBreed.getParameterTypes().length, equalTo(1));
 	}
 
 	@Test

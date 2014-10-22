@@ -23,6 +23,7 @@ import java.lang.reflect.Method;
 import java.util.List;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.core.ReflectionProvider;
@@ -42,6 +43,7 @@ public class StepInvoker {
 		this(null);
 	}
 
+	@Inject
 	public StepInvoker(ReflectionProvider reflectionProvider) {
 		this.reflectionProvider = reflectionProvider;
 	}

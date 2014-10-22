@@ -9,7 +9,7 @@ import javax.enterprise.context.ApplicationScoped;
 import net.vidageek.mirror.dsl.Mirror;
 
 /**
- * Default implementation for {@link ReflectionProvider} that uses Mirror to access Java reflection featues.
+ * Default implementation for {@link ReflectionProvider} that uses Mirror to access Java reflection features.
  * 
  * @author Otávio Scherer Garcia
  * @since 4.2

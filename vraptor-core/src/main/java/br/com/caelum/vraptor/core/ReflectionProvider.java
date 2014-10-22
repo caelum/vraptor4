@@ -5,7 +5,7 @@ import java.lang.reflect.Method;
 import java.util.List;
 
 /**
- * Utility class to execute reflection operations.
+ * Class to execute reflection operations.
  * 
  * @author Otávio Scherer Garcia
  * @since 4.2

@@ -53,26 +53,41 @@ public  class VRaptorXStream extends XStream {
 
 	@Override
 	protected MapperWrapper wrapMapper(MapperWrapper next) {
-		
-		vraptorMapper = new VRaptorClassMapper(next,
 		/* this method is called in the super constructor, so we cannot use instance variables, so we're
 		 * using this 'lazy' get */
-		new Supplier<TypeNameExtractor>() {
+		vraptorMapper = new VRaptorClassMapper(next, lazyTypeNameExtractor(), lazySerializee(), lazyReflectionProvider());
+		return vraptorMapper;
+	}
+
+	public VRaptorClassMapper getVRaptorMapper() {
+		return vraptorMapper;
+	}
+
+
+	private Supplier<ReflectionProvider> lazyReflectionProvider() {
+		return new Supplier<ReflectionProvider>() {
 			@Override
-			public TypeNameExtractor get() {
-				return extractor;
+			public ReflectionProvider get() {
+				return reflectionProvider;
 			}
-		}, 
-		new Supplier<Serializee>() {
+		};
+	}
+
+	private Supplier<Serializee> lazySerializee() {
+		return new Supplier<Serializee>() {
 			@Override
 			public Serializee get() {
 				return serializee;
 			}
-		}, reflectionProvider);
-		return vraptorMapper;
+		};
 	}
-	
-	public VRaptorClassMapper getVRaptorMapper() {
-		return vraptorMapper;
+
+	private Supplier<TypeNameExtractor> lazyTypeNameExtractor() {
+		return new Supplier<TypeNameExtractor>() {
+			@Override
+			public TypeNameExtractor get() {
+				return extractor;
+			}
+		};
 	}
 }

@@ -83,7 +83,8 @@ public class DefaultRouterTest {
 		this.nameProvider = new ParanamerNameProvider();
 		this.cache = new DefaultCacheStore<>();
 
-		router = new DefaultRouter(proxifier, new NoTypeFinder(), converters, nameProvider, new JavaEvaluator(), encodingHandler,cache);
+		router = new DefaultRouter(proxifier, new NoTypeFinder(), converters, nameProvider, 
+				new JavaEvaluator(new DefaultReflectionProvider()), encodingHandler,cache);
 	}
 
 	@Test

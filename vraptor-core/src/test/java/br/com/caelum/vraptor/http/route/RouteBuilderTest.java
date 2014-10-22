@@ -86,7 +86,8 @@ public class RouteBuilderTest {
 	}
 
 	private DefaultRouteBuilder newBuilder(String uri) {
-		return new DefaultRouteBuilder(proxifier, typeFinder, converters, provider, new JavaEvaluator(), uri, encodingHandler);
+		return new DefaultRouteBuilder(proxifier, typeFinder, converters, provider, 
+				new JavaEvaluator(new DefaultReflectionProvider()), uri, encodingHandler);
 	}
 
 	@Test

@@ -36,6 +36,7 @@ import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor.TwoWayConverter;
 import br.com.caelum.vraptor.core.Converters;
+import br.com.caelum.vraptor.core.DefaultReflectionProvider;
 import br.com.caelum.vraptor.http.EncodingHandler;
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
@@ -54,7 +55,7 @@ public class DefaultParametersControlTest {
 	public void setup() {
 		MockitoAnnotations.initMocks(this);
 		when(encodingHandler.getEncoding()).thenReturn("UTF-8");
-		evaluator = new JavaEvaluator();
+		evaluator = new JavaEvaluator(new DefaultReflectionProvider());
 		nameProvider = new ParanamerNameProvider();
 	}
 

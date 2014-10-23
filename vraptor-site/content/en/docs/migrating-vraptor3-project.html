@@ -11,9 +11,9 @@ To use VRaptor you need a JDK 7 and an Application Server or Servlet Container t
 
 ##IoC Containers
 
-Now VRaptor uses CDI as container. So you don't need to use Guice, Pico or Spring.
+Now VRaptor uses CDI as container, so you don't need to use Guice, Pico or Spring.
 
-CDI spec **obligates** that all managed class have a no-arg constructor. So you need to create a no-arg constructor even you have another constructor annotated with `@Inject`.
+CDI spec **requires** managed classes with normal scope to have a no-arg constructor. If you have another constructor annotated with `@Inject` you still need to add a no-arg constructor.
 
 ~~~
 #!java
@@ -43,7 +43,7 @@ Since CDI can scan the classpath, this feature is not nedded anymore.
 
 ##Startup events
 
-Now to trigger a code when VRaptor starts, you need to observes the event `VRaptorInitialized` as example below:
+Now to trigger some code when VRaptor starts, you need to observe the event `VRaptorInitialized` as shown below:
 
 ~~~ 
 #!java
@@ -61,7 +61,7 @@ public class PrintLog {
 
 ##Changes in classes and method signatures
 
-Some classes and methods was changed or removed. If you have override some internal behaviour, you need to checkout our Javadocs to see what's changed.
+Some classes and methods were changed or removed. If you overrode some internal behaviour, you need to checkout our Javadocs to see what has changed.
 
 All methods and classes annotated with `@Deprecated` were removed.
 
@@ -75,19 +75,19 @@ The fluent validation was removed. From now we only support Bean Validation. For
 
 The `Validator` interface was moved to `br.com.caelum.vraptor.validator.Validator` package.
 
-The inherited classes from `Message` was changed. `ValidationMessage` was renamed to `SimpleMessage` and the constructor was refactored to `SimpleMessage(String category, String message, Object... params)` signature to keep compatibility if another classes for same package.
+The classes that used to inherit from `Message` were changed. `ValidationMessage` was renamed to `SimpleMessage` and the constructor was refactored to `SimpleMessage(String category, String message, Object... params)` to keep it compatible with other `Message` implementations.
 
 ##Converters
 
-All localized converters are merged with non-localized converters. From now on you don't need to declare these converters in the `web.xml`.
+All localized converters were merged with non-localized converters. From now on you don't need to declare these converters in the `web.xml`.
 
-All converters are refactored, and `Converter#convert` doesn't have a `ResourceBundle` parameter anymore. If you need to use some localization features you can inject `Locale` in the class.
+All converters were refactored, and `Converter#convert` doesn't have a `ResourceBundle` parameter anymore. If you need to use some localization features you can inject `Locale` in the class.
 
 The `Converter` interface was moved to `br.com.caelum.vraptor.converter` package.
 
 ##VRaptor scopes removed
 
-All VRaptor scopes are removed in flavor to use CDI scopes under package `javax.enterprise.context`:
+All VRaptor scopes are removed in favor of CDI scopes under package `javax.enterprise.context`:
 
 ~~~ 
 #!java
@@ -101,11 +101,11 @@ All VRaptor scopes are removed in flavor to use CDI scopes under package `javax.
 
 ##Component factories
 
-The `ComponentFactory` interface don't exists anymore. From now you can use `@Produces` from CDI spec. You can see more [here](/en/docs/components).
+The `ComponentFactory` interface doesn't exist anymore. From now you can use `@Produces` from CDI spec. You can see more [here](/en/docs/components).
 
 ##Overriding components
 
-Due CDI behaviour you need to annotate your class with `@Specializes` annotation.
+Due to CDI behaviour you need to annotate your class with `@Specializes` annotation.
 
 ##@Resource is now @Controller
 
@@ -113,7 +113,7 @@ The `@Resource` annotation was renamed to `@Controller` and has the same behavio
 
 ##There is no Localization interface
 
-Instead of using `Localization` and call `.getLocale()` or `.getBundle()` methods, from now you can inject these objects directly like this:
+Instead of using `Localization` and call `.getLocale()` or `.getBundle()` methods, from now on you can inject these objects directly like this:
 
 ~~~ 
 #!java
@@ -130,9 +130,9 @@ public class MyClass {
 
 ##LinkTo
 
-The ***LinkTo*** feature was updated, and now supports method sintax. From now instead of using `${linkTo[Controller].metodo[0, 1]}` you can use `${linkTo[Controller].metodo(0, 1)}`. More information [here](/en/docs/view-and-ajax).
+The ***LinkTo*** feature was updated, and now support method sintax. From now on, instead of using `${linkTo[Controller].metodo[0, 1]}` you can use `${linkTo[Controller].metodo(0, 1)}`. More information [here](/en/docs/view-and-ajax).
 
-To easy migration we shared a `.sh` script [here](https://gist.github.com/rponte/7546377).
+To simplify migration, we shared a `.sh` script [here](https://gist.github.com/rponte/7546377).
 
 ##Serialization and deserialization
 

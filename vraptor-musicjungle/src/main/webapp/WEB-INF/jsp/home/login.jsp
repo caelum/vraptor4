@@ -18,6 +18,7 @@
 				<div class="form-group">
 					<label class="sr-only" for="password"><fmt:message key="user.password"/></label>
 					<input type="password" class="form-control" name="password" placeholder="<fmt:message key="user.password"/>" />
+					<span class="no-emphasis"><fmt:message key="user.default"/></span>
 				</div>
 				<div class="form-group pull-right">	
 					<button type="submit" id="submit" class="btn btn-large btn-primary">

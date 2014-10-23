@@ -13,7 +13,7 @@ To use VRaptor you need a JDK 7 and an Application Server or Servlet Container t
 
 Now VRaptor uses CDI as container, so you don't need to use Guice, Pico or Spring.
 
-CDI spec **obligates** that all managed class have a no-arg constructor, so you need to create a no-arg constructor even if you have another constructor annotated with `@Inject`.
+CDI spec **requires** managed classes with normal scope to have a no-arg constructor. If you have another constructor annotated with `@Inject` you still need to add a no-arg constructor.
 
 ~~~
 #!java

@@ -140,4 +140,9 @@ public class GsonBuilderWrapper implements GsonSerializerBuilder, GsonDeserializ
 	public void setExclusionStrategies(ExclusionStrategy... strategies) {
 		builder.setExclusionStrategies(strategies);
 	}
+
+	protected GsonBuilder getGsonBuilder() {
+		return builder;
+	}
+
 }

@@ -79,18 +79,18 @@ public class GsonBuilderWrapper implements GsonSerializerBuilder, GsonDeserializ
 		}
 		
 		for (ExclusionStrategy exclusion : exclusions) {
-			builder.addSerializationExclusionStrategy(exclusion);
+			getGsonBuilder().addSerializationExclusionStrategy(exclusion);
 		}
 		
-		return builder.create();
+		return getGsonBuilder().create();
 	}
 	
 	private void registerAdapter(Class<?> adapterType, Object adapter) {
 		RegisterStrategy registerStrategy = adapter.getClass().getAnnotation(RegisterStrategy.class);
 		if ((registerStrategy != null) && (registerStrategy.value().equals(RegisterType.SINGLE))) {
-			builder.registerTypeAdapter(adapterType, adapter);
+			getGsonBuilder().registerTypeAdapter(adapterType, adapter);
 		} else {
-			builder.registerTypeHierarchyAdapter(adapterType, adapter);
+			getGsonBuilder().registerTypeHierarchyAdapter(adapterType, adapter);
 		}	
 	}
 	
@@ -133,12 +133,12 @@ public class GsonBuilderWrapper implements GsonSerializerBuilder, GsonDeserializ
 
 	@Override
 	public void indented() {
-		builder.setPrettyPrinting();
+		getGsonBuilder().setPrettyPrinting();
 	}
 
 	@Override
 	public void setExclusionStrategies(ExclusionStrategy... strategies) {
-		builder.setExclusionStrategies(strategies);
+		getGsonBuilder().setExclusionStrategies(strategies);
 	}
 
 	protected GsonBuilder getGsonBuilder() {

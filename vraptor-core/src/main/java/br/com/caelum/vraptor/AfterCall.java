@@ -21,6 +21,17 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+/**
+ * Executes a method after the current call. The target method must have no parameters, and you can't have more than 
+ * one method annotated with {@link AfterCall} in the same class. 
+ * 
+ * <code>
+ * \@AfterCall
+ * public void intercept() {
+ *     System.out.println("code executed after stack");
+ * }
+ * </code>
+ */
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)

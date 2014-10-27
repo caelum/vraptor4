@@ -23,7 +23,8 @@ import java.lang.annotation.Target;
 
 /**
  * Executes a method before the current call, and you can't have more than one method annotated with {@link BeforeCall} 
- * in the same class. The target method must have no parameters. 
+ * in the same class. The target method must have no parameters. The method 
+ * {@code br.com.caelum.vraptor.interceptor.SimpleInterceptorStack#next} will call implicity after the execution.
  * 
  * <code>
  * \@BeforeCall

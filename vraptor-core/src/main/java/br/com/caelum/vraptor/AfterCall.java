@@ -23,8 +23,7 @@ import java.lang.annotation.Target;
 
 /**
  * Executes a method after the current call. The target method must have no parameters, and you can't have more than 
- * one method annotated with {@link AfterCall} in the same class. The method {@code SimpleInterceptorStack#next} will
- * call implicity after the execution.
+ * one method annotated with {@link AfterCall} in the same class.
  * 
  * <code>
  * \@AfterCall

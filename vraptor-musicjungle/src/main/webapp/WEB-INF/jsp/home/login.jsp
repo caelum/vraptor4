@@ -3,7 +3,7 @@
 
 <div class="well login-logo">
 	<span class="logo">VRaptor Music Jungle</span>
-	<span class="logo-message"><fmt:message key="project-description"/></span> 
+	<span class="logo-message"><fmt:message key="project_description"/></span> 
 </div>
 
 <div class="container">

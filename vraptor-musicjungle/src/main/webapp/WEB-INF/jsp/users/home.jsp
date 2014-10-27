@@ -54,10 +54,10 @@
 <table class="table table-striped table-bordered table-hover">
 	<thead>
 		<tr>
-			<th>Title</th>
-			<th>Description</th>
-			<th>Type</th>
-			<th>Download</th>
+			<th><fmt:message key="music.title"/></th>
+			<th><fmt:message key="music.description"/></th>
+			<th><fmt:message key="music.type"/></th>
+			<td><fmt:message key="music.download"/></td>
 		</tr>
 	</thead>
 	<tbody>

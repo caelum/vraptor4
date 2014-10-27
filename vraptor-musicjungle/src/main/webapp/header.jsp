@@ -25,8 +25,6 @@
 <body>
     <c:set var="path"><c:url value="/"/></c:set>
 
-	<fmt:setLocale value="${locale}"/>
-
 	<c:if test="${not empty param.language}">
 		<fmt:setLocale value="${param.language}" scope="session"/>
 	</c:if>

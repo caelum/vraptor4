@@ -23,7 +23,7 @@ import java.lang.annotation.Target;
 
 /**
  * Defines a method with a condition to intercept or not the current stack. The annotated method must return a
- * {@code boolean} value and you can't have more than one method annotated with {@link Accepts} in the same class.
+ * {@code boolean} value and you can't have more than one accept strategy in the same class.
  * 
  * <code>
  * \@Accepts

@@ -3,7 +3,7 @@
 
 <div class="well login-logo">
 	<span class="logo">VRaptor Music Jungle</span>
-	<span class="logo-message">a place to upload, download and share your favorite musics.</span> 
+	<span class="logo-message"><fmt:message key="project-description"/></span> 
 </div>
 
 <div class="container">

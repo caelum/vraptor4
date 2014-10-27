@@ -33,8 +33,12 @@
 		<div class="navbar-inner">
 			<div class="collapse navbar-collapse navbar-ex1-collapse">
 				<ul class="nav navbar-nav">
-					<li class="active"><a href="${path}"> Home</a></li>
-					<li><a href="${path}"> About</a></li>
+					<li class="active">
+						<a href="${path}"> <fmt:message key="menu.home"/> </a>
+					</li>
+					<li>
+						<a href="${path}"> <fmt:message key="menu.about"/> </a>
+					</li>
 					<li>
 						<a href="${linkTo[UsersController].list}"> 
 							<fmt:message key="list_users" />
@@ -55,7 +59,7 @@
 				</ul>
 
 				<span class="pull-right ${not empty userInfo.user ? '' : 'hidden'}">
-					${userInfo.user.name} (<a href="${linkTo[HomeController].logout}">Logout</a>)
+					${userInfo.user.name} (<a href="${linkTo[HomeController].logout}"><fmt:message key="logout"/></a>)
 				</span>
 			</div>
 		</div>

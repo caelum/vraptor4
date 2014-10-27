@@ -26,6 +26,7 @@
     <c:set var="path"><c:url value="/"/></c:set>
 
 	<c:if test="${not empty param.language}">
+		<c:set var="lang" value="${param.language}" scope="session"/>
 		<fmt:setLocale value="${param.language}" scope="session"/>
 	</c:if>
 	
@@ -53,8 +54,12 @@
             
 				<ul class="nav navbar-nav">
 					<li class="divider-vertical"></li>
-					<li class="active"><a href="?language=en">ENGLISH</a></li>
-					<li><a href="?language=pt_BR">PORTUGUÊS</a></li>
+					<li class="${lang eq 'en' ? 'active' : ''}">
+						<a href="?language=en">ENGLISH</a>
+					</li>
+					<li class="${lang eq 'pt_BR' ? 'active' : ''}">
+						<a href="?language=pt_BR">PORTUGUÊS</a>
+					</li>
 					<li class="divider-vertical"></li>
 				</ul>
 

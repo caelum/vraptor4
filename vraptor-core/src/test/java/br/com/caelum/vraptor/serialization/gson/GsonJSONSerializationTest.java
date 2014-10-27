@@ -42,9 +42,10 @@ import org.junit.Test;
 
 import br.com.caelum.vraptor.environment.Environment;
 import br.com.caelum.vraptor.interceptor.DefaultTypeNameExtractor;
-import br.com.caelum.vraptor.serialization.SkipSerialization;
 import br.com.caelum.vraptor.serialization.JSONPSerialization;
+import br.com.caelum.vraptor.serialization.JSONSerialization;
 import br.com.caelum.vraptor.serialization.Serializee;
+import br.com.caelum.vraptor.serialization.SkipSerialization;
 import br.com.caelum.vraptor.util.test.MockInstanceImpl;
 
 import com.google.common.collect.ForwardingCollection;
@@ -56,6 +57,7 @@ import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
+import com.google.gson.annotations.Since;
 
 public class GsonJSONSerializationTest {
 
@@ -117,16 +119,26 @@ public class GsonJSONSerializationTest {
 	}
 
 	public static class Address {
+		@Since(1.0)
 		String street;
+
+		String city;
 
 		public Address(String street) {
 			this.street = street;
 		}
+
+		public Address(String street, String city) {
+			this.street = street;
+			this.city = city;
+		}
 	}
 
 	public static class Client {
+		@Since(1.0)
 		String name;
 
+		@Since(1.0)
 		Address address;
 
 		Calendar included;
@@ -570,6 +582,28 @@ public class GsonJSONSerializationTest {
 		String expectedResult = "calculate({\"order\":{\"price\":15.0}})";
 		Order order = new Order(new Client("nykolas lima"), 15.0, "gift bags, please");
 		serialization.withCallback("calculate").from(order).excludeAll().include("price").serialize();
+		assertThat(result(), is(equalTo(expectedResult)));
+	}
+
+	@Test
+	public void shouldSerializeVersionedJsonFieldsWithSinceAnnotation() {
+		JSONSerialization serialization = new GsonJSONSerialization(response, extractor, builder, environment);
+
+		String expectedResult = "{\"client\":{\"name\":\"adolfo eloy\"}}";
+		Client client = new Client("adolfo eloy");
+		serialization.version(1.0).from(client).serialize();
+		assertThat(result(), is(equalTo(expectedResult)));
+	}
+
+	@Test
+	public void shouldSerializeRecursivelyVersionedJsonFieldsWithSinceAnnotationOnly() {
+		ExclusionStrategy strategy = new SinceExclusionStrategy();
+		JSONSerialization serialization = new GsonJSONSerialization(response, extractor, builder, environment);
+
+		String expectedResult = "{\"client\":{\"name\":\"adolfo eloy\",\"address\":{\"street\":\"antonio agu\"}}}";
+
+		Client client = new Client("adolfo eloy", new Address("antonio agu", "osasco"));
+		serialization.version(1.0).setExclusionStrategies(strategy).from(client).recursive().serialize();
 		assertThat(result(), is(equalTo(expectedResult)));
 	}
 }

@@ -15,6 +15,8 @@
  */
 package br.com.caelum.vraptor.serialization;
 
+import com.google.gson.ExclusionStrategy;
+
 /**
  * Basic json serialization support using a Json SerializerBuilder.
  *
@@ -36,4 +38,8 @@ public interface JSONSerialization extends Serialization {
 	<T> NoRootSerialization withoutRoot();
 	
 	JSONSerialization indented();
+
+	JSONSerialization version(double versionNumber);
+
+	JSONSerialization setExclusionStrategies(ExclusionStrategy... exclusionStrategies);
 }

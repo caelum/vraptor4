@@ -23,7 +23,13 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * A class level annotation to define that the stack will intercepted only for package or sub-packages.
+ * A class level annotation to define that the stack will intercepted only for packages and subpackages. In 
+ * the example below all classes inside {@code com.myapp.controllers} will be intercepted, including subpackages.
+ * <code>
+ * \@AcceptsForPackages("com.myapp.controllers")
+ * public class AuditInterceptor {
+ * }
+ * </code>
  */
 @Documented
 @Retention(RetentionPolicy.RUNTIME)

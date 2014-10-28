@@ -23,6 +23,19 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+/**
+ * A class level annotation to define that the stack will intercepted when an annotation is present.
+ * <code>
+ * \@AcceptsWithAnnotations(Audit.class)
+ *  public class AuditInterceptor {
+ *  
+ *      \@AroundCall
+ *      public void around(SimpleInterceptorStack stack) {
+ *          stack.next();
+ *      }
+ *  }
+ * </code>
+ */
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)

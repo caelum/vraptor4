@@ -5,9 +5,9 @@
 <table class="table table-striped table-bordered table-hover">
 	<thead>
 		<tr>
-			<th>Title</th>
-			<th>Description</th>
-			<th>Type</th>
+			<th><fmt:message key="music.title"/></th>
+			<th><fmt:message key="music.description"/></th>
+			<th><fmt:message key="music.type"/></th>
 			<th></th>
 			<th></th>
 		</tr>

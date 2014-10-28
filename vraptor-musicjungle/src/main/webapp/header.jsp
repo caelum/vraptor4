@@ -36,7 +36,7 @@
 			<div class="collapse navbar-collapse navbar-ex1-collapse">
 				<ul class="nav navbar-nav">
 					<li class="active"><a href="${path}"></i> Home</a></li>
-					<li><a href="${path}"></i> About</a></li>
+					<li><a href="${linkTo[HomeController].about}"></i> About</a></li>
 					<li>
 						<a href="${linkTo[UsersController].list}"> 
 							<fmt:message key="list_users" />

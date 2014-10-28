@@ -5,7 +5,7 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<meta name="author" content="Caelum - Ensino e Inovação"/>
+	<meta name="author" content="Caelum - Ensino e InovaÃ§Ã£o"/>
 	<meta name="reply-to" content="contato@caelum.com.br"/>
 	<meta name="description" content="<fmt:message key="meta.description"/>"/>
 	<meta name="keywords" content="sites, web, desenvolvimento, development, java, opensource"/>
@@ -58,7 +58,7 @@
 						<a href="?language=en">ENGLISH</a>
 					</li>
 					<li class="${lang eq 'pt_BR' ? 'active' : ''}">
-						<a href="?language=pt_BR">PORTUGUÊS</a>
+						<a href="?language=pt_BR">PORTUGUÃŠS</a>
 					</li>
 					<li class="divider-vertical"></li>
 				</ul>

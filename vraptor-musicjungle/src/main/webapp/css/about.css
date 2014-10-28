@@ -1,0 +1,25 @@
+@CHARSET "UTF-8";
+
+.about-content {
+	text-align: center;
+}
+
+.about-content {
+	font-size: 1.3em;
+}
+
+#caelum-logo {
+	width: 100px;
+}
+
+#logo {
+	width: 400px;
+}
+
+.powered-by {
+	font-size: .7em;
+	position: relative;
+	left: 130px;
+}
+
+

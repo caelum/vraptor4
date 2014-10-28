@@ -126,5 +126,10 @@ public class HomeController {
 	@Get
 	public void login() {
 	}
+	
+	@Public
+	@Get
+	public void about() {
+	}
 
 }

@@ -34,6 +34,8 @@
 		<div class="navbar-inner">
 			<div class="collapse navbar-collapse navbar-ex1-collapse">
 				<ul class="nav navbar-nav">
+					<li class="active"><a href="${path}"></i> Home</a></li>
+					<li><a href="${linkTo[HomeController].about}"></i> About</a></li>
 					<li class="active">
 						<a href="${path}"> <fmt:message key="menu.home"/> </a>
 					</li>

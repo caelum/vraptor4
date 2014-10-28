@@ -21,6 +21,17 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+/**
+ * Defines a method with a condition to intercept or not the current stack. The annotated method must return a
+ * {@code boolean} value and you can't have more than one accept strategy in the same class.
+ * 
+ * <code>
+ * \@Accepts
+ * public boolean accepts(ControllerMethod method) {
+ *     return method.containsAnnotation(Audit.class);
+ * }
+ * </code>
+ */
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)

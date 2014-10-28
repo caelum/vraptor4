@@ -21,6 +21,24 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import br.com.caelum.vraptor.core.InterceptorStack;
+import br.com.caelum.vraptor.interceptor.SimpleInterceptorStack;
+
+/**
+ * Executes a method in the current call. You should use the {@code SimpleInterceptorStack#next()} to execute
+ * the next interceptor stack. The target method must have only one parameter with {@link SimpleInterceptorStack} or 
+ * {@link InterceptorStack} type, and you can't have more than one method annotated with {@link AroundCall} 
+ * in the same class.
+ * 
+ * <code>
+ * \@AroundCall
+ * public void intercept(SimpleInterceptorStack stack) {
+ *     System.out.println("Executing before");
+ *     stack.next();
+ *     System.out.println("Executing after");
+ * }
+ * </code>
+ */
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)

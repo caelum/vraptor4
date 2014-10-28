@@ -172,8 +172,8 @@
 				<configuration>
 					<webApp>
 						<contextPath>/${project.build.finalName}</contextPath>
-						<jettyEnvXml>${basedir}/src/main/webapp/WEB-INF/jetty-env.xml</jettyEnvXml>
 					</webApp>
+					<contextXml>src/main/webapp/WEB-INF/jetty-context.xml</contextXml>
 				</configuration>
 			</plugin>
 

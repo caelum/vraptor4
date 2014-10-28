@@ -5,7 +5,7 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<meta name="author" content="Caelum - Ensino e Inovação"/>
+	<meta name="author" content="Caelum - Ensino e InovaÃ§Ã£o"/>
 	<meta name="reply-to" content="contato@caelum.com.br"/>
 	<meta name="description" content="<fmt:message key="meta.description"/>"/>
 	<meta name="keywords" content="sites, web, desenvolvimento, development, java, opensource"/>
@@ -25,9 +25,8 @@
 <body>
     <c:set var="path"><c:url value="/"/></c:set>
 
-	<fmt:setLocale value="${locale}"/>
-
 	<c:if test="${not empty param.language}">
+		<c:set var="lang" value="${param.language}" scope="session"/>
 		<fmt:setLocale value="${param.language}" scope="session"/>
 	</c:if>
 	
@@ -35,8 +34,12 @@
 		<div class="navbar-inner">
 			<div class="collapse navbar-collapse navbar-ex1-collapse">
 				<ul class="nav navbar-nav">
-					<li class="active"><a href="${path}"></i> Home</a></li>
-					<li><a href="${path}"></i> About</a></li>
+					<li class="active">
+						<a href="${path}"> <fmt:message key="menu.home"/> </a>
+					</li>
+					<li>
+						<a href="${path}"> <fmt:message key="menu.about"/> </a>
+					</li>
 					<li>
 						<a href="${linkTo[UsersController].list}"> 
 							<fmt:message key="list_users" />
@@ -51,13 +54,17 @@
             
 				<ul class="nav navbar-nav">
 					<li class="divider-vertical"></li>
-					<li class="active"><a href="?language=en">ENGLISH</a></li>
-					<li><a href="?language=pt_BR">PORTUGUÊS</a></li>
+					<li class="${lang eq 'en' ? 'active' : ''}">
+						<a href="?language=en">ENGLISH</a>
+					</li>
+					<li class="${lang eq 'pt_BR' ? 'active' : ''}">
+						<a href="?language=pt_BR">PORTUGUÃŠS</a>
+					</li>
 					<li class="divider-vertical"></li>
 				</ul>
 
 				<span class="pull-right ${not empty userInfo.user ? '' : 'hidden'}">
-					${userInfo.user.name} (<a href="${linkTo[HomeController].logout}">Logout</a>)
+					${userInfo.user.name} (<a href="${linkTo[HomeController].logout}"><fmt:message key="logout"/></a>)
 				</span>
 			</div>
 		</div>

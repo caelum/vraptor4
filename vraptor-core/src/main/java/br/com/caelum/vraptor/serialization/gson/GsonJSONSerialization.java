@@ -22,8 +22,6 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
 
-import com.google.gson.ExclusionStrategy;
-
 import br.com.caelum.vraptor.environment.Environment;
 import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
 import br.com.caelum.vraptor.serialization.JSONSerialization;
@@ -114,10 +112,4 @@ public class GsonJSONSerialization implements JSONSerialization {
 		return this;
 	}
 
-	@Override
-	public JSONSerialization setExclusionStrategies(
-			ExclusionStrategy... exclusionStrategies) {
-		builder.setExclusionStrategies(exclusionStrategies);
-		return this;
-	}
 }

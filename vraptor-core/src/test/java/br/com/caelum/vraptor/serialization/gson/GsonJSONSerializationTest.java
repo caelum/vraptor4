@@ -596,14 +596,13 @@ public class GsonJSONSerializationTest {
 	}
 
 	@Test
-	public void shouldSerializeRecursivelyVersionedJsonFieldsWithSinceAnnotationOnly() {
-		ExclusionStrategy strategy = new SinceExclusionStrategy();
+	public void shouldSerializeRecursivelyVersionedJsonFields() {
 		JSONSerialization serialization = new GsonJSONSerialization(response, extractor, builder, environment);
 
-		String expectedResult = "{\"client\":{\"name\":\"adolfo eloy\",\"address\":{\"street\":\"antonio agu\"}}}";
+		String expectedResult = "{\"client\":{\"name\":\"adolfo eloy\",\"address\":{\"street\":\"antonio agu\",\"city\":\"osasco\"}}}";
 
 		Client client = new Client("adolfo eloy", new Address("antonio agu", "osasco"));
-		serialization.version(1.0).setExclusionStrategies(strategy).from(client).recursive().serialize();
+		serialization.version(1.0).from(client).recursive().serialize();
 		assertThat(result(), is(equalTo(expectedResult)));
 	}
 }

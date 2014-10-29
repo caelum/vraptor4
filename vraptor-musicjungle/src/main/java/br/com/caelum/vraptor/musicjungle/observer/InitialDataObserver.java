@@ -30,16 +30,24 @@ public class InitialDataObserver {
 
 	public void insert(@Observes VRaptorInitialized event) {
 
-		EntityManager manager = factory.createEntityManager();
-		manager.getTransaction().begin();
+		EntityManager manager = null;
 		
-		User defaultUser = new User();
-		defaultUser.setLogin("vraptor");
-		defaultUser.setPassword("vraptor");
-		defaultUser.setName("VRaptor's Default User");
+		try {
+			manager = factory.createEntityManager();
+			manager.getTransaction().begin();
+			
+			User defaultUser = new User();
+			defaultUser.setLogin("vraptor");
+			defaultUser.setPassword("vraptor");
+			defaultUser.setName("VRaptor's Default User");
 
-		manager.persist(defaultUser);
-		manager.getTransaction().commit();
-		manager.close(); 
+			manager.persist(defaultUser);
+			manager.getTransaction().commit();
+			
+		} finally {
+			if (manager != null && manager.isOpen()) {
+				manager.close();
+			}
+		} 
 	}
 }

@@ -18,6 +18,7 @@
 package br.com.caelum.vraptor.core;
 
 
+import static br.com.caelum.vraptor.view.Results.logic;
 import static java.util.Collections.unmodifiableMap;
 
 import java.util.HashMap;
@@ -75,10 +76,17 @@ public class DefaultResult extends AbstractResult {
 	
 	@Override
 	public <T extends View> T use(Class<T> view) {
+		
 		messages.assertAbsenceOfErrors();
 	    
 		responseCommitted = true;
 		return container.instanceFor(view);
+	}
+	
+	@Override
+	public <T> T forwardTo(Class<T> controller) {
+		messages.assertAbsenceOfErrors();
+		return container.instanceFor(logic()).forwardTo(controller);
 	}
 	
 	@Override

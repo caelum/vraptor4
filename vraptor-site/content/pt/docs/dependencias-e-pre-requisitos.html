@@ -25,6 +25,18 @@ Ao usar um Servlet Container como o Tomcat ou Jetty, é preciso adicionar os jar
 </listener>
 ~~~
 
+E o arquivo `beans.xml`, opcional, que deve estar dentro do `WEB-INF` de sua aplicação:
+
+~~~
+#!xml
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/beans_1_1.xsd"
+	version="1.1" bean-discovery-mode="all">
+</beans>
+~~~
+
 
 Algumas dependências podem variar se você usa um Application Server ou um Servlet Container. Pacotes da especificação, como o CDI ou Bean Validation, não são necessários quando você usa um Application Server.
 

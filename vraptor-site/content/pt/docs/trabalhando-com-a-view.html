@@ -281,6 +281,76 @@ result.use(xml()).from(usuario).exclude("email").serialize(); // excluir o campo
 result.use(xml()).from(usuario).excludeAll().serialize(); // exclui todos os campos
 ~~~ 
 
+Você pode adicionar versionamento aos seus resultados baseados em JSON.
+Através desse recurso é possível versionar uma API. 
+Para exemplificar a utilidade do versionamento, suponha que foi criada uma API que retorna clientes de um determinado sistema.
+A primeira versão, retorna clientes definidos através da seguinte estrutura:
+
+~~~
+#!java
+public class Cliente {
+	private String nome;	
+	private String ramo;
+
+	// getters e setters omitidos
+}
+~~~
+
+Agora suponha que você criou um método no seu controlador que possui o seguinte resultado:
+
+~~~ 
+#!java
+@Get{"/clientes"}
+public void clientes() {
+	List<Cliente> clientes = repositorioDeClientes.getAll();
+	result.use(json()).from(clientes).serialize();	
+}
+~~~
+
+Até agora não há problema algum. Porém, caso seja necessário disponibilizar um novo atributo como resultado que só fará sentido para uma nova versão da API, como poderíamos contornar a situação? Poderiamos criar uma segunda classe chamada ClienteV2 com o novo atributo e o método do controlador que retorna os clientes poderia ser reescrito conforme abaixo:
+
+~~~
+#!java
+@Get{"/{versaoParam}/clientes"}
+public void clientes(String versaoParam) {
+    double versao = Double.parseDouble(versaoParam);
+    if (versao == 2.0) {
+		result.use(json()).from(repositorioDeClientes.getAll()).serialize();
+	} else {
+		result.use(json()).from(repositorioDeClientes.getAllFromV2()).serialize();
+	}
+}
+~~~
+
+Certamente a solução acima não é nada boa. Como o VRaptor utiliza a biblioteca GSON (criada pelo Google), podemos utilizar a mesma classe Cliente utilizando a anotação @Since nos atributos que queremos versionar. Essa anotação indica que um determinado atributo está disponível apartir de uma versão *x* conforme o exemplo abaixo:
+
+~~~
+#!java
+public class Cliente {
+	private String nome;
+	private String ramo;
+
+	@Since(2.0)
+	private Calendar dataDeRegistro;	
+
+	// getters e setters omitidos
+}
+~~~
+
+Dessa forma o método do controlador agora pode ser reescrito da seguinte forma:
+
+~~~
+#!java
+@Get{"/{versaoParam}/clientes"}
+public void clientes(String versaoParam) {
+    double versao = Double.parseDouble(versaoParam);
+    List<Cliente> clientes = repositorioDeClientes.getAll();
+	result.use(json()).version(versao).from(clientes).serialize();
+}
+~~~
+
+Pronto, agora os clientes de nossa API, podem solicitar um resultado com uma versão específica.
+
 A implementação para serialização de XML padrão é baseada no XStream, então é possível configurar a serialização por anotações ou configurações diretas ao XStream, bastando criar a classe:
 
 ~~~ 

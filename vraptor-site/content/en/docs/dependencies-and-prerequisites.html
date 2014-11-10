@@ -27,6 +27,19 @@ Weld 2.x jars and the following listener to your `web.xml` file to activate CDI:
 </listener>
 ~~~
 
+And the `beans.xml` file located under your `WEB-INF` (which is optional in case of 
+Application Servers) with this content:
+
+~~~
+#!xml
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/beans_1_1.xsd"
+	version="1.1" bean-discovery-mode="all">
+</beans>
+~~~
+
 Some dependencies may differ between applications running in an Application Server
 or a Servlet Container. Dependencies from Java EE specification, such as CDI or
 Bean Validation, are not required if you are using an Application Server.

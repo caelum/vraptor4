@@ -19,6 +19,7 @@ package br.com.caelum.vraptor.core;
 
 import javax.enterprise.inject.Vetoed;
 
+import br.com.caelum.vraptor.util.Try;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,6 +27,8 @@ import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.interceptor.Interceptor;
 import br.com.caelum.vraptor.ioc.Container;
+
+import java.util.concurrent.Callable;
 
 /**
  * Instantiates the interceptor on the fly and executes its method.
@@ -46,16 +49,22 @@ public class ToInstantiateInterceptorHandler implements InterceptorHandler {
 	}
 
 	@Override
-	public void execute(InterceptorStack stack, ControllerMethod method, Object controllerInstance)
+	public void execute(final InterceptorStack stack, final ControllerMethod method, final Object controllerInstance)
 			throws InterceptionException {
-		Interceptor interceptor = (Interceptor) container.instanceFor(type);
+		final Interceptor interceptor = (Interceptor) container.instanceFor(type);
 		if (interceptor == null) {
 			throw new InterceptionException("Unable to instantiate interceptor for " + type.getName()
 					+ ": the container returned null.");
 		}
 		if (interceptor.accepts(method)) {
 			logger.debug("Invoking interceptor {}", interceptor.getClass().getSimpleName());
-			interceptor.intercept(stack, method, controllerInstance);
+			Try result = Try.run(new Callable<Void>() {
+				@Override
+				public Void call() throws Exception {
+					interceptor.intercept(stack, method, controllerInstance);
+					return null;
+				}
+			});
 		} else {
 			stack.next(method, controllerInstance);
 		}

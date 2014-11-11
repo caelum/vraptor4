@@ -19,7 +19,9 @@ package br.com.caelum.vraptor.core;
 
 import javax.enterprise.inject.Vetoed;
 
+import br.com.caelum.vraptor.observer.ExecuteMethodExceptionHandler;
 import br.com.caelum.vraptor.util.Try;
+import br.com.caelum.vraptor.validator.ValidatedInterceptor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,10 +44,12 @@ public class ToInstantiateInterceptorHandler implements InterceptorHandler {
 
 	private final Container container;
 	private final Class<?> type;
+	private final ExecuteMethodExceptionHandler executeMethodExceptionHandler;
 
-	public ToInstantiateInterceptorHandler(Container container, Class<?> type) {
+	public ToInstantiateInterceptorHandler(Container container, Class<?> type, ExecuteMethodExceptionHandler executeMethodExceptionHandler) {
 		this.container = container;
 		this.type = type;
+		this.executeMethodExceptionHandler = executeMethodExceptionHandler;
 	}
 
 	@Override
@@ -58,15 +62,27 @@ public class ToInstantiateInterceptorHandler implements InterceptorHandler {
 		}
 		if (interceptor.accepts(method)) {
 			logger.debug("Invoking interceptor {}", interceptor.getClass().getSimpleName());
-			Try result = Try.run(new Callable<Void>() {
-				@Override
-				public Void call() throws Exception {
-					interceptor.intercept(stack, method, controllerInstance);
-					return null;
-				}
-			});
+			boolean isValidated = type.isAnnotationPresent(ValidatedInterceptor.class);
+			if (isValidated) {
+				executeSafely(stack, method, controllerInstance, interceptor);
+			} else {
+				interceptor.intercept(stack, method, controllerInstance);
+			}
 		} else {
 			stack.next(method, controllerInstance);
+		}
+	}
+
+	private void executeSafely(final InterceptorStack stack, final ControllerMethod method, final Object controllerInstance, final Interceptor interceptor) {
+		Try result = Try.run(new Callable<Void>() {
+			@Override
+			public Void call() throws Exception {
+				interceptor.intercept(stack, method, controllerInstance);
+				return null;
+			}
+		});
+		if (result.failed()) {
+			executeMethodExceptionHandler.handle(result.getException());
 		}
 	}
 

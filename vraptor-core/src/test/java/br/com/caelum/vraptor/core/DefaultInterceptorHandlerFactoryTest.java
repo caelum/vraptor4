@@ -20,6 +20,7 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.sameInstance;
 import static org.junit.Assert.assertThat;
 
+import br.com.caelum.vraptor.observer.ExecuteMethodExceptionHandler;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -55,8 +56,9 @@ public class DefaultInterceptorHandlerFactoryTest {
 		MockitoAnnotations.initMocks(this);
 
 		CacheStore<Class<?>, InterceptorHandler> cachedHandlers = new DefaultCacheStore<>();
+		ExecuteMethodExceptionHandler executeMethodExceptionHandler = new ExecuteMethodExceptionHandler();
 		factory = new DefaultInterceptorHandlerFactory(container, stepInvoker,
-				cachedHandlers, acceptsExecutor, customAcceptsExecutor, interceptorExecutor);
+				cachedHandlers, acceptsExecutor, customAcceptsExecutor, interceptorExecutor, executeMethodExceptionHandler);
 	}
 
 	static interface RegularInterceptor extends Interceptor {}

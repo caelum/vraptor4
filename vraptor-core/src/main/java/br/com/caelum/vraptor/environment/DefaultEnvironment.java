@@ -19,7 +19,7 @@ import static br.com.caelum.vraptor.environment.EnvironmentType.DEVELOPMENT;
 import static br.com.caelum.vraptor.environment.EnvironmentType.PRODUCTION;
 import static br.com.caelum.vraptor.environment.EnvironmentType.TEST;
 import static com.google.common.base.Objects.firstNonNull;
-import static org.apache.commons.lang3.StringUtils.isNotBlank;
+import static com.google.common.base.Strings.isNullOrEmpty;
 import static org.slf4j.LoggerFactory.getLogger;
 
 import java.io.IOException;
@@ -94,7 +94,7 @@ public class DefaultEnvironment implements Environment {
 		}
 		
 		String systemProperty = System.getProperty(key);
-		if(isNotBlank(systemProperty)) {
+		if(!isNullOrEmpty(systemProperty)) {
 			return systemProperty;
 		} else {
 			return properties.getProperty(key);

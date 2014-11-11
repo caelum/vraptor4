@@ -14,7 +14,7 @@ public abstract class Try<T> {
 
 	public abstract boolean failed();
 
-	public abstract T value();
+	public abstract T result();
 
 	public abstract Exception getException();
 
@@ -31,13 +31,13 @@ public abstract class Try<T> {
 		}
 
 		@Override
-		public Object value() {
+		public Object result() {
 			return result;
 		}
 
 		@Override
 		public Exception getException() {
-			throw new UnsupportedOperationException();
+			throw new UnsupportedOperationException("A Success doesn't have an exception.");
 		}
 	}
 
@@ -54,8 +54,8 @@ public abstract class Try<T> {
 		}
 
 		@Override
-		public Object value() {
-			throw new UnsupportedOperationException();
+		public Object result() {
+			throw new UnsupportedOperationException("A Failed doesn't have a result.");
 		}
 
 		@Override

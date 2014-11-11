@@ -96,6 +96,16 @@ public class DefaultEnvironmentTest {
 	}
 	
 	@Test
+	public void shouldGetOverridedSystemPropertyValueIfIsSet() throws IOException {
+		DefaultEnvironment defaultEnvironment = new DefaultEnvironment(EnvironmentType.DEVELOPMENT);
+		System.setProperty("env_name", "customEnv");
+		String value = defaultEnvironment.get("env_name");
+		assertEquals("customEnv", value);
+		//unset property to not break other tests
+		System.setProperty("env_name", "");
+	}
+	
+	@Test
 	public void shouldTrimValueWhenEvaluatingSupport() throws Exception {
 		DefaultEnvironment defaultEnvironment = new DefaultEnvironment(EnvironmentType.DEVELOPMENT);
 		assertThat(defaultEnvironment.supports("untrimmed_boolean"), is(true));

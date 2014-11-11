@@ -19,6 +19,7 @@ import static br.com.caelum.vraptor.environment.EnvironmentType.DEVELOPMENT;
 import static br.com.caelum.vraptor.environment.EnvironmentType.PRODUCTION;
 import static br.com.caelum.vraptor.environment.EnvironmentType.TEST;
 import static com.google.common.base.Objects.firstNonNull;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import static org.slf4j.LoggerFactory.getLogger;
 
 import java.io.IOException;
@@ -91,7 +92,13 @@ public class DefaultEnvironment implements Environment {
 		if (!has(key)) {
 			throw new NoSuchElementException("Key " + key + " not found in environment " + getName());
 		}
-		return properties.getProperty(key);
+		
+		String systemProperty = System.getProperty(key);
+		if(isNotBlank(systemProperty)) {
+			return systemProperty;
+		} else {
+			return properties.getProperty(key);
+		}
 	}
 
 	@Override

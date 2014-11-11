@@ -8,8 +8,8 @@ import org.slf4j.Logger;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
-public class ExceptionHandler {
-	private final static Logger log = getLogger(ExceptionHandler.class);
+public class ExecuteMethodExceptionHandler {
+	private final static Logger log = getLogger(ExecuteMethodExceptionHandler.class);
 
 	public void handle(Exception exception) {
 		if (exception instanceof IllegalArgumentException) {

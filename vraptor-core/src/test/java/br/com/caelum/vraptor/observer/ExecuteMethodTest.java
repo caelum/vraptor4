@@ -64,7 +64,7 @@ public class ExecuteMethodTest {
 	public void setup() throws NoSuchMethodException {
 		MockitoAnnotations.initMocks(this);
 		observer = new ExecuteMethod(methodInfo, messages, methodEvecutedEvent, readyToExecuteMethodEvent,
-				new ExceptionHandler(), new DefaultReflectionProvider());
+				new ExecuteMethodExceptionHandler(), new DefaultReflectionProvider());
 	}
 
 	@Test

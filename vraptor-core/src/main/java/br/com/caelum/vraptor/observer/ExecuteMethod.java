@@ -17,7 +17,6 @@
 
 package br.com.caelum.vraptor.observer;
 
-import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.core.ReflectionProvider;
@@ -26,7 +25,6 @@ import br.com.caelum.vraptor.events.MethodExecuted;
 import br.com.caelum.vraptor.events.MethodReady;
 import br.com.caelum.vraptor.util.Try;
 import br.com.caelum.vraptor.validator.Messages;
-import net.vidageek.mirror.dsl.Mirror;
 import org.slf4j.Logger;
 
 import javax.enterprise.context.Dependent;
@@ -56,7 +54,7 @@ public class ExecuteMethod {
 
 	private final Event<MethodExecuted> methodExecutedEvent;
 	private final Event<MethodReady> methodReady;
-	private final ExceptionHandler exceptionHandler;
+	private final ExecuteMethodExceptionHandler executeMethodExceptionHandler;
 
 	/**
 	 * @deprecated CDI eyes only
@@ -68,12 +66,12 @@ public class ExecuteMethod {
 	@Inject
 	public ExecuteMethod(MethodInfo methodInfo, Messages messages, 
 			Event<MethodExecuted> methodExecutedEvent, Event<MethodReady> methodReady,
-			ExceptionHandler exceptionHandler, ReflectionProvider reflectionProvider) {
+			ExecuteMethodExceptionHandler exceptionHandler, ReflectionProvider reflectionProvider) {
 		this.methodInfo = methodInfo;
 		this.messages = messages;
 		this.methodExecutedEvent = methodExecutedEvent;
 		this.methodReady = methodReady;
-		this.exceptionHandler = exceptionHandler;
+		this.executeMethodExceptionHandler = exceptionHandler;
 		this.reflectionProvider = reflectionProvider;
 	}
 
@@ -99,7 +97,7 @@ public class ExecuteMethod {
 		});
 		if (run.failed()) {
 			Exception exception = run.getException();
-			exceptionHandler.handle(exception);
+			executeMethodExceptionHandler.handle(exception);
 		}
 	}
 

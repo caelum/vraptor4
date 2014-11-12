@@ -16,7 +16,6 @@
  */
 package br.com.caelum.vraptor.observer.upload;
 
-import static com.google.common.base.Objects.toStringHelper;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static java.nio.file.Files.copy;
 
@@ -44,11 +43,6 @@ public class DefaultUploadedFile implements UploadedFile {
 		this.fileName = fileName;
 		this.contentType = contentType;
 		this.size = size;
-	}
-
-	@Override
-	public String toString() {
-		return toStringHelper(this).add("fileName", fileName).toString();
 	}
 
 	@Override
@@ -83,5 +77,10 @@ public class DefaultUploadedFile implements UploadedFile {
 		try (InputStream in = getFile()) {
 			copy(in, target, options);
 		}
+	}
+
+	@Override
+	public String toString() {
+		return String.format("UploadedFile[name=%s]", getFileName());
 	}
 }

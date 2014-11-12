@@ -59,19 +59,20 @@ Se você tem propriedades que são comuns a outros ambientes, você pode criar u
 Você também pode sobrescrever propriedades usando System Properties. Propriedades definidas nas System Properties irão sobreescrever quaisquer outras definições.
 **Nota**: Você só pode usar System Properties para sobreescrever propriedades existentes nos arquivos de propriedades e não para definir novas propriedades.
 
+Considerando que você tenha um environment.properties abaixo:
 ~~~ 
 #!properties
-#environment.properties
 my.prop hello
 ~~~ 
 
+Você pode sobrescrever a propriedade existente my.prop com uma System Property:
 ~~~ 
 #!java
-//System.setProperty("my.prop", "bye");
+System.setProperty("my.prop", "bye");
 environment.get("my.prop"); //bye
-//System.setProperty("not.in.properties", "foo")
-environment.get("not.in.properties"); //throw NoSuchElementException
 ~~~ 
+
+Se a chave não existir no arquivo de propriedades, o método get irá lançar uma NoSuchElementException.
 
 ## Acessando propriedades de ambiente no seu código
 

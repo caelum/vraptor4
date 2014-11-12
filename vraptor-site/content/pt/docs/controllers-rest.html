@@ -353,7 +353,7 @@ do header `X-Auth-User`.
 
 ~~~ 
 #!java
-public void profile(@HeaderParam("X-Auth-User") username) { ... } 
+public void profile(@HeaderParam("X-Auth-User") String username) { ... } 
 ~~~
 
 *Atenção*: No exemplo acima, se você tiver paramêtro com a chave `username`

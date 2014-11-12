@@ -57,8 +57,21 @@ email=production.mail@mail.com
 Se você tem propriedades que são comuns a outros ambientes, você pode criar um arquivo chamado `environment.properties` com as propriedades comuns. Quando você precisar usar alguma propriedade, o `Environment` irá procurar primeiro no arquivo do ambiente, e caso não encontrar, irá procurar o `environment.properties`.
 
 Você também pode sobrescrever propriedades usando System Properties. Propriedades definidas nas System Properties irão sobreescrever quaisquer outras definições.
-Nota: Você só pode usar System Properties para sobreescrever propriedades existentes nos arquivos de propriedades e não para definir novas propriedades.
+**Nota**: Você só pode usar System Properties para sobreescrever propriedades existentes nos arquivos de propriedades e não para definir novas propriedades.
 
+~~~ 
+#!properties
+#environment.properties
+my.prop hello
+~~~ 
+
+~~~ 
+#!java
+//System.setProperty("my.prop", "bye");
+environment.get("my.prop"); //bye
+//System.setProperty("not.in.properties", "foo")
+environment.get("not.in.properties"); //throw NoSuchElementException
+~~~ 
 
 ## Acessando propriedades de ambiente no seu código
 

@@ -16,20 +16,17 @@
 package br.com.caelum.vraptor.observer.upload;
 
 import static com.google.common.io.ByteStreams.toByteArray;
-import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 
-import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
@@ -50,7 +47,6 @@ import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.controller.DefaultControllerMethod;
 import br.com.caelum.vraptor.core.InterceptorStack;
 import br.com.caelum.vraptor.events.ControllerFound;
-import br.com.caelum.vraptor.http.InvalidParameterException;
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.validator.I18nMessage;
 import br.com.caelum.vraptor.validator.Validator;
@@ -171,24 +167,6 @@ public class CommonsUploadMultipartObserverTest {
 
 		when(observer.createServletFileUpload(config)).thenReturn(servletFileUpload);
 		when(servletFileUpload.parseRequest(request)).thenReturn(elements);
-
-		observer.upload(event, request, config, validator);
-	}
-
-	@Test
-	public void throwsInvalidParameterExceptionIfIOExceptionOccurs() throws Exception {
-		exception.expect(InvalidParameterException.class);
-		exception.expectMessage("Can't parse uploaded file myfile.txt");
-
-		when(event.getMethod()).thenReturn(uploadMethodController);
-
-		FileItem item = new MockFileItem("thefile0", "myfile.txt", new byte[0]);
-		item = spy(item);
-
-		doThrow(new IOException()).when(item).getInputStream();
-
-		when(observer.createServletFileUpload(config)).thenReturn(servletFileUpload);
-		when(servletFileUpload.parseRequest(request)).thenReturn(asList(item));
 
 		observer.upload(event, request, config, validator);
 	}

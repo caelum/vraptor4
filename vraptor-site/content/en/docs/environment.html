@@ -53,7 +53,25 @@ test_environment=false
 email=production.mail@mail.com
 ~~~ 
 
-Tip: if you have a common properties for other environments you can create a file called `environment.properties` with these common properties. So VRaptor will ask for properties first in the environment file, and if not found, will ask in the `environment.properties` file.
+If you have a common properties for other environments you can create a file called `environment.properties` with these common properties. So VRaptor will ask for properties first in the environment file, and if not found, will ask in the `environment.properties` file.
+
+You can also override properties using System Properties. Properties defined by System Properties will override any other definitions.
+**Note:** You can only use System Properties to override existing properties in property files and not to define a new one.
+
+Considering that you have the environment.properties below:
+~~~ 
+#!properties
+my.prop hello
+~~~ 
+
+You can override the existing my.prop with a System Property like this:
+~~~ 
+#!java
+System.setProperty("my.prop", "bye");
+environment.get("my.prop"); //bye
+~~~ 
+
+If the key doesn't exists in properties file, get method will throw a NoSuchElementException.
 
 ## Getting environment properties in your code
 

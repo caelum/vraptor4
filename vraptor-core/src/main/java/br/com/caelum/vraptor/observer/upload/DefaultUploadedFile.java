@@ -18,6 +18,7 @@ package br.com.caelum.vraptor.observer.upload;
 
 import static com.google.common.base.Objects.toStringHelper;
 
+import java.io.IOException;
 import java.io.InputStream;
 
 import javax.enterprise.inject.Vetoed;
@@ -51,7 +52,7 @@ public class DefaultUploadedFile implements UploadedFile {
 	}
 
 	@Override
-	public InputStream getFile() {
+	public InputStream getFile() throws IOException {
 		return content;
 	}
 

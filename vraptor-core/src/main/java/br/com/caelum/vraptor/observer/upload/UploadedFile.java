@@ -16,6 +16,7 @@
  */
 package br.com.caelum.vraptor.observer.upload;
 
+import java.io.IOException;
 import java.io.InputStream;
 
 /**
@@ -35,7 +36,7 @@ public interface UploadedFile {
 	/**
 	 * @return Returns the contents of uploaded file.
 	 */
-	InputStream getFile();
+	InputStream getFile() throws IOException;
 
 	/**
 	 * @return Returns the fileName of the uploaded as it was uploaded from the

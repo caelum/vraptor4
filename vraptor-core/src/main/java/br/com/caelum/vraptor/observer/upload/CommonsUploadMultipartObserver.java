@@ -20,7 +20,6 @@ import static com.google.common.base.Strings.isNullOrEmpty;
 import static org.apache.commons.fileupload.disk.DiskFileItemFactory.DEFAULT_SIZE_THRESHOLD;
 import static org.slf4j.LoggerFactory.getLogger;
 
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Collection;
 import java.util.List;
@@ -36,11 +35,9 @@ import org.apache.commons.fileupload.FileUploadBase.SizeLimitExceededException;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 
 import br.com.caelum.vraptor.events.ControllerFound;
-import br.com.caelum.vraptor.http.InvalidParameterException;
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.validator.I18nMessage;
 import br.com.caelum.vraptor.validator.Validator;
@@ -136,16 +133,11 @@ public class CommonsUploadMultipartObserver {
 	}
 
 	protected void processFile(FileItem item, String name, MutableRequest request) {
-		try {
-			String fileName = FilenameUtils.getName(item.getName());
-			UploadedFile upload = new DefaultUploadedFile(item.getInputStream(), fileName, item.getContentType(), item.getSize());
-			request.setParameter(name, name);
-			request.setAttribute(name, upload);
+		UploadedFile upload = new CommonsUploadUploadedFile(item);
+		request.setParameter(name, name);
+		request.setAttribute(name, upload);
 
-			logger.debug("Uploaded file: {} with {}", name, upload);
-		} catch (IOException e) {
-			throw new InvalidParameterException("Can't parse uploaded file " + item.getName(), e);
-		}
+		logger.debug("Uploaded file: {} with {}", name, upload);
 	}
 
 	protected ServletFileUpload createServletFileUpload(MultipartConfig config) {

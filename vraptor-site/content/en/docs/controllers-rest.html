@@ -380,7 +380,7 @@ injected with the value of the header `X-Auth-User`.
 
 ~~~ 
 #!java
-public void profile(@HeaderParam("X-Auth-User") username) { ... }
+public void profile(@HeaderParam("X-Auth-User") String username) { ... }
 ~~~
 
 **Warning**: In this example, if you had a request parameter named `username`

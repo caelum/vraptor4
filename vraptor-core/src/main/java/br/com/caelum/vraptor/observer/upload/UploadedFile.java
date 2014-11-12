@@ -16,8 +16,11 @@
  */
 package br.com.caelum.vraptor.observer.upload;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.CopyOption;
+import java.nio.file.Path;
 
 /**
  * An interface which represents the information of an uploaded file.
@@ -25,29 +28,45 @@ import java.io.InputStream;
  * @author Guilherme Silveira
  * @author Paulo Silveira
  * @author Lucas Cavalcanti
+ * @author Otávio Garcia
  */
 public interface UploadedFile {
 
 	/**
-	 * @return Returns the contentType.
+	 * Returns the contentType.
 	 */
 	String getContentType();
 
 	/**
-	 * @return Returns the contents of uploaded file.
+	 * Returns the contents of uploaded file.
 	 */
 	InputStream getFile() throws IOException;
 
 	/**
-	 * @return Returns the fileName of the uploaded as it was uploaded from the
-	 * client
+	 * Returns the fileName of the uploaded as it was uploaded from the client.
 	 */
 	String getFileName();
 	
 	/**
-	 * 
-	 * @return Returns the file of uploaded file.
+	 * Returns the size of uploaded file.
 	 */
 	long getSize();
 
+	/**
+	 * Write the current uploaded file to disk.
+	 * 
+	 * @param target The target file.
+	 * @throws IOException if an I/O error occurs
+	 */
+	void writeTo(File target) throws IOException;
+
+	/**
+	 * Write the current uploaded file to disk. You can define some options when move/copy the file like REPLACE_EXISTING, but there is no
+	 * guarantees that all implementations supports all options.
+	 *
+	 * @param target The target file.
+	 * @param options Options when write the file.
+	 * @throws IOException if an I/O error occurs
+	 */
+	void writeTo(Path target, CopyOption... options) throws IOException;
 }

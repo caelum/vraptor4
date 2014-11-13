@@ -22,12 +22,19 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.lang.reflect.Method;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,6 +46,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import org.junit.rules.TemporaryFolder;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -60,6 +68,9 @@ public class CommonsUploadMultipartObserverTest {
 
 	@Rule
 	public ExpectedException exception = ExpectedException.none();
+
+	@Rule
+	public TemporaryFolder tmpdir = new TemporaryFolder();
 
 	@Mock private InterceptorStack stack;
 	@Mock private ControllerFound event;
@@ -332,6 +343,22 @@ public class CommonsUploadMultipartObserverTest {
 		verify(request).setAttribute(anyString(), argument.capture());
 
 		assertThat(argument.getValue().getFileName(), is("file0.txt"));
+	}
+
+	@Test
+	public void ensureCopyUploadedFileToOutputStream() throws IOException {
+		File outputFile = tmpdir.newFile();
+		OutputStream outputStream = new FileOutputStream(outputFile);
+
+		byte[] byteOnlyFileContent = { 0x0, 0x1, 0x2 };
+		FileItem mockedFileItem = mock(FileItem.class);
+		when(mockedFileItem.getInputStream()).thenReturn(new ByteArrayInputStream(byteOnlyFileContent));
+
+		UploadedFile file = new CommonsUploadUploadedFile(mockedFileItem);
+		file.writeTo(outputStream);
+
+		assertThat(outputFile.length(), is(new Long(byteOnlyFileContent.length)));
+		assertThat(Files.readAllBytes(outputFile.toPath()), is(byteOnlyFileContent));
 	}
 
 	public void uploadMethod(UploadedFile file) {

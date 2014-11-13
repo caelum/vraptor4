@@ -31,6 +31,7 @@ import javax.enterprise.inject.Vetoed;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
 
 /**
  * An implementation for {@link UploadedFile} that delegates all operations to Apache Commons 
@@ -91,14 +92,7 @@ public class CommonsUploadedFile implements UploadedFile {
 	@Override
 	public void writeTo(OutputStream target) throws IOException {
 		requireNonNull(target, "Target can't be null");
-
-		try (InputStream input = delegate.getInputStream()) {
-			byte[] buf = new byte[4096];
-			int len;
-			while ((len = input.read(buf)) > 0) {
-				target.write(buf, 0, len);
-			}
-		}
+		IOUtils.copy(getFile(), target);
 	}
 
 	@Override

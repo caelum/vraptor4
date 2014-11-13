@@ -28,6 +28,8 @@ import java.nio.file.Path;
 
 import javax.enterprise.inject.Vetoed;
 
+import org.apache.commons.io.IOUtils;
+
 /**
  * Default implementation for {@link UploadedFile}.
  */
@@ -83,14 +85,7 @@ public class DefaultUploadedFile implements UploadedFile {
 	@Override
 	public void writeTo(OutputStream target) throws IOException {
 		requireNonNull(target, "Target can't be null");
-
-		try (InputStream input = getFile()) {
-			byte[] buf = new byte[4096];
-			int len;
-			while ((len = input.read(buf)) > 0) {
-				target.write(buf, 0, len);
-			}
-		}
+		IOUtils.copy(getFile(), target);
 	}
 
 	@Override

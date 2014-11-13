@@ -131,7 +131,7 @@ public class CommonsUploadMultipartObserver {
 	}
 
 	protected void processFile(FileItem item, String name, MutableRequest request) {
-		UploadedFile upload = new CommonsUploadUploadedFile(item);
+		UploadedFile upload = new CommonsUploadedFile(item);
 		request.setParameter(name, name);
 		request.setAttribute(name, upload);
 

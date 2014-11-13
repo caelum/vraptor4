@@ -354,7 +354,7 @@ public class CommonsUploadMultipartObserverTest {
 		FileItem mockedFileItem = mock(FileItem.class);
 		when(mockedFileItem.getInputStream()).thenReturn(new ByteArrayInputStream(byteOnlyFileContent));
 
-		UploadedFile file = new CommonsUploadUploadedFile(mockedFileItem);
+		UploadedFile file = new CommonsUploadedFile(mockedFileItem);
 		file.writeTo(outputStream);
 
 		assertThat(outputFile.length(), is(new Long(byteOnlyFileContent.length)));

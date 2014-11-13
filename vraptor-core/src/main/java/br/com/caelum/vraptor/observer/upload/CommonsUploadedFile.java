@@ -40,11 +40,11 @@ import org.apache.commons.io.FilenameUtils;
  * @since 4.2
  */
 @Vetoed
-public class CommonsUploadUploadedFile implements UploadedFile {
+public class CommonsUploadedFile implements UploadedFile {
 
 	private final FileItem delegate;
 
-	public CommonsUploadUploadedFile(FileItem fileItem) {
+	public CommonsUploadedFile(FileItem fileItem) {
 		this.delegate = fileItem;
 	}
 

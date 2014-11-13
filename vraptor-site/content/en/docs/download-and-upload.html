@@ -98,11 +98,9 @@ contains the file content as an `InputStream`. So you can copy to disk (or anoth
 ~~~ 
 #!java
 public void updatePhoto(Profile profile, UploadedFile photo) {
-	try (InputStream input = photo.getFile()) {
-		File savedPhoto = new File("/path/to/photo/repository", photo.getFileName());
-		Files.write(input, savedPhoto.toPath());
-		dao.assign(savedPhoto, profile);
-	}
+	File savedPhoto = new File("/path/to/photo/repository", photo.getFileName());
+	photo.writeTo(savedPhoto);
+	dao.assign(savedPhoto, profile);
 }
 ~~~ 
 

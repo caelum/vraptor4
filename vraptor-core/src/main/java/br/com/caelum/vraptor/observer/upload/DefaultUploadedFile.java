@@ -16,8 +16,8 @@
  */
 package br.com.caelum.vraptor.observer.upload;
 
-import static com.google.common.base.Preconditions.checkNotNull;
 import static java.nio.file.Files.copy;
+import static java.util.Objects.requireNonNull;
 
 import java.io.File;
 import java.io.IOException;
@@ -67,13 +67,13 @@ public class DefaultUploadedFile implements UploadedFile {
 
 	@Override
 	public void writeTo(File target) throws IOException {
-		checkNotNull(target, "Target can't be null");
+		requireNonNull(target, "Target can't be null");
 		writeTo(target.toPath());
 	}
 
 	@Override
 	public void writeTo(Path target, CopyOption... options) throws IOException {
-		checkNotNull(target, "Target can't be null");
+		requireNonNull(target, "Target can't be null");
 		try (InputStream in = getFile()) {
 			copy(in, target, options);
 		}

@@ -73,7 +73,7 @@ public Download fotos() {
 ~~~
 
 
-##Using DownloadBuilder
+##Usando o DownloadBuilder
 
 `DownloadBuilder` é uma classe útil para ajudar você a criar instâncias da classe `Download`, usando uma interface fluente. Para criar uma instância de um `FileDownload` você pode escrever o seguinte código:
 
@@ -86,13 +86,13 @@ FileDownload download = DownloadBuilder.of(meuArquivo)
 	.build();
 ~~~
 
-##Upload
+#Upload
 
 Para ativar o suporte a upload é necessário adicionar as bibliotecas `commons-upload` e `commons-io` em seu classpath. Veja mais informações [aqui](/pt/docs/dependencias-e-pre-requisitos/#commons-fileupload).
 
 **Nota: ** O upload funciona apenas com métodos do seu controller anotados com `@Post`. `@Get`, `@Put` e demais verbos não são suportados.
 
-#Exemplo de 1 minuto: upload
+##Exemplo de 1 minuto: upload
 
 Para receber um upload você precisa receber um `UploadedFile` em seu método conforme o exemplo abaixo. O `UploadedFile` 
 retorna o arquivo como um `InputStream`. Com isso você pode copiar o arquivo para o disco facilmente.

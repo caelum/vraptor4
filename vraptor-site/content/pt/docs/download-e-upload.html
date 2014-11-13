@@ -102,7 +102,7 @@ retorna o arquivo como um `InputStream`. Com isso você pode copiar o arquivo pa
 public void atualizaFoto(Perfil perfil, UploadedFile foto) {
 	try (InputStream input = foto.getFile()) {
 		File fotoSalva = new File("/path/to/file/repository", foto.getFileName());
-		Files.write(input, fotoSalva);
+		Files.write(input, fotoSalva.toPath());
 		dao.atribui(fotoSalva, perfil);
 	}
 }

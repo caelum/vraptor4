@@ -100,7 +100,7 @@ contains the file content as an `InputStream`. So you can copy to disk (or anoth
 public void updatePhoto(Profile profile, UploadedFile photo) {
 	try (InputStream input = photo.getFile()) {
 		File savedPhoto = new File("/path/to/photo/repository", photo.getFileName());
-		Files.write(input, savedPhoto);
+		Files.write(input, savedPhoto.toPath());
 		dao.assign(savedPhoto, profile);
 	}
 }

@@ -20,7 +20,7 @@ package br.com.caelum.vraptor.observer.upload;
 import java.io.File;
 
 /**
- * Basic multi part interceptor configuration.
+ * Basic multipart interceptor configuration.
  * 
  * @author guilherme silveira
  */

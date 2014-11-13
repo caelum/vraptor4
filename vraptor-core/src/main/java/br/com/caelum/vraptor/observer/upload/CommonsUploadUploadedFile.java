@@ -32,7 +32,8 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.io.FilenameUtils;
 
 /**
- * An implementation for {@link UploadedFile} that delegates all operations to commons-fileupload API.
+ * An implementation for {@link UploadedFile} that delegates all operations to Apache Commons 
+ * FileUpload API.
  * 
  * @author Otávio Scherer Garcia
  * @since 4.2

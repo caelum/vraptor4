@@ -24,7 +24,7 @@ import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.converter.Converter;
 
 /**
- * A converter capable of setting UploadedFiles based on files parsed by the
+ * A converter capable of setting {@link UploadedFile}s based on files parsed by the
  * multipart interceptor.
  *
  * @author Guilherme Silveira

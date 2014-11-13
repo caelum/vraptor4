@@ -27,7 +27,6 @@ import java.util.List;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
 import javax.servlet.ServletRequest;
-import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemFactory;
@@ -48,8 +47,7 @@ import com.google.common.collect.Multimap;
 import com.google.common.collect.Multiset;
 
 /**
- * A multipart observer based on Apache Commons Upload. Provided parameters are injected through
- * {@link HttpServletRequest#setAttribute(String, Object)} and uploaded files are made available through.
+ * A multipart observer based on Apache Commons FileUpload.
  *
  * @author Guilherme Silveira
  * @author Otávio Scherer Garcia

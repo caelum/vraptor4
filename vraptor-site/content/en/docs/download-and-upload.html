@@ -84,13 +84,13 @@ FileDownload download = DownloadBuilder.of(myFile)
 	.build();
 ~~~
 
-##Upload
+#Upload
 
 To activate upload support it's necessary to add `commons-upload` and `commons-io` artifacts in your classpath. You can see more info [here](/en/docs/dependencies-and-prerequisites#commons-fileupload).
 
 **Note: ** Upload only works with methods annotated with `@Post`. `@Get`, `@Put` and others are not supported.
 
-#One minute example: upload
+##One minute example: upload
 
 To receive an uploaded file in your controller, you need to use a parameter as `UploadedFile`. The `UploadedFile` class 
 contains the file content as an `InputStream`. So you can copy to disk (or another location) too easily as you can see in the example below:
@@ -100,7 +100,7 @@ contains the file content as an `InputStream`. So you can copy to disk (or anoth
 public void updatePhoto(Profile profile, UploadedFile photo) {
 	try (InputStream input = photo.getFile()) {
 		File savedPhoto = new File("/path/to/photo/repository", photo.getFileName());
-		Files.write(input, savedPhoto);
+		Files.write(input, savedPhoto.toPath());
 		dao.assign(savedPhoto, profile);
 	}
 }

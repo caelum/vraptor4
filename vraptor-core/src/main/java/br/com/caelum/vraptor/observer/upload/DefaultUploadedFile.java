@@ -22,6 +22,7 @@ import static java.util.Objects.requireNonNull;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.file.CopyOption;
 import java.nio.file.Path;
 
@@ -76,6 +77,19 @@ public class DefaultUploadedFile implements UploadedFile {
 		requireNonNull(target, "Target can't be null");
 		try (InputStream in = getFile()) {
 			copy(in, target, options);
+		}
+	}
+
+	@Override
+	public void writeTo(OutputStream target) throws IOException {
+		requireNonNull(target, "Target can't be null");
+
+		try (InputStream input = getFile()) {
+			byte[] buf = new byte[4096];
+			int len;
+			while ((len = input.read(buf)) > 0) {
+				target.write(buf, 0, len);
+			}
 		}
 	}
 

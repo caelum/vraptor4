@@ -23,6 +23,7 @@ import static java.util.Objects.requireNonNull;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.file.CopyOption;
 import java.nio.file.Path;
 
@@ -85,6 +86,19 @@ public class CommonsUploadUploadedFile implements UploadedFile {
 	public void writeTo(Path target, CopyOption... options) throws IOException {
 		requireNonNull(target, "Target can't be null");
 		writeTo(target.toFile());
+	}
+
+	@Override
+	public void writeTo(OutputStream target) throws IOException {
+		requireNonNull(target, "Target can't be null");
+
+		try (InputStream input = delegate.getInputStream()) {
+			byte[] buf = new byte[4096];
+			int len;
+			while ((len = input.read(buf)) > 0) {
+				target.write(buf, 0, len);
+			}
+		}
 	}
 
 	@Override

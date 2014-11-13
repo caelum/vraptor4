@@ -19,6 +19,7 @@ package br.com.caelum.vraptor.observer.upload;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.file.CopyOption;
 import java.nio.file.Path;
 
@@ -69,4 +70,12 @@ public interface UploadedFile {
 	 * @throws IOException if an I/O error occurs
 	 */
 	void writeTo(Path target, CopyOption... options) throws IOException;
+
+	/**
+	 * Write the current uploaded file to a {@link OutputStream}.
+	 *
+	 * @param target The target stream.
+	 * @throws IOException if an I/O error occurs
+	 */
+	void writeTo(OutputStream target) throws IOException;
 }

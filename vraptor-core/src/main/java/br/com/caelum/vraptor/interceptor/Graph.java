@@ -16,7 +16,6 @@
 package br.com.caelum.vraptor.interceptor;
 
 import static com.google.common.base.Preconditions.checkState;
-import static com.google.common.collect.Iterables.get;
 import static com.google.common.collect.Sets.difference;
 import static com.google.common.collect.Sets.newHashSet;
 
@@ -113,13 +112,17 @@ public class Graph<E> {
 	}
 
 	private List<E> findCycle() {
-		E node = get(graph.keySet(), 0);
+		E node = firstElement(graph.keySet());
 		List<E> cycle = new ArrayList<>();
 		do {
 			cycle.add(node);
-		} while(!cycle.contains(node = get(graph.get(node), 0)));
+		} while(!cycle.contains(node = firstElement(graph.get(node))));
 
 		return cycle.subList(cycle.indexOf(node), cycle.size());
+	}
+
+	private E firstElement(Iterable<E> elements) {
+		return elements.iterator().next();
 	}
 
 	private void removeLeaves() {

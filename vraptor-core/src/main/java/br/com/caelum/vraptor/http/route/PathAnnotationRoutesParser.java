@@ -26,11 +26,10 @@ import static java.util.Arrays.asList;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
-
-import javassist.Modifier;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;

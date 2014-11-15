@@ -29,14 +29,14 @@ import javax.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.base.Supplier;
-
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.TwoWayConverter;
 import br.com.caelum.vraptor.cache.CacheStore;
 import br.com.caelum.vraptor.cache.LRU;
 import br.com.caelum.vraptor.converter.Converter;
 import br.com.caelum.vraptor.ioc.Container;
+
+import com.google.common.base.Supplier;
 
 /**
  * Default implementation for {@link Converters}.
@@ -103,47 +103,52 @@ public class DefaultConverters implements Converters {
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T> Converter<T> to(Class<T> clazz) {
-		Class<? extends Converter<?>> converterType = findConverterType(clazz);
+		Class<? extends Converter<?>> converterType = findConverterTypeFromCache(clazz);
 		checkState(!converterType.equals(NullConverter.class), "Unable to find converter for %s", clazz.getName());
 
 		logger.debug("found converter {} to {}", converterType.getName(), clazz.getName());
 		return (Converter<T>) container.instanceFor(converterType);
 	}
 
-	private Class<? extends Converter<?>> findConverterType(final Class<?> clazz) {
+	private Class<? extends Converter<?>> findConverterTypeFromCache(final Class<?> clazz) {
 		return cache.fetch(clazz, new Supplier<Class<? extends Converter<?>>>() {
 
 			@Override
 			public Class<? extends Converter<?>> get() {
-				for (Class<? extends Converter<?>> current : classes) {
-					Class<?> boundType = current.getAnnotation(Convert.class).value();
-					if (boundType.isAssignableFrom(clazz)) {
-						return current;
-					}
-				}
-
-				logger.debug("Unable to find a converter for {}. Returning NullConverter.", clazz);
-				return NullConverter.class;
+				return findConverterType(clazz);
 			}
+
 		});
+	}
+
+	private Class<? extends Converter<?>> findConverterType(final Class<?> clazz) {
+		for (Class<? extends Converter<?>> current : classes) {
+			Class<?> boundType = current.getAnnotation(Convert.class).value();
+			if (boundType.isAssignableFrom(clazz)) {
+				return current;
+			}
+		}
+
+		logger.debug("Unable to find a converter for {}. Returning NullConverter.", clazz);
+		return NullConverter.class;
 	}
 
 	private interface NullConverter extends Converter<Object> {};
 
 	@Override
 	public boolean existsFor(Class<?> type) {
-		return !findConverterType(type).equals(NullConverter.class);
+		return !findConverterTypeFromCache(type).equals(NullConverter.class);
 	}
 
 	@Override
 	public boolean existsTwoWayFor(Class<?> type) {
-		return TwoWayConverter.class.isAssignableFrom(findConverterType(type));
+		return TwoWayConverter.class.isAssignableFrom(findConverterTypeFromCache(type));
 	}
 
 	@Override
 	public TwoWayConverter<?> twoWayConverterFor(Class<?> type) {
 		checkState(existsTwoWayFor(type), "Unable to find two way converter for %s", type.getName());
 
-		return (TwoWayConverter<?>) container.instanceFor(findConverterType(type));
+		return (TwoWayConverter<?>) container.instanceFor(findConverterTypeFromCache(type));
 	}
 }

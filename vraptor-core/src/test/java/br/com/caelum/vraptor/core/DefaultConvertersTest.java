@@ -81,6 +81,15 @@ public class DefaultConvertersTest {
 		assertThat(converter, instanceOf(MySecondConverter.class));
 	}
 
+	@Test
+	public void shouldForbidConverterWithSamePriority() {
+		exception.expect(IllegalStateException.class);
+		exception.expectMessage(String.format("Converter %s have same priority than %s", MyThirdConverter.class, MySecondConverter.class));
+
+		converters.register(MySecondConverter.class);
+		converters.register(MyThirdConverter.class);
+	}
+
 	class WrongConverter implements Converter<String> {
 
 		@Override
@@ -103,6 +112,15 @@ public class DefaultConvertersTest {
 	@Convert(MyData.class)
 	@Priority(javax.interceptor.Interceptor.Priority.APPLICATION)
 	private class MySecondConverter implements Converter<MyData> {
+		@Override
+		public MyData convert(String value, Class<? extends MyData> type) {
+			return null;
+		}
+	}
+
+	@Convert(MyData.class)
+	@Priority(javax.interceptor.Interceptor.Priority.APPLICATION)
+	private class MyThirdConverter implements Converter<MyData> {
 		@Override
 		public MyData convert(String value, Class<? extends MyData> type) {
 			return null;

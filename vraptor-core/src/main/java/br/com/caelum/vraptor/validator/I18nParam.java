@@ -15,6 +15,7 @@
  */
 package br.com.caelum.vraptor.validator;
 
+import java.io.Serializable;
 import java.util.ResourceBundle;
 
 import javax.enterprise.inject.Vetoed;
@@ -29,8 +30,10 @@ import javax.enterprise.inject.Vetoed;
  * @since 3.4.0
  */
 @Vetoed
-public class I18nParam {
-	
+public class I18nParam implements Serializable {
+
+	public static final long serialVersionUID = 1L;
+
 	private final String key;
 
 	public I18nParam(String key) {

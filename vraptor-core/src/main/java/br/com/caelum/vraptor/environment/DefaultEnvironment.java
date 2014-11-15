@@ -63,14 +63,16 @@ public class DefaultEnvironment implements Environment {
 
 	private void loadAndPut(String environment) throws IOException {
 		String name = "/" + environment + ".properties";
-		InputStream stream = DefaultEnvironment.class.getResourceAsStream(name);
-		Properties properties = new Properties();
 
-		if (stream != null) {
-			properties.load(stream);
-			this.properties.putAll(properties);
-		} else {
-			LOG.warn("Could not find the file '{}.properties' to load.", environment);
+		try (InputStream stream = DefaultEnvironment.class.getResourceAsStream(name)) {
+			Properties properties = new Properties();
+
+			if (stream != null) {
+				properties.load(stream);
+				this.properties.putAll(properties);
+			} else {
+				LOG.warn("Could not find the file '{}.properties' to load.", environment);
+			}
 		}
 	}
 

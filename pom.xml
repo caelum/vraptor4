@@ -14,7 +14,7 @@
 	</parent>
 
 	<description>Java web MVC framework for fast and maintainable development</description>
-	<url>http://vraptor.caelum.com.br</url>
+	<url>http://www.vraptor.org</url>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

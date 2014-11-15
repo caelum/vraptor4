@@ -23,6 +23,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.nio.charset.Charset;
 
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
@@ -156,7 +157,7 @@ public class GsonDeserialization implements Deserializer {
 	}
 
 	private String getContentOfStream(InputStream input) throws IOException {
-		String charset = getRequestCharset();
+		Charset charset = Charset.forName(getRequestCharset());
 		logger.debug("Using charset {}", charset);
 
 		return CharStreams.toString(new InputStreamReader(input, charset));

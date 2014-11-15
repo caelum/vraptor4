@@ -22,7 +22,6 @@ import static javax.servlet.RequestDispatcher.INCLUDE_REQUEST_URI;
 
 import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.Map;
 
 import javax.enterprise.inject.Vetoed;
@@ -43,7 +42,7 @@ public class VRaptorRequest extends HttpServletRequestWrapper implements Mutable
 
 	private static final Logger logger = LoggerFactory.getLogger(VRaptorRequest.class);
 
-	private final Hashtable<String, String[]> extraParameters = new Hashtable<>();
+	private final Map<String, String[]> extraParameters = new HashMap<>();
 
 	public VRaptorRequest(HttpServletRequest request) {
 		super(request);

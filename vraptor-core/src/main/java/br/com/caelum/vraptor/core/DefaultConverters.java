@@ -29,6 +29,8 @@ import javax.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.Supplier;
+
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.TwoWayConverter;
 import br.com.caelum.vraptor.cache.CacheStore;
@@ -109,15 +111,21 @@ public class DefaultConverters implements Converters {
 	}
 
 	private Class<? extends Converter<?>> findConverterType(final Class<?> clazz) {
-		for (Class<? extends Converter<?>> current : classes) {
-			Class<?> boundType = current.getAnnotation(Convert.class).value();
-			if (boundType.isAssignableFrom(clazz)) {
-				return current;
-			}
-		}
+		return cache.fetch(clazz, new Supplier<Class<? extends Converter<?>>>() {
 
-		logger.debug("Unable to find a converter for {}. Returning NullConverter.", clazz);
-		return NullConverter.class;
+			@Override
+			public Class<? extends Converter<?>> get() {
+				for (Class<? extends Converter<?>> current : classes) {
+					Class<?> boundType = current.getAnnotation(Convert.class).value();
+					if (boundType.isAssignableFrom(clazz)) {
+						return current;
+					}
+				}
+
+				logger.debug("Unable to find a converter for {}. Returning NullConverter.", clazz);
+				return NullConverter.class;
+			}
+		});
 	}
 
 	private interface NullConverter extends Converter<Object> {};

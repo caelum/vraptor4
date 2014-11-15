@@ -36,6 +36,14 @@ import br.com.caelum.vraptor.cache.LRU;
 import br.com.caelum.vraptor.converter.Converter;
 import br.com.caelum.vraptor.ioc.Container;
 
+/**
+ * Default implementation for {@link Converters}.
+ *
+ * @author Guilherme Silveira
+ * @author Rodrigo Turini
+ * @author Lucas Cavalcanti
+ * @author Otávio Scherer Garcia
+ */
 @ApplicationScoped
 public class DefaultConverters implements Converters {
 

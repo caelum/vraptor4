@@ -24,6 +24,7 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
 
 import javax.annotation.Priority;
+import javax.interceptor.Interceptor;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -102,6 +103,7 @@ public class DefaultConvertersTest {
 	}
 
 	@Convert(MyData.class)
+	@Priority(Interceptor.Priority.LIBRARY_BEFORE)
 	private class MyConverter implements Converter<MyData> {
 		@Override
 		public MyData convert(String value, Class<? extends MyData> type) {

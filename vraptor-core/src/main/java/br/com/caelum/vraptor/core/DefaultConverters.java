@@ -65,17 +65,19 @@ public class DefaultConverters implements Converters {
 		Convert type = converterClass.getAnnotation(Convert.class);
 		checkState(type != null, "The converter type %s should have the Convert annotation", converterClass.getName());
 
-		Class<? extends Converter<?>> other = findConverterType(type.value());
-		if (!other.equals(NullConverter.class)) {
+		Class<? extends Converter<?>> currentConverter = findConverterType(type.value());
+		if (!currentConverter.equals(NullConverter.class)) {
 			int priority = getConverterPriority(converterClass);
-			int priorityOther = getConverterPriority(other);
+			int priorityCurrent = getConverterPriority(currentConverter);
 
-			checkState(priority != priorityOther, "Converter %s have same priority than %s", converterClass, other);
+			checkState(priority != priorityCurrent, "Converter %s have same priority than %s", converterClass, currentConverter);
 
-			if (priority > priorityOther) {
-				logger.debug("Overriding converter {} with {} because have more priority", other, converterClass);
-				classes.remove(other);
+			if (priority > priorityCurrent) {
+				logger.debug("Overriding converter {} with {} because have more priority", currentConverter, converterClass);
+				classes.remove(currentConverter);
 				classes.add(converterClass);
+			} else {
+				logger.debug("Converter {} not registered because have less priority than {}", converterClass, currentConverter);
 			}
 		}
 
@@ -106,6 +108,7 @@ public class DefaultConverters implements Converters {
 			}
 		}
 
+		logger.debug("Unable to find a converter for {}. Returning NullConverter.", clazz);
 		return NullConverter.class;
 	}
 

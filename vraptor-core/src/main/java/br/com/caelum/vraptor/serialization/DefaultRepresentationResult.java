@@ -19,6 +19,7 @@ import static br.com.caelum.vraptor.view.Results.status;
 import static com.google.common.collect.Lists.newArrayList;
 import static java.util.Collections.sort;
 
+import java.io.Serializable;
 import java.util.Comparator;
 import java.util.List;
 
@@ -102,12 +103,14 @@ public class DefaultRepresentationResult implements RepresentationResult {
 	 * @author A.C de Souza
 	 * @since 3.4.0
 	 */
-	static final class ApplicationPackageFirst implements Comparator<Serialization> {
+	static final class ApplicationPackageFirst implements Comparator<Serialization>, Serializable {
+
+		public static final long serialVersionUID = 1L;
 
 		private static final String VRAPTOR_PACKAGE = "br.com.caelum.vraptor.serialization";
 
 		private int priority(Serialization s) {
-			return s.getClass().getPackage().getName().startsWith(VRAPTOR_PACKAGE)?  1 : 0;
+			return s.getClass().getPackage().getName().startsWith(VRAPTOR_PACKAGE) ? 1 : 0;
 		}
 
 		@Override

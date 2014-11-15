@@ -21,9 +21,7 @@ import br.com.caelum.vraptor.TwoWayConverter;
 import br.com.caelum.vraptor.converter.Converter;
 
 /**
- * Represents a collection of converters.<br>
- * Note: This interface will probably change in the near future to allow
- * annotation support.
+ * Represents a collection of converters.
  *
  * @author Guilherme Silveira
  */
@@ -31,14 +29,19 @@ public interface Converters {
 
 	/**
 	 * Extracts a converter for this specific type.
-	 *
-	 * @param type
-	 * @return
 	 */
 	<T> Converter<T> to(Class<T> type);
 
+	/**
+	 * Register a converter. Implementations must guarantee that converters 
+	 * are registered always keeping its priority.
+	 * @param converterClass
+	 */
 	void register(Class<? extends Converter<?>> converterClass);
 
+	/**
+	 * Returns true if a converter exists for the type.
+	 */
 	boolean existsFor(Class<?> type);
 
 	boolean existsTwoWayFor(Class<?> type);

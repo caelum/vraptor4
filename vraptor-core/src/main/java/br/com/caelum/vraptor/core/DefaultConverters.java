@@ -20,7 +20,9 @@ package br.com.caelum.vraptor.core;
 import static com.google.common.base.Preconditions.checkState;
 
 import java.util.LinkedList;
+import java.util.List;
 
+import javax.annotation.Priority;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
@@ -34,15 +36,11 @@ import br.com.caelum.vraptor.cache.LRU;
 import br.com.caelum.vraptor.converter.Converter;
 import br.com.caelum.vraptor.ioc.Container;
 
-import com.google.common.base.Predicate;
-import com.google.common.base.Supplier;
-import com.google.common.collect.FluentIterable;
-
 @ApplicationScoped
 public class DefaultConverters implements Converters {
 
 	private final Logger logger = LoggerFactory.getLogger(DefaultConverters.class);
-	private final LinkedList<Class<? extends Converter<?>>> classes = new LinkedList<>();
+	private final List<Class<? extends Converter<?>>> classes = new LinkedList<>();
 
 	@LRU
 	private final CacheStore<Class<?>, Class<? extends Converter<?>>> cache;
@@ -67,8 +65,27 @@ public class DefaultConverters implements Converters {
 		Convert type = converterClass.getAnnotation(Convert.class);
 		checkState(type != null, "The converter type %s should have the Convert annotation", converterClass.getName());
 
+		Class<? extends Converter<?>> other = findConverterType(type.value());
+		if (!other.equals(NullConverter.class)) {
+			int priority = getConverterPriority(converterClass);
+			int priorityOther = getConverterPriority(other);
+
+			checkState(priority != priorityOther, "Converter %s have same priority than %s", converterClass, other);
+
+			if (priority > priorityOther) {
+				logger.debug("Overriding converter {} with {} because have more priority", other, converterClass);
+				classes.remove(other);
+				classes.add(converterClass);
+			}
+		}
+
 		logger.debug("adding converter {} to {}", converterClass, type.value());
 		classes.add(converterClass);
+	}
+
+	private int getConverterPriority(Class<? extends Converter<?>> converter) {
+		Priority priority = converter.getAnnotation(Priority.class);
+		return priority == null ? 0 : priority.value();
 	}
 
 	@SuppressWarnings("unchecked")
@@ -77,27 +94,19 @@ public class DefaultConverters implements Converters {
 		Class<? extends Converter<?>> converterType = findConverterType(clazz);
 		checkState(!converterType.equals(NullConverter.class), "Unable to find converter for %s", clazz.getName());
 
+		logger.debug("found converter {} to {}", converterType.getName(), clazz.getName());
 		return (Converter<T>) container.instanceFor(converterType);
 	}
 
 	private Class<? extends Converter<?>> findConverterType(final Class<?> clazz) {
-		return cache.fetch(clazz, new Supplier<Class<? extends Converter<?>>>() {
-			@Override
-			public Class<? extends Converter<?>> get() {
-				return FluentIterable.from(classes).filter(matchConverter(clazz))
-						.first().or(NullConverter.class);
+		for (Class<? extends Converter<?>> current : classes) {
+			Class<?> boundType = current.getAnnotation(Convert.class).value();
+			if (boundType.isAssignableFrom(clazz)) {
+				return current;
 			}
-		});
-	}
+		}
 
-	private Predicate<Class<?>> matchConverter(final Class<?> clazz) {
-		return new Predicate<Class<?>>() {
-			@Override
-			public boolean apply(Class<?> input) {
-				Class<?> boundType = input.getAnnotation(Convert.class).value();
-				return boundType.isAssignableFrom(clazz);
-			}
-		};
+		return NullConverter.class;
 	}
 
 	private interface NullConverter extends Converter<Object> {};

@@ -36,13 +36,6 @@ import com.google.common.collect.ForwardingList;
 @Vetoed
 public class MessageList extends ForwardingList<Message> {
 
-	private static Function<Message, String> byCategory = new Function<Message, String>() {
-		@Override
-		public String apply(Message input) {
-			return input.getCategory();
-		}
-	};
-
 	private final List<Message> delegate;
 	private Map<String, Collection<Message>> grouped;
 
@@ -56,7 +49,7 @@ public class MessageList extends ForwardingList<Message> {
 	 */
 	public Map<String, Collection<Message>> getGrouped() {
 		if (grouped == null) {
-			grouped = FluentIterable.from(delegate).index(byCategory).asMap();
+			grouped = FluentIterable.from(delegate).index(byCategoryMapping()).asMap();
 		}
 		return grouped;
 	}
@@ -79,6 +72,15 @@ public class MessageList extends ForwardingList<Message> {
 			@Override
 			public boolean apply(Message input) {
 				return input.getCategory().equals(category);
+			}
+		};
+	}
+
+	private Function<Message, String> byCategoryMapping() {
+		return new Function<Message, String>() {
+			@Override
+			public String apply(Message input) {
+				return input.getCategory();
 			}
 		};
 	}

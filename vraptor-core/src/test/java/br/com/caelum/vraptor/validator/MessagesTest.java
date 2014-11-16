@@ -11,7 +11,9 @@ import static org.hamcrest.Matchers.isEmptyString;
 import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertThat;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import javax.el.ELProcessor;
 
@@ -59,6 +61,23 @@ public class MessagesTest {
 	@Test
 	public void shouldNotThrowExceptionIfMessagesHasNoErrors() {
 		messages.assertAbsenceOfErrors();
+	}
+
+	@Test
+	public void shouldGroupMessagesInMapFromSameCategory() {
+		messages.add(new SimpleMessage("client.name", "not null"));
+		messages.add(new SimpleMessage("client.name", "not empty"));
+		messages.add(new SimpleMessage("client.email", "not null"));
+
+		MessageList messageList = (MessageList) messages.getErrors();
+
+		List<Message> messagesName = new ArrayList<>(messageList.getGrouped().get("client.name"));
+		assertThat(messagesName, hasSize(2));
+		assertThat(messagesName, contains(messageList.get(0), messageList.get(1)));
+
+		List<Message> messagesEmail = new ArrayList<>(messageList.getGrouped().get("client.email"));
+		assertThat(messagesEmail, hasSize(1));
+		assertThat(messagesEmail, contains(messageList.get(2)));
 	}
 
 	@Test

@@ -15,6 +15,7 @@
  */
 package br.com.caelum.vraptor.observer.download;
 
+import static java.util.Arrays.asList;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -74,5 +75,15 @@ public class ZipDownloadTest {
 
 		verify(response, times(1)).setHeader("Content-type", "application/zip");
 		verify(response, times(1)).setHeader("Content-disposition", "attachment; filename=download.zip");
+	}
+
+	@Test
+	public void testConstructWithDownloadBuilder() throws Exception {
+		Download fd = DownloadBuilder.of(asList(inpuFile0, inpuFile1))
+				.withFileName("download.zip")
+				.downloadable().build();
+		fd.write(response);
+
+		verify(response).setHeader("Content-disposition", "attachment; filename=download.zip");
 	}
 }

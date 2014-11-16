@@ -113,6 +113,7 @@ public class CommonsUploadMultipartObserverTest {
 
 		when(observer.createServletFileUpload(config)).thenReturn(servletFileUpload);
 		when(servletFileUpload.parseRequest(request)).thenReturn(elements);
+		when(request.getCharacterEncoding()).thenReturn("UTF-8");
 
 		observer.upload(event, request, config, validator);
 
@@ -130,6 +131,7 @@ public class CommonsUploadMultipartObserverTest {
 
 		when(observer.createServletFileUpload(config)).thenReturn(servletFileUpload);
 		when(servletFileUpload.parseRequest(request)).thenReturn(elements);
+		when(request.getCharacterEncoding()).thenReturn("BLAH");
 
 		observer.upload(event, request, config, validator);
 

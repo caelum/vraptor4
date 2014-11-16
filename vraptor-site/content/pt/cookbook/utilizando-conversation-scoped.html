@@ -97,7 +97,7 @@ public class HomeController implements Serializable {
 ~~~
 
 A primeira distinção desse Controller é a anotação `@ConversationScoped` na classe. Isso indica para o CDI qual vai ser o escopo, mas cuidado: só isso não é suficiente para que a sua classe tenha um escopo maior que o escopo request.
-Para que o escopo se torne persistente, não perdendo os dados a cada requisição, é necessário injetar um objeto Conversation e chamar seu método begin. Isso pode ser observado aqui:
+Para que o escopo se torne persistente, não perdendo os dados a cada requisição, é necessário injetar um objeto `Conversation` e chamar seu método `begin`. Isso pode ser observado aqui:
 
 ~~~
 #!java
@@ -114,10 +114,10 @@ Para que o escopo se torne persistente, não perdendo os dados a cada requisiç�
 ~~~
 
 
-Nesse método a conversação é iniciada. O Conversation tem um estado padrão conhecido como *transient*. Quando o método begin é acionado ele passa para o *long-running* mantendo os dados até que seja invocado o método end do Conversation.
+Nesse método a conversação é iniciada. O `Conversation` tem um estado padrão conhecido como *transient*. Quando o método `begin` é acionado ele passa para o *long-running* mantendo os dados até que seja invocado o método `end` do `Conversation`.
 Só que um detalhe importante deve ser observado. O CDI não tem como saber a qual objeto você está tratando. O único modo dele saber isso é você informando qual o identificador daquela conversação e isso é feito através do pârametro **cid**.
 É necessário informar na url esse pârametro para que o CDI consiga recuperar o objeto correto. Observe que o pârametro cid é incluido no result para que seja possível utilizar ele na pagina.
-O nome utilizado para incluir o *id* do Conversation no result não é fundamental. Ele poderia ser qualquer um, desde que fosse recuperado corretamente na pagina. Só é fundamental utilizar o pârametro **cid** quando a requisição for enviada para o servidor.
+O nome utilizado para incluir o *id* do `Conversation` no result não é fundamental. Ele poderia ser qualquer um, desde que fosse recuperado corretamente na pagina. Só é fundamental utilizar o pârametro **cid** quando a requisição for enviada para o servidor.
 Observe como ficou a nossa pagina que vai utilizar esse parâmetro.
 
 ~~~
@@ -150,7 +150,7 @@ Você pode observar que a action do formulário faz o uso correto do **cid**. Qu
 Enquanto a requisição for feita enviando o **cid** o número exibido em Sessão atual vai continuar o mesmo, pois a conversação vai se manter. Você pode fazer um teste acessando diretamente '/home/game' sem enviar o cid no pârametro. 
 Vai ser iniciada uma nova conversação e o cid irá se modificar. 
 
-Por fim temos o método que encerra o *long-running* através do método end:
+Por fim temos o método que encerra o *long-running* através do método `end`:
 
 
 ~~~
@@ -167,4 +167,4 @@ Por fim temos o método que encerra o *long-running* através do método end:
 ~~~
 
 Aqui é valido observar que caso você não encerre uma conversação, ela não vai se manter em memória por muito mais que dois minutos, que é o tempo padrão. Isso garante que diferente do `@SessionScoped` os recursos vão ser liberados antes, caso a aplicação não encerre o estado daquele objeto.
-O timeout pode ser ajustado através do método setTimeout conforme a necessidade, mas normalmente não é preciso.
+O timeout pode ser ajustado através do método `setTimeout` conforme a necessidade, mas normalmente não é preciso.

@@ -49,7 +49,7 @@
 		<dependency>
 			<groupId>com.thoughtworks.paranamer</groupId>
 			<artifactId>paranamer</artifactId>
-			<version>2.6</version>
+			<version>2.7</version>
 			<exclusions>
 				<exclusion>
 					<groupId>org.mockito</groupId>
@@ -57,15 +57,33 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
+		<!-- /mandatory -->
 		
+		
+		<!-- XML Serialization -->
 		<dependency>
 			<groupId>com.thoughtworks.xstream</groupId>
 			<artifactId>xstream</artifactId>
 			<version>1.4.7</version>
 		</dependency>
-		<!-- /mandatory -->
 		
-		<!-- [cdi] -->		
+		<!-- JSON Serialization -->
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+			<version>2.2.4</version>
+		</dependency>
+		
+		<!-- fileupload -->
+		<dependency>
+			<groupId>commons-fileupload</groupId>
+			<artifactId>commons-fileupload</artifactId>
+			<version>1.3.1</version>
+			<optional>true</optional>
+		</dependency>
+		
+		
+		<!-- cdi -->
 		<dependency>
 			<groupId>javax.inject</groupId>
 			<artifactId>javax.inject</artifactId>
@@ -107,16 +125,8 @@
 			<artifactId>javax.ejb-api</artifactId>
 			<version>3.2</version>
 		</dependency>		
+		<!-- /cdi -->
 		
-		<!-- [/cdi] -->
-		
-		<!-- [deserialization] -->
-		<dependency>
-			<groupId>com.google.code.gson</groupId>
-			<artifactId>gson</artifactId>
-			<version>2.2.4</version>
-		</dependency>
-		<!-- [/deserialization] -->
 		
 		<!-- bean validation -->
 		<dependency>
@@ -133,19 +143,6 @@
 			<scope>provided</scope>
 		</dependency>
 		
-		<dependency>
-			<groupId>javax.annotation</groupId>
-			<artifactId>jsr250-api</artifactId>
-			<version>1.0</version>
-			<optional>true</optional>
-		</dependency>
-		
-		<dependency>
-			<groupId>commons-fileupload</groupId>
-			<artifactId>commons-fileupload</artifactId>
-			<version>1.3.1</version>
-			<optional>true</optional>
-		</dependency>
 		
 		<!-- provided by servlet containers -->
 		<dependency>
@@ -168,6 +165,7 @@
 			<version>3.1.0</version>
 			<scope>provided</scope>
 		</dependency>
+		
 		
 		<!-- test libs -->
 		<dependency>
@@ -235,6 +233,8 @@
 			<version>2.2</version>
 			<scope>test</scope>
 		</dependency>
+		<!-- /test libs -->
+		
 	</dependencies>
 	
 	<build>

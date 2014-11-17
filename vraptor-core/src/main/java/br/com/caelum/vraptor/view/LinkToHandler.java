@@ -20,6 +20,7 @@ import static java.util.Arrays.fill;
 import static java.util.Collections.sort;
 import static javassist.CtNewMethod.abstractMethod;
 
+import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -210,7 +211,9 @@ public class LinkToHandler extends ForwardingMap<Class<?>, Object> {
 		return methods;
 	}
 
-	private final class SortByArgumentsLengthDesc implements Comparator<Method> {
+	private static final class SortByArgumentsLengthDesc implements Comparator<Method>, Serializable {
+		public static final long serialVersionUID = 1L;
+
 		@Override
 		public int compare(Method o1, Method o2) {
 			return Integer.compare(o2.getParameterTypes().length, o1.getParameterTypes().length);

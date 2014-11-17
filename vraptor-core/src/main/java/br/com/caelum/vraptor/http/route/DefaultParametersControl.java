@@ -96,7 +96,9 @@ public class DefaultParametersControl implements ParametersControl {
 	@Override
 	public String fillUri(Parameter[] paramNames, Object... paramValues) {
 		if (paramNames.length != paramValues.length) {
-			throw new IllegalArgumentException("paramNames must have the same length as paramValues. Names: " + paramNames + " Values: " + Arrays.toString(paramValues));
+			String message = String.format("paramNames must have the same length as paramValues. Names: %s Values: %s",
+					Arrays.toString(paramNames), Arrays.toString(paramValues));
+			throw new IllegalArgumentException(message);
 		}
 
 		String[] splittedPatterns = StringUtils.extractParameters(originalPattern);

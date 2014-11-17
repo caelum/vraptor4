@@ -17,6 +17,7 @@
 package br.com.caelum.vraptor.view;
 
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
@@ -99,8 +100,8 @@ public class DefaultAcceptHeaderToFormat implements AcceptHeaderToFormat {
 	}
 
 	private static class MimeType implements Comparable<MimeType> {
-		String type;
-		double qualifier;
+		private final String type;
+		private final double qualifier;
 
 		public MimeType(String type, double qualifier) {
 			this.type = type;
@@ -111,6 +112,21 @@ public class DefaultAcceptHeaderToFormat implements AcceptHeaderToFormat {
 		public int compareTo(MimeType mime) {
 			// reverse order
 			return Double.compare(mime.qualifier, this.qualifier);
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (obj == null || getClass() != obj.getClass()) {
+				return false;
+			}
+
+			MimeType other = (MimeType) obj;
+			return Objects.equals(type, other.type) && Objects.equals(qualifier, other.qualifier);
+		}
+
+		@Override
+		public int hashCode() {
+			return Objects.hash(type, qualifier);
 		}
 
 		public String getType() {

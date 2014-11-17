@@ -17,6 +17,7 @@
 
 package br.com.caelum.vraptor.http;
 
+import static java.util.Collections.enumeration;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
@@ -24,7 +25,7 @@ import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.Mockito.when;
 
 import java.util.Enumeration;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -43,11 +44,11 @@ public class VRaptorRequestTest {
 	public void setup() {
 		MockitoAnnotations.initMocks(this);
 		
-		final Hashtable<String, String[]> t = new Hashtable<>();
+		final Map<String, String[]> t = new HashMap<>();
 		t.put("name", new String[] { "guilherme" });
 		t.put("age", new String[] { "27" });
 		
-		when(request.getParameterNames()).thenReturn(t.keys());
+		when(request.getParameterNames()).thenReturn(enumeration(t.keySet()));
 		when(request.getParameterMap()).thenReturn(t);
 		when(request.getParameter("name")).thenReturn("guilherme");
 		when(request.getParameter("minimum")).thenReturn(null);

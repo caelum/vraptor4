@@ -22,9 +22,9 @@ import br.com.caelum.vraptor.converter.Converter;
 
 /**
  * Represents a collection of all converters registered by VRaptor. When the application
- * {@link #register(Class)} method is called to register all converters found. Before 
- * registration the default implementation check the priority of each converter, and 
- * in the case of multiple converter for the same type, only the converter with highest 
+ * starts, the {@link #register(Class)} method is called to register all converters found. 
+ * Before registration the default implementation check the priority of each converter, 
+ * and in the case of multiple converter for the same type, only the converter with highest 
  * priority will registered.
  *
  * @author Guilherme Silveira

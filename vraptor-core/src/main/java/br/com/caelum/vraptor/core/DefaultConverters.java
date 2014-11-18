@@ -20,7 +20,9 @@ package br.com.caelum.vraptor.core;
 import static com.google.common.base.Preconditions.checkState;
 
 import java.util.LinkedList;
+import java.util.List;
 
+import javax.annotation.Priority;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
@@ -34,15 +36,21 @@ import br.com.caelum.vraptor.cache.LRU;
 import br.com.caelum.vraptor.converter.Converter;
 import br.com.caelum.vraptor.ioc.Container;
 
-import com.google.common.base.Predicate;
 import com.google.common.base.Supplier;
-import com.google.common.collect.FluentIterable;
 
+/**
+ * Default implementation for {@link Converters}.
+ *
+ * @author Guilherme Silveira
+ * @author Rodrigo Turini
+ * @author Lucas Cavalcanti
+ * @author Otávio Scherer Garcia
+ */
 @ApplicationScoped
 public class DefaultConverters implements Converters {
 
 	private final Logger logger = LoggerFactory.getLogger(DefaultConverters.class);
-	private final LinkedList<Class<? extends Converter<?>>> classes = new LinkedList<>();
+	private final List<Class<? extends Converter<?>>> classes = new LinkedList<>();
 
 	@LRU
 	private final CacheStore<Class<?>, Class<? extends Converter<?>>> cache;
@@ -67,55 +75,80 @@ public class DefaultConverters implements Converters {
 		Convert type = converterClass.getAnnotation(Convert.class);
 		checkState(type != null, "The converter type %s should have the Convert annotation", converterClass.getName());
 
+		Class<? extends Converter<?>> currentConverter = findConverterType(type.value());
+		if (!currentConverter.equals(NullConverter.class)) {
+			int priority = getConverterPriority(converterClass);
+			int priorityCurrent = getConverterPriority(currentConverter);
+
+			checkState(priority != priorityCurrent, "Converter %s have same priority than %s", converterClass, currentConverter);
+
+			if (priority > priorityCurrent) {
+				logger.debug("Overriding converter {} with {} because have more priority", currentConverter, converterClass);
+				classes.remove(currentConverter);
+				classes.add(converterClass);
+			} else {
+				logger.debug("Converter {} not registered because have less priority than {}", converterClass, currentConverter);
+			}
+		}
+
 		logger.debug("adding converter {} to {}", converterClass, type.value());
 		classes.add(converterClass);
+	}
+
+	private int getConverterPriority(Class<? extends Converter<?>> converter) {
+		Priority priority = converter.getAnnotation(Priority.class);
+		return priority == null ? 0 : priority.value();
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T> Converter<T> to(Class<T> clazz) {
-		Class<? extends Converter<?>> converterType = findConverterType(clazz);
+		Class<? extends Converter<?>> converterType = findConverterTypeFromCache(clazz);
 		checkState(!converterType.equals(NullConverter.class), "Unable to find converter for %s", clazz.getName());
 
+		logger.debug("found converter {} to {}", converterType.getName(), clazz.getName());
 		return (Converter<T>) container.instanceFor(converterType);
 	}
 
-	private Class<? extends Converter<?>> findConverterType(final Class<?> clazz) {
+	private Class<? extends Converter<?>> findConverterTypeFromCache(final Class<?> clazz) {
 		return cache.fetch(clazz, new Supplier<Class<? extends Converter<?>>>() {
+
 			@Override
 			public Class<? extends Converter<?>> get() {
-				return FluentIterable.from(classes).filter(matchConverter(clazz))
-						.first().or(NullConverter.class);
+				return findConverterType(clazz);
 			}
+
 		});
 	}
 
-	private Predicate<Class<?>> matchConverter(final Class<?> clazz) {
-		return new Predicate<Class<?>>() {
-			@Override
-			public boolean apply(Class<?> input) {
-				Class<?> boundType = input.getAnnotation(Convert.class).value();
-				return boundType.isAssignableFrom(clazz);
+	private Class<? extends Converter<?>> findConverterType(final Class<?> clazz) {
+		for (Class<? extends Converter<?>> current : classes) {
+			Class<?> boundType = current.getAnnotation(Convert.class).value();
+			if (boundType.isAssignableFrom(clazz)) {
+				return current;
 			}
-		};
+		}
+
+		logger.debug("Unable to find a converter for {}. Returning NullConverter.", clazz);
+		return NullConverter.class;
 	}
 
 	private interface NullConverter extends Converter<Object> {};
 
 	@Override
 	public boolean existsFor(Class<?> type) {
-		return !findConverterType(type).equals(NullConverter.class);
+		return !findConverterTypeFromCache(type).equals(NullConverter.class);
 	}
 
 	@Override
 	public boolean existsTwoWayFor(Class<?> type) {
-		return TwoWayConverter.class.isAssignableFrom(findConverterType(type));
+		return TwoWayConverter.class.isAssignableFrom(findConverterTypeFromCache(type));
 	}
 
 	@Override
 	public TwoWayConverter<?> twoWayConverterFor(Class<?> type) {
 		checkState(existsTwoWayFor(type), "Unable to find two way converter for %s", type.getName());
 
-		return (TwoWayConverter<?>) container.instanceFor(findConverterType(type));
+		return (TwoWayConverter<?>) container.instanceFor(findConverterTypeFromCache(type));
 	}
 }

@@ -17,10 +17,14 @@
 package br.com.caelum.vraptor.core;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.typeCompatibleWith;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
+
+import javax.annotation.Priority;
+import javax.interceptor.Interceptor;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -66,6 +70,27 @@ public class DefaultConvertersTest {
 		converters.register(WrongConverter.class);
 	}
 
+	@Test
+	public void shouldChooseConverterWithGreaterPriority() {
+		converters.register(MyConverter.class);
+		converters.register(MySecondConverter.class);
+
+		when(container.instanceFor(MyConverter.class)).thenReturn(new MyConverter());
+		when(container.instanceFor(MySecondConverter.class)).thenReturn(new MySecondConverter());
+
+		Object converter = converters.to(MyData.class);
+		assertThat(converter, instanceOf(MySecondConverter.class));
+	}
+
+	@Test
+	public void shouldForbidConverterWithSamePriority() {
+		exception.expect(IllegalStateException.class);
+		exception.expectMessage(String.format("Converter %s have same priority than %s", MyThirdConverter.class, MySecondConverter.class));
+
+		converters.register(MySecondConverter.class);
+		converters.register(MyThirdConverter.class);
+	}
+
 	class WrongConverter implements Converter<String> {
 
 		@Override
@@ -78,7 +103,8 @@ public class DefaultConvertersTest {
 	}
 
 	@Convert(MyData.class)
-	class MyConverter implements Converter<MyData> {
+	@Priority(Interceptor.Priority.LIBRARY_BEFORE)
+	private class MyConverter implements Converter<MyData> {
 		@Override
 		public MyData convert(String value, Class<? extends MyData> type) {
 			return null;
@@ -86,7 +112,17 @@ public class DefaultConvertersTest {
 	}
 
 	@Convert(MyData.class)
-	class MySecondConverter implements Converter<MyData> {
+	@Priority(javax.interceptor.Interceptor.Priority.APPLICATION)
+	private class MySecondConverter implements Converter<MyData> {
+		@Override
+		public MyData convert(String value, Class<? extends MyData> type) {
+			return null;
+		}
+	}
+
+	@Convert(MyData.class)
+	@Priority(javax.interceptor.Interceptor.Priority.APPLICATION)
+	private class MyThirdConverter implements Converter<MyData> {
 		@Override
 		public MyData convert(String value, Class<? extends MyData> type) {
 			return null;

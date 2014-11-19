@@ -104,7 +104,13 @@ public class VRaptor implements Filter {
 
 		final HttpServletRequest baseRequest = (HttpServletRequest) req;
 		final HttpServletResponse baseResponse = (HttpServletResponse) res;
-
+		
+		// Do not filter websocket requests -- this allows the use of websockets in VRaptor apps.
+		if ("websocket".equals(baseRequest.getHeader("upgrade"))) {
+			chain.doFilter(req, res);
+			return;
+		}
+		
 		if (staticHandler.requestingStaticFile(baseRequest)) {
 			staticHandler.deferProcessingToContainer(chain, baseRequest, baseResponse);
 		} else {

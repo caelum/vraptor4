@@ -106,7 +106,7 @@ public class VRaptor implements Filter {
 		final HttpServletResponse baseResponse = (HttpServletResponse) res;
 		
 		// Do not filter websocket requests -- this allows the use of websockets in VRaptor apps.
-		if ("websocket".equals(baseRequest.getHeader("upgrade"))) {
+		if (isWebsocketRequest(baseRequest)) {
 			chain.doFilter(req, res);
 			return;
 		}
@@ -178,4 +178,11 @@ public class VRaptor implements Filter {
 			throw new ServletException("Dependencies were not set. Do you have a Weld/CDI listener setup in your web.xml?");
 		}
 	}
+	
+	private boolean isWebsocketRequest(HttpServletRequest request) {
+		// according to the Websocket spec (https://tools.ietf.org/html/rfc6455): The WebSocket Protocol 
+		// 5. The request MUST contain an |Upgrade| header field whose value MUST include the "websocket" keyword.
+	    return request.getHeader("Upgrade") != null && request.getHeader("Upgrade").toLowerCase().contains("websocket");
+	}
+	
 }

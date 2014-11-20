@@ -19,6 +19,7 @@ package br.com.caelum.vraptor;
  import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import javax.inject.Inject;
 import javax.servlet.FilterChain;
@@ -32,6 +33,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
+
 
 @RunWith(WeldJunitRunner.class)
 public class VRaptorTest {
@@ -60,4 +62,18 @@ public class VRaptorTest {
 		vRaptor.doFilter(request, response, chain);
 		assertThat(handler.isDeferProcessingToContainerCalled(), is(true));
 	}
+	
+	@Test
+	public void shouldBypassWebsocketRequests() throws Exception{
+		HttpServletRequest request = mock(HttpServletRequest.class);
+		HttpServletResponse response = mock(HttpServletResponse.class);
+		FilterChain chain = mock(FilterChain.class);
+		
+		when(request.getHeader("Upgrade")).thenReturn("Websocket");
+
+		handler.setRequestingStaticFile(false);
+		vRaptor.doFilter(request, response, chain);
+		assertThat(handler.isDeferProcessingToContainerCalled(), is(false));
+	}
+	
 }

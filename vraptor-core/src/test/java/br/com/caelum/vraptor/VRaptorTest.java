@@ -16,9 +16,11 @@
  */
 package br.com.caelum.vraptor;
 
- import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 import javax.inject.Inject;
@@ -34,15 +36,16 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 
-
 @RunWith(WeldJunitRunner.class)
 public class VRaptorTest {
 
 	@Rule
 	public ExpectedException exception = ExpectedException.none();
 
-	@Inject private VRaptor vRaptor;
-	@Inject private MockStaticContentHandler handler;
+	@Inject
+	private VRaptor vRaptor;
+	@Inject
+	private MockStaticContentHandler handler;
 
 	@Test
 	public void shoudlComplainIfNotInAServletEnviroment() throws Exception {
@@ -54,7 +57,7 @@ public class VRaptorTest {
 	}
 
 	@Test
-	public void shouldDeferToContainerIfStaticFile() throws Exception{
+	public void shouldDeferToContainerIfStaticFile() throws Exception {
 		HttpServletRequest request = mock(HttpServletRequest.class);
 		HttpServletResponse response = mock(HttpServletResponse.class);
 		FilterChain chain = mock(FilterChain.class);
@@ -62,18 +65,20 @@ public class VRaptorTest {
 		vRaptor.doFilter(request, response, chain);
 		assertThat(handler.isDeferProcessingToContainerCalled(), is(true));
 	}
-	
+
 	@Test
-	public void shouldBypassWebsocketRequests() throws Exception{
+	public void shouldBypassWebsocketRequests() throws Exception {
 		HttpServletRequest request = mock(HttpServletRequest.class);
 		HttpServletResponse response = mock(HttpServletResponse.class);
 		FilterChain chain = mock(FilterChain.class);
-		
+
 		when(request.getHeader("Upgrade")).thenReturn("Websocket");
 
-		handler.setRequestingStaticFile(false);
 		vRaptor.doFilter(request, response, chain);
-		assertThat(handler.isDeferProcessingToContainerCalled(), is(false));
+		verify(request).getHeader("Upgrade");
+		verify(chain).doFilter(request, response);
+
+		verifyNoMoreInteractions(request, response);
 	}
-	
+
 }

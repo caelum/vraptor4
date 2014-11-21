@@ -183,7 +183,8 @@ public class VRaptor implements Filter {
 	 * 5. The request MUST contain an |Upgrade| header field whose value MUST include the "websocket" keyword.
 	 */
 	private boolean isWebsocketRequest(HttpServletRequest request) {
-		return request.getHeader("Upgrade") != null && request.getHeader("Upgrade").toLowerCase().contains("websocket");
+		String upgradeHeader = request.getHeader("Upgrade");
+		return upgradeHeader != null && upgradeHeader.toLowerCase().contains("websocket");
 	}
 	
 }

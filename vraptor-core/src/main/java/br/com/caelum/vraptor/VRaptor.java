@@ -104,7 +104,12 @@ public class VRaptor implements Filter {
 
 		final HttpServletRequest baseRequest = (HttpServletRequest) req;
 		final HttpServletResponse baseResponse = (HttpServletResponse) res;
-
+		
+		if (isWebsocketRequest(baseRequest)) {
+			chain.doFilter(req, res);
+			return;
+		}
+		
 		if (staticHandler.requestingStaticFile(baseRequest)) {
 			staticHandler.deferProcessingToContainer(chain, baseRequest, baseResponse);
 		} else {
@@ -172,4 +177,14 @@ public class VRaptor implements Filter {
 			throw new ServletException("Dependencies were not set. Do you have a Weld/CDI listener setup in your web.xml?");
 		}
 	}
+	
+	/**
+	 * According to the Websocket spec (https://tools.ietf.org/html/rfc6455): The WebSocket Protocol 
+	 * 5. The request MUST contain an |Upgrade| header field whose value MUST include the "websocket" keyword.
+	 */
+	private boolean isWebsocketRequest(HttpServletRequest request) {
+		String upgradeHeader = request.getHeader("Upgrade");
+		return upgradeHeader != null && upgradeHeader.toLowerCase().contains("websocket");
+	}
+	
 }

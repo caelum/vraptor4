@@ -281,6 +281,77 @@ result.use(xml()).from(user).exclude("email").serialize(); // exclude the email 
 result.use(xml()).from(user).excludeAll().serialize(); // excludes all fields
 ~~~ 
 
+You can also add versioning capability to JSON based results.
+Through this resource it is possible to add API versioning.
+As a useful example, suppose that an API which returns a list of our system's customers was created.
+The first version returns a list of customers defined by the structure that follows:
+
+~~~
+#!java
+public class Customer {
+	private String name;	
+	private String group;
+
+	// getters and setters omitted
+}
+~~~
+
+Now suppose you've created a controller's method as follows:
+
+~~~ 
+#!java
+@Get{"/customers"}
+public void customers() {
+	List<Customer> customers = customersRepository.getAll();
+	result.use(json()).from(customers).serialize();	
+}
+~~~
+
+So far, so good. But what if we need to add a new attribute as a result. A new attribute that only makes sense to the new API version.
+How could we solve it? We could write a new class named as CustomerV2 with new attribute and rewrite the cotroller's method so it could look like the following code:
+
+~~~
+#!java
+@Get{"/{versionParameter}/customers"}
+public void customers(String versionParameter) {
+    double version = Double.parseDouble(versionParameter);
+    if (version == 2.0) {
+		result.use(json()).from(customersRepository.getAll()).serialize();
+	} else {
+		result.use(json()).from(customersRepository.getAllFromV2()).serialize();
+	}
+}
+~~~
+
+Certainly, that was not a well suited approach. Regarding that VRaptor comes with GSON lib from Google as a dependency, we can use the same Customer class just by inserting @Since annotation through our new versioned attributes. This annotation, tells that an attribute will be available since an specified version as follows at our new Customer class:
+
+~~~
+#!java
+public class Customer {
+	private String name;
+	private String group;
+
+	@Since(2.0)
+	private Calendar registerDate;	
+
+	// getters and setters omitted
+}
+~~~
+
+Now, the our method could be rewritten as follows:
+
+~~~
+#!java
+@Get{"/{versionParameter}/customers"}
+public void customers(String versionParameter) {
+    double version = Double.parseDouble(versionParameter);
+    List<Customer> customers = customersRepository.getAll();
+	result.use(json()).version(version).from(customers).serialize();
+}
+~~~
+
+That's all. Now our API clients could request for a specified versioned result.
+
 The default XML Serialization implementation is based on XStream, then you can configure serialization by annotations or direct settings to XStream, just create the class:
 
 ~~~ 

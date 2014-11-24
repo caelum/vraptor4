@@ -105,4 +105,11 @@ public class GsonJSONSerialization implements JSONSerialization {
 		builder.indented();
 		return this;
 	}
+
+	@Override
+	public JSONSerialization version(double versionNumber) {
+		builder.version(versionNumber);
+		return this;
+	}
+
 }

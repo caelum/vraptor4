@@ -34,4 +34,6 @@ public interface GsonSerializerBuilder extends GsonInterfaceBuilder {
 	void indented();
 
 	void setExclusionStrategies(ExclusionStrategy... strategies);
+
+	void version(double versionNumber);
 }

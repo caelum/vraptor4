@@ -15,6 +15,7 @@
  */
 package br.com.caelum.vraptor.serialization;
 
+
 /**
  * Basic json serialization support using a Json SerializerBuilder.
  *
@@ -36,4 +37,7 @@ public interface JSONSerialization extends Serialization {
 	<T> NoRootSerialization withoutRoot();
 	
 	JSONSerialization indented();
+
+	JSONSerialization version(double versionNumber);
+
 }

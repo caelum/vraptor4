@@ -15,11 +15,11 @@
  */
 package br.com.caelum.vraptor.environment;
 
-import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertEquals;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.io.IOException;
@@ -28,86 +28,120 @@ import java.util.NoSuchElementException;
 
 import javax.servlet.ServletContext;
 
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import org.mockito.Mockito;
 
 public class DefaultEnvironmentTest {
 
 	@Rule
 	public ExpectedException exception = ExpectedException.none();
 
+	private ServletContext context;
+
+	@Before
+	public void setup() {
+		context = Mockito.mock(ServletContext.class);
+	}
+
 	@Test
-	public void shouldUseTheCurrentEnvironmentFileIfFound() throws IOException {
-		ServletContext context = mock(ServletContext.class);
-		ServletBasedEnvironment env = new ServletBasedEnvironment(context);
-		URL resource = env.getResource("/hibernate.cfg.xml");
-		assertThat(resource, is(equalTo(DefaultEnvironment.class.getResource("/development/hibernate.cfg.xml"))));
+	public void shouldUseEnvironmentBasedFileIfFoundUnderEnvironmentFolder() throws IOException {
+		DefaultEnvironment env = new DefaultEnvironment(EnvironmentType.DEVELOPMENT);
+		URL resource = env.getResource("/rules.txt");
+
+		assertThat(resource, notNullValue());
+		assertThat(resource, is(getClass().getResource("/development/rules.txt")));
+	}
+
+	@Test
+	public void shouldUseRootBasedFileIfNotFoundUnderEnvironmentFolder() throws IOException {
+		DefaultEnvironment env = new DefaultEnvironment(EnvironmentType.PRODUCTION);
+		URL resource = env.getResource("/rules.txt");
+
+		assertThat(resource, notNullValue());
+		assertThat(resource, is(getClass().getResource("/rules.txt")));
 	}
 
 	@Test
 	public void shouldLoadConfigurationInDefaultFileEnvironment() throws IOException {
-		ServletContext context = mock(ServletContext.class);
-		when(context.getInitParameter("br.com.caelum.vraptor.environment")).thenReturn("production");
-		ServletBasedEnvironment env = new ServletBasedEnvironment(context);
-
-		assertThat(env.get("env_name"), is(equalTo("production")));
-		assertEquals("only_in_default_file", env.get("only_in_default_file"));
+		DefaultEnvironment env = new DefaultEnvironment(context);
+		when(context.getInitParameter(DefaultEnvironment.ENVIRONMENT_PROPERTY)).thenReturn("production");
+		
+		assertThat(env.get("env_name"), is("production"));
+		assertThat(env.get("only_in_default_file"), is("only_in_default_file"));
 	}
 
 	@Test
-	public void shouldUseTheDefaultFileIfEnvironmentIsNotFound() throws IOException {
-		ServletContext context = mock(ServletContext.class);
-		when(context.getInitParameter("br.com.caelum.vraptor.environment")).thenReturn("production");
-		ServletBasedEnvironment env = new ServletBasedEnvironment(context);
-		URL resource = env.getResource("/hibernate.cfg.xml");
-		assertThat(resource, is(equalTo(DefaultEnvironment.class.getResource("/hibernate.cfg.xml"))));
-		assertThat(env.get("env_name"), is(equalTo("production")));
+	public void shouldUseFalseWhenFeatureIsNotPresent() throws IOException {
+		DefaultEnvironment env = new DefaultEnvironment(context);
+		assertThat(env.supports("feature_that_doesnt_exists"), is(false));
 	}
 
 	@Test
-	public void shouldUseFalseIfFeatureIsNotPresent() throws IOException {
-		Environment env = new DefaultEnvironment(EnvironmentType.PRODUCTION);
-
-		assertThat(env.supports("feature_that_doesnt_exists"), equalTo(false));
+	public void shouldTrimValueWhenEvaluatingSupports() throws Exception {
+		DefaultEnvironment env = new DefaultEnvironment(context);
+		assertThat(env.supports("untrimmed_boolean"), is(true));
 	}
 
 	@Test
 	public void shouldThrowExceptionIfKeyDoesNotExist() throws Exception {
 		exception.expect(NoSuchElementException.class);
 
-		ServletContext context = mock(ServletContext.class);
-		ServletBasedEnvironment env = new ServletBasedEnvironment(context);
+		DefaultEnvironment env = new DefaultEnvironment(context);
 		env.get("key_that_doesnt_exist");
 	}
 
 	@Test
-	public void shouldGetDefaultValueIfTheValueIsntSet() throws Exception {
-		DefaultEnvironment defaultEnvironment = new DefaultEnvironment(EnvironmentType.DEVELOPMENT);
-		String value = defaultEnvironment.get("inexistent", "fallback");
-		assertEquals("fallback", value);
+	public void shouldGetValueWhenIsPresent() throws Exception {
+		DefaultEnvironment env = new DefaultEnvironment(context);
+		String value = env.get("env_name", "fallback");
+		assertThat(value, is("development"));
 	}
 
 	@Test
-	public void shouldGetValueIfIsSetInProperties() throws Exception {
-		DefaultEnvironment defaultEnvironment = new DefaultEnvironment(EnvironmentType.DEVELOPMENT);
-		String value = defaultEnvironment.get("env_name", "fallback");
-		assertEquals("development", value);
+	public void shouldGetDefaultValueWhenIsntPresent() throws Exception {
+		DefaultEnvironment env = new DefaultEnvironment(context);
+		String value = env.get("inexistent", "fallback");
+		assertThat(value, is("fallback"));
+	}
+
+	@Test
+	public void shouldAllowApplicationToOverrideProperties() throws Exception {
+		DefaultEnvironment env = new DefaultEnvironment(context);
+
+		assertThat(env.get("itWorks"), is("It Works!"));
+
+		env.set("itWorks", "Yep, works fine.");
+		assertThat(env.get("itWorks"), is("Yep, works fine."));
+	}
+
+	@Test
+	public void shouldUseContextInitParameterWhenSystemPropertiesIsntPresent() {
+		DefaultEnvironment env = new DefaultEnvironment(context);
+		when(context.getInitParameter(DefaultEnvironment.ENVIRONMENT_PROPERTY)).thenReturn("acceptance");
+		
+		assertThat(env.getName(), is("acceptance"));
+	}
+
+	@Test
+	public void shouldUseSystemPropertiesWhenSysenvIsntPresent() {
+		DefaultEnvironment env = new DefaultEnvironment(context);
+		System.getProperties().setProperty(DefaultEnvironment.ENVIRONMENT_PROPERTY, "acceptance");
+
+		verify(context, never()).getInitParameter(DefaultEnvironment.ENVIRONMENT_PROPERTY);
+
+		assertThat(env.getName(), is("acceptance"));
+		System.getProperties().remove(DefaultEnvironment.ENVIRONMENT_PROPERTY);
 	}
 	
-	@Test
 	public void shouldGetOverridedSystemPropertyValueIfIsSet() throws IOException {
 		DefaultEnvironment defaultEnvironment = new DefaultEnvironment(EnvironmentType.DEVELOPMENT);
 		System.setProperty("env_name", "customEnv");
 		String value = defaultEnvironment.get("env_name");
-		assertEquals("customEnv", value);
+		assertThat("customEnv", is(value));
 		//unset property to not break other tests
 		System.setProperty("env_name", "");
-	}
-	
-	@Test
-	public void shouldTrimValueWhenEvaluatingSupport() throws Exception {
-		DefaultEnvironment defaultEnvironment = new DefaultEnvironment(EnvironmentType.DEVELOPMENT);
-		assertThat(defaultEnvironment.supports("untrimmed_boolean"), is(true));
 	}
 }

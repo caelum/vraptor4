@@ -590,7 +590,8 @@ public class GsonJSONSerializationTest {
 
 	@Test
 	public void shouldSerializeVersionedJsonFieldsWithSinceAnnotation() {
-		JSONSerialization serialization = new GsonJSONSerialization(response, extractor, builder, environment);
+		JSONSerialization serialization = new GsonJSONSerialization(response, extractor, builder, 
+				environment, new DefaultReflectionProvider());
 
 		String expectedResult = "{\"client\":{\"name\":\"adolfo eloy\"}}";
 		Client client = new Client("adolfo eloy");
@@ -600,7 +601,8 @@ public class GsonJSONSerializationTest {
 
 	@Test
 	public void shouldSerializeRecursivelyVersionedJsonFields() {
-		JSONSerialization serialization = new GsonJSONSerialization(response, extractor, builder, environment);
+		JSONSerialization serialization = new GsonJSONSerialization(response, extractor, builder, 
+				environment, new DefaultReflectionProvider());
 
 		String expectedResult = "{\"client\":{\"name\":\"adolfo eloy\",\"address\":{\"street\":\"antonio agu\",\"city\":\"osasco\"}}}";
 

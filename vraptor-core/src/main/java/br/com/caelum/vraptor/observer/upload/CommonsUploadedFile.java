@@ -14,9 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package br.com.caelum.vraptor.observer.upload;
 
-import static java.nio.file.Files.copy;
+import static com.google.common.base.Throwables.propagateIfPossible;
 import static java.util.Objects.requireNonNull;
 
 import java.io.File;
@@ -28,58 +29,64 @@ import java.nio.file.Path;
 
 import javax.enterprise.inject.Vetoed;
 
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 
 /**
- * Default implementation for {@link UploadedFile}.
+ * An implementation for {@link UploadedFile} that delegates all operations to Apache Commons 
+ * FileUpload API.
+ * 
+ * @author Otávio Scherer Garcia
+ * @since 4.2
  */
 @Vetoed
-public class DefaultUploadedFile implements UploadedFile {
-	
-	private final String contentType;
-	private final String fileName;
-	private final InputStream content;
-	private final long size;
-	
-	public DefaultUploadedFile(InputStream content, String fileName, String contentType, long size) {
-		this.content = content;
-		this.fileName = fileName;
-		this.contentType = contentType;
-		this.size = size;
+public class CommonsUploadedFile implements UploadedFile {
+
+	private final FileItem delegate;
+
+	public CommonsUploadedFile(FileItem fileItem) {
+		this.delegate = fileItem;
 	}
 
 	@Override
 	public String getContentType() {
-		return this.contentType;
+		return delegate.getContentType();
 	}
 
 	@Override
 	public InputStream getFile() throws IOException {
-		return content;
+		return delegate.getInputStream();
 	}
 
 	@Override
 	public String getFileName() {
-		return this.fileName;
+		return FilenameUtils.getName(delegate.getName());
 	}
 
 	@Override
 	public long getSize() {
-		return size;
+		return delegate.getSize();
 	}
 
 	@Override
 	public void writeTo(File target) throws IOException {
 		requireNonNull(target, "Target can't be null");
-		writeTo(target.toPath());
+
+		try {
+			delegate.write(target);
+		} catch (IOException e) {
+			throw e;
+		} catch (Exception e) {
+			propagateIfPossible(e);
+			throw new IOException(e);
+		}
 	}
 
 	@Override
 	public void writeTo(Path target, CopyOption... options) throws IOException {
 		requireNonNull(target, "Target can't be null");
-		try (InputStream in = getFile()) {
-			copy(in, target, options);
-		}
+		writeTo(target.toFile());
 	}
 
 	@Override

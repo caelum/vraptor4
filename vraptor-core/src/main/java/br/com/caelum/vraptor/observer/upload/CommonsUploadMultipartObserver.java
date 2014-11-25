@@ -20,7 +20,6 @@ import static com.google.common.base.Strings.isNullOrEmpty;
 import static org.apache.commons.fileupload.disk.DiskFileItemFactory.DEFAULT_SIZE_THRESHOLD;
 import static org.slf4j.LoggerFactory.getLogger;
 
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Collection;
 import java.util.List;
@@ -28,7 +27,6 @@ import java.util.List;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
 import javax.servlet.ServletRequest;
-import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemFactory;
@@ -36,11 +34,9 @@ import org.apache.commons.fileupload.FileUploadBase.SizeLimitExceededException;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 
 import br.com.caelum.vraptor.events.ControllerFound;
-import br.com.caelum.vraptor.http.InvalidParameterException;
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.validator.I18nMessage;
 import br.com.caelum.vraptor.validator.Validator;
@@ -51,8 +47,7 @@ import com.google.common.collect.Multimap;
 import com.google.common.collect.Multiset;
 
 /**
- * A multipart observer based on Apache Commons Upload. Provided parameters are injected through
- * {@link HttpServletRequest#setAttribute(String, Object)} and uploaded files are made available through.
+ * A multipart observer based on Apache Commons FileUpload.
  *
  * @author Guilherme Silveira
  * @author Otávio Scherer Garcia
@@ -136,16 +131,11 @@ public class CommonsUploadMultipartObserver {
 	}
 
 	protected void processFile(FileItem item, String name, MutableRequest request) {
-		try {
-			String fileName = FilenameUtils.getName(item.getName());
-			UploadedFile upload = new DefaultUploadedFile(item.getInputStream(), fileName, item.getContentType(), item.getSize());
-			request.setParameter(name, name);
-			request.setAttribute(name, upload);
+		UploadedFile upload = new CommonsUploadedFile(item);
+		request.setParameter(name, name);
+		request.setAttribute(name, upload);
 
-			logger.debug("Uploaded file: {} with {}", name, upload);
-		} catch (IOException e) {
-			throw new InvalidParameterException("Can't parse uploaded file " + item.getName(), e);
-		}
+		logger.debug("Uploaded file: {} with {}", name, upload);
 	}
 
 	protected ServletFileUpload createServletFileUpload(MultipartConfig config) {

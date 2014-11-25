@@ -28,8 +28,8 @@ import org.slf4j.Logger;
 import br.com.caelum.vraptor.events.ControllerFound;
 
 /**
- * This observer will warn a message in console when no commons-fileupload was
- * found in classpath and application try to upload any files.
+ * This observer will warn a message in console when no Apache Commons FileUpload 
+ * was found in classpath and application try to upload any files.
  *
  * @author Otávio Scherer Garcia
  * @author Rodrigo Turini

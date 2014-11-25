@@ -26,14 +26,13 @@ import javax.enterprise.event.Event;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 
-import net.vidageek.mirror.dsl.Mirror;
-import net.vidageek.mirror.exception.ReflectionProviderException;
-
 import org.slf4j.Logger;
 
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.core.MethodInfo;
+import br.com.caelum.vraptor.core.ReflectionProvider;
+import br.com.caelum.vraptor.core.ReflectionProviderException;
 import br.com.caelum.vraptor.events.InterceptorsExecuted;
 import br.com.caelum.vraptor.events.MethodExecuted;
 import br.com.caelum.vraptor.events.MethodReady;
@@ -55,24 +54,19 @@ public class ExecuteMethod {
 
 	private final MethodInfo methodInfo;
 	private final Messages messages;
+	private final ReflectionProvider reflectionProvider;
 
-	private Event<MethodExecuted> methodExecutedEvent;
-	private Event<MethodReady> methodReady;
-
-	/**
-	 * @deprecated CDI eyes only
-	 */
-	protected ExecuteMethod() {
-		this(null, null, null, null);
-	}
+	private final Event<MethodExecuted> methodExecutedEvent;
+	private final Event<MethodReady> methodReady;
 
 	@Inject
-	public ExecuteMethod(MethodInfo methodInfo, Messages messages, 
-			Event<MethodExecuted> methodExecutedEvent, Event<MethodReady> methodReady) {
+	public ExecuteMethod(MethodInfo methodInfo, Messages messages, Event<MethodExecuted> methodExecutedEvent, 
+			Event<MethodReady> methodReady, ReflectionProvider reflectionProvider) {
 		this.methodInfo = methodInfo;
 		this.messages = messages;
 		this.methodExecutedEvent = methodExecutedEvent;
 		this.methodReady = methodReady;
+		this.reflectionProvider = reflectionProvider;
 	}
 
 	public void execute(@Observes InterceptorsExecuted event) {
@@ -84,7 +78,7 @@ public class ExecuteMethod {
 
 			log.debug("Invoking {}", reflectionMethod);
 			Object instance = event.getControllerInstance();
-			Object result = new Mirror().on(instance).invoke().method(reflectionMethod).withArgs(parameters);
+			Object result = reflectionProvider.invoke(instance, reflectionMethod, parameters);
 
 			messages.assertAbsenceOfErrors();
 			

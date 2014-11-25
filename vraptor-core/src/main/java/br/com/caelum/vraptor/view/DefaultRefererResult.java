@@ -26,10 +26,10 @@ import java.util.ArrayList;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 
-import net.vidageek.mirror.dsl.Mirror;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.controller.HttpMethod;
+import br.com.caelum.vraptor.core.ReflectionProvider;
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.http.ParametersProvider;
 import br.com.caelum.vraptor.http.route.ControllerNotFoundException;
@@ -44,20 +44,23 @@ public class DefaultRefererResult implements RefererResult {
 	private final Result result;
 	private final Router router;
 	private final ParametersProvider provider;
+	private ReflectionProvider reflectionProvider;
 
 	/** 
 	 * @deprecated CDI eyes only
 	 */
 	protected DefaultRefererResult() {
-		this(null, null, null, null);
+		this(null, null, null, null, null);
 	}
 
 	@Inject
-	public DefaultRefererResult(Result result, MutableRequest request, Router router, ParametersProvider provider) {
+	public DefaultRefererResult(Result result, MutableRequest request, Router router, ParametersProvider provider,
+			ReflectionProvider reflectionProvider) {
 		this.result = result;
 		this.request = request;
 		this.router = router;
 		this.provider = provider;
+		this.reflectionProvider = reflectionProvider;
 	}
 
 	@Override
@@ -73,8 +76,8 @@ public class DefaultRefererResult implements RefererResult {
 	}
 
 	private void executeMethod(ControllerMethod method, Object instance) {
-		new Mirror().on(instance).invoke().method(method.getMethod())
-			.withArgs(provider.getParametersFor(method, new ArrayList<Message>()));
+		Object[] args = provider.getParametersFor(method, new ArrayList<Message>());
+		reflectionProvider.invoke(instance, method.getMethod(), args);
 	}
 
 	@Override

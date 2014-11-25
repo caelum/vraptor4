@@ -26,6 +26,7 @@ import org.junit.rules.ExpectedException;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import br.com.caelum.vraptor.core.DefaultReflectionProvider;
 import br.com.caelum.vraptor.http.EncodingHandler;
 import br.com.caelum.vraptor.proxy.Proxifier;
 
@@ -43,7 +44,8 @@ public class RulesTest {
 	public void setup() {
 		MockitoAnnotations.initMocks(this);
 
-		routeBuilder = new DefaultRouteBuilder(proxifier, null, null, null, new JavaEvaluator(), "",encodingHandler);
+		routeBuilder = new DefaultRouteBuilder(proxifier, null, null, null, 
+				new JavaEvaluator(new DefaultReflectionProvider()), "",encodingHandler);
 		when(router.builderFor("")).thenReturn(routeBuilder);
 	}
 

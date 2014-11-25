@@ -49,6 +49,7 @@ import br.com.caelum.vraptor.controller.DefaultBeanClass;
 import br.com.caelum.vraptor.controller.DefaultControllerMethod;
 import br.com.caelum.vraptor.controller.HttpMethod;
 import br.com.caelum.vraptor.core.Converters;
+import br.com.caelum.vraptor.core.DefaultReflectionProvider;
 import br.com.caelum.vraptor.http.EncodingHandler;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.http.ParanamerNameProvider;
@@ -82,7 +83,8 @@ public class DefaultRouterTest {
 		this.nameProvider = new ParanamerNameProvider();
 		this.cache = new DefaultCacheStore<>();
 
-		router = new DefaultRouter(proxifier, new NoTypeFinder(), converters, nameProvider, new JavaEvaluator(), encodingHandler,cache);
+		router = new DefaultRouter(proxifier, new NoTypeFinder(), converters, nameProvider, 
+				new JavaEvaluator(new DefaultReflectionProvider()), encodingHandler,cache);
 	}
 
 	@Test
@@ -342,7 +344,7 @@ public class DefaultRouterTest {
 	}
 
 	private void registerRulesFor(Class<?> type) {
-		RoutesParser parser = new PathAnnotationRoutesParser(router);
+		RoutesParser parser = new PathAnnotationRoutesParser(router, new DefaultReflectionProvider());
 
 		BeanClass controllerClass = new DefaultBeanClass(type);
 		List<Route> rules = parser.rulesFor(controllerClass);

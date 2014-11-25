@@ -17,6 +17,7 @@ package br.com.caelum.vraptor.serialization.xstream;
 
 import javax.enterprise.inject.Vetoed;
 
+import br.com.caelum.vraptor.core.ReflectionProvider;
 import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
 import br.com.caelum.vraptor.serialization.Serializee;
 
@@ -30,44 +31,63 @@ import com.thoughtworks.xstream.mapper.MapperWrapper;
 public  class VRaptorXStream extends XStream {
 	private final TypeNameExtractor extractor;
 	private final Serializee serializee;
+	private final ReflectionProvider reflectionProvider;
 	private VRaptorClassMapper vraptorMapper;
 
 	{setMode(NO_REFERENCES);}
 
-	public VRaptorXStream(TypeNameExtractor extractor, Serializee serializee) {
+	public VRaptorXStream(TypeNameExtractor extractor, Serializee serializee, ReflectionProvider reflectionProvider) {
 		super(new PureJavaReflectionProvider());
 		this.extractor = extractor;
 		this.serializee = serializee;
+		this.reflectionProvider = reflectionProvider;
 	}
 	
-	public VRaptorXStream(TypeNameExtractor extractor, HierarchicalStreamDriver hierarchicalStreamDriver, Serializee serializee) {
+	public VRaptorXStream(TypeNameExtractor extractor, HierarchicalStreamDriver hierarchicalStreamDriver, 
+			Serializee serializee, ReflectionProvider reflectionProvider) {
 		super(new PureJavaReflectionProvider(),hierarchicalStreamDriver);
 		this.extractor = extractor;
 		this.serializee = serializee;
+		this.reflectionProvider = reflectionProvider;
 	}
 
 	@Override
 	protected MapperWrapper wrapMapper(MapperWrapper next) {
-		
-		vraptorMapper = new VRaptorClassMapper(next,
 		/* this method is called in the super constructor, so we cannot use instance variables, so we're
 		 * using this 'lazy' get */
-		new Supplier<TypeNameExtractor>() {
+		vraptorMapper = new VRaptorClassMapper(next, lazyTypeNameExtractor(), lazySerializee(), lazyReflectionProvider());
+		return vraptorMapper;
+	}
+
+	public VRaptorClassMapper getVRaptorMapper() {
+		return vraptorMapper;
+	}
+
+
+	private Supplier<ReflectionProvider> lazyReflectionProvider() {
+		return new Supplier<ReflectionProvider>() {
 			@Override
-			public TypeNameExtractor get() {
-				return extractor;
+			public ReflectionProvider get() {
+				return reflectionProvider;
 			}
-		}, 
-		new Supplier<Serializee>() {
+		};
+	}
+
+	private Supplier<Serializee> lazySerializee() {
+		return new Supplier<Serializee>() {
 			@Override
 			public Serializee get() {
 				return serializee;
 			}
-		});
-		return vraptorMapper;
+		};
 	}
-	
-	public VRaptorClassMapper getVRaptorMapper() {
-		return vraptorMapper;
+
+	private Supplier<TypeNameExtractor> lazyTypeNameExtractor() {
+		return new Supplier<TypeNameExtractor>() {
+			@Override
+			public TypeNameExtractor get() {
+				return extractor;
+			}
+		};
 	}
 }

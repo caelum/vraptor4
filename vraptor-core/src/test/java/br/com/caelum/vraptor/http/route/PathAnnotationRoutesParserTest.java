@@ -53,6 +53,8 @@ import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.controller.DefaultBeanClass;
 import br.com.caelum.vraptor.controller.HttpMethod;
 import br.com.caelum.vraptor.core.Converters;
+import br.com.caelum.vraptor.core.DefaultReflectionProvider;
+import br.com.caelum.vraptor.core.ReflectionProvider;
 import br.com.caelum.vraptor.http.EncodingHandler;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.http.ParanamerNameProvider;
@@ -73,6 +75,8 @@ public class PathAnnotationRoutesParserTest {
 
 	private PathAnnotationRoutesParser parser;
 
+	private ReflectionProvider reflectionProvider;
+
 	@Before
 	public void setup() {
 		MockitoAnnotations.initMocks(this);
@@ -80,16 +84,17 @@ public class PathAnnotationRoutesParserTest {
 		this.proxifier = new JavassistProxifier();
 		this.typeFinder = new NoTypeFinder();
 		this.nameProvider = new ParanamerNameProvider();
-
+		this.reflectionProvider = new DefaultReflectionProvider();
+		
 		when(router.builderFor(anyString())).thenAnswer(new Answer<DefaultRouteBuilder>() {
 
 			@Override
 			public DefaultRouteBuilder answer(InvocationOnMock invocation) throws Throwable {
-				return new DefaultRouteBuilder(proxifier, typeFinder, converters, nameProvider, new JavaEvaluator(), (String) invocation.getArguments()[0],encodingHandler);
+				return new DefaultRouteBuilder(proxifier, typeFinder, converters, nameProvider, new JavaEvaluator(reflectionProvider), (String) invocation.getArguments()[0],encodingHandler);
 			}
 		});
 
-		parser = new PathAnnotationRoutesParser(router);
+		parser = new PathAnnotationRoutesParser(router, reflectionProvider);
 	}
 
 	@Controller

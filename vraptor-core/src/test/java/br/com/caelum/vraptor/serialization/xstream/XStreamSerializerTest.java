@@ -28,6 +28,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.junit.Before;
 
+import br.com.caelum.vraptor.core.DefaultReflectionProvider;
 import br.com.caelum.vraptor.environment.Environment;
 import br.com.caelum.vraptor.interceptor.DefaultTypeNameExtractor;
 import br.com.caelum.vraptor.serialization.Serializee;
@@ -62,6 +63,7 @@ public class XStreamSerializerTest extends XStreamXMLSerializationTest {
 		Instance<Converter> convertersInst = new MockInstanceImpl<>(converters);
 		Instance<SingleValueConverter> singleValueConverters = new MockInstanceImpl<>();
 		XStreamConverters xStreamConverters = new XStreamConverters(convertersInst, singleValueConverters);
-		serialization = new XStreamXMLSerialization(response, new XStreamBuilderImpl(xStreamConverters, extractor, new Serializee()), environment);
+		serialization = new XStreamXMLSerialization(response, new XStreamBuilderImpl(xStreamConverters, extractor, 
+				new Serializee(new DefaultReflectionProvider()), new DefaultReflectionProvider()), environment);
 	}
 }

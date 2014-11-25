@@ -34,6 +34,7 @@ import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.controller.DefaultBeanClass;
 import br.com.caelum.vraptor.controller.DefaultControllerMethod;
 import br.com.caelum.vraptor.core.Converters;
+import br.com.caelum.vraptor.core.DefaultReflectionProvider;
 import br.com.caelum.vraptor.http.EncodingHandler;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.http.ParanamerNameProvider;
@@ -67,7 +68,7 @@ public class RouteBuilderTest {
 				"method", String.class, Integer.class, BigDecimal.class));
 
 		proxifier = new JavassistProxifier();
-		typeFinder = new DefaultTypeFinder(provider);
+		typeFinder = new DefaultTypeFinder(provider, new DefaultReflectionProvider());
 	}
 
 	@Test
@@ -85,7 +86,8 @@ public class RouteBuilderTest {
 	}
 
 	private DefaultRouteBuilder newBuilder(String uri) {
-		return new DefaultRouteBuilder(proxifier, typeFinder, converters, provider, new JavaEvaluator(), uri, encodingHandler);
+		return new DefaultRouteBuilder(proxifier, typeFinder, converters, provider, 
+				new JavaEvaluator(new DefaultReflectionProvider()), uri, encodingHandler);
 	}
 
 	@Test

@@ -26,7 +26,7 @@ import java.util.Map;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
-import net.vidageek.mirror.dsl.Mirror;
+import br.com.caelum.vraptor.core.ReflectionProvider;
 import br.com.caelum.vraptor.http.Parameter;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 /**
@@ -38,17 +38,19 @@ import br.com.caelum.vraptor.http.ParameterNameProvider;
 public class DefaultTypeFinder implements TypeFinder {
 
 	private final ParameterNameProvider provider;
+	private final ReflectionProvider reflectionProvider;
 	
 	/** 
 	 * @deprecated CDI eyes only
 	 */
 	protected DefaultTypeFinder() {
-		this(null);
+		this(null, null);
 	}
 	
 	@Inject
-	public DefaultTypeFinder(ParameterNameProvider provider) {
+	public DefaultTypeFinder(ParameterNameProvider provider, ReflectionProvider reflectionProvider) {
 		this.provider = provider;
+		this.reflectionProvider = reflectionProvider;
 	}
 	
 	@Override
@@ -63,7 +65,7 @@ public class DefaultTypeFinder implements TypeFinder {
 					for (int j = 1; j < items.length; j++) {
 						String item = items[j];
 						try {
-							type = new Mirror().on(type).reflect().method("get" + capitalize(item)).withoutArgs().getReturnType();
+							type = reflectionProvider.getMethod(type, "get" + capitalize(item)).getReturnType();
 						} catch (Exception e) {
 							throw new IllegalArgumentException("Parameters paths are invalid: " + Arrays.toString(parameterPaths) + " for method " + method, e);
 						}

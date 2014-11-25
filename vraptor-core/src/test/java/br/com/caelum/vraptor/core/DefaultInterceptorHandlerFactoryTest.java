@@ -42,7 +42,7 @@ public class DefaultInterceptorHandlerFactoryTest {
 
 	private DefaultInterceptorHandlerFactory factory;
 
-	private StepInvoker stepInvoker = new StepInvoker();
+	private StepInvoker stepInvoker = new StepInvoker(new DefaultReflectionProvider());
 
 	private @Mock SimpleInterceptorStack simpleStack;
 	private @Mock InterceptorAcceptsExecutor acceptsExecutor;

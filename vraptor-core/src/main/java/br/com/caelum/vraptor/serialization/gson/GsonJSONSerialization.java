@@ -22,6 +22,7 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
 
+import br.com.caelum.vraptor.core.ReflectionProvider;
 import br.com.caelum.vraptor.environment.Environment;
 import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
 import br.com.caelum.vraptor.serialization.JSONSerialization;
@@ -43,21 +44,23 @@ public class GsonJSONSerialization implements JSONSerialization {
 	private final TypeNameExtractor extractor;
 	private final GsonSerializerBuilder builder;
 	private Environment environment;
+	private ReflectionProvider reflectionProvider;
 
 	/** 
 	 * @deprecated CDI eyes only
 	 */
 	protected GsonJSONSerialization() {
-		this(null, null, null, null);
+		this(null, null, null, null, null);
 	}
 
 	@Inject
 	public GsonJSONSerialization(HttpServletResponse response, TypeNameExtractor extractor,
-			GsonSerializerBuilder builder, Environment environment) {
+			GsonSerializerBuilder builder, Environment environment, ReflectionProvider reflectionProvider) {
 		this.response = response;
 		this.extractor = extractor;
 		this.builder = builder;
 		this.environment = environment;
+		this.reflectionProvider = reflectionProvider;
 	}
 
 	@PostConstruct
@@ -85,7 +88,7 @@ public class GsonJSONSerialization implements JSONSerialization {
 
 	protected SerializerBuilder getSerializer() {
 		try {
-			return new GsonSerializer(builder, response.getWriter(), extractor);
+			return new GsonSerializer(builder, response.getWriter(), extractor, reflectionProvider);
 		} catch (IOException e) {
 			throw new ResultException("Unable to serialize data", e);
 		}

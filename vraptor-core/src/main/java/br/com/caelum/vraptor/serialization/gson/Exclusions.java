@@ -17,13 +17,14 @@ package br.com.caelum.vraptor.serialization.gson;
 
 import static br.com.caelum.vraptor.serialization.gson.GsonSerializer.shouldSerializeField;
 
+import java.lang.reflect.Field;
 import java.util.Map.Entry;
 
 import javax.enterprise.inject.Vetoed;
 
-import net.vidageek.mirror.dsl.Mirror;
-import br.com.caelum.vraptor.serialization.SkipSerialization;
+import br.com.caelum.vraptor.core.ReflectionProvider;
 import br.com.caelum.vraptor.serialization.Serializee;
+import br.com.caelum.vraptor.serialization.SkipSerialization;
 
 import com.google.gson.ExclusionStrategy;
 import com.google.gson.FieldAttributes;
@@ -38,9 +39,11 @@ import com.google.gson.FieldAttributes;
 public class Exclusions implements ExclusionStrategy {
 
 	private Serializee serializee;
+	private ReflectionProvider reflectionProvider;
 
-	public Exclusions(Serializee serializee) {
+	public Exclusions(Serializee serializee, ReflectionProvider reflectionProvider) {
 		this.serializee = serializee;
+		this.reflectionProvider = reflectionProvider;
 	}
 
 	@Override
@@ -62,9 +65,9 @@ public class Exclusions implements ExclusionStrategy {
 				return true;
 			}
 		}
-
-		return !serializee.isRecursive() 
-				&& !shouldSerializeField(new Mirror().on(definedIn).reflect().field(fieldName).getType());
+		
+		Field field = reflectionProvider.getField(definedIn, fieldName);
+		return !serializee.isRecursive() && !shouldSerializeField(field.getType());
 	}
 
 	private boolean isCompatiblePath(Entry<String, Class<?>> path, Class<?> definedIn, String fieldName) {

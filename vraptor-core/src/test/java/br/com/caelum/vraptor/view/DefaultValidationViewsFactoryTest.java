@@ -34,6 +34,7 @@ import org.mockito.stubbing.Answer;
 
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.controller.HttpMethod;
+import br.com.caelum.vraptor.core.DefaultReflectionProvider;
 import br.com.caelum.vraptor.proxy.JavassistProxifier;
 import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.serialization.JSONSerialization;
@@ -58,7 +59,7 @@ public class DefaultValidationViewsFactoryTest {
 		result = mock(Result.class);
 
 		proxifier = new JavassistProxifier();
-		factory = new DefaultValidationViewsFactory(result, proxifier);
+		factory = new DefaultValidationViewsFactory(result, proxifier, new DefaultReflectionProvider());
 		errors = Collections.emptyList();
 
 	}

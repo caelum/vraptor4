@@ -29,6 +29,7 @@ import java.util.Set;
 
 import javax.enterprise.inject.Vetoed;
 
+import br.com.caelum.vraptor.core.ReflectionProvider;
 import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
 import br.com.caelum.vraptor.serialization.Serializer;
 import br.com.caelum.vraptor.serialization.SerializerBuilder;
@@ -44,14 +45,17 @@ import com.google.gson.Gson;
 @Vetoed
 public class GsonSerializer implements SerializerBuilder {
 
-	private GsonSerializerBuilder builder;
-	private Writer writer;
-	private TypeNameExtractor extractor;
+	private final GsonSerializerBuilder builder;
+	private final Writer writer;
+	private final TypeNameExtractor extractor;
+	private final ReflectionProvider reflectionProvider;
 
-	public GsonSerializer(GsonSerializerBuilder builder, Writer writer, TypeNameExtractor extractor) {
+	public GsonSerializer(GsonSerializerBuilder builder, Writer writer, TypeNameExtractor extractor, 
+			ReflectionProvider reflectionProvider) {
 		this.writer = writer;
 		this.extractor = extractor;
 		this.builder = builder;
+		this.reflectionProvider = reflectionProvider;
 	}
 
 	@Override
@@ -129,7 +133,7 @@ public class GsonSerializer implements SerializerBuilder {
 
 	@Override
 	public void serialize() {
-		builder.setExclusionStrategies(new Exclusions(builder.getSerializee()));
+		builder.setExclusionStrategies(new Exclusions(builder.getSerializee(), reflectionProvider));
 		Gson gson = builder.create();
 		
 		String alias = builder.getAlias();

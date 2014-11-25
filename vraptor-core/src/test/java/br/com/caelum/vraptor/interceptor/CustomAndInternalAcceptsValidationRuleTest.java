@@ -24,6 +24,7 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import br.com.caelum.vraptor.Accepts;
+import br.com.caelum.vraptor.core.DefaultReflectionProvider;
 import br.com.caelum.vraptor.interceptor.example.NotLogged;
 
 public class CustomAndInternalAcceptsValidationRuleTest {
@@ -36,7 +37,7 @@ public class CustomAndInternalAcceptsValidationRuleTest {
 
 	@Before
 	public void setUp() {
-		stepInvoker = new StepInvoker();
+		stepInvoker = new StepInvoker(new DefaultReflectionProvider());
 		validationRule = new CustomAndInternalAcceptsValidationRule(stepInvoker);
 	}
 

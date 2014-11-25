@@ -29,13 +29,15 @@ import java.util.TreeSet;
 import org.junit.Before;
 import org.junit.Test;
 
+import br.com.caelum.vraptor.core.DefaultReflectionProvider;
+
 public class JavaEvaluatorTest {
 
 	private Evaluator evaluator;
 
 	@Before
 	public void setup() {
-		this.evaluator = new JavaEvaluator();
+		this.evaluator = new JavaEvaluator(new DefaultReflectionProvider());
 	}
 
 	class Client {

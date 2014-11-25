@@ -23,7 +23,7 @@ import java.util.Map.Entry;
 
 import javax.enterprise.inject.Vetoed;
 
-import net.vidageek.mirror.dsl.Mirror;
+import br.com.caelum.vraptor.core.ReflectionProvider;
 import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
 import br.com.caelum.vraptor.serialization.Serializee;
 import br.com.caelum.vraptor.validator.Message;
@@ -37,11 +37,14 @@ public class VRaptorClassMapper extends MapperWrapper {
 
 	private final Supplier<TypeNameExtractor> extractor;
 	private final Supplier<Serializee> serializee;
+	private final Supplier<ReflectionProvider> reflectionProvider;
 
-	public VRaptorClassMapper(Mapper wrapped, Supplier<TypeNameExtractor> supplier, Supplier<Serializee> serializee) {
+	public VRaptorClassMapper(Mapper wrapped, Supplier<TypeNameExtractor> supplier, Supplier<Serializee> serializee,
+			Supplier<ReflectionProvider> reflectionProvider) {
 		super(wrapped);
 		this.extractor = supplier;
 		this.serializee = serializee;
+		this.reflectionProvider = reflectionProvider;
 	}
 
 	static boolean isPrimitive(Class<?> type) {
@@ -67,10 +70,10 @@ public class VRaptorClassMapper extends MapperWrapper {
 				return false;
 			}
 		}
-
+		
 		boolean should = super.shouldSerializeMember(definedIn, fieldName);
 		if (!getSerializee().isRecursive())
-			should = should && isPrimitive(new Mirror().on(definedIn).reflect().field(fieldName).getType());
+			should = should && isPrimitive(reflectionProvider.get().getField(definedIn, fieldName).getType());
 		return should;
 	}
 

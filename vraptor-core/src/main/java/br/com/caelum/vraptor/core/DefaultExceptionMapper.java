@@ -46,16 +46,19 @@ public class DefaultExceptionMapper implements ExceptionMapper {
 
 	private final Map<Class<? extends Exception>, ExceptionRecorder<Result>> exceptions;
 	private final Proxifier proxifier;
+	private final ReflectionProvider reflectionProvider;
 
 	/** 
 	 * @deprecated CDI eyes only
 	 */
 	protected DefaultExceptionMapper() {
-		this(null);
+		this(null, null);
 	}
+
 	@Inject
-	public DefaultExceptionMapper(Proxifier proxifier) {
+	public DefaultExceptionMapper(Proxifier proxifier, ReflectionProvider reflectionProvider) {
 		this.proxifier = proxifier;
+		this.reflectionProvider = reflectionProvider;
 		this.exceptions = new LinkedHashMap<>();
 	}
 
@@ -63,7 +66,7 @@ public class DefaultExceptionMapper implements ExceptionMapper {
 	public Result record(Class<? extends Exception> exception) {
 		requireNonNull(exception, "Exception cannot be null.");
 
-		ExceptionRecorder<Result> instance = new ExceptionRecorder<>(proxifier);
+		ExceptionRecorder<Result> instance = new ExceptionRecorder<>(proxifier, reflectionProvider);
 		exceptions.put(exception, instance);
 
 		return proxifier.proxify(Result.class, instance);

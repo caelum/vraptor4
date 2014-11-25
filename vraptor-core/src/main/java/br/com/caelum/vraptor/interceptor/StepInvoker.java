@@ -23,15 +23,30 @@ import java.lang.reflect.Method;
 import java.util.List;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 
-import net.vidageek.mirror.dsl.Mirror;
 import br.com.caelum.vraptor.InterceptionException;
+import br.com.caelum.vraptor.core.ReflectionProvider;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
 
 @ApplicationScoped
 public class StepInvoker {
+
+	private final ReflectionProvider reflectionProvider;
+
+	/**
+	 * @deprecated CDI eyes only
+	 */
+	protected StepInvoker() {
+		this(null);
+	}
+
+	@Inject
+	public StepInvoker(ReflectionProvider reflectionProvider) {
+		this.reflectionProvider = reflectionProvider;
+	}
 
 	public Object tryToInvoke(Object interceptor, Method stepMethod, Object... params) {
 		if (stepMethod == null) {
@@ -46,7 +61,7 @@ public class StepInvoker {
 
 	private Object invokeMethod(Object interceptor, Method stepMethod, Object... params) {
 		try {
-			return new Mirror().on(interceptor).invoke().method(stepMethod).withArgs(params);
+			return reflectionProvider.invoke(interceptor, stepMethod, params);
 		} catch (Exception e) {
 			// we dont wanna wrap it if it is a simple controller business logic
 			// exception
@@ -56,7 +71,7 @@ public class StepInvoker {
 	}
 
 	public List<Method> findAllMethods(Class<?> interceptorClass) {
-		return new Mirror().on(interceptorClass).reflectAll().methods();
+		return reflectionProvider.getMethodsFor(interceptorClass);
 	}
 
 	public Method findMethod(List<Method> interceptorMethods, Class<? extends Annotation> step, Class<?> interceptorClass) {

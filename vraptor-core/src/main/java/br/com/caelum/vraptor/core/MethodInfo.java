@@ -96,13 +96,11 @@ public class MethodInfo {
 	}
 
 	private void createValuedParameter(ControllerMethod controllerMethod) {
-		if (valuedParameters == null) {
+		if (valuedParameters == null && controllerMethod != null && controllerMethod.getMethod() != null) {
 			valuedParameters = new ValuedParameter[controllerMethod.getArity()];
-			if (controllerMethod != null && controllerMethod.getMethod() != null) {
-				Parameter[] parameters = parameterNameProvider.parametersFor(controllerMethod.getMethod());
-				for (int i = 0; i < valuedParameters.length; i++) {
-					valuedParameters[i] = new ValuedParameter(parameters[i], null);
-				}
+			Parameter[] parameters = parameterNameProvider.parametersFor(controllerMethod.getMethod());
+			for (int i = 0; i < valuedParameters.length; i++) {
+				valuedParameters[i] = new ValuedParameter(parameters[i], null);
 			}
 		}
 	}

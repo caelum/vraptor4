@@ -117,11 +117,12 @@ public class DefaultHttpResultTest {
 
 	@Test
 	public void shouldWriteStringBody() throws Exception {
-		PrintWriter writer = mock(PrintWriter.class);
-		when(response.getWriter()).thenReturn(writer);
-
-		httpResult.body("The text");
-		verify(writer).print(anyString());
+		try (PrintWriter writer = mock(PrintWriter.class)) {
+			when(response.getWriter()).thenReturn(writer);
+	
+			httpResult.body("The text");
+			verify(writer).print(anyString());
+		}
 	}
 
 	@Test

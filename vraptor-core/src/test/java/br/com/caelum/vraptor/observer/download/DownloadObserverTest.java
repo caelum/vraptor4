@@ -142,8 +142,9 @@ public class DownloadObserverTest {
 
 	@Test
 	public void shouldAcceptInput() throws Exception {
-		InputStream inputStream = mock(InputStream.class);
-		assertThat(downloadObserver.resolveDownload(inputStream), instanceOf(InputStreamDownload.class));
+		try (InputStream inputStream = mock(InputStream.class)) {
+			assertThat(downloadObserver.resolveDownload(inputStream), instanceOf(InputStreamDownload.class));
+		}
 	}
 
 	@Test

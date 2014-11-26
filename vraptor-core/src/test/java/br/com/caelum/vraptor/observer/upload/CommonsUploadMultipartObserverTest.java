@@ -350,17 +350,18 @@ public class CommonsUploadMultipartObserverTest {
 	@Test
 	public void ensureCopyUploadedFileToOutputStream() throws IOException {
 		File outputFile = tmpdir.newFile();
-		OutputStream outputStream = new FileOutputStream(outputFile);
 
-		byte[] byteOnlyFileContent = { 0x0, 0x1, 0x2 };
-		FileItem mockedFileItem = mock(FileItem.class);
-		when(mockedFileItem.getInputStream()).thenReturn(new ByteArrayInputStream(byteOnlyFileContent));
+		try (OutputStream outputStream = new FileOutputStream(outputFile)) {
+			byte[] byteOnlyFileContent = { 0x0, 0x1, 0x2 };
+			FileItem mockedFileItem = mock(FileItem.class);
+			when(mockedFileItem.getInputStream()).thenReturn(new ByteArrayInputStream(byteOnlyFileContent));
+	
+			UploadedFile file = new CommonsUploadedFile(mockedFileItem);
+			file.writeTo(outputStream);
 
-		UploadedFile file = new CommonsUploadedFile(mockedFileItem);
-		file.writeTo(outputStream);
-
-		assertThat(outputFile.length(), is(new Long(byteOnlyFileContent.length)));
-		assertThat(Files.readAllBytes(outputFile.toPath()), is(byteOnlyFileContent));
+			assertThat(outputFile.length(), is(Long.valueOf(byteOnlyFileContent.length)));
+			assertThat(Files.readAllBytes(outputFile.toPath()), is(byteOnlyFileContent));
+		}
 	}
 
 	public void uploadMethod(UploadedFile file) {

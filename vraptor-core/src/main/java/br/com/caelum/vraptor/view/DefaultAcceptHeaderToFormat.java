@@ -25,10 +25,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
 
 import br.com.caelum.vraptor.cache.CacheStore;
-import br.com.caelum.vraptor.cache.LRU;
+import br.com.caelum.vraptor.cache.LRUCacheStore;
 
 import com.google.common.base.Function;
 import com.google.common.base.Supplier;
@@ -50,16 +49,8 @@ public class DefaultAcceptHeaderToFormat implements AcceptHeaderToFormat {
 	private static final double DEFAULT_QUALIFIER_VALUE = 0.01;
 	protected final Map<String, String> mimeToFormat;
 
-	/** 
-	 * @deprecated CDI eyes only
-	 */
-	protected DefaultAcceptHeaderToFormat() {
-		this(null);
-	}
-
-	@Inject
-	public DefaultAcceptHeaderToFormat(@LRU(capacity=100) CacheStore<String, String> acceptToFormatCache) {
-		this.acceptToFormatCache = acceptToFormatCache;
+	public DefaultAcceptHeaderToFormat() {
+		this.acceptToFormatCache = new LRUCacheStore<String, String>(50);
 		mimeToFormat = new ConcurrentHashMap<>();
 		mimeToFormat.put("text/html", "html");
 		mimeToFormat.put("application/json", "json");

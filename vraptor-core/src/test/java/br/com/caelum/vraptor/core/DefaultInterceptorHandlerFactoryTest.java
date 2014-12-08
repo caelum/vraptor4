@@ -25,8 +25,6 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import br.com.caelum.vraptor.cache.CacheStore;
-import br.com.caelum.vraptor.cache.DefaultCacheStore;
 import br.com.caelum.vraptor.interceptor.AspectStyleInterceptorHandler;
 import br.com.caelum.vraptor.interceptor.CustomAcceptsExecutor;
 import br.com.caelum.vraptor.interceptor.Interceptor;
@@ -54,9 +52,8 @@ public class DefaultInterceptorHandlerFactoryTest {
 	public void setUp() throws Exception {
 		MockitoAnnotations.initMocks(this);
 
-		CacheStore<Class<?>, InterceptorHandler> cachedHandlers = new DefaultCacheStore<>();
 		factory = new DefaultInterceptorHandlerFactory(container, stepInvoker,
-				cachedHandlers, acceptsExecutor, customAcceptsExecutor, interceptorExecutor);
+				acceptsExecutor, customAcceptsExecutor, interceptorExecutor);
 	}
 
 	static interface RegularInterceptor extends Interceptor {}

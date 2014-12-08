@@ -41,8 +41,6 @@ import org.junit.Test;
 import br.com.caelum.vraptor.Controller;
 import br.com.caelum.vraptor.Get;
 import br.com.caelum.vraptor.Path;
-import br.com.caelum.vraptor.cache.CacheStore;
-import br.com.caelum.vraptor.cache.DefaultCacheStore;
 import br.com.caelum.vraptor.controller.BeanClass;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.controller.DefaultBeanClass;
@@ -71,7 +69,6 @@ public class DefaultRouterTest {
 	private Converters converters;
 	private ParameterNameProvider nameProvider;
 	private EncodingHandler encodingHandler;
-	private CacheStore<Invocation,Route> cache;
 
 	@Before
 	public void setup() {
@@ -81,10 +78,9 @@ public class DefaultRouterTest {
 		this.converters = mock(Converters.class);
 		this.encodingHandler = mock(EncodingHandler.class);
 		this.nameProvider = new ParanamerNameProvider();
-		this.cache = new DefaultCacheStore<>();
 
 		router = new DefaultRouter(proxifier, new NoTypeFinder(), converters, nameProvider, 
-				new JavaEvaluator(new DefaultReflectionProvider()), encodingHandler,cache);
+				new JavaEvaluator(new DefaultReflectionProvider()), encodingHandler);
 	}
 
 	@Test

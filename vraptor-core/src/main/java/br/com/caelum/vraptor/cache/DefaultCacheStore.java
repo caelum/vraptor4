@@ -20,13 +20,11 @@ import static com.google.common.base.Throwables.propagateIfPossible;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
-import javax.enterprise.context.Dependent;
-import javax.enterprise.inject.Default;
+import javax.enterprise.inject.Vetoed;
 
 import com.google.common.base.Supplier;
 
-@Default
-@Dependent
+@Vetoed
 public class DefaultCacheStore<K,V> implements CacheStore<K,V> {
 
 	private final ConcurrentMap<K,V> cache = new ConcurrentHashMap<>();

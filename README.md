@@ -39,3 +39,12 @@ Do you want to contribute with code, documentation or bug report?
 
 You can find guidelines to contribute to VRaptor [here](http://vraptor.caelum.com.br/en/docs/how-to-contribute/ "Contribute").
 
+## Compatibility checks
+
+You can check compatibility with previous versions of `vraptor-core` by running:
+
+```
+mvn clirr:clirr
+```
+
+A full report will be generated at `target/site/clirr-report.html` file.

@@ -83,6 +83,17 @@
 		<url>http://www.caelum.com.br</url>
 	</organization>
 
+	<mailingLists>
+		<mailingList>
+			<name>VRaptor Users (EN)</name>
+			<archive>https://groups.google.com/forum/?hl=pt-BR#!forum/caelum-vraptor-en</archive>
+		</mailingList>
+		<mailingList>
+			<name>VRaptor Users (PT)</name>
+			<archive>https://groups.google.com/forum/?hl=pt-BR#!forum/caelum-vraptor</archive>
+		</mailingList>
+	</mailingLists>
+
 	<licenses>
 		<license>
 			<distribution>repo</distribution>

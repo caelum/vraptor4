@@ -34,8 +34,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import br.com.caelum.vraptor.Convert;
-import br.com.caelum.vraptor.cache.CacheStore;
-import br.com.caelum.vraptor.cache.DefaultCacheStore;
 import br.com.caelum.vraptor.converter.Converter;
 import br.com.caelum.vraptor.ioc.Container;
 
@@ -49,9 +47,8 @@ public class DefaultConvertersTest {
 
 	@Before
 	public void setup() {
-		CacheStore<Class<?>, Class<? extends Converter<?>>> cache = new DefaultCacheStore<>();
 		MockitoAnnotations.initMocks(this);
-		this.converters = new DefaultConverters(container, cache);
+		this.converters = new DefaultConverters(container);
 	}
 
 	@Test

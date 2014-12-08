@@ -20,17 +20,13 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import br.com.caelum.vraptor.cache.CacheStore;
-import br.com.caelum.vraptor.cache.LRUCacheStore;
-
 public class DefaultAcceptHeaderToFormatTest {
 
 	private AcceptHeaderToFormat mimeTypeToFormat;
 
 	@Before
 	public void setup() {
-		CacheStore<String, String> cache = new LRUCacheStore<>(100);
-		mimeTypeToFormat = new DefaultAcceptHeaderToFormat(cache);
+		mimeTypeToFormat = new DefaultAcceptHeaderToFormat();
 	}
 
 

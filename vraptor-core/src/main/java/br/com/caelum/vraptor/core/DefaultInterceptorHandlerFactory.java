@@ -20,6 +20,7 @@ import javax.inject.Inject;
 
 import br.com.caelum.vraptor.Intercepts;
 import br.com.caelum.vraptor.cache.CacheStore;
+import br.com.caelum.vraptor.cache.DefaultCacheStore;
 import br.com.caelum.vraptor.interceptor.AspectStyleInterceptorHandler;
 import br.com.caelum.vraptor.interceptor.CustomAcceptsExecutor;
 import br.com.caelum.vraptor.interceptor.Interceptor;
@@ -49,20 +50,18 @@ public class DefaultInterceptorHandlerFactory implements InterceptorHandlerFacto
 	 * @deprecated CDI eyes only
 	 */
 	protected DefaultInterceptorHandlerFactory() {
-		this(null, null, null, null, null, null);
+		this(null, null, null, null, null);
 	}
 
 	@Inject
-	public DefaultInterceptorHandlerFactory(Container container, StepInvoker stepInvoker,
-			CacheStore<Class<?>, InterceptorHandler> cachedHandlers, InterceptorAcceptsExecutor acceptsExecutor,
+	public DefaultInterceptorHandlerFactory(Container container, StepInvoker stepInvoker, InterceptorAcceptsExecutor acceptsExecutor,
 			CustomAcceptsExecutor customAcceptsExecutor, InterceptorExecutor interceptorExecutor) {
-
 		this.container = container;
 		this.stepInvoker = stepInvoker;
-		this.cachedHandlers = cachedHandlers;
 		this.acceptsExecutor = acceptsExecutor;
 		this.customAcceptsExecutor = customAcceptsExecutor;
 		this.interceptorExecutor = interceptorExecutor;
+		this.cachedHandlers = new DefaultCacheStore<>();
 	}
 
 	@Override

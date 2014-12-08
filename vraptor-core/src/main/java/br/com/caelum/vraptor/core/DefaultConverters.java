@@ -32,7 +32,7 @@ import org.slf4j.LoggerFactory;
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.TwoWayConverter;
 import br.com.caelum.vraptor.cache.CacheStore;
-import br.com.caelum.vraptor.cache.LRU;
+import br.com.caelum.vraptor.cache.LRUCacheStore;
 import br.com.caelum.vraptor.converter.Converter;
 import br.com.caelum.vraptor.ioc.Container;
 
@@ -52,7 +52,6 @@ public class DefaultConverters implements Converters {
 	private final Logger logger = LoggerFactory.getLogger(DefaultConverters.class);
 	private final List<Class<? extends Converter<?>>> classes = new LinkedList<>();
 
-	@LRU
 	private final CacheStore<Class<?>, Class<? extends Converter<?>>> cache;
 	private final Container container;
 
@@ -60,13 +59,13 @@ public class DefaultConverters implements Converters {
 	 * @deprecated CDI eyes only
 	 */
 	protected DefaultConverters() {
-		this(null, null);
+		this(null);
 	}
 
 	@Inject
-	public DefaultConverters(Container container, CacheStore<Class<?>, Class<? extends Converter<?>>> cache) {
+	public DefaultConverters(Container container) {
 		this.container = container;
-		this.cache = cache;
+		this.cache = new LRUCacheStore<>(100);
 		logger.info("Registering bundled converters");
 	}
 

@@ -34,6 +34,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.cache.CacheStore;
+import br.com.caelum.vraptor.cache.DefaultCacheStore;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.controller.HttpMethod;
 import br.com.caelum.vraptor.core.Converters;
@@ -77,20 +78,19 @@ public class DefaultRouter implements Router {
 	 * @deprecated CDI eyes only
 	 */
 	protected DefaultRouter() {
-		this(null, null, null, null, null, null, null);
+		this(null, null, null, null, null, null);
 	}
 
 	@Inject
 	public DefaultRouter(Proxifier proxifier, TypeFinder finder, Converters converters,
-			ParameterNameProvider nameProvider, Evaluator evaluator, EncodingHandler encodingHandler,
-			CacheStore<Invocation, Route> cache) {
+			ParameterNameProvider nameProvider, Evaluator evaluator, EncodingHandler encodingHandler) {
 		this.proxifier = proxifier;
 		this.finder = finder;
 		this.converters = converters;
 		this.nameProvider = nameProvider;
 		this.evaluator = evaluator;
 		this.encodingHandler = encodingHandler;
-		this.cache = cache;
+		this.cache = new DefaultCacheStore<>();
 	}
 
 	@Override

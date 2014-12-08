@@ -101,13 +101,13 @@
 			<url>http://apache.org/licenses/LICENSE-2.0.txt</url>
 		</license>
 	</licenses>
-	
+
 	<scm>
 		<url>http://github.com/caelum/vraptor4</url>
 		<connection>scm:git:git://github.com/caelum/vraptor4</connection>
 		<developerConnection>scm:git:git@github.com:caelum/vraptor4.git</developerConnection>
-	  <tag>HEAD</tag>
-  </scm>
+		<tag>HEAD</tag>
+	</scm>
 	
 	<modules>
 		<module>vraptor-core</module>

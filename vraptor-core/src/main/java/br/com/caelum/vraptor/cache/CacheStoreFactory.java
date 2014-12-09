@@ -20,6 +20,12 @@ import javax.enterprise.inject.Default;
 import javax.enterprise.inject.Produces;
 import javax.enterprise.inject.spi.InjectionPoint;
 
+/**
+ * A factory class that produces cache implementations.
+ * 
+ * @author Alberto Souza
+ * @author Otávio S Garcia
+ */
 @Dependent
 public class CacheStoreFactory {
 

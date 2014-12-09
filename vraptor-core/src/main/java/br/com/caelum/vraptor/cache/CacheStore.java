@@ -18,7 +18,8 @@ package br.com.caelum.vraptor.cache;
 import com.google.common.base.Supplier;
 
 /**
- *
+ * An API to use as internal VRaptor cache
+ * 
  * @author Lucas Cavalcanti
  * @author Alberto Souza
  * @since 4.0.0

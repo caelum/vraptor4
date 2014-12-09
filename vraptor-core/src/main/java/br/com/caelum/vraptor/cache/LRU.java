@@ -26,8 +26,8 @@ import javax.inject.Qualifier;
 
 /**
  * Used to mark an cache implementation as LRUCache.
+ * 
  * @author Alberto Souza
- *
  */
 @Qualifier
 @Target(value={ElementType.TYPE,ElementType.FIELD,ElementType.PARAMETER,ElementType.METHOD})

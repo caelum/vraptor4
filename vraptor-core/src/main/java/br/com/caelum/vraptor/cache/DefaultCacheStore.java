@@ -24,6 +24,12 @@ import javax.enterprise.inject.Vetoed;
 
 import com.google.common.base.Supplier;
 
+/**
+ * A default implementation for {@link CacheStore}. This class is produced by {@link CacheStoreFactory}.
+ * 
+ * @author Lucas Cavalcanti
+ * @author Alberto Souza
+ */
 @Vetoed
 public class DefaultCacheStore<K,V> implements CacheStore<K,V> {
 

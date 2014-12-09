@@ -26,7 +26,7 @@ import javax.enterprise.inject.Vetoed;
 import com.google.common.base.Supplier;
 
 /**
- * A LRU cache based on LinkedHashMap.
+ * A LRU cache based on LinkedHashMap. This class is produced by {@link CacheStoreFactory}.
  *
  * @author Sérgio Lopes
  * @author Paulo Silveira

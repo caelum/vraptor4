@@ -52,7 +52,6 @@ public class DefaultConverters implements Converters {
 	private final Logger logger = LoggerFactory.getLogger(DefaultConverters.class);
 	private final List<Class<? extends Converter<?>>> classes = new LinkedList<>();
 
-	@LRU
 	private final CacheStore<Class<?>, Class<? extends Converter<?>>> cache;
 	private final Container container;
 
@@ -64,7 +63,7 @@ public class DefaultConverters implements Converters {
 	}
 
 	@Inject
-	public DefaultConverters(Container container, CacheStore<Class<?>, Class<? extends Converter<?>>> cache) {
+	public DefaultConverters(Container container, @LRU CacheStore<Class<?>, Class<? extends Converter<?>>> cache) {
 		this.container = container;
 		this.cache = cache;
 		logger.info("Registering bundled converters");

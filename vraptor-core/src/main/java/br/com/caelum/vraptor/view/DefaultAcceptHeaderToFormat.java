@@ -46,6 +46,7 @@ import com.google.common.collect.FluentIterable;
 public class DefaultAcceptHeaderToFormat implements AcceptHeaderToFormat {
 
 	private final CacheStore<String, String> acceptToFormatCache;
+
 	private static final String DEFAULT_FORMAT = "html";
 	private static final double DEFAULT_QUALIFIER_VALUE = 0.01;
 	protected final Map<String, String> mimeToFormat;
@@ -58,7 +59,7 @@ public class DefaultAcceptHeaderToFormat implements AcceptHeaderToFormat {
 	}
 
 	@Inject
-	public DefaultAcceptHeaderToFormat(@LRU(capacity=100) CacheStore<String, String> acceptToFormatCache) {
+	public DefaultAcceptHeaderToFormat(@LRU CacheStore<String, String> acceptToFormatCache) {
 		this.acceptToFormatCache = acceptToFormatCache;
 		mimeToFormat = new ConcurrentHashMap<>();
 		mimeToFormat.put("text/html", "html");

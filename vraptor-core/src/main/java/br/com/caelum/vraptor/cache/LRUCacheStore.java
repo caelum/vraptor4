@@ -31,7 +31,6 @@ import com.google.common.base.Supplier;
  * @author Sérgio Lopes
  * @author Paulo Silveira
  */
-//Not registering it because it is already produced by LRUCacheFactory.
 @Vetoed
 public class LRUCacheStore<K, V> extends LinkedHashMap<K, V> implements CacheStore<K,V> {
 	private static final long serialVersionUID = 1L;

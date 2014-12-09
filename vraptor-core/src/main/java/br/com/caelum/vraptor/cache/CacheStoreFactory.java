@@ -15,18 +15,24 @@
  */
 package br.com.caelum.vraptor.cache;
 
-import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.Dependent;
+import javax.enterprise.inject.Default;
 import javax.enterprise.inject.Produces;
 import javax.enterprise.inject.spi.InjectionPoint;
 
-@ApplicationScoped
-public class LRUCacheFactory {
-	
-	@SuppressWarnings("rawtypes")	
+@Dependent
+public class CacheStoreFactory {
+
+	@Produces
+	@Default
+	public <K, V> DefaultCacheStore<K, V> buildDefaultCache() {
+		return new DefaultCacheStore<K, V>();
+	}
+
 	@Produces
 	@LRU
-	public LRUCacheStore getCache(InjectionPoint ip){
+	public <K, V> LRUCacheStore<K, V> buildLRUCache(InjectionPoint ip) {
 		int capacity = ip.getAnnotated().getAnnotation(LRU.class).capacity();
-		return new LRUCacheStore<>(capacity);
+		return new LRUCacheStore<K, V>(capacity);
 	}
 }

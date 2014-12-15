@@ -233,7 +233,7 @@ public class ProdutoDao {
 
 O VRaptor precisa saber como criar esse `EntityManager`, e eu não posso simplesmente colocar um `@RequestScoped` na `EntityManager` pois é uma classe da JPA. Para isso existe precisamos criar um `@Produces`.
 
-Veja mais informações de como fazer isso no capítulo de [Componentes](/pt/docs/componentes). Você pode, ainda, usar o plugin para JPA que já existe para o VRaptor. Veja mais sobre isso no capítulo de [Plugins](/pt/docs/plugins).
+Veja mais informações de como fazer isso no capítulo de [Componentes](/pt/docs/componentes). Você pode, ainda, usar o plugin para JPA que já existe para o VRaptor. Ele já faz todo esse trabalho para você e ainda te ajuda a fazer o controle de transações. Você pode ler mais sobre ele na página de [plugins](/pt/docs/plugins).
 
 ##Controlando transações: Interceptors
 

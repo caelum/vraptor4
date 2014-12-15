@@ -430,7 +430,6 @@ O VRaptor possui um Exception Handler, que captura as exceções não tratadas e
 
 No exemplo abaixo, se o método `adicionar(Cliente)` lançar uma `ClienteJaExisteException` ou qualquer exceção filha, o usuário será redirecionado para o método `formulario()`.
 
-
 ~~~ 
 #!java
 @Get
@@ -444,3 +443,4 @@ public void adicionar(Cliente cliente) {
 }
 ~~~
 
+Se quiser, você também pode usar o plugin [vraptor-error-control](http://www.vraptor.org/pt/docs/plugins/#vraptor-error-control) para acompanhar as exceptions que acontecem em sua aplicação em tempo real. Ele te envia um e-mail com a mensagem de erro. 

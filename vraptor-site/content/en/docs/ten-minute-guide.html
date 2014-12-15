@@ -238,7 +238,7 @@ public class ProductDAO {
 
 VRaptor needs to know how to create that `EntityManager` and we cannot annotate an `EntityManager` as `@RequestScoped`, since that is a JPA class. That is when we need to create a Producer.
 
-Check out the [Components](/en/docs/components) chapter. Alternatively, you can simply use the JPA plugin. Learn more about that plugin on the [Plugins](/en/docs/plugins) chapter.
+Check out the [Components](/en/docs/components) chapter. Alternatively, you can simply use the JPA plugin. It already does all that work for you and also helps you make the transaction control. You can learn more about that plugin on the [plugins](/en/docs/plugins) page.
 
 ##Transaction control: Interceptors
 

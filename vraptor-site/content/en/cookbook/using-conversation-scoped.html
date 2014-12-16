@@ -6,7 +6,7 @@ title: Using @ConversationScoped on VRaptor 4
 
 VRaptor in its 4th version uses CDI 1.1. And one of the things to be considered when using CDI is the scope of your managed objects. We should always choose carefully the bean scope, since using a `@RequestScoped` where an `@ApplicationScoped` is required can be a disaster.
 
-A very useful CDI scope is `@ConversationScoped`, that allows us a greater and more flexible control according to our need. The application presented in this tutorial are available on GitHub [ScoreCDI] (https://github.com/angeliski/ScoreCDI) in portuguese.
+A very useful CDI scope is `@ConversationScoped`, that allows us a greater and more flexible control according to our needs. The application presented in this tutorial is available on GitHub [ScoreCDI] (https://github.com/angeliski/ScoreCDI) in portuguese.
 
 
 Take a look at the controller below:
@@ -93,7 +93,7 @@ public class HomeController implements Serializable {
 }
 ~~~
 
-The first difference of this controller is it's scope, defined with `@ConversationScoped` annotation. It indicates to CDI wich will be the controller scope, but be careful: only declaring the annotation is not enough to use this special scope.
+The first difference of this controller is its scope, defined with `@ConversationScoped` annotation. It indicates to CDI which will be the controller scope, but be careful: only declaring the annotation is not enough to use this special scope.
 
 To make this scope *persistent*, not losing the data on each request, it is necessary to inject a `Conversation` object and call its `begin` method. In example:
 
@@ -109,11 +109,11 @@ public void game() {
 }
 ~~~
 
-The conversation scope will start at this method. It has a default state known as *transient*. When the `begin` method is called, it goes to the *long-running* keeping data until the `end` method is called. 
+The conversation scope will start at this method. It has a default state known as *transient*. When the `begin` method is called, it goes to the *long-running* state, keeping data until the `end` method is called. 
 
-One important detail must be observed. CDI doesn't know which object you're dealing with. The way CDI uses to know that is providing an id (called **cid**) to the conversation. We need to provide **cid** as parameter on each url, so CDI can recover the current state. Note that on `game`'s method we're including the **cid** on the `result`.
+One important detail must be observed. CDI doesn't know which object you're dealing with. The way CDI uses to know that is providing an id (called **cid**) to the conversation. We need to provide **cid** as parameter on each url, so CDI can recover the current state. Note that on method `game` we're including the **cid** in `result`.
 
-The name used to include the `Conversation`'s *id* isn't really important. It could be anyone, since it was retrieved correctly on the view. It is only important to use the parameter **cid** when the request is sent to the server. 
+The name used to include the `Conversation`'s *id* isn't really important. It can be anyone, provided it is properly retrieved on the view. It is only important to use the parameter **cid** when the request is sent to the server. 
 
 Take a look on the page using this parameter:
 
@@ -145,7 +145,7 @@ Take a look on the page using this parameter:
 
 You can see that the form action uses the **cid**. When the request is sent to the server, it will send the correct identifier on it.
 
-While the request is done by sending the **cid**, the number displayed in the current session will remain the same (because the conversation will remain the same). You can test it directly accessing `/home/game` without sending the cid as parameter. A new conversation will be started and the cid will change.
+While the request is done by sending the **cid**, the number displayed in the current session will remain the same (because the conversation will remain the same). You can test it by directly accessing `/home/game` without sending the cid as parameter. A new conversation will be started and the cid will change.
 
 
 Finally, we've the `end` method closing the *long-running* cycle:
@@ -161,4 +161,4 @@ public void end() {
 }
 ~~~
 
-It's valid to note that if you don't finish the conversation, it wont remain in memory for more than two minutes, which is the standard time. This ensures that, different from `@SessionScoped`, resources will be released earlier if the application does not shutdown the state of that object. The timeout can be set through `setTimeout` method if you need, but is usually not necessary.
+It's worth noting that if you don't finish the conversation, it won't remain in memory for more than two minutes, which is the standard time. This ensures that, different from `@SessionScoped`, resources will be released earlier if the application does not shutdown the state of that object. The timeout can be set through `setTimeout` method if you need, but it's usually not necessary.

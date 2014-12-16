@@ -1,0 +1,164 @@
+---
+title: Using @ConversationScoped on VRaptor 4
+---
+
+# Using @ConversationScoped on VRaptor 4
+
+VRaptor in its 4th version uses CDI 1.1. And one of the things to be considered when using CDI is the scope of your managed objects. We should always choose carefully the bean scope, since using a `@RequestScoped` where an `@ApplicationScoped` is required can be a disaster.
+
+A very useful CDI scope is `@ConversationScoped`, that allows us a greater and more flexible control according to our needs. The application presented in this tutorial is available on GitHub [ScoreCDI] (https://github.com/angeliski/ScoreCDI) in portuguese.
+
+
+Take a look at the controller below:
+
+~~~
+#!java
+package br.com.angeliski.controller;
+
+import java.io.Serializable;
+import java.util.Random;
+
+import javax.enterprise.context.Conversation;
+import javax.enterprise.context.ConversationScoped;
+import javax.inject.Inject;
+
+import br.com.caelum.vraptor.Controller;
+import br.com.caelum.vraptor.Get;
+import br.com.caelum.vraptor.Post;
+import br.com.caelum.vraptor.Result;
+
+@Controller
+@ConversationScoped
+public class HomeController implements Serializable {
+
+	private static final long serialVersionUID = 943045823176068998L;
+	private Result result;
+	private Conversation conversation;
+	private Integer questionResult;
+	private int total;
+
+	/**
+	 * @deprecated CDI eyes only
+	 */
+	protected HomeController() {
+		this(null, null);
+	}
+
+	@Inject
+	public HomeController(Result result, Conversation conversation) {
+		this.result = result;
+		this.conversation = conversation;
+	}
+
+	@Get
+	public void index() {
+	}
+
+	@Get
+	public void game() {
+		if (conversation.isTransient()) {
+			conversation.begin();
+		}
+		result.include("cid", conversation.getId());
+		generateQuestion();
+	}
+
+	private void generateQuestion() {
+		Random random = new Random();
+		Integer firstValue = random.nextInt(100);
+		Integer secondValue = random.nextInt(100);
+
+		questionResult = firstValue * secondValue;
+
+		result.include("first", firstValue);
+		result.include("second", secondValue);
+	}
+
+	@Post
+	public void game(Integer answer) {
+		if (questionResult.equals(answer)) {
+			total++;
+		}
+		generateQuestion();
+		result.include("cid", conversation.getId());
+	}
+
+	@Get
+	public void end() {
+		if (!conversation.isTransient()) {
+			conversation.end();
+		}
+		result.include("total", total);
+	}
+}
+~~~
+
+The first difference of this controller is its scope, defined with `@ConversationScoped` annotation. It indicates to CDI which will be the controller scope, but be careful: only declaring the annotation is not enough to use this special scope.
+
+To make this scope *persistent*, not losing the data on each request, it is necessary to inject a `Conversation` object and call its `begin` method. In example:
+
+~~~
+#!java
+@Get
+public void game() {
+	if (conversation.isTransient()) {
+		conversation.begin();
+	}
+	result.include("cid", conversation.getId());
+	generateQuestion();
+}
+~~~
+
+The conversation scope will start at this method. It has a default state known as *transient*. When the `begin` method is called, it goes to the *long-running* state, keeping data until the `end` method is called. 
+
+One important detail must be observed. CDI doesn't know which object you're dealing with. The way CDI uses to know that is providing an id (called **cid**) to the conversation. We need to provide **cid** as parameter on each url, so CDI can recover the current state. Note that on method `game` we're including the **cid** in `result`.
+
+The name used to include the `Conversation`'s *id* isn't really important. It can be anyone, provided it is properly retrieved on the view. It is only important to use the parameter **cid** when the request is sent to the server. 
+
+Take a look on the page using this parameter:
+
+~~~
+#!jsp
+
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>CDI Score</title>
+
+</head>
+<body>
+	<h4>Current session: ${cid}</h4>
+	<p>How much is ${first} * ${second}?</p>
+	<form action="${linkTo[HomeController].game}?cid=${cid}" method="POST">
+		<input name="answer" type="number" required>
+		<button type="submit">Keep playing!</button>
+	</form>
+	
+	<a href="${linkTo[HomeController].end}?cid=${cid}">Finish!</a>
+
+</body>
+</html>
+~~~
+
+You can see that the form action uses the **cid**. When the request is sent to the server, it will send the correct identifier on it.
+
+While the request is done by sending the **cid**, the number displayed in the current session will remain the same (because the conversation will remain the same). You can test it by directly accessing `/home/game` without sending the cid as parameter. A new conversation will be started and the cid will change.
+
+
+Finally, we've the `end` method closing the *long-running* cycle:
+
+~~~
+#!java
+@Get
+public void end() {
+	if (!conversation.isTransient()) {
+		conversation.end();
+	}
+	result.include("total", total);
+}
+~~~
+
+It's worth noting that if you don't finish the conversation, it won't remain in memory for more than two minutes, which is the standard time. This ensures that, different from `@SessionScoped`, resources will be released earlier if the application does not shutdown the state of that object. The timeout can be set through `setTimeout` method if you need, but it's usually not necessary.

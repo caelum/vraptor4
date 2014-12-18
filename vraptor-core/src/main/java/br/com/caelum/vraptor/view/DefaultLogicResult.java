@@ -34,7 +34,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.Get;
-import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.controller.DefaultControllerMethod;
 import br.com.caelum.vraptor.controller.HttpMethod;
@@ -68,20 +67,18 @@ public class DefaultLogicResult implements LogicResult {
 	private final TypeNameExtractor extractor;
 	private final FlashScope flash;
 	private final MethodInfo methodInfo;
-	private final Result result;
 
 	/** 
 	 * @deprecated CDI eyes only
 	 */
 	protected DefaultLogicResult() {
-		this(null, null, null, null, null, null, null, null, null, null);
+		this(null, null, null, null, null, null, null, null, null);
 	}
 
 	@Inject
 	public DefaultLogicResult(Proxifier proxifier, Router router, MutableRequest request, HttpServletResponse response,
-			Container container, PathResolver resolver, TypeNameExtractor extractor, FlashScope flash, MethodInfo methodInfo, Result result) {
+			Container container, PathResolver resolver, TypeNameExtractor extractor, FlashScope flash, MethodInfo methodInfo) {
 		this.proxifier = proxifier;
-		this.result = result;
 		this.response = unproxifyIfPossible(response);
 		this.request = unproxifyIfPossible(request);
 		this.router = router;
@@ -115,7 +112,7 @@ public class DefaultLogicResult implements LogicResult {
 						request.setAttribute(extractor.nameFor(returnType), methodResult);
 					}
 					
-					if (response.isCommitted() || result.used()) {
+					if (response.isCommitted()) {
 						logger.debug("Response already commited, not forwarding.");
 						return null;
 					}

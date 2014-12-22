@@ -8,6 +8,11 @@ import org.slf4j.Logger;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
+/**
+ * Handles exceptions thrown by a controller method
+ *
+ * @author Chico Sokol
+ */
 public class ExecuteMethodExceptionHandler {
 	private final static Logger log = getLogger(ExecuteMethodExceptionHandler.class);
 

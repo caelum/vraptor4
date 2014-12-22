@@ -37,7 +37,7 @@ import java.util.concurrent.Callable;
 import static org.slf4j.LoggerFactory.getLogger;
 
 /**
- * Interceptor that executes the logic method.
+ * Observer that executes the logic method.
  *
  * @author Guilherme Silveira
  * @author Rodrigo Turini

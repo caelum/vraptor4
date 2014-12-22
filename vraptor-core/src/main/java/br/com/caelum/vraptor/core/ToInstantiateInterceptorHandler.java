@@ -17,19 +17,16 @@
 
 package br.com.caelum.vraptor.core;
 
-import javax.enterprise.inject.Vetoed;
-
-import br.com.caelum.vraptor.observer.ExecuteMethodExceptionHandler;
-import br.com.caelum.vraptor.util.Try;
-import br.com.caelum.vraptor.validator.ValidatedInterceptor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.interceptor.Interceptor;
 import br.com.caelum.vraptor.ioc.Container;
+import br.com.caelum.vraptor.observer.ExecuteMethodExceptionHandler;
+import br.com.caelum.vraptor.util.Try;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import javax.enterprise.inject.Vetoed;
 import java.util.concurrent.Callable;
 
 /**
@@ -62,12 +59,7 @@ public class ToInstantiateInterceptorHandler implements InterceptorHandler {
 		}
 		if (interceptor.accepts(method)) {
 			logger.debug("Invoking interceptor {}", interceptor.getClass().getSimpleName());
-			boolean isValidated = type.isAnnotationPresent(ValidatedInterceptor.class);
-			if (isValidated) {
-				executeSafely(stack, method, controllerInstance, interceptor);
-			} else {
-				interceptor.intercept(stack, method, controllerInstance);
-			}
+			executeSafely(stack, method, controllerInstance, interceptor);
 		} else {
 			stack.next(method, controllerInstance);
 		}

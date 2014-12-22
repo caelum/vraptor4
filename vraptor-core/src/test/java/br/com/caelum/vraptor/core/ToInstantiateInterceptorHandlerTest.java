@@ -16,20 +16,13 @@
  */
 package br.com.caelum.vraptor.core;
 
-import static org.hamcrest.CoreMatchers.any;
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.io.IOException;
-import java.util.ArrayList;
-
+import br.com.caelum.vraptor.InterceptionException;
+import br.com.caelum.vraptor.controller.ControllerMethod;
+import br.com.caelum.vraptor.interceptor.Interceptor;
+import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.observer.ExecuteMethodExceptionHandler;
 import br.com.caelum.vraptor.validator.Message;
-import br.com.caelum.vraptor.validator.ValidatedInterceptor;
 import br.com.caelum.vraptor.validator.ValidationException;
-import com.google.common.collect.Lists;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -38,10 +31,11 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
-import br.com.caelum.vraptor.InterceptionException;
-import br.com.caelum.vraptor.controller.ControllerMethod;
-import br.com.caelum.vraptor.interceptor.Interceptor;
-import br.com.caelum.vraptor.ioc.Container;
+import java.io.IOException;
+import java.util.ArrayList;
+
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.mockito.Mockito.*;
 
 public class ToInstantiateInterceptorHandlerTest {
 
@@ -125,33 +119,7 @@ public class ToInstantiateInterceptorHandlerTest {
 		verify(exceptionHandler).handle(Mockito.any(ValidationException.class));
 	}
 
-	@Test
-	public void shouldNotCatchValidationExceptionOfRegularInterceptor() {
-		MyBuggedInterceptor validatedInterceptor = new MyBuggedInterceptor();
-		when(container.instanceFor(MyBuggedInterceptor.class)).thenReturn(validatedInterceptor);
-		ExecuteMethodExceptionHandler exceptionHandler = new ExecuteMethodExceptionHandler();
-		ToInstantiateInterceptorHandler handler = new ToInstantiateInterceptorHandler(container, MyBuggedInterceptor.class, exceptionHandler);
-
-		exception.expect(ValidationException.class);
-		handler.execute(stack, method, new Object());
-	}
-
-	@ValidatedInterceptor
-	public static class MyValidatedInterceptor implements Interceptor {
-
-		@Override
-		public void intercept(InterceptorStack stack, ControllerMethod method, Object resourceInstance)
-				throws InterceptionException {
-			throw new ValidationException(new ArrayList<Message>());
-		}
-
-		@Override
-		public boolean accepts(ControllerMethod method) {
-			return true;
-		}
-	}
-
-	private static class MyBuggedInterceptor implements Interceptor {
+	private static class MyValidatedInterceptor implements Interceptor {
 		@Override
 		public void intercept(InterceptorStack stack, ControllerMethod method, Object controllerInstance) throws InterceptionException {
 			throw new ValidationException(new ArrayList<Message>());

@@ -1,9 +1,9 @@
 package br.com.caelum.vraptor.observer;
 
 import br.com.caelum.vraptor.InterceptionException;
+import br.com.caelum.vraptor.core.ReflectionProviderException;
 import br.com.caelum.vraptor.interceptor.ApplicationLogicException;
 import br.com.caelum.vraptor.validator.ValidationException;
-import net.vidageek.mirror.exception.ReflectionProviderException;
 import org.slf4j.Logger;
 
 import static org.slf4j.LoggerFactory.getLogger;

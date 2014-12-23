@@ -1,0 +1,15 @@
+.search-main-input {
+  display: block;
+  margin: 1em auto;
+  font: inherit;
+  padding: .5em 1em;
+  border: 1px solid #ccc;
+  border-radius: 2em;
+  width: 40ch;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+.search-results li {
+  list-style: none;
+  line-height: 1.5;
+}

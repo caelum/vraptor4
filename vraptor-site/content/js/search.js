@@ -29,3 +29,32 @@ function search(query, callback) {
   }
   callback(matching_ids.map(function(id){ return index.items[id]; }))
 }
+function showResults(element) {
+  return function(items) {
+    if (items.length > 0) {
+      var html = "";
+      for (var i = 0; i < items.length; i++) {
+        html += '<li><a href="'+items[i].url+'">'+items[i].title+'</a></li>';
+      }
+      element.innerHTML = html;
+    } else {
+      element.innerHTML = '<li>' + element.dataset.noResultMessage;
+    }
+  };
+}
+
+var input = document.getElementById('q');
+var results = document.getElementById('results');
+if (input && results) {
+  document.getElementById('search-button').style.display = 'none';
+
+  input.addEventListener('input', function() {
+    search(this.value, showResults(results));
+  });
+
+  var query = decodeURI(window.location.search.replace(/^.*q=([^&]*).*$/, '$1')).replace(/\+/g, ' ');
+  if (query) {
+    input.value = query;
+    search(query, showResults(results));
+  }
+}

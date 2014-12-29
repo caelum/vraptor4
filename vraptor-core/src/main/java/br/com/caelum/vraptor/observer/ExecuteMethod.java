@@ -56,13 +56,6 @@ public class ExecuteMethod {
 	private final Event<MethodReady> methodReady;
 	private final ExecuteMethodExceptionHandler executeMethodExceptionHandler;
 
-	/**
-	 * @deprecated CDI eyes only
-	 */
-	protected ExecuteMethod() {
-		this(null, null, null, null, null, null);
-	}
-
 	@Inject
 	public ExecuteMethod(MethodInfo methodInfo, Messages messages, 
 			Event<MethodExecuted> methodExecutedEvent, Event<MethodReady> methodReady,

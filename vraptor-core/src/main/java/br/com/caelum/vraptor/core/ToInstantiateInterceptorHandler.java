@@ -22,7 +22,6 @@ import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.interceptor.Interceptor;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.observer.ExecuteMethodExceptionHandler;
-import br.com.caelum.vraptor.util.Try;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

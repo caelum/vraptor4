@@ -20,10 +20,10 @@ package br.com.caelum.vraptor.observer;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.core.ReflectionProvider;
+import br.com.caelum.vraptor.core.Try;
 import br.com.caelum.vraptor.events.InterceptorsExecuted;
 import br.com.caelum.vraptor.events.MethodExecuted;
 import br.com.caelum.vraptor.events.MethodReady;
-import br.com.caelum.vraptor.util.Try;
 import br.com.caelum.vraptor.validator.Messages;
 import org.slf4j.Logger;
 

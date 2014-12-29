@@ -1,4 +1,4 @@
-package br.com.caelum.vraptor.util;
+package br.com.caelum.vraptor.core;
 
 import java.util.concurrent.Callable;
 

@@ -2,6 +2,25 @@ package br.com.caelum.vraptor.core;
 
 import java.util.concurrent.Callable;
 
+/**
+ * A class to wrap code that can possibly throw exceptions.
+ *
+ * Use the static method Try#run to instantiate this class, passing down
+ * the dangerous code and use its methods to retrieve the result or the exception
+ * of your computation. Example using java 8:
+ *
+ * <code>
+ *     Try try = Try.run(() -> someDangerousMethod());
+ *     if (try.failed()) {
+ *         Exception e = try.getException();
+ *         handleError(e);
+ *     }
+ *     try.result(); //do something with the result
+ * </code>
+ *
+ * @author Chico Sokol
+ * @param <T> the type of the result of your computation
+ */
 public abstract class Try<T> {
 	public static <T> Try run(Callable<T> callable) {
 		try {
@@ -21,7 +40,7 @@ public abstract class Try<T> {
 	public static class Success<T> extends Try {
 		private final T result;
 
-		public Success(T result) {
+		private Success(T result) {
 			this.result = result;
 		}
 
@@ -44,7 +63,7 @@ public abstract class Try<T> {
 	public static class Failed<T> extends Try {
 		private final Exception e;
 
-		public Failed(Exception e) {
+		private Failed(Exception e) {
 			this.e = e;
 		}
 

@@ -16,24 +16,26 @@
  */
 package br.com.caelum.vraptor.core;
 
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.io.IOException;
-
+import br.com.caelum.vraptor.InterceptionException;
+import br.com.caelum.vraptor.controller.ControllerMethod;
+import br.com.caelum.vraptor.interceptor.Interceptor;
+import br.com.caelum.vraptor.ioc.Container;
+import br.com.caelum.vraptor.observer.ExecuteMethodExceptionHandler;
+import br.com.caelum.vraptor.validator.Message;
+import br.com.caelum.vraptor.validator.ValidationException;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
-import br.com.caelum.vraptor.InterceptionException;
-import br.com.caelum.vraptor.controller.ControllerMethod;
-import br.com.caelum.vraptor.interceptor.Interceptor;
-import br.com.caelum.vraptor.ioc.Container;
+import java.io.IOException;
+import java.util.ArrayList;
+
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.mockito.Mockito.*;
 
 public class ToInstantiateInterceptorHandlerTest {
 
@@ -77,7 +79,7 @@ public class ToInstantiateInterceptorHandlerTest {
 		when(container.instanceFor(MyWeirdInterceptor.class)).thenReturn(null);
 
 		ToInstantiateInterceptorHandler handler = new ToInstantiateInterceptorHandler(container,
-				MyWeirdInterceptor.class);
+				MyWeirdInterceptor.class, new ExecuteMethodExceptionHandler());
 		handler.execute(null, null, null);
 	}
 
@@ -88,7 +90,7 @@ public class ToInstantiateInterceptorHandlerTest {
 		when(container.instanceFor(Interceptor.class)).thenReturn(interceptor);
 		when(interceptor.accepts(method)).thenReturn(true);
 
-		ToInstantiateInterceptorHandler handler = new ToInstantiateInterceptorHandler(container, Interceptor.class);
+		ToInstantiateInterceptorHandler handler = new ToInstantiateInterceptorHandler(container, Interceptor.class, new ExecuteMethodExceptionHandler());
 		handler.execute(stack, method, instance);
 
 		verify(interceptor).intercept(stack, method, instance);
@@ -99,10 +101,33 @@ public class ToInstantiateInterceptorHandlerTest {
 		when(container.instanceFor(Interceptor.class)).thenReturn(interceptor);
 		when(interceptor.accepts(method)).thenReturn(false);
 
-			ToInstantiateInterceptorHandler handler = new ToInstantiateInterceptorHandler(container, Interceptor.class);
+			ToInstantiateInterceptorHandler handler = new ToInstantiateInterceptorHandler(container, Interceptor.class, new ExecuteMethodExceptionHandler());
 			handler.execute(stack, method, instance);
 		
 		verify(interceptor, never()).intercept(stack, method, instance);
 		verify(stack).next(method, instance);
-	}   
+	}
+
+	@Test
+	public void shouldCatchValidationExceptionOfValidatedInterceptor() {
+		MyValidatedInterceptor validatedInterceptor = new MyValidatedInterceptor();
+		when(container.instanceFor(MyValidatedInterceptor.class)).thenReturn(validatedInterceptor);
+		ExecuteMethodExceptionHandler exceptionHandler = Mockito.spy(new ExecuteMethodExceptionHandler());
+		ToInstantiateInterceptorHandler handler = new ToInstantiateInterceptorHandler(container, MyValidatedInterceptor.class, exceptionHandler);
+
+		handler.execute(stack, method, new Object());
+		verify(exceptionHandler).handle(Mockito.any(ValidationException.class));
+	}
+
+	private static class MyValidatedInterceptor implements Interceptor {
+		@Override
+		public void intercept(InterceptorStack stack, ControllerMethod method, Object controllerInstance) throws InterceptionException {
+			throw new ValidationException(new ArrayList<Message>());
+		}
+
+		@Override
+		public boolean accepts(ControllerMethod method) {
+			return true;
+		}
+	}
 }

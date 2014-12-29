@@ -34,7 +34,7 @@ import br.com.caelum.vraptor.core.ExceptionMapper;
 import br.com.caelum.vraptor.core.ExceptionRecorder;
 import br.com.caelum.vraptor.core.InterceptorStack;
 
-public class ExceptionHandlerInterceptorTest {
+public class ExecuteMethodExceptionHandlerInterceptorTest {
 
 	private Object instance;
 	@Mock private InterceptorStack stack;

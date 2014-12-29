@@ -28,6 +28,7 @@ import br.com.caelum.vraptor.interceptor.InterceptorExecutor;
 import br.com.caelum.vraptor.interceptor.StepInvoker;
 import br.com.caelum.vraptor.ioc.Container;
 
+import br.com.caelum.vraptor.observer.ExecuteMethodExceptionHandler;
 import com.google.common.base.Supplier;
 
 /**
@@ -44,18 +45,20 @@ public class DefaultInterceptorHandlerFactory implements InterceptorHandlerFacto
 	private final InterceptorAcceptsExecutor acceptsExecutor;
 	private final CustomAcceptsExecutor customAcceptsExecutor;
 	private final InterceptorExecutor interceptorExecutor;
+	private final ExecuteMethodExceptionHandler executeMethodExceptionHandler;
 
 	/**
 	 * @deprecated CDI eyes only
 	 */
 	protected DefaultInterceptorHandlerFactory() {
-		this(null, null, null, null, null, null);
+		this(null, null, null, null, null, null, null);
 	}
 
 	@Inject
 	public DefaultInterceptorHandlerFactory(Container container, StepInvoker stepInvoker,
 			CacheStore<Class<?>, InterceptorHandler> cachedHandlers, InterceptorAcceptsExecutor acceptsExecutor,
-			CustomAcceptsExecutor customAcceptsExecutor, InterceptorExecutor interceptorExecutor) {
+			CustomAcceptsExecutor customAcceptsExecutor, InterceptorExecutor interceptorExecutor,
+			ExecuteMethodExceptionHandler executeMethodExceptionHandler) {
 
 		this.container = container;
 		this.stepInvoker = stepInvoker;
@@ -63,6 +66,7 @@ public class DefaultInterceptorHandlerFactory implements InterceptorHandlerFacto
 		this.acceptsExecutor = acceptsExecutor;
 		this.customAcceptsExecutor = customAcceptsExecutor;
 		this.interceptorExecutor = interceptorExecutor;
+		this.executeMethodExceptionHandler = executeMethodExceptionHandler;
 	}
 
 	@Override
@@ -74,7 +78,7 @@ public class DefaultInterceptorHandlerFactory implements InterceptorHandlerFacto
 					return new AspectStyleInterceptorHandler(type, stepInvoker, container, customAcceptsExecutor,
 							acceptsExecutor, interceptorExecutor);
 				}
-				return new ToInstantiateInterceptorHandler(container, type);
+				return new ToInstantiateInterceptorHandler(container, type, executeMethodExceptionHandler);
 			}
 		});
 	}

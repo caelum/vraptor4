@@ -17,15 +17,16 @@
 
 package br.com.caelum.vraptor.core;
 
-import javax.enterprise.inject.Vetoed;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.interceptor.Interceptor;
 import br.com.caelum.vraptor.ioc.Container;
+import br.com.caelum.vraptor.observer.ExecuteMethodExceptionHandler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.enterprise.inject.Vetoed;
+import java.util.concurrent.Callable;
 
 /**
  * Instantiates the interceptor on the fly and executes its method.
@@ -39,25 +40,40 @@ public class ToInstantiateInterceptorHandler implements InterceptorHandler {
 
 	private final Container container;
 	private final Class<?> type;
+	private final ExecuteMethodExceptionHandler executeMethodExceptionHandler;
 
-	public ToInstantiateInterceptorHandler(Container container, Class<?> type) {
+	public ToInstantiateInterceptorHandler(Container container, Class<?> type, ExecuteMethodExceptionHandler executeMethodExceptionHandler) {
 		this.container = container;
 		this.type = type;
+		this.executeMethodExceptionHandler = executeMethodExceptionHandler;
 	}
 
 	@Override
-	public void execute(InterceptorStack stack, ControllerMethod method, Object controllerInstance)
+	public void execute(final InterceptorStack stack, final ControllerMethod method, final Object controllerInstance)
 			throws InterceptionException {
-		Interceptor interceptor = (Interceptor) container.instanceFor(type);
+		final Interceptor interceptor = (Interceptor) container.instanceFor(type);
 		if (interceptor == null) {
 			throw new InterceptionException("Unable to instantiate interceptor for " + type.getName()
 					+ ": the container returned null.");
 		}
 		if (interceptor.accepts(method)) {
 			logger.debug("Invoking interceptor {}", interceptor.getClass().getSimpleName());
-			interceptor.intercept(stack, method, controllerInstance);
+			executeSafely(stack, method, controllerInstance, interceptor);
 		} else {
 			stack.next(method, controllerInstance);
+		}
+	}
+
+	private void executeSafely(final InterceptorStack stack, final ControllerMethod method, final Object controllerInstance, final Interceptor interceptor) {
+		Try result = Try.run(new Callable<Void>() {
+			@Override
+			public Void call() throws Exception {
+				interceptor.intercept(stack, method, controllerInstance);
+				return null;
+			}
+		});
+		if (result.failed()) {
+			executeMethodExceptionHandler.handle(result.getException());
 		}
 	}
 

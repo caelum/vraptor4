@@ -17,31 +17,27 @@
 
 package br.com.caelum.vraptor.observer;
 
-import static org.slf4j.LoggerFactory.getLogger;
-
-import java.lang.reflect.Method;
+import br.com.caelum.vraptor.controller.ControllerMethod;
+import br.com.caelum.vraptor.core.MethodInfo;
+import br.com.caelum.vraptor.core.ReflectionProvider;
+import br.com.caelum.vraptor.core.Try;
+import br.com.caelum.vraptor.events.InterceptorsExecuted;
+import br.com.caelum.vraptor.events.MethodExecuted;
+import br.com.caelum.vraptor.events.MethodReady;
+import br.com.caelum.vraptor.validator.Messages;
+import org.slf4j.Logger;
 
 import javax.enterprise.context.Dependent;
 import javax.enterprise.event.Event;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
+import java.lang.reflect.Method;
+import java.util.concurrent.Callable;
 
-import org.slf4j.Logger;
-
-import br.com.caelum.vraptor.InterceptionException;
-import br.com.caelum.vraptor.controller.ControllerMethod;
-import br.com.caelum.vraptor.core.MethodInfo;
-import br.com.caelum.vraptor.core.ReflectionProvider;
-import br.com.caelum.vraptor.core.ReflectionProviderException;
-import br.com.caelum.vraptor.events.InterceptorsExecuted;
-import br.com.caelum.vraptor.events.MethodExecuted;
-import br.com.caelum.vraptor.events.MethodReady;
-import br.com.caelum.vraptor.interceptor.ApplicationLogicException;
-import br.com.caelum.vraptor.validator.Messages;
-import br.com.caelum.vraptor.validator.ValidationException;
+import static org.slf4j.LoggerFactory.getLogger;
 
 /**
- * Interceptor that executes the logic method.
+ * Observer that executes the logic method.
  *
  * @author Guilherme Silveira
  * @author Rodrigo Turini
@@ -58,49 +54,44 @@ public class ExecuteMethod {
 
 	private final Event<MethodExecuted> methodExecutedEvent;
 	private final Event<MethodReady> methodReady;
+	private final ExecuteMethodExceptionHandler executeMethodExceptionHandler;
 
 	@Inject
-	public ExecuteMethod(MethodInfo methodInfo, Messages messages, Event<MethodExecuted> methodExecutedEvent, 
-			Event<MethodReady> methodReady, ReflectionProvider reflectionProvider) {
+	public ExecuteMethod(MethodInfo methodInfo, Messages messages, 
+			Event<MethodExecuted> methodExecutedEvent, Event<MethodReady> methodReady,
+			ExecuteMethodExceptionHandler exceptionHandler, ReflectionProvider reflectionProvider) {
 		this.methodInfo = methodInfo;
 		this.messages = messages;
 		this.methodExecutedEvent = methodExecutedEvent;
 		this.methodReady = methodReady;
+		this.executeMethodExceptionHandler = exceptionHandler;
 		this.reflectionProvider = reflectionProvider;
 	}
 
-	public void execute(@Observes InterceptorsExecuted event) {
-		try {
-			ControllerMethod method = event.getControllerMethod();
-			methodReady.fire(new MethodReady(method));
-			Method reflectionMethod = method .getMethod();
-			Object[] parameters = methodInfo.getParametersValues();
+	public void execute(@Observes final InterceptorsExecuted event) {
+		Try run = Try.run(new Callable<Void>() {
+			@Override
+			public Void call() throws Exception {
+				ControllerMethod method = event.getControllerMethod();
+				methodReady.fire(new MethodReady(method));
+				Method reflectionMethod = method.getMethod();
+				Object[] parameters = methodInfo.getParametersValues();
 
-			log.debug("Invoking {}", reflectionMethod);
-			Object instance = event.getControllerInstance();
-			Object result = reflectionProvider.invoke(instance, reflectionMethod, parameters);
+				log.debug("Invoking {}", reflectionMethod);
+				Object instance = event.getControllerInstance();
+				Object result = reflectionProvider.invoke(instance, reflectionMethod, parameters);
 
-			messages.assertAbsenceOfErrors();
-			
-			this.methodInfo.setResult(result);
-			methodExecutedEvent.fire(new MethodExecuted(method, methodInfo));
-		} catch (IllegalArgumentException e) {
-			throw new InterceptionException(e);
-		} catch (ReflectionProviderException e) {
-			throwIfNotValidationException(e, e.getCause());
-		} catch (Exception e) {
-			throwIfNotValidationException(e, e);
+				messages.assertAbsenceOfErrors();
+
+				methodInfo.setResult(result);
+				methodExecutedEvent.fire(new MethodExecuted(method, methodInfo));
+				return null;
+			}
+		});
+		if (run.failed()) {
+			Exception exception = run.getException();
+			executeMethodExceptionHandler.handle(exception);
 		}
 	}
 
-	private void throwIfNotValidationException(Throwable original, Throwable alternativeCause) {
-		Throwable cause = original.getCause();
-
-		if (original instanceof ValidationException || cause instanceof ValidationException) {
-			// fine... already parsed
-			log.trace("swallowing {}", cause);
-		} else {
-			throw new ApplicationLogicException(alternativeCause);
-		}
-	}
 }

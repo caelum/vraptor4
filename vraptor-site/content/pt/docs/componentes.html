@@ -397,3 +397,20 @@ public class NullVRaptorInstantiator extends VRaptorInstantiator {
 ~~~ 
 
 Dessa forma, quando os dados de um objeto não estiverem presentes no request, você receberá um parâmetro `null` no lugar de uma instância vazia.
+
+## Usando a classe Try
+
+Para facilitar o tratamento de exceções, você pode usar a classe `Try`, da API pública do VRaptor.
+
+Com essa classe, você pode especificar a código que pode lançar exceptions dentro do método `run`:
+
+~~~
+Try try = Try.run(() -> umMetodoPerigoso());
+if (try.failed()) {
+	Exception e = try.getException();
+	lidaComErro(e);
+}
+lidaComResultado(try.result());
+~~~
+
+Essa classe é especialmente útil para compor diferentes trechos de código que lançam exceptions.

@@ -25,8 +25,8 @@ public class LRUCacheFactory {
 	@SuppressWarnings("rawtypes")	
 	@Produces
 	@LRU
-	public LRUCacheStore getCache(InjectionPoint ip){
+	public <K,V> LRUCacheStore<K,V> getCache(InjectionPoint ip){
 		int capacity = ip.getAnnotated().getAnnotation(LRU.class).capacity();
-		return new LRUCacheStore<>(capacity);
+		return new LRUCacheStore<K,V>(capacity);
 	}
 }

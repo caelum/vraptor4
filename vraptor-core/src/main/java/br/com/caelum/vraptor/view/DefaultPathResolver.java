@@ -25,6 +25,7 @@ import org.slf4j.LoggerFactory;
 
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.http.FormatResolver;
+import br.com.caelum.vraptor.view.annotation.ViewPathPrefix;
 
 /**
  * The default vraptor3 path resolver uses the type and method name as
@@ -64,7 +65,14 @@ public class DefaultPathResolver implements PathResolver {
 		
 		String name = method.getController().getType().getSimpleName();
 		String folderName = extractControllerFromName(name);
-		String path = getPrefix() + folderName + "/" + method.getMethod().getName() + suffix + "." + getExtension();
+		
+		String folderPrefix = "";
+		if(method.getController().getType().isAnnotationPresent(ViewPathPrefix.class)) {
+			ViewPathPrefix prefixAnnotation = method.getController().getType().getAnnotation(ViewPathPrefix.class);
+			folderPrefix = prefixAnnotation.value() + "/";
+		}
+		
+		String path = getPrefix() + folderPrefix + folderName + "/" + method.getMethod().getName() + suffix + "." + getExtension();
 
 		logger.debug("Returning path {} for {}", path, method);
 		return path;

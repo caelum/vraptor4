@@ -1,0 +1,112 @@
+<!DOCTYPE HTML> <html lang="pt"> <head> <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> <meta charset="utf-8"> <meta name="viewport" content="width=device-width"> <title>VRaptor 4 - Utilizando o @ConversationScoped no VRaptor4</title> <link rel="shortcut icon" href="../../../img/favicon.png"> <link rel="stylesheet" href="/css/style.min.css"/> <meta name="generator" content="nanoc 3.6.7"> </head> <body> <header class="container"> <h1 class="logo"><a class="logo-link" href="../.."> <img src="../../../img/logo.png" alt="VRaptor"> </a></h1> <ul class="community"> <li><a href="https://groups.google.com/forum/#!forum/caelum-vraptor" target="_blank">Google Groups</a></li> <li><a href="https://github.com/caelum/vraptor4/" target="_blank">GitHub</a></li> <li><a href="http://www.guj.com.br/tag/vraptor" target="_blank">GUJ Respostas</a></li> </ul> <ul class="site-languages"> <li> <a class="site-language flag flag-en not-selected" title="en" href="../../../en"> EN </a> </li> <li> <a class="site-language flag flag-pt " title="pt" href="../.."> PT </a> </li> </ul> </header> <input type="checkbox" id="nav-visibility"> <label for="nav-visibility" class="nav-toggle">Menu</label> <nav class="main-nav"> <ul> <li><a href="../../download">Download</a></li> <li><a href="../../docs/guia-de-1-minuto/">Documentação</a></li> <li><a href="../aceitando-urls-com-ou-sem-barra-no-final">Cookbook</a></li> <li><a href="https://github.com/caelum/vraptor4/releases" target="_blank">Changelog</a></li> <li><a href="https://github.com/caelum/vraptor4/milestones" target="_blank">Roadmap</a></li> <li><a href="../../../javadoc">Javadoc</a></li> </ul> </nav> <nav class="doc-nav container"> <h1>Cookbook</h1> <ul> <li> <a href="../aceitando-urls-com-ou-sem-barra-no-final"> Aceitando URLs com ou sem barra no final </a> </li> <li> <a href="../construindo-uma-aplicacao-web-com-java8-vraptor4-wildfly"> Construindo uma Aplicação Web com Java 8 e VRaptor 4 no Wildfly </a> </li> <li> <a href="../evitando-que-o-browser-faca-cache-das-paginas"> Evitando que o browser faça cache das páginas </a> </li> <li> <a href="../usando-o-header-referer-para-fazer-redirecionamentos"> Usando o Header Referer para fazer redirecionamentos </a> </li> <li> <a href="../integrando-vraptor-com-tiles3"> Integrando o VRaptor com Tiles 3 </a> </li> </ul> </nav> <main class="container"> <h1 id="utilizando-o-conversationscoped-no-vraptor4">Utilizando o @ConversationScoped no VRaptor4</h1> <p>O VRaptor em sua versão 4 utiliza o CDI 1.1 como base. E uma das considerações a serem feitas quando usamos o CDI é o escopo de vida dos objetos. Sempre é preciso escolher com cuidado o escopo, levando em consideração qual vai ser a aplicação do objeto. Utilizar o <code>@RequestScoped</code> onde é necessário um <code>@ApplicationScoped</code> pode ser desastroso. Um escopo muito util nesse cenário é o <code>@ConversationScoped</code> que nos permite um controle maior conforme a nossa necessidade. A aplicação apresentada nesse tutorial está disponivel no GitHub: <a href="https://github.com/angeliski/ScoreCDI">ScoreCDI</a>.</p> <p>Abaixo nosso Controller:</p> <pre><code class="language-java"><span class="kn">package</span> <span class="n">br</span><span class="o">.</span><span class="na">com</span><span class="o">.</span><span class="na">angeliski</span><span class="o">.</span><span class="na">controller</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">java.io.Serializable</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.Random</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">javax.enterprise.context.Conversation</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">javax.enterprise.context.ConversationScoped</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">javax.inject.Inject</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">br.com.caelum.vraptor.Controller</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">br.com.caelum.vraptor.Get</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">br.com.caelum.vraptor.Post</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">br.com.caelum.vraptor.Result</span><span class="o">;</span>
+
+<span class="nd">@Controller</span>
+<span class="nd">@ConversationScoped</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">HomeController</span> <span class="kd">implements</span> <span class="n">Serializable</span> <span class="o">{</span>
+
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">long</span> <span class="n">serialVersionUID</span> <span class="o">=</span> <span class="mi">943045823176068998L</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="n">Result</span> <span class="n">result</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="n">Conversation</span> <span class="n">conversation</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="n">Integer</span> <span class="n">resultado</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kt">int</span> <span class="n">total</span><span class="o">;</span>
+
+    <span class="cm">/**</span>
+<span class="cm">     * @deprecated CDI eyes only</span>
+<span class="cm">     */</span>
+    <span class="kd">protected</span> <span class="nf">HomeController</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">(</span><span class="kc">null</span><span class="o">,</span> <span class="kc">null</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Inject</span>
+    <span class="kd">public</span> <span class="nf">HomeController</span><span class="o">(</span><span class="n">Result</span> <span class="n">result</span><span class="o">,</span> <span class="n">Conversation</span> <span class="n">conversation</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">result</span> <span class="o">=</span> <span class="n">result</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">conversation</span> <span class="o">=</span> <span class="n">conversation</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Get</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">index</span><span class="o">()</span> <span class="o">{</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Get</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">game</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">conversation</span><span class="o">.</span><span class="na">isTransient</span><span class="o">())</span> <span class="o">{</span>
+            <span class="n">conversation</span><span class="o">.</span><span class="na">begin</span><span class="o">();</span>
+        <span class="o">}</span>
+        <span class="n">result</span><span class="o">.</span><span class="na">include</span><span class="o">(</span><span class="s">"cid"</span><span class="o">,</span> <span class="n">conversation</span><span class="o">.</span><span class="na">getId</span><span class="o">());</span>
+        <span class="n">gerarPergunta</span><span class="o">();</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kt">void</span> <span class="nf">gerarPergunta</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">Random</span> <span class="n">random</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Random</span><span class="o">();</span>
+        <span class="n">Integer</span> <span class="n">primeiroValor</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="na">nextInt</span><span class="o">(</span><span class="mi">100</span><span class="o">);</span>
+        <span class="n">Integer</span> <span class="n">segundoValor</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="na">nextInt</span><span class="o">(</span><span class="mi">100</span><span class="o">);</span>
+
+        <span class="n">resultado</span> <span class="o">=</span> <span class="n">primeiroValor</span> <span class="o">*</span> <span class="n">segundoValor</span><span class="o">;</span>
+
+        <span class="n">result</span><span class="o">.</span><span class="na">include</span><span class="o">(</span><span class="s">"primeiro"</span><span class="o">,</span> <span class="n">primeiroValor</span><span class="o">);</span>
+        <span class="n">result</span><span class="o">.</span><span class="na">include</span><span class="o">(</span><span class="s">"segundo"</span><span class="o">,</span> <span class="n">segundoValor</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Post</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">game</span><span class="o">(</span><span class="n">Integer</span> <span class="n">resposta</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">resultado</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">resposta</span><span class="o">))</span> <span class="o">{</span>
+            <span class="n">total</span><span class="o">++;</span>
+        <span class="o">}</span>
+        <span class="n">gerarPergunta</span><span class="o">();</span>
+        <span class="n">result</span><span class="o">.</span><span class="na">include</span><span class="o">(</span><span class="s">"cid"</span><span class="o">,</span> <span class="n">conversation</span><span class="o">.</span><span class="na">getId</span><span class="o">());</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Get</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">fim</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(!</span><span class="n">conversation</span><span class="o">.</span><span class="na">isTransient</span><span class="o">())</span> <span class="o">{</span>
+            <span class="n">conversation</span><span class="o">.</span><span class="na">end</span><span class="o">();</span>
+        <span class="o">}</span>
+        <span class="n">result</span><span class="o">.</span><span class="na">include</span><span class="o">(</span><span class="s">"total"</span><span class="o">,</span> <span class="n">total</span><span class="o">);</span>
+    <span class="o">}</span>
+
+<span class="o">}</span></code></pre> <p>A primeira distinção desse Controller é a anotação <code>@ConversationScoped</code> na classe. Isso indica para o CDI qual vai ser o escopo, mas cuidado: só isso não é suficiente para que a sua classe tenha um escopo maior que o escopo request. Para que o escopo se torne persistente, não perdendo os dados a cada requisição, é necessário injetar um objeto <code>Conversation</code> e chamar seu método <code>begin</code>. Isso pode ser observado aqui:</p> <pre><code class="language-java">    <span class="nd">@Get</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">game</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">conversation</span><span class="o">.</span><span class="na">isTransient</span><span class="o">())</span> <span class="o">{</span>
+            <span class="n">conversation</span><span class="o">.</span><span class="na">begin</span><span class="o">();</span>
+        <span class="o">}</span>
+        <span class="n">result</span><span class="o">.</span><span class="na">include</span><span class="o">(</span><span class="s">"cid"</span><span class="o">,</span> <span class="n">conversation</span><span class="o">.</span><span class="na">getId</span><span class="o">());</span>
+        <span class="n">gerarPergunta</span><span class="o">();</span>
+    <span class="o">}</span></code></pre> <p>Nesse método a conversação é iniciada. O <code>Conversation</code> tem um estado padrão conhecido como <em>transient</em>. Quando o método <code>begin</code> é acionado ele passa para o <em>long-running</em> mantendo os dados até que seja invocado o método <code>end</code> do <code>Conversation</code>. Só que um detalhe importante deve ser observado. O CDI não tem como saber a qual objeto você está tratando. O único modo dele saber isso é você informando qual o identificador daquela conversação e isso é feito através do pârametro <strong>cid</strong>. É necessário informar na url esse pârametro para que o CDI consiga recuperar o objeto correto. Observe que o pârametro cid é incluido no result para que seja possível utilizar ele na pagina. O nome utilizado para incluir o <em>id</em> do <code>Conversation</code> no result não é fundamental. Ele poderia ser qualquer um, desde que fosse recuperado corretamente na pagina. Só é fundamental utilizar o pârametro <strong>cid</strong> quando a requisição for enviada para o servidor. Observe como ficou a nossa pagina que vai utilizar esse parâmetro.</p> <pre><code class="language-jsp"><span class="k">&lt;%@</span> <span class="n">taglib</span> <span class="n">prefix</span><span class="o">=</span><span class="s">"fmt"</span> <span class="n">uri</span><span class="o">=</span><span class="s">"http://java.sun.com/jsp/jstl/fmt"</span><span class="k">%&gt;</span>
+<span class="k">&lt;%@</span> <span class="n">taglib</span> <span class="n">prefix</span><span class="o">=</span><span class="s">"c"</span> <span class="n">uri</span><span class="o">=</span><span class="s">"http://java.sun.com/jsp/jstl/core"</span><span class="k">%&gt;</span>
+
+<span class="cp">&lt;!DOCTYPE html&gt;</span>
+<span class="nt">&lt;html&gt;</span>
+<span class="nt">&lt;head&gt;</span>
+<span class="nt">&lt;title&gt;</span>Score CDI<span class="nt">&lt;/title&gt;</span>
+
+<span class="nt">&lt;/head&gt;</span>
+<span class="nt">&lt;body&gt;</span>
+    <span class="nt">&lt;h4&gt;</span>Sessão atual ${cid}<span class="nt">&lt;/h4&gt;</span>
+    <span class="nt">&lt;p&gt;</span>Quanto é ${primeiro} * ${segundo}?<span class="nt">&lt;/p&gt;</span>
+    <span class="nt">&lt;form</span> <span class="na">action=</span><span class="s">"${linkTo[HomeController].game}?cid=${cid}"</span> <span class="na">method=</span><span class="s">"POST"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;input</span> <span class="na">name=</span><span class="s">"resposta"</span> <span class="na">type=</span><span class="s">"number"</span> <span class="err">required</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;button</span> <span class="na">type=</span><span class="s">"submit"</span><span class="nt">&gt;</span>Continuar jogo!<span class="nt">&lt;/button&gt;</span>
+    <span class="nt">&lt;/form&gt;</span>
+    
+    <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">"${linkTo[HomeController].fim}?cid=${cid}"</span><span class="nt">&gt;</span>Finalizar!<span class="nt">&lt;/a&gt;</span>
+
+<span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span></code></pre> <p>Você pode observar que a action do formulário faz o uso correto do <strong>cid</strong>. Quando essa requisição for enviada ao servidor, vai enviar junto o identificador correto. Enquanto a requisição for feita enviando o <strong>cid</strong> o número exibido em Sessão atual vai continuar o mesmo, pois a conversação vai se manter. Você pode fazer um teste acessando diretamente ‘/home/game’ sem enviar o cid no pârametro. Vai ser iniciada uma nova conversação e o cid irá se modificar. </p> <p>Por fim temos o método que encerra o <em>long-running</em> através do método <code>end</code>:</p> <pre><code class="language-java">    <span class="nd">@Get</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">fim</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(!</span><span class="n">conversation</span><span class="o">.</span><span class="na">isTransient</span><span class="o">())</span> <span class="o">{</span>
+            <span class="n">conversation</span><span class="o">.</span><span class="na">end</span><span class="o">();</span>
+        <span class="o">}</span>
+        <span class="n">result</span><span class="o">.</span><span class="na">include</span><span class="o">(</span><span class="s">"total"</span><span class="o">,</span> <span class="n">total</span><span class="o">);</span>
+    <span class="o">}</span></code></pre> <p>Aqui é valido observar que caso você não encerre uma conversação, ela não vai se manter em memória por muito mais que dois minutos, que é o tempo padrão. Isso garante que diferente do <code>@SessionScoped</code> os recursos vão ser liberados antes, caso a aplicação não encerre o estado daquele objeto. O timeout pode ser ajustado através do método <code>setTimeout</code> conforme a necessidade, mas normalmente não é preciso.</p> </main> <script src="/js/headers.min.js"></script> </body> </html>

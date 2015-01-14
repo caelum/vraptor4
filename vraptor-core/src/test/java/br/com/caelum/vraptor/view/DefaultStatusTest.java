@@ -186,6 +186,7 @@ public class DefaultStatusTest {
 		verify(response).addHeader("Location", "http://myapp.com/resource/method");
 	}
 
+	@SuppressWarnings("deprecation")
 	@Test
 	public void shouldSerializeErrorMessages() throws Exception {
 		Message normal = new SimpleMessage("category", "The message");
@@ -206,6 +207,7 @@ public class DefaultStatusTest {
 		assertThat(serialized, not(containsString("<i18nMessage>")));
 	}
 
+	@SuppressWarnings("deprecation")
 	@Test
 	public void shouldSerializeErrorMessagesInJSON() throws Exception {
 		Message normal = new SimpleMessage("category", "The message");

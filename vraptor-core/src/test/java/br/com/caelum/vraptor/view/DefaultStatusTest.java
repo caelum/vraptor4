@@ -136,6 +136,13 @@ public class DefaultStatusTest {
 
 		verify(response).setStatus(501);
 	}
+	
+	@Test
+	public void shouldSetInternalServerErrorStatus() throws Exception {
+		status.internalServerError();
+
+		verify(response).setStatus(500);
+	}
 
 	@Test
 	public void shouldSetMethodNotAllowedStatus() throws Exception {

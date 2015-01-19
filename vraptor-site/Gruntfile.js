@@ -89,7 +89,7 @@ module.exports = function(grunt) {
         },
         uglify: {
             headers: {
-                src: 'output/js/headers.js',
+                src: ['output/js/headers.js', 'output/js/search.js'],
                 dest: 'deploy/js/headers.min.js'
             }
         }

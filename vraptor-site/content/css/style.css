@@ -95,6 +95,13 @@ header {
   margin: 0;
 }
 
+.community,
+.site-languages {
+  display: inline-block;
+  vertical-align: middle;
+  margin: .5em 1em;
+}
+
 .community li {
   display: inline-block;
   margin: .5em;
@@ -113,8 +120,8 @@ header {
   display: inline-block;
   content: '';
   background-size: 32px;
-  width: 35px;
-  height: 35px;
+  width: 32px;
+  height: 32px;
 }
 
 .community a[href*="groups.google.com"]:before {
@@ -128,6 +135,33 @@ header {
 .community a[href*="guj.com.br"]:before,
 .community a[href*="questions.vraptor"]:before {
   background-position: 0 -89px;
+}
+
+.site-search-link {
+  display: inline-block;
+  vertical-align: middle;
+  width: 32px;
+  height: 32px;
+  overflow: hidden;
+  margin: 0 2em;
+}
+
+.site-search-link:before {
+  content: '';
+  width: 32px;
+  height: 32px;
+  display: inline-block;
+  background-image: url(../img/search.png);
+  background-size: 50% 50%;
+  background-position: center center;
+  background-repeat: no-repeat;
+  border: 2px solid #3E82C3;
+  border-radius: 50%;
+  box-sizing: border-box;
+}
+
+.site-search-form {
+  display: none;
 }
 
 .home-call-links {
@@ -245,10 +279,39 @@ header {
     margin-right: auto;
 }
 
-@media (min-width: 480px) {
-  .community {
+@media (min-width: 400px) {
+  .site-search-link {
+    display: none;
+  }
+
+  .site-search-form {
     display: inline-block;
-    margin-right: 2em;
+    position: relative;
+    font-size: 22px;
+  }
+
+  .site-search-form input {
+    padding: .25em 1.5em .25em .75em;
+    border: 1px solid #ccc;
+    border-radius: 1em;
+    font: inherit;
+  }
+
+  .site-search-form button {
+    position: absolute;
+    right: .25em;
+    top: 1px; /* input border */
+    padding: 0;
+    width: 1.5em;
+    height: 1.5em;
+    text-indent: -9999px;
+    border: none;
+    background-image: url("../img/search.png");
+    background-size: 50% 50%;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-color: transparent;
+    font: inherit;
   }
 }
 
@@ -260,14 +323,38 @@ header {
 
 @media (min-width: 760px) {
   header {
+    margin-top: 0;
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    padding: 1em;
   }
 
-  .logo {
-    flex: 1;
-    text-align: left;
+  .header-links {
+    overflow: hidden;
+  }
+
+  .community,
+  .site-languages,
+  .site-search-form {
+    float: right;
+  }
+
+  .community,
+  .site-languages {
+    margin-right: 0;
+    margin-bottom: 1em;
+  }
+
+  .site-search-form {
+    clear: right;
+  }
+
+  .community {
+    margin-left: 2em;
+  }
+
+  .community :last-child {
+    margin-right: 0;
   }
 
   .home-advantages li {

@@ -20,17 +20,21 @@ main.container h2:hover:after {
   margin-left: 10px;
 }
 
-ul.who-uses {
-  width: 80%;
+.who-uses {
+  width: 95%;
   margin: auto;
 }
 
 .who-uses li {
+  display: inline-block;
+  margin: 1em 2em;
+  vertical-align: middle;
+}
+
+.who-uses a {
   background: url(../img/whoUses.png) no-repeat top left;
   display: inline-block;
-  vertical-align: middle;
   text-indent: -99999px;
-  margin: 1em 2em;
 }
 
 .who-uses .agenciaclick {

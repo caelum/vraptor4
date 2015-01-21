@@ -145,5 +145,10 @@ public interface Status extends View {
 	 */
 	void notImplemented();
 	
+	/**
+	 * Return Internal Server Error (500) Status
+	 */
+	void internalServerError();
+	
 	void header(String key, String value);
 }

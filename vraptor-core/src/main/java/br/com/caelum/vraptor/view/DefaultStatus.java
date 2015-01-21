@@ -28,8 +28,6 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
 
-import com.google.common.base.Joiner;
-
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.config.Configuration;
 import br.com.caelum.vraptor.controller.HttpMethod;
@@ -37,6 +35,8 @@ import br.com.caelum.vraptor.http.route.Router;
 import br.com.caelum.vraptor.proxy.MethodInvocation;
 import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.proxy.SuperMethod;
+
+import com.google.common.base.Joiner;
 
 /**
  * Allows header related results.
@@ -199,4 +199,10 @@ public class DefaultStatus implements Status {
 	public void notImplemented() {
 		response.setStatus(HttpServletResponse.SC_NOT_IMPLEMENTED);
 	}
+
+	@Override
+	public void internalServerError() {
+		response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+	}
+	
 }

@@ -7,6 +7,7 @@ set -e # halt on error
 rvm use --create 2.0.0@vraptor-site
 cd vraptor-site
 bundle install
+npm install
 rm -rf output deploy
 bundle exec nanoc
 grunt

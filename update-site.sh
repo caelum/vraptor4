@@ -1,5 +1,7 @@
 #!/bin/bash
 
+source "$HOME/.rvm/scripts/rvm"
+
 set -e # halt on error
 
 rvm use --create 2.0.0@vraptor-site

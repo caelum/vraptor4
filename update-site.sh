@@ -1,5 +1,6 @@
 #!/bin/bash
 
+rvm use --create 2.0.0@vraptor-site
 cd vraptor-site
 bundle install
 rm -rf output deploy

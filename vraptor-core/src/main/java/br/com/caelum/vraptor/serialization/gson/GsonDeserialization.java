@@ -23,6 +23,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.lang.reflect.TypeVariable;
 import java.nio.charset.Charset;
 
 import javax.enterprise.inject.Instance;
@@ -120,7 +121,7 @@ public class GsonDeserialization implements Deserializer {
 						JsonElement node = root.get(parameter.getName());
 						
 						if (deserializee.isWithoutRoot()) { 
-							values[i] = gson.fromJson(root, parameter.getParameterizedType());
+							values[i] = gson.fromJson(root, fallbackTo(parameter.getParameterizedType(), types[i]));
 							logger.info("json without root deserialized");
 							break;
 
@@ -154,6 +155,11 @@ public class GsonDeserialization implements Deserializer {
 
 		logger.debug("json deserialized: {}", (Object) values);
 		return values;
+	}
+
+	private Type fallbackTo(Type parameterizedType, Class<?> type) {
+		if (parameterizedType instanceof TypeVariable) return type;
+		return parameterizedType;
 	}
 
 	private String getContentOfStream(InputStream input) throws IOException {

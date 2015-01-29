@@ -87,9 +87,9 @@ public class GsonDeserializerTest {
 	private ControllerMethod dateParameter;
 	private ControllerMethod dogParameterWithoutRoot;
 	private ControllerMethod dogParameterNameEqualsJsonPropertyWithoutRoot;
-	
+
 	private @Mock Container container;
-	
+
 	private @Mock Instance<Deserializee> deserializeeInstance;
 
 	@Before
@@ -119,7 +119,7 @@ public class GsonDeserializerTest {
 		listDog = new DefaultControllerMethod(controllerClass, DogController.class.getDeclaredMethod("list", List.class));
 		dogParameterWithoutRoot = new DefaultControllerMethod(controllerClass, DogController.class.getDeclaredMethod("dogParameterWithoutRoot", Dog.class));
 		dogParameterNameEqualsJsonPropertyWithoutRoot = new DefaultControllerMethod(controllerClass, DogController.class.getDeclaredMethod("dogParameterNameEqualsJsonPropertyWithoutRoot", Dog.class));
-		
+
 		when(deserializeeInstance.get()).thenReturn(new Deserializee());
 		when(container.instanceFor(WithRoot.class)).thenReturn(new WithRoot());
 		when(container.instanceFor(WithoutRoot.class)).thenReturn(new WithoutRoot());
@@ -381,6 +381,21 @@ public class GsonDeserializerTest {
 		Dog dog = (Dog) deserialized[0];
 
 		assertThat(dog.name, equalTo("Brutus"));
+	}
+
+	@Test
+	public void shouldDeserializeFromGenericTypeWithoutRoot() {
+		InputStream stream = asStream("{'name':'Brutus','age':7,'birthday':'2013-07-23T17:14:14-03:00'}");
+		BeanClass resourceClass = new DefaultBeanClass(DogGenericController.class);
+		Method method = new Mirror().on(DogGenericController.class).reflect().method("method").withAnyArgs();
+		ControllerMethod resource = new DefaultControllerMethod(resourceClass, method);
+
+		Object[] deserialized = deserializer.deserialize(stream, resource);
+
+		Dog dog = (Dog) deserialized[0];
+
+		assertThat(dog.name, equalTo("Brutus"));
+		assertThat(dog.age, equalTo(7));
 	}
 
 	@Test

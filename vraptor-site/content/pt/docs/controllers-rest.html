@@ -383,14 +383,18 @@ Com isso você já pode fazer uma requisição `POST` com o content-type `applic
 {"cliente":{"id":3,"nome":"Paulo"}}
 ~~~ 
 
-Você também pode consumir o JSON sem o elemento da raiz (`root`):
+Como passamos o elemento da raiz (`root`) do JSON, o VRaptor populará o parâmetro com o mesmo nome que esse elemento -- neste caso `cliente`.
+
+Você também pode consumir o JSON sem o `root`:
 
 ~~~ 
 #!json
 {"id":3,"nome":"Paulo"}
 ~~~ 
 
-O VRaptor vai cuidar de converter estes dados automaticamente para o seu objeto `Cliente`. 
+O VRaptor vai cuidar de converter estes dados automaticamente para o seu objeto `Cliente`, mas neste caso, como não passamos o `root`, é necessário que o `Cliente` seja o primeiro parâmetro do método.
+
+Em outras palavras, a deserialização com o `root` popula o parâmetro com o nome do `root`, enquanto a deserialização sem `root` popula o primeiro parâmetro do método. 
 
 Se o JSON contém alguma propriedade com o mesmo nome de algum dos parâmetros do método, você precisa adicionar a classe `WithoutRoot` à propriedade `options` da anotação `@Consumes` para forçar a deserialização sem o elemento raiz.
 

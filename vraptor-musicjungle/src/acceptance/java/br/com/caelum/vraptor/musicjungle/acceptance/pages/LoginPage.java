@@ -19,22 +19,7 @@ public class LoginPage extends PageObject {
 		form.submitForm();
 	}
 
-	private void createUser(String value) {
-		By cssSelector = cssSelector("form[action$='users']");
-		PageForm form = new PageForm(driver, cssSelector);
-		form.input("user.name", value);
-		form.input("user.login", value);
-		form.input("user.password", value);
-		form.submitForm();
-	}
-
 	public void logout() {
 		driver.findElement(By.linkText("Logout")).click();
 	}
-
-	public void createAndloginAsUser(String userName) {
-		createUser(userName);
-		loginAsUser(userName);
-	}
-	
 }

@@ -26,7 +26,7 @@ public class ResultSerializationTest extends AcceptanceTestCase{
 	
 	@Before
 	public void setUpBeforeClass() {
-		loginPage().createAndloginAsUser("vraptortest");
+		loginPage().loginAsUser("vraptor");
 		HomePage page = homePage();
 		this.mozart = new MusicBuilder(1, "Mozart - Symphony #40", "Mozart", CLASSICAL).create();
 		this.beethoven = new MusicBuilder(2, "Moonlight Sonata", "Beethoven", CLASSICAL).create();

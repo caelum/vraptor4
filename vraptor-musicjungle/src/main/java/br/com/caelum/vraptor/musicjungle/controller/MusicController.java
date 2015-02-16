@@ -201,7 +201,7 @@ public class MusicController {
 	 */
 	@Public @Path("/musics/list/xml")
 	public void showAllMusicsAsXML() {
-		result.use(xml()).indented().from(musicDao.listAll()).serialize();
+		result.use(xml()).from(musicDao.listAll()).serialize();
 	}
 	
 	/**

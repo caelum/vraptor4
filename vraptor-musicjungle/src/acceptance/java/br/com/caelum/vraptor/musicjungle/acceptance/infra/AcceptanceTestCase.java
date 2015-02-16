@@ -1,10 +1,7 @@
 package br.com.caelum.vraptor.musicjungle.acceptance.infra;
 
-import static org.openqa.selenium.By.linkText;
-
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
@@ -42,8 +39,7 @@ public abstract class AcceptanceTestCase {
 	}
 
 	public MusicExportPage accessMusicsExport() {
-		By linkText = linkText("Export all musics");
-		driver.findElement(linkText).click();
+		driver.get(getBaseUrl() + "/musics/list/form");
 		return new MusicExportPage(driver);
 	}
 	

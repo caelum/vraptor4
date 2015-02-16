@@ -93,7 +93,7 @@ public class ExceptionHandlerInterceptor implements Interceptor {
 
 		reportException(e);
 
-		logger.debug("handling exception {}", e.getClass());
+		logger.debug("handling exception {}", e);
 		exresult.replay(result);
 
 		return true;

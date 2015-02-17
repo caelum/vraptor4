@@ -82,19 +82,9 @@ Se você não quiser usar o Maven, basta criar um projeto em branco na sua IDE p
 
 ### CDI
 
-Esta é a dependência mais importante do VRaptor 4. Se você usa um Application Server, ele já possui esta dependência, portanto você pode declarar no seu `pom.xml` como `provided` conforme exemplo:
+Esta é a dependência mais importante do VRaptor 4. Se você usa um servidor de aplicação, que já possui essa dependência, você não precisará declará-la novamente em seu `pom.xml`. 
 
-~~~
-#!xml
-<dependency>
-	<groupId>javax.inject</groupId>
-	<artifactId>javax.inject</artifactId>
-	<version>1</version>
-	<scope>provided</scope>
-</dependency>
-~~~
-
-E se você utiliza um Servlet Container (como o Tomcat ou Jetty) você precisa remover a linha `<scope>provided</scope>` da dependência `javax.inject` e adicionar a implementação de referência do CDI: o Weld.
+Caso você utilize um Servlet Container (como o Tomcat ou Jetty), você precisará adicionar a implementação de referência do CDI: o Weld.
 
 ~~~
 #!xml

@@ -98,22 +98,9 @@ available in a `zip` file in our <a href="/en/download">downloads page</a>.
 
 ### CDI
 
-This is the most important dependency of VRaptor 4. If you use an Application Server,
-this dependency is already included, so you should declare CDI dependency with scope 
-`provided` in your `pom.xml`:
+This is the most important dependency of VRaptor 4. If you're using an Application Server, that already includes this dependency, you don't need to declare it again in your `pom.xml`.
 
-~~~
-#!xml
-<dependency>
-	<groupId>javax.inject</groupId>
-	<artifactId>javax.inject</artifactId>
-	<version>1</version>
-	<scope>provided</scope>
-</dependency>
-~~~
-
-If you are using a Servlet Container (such as Tomcat or Jetty) you need to remove line `<scope>provided</scope>` from `javax.inject` dependency and add
-the reference implementation of CDI: Weld.
+If you are using a Servlet Container (such as Tomcat or Jetty), you need to add the reference implementation of CDI: Weld.
 
 ~~~
 #!xml

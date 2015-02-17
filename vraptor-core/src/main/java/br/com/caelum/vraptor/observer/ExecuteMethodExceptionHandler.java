@@ -4,7 +4,10 @@ import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.core.ReflectionProviderException;
 import br.com.caelum.vraptor.interceptor.ApplicationLogicException;
 import br.com.caelum.vraptor.validator.ValidationException;
+
 import org.slf4j.Logger;
+
+import com.google.common.base.Throwables;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
@@ -33,6 +36,7 @@ public class ExecuteMethodExceptionHandler {
 			// fine... already parsed
 			log.trace("swallowing {}", cause);
 		} else {
+			Throwables.propagateIfPossible(alternativeCause);
 			throw new ApplicationLogicException(alternativeCause);
 		}
 	}

@@ -20,7 +20,8 @@ public class ExecuteMethodExceptionHandler {
 	private final static Logger log = getLogger(ExecuteMethodExceptionHandler.class);
 
 	public void handle(Exception exception) {
-		if (exception instanceof IllegalArgumentException) {
+		if (exception instanceof IllegalArgumentException
+				|| exception instanceof IllegalStateException) {
 			throw new InterceptionException(exception);
 		}
 		if (exception instanceof ReflectionProviderException) {

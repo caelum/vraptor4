@@ -31,6 +31,7 @@ import br.com.caelum.vraptor.validator.Message;
 import br.com.caelum.vraptor.validator.Messages;
 import br.com.caelum.vraptor.validator.ValidationException;
 import br.com.caelum.vraptor.validator.Validator;
+
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -39,6 +40,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import javax.enterprise.event.Event;
+
 import java.lang.reflect.Method;
 import java.util.Collections;
 
@@ -138,17 +140,27 @@ public class ExecuteMethodTest {
 	}
 
 	@Test
-	public void shouldThrowApplicationLogicExceptionIfItsABusinessException() throws Exception {
+	public void shouldThrowApplicationLogicExceptionIfItsACheckedException() throws Exception {
 		Method method = AnyController.class.getDeclaredMethod("throwException");
 		ControllerMethod controllerMethod = instanceFor(AnyController.class, method);
 		AnyController controller = new AnyController(validator);
 
 		expected.expect(ApplicationLogicException.class);
-		expected.expectCause(any(TestException.class));
+		expected.expectCause(any(TestCheckedException.class));
 		observer.execute(new InterceptorsExecuted(controllerMethod, controller));
 		verify(messages).assertAbsenceOfErrors();
 	}
-	
+
+	@Test
+	public void shouldThrowTheBusinessExceptionIfItsUnChecked() throws Exception {
+		Method method = AnyController.class.getDeclaredMethod("throwUnCheckedException");
+		ControllerMethod controllerMethod = instanceFor(AnyController.class, method);
+		AnyController controller = new AnyController(validator);
+
+		expected.expect(TestException.class);
+		observer.execute(new InterceptorsExecuted(controllerMethod, controller));
+		verify(messages).assertAbsenceOfErrors();
+	}
 
 	public static class AnyController {
 		private final Validator validator;
@@ -162,10 +174,14 @@ public class ExecuteMethodTest {
 		public void specifiedWhereToGo() {
 			this.validator.onErrorUse(nothing());
 		}
-		public void throwException() {
+		public void throwException() throws Exception {
+			throw new TestCheckedException();
+		}
+		public void throwUnCheckedException() {
 			throw new TestException();
 		}
 	}
 
 	private static class TestException extends RuntimeException {}
+	private static class TestCheckedException extends Exception {}
 }

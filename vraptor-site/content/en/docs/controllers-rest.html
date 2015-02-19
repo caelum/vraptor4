@@ -409,6 +409,8 @@ With this you can do a `POST` request with `application/json` content-type, prov
 {"customer":{"id":3,"name":"Paulo"}}
 ~~~ 
 
+As our JSON has an root element, VRaptor will fill the parameter with the name of the root -- in this case `customer`.
+
 You can also consumes a JSON without root element, as example below:
 
 ~~~ 
@@ -416,8 +418,10 @@ You can also consumes a JSON without root element, as example below:
 {"id":3,"name":"Paulo"}
 ~~~ 
 
-VRaptor will take care of converting this data automatically to your `customer` object.
+VRaptor will take care of converting this data automatically to your `customer` object, but in that case, since it has no root element, it's required for `Customer` being the first parameter of the method. 
 
+In other words, deserialization with root will fill the parameter with the name of the root, and on the other hand, deserialization without root will fill the first parameter of your controller method.
+ 
 If the JSON has any property with the same name of some of method parameters, you need to add `WithoutRoot` class into `options` property from `@Consumes` annotation to force deserialization without root element.
 
 ~~~ 

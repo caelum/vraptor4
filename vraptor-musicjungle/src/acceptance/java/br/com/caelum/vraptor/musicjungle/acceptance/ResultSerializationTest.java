@@ -26,7 +26,7 @@ public class ResultSerializationTest extends AcceptanceTestCase{
 	
 	@Before
 	public void setUpBeforeClass() {
-		loginPage().createAndloginAsUser("vraptortest");
+		loginPage().loginAsUser("vraptor");
 		HomePage page = homePage();
 		this.mozart = new MusicBuilder(1, "Mozart - Symphony #40", "Mozart", CLASSICAL).create();
 		this.beethoven = new MusicBuilder(2, "Moonlight Sonata", "Beethoven", CLASSICAL).create();
@@ -68,19 +68,19 @@ public class ResultSerializationTest extends AcceptanceTestCase{
 	}
 
 	private String getExpectedXml() {
-		return "<list>\n"+
-				"  <music>\n"+
-				"    <id>1</id>\n"+
-				"    <title>"+ mozart.getTitle() +"</title>\n"+
-				"    <description>"+ mozart.getDescription() +"</description>\n"+
-				"    <type>"+ mozart.getType().toString() +"</type>\n"+
-				"  </music>\n"+
-				"  <music>\n"+
-				"    <id>2</id>\n"+
-				"    <title>"+ beethoven.getTitle() +"</title>\n"+
-				"    <description>"+ beethoven.getDescription() +"</description>\n"+
-				"    <type>"+ beethoven.getType().toString() +"</type>\n"+
-				"  </music>\n"+
+		return "<list>"+
+				"<music>"+
+				"<id>1</id>"+
+				"<title>"+ mozart.getTitle() +"</title>"+
+				"<description>"+ mozart.getDescription() +"</description>"+
+				"<type>"+ mozart.getType().toString() +"</type>"+
+				"</music>"+
+				"<music>"+
+				"<id>2</id>"+
+				"<title>"+ beethoven.getTitle() +"</title>"+
+				"<description>"+ beethoven.getDescription() +"</description>"+
+				"<type>"+ beethoven.getType().toString() +"</type>"+
+				"</music>"+
 				"</list>";
 	}
 	

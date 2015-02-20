@@ -61,16 +61,18 @@ public class DateConverter implements Converter<Date> {
 		if (isNullOrEmpty(value)) {
 			return null;
 		}
-
-		try {
-			return getDateFormat().parse(value);
-
-		} catch (ParseException pe) {
-			throw new ConversionException(new ConversionMessage(INVALID_MESSAGE_KEY, value));
+		
+		DateFormat formatDateTime = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.MEDIUM, locale);  
+		try {  
+			return formatDateTime.parse(value);  
+		} catch (ParseException pe) {  
+				DateFormat formatDate = DateFormat.getDateInstance(DateFormat.SHORT, locale);  
+			try {  
+				return formatDate.parse(value);  
+			} catch (ParseException pe1) {  
+				throw new ConversionException(new ConversionMessage(INVALID_MESSAGE_KEY, value));
+			}
 		}
 	}
 
-	protected DateFormat getDateFormat() {
-		return DateFormat.getDateInstance(DateFormat.SHORT, locale);
-	}
 }

@@ -476,4 +476,16 @@ public void add(Customer customer) {
 }
 ~~~
 
+Anytime you use `Result.on(...)` like that, the exception handler will intercept your exception and leave it accessible as a request attribute named `exception`.  This means that in your 'form.jsp`, for instance, you can do something like:
+
+~~~ 
+#!jsp
+<c:if test="${not empty exception}">
+The following error occurred: ${exception.message}
+</c:if>
+~~~ 
+
+
+## Monitoring the exceptions of your project
+
 You can also use the [vraptor-error-control](http://www.vraptor.org/en/docs/plugins/#vraptor-error-control) plugin, that allows you to real time control error messages sending them by email.

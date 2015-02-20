@@ -447,4 +447,16 @@ public void adicionar(Cliente cliente) {
 }
 ~~~
 
+Sempre que você utilizar o `Result.on(...)` dessa forma, o exception handler vai interceptar sua exceção e deixá-la acessível como um atributo da request, chamado `exception`. Isso significa que em seu `formulario.jsp`, por exemplo, você poderá fazer algo como:
+
+~~~ 
+#!jsp
+<c:if test="${not empty exception}">
+O seguinte erro ocorreu: ${exception.message}
+</c:if>
+~~~ 
+
+
+## Monitorando as exceções do seu projeto
+
 Se quiser, você também pode usar o plugin [vraptor-error-control](http://www.vraptor.org/pt/docs/plugins/#vraptor-error-control) para acompanhar as exceptions que acontecem em sua aplicação em tempo real. Ele te envia um e-mail com a mensagem de erro. 

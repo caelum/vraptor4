@@ -36,7 +36,7 @@ public class MessagesTest {
 
 	@Test
 	public void shouldThrowExceptionIfMessagesHasUnhandledErrors() {
-		exception.expect(IllegalStateException.class);
+		exception.expect(ValidationFailedException.class);
 		exception.expectMessage(containsString("There are validation errors and you forgot to specify where to go."));
 
 		messages.add(new SimpleMessage("Test", "Test message"));

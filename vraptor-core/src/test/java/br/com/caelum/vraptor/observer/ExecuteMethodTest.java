@@ -29,7 +29,9 @@ import br.com.caelum.vraptor.interceptor.ApplicationLogicException;
 import br.com.caelum.vraptor.interceptor.DogAlike;
 import br.com.caelum.vraptor.validator.Message;
 import br.com.caelum.vraptor.validator.Messages;
+import br.com.caelum.vraptor.validator.ValidationFailedException;
 import br.com.caelum.vraptor.validator.ValidationException;
+import br.com.caelum.vraptor.validator.ValidationFailedException;
 import br.com.caelum.vraptor.validator.Validator;
 
 import org.junit.Before;
@@ -128,12 +130,12 @@ public class ExecuteMethodTest {
 
 	@Test
 	public void shouldThrowExceptionIfYouHaventSpecifiedWhereToGoOnValidationError() throws Exception {
-		exception.expect(InterceptionException.class);
+		exception.expect(ValidationFailedException.class);
 
 		Method didntSpecifyWhereToGo = AnyController.class.getMethod("didntSpecifyWhereToGo");
 		final ControllerMethod method = DefaultControllerMethod.instanceFor(AnyController.class, didntSpecifyWhereToGo);
 		final AnyController controller = new AnyController(validator);
-		doThrow(new IllegalStateException()).when(messages).assertAbsenceOfErrors();
+		doThrow(new ValidationFailedException("")).when(messages).assertAbsenceOfErrors();
 		when(methodInfo.getParametersValues()).thenReturn(new Object[0]);
 
 		observer.execute(new InterceptorsExecuted(method, controller));

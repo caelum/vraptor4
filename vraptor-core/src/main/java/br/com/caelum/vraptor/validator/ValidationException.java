@@ -21,6 +21,8 @@ import java.util.List;
 
 import javax.ejb.ApplicationException;
 
+import br.com.caelum.vraptor.VRaptorException;
+
 /**
  * If some validation error occur, its encapsulated within an instance of
  * ValidationException, which is then throw and parsed.
@@ -29,7 +31,7 @@ import javax.ejb.ApplicationException;
  */
 //just for the javaee container understands this as a Business Exception
 @ApplicationException
-public class ValidationException extends RuntimeException {
+public class ValidationException extends VRaptorException {
 
 	/**
 	 * Serialized id.

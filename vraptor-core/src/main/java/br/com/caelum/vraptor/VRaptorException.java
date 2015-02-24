@@ -28,6 +28,9 @@ import javax.enterprise.inject.Vetoed;
 public class VRaptorException extends RuntimeException {
 	private static final long serialVersionUID = -8040463849613736889L;
 
+	public VRaptorException() {
+	}
+	
 	public VRaptorException(Throwable e) {
 		super(e);
 	}

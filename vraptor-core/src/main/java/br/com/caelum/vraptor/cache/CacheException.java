@@ -17,8 +17,10 @@ package br.com.caelum.vraptor.cache;
 
 import javax.enterprise.inject.Vetoed;
 
+import br.com.caelum.vraptor.VRaptorException;
+
 @Vetoed
-public class CacheException extends RuntimeException {
+public class CacheException extends VRaptorException {
 
 	private static final long serialVersionUID = 1L;
 

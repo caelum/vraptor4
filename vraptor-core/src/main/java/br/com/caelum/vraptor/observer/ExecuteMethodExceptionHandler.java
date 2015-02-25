@@ -1,12 +1,14 @@
 package br.com.caelum.vraptor.observer;
 
-import br.com.caelum.vraptor.InterceptionException;
+import static org.slf4j.LoggerFactory.getLogger;
+
+import org.slf4j.Logger;
+
 import br.com.caelum.vraptor.core.ReflectionProviderException;
 import br.com.caelum.vraptor.interceptor.ApplicationLogicException;
 import br.com.caelum.vraptor.validator.ValidationException;
-import org.slf4j.Logger;
 
-import static org.slf4j.LoggerFactory.getLogger;
+import com.google.common.base.Throwables;
 
 /**
  * Handles exceptions thrown by a controller method
@@ -17,9 +19,6 @@ public class ExecuteMethodExceptionHandler {
 	private final static Logger log = getLogger(ExecuteMethodExceptionHandler.class);
 
 	public void handle(Exception exception) {
-		if (exception instanceof IllegalArgumentException) {
-			throw new InterceptionException(exception);
-		}
 		if (exception instanceof ReflectionProviderException) {
 			throwIfNotValidationException(exception, exception.getCause());
 		}
@@ -33,6 +32,7 @@ public class ExecuteMethodExceptionHandler {
 			// fine... already parsed
 			log.trace("swallowing {}", cause);
 		} else {
+			Throwables.propagateIfPossible(alternativeCause);
 			throw new ApplicationLogicException(alternativeCause);
 		}
 	}

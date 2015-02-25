@@ -105,7 +105,7 @@ public class Messages {
 		if (hasUnhandledErrors()) {
 			log.debug("Some validation errors occured: {}", getErrors());
 			
-			throw new IllegalStateException(
+			throw new ValidationFailedException(
 				"There are validation errors and you forgot to specify where to go. Please add in your method "
 				+ "something like:\n"
 				+ "validator.onErrorUse(page()).of(AnyController.class).anyMethod();\n"

@@ -581,7 +581,6 @@ public class IogiParametersProviderTest {
 	protected static class MyResource {
 		public MyResource() { }
 		void buyA(House house) { }
-		void kick(AngryCat angryCat) { }
 		void error(WrongCat wrongCat) { }
 		void array(Long[] abc) { }
 		void list(List<Long> abc) { }
@@ -731,16 +730,6 @@ public class IogiParametersProviderTest {
 			this.street = street;
 		}
 		
-	}
-
-	public static class AngryCat {
-		public void setId(String id) {
-			throw new RuntimeException("AngryCat Exception");
-		}
-
-		public String getId() {
-			throw new RuntimeException("AngryCat Exception");
-		}
 	}
 
 	public static class WrongCat {

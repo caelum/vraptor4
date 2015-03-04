@@ -18,7 +18,7 @@ package br.com.caelum.vraptor.util;
 import br.com.caelum.vraptor.VRaptorException;
 
 /**
- * This exception is thrown when we have some problem trying to merge to objects
+ * This exception is thrown when we have some problem trying to merge objects
  *
  * @author Nykolas Lima
  */

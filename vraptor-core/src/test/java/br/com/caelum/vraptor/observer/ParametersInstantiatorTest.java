@@ -50,6 +50,7 @@ import br.com.caelum.vraptor.events.InterceptorsReady;
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.http.ParametersProvider;
 import br.com.caelum.vraptor.http.ParanamerNameProvider;
+import br.com.caelum.vraptor.util.ObjectMerger;
 import br.com.caelum.vraptor.validator.Message;
 import br.com.caelum.vraptor.validator.SimpleMessage;
 import br.com.caelum.vraptor.validator.Validator;
@@ -66,30 +67,36 @@ public class ParametersInstantiatorTest {
 	private @Mock ResourceBundle bundle;
 	private @Mock MutableRequest request;
 	private @Mock FlashScope flash;
+	private ObjectMerger objectMerger;
 
 	private List<Message> errors ;
 	private ParametersInstantiator instantiator;
 
 	private ControllerMethod method;
 	private ControllerMethod otherMethod;
+	private ControllerMethod addClientMethod;
 
 	@Before
 	@SuppressWarnings("unchecked")
 	public void setup() throws Exception {
 		MockitoAnnotations.initMocks(this);
 		when(request.getParameterNames()).thenReturn(Collections.<String> emptyEnumeration());
+		objectMerger = new ObjectMerger();
 
-		this.instantiator = new ParametersInstantiator(parametersProvider, methodInfo, validator, request, flash);
+		this.instantiator = new ParametersInstantiator(parametersProvider, methodInfo, validator, request, flash, objectMerger);
 
 		this.errors = (List<Message>) new Mirror().on(instantiator).get().field("errors");
 		this.method = DefaultControllerMethod.instanceFor(Component.class, Component.class.getDeclaredMethod("method"));
 		this.otherMethod = DefaultControllerMethod.instanceFor(Component.class, Component.class.getDeclaredMethod("otherMethod", int.class));
+		this.addClientMethod = DefaultControllerMethod.instanceFor(Component.class, Component.class.getDeclaredMethod("addClient", Client.class));
 	}
 
 	class Component {
 		void method() {
 		}
 		void otherMethod(int oneParam){
+		}
+		void addClient(Client client) {
 		}
 	}
 
@@ -216,6 +223,50 @@ public class ParametersInstantiatorTest {
 
 		verify(request, never()).setParameter(anyString(), anyString());
 		verify(validator).addAll(Collections.<Message>emptyList());
+	}
+	
+	@Test
+	public void shouldOverrideParameterAttributeAlreadyInstantiatedAndDoNotOverrideIfValueIsNull() {
+		methodInfo.setControllerMethod(addClientMethod);
+		
+		Client client = new Client(1, "nykolas");
+		methodInfo.setParameter(0, client);
+		
+		Client pathParamClient = new Client(2, null);
+		Object[] pathParamValues = new Object[] { pathParamClient };
+
+		when(parametersProvider.getParametersFor(addClientMethod, errors)).thenReturn(pathParamValues);
+
+		instantiator.instantiate(new InterceptorsReady(otherMethod));
+
+		verify(validator).addAll(Collections.<Message> emptyList());
+
+		Client instantiatedClient = (Client) methodInfo.getValuedParameters()[0].getValue();
+		assertEquals(2, instantiatedClient.getId().intValue());
+		assertEquals("nykolas", instantiatedClient.getName());
+	}
+	
+	public class Client {
+		public Integer id;
+		public String name;
+
+		public Client(Integer id, String nome) {
+			this.id = id;
+			this.name = nome;
+		}
+
+		public Integer getId() {
+			return id;
+		}
+		public String getName() {
+			return name;
+		}
+		public void setId(Integer id) {
+			this.id = id;
+		}
+		public void setName(String name) {
+			this.name = name;
+		}
 	}
 	
 	private <T> Answer<T> addErrorsToListAndReturn(final T value, final String... messages) {

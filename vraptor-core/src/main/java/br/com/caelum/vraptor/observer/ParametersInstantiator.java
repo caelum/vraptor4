@@ -38,6 +38,7 @@ import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.http.Parameter;
 import br.com.caelum.vraptor.http.ParametersProvider;
 import br.com.caelum.vraptor.http.ValuedParameter;
+import br.com.caelum.vraptor.util.ObjectMerger;
 import br.com.caelum.vraptor.validator.Message;
 import br.com.caelum.vraptor.validator.Validator;
 import br.com.caelum.vraptor.view.FlashScope;
@@ -59,6 +60,7 @@ public class ParametersInstantiator {
 	private final Validator validator;
 	private final MutableRequest request;
 	private final FlashScope flash;
+	private final ObjectMerger objectMerger;
 
 	private final List<Message> errors = new ArrayList<>();
 
@@ -66,17 +68,18 @@ public class ParametersInstantiator {
 	 * @deprecated CDI eyes only
 	 */
 	protected ParametersInstantiator() {
-		this(null, null, null, null, null);
+		this(null, null, null, null, null, null);
 	}
 
 	@Inject
 	public ParametersInstantiator(ParametersProvider provider, MethodInfo methodInfo, Validator validator, 
-			MutableRequest request, FlashScope flash) {
+			MutableRequest request, FlashScope flash, ObjectMerger objectMerger) {
 		this.provider = provider;
 		this.methodInfo = methodInfo;
 		this.validator = validator;
 		this.request = request;
 		this.flash = flash;
+		this.objectMerger = objectMerger;
 	}
 
 	public void instantiate(@Observes InterceptorsReady event) {
@@ -101,8 +104,14 @@ public class ParametersInstantiator {
 				valuedParameters[i].setValue(request.getHeader(headerParam.value()));
 			} else {
 				ValuedParameter valuedParameter = valuedParameters[i];
-				if (valuedParameter.getValue() == null) {
-					valuedParameter.setValue(values[i]);
+				Object existingValue = valuedParameter.getValue();
+				Object value = values[i];
+				
+				if (existingValue == null) {
+					valuedParameter.setValue(value);
+				} else {
+					Object mergedValue = objectMerger.merge(existingValue, value);
+					valuedParameter.setValue(mergedValue);
 				}
 			}
 		}

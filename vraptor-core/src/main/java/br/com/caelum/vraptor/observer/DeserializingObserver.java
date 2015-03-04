@@ -33,9 +33,11 @@ import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.events.InterceptorsReady;
 import br.com.caelum.vraptor.events.MethodReady;
+import br.com.caelum.vraptor.http.ValuedParameter;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.serialization.Deserializer;
 import br.com.caelum.vraptor.serialization.Deserializers;
+import br.com.caelum.vraptor.util.ObjectMerger;
 import br.com.caelum.vraptor.view.Status;
 
 /**
@@ -51,6 +53,7 @@ public class DeserializingObserver {
 
 	private final Deserializers deserializers;
 	private final Container container;
+	private final ObjectMerger objectMerger;
 
 	private static final Logger logger = getLogger(DeserializingObserver.class);
 
@@ -58,13 +61,14 @@ public class DeserializingObserver {
 	 * @deprecated CDI eyes only
 	 */
 	protected DeserializingObserver() {
-		this(null, null);
+		this(null, null, null);
 	}
 
 	@Inject
-	public DeserializingObserver(Deserializers deserializers, Container container) {
+	public DeserializingObserver(Deserializers deserializers, Container container, ObjectMerger objectMerger) {
 		this.deserializers = deserializers;
 		this.container = container;
+		this.objectMerger = objectMerger;
 	}
 
 	public void deserializes(@Observes InterceptorsReady event, HttpServletRequest request,
@@ -96,9 +100,20 @@ public class DeserializingObserver {
 		Object[] deserialized = deserializer.deserialize(request.getInputStream(), method);
 		logger.debug("Deserialized parameters for {} are {} ", method, deserialized);
 
+		ValuedParameter[] valuedParameters = methodInfo.getValuedParameters();
+		
 		for (int i = 0; i < deserialized.length; i++) {
 			if (deserialized[i] != null) {
-				methodInfo.setParameter(i, deserialized[i]);
+				ValuedParameter valuedParameter = valuedParameters[i];
+				Object existingValue = valuedParameter.getValue();
+				Object deserializedValue = deserialized[i];
+				
+				if (existingValue == null) {
+					methodInfo.setParameter(i, deserializedValue);
+				} else {
+					Object mergedValue = objectMerger.merge(deserializedValue, existingValue);
+					methodInfo.setParameter(i, mergedValue);
+				}
 			}
 		}
 	}

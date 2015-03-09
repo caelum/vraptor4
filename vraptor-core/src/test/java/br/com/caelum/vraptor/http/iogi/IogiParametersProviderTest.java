@@ -36,7 +36,6 @@ import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.emptyArray;
 import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
@@ -83,7 +82,6 @@ import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.http.ParametersProvider;
 import br.com.caelum.vraptor.http.ParanamerNameProvider;
 import br.com.caelum.vraptor.ioc.Container;
-import br.com.caelum.vraptor.validator.DefaultValidationException;
 import br.com.caelum.vraptor.validator.Message;
 
 import com.google.common.collect.ImmutableMap;
@@ -232,14 +230,6 @@ public class IogiParametersProviderTest {
 
 		assertThat(house.owners, hasSize(1));
 		assertThat(house.owners.get(0), is(equalTo("guilherme")));
-	}
-
-	@Test
-	public void addsValidationMessageWhenSetterFailsWithAValidationException() throws Exception {
-		requestParameterIs("angryCat.id", "guilherme");
-		getFirstParameterFor(method("kick", AngryCat.class));
-
-		assertThat(errors.size(), is(greaterThan(0)));
 	}
 
 	@Test
@@ -591,7 +581,6 @@ public class IogiParametersProviderTest {
 	protected static class MyResource {
 		public MyResource() { }
 		void buyA(House house) { }
-		void kick(AngryCat angryCat) { }
 		void error(WrongCat wrongCat) { }
 		void array(Long[] abc) { }
 		void list(List<Long> abc) { }
@@ -741,16 +730,6 @@ public class IogiParametersProviderTest {
 			this.street = street;
 		}
 		
-	}
-
-	public static class AngryCat {
-		public void setId(String id) {
-			throw new DefaultValidationException("AngryCat Exception");
-		}
-
-		public String getId() {
-			throw new DefaultValidationException("AngryCat Exception");
-		}
 	}
 
 	public static class WrongCat {

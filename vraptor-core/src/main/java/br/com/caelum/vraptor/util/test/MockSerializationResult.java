@@ -70,7 +70,7 @@ public class MockSerializationResult extends MockResult {
 
 
 	/**
-	 * @deprecated Prefer using {@link MockSerializationResult#MockSerializationResult(Proxifier, XStreamBuilder, GsonSerializerBuilder, Environment)}
+	 * @deprecated Prefer using {@link MockSerializationResult#MockSerializationResult(Proxifier, XStreamBuilder, GsonSerializerBuilder, Environment, ReflectionProvider)}
 	 * that provides a {@link Environment}.
 	 */
 	public MockSerializationResult(Proxifier proxifier, XStreamBuilder xstreambuilder, GsonSerializerBuilder gsonBuilder, ReflectionProvider reflectionProvider) {

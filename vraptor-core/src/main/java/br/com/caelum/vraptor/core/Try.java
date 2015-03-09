@@ -7,16 +7,7 @@ import java.util.concurrent.Callable;
  *
  * Use the static method Try#run to instantiate this class, passing down
  * the dangerous code and use its methods to retrieve the result or the exception
- * of your computation. Example using java 8:
- *
- * <code>
- *     Try try = Try.run(() -> someDangerousMethod());
- *     if (try.failed()) {
- *         Exception e = try.getException();
- *         handleError(e);
- *     }
- *     try.result(); //do something with the result
- * </code>
+ * of your computation. 
  *
  * @author Chico Sokol
  * @param <T> the type of the result of your computation

@@ -80,7 +80,7 @@ public class LinkToHandler extends ForwardingMap<Class<?>, Object> {
 	private final Proxifier proxifier;
 	private final ReflectionProvider reflectionProvider;
 
-	private ConcurrentMap<Class<?>, Class<?>> interfaces = new ConcurrentHashMap<>();
+	private ConcurrentMap<Class<?>, Object> interfaces = new ConcurrentHashMap<>();
 
 	/** 
 	 * @deprecated CDI eyes only
@@ -115,35 +115,37 @@ public class LinkToHandler extends ForwardingMap<Class<?>, Object> {
 		
 		BeanClass beanClass = (BeanClass) key;
 		final Class<?> controller = beanClass.getType();
-		Class<?> linkToInterface = interfaces.get(controller);
-		if (linkToInterface == null) {
+		Object linkToProxy = interfaces.get(controller);
+		if (linkToProxy == null) {
 			logger.debug("interface not found, creating one {}", controller);
 
 			lock.lock();
 			try {
-				linkToInterface = interfaces.get(controller);
-				if (linkToInterface == null) {
+				linkToProxy = interfaces.get(controller);
+				if (linkToProxy == null) {
 					String path = context.getContextPath().replace('/', '$');
 					String interfaceName = controller.getName() + "$linkTo" + path;
-					linkToInterface = createLinkToInterface(controller, interfaceName);
-					interfaces.put(controller, linkToInterface);
+					Class<?> linkToInterface = createLinkToInterface(controller, interfaceName);
 
 					logger.debug("created interface {} to {}", interfaceName, controller);
+					
+					linkToProxy = proxifier.proxify(linkToInterface, new MethodInvocation<Object>() {
+						@Override
+						public Object intercept(Object proxy, Method method, Object[] args, SuperMethod superMethod) {
+							String methodName = StringUtils.decapitalize(method.getName().replaceFirst("^get", ""));
+							List<Object> params = args.length == 0 ? Collections.emptyList() : Arrays.asList(args);
+							return linker(controller, methodName, params).getLink();
+						}
+					});
+					
+					interfaces.put(controller, linkToProxy);
 				}
 			} finally {
 				lock.unlock();
 			}
 		}
 
-		return proxifier.proxify(linkToInterface, new MethodInvocation<Object>() {
-			@Override
-			public Object intercept(Object proxy, Method method, Object[] args, SuperMethod superMethod) {
-				String methodName = StringUtils.decapitalize(method.getName().replaceFirst("^get", ""));
-				List<Object> params = args.length == 0 ? Collections.emptyList() : Arrays.asList(args);
-				return linker(controller, methodName, params).getLink();
-			}
-
-		});
+		return linkToProxy;
 	}
 
 	protected Linker linker(final Class<?> controller,
@@ -227,11 +229,11 @@ public class LinkToHandler extends ForwardingMap<Class<?>, Object> {
 	@PreDestroy
 	public void removeGeneratedClasses() {
 		ClassPool pool = ClassPool.getDefault();
-		for (Class<?> clazz : interfaces.values()) {
-			CtClass ctClass = pool.getOrNull(clazz.getName());
+		for (Object proxyInstance : interfaces.values()) {
+			CtClass ctClass = pool.getOrNull(proxyInstance.getClass().getName());
 			if (ctClass != null) {
 				ctClass.detach();
-				logger.debug("class {} is detached", clazz.getName());
+				logger.debug("class {} is detached", proxyInstance.getClass().getName());
 			}
 		}
 	}

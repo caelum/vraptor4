@@ -21,8 +21,6 @@ import static br.com.caelum.vraptor.view.Results.logic;
 import static br.com.caelum.vraptor.view.Results.page;
 import static com.google.common.base.Preconditions.checkState;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 
 import javax.enterprise.context.RequestScoped;
@@ -94,19 +92,11 @@ public class DefaultRefererResult implements RefererResult {
 	}
 
 	private String getReferer() {
-	    String referer = request.getHeader("Referer");
-	    checkState(referer != null, "The Referer header was not specified");
-	    
-	    String refererPath = referer;
-		try {
-		    refererPath = new URL(referer).getPath();
-		} catch(MalformedURLException e) {
-		    //Maybe a relative path?
-		    refererPath = referer;
-		}
+		String referer = request.getHeader("Referer");
+		checkState(referer != null, "The Referer header was not specified");
 
 		String path = request.getContextPath();
-		return refererPath.substring(refererPath.indexOf(path) + path.length());
+		return referer.substring(referer.indexOf(path) + path.length());
 	}
 
 }

@@ -105,7 +105,10 @@ public class DefaultRefererResult implements RefererResult {
 			refererPath = referer;
 		}
 		String ctxPath = request.getContextPath();
-		return refererPath.substring(refererPath.indexOf(ctxPath) + ctxPath.length());
+		
+		//if the context path is not in the beggining we should return the entire path
+		//this is useful for proxied app servers which hide the ctx path from url
+		return refererPath.startsWith(ctxPath) ? refererPath.substring(ctxPath.length()) : refererPath;
 	}
 
 }

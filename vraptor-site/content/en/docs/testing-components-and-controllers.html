@@ -94,6 +94,42 @@ public void shouldHaveSuccessMessage() {
 
 Note that any call of the type `result.use(...)` will be ignored.
 
+##MockSerializationResult
+
+Very similar to `MockResult` with a difference that we can get the serialized content of `Result`.
+
+In your `PersonControllerTest` class the `result` should have the type `MockSerializationResult`, like this:
+
+~~~
+#!java
+private MockSerializationResult result;
+~~~
+
+Consider the following `PersonController`'s method:
+
+~~~
+#!java
+@Post("/person/serialize")
+public void serialize(Person person) {
+	result.use(Results.json()).from(person).serialize();
+}
+~~~
+
+In your test you can do something like:
+
+~~~
+#!java
+@Test
+public void shouldSerializePerson() {
+	Person person = new Person();
+	person.setName("Renan Montenegro");
+	
+	controller.serialize(person);
+	
+	Assert.assertEquals("{\"person\": {\"name\": \"Renan Montenegro\"}}", result.serializedResult());
+}
+~~~
+
 ##MockValidator
 
 The `MockValidator` will execute the validation accumulating possible errors. To retrieve them you can use the method `getErrors()` as you can see in the example:

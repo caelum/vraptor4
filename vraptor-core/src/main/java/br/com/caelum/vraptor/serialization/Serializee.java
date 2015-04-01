@@ -168,7 +168,7 @@ public class Serializee {
 		return field;
 	}
 
-	private static Class<?> getActualType(Type genericType) {
+	protected static Class<?> getActualType(Type genericType) {
 		if (genericType instanceof ParameterizedType) {
 			ParameterizedType type = (ParameterizedType) genericType;
 

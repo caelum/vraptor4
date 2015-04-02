@@ -168,7 +168,7 @@ public class Serializee {
 		return field;
 	}
 
-	protected static Class<?> getActualType(Field field) {
+	protected Class<?> getActualType(Field field) {
 		
 		Type genericType = field.getGenericType();
 	

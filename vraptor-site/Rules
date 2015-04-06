@@ -13,6 +13,7 @@ def stylized(*archive, layout)
   archive.each do |a|
     compile a do
       if layout
+        filter :erb
         filter :kramdown
         filter :colorize_syntax, :default_colorizer => :pygmentsrb
         layout layout

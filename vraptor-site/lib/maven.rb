@@ -20,12 +20,16 @@ class Maven
     if doc['numFound'] > 0
       doc['docs'][0]['latestVersion']
     else
-      'VERSION'
+      'LATEST_VERSION'
     end
   end
 
   def self.vraptor_version
   	self.latest_version('br.com.caelum', 'vraptor')
+  end
+
+  def self.plugin_version(artifact_id)
+    self.latest_version('br.com.caelum.vraptor', artifact_id)
   end
   
 end

@@ -1,6 +1,21 @@
-#VRaptor 4
+![image](https://cloud.githubusercontent.com/assets/1529021/7015058/0844e14c-dca4-11e4-8d7b-e0546b6ec74d.png)
 
-![Build status](https://secure.travis-ci.org/caelum/vraptor4.png)
+[![][travis img]][travis]
+[![][maven img]][maven]
+[![][release img]][release]
+[![][license img]][license]
+
+[travis]:https://travis-ci.org/caelum/vraptor4
+[travis img]:https://travis-ci.org/caelum/vraptor4.svg?branch=master
+
+[maven]:http://search.maven.org/#search|gav|1|g:"br.com.caelum"%20AND%20a:"vraptor"
+[maven img]:https://maven-badges.herokuapp.com/maven-central/br.com.caelum/vraptor/badge.svg
+
+[release]:https://github.com/caelum/vraptor4/releases
+[release img]:https://img.shields.io/github/release/caelum/vraptor4.svg
+
+[license]:LICENSE
+[license img]:https://img.shields.io/badge/License-Apache%202-blue.svg
 
 A web MVC action-based framework, on top of CDI, for fast and maintainable Java development. 
 

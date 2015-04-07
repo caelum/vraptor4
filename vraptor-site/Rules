@@ -38,6 +38,8 @@ stylized '/en/docs/*', '/en/documentation'
 
 stylized '/en/cookbook/*', '/en/cookbook'
 
+stylized '/sitemap', '/sitemap'
+
 stylized '/en/*', '/en/default'
 
 stylized '/*', '/pt/default'

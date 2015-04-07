@@ -18,7 +18,7 @@ Para usá-lo basta você copiar o jar para a sua aplicação, ou declarar o plug
 <dependency>
 	<groupId>br.com.caelum.vraptor</groupId>
 	<artifactId>vraptor-jpa</artifactId>
-	<version>4.0.2</version> <!-- ou a última versão disponível -->
+	<version><%= Maven.plugin_version('vraptor-jpa') %></version>
 </dependency>
 ~~~ 
 
@@ -61,7 +61,7 @@ Você pode adicioná-lo em seu projeto Maven conforme o trecho abaixo, ou copiar
 <dependency>
 	<groupId>br.com.caelum.vraptor</groupId>
 	<artifactId>vraptor-hibernate</artifactId>
-	<version>4.0.2</version> <!-- ou a última versão disponível -->
+	<version><%= Maven.plugin_version('vraptor-hibernate') %></version>
 </dependency>
 ~~~ 
 
@@ -77,7 +77,7 @@ Plugin de suporte para Java 8. Oferece converters para as classes do Java Time (
 <dependency>
 	<groupId>br.com.caelum.vraptor</groupId>
 	<artifactId>vraptor-java8</artifactId>
-	<version>4.0.0-RC2</version> <!-- ou a última versão disponível -->
+	<version><%= Maven.plugin_version('vraptor-java8') %></version>
 </dependency>
 ~~~ 
 
@@ -93,7 +93,7 @@ Permite envio de e-mails.
 <dependency>
 	<groupId>br.com.caelum.vraptor</groupId>
 	<artifactId>vraptor-simplemail</artifactId>
-	<version>4.0.0-RC2</version> <!-- ou a última versão disponível -->
+	<version><%= Maven.plugin_version('vraptor-simplemail') %></version>
 </dependency>
 ~~~ 
 
@@ -109,7 +109,7 @@ Joda-time é uma API para facilitar o trabalho de dados temporais em Java. Para 
 <dependency>
 	<groupId>br.com.caelum.vraptor</groupId>
 	<artifactId>vraptor-jodatime</artifactId>
-	<version>4.0.0.Final</version> <!-- ou a última versão disponível -->
+	<version><%= Maven.plugin_version('vraptor-jodatime') %></version>
 </dependency>
 ~~~
 
@@ -125,7 +125,7 @@ Controle dos erros de sua aplicação em tempo real com o envio de e-mail.
 <dependency>
 	<groupId>br.com.caelum.vraptor</groupId>
 	<artifactId>vraptor-error-control</artifactId>
-	<version>4.0.0.Final</version> <!-- ou a última versão disponível -->
+	<version><%= Maven.plugin_version('vraptor-error-control') %></version>
 </dependency>
 ~~~ 
 
@@ -141,7 +141,7 @@ Forma fácil de verificar as permissões de acesso das ações de seu controller
 <dependency>
 	<groupId>br.com.caelum.vraptor</groupId>
 	<artifactId>vraptor-brutauth</artifactId>
-	<version>4.0.1.Final</version> <!-- ou a última versão disponível -->
+	<version><%= Maven.plugin_version('vraptor-brutauth') %></version>
 </dependency>
 ~~~ 
 
@@ -157,7 +157,7 @@ Agendamento de tarefas com Quartz.
 <dependency>
 	<groupId>br.com.caelum.vraptor</groupId>
 	<artifactId>vraptor-quartzjob</artifactId>
-	<version>4.0.0.Final</version> <!-- ou a última versão disponível -->
+	<version><%= Maven.plugin_version('vraptor-quartzjob') %></version>
 </dependency>
 ~~~ 
 
@@ -173,7 +173,7 @@ Renderiza templates do Freemarker.
 <dependency>
 	<groupId>br.com.caelum.vraptor</groupId>
 	<artifactId>vraptor-freemarker</artifactId>
-	<version>4.0.0-RC2</version> <!-- ou a última versão disponível -->
+	<version><%= Maven.plugin_version('vraptor-freemarker') %></version>
 </dependency>
 ~~~ 
 
@@ -189,7 +189,7 @@ Dashboard com varias ferramentas para seus projetos VRaptor.
 <dependency>
 	<groupId>br.com.caelum.vraptor</groupId>
 	<artifactId>vraptor-dash</artifactId>
-	<version>4.1.0-RC2</version> <!-- ou a última versão disponível -->
+	<version><%= Maven.plugin_version('vraptor-dash') %></version>
 </dependency>
 ~~~ 
 
@@ -205,7 +205,7 @@ Alternativa para controle de acesso (autorização) de seus métodos do controll
 <dependency>
 	<groupId>br.com.caelum.vraptor</groupId>
 	<artifactId>vraptor-authz</artifactId>
-	<version>4.0.0-RC2</version> <!-- ou a última versão disponível -->
+	<version><%= Maven.plugin_version('vraptor-authz') %></version>
 </dependency>
 ~~~ 
 
@@ -221,7 +221,7 @@ Soluções de i18n na view
 <dependency>
 	<groupId>br.com.caelum.vraptor</groupId>
 	<artifactId>vraptor-i18n</artifactId>
-	<version>4.1.0-RC2</version> <!-- ou a última versão disponível -->
+	<version><%= Maven.plugin_version('vraptor-i18n') %></version>
 </dependency>
 ~~~ 
 
@@ -236,7 +236,7 @@ Facilmente possibilita a criação de testes de integração ou sistema.
 <dependency>
 	<groupId>br.com.caelum.vraptor</groupId>
 	<artifactId>vraptor-test</artifactId>
-	<version>4.0.0</version> <!-- ou a última versão disponível -->
+	<version><%= Maven.plugin_version('vraptor-test') %></version>
 </dependency>
 ~~~ 
 
@@ -251,7 +251,7 @@ Paginação eficiente de seus dados do JPA/Hibernate.
 <dependency>
 	<groupId>br.com.caelum.vraptor</groupId>
 	<artifactId>vraptor-paginator</artifactId>
-	<version>4.0.0</version> <!-- ou a última versão disponível -->
+	<version><%= Maven.plugin_version('vraptor-paginator') %></version>
 </dependency>
 ~~~ 
 
@@ -266,7 +266,7 @@ Um template engine typesafe escrito em Java.
 <dependency>
 	<groupId>br.com.caelum.vraptor</groupId>
 	<artifactId>vraptor-panettone</artifactId>
-	<version>4.0.0-RC1</version> <!-- ou a última versão disponível -->
+	<version><%= Maven.plugin_version('vraptor-panettone') %></version>
 </dependency>
 ~~~ 
 
@@ -281,7 +281,7 @@ I18n typesafe. Sem mais chaves esquecidas e exceptions pra você e seu cliente.
 <dependency>
 	<groupId>br.com.caelum.vraptor</groupId>
 	<artifactId>vraptor-biscotti</artifactId>
-	<version>4.0.0-RC1</version> <!-- ou a última versão disponível -->
+	<version><%= Maven.plugin_version('vraptor-biscotti') %></version>
 </dependency>
 ~~~ 
 
@@ -297,7 +297,7 @@ Extraia e defina rotas customizadas em um arquivo de `properties`.
 <dependency>
 	<groupId>br.com.caelum.vraptor</groupId>
 	<artifactId>vraptor-routes</artifactId>
-	<version>4.1.0-RC3</version> <!-- ou a última versão disponível -->
+	<version><%= Maven.plugin_version('vraptor-routes') %></version>
 </dependency>
 ~~~ 
 
@@ -313,7 +313,7 @@ Uma forma simples e efetiva de fazer validações programáticas.
 <dependency>
 	<groupId>br.com.caelum.vraptor</groupId>
 	<artifactId>vraptor-simple-validator</artifactId>
-	<version>4.1.0-RC3</version> <!-- ou a última versão disponível -->
+	<version><%= Maven.plugin_version('vraptor-simple-validator') %></version>
 </dependency>
 ~~~ 
 

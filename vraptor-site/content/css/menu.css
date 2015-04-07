@@ -78,6 +78,19 @@
 	line-height: 1.3;
 }
 
+.breadcrumbs {
+  margin: 2em 3em 0px;
+  font-size: .8em;
+}
+
+.breadcrumbs a:not(:last-child) {
+  color: grey;
+}
+
+.breadcrumbs a:not(:last-child):after {
+  content: ' >';
+}
+
 @media (min-width: 760px) {
 	.main-nav ul {
 		display: flex;

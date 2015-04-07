@@ -20,24 +20,13 @@ compile '/js/search-*/' do
 end
 
 apply_filters_and_layouts '/img/*', '/css/*', '/js/*', false
-
 apply_filters_and_layouts '/pt/docs/*', '/pt/documentacao'
-
 apply_filters_and_layouts '/pt/cookbook/*', '/pt/cookbook'
-
 apply_filters_and_layouts '/en/docs/*', '/en/documentation'
-
 apply_filters_and_layouts '/en/cookbook/*', '/en/cookbook'
-
-apply_filters_and_layouts '/sitemap', '/sitemap'
-
 apply_filters_and_layouts '/en/*', '/en/default'
-
+apply_filters_and_layouts '/sitemap', '/sitemap'
 apply_filters_and_layouts '/*', '/pt/default'
-
-route 'css/*' do
-    item.identifier.chop + '.' + item[:extension]
-end
 
 route '/js/search-en/' do
   '/js/search-en.js'
@@ -47,12 +36,9 @@ route '/js/search-pt/' do
   '/js/search-pt.js'
 end
 
-route 'js/*' do
-    item.identifier.chop + '.' + item[:extension]
-end
-
 route '*' do
-  if item.binary?
+  ext = item[:extension]
+  if item.binary? || ext.eql?('js') || ext.eql?('css')
     # Write item with identifier /foo/ to /foo.ext
     item.identifier.chop + '.' + item[:extension]
   else

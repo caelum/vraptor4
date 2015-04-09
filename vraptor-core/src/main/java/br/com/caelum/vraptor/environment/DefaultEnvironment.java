@@ -72,7 +72,7 @@ public class DefaultEnvironment implements Environment {
 	}
 	
 	@PostConstruct
-	public void setup() {
+	protected void setup() {
 		loadProperties();
 	}
 	

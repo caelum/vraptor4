@@ -48,7 +48,7 @@ public class DefaultEnvironmentTest {
 
 	@Test
 	public void shouldUseEnvironmentBasedFileIfFoundUnderEnvironmentFolder() throws IOException {
-		DefaultEnvironment env = new DefaultEnvironment(EnvironmentType.DEVELOPMENT);
+		DefaultEnvironment env = buildEnvironment(EnvironmentType.DEVELOPMENT);
 		URL resource = env.getResource("/rules.txt");
 
 		assertThat(resource, notNullValue());
@@ -57,7 +57,7 @@ public class DefaultEnvironmentTest {
 
 	@Test
 	public void shouldUseRootBasedFileIfNotFoundUnderEnvironmentFolder() throws IOException {
-		DefaultEnvironment env = new DefaultEnvironment(EnvironmentType.PRODUCTION);
+		DefaultEnvironment env = buildEnvironment(EnvironmentType.PRODUCTION);
 		URL resource = env.getResource("/rules.txt");
 
 		assertThat(resource, notNullValue());
@@ -66,8 +66,8 @@ public class DefaultEnvironmentTest {
 
 	@Test
 	public void shouldLoadConfigurationInDefaultFileEnvironment() throws IOException {
-		DefaultEnvironment env = new DefaultEnvironment(context);
 		when(context.getInitParameter(DefaultEnvironment.ENVIRONMENT_PROPERTY)).thenReturn("production");
+		DefaultEnvironment env = buildEnvironment(context);
 		
 		assertThat(env.get("env_name"), is("production"));
 		assertThat(env.get("only_in_default_file"), is("only_in_default_file"));
@@ -75,13 +75,13 @@ public class DefaultEnvironmentTest {
 
 	@Test
 	public void shouldUseFalseWhenFeatureIsNotPresent() throws IOException {
-		DefaultEnvironment env = new DefaultEnvironment(context);
+		DefaultEnvironment env = buildEnvironment(context);
 		assertThat(env.supports("feature_that_doesnt_exists"), is(false));
 	}
 
 	@Test
 	public void shouldTrimValueWhenEvaluatingSupports() throws Exception {
-		DefaultEnvironment env = new DefaultEnvironment(context);
+		DefaultEnvironment env = buildEnvironment(context);
 		assertThat(env.supports("untrimmed_boolean"), is(true));
 	}
 
@@ -89,27 +89,28 @@ public class DefaultEnvironmentTest {
 	public void shouldThrowExceptionIfKeyDoesNotExist() throws Exception {
 		exception.expect(NoSuchElementException.class);
 
-		DefaultEnvironment env = new DefaultEnvironment(context);
+		DefaultEnvironment env = buildEnvironment(context);
 		env.get("key_that_doesnt_exist");
 	}
 
 	@Test
 	public void shouldGetValueWhenIsPresent() throws Exception {
-		DefaultEnvironment env = new DefaultEnvironment(context);
+		DefaultEnvironment env = buildEnvironment(context);
 		String value = env.get("env_name", "fallback");
 		assertThat(value, is("development"));
 	}
 
 	@Test
 	public void shouldGetDefaultValueWhenIsntPresent() throws Exception {
-		DefaultEnvironment env = new DefaultEnvironment(context);
+		DefaultEnvironment env = buildEnvironment(context);
 		String value = env.get("inexistent", "fallback");
 		assertThat(value, is("fallback"));
 	}
 
 	@Test
 	public void shouldAllowApplicationToOverrideProperties() throws Exception {
-		DefaultEnvironment env = new DefaultEnvironment(context);
+		DefaultEnvironment env = buildEnvironment(context);
+		env.setup();
 
 		assertThat(env.get("itWorks"), is("It Works!"));
 
@@ -119,16 +120,16 @@ public class DefaultEnvironmentTest {
 
 	@Test
 	public void shouldUseContextInitParameterWhenSystemPropertiesIsntPresent() {
-		DefaultEnvironment env = new DefaultEnvironment(context);
 		when(context.getInitParameter(DefaultEnvironment.ENVIRONMENT_PROPERTY)).thenReturn("acceptance");
+		DefaultEnvironment env = buildEnvironment(context);
 		
 		assertThat(env.getName(), is("acceptance"));
 	}
 
 	@Test
 	public void shouldUseSystemPropertiesWhenSysenvIsntPresent() {
-		DefaultEnvironment env = new DefaultEnvironment(context);
 		System.getProperties().setProperty(DefaultEnvironment.ENVIRONMENT_PROPERTY, "acceptance");
+		DefaultEnvironment env = buildEnvironment(context);
 
 		verify(context, never()).getInitParameter(DefaultEnvironment.ENVIRONMENT_PROPERTY);
 
@@ -137,11 +138,26 @@ public class DefaultEnvironmentTest {
 	}
 	
 	public void shouldGetOverridedSystemPropertyValueIfIsSet() throws IOException {
-		DefaultEnvironment defaultEnvironment = new DefaultEnvironment(EnvironmentType.DEVELOPMENT);
+		DefaultEnvironment defaultEnvironment = buildEnvironment(EnvironmentType.DEVELOPMENT);
 		System.setProperty("env_name", "customEnv");
 		String value = defaultEnvironment.get("env_name");
 		assertThat("customEnv", is(value));
 		//unset property to not break other tests
 		System.setProperty("env_name", "");
 	}
+	
+	private DefaultEnvironment buildEnvironment(EnvironmentType environmentType) {
+		DefaultEnvironment defaultEnvironment = new DefaultEnvironment(environmentType);
+		defaultEnvironment.setup();
+		
+		return defaultEnvironment;
+	}
+	
+	private DefaultEnvironment buildEnvironment(ServletContext context) {
+		DefaultEnvironment defaultEnvironment = new DefaultEnvironment(context);
+		defaultEnvironment.setup();
+		
+		return defaultEnvironment;
+	}
+	
 }

@@ -17,6 +17,13 @@ import br.com.caelum.vraptor.view.Results;
 public class DefaultInvalidInputHandler implements InvalidInputHandler {
 
 	private final Result result;
+	
+	/**
+	 * @deprecated CDI eyes only
+	 */
+	protected DefaultInvalidInputHandler() {
+		this(null);
+	}
 
 	@Inject
 	public DefaultInvalidInputHandler(Result result) {

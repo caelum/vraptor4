@@ -28,6 +28,7 @@ import java.security.PrivilegedAction;
 import java.util.NoSuchElementException;
 import java.util.Properties;
 
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -68,12 +69,17 @@ public class DefaultEnvironment implements Environment {
 	@Inject
 	public DefaultEnvironment(ServletContext context) {
 		this.context = context;
+	}
+	
+	@PostConstruct
+	public void setup() {
 		loadProperties();
 	}
-
+	
 	public DefaultEnvironment(EnvironmentType environmentType) {
 		this((ServletContext) null);
 		this.environmentType = environmentType;
+		loadProperties();
 	}
 	
 	private void loadProperties() {

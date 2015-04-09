@@ -148,7 +148,6 @@ public class DefaultEnvironmentTest {
 	
 	private DefaultEnvironment buildEnvironment(EnvironmentType environmentType) {
 		DefaultEnvironment defaultEnvironment = new DefaultEnvironment(environmentType);
-		defaultEnvironment.setup();
 		
 		return defaultEnvironment;
 	}

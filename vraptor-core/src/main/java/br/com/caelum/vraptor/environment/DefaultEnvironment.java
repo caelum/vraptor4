@@ -28,6 +28,7 @@ import java.security.PrivilegedAction;
 import java.util.NoSuchElementException;
 import java.util.Properties;
 
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -69,25 +70,25 @@ public class DefaultEnvironment implements Environment {
 	public DefaultEnvironment(ServletContext context) {
 		this.context = context;
 	}
-
+	
+	@PostConstruct
+	protected void setup() {
+		loadProperties();
+	}
+	
 	public DefaultEnvironment(EnvironmentType environmentType) {
 		this((ServletContext) null);
 		this.environmentType = environmentType;
+		loadProperties();
 	}
-
-	private Properties getProperties() {
-		if (properties == null) {
-			properties = new Properties();
-
-			loadAndPut(BASE_ENVIRONMENT_FILE);
-			loadAndPut(getEnvironmentType().getName());
-
-			LOG.debug("Environment is up with properties {}", properties);
-		}
-
-		return properties;
+	
+	private void loadProperties() {
+		properties = new Properties();
+		loadAndPut(BASE_ENVIRONMENT_FILE);
+		loadAndPut(getEnvironmentType().getName());
+		LOG.debug("Environment is up with properties {}", properties);
 	}
-
+	
 	private EnvironmentType getEnvironmentType() {
 		if (environmentType == null) {
 			environmentType = new EnvironmentType(findEnvironmentName(context));
@@ -165,7 +166,7 @@ public class DefaultEnvironment implements Environment {
 
 	@Override
 	public boolean has(String key) {
-		return getProperties().containsKey(key);
+		return properties.containsKey(key);
 	}
 
 	@Override
@@ -178,7 +179,7 @@ public class DefaultEnvironment implements Environment {
 		if (!isNullOrEmpty(systemProperty)) {
 			return systemProperty;
 		} else {
-			return getProperties().getProperty(key);
+			return properties.getProperty(key);
 		}
 	}
 
@@ -192,12 +193,12 @@ public class DefaultEnvironment implements Environment {
 
 	@Override
 	public void set(String key, String value) {
-		getProperties().setProperty(key, value);
+		properties.setProperty(key, value);
 	}
 
 	@Override
 	public Iterable<String> getKeys() {
-		return getProperties().stringPropertyNames();
+		return properties.stringPropertyNames();
 	}
 
 	@Override

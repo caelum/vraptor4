@@ -17,6 +17,7 @@ package br.com.caelum.vraptor.view;
 
 import static br.com.caelum.vraptor.view.Results.logic;
 import static br.com.caelum.vraptor.view.Results.page;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
@@ -152,87 +153,22 @@ public class DefaultRefererResultTest {
 	}
 	
 	@Test
-	public void whenRefererContainsCtxPathStrInTheHostItShouldRedirectCorrectly() throws Exception {
-		LogicResult logic = mock(LogicResult.class);
-		RefererController controller = mock(RefererController.class);
-		
-		Method index = RefererController.class.getMethod("index");
-		ControllerMethod method = DefaultControllerMethod.instanceFor(RefererController.class, index);
-		
-		when(request.getHeader("Referer")).thenReturn("http://vraptor.test.com/vrap/anything/ok");
-		when(request.getContextPath()).thenReturn("/vrap");
-		when(router.parse("/anything/ok", HttpMethod.GET, request)).thenReturn(method);
-		
-		doReturn(logic).when(result).use(logic());
-		when(logic.redirectTo(RefererController.class)).thenReturn(controller);
-		
-		refererResult.redirect();
-		
-		verify(logic).redirectTo(RefererController.class);
-		verify(controller).index();
-	}
+	public void getRefererShouldReturnCorrectValue() throws Exception {
+		when(request.getHeader("Referer")).thenReturn("http://vraptor.caelum.com.br/test/anything/ok"); //Regular case
+		when(request.getContextPath()).thenReturn("/test");
+		assertEquals("/anything/ok", refererResult.getReferer());
 
-	@Test
-	public void whenRefererContainsCtxPathStrInTheHostItShouldForwardCorrectly() throws Exception {
-		LogicResult logic = mock(LogicResult.class);
-		RefererController controller = mock(RefererController.class);
+		when(request.getHeader("Referer")).thenReturn("http://vraptor.caelum.com.br/anything/ok/test"); //URL without context path (it appears in the path but not in in the right place)
+		when(request.getContextPath()).thenReturn("/test");
+		assertEquals("/anything/ok/test", refererResult.getReferer());
 		
-		Method index = RefererController.class.getMethod("index");
-		ControllerMethod method = DefaultControllerMethod.instanceFor(RefererController.class, index);
-		
-		when(request.getHeader("Referer")).thenReturn("http://vraptor.test.com/vrap/anything/ok");
+		when(request.getHeader("Referer")).thenReturn("http://vraptor.caelum.com.br/vrap/anything/ok"); //URL host starts with ctx path string (/vrap)
 		when(request.getContextPath()).thenReturn("/vrap");
-		when(router.parse("/anything/ok", HttpMethod.GET, request)).thenReturn(method);
+		assertEquals("/anything/ok", refererResult.getReferer());
 		
-		doReturn(logic).when(result).use(logic());
-		when(logic.forwardTo(RefererController.class)).thenReturn(controller);
-		
-		refererResult.forward();
-		
-		verify(logic).forwardTo(RefererController.class);
-		verify(controller).index();
-	}
-	
-	@Test
-	public void whenRefererDoesNotContainsCtxPathItShouldRedirectCorrectly() throws Exception {
-		LogicResult logic = mock(LogicResult.class);
-		RefererController controller = mock(RefererController.class);
-		
-		Method index = RefererController.class.getMethod("index");
-		ControllerMethod method = DefaultControllerMethod.instanceFor(RefererController.class, index);
-		
-		when(request.getHeader("Referer")).thenReturn("http://vraptor.test.com/anything/ok");
+		when(request.getHeader("Referer")).thenReturn("/vrap/anything/ok/vrap"); //relative path in the referer (not common but predicted by http spec)
 		when(request.getContextPath()).thenReturn("/vrap");
-		when(router.parse("/anything/ok", HttpMethod.GET, request)).thenReturn(method);
-		
-		doReturn(logic).when(result).use(logic());
-		when(logic.redirectTo(RefererController.class)).thenReturn(controller);
-		
-		refererResult.redirect();
-		
-		verify(logic).redirectTo(RefererController.class);
-		verify(controller).index();
-	}
-	
-	@Test
-	public void whenRefererDoesNotContainsCtxPathItShouldForwardCorrectly() throws Exception {
-		LogicResult logic = mock(LogicResult.class);
-		RefererController controller = mock(RefererController.class);
-		
-		Method index = RefererController.class.getMethod("index");
-		ControllerMethod method = DefaultControllerMethod.instanceFor(RefererController.class, index);
-		
-		when(request.getHeader("Referer")).thenReturn("http://vraptor.test.com/anything/ok");
-		when(request.getContextPath()).thenReturn("/vrap");
-		when(router.parse("/anything/ok", HttpMethod.GET, request)).thenReturn(method);
-		
-		doReturn(logic).when(result).use(logic());
-		when(logic.forwardTo(RefererController.class)).thenReturn(controller);
-		
-		refererResult.forward();
-		
-		verify(logic).forwardTo(RefererController.class);
-		verify(controller).index();
+		assertEquals("/anything/ok/vrap", refererResult.getReferer());
 	}
 	
 }

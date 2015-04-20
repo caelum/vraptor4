@@ -93,11 +93,11 @@ public class DefaultRefererResult implements RefererResult {
 		}
 	}
 
-	private String getReferer() {
+	protected String getReferer() {
 		String referer = request.getHeader("Referer");
 		checkState(referer != null, "The Referer header was not specified");
 
-		String refererPath= null;
+		String refererPath = null;
 		try {
 			refererPath = new URL(referer).getPath();
 		} catch(MalformedURLException e) {

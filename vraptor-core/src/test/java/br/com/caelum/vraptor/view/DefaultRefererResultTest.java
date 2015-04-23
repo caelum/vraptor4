@@ -153,19 +153,28 @@ public class DefaultRefererResultTest {
 	}
 	
 	@Test
-	public void getRefererShouldReturnCorrectValue() throws Exception {
+	public void getRefererShouldReturnCorrectValueInRegularCase() throws Exception {
 		when(request.getHeader("Referer")).thenReturn("http://vraptor.caelum.com.br/test/anything/ok"); //Regular case
 		when(request.getContextPath()).thenReturn("/test");
 		assertEquals("/anything/ok", refererResult.getReferer());
-
-		when(request.getHeader("Referer")).thenReturn("http://vraptor.caelum.com.br/anything/ok/test"); //URL without context path (it appears in the path but not in in the right place)
-		when(request.getContextPath()).thenReturn("/test");
-		assertEquals("/anything/ok/test", refererResult.getReferer());
+	}
 		
-		when(request.getHeader("Referer")).thenReturn("http://vraptor.caelum.com.br/vrap/anything/ok"); //URL host starts with ctx path string (/vrap)
+	@Test
+	public void whenCtxPathAppearsAmongURLButNotInRightPlaceRefererShouldBeReturnedCorrectly() throws Exception {
+		when(request.getHeader("Referer")).thenReturn("http://vraptor.caelum.com.br/vrapanything/ok/vrap/ok/vrap"); //ctx path appears among url path but without 'being itself'
 		when(request.getContextPath()).thenReturn("/vrap");
-		assertEquals("/anything/ok", refererResult.getReferer());
-		
+		assertEquals("/vrapanything/ok/vrap/ok/vrap", refererResult.getReferer());
+	}
+	
+	@Test
+	public void whenCtxPathEqualsURLPathRefererShouldBeReturnedCorrectly() throws Exception {
+		when(request.getHeader("Referer")).thenReturn("http://vraptor.caelum.com.br/vrap/"); //url path equals ctx path
+		when(request.getContextPath()).thenReturn("/vrap");
+		assertEquals("/", refererResult.getReferer());
+	}
+	
+	@Test
+	public void whenRefererIsARelativePathRefererShouldBeReturnedCorrectly() throws Exception {
 		when(request.getHeader("Referer")).thenReturn("/vrap/anything/ok/vrap"); //relative path in the referer (not common but predicted by http spec)
 		when(request.getContextPath()).thenReturn("/vrap");
 		assertEquals("/anything/ok/vrap", refererResult.getReferer());

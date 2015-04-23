@@ -153,29 +153,29 @@ public class DefaultRefererResultTest {
 	}
 	
 	@Test
-	public void getRefererShouldReturnCorrectValueInRegularCase() throws Exception {
-		when(request.getHeader("Referer")).thenReturn("http://vraptor.caelum.com.br/test/anything/ok"); //Regular case
+	public void whenCtxPathAppearsInItsPlaceRefererShouldBeReturnedCorrectly() throws Exception {
+		when(request.getHeader("Referer")).thenReturn("http://vraptor.caelum.com.br/test/anything/ok");
 		when(request.getContextPath()).thenReturn("/test");
 		assertEquals("/anything/ok", refererResult.getReferer());
 	}
 		
 	@Test
 	public void whenCtxPathAppearsAmongURLButNotInRightPlaceRefererShouldBeReturnedCorrectly() throws Exception {
-		when(request.getHeader("Referer")).thenReturn("http://vraptor.caelum.com.br/vrapanything/ok/vrap/ok/vrap"); //ctx path appears among url path but without 'being itself'
+		when(request.getHeader("Referer")).thenReturn("http://vraptor.caelum.com.br/vrapanything/ok/vrap/ok/vrap");
 		when(request.getContextPath()).thenReturn("/vrap");
 		assertEquals("/vrapanything/ok/vrap/ok/vrap", refererResult.getReferer());
 	}
 	
 	@Test
 	public void whenCtxPathEqualsURLPathRefererShouldBeReturnedCorrectly() throws Exception {
-		when(request.getHeader("Referer")).thenReturn("http://vraptor.caelum.com.br/vrap/"); //url path equals ctx path
+		when(request.getHeader("Referer")).thenReturn("http://vraptor.caelum.com.br/vrap/");
 		when(request.getContextPath()).thenReturn("/vrap");
 		assertEquals("/", refererResult.getReferer());
 	}
 	
 	@Test
 	public void whenRefererIsARelativePathRefererShouldBeReturnedCorrectly() throws Exception {
-		when(request.getHeader("Referer")).thenReturn("/vrap/anything/ok/vrap"); //relative path in the referer (not common but predicted by http spec)
+		when(request.getHeader("Referer")).thenReturn("/vrap/anything/ok/vrap");
 		when(request.getContextPath()).thenReturn("/vrap");
 		assertEquals("/anything/ok/vrap", refererResult.getReferer());
 	}

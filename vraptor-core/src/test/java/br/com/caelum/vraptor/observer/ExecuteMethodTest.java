@@ -17,7 +17,26 @@
 
 package br.com.caelum.vraptor.observer;
 
-import br.com.caelum.vraptor.InterceptionException;
+import static br.com.caelum.vraptor.controller.DefaultControllerMethod.instanceFor;
+import static br.com.caelum.vraptor.view.Results.nothing;
+import static org.hamcrest.Matchers.any;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.lang.reflect.Method;
+import java.util.Collections;
+
+import javax.enterprise.event.Event;
+
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.ExpectedException;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.controller.DefaultControllerMethod;
 import br.com.caelum.vraptor.core.DefaultReflectionProvider;
@@ -27,29 +46,13 @@ import br.com.caelum.vraptor.events.MethodExecuted;
 import br.com.caelum.vraptor.events.MethodReady;
 import br.com.caelum.vraptor.interceptor.ApplicationLogicException;
 import br.com.caelum.vraptor.interceptor.DogAlike;
+import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.validator.Message;
 import br.com.caelum.vraptor.validator.Messages;
-import br.com.caelum.vraptor.validator.ValidationFailedException;
 import br.com.caelum.vraptor.validator.ValidationException;
 import br.com.caelum.vraptor.validator.ValidationFailedException;
 import br.com.caelum.vraptor.validator.Validator;
-
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-
-import javax.enterprise.event.Event;
-
-import java.lang.reflect.Method;
-import java.util.Collections;
-
-import static br.com.caelum.vraptor.controller.DefaultControllerMethod.instanceFor;
-import static br.com.caelum.vraptor.view.Results.nothing;
-import static org.hamcrest.Matchers.any;
-import static org.mockito.Mockito.*;
+import br.com.caelum.vraptor.view.DogController;
 
 public class ExecuteMethodTest {
 
@@ -61,14 +64,18 @@ public class ExecuteMethodTest {
 	@Mock private Validator validator;
 	@Mock private Event<MethodExecuted> methodEvecutedEvent;
 	@Mock private Event<MethodReady> readyToExecuteMethodEvent;
+	@Mock private Container container;
+	
 	@Rule public ExpectedException expected = ExpectedException.none();
+	
 	private ExecuteMethod observer;
+
 
 	@Before
 	public void setup() throws NoSuchMethodException {
 		MockitoAnnotations.initMocks(this);
 		observer = new ExecuteMethod(methodInfo, messages, methodEvecutedEvent, readyToExecuteMethodEvent,
-				new ExecuteMethodExceptionHandler(), new DefaultReflectionProvider());
+				new ExecuteMethodExceptionHandler(), new DefaultReflectionProvider(), container);
 	}
 
 	@Test
@@ -90,6 +97,19 @@ public class ExecuteMethodTest {
 		verify(auau).bark(3);
 		verify(messages).assertAbsenceOfErrors();
 	}
+	
+	@Test
+	public void wontThrowExceptionIfTheMethodIsntDeclaredOnProvidedInstance() throws Exception {
+		ControllerMethod method = new DefaultControllerMethod(null, DogAlike.class.getMethod("bark"));
+		XController oldController = mock(XController.class);
+		DogController dog = DogController.class.newInstance();
+		Class<DogAlike> declaringClass = (Class<DogAlike>) method.getMethod().getDeclaringClass();
+		when(container.instanceFor(declaringClass)).thenReturn(dog);
+		when(methodInfo.getParametersValues()).thenReturn(new Object[]{});
+		observer.execute(new InterceptorsExecuted(method, oldController));
+		verify(messages).assertAbsenceOfErrors();
+	}
+	
 
 	public static class XController {
 		public Object method(Object o) {

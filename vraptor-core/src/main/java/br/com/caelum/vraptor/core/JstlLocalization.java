@@ -77,7 +77,7 @@ public class JstlLocalization {
 			try {
 				return ResourceBundle.getBundle(baseName, locale);
 			} catch (MissingResourceException e) {
-				logger.warn("couldn't find message bundle, creating an empty one", e);
+				logger.warn("couldn't find message bundle, creating an empty one");
 				return new EmptyBundle();
 			}
 		}

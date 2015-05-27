@@ -67,7 +67,7 @@
 	</dependencies>
 
 	<build>
-		<finalName>vraptor-blank-project</finalName>
+		<finalName>your.groupid</finalName>
 		<outputDirectory>src/main/webapp/WEB-INF/classes</outputDirectory>
 		<plugins>
 			<plugin>

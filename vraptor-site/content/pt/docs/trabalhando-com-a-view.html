@@ -281,6 +281,21 @@ result.use(xml()).from(usuario).exclude("email").serialize(); // excluir o campo
 result.use(xml()).from(usuario).excludeAll().serialize(); // exclui todos os campos
 ~~~ 
 
+Por padrão atributos com valores `null` não são serializados no json, é possível modificar este comportamento:
+~~~
+#!java
+result.use(json()).serializeNulls().from(new Pessoa("João", null)).serialize(); 
+~~~
+
+O JSON resultante será o seguinte:
+~~~
+#!javascript
+{"pessoa":{
+	"nome": "João",
+	"idade": null
+}}
+~~~
+
 Você pode adicionar versionamento aos seus resultados baseados em JSON.
 Através desse recurso é possível versionar uma API. 
 Para exemplificar a utilidade do versionamento, suponha que foi criada uma API que retorna clientes de um determinado sistema.

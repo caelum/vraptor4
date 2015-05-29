@@ -281,7 +281,7 @@ result.use(xml()).from(usuario).exclude("email").serialize(); // excluir o campo
 result.use(xml()).from(usuario).excludeAll().serialize(); // exclui todos os campos
 ~~~ 
 
-Por padrão atributos com valores `null` não são serializados no json, é possível modificar este comportamento:
+Por padrão atributos com valores `null` não são serializados no json, é possível modificar este comportamento chamando o método `serializeNulls`:
 ~~~
 #!java
 result.use(json()).serializeNulls().from(new Pessoa("João", null)).serialize(); 

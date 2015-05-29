@@ -115,4 +115,10 @@ public class GsonJSONSerialization implements JSONSerialization {
 		return this;
 	}
 
+	@Override
+	public JSONSerialization serializeNulls() {
+		builder.serializeNulls();
+		return this;		
+	}
+
 }

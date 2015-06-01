@@ -19,6 +19,7 @@ package br.com.caelum.vraptor.observer;
 
 import static com.google.common.base.Preconditions.checkState;
 
+import javax.enterprise.context.Dependent;
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.event.Observes;
 import javax.enterprise.inject.Produces;
@@ -41,13 +42,6 @@ public class InstantiateObserver {
 	private final Container container;
 	private ControllerInstance controllerInstance;
 
-	/**
-	 * @deprecated CDI eyes only
-	 */
-	protected InstantiateObserver() {
-		this(null);
-	}
-
 	@Inject
 	public InstantiateObserver(Container container) {
 		this.container = container;
@@ -58,7 +52,7 @@ public class InstantiateObserver {
 		this.controllerInstance = new DefaultControllerInstance(instance);
 	}
 
-	@Produces @RequestScoped
+	@Produces @Dependent
 	public ControllerInstance getControllerInstance() {
 		checkState(controllerInstance != null, "ControllerInstance is not initialised yet");
 		return this.controllerInstance;

@@ -145,4 +145,9 @@ public class GsonBuilderWrapper implements GsonSerializerBuilder, GsonDeserializ
 		getGsonBuilder().setVersion(versionNumber);
 	}
 
+	@Override
+	public void serializeNulls() {
+		getGsonBuilder().serializeNulls();
+	}
+
 }

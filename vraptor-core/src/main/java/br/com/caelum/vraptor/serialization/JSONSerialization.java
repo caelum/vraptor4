@@ -39,5 +39,7 @@ public interface JSONSerialization extends Serialization {
 	JSONSerialization indented();
 
 	JSONSerialization version(double versionNumber);
+	
+	JSONSerialization serializeNulls();
 
 }

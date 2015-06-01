@@ -610,4 +610,22 @@ public class GsonJSONSerializationTest {
 		serialization.version(1.0).from(client).recursive().serialize();
 		assertThat(result(), is(equalTo(expectedResult)));
 	}
+	
+	@Test
+	public void shouldSerializeNullfieldswhenRequested(){
+		Address address = new Address("Alameda street", null);
+		serialization.serializeNulls().from(address).serialize();
+		
+		String expectedResult = "{\"address\":{\"street\":\"Alameda street\",\"city\":null}}";
+		assertThat(result(), is(equalTo(expectedResult)));
+	}
+	
+	@Test
+	public void shouldNotSerializeNullFieldsByDefault(){
+		Address address = new Address("Alameda street", null);
+		serialization.from(address).serialize();
+		
+		String expectedResult = "{\"address\":{\"street\":\"Alameda street\"}}";
+		assertThat(result(), is(equalTo(expectedResult)));
+	}
 }

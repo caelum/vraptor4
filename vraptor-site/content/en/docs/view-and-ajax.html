@@ -281,7 +281,22 @@ result.use(xml()).from(user).exclude("email").serialize(); // exclude the email 
 result.use(xml()).from(user).excludeAll().serialize(); // excludes all fields
 ~~~ 
 
-You can also add versioning capability to JSON based results.
+The default behavior of JSON serialization is exclude atributes with `null` values, but it's possible to change this behavior by calling `serializeNulls` method:
+~~~
+#!java
+result.use(json()).serializeNulls().from(new Person("John", null)).serialize(); 
+~~~
+
+The resulting JSON will be the following:
+~~~
+#!javascript
+{"person":{
+	"name": "John",
+	"age": null
+}}
+~~~
+
+You can add versioning capability to JSON based results.
 Through this resource it is possible to add API versioning.
 As a useful example, suppose that an API which returns a list of our system's customers was created.
 The first version returns a list of customers defined by the structure that follows:

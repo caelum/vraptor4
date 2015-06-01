@@ -17,7 +17,10 @@
 
 package br.com.caelum.vraptor.observer;
 
-import static com.google.common.base.Preconditions.checkState;
+import br.com.caelum.vraptor.controller.ControllerInstance;
+import br.com.caelum.vraptor.controller.DefaultControllerInstance;
+import br.com.caelum.vraptor.events.ControllerFound;
+import br.com.caelum.vraptor.ioc.Container;
 
 import javax.enterprise.context.Dependent;
 import javax.enterprise.context.RequestScoped;
@@ -25,10 +28,7 @@ import javax.enterprise.event.Observes;
 import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 
-import br.com.caelum.vraptor.controller.ControllerInstance;
-import br.com.caelum.vraptor.controller.DefaultControllerInstance;
-import br.com.caelum.vraptor.events.ControllerFound;
-import br.com.caelum.vraptor.ioc.Container;
+import static com.google.common.base.Preconditions.checkState;
 
 /**
  * Instantiates the current instance of controller class.
@@ -45,6 +45,13 @@ public class InstantiateObserver {
 	@Inject
 	public InstantiateObserver(Container container) {
 		this.container = container;
+	}
+
+	/**
+	 *  @deprecated CDI eyes only
+	 */
+	protected InstantiateObserver(){
+		this(null);
 	}
 
 	public void instantiate(@Observes ControllerFound event) {

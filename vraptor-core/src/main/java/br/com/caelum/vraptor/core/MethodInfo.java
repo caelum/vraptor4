@@ -64,6 +64,7 @@ public class MethodInfo {
 	}
 
 	public void setControllerMethod(ControllerMethod controllerMethod) {
+		this.valuedParameters = null;
 		this.controllerMethod = controllerMethod;
 	}
 

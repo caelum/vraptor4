@@ -18,7 +18,6 @@
 package br.com.caelum.vraptor.http.iogi;
 
 import java.lang.reflect.Method;
-import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.util.ArrayList;
@@ -39,6 +38,7 @@ import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.http.Parameter;
 import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.http.ParametersProvider;
+import br.com.caelum.vraptor.util.TypeExtractor;
 import br.com.caelum.vraptor.validator.Message;
 
 @RequestScoped
@@ -90,22 +90,18 @@ public class IogiParametersProvider implements ParametersProvider {
 	private List<Target<Object>> createTargets(ControllerMethod method) {
 		Method javaMethod = method.getMethod();
 		List<Target<Object>> targets = new ArrayList<>();
+		TypeExtractor typeExtractor = new TypeExtractor(method.getController().getType());
 
 		for (Parameter p : nameProvider.parametersFor(javaMethod)) {
 			Type type = p.getParameterizedType();
 			if (type instanceof TypeVariable) {
-				type = extractType(method);
+				type = typeExtractor.extractType(type);
 			}
 
 			targets.add(new Target<>(type, p.getName()));
 		}
 
 		return targets;
-	}
-	
-	private Type extractType(ControllerMethod method) {
-		ParameterizedType superclass = (ParameterizedType) method.getController().getType().getGenericSuperclass();
-		return superclass.getActualTypeArguments()[0];
 	}
 
 	private Parameters parseParameters(HttpServletRequest request) {

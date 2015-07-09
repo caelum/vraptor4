@@ -295,6 +295,18 @@ Se você precisa mudar a view renderizada por padrão, ou mudar o local em que e
 @Specializes
 public class CustomPathResolver extends DefaultPathResolver {
 
+	/**
+	 * @deprecated CDI eyes only
+	 */
+	protected CustomPathResolver() {
+		this(null);
+	}
+
+	@Inject
+	public CustomPathResolver(FormatResolver resolver) {
+		super(resolver);
+	}
+
 	@Override
 	protected String getPrefix() {
 		return "/pasta/raiz/";

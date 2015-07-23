@@ -40,14 +40,18 @@ import java.util.TimeZone;
 import javax.enterprise.inject.Instance;
 import javax.servlet.http.HttpServletRequest;
 
-import net.vidageek.mirror.dsl.Mirror;
-
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonSerializer;
 
 import br.com.caelum.vraptor.Consumes;
 import br.com.caelum.vraptor.controller.BeanClass;
@@ -62,12 +66,7 @@ import br.com.caelum.vraptor.serialization.Deserializee;
 import br.com.caelum.vraptor.serialization.Serializee;
 import br.com.caelum.vraptor.util.test.MockInstanceImpl;
 import br.com.caelum.vraptor.view.GenericController;
-
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonDeserializer;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParseException;
-import com.google.gson.JsonSerializer;
+import net.vidageek.mirror.dsl.Mirror;
 
 public class GsonDeserializerTest {
 
@@ -169,9 +168,6 @@ public class GsonDeserializerTest {
 			return dog;
 		}
 	}
-	
-	private class DogDeserializer$Proxy$$somentigin extends DogDeserializer implements JsonDeserializer<Dog> {
-	}
 
 	static class DogGenericController extends GenericController<Dog> {
 
@@ -265,27 +261,6 @@ public class GsonDeserializerTest {
 		List<JsonDeserializer<?>> deserializers = new ArrayList<>();
 		List<JsonSerializer<?>> serializers = new ArrayList<>();
 		deserializers.add(new DogDeserializer());
-
-		builder = new GsonBuilderWrapper(new MockInstanceImpl<>(serializers), new MockInstanceImpl<>(deserializers), 
-				new Serializee(new DefaultReflectionProvider()), new DefaultReflectionProvider());
-		deserializer = new GsonDeserialization(builder, provider, request, container, deserializeeInstance);
-
-		InputStream stream = asStream("{'dog':{'name':'Renan Reis','age':'0'}}");
-
-		Object[] deserialized = deserializer.deserialize(stream, dogParameter);
-
-		assertThat(deserialized.length, is(1));
-		assertThat(deserialized[0], is(instanceOf(Dog.class)));
-		Dog dog = (Dog) deserialized[0];
-		assertThat(dog.name, is("Renan"));
-		assertThat(dog.age, is(25));
-	}
-
-	@Test
-	public void shouldBeAbleToDeserializeADogWithCdiProxyAdapter() throws Exception {
-		List<JsonDeserializer<?>> deserializers = new ArrayList<>();
-		List<JsonSerializer<?>> serializers = new ArrayList<>();
-		deserializers.add(new DogDeserializer$Proxy$$somentigin());
 
 		builder = new GsonBuilderWrapper(new MockInstanceImpl<>(serializers), new MockInstanceImpl<>(deserializers), 
 				new Serializee(new DefaultReflectionProvider()), new DefaultReflectionProvider());

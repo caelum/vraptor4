@@ -15,7 +15,7 @@
  */
 package br.com.caelum.vraptor.serialization.gson;
 
-import static br.com.caelum.vraptor.proxy.CDIProxies.isCDIProxy;
+import static br.com.caelum.vraptor.proxy.CDIProxies.extractRawTypeIfPossible;
 import static java.util.Collections.singletonList;
 
 import java.lang.reflect.ParameterizedType;
@@ -91,17 +91,7 @@ public class GsonBuilderWrapper implements GsonSerializerBuilder, GsonDeserializ
 	}
 	
 	private Class<?> getAdapterType(Object adapter) {
-		final Class<?> klazz;
-		if(isCDIProxy(adapter.getClass())){
-			final String[] split = adapter.getClass().getName().split("\\$Proxy\\$");
-			try {
-				klazz = Class.forName(split[0]);
-			} catch (final ClassNotFoundException e) {
-				throw new RuntimeException(e);
-			}
-		}else{
-			klazz = adapter.getClass();
-		}
+		final Class<?> klazz = extractRawTypeIfPossible(adapter.getClass());
 		final Type[] genericInterfaces = klazz.getGenericInterfaces();
 		final ParameterizedType type = (ParameterizedType) genericInterfaces[0];
 		final Type actualType = type.getActualTypeArguments()[0];

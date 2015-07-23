@@ -15,6 +15,7 @@
  */
 package br.com.caelum.vraptor.serialization.gson;
 
+import static br.com.caelum.vraptor.proxy.CDIProxies.extractRawTypeIfPossible;
 import static java.util.Collections.singletonList;
 
 import java.lang.reflect.ParameterizedType;
@@ -26,14 +27,14 @@ import javax.enterprise.inject.Any;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 
-import br.com.caelum.vraptor.core.ReflectionProvider;
-import br.com.caelum.vraptor.serialization.Serializee;
-
 import com.google.gson.ExclusionStrategy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonSerializer;
+
+import br.com.caelum.vraptor.core.ReflectionProvider;
+import br.com.caelum.vraptor.serialization.Serializee;
 
 /**
  * Builder Wrapper for JSON using GSON.
@@ -90,9 +91,10 @@ public class GsonBuilderWrapper implements GsonSerializerBuilder, GsonDeserializ
 	}
 	
 	private Class<?> getAdapterType(Object adapter) {
-		Type[] genericInterfaces = adapter.getClass().getGenericInterfaces();
-		ParameterizedType type = (ParameterizedType) genericInterfaces[0];
-		Type actualType = type.getActualTypeArguments()[0];
+		final Class<?> klazz = extractRawTypeIfPossible(adapter.getClass());
+		final Type[] genericInterfaces = klazz.getGenericInterfaces();
+		final ParameterizedType type = (ParameterizedType) genericInterfaces[0];
+		final Type actualType = type.getActualTypeArguments()[0];
 
 		if (actualType instanceof ParameterizedType) {
 			return (Class<?>) ((ParameterizedType) actualType).getRawType();

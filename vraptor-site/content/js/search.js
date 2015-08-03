@@ -15,10 +15,11 @@ function search(query, callback) {
   var terms = query.replace(/[\W\s_]+/m,' ').toLowerCase().split(/\s+/);
   var matching_ids = null;
   for (var i = 0; i < terms.length; i++) {
-    var term = terms[i];
-    var exactmatch = index.terms[term] || [];
-    var approxmatch = index.approximate[term] || [];
-    var ids = unique(exactmatch.concat(approxmatch));
+    var term = terms[i],
+        exactmatch = index.terms[term] || [],
+        approxmatch = index.approximate[term] || [],
+        ids = unique(exactmatch.concat(approxmatch));
+		
     if (matching_ids) {
       matching_ids = matching_ids.filter(function(id) {
         return ids.indexOf(id) != -1;

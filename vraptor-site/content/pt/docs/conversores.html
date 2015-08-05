@@ -40,6 +40,16 @@ Existem conversores para os principais tipos do Joda-time como `DateTime`, `Loca
 
 Se você está usando JDK 8, você pode tirar proveito dos conversores do pacote `java.time`, que estão disponíveis usando o plugin [vraptor-java8](/pt/docs/plugins/#vraptor-java-8).
 
+Você ainda pode customizar o pattern de uma `Date` implementando um `CustomDateGsonConverter` e sobrescrevendo o método `getPattern()`:
+
+~~
+@Specializes
+public class CustomDateGsonConverter extends DateGsonConverter {
+    @Override
+    public String getPattern() { return //qualquer padrão customizado }
+}
+~~
+
 ##Mensagem de erro de conversão
 
 Quando o VRaptor tenta converter um objeto, e ocorrer algum erro, é retornada para a apicação uma exception indicando o erro de conversão. Por exemplo, se você receber um parametro com valor `A` para um campo `Integer`, a conversão irá falhar e você receberá uma `ConversionException` internacionalizada. Para exibir as mensagens na sua aplicação, basta adicionar as seguintes chaves no seu resource bundle:

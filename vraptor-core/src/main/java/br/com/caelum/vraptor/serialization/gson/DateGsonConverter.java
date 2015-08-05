@@ -44,7 +44,7 @@ public class DateGsonConverter implements JsonDeserializer<Date>, JsonSerializer
 	private final SimpleDateFormat iso8601Format;
 
 	public DateGsonConverter() {
-		this.iso8601Format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
+		this.iso8601Format = new SimpleDateFormat(getPattern());
 	}
 	
 	@Override
@@ -60,6 +60,10 @@ public class DateGsonConverter implements JsonDeserializer<Date>, JsonSerializer
 		} catch (ParseException e) {
 			throw new JsonSyntaxException(json.getAsString(), e);
 		}
+	}
+	
+	public String getPattern(){
+		return "yyyy-MM-dd'T'HH:mm:ssZ";
 	}
 
 }

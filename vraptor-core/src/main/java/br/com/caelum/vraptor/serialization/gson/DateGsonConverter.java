@@ -41,29 +41,29 @@ import com.google.gson.JsonSyntaxException;
 @Dependent
 public class DateGsonConverter implements JsonDeserializer<Date>, JsonSerializer<Date>{
 
-	private final SimpleDateFormat iso8601Format;
+	private final SimpleDateFormat format;
 
 	public DateGsonConverter() {
-		this.iso8601Format = new SimpleDateFormat(getPattern());
+		this.format = getDateFormat();
 	}
 	
 	@Override
 	public JsonElement serialize(Date date, Type typeOfSrc, JsonSerializationContext context) {
-		String dateString = iso8601Format.format(date);
+		String dateString = format.format(date);
 		return new JsonPrimitive(dateString);
 	}
 
 	@Override
 	public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
 		try {
-			return iso8601Format.parse(json.getAsString());
+			return format.parse(json.getAsString());
 		} catch (ParseException e) {
 			throw new JsonSyntaxException(json.getAsString(), e);
 		}
-	}
-	
-	public String getPattern(){
-		return "yyyy-MM-dd'T'HH:mm:ssZ";
+	}	
+
+	protected SimpleDateFormat getDateFormat(){
+		return new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
 	}
 
 }

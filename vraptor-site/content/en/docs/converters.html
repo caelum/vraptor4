@@ -41,16 +41,6 @@ There are converters for the main Joda-time types: `DateTime`, `LocalDate`, `Loc
 
 If you are using JDK 8, you can use the new `java.time` API available using [vraptor-java8](/en/docs/plugins#vraptor-java-8) plugin.
 
-You can also customize the Date pattern by implementing your own CustomDateGsonConverter and overriding the method `getPattern()`:
-
-~~
-@Specializes
-public class CustomDateGsonConverter extends DateGsonConverter {
-    @Override
-    public String getPattern() { return //any custom pattern }
-}
-~~
-
 ##If conversion fails
 
 When a conversion fails VRaptor will add the error message using localization. To see these messages you need to add the lines below in your resource bundle:
@@ -199,3 +189,15 @@ public class CustomDecimalConverter implements Converter<BigDecimal>{
 ~~~ 
 
 All of VRaptor's `Converter`s have `LIBRARY_BEFORE` priority. 
+
+##Overriding custom JSON and XML converters
+
+You can also customize the Date pattern by implementing your own CustomDateGsonConverter and overriding the method `getPattern()`:
+
+~~
+@Specializes
+public class CustomDateGsonConverter extends DateGsonConverter {
+    @Override
+    public String getPattern() { return //any custom pattern }
+}
+~~

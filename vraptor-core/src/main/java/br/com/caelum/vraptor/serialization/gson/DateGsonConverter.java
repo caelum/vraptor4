@@ -16,6 +16,7 @@
 package br.com.caelum.vraptor.serialization.gson;
 
 import java.lang.reflect.Type;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -41,28 +42,22 @@ import com.google.gson.JsonSyntaxException;
 @Dependent
 public class DateGsonConverter implements JsonDeserializer<Date>, JsonSerializer<Date>{
 
-	private final SimpleDateFormat format;
-
-	public DateGsonConverter() {
-		this.format = getDateFormat();
-	}
-	
 	@Override
 	public JsonElement serialize(Date date, Type typeOfSrc, JsonSerializationContext context) {
-		String dateString = format.format(date);
+		String dateString = getFormat().format(date);
 		return new JsonPrimitive(dateString);
 	}
 
 	@Override
 	public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
 		try {
-			return format.parse(json.getAsString());
+			return getFormat().parse(json.getAsString());
 		} catch (ParseException e) {
 			throw new JsonSyntaxException(json.getAsString(), e);
 		}
 	}	
 
-	protected SimpleDateFormat getDateFormat(){
+	protected DateFormat getFormat(){
 		return new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
 	}
 

@@ -149,6 +149,21 @@ public class IogiParametersProviderTest {
 	}
 
 	@Test
+	public void isCapableOfDealingWithGenericsAndMultipleParameters() throws Exception {
+		requestParametersAre(ImmutableMap.of("key", new String[] { "age" }, "value", new String[] { "32" }));
+
+		ControllerMethod generic = method(SpecificKeyValueResource.class, GenericKeyValueResource.class, "put", Object.class, Object.class);
+		Object[] params = iogi.getParametersFor(generic, errors);
+		String key = (String) params[0];
+		Long value = (Long) params[1];
+
+		assertThat(key, is("age"));
+		assertThat(value, notNullValue());
+		assertThat(value, instanceOf(Long.class));
+		assertThat(value, is(32L));
+	}
+
+	@Test
 	public void isCapableOfDealingWithIndexedLists() throws Exception {
 		requestParameterIs("abc[2]", "1");
 		List<Long> abc = getFirstParameterFor(method("list", List.class));
@@ -601,6 +616,14 @@ public class IogiParametersProviderTest {
 	}
 
 	static class Specific extends Generic<ABC> {
+	}
+	
+	static class GenericKeyValueResource<K, V> {
+		void put(K key, V value) { }
+	}
+
+	static class SpecificKeyValueResource extends GenericKeyValueResource<String, Long> {
+	
 	}
 
 	public static class Cat {

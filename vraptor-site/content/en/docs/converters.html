@@ -198,6 +198,6 @@ You can also customize the Date pattern by implementing your own CustomDateGsonC
 @Specializes
 public class CustomDateGsonConverter extends DateGsonConverter {
     @Override
-    public String getPattern() { return //any custom pattern }
+    public DateFormat getPattern() { return //any custom pattern }
 }
 ~~

@@ -32,13 +32,13 @@ public class CacheStoreFactory {
 	@Produces
 	@Default
 	public <K, V> DefaultCacheStore<K, V> buildDefaultCache() {
-		return new DefaultCacheStore<K, V>();
+		return new DefaultCacheStore<>();
 	}
 
 	@Produces
 	@LRU
 	public <K, V> LRUCacheStore<K, V> buildLRUCache(InjectionPoint ip) {
 		int capacity = ip.getAnnotated().getAnnotation(LRU.class).capacity();
-		return new LRUCacheStore<K, V>(capacity);
+		return new LRUCacheStore<>(capacity);
 	}
 }

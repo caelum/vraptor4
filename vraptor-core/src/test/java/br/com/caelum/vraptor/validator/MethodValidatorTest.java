@@ -119,7 +119,7 @@ public class MethodValidatorTest {
 	}
 
 	private MethodValidator getMethodValidator() {
-		return new MethodValidator(new MockInstanceImpl<Locale>(new Locale("pt", "br")), interpolator, validatorFactory.getValidator());
+		return new MethodValidator(new MockInstanceImpl<>(new Locale("pt", "br")), interpolator, validatorFactory.getValidator());
 	}
 	
 	public class Example {

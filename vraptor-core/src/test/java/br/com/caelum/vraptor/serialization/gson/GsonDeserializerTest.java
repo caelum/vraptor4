@@ -176,7 +176,9 @@ public class GsonDeserializerTest {
 
 	@Test
 	public void shouldDeserializerParseArraysWithoutRoot() throws IOException {
-		try (InputStream stream = asStream("[{'name':'name1','age':1},{'name':'name2','age':2},{'name':'name3','age':3}]")) {
+		String payload = "[{'name':'name1','age':1},{'name':'name2','age':2},{'name':'name3','age':3}]";
+
+		try (InputStream stream = asStream(payload)) {
 			Object[] deserialized = deserializer.deserialize(stream, listDog);
 			List<Dog>  dogs = (List<Dog>) deserialized[0]; 
 			assertThat(dogs.size(), is(3));
@@ -189,7 +191,9 @@ public class GsonDeserializerTest {
 
 	@Test
 	public void shouldDeserializerParseArraysWithRoot() throws IOException {
-		try (InputStream stream = asStream("{dogs : [{'name':'name1','age':1},{'name':'name2','age':2},{'name':'name3','age':3}]}")) {
+		String payload = "{dogs : [{'name':'name1','age':1},{'name':'name2','age':2},{'name':'name3','age':3}]}";
+
+		try (InputStream stream = asStream(payload)) {
 			Object[] deserialized = deserializer.deserialize(stream, listDog);
 			List<Dog>  dogs = (List<Dog>) deserialized[0]; 
 			assertThat(dogs.size(), is(3));
@@ -392,7 +396,9 @@ public class GsonDeserializerTest {
 
 	@Test
 	public void shouldDeserializeFromGenericTypeTwoParams() throws IOException {
-		try (InputStream stream = asStream("{'entity':{'name':'Brutus','age':7,'birthday':'2013-07-23T17:14:14-03:00'}, 'param': 'test', 'over': 'value'}")) {
+		String payload = "{'entity':{'name':'Brutus','age':7,'birthday':'2013-07-23T17:14:14-03:00'}, 'param': 'test', 'over': 'value'}";
+
+		try (InputStream stream = asStream(payload)) {
 			BeanClass resourceClass = new DefaultBeanClass(DogGenericController.class);
 			Method method = new Mirror().on(DogGenericController.class).reflect().method("anotherMethod").withAnyArgs();
 			ControllerMethod resource = new DefaultControllerMethod(resourceClass, method);

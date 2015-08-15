@@ -60,7 +60,7 @@ public class DefaultParametersControlTest {
 	}
 
 	@Test
-	public void registerExtraParametersFromAcessedUrl() throws SecurityException, NoSuchMethodException {
+	public void registerExtraParametersFromAcessedUrl() throws SecurityException {
 		DefaultParametersControl control = getDefaultParameterControlForUrl("/clients/{dog.id}");
 		control.fillIntoRequest("/clients/45", request);
 		verify(request).setParameter("dog.id", new String[] {"45"});
@@ -71,14 +71,14 @@ public class DefaultParametersControlTest {
 	}
 
 	@Test
-	public void registerParametersWithAsterisks() throws SecurityException, NoSuchMethodException {
+	public void registerParametersWithAsterisks() throws SecurityException {
 		DefaultParametersControl control = getDefaultParameterControlForUrl("/clients/{my.path*}");
 		control.fillIntoRequest("/clients/one/path", request);
 		verify(request).setParameter("my.path", new String[] {"one/path"});
 	}
 
 	@Test
-	public void registerParametersWithRegexes() throws SecurityException, NoSuchMethodException {
+	public void registerParametersWithRegexes() throws SecurityException {
 		DefaultParametersControl control = getDefaultParameterControlForUrl("/clients/{hexa:[0-9A-Z]+}");
 
 		control.fillIntoRequest("/clients/FAF323", request);
@@ -87,7 +87,7 @@ public class DefaultParametersControlTest {
 	}
 
 	@Test
-	public void registerParametersWithMultipleRegexes() throws SecurityException, NoSuchMethodException {
+	public void registerParametersWithMultipleRegexes() throws SecurityException {
 		DefaultParametersControl control = new DefaultParametersControl("/test/{hash1:[a-z0-9]{16}}{id}{hash2:[a-z0-9]{16}}/", Collections.singletonMap("id", "\\d+"), converters, evaluator,encodingHandler);
 
 		control.fillIntoRequest("/test/0123456789abcdef1234fedcba9876543210/", request);
@@ -98,13 +98,13 @@ public class DefaultParametersControlTest {
 	}
 
 	@Test
-	public void worksAsRegexWhenUsingParameters() throws SecurityException, NoSuchMethodException {
+	public void worksAsRegexWhenUsingParameters() throws SecurityException {
 		DefaultParametersControl control = getDefaultParameterControlForUrl("/clients/{dog.id}");
 		assertThat(control.matches("/clients/15"), is(equalTo(true)));
 	}
 
 	@Test
-	public void worksWithBasicRegexEvaluation() throws SecurityException, NoSuchMethodException {
+	public void worksWithBasicRegexEvaluation() throws SecurityException {
 		DefaultParametersControl control = getDefaultParameterControlForUrl("/clients.*");
 		assertThat(control.matches("/clientsWhatever"), is(equalTo(true)));
 	}
@@ -233,7 +233,7 @@ public class DefaultParametersControlTest {
 	}
 
 	@Test
-	public void registerExtraParametersFromAcessedUrlWithGreedyParameters() throws SecurityException, NoSuchMethodException {
+	public void registerExtraParametersFromAcessedUrlWithGreedyParameters() throws SecurityException {
 		DefaultParametersControl control = getDefaultParameterControlForUrl("/clients/{pathToFile*}");
 
 		control.fillIntoRequest("/clients/my/path/to/file", request);
@@ -242,7 +242,7 @@ public class DefaultParametersControlTest {
 	}
 
 	@Test
-	public void registerExtraParametersFromAcessedUrlWithGreedyAndDottedParameters() throws SecurityException, NoSuchMethodException {
+	public void registerExtraParametersFromAcessedUrlWithGreedyAndDottedParameters() throws SecurityException {
 		DefaultParametersControl control = getDefaultParameterControlForUrl("/clients/{path.to.file*}");
 
 		control.fillIntoRequest("/clients/my/path/to/file", request);

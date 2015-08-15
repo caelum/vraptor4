@@ -47,7 +47,7 @@ public class DefaultEnvironmentTest {
 	}
 
 	@Test
-	public void shouldUseEnvironmentBasedFileIfFoundUnderEnvironmentFolder() throws IOException {
+	public void shouldUseEnvironmentBasedFileIfFoundUnderEnvironmentFolder() {
 		DefaultEnvironment env = buildEnvironment(EnvironmentType.DEVELOPMENT);
 		URL resource = env.getResource("/rules.txt");
 
@@ -56,7 +56,7 @@ public class DefaultEnvironmentTest {
 	}
 
 	@Test
-	public void shouldUseRootBasedFileIfNotFoundUnderEnvironmentFolder() throws IOException {
+	public void shouldUseRootBasedFileIfNotFoundUnderEnvironmentFolder() {
 		DefaultEnvironment env = buildEnvironment(EnvironmentType.PRODUCTION);
 		URL resource = env.getResource("/rules.txt");
 
@@ -65,7 +65,7 @@ public class DefaultEnvironmentTest {
 	}
 
 	@Test
-	public void shouldLoadConfigurationInDefaultFileEnvironment() throws IOException {
+	public void shouldLoadConfigurationInDefaultFileEnvironment() {
 		when(context.getInitParameter(DefaultEnvironment.ENVIRONMENT_PROPERTY)).thenReturn("production");
 		DefaultEnvironment env = buildEnvironment(context);
 		
@@ -74,7 +74,7 @@ public class DefaultEnvironmentTest {
 	}
 
 	@Test
-	public void shouldUseFalseWhenFeatureIsNotPresent() throws IOException {
+	public void shouldUseFalseWhenFeatureIsNotPresent() {
 		DefaultEnvironment env = buildEnvironment(context);
 		assertThat(env.supports("feature_that_doesnt_exists"), is(false));
 	}
@@ -137,7 +137,7 @@ public class DefaultEnvironmentTest {
 		System.getProperties().remove(DefaultEnvironment.ENVIRONMENT_PROPERTY);
 	}
 	
-	public void shouldGetOverridedSystemPropertyValueIfIsSet() throws IOException {
+	public void shouldGetOverridedSystemPropertyValueIfIsSet() {
 		DefaultEnvironment defaultEnvironment = buildEnvironment(EnvironmentType.DEVELOPMENT);
 		System.setProperty("env_name", "customEnv");
 		String value = defaultEnvironment.get("env_name");

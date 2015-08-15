@@ -252,8 +252,7 @@ public class PathAnnotationRoutesParserTest {
 	}
 
 	@Test
-	public void suportsTheDefaultNameForANonAnnotatedMethod() throws SecurityException,
-			NoSuchMethodException {
+	public void suportsTheDefaultNameForANonAnnotatedMethod() throws SecurityException {
 		List<Route> routes = parser.rulesFor(new DefaultBeanClass(ClientsController.class));
 		Route route = getRouteMatching(routes, "/clients/add");
 
@@ -263,8 +262,7 @@ public class PathAnnotationRoutesParserTest {
 	}
 
 	@Test
-	public void ignoresTheControllerSuffixForANonAnnotatedMethod() throws SecurityException,
-			NoSuchMethodException {
+	public void ignoresTheControllerSuffixForANonAnnotatedMethod() throws SecurityException {
 		List<Route> routes = parser.rulesFor(new DefaultBeanClass(ClientsController.class));
 		Route route = getRouteMatching(routes, "/clients/add");
 
@@ -273,7 +271,7 @@ public class PathAnnotationRoutesParserTest {
 
 	}
 	@Test
-	public void addsASlashWhenUserForgotIt() throws SecurityException,  NoSuchMethodException {
+	public void addsASlashWhenUserForgotIt() throws SecurityException {
 		List<Route> routes = parser.rulesFor(new DefaultBeanClass(ClientsController.class));
 		Route route = getRouteMatching(routes, "/noSlash");
 
@@ -283,7 +281,7 @@ public class PathAnnotationRoutesParserTest {
 	}
 
 	@Test
-	public void matchesWhenUsingAWildcard() throws SecurityException, NoSuchMethodException {
+	public void matchesWhenUsingAWildcard() throws SecurityException {
 		List<Route> routes = parser.rulesFor(new DefaultBeanClass(ClientsController.class));
 		Route route = getRouteMatching(routes, "/move/second/child");
 
@@ -396,7 +394,7 @@ public class PathAnnotationRoutesParserTest {
 	}
 
 	@Test
-	public void shouldAcceptAResultWithASpecificWebMethod() throws SecurityException, NoSuchMethodException {
+	public void shouldAcceptAResultWithASpecificWebMethod() throws SecurityException {
 		List<Route> routes = parser.rulesFor(new DefaultBeanClass(ClientsController.class));
 		Route route = getRouteMatching(routes, "/clients/head");
 
@@ -404,7 +402,7 @@ public class PathAnnotationRoutesParserTest {
 	}
 
 	@Test
-	public void shouldAcceptAResultWithOptionsWebMethod() throws SecurityException, NoSuchMethodException {
+	public void shouldAcceptAResultWithOptionsWebMethod() throws SecurityException {
 		List<Route> routes = parser.rulesFor(new DefaultBeanClass(ClientsController.class));
 		Route route = getRouteMatching(routes, "/clients/options");
 
@@ -412,7 +410,7 @@ public class PathAnnotationRoutesParserTest {
 	}
 
 	@Test
-	public void shouldAcceptAResultWithPatchWebMethod() throws SecurityException, NoSuchMethodException {
+	public void shouldAcceptAResultWithPatchWebMethod() throws SecurityException {
 		List<Route> routes = parser.rulesFor(new DefaultBeanClass(ClientsController.class));
 		Route route = getRouteMatching(routes, "/clients/update");
 
@@ -435,7 +433,7 @@ public class PathAnnotationRoutesParserTest {
 		assertTrue(route.canHandle(NiceClients.class, ClientsController.class.getDeclaredMethod("toInherit")));
 	}
 	@Test
-	public void supportMethodOverriding() throws SecurityException, NoSuchMethodException {
+	public void supportMethodOverriding() throws SecurityException {
 		List<Route> routes = parser.rulesFor(new DefaultBeanClass(NiceClients.class));
 		Route route = getRouteMatching(routes, "/niceClients/add");
 
@@ -462,14 +460,14 @@ public class PathAnnotationRoutesParserTest {
 	}
 
 	@Test
-	public void supportTypeHttpMethodAnnotation() throws SecurityException, NoSuchMethodException {
+	public void supportTypeHttpMethodAnnotation() throws SecurityException {
 		List<Route> routes = parser.rulesFor(new DefaultBeanClass(AnnotatedController.class));
 		Route route = getRouteMatching(routes, "/annotated/test");
 		assertThat(route.allowedMethods(), is(EnumSet.of(HttpMethod.POST)));
 	}
 
 	@Test
-	public void supportOverrideTypeHttpMethodAnnotation() throws SecurityException, NoSuchMethodException {
+	public void supportOverrideTypeHttpMethodAnnotation() throws SecurityException {
 		List<Route> routes = parser.rulesFor(new DefaultBeanClass(AnnotatedController.class));
 		Route route = getRouteMatching(routes, "/annotated/overridden");
 		assertThat(route.allowedMethods(), is(EnumSet.of(HttpMethod.GET)));

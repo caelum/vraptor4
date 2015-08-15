@@ -142,8 +142,7 @@ public class VRaptor implements Filter {
 		}
 	}
 
-	private void warnIfBeansXmlIsNotFound() throws ServletException {
-		
+	private void warnIfBeansXmlIsNotFound() {
 		URL webInfFile = getResource("/WEB-INF/beans.xml");
 		URL metaInfFile = getResource("/WEB-INF/classes/META-INF/beans.xml");
 
@@ -153,7 +152,7 @@ public class VRaptor implements Filter {
 		}
 	}
 
-	private URL getResource(String path) throws ServletException {
+	private URL getResource(String path) {
 		try {
 			return servletContext.getResource(path);
 		} catch (MalformedURLException e) {

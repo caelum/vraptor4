@@ -33,7 +33,7 @@ public class MockHttpServletResponseTest {
 	}
 
 	@Test 
-	public void shouldBeAbleToReturnContentIntoWriteAsString() throws IOException {
+	public void shouldBeAbleToReturnContentIntoWriteAsString() {
 		response.getWriter().write("X");
 		response.getWriter().flush();
 		assertEquals("X", response.getContentAsString());

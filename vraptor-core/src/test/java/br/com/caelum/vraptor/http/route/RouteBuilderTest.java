@@ -195,7 +195,7 @@ public class RouteBuilderTest {
 	}
 
 	@Test
-	public void shouldSupportPathsWithDotsAndAsterisks() throws SecurityException, NoSuchMethodException {
+	public void shouldSupportPathsWithDotsAndAsterisks() throws SecurityException {
 		builder = newBuilder("/my/{abc.def*}");
 
 		Method method = AbcResource.class.getDeclaredMethods()[0];
@@ -208,7 +208,7 @@ public class RouteBuilderTest {
 	
 	@Test
 	@Ignore("Should it work someday?")
-	public void shouldUseGenericParameters() throws SecurityException, NoSuchMethodException {
+	public void shouldUseGenericParameters() throws SecurityException {
 		builder = newBuilder("/my/{abc.y}");
 
 		Method method = Generic.class.getDeclaredMethods()[0];

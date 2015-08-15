@@ -44,7 +44,7 @@ public class InstantiateObserverTest {
 	}
 
 	@Test
-	public void shouldUseContainerForNewComponent() throws InterceptionException, IOException {
+	public void shouldUseContainerForNewComponent() throws InterceptionException {
 		final DogController myDog = new DogController();
 		InstanceContainer container = new InstanceContainer(myDog);
 		InstantiateObserver observer = new InstantiateObserver(container);

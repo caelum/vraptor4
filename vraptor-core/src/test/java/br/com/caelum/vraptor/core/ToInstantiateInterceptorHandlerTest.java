@@ -72,7 +72,7 @@ public class ToInstantiateInterceptorHandlerTest {
 	}
 
 	@Test
-	public void shouldComplainWhenUnableToInstantiateAnInterceptor() throws InterceptionException, IOException {
+	public void shouldComplainWhenUnableToInstantiateAnInterceptor() throws InterceptionException {
 		exception.expect(InterceptionException.class);
 		exception.expectMessage(containsString("Unable to instantiate interceptor for"));
 
@@ -84,7 +84,7 @@ public class ToInstantiateInterceptorHandlerTest {
 	}
 
 	@Test
-	public void shouldInvokeInterceptorsMethodIfAbleToInstantiateIt() throws InterceptionException, IOException {
+	public void shouldInvokeInterceptorsMethodIfAbleToInstantiateIt() throws InterceptionException {
 		final Object instance = new Object();
 		
 		when(container.instanceFor(Interceptor.class)).thenReturn(interceptor);
@@ -96,7 +96,7 @@ public class ToInstantiateInterceptorHandlerTest {
 		verify(interceptor).intercept(stack, method, instance);
 	}
 	@Test
-	public void shouldNotInvokeInterceptorsMethodIfInterceptorDoesntAcceptsResource() throws InterceptionException, IOException {
+	public void shouldNotInvokeInterceptorsMethodIfInterceptorDoesntAcceptsResource() throws InterceptionException {
 		final Object instance = new Object();
 		when(container.instanceFor(Interceptor.class)).thenReturn(interceptor);
 		when(interceptor.accepts(method)).thenReturn(false);

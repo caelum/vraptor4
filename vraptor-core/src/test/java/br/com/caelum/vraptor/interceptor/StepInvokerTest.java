@@ -64,7 +64,7 @@ public class StepInvokerTest {
 	}
 
 	@Test
-	public void shouldFindMethodFromWeldStyleInterceptor() throws SecurityException, NoSuchMethodException{
+	public void shouldFindMethodFromWeldStyleInterceptor() throws SecurityException{
 		Class<?> interceptorClass = WeldProxy$$$StyleInterceptor.class;
 		assertNotNull(findMethod(interceptorClass, AroundCall.class));
 	}

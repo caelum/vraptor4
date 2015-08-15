@@ -59,7 +59,7 @@ public class DefaultPathResolverTest {
 	}
 
 	@Test
-	public void shouldUseTheFormatIfSupplied() throws NoSuchMethodException {
+	public void shouldUseTheFormatIfSupplied() {
 		when(formatResolver.getAcceptFormat()).thenReturn("json");
 
 		String result = resolver.pathFor(method);
@@ -68,7 +68,7 @@ public class DefaultPathResolverTest {
 	}
 
 	@Test
-	public void shouldIgnoreHtmlFormat() throws NoSuchMethodException {
+	public void shouldIgnoreHtmlFormat() {
 		when(formatResolver.getAcceptFormat()).thenReturn("html");
 
 		String result = resolver.pathFor(method);

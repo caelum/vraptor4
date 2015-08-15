@@ -46,6 +46,7 @@ class MockRequestHandlerObserver extends RequestHandlerObserver{
 		super(translator, controllerNotFoundHandler, methodNotAllowedHandler, controllerFoundEvent, endRequestEvent, interceptorStack, invalidInputHandler);
 	}
 
+	@Override
 	public void handle(@Observes VRaptorRequestStarted event) {
 		vraptorStackCalled = true;
 	}

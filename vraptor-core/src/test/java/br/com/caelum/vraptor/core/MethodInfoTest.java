@@ -22,9 +22,9 @@ public class MethodInfoTest {
 	public void setUp() {
 		this.methodInfo = new MethodInfo(new ParanamerNameProvider());
 	}
-	
+
 	@Test
-	public void should_clear_valued_parameters_when_controller_method_is_updated() {
+	public void shouldClearValuedParametersWhenControllerMethodIsUpdated() {
 		ValuedParameter[] parameters = null;
 		methodInfo.setControllerMethod(controllerMethod("bark", int.class));
 		parameters = methodInfo.getValuedParameters();

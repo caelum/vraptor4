@@ -17,7 +17,10 @@ package br.com.caelum.vraptor.serialization.gson;
 
 import java.lang.reflect.Type;
 
+import javax.annotation.Priority;
 import javax.enterprise.context.Dependent;
+import javax.enterprise.inject.Alternative;
+import javax.interceptor.Interceptor;
 
 import br.com.caelum.vraptor.validator.Message;
 
@@ -34,6 +37,8 @@ import com.google.gson.JsonSerializer;
  * @since 4.0.0
  */
 @Dependent
+@Alternative
+@Priority(Interceptor.Priority.LIBRARY_BEFORE)
 public class MessageGsonConverter implements JsonSerializer<Message> {
 	
 	@Override

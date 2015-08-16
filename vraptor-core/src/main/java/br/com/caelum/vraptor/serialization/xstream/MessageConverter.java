@@ -15,7 +15,10 @@
  */
 package br.com.caelum.vraptor.serialization.xstream;
 
+import javax.annotation.Priority;
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.Alternative;
+import javax.interceptor.Interceptor;
 
 import br.com.caelum.vraptor.validator.Message;
 
@@ -31,6 +34,8 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
  * @since 3.4.0
  */
 @ApplicationScoped
+@Alternative
+@Priority(Interceptor.Priority.LIBRARY_BEFORE)
 public class MessageConverter implements Converter {
 
 	@Override

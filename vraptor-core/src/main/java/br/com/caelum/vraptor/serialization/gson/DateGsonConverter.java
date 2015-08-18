@@ -21,7 +21,10 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import javax.annotation.Priority;
 import javax.enterprise.context.Dependent;
+import javax.enterprise.inject.Alternative;
+import javax.interceptor.Interceptor;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
@@ -40,6 +43,8 @@ import com.google.gson.JsonSyntaxException;
  * @since 4.0.0
  */
 @Dependent
+@Alternative
+@Priority(Interceptor.Priority.LIBRARY_BEFORE)
 public class DateGsonConverter implements JsonDeserializer<Date>, JsonSerializer<Date>{
 
 	@Override

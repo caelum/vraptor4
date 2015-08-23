@@ -1,3 +1,2 @@
 language: java
 sudo: false
-install: mvn clean install

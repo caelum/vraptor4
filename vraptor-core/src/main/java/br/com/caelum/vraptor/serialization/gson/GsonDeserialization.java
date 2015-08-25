@@ -122,7 +122,7 @@ public class GsonDeserialization implements Deserializer {
 						
 						if (deserializee.isWithoutRoot()) { 
 							values[i] = gson.fromJson(root, fallbackTo(parameter.getParameterizedType(), types[i]));
-							logger.info("json without root deserialized");
+							logger.warn("json without root deserialized");
 							break;
 
 						} else if (node != null) {

@@ -130,6 +130,18 @@
 <span class="o">}</span></code></pre> <h2 id="sobrescrevendo-componentes">Sobrescrevendo componentes</h2> <p>A maioria dos comportamentos e convenções do VRaptor são personalizáveis. E a forma de personalizar é bem fácil: criar um componente que estende uma das classes internas do VRaptor e anotá-las com <code>@Specializes</code>. Ao fazer isso, o VRaptor vai usar a implementação personalizada ao invés da padrão.</p> <p>Caso você quiser implementar alguma interface basta você usar a anotação: </p> <pre><code class="language-java"><span class="nd">@Priority</span><span class="o">(</span><span class="n">Interceptor</span><span class="o">.</span><span class="na">Priority</span><span class="o">.</span><span class="na">LIBRARY_BEFORE</span> <span class="o">+</span> <span class="mi">10</span><span class="o">)</span></code></pre> <h2 id="mudando-a-view-renderizada-por-padro">Mudando a view renderizada por padrão</h2> <p>Se você precisa mudar a view renderizada por padrão, ou mudar o local em que ela é procurada, basta criar a seguinte classe:</p> <pre><code class="language-java"><span class="nd">@Specializes</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">CustomPathResolver</span> <span class="kd">extends</span> <span class="n">DefaultPathResolver</span> <span class="o">{</span>
 
+    <span class="cm">/**</span>
+<span class="cm">     * @deprecated CDI eyes only</span>
+<span class="cm">     */</span>
+    <span class="kd">protected</span> <span class="nf">CustomPathResolver</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">(</span><span class="kc">null</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Inject</span>
+    <span class="kd">public</span> <span class="nf">CustomPathResolver</span><span class="o">(</span><span class="n">FormatResolver</span> <span class="n">resolver</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kd">super</span><span class="o">(</span><span class="n">resolver</span><span class="o">);</span>
+    <span class="o">}</span>
+
     <span class="nd">@Override</span>
     <span class="kd">protected</span> <span class="n">String</span> <span class="nf">getPrefix</span><span class="o">()</span> <span class="o">{</span>
         <span class="k">return</span> <span class="s">"/pasta/raiz/"</span><span class="o">;</span>

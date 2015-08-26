@@ -33,31 +33,31 @@ import java.util.ResourceBundle;
 @RequestScoped
 public class I18nMessageSerialization implements View {
 
-    private final Container container;
-    private final ResourceBundle bundle;
-    private I18nMessage i18nMessage;
+	private final Container container;
+	private final ResourceBundle bundle;
+	private I18nMessage i18nMessage;
 
-    /**
-     * @deprecated CDI eyes only
-     */
-    protected I18nMessageSerialization() {
-        this(null, null);
-    }
+	/**
+	 * @deprecated CDI eyes only
+	 */
+	protected I18nMessageSerialization() {
+		this(null, null);
+	}
 
-    @Inject
-    public I18nMessageSerialization(Container container, ResourceBundle bundle) {
-        this.container = container;
-        this.bundle = bundle;
-    }
+	@Inject
+	public I18nMessageSerialization(Container container, ResourceBundle bundle) {
+		this.container = container;
+		this.bundle = bundle;
+	}
 
-    public I18nMessageSerialization from(String category, String key, Object... params) {
-        i18nMessage = new I18nMessage(category, key, params);
-        i18nMessage.setBundle(bundle);
-        return this;
-    }
+	public I18nMessageSerialization from(String category, String key, Object... params) {
+		i18nMessage = new I18nMessage(category, key, params);
+		i18nMessage.setBundle(bundle);
+		return this;
+	}
 
-    public void as(Class<? extends Serialization> method) {
-        Serialization serialization = container.instanceFor(method);
-        serialization.from(i18nMessage, "message").serialize();
-    }
+	public void as(Class<? extends Serialization> method) {
+		Serialization serialization = container.instanceFor(method);
+		serialization.from(i18nMessage, "message").serialize();
+	}
 }

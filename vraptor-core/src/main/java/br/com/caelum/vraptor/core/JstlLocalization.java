@@ -16,11 +16,10 @@
  */
 package br.com.caelum.vraptor.core;
 
-import static com.google.common.base.Objects.firstNonNull;
-
-import java.util.Locale;
-import java.util.MissingResourceException;
-import java.util.ResourceBundle;
+import br.com.caelum.vraptor.util.EmptyBundle;
+import br.com.caelum.vraptor.util.SafeResourceBundle;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.inject.Produces;
@@ -29,12 +28,11 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.jstl.core.Config;
 import javax.servlet.jsp.jstl.fmt.LocalizationContext;
+import java.util.Locale;
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import br.com.caelum.vraptor.util.EmptyBundle;
-import br.com.caelum.vraptor.util.SafeResourceBundle;
+import static com.google.common.base.Objects.firstNonNull;
 
 /**
  * The default implementation of bundle provider uses JSTL's api to access user information on the bundle to be used.
@@ -75,7 +73,7 @@ public class JstlLocalization {
 			String baseName = firstNonNull((String) bundle, DEFAULT_BUNDLE_NAME);
 
 			try {
-				return ResourceBundle.getBundle(baseName, locale);
+				return ResourceBundle.getBundle(baseName, locale, new UTF8Control());
 			} catch (MissingResourceException e) {
 				logger.warn("couldn't find message bundle, creating an empty one", e);
 				return new EmptyBundle();

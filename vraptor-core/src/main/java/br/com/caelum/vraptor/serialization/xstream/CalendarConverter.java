@@ -17,7 +17,10 @@ package br.com.caelum.vraptor.serialization.xstream;
 
 import java.util.Calendar;
 
+import javax.annotation.Priority;
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.Alternative;
+import javax.interceptor.Interceptor;
 import javax.xml.bind.DatatypeConverter;
 
 import com.thoughtworks.xstream.converters.Converter;
@@ -32,6 +35,8 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
  * @since 4.0.0
  */
 @ApplicationScoped
+@Alternative
+@Priority(Interceptor.Priority.LIBRARY_BEFORE)
 public class CalendarConverter implements Converter {
 	
 	@Override

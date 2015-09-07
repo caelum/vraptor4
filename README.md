@@ -27,7 +27,7 @@ For a quick start, you can use this snippet in your maven POM:
 <dependency>
     <groupId>br.com.caelum</groupId>
     <artifactId>vraptor</artifactId>
-    <version>4.2.0-RC2</version> <!--or the latest version-->
+    <version>4.2.0-RC3</version> <!--or the latest version-->
 </dependency>
 ```
 
@@ -52,7 +52,7 @@ VRaptor uses Maven as build tool. So you can easily import it into your favorite
 
 Do you want to contribute with code, documentation or bug report?
 
-You can find guidelines to contribute to VRaptor [here](http://vraptor.caelum.com.br/en/docs/how-to-contribute/ "Contribute").
+You can find guidelines to contribute to VRaptor [here](http://www.vraptor.org/en/docs/how-to-contribute/ "Contribute").
 
 ## Compatibility checks
 

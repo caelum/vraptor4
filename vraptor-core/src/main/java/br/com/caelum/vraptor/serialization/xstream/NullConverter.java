@@ -15,7 +15,10 @@
  */
 package br.com.caelum.vraptor.serialization.xstream;
 
+import javax.annotation.Priority;
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.Alternative;
+import javax.interceptor.Interceptor;
 
 import com.thoughtworks.xstream.converters.SingleValueConverter;
 
@@ -23,6 +26,8 @@ import com.thoughtworks.xstream.converters.SingleValueConverter;
  * for DI purposes
  */
 @ApplicationScoped
+@Alternative
+@Priority(Interceptor.Priority.LIBRARY_BEFORE)
 public class NullConverter implements SingleValueConverter {
 	@Override
 	public String toString(Object o) {return null;}

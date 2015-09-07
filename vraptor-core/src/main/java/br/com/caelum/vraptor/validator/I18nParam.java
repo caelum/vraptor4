@@ -16,6 +16,7 @@
 package br.com.caelum.vraptor.validator;
 
 import java.io.Serializable;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 import javax.enterprise.inject.Vetoed;
@@ -47,5 +48,19 @@ public class I18nParam implements Serializable {
 	@Override
 	public String toString() {
 		return String.format("i18n(%s)", key);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hashCode(key);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) return true;
+		if (obj == null) return false;
+		if (getClass() != obj.getClass()) return false;
+		I18nParam other = (I18nParam) obj;
+		return Objects.equals(key, other.key);
 	}
 }

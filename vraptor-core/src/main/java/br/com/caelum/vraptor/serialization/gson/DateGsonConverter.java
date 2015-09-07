@@ -16,11 +16,15 @@
 package br.com.caelum.vraptor.serialization.gson;
 
 import java.lang.reflect.Type;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import javax.annotation.Priority;
 import javax.enterprise.context.Dependent;
+import javax.enterprise.inject.Alternative;
+import javax.interceptor.Interceptor;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
@@ -39,27 +43,27 @@ import com.google.gson.JsonSyntaxException;
  * @since 4.0.0
  */
 @Dependent
+@Alternative
+@Priority(Interceptor.Priority.LIBRARY_BEFORE)
 public class DateGsonConverter implements JsonDeserializer<Date>, JsonSerializer<Date>{
 
-	private final SimpleDateFormat iso8601Format;
-
-	public DateGsonConverter() {
-		this.iso8601Format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
-	}
-	
 	@Override
 	public JsonElement serialize(Date date, Type typeOfSrc, JsonSerializationContext context) {
-		String dateString = iso8601Format.format(date);
+		String dateString = getFormat().format(date);
 		return new JsonPrimitive(dateString);
 	}
 
 	@Override
 	public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
 		try {
-			return iso8601Format.parse(json.getAsString());
+			return getFormat().parse(json.getAsString());
 		} catch (ParseException e) {
 			throw new JsonSyntaxException(json.getAsString(), e);
 		}
+	}	
+
+	protected DateFormat getFormat(){
+		return new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
 	}
 
 }

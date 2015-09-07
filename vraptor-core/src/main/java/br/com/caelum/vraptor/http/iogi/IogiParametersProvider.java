@@ -94,7 +94,7 @@ public class IogiParametersProvider implements ParametersProvider {
 		for (Parameter p : nameProvider.parametersFor(javaMethod)) {
 			Type type = p.getParameterizedType();
 			if (type instanceof TypeVariable) {
-				type = extractType(method);
+				type = extractType(method, (TypeVariable<?>) type);
 			}
 
 			targets.add(new Target<>(type, p.getName()));
@@ -102,10 +102,20 @@ public class IogiParametersProvider implements ParametersProvider {
 
 		return targets;
 	}
-	
-	private Type extractType(ControllerMethod method) {
-		ParameterizedType superclass = (ParameterizedType) method.getController().getType().getGenericSuperclass();
-		return superclass.getActualTypeArguments()[0];
+
+	private Type extractType(ControllerMethod method, TypeVariable<?> paramType) {
+		ParameterizedType parameterizedType = (ParameterizedType) method.getController().getType().getGenericSuperclass();
+		Class<?> rawType = (Class<?>) parameterizedType.getRawType();
+		TypeVariable<?>[] typeParameters = rawType.getTypeParameters();
+		if (typeParameters.length > 0) {
+			for (int i = 0; i < typeParameters.length; i++) {
+				TypeVariable<?> typeVariable = typeParameters[i];
+				if (typeVariable.getName().equals(paramType.getName())) {
+					return (Class<?>) parameterizedType.getActualTypeArguments()[i];
+				}
+			}
+		}
+		return paramType;
 	}
 
 	private Parameters parseParameters(HttpServletRequest request) {

@@ -40,14 +40,18 @@ import java.util.TimeZone;
 import javax.enterprise.inject.Instance;
 import javax.servlet.http.HttpServletRequest;
 
-import net.vidageek.mirror.dsl.Mirror;
-
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonSerializer;
 
 import br.com.caelum.vraptor.Consumes;
 import br.com.caelum.vraptor.controller.BeanClass;
@@ -62,12 +66,7 @@ import br.com.caelum.vraptor.serialization.Deserializee;
 import br.com.caelum.vraptor.serialization.Serializee;
 import br.com.caelum.vraptor.util.test.MockInstanceImpl;
 import br.com.caelum.vraptor.view.GenericController;
-
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonDeserializer;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParseException;
-import com.google.gson.JsonSerializer;
+import net.vidageek.mirror.dsl.Mirror;
 
 public class GsonDeserializerTest {
 

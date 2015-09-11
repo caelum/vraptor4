@@ -17,6 +17,8 @@ package br.com.caelum.vraptor.controller;
 
 import javax.enterprise.inject.Vetoed;
 
+import static br.com.caelum.vraptor.proxy.CDIProxies.extractRawTypeIfPossible;
+
 @Vetoed
 public class DefaultControllerInstance implements ControllerInstance {
 
@@ -33,7 +35,8 @@ public class DefaultControllerInstance implements ControllerInstance {
 	
 	@Override
 	public BeanClass getBeanClass(){
-		return new DefaultBeanClass(controller.getClass());
+		Class<?> controllerClass = extractRawTypeIfPossible(controller.getClass());
+		return new DefaultBeanClass(controllerClass);
 	}
-	
+
 }

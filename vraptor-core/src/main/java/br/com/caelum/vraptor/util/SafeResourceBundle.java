@@ -23,6 +23,9 @@ import java.util.ResourceBundle;
 
 import javax.enterprise.inject.Vetoed;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * A Resource bundle that doesn't throw exception when there is no resource of given key.
  * It only returns ??? + key + ??? when the key doesn't exist.
@@ -33,6 +36,7 @@ import javax.enterprise.inject.Vetoed;
 @Vetoed
 public class SafeResourceBundle extends ResourceBundle {
 
+	private static final Logger logger = LoggerFactory.getLogger(SafeResourceBundle.class);
 	private final ResourceBundle delegate;
 	private final boolean isDefault;
 
@@ -59,6 +63,7 @@ public class SafeResourceBundle extends ResourceBundle {
 		try {
 			return delegate.getString(key);
 		} catch (MissingResourceException e) {
+			logger.warn("Resource missed while calling delegate", e);
 			return "???" + key + "???";
 		}
 	}

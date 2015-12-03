@@ -151,7 +151,7 @@ public class CommonsUploadMultipartObserver {
 			try {
 				return item.getString(encoding);
 			} catch (UnsupportedEncodingException e) {
-				logger.warn("Request have an invalid encoding. Ignoring it");
+				logger.debug("Request has an invalid encoding. Ignoring it", e);
 			}
 		}
 		return item.getString();

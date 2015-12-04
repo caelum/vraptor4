@@ -50,7 +50,7 @@ import br.com.caelum.vraptor.util.StringUtils;
 @Vetoed
 public class DefaultParametersControl implements ParametersControl {
 
-	private final Logger logger = LoggerFactory.getLogger(DefaultParametersControl.class);
+	private static final Logger logger = LoggerFactory.getLogger(DefaultParametersControl.class);
 	private final List<String> parameters = new ArrayList<>();
 	private final Pattern pattern;
 	private final String originalPattern;

@@ -155,6 +155,7 @@ public class LinkToHandler extends ForwardingMap<Class<?>, Object> {
 		try {
 			return Class.forName(interfaceName);
 		} catch (ClassNotFoundException e1) {
+			logger.warn("Could not find class", e1);
 			// ok, continue
 		}
 

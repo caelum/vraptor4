@@ -26,6 +26,7 @@ import static org.mockito.Mockito.when;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -68,8 +69,6 @@ public class GsonJSONSerializationTest {
 	private HttpServletResponse response;
 	private DefaultTypeNameExtractor extractor;
 	private Environment environment;
-	private PrintWriter writer;
-
 	private GsonSerializerBuilder builder;
 
 	@Before
@@ -79,8 +78,7 @@ public class GsonJSONSerializationTest {
 		stream = new ByteArrayOutputStream();
 
 		response = mock(HttpServletResponse.class);
-		writer = new PrintWriter(stream);
-		when(response.getWriter()).thenReturn(writer);
+		when(response.getWriter()).thenReturn(new AlwaysFlushWriter(stream));
 		extractor = new DefaultTypeNameExtractor();
 		environment = mock(Environment.class);
 
@@ -94,6 +92,20 @@ public class GsonJSONSerializationTest {
 		builder = new GsonBuilderWrapper(new MockInstanceImpl<>(jsonSerializers), new MockInstanceImpl<>(jsonDeserializers), 
 				new Serializee(new DefaultReflectionProvider()), new DefaultReflectionProvider());
 		serialization = new GsonJSONSerialization(response, extractor, builder, environment, new DefaultReflectionProvider());
+	}
+	
+	private static class AlwaysFlushWriter extends PrintWriter {
+
+		public AlwaysFlushWriter(OutputStream out) {
+			super(out);
+		}
+		
+		@Override
+		public void write(String s) {
+			super.write(s);
+			super.flush();
+		}
+		
 	}
 	
 	@SkipSerialization
@@ -241,7 +253,6 @@ public class GsonJSONSerializationTest {
 		GenericWrapper<Client> wrapper = new GenericWrapper<>(entityList, entityList.size());
 
 		serialization.from(wrapper).include("entityList").serialize();
-		writer.flush();
 
 		assertThat(result(), is(equalTo(expectedResult)));
 	}
@@ -251,7 +262,6 @@ public class GsonJSONSerializationTest {
 		String expectedResult = "{\"order\":{\"price\":15.0,\"comments\":\"pack it nicely, please\"}}";
 		Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please");
 		serialization.from(order).serialize();
-		writer.flush();
 		assertThat(result(), is(equalTo(expectedResult)));
 	}
 
@@ -260,7 +270,6 @@ public class GsonJSONSerializationTest {
 		String expectedResult = "{\n  \"order\": {\n    \"price\": 15.0,\n    \"comments\": \"pack it nicely, please\"\n  }\n}";
 		Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please");
 		serialization.indented().from(order).serialize();
-		writer.flush();
 		assertThat(result(), is(equalTo(expectedResult)));
 	}
 
@@ -272,7 +281,6 @@ public class GsonJSONSerializationTest {
 		String expectedResult = "{\n  \"order\": {\n    \"price\": 15.0,\n    \"comments\": \"pack it nicely, please\"\n  }\n}";
 		Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please");
 		serialization.from(order).serialize();
-		writer.flush();
 		assertThat(result(), is(equalTo(expectedResult)));
 	}
 
@@ -284,7 +292,6 @@ public class GsonJSONSerializationTest {
 		String expectedResult = "{\"order\":{\"price\":15.0,\"comments\":\"pack it nicely, please\"}}";
 		Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please");
 		serialization.from(order).serialize();
-		writer.flush();
 		assertThat(result(), is(equalTo(expectedResult)));
 	}
 
@@ -293,7 +300,6 @@ public class GsonJSONSerializationTest {
 		String expectedResult = "{\"customOrder\":{\"price\":15.0,\"comments\":\"pack it nicely, please\"}}";
 		Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please");
 		serialization.from(order, "customOrder").serialize();
-		writer.flush();
 		assertThat(result(), is(equalTo(expectedResult)));
 	}
 
@@ -318,7 +324,6 @@ public class GsonJSONSerializationTest {
 		Order order = new BasicOrder(new Client("guilherme silveira"), 15.0, "pack it nicely, please",
 				Type.basic);
 		serialization.from(order).serialize();
-		writer.flush();
 		String result = result();
 		assertThat(result, containsString("\"type\":\"basic\""));
 	}
@@ -331,7 +336,6 @@ public class GsonJSONSerializationTest {
 
 		Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please");
 		serialization.from(Arrays.asList(order, order)).serialize();
-		writer.flush();
 		assertThat(result(), is(equalTo(expectedResult)));
 	}
 
@@ -342,7 +346,6 @@ public class GsonJSONSerializationTest {
 		expectedResult = "{\"orders\":[" + expectedResult + "]}";
 		Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please");
 		serialization.from(Arrays.asList(order, order), "orders").serialize();
-		writer.flush();
 		assertThat(result(), is(equalTo(expectedResult)));
 	}
 
@@ -351,7 +354,6 @@ public class GsonJSONSerializationTest {
 		Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please", new Item(
 				"name", 12.99));
 		serialization.from(Arrays.asList(order, order), "orders").exclude("price").serialize();
-		writer.flush();
 
 		assertThat(result(), not(containsString("\"items\"")));
 		assertThat(result(), not(containsString("name")));
@@ -365,7 +367,6 @@ public class GsonJSONSerializationTest {
 		User user = new User("caelum", "pwd12345",
 			new UserPrivateInfo("123.456.789-00", "+55 (11) 1111-1111"));
 		serialization.from(user).recursive().serialize();
-		writer.flush();
 
 		assertThat(result(), not(containsString("\"pwd12345\"")));
 		assertThat(result(), not(containsString("password")));
@@ -378,7 +379,6 @@ public class GsonJSONSerializationTest {
 		User user = new User("caelum", "pwd12345",
 			new UserPrivateInfo("123.456.789-00", "+55 (11) 1111-1111"));
 		serialization.from(user).recursive().serialize();
-		writer.flush();
 
 		assertThat(result(), not(containsString("info")));
 		assertThat(result(), not(containsString("cpf")));
@@ -395,7 +395,6 @@ public class GsonJSONSerializationTest {
 		// "<advancedOrder><notes>complex package</notes><price>15.0</price><comments>pack it nicely, please</comments></advancedOrder>";
 		Order order = new AdvancedOrder(null, 15.0, "pack it nicely, please", "complex package");
 		serialization.from(order).serialize();
-		writer.flush();
 		assertThat(result(), containsString("\"notes\":\"complex package\""));
 	}
 
@@ -407,7 +406,6 @@ public class GsonJSONSerializationTest {
 		advanced.order = new AdvancedOrder(new Client("john"), 15.0, "pack it nicely, please",
 				"complex package");
 		serialization.from(advanced).include("order").serialize();
-		writer.flush();
 		assertThat(result(), not(containsString("\"client\"")));
 	}
 
@@ -415,7 +413,6 @@ public class GsonJSONSerializationTest {
 	public void shouldExcludeParentFields() {
 		Order order = new AdvancedOrder(null, 15.0, "pack it nicely, please", "complex package");
 		serialization.from(order).exclude("comments").serialize();
-		writer.flush();
 		assertThat(result(), not(containsString("\"comments\"")));
 	}
 
@@ -424,7 +421,6 @@ public class GsonJSONSerializationTest {
 		String expectedResult = "{\"order\":{\"comments\":\"pack it nicely, please\"}}";
 		Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please");
 		serialization.from(order).exclude("price").serialize();
-		writer.flush();
 		assertThat(result(), is(equalTo(expectedResult)));
 	}
 
@@ -435,7 +431,6 @@ public class GsonJSONSerializationTest {
 		Order order = new Order(new Client("guilherme silveira", new Address("R. Vergueiro")), 15.0,
 				"pack it nicely, please");
 		serialization.from(order).include("client").serialize();
-		writer.flush();
 		assertThat(result(), containsString("\"name\":\"guilherme silveira\""));
 		assertThat(result(), not(containsString("R. Vergueiro")));
 	}
@@ -447,7 +442,6 @@ public class GsonJSONSerializationTest {
 		Order order = new Order(new Client("guilherme silveira", new Address("R. Vergueiro")), 15.0,
 				"pack it nicely, please");
 		serialization.from(order).include("client", "client.address").serialize();
-		writer.flush();
 		assertThat(result(), containsString("\"street\":\"R. Vergueiro\""));
 	}
 
@@ -457,7 +451,6 @@ public class GsonJSONSerializationTest {
 		// "<order><client></client>  <price>15.0</price><comments>pack it nicely, please</comments></order>";
 		Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please");
 		serialization.from(order).include("client").exclude("client.name").serialize();
-		writer.flush();
 		assertThat(result(), containsString("\"client\""));
 		assertThat(result(), not(containsString("guilherme silveira")));
 	}
@@ -469,7 +462,6 @@ public class GsonJSONSerializationTest {
 		Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please", new Item(
 				"any item", 12.99));
 		serialization.from(order).include("items").serialize();
-		writer.flush();
 		assertThat(result(), containsString("\"items\""));
 		assertThat(result(), containsString("\"name\":\"any item\""));
 		assertThat(result(), containsString("\"price\":12.99"));
@@ -482,7 +474,6 @@ public class GsonJSONSerializationTest {
 		orders.add(new Order(new Client("nykolas lima"), 15.0, "gift bags, please"));
 		orders.add(new Order(new Client("Rafael Dipold"), 15.0, "gift bags, please"));
 		serialization.from(orders).excludeAll().serialize();
-		writer.flush();
 		assertThat(result(), is(equalTo(expectedResult)));
 	}	
 
@@ -493,7 +484,6 @@ public class GsonJSONSerializationTest {
 		Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please", new Item(
 				"any item", 12.99));
 		serialization.from(order).include("items").exclude("items.price").serialize();
-		writer.flush();
 		assertThat(result(), containsString("\"items\""));
 		assertThat(result(), containsString("\"name\":\"any item\""));
 		assertThat(result(), not(containsString("12.99")));
@@ -504,7 +494,6 @@ public class GsonJSONSerializationTest {
 		Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please", new Item(
 				"any item", 12.99));
 		serialization.withoutRoot().from(order).include("items").exclude("items.price").serialize();
-		writer.flush();
 		assertThat(result(), containsString("\"items\""));
 		assertThat(result(), containsString("\"name\":\"any item\""));
 		assertThat(result(), not(containsString("12.99")));
@@ -517,7 +506,6 @@ public class GsonJSONSerializationTest {
 		Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please", new Item(
 				"any item", 12.99));
 		serialization.indented().withoutRoot().from(order).include("items").exclude("items.price").serialize();
-		writer.flush();
 		assertThat(result(), equalTo(expected));
 	}
 
@@ -558,7 +546,6 @@ public class GsonJSONSerializationTest {
 		String expectedResult = "[\"testing\"]";
 
 		serialization.withoutRoot().from(new MyCollection()).serialize();
-		writer.flush();
 		assertThat(result(), is(equalTo(expectedResult)));
 	}
 
@@ -569,7 +556,6 @@ public class GsonJSONSerializationTest {
 		c.included.setTimeZone(TimeZone.getTimeZone("GMT-0300"));
 
 		serialization.from(c).serialize();
-		writer.flush();
 		String result = result();
 
 		String expectedResult = "{\"client\":{\"name\":\"renan\",\"included\":\"2012-09-03T01:05:09-03:00\"}}";
@@ -581,7 +567,6 @@ public class GsonJSONSerializationTest {
 	public void shouldSerializeDateWithISO8601() {
 		Date date = new GregorianCalendar(1988, 0, 25, 1, 30, 15).getTime();
 		serialization.from(date).serialize();
-		writer.flush();
 		String expectedResult = "{\"date\":\"1988-01-25T01:30:15-0300\"}";
 		assertThat(result(), is(equalTo(expectedResult)));
 	}
@@ -591,7 +576,6 @@ public class GsonJSONSerializationTest {
 		String expectedResult = "{\"order\":{}}";
 		Order order = new Order(new Client("nykolas lima"), 15.0, "gift bags, please");
 		serialization.from(order).excludeAll().serialize();
-		writer.flush();
 		assertThat(result(), is(equalTo(expectedResult)));
 	}
 
@@ -600,7 +584,6 @@ public class GsonJSONSerializationTest {
 		String expectedResult = "{\"advancedOrder\":{}}";
 		Order order = new AdvancedOrder(null, 15.0, "pack it nicely, please", "complex package");
 		serialization.from(order).excludeAll().serialize();
-		writer.flush();
 		assertThat(result(), is(equalTo(expectedResult)));
 	}
 
@@ -609,7 +592,6 @@ public class GsonJSONSerializationTest {
 		String expectedResult = "{\"order\":{\"price\":15.0}}";
 		Order order = new Order(new Client("nykolas lima"), 15.0, "gift bags, please");
 		serialization.from(order).excludeAll().include("price").serialize();
-		writer.flush();
 		assertThat(result(), is(equalTo(expectedResult)));
 	}
 
@@ -621,7 +603,6 @@ public class GsonJSONSerializationTest {
 		String expectedResult = "calculate({\"order\":{\"price\":15.0}})";
 		Order order = new Order(new Client("nykolas lima"), 15.0, "gift bags, please");
 		serialization.withCallback("calculate").from(order).excludeAll().include("price").serialize();
-		writer.flush();
 		assertThat(result(), is(equalTo(expectedResult)));
 	}
 
@@ -633,7 +614,6 @@ public class GsonJSONSerializationTest {
 		String expectedResult = "{\"client\":{\"name\":\"adolfo eloy\"}}";
 		Client client = new Client("adolfo eloy");
 		serialization.version(1.0).from(client).serialize();
-		writer.flush();
 		assertThat(result(), is(equalTo(expectedResult)));
 	}
 
@@ -646,7 +626,6 @@ public class GsonJSONSerializationTest {
 
 		Client client = new Client("adolfo eloy", new Address("antonio agu", "osasco"));
 		serialization.version(1.0).from(client).recursive().serialize();
-		writer.flush();
 		assertThat(result(), is(equalTo(expectedResult)));
 	}
 	
@@ -654,7 +633,6 @@ public class GsonJSONSerializationTest {
 	public void shouldSerializeNullfieldswhenRequested(){
 		Address address = new Address("Alameda street", null);
 		serialization.serializeNulls().from(address).serialize();
-		writer.flush();
 		
 		String expectedResult = "{\"address\":{\"street\":\"Alameda street\",\"city\":null}}";
 		assertThat(result(), is(equalTo(expectedResult)));
@@ -664,9 +642,9 @@ public class GsonJSONSerializationTest {
 	public void shouldNotSerializeNullFieldsByDefault(){
 		Address address = new Address("Alameda street", null);
 		serialization.from(address).serialize();
-		writer.flush();
 		
 		String expectedResult = "{\"address\":{\"street\":\"Alameda street\"}}";
 		assertThat(result(), is(equalTo(expectedResult)));
 	}
+	
 }

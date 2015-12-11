@@ -34,6 +34,9 @@ import javax.servlet.http.HttpServletResponse;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonSerializer;
+
 import br.com.caelum.vraptor.core.DefaultReflectionProvider;
 import br.com.caelum.vraptor.environment.Environment;
 import br.com.caelum.vraptor.interceptor.DefaultTypeNameExtractor;
@@ -50,12 +53,11 @@ import br.com.caelum.vraptor.serialization.xstream.XStreamXMLSerialization;
 import br.com.caelum.vraptor.util.test.MockInstanceImpl;
 import br.com.caelum.vraptor.validator.SingletonResourceBundle;
 
-import com.google.gson.JsonDeserializer;
-import com.google.gson.JsonSerializer;
-
 public class I18nMessageSerializationTest {
+	
 	private I18nMessageSerialization serialization;
 	private ByteArrayOutputStream stream;
+	private PrintWriter writer;
 
 	@Before
 	public void setup() throws Exception {
@@ -64,7 +66,8 @@ public class I18nMessageSerializationTest {
 		Environment environment = mock(Environment.class);
 
 		HttpServletResponse response = mock(HttpServletResponse.class);
-		when(response.getWriter()).thenReturn(new PrintWriter(stream));
+		writer = new PrintWriter(stream);
+		when(response.getWriter()).thenReturn(writer);
 		DefaultTypeNameExtractor extractor = new DefaultTypeNameExtractor();
 		XStreamBuilder builder = XStreamBuilderImpl.cleanInstance(new MessageConverter());
 		XStreamXMLSerialization xmlSerialization = new XStreamXMLSerialization(response, builder, environment);
@@ -91,6 +94,8 @@ public class I18nMessageSerializationTest {
 	public void shouldCallJsonSerialization() {
 		String expectedResult = "{\"message\":{\"category\":\"success\",\"message\":\"Just another {0} in {1}\"}}";
 		serialization.from("success", "message.cat").as(json());
+		writer.flush();
+		
 		assertThat(result(), is(equalTo(expectedResult)));
 	}
 

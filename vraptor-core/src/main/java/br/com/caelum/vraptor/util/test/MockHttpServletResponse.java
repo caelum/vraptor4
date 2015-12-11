@@ -54,6 +54,7 @@ public class MockHttpServletResponse implements HttpServletResponse {
 	}
 	
 	public String getContentAsString() {
+		writer.flush();
 		return this.content.toString();
 	}
 

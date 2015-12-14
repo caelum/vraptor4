@@ -52,7 +52,7 @@ public class DefaultResult extends AbstractResult {
 	private final Messages messages;
 	
 	private Map<String, Object> includedAttributes;
-	private boolean responseCommitted = false;
+	private boolean responseCommitted;
 	
 
 	/** 

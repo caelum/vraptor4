@@ -44,8 +44,8 @@ public class XStreamBuilderImpl implements XStreamBuilder {
 	private final Serializee serializee;
 	private final ReflectionProvider reflectionProvider;
 
-	private boolean indented = false;
-	private boolean recursive = false;
+	private boolean indented;
+	private boolean recursive;
 	
 	/** 
 	 * @deprecated CDI eyes only

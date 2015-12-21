@@ -49,7 +49,7 @@ final class ArrayAdapter implements Instantiator<Object> {
 
 	private Function<Parameter, Parameter> indexedParameters(final Target<?> target) {
 		return new Function<Parameter, Parameter>() {
-			int i = 0;
+			int i;
 			@Override
 			public Parameter apply(Parameter parameter) {
 				if (target.getName().equals(parameter.getName())) {

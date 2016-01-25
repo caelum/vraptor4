@@ -31,7 +31,7 @@ import br.com.caelum.vraptor.observer.RequestHandlerObserver;
 @Vetoed
 public class InterceptorsReady {
 
-	private ControllerMethod method;
+	private final ControllerMethod method;
 
 	public InterceptorsReady(ControllerMethod method) {
 		this.method = method;

@@ -34,7 +34,7 @@ import com.google.common.base.Supplier;
 @Vetoed
 public class LRUCacheStore<K, V> extends LinkedHashMap<K, V> implements CacheStore<K,V> {
 	private static final long serialVersionUID = 1L;
-	private int capacity;
+	private final int capacity;
 
 	public LRUCacheStore(int capacity) {
 		super(capacity, 0.75f, true);

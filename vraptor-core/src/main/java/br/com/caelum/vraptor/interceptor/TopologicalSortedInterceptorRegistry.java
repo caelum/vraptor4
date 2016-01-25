@@ -32,7 +32,7 @@ import br.com.caelum.vraptor.Intercepts;
 @ApplicationScoped
 public class TopologicalSortedInterceptorRegistry implements InterceptorRegistry {
 
-	private Graph<Class<?>> set = new Graph<>();
+	private final Graph<Class<?>> set = new Graph<>();
 
 	@Override
 	public List<Class<?>> all() {

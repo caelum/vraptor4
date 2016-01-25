@@ -42,9 +42,9 @@ public class AspectStyleInterceptorHandler implements InterceptorHandler {
 	private final StepInvoker stepInvoker;
 	private final Container container;
 	private final Class<?> interceptorClass;
-	private CustomAcceptsExecutor customAcceptsExecutor;
-	private InterceptorAcceptsExecutor acceptsExecutor;
-	private InterceptorExecutor interceptorExecutor;
+	private final CustomAcceptsExecutor customAcceptsExecutor;
+	private final InterceptorAcceptsExecutor acceptsExecutor;
+	private final InterceptorExecutor interceptorExecutor;
 	private Method afterMethod;
 	private Method aroundMethod;
 	private Method beforeMethod;

@@ -94,7 +94,7 @@ public class JavassistProxifier implements Proxifier {
 	}
 
 	private static class MethodInvocationAdapter<T> implements MethodHandler {
-		private MethodInvocation<? super T> handler;
+		private final MethodInvocation<? super T> handler;
 
 		public MethodInvocationAdapter(MethodInvocation<? super T> handler) {
 			this.handler = handler;

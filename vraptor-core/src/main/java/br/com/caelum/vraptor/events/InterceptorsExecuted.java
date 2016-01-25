@@ -29,8 +29,8 @@ import br.com.caelum.vraptor.core.InterceptorStack;
 @Vetoed
 public class InterceptorsExecuted {
 
-	private ControllerMethod controllerMethod;
-	private Object controllerInstance;
+	private final ControllerMethod controllerMethod;
+	private final Object controllerInstance;
 
 	public InterceptorsExecuted(ControllerMethod controllerMethod, Object controllerInstance) {
 		this.controllerMethod = controllerMethod;

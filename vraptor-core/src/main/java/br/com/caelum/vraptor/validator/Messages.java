@@ -44,7 +44,7 @@ public class Messages {
 
 	private final static Logger log = getLogger(Messages.class);
 	
-	private Map<Severity, List<Message>> messages = new HashMap<>();
+	private final Map<Severity, List<Message>> messages = new HashMap<>();
 	private boolean unhandledErrors;
 
 	public Messages add(Message message) {

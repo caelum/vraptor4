@@ -38,8 +38,8 @@ import com.google.gson.FieldAttributes;
 @Vetoed
 public class Exclusions implements ExclusionStrategy {
 
-	private Serializee serializee;
-	private ReflectionProvider reflectionProvider;
+	private final Serializee serializee;
+	private final ReflectionProvider reflectionProvider;
 
 	public Exclusions(Serializee serializee, ReflectionProvider reflectionProvider) {
 		this.serializee = serializee;

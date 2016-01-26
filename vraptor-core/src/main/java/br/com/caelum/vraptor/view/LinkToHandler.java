@@ -80,7 +80,7 @@ public class LinkToHandler extends ForwardingMap<Class<?>, Object> {
 	private final Proxifier proxifier;
 	private final ReflectionProvider reflectionProvider;
 
-	private ConcurrentMap<Class<?>, Class<?>> interfaces = new ConcurrentHashMap<>();
+	private final ConcurrentMap<Class<?>, Class<?>> interfaces = new ConcurrentHashMap<>();
 
 	/** 
 	 * @deprecated CDI eyes only
@@ -107,7 +107,7 @@ public class LinkToHandler extends ForwardingMap<Class<?>, Object> {
 		return Collections.emptyMap();
 	}
 
-	private Lock lock = new ReentrantLock();
+	private final Lock lock = new ReentrantLock();
 
 	@Override
 	public Object get(Object key) {

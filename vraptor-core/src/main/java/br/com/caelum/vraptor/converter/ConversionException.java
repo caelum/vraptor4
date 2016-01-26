@@ -30,7 +30,7 @@ import br.com.caelum.vraptor.validator.Message;
 public class ConversionException extends IllegalArgumentException {
 
 	private static final long serialVersionUID = 8817715363221616696L;
-	private ConversionMessage message;
+	private final ConversionMessage message;
 
 	public ConversionException(Message message) {
 		this.message = new ConversionMessage("", message);

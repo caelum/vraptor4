@@ -22,7 +22,7 @@ import static br.com.caelum.vraptor.proxy.CDIProxies.extractRawTypeIfPossible;
 @Vetoed
 public class DefaultControllerInstance implements ControllerInstance {
 
-	private Object controller;
+	private final Object controller;
 
 	public DefaultControllerInstance(Object instance) {
 		this.controller = instance;

@@ -11,7 +11,7 @@ import org.openqa.selenium.WebElement;
 
 public class PageForm {
 
-	private WebElement form;
+	private final WebElement form;
 
 	public PageForm(WebDriver driver, By by) {
 		this.form = driver.findElement(by);

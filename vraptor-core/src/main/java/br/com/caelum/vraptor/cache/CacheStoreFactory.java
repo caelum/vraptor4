@@ -49,6 +49,10 @@ public class CacheStoreFactory {
 	@LRU
 	public <K, V> CacheStore<K, V> buildLRUCache(InjectionPoint ip) {
 		int capacity = ip.getAnnotated().getAnnotation(LRU.class).capacity();
+		return createCacheWrapper(capacity);
+	}
+
+	public <V, K> CacheStore<K, V> createCacheWrapper(int capacity) {
 		Cache<K, V> guavaCache = CacheBuilder.newBuilder()
 			.maximumSize(capacity)
 			.build();

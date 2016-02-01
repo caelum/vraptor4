@@ -73,7 +73,7 @@ public class BigDecimalConverter implements Converter<BigDecimal> {
 	}
 	
 	protected NumberFormat getNumberFormat() {
-		DecimalFormat fmt = ((DecimalFormat) DecimalFormat.getInstance(locale));
+		DecimalFormat fmt = (DecimalFormat) DecimalFormat.getInstance(locale);
 		fmt.setParseBigDecimal(true);
 		return fmt;
 	}

@@ -57,12 +57,11 @@ public class DefaultUserDao implements UserDao {
 	@Override
 	public User find(String login, String password) {
 		try {
-			User user = entityManager
-				.createQuery("select u from User u where u.login = :login and u.password = :password", User.class)
+			return entityManager
+					.createQuery("select u from User u where u.login = :login and u.password = :password", User.class)
 					.setParameter("login", login)
 					.setParameter("password", password)
 					.getSingleResult();
-			return user;
 		} catch (NoResultException e) {
 			return null;
 		}

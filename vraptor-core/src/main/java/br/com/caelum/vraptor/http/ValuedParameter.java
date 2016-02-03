@@ -58,7 +58,7 @@ public class ValuedParameter {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj instanceof ValuedParameter) {
+		if (this.getClass() == obj.getClass()) {
 			ValuedParameter other = (ValuedParameter) obj;
 			return Objects.equals(parameter.getName(), other.getParameter().getName())
 					&& Objects.equals(value, other.getValue());

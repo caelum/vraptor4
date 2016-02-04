@@ -90,8 +90,7 @@ public class CacheStoreFactory {
 					}
 				});
 			} catch (ExecutionException e) {
-				propagateIfPossible(e);
-				return valueProvider.get();
+				throw new CacheException("Error while trying to fetch key: " + key, e);
 			}
 		}
 	}

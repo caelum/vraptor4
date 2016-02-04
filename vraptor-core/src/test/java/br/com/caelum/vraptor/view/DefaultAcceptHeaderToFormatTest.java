@@ -21,7 +21,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.cache.CacheStore;
-import br.com.caelum.vraptor.cache.LRUCacheStore;
+import br.com.caelum.vraptor.cache.CacheStoreFactory;
 
 public class DefaultAcceptHeaderToFormatTest {
 
@@ -29,7 +29,8 @@ public class DefaultAcceptHeaderToFormatTest {
 
 	@Before
 	public void setup() {
-		CacheStore<String, String> cache = new LRUCacheStore<>(100);
+		
+		CacheStore<String, String> cache = new CacheStoreFactory().createCacheWrapper(100);
 		mimeTypeToFormat = new DefaultAcceptHeaderToFormat(cache);
 	}
 

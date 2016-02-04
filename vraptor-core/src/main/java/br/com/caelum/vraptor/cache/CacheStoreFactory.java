@@ -15,10 +15,20 @@
  */
 package br.com.caelum.vraptor.cache;
 
+import static com.google.common.base.Throwables.propagateIfPossible;
+
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+
 import javax.enterprise.context.Dependent;
 import javax.enterprise.inject.Default;
 import javax.enterprise.inject.Produces;
 import javax.enterprise.inject.spi.InjectionPoint;
+
+import com.google.common.base.Supplier;
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
+
 
 /**
  * A factory class that produces cache implementations.
@@ -31,14 +41,57 @@ public class CacheStoreFactory {
 
 	@Produces
 	@Default
-	public <K, V> DefaultCacheStore<K, V> buildDefaultCache() {
+	public <K, V> CacheStore<K, V> buildDefaultCache() {
 		return new DefaultCacheStore<K, V>();
 	}
 
 	@Produces
 	@LRU
-	public <K, V> LRUCacheStore<K, V> buildLRUCache(InjectionPoint ip) {
+	public <K, V> CacheStore<K, V> buildLRUCache(InjectionPoint ip) {
 		int capacity = ip.getAnnotated().getAnnotation(LRU.class).capacity();
-		return new LRUCacheStore<K, V>(capacity);
+		return createCacheWrapper(capacity);
+	}
+
+	public <V, K> CacheStore<K, V> createCacheWrapper(int capacity) {
+		Cache<K, V> guavaCache = CacheBuilder.newBuilder()
+			.maximumSize(capacity)
+			.build();
+		return new GuavaCacheWrapper<K,V>(guavaCache);
+	}
+	
+	public static class  GuavaCacheWrapper<K,V> implements CacheStore<K, V>{
+
+		private Cache<K, V> guavaCache;
+
+		public GuavaCacheWrapper(Cache<K,V> guavaCache) {
+			this.guavaCache = guavaCache;
+		}
+
+		@Override
+		public V write(K key, V value) {
+			guavaCache.put(key, value);
+			return value;
+		}
+
+		@Override
+		public V fetch(K key) {
+			return guavaCache.getIfPresent(key);
+		}
+
+		@Override
+		public V fetch(K key, Supplier<V> valueProvider) {
+			final Supplier<V> userSuplier = valueProvider;
+			try {
+				return guavaCache.get(key, new Callable<V>() {
+
+					@Override
+					public V call() throws Exception {
+						return userSuplier.get();
+					}
+				});
+			} catch (ExecutionException e) {
+				throw new CacheException("Error while trying to fetch key: " + key, e);
+			}
+		}
 	}
 }

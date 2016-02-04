@@ -157,7 +157,7 @@ public class GsonDeserialization implements Deserializer {
 		return values;
 	}
 
-	private Type fallbackTo(Type parameterizedType, Class<?> type) {
+	private static Type fallbackTo(Type parameterizedType, Class<?> type) {
 		if (parameterizedType instanceof TypeVariable) return type;
 		return parameterizedType;
 	}
@@ -174,7 +174,7 @@ public class GsonDeserialization implements Deserializer {
 		return charset.split(",")[0];
 	}
 
-	private boolean isWithoutRoot(Parameter[] parameters, JsonObject root) {
+	private static boolean isWithoutRoot(Parameter[] parameters, JsonObject root) {
 		for (Parameter parameter : parameters) {
 			if (root.get(parameter.getName()) != null)
 				return false;
@@ -192,7 +192,7 @@ public class GsonDeserialization implements Deserializer {
 		return parameterTypes;
 	}
 
-	private Class<?>[] parseGenericParameters(Class<?>[] parameterTypes,
+	private static Class<?>[] parseGenericParameters(Class<?>[] parameterTypes,
 			Type genericType) {
 		Class<?> type = (Class<?>) getGenericType(genericType);
 		for (int i = 0; i < parameterTypes.length; i++) {
@@ -203,7 +203,7 @@ public class GsonDeserialization implements Deserializer {
 		return parameterTypes;
 	}
 
-	private Type getGenericSuperClass(ControllerMethod method) {
+	private static Type getGenericSuperClass(ControllerMethod method) {
 		Type genericType = method.getController().getType().getGenericSuperclass();
 		if (genericType instanceof ParameterizedType) {
 			return genericType;
@@ -212,7 +212,7 @@ public class GsonDeserialization implements Deserializer {
 		return null;
 	}
 
-	private Type getGenericType(Type type) {
+	private static Type getGenericType(Type type) {
 		ParameterizedType paramType = (ParameterizedType) type;
 		return paramType.getActualTypeArguments()[0];
 	}

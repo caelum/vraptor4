@@ -103,7 +103,7 @@ public class DeserializingObserver {
 		}
 	}
 
-	private String mime(String contentType) {
+	private static String mime(String contentType) {
 		if (contentType.contains(";")) {
 			return contentType.split(";")[0];
 		}

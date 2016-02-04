@@ -202,7 +202,7 @@ public class PathAnnotationRoutesParser implements RoutesParser {
 		}
 	}
 
-	private String fixLeadingSlash(String uri) {
+	private static String fixLeadingSlash(String uri) {
 		if (!uri.startsWith("/")) {
 			return  "/" + uri;
 		}

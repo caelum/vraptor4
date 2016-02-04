@@ -94,7 +94,7 @@ public class Parameter {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj instanceof Parameter) {
+		if (this.getClass() == obj.getClass()) {
 			Parameter other = (Parameter) obj;
 			return other.index == index && other.holder.equals(holder);
 		}

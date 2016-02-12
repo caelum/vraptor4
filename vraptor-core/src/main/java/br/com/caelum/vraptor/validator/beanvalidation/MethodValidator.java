@@ -63,6 +63,7 @@ public class MethodValidator {
 	/**
 	 * @deprecated CDI eyes only
 	 */
+	@Deprecated
 	protected MethodValidator() {
 		this(null, null, null);
 	}

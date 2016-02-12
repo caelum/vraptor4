@@ -56,6 +56,7 @@ public class DefaultStatus implements Status {
 	/** 
 	 * @deprecated CDI eyes only
 	 */
+	@Deprecated
 	protected DefaultStatus() {
 		this(null, null, null, null, null);
 	}

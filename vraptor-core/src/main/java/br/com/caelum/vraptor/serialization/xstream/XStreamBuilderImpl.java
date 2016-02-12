@@ -50,6 +50,7 @@ public class XStreamBuilderImpl implements XStreamBuilder {
 	/** 
 	 * @deprecated CDI eyes only
 	 */
+	@Deprecated
 	protected XStreamBuilderImpl() {
 		this(null, null, null, null);
 	}

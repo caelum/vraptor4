@@ -41,6 +41,7 @@ public class ParameterIncluder {
 	/**
 	 * @deprecated CDI eyes only
 	 */
+	@Deprecated
 	protected ParameterIncluder() {
 		this(null);
 	}

@@ -40,6 +40,7 @@ public class InterceptorStackHandlersCache {
 	/** 
 	 * @deprecated CDI eyes only
 	 */
+	@Deprecated
 	protected InterceptorStackHandlersCache() {
 		this(null, null);
 	}

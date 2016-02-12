@@ -61,6 +61,7 @@ public class DefaultValidationViewsFactory implements ValidationViewsFactory {
 	/** 
 	 * @deprecated CDI eyes only
 	 */
+	@Deprecated
 	protected DefaultValidationViewsFactory() {
 		this(null, null, null);
 	}

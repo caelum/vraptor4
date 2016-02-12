@@ -71,6 +71,7 @@ public class GsonDeserialization implements Deserializer {
 	/** 
 	 * @deprecated CDI eyes only
 	 */
+	@Deprecated
 	protected GsonDeserialization() {
 		this(null, null, null, null, null);
 	}

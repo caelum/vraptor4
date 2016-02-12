@@ -53,6 +53,7 @@ public class PrimitiveFloatConverter implements Converter<Float> {
 	/** 
 	 * @deprecated CDI eyes only
 	 */
+	@Deprecated
 	protected PrimitiveFloatConverter() {
 		this(null);
 	}

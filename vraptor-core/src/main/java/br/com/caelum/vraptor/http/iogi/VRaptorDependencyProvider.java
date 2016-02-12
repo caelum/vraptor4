@@ -39,6 +39,7 @@ public class VRaptorDependencyProvider implements DependencyProvider {
 	/** 
 	 * @deprecated CDI eyes only
 	 */
+	@Deprecated
 	protected VRaptorDependencyProvider() {
 		this(null);
 	}

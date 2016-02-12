@@ -65,6 +65,7 @@ public class ParametersInstantiator {
 	/**
 	 * @deprecated CDI eyes only
 	 */
+	@Deprecated
 	protected ParametersInstantiator() {
 		this(null, null, null, null, null);
 	}

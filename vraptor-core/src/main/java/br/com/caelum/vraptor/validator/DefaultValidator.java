@@ -64,6 +64,7 @@ public class DefaultValidator extends AbstractValidator {
 	/** 
 	 * @deprecated CDI eyes only
 	 */
+	@Deprecated
 	protected DefaultValidator() {
 		this(null, null, null, null, null, null, null, null, null);
 	}

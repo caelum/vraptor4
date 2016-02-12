@@ -32,6 +32,7 @@ public class InterceptorMethodParametersResolver {
 	/** 
 	 * @deprecated CDI eyes only
 	 */
+	@Deprecated
 	protected InterceptorMethodParametersResolver() {
 		this(null);
 	}

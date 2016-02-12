@@ -54,6 +54,7 @@ public class DefaultAcceptHeaderToFormat implements AcceptHeaderToFormat {
 	/** 
 	 * @deprecated CDI eyes only
 	 */
+	@Deprecated
 	protected DefaultAcceptHeaderToFormat() {
 		this(null);
 	}

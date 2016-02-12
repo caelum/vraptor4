@@ -54,6 +54,7 @@ public class JstlLocalization {
 	/** 
 	 * @deprecated CDI eyes only
 	 */
+	@Deprecated
 	protected JstlLocalization() {
 		this(null);
 	}

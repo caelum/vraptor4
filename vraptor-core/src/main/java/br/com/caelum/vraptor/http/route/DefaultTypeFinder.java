@@ -43,6 +43,7 @@ public class DefaultTypeFinder implements TypeFinder {
 	/** 
 	 * @deprecated CDI eyes only
 	 */
+	@Deprecated
 	protected DefaultTypeFinder() {
 		this(null, null);
 	}

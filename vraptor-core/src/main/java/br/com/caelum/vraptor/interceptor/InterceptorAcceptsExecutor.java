@@ -31,6 +31,7 @@ public class InterceptorAcceptsExecutor {
 	/**
 	 * @deprecated CDI eyes only
 	 */
+	@Deprecated
 	protected InterceptorAcceptsExecutor() {
 		this(null, null);
 	}

@@ -62,6 +62,7 @@ public class DefaultEnvironment implements Environment {
 	/**
 	 * @deprecated CDI eyes only
 	 */
+	@Deprecated
 	protected DefaultEnvironment() {
 		this((ServletContext) null);
 	}

@@ -50,6 +50,7 @@ public class DoubleConverter implements Converter<Double> {
 	/** 
 	 * @deprecated CDI eyes only
 	 */
+	@Deprecated
 	protected DoubleConverter() {
 		this(null);
 	}

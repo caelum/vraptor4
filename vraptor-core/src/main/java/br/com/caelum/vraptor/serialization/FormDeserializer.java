@@ -36,6 +36,7 @@ public class FormDeserializer implements Deserializer {
 	/** 
 	 * @deprecated CDI eyes only
 	 */
+	@Deprecated
 	protected FormDeserializer() {
 		this(null);
 	}

@@ -65,6 +65,7 @@ public class RequestHandlerObserver {
 	/**
 	 * @deprecated CDI eyes only
 	 */
+	@Deprecated
 	protected RequestHandlerObserver() {
 		this(null, null, null, null, null, null, null);
 	}

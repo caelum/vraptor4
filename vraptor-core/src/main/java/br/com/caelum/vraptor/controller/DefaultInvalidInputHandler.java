@@ -21,6 +21,7 @@ public class DefaultInvalidInputHandler implements InvalidInputHandler {
 	/**
 	 * @deprecated CDI eyes only
 	 */
+	@Deprecated
 	protected DefaultInvalidInputHandler() {
 		this(null);
 	}

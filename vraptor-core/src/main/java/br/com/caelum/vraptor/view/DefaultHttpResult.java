@@ -44,6 +44,7 @@ public class DefaultHttpResult implements HttpResult {
 	/** 
 	 * @deprecated CDI eyes only
 	 */
+	@Deprecated
 	protected DefaultHttpResult() {
 		this(null, null);
 	}

@@ -48,6 +48,7 @@ public class OutjectResult {
 	/**
 	 * @deprecated CDI eyes only
 	 */
+	@Deprecated
 	protected OutjectResult() {
 		this(null);
 	}

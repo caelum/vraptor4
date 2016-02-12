@@ -50,6 +50,7 @@ public class FloatConverter implements Converter<Float> {
 	/** 
 	 * @deprecated CDI eyes only
 	 */
+	@Deprecated
 	protected FloatConverter() {
 		this(null);
 	}

@@ -58,6 +58,7 @@ public class DefaultResult extends AbstractResult {
 	/** 
 	 * @deprecated CDI eyes only
 	 */
+	@Deprecated
 	protected DefaultResult() {
 		this(null, null, null, null, null);
 	}

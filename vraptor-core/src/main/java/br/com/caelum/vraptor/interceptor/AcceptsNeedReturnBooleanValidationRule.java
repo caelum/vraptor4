@@ -34,6 +34,7 @@ public class AcceptsNeedReturnBooleanValidationRule implements ValidationRule {
 	/** 
 	 * @deprecated CDI eyes only 
 	 */
+	@Deprecated
 	protected AcceptsNeedReturnBooleanValidationRule() {
 		this(null);
 	}

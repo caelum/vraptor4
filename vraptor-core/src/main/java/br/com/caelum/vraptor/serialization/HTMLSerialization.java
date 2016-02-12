@@ -37,6 +37,7 @@ public class HTMLSerialization implements Serialization {
 	/** 
 	 * @deprecated CDI eyes only
 	 */
+	@Deprecated
 	protected HTMLSerialization() {
 		this(null, null);
 	}

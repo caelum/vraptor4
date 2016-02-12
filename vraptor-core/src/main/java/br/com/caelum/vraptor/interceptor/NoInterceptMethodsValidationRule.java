@@ -37,6 +37,7 @@ public class NoInterceptMethodsValidationRule implements ValidationRule {
 	/** 
 	 * @deprecated CDI eyes only
 	 */
+	@Deprecated
 	protected NoInterceptMethodsValidationRule() {
 		this(null);
 	}

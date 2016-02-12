@@ -41,6 +41,7 @@ public class NoStackParamValidationRule implements ValidationRule {
 	/** 
 	 * @deprecated CDI eyes only 
 	 */
+	@Deprecated
 	protected NoStackParamValidationRule() {
 		this(null);
 	}

@@ -66,6 +66,7 @@ public class VRaptorInstantiator implements InstantiatorWithErrors, Instantiator
 	/** 
 	 * @deprecated CDI eyes only
 	 */
+	@Deprecated
 	protected VRaptorInstantiator() {
 		this(null, null, null, null);
 	}

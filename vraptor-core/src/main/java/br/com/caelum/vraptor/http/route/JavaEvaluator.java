@@ -42,6 +42,7 @@ public class JavaEvaluator implements Evaluator {
 	/**
 	 * @deprecated CDI eyes only
 	 */
+	@Deprecated
 	protected JavaEvaluator() {
 		this(null);
 	}

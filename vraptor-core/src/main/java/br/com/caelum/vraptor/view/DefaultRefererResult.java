@@ -56,6 +56,7 @@ public class DefaultRefererResult implements RefererResult {
 	/** 
 	 * @deprecated CDI eyes only
 	 */
+	@Deprecated
 	protected DefaultRefererResult() {
 		this(null, null, null, null, null);
 	}

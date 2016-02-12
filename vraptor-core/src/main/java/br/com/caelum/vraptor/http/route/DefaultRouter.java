@@ -76,6 +76,7 @@ public class DefaultRouter implements Router {
 	/**
 	 * @deprecated CDI eyes only
 	 */
+	@Deprecated
 	protected DefaultRouter() {
 		this(null, null, null, null, null, null, null);
 	}

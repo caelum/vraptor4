@@ -45,6 +45,7 @@ public class EnvironmentPropertyProducer {
 	/**
 	 * @deprecated CDI eyes only
 	 */
+	@Deprecated
 	protected EnvironmentPropertyProducer() {
 		this(null);
 	}

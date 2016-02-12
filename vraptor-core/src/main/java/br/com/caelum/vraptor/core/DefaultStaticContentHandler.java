@@ -49,6 +49,7 @@ public class DefaultStaticContentHandler implements StaticContentHandler {
 	/** 
 	 * @deprecated CDI eyes only
 	 */
+	@Deprecated
 	protected DefaultStaticContentHandler() {
 		this(null);
 	}

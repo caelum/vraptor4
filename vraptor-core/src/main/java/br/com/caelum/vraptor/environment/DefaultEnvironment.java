@@ -136,7 +136,7 @@ public class DefaultEnvironment implements Environment {
 	/**
 	 * Find environment name using {@code VRAPTOR_ENV} from system environment.
 	 */
-	private String fromSystemEnv() {
+	private static String fromSystemEnv() {
 		return System.getenv("VRAPTOR_ENV");
 	}
 
@@ -144,7 +144,7 @@ public class DefaultEnvironment implements Environment {
 	 * Find environment name using {@code br.com.caelum.vraptor.environment} from system property. To define this
 	 * you can start the application server using {@code -Dbr.com.caelum.vraptor.environment=DEVELOPMENT}.
 	 */
-	private String fromSystemProperty() {
+	private static String fromSystemProperty() {
 		return System.getProperty(ENVIRONMENT_PROPERTY);
 	}
 

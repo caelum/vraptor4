@@ -51,7 +51,7 @@ public abstract class Try<T> {
 		}
 	}
 
-	public static class Failed<T> extends Try {
+	public static class Failed extends Try {
 		private final Exception e;
 
 		private Failed(Exception e) {

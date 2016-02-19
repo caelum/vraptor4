@@ -17,6 +17,8 @@
 
 package br.com.caelum.vraptor.util;
 
+import com.thoughtworks.xstream.InitializationException;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,8 +30,11 @@ import javax.enterprise.inject.Vetoed;
  * @author Lucas Cavalcanti
  */
 @Vetoed
-public class StringUtils {
+public final class StringUtils {
 
+	private StringUtils(){
+		throw new InitializationException("Not allowed to initialize");
+	}
 	public static String decapitalize(String name) {
 		if (name.length() == 1) {
 			return name.toLowerCase();

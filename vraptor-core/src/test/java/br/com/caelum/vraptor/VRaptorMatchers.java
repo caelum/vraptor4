@@ -23,6 +23,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.ResourceBundle;
 
+import com.thoughtworks.xstream.InitializationException;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
@@ -32,7 +33,11 @@ import br.com.caelum.vraptor.converter.ConversionMessage;
 import br.com.caelum.vraptor.http.route.Route;
 import br.com.caelum.vraptor.validator.Message;
 
-public class VRaptorMatchers {
+public final class VRaptorMatchers {
+	private VRaptorMatchers(){
+		throw new InitializationException("Not allowed to initialize");
+	}
+
 	public static Matcher<Collection<?>> hasOneCopyOf(final Object item) {
 		return new TypeSafeMatcher<Collection<?>>(){
 

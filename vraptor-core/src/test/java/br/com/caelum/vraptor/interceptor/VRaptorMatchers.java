@@ -18,6 +18,7 @@ package br.com.caelum.vraptor.interceptor;
 
 import java.lang.reflect.Method;
 
+import com.thoughtworks.xstream.InitializationException;
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
@@ -33,8 +34,10 @@ import br.com.caelum.vraptor.validator.SimpleMessage;
  *
  * @author Guilherme Silveira
  */
-public class VRaptorMatchers {
-
+public final class VRaptorMatchers {
+	private VRaptorMatchers(){
+		throw new InitializationException("Not allowed to initialize");
+	}
 	public static TypeSafeMatcher<ControllerMethod> controllerMethod(final Method method) {
 		return new TypeSafeMatcher<ControllerMethod>() {
 

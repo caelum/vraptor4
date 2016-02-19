@@ -17,6 +17,7 @@ package br.com.caelum.vraptor.proxy;
 
 import javax.enterprise.inject.Vetoed;
 
+import com.thoughtworks.xstream.InitializationException;
 import org.jboss.weld.bean.proxy.ProxyObject;
 import org.jboss.weld.interceptor.util.proxy.TargetInstanceProxy;
 
@@ -30,6 +31,9 @@ import org.jboss.weld.interceptor.util.proxy.TargetInstanceProxy;
  */
 @Vetoed
 public final class CDIProxies {
+	private CDIProxies(){
+		throw new InitializationException("Not allowed to initialize");
+	}
 
 	public static boolean isCDIProxy(Class<?> type) {
 		return ProxyObject.class.isAssignableFrom(type);

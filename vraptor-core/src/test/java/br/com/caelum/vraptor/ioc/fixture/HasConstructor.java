@@ -16,8 +16,12 @@
 package br.com.caelum.vraptor.ioc.fixture;
 
 import br.com.caelum.vraptor.Result;
+import com.thoughtworks.xstream.InitializationException;
 
-public class HasConstructor {
+public final class HasConstructor {
+	private HasConstructor(){
+		throw new InitializationException("Not allowed to initialize");
+	}
 
 	public HasConstructor(Result result) {
 	}

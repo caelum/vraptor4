@@ -82,6 +82,8 @@ public class LinkToHandler extends ForwardingMap<Class<?>, Object> {
 
 	private final ConcurrentMap<Class<?>, Class<?>> interfaces = new ConcurrentHashMap<>();
 
+	private final Lock lock = new ReentrantLock();
+
 	/** 
 	 * @deprecated CDI eyes only
 	 */
@@ -106,8 +108,6 @@ public class LinkToHandler extends ForwardingMap<Class<?>, Object> {
 	protected Map<Class<?>, Object> delegate() {
 		return Collections.emptyMap();
 	}
-
-	private final Lock lock = new ReentrantLock();
 
 	@Override
 	public Object get(Object key) {

@@ -70,18 +70,18 @@ public class DefaultEnvironment implements Environment {
 	public DefaultEnvironment(ServletContext context) {
 		this.context = context;
 	}
-	
-	@PostConstruct
-	protected void setup() {
-		loadProperties();
-	}
-	
+
 	public DefaultEnvironment(EnvironmentType environmentType) {
 		this((ServletContext) null);
 		this.environmentType = environmentType;
 		loadProperties();
 	}
-	
+
+	@PostConstruct
+	protected void setup() {
+		loadProperties();
+	}
+
 	private void loadProperties() {
 		properties = new Properties();
 		loadAndPut(BASE_ENVIRONMENT_FILE);

@@ -29,10 +29,10 @@ import br.com.caelum.vraptor.VRaptorException;
 @Vetoed
 public class RouteNotFoundException extends VRaptorException {
 
+	private static final long serialVersionUID = 606801838930057251L;
+
 	public RouteNotFoundException(String msg) {
 		super(msg);
 	}
-
-	private static final long serialVersionUID = 606801838930057251L;
 
 }

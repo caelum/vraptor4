@@ -42,6 +42,7 @@ import org.apache.commons.io.IOUtils;
  */
 @Vetoed
 public class CommonsUploadedFile implements UploadedFile {
+	private static final String TARGET_CANNOT_BE_NULL = "Target can't be null";
 
 	private final FileItem delegate;
 
@@ -71,7 +72,7 @@ public class CommonsUploadedFile implements UploadedFile {
 
 	@Override
 	public void writeTo(File target) throws IOException {
-		requireNonNull(target, "Target can't be null");
+		requireNonNull(target, TARGET_CANNOT_BE_NULL);
 
 		try {
 			delegate.write(target);
@@ -85,13 +86,13 @@ public class CommonsUploadedFile implements UploadedFile {
 
 	@Override
 	public void writeTo(Path target, CopyOption... options) throws IOException {
-		requireNonNull(target, "Target can't be null");
+		requireNonNull(target, TARGET_CANNOT_BE_NULL);
 		writeTo(target.toFile());
 	}
 
 	@Override
 	public void writeTo(OutputStream target) throws IOException {
-		requireNonNull(target, "Target can't be null");
+		requireNonNull(target, TARGET_CANNOT_BE_NULL);
 		IOUtils.copy(getFile(), target);
 	}
 

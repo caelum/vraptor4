@@ -42,7 +42,7 @@ public class CacheStoreFactory {
 	@Produces
 	@Default
 	public <K, V> CacheStore<K, V> buildDefaultCache() {
-		return new DefaultCacheStore<K, V>();
+		return new DefaultCacheStore<>();
 	}
 
 	@Produces
@@ -56,7 +56,7 @@ public class CacheStoreFactory {
 		Cache<K, V> guavaCache = CacheBuilder.newBuilder()
 			.maximumSize(capacity)
 			.build();
-		return new GuavaCacheWrapper<K,V>(guavaCache);
+		return new GuavaCacheWrapper<>(guavaCache);
 	}
 	
 	public static class  GuavaCacheWrapper<K,V> implements CacheStore<K, V>{

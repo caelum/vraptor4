@@ -194,10 +194,10 @@ All of VRaptor's `Converter`s have `LIBRARY_BEFORE` priority.
 
 You can also customize the Date pattern by implementing your own CustomDateGsonConverter and overriding the method `getPattern()`:
 
-~~
+~~~
 @Specializes
 public class CustomDateGsonConverter extends DateGsonConverter {
     @Override
     public DateFormat getPattern() { return //any custom pattern }
 }
-~~
+~~~

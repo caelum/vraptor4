@@ -190,6 +190,7 @@ Por padrão todo `Converter` do VRaptor tem prioridade `LIBRARY_BEFORE`.
 Você ainda pode customizar o pattern de uma `Date` implementando um `CustomDateGsonConverter` e sobrescrevendo o método `getPattern()`:
 
 ~~~
+#!java
 @Specializes
 public class CustomDateGsonConverter extends DateGsonConverter {
     @Override

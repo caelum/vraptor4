@@ -76,3 +76,20 @@ Com isso, se você requisitar o método `ClienteController.formulario`, o VRapto
 	[...]
 </definition>
 ~~~
+
+O Tiles possui uma versão mais antiga do Javassist como dependência, o que pode causar conflitos com a versão utilizada pelo VRaptor. Para resolver, basta excluir essa dependência como no exemplo a seguir:
+
+~~~
+#!xml
+<dependency>
+    <groupId>org.apache.tiles</groupId>
+    <artifactId>tiles-extras</artifactId>
+    <version>3.0.0</version> <!-- ou a última versão -->
+        <exclusions>
+           <exclusion>
+              <artifactId>javassist</artifactId>
+              <groupId>jboss</groupId>
+           </exclusion>
+         </exclusions>
+</dependency>
+~~~

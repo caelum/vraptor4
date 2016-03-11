@@ -85,3 +85,23 @@ definition in the file `/WEB-INF/tiles.xml`:
 	[...]
 </definition>
 ~~~
+
+Tiles has a older Javassist version as dependency, which might cause issues with the
+one used by VRaptor. To resolve this situation, what should be done is exclude the dependency
+as it is defined in the example below:
+
+~~~
+#!xml
+<dependency>
+    <groupId>org.apache.tiles</groupId>
+    <artifactId>tiles-extras</artifactId>
+    <version>3.0.0</version> <!-- ou a última versão -->
+        <exclusions>
+           <exclusion>
+              <artifactId>javassist</artifactId>
+              <groupId>jboss</groupId>
+           </exclusion>
+         </exclusions>
+</dependency>
+~~~
+

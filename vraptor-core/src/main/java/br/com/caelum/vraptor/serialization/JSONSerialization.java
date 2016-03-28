@@ -34,7 +34,7 @@ public interface JSONSerialization extends Serialization {
 	 * Exclude the root alias from serialization.
 	 * @since 3.1.2
 	 */
-	<T> NoRootSerialization withoutRoot();
+	NoRootSerialization withoutRoot();
 	
 	JSONSerialization indented();
 

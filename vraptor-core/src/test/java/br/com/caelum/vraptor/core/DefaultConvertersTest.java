@@ -91,6 +91,36 @@ public class DefaultConvertersTest {
 		converters.register(MyThirdConverter.class);
 	}
 
+	@Test
+	public void findCorrectConverterSubclassLoadFirst() {
+		converters.register(MySubConverter.class);
+		converters.register(MySecondConverter.class);
+
+		when(container.instanceFor(MySubConverter.class)).thenReturn(new MySubConverter());
+		when(container.instanceFor(MySecondConverter.class)).thenReturn(new MySecondConverter());
+
+		Object converter = converters.to(MySubData.class);
+		assertThat(converter, instanceOf(MySubConverter.class));
+
+		converter = converters.to(MyData.class);
+		assertThat(converter, instanceOf(MySecondConverter.class));
+	}
+
+	@Test
+	public void findCorrectConverterSubclassLoadSecond() {
+		converters.register(MySecondConverter.class);
+		converters.register(MySubConverter.class);
+
+		when(container.instanceFor(MySubConverter.class)).thenReturn(new MySubConverter());
+		when(container.instanceFor(MySecondConverter.class)).thenReturn(new MySecondConverter());
+
+		Object converter = converters.to(MySubData.class);
+		assertThat(converter, instanceOf(MySubConverter.class));
+
+		converter = converters.to(MyData.class);
+		assertThat(converter, instanceOf(MySecondConverter.class));
+	}
+
 	class WrongConverter implements Converter<String> {
 
 		@Override
@@ -100,6 +130,12 @@ public class DefaultConvertersTest {
 	}
 
 	class MyData {
+	}
+
+	class MySubData extends MyData {
+	}
+
+	class MyOtherSubData extends MyData {
 	}
 
 	@Convert(MyData.class)
@@ -125,6 +161,15 @@ public class DefaultConvertersTest {
 	private class MyThirdConverter implements Converter<MyData> {
 		@Override
 		public MyData convert(String value, Class<? extends MyData> type) {
+			return null;
+		}
+	}
+
+	@Convert(MySubData.class)
+	@Priority(javax.interceptor.Interceptor.Priority.APPLICATION)
+	private class MySubConverter implements Converter<MySubData> {
+		@Override
+		public MySubData convert(String value, Class<? extends MySubData> type) {
 			return null;
 		}
 	}

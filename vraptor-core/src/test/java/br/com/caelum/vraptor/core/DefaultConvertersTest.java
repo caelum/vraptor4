@@ -104,6 +104,9 @@ public class DefaultConvertersTest {
 
 		converter = converters.to(MyData.class);
 		assertThat(converter, instanceOf(MySecondConverter.class));
+
+		converter = converters.to(MyOtherSubData.class);
+		assertThat(converter, instanceOf(MySecondConverter.class));
 	}
 
 	@Test
@@ -118,6 +121,9 @@ public class DefaultConvertersTest {
 		assertThat(converter, instanceOf(MySubConverter.class));
 
 		converter = converters.to(MyData.class);
+		assertThat(converter, instanceOf(MySecondConverter.class));
+
+		converter = converters.to(MyOtherSubData.class);
 		assertThat(converter, instanceOf(MySecondConverter.class));
 	}
 

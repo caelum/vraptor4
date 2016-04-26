@@ -5,7 +5,7 @@ title: Dependencies and prerequisites
 #Dependencies and prerequisites
 
 VRaptor 4 depends directly on CDI 1.1, so it will work only in servers that support
-this version of CDI, or higher like CDI 1.2. JDK 1.7 or higher is also mandatory.
+this version of CDI, or higher like CDI 1.2. JDK 1.7 or higher is also mandatory (read more on <a href="#jdk-8">JDK 8 section</a>).
 
 The Application Servers already supported and tested are:
 
@@ -64,6 +64,8 @@ default dependency):
 is already provided by the server. So even defining the dependency in your
 application, it won't be used by the application. If you can't update to 8.1+,
 an alternative is to update the module directly in the server.
+
+You may also need to add the <a href="/en/docs/plugins/#vraptor-java-8">VRaptor Java 8</a> plugin to your project.
 
 ## Maven
 

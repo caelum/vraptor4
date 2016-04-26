@@ -147,7 +147,7 @@ public class Serializee {
 			for (int i = 0; i < path.length; i++) {
 			    Field field = reflectField(path[i], type);
 			    if (field == null) break;
-			    if (i < path.length - 1) type = getActualType(field.getGenericType());
+			    if (i < path.length - 1) type = getActualType(field);
 			}
 		} catch (NullPointerException e) {
 			throw new IllegalArgumentException("Field path '" + name + "' doesn't exists in " + type, e);
@@ -168,7 +168,10 @@ public class Serializee {
 		return field;
 	}
 
-	private static Class<?> getActualType(Type genericType) {
+	protected Class<?> getActualType(Field field) {
+		
+		Type genericType = field.getGenericType();
+	
 		if (genericType instanceof ParameterizedType) {
 			ParameterizedType type = (ParameterizedType) genericType;
 

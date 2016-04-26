@@ -98,7 +98,7 @@ public class GsonJSONSerialization implements JSONSerialization {
 	 * You can override this method for configuring Driver before serialization
 	 */
 	@Override
-	public <T> NoRootSerialization withoutRoot() {
+	public NoRootSerialization withoutRoot() {
 		builder.setWithoutRoot(true);
 		return this;
 	}
@@ -113,6 +113,12 @@ public class GsonJSONSerialization implements JSONSerialization {
 	public JSONSerialization version(double versionNumber) {
 		builder.version(versionNumber);
 		return this;
+	}
+
+	@Override
+	public JSONSerialization serializeNulls() {
+		builder.serializeNulls();
+		return this;		
 	}
 
 }

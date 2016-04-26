@@ -35,7 +35,7 @@ public class InterceptorStackHandlersCache {
 	private final InterceptorRegistry registry;
 	private final InterceptorHandlerFactory handlerFactory;
 
-	private Logger logger = LoggerFactory.getLogger(InterceptorStackHandlersCache.class);
+	private final Logger logger = LoggerFactory.getLogger(InterceptorStackHandlersCache.class);
 
 	/** 
 	 * @deprecated CDI eyes only

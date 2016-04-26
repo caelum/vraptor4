@@ -65,7 +65,7 @@ public class BooleanConverter implements Converter<Boolean> {
 		throw new ConversionException(new ConversionMessage(INVALID_MESSAGE_KEY, value));
 	}
 
-	private boolean matches(Set<String> words, String value) {
+	private static boolean matches(Set<String> words, String value) {
 		return words.contains(value);
 	}
 }

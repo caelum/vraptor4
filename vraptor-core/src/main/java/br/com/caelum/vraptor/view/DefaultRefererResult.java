@@ -21,6 +21,8 @@ import static br.com.caelum.vraptor.view.Results.logic;
 import static br.com.caelum.vraptor.view.Results.page;
 import static com.google.common.base.Preconditions.checkState;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 
 import javax.enterprise.context.RequestScoped;
@@ -37,9 +39,14 @@ import br.com.caelum.vraptor.http.route.MethodNotAllowedException;
 import br.com.caelum.vraptor.http.route.Router;
 import br.com.caelum.vraptor.validator.Message;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @RequestScoped
 public class DefaultRefererResult implements RefererResult {
-
+	
+	private static final Logger logger = LoggerFactory.getLogger(DefaultRefererResult.class);
+	
 	private final MutableRequest request;
 	private final Result result;
 	private final Router router;
@@ -71,6 +78,7 @@ public class DefaultRefererResult implements RefererResult {
 			ControllerMethod method = router.parse(referer, HttpMethod.GET, request);
 			executeMethod(method, result.use(logic()).forwardTo(method.getController().getType()));
 		} catch (ControllerNotFoundException | MethodNotAllowedException e) {
+			logger.warn("Could not find or doesn't allowed to get controller method", e);
 			result.use(page()).forwardTo(referer);
 		}
 	}
@@ -87,16 +95,27 @@ public class DefaultRefererResult implements RefererResult {
 			ControllerMethod method = router.parse(referer, HttpMethod.GET, request);
 			executeMethod(method, result.use(logic()).redirectTo(method.getController().getType()));
 		} catch (ControllerNotFoundException | MethodNotAllowedException e) {
+			logger.warn("Could not find or doesn't allowed to get controller method", e);
 			result.use(page()).redirectTo(referer);
 		}
 	}
 
-	private String getReferer() {
+	protected String getReferer() {
 		String referer = request.getHeader("Referer");
 		checkState(referer != null, "The Referer header was not specified");
 
-		String path = request.getContextPath();
-		return referer.substring(referer.indexOf(path) + path.length());
+		String refererPath = null;
+		try {
+			refererPath = new URL(referer).getPath();
+		} catch(MalformedURLException e) {
+			//Maybe a relative path?
+			refererPath = referer;
+		}
+		String ctxPath = request.getContextPath();
+		
+		//if the context path is not in the beggining we should return the entire path
+		//this is useful for proxied app servers which hide the ctx path from url
+		return refererPath.startsWith(ctxPath+"/") || refererPath.equals(ctxPath) ? refererPath.substring(ctxPath.length()) : refererPath;
 	}
 
 }

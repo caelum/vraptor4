@@ -21,6 +21,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -49,6 +52,8 @@ import com.google.common.collect.ImmutableList;
 
 @RequestScoped
 public class VRaptorInstantiator implements InstantiatorWithErrors, Instantiator<Object> {
+	
+	private static final Logger logger = LoggerFactory.getLogger(VRaptorInstantiator.class);
 	
 	private MultiInstantiator multiInstantiator;
 	private List<Message> errors;
@@ -164,8 +169,10 @@ public class VRaptorInstantiator implements InstantiatorWithErrors, Instantiator
 				
 				return converterForTarget(target).convert(parameter.getValue(), target.getClassType());
 			} catch (ConversionException ex) {
+				logger.debug("Could not convert target", ex);
 				errors.add(ex.getValidationMessage().withCategory(target.getName()));
 			} catch (IllegalStateException e) {
+				logger.debug("An error occured while getting validation message", e);
 				return setPropertiesAfterConversions(target, parameters);
 			}
 			return null;

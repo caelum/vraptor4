@@ -22,6 +22,9 @@ import java.util.ArrayList;
 
 import javax.enterprise.inject.Vetoed;
 
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonSerializer;
+
 import br.com.caelum.vraptor.View;
 import br.com.caelum.vraptor.core.DefaultReflectionProvider;
 import br.com.caelum.vraptor.core.ReflectionProvider;
@@ -44,9 +47,6 @@ import br.com.caelum.vraptor.serialization.xstream.XStreamBuilder;
 import br.com.caelum.vraptor.serialization.xstream.XStreamBuilderImpl;
 import br.com.caelum.vraptor.serialization.xstream.XStreamXMLSerialization;
 import br.com.caelum.vraptor.view.EmptyResult;
-
-import com.google.gson.JsonDeserializer;
-import com.google.gson.JsonSerializer;
 
 /**
  *

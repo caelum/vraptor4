@@ -23,8 +23,8 @@ import javax.enterprise.inject.Vetoed;
 
 @Vetoed
 public class Invocation {
-	private Class<?> controllerType;
-	private Method method;
+	private final Class<?> controllerType;
+	private final Method method;
 
 	public Invocation(Class<?> type, Method method) {
 		controllerType = type;

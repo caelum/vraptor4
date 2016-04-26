@@ -1,5 +1,7 @@
 package br.com.caelum.vraptor.observer.download;
 
+import com.thoughtworks.xstream.InitializationException;
+
 import static com.google.common.base.Objects.firstNonNull;
 import static java.util.Objects.requireNonNull;
 
@@ -19,6 +21,10 @@ import javax.enterprise.inject.Vetoed;
  */
 @Vetoed
 public final class DownloadBuilder {
+
+	private DownloadBuilder () {
+		throw new InitializationException("Not allowed to initialize");
+	}
 
 	/**
 	 * Creates an instance for build a {@link FileDownload}.<br>

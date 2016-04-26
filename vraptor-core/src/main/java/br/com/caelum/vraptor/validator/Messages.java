@@ -17,6 +17,7 @@ package br.com.caelum.vraptor.validator;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -40,12 +41,14 @@ import org.slf4j.Logger;
  * @author Otávio S Garcia
  */
 @Vetoed
-public class Messages {
+public class Messages implements Serializable {
+
+	private static final long serialVersionUID = 728589528391504120L;
 
 	private final static Logger log = getLogger(Messages.class);
 	
-	private Map<Severity, List<Message>> messages = new HashMap<>();
-	private boolean unhandledErrors = false;
+	private final Map<Severity, List<Message>> messages = new HashMap<>();
+	private boolean unhandledErrors;
 
 	public Messages add(Message message) {
 		get(message.getSeverity()).add(message);

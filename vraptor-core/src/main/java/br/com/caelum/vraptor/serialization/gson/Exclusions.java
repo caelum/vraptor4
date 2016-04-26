@@ -38,8 +38,8 @@ import com.google.gson.FieldAttributes;
 @Vetoed
 public class Exclusions implements ExclusionStrategy {
 
-	private Serializee serializee;
-	private ReflectionProvider reflectionProvider;
+	private final Serializee serializee;
+	private final ReflectionProvider reflectionProvider;
 
 	public Exclusions(Serializee serializee, ReflectionProvider reflectionProvider) {
 		this.serializee = serializee;
@@ -71,8 +71,8 @@ public class Exclusions implements ExclusionStrategy {
 	}
 
 	private boolean isCompatiblePath(Entry<String, Class<?>> path, Class<?> definedIn, String fieldName) {
-		return (path.getValue().equals(definedIn) && (path.getKey().equals(fieldName) || 
-				path.getKey().endsWith("." + fieldName)));
+		return path.getValue().equals(definedIn) && (path.getKey().equals(fieldName) || 
+				path.getKey().endsWith("." + fieldName));
 	}
 
 	@Override

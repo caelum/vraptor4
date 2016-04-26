@@ -44,7 +44,7 @@ import com.google.common.collect.Multimap;
 @Vetoed
 public class Graph<E> {
 
-	private Multimap<E, E> graph = LinkedHashMultimap.create();
+	private final Multimap<E, E> graph = LinkedHashMultimap.create();
 	private List<E> orderedList;
 
 	private final Lock lock = new ReentrantLock();

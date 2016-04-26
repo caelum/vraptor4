@@ -93,12 +93,13 @@ public class RequestHandlerObserver {
 			interceptorStack.start();
 			endRequestEvent.fire(new RequestSucceded(request, response));
 		} catch (ControllerNotFoundException e) {
+			LOGGER.debug("Could not found controller method", e);
 			controllerNotFoundHandler.couldntFind(event.getChain(), request, response);
 		} catch (MethodNotAllowedException e) {
-			LOGGER.debug(e.getMessage(), e);
+			LOGGER.debug("Method is not allowed", e);
 			methodNotAllowedHandler.deny(request, response, e.getAllowedMethods());
 		} catch (InvalidInputException e) {
-			LOGGER.debug(e.getMessage(), e);
+			LOGGER.debug("Invalid input", e);
 			invalidInputHandler.deny(e);
 		}
 	}

@@ -85,7 +85,7 @@ public class XStreamXMLDeserializer implements Deserializer {
 		return xStream;
 	}
 
-	private void chooseParam(Class<?>[] types, Object[] params, Object deserialized) {
+	private static void chooseParam(Class<?>[] types, Object[] params, Object deserialized) {
 		for (int i = 0; i < types.length; i++) {
 			if (types[i].isInstance(deserialized)) {
 				params[i] = deserialized;

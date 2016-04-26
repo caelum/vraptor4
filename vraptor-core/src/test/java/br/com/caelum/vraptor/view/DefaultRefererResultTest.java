@@ -17,6 +17,7 @@ package br.com.caelum.vraptor.view;
 
 import static br.com.caelum.vraptor.view.Results.logic;
 import static br.com.caelum.vraptor.view.Results.page;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
@@ -150,4 +151,33 @@ public class DefaultRefererResultTest {
 		verify(logic).forwardTo(RefererController.class);
 		verify(controller).index();
 	}
+	
+	@Test
+	public void whenCtxPathAppearsInItsPlaceRefererShouldBeReturnedCorrectly() throws Exception {
+		when(request.getHeader("Referer")).thenReturn("http://vraptor.caelum.com.br/test/anything/ok");
+		when(request.getContextPath()).thenReturn("/test");
+		assertEquals("/anything/ok", refererResult.getReferer());
+	}
+		
+	@Test
+	public void whenCtxPathAppearsAmongURLButNotInRightPlaceRefererShouldBeReturnedCorrectly() throws Exception {
+		when(request.getHeader("Referer")).thenReturn("http://vraptor.caelum.com.br/vrapanything/ok/vrap/ok/vrap");
+		when(request.getContextPath()).thenReturn("/vrap");
+		assertEquals("/vrapanything/ok/vrap/ok/vrap", refererResult.getReferer());
+	}
+	
+	@Test
+	public void whenCtxPathEqualsURLPathRefererShouldBeReturnedCorrectly() throws Exception {
+		when(request.getHeader("Referer")).thenReturn("http://vraptor.caelum.com.br/vrap/");
+		when(request.getContextPath()).thenReturn("/vrap");
+		assertEquals("/", refererResult.getReferer());
+	}
+	
+	@Test
+	public void whenRefererIsARelativePathRefererShouldBeReturnedCorrectly() throws Exception {
+		when(request.getHeader("Referer")).thenReturn("/vrap/anything/ok/vrap");
+		when(request.getContextPath()).thenReturn("/vrap");
+		assertEquals("/anything/ok/vrap", refererResult.getReferer());
+	}
+	
 }

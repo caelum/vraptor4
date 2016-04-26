@@ -25,6 +25,8 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -40,15 +42,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.junit.Before;
 import org.junit.Test;
 
-import br.com.caelum.vraptor.core.DefaultReflectionProvider;
-import br.com.caelum.vraptor.environment.Environment;
-import br.com.caelum.vraptor.interceptor.DefaultTypeNameExtractor;
-import br.com.caelum.vraptor.serialization.JSONPSerialization;
-import br.com.caelum.vraptor.serialization.JSONSerialization;
-import br.com.caelum.vraptor.serialization.Serializee;
-import br.com.caelum.vraptor.serialization.SkipSerialization;
-import br.com.caelum.vraptor.util.test.MockInstanceImpl;
-
 import com.google.common.collect.ForwardingCollection;
 import com.google.gson.ExclusionStrategy;
 import com.google.gson.FieldAttributes;
@@ -60,6 +53,15 @@ import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 import com.google.gson.annotations.Since;
 
+import br.com.caelum.vraptor.core.DefaultReflectionProvider;
+import br.com.caelum.vraptor.environment.Environment;
+import br.com.caelum.vraptor.interceptor.DefaultTypeNameExtractor;
+import br.com.caelum.vraptor.serialization.JSONPSerialization;
+import br.com.caelum.vraptor.serialization.JSONSerialization;
+import br.com.caelum.vraptor.serialization.Serializee;
+import br.com.caelum.vraptor.serialization.SkipSerialization;
+import br.com.caelum.vraptor.util.test.MockInstanceImpl;
+
 public class GsonJSONSerializationTest {
 
 	private GsonJSONSerialization serialization;
@@ -67,7 +69,6 @@ public class GsonJSONSerializationTest {
 	private HttpServletResponse response;
 	private DefaultTypeNameExtractor extractor;
 	private Environment environment;
-
 	private GsonSerializerBuilder builder;
 
 	@Before
@@ -77,7 +78,7 @@ public class GsonJSONSerializationTest {
 		stream = new ByteArrayOutputStream();
 
 		response = mock(HttpServletResponse.class);
-		when(response.getWriter()).thenReturn(new PrintWriter(stream));
+		when(response.getWriter()).thenReturn(new AlwaysFlushWriter(stream));
 		extractor = new DefaultTypeNameExtractor();
 		environment = mock(Environment.class);
 
@@ -91,6 +92,20 @@ public class GsonJSONSerializationTest {
 		builder = new GsonBuilderWrapper(new MockInstanceImpl<>(jsonSerializers), new MockInstanceImpl<>(jsonDeserializers), 
 				new Serializee(new DefaultReflectionProvider()), new DefaultReflectionProvider());
 		serialization = new GsonJSONSerialization(response, extractor, builder, environment, new DefaultReflectionProvider());
+	}
+	
+	private static class AlwaysFlushWriter extends PrintWriter {
+
+		public AlwaysFlushWriter(OutputStream out) {
+			super(out);
+		}
+		
+		@Override
+		public void write(String s) {
+			super.write(s);
+			super.flush();
+		}
+		
 	}
 	
 	@SkipSerialization
@@ -237,7 +252,6 @@ public class GsonJSONSerializationTest {
 
 		GenericWrapper<Client> wrapper = new GenericWrapper<>(entityList, entityList.size());
 
-		// serialization.from(wrapper).include("entityList").include("entityList.name").serialize();
 		serialization.from(wrapper).include("entityList").serialize();
 
 		assertThat(result(), is(equalTo(expectedResult)));
@@ -491,13 +505,17 @@ public class GsonJSONSerializationTest {
 		String expected = "{\n  \"price\": 15.0,\n  \"comments\": \"pack it nicely, please\",\n  \"items\": [\n    {\n      \"name\": \"any item\"\n    }\n  ]\n}";
 		Order order = new Order(new Client("guilherme silveira"), 15.0, "pack it nicely, please", new Item(
 				"any item", 12.99));
-		serialization.indented().withoutRoot().from(order).include("items").exclude("items.price")
-				.serialize();
+		serialization.indented().withoutRoot().from(order).include("items").exclude("items.price").serialize();
 		assertThat(result(), equalTo(expected));
 	}
 
 	private String result() {
-		return new String(stream.toByteArray());
+		try {
+			stream.flush();
+			return new String(stream.toByteArray());
+		} catch (IOException e) {
+			throw new RuntimeException("Error flushing stream", e);
+		}
 	}
 
 	static class MyCollection extends ForwardingCollection<Order> {
@@ -610,4 +628,23 @@ public class GsonJSONSerializationTest {
 		serialization.version(1.0).from(client).recursive().serialize();
 		assertThat(result(), is(equalTo(expectedResult)));
 	}
+	
+	@Test
+	public void shouldSerializeNullfieldswhenRequested(){
+		Address address = new Address("Alameda street", null);
+		serialization.serializeNulls().from(address).serialize();
+		
+		String expectedResult = "{\"address\":{\"street\":\"Alameda street\",\"city\":null}}";
+		assertThat(result(), is(equalTo(expectedResult)));
+	}
+	
+	@Test
+	public void shouldNotSerializeNullFieldsByDefault(){
+		Address address = new Address("Alameda street", null);
+		serialization.from(address).serialize();
+		
+		String expectedResult = "{\"address\":{\"street\":\"Alameda street\"}}";
+		assertThat(result(), is(equalTo(expectedResult)));
+	}
+	
 }

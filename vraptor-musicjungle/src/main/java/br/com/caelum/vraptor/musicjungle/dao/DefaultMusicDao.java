@@ -57,11 +57,10 @@ public class DefaultMusicDao implements MusicDao {
 
 	@Override
 	public List<Music> searchSimilarTitle(String title) {
-		List<Music> musics = entityManager
-			.createQuery("select m from Music m where lower(m.title) like lower(:title)", Music.class)
+		return entityManager
+				.createQuery("select m from Music m where lower(m.title) like lower(:title)", Music.class)
 				.setParameter("title", "%" + title+ "%")
 				.getResultList();
-		return musics;
 	}
 	
 	@Override

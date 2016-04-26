@@ -41,15 +41,15 @@ public class VRaptorRequestStarted implements RequestStarted {
 		this.request = request;
 		this.response = response;
 	}
-
+	@Override
 	public FilterChain getChain() {
 		return chain;
 	}
-
+	@Override
 	public MutableRequest getRequest() {
 		return request;
 	}
-
+	@Override
 	public MutableResponse getResponse() {
 		return response;
 	}

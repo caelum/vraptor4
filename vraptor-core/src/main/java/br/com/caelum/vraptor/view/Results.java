@@ -24,6 +24,7 @@ import br.com.caelum.vraptor.serialization.JSONPSerialization;
 import br.com.caelum.vraptor.serialization.JSONSerialization;
 import br.com.caelum.vraptor.serialization.RepresentationResult;
 import br.com.caelum.vraptor.serialization.XMLSerialization;
+import com.thoughtworks.xstream.InitializationException;
 
 /**
  * Some common results for most web based logics.
@@ -31,8 +32,11 @@ import br.com.caelum.vraptor.serialization.XMLSerialization;
  * @author Guilherme Silveira
  */
 @Vetoed
-public class Results {
+public final class Results {
 
+	private Results(){
+		throw new InitializationException("Not allowed to initialize");
+	}
 	/**
 	 * Offers server side forward and include for web pages.<br>
 	 * Should be used only with end results (not logics), otherwise you might

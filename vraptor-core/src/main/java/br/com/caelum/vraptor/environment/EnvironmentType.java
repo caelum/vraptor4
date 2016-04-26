@@ -33,7 +33,7 @@ public class EnvironmentType {
 	public static final EnvironmentType DEVELOPMENT = new EnvironmentType("development");
 	public static final EnvironmentType TEST = new EnvironmentType("test");
 
-	private String name;
+	private final String name;
 	
 	public EnvironmentType(String name) {
 		this.name = name;

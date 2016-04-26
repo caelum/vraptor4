@@ -9,7 +9,7 @@
   <div class="header-links">
     <ul class="community">
 
-      <li><a href="https://groups.google.com/forum/#!forum/caelum-vraptor<%= path == 'en' ? '-en' : '' %>>" target="_blank">Google Groups</a></li>
+      <li><a href="https://groups.google.com/forum/#!forum/caelum-vraptor<%= path == 'en' ? '-en' : '' %>" target="_blank">Google Groups</a></li>
 
       <li><a href="https://github.com/caelum/vraptor4/" target="_blank">GitHub</a></li>
 
@@ -50,3 +50,11 @@
 
 </header>
 <%= render path + '/menu' %>
+
+<div class="breadcrumbs">
+  <% breadcrumbs_trail.each do |crumb| %> 
+    <% if crumb && @item[:title] != "Home" %>
+     <%= link_to(crumb[:title], crumb.reps.find { |r| r.name == :default }) %>
+    <% end %>
+  <% end %>
+</div>

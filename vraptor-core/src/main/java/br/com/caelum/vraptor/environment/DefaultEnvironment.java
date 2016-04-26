@@ -28,6 +28,7 @@ import java.security.PrivilegedAction;
 import java.util.NoSuchElementException;
 import java.util.Properties;
 
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -73,21 +74,21 @@ public class DefaultEnvironment implements Environment {
 	public DefaultEnvironment(EnvironmentType environmentType) {
 		this((ServletContext) null);
 		this.environmentType = environmentType;
+		loadProperties();
 	}
 
-	private Properties getProperties() {
-		if (properties == null) {
-			properties = new Properties();
-
-			loadAndPut(BASE_ENVIRONMENT_FILE);
-			loadAndPut(getEnvironmentType().getName());
-
-			LOG.debug("Environment is up with properties {}", properties);
-		}
-
-		return properties;
+	@PostConstruct
+	protected void setup() {
+		loadProperties();
 	}
 
+	private void loadProperties() {
+		properties = new Properties();
+		loadAndPut(BASE_ENVIRONMENT_FILE);
+		loadAndPut(getEnvironmentType().getName());
+		LOG.debug("Environment is up with properties {}", properties);
+	}
+	
 	private EnvironmentType getEnvironmentType() {
 		if (environmentType == null) {
 			environmentType = new EnvironmentType(findEnvironmentName(context));
@@ -100,7 +101,7 @@ public class DefaultEnvironment implements Environment {
 			properties.load(resource);
 			LOG.debug("File {}.properties loaded", environment);
 		} catch (NullPointerException | IOException whenNotFound) {
-			LOG.warn("Could not find the file " + environment + ".properties to load.");
+			LOG.warn("Could not find the file " + environment + ".properties to load.", whenNotFound);
 		}
 	}
 
@@ -135,7 +136,7 @@ public class DefaultEnvironment implements Environment {
 	/**
 	 * Find environment name using {@code VRAPTOR_ENV} from system environment.
 	 */
-	private String fromSystemEnv() {
+	private static String fromSystemEnv() {
 		return System.getenv("VRAPTOR_ENV");
 	}
 
@@ -143,7 +144,7 @@ public class DefaultEnvironment implements Environment {
 	 * Find environment name using {@code br.com.caelum.vraptor.environment} from system property. To define this
 	 * you can start the application server using {@code -Dbr.com.caelum.vraptor.environment=DEVELOPMENT}.
 	 */
-	private String fromSystemProperty() {
+	private static String fromSystemProperty() {
 		return System.getProperty(ENVIRONMENT_PROPERTY);
 	}
 
@@ -165,7 +166,7 @@ public class DefaultEnvironment implements Environment {
 
 	@Override
 	public boolean has(String key) {
-		return getProperties().containsKey(key);
+		return properties.containsKey(key);
 	}
 
 	@Override
@@ -178,7 +179,7 @@ public class DefaultEnvironment implements Environment {
 		if (!isNullOrEmpty(systemProperty)) {
 			return systemProperty;
 		} else {
-			return getProperties().getProperty(key);
+			return properties.getProperty(key);
 		}
 	}
 
@@ -192,12 +193,12 @@ public class DefaultEnvironment implements Environment {
 
 	@Override
 	public void set(String key, String value) {
-		getProperties().setProperty(key, value);
+		properties.setProperty(key, value);
 	}
 
 	@Override
 	public Iterable<String> getKeys() {
-		return getProperties().stringPropertyNames();
+		return properties.stringPropertyNames();
 	}
 
 	@Override

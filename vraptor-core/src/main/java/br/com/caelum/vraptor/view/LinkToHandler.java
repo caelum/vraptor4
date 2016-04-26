@@ -80,7 +80,9 @@ public class LinkToHandler extends ForwardingMap<Class<?>, Object> {
 	private final Proxifier proxifier;
 	private final ReflectionProvider reflectionProvider;
 
-	private ConcurrentMap<Class<?>, Class<?>> interfaces = new ConcurrentHashMap<>();
+	private final ConcurrentMap<Class<?>, Class<?>> interfaces = new ConcurrentHashMap<>();
+
+	private final Lock lock = new ReentrantLock();
 
 	/** 
 	 * @deprecated CDI eyes only
@@ -106,8 +108,6 @@ public class LinkToHandler extends ForwardingMap<Class<?>, Object> {
 	protected Map<Class<?>, Object> delegate() {
 		return Collections.emptyMap();
 	}
-
-	private Lock lock = new ReentrantLock();
 
 	@Override
 	public Object get(Object key) {
@@ -155,6 +155,7 @@ public class LinkToHandler extends ForwardingMap<Class<?>, Object> {
 		try {
 			return Class.forName(interfaceName);
 		} catch (ClassNotFoundException e1) {
+			logger.warn("Could not find class", e1);
 			// ok, continue
 		}
 

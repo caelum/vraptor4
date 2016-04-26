@@ -15,7 +15,6 @@
  */
 package br.com.caelum.vraptor.serialization.gson;
 
-import static com.google.common.io.Flushables.flushQuietly;
 import static java.util.Collections.singletonMap;
 import static java.util.Objects.requireNonNull;
 
@@ -29,12 +28,12 @@ import java.util.Set;
 
 import javax.enterprise.inject.Vetoed;
 
+import com.google.gson.Gson;
+
 import br.com.caelum.vraptor.core.ReflectionProvider;
 import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
 import br.com.caelum.vraptor.serialization.Serializer;
 import br.com.caelum.vraptor.serialization.SerializerBuilder;
-
-import com.google.gson.Gson;
 
 /**
  * A SerializerBuilder based on Gson.
@@ -144,8 +143,6 @@ public class GsonSerializer implements SerializerBuilder {
 		} else {
 			gson.toJson(singletonMap(alias, root), writer);
 		}
-		
-		flushQuietly(writer);
 	}
 	
 	@Override

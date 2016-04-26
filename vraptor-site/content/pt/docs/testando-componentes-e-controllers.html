@@ -65,7 +65,7 @@ Considere o seguinte método da classe `PessoaController`:
 ~~~
 #!java
 @Post("/pessoa/adiciona")
-public void add(Pessoa pessoa) {
+public void adiciona(Pessoa pessoa) {
 	validator.addIf(pessoa.getNome() == null, new SimpleMessage("nome", "O nome deve ser preenchido"));
 	validator.onErrorRedirectTo(IndexController.class).index();
 
@@ -80,7 +80,7 @@ Para testá-lo você pode em sua classe `PessoaControllerTest` fazer algo como:
 ~~~
 #!java
 @Test
-public void shouldHaveSuccessMessage() {
+public void deveConterMensagemDeSucesso() {
 	Pessoa pessoa = new Pessoa();
 	pessoa.setNome("Renan Montenegro");
 	
@@ -93,6 +93,42 @@ public void shouldHaveSuccessMessage() {
 
 Note que qualquer chamada do tipo `result.use(...)` será ignorada.
 
+##MockSerializationResult
+
+De forma bastante semelhante, você pode utilizar o `MockSerializationResult` sempre que quiser inspecionar o conteúdo serializado no `Result`.
+
+Na sua classe `PessoaControllerTest` o `result` deve ser do tipo `MockSerializationResult`, como a seguir:
+
+~~~
+#!java
+private MockSerializationResult result;
+~~~
+
+Considere o seguinte método da classe `PessoaController`:
+
+~~~
+#!java
+@Post("/pessoa/serializa")
+public void serializa(Pessoa pessoa) {
+	result.use(Results.json()).from(pessoa).serialize();
+}
+~~~
+
+No seu teste você pode fazer algo como:
+
+~~~
+#!java
+@Test
+public void deveriaSerializarPessoa() {
+	Pessoa pessoa = new Pessoa();
+	pessoa.setNome("Renan Montenegro");
+	
+	controller.serializa(pessoa);
+	
+	Assert.assertEquals("{\"pessoa\": {\"nome\": \"Renan Montenegro\"}}", result.serializedResult());
+}
+~~~
+
 ##MockValidator
 
 O `MockValidator` vai executar a validação acumulando possíveis erros. Para recuperá-los você pode usar o método `getErrors()` como você pode ver no exemplo:
@@ -100,7 +136,7 @@ O `MockValidator` vai executar a validação acumulando possíveis erros. Para r
 ~~~
 #!java
 @Test
-public void shouldThrowValidationException() {
+public void deveLancarValidationException() {
 	try {
 		controller.add(new Pessoa());
 		Assert.fail();
@@ -117,7 +153,7 @@ A chamada do método `validator.onErrorUse`, no caso de problema de validação,
 ~~~
 #!java
 @Test(expected = ValidationException.class)
-public void shouldThrowValidationException() {
+public void deveLancarValidationException() {
 	controller.add(new Pessoa());
 }
 ~~~

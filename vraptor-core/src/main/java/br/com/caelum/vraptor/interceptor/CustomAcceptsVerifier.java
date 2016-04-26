@@ -73,7 +73,7 @@ public class CustomAcceptsVerifier {
 		return new Predicate<Annotation>() {
 			@Override
 			public boolean apply(Annotation element) {
-				return element.annotationType().isAnnotationPresent(AcceptsConstraint.class);
+				return element != null && element.annotationType().isAnnotationPresent(AcceptsConstraint.class);
 			}
 		};
 	}

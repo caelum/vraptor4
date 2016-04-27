@@ -4,7 +4,7 @@ title: Dependências e pré-requisitos
 
 #Dependências e pré-requisitos
 
-O VRaptor 4 depende diretamente do CDI versão 1.1, portanto só funcionará nos servidores que suportem essa versão do CDI ou superior como CDI 1.2. Também é necessário possuir JDK 1.7 ou superior.
+O VRaptor 4 depende diretamente do CDI versão 1.1, portanto só funcionará nos servidores que suportem essa versão do CDI ou superior como CDI 1.2. Também é necessário possuir JDK 1.7 ou superior. Se for usar Java 8, não deixe de conferir <a href="#jdk-8">este tópico</a>.
 
 Os Servidores de Aplicações já testados e suportados são:
 
@@ -54,6 +54,8 @@ Algumas dependências podem variar se você usa um Application Server ou um Serv
 ~~~
 
 **Nota**: Se você usa Wildfly, tente usar a versão 8.1, pois o Javassist já é disponibilizado nos módulos do servidor. Sendo assim mesmo que você defina a dependência na aplicação, ela será ignorada. Uma alternativa, se você não pode usar a versão 8.1, é atualizar o módulo direto no servidor.
+
+Você pode precisar também adicionar o plugin <a href="/pt/docs/plugins/#vraptor-java-8">VRaptor Java 8</a> ao seu projeto.
 
 ## Maven
 

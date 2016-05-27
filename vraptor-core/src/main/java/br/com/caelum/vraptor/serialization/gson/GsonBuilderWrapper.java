@@ -81,7 +81,7 @@ public class GsonBuilderWrapper implements GsonSerializerBuilder, GsonDeserializ
 		return getGsonBuilder().create();
 	}
 	
-	private void registerAdapter(Class<?> adapterType, Object adapter) {
+	protected void registerAdapter(Class<?> adapterType, Object adapter) {
 		RegisterStrategy registerStrategy = adapter.getClass().getAnnotation(RegisterStrategy.class);
 		if ((registerStrategy != null) && (registerStrategy.value().equals(RegisterType.SINGLE))) {
 			getGsonBuilder().registerTypeAdapter(adapterType, adapter);

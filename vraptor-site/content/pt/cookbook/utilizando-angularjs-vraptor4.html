@@ -114,11 +114,11 @@ public class TodoController {
 }
 ~~~
 
-Aqui valem algumas observações pra você ficar atento.
+Aqui valem algumas observações para você ficar atento.
 
 Primeiro, nenhum metodo está retornando, TODOS são `void`. Isso mesmo, o VRaptor tem por padrão direcionar para uma página quando você faz o retorno e como o que nós queremos é consumir esse serviço pelo angular, não é interessante voltar uma página.
 
-Segunda observação é que a url disponibilizada pelos métodos que contém ("/") sempra vai conter a /. Por exemplo, a url do método `get()` é `/todo` porque o `@Get("")` está vazio, se houvesse uma barra a url seria `/todo/`. Isso vai nos poupar problemas mais tarde. Essa é uma observação importante porque se você colocar a url sem a barra no fim, o VRaptor não vai entender. [Aqui](http://www.vraptor.org/pt/cookbook/aceitando-urls-com-ou-sem-barra-no-final/) tem uma opção caso você queira entender e/ou mudar isso.
+A segunda observação é com relação a url disponibilizada pelos métodos que contém ("/"), pois ele sempre irá adicionar a barra ao final da url. Se a anotação que você inserir no método for `@Get("")` a url disponibilizada pelo VRaptor4 será `/todo`, se você anotar o método como `@Get("/")` a url seria `/todo/`.Mantenha `@Get("")`, isso vai nos poupar problemas mais tarde ao usar o Resource do AngularJS. [Aqui](http://www.vraptor.org/pt/cookbook/aceitando-urls-com-ou-sem-barra-no-final/) tem uma opção caso você queira entender e/ou mudar isso.
 
 O nosso controller basicamente delega as chamadas para um repository, que vai se preocupar com a regra de negocio em si. Como a ideia é fazer algo simples, vamos apenas usar um Map para guardar esse registros.  Vamos dar uma olhada no nosso repository:
 
@@ -179,12 +179,13 @@ Como você pode ver, nada de especial. Temos um bean anotado com `@ApplicationSc
 
 Tudo pronto, tudo maravilhoso no servidor, vamos tomar conta da nossa integração com o Angular.
 
-O primeiro passo pra isso é adicionar as dependecias do angular na nossa página inicial. Você pode fazer o download no [repositório oficial](https://angularjs.org/), mas nesse projeto nós vamos nos valer do poder do CDN. Vamos adicionar 3 arquivos: 
+O primeiro passo pra isso é adicionar as dependecias do angular na nossa página inicial. Você pode fazer o download no [repositório oficial](https://angularjs.org/), mas nesse projeto nós vamos nos valer do poder do CDN: 
 
  - angular.js, o core do angular
  -  angular-ui-router, responsável pelas nossas rotas
  - angular-resource, responsável por facilitar nossas chamadas ao servidor
-Além desses arquivos, vamos adicionar o arquivo de configuração da nossa aplicação, ele vai se chamar app.js e vai ficar em `/src/main/webapp/resources/js/app.js`.
+
+Além desses arquivos, vamos adicionar a configuração da nossa aplicação, ele vai se chamar app.js e vai ficar em `/src/main/webapp/resources/js/app.js`.
 
 Nesse momento nossa página deve estar como abaixo:
 
@@ -214,8 +215,8 @@ Nesse momento nossa página deve estar como abaixo:
 
 ~~~
 
-Antes de continuarmos mexendo nessa página, você pode fazer um teste para verificar se o angular já está funcionando na sua página. Na tag body adicione o atributo ng-app e no corpo escreva `{{2+2}}`
-Quando você acessar  página, deve aparecer só o número 4. Se isso aconteceu, tudo ok! Caso tenha aparecido o `{{2+2}}` (convém esperar um pouco para que o script do angular seja carregado), você pode abrir o console (F12 normalmente) e dar uma olhada nos erros.
+Antes de continuarmos, você pode fazer um teste para verificar se o angular já está funcionando. Na tag body adicione o atributo ng-app e no corpo escreva `{{2+2}}`
+Quando você acessar, deve aparecer só o número 4. Se isso aconteceu, tudo ok! Caso tenha aparecido o `{{2+2}}` (convém esperar um pouco para que o script do angular seja carregado), você pode abrir o console (F12 normalmente) e dar uma olhada nos erros.
 
 Vamos criar o nosso app.js agora:
 
@@ -320,7 +321,7 @@ angular.module("vraptor").controller('TodoCtrl', [ '$scope', 'TodoService', func
 } ]);
 
 ~~~
-Depois de criar esse controller, voltamos ao `app.js` e definimos que as rotas vão usar esse controller (vamos usar o mesmo controller para simplificar) :
+Depois de criar esse controller, voltamos ao `app.js` e definimos que as rotas vão usar esse controller (Todas as rotas vão se valer desse controller simplesmente para facilitar nosso exemplo, mas você pode mudar isso depois) :
 
 ~~~
 #!javascript

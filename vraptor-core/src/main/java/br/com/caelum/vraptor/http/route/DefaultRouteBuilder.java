@@ -185,10 +185,20 @@ public class DefaultRouteBuilder implements RouteBuilder {
 		addParametersInfo(method);
 		ControllerMethod controllerMethod = DefaultControllerMethod.instanceFor(type, method);
 		Parameter[] parameterNames = nameProvider.parametersFor(method);
-		this.strategy = new FixedMethodStrategy(originalUri, controllerMethod, this.supportedMethods, builder.build(), priority, parameterNames);
+		this.strategy = getRouteStrategy(controllerMethod, parameterNames);
 
 		logger.info(String.format("%-50s%s -> %10s", originalUri,
 				this.supportedMethods.isEmpty() ? "[ALL]" : this.supportedMethods, method));
+	}
+
+	/**
+	 * Override this method to change the default Route implementation
+	 * @param controllerMethod The ControllerMethod
+	 * @param parameterNames parameters of the method
+	 * @return Route representation
+	 */
+	protected Route getRouteStrategy(ControllerMethod controllerMethod, Parameter[] parameterNames) {
+		return new FixedMethodStrategy(originalUri, controllerMethod, this.supportedMethods, builder.build(), priority, parameterNames);
 	}
 
 	private void addParametersInfo(Method method) {

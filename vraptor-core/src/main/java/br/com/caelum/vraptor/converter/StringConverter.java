@@ -15,6 +15,8 @@
  */
 package br.com.caelum.vraptor.converter;
 
+import static com.google.common.base.Strings.isNullOrEmpty;
+
 import javax.annotation.Priority;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Alternative;
@@ -37,6 +39,10 @@ public class StringConverter implements Converter<String> {
 
 	@Override
 	public String convert(String value, Class<? extends String> type) {
+		if (isNullOrEmpty(value)) {
+			return null;
+		}
+		
 		return value;
 	}
 }

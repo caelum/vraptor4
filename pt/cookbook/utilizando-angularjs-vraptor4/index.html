@@ -1,0 +1,250 @@
+<!DOCTYPE HTML> <html lang="pt"> <head> <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> <meta charset="utf-8"> <meta name="viewport" content="width=device-width"> <title>VRaptor 4 - Utilizando AngularJS no VRaptor4</title> <link rel="shortcut icon" href="../../../img/favicon.png"> <link rel="stylesheet" href="/css/style.min.css"/> <meta name="generator" content="nanoc 3.6.7"> </head> <body> <header class="container"> <h1 class="logo"><a class="logo-link" href="../.."> <img src="../../../img/logo.png" alt="VRaptor"> </a></h1> <div class="header-links"> <ul class="community"> <li><a href="https://groups.google.com/forum/#!forum/caelum-vraptor" target="_blank">Google Groups</a></li> <li><a href="https://github.com/caelum/vraptor4/" target="_blank">GitHub</a></li> <li><a href="http://www.guj.com.br/tag/vraptor" target="_blank">GUJ Respostas</a></li> </ul> <ul class="site-languages"> <li> <a class="site-language flag flag-en not-selected" title="en" href="../../../en"> EN </a> </li> <li> <a class="site-language flag flag-pt " title="pt" href="../.."> PT </a> </li> </ul> <a href="../../busca/" class="site-search-link">Ir para a página de busca</a> <form action="/pt/busca/" method="get" class="site-search-form"> <input type="search" name="q"> <button type="submit">Buscar</button> </form> </div> </header> <input type="checkbox" id="nav-visibility"> <label for="nav-visibility" class="nav-toggle">Menu</label> <nav class="main-nav"> <ul> <li><a href="../../download">Download</a></li> <li><a href="../../docs/guia-de-1-minuto/">Documentação</a></li> <li><a href="../aceitando-urls-com-ou-sem-barra-no-final">Cookbook</a></li> <li><a href="https://github.com/caelum/vraptor4/releases" target="_blank">Changelog</a></li> <li><a href="https://github.com/caelum/vraptor4/milestones" target="_blank">Roadmap</a></li> <li><a href="../../../javadoc">Javadoc</a></li> </ul> </nav> <div class="breadcrumbs"> <a href="../../">Home</a> <a href="../">Cookbook</a> <a href="./">Utilizando AngularJS no VRaptor4</a> </div> <nav class="doc-nav container"> <h1>Cookbook</h1> <ul> <li> <a href="../aceitando-urls-com-ou-sem-barra-no-final"> Aceitando URLs com ou sem barra no final </a> </li> <li> <a href="../construindo-uma-aplicacao-web-com-java8-vraptor4-wildfly"> Construindo uma Aplicação Web com Java 8 e VRaptor 4 no Wildfly </a> </li> <li> <a href="../evitando-que-o-browser-faca-cache-das-paginas"> Evitando que o browser faça cache das páginas </a> </li> <li> <a href="../usando-o-header-referer-para-fazer-redirecionamentos"> Usando o Header Referer para fazer redirecionamentos </a> </li> <li> <a href="../integrando-vraptor-com-tiles3"> Integrando o VRaptor com Tiles 3 </a> </li> <li> <a href="../utilizando-conversation-scoped"> Utilizando o @ConversationScoped no VRaptor4 </a> </li> <li> <a href="."> Utilizando AngularJS no VRaptor4 </a> </li> </ul> </nav> <main class="container"> <h1 id="utilizando-angularjs-no-vraptor4">Utilizando AngularJS no VRaptor4</h1> <p>Uns dos frameworks em alta é o <a href="https://angularjs.org/">AngularJS</a>. Atualmente em sua versão 1.5.9, mas já com a versão 2 disponível, onde há uma reformulação total, pois a nova versão se vale do ECMA2015, esse cookbook vai se valer da versão 1 que atualmente é a mais utilizada. Hoje vamos criar um aplicativo simples de tarefas para exemplificar como o AngularJS pode se integrar com o VRaptor4.</p> <p>Você pode acessar o <a href="https://github.com/angeliski/vraptor-blank-project-angular">vraptor-blank-project-angular</a> para visualizar o fonte final. Esse projeto vai partir do vraptor-blank-project(disponível no <a href="https://github.com/caelum/vraptor4">repositório oficial</a>).</p> <p>O primeiro passo é baixar o vraptor-blank-project, você pode rodar ele com um simples <code>mvn tomcat7:run</code> na raiz do projeto. Aqui valem algumas observações:</p> <ul> <li>Você pode ter um problema com relação a versão do projeto blank, pois ela diz respeito a um snapshot, então talvez seja necessário alterar o version do projeto blank para a ultima versão disponível do VRaptor.</li> <li>Se você tiver algum problema ao rodar o <code>mvn tomcat7:run</code> vale a pena dar uma olhada <a href="https://groups.google.com/forum/#!topic/caelum-vraptor/sYwCOX0ICWw">nessa thread</a> do grupo, relacionada ao plugin do tomcat.</li> </ul> <p>Beleza! Tudo certo, nosso projeto está rodando, então vamos começar a programar! Primeiro disponibilizamos o lado do servidor da nossa aplicação. Vamos começar criando uma classe para representar nossa tarefa:</p> <pre><code class="language-java"><span class="kn">package</span> <span class="n">br</span><span class="o">.</span><span class="na">com</span><span class="o">.</span><span class="na">caelum</span><span class="o">.</span><span class="na">vraptor</span><span class="o">.</span><span class="na">model</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">java.io.Serializable</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Todo</span> <span class="kd">implements</span> <span class="n">Serializable</span> <span class="o">{</span>
+
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">long</span> <span class="n">serialVersionUID</span> <span class="o">=</span> <span class="mi">1L</span><span class="o">;</span>
+
+    <span class="kd">private</span> <span class="n">Long</span> <span class="n">id</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="n">String</span> <span class="n">title</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kt">boolean</span> <span class="n">completed</span><span class="o">;</span>
+
+<span class="c1">//Getters e Setters ( Não precisa por aqui né?)</span>
+<span class="o">}</span></code></pre> <p>Com o nosso Model pronto, vamos criar a nossa API? De uma olhada no controller:</p> <pre><code class="language-java"><span class="kn">package</span> <span class="n">br</span><span class="o">.</span><span class="na">com</span><span class="o">.</span><span class="na">caelum</span><span class="o">.</span><span class="na">vraptor</span><span class="o">.</span><span class="na">controller</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">javax.inject.Inject</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">br.com.caelum.vraptor.Consumes</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">br.com.caelum.vraptor.Controller</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">br.com.caelum.vraptor.Delete</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">br.com.caelum.vraptor.Get</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">br.com.caelum.vraptor.Path</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">br.com.caelum.vraptor.Post</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">br.com.caelum.vraptor.Put</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">br.com.caelum.vraptor.Result</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">br.com.caelum.vraptor.model.Todo</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">br.com.caelum.vraptor.repository.TodoRepository</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">br.com.caelum.vraptor.serialization.gson.WithoutRoot</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">br.com.caelum.vraptor.view.Results</span><span class="o">;</span>
+
+<span class="nd">@Controller</span>
+<span class="nd">@Path</span><span class="o">(</span><span class="s">"/todo"</span><span class="o">)</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">TodoController</span> <span class="o">{</span>
+
+    <span class="kd">private</span> <span class="kd">final</span> <span class="n">Result</span> <span class="n">result</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="n">TodoRepository</span> <span class="n">todoRepository</span><span class="o">;</span>
+
+    <span class="cm">/**</span>
+<span class="cm">     * @deprecated CDI eyes only</span>
+<span class="cm">     */</span>
+    <span class="kd">protected</span> <span class="nf">TodoController</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">(</span><span class="kc">null</span><span class="o">,</span> <span class="kc">null</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Inject</span>
+    <span class="kd">public</span> <span class="nf">TodoController</span><span class="o">(</span><span class="n">Result</span> <span class="n">result</span><span class="o">,</span> <span class="n">TodoRepository</span> <span class="n">todoRepository</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">result</span> <span class="o">=</span> <span class="n">result</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">todoRepository</span> <span class="o">=</span> <span class="n">todoRepository</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Get</span><span class="o">(</span><span class="s">""</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">get</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">result</span><span class="o">.</span><span class="na">use</span><span class="o">(</span><span class="n">Results</span><span class="o">.</span><span class="na">json</span><span class="o">()).</span><span class="na">withoutRoot</span><span class="o">().</span><span class="na">from</span><span class="o">(</span><span class="n">todoRepository</span><span class="o">.</span><span class="na">findAll</span><span class="o">())</span>
+                <span class="o">.</span><span class="na">serialize</span><span class="o">();</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Get</span><span class="o">(</span><span class="s">"/{todo.id}"</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">getOne</span><span class="o">(</span><span class="n">Todo</span> <span class="n">todo</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">result</span><span class="o">.</span><span class="na">use</span><span class="o">(</span><span class="n">Results</span><span class="o">.</span><span class="na">json</span><span class="o">()).</span><span class="na">withoutRoot</span><span class="o">()</span>
+                <span class="o">.</span><span class="na">from</span><span class="o">(</span><span class="n">todoRepository</span><span class="o">.</span><span class="na">find</span><span class="o">(</span><span class="n">todo</span><span class="o">.</span><span class="na">getId</span><span class="o">())).</span><span class="na">serialize</span><span class="o">();</span>
+
+    <span class="o">}</span>
+
+    <span class="nd">@Consumes</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"application/json"</span><span class="o">,</span> <span class="n">options</span> <span class="o">=</span> <span class="n">WithoutRoot</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
+    <span class="nd">@Post</span><span class="o">(</span><span class="s">""</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">create</span><span class="o">(</span><span class="n">Todo</span> <span class="n">todo</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">result</span><span class="o">.</span><span class="na">use</span><span class="o">(</span><span class="n">Results</span><span class="o">.</span><span class="na">json</span><span class="o">()).</span><span class="na">withoutRoot</span><span class="o">()</span>
+                <span class="o">.</span><span class="na">from</span><span class="o">(</span><span class="n">todoRepository</span><span class="o">.</span><span class="na">create</span><span class="o">(</span><span class="n">todo</span><span class="o">)).</span><span class="na">serialize</span><span class="o">();</span>
+
+    <span class="o">}</span>
+
+    <span class="nd">@Consumes</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"application/json"</span><span class="o">,</span> <span class="n">options</span> <span class="o">=</span> <span class="n">WithoutRoot</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
+    <span class="nd">@Put</span><span class="o">(</span><span class="s">""</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">update</span><span class="o">(</span><span class="n">Todo</span> <span class="n">todo</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">result</span><span class="o">.</span><span class="na">use</span><span class="o">(</span><span class="n">Results</span><span class="o">.</span><span class="na">json</span><span class="o">()).</span><span class="na">withoutRoot</span><span class="o">()</span>
+                <span class="o">.</span><span class="na">from</span><span class="o">(</span><span class="n">todoRepository</span><span class="o">.</span><span class="na">update</span><span class="o">(</span><span class="n">todo</span><span class="o">)).</span><span class="na">serialize</span><span class="o">();</span>
+
+    <span class="o">}</span>
+
+    <span class="nd">@Delete</span><span class="o">(</span><span class="s">"/{todo.id}"</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">delete</span><span class="o">(</span><span class="n">Todo</span> <span class="n">todo</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">result</span><span class="o">.</span><span class="na">use</span><span class="o">(</span><span class="n">Results</span><span class="o">.</span><span class="na">json</span><span class="o">()).</span><span class="na">withoutRoot</span><span class="o">()</span>
+                <span class="o">.</span><span class="na">from</span><span class="o">(</span><span class="n">todoRepository</span><span class="o">.</span><span class="na">delete</span><span class="o">(</span><span class="n">todo</span><span class="o">.</span><span class="na">getId</span><span class="o">())).</span><span class="na">serialize</span><span class="o">();</span>
+
+    <span class="o">}</span>
+
+<span class="o">}</span></code></pre> <p>Aqui valem algumas observações para você ficar atento.</p> <p>Primeiro, nenhum metodo está retornando, TODOS são <code>void</code>. Isso mesmo, o VRaptor tem por padrão direcionar para uma página quando você faz o retorno e como o que nós queremos é consumir esse serviço pelo angular, não é interessante voltar uma página.</p> <p>A segunda observação é com relação a url disponibilizada pelos métodos que contém (“/”), pois ele sempre irá adicionar a barra ao final da url. Se a anotação que você inserir no método for <code>@Get("")</code> a url disponibilizada pelo VRaptor4 será <code>/todo</code>, se você anotar o método como <code>@Get("/")</code> a url seria <code>/todo/</code>.Mantenha <code>@Get("")</code>, isso vai nos poupar problemas mais tarde ao usar o Resource do AngularJS. <a href="http://www.vraptor.org/pt/cookbook/aceitando-urls-com-ou-sem-barra-no-final/">Aqui</a> tem uma opção caso você queira entender e/ou mudar isso.</p> <p>O nosso controller basicamente delega as chamadas para um repository, que vai se preocupar com a regra de negocio em si. Como a ideia é fazer algo simples, vamos apenas usar um Map para guardar esse registros. Vamos dar uma olhada no nosso repository:</p> <pre><code class="language-java"><span class="kn">package</span> <span class="n">br</span><span class="o">.</span><span class="na">com</span><span class="o">.</span><span class="na">caelum</span><span class="o">.</span><span class="na">vraptor</span><span class="o">.</span><span class="na">repository</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">java.io.Serializable</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.ArrayList</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.HashMap</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.List</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.Map</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.Random</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">javax.annotation.PostConstruct</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">javax.enterprise.context.ApplicationScoped</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">br.com.caelum.vraptor.model.Todo</span><span class="o">;</span>
+
+<span class="nd">@ApplicationScoped</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">TodoRepository</span> <span class="kd">implements</span> <span class="n">Serializable</span> <span class="o">{</span>
+
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">long</span> <span class="n">serialVersionUID</span> <span class="o">=</span> <span class="mi">1L</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="n">Map</span><span class="o">&lt;</span><span class="n">Long</span><span class="o">,</span> <span class="n">Todo</span><span class="o">&gt;</span> <span class="n">todoList</span><span class="o">;</span>
+
+    <span class="nd">@PostConstruct</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">init</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">todoList</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashMap</span><span class="o">&lt;&gt;();</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">Todo</span><span class="o">&gt;</span> <span class="nf">findAll</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;&gt;(</span><span class="n">todoList</span><span class="o">.</span><span class="na">values</span><span class="o">());</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="n">Todo</span> <span class="nf">find</span><span class="o">(</span><span class="n">Long</span> <span class="n">id</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">todoList</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">id</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="n">Todo</span> <span class="nf">create</span><span class="o">(</span><span class="n">Todo</span> <span class="n">todo</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">todo</span><span class="o">.</span><span class="na">setId</span><span class="o">(</span><span class="k">new</span> <span class="n">Random</span><span class="o">().</span><span class="na">nextLong</span><span class="o">());</span>
+        <span class="n">todoList</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">todo</span><span class="o">.</span><span class="na">getId</span><span class="o">(),</span> <span class="n">todo</span><span class="o">);</span>
+        <span class="k">return</span> <span class="n">todo</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="n">Todo</span> <span class="nf">update</span><span class="o">(</span><span class="n">Todo</span> <span class="n">todo</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">todoList</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">todo</span><span class="o">.</span><span class="na">getId</span><span class="o">(),</span> <span class="n">todo</span><span class="o">);</span>
+        <span class="k">return</span> <span class="n">todo</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="n">Todo</span> <span class="nf">delete</span><span class="o">(</span><span class="n">Long</span> <span class="n">id</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">todoList</span><span class="o">.</span><span class="na">remove</span><span class="o">(</span><span class="n">id</span><span class="o">);</span>
+    <span class="o">}</span>
+
+<span class="o">}</span></code></pre> <p>Como você pode ver, nada de especial. Temos um bean anotado com <code>@ApplicationScoped</code>, o que quer dizer que ele vai ser praticamente um singleton. E nele temos uma lista que gerencia nossos registros. Você deve estar se perguntando se é thread-safe, se o id não vai duplicar,ou até o que vai acontecer quando a aplicação for encerrada. Essa não é nossa preocupação agora, mas você pode ficar a vontade para evoluir nosso projeto para resolver todas essas questões! :)</p> <p>Tudo pronto, tudo maravilhoso no servidor, vamos tomar conta da nossa integração com o Angular.</p> <p>O primeiro passo pra isso é adicionar as dependecias do angular na nossa página inicial. Você pode fazer o download no <a href="https://angularjs.org/">repositório oficial</a>, mas nesse projeto nós vamos nos valer do poder do CDN: </p> <ul> <li>angular.js, o core do angular</li> <li>angular-ui-router, responsável pelas nossas rotas</li> <li>angular-resource, responsável por facilitar nossas chamadas ao servidor</li> </ul> <p>Além desses arquivos, vamos adicionar a configuração da nossa aplicação, ele vai se chamar app.js e vai ficar em <code>/src/main/webapp/resources/js/app.js</code>.</p> <p>Nesse momento nossa página deve estar como abaixo:</p> <pre><code class="language-jsp"><span class="cp">&lt;!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"&gt;</span>
+<span class="nt">&lt;html&gt;</span>
+<span class="nt">&lt;head&gt;</span>
+<span class="nt">&lt;meta</span> <span class="na">http-equiv=</span><span class="s">"Content-Type"</span> <span class="na">content=</span><span class="s">"text/html; charset=UTF-8"</span><span class="nt">&gt;</span>
+<span class="nt">&lt;title&gt;</span>VRaptor Blank Project Angular<span class="nt">&lt;/title&gt;</span>
+<span class="nt">&lt;/head&gt;</span>
+<span class="nt">&lt;body&gt;</span>
+
+
+
+    <span class="nt">&lt;script</span> <span class="na">type=</span><span class="s">"text/javascript"</span>
+        <span class="na">src=</span><span class="s">"https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.3/angular.js"</span><span class="nt">&gt;&lt;/script&gt;</span>
+    <span class="nt">&lt;script</span>
+        <span class="na">src=</span><span class="s">"https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.18/angular-ui-router.min.js"</span><span class="nt">&gt;&lt;/script&gt;</span>
+    <span class="nt">&lt;script</span>
+        <span class="na">src=</span><span class="s">"https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.3/angular-resource.min.js"</span><span class="nt">&gt;&lt;/script&gt;</span>
+
+    <span class="nt">&lt;script</span> <span class="na">type=</span><span class="s">"text/javascript"</span> <span class="na">src=</span><span class="s">"resources/js/app.js"</span><span class="nt">&gt;&lt;/script&gt;</span>
+<span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span></code></pre> <p>Antes de continuarmos, você pode fazer um teste para verificar se o angular já está funcionando. Na tag body adicione o atributo ng-app e no corpo escreva <code>{{2+2}}</code> Quando você acessar, deve aparecer só o número 4. Se isso aconteceu, tudo ok! Caso tenha aparecido o <code>{{2+2}}</code> (convém esperar um pouco para que o script do angular seja carregado), você pode abrir o console (F12 normalmente) e dar uma olhada nos erros.</p> <p>Vamos criar o nosso app.js agora:</p> <pre><code class="language-javascript"><span class="kd">var</span> <span class="nx">app</span> <span class="o">=</span> <span class="nx">angular</span><span class="p">.</span><span class="nx">module</span><span class="p">(</span><span class="s2">"vraptor"</span><span class="p">,</span> <span class="p">[</span> <span class="s1">'ngResource'</span><span class="p">,</span> <span class="s1">'ui.router'</span> <span class="p">]);</span>
+
+<span class="nx">app</span><span class="p">.</span><span class="nx">config</span><span class="p">([</span> <span class="s1">'$stateProvider'</span><span class="p">,</span> <span class="s1">'$urlRouterProvider'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">$stateProvider</span><span class="p">,</span> <span class="nx">$urlRouterProvider</span><span class="p">)</span> <span class="p">{</span>
+
+    <span class="nx">$urlRouterProvider</span><span class="p">.</span><span class="nx">otherwise</span><span class="p">(</span><span class="s1">'/'</span><span class="p">);</span>
+
+    <span class="nx">$stateProvider</span><span class="p">.</span><span class="nx">state</span><span class="p">(</span><span class="s1">'todo'</span><span class="p">,</span> <span class="p">{</span>
+        <span class="nx">url</span> <span class="o">:</span> <span class="s1">'/'</span><span class="p">,</span>
+        <span class="nx">templateUrl</span> <span class="o">:</span> <span class="s1">'views/index.jsp'</span><span class="p">,</span>
+    <span class="p">}).</span><span class="nx">state</span><span class="p">(</span><span class="s1">'list'</span><span class="p">,</span> <span class="p">{</span>
+        <span class="nx">url</span> <span class="o">:</span> <span class="s1">'/list'</span><span class="p">,</span>
+        <span class="nx">templateUrl</span> <span class="o">:</span> <span class="s1">'views/list.jsp'</span><span class="p">,</span>
+    <span class="p">});</span>
+
+<span class="p">}</span> <span class="p">]);</span></code></pre> <p>Nada fora do comum de uma configuração do Angular. Iniciamos o module com as nossas dependências e configuramos nossas rotas. Se você conhece o VRaptor deve ter se perguntado porque as nossas jsp estão fora do pasta <code>WEB-INF/jsp</code>. Acontece que todos os arquivos que estão dentro da pasta <code>WEB-INF</code> são “privados”, ou seja, não podem ser requisitados pelo navegador, só pelo servidor. Isso é um problema para os templates do angular, pois quem faz essa solicitação de páginas é o navegador conforme o usuário navega, ou seja, o angular vai tentar requisitar uma página “privada” e não vai recebe-la. Afim de evitar isso, nós colocamos nossa views fora de <code>WEB-INF</code>. Outra solução para isso, seria criar um controller do VRaptor, onde o angular requisita a página para ele, isso pode ser feito caso você queira uma estratégia onde existe algum processamento da página no servidor, mas isso iria adicionar uma verbosidade que não queremos nos preocupar agora.</p> <p>Se você rodar a nossa aplicação agora, nada vai aparecer porque faltou adicionar no index uma referencia onde o angular vai renderizar os templates, o <code>ui-view</code>.Além disso, precisamos atualizar o ng-app com o nome do nosso modulo (vraptor). Veja como ficou nossa página inicial:</p> <pre><code class="language-jsp"><span class="cp">&lt;!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"&gt;</span>
+<span class="nt">&lt;html&gt;</span>
+<span class="nt">&lt;head&gt;</span>
+<span class="nt">&lt;meta</span> <span class="na">http-equiv=</span><span class="s">"Content-Type"</span> <span class="na">content=</span><span class="s">"text/html; charset=UTF-8"</span><span class="nt">&gt;</span>
+<span class="nt">&lt;title&gt;</span>VRaptor Blank Project Angular<span class="nt">&lt;/title&gt;</span>
+<span class="nt">&lt;/head&gt;</span>
+<span class="nt">&lt;body</span> <span class="na">ng-app=</span><span class="s">"vraptor"</span><span class="nt">&gt;</span>
+
+    <span class="nt">&lt;div</span> <span class="err">ui-view</span><span class="nt">&gt;&lt;/div&gt;</span>
+
+    <span class="nt">&lt;script</span> <span class="na">type=</span><span class="s">"text/javascript"</span>
+        <span class="na">src=</span><span class="s">"https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.3/angular.js"</span><span class="nt">&gt;&lt;/script&gt;</span>
+    <span class="nt">&lt;script</span>
+        <span class="na">src=</span><span class="s">"https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.18/angular-ui-router.min.js"</span><span class="nt">&gt;&lt;/script&gt;</span>
+    <span class="nt">&lt;script</span>
+        <span class="na">src=</span><span class="s">"https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.3/angular-resource.min.js"</span><span class="nt">&gt;&lt;/script&gt;</span>
+
+    <span class="nt">&lt;script</span> <span class="na">type=</span><span class="s">"text/javascript"</span> <span class="na">src=</span><span class="s">"resources/js/app.js"</span><span class="nt">&gt;&lt;/script&gt;</span>
+<span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span></code></pre> <p>Agora basta você criar dentro de <code>webapp</code> uma pasta chamada <code>views</code> e adicionar duas páginas: <code>index.jsp e list.jsp</code>. Note que o conteudo dessas páginas não deve conter as tags <code>html e body</code>, só o conteudo efetivo da div, já que o angular vai renderizar o conteúdo ali dentro.</p> <p>Vamos criar primeiro a nossa página de adicionar tarefas, que é representada pela index.jsp dentro de views. Nossa página inicialmente fica assim:</p> <pre><code class="language-jsp"><span class="nt">&lt;header</span> <span class="na">id=</span><span class="s">"header"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;h1&gt;</span>Todos<span class="nt">&lt;/h1&gt;</span>
+    <span class="nt">&lt;form</span> <span class="na">id=</span><span class="s">"todo-form"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;input</span> <span class="na">id=</span><span class="s">"new-todo"</span> <span class="na">placeholder=</span><span class="s">"O que precisa ser feito?"</span> <span class="err">autofocus</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;/form&gt;</span>
+<span class="nt">&lt;/header&gt;</span></code></pre> <p>Apenas um campo input com um placeholder. Isso precisa ser gerenciado por alguém, não é mesmo? Vamos criar um controller (do angular) para cuidar disso. Dentro da pasta <code>js</code> adicione uma pasta <code>controllers</code> e um arquivo chamado <code>TodoCtrl.js</code>. Esse controller vai ser responsável por adicionar novos registros a nossa lista. Mas onde ele vai salvar esses registros? No servidor! Então vamos providenciar um service que cuide disso. Crie uma pasta <code>services</code> dentro de js e coloque um arquivo chamado <code>TodoService.js</code>, nele nós vamos injetar o <code>$resource</code> e criar o responsável por gerenciar nossa api. Vamos dar uma olhada nesse service:</p> <pre><code class="language-javascript"><span class="nx">angular</span><span class="p">.</span><span class="nx">module</span><span class="p">(</span><span class="s2">"vraptor"</span><span class="p">).</span><span class="nx">service</span><span class="p">(</span><span class="s2">"TodoService"</span><span class="p">,</span> <span class="p">[</span> <span class="s1">'$resource'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">$resource</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">$resource</span><span class="p">(</span><span class="s2">"todo/:id"</span><span class="p">,</span> <span class="p">{</span>
+        <span class="nx">id</span> <span class="o">:</span> <span class="s1">'@_id'</span>
+    <span class="p">},</span> <span class="p">{</span>
+        <span class="nx">update</span> <span class="o">:</span> <span class="p">{</span>
+            <span class="nx">method</span> <span class="o">:</span> <span class="s1">'PUT'</span>
+        <span class="p">}</span>
+    <span class="p">});</span>
+<span class="p">}</span> <span class="p">]);</span></code></pre> <p>Esse service simplesmente disponibiliza um <code>$resource </code> que atende a url da nossa api. <code>$resource</code> é mágico. Agora nós podemos definir o nosso controller para que ele consiga adicionar nossas tarefas:</p> <pre><code class="language-javascript"><span class="nx">angular</span><span class="p">.</span><span class="nx">module</span><span class="p">(</span><span class="s2">"vraptor"</span><span class="p">).</span><span class="nx">controller</span><span class="p">(</span><span class="s1">'TodoCtrl'</span><span class="p">,</span> <span class="p">[</span> <span class="s1">'$scope'</span><span class="p">,</span> <span class="s1">'TodoService'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">$scope</span><span class="p">,</span> <span class="nx">TodoService</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">$scope</span><span class="p">.</span><span class="nx">todo</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">TodoService</span><span class="p">();</span>
+    
+    <span class="nx">$scope</span><span class="p">.</span><span class="nx">add</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">todo</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">TodoService</span><span class="p">.</span><span class="nx">save</span><span class="p">(</span><span class="nx">todo</span><span class="p">,</span><span class="kd">function</span><span class="p">(){</span>
+            <span class="nx">$scope</span><span class="p">.</span><span class="nx">todo</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">TodoService</span><span class="p">();</span>        
+        <span class="p">});</span>
+    <span class="p">};</span>
+
+<span class="p">}</span> <span class="p">]);</span></code></pre> <p>Depois de criar esse controller, voltamos ao <code>app.js</code> e definimos que as rotas vão usar esse controller (Todas as rotas vão se valer desse controller simplesmente para facilitar nosso exemplo, mas você pode mudar isso depois) :</p> <pre><code class="language-javascript"><span class="kd">var</span> <span class="nx">app</span> <span class="o">=</span> <span class="nx">angular</span><span class="p">.</span><span class="nx">module</span><span class="p">(</span><span class="s2">"vraptor"</span><span class="p">,</span> <span class="p">[</span> <span class="s1">'ngResource'</span><span class="p">,</span> <span class="s1">'ui.router'</span> <span class="p">]);</span>
+
+<span class="nx">app</span><span class="p">.</span><span class="nx">config</span><span class="p">([</span> <span class="s1">'$stateProvider'</span><span class="p">,</span> <span class="s1">'$urlRouterProvider'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">$stateProvider</span><span class="p">,</span> <span class="nx">$urlRouterProvider</span><span class="p">)</span> <span class="p">{</span>
+
+    <span class="nx">$urlRouterProvider</span><span class="p">.</span><span class="nx">otherwise</span><span class="p">(</span><span class="s1">'/'</span><span class="p">);</span>
+
+    <span class="nx">$stateProvider</span><span class="p">.</span><span class="nx">state</span><span class="p">(</span><span class="s1">'todo'</span><span class="p">,</span> <span class="p">{</span>
+        <span class="nx">url</span> <span class="o">:</span> <span class="s1">'/'</span><span class="p">,</span>
+        <span class="nx">templateUrl</span> <span class="o">:</span> <span class="s1">'views/index.jsp'</span><span class="p">,</span>
+        <span class="nx">controller</span><span class="o">:</span> <span class="s1">'TodoCtrl'</span>
+    <span class="p">}).</span><span class="nx">state</span><span class="p">(</span><span class="s1">'list'</span><span class="p">,</span> <span class="p">{</span>
+        <span class="nx">url</span> <span class="o">:</span> <span class="s1">'/list'</span><span class="p">,</span>
+        <span class="nx">templateUrl</span> <span class="o">:</span> <span class="s1">'views/list.jsp'</span><span class="p">,</span>
+        <span class="nx">controller</span><span class="o">:</span> <span class="s1">'TodoCtrl'</span>
+    <span class="p">});</span>
+
+<span class="p">}</span> <span class="p">]);</span></code></pre> <p>Vamos ajustar o a nossa views/index.jsp para usar o método que definimos:</p> <pre><code class="language-jsp"><span class="nt">&lt;header</span> <span class="na">id=</span><span class="s">"header"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;h1&gt;</span>Todos<span class="nt">&lt;/h1&gt;</span>
+    <span class="nt">&lt;form</span> <span class="na">id=</span><span class="s">"todo-form"</span> <span class="na">ng-submit=</span><span class="s">"add(todo)"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;input</span> <span class="na">ng-model=</span><span class="s">"todo.title"</span> <span class="na">id=</span><span class="s">"new-todo"</span> <span class="na">placeholder=</span><span class="s">"O que precisa ser feito?"</span> <span class="err">autofocus</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;/form&gt;</span>
+<span class="nt">&lt;/header&gt;</span></code></pre> <p>Pronto! Se você rodar o projeto, ele já vai ser capaz de adicionar nossas tarefas ao servidor. Se você tiver algum erro vale observar se você adicionou todos os scripts na pagina principal (infelizmente o angular não descobre onde os arquivos estão). Que tal listarmos nossas tarefas na rota list agora?</p> <p>Primeiro nós adicionamos no controller a chamada do nosso service que vai listar as tarefas:</p> <pre><code class="language-javascript"><span class="nx">angular</span><span class="p">.</span><span class="nx">module</span><span class="p">(</span><span class="s2">"vraptor"</span><span class="p">).</span><span class="nx">controller</span><span class="p">(</span><span class="s1">'TodoCtrl'</span><span class="p">,</span> <span class="p">[</span> <span class="s1">'$scope'</span><span class="p">,</span> <span class="s1">'TodoService'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">$scope</span><span class="p">,</span> <span class="nx">TodoService</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">$scope</span><span class="p">.</span><span class="nx">todo</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">TodoService</span><span class="p">();</span>
+    
+    <span class="nx">$scope</span><span class="p">.</span><span class="nx">add</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">todo</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">TodoService</span><span class="p">.</span><span class="nx">save</span><span class="p">(</span><span class="nx">todo</span><span class="p">,</span><span class="kd">function</span><span class="p">(){</span>
+            <span class="nx">$scope</span><span class="p">.</span><span class="nx">todo</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">TodoService</span><span class="p">();</span>        
+        <span class="p">});</span>
+    <span class="p">};</span>
+    
+    <span class="nx">$scope</span><span class="p">.</span><span class="nx">todos</span> <span class="o">=</span> <span class="nx">TodoService</span><span class="p">.</span><span class="nx">query</span><span class="p">();</span> 
+    
+<span class="p">}</span> <span class="p">]);</span></code></pre> <p>E na nossa página <code>list.jsp</code>, nós adicionamos um <code>ng-repeat</code>:</p> <pre><code class="language-jsp"><span class="nt">&lt;ul&gt;</span>
+    <span class="nt">&lt;li</span> <span class="na">ng-repeat=</span><span class="s">"todo in todos"</span><span class="nt">&gt;</span>{{todo.title}}<span class="nt">&lt;/li&gt;</span>
+<span class="nt">&lt;/ul&gt;</span></code></pre> <p>E vamos colocar um link para a lista na nossa página de adição de tarefas:</p> <pre><code class="language-jsp"><span class="nt">&lt;header</span> <span class="na">id=</span><span class="s">"header"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;h1&gt;</span>Todos<span class="nt">&lt;/h1&gt;</span>
+    <span class="nt">&lt;form</span> <span class="na">id=</span><span class="s">"todo-form"</span> <span class="na">ng-submit=</span><span class="s">"add(todo)"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;input</span> <span class="na">ng-model=</span><span class="s">"todo.title"</span> <span class="na">id=</span><span class="s">"new-todo"</span>
+            <span class="na">placeholder=</span><span class="s">"O que precisa ser feito?"</span> <span class="err">autofocus</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;/form&gt;</span>
+    <span class="nt">&lt;a</span> <span class="na">ui-sref=</span><span class="s">"list"</span><span class="nt">&gt;</span>Lista de tarefas<span class="nt">&lt;/a&gt;</span>
+<span class="nt">&lt;/header&gt;</span></code></pre> <p>Só isso. Quando você acessar adicionar novas tarefas e acessar a rota <code>/list</code> pelo link que adicionamos, elas vão aparecer listadas lá.</p> <p>O visual não está finalizado, você não pode editar nem remover tarefas, entre outras coisas. Mas essa é uma oportunidade para você aprimorar esse simples projeto. Agora você já tem uma ideia de como é simples a integração do VRaptor com o Angular e pode começar a ter mil ideias para os seus próximos projetos!</p> </main> <script src="../../../js/search-pt.js"></script> <script src="/js/headers.min.js"></script> </body> </html>

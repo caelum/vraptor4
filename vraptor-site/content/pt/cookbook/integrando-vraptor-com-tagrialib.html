@@ -1,0 +1,59 @@
+---
+title: Integrando VRaptor com Tagria
+---
+
+# Integrando VRaptor com Tagria
+
+## por Jonatan Lemes
+
+Tagria é uma suite open source de componentes que te ajuda a construir lindas view em minutos.
+Tagria integra perfeitamente com qualquer framework MVC baseado em ação incluindo VRaptor
+Você pode encontrar mais informações visitando o projeto no github <a href="https://github.com/jslsolucoes/tagria">Tagria</a>.
+
+O primeiro passo é incluir a dependência do Tagria no seu projeto maven como descrito abaixo.
+~~~
+#!xml
+<dependency>
+	<groupId>com.jslsolucoes</groupId>
+	<artifactId>tagria-lib</artifactId>
+	<version>1.0.2</version> <!-- ou a ultima versão disponível -->
+</dependency>
+~~~
+
+E como último passo é necessário declarar a `Servlet` que irá responder pelas requisições feita pelos componentes.
+No exemplo abaixo, qualquer request para o caminho  `/tagria/*` será enviada para os componentes Tagria.
+
+~~~
+#!xml
+<servlet>
+    <servlet-name>tagria</servlet-name>
+    <servlet-class>com.jslsolucoes.tagria.lib.servlet.Tagria</servlet-class>
+</servlet>
+<servlet-mapping>
+    <servlet-name>tagria</servlet-name>
+    <url-pattern>/tagria/*</url-pattern>
+</servlet-mapping>
+~~~
+
+E agora nós temos Tagria ouvindo as requisições para construir os componentes.
+
+Por default o VRaptor utiliza páginas JSPs. Basta criar uma jsp e incluir as diretivas na sua view.
+
+~~~
+#!xml
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib  uri="http://tagrialib.jslsolucoes.com/tags/html" prefix="html"%>
+<%@ taglib  uri="http://tagrialib.jslsolucoes.com/tags/ajax" prefix="ajax"%>
+<%@ taglib  uri="http://tagrialib.jslsolucoes.com/tags/x" prefix="x"%>
+<html:view title="Meu título">
+    <html:alert state="info">
+        Minha primeira view
+    </html:alert>
+</html:view>
+~~~
+
+Você pode encontrar mais documentação sobre todos componentes e exemplos visitando a <a href="http://doc-tagrialib.jslsolucoes.com/">documentação</a>.
+
+Aproveite.

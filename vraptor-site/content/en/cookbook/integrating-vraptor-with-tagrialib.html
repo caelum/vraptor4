@@ -1,0 +1,61 @@
+---
+title: Integrating VRaptor with Tagria
+---
+
+# Integrating VRaptor with Tagria
+
+## by Jonatan Lemes
+
+Tagria is an open source component suit framework that help build beautiful view in minutes. 
+Tagria integrates perfectly with any action based MVC framework for java including VRaptor.
+You can found more information visiting <a href="https://github.com/jslsolucoes/tagria">Tagria project</a>.
+
+The first step is include the Tagria dependency in your Maven project as described below. 
+
+~~~
+#!xml
+<dependency>
+	<groupId>com.jslsolucoes</groupId>
+	<artifactId>tagria-lib</artifactId>
+	<version>1.0.2</version> <!-- or the latest version -->
+</dependency>
+~~~
+
+
+And for the last step, you need to declare the `Servlet` that will respond Tagria requests. 
+In the example below, any request to the URL `/tagria/*` will be forwarded to Tagria components.
+
+~~~
+#!xml
+<servlet>
+    <servlet-name>tagria</servlet-name>
+    <servlet-class>com.jslsolucoes.tagria.lib.servlet.Tagria</servlet-class>
+</servlet>
+<servlet-mapping>
+    <servlet-name>tagria</servlet-name>
+    <url-pattern>/tagria/*</url-pattern>
+</servlet-mapping>
+~~~
+
+And now we have Tagria listening requests to build components.
+
+By default, VRaptor does forwards to JSPs pages. Now just create an jsp and include tagria directives in your view.
+
+~~~
+#!xml
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib  uri="http://tagrialib.jslsolucoes.com/tags/html" prefix="html"%>
+<%@ taglib  uri="http://tagrialib.jslsolucoes.com/tags/ajax" prefix="ajax"%>
+<%@ taglib  uri="http://tagrialib.jslsolucoes.com/tags/x" prefix="x"%>
+<html:view title="My title">
+    <html:alert state="info">
+        My firts view   
+    </html:alert>
+</html:view>
+~~~
+
+You can found much more documentation about all components and examples visiting <a href="http://doc-tagrialib.jslsolucoes.com/">documentation</a>.
+
+Enjoy.

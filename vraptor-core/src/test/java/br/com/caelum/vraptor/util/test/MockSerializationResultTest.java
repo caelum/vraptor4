@@ -16,6 +16,7 @@
 package br.com.caelum.vraptor.util.test;
 
 import static br.com.caelum.vraptor.view.Results.json;
+import static br.com.caelum.vraptor.view.Results.xml;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 
@@ -47,10 +48,19 @@ public class MockSerializationResultTest {
 	}
 
 	@Test
-	public void shouldReturnStringWithObjectSerialized() throws Exception {
+	public void shouldReturnStringWithObjectSerializedAsJSON() throws Exception {
 		Car car = new Car("XXU-5569", "Caelum", "VW", "Polo");
 		String expectedResult = "{\"car\":{\"licensePlate\":\"XXU-5569\",\"owner\":\"Caelum\",\"make\":\"VW\",\"model\":\"Polo\"}}";
 		result.use(json()).from(car).serialize();
 		Assert.assertThat(result.serializedResult(), is(equalTo(expectedResult)));
 	}
+
+	@Test
+	public void shouldReturnStringWithObjectSerializedAsXML() throws Exception {
+		Car car = new Car("XXU-5569", "Caelum", "VW", "Polo");
+		String expectedResult = "<car><licensePlate>XXU-5569</licensePlate><owner>Caelum</owner><make>VW</make><model>Polo</model></car>";
+		result.use(xml()).from(car).serialize();
+		Assert.assertThat(result.serializedResult(), is(equalTo(expectedResult)));
+	}
+	
 }

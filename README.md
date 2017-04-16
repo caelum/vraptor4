@@ -17,7 +17,7 @@
 [license]:LICENSE
 [license img]:https://img.shields.io/badge/License-Apache%202-blue.svg
 
-A web MVC action-based framework, on top of CDI, for fast and maintainable Java development. 
+A web MVC action-based framework, on top of CDI, for fast and maintainable Java development. aaa
 
 ## Downloading directly or using it through Maven
 

@@ -17,6 +17,18 @@
 
 package br.com.caelum.vraptor.observer;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
+import java.lang.reflect.Method;
+import java.util.concurrent.Callable;
+
+import javax.enterprise.context.Dependent;
+import javax.enterprise.event.Event;
+import javax.enterprise.event.Observes;
+import javax.inject.Inject;
+
+import org.slf4j.Logger;
+
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.core.MethodInfo;
 import br.com.caelum.vraptor.core.ReflectionProvider;
@@ -24,17 +36,8 @@ import br.com.caelum.vraptor.core.Try;
 import br.com.caelum.vraptor.events.InterceptorsExecuted;
 import br.com.caelum.vraptor.events.MethodExecuted;
 import br.com.caelum.vraptor.events.MethodReady;
+import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.validator.Messages;
-import org.slf4j.Logger;
-
-import javax.enterprise.context.Dependent;
-import javax.enterprise.event.Event;
-import javax.enterprise.event.Observes;
-import javax.inject.Inject;
-import java.lang.reflect.Method;
-import java.util.concurrent.Callable;
-
-import static org.slf4j.LoggerFactory.getLogger;
 
 /**
  * Observer that executes the logic method.
@@ -51,21 +54,24 @@ public class ExecuteMethod {
 	private final MethodInfo methodInfo;
 	private final Messages messages;
 	private final ReflectionProvider reflectionProvider;
-
 	private final Event<MethodExecuted> methodExecutedEvent;
 	private final Event<MethodReady> methodReady;
 	private final ExecuteMethodExceptionHandler executeMethodExceptionHandler;
+	private final Container container;
+
 
 	@Inject
 	public ExecuteMethod(MethodInfo methodInfo, Messages messages, 
 			Event<MethodExecuted> methodExecutedEvent, Event<MethodReady> methodReady,
-			ExecuteMethodExceptionHandler exceptionHandler, ReflectionProvider reflectionProvider) {
+			ExecuteMethodExceptionHandler exceptionHandler, 
+			ReflectionProvider reflectionProvider, Container container) {
 		this.methodInfo = methodInfo;
 		this.messages = messages;
 		this.methodExecutedEvent = methodExecutedEvent;
 		this.methodReady = methodReady;
 		this.executeMethodExceptionHandler = exceptionHandler;
 		this.reflectionProvider = reflectionProvider;
+		this.container = container;
 	}
 
 	public void execute(@Observes final InterceptorsExecuted event) {
@@ -79,6 +85,11 @@ public class ExecuteMethod {
 
 				log.debug("Invoking {}", reflectionMethod);
 				Object instance = event.getControllerInstance();
+				
+				Class<?> declaringClass = reflectionMethod.getDeclaringClass();
+				if (!declaringClass.isAssignableFrom(instance.getClass())) {
+					instance = container.instanceFor(declaringClass);
+				}
 				Object result = reflectionProvider.invoke(instance, reflectionMethod, parameters);
 
 				messages.assertAbsenceOfErrors();

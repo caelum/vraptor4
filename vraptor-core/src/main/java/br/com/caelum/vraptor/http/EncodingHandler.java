@@ -50,6 +50,7 @@ public class EncodingHandler {
 	/** 
 	 * @deprecated CDI eyes only
 	 */
+	@Deprecated
 	protected EncodingHandler() {
 		this(null);
 	}

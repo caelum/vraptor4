@@ -71,6 +71,7 @@ public class DefaultLogicResult implements LogicResult {
 	/** 
 	 * @deprecated CDI eyes only
 	 */
+	@Deprecated
 	protected DefaultLogicResult() {
 		this(null, null, null, null, null, null, null, null, null);
 	}

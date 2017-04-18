@@ -48,6 +48,7 @@ public class CalendarConverter implements Converter<Calendar> {
 	/** 
 	 * @deprecated CDI eyes only
 	 */
+	@Deprecated
 	protected CalendarConverter() {
 		this(null);
 	}

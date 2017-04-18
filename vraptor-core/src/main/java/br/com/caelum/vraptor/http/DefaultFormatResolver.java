@@ -38,6 +38,7 @@ public class DefaultFormatResolver implements FormatResolver {
 	/** 
 	 * @deprecated CDI eyes only
 	 */
+	@Deprecated
 	protected DefaultFormatResolver() {
 		this(null, null);
 	}

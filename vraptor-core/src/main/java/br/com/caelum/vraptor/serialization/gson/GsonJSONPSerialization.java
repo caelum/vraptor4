@@ -47,6 +47,7 @@ public class GsonJSONPSerialization implements JSONPSerialization {
 	/** 
 	 * @deprecated CDI eyes only
 	 */
+	@Deprecated
 	protected GsonJSONPSerialization() {
 		this(null, null, null, null, null);
 	}

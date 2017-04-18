@@ -49,6 +49,7 @@ public class ControllerHandler{
 	/**
 	 * @deprecated CDI eyes only
 	 */
+	@Deprecated
 	protected ControllerHandler() {
 		this(null, null, null);
 	}

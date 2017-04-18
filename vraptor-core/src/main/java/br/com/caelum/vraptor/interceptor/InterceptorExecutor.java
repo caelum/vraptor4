@@ -42,6 +42,7 @@ public class InterceptorExecutor {
 	/**
 	 * @deprecated CDI eyes only
 	 */
+	@Deprecated
 	protected InterceptorExecutor() {
 		this(null, null, null);
 	}

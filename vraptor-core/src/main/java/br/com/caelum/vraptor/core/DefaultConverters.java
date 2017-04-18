@@ -58,6 +58,7 @@ public class DefaultConverters implements Converters {
 	/** 
 	 * @deprecated CDI eyes only
 	 */
+	@Deprecated
 	protected DefaultConverters() {
 		this(null, null);
 	}

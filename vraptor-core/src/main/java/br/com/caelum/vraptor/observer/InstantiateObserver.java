@@ -50,6 +50,7 @@ public class InstantiateObserver {
 	/**
 	 *  @deprecated CDI eyes only
 	 */
+	@Deprecated
 	protected InstantiateObserver(){
 		this(null);
 	}

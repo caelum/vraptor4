@@ -32,6 +32,7 @@ public class DefaultSimpleInterceptorStack implements SimpleInterceptorStack {
 	/** 
 	 * @deprecated CDI eyes only
 	 */
+	@Deprecated
 	protected DefaultSimpleInterceptorStack() {
 		this(null, null, null);
 	}

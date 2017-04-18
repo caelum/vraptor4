@@ -52,6 +52,7 @@ public class IogiParametersProvider implements ParametersProvider {
 	/** 
 	 * @deprecated CDI eyes only
 	 */
+	@Deprecated
 	protected IogiParametersProvider() {
 		this(null, null, null);
 	}

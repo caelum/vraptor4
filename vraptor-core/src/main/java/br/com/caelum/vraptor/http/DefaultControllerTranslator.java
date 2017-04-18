@@ -44,6 +44,7 @@ public class DefaultControllerTranslator implements UrlToControllerTranslator {
 	/** 
 	 * @deprecated CDI eyes only
 	 */
+	@Deprecated
 	protected DefaultControllerTranslator() {
 		this(null);
 	}

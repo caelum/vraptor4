@@ -57,6 +57,7 @@ public class DeserializingObserver {
 	/**
 	 * @deprecated CDI eyes only
 	 */
+	@Deprecated
 	protected DeserializingObserver() {
 		this(null, null);
 	}

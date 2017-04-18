@@ -51,6 +51,7 @@ public class DefaultExceptionMapper implements ExceptionMapper {
 	/** 
 	 * @deprecated CDI eyes only
 	 */
+	@Deprecated
 	protected DefaultExceptionMapper() {
 		this(null, null);
 	}

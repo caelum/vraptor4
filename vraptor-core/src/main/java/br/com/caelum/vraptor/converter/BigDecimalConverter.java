@@ -50,6 +50,7 @@ public class BigDecimalConverter implements Converter<BigDecimal> {
 	/** 
 	 * @deprecated CDI eyes only
 	 */
+	@Deprecated
 	protected BigDecimalConverter() {
 		this(null);
 	}

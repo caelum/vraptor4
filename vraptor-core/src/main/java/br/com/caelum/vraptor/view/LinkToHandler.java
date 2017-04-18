@@ -87,6 +87,7 @@ public class LinkToHandler extends ForwardingMap<Class<?>, Object> {
 	/** 
 	 * @deprecated CDI eyes only
 	 */
+	@Deprecated
 	protected LinkToHandler() {
 		this(null, null, null, null);
 	}

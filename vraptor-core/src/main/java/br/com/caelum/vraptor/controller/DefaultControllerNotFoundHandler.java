@@ -44,6 +44,7 @@ public class DefaultControllerNotFoundHandler implements ControllerNotFoundHandl
 	/**
 	 * @deprecated CDI eyes only
 	 */
+	@Deprecated
 	protected DefaultControllerNotFoundHandler() {
 		this(null);
 	}

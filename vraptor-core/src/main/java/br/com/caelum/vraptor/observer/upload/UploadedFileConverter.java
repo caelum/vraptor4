@@ -37,6 +37,7 @@ public class UploadedFileConverter implements Converter<UploadedFile> {
 	/** 
 	 * @deprecated CDI eyes only
 	 */
+	@Deprecated
 	protected UploadedFileConverter() {
 		this(null);
 	}

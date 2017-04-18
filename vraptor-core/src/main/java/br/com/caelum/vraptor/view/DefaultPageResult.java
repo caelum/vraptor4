@@ -59,6 +59,7 @@ public class DefaultPageResult implements PageResult {
 	/** 
 	 * @deprecated CDI eyes only
 	 */
+	@Deprecated
 	protected DefaultPageResult() {
 		this(null, null, null, null, null);
 	}

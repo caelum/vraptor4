@@ -40,6 +40,7 @@ public class I18nMessageSerialization implements View {
 	/**
 	 * @deprecated CDI eyes only
 	 */
+	@Deprecated
 	protected I18nMessageSerialization() {
 		this(null, null);
 	}

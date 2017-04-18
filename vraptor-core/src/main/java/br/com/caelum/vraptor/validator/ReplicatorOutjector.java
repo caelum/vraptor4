@@ -36,6 +36,7 @@ public class ReplicatorOutjector implements Outjector {
 	/** 
 	 * @deprecated CDI eyes only
 	 */
+	@Deprecated
 	protected ReplicatorOutjector() {
 		this(null, null);
 	}

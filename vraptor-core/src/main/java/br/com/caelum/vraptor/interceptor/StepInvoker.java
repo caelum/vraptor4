@@ -39,6 +39,7 @@ public class StepInvoker {
 	/**
 	 * @deprecated CDI eyes only
 	 */
+	@Deprecated
 	protected StepInvoker() {
 		this(null);
 	}

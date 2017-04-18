@@ -39,6 +39,7 @@ public class CustomAcceptsExecutor {
 	/**
 	 * @deprecated CDI eyes only
 	 */
+	@Deprecated
 	protected CustomAcceptsExecutor() {
 		this(null, null, null, null);
 	}

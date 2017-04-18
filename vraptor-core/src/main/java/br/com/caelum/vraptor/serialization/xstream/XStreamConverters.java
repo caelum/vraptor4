@@ -45,6 +45,7 @@ public class XStreamConverters {
 	/** 
 	 * @deprecated CDI eyes only
 	 */
+	@Deprecated
 	protected XStreamConverters() {
 		this(null, null);
 	}

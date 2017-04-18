@@ -77,6 +77,7 @@ public class PathAnnotationRoutesParser implements RoutesParser {
 	 * @deprecated CDI eyes only
 	 */
 
+	@Deprecated
 	protected PathAnnotationRoutesParser() {
 		this(null, null);
 	}

@@ -39,6 +39,7 @@ public class CDIBasedContainer implements Container {
 	/**
 	 * @deprecated CDI eyes only
 	 */
+	@Deprecated
 	protected CDIBasedContainer(){
 		this(null);
 	}

@@ -36,6 +36,7 @@ public class SessionFlashScope implements FlashScope {
 	/** 
 	 * @deprecated CDI eyes only
 	 */
+	@Deprecated
 	protected SessionFlashScope() {
 		this(null);
 	}

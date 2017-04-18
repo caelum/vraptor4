@@ -43,6 +43,7 @@ public class DefaultPathResolver implements PathResolver {
 	/** 
 	 * @deprecated CDI eyes only
 	 */
+	@Deprecated
 	protected DefaultPathResolver() {
 		this(null);
 	}

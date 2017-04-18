@@ -48,6 +48,7 @@ public class ForwardToDefaultView {
 	/** 
 	 * @deprecated CDI eyes only
 	 */
+	@Deprecated
 	protected ForwardToDefaultView() {
 		this(null);
 	}

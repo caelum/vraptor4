@@ -55,6 +55,7 @@ public class DefaultInterceptorStack implements InterceptorStack {
 	/**
 	 * @deprecated CDI eyes only
 	 */
+	@Deprecated
 	protected DefaultInterceptorStack() {
 		this(null, null, null, null, null);
 	}

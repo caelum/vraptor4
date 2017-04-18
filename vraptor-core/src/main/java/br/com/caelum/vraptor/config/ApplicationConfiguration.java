@@ -36,6 +36,7 @@ public class ApplicationConfiguration implements Configuration {
 	/** 
 	 * @deprecated CDI eyes only
 	 */
+	@Deprecated
 	protected ApplicationConfiguration() {
 		this(null);
 	}

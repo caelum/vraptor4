@@ -48,6 +48,7 @@ public class DefaultRepresentationResult implements RepresentationResult {
 	/** 
 	 * @deprecated CDI eyes only
 	 */
+	@Deprecated
 	protected DefaultRepresentationResult() {
 		this(null, null, null);
 	}

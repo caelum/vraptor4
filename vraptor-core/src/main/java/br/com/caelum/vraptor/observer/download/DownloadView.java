@@ -37,6 +37,7 @@ public class DownloadView implements View {
 	/**
 	 * @deprecated CDI eyes only
 	 */
+	@Deprecated
 	protected DownloadView() {
 	}
 

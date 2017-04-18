@@ -45,6 +45,7 @@ public class MethodInfo {
 	/**
 	 * @deprecated CDI eyes only
 	 */
+	@Deprecated
 	protected MethodInfo() {
 		this(null);
 	}

@@ -41,6 +41,7 @@ public class MessageInterpolatorFactory{
 	/** 
 	 * @deprecated CDI eyes only
 	 */
+	@Deprecated
 	protected MessageInterpolatorFactory() {
 		this(null);
 	}

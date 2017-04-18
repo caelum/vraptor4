@@ -53,6 +53,7 @@ public class ExceptionHandlerInterceptor implements Interceptor {
 	/** 
 	 * @deprecated CDI eyes only
 	 */
+	@Deprecated
 	protected ExceptionHandlerInterceptor() {
 		this(null, null);
 	}

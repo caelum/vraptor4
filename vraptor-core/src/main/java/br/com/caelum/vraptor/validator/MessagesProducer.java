@@ -18,6 +18,7 @@ public class MessagesProducer {
 	/**
 	 * @deprecated CDI eyes only
 	 */
+	@Deprecated
 	protected MessagesProducer() {
 		this(null);
 	}

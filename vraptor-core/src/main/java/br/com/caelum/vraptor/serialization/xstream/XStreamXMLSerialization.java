@@ -50,6 +50,7 @@ public class XStreamXMLSerialization implements XMLSerialization {
 	/** 
 	 * @deprecated CDI eyes only
 	 */
+	@Deprecated
 	protected XStreamXMLSerialization() {
 		this(null, null, null);
 	}

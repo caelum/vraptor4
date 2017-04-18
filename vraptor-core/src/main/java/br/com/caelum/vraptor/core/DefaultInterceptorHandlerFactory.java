@@ -50,6 +50,7 @@ public class DefaultInterceptorHandlerFactory implements InterceptorHandlerFacto
 	/**
 	 * @deprecated CDI eyes only
 	 */
+	@Deprecated
 	protected DefaultInterceptorHandlerFactory() {
 		this(null, null, null, null, null, null, null);
 	}

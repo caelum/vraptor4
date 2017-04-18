@@ -53,7 +53,7 @@ public class PrimitiveDoubleConverter implements Converter<Double> {
 	/** 
 	 * @deprecated CDI eyes only
 	 */
-
+	@Deprecated
 	public PrimitiveDoubleConverter() {
 		this(null);
 	}

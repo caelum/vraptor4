@@ -35,6 +35,7 @@ public class CustomAndInternalAcceptsValidationRule implements ValidationRule {
 	/**
 	 * @deprecated CDI eyes only
 	 */
+	@Deprecated
 	protected CustomAndInternalAcceptsValidationRule() {
 		this(null);
 	}

@@ -47,6 +47,7 @@ public class DateConverter implements Converter<Date> {
 	/** 
 	 * @deprecated CDI eyes only
 	 */
+	@Deprecated
 	protected DateConverter() {
 		this(null);
 	}

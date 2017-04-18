@@ -47,6 +47,7 @@ public class XStreamXMLDeserializer implements Deserializer {
 	/** 
 	 * @deprecated CDI eyes only
 	 */
+	@Deprecated
 	protected XStreamXMLDeserializer() {
 		this(null, null);
 	}

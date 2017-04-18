@@ -52,6 +52,7 @@ public class FlashInterceptor implements Interceptor {
 	/** 
 	 * @deprecated CDI eyes only
 	 */
+	@Deprecated
 	protected FlashInterceptor() {
 		this(null, null, null);
 	}

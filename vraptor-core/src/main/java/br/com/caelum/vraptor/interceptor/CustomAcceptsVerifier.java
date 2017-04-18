@@ -38,6 +38,7 @@ public class CustomAcceptsVerifier {
 	/**
 	 * @deprecated CDI eyes only
 	 */
+	@Deprecated
 	protected CustomAcceptsVerifier() {
 		this(null);
 	}

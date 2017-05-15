@@ -10,7 +10,7 @@
 	<parent>
 		<groupId>org.sonatype.oss</groupId>
 		<artifactId>oss-parent</artifactId>
-		<version>7</version>
+		<version>8</version>
 	</parent>
 
 	<description>Java web MVC framework for fast and maintainable development</description>

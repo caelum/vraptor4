@@ -282,12 +282,14 @@ result.use(xml()).from(user).excludeAll().serialize(); // excludes all fields
 ~~~ 
 
 The default behavior of JSON serialization is exclude atributes with `null` values, but it's possible to change this behavior by calling `serializeNulls` method:
+
 ~~~
 #!java
 result.use(json()).serializeNulls().from(new Person("John", null)).serialize(); 
 ~~~
 
 The resulting JSON will be the following:
+
 ~~~
 #!javascript
 {"person":{

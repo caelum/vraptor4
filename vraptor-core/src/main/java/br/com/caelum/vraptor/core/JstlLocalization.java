@@ -51,9 +51,10 @@ public class JstlLocalization {
 
 	private final HttpServletRequest request;
 
-	/** 
+	/**
 	 * @deprecated CDI eyes only
 	 */
+	@Deprecated
 	protected JstlLocalization() {
 		this(null);
 	}
@@ -119,7 +120,7 @@ public class JstlLocalization {
 			return value;
 		}
 
-		value = Config.get(request.getSession(), key);
+		value = Config.get(request.getSession(false), key);
 		if (value != null) {
 			return value;
 		}

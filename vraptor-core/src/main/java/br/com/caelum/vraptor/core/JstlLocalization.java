@@ -54,7 +54,6 @@ public class JstlLocalization {
 	/**
 	 * @deprecated CDI eyes only
 	 */
-	@Deprecated
 	protected JstlLocalization() {
 		this(null);
 	}
@@ -120,7 +119,7 @@ public class JstlLocalization {
 			return value;
 		}
 
-		value = Config.get(request.getSession(false), key);
+		value = Config.get(request.getSession(createNewSession()), key);
 		if (value != null) {
 			return value;
 		}
@@ -131,5 +130,9 @@ public class JstlLocalization {
 		}
 
 		return request.getServletContext().getInitParameter(key);
+	}
+
+	protected boolean createNewSession(){
+	    return false;
 	}
 }

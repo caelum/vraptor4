@@ -70,6 +70,19 @@ public class DoubleConverterTest {
 	}
 
 	@Test
+	public void shouldBeAbleToConvertWithGroupingAndPTBR() {
+		assertThat(converter.convert("1.000.000,00", Double.class), is(equalTo(new Double("1000000.00"))));
+		assertThat(converter.convert("1.001.000,01", Double.class), is(equalTo(new Double("1001000.01"))));
+	}
+
+	@Test
+	public void shouldBeAbleToConvertWithGroupingAndENUS() {
+		converter = new DoubleConverter(new Locale("en", "US"));
+		assertThat(converter.convert("1,000,000.00", Double.class), is(equalTo(new Double("1000000.00"))));
+		assertThat(converter.convert("1,001,000.01", Double.class), is(equalTo(new Double("1001000.01"))));
+	}
+
+	@Test
 	public void shouldBeAbleToConvertEmpty() {
 		assertThat(converter.convert("", Double.class), is(nullValue()));
 	}

@@ -70,15 +70,15 @@ public class PrimitiveDoubleConverterTest {
 
 	@Test
 	public void shouldBeAbleToConvertWithGroupingAndPTBR() {
-		assertThat(converter.convert("1.000.000,00", double.class), is(equalTo(new Double("1000000.00"))));
-		assertThat(converter.convert("1.001.000,01", double.class), is(equalTo(new Double("1001000.01"))));
+		assertThat(converter.convert("1.000.000,00", double.class), is(equalTo(Double.parseDouble("1000000.00"))));
+		assertThat(converter.convert("1.001.000,01", double.class), is(equalTo(Double.parseDouble("1001000.01"))));
 	}
 
 	@Test
 	public void shouldBeAbleToConvertWithGroupingAndENUS() {
 		converter = new PrimitiveDoubleConverter(new Locale("en", "US"));
-		assertThat(converter.convert("1,000,000.00", double.class), is(equalTo(new Double("1000000.00"))));
-		assertThat(converter.convert("1,001,000.01", double.class), is(equalTo(new Double("1001000.01"))));
+		assertThat(converter.convert("1,000,000.00", double.class), is(equalTo(Double.parseDouble("1000000.00"))));
+		assertThat(converter.convert("1,001,000.01", double.class), is(equalTo(Double.parseDouble("1001000.01"))));
 	}
 
 	@Test

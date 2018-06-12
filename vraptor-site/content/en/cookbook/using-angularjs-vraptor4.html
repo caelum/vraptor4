@@ -1,0 +1,403 @@
+---
+title: Using AngularJS on VRaptor4
+---
+# Using AngularJS on VRaptor4
+Some the frameworks in high is the [AngularJS](https://angularjs.org/), nowadays in their 1.5.9 version.
+With Angular 2 released, the framework has been completely overhauled, because thhat version has been using the power of ECMA2015. That cookbook is about the version 1, nowadays the most used.
+In this cookbook we will create a simple Todo application to exemplify how the AngularJS can integrate with VRaptor4.
+
+You can access the final source code here: [vraptor-blank-project-angular](https://github.com/angeliski/vraptor-blank-project-angular);
+That project is based in the vraptor-blank-project(avaliable in [official repository](https://github.com/caelum/vraptor4)).
+
+The first step is download the vraptor-blank-project. You can run that with just a command line `mvn tomcat7:run` in the root project folder. Some observations:
+
+- You can have problem with relation the project version, because the version is a snapshot. So, maybe is necessary change the blank project version to the last VRaptor available version.
+- If you have some problem to run `mvn tomcat7:run` look the [discussion](https://groups.google.com/forum/#!topic/caelum-vraptor/sYwCOX0ICWw) about tomcat plugin.
+
+Ok! Our project is running, so let's begin program!
+First we make available the server side application. Let's start creating the class to representing our Todo Object:
+
+~~~
+#!java
+package br.com.caelum.vraptor.model;
+
+import java.io.Serializable;
+
+public class Todo implements Serializable {
+
+	private static final long serialVersionUID = 1L;
+
+	private Long id;
+	private String title;
+	private boolean completed;
+
+//Getters e Setters ( No need, right?)
+}
+~~~
+Our model object is ready, now what do you think to create our API?
+See the controoler:
+
+~~~
+#!java
+package br.com.caelum.vraptor.controller;
+
+import javax.inject.Inject;
+
+import br.com.caelum.vraptor.Consumes;
+import br.com.caelum.vraptor.Controller;
+import br.com.caelum.vraptor.Delete;
+import br.com.caelum.vraptor.Get;
+import br.com.caelum.vraptor.Path;
+import br.com.caelum.vraptor.Post;
+import br.com.caelum.vraptor.Put;
+import br.com.caelum.vraptor.Result;
+import br.com.caelum.vraptor.model.Todo;
+import br.com.caelum.vraptor.repository.TodoRepository;
+import br.com.caelum.vraptor.serialization.gson.WithoutRoot;
+import br.com.caelum.vraptor.view.Results;
+
+@Controller
+@Path("/todo")
+public class TodoController {
+
+	private final Result result;
+	private final TodoRepository todoRepository;
+
+	/**
+	 * @deprecated CDI eyes only
+	 */
+	protected TodoController() {
+		this(null, null);
+	}
+
+	@Inject
+	public TodoController(Result result, TodoRepository todoRepository) {
+		this.result = result;
+		this.todoRepository = todoRepository;
+	}
+
+	@Get("")
+	public void get() {
+		result.use(Results.json()).withoutRoot().from(todoRepository.findAll())
+				.serialize();
+	}
+
+	@Get("/{todo.id}")
+	public void getOne(Todo todo) {
+		result.use(Results.json()).withoutRoot()
+				.from(todoRepository.find(todo.getId())).serialize();
+
+	}
+
+	@Consumes(value = "application/json", options = WithoutRoot.class)
+	@Post("")
+	public void create(Todo todo) {
+		result.use(Results.json()).withoutRoot()
+				.from(todoRepository.create(todo)).serialize();
+
+	}
+
+	@Consumes(value = "application/json", options = WithoutRoot.class)
+	@Put("")
+	public void update(Todo todo) {
+		result.use(Results.json()).withoutRoot()
+				.from(todoRepository.update(todo)).serialize();
+
+	}
+
+	@Delete("/{todo.id}")
+	public void delete(Todo todo) {
+		result.use(Results.json()).withoutRoot()
+				.from(todoRepository.delete(todo.getId())).serialize();
+
+	}
+
+}
+~~~
+Here I need to make some observations for your attention.
+
+None method is returning, all have void type. Yes, that's it. The VRpator have to default the behavior redirect to page when you put returning. As we need consume the service by the angular, the return page it's not interesting.
+
+
+We need observe the url available to the method annotated with ("/"), because VRaptor it always will put the slash on the end of url. If the annotation above method will be `@Get("")`, the available url by VRaptor4 will be `/todo`, if you put `@Get("/")` the  url will change to `/todo/`. Keep `@Get("")`, this will save us later problem when use AngularJS Resource. [Here](http://www.vraptor.org/pt/cookbook/aceitando-urls-com-ou-sem-barra-no-final/) you have option to undestand and change if you like.
+
+Our controller basically delegate calls to a repository. This repository will control the business rules. The ideia is make simple, so, we going to use one Map to save our registry. Let's look the repository:
+
+~~~
+#!java
+
+package br.com.caelum.vraptor.repository;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+
+import javax.annotation.PostConstruct;
+import javax.enterprise.context.ApplicationScoped;
+
+import br.com.caelum.vraptor.model.Todo;
+
+@ApplicationScoped
+public class TodoRepository implements Serializable {
+
+	private static final long serialVersionUID = 1L;
+	private Map<Long, Todo> todoList;
+
+	@PostConstruct
+	public void init() {
+		todoList = new HashMap<>();
+	}
+
+	public List<Todo> findAll() {
+		return new ArrayList<>(todoList.values());
+	}
+
+	public Todo find(Long id) {
+		return todoList.get(id);
+	}
+
+	public Todo create(Todo todo) {
+		todo.setId(new Random().nextLong());
+		todoList.put(todo.getId(), todo);
+		return todo;
+	}
+
+	public Todo update(Todo todo) {
+		todoList.put(todo.getId(), todo);
+		return todo;
+	}
+
+	public Todo delete(Long id) {
+		return todoList.remove(id);
+	}
+
+}
+~~~
+How you can see, nothing special. We have on bean with `@ApplicationScoped`, which means that it will be like a singleton. You must be wondering if it is thread-safe, if the id not will be duplicated, or maybe what's happening when your application down. That isn't our concern now, but you can improve that project to solve this problems! :)
+
+Ok, everything ready in the server side, let's take care to our integration with Angular.
+
+Add the angular dependencies on our homepage. You can download in  [officially repository](https://angularjs.org/),but in this project we will use the power of CDN.
+
+ - angular.js, Angula Core
+ -  angular-ui-router, The route manager
+ - angular-resource, responsible to server API calls 
+
+Beyond this files, we will add the application configuration, it is named to app.js and we will put on `/src/main/webapp/resources/js/app.js`.
+
+At this point our page should be as below:
+
+~~~
+#!jsp
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>VRaptor Blank Project Angular</title>
+</head>
+<body>
+
+
+
+	<script type="text/javascript"
+		src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.3/angular.js"></script>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.18/angular-ui-router.min.js"></script>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.3/angular-resource.min.js"></script>
+
+	<script type="text/javascript" src="resources/js/app.js"></script>
+</body>
+</html>
+
+~~~
+
+Before continue, you can make a test to verify if angular is running. In the body tag put the ng-app attribute and inside the body write `{{2+2}}`. When you access then only show the number 4. If that happening, that's right. If number 4 isn't showing (I recommend you wait little until the script  be loaded), you can open the console (Default is F12) and look if have any error.
+
+Let's create our app.js now:
+
+~~~
+#!javascript
+var app = angular.module("vraptor", [ 'ngResource', 'ui.router' ]);
+
+app.config([ '$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
+
+	$urlRouterProvider.otherwise('/');
+
+	$stateProvider.state('todo', {
+		url : '/',
+		templateUrl : 'views/index.jsp',
+	}).state('list', {
+		url : '/list',
+		templateUrl : 'views/list.jsp',
+	});
+
+} ]);
+
+~~~
+Nothing unusual to angular configuration. We start the writing the module definition with our dependencies and configuring our routes. If you have some knowledge about VRaptor have asked yourself why pages are outside the folder `WEB-INF/jsp`. All files located inside the `WEB-INF` folder are "private",that is, they can't be requested by the navigator, only by the server. That is a problem because in the angular routes who makes the requisition is the navigator based in the user navigate. To avoid this we put our views outside the folder `WEB-INF`. Another solution for that is create a controller to process angular routes requisition, but it will add a verbosity unnecessary now.
+
+If you run our application, nothing will be shown because is missing add in our homepage a reference where angular will be render the template, the `ui-view`. Also we need update the ng-app with the module name (vraptor). See below the result for this changes:
+
+~~~
+#!jsp
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>VRaptor Blank Project Angular</title>
+</head>
+<body ng-app="vraptor">
+
+	<div ui-view></div>
+
+	<script type="text/javascript"
+		src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.3/angular.js"></script>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.18/angular-ui-router.min.js"></script>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.3/angular-resource.min.js"></script>
+
+	<script type="text/javascript" src="resources/js/app.js"></script>
+</body>
+</html>
+
+~~~
+Now you can create a folder inside the `webapp` called `views` and add two pages:`index.jsp and list.jsp`. How you can see the content inside the pages should not contain the tags `html and body`, only the actuals content of div, because angular will be render the content inside the other page.
+
+We create our page to add TODO tasks, who is represented by index.jsp inside the views. See below:
+
+~~~
+#!jsp
+
+<header id="header">
+	<h1>Todos</h1>
+	<form id="todo-form">
+		<input id="new-todo" placeholder="What needs to be done?" autofocus>
+	</form>
+</header>
+
+~~~
+Just a input text with the placeholder. It need be managed by someone, right? Let's create a angular controller to handle it. Inside the `js` folder create the `controllers` folder and a file called `TodoCtrl.js`.
+This controller will be responsible for add new registries to our list. But where it will save the registries? In the server side! So, we will make a service to handle it. Create the `services` folder and put a file called `TodoService.js`,where we will inject the `$resource` and create the manager our api. See the service below:
+
+~~~
+#!javascript
+
+angular.module("vraptor").service("TodoService", [ '$resource', function($resource) {
+	return $resource("todo/:id", {
+		id : '@_id'
+	}, {
+		update : {
+			method : 'PUT'
+		}
+	});
+} ]);
+
+~~~
+
+That service only makes a `$resource` available who supports the url to our api. `$resource` is magic. Now we can define our controller to add TODO tasks.
+
+~~~
+#!javascript
+angular.module("vraptor").controller('TodoCtrl', [ '$scope', 'TodoService', function($scope, TodoService) {
+	$scope.todo = new TodoService();
+	
+	$scope.add = function(todo) {
+		TodoService.save(todo,function(){
+			$scope.todo = new TodoService();		
+		});
+	};
+
+} ]);
+
+~~~
+After create the controller, go back the `app.js` and define our routes who will use this controller. (All routes will using that controller for makes our job more easy, you can change late)
+
+~~~
+#!javascript
+var app = angular.module("vraptor", [ 'ngResource', 'ui.router' ]);
+
+app.config([ '$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
+
+	$urlRouterProvider.otherwise('/');
+
+	$stateProvider.state('todo', {
+		url : '/',
+		templateUrl : 'views/index.jsp',
+		controller: 'TodoCtrl'
+	}).state('list', {
+		url : '/list',
+		templateUrl : 'views/list.jsp',
+		controller: 'TodoCtrl'
+	});
+
+} ]);
+
+~~~
+
+Update our views/index.jsp to use the defined method.
+
+~~~
+#!jsp
+<header id="header">
+	<h1>Todos</h1>
+	<form id="todo-form" ng-submit="add(todo)">
+		<input ng-model="todo.title" id="new-todo" placeholder="O que precisa ser feito?" autofocus>
+	</form>
+</header>
+
+~~~
+
+Ready! If you run the application, it will be able to add our todo task in the server. If you catch some error check if you put all scripts in the primary page (infortunaly angular don't discover path files)
+What do you think list our tasks ?
+
+Add in the controller the call to list our tasks:
+
+~~~
+#!javascript
+angular.module("vraptor").controller('TodoCtrl', [ '$scope', 'TodoService', function($scope, TodoService) {
+	$scope.todo = new TodoService();
+	
+	$scope.add = function(todo) {
+		TodoService.save(todo,function(){
+			$scope.todo = new TodoService();		
+		});
+	};
+	
+	$scope.todos = TodoService.query(); 
+	
+} ]);
+
+~~~
+
+And in the page `list.jsp`, we can put the `ng-repeat`:
+
+~~~
+#!jsp
+<ul>
+	<li ng-repeat="todo in todos">{{todo.title}}</li>
+</ul>
+~~~
+
+And let's put a link for our list page in the add page:
+
+~~~
+#!jsp
+<header id="header">
+	<h1>Todos</h1>
+	<form id="todo-form" ng-submit="add(todo)">
+		<input ng-model="todo.title" id="new-todo"
+			placeholder="O que precisa ser feito?" autofocus>
+	</form>
+	<a ui-sref="list">Lista de tarefas</a>
+</header>
+~~~
+
+Only that. When you access the add page and click in the link,the tasks will be listed.
+The design is not finished, you can't edit or remove tasks and much more. But it's a chance to you increase that simple project. Now you have a ideia how simple is a integration between VRaptor and Angular and can start other million plans in that stack.

@@ -101,7 +101,8 @@ public class DefaultEnvironment implements Environment {
 			properties.load(resource);
 			LOG.debug("File {}.properties loaded", environment);
 		} catch (NullPointerException | IOException whenNotFound) {
-			LOG.warn("Could not find the file " + environment + ".properties to load.", whenNotFound);
+			LOG.warn("Could not find the file " + environment + ".properties to load.");
+			LOG.debug("Exception was " + whenNotFound);
 		}
 	}
 

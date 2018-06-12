@@ -16,6 +16,9 @@
 package br.com.caelum.vraptor.observer.download;
 
 import static org.junit.Assert.assertArrayEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -108,5 +111,15 @@ public class InputStreamDownloadTest {
 
 		verify(response).setHeader("Content-Length", String.valueOf(bytes.length));
 		verify(response).setHeader("Content-disposition", "attachment; filename=file.txt");
+	}
+
+	@Test
+	public void inputStreamNeedBeClosed() throws Exception {
+		InputStream streamMocked = spy(inputStream);
+
+		InputStreamDownload fd = new InputStreamDownload(streamMocked, "type", "x.txt");
+		fd.write(response);
+
+		verify(streamMocked,times(1)).close();
 	}
 }

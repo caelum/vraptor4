@@ -155,7 +155,7 @@ public class VRaptorInstantiator implements InstantiatorWithErrors, Instantiator
 		
 		@Override
 		public boolean isAbleToInstantiate(Target<?> target) {
-			return !String.class.equals(target.getClassType()) && converters.existsFor(target.getClassType());
+			return converters.existsFor(target.getClassType());
 		}
 
 		@Override

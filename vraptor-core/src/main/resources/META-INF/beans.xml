@@ -25,5 +25,9 @@
 			<if-class-not-available name="com.thoughtworks.paranamer.Paranamer"/>
 		</exclude>
 
+		<exclude name="br.com.caelum.vraptor.ioc.cdi.ServletContextFactory">
+			<if-class-available name="io.undertow.servlet.spec.ServletContextImpl"/>
+		</exclude>
+
 	</scan>
 </beans>

@@ -80,4 +80,16 @@ public class DateConverterTest {
 		exception.expect(hasConversionException("a,10/06/2008/a/b/c is not a valid date."));
 		converter.convert("a,10/06/2008/a/b/c", Date.class);
 	}
+	
+	@Test
+	public void shouldBeAbleToConvertWithHourMinuteAndSecond() throws ParseException {
+		assertThat(converter.convert("10/06/2008 14:22:33", Date.class), is(equalTo(new SimpleDateFormat("dd/MM/yyyy HH:mm:ss")
+				.parse("10/06/2008 14:22:33"))));
+	}
+	
+	@Test
+	public void shouldBeAbleToConvertWithHourAndMinute() throws ParseException {
+		assertThat(converter.convert("10/06/2008 14:22", Date.class), is(equalTo(new SimpleDateFormat("dd/MM/yyyy HH:mm")
+				.parse("10/06/2008 14:22"))));
+	}
 }

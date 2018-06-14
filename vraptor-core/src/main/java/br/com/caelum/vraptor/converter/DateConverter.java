@@ -63,6 +63,12 @@ public class DateConverter implements Converter<Date> {
 		}
 
 		try {
+			if(hasHourMinutesAndSeconds(value)){
+				return getDateTimeMediumFormat().parse(value);
+			}
+			if(hasHourAndMinutes(value)){
+				return getDateTimeShortFormat().parse(value);
+			}
 			return getDateFormat().parse(value);
 
 		} catch (ParseException pe) {
@@ -72,5 +78,39 @@ public class DateConverter implements Converter<Date> {
 
 	protected DateFormat getDateFormat() {
 		return DateFormat.getDateInstance(DateFormat.SHORT, locale);
+	}
+	
+	protected DateFormat getDateTimeMediumFormat(){
+		return DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.MEDIUM, locale);
+	}
+	
+	protected DateFormat getDateTimeShortFormat(){
+		return DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, locale);
+	}
+	
+	private boolean hasHourMinutesAndSeconds(String value){		
+		if( isDateTime(value) && isMediumTime(value)){
+			return true;
+		}
+		return false;
+	}
+	
+	private boolean hasHourAndMinutes(String value){		
+		if( isDateTime(value) && isShortTime(value)){
+			return true;
+		}
+		return false;
+	}
+	
+	private boolean isDateTime(String value){
+		return value.split(" ").length > 1;
+	}
+	
+	private boolean isMediumTime(String value){
+		return value.split(" ")[1].split(":").length == 3;
+	}
+	
+	private boolean isShortTime(String value){
+		return value.split(" ")[1].split(":").length == 2;
 	}
 }

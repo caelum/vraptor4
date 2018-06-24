@@ -27,7 +27,7 @@ For a quick start, you can use this snippet in your maven POM:
 <dependency>
     <groupId>br.com.caelum</groupId>
     <artifactId>vraptor</artifactId>
-    <version>4.2.0-RC3</version> <!--or the latest version-->
+    <version>4.2.2</version> <!--or the latest version-->
 </dependency>
 ```
 

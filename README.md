@@ -19,7 +19,7 @@
 
 A web MVC action-based framework, on top of CDI, for fast and maintainable Java development. 
 
-## Downloading directly or using it through Maven
+## Downloading 
 
 For a quick start, you can use this snippet in your maven POM:
 
@@ -34,20 +34,16 @@ For a quick start, you can use this snippet in your maven POM:
 More detailed prerequisites and dependencies can be found [here](http://www.vraptor.org/en/docs/dependencies-and-prerequisites/).
 
 ## Documentation
-[More detailed documentation](http://www.vraptor.org/en/docs/one-minute-guide/) and [Javadoc](http://www.vraptor.org/javadoc/) are also available at [VRaptor's website](http://www.vraptor.org/en/).
-
-Looking for more? Take a look at our [articles and presentations' page](http://www.vraptor.org/en/docs/articles-and-presentations).
+[More detailed documentation](http://www.vraptor.org/en/docs/one-minute-guide/) and [Javadoc](http://www.vraptor.org/javadoc/) are available at [VRaptor's website](http://www.vraptor.org/en/). You also might be interested in our [articles and presentations' page](http://www.vraptor.org/en/docs/articles-and-presentations).
 
 ## Building in your machine
 
-If you want to build VRaptor, execute:
+You can build VRaptor by running:
 
 	mvn package
 
-VRaptor uses Maven as build tool. So you can easily import it into your favorite IDE. In Eclipse you can import as "Maven project".
+VRaptor uses Maven as build tool, so you can easily import it into your favorite IDE.
 
 ## Contribute to VRaptor
 
-Do you want to contribute with code, documentation or bug report?
-
-You can find guidelines to contribute to VRaptor [here](http://www.vraptor.org/en/docs/how-to-contribute/ "Contribute").
+Do you want to contribute with code, documentation or reporting a bug? You can find our guideline [here](http://www.vraptor.org/en/docs/how-to-contribute/ "Contribute").

@@ -31,8 +31,6 @@ For a quick start, you can use this snippet in your maven POM:
 </dependency>
 ```
 
-Or you can download it directly [at our artifacts repository](https://bintray.com/caelum/VRaptor4/br.com.caelum.vraptor).
-
 More detailed prerequisites and dependencies can be found [here](http://www.vraptor.org/en/docs/dependencies-and-prerequisites/).
 
 ## Documentation

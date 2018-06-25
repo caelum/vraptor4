@@ -15,14 +15,11 @@
  */
 package br.com.caelum.vraptor.validator;
 
-import static com.google.common.base.Objects.toStringHelper;
-
-import java.text.MessageFormat;
-import java.util.Arrays;
-import java.util.Objects;
-import java.util.ResourceBundle;
-
 import javax.enterprise.inject.Vetoed;
+import java.text.MessageFormat;
+import java.util.*;
+
+import static com.google.common.base.MoreObjects.toStringHelper;
 
 
 /**

@@ -90,6 +90,13 @@
 			<version>1</version>
 			<scope>provided</scope>
 		</dependency>
+
+		<dependency>
+			<groupId>org.jboss.weld.se</groupId>
+			<artifactId>weld-se-core</artifactId>
+			<version>2.1.2.Final</version>
+			<scope>provided</scope>
+		</dependency>
 		
 		<dependency>
 			<groupId>javax.annotation</groupId>
@@ -165,7 +172,13 @@
 			<version>3.1.0</version>
 			<scope>provided</scope>
 		</dependency>
-		
+
+		<dependency>
+			<groupId>javax.el</groupId>
+			<artifactId>javax.el-api</artifactId>
+			<version>3.0.0</version>
+			<scope>provided</scope>
+		</dependency>
 		
 		<!-- test libs -->
 		<dependency>
@@ -211,20 +224,6 @@
 					<groupId>org.hamcrest</groupId>
 				</exclusion>
 			</exclusions>
-		</dependency>
-		
-		<dependency>
-			<groupId>org.jboss.weld.se</groupId>
-			<artifactId>weld-se-core</artifactId>
-			<version>2.1.2.Final</version>
-			<scope>provided</scope>
-		</dependency>
-		
-		<dependency>
-			<groupId>javax.el</groupId>
-			<artifactId>javax.el-api</artifactId>
-			<version>3.0.0</version>
-			<scope>provided</scope>
 		</dependency>
 		
 		<dependency>
@@ -292,23 +291,6 @@
 			</plugin>
 
 			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>cobertura-maven-plugin</artifactId>
-				<version>2.6</version>
-				<configuration>
-					<instrumentation>
-						<excludes>
-							<exclude>**/*Test.class</exclude>
-						</excludes>
-					</instrumentation>
-					<formats>
-						<format>xml</format>
-						<format>html</format>
-					</formats>
-				</configuration>
-			</plugin>
-			
-			<plugin>
 				<artifactId>maven-eclipse-plugin</artifactId>
 				<version>2.7</version>
 				<configuration>
@@ -335,15 +317,5 @@
 			</plugin>
 		</plugins>
 	</build>
-
-	<reporting>
-		<plugins>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>clirr-maven-plugin</artifactId>
-				<version>2.6.1</version>
-			</plugin>
-		</plugins>
-	</reporting>
 
 </project>

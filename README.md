@@ -19,7 +19,7 @@
 
 A web MVC action-based framework, on top of CDI, for fast and maintainable Java development. 
 
-## Downloading directly or using it through Maven
+## Downloading 
 
 For a quick start, you can use this snippet in your maven POM:
 
@@ -27,39 +27,23 @@ For a quick start, you can use this snippet in your maven POM:
 <dependency>
     <groupId>br.com.caelum</groupId>
     <artifactId>vraptor</artifactId>
-    <version>4.2.0-RC3</version> <!--or the latest version-->
+    <version>4.2.2</version> <!--or the latest version-->
 </dependency>
 ```
-
-Or you can download it directly [at our artifacts repository](https://bintray.com/caelum/VRaptor4/br.com.caelum.vraptor).
 
 More detailed prerequisites and dependencies can be found [here](http://www.vraptor.org/en/docs/dependencies-and-prerequisites/).
 
 ## Documentation
-[More detailed documentation](http://www.vraptor.org/en/docs/one-minute-guide/) and [Javadoc](http://www.vraptor.org/javadoc/) are also available at [VRaptor's website](http://www.vraptor.org/en/).
-
-Looking for more? Take a look at our [articles and presentations' page](http://www.vraptor.org/en/docs/articles-and-presentations).
+[More detailed documentation](http://www.vraptor.org/en/docs/one-minute-guide/) and [Javadoc](http://www.vraptor.org/javadoc/) are available at [VRaptor's website](http://www.vraptor.org/en/). You also might be interested in our [articles and presentations' page](http://www.vraptor.org/en/docs/articles-and-presentations).
 
 ## Building in your machine
 
-If you want to build VRaptor, execute:
+You can build VRaptor by running:
 
 	mvn package
 
-VRaptor uses Maven as build tool. So you can easily import it into your favorite IDE. In Eclipse you can import as "Maven project".
+VRaptor uses Maven as build tool, so you can easily import it into your favorite IDE.
 
 ## Contribute to VRaptor
 
-Do you want to contribute with code, documentation or bug report?
-
-You can find guidelines to contribute to VRaptor [here](http://www.vraptor.org/en/docs/how-to-contribute/ "Contribute").
-
-## Compatibility checks
-
-You can check compatibility with previous versions of `vraptor-core` by running:
-
-```
-mvn clirr:clirr
-```
-
-A full report will be generated at `target/site/clirr-report.html` file.
+Do you want to contribute with code, documentation or reporting a bug? You can find our guideline [here](http://www.vraptor.org/en/docs/how-to-contribute/ "Contribute").

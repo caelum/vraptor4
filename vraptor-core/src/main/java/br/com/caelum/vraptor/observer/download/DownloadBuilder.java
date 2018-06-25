@@ -2,16 +2,13 @@ package br.com.caelum.vraptor.observer.download;
 
 import com.thoughtworks.xstream.InitializationException;
 
-import static com.google.common.base.Objects.firstNonNull;
-import static java.util.Objects.requireNonNull;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
+import javax.enterprise.inject.Vetoed;
+import java.io.*;
 import java.nio.file.Path;
 import java.util.List;
 
-import javax.enterprise.inject.Vetoed;
+import static com.google.common.base.MoreObjects.firstNonNull;
+import static java.util.Objects.requireNonNull;
 
 /**
  * A Builder to create a proper instance for {@link Download} class.

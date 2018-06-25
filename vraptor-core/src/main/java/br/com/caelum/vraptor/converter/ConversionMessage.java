@@ -15,17 +15,13 @@
  */
 package br.com.caelum.vraptor.converter;
 
-import static com.google.common.base.Objects.firstNonNull;
-import static com.google.common.base.Objects.toStringHelper;
-import static com.google.common.base.Strings.emptyToNull;
-
-import java.util.ResourceBundle;
+import br.com.caelum.vraptor.validator.*;
 
 import javax.enterprise.inject.Vetoed;
+import java.util.ResourceBundle;
 
-import br.com.caelum.vraptor.validator.I18nMessage;
-import br.com.caelum.vraptor.validator.Message;
-import br.com.caelum.vraptor.validator.Severity;
+import static com.google.common.base.MoreObjects.*;
+import static com.google.common.base.Strings.emptyToNull;
 
 @Vetoed
 public class ConversionMessage implements Message {

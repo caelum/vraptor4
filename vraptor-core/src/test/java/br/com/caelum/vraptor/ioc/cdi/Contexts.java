@@ -21,7 +21,7 @@ import java.util.Map;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
-import org.jboss.weld.context.AbstractSharedContext;
+import org.jboss.weld.contexts.AbstractSharedContext;
 import org.jboss.weld.context.ApplicationContext;
 import org.jboss.weld.context.bound.BoundConversationContext;
 import org.jboss.weld.context.bound.BoundRequestContext;

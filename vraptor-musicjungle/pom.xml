@@ -38,20 +38,28 @@
 			<version>${weld.version}</version>
 			<exclusions>
 				<exclusion>
-					<groupId>org.jboss.spec.javax.el</groupId>
+					<artifactId>weld-jsf</artifactId>
+					<groupId>org.jboss.weld.module</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>weld-probe-core</artifactId>
+					<groupId>org.jboss.weld.probe</groupId>
+				</exclusion>
+				<exclusion>
 					<artifactId>jboss-el-api_3.0_spec</artifactId>
+					<groupId>org.jboss.spec.javax.el</groupId>
 				</exclusion>
 			</exclusions>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.jboss.weld</groupId>
 			<artifactId>weld-core-impl</artifactId>
 			<version>${weld.version}</version>
 			<exclusions>
 				<exclusion>
-					<groupId>org.jboss.spec.javax.el</groupId>
 					<artifactId>jboss-el-api_3.0_spec</artifactId>
+					<groupId>org.jboss.spec.javax.el</groupId>
 				</exclusion>
 			</exclusions>
 		</dependency>

@@ -1,27 +1,35 @@
 package br.com.caelum.vraptor.proxy;
 
-import static br.com.caelum.vraptor.proxy.CDIProxies.isCDIProxy;
-import static br.com.caelum.vraptor.proxy.CDIProxies.unproxifyIfPossible;
-import static org.hamcrest.Matchers.equalTo;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
-
-import javax.enterprise.context.Dependent;
-import javax.enterprise.context.RequestScoped;
-import javax.inject.Inject;
-
+import org.jboss.arquillian.container.test.api.Deployment;
+import org.jboss.arquillian.junit.Arquillian;
+import org.jboss.shrinkwrap.api.ShrinkWrap;
+import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import br.com.caelum.vraptor.WeldJunitRunner;
+import javax.enterprise.context.*;
+import javax.inject.Inject;
 
-@RunWith(WeldJunitRunner.class)
+import static br.com.caelum.vraptor.proxy.CDIProxies.*;
+import static org.hamcrest.Matchers.equalTo;
+import static org.jboss.shrinkwrap.api.asset.EmptyAsset.INSTANCE;
+import static org.junit.Assert.*;
+
+@RunWith(Arquillian.class)
 public class CDIProxiesTest {
 
 	@Inject private AnyProxiableBean proxiable;
 	@Inject private NonProxiableBean nonProxiable;
-	
+
+	@Deployment
+	public static WebArchive createDeployment() {
+		return ShrinkWrap
+			.create(WebArchive.class)
+				.addClass(AnyProxiableBean.class)
+				.addClass(NonProxiableBean.class)
+			.addAsManifestResource(INSTANCE, "beans.xml");
+	}
+
 	@Test
 	public void shoulIdentifyCDIProxies() {
 		assertTrue(isCDIProxy(proxiable.getClass()));

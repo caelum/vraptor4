@@ -15,60 +15,48 @@
  */
 package br.com.caelum.vraptor.ioc.cdi;
 
-import static br.com.caelum.vraptor.VRaptorMatchers.canHandle;
-import static br.com.caelum.vraptor.VRaptorMatchers.hasOneCopyOf;
-import static java.util.Arrays.asList;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.assertEquals;
-
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map.Entry;
-
-import javax.enterprise.event.Event;
-import javax.inject.Inject;
-
-import org.hamcrest.Matcher;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-
 import br.com.caelum.cdi.component.UsingCacheComponent;
-import br.com.caelum.vraptor.WeldJunitRunner;
 import br.com.caelum.vraptor.converter.*;
 import br.com.caelum.vraptor.core.Converters;
 import br.com.caelum.vraptor.events.VRaptorInitialized;
-import br.com.caelum.vraptor.http.route.Route;
-import br.com.caelum.vraptor.http.route.Router;
+import br.com.caelum.vraptor.http.route.*;
 import br.com.caelum.vraptor.interceptor.InterceptorRegistry;
-import br.com.caelum.vraptor.ioc.fixture.ControllerInTheClasspath;
-import br.com.caelum.vraptor.ioc.fixture.ConverterInTheClasspath;
-import br.com.caelum.vraptor.ioc.fixture.InterceptorInTheClasspath;
-import br.com.caelum.vraptor.serialization.Deserializer;
-import br.com.caelum.vraptor.serialization.Deserializers;
+import br.com.caelum.vraptor.ioc.fixture.*;
+import br.com.caelum.vraptor.serialization.*;
+import org.hamcrest.Matcher;
+import org.jboss.arquillian.container.test.api.Deployment;
+import org.jboss.arquillian.junit.Arquillian;
+import org.jboss.shrinkwrap.api.ShrinkWrap;
+import org.jboss.shrinkwrap.api.spec.WebArchive;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
-@RunWith(WeldJunitRunner.class)
+import javax.enterprise.event.Event;
+import javax.inject.Inject;
+import java.util.*;
+import java.util.Map.Entry;
+
+import static br.com.caelum.vraptor.VRaptorMatchers.*;
+import static java.util.Arrays.asList;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
+import static org.jboss.shrinkwrap.api.asset.EmptyAsset.INSTANCE;
+import static org.junit.Assert.assertEquals;
+
+@RunWith(Arquillian.class)
 public class CDIBasedContainerTest {
 
 	@Inject private CDIBasedContainer cdiBasedContainer;
 	@Inject private Event<VRaptorInitialized> initEvent;
-	@Inject private Contexts contexts;
 
-	@Before
-	public void setup() {
-		contexts.startApplicationScope();
-		contexts.startSessionScope();
-		initEvent.fire(new VRaptorInitialized(null));
-	}
-	
-	@After
-	public void tearDown() {
-		contexts.stopSessionScope();
-		contexts.stopApplicationScope();
+	@Deployment
+	public static WebArchive createDeployment() {
+		return ShrinkWrap
+			.create(WebArchive.class)
+				.addClass(CDIBasedContainer.class)
+				.addPackages(true, "br.com.caelum.vraptor")
+				.addPackages(true, "br.com.caelum.cdi")
+			.addAsManifestResource(INSTANCE, "beans.xml");
 	}
 
 	@Test
@@ -79,9 +67,10 @@ public class CDIBasedContainerTest {
 		assertEquals(component.putWithLRU("test","test"),"test");
 		assertEquals(component.putWithDefault("test2","test2"),"test2");
 	}
-	
+
 	@Test
 	public void shoudRegisterResourcesInRouter() {
+		initEvent.fire(new VRaptorInitialized(null));
 		Router router = instanceFor(Router.class);
 		Matcher<Iterable<? super Route>> hasItem = hasItem(canHandle(ControllerInTheClasspath.class,
 				ControllerInTheClasspath.class.getDeclaredMethods()[0]));

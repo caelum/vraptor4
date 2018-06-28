@@ -15,25 +15,24 @@
  */
 package br.com.caelum.vraptor.ioc;
 
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import br.com.caelum.vraptor.*;
+import org.jboss.arquillian.container.test.api.Deployment;
+import org.jboss.arquillian.junit.Arquillian;
+import org.jboss.shrinkwrap.api.ShrinkWrap;
+import org.jboss.shrinkwrap.api.spec.WebArchive;
+import org.junit.*;
+import org.junit.runner.RunWith;
 
 import javax.inject.Inject;
 import javax.servlet.FilterChain;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.*;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import static org.hamcrest.Matchers.is;
+import static org.jboss.shrinkwrap.api.asset.EmptyAsset.INSTANCE;
+import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.*;
 
-import br.com.caelum.vraptor.MockStaticContentHandler;
-import br.com.caelum.vraptor.VRaptor;
-import br.com.caelum.vraptor.WeldJunitRunner;
-
-@RunWith(WeldJunitRunner.class)
+@RunWith(Arquillian.class)
 public class RequestStartedFactoryTest {
 
 	@Inject private MockStaticContentHandler handler;
@@ -51,6 +50,15 @@ public class RequestStartedFactoryTest {
 		chain = mock(FilterChain.class);
 		handler.setRequestingStaticFile(false);
 	}
+
+	@Deployment
+	public static WebArchive createDeployment() {
+		return ShrinkWrap
+			.create(WebArchive.class)
+				.addPackages(true, "br.com.caelum.vraptor")
+			.addAsManifestResource(INSTANCE, "beans.xml");
+	}
+
 
 	@Test
 	public void shouldNotRunVRaptorStackIfVRaptorRequestStartedEventNotFired() throws Exception {

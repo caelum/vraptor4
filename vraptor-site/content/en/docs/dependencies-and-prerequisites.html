@@ -4,8 +4,8 @@ title: Dependencies and prerequisites
 
 #Dependencies and prerequisites
 
-VRaptor 4 depends directly on CDI 1.1, so it will work only in servers that support
-this version of CDI, or higher like CDI 1.2. JDK 1.7 or higher is also mandatory. If you're using JDK 1.8, please read <a href="#jdk-8">this section</a>.
+VRaptor 4 depends directly on CDI, so it will work only in servers that support the version used, or higher.
+JDK 1.7 or higher is also mandatory. If you're using JDK 1.8, please read <a href="#jdk-8">this section</a>.
 
 The Application Servers already supported and tested are:
 
@@ -14,11 +14,11 @@ The Application Servers already supported and tested are:
 
 And Servlet Containers supported are:
 
-* Tomcat 7 (+ Weld 2.x jars)
-* Jetty 8 and 9  (+ Weld 2.x jars)
+* Tomcat 8 and 9 (+ Weld jars)
+* Jetty 8 and 9  (+ Weld jars)
 
 To use the mentioned Servlet Containers its also necessary to add
-Weld 2.x jars and the following listener to your `web.xml` file to activate CDI:
+Weld jars and the following listener to your `web.xml` file to activate CDI:
 
 ~~~
 #!xml
@@ -34,9 +34,11 @@ Application Servers) with this content:
 #!xml
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://xmlns.jcp.org/xml/ns/javaee"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/beans_1_1.xsd"
-	version="1.1" bean-discovery-mode="all">
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee
+	   http://xmlns.jcp.org/xml/ns/javaee/beans_2_0.xsd"
+	   bean-discovery-mode="all" version="2.0">
+
 </beans>
 ~~~
 
@@ -109,13 +111,23 @@ If you are using a Servlet Container (such as Tomcat or Jetty), you need to add 
 <dependency>
 	<groupId>org.jboss.weld.servlet</groupId>
 	<artifactId>weld-servlet-core</artifactId>
-	<version>2.1.2.Final</version>
+	<version>3.0.4.Final</version>
+	<exclusions>
+		<exclusion>
+			<artifactId>weld-jsf</artifactId>
+			<groupId>org.jboss.weld.module</groupId>
+		</exclusion>
+		<exclusion>
+			<artifactId>weld-probe-core</artifactId>
+			<groupId>org.jboss.weld.probe</groupId>
+		</exclusion>
+	</exclusions>
 </dependency>
 
 <dependency>
 	<groupId>org.jboss.weld</groupId>
 	<artifactId>weld-core-impl</artifactId>
-	<version>2.1.2.Final</version>
+	<version>3.0.4.Final</version>
 </dependency>
 ~~~
 
@@ -208,7 +220,7 @@ This is the XStream dependency:
 <dependency>
 	<groupId>com.thoughtworks.xstream</groupId>
 	<artifactId>xstream</artifactId>
-	<version>1.4.4</version>
+	<version>1.4.10</version>
 </dependency>
 ~~~ 
 
@@ -219,7 +231,7 @@ And this is the Gson dependency:
 <dependency>
 	<groupId>com.google.code.gson</groupId>
 	<artifactId>gson</artifactId>
-	<version>2.2.4</version>
+	<version>2.8.5</version>
 </dependency>
 ~~~ 
 
@@ -283,7 +295,7 @@ uploading:
 <dependency>
 	<groupId>commons-fileupload</groupId>
 	<artifactId>commons-fileupload</artifactId>
-	<version>1.3</version>
+	<version>1.3.3</version>
 </dependency>
 ~~~ 
 
@@ -293,8 +305,8 @@ to add `commons-io` library to the classpath.
 ## Iogi
 
 **Iogi** is a library used internally in VRaptor to inject http request
-parameters.  Iogi is responsible for building the beans that you receive in
-controller methods.  The great benefit of Iogi is that it is capable of
+parameters. Iogi is responsible for building the beans that you receive in
+controller methods. The great benefit of Iogi is that it is capable of
 building imutable classes, without the need of **setters**. Iogi is also capable
 of building your beans trough setters.
 

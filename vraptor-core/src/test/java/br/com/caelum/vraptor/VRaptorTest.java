@@ -16,27 +16,24 @@
  */
 package br.com.caelum.vraptor;
 
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.when;
-
-import javax.inject.Inject;
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.junit.Rule;
-import org.junit.Test;
+import org.jboss.arquillian.container.test.api.Deployment;
+import org.jboss.arquillian.junit.Arquillian;
+import org.jboss.shrinkwrap.api.ShrinkWrap;
+import org.jboss.shrinkwrap.api.spec.WebArchive;
+import org.junit.*;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 
-@RunWith(WeldJunitRunner.class)
+import javax.inject.Inject;
+import javax.servlet.*;
+import javax.servlet.http.*;
+
+import static org.hamcrest.Matchers.is;
+import static org.jboss.shrinkwrap.api.asset.EmptyAsset.INSTANCE;
+import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.*;
+
+@RunWith(Arquillian.class)
 public class VRaptorTest {
 
 	@Rule
@@ -44,8 +41,17 @@ public class VRaptorTest {
 
 	@Inject
 	private VRaptor vRaptor;
+
 	@Inject
 	private MockStaticContentHandler handler;
+
+	@Deployment
+	public static WebArchive createDeployment() {
+		return ShrinkWrap
+			.create(WebArchive.class)
+				.addPackages(true, "br.com.caelum.vraptor")
+			.addAsManifestResource(INSTANCE, "beans.xml");
+	}
 
 	@Test
 	public void shoudlComplainIfNotInAServletEnviroment() throws Exception {

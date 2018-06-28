@@ -15,21 +15,22 @@
  */
 package br.com.caelum.vraptor.environment;
 
-import static org.junit.Assert.assertEquals;
-
-import java.util.NoSuchElementException;
-
-import javax.enterprise.inject.Instance;
-import javax.inject.Inject;
-
-import org.junit.Rule;
-import org.junit.Test;
+import org.jboss.arquillian.container.test.api.Deployment;
+import org.jboss.arquillian.junit.Arquillian;
+import org.jboss.shrinkwrap.api.ShrinkWrap;
+import org.jboss.shrinkwrap.api.spec.WebArchive;
+import org.junit.*;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 
-import br.com.caelum.vraptor.WeldJunitRunner;
+import javax.enterprise.inject.Instance;
+import javax.inject.Inject;
+import java.util.NoSuchElementException;
 
-@RunWith(WeldJunitRunner.class)
+import static org.jboss.shrinkwrap.api.asset.EmptyAsset.INSTANCE;
+import static org.junit.Assert.assertEquals;
+
+@RunWith(Arquillian.class)
 public class EnvironmentPropertyProducerTest {
 
 	@Rule
@@ -48,7 +49,15 @@ public class EnvironmentPropertyProducerTest {
 	
 	@Inject @Property(defaultValue = "default") 
 	private String ignoreDefaultValue;
-	
+
+	@Deployment
+	public static WebArchive createDeployment() {
+		return ShrinkWrap
+			.create(WebArchive.class)
+				.addPackages(true, "br.com.caelum.vraptor")
+			.addAsManifestResource(INSTANCE, "beans.xml");
+	}
+
 	@Test
 	public void shouldInjectAnEnvironmentProperty() {
 		assertEquals("vraptor.caelum.com.br", mailHost);

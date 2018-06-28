@@ -1,34 +1,39 @@
 package br.com.caelum.vraptor.serialization.gson;
 
-import static org.junit.Assert.assertEquals;
-
-import java.lang.reflect.Type;
-
-import javax.enterprise.context.RequestScoped;
-import javax.inject.Inject;
-
-import org.junit.Before;
-import org.junit.Test;
+import com.google.gson.Gson;
+import org.jboss.arquillian.container.test.api.Deployment;
+import org.jboss.arquillian.junit.Arquillian;
+import org.jboss.shrinkwrap.api.ShrinkWrap;
+import org.jboss.shrinkwrap.api.spec.WebArchive;
+import org.junit.*;
 import org.junit.runner.RunWith;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonSerializationContext;
-import com.google.gson.JsonSerializer;
+import javax.inject.Inject;
 
-import br.com.caelum.vraptor.WeldJunitRunner;
+import static org.jboss.shrinkwrap.api.asset.EmptyAsset.INSTANCE;
+import static org.junit.Assert.assertEquals;
 
-@RunWith(WeldJunitRunner.class)
+@RunWith(Arquillian.class)
 public class GsonBuilderWrapperTest {
-	private @Inject GsonBuilderWrapper builder;
+
+	@Inject
+	private GsonBuilderWrapper builder;
+
 	private Gson gson;
 	
 	@Before
 	public void init(){
 		gson = builder.create();
 	}
-	
+
+	@Deployment
+	public static WebArchive createDeployment() {
+		return ShrinkWrap
+			.create(WebArchive.class)
+				.addPackages(true, "br.com.caelum.vraptor")
+			.addAsManifestResource(INSTANCE, "beans.xml");
+	}
+
 	@Test
 	public void test() {
 		String json = gson.toJson(new Bean());
@@ -38,19 +43,4 @@ public class GsonBuilderWrapperTest {
 
 class Bean{
 	
-}
-
-
-@RegisterStrategy(RegisterType.SINGLE)
-@RequestScoped
-class BeanSerializer implements JsonSerializer<Bean> {
-	private static final JsonObject element = new JsonObject();
-	static{
-		element.add("test123", new JsonObject());
-	}
-	
-	@Override
-	public JsonElement serialize(Bean src, Type typeOfSrc, JsonSerializationContext context) {
-		return element;
-	}
 }

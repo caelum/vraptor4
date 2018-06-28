@@ -10,7 +10,7 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<weld.version>2.1.2.Final</weld.version>
+		<weld.version>3.0.4.Final</weld.version>
 	</properties>
 
 	<dependencies>
@@ -29,7 +29,7 @@
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-entitymanager</artifactId>
-			<version>4.3.0.Final</version>
+			<version>5.3.1.Final</version>
 		</dependency>
 
 		<dependency>
@@ -38,20 +38,28 @@
 			<version>${weld.version}</version>
 			<exclusions>
 				<exclusion>
-					<groupId>org.jboss.spec.javax.el</groupId>
+					<artifactId>weld-jsf</artifactId>
+					<groupId>org.jboss.weld.module</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>weld-probe-core</artifactId>
+					<groupId>org.jboss.weld.probe</groupId>
+				</exclusion>
+				<exclusion>
 					<artifactId>jboss-el-api_3.0_spec</artifactId>
+					<groupId>org.jboss.spec.javax.el</groupId>
 				</exclusion>
 			</exclusions>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.jboss.weld</groupId>
 			<artifactId>weld-core-impl</artifactId>
 			<version>${weld.version}</version>
 			<exclusions>
 				<exclusion>
-					<groupId>org.jboss.spec.javax.el</groupId>
 					<artifactId>jboss-el-api_3.0_spec</artifactId>
+					<groupId>org.jboss.spec.javax.el</groupId>
 				</exclusion>
 			</exclusions>
 		</dependency>

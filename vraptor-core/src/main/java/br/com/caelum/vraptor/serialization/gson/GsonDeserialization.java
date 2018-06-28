@@ -15,7 +15,7 @@
  */
 package br.com.caelum.vraptor.serialization.gson;
 
-import static com.google.common.base.Objects.firstNonNull;
+import static com.google.common.base.MoreObjects.firstNonNull;
 import static com.google.common.base.Strings.isNullOrEmpty;
 
 import java.io.IOException;

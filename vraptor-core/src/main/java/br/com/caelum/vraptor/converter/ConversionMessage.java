@@ -15,8 +15,8 @@
  */
 package br.com.caelum.vraptor.converter;
 
-import static com.google.common.base.Objects.firstNonNull;
-import static com.google.common.base.Objects.toStringHelper;
+import static com.google.common.base.MoreObjects.firstNonNull;
+import static com.google.common.base.MoreObjects.toStringHelper;
 import static com.google.common.base.Strings.emptyToNull;
 
 import java.util.ResourceBundle;

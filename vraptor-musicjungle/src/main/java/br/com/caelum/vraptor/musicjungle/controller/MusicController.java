@@ -173,7 +173,7 @@ public class MusicController {
 	 */
 	@Get("/musics/search")
 	public void search(Music music) {
-		String title = Objects.firstNonNull(music.getTitle(), "");
+		String title = MoreObjects.firstNonNull(music.getTitle(), "");
         result.include("musics", this.musicDao.searchSimilarTitle(title));
     }
 	

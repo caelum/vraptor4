@@ -2,7 +2,7 @@ package br.com.caelum.vraptor.observer.download;
 
 import com.thoughtworks.xstream.InitializationException;
 
-import static com.google.common.base.Objects.firstNonNull;
+import static com.google.common.base.MoreObjects.firstNonNull;
 import static java.util.Objects.requireNonNull;
 
 import java.io.File;

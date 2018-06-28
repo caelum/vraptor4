@@ -1,6 +1,6 @@
 package br.com.caelum.vraptor.validator;
 
-import static com.google.common.base.Objects.firstNonNull;
+import static com.google.common.base.MoreObjects.firstNonNull;
 
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.inject.Produces;

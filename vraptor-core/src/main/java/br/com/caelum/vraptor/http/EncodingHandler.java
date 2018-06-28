@@ -17,7 +17,7 @@
 
 package br.com.caelum.vraptor.http;
 
-import static com.google.common.base.Objects.firstNonNull;
+import static com.google.common.base.MoreObjects.firstNonNull;
 import static java.nio.charset.Charset.defaultCharset;
 
 import java.io.UnsupportedEncodingException;

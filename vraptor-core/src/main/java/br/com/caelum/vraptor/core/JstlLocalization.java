@@ -16,7 +16,7 @@
  */
 package br.com.caelum.vraptor.core;
 
-import static com.google.common.base.Objects.firstNonNull;
+import static com.google.common.base.MoreObjects.firstNonNull;
 
 import java.util.Locale;
 import java.util.MissingResourceException;

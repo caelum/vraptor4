@@ -2,7 +2,7 @@
 title: REST Controllers
 ---
 
-#What are Controllers?
+#What are REST Controllers?
 
 A controller is a class that can provide resources to be accessed by your
 clients. With VRaptor, a controller must be annotated with `@Controller`. All
@@ -10,8 +10,7 @@ public methods of an annotated class become accessible through GET or POST reque
 specific URIs. 
 
 The following example shows a controller named `CustomerController`, which
-provides several operations over customers. Creating the class below with all
-its methods instantly make the URIs `/customer/add`, `/customer/list`,
+provides several operations over customers. When annotating the class with `@Controller` and methods with `@Get` or `@Post` for example, make the URIs `/customer/add`, `/customer/list`,
 `/customer/show`, `/customer/remove` and `/customer/update` available, each one
 invoking the respective method.
 
@@ -36,6 +35,82 @@ public class CustomerController {
 	public void update(Customer customer) { ... }
 }
 ~~~ 
+
+##HTTP methods
+
+The best practice when designing REST resources is to use the sematincs of each
+HTTP method. Therefore, eventually we need to use methods like `GET`, `POST`,
+`PUT` etc, for the same URI. In order to accomplish that, we use annotations
+`@Get`, `@Post`, `@Delete` etc, which also allows us to configure a custom URI
+in the same way as `@Path`. The following example changes the default URIs for
+`CustomerController`.  Now we specify two different URIs for different HTTP
+methods:
+
+~~~
+#!java
+@Controller
+public class CustomerController {
+    @Post("/")
+    public void add(Customer customer) { }
+
+    @Path("/")
+    public List<Customer> list() 
+        return ...
+    }
+
+    @Get("/customer")
+    public Customer show(Customer customer) {
+        return ...
+    }
+
+    @Delete("/customer")
+    public void remove(Customer customer) { ... }
+
+    @Put("/customer")
+    public void update(Customer customer) { ... }
+
+}
+~~~
+
+As you can see, we used HTTP methods + a specific URI to identify each method
+in our Java class.
+
+**Obs:**
+
+We must be **very careful** when creating hyperlinks and HTML forms, because web
+browsers currently support only `POST` and `GET` methods. For that reason, requests
+for methods `DELETE`, `PUT` etc should be performed through JavaScript, or by adding
+an extra parameter called `_method`. The latter one only works on `POST` requests.
+This parameter will overwrite the real HTTP method being invoked. 
+
+The following example creates a link to show one customer's data:
+
+~~~ 
+#!jsp
+<a href="/customer?customer.id=5">show customer 5</a>
+~~~ 
+
+Now an example on how to invoke the method to add a customer:
+
+~~~ 
+#!jsp
+<form action="/customer" method="post">
+    <input name="customer.name" />
+    <input type="submit" />
+</form>
+~~~
+
+Notice that if we want to remove a customer using the `DELETE` HTTP method, we
+have to use the `_method` parameter, since browsers still don't support that kind
+of requests:
+
+~~~ 
+#!jsp
+<form action="/customer" method="POST">
+    <input name="customer.id" value="5" type="hidden" />
+    <button type="submit" name="_method" value="DELETE">remove customer 5</button>
+</form>
+~~~
 
 ##Method parameters
 
@@ -86,9 +161,11 @@ in which scope your component will live, use the annotations
 assumes the dependent scope, meaning a fresh instance will be created for each
 time it needs to be injected.
 
+A principle of Rest Architecture explains that a controller must be `stateless`, ie, a controller only live *one* request.
+
 Those scopes are from CDI specification, see the [Java EE 7
 documentation](http://docs.oracle.com/javaee/7/tutorial/partcdi.htm)
-for more information.
+for more information and visit this page <a href="/en/docs/componentes">components</a>.
 
 ##@Path
 
@@ -133,79 +210,6 @@ By annotating the methods with `@Path` we'll have the following URIs:
 |void listAll()         | URI: /customers/allCustomers|
 {: .content-table}
 
-##HTTP methods
-
-The best practice when designing REST resources is to use the sematincs of each
-HTTP method. Therefore, eventually we need to use methods like `GET`, `POST`,
-`PUT` etc, for the same URI. In order to accomplish that, we use annotations
-`@Get`, `@Post`, `@Delete` etc, which also allows us to configure a custom URI
-in the same way as `@Path`. The following example changes the default URIs for
-`CustomerController`.  Now we specify two different URIs for different HTTP
-methods:
-
-~~~
-#!java
-@Controller
-public class CustomerController {
-    @Post("/")
-    public void add(Customer customer) { }
-
-    @Path("/")
-    public List<Customer> list() 
-        return ...
-    }
-
-    @Get("/customer")
-    public Customer show(Customer customer) {
-        return ...
-    }
-
-    @Delete("/customer")
-    public void remove(Customer customer) { ... }
-
-    @Put("/customer")
-    public void update(Customer customer) { ... }
-
-}
-~~~
-
-As you can see, we used HTTP methods + a specific URI to identify each method
-in our Java class.
-
-We must be **very careful** when creating hyperlinks and HTML forms, because web
-browsers currently support only `POST` and `GET` methods. For that reason, requests
-for methods `DELETE`, `PUT` etc should be performed through JavaScript, or by adding
-an extra parameter called `_method`. The latter one only works on `POST` requests.
-This parameter will overwrite the real HTTP method being invoked. 
-
-The following example creates a link to show one customer's data:
-
-~~~ 
-#!jsp
-<a href="/customer?customer.id=5">show customer 5</a>
-~~~ 
-
-Now an example on how to invoke the method to add a customer:
-
-~~~ 
-#!jsp
-<form action="/customer" method="post">
-    <input name="customer.name" />
-    <input type="submit" />
-</form>
-~~~
-
-Notice that if we want to remove a customer using the `DELETE` HTTP method, we
-have to use the `_method` parameter, since browsers still don't support that kind
-of requests:
-
-~~~ 
-#!jsp
-<form action="/customer" method="POST">
-    <input name="customer.id" value="5" type="hidden" />
-    <button type="submit" name="_method" value="DELETE">remove customer 5</button>
-</form>
-~~~
 
 ##Path with variable injection 
 

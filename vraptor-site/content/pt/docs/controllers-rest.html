@@ -2,15 +2,15 @@
 title: Controllers REST
 ---
 
-#O que são Controllers?
+#O que são Controllers Rest?
 
-Um controller é uma classe que disponibiliza recursos a nossos clientes. No
+Um controller Rest é uma classe que disponibiliza recursos a nossos clientes. No
 caso de uma aplicação Web baseada no VRaptor, um controller deve ser anotado
 com a anotação `@Controller`. Assim que o programador insere tal anotação em
 seu código, todos os métodos públicos desse recurso se tornam acessíveis
 através de chamadas do tipo GET ou POST a URIs específicas.
 
-O exemplo a seguir mostra um recurso chamado `ClienteController` que possui métodos para diversas funcionalidades ligadas a um cliente. Simplesmente criar essa classe e os métodos faz com que as URLs `/cliente/adiciona`, `/cliente/lista`, `/cliente/visualiza`, `/cliente/remove` e `/cliente/atualiza` sejam disponibilizadas, cada uma invocando o respectivo método em sua classe.
+O exemplo a seguir mostra um recurso chamado `ClienteController` que possui métodos para diversas funcionalidades ligadas a um cliente. Simplesmente ao anotar a classe com `@Controller` e os métodos com `@Get` ou `@Post` por exemplo, faz com que as URLs `/cliente/adiciona`, `/cliente/lista`, `/cliente/visualiza`, `/cliente/remove` e `/cliente/atualiza` sejam disponibilizadas, cada uma invocando o respectivo método em sua classe.
 
 ~~~ 
 #!java
@@ -32,6 +32,76 @@ public class ClienteController {
 	public void atualiza(Cliente cliente) { ... }
 }
 ~~~ 
+
+##Métodos HTTP
+
+Desenvolvendo sua aplicação com recursos REST, o ideal é aproveitar a semântica
+de cada método HTTP. Portanto às vezes precisamos usar métodos como `GET`,
+`POST`, `PUT` etc para acessar uma mesma URI.  Para atingir esse objetivo,
+utilizamos as anotações `@Get`, `@Post`, `@Delete`, etc que também permitem
+configurar uma URI diferente da URI padrão, da mesma forma que a anotação
+`@Path`. O exemplo a seguir altera os padrões de URI do `ClienteController`
+para utilizar duas URIs distintas, com diversos métodos HTTP:
+
+~~~
+#!java
+@Controller
+public class ClienteController {
+
+	@Post("/cliente")
+	public void adiciona(Cliente cliente) {...}
+
+	@Path("/")
+	public List<Cliente> lista() {
+		return ...
+	}
+
+	@Get("/cliente")
+	public Cliente visualiza(Cliente cliente) {
+		return ...
+	}
+
+	@Delete("/cliente")
+	public void remove(Cliente cliente) { ... }
+
+	@Put("/cliente")
+	public void atualiza(Cliente cliente) { ... }
+}
+~~~
+
+Como você pode notar, utilizamos os métodos HTTP + uma URI específica para identificar cada um dos métodos da nossa classe Java.
+
+**Obs:**
+
+No momento de criar os links e formulários HTML devemos tomar um cuidado **muito importante** pois os browsers só dão suporte aos métodos `POST` e `GET` por meio de formulários hoje em dia. Por isso, você deverá criar as requisições para métodos do tipo `DELETE`, `PUT` etc usando JavaScript ou passando um parâmetro extra, chamado `_method`. O último só funciona em requisições `POST`. Esse parâmetro sobrescreverá o método HTTP real sendo invocado.
+
+O exemplo a seguir mostra um link para o método `visualiza` da classe `ClienteController`:
+
+~~~ 
+#!jsp
+<a href="/cliente?cliente.id=5">ver cliente 5</a>
+~~~ 
+
+Agora um exemplo de como invocar o método de adicionar um cliente:
+
+~~~ 
+#!jsp
+<form action="/cliente" method="post">
+	<input name="cliente.nome" />
+	<input type="submit" />
+</form>
+~~~
+
+E, note que para permitir a remoção pelo método `DELETE`, temos que usar o parâmetro `_method`, uma vez que o browser ainda não suporta tais requisições:
+
+~~~ 
+#!jsp
+<form action="/cliente" method="post">
+	<input name="cliente.id" value="5" type="hidden" />
+	<button type="submit" name="_method" value="DELETE">remover cliente 5</button>
+</form>
+~~~
+
 
 ##Parâmetros dos métodos
 
@@ -70,13 +140,13 @@ O VRaptor tira proveito do framework [Paranamer](http://paranamer.codehaus.org),
 
 Por vezes você deseja compartilhar um componente entre todos os usuários, entre
 todas as requisições de um mesmo usuário ou a cada requisição de um usuário.
-Para definir em que escopo o seu componente vive, basta utilizar as anotações
-`@ApplicationScoped`, `@SessionScoped`, `@RequestScoped`, `@Dependent` e
-`@Conversation`. Caso nenhuma anotação seja utilizada, o VRaptor assume que seu
-componente ficará com escopo dependent, isto é, você terá um novo componente a
-cada ponto de injeção.
 
-Esses escopos estão definidos na especificação do CDI. Para mais informações
+Para definir um escopo ao seu componente, basta utilizar as anotações
+`@ApplicationScoped`, `@SessionScoped`, `@RequestScoped`, `@Dependent` e `@Conversation`. Caso nenhuma anotação seja utilizada, o VRaptor assume que seu componente ficará com escopo dependent, isto é, você terá um novo componente a cada ponto de injeção.
+
+Um dos princípios da Arquitetura REST e que seus `recursos` sejam `stateless` ou seja não podem guardar estado, com isso todos os `@Controllers` por padrão serão do tipo `@ResquestScoped`
+
+Na especificação CDI. existe vários outros escopos, para mais informações
 veja a página sobre <a href="/pt/docs/componentes">componentes</a>.
 
 ##@Path
@@ -118,74 +188,6 @@ Anotando os métodos com `@Path`, teremos as seguntes URIs
 |void adiciona() 		| URI: /clientes/salva
 |void listaTudo()		| URI: /clientes/todosOsClientes
 {: .content-table}
-
-##Métodos HTTP
-
-Desenvolvendo sua aplicação com recursos REST, o ideal é aproveitar a semântica
-de cada método HTTP. Portanto às vezes precisamos usar métodos como `GET`,
-`POST`, `PUT` etc para acessar uma mesma URI.  Para atingir esse objetivo,
-utilizamos as anotações `@Get`, `@Post`, `@Delete`, etc que também permitem
-configurar uma URI diferente da URI padrão, da mesma forma que a anotação
-`@Path`. O exemplo a seguir altera os padrões de URI do `ClienteController`
-para utilizar duas URIs distintas, com diversos métodos HTTP:
-
-~~~
-#!java
-@Controller
-public class ClienteController {
-
-	@Post("/cliente")
-	public void adiciona(Cliente cliente) {...}
-
-	@Path("/")
-	public List<Cliente> lista() {
-		return ...
-	}
-
-	@Get("/cliente")
-	public Cliente visualiza(Cliente cliente) {
-		return ...
-	}
-
-	@Delete("/cliente")
-	public void remove(Cliente cliente) { ... }
-
-	@Put("/cliente")
-	public void atualiza(Cliente cliente) { ... }
-}
-~~~
-
-Como você pode notar, utilizamos os métodos HTTP + uma URI específica para identificar cada um dos métodos da nossa classe Java.
-
-No momento de criar os links e formulários HTML devemos tomar um cuidado **muito importante** pois os browsers só dão suporte aos métodos `POST` e `GET` por meio de formulários hoje em dia. Por isso, você deverá criar as requisições para métodos do tipo `DELETE`, `PUT` etc usando JavaScript ou passando um parâmetro extra, chamado `_method`. O último só funciona em requisições `POST`. Esse parâmetro sobrescreverá o método HTTP real sendo invocado.
-
-O exemplo a seguir mostra um link para o método visualiza de cliente:
-
-~~~ 
-#!jsp
-<a href="/cliente?cliente.id=5">ver cliente 5</a>
-~~~ 
-
-Agora um exemplo de como invocar o método de adicionar um cliente:
-
-~~~ 
-#!jsp
-<form action="/cliente" method="post">
-	<input name="cliente.nome" />
-	<input type="submit" />
-</form>
-~~~
-
-E, note que para permitir a remoção pelo método `DELETE`, temos que usar o parâmetro `_method`, uma vez que o browser ainda não suporta tais requisições:
-
-~~~ 
-#!jsp
-<form action="/cliente" method="post">
-	<input name="cliente.id" value="5" type="hidden" />
-	<button type="submit" name="_method" value="DELETE">remover cliente 5</button>
-</form>
-~~~
-
 
 ##Path com injeção de variáveis
 

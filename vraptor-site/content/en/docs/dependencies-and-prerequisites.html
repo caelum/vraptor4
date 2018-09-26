@@ -285,6 +285,27 @@ framework which is capable of extracting parameters information through pre
 compilation of your code or from debug bytecode, avoiding the use of
 annotations. Some of VRaptor's developers are also contributors of Paranamer.
 
+It is worth mentioning that if you pack your
+war file with version lower than 2.8 you may have problem with converts as per
+example:
+
+java.lang.IllegalStateException: Converter class br.com.caelum.vraptor.converter.ByteConverter
+
+~~~
+#!xml
+<dependency>
+	<groupId>com.thoughtworks.paranamer</groupId>
+	<artifactId>paranamer</artifactId>
+	<version>2.8</version>
+	<exclusions>
+		<exclusion>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-all</artifactId>
+		</exclusion>
+	</exclusions>
+</dependency>
+~~~
+
 ## Commons-fileupload
 
 This is an optional dependency required only if your application use file

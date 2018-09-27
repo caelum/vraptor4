@@ -239,6 +239,28 @@ Infelizmente, nas versões anteriores ao Java 8, não é possível fazer reflect
 
 O VRaptor tira proveito do framework <a href="http://paranamer.codehaus.org/">Paranamer</a>, que consegue tirar essa informação por meio da pré compilação ou dos dados de debug, evitando criar mais uma anotação. Alguns dos desenvolvedores do VRaptor também participam no desenvolvimento do **Paranamer**.
 
+Vale a pena mencionar que se você empacotar seu
+arquivo war com versão inferior a 2.8 você pode ter problema com os convertes como por
+exemplo:
+
+java.lang.IllegalStateException: Converter class br.com.caelum.vraptor.converter.ByteConverter,
+
+
+
+~~~
+#!xml
+<dependency>
+	<groupId>com.thoughtworks.paranamer</groupId>
+	<artifactId>paranamer</artifactId>
+	<version>2.8</version>
+	<exclusions>
+		<exclusion>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-all</artifactId>
+		</exclusion>
+	</exclusions>
+</dependency>
+~~~
 ## Commons-fileupload
 
 Dependência opcional utilizada apenas se sua aplicação possui funcionalidade de upload de arquivos. Se você não usa o Maven, será necessário adicionar também a biblioteca `commons-io` no classpath.

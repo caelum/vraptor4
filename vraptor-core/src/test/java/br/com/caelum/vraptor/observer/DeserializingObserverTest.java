@@ -21,6 +21,8 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 
+import java.io.IOException;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.junit.Before;
@@ -37,6 +39,7 @@ import br.com.caelum.vraptor.http.ParanamerNameProvider;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.serialization.Deserializer;
 import br.com.caelum.vraptor.serialization.Deserializers;
+import br.com.caelum.vraptor.util.ObjectMerger;
 import br.com.caelum.vraptor.view.Status;
 
 
@@ -44,7 +47,9 @@ public class DeserializingObserverTest {
 	private DeserializingObserver observer;
 	private ControllerMethod consumeXml;
 	private ControllerMethod doesntConsume;
+	private ControllerMethod consumeClientXml;
 	private MethodInfo methodInfo;
+	private ObjectMerger objectMerger;
 
 	@Mock private HttpServletRequest request;
 	@Mock Deserializers deserializers;
@@ -57,9 +62,12 @@ public class DeserializingObserverTest {
 
 		methodInfo = new MethodInfo(new ParanamerNameProvider());
 
-		observer = new DeserializingObserver(deserializers, container);
+		objectMerger = new ObjectMerger();
+		
+		observer = new DeserializingObserver(deserializers, container, objectMerger);
 		consumeXml = new DefaultControllerMethod(null, DummyResource.class.getDeclaredMethod("consumeXml", String.class, String.class));
 		doesntConsume = new DefaultControllerMethod(null, DummyResource.class.getDeclaredMethod("doesntConsume"));
+		consumeClientXml = new DefaultControllerMethod(null, DummyResource.class.getDeclaredMethod("addClient", Client.class));
 	}
 
 
@@ -71,6 +79,9 @@ public class DeserializingObserverTest {
 		public void consumesAnything(String a, String b) {}
 
 		public void doesntConsume() {}
+		
+		@Consumes("application/xml")
+		public void addClient(Client client) {}
 	}
 
 	@Test
@@ -178,4 +189,58 @@ public class DeserializingObserverTest {
 		assertEquals(methodInfo.getValuedParameters()[0].getValue(), "original1");
 		assertEquals(methodInfo.getValuedParameters()[1].getValue(), "deserialized");
 	}
+	
+	@Test
+	public void shouldOverrideDeserializedAttributeWithAlreadyInstantiatedValue() throws IOException {
+		final Deserializer deserializer = mock(Deserializer.class);
+		methodInfo.setControllerMethod(consumeClientXml);
+		
+		Client alreadInstantiatedClient = new Client(2, null, 18);
+		methodInfo.setParameter(0, alreadInstantiatedClient);
+		
+		Client deserializedClient = new Client(1, "nykolas", null);
+
+		when(request.getContentType()).thenReturn("application/xml");
+		when(deserializer.deserialize(null, consumeXml)).thenReturn(new Object[] {deserializedClient});
+
+		when(deserializers.deserializerFor("application/xml", container)).thenReturn(deserializer);
+		observer.deserializes(new InterceptorsReady(consumeXml), request, methodInfo, status);
+
+		Client mergedClient = (Client) methodInfo.getValuedParameters()[0].getValue();
+		assertEquals(2, mergedClient.getId().intValue());
+		assertEquals("nykolas", mergedClient.getName());
+		assertEquals(18, mergedClient.getAge().intValue());
+	}
+	
+	public class Client {
+		public Integer id;
+		public String name;
+		public Integer age;
+
+		public Client(Integer id, String nome, Integer age) {
+			this.id = id;
+			this.name = nome;
+			this.age = age;
+		}
+
+		public Integer getId() {
+			return id;
+		}
+		public String getName() {
+			return name;
+		}
+		public Integer getAge() {
+			return age;
+		}
+		public void setId(Integer id) {
+			this.id = id;
+		}
+		public void setName(String name) {
+			this.name = name;
+		}
+		public void setAge(Integer age) {
+			this.age = age;
+		}
+	}
+	
 }

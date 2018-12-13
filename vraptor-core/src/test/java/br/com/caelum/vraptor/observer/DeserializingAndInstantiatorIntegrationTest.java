@@ -20,6 +20,7 @@ import br.com.caelum.vraptor.http.ParanamerNameProvider;
 import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.serialization.Deserializer;
 import br.com.caelum.vraptor.serialization.Deserializers;
+import br.com.caelum.vraptor.util.ObjectMerger;
 import br.com.caelum.vraptor.validator.Message;
 import br.com.caelum.vraptor.validator.Validator;
 import br.com.caelum.vraptor.view.FlashScope;
@@ -36,6 +37,7 @@ public class DeserializingAndInstantiatorIntegrationTest {
 	@Mock private Container container;
 	@Mock private Status status;
 	@Mock private Deserializer deserializer;
+	private ObjectMerger objectMerger;
 	
 	private MethodInfo methodInfo;
 	private ParametersInstantiator instantiator;
@@ -50,9 +52,10 @@ public class DeserializingAndInstantiatorIntegrationTest {
 		when(deserializers.deserializerFor("application/xml", container)).thenReturn(deserializer);
 		when(request.getContentType()).thenReturn("application/xml");
 		
+		objectMerger = new ObjectMerger();
 		methodInfo = new MethodInfo(new ParanamerNameProvider());
-		instantiator = new ParametersInstantiator(provider, methodInfo, validator, request, flash);
-		deserializing = new DeserializingObserver(deserializers, container);
+		instantiator = new ParametersInstantiator(provider, methodInfo, validator, request, flash, objectMerger);
+		deserializing = new DeserializingObserver(deserializers, container, objectMerger);
 		
 		controllerMethod = new DefaultControllerMethod(null, DeserializingObserverTest
 				.DummyResource.class.getDeclaredMethod("consumeXml", String.class, String.class));

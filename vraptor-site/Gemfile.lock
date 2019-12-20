@@ -53,7 +53,7 @@ GEM
     pygments.rb (0.5.4)
       posix-spawn (~> 0.3.6)
       yajl-ruby (~> 1.1.0)
-    rack (1.5.2)
+    rack (1.6.12)
     rainpress (1.0)
       echoe
     rake (10.1.1)

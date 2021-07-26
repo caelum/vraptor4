@@ -47,7 +47,7 @@ public final class CDIProxies {
 	public static <T> T unproxifyIfPossible(T source) {
 		if (source instanceof TargetInstanceProxy) {
 			TargetInstanceProxy<T> target = (TargetInstanceProxy) source;
-			return target.getTargetInstance();
+			return target.weld_getTargetInstance();
 		}
 		return source;
 	}

@@ -100,4 +100,6 @@ public abstract class AbstractResult implements Result {
 		return (T) use(status()).movedPermanentlyTo(controller.getClass());
 	}
 
+	public void test() {}
+
 }

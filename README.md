@@ -17,6 +17,10 @@
 [license]:LICENSE
 [license img]:https://img.shields.io/badge/License-Apache%202-blue.svg
 
+## Novo Usuário:
+
+Engels Souza, es99, agora é dono deste projeto!
+
 A web MVC action-based framework, on top of CDI, for fast and maintainable Java development. 
 
 ## Downloading 
